@@ -79,10 +79,6 @@ class Scene
 		void Render( Renderer& renderer, PlatformSurface& rTarget, DisplayObject& object );
 
 	public:
-		void RenderOverlay( Display& display, Renderer& renderer, const Matrix& srcToDstSpace );
-		StageObject& Overlay();
-
-	public:
 		StageObject* PushStage();
 		void PopStage();
 
@@ -99,7 +95,6 @@ class Scene
 		StageObject *fOffscreenStage;
 		StageObject *fOrphanage; // For Lua-created display objects removed from a group
 		StageObject *fSnapshotOrphanage;
-		StageObject *fOverlay;
 		LightPtrArray< LuaUserdataProxy > fProxyOrphanage;
 		bool fIsValid;
 		U8 fCounter; // DO NOT change type --- must be U8

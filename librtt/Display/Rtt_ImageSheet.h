@@ -71,7 +71,6 @@ class ImageSheet
 		const SharedPtr< TextureResource >& GetTextureResource() const { return fResource; }
 		const ImageFrame* GetFrame( int index ) const { return fFrames[index]; }
 		S32 GetNumFrames() const { return fFrames.Length(); }
-		bool IsEmpty() const { return fFrames.Length() <= 0; }
 
 	private:
 		SharedPtr< TextureResource > fResource;

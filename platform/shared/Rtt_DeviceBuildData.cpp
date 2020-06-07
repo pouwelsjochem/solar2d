@@ -34,15 +34,6 @@ static const char kBuildRevisionKey[] = "buildRevision";
 static const char kSplashScreenKey[] = "splashScreen";
 static const char kDebugBuildProcessKey[] = "debugBuildProcess";
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-static const char kFuseStagingKey[] = "fuseStaging";
-static const char kFuseStagingSuffixKey[] = "fuseStagingSuffix";
-static const char kFuseStagingSuffixDefaultValue[] = "-staging";
-
-static const char kFusePluginName[] = "plugin.fuse";
-static const char kFuseAdsPluginName[] = "plugin.fuse.ads";
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
-
 // ----------------------------------------------------------------------------
 
 static lua_State *
@@ -62,37 +53,6 @@ NewLua()
 
 	return L;
 }
-
-#if 0
-static TargetDevice::Platform
-PlatformForString( const char *str )
-{
-	static const char kAndroidPlatformString[] = "android";
-	//static const char kIOSPlatformString[] = "iphone";
-	static const char kKindlePlatformString[] = "kindle";
-	static const char kNookPlatformString[] = "nook";
-
-	TargetDevice::Platform result = TargetDevice::kIPhonePlatform;
-
-	if ( str )
-	{
-		if ( 0 == Rtt_StringCompareNoCase( str, kAndroidPlatformString ) )
-		{
-			result = TargetDevice::kAndroidPlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kKindlePlatformString ) )
-		{
-			result = TargetDevice::kKindlePlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kNookPlatformString ) )
-		{
-			result = TargetDevice::kNookPlatform;
-		}
-	}
-
-	return result;
-}
-#endif // 0
     
 // ----------------------------------------------------------------------------
 
@@ -122,9 +82,6 @@ DeviceBuildData::DeviceBuildData(
 	fBuildYear( Rtt_BUILD_YEAR ),
 	fBuildRevision( Rtt_BUILD_REVISION ),
 	fDebugBuildProcess( 0 )
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	, fFuseStagingSuffix( pAllocator )
-#endif
 {
 }
 
@@ -185,8 +142,6 @@ DeviceBuildData::ReadAppSettings( lua_State *L, const char *appSettingsPath )
 //		buildBucket = "",
 //      buildYear = 2014,        -- int. default is simulator's daily build year
 //      buildRevision = 2511,    -- int. default is simulator's daily build revision
-//      fuseStaging = false,     -- default is false
-//      fuseStagingSuffix = nil, -- default is kBuildFuseStagingSuffixDefaultValue
 //	}
 //
 bool
@@ -206,29 +161,6 @@ DeviceBuildData::ReadBuildSettings( lua_State *L, const char *buildSettingsPath 
 		lua_getglobal( L, "settings" );
 		if ( lua_istable( L, -1 ) )
 		{
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-			// Fuse: Detect whether we want to use the staging version of the plugin
-			lua_getfield( L, -1, kFuseStagingKey );
-			bool isStaging = lua_toboolean( L, -1 );
-			lua_pop( L, 1 );
-
-			if ( isStaging )
-			{
-				// Allow a custom suffix to be used, or use default
-				lua_getfield( L, -1, kFuseStagingSuffixKey );
-				{
-					const char *suffix = lua_tostring( L, -1 );
-					if ( ! suffix )
-					{
-						suffix = kFuseStagingSuffixDefaultValue;
-					}
-					
-					fFuseStagingSuffix.Set( suffix );
-				}
-				lua_pop( L, 1 );
-			}
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
-
 			lua_getfield( L, -1, kBuildYearKey );
 			int buildYear = (int)lua_tointeger( L, -1 );
 			lua_pop( L, 1 );
@@ -295,8 +227,6 @@ bool
 DeviceBuildData::Initialize(
 	const char *appSettingsPath,
 	const char *buildSettingsPath,
-	bool includeFusePlugins,
-	bool usesMonetization,
 	bool liveBuild,
 	int debugBuildProcess)
 {
@@ -312,22 +242,6 @@ DeviceBuildData::Initialize(
 	ReadBuildSettings( L, buildSettingsPath );
 
 	fDebugBuildProcess = debugBuildProcess;
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	// If they want monetization and it's a platform we support that on which excludes the non-Google Android platforms
-	// ("kAndroidPlatform" actually means "Google App Store", see Rtt_TargetDevice.h)
-	if (includeFusePlugins && (fTargetPlatform == TargetDevice::kIPhonePlatform || fTargetPlatform == TargetDevice::kAndroidPlatform))
-	{
-		// NOTE: ReadBuildSettings should precede calls to AddRequiredPlugin
-		// so that the staging suffix can be read in.
-		AddRequiredPlugin( L, kFusePluginName );
-
-		if ( usesMonetization )
-		{
-			AddRequiredPlugin( L, kFuseAdsPluginName );
-		}
-	}
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
 
 	if (liveBuild)
 	{
@@ -369,28 +283,6 @@ DeviceBuildData::PushCoronaPluginMetadata( lua_State *L )
 	lua_pushstring( L, "com.coronalabs" );
 	lua_setfield( L, -2, "publisherId" );
 }
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-void
-DeviceBuildData::AddRequiredPlugin( lua_State *L, const char *name )
-{
-	Rtt_ASSERT( name );
-
-	PushCoronaPluginMetadata( L );
-	{
-		int index = lua_gettop( L );
-		const char *suffix = fFuseStagingSuffix.GetString();
-		if ( ! suffix ) { suffix = ""; }
-		lua_pushfstring( L, "%s%s", name, suffix );
-		{
-			const char *name = lua_tostring( L, -1 );
-			AddPlugin( L, name, index );
-		}
-		lua_pop( L, 1 );
-	}
-	lua_pop( L, 1 );
-}
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
 
 void
 DeviceBuildData::AddPlugin( lua_State *L, const char *moduleName, int index )

@@ -51,7 +51,6 @@ class Program : public CPUResource
 			kMaskCount1,
 			kMaskCount2,
 			kMaskCount3,
-			kWireframe,
 			kNumVersions
 		}
 		Version;

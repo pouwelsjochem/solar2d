@@ -15,8 +15,6 @@
 
 // ----------------------------------------------------------------------------
 
-struct b2Mat33;
-
 namespace Rtt
 {
 
@@ -24,17 +22,6 @@ class Geometry;
 struct Vertex2;
 
 // ----------------------------------------------------------------------------
-
-struct Xform3D
-{
-	public:
-		Xform3D();
-
-	public:
-		Real tx, ty, tz;
-		Real angle, x, y, z;
-		Real sx, sy;
-};
 
 class Matrix
 {
@@ -69,7 +56,6 @@ class Matrix
 
 		void ToGLMatrix( Rtt_Real m[16] ) const;
 		void ToGLMatrix3x3( Rtt_Real m[9] ) const;
-		void Tob2Mat33( b2Mat33 &m ) const;
 
 		#ifdef Rtt_DEBUG
 			bool TestIdentity() const;

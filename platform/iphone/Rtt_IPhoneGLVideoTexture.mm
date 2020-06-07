@@ -101,22 +101,6 @@
 	}
 }
 
-//TODO - if we need to set the orientation for the front facing/back facing camera, we could subscribe to notifications
-//then change the device connection video orientation setup here
-//- (void)orientationChanged:(NSNotification *)notification
-//{
-//	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-//
-//	if (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown)
-//	{
-//		//load the portrait view
-//	}
-//	else if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight)
-//	{
-//		//load the landscape view
-//	}
-//}
-
 - (void)setup
 {
 

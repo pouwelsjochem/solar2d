@@ -61,7 +61,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
     <ClCompile>
       <CppLanguageStandard>gnu++11</CppLanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\ndk\jni;$(ProjectDir)\..\..\..\librtt;$(ProjectDir)\..\..\..\platform\shared;$(ProjectDir)\..\ndk;$(ProjectDir)\..\..\..\external\lua-5.1.3\src;$(ProjectDir)\..\..\..\;$(ProjectDir)\..\..\..\external\LuaHashMap;$(ProjectDir)\..\..\..\librtt\Corona;C:\NVPACK1r6\android-ndk-r12b\platforms\android-24\arch-arm\usr\include\machine;$(ProjectDir)\..\..\..\external\Box2D;$(ProjectDir)\..\..\..\external\smoothpolygon;$(ProjectDir)\..\..\..\external\ALmixer;$(ProjectDir)\..\..\..\external\b2Separator-cpp;$(ProjectDir)\..\..\..\external\openal-soft_apportable\jni\OpenAL\include\AL;$(ProjectDir)\..\..\..\external\ALmixer\Isolated</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\ndk\jni;$(ProjectDir)\..\..\..\librtt;$(ProjectDir)\..\..\..\platform\shared;$(ProjectDir)\..\ndk;$(ProjectDir)\..\..\..\external\lua-5.1.3\src;$(ProjectDir)\..\..\..\;$(ProjectDir)\..\..\..\external\LuaHashMap;$(ProjectDir)\..\..\..\librtt\Corona;C:\NVPACK1r6\android-ndk-r12b\platforms\android-24\arch-arm\usr\include\machine;$(ProjectDir)\..\..\..\external\smoothpolygon;$(ProjectDir)\..\..\..\external\ALmixer;$(ProjectDir)\..\..\..\external\openal-soft_apportable\jni\OpenAL\include\AL;$(ProjectDir)\..\..\..\external\ALmixer\Isolated</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>Rtt_ANDROID_ENV;Rtt_DEBUG;ALMIXER_COMPILE_WITHOUT_SDL</PreprocessorDefinitions>
       <AdditionalOptions>-U"_WIN32" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -87,7 +87,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug386|Tegra-Android'">
     <ClCompile>
       <CppLanguageStandard>gnu++11</CppLanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\ndk\jni;$(ProjectDir)\..\..\..\librtt;$(ProjectDir)\..\..\..\platform\shared;$(ProjectDir)\..\ndk;$(ProjectDir)\..\..\..\external\lua-5.1.3\src;$(ProjectDir)\..\..\..\;$(ProjectDir)\..\..\..\external\LuaHashMap;$(ProjectDir)\..\..\..\librtt\Corona;C:\NVPACK1r6\android-ndk-r12b\platforms\android-24\arch-arm\usr\include\machine;$(ProjectDir)\..\..\..\external\Box2D;$(ProjectDir)\..\..\..\external\smoothpolygon;$(ProjectDir)\..\..\..\external\ALmixer;$(ProjectDir)\..\..\..\external\b2Separator-cpp;$(ProjectDir)\..\..\..\external\openal-soft_apportable\jni\OpenAL\include\AL;$(ProjectDir)\..\..\..\external\ALmixer\Isolated</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\ndk\jni;$(ProjectDir)\..\..\..\librtt;$(ProjectDir)\..\..\..\platform\shared;$(ProjectDir)\..\ndk;$(ProjectDir)\..\..\..\external\lua-5.1.3\src;$(ProjectDir)\..\..\..\;$(ProjectDir)\..\..\..\external\LuaHashMap;$(ProjectDir)\..\..\..\librtt\Corona;C:\NVPACK1r6\android-ndk-r12b\platforms\android-24\arch-arm\usr\include\machine;$(ProjectDir)\..\..\..\external\smoothpolygon;$(ProjectDir)\..\..\..\external\ALmixer;$(ProjectDir)\..\..\..\external\openal-soft_apportable\jni\OpenAL\include\AL;$(ProjectDir)\..\..\..\external\ALmixer\Isolated</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>Rtt_ANDROID_ENV;Rtt_DEBUG;ALMIXER_COMPILE_WITHOUT_SDL</PreprocessorDefinitions>
       <AdditionalOptions>-U"_WIN32" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -188,7 +188,6 @@
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-xhdpi\icon.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-xxhdpi\icon.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-xxxhdpi\icon.png" />
-    <None Include="Z:\corona\main\platform\android\sdk\res\raw\corona_map_view2.html" />
   </ItemGroup>
   <ItemGroup>
     <JCompile Include="src\com\ansca\corona\ActivityIndicatorDialog.java" />
@@ -219,8 +218,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaService.java" />
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSplashScreenApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaStatusBarApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaStatusBarSettings.java" />
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaVideoView.java" />
@@ -235,7 +232,6 @@
     <JCompile Include="src\com\ansca\corona\events\FinishedLoadUrlTask.java" />
     <JCompile Include="src\com\ansca\corona\events\GyroscopeTask.java" />
     <JCompile Include="src\com\ansca\corona\events\ImagePickerTask.java" />
-    <JCompile Include="src\com\ansca\corona\events\LocationTask.java" />
     <JCompile Include="src\com\ansca\corona\events\MediaEvent.java" />
     <JCompile Include="src\com\ansca\corona\events\MediaPickerTask.java" />
     <JCompile Include="src\com\ansca\corona\events\NotificationReceivedTask.java" />
@@ -300,19 +296,9 @@
     <JCompile Include="src\com\ansca\corona\JavaToNativeShim.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaShowApiListener.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaSplashScreenApiListener.java" />
-    <JCompile Include="src\com\ansca\corona\listeners\CoronaStatusBarApiListener.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaStoreApiListener.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaSystemApiListener.java" />
     <JCompile Include="src\com\ansca\corona\MailSettings.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapAddressReceivedTask.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapAddressRequestFailedTask.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapMarker.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapMarkerTask.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapRequestLocationFailedTask.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapRequestLocationTask.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapTappedTask.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapType.java" />
-    <JCompile Include="src\com\ansca\corona\map\MapView.java" />
     <JCompile Include="src\com\ansca\corona\MediaManager.java" />
     <JCompile Include="src\com\ansca\corona\MessageBasedTimer.java" />
     <JCompile Include="src\com\ansca\corona\NativeToJavaBridge.java" />
@@ -334,7 +320,6 @@
     <JCompile Include="src\com\ansca\corona\permissions\PermissionUrgency.java" />
     <JCompile Include="src\com\ansca\corona\permissions\RequestPermissionsResultData.java" />
     <JCompile Include="src\com\ansca\corona\purchasing\Store.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreActivity.java" />
     <JCompile Include="src\com\ansca\corona\purchasing\StoreName.java" />
     <JCompile Include="src\com\ansca\corona\purchasing\StoreProxy.java" />
     <JCompile Include="src\com\ansca\corona\purchasing\StoreServices.java" />

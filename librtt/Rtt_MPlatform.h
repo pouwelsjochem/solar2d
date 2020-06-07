@@ -121,19 +121,6 @@ class MPlatform
 			return kVirtualTexturesDir == directory;
 		}
 
-		typedef enum _StatusBarMode
-		{
-			kHiddenStatusBar = 0,
-			kDefaultStatusBar,
-			kTranslucentStatusBar,
-			kDarkStatusBar,
-			kLightTransparentStatusBar,
-			kDarkTransparentStatusBar,
-
-			kNumModes
-		}
-		StatusBarMode;
-
 		typedef enum _Category
 		{
 			kLocaleIdentifier = 0,
@@ -143,17 +130,6 @@ class MPlatform
 			
 			kNumCategories,
 			kUnknownCategory = -1
-
-			// This is a hack, but for 
-				, kDefaultStatusBarFile = -100
-				, kDarkStatusBarFile = -101
-				, kTranslucentStatusBarFile = -102
-
-				, kSubscription = -103
-
-				, kLightTransparentStatusBarFile = -104
-				, kDarkTransparentStatusBarFile = -105
-				, kScreenDressingFile = -106
 		}
 		Category;
 
@@ -161,7 +137,7 @@ class MPlatform
 		// Factory methods
 		virtual Rtt_Allocator& GetAllocator() const = 0;
 		virtual MPlatformDevice& GetDevice() const = 0;
-		virtual RenderingStream* CreateRenderingStream( bool antialias ) const = 0;
+		virtual RenderingStream* CreateRenderingStream() const = 0;
 		virtual PlatformSurface* CreateScreenSurface() const = 0;
 		virtual PlatformSurface* CreateOffscreenSurface( const PlatformSurface& parent ) const = 0;
 		virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const = 0;
@@ -193,13 +169,6 @@ class MPlatform
 		virtual PlatformImageProvider * GetImageProvider( const ResourceHandle<lua_State> & handle ) const = 0;
 		virtual PlatformVideoProvider * GetVideoProvider( const ResourceHandle<lua_State> & handle ) const = 0;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const = 0;
-
-		virtual void SetStatusBarMode( StatusBarMode newValue ) const = 0;
-		virtual StatusBarMode GetStatusBarMode() const = 0;
-		virtual int GetStatusBarHeight() const = 0;
-
-        virtual int GetTopStatusBarHeightPixels() const = 0;
-        virtual int GetBottomStatusBarHeightPixels() const = 0;
     
 		virtual void SetIdleTimer( bool enabled ) const = 0;
 		virtual bool GetIdleTimer() const = 0;
@@ -230,7 +199,6 @@ class MPlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const = 0;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const = 0;
 		
-		virtual PlatformDisplayObject* CreateNativeMapView( const Rect& bounds ) const = 0;
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const = 0;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const = 0;
         virtual PlatformFBConnect* GetFBConnect() const = 0;

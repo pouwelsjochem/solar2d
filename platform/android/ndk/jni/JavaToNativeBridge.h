@@ -81,7 +81,6 @@ class JavaToNativeBridge
 		void AxisEvent(int coronaDeviceId, int axisIndex, float rawValue);
 		void AccelerometerEvent(double x, double y, double z, double deltaTime);
 		void GyroscopeEvent(double x, double y, double z, double deltaTime);
-		void LocationEvent(double lat, double lon, double altitude, double accuracy, double speed, double bearing, double time);
 		void OrientationChanged(int newOrientation, int oldOrientation);
 		void ResizeEvent();
 		void AlertCallback(int which, bool cancelled);
@@ -110,15 +109,6 @@ class JavaToNativeBridge
 					JNIEnv *env, jint state, jint errorType, jstring errorMessage, jstring productId, jstring signature,
 					jstring receipt, jstring transactionId, jstring transactionTime,
 					jstring originalReceipt, jstring originalTransactionId, jstring originalTransactionTime);
-		void MapAddressReceivedEvent(
-					JNIEnv *env, jstring street, jstring streetDetails, jstring city, jstring cityDetails,
-					jstring region, jstring regionDetails, jstring postalCode,
-					jstring country, jstring countryCode);
-		void MapAddressRequestFailedEvent(JNIEnv *env, jstring errorMessage);
-		void MapRequestLocationFailedEvent(JNIEnv *env, jint listenerId, jstring errorMessage, jstring originalRequest);
-		void MapRequestLocationEvent(JNIEnv *env, jint listenerId, jdouble latitude, jdouble longitude, jstring originalRequest);
-		void MapMarkerEvent(jint markerId, jint listenerId, jdouble latitude, jdouble longitude);
-		void MapTappedEvent(jint id, jdouble latitude, jdouble longitude);
 		void VideoViewPreparedEvent(jint id);
 		void VideoViewEndedEvent(jint id);
 		const char* GetBuildId();

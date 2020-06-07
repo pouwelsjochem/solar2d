@@ -67,11 +67,9 @@ class PlatformSimulator
 			// Event Masks
 			kOrientationEventMask	= 0x0100,
 			kAccelerometerEventMask = 0x0200,
-			kLocationEventMask		= 0x0400,
-			kHeadingEventMask		= 0x0800,
-			kMultitouchEventMask	= 0x1000,
-			kGyroscopeEventMask		= 0x2000,
-			kMouseEventMask			= 0x4000
+			kMultitouchEventMask		= 0x0400,
+			kGyroscopeEventMask		= 0x0800,
+			kMouseEventMask	= 0x1000,
 		}
 		PropertyMask;
 
@@ -87,12 +85,10 @@ class PlatformSimulator
 			float screenOriginY;
 			float screenWidth;
 			float screenHeight;
-			float safeScreenInsetStatusBar;
 			float safeScreenInsetTop;
 			float safeScreenInsetLeft;
 			float safeScreenInsetBottom;
 			float safeScreenInsetRight;
-			float safeLandscapeScreenInsetStatusBar;
 			float safeLandscapeScreenInsetTop;
 			float safeLandscapeScreenInsetLeft;
 			float safeLandscapeScreenInsetBottom;
@@ -101,12 +97,6 @@ class PlatformSimulator
 			String deviceImageFile;
 			String displayManufacturer;
 			String displayName;
-			String statusBarDefaultFile;
-			String statusBarTranslucentFile;
-			String statusBarBlackFile;
-			String statusBarLightTransparentFile;
-			String statusBarDarkTransparentFile;
-			String screenDressingFile;
 			bool supportsScreenRotation;
 			bool supportsExitRequests;
 			bool supportsInputDevices;
@@ -151,12 +141,6 @@ class PlatformSimulator
 		static const char kPlatformKeyNameIPhone[];
 		static const char kPlatformKeyNameAndroid[];
 		static const char kPlatformKeyNameMac[];
-		// Currently loads the Lua state, computes the modules for a platform, closes the lua state.
-		// isdefined is true if the components array is defined in the build.settings. If the field is omitted, it is false, intended to let us know if we should revert to the old behavior. An empty array {} should be provided if you want to specify no modules are desired.
-		// iserror is true if the build.settings fails to load/run.
-		// U32 is from the LuaContext::ModuleMask
-		// platform keys are like: "iphone" or "android" or "mac", etc
-		U32 GetModulesFromBuildSettings( const char* platformkeyname, bool& isdefined, bool& iserror );
 	
 		// Device configuration --- not to be confused with config.lua
 		static void LoadConfig(const char deviceConfigFile[], Config& rConfig);
@@ -203,10 +187,6 @@ class PlatformSimulator
 	public:
 		const PlatformPlayer* GetPlayer() const { return fPlayer; }
 		PlatformPlayer* GetPlayer() { return fPlayer; }
-
-	public:
-		virtual void SetStatusBarMode( MPlatform::StatusBarMode newValue ) = 0;
-		virtual MPlatform::StatusBarMode GetStatusBarMode() const = 0;
 
 	public:
 		virtual void WillSuspend();

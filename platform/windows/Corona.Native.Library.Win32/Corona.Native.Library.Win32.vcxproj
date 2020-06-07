@@ -241,7 +241,6 @@
     <ClInclude Include="Rtt\Rtt_WinImageProvider.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDevice.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDeviceManager.h" />
-    <ClInclude Include="Rtt\Rtt_WinLocation.h" />
     <ClInclude Include="Rtt\Rtt_WinModalInteraction.h" />
     <ClInclude Include="Rtt\Rtt_WinPlatform.h" />
     <ClInclude Include="Rtt\Rtt_WinProjectSettings.h" />
@@ -356,7 +355,6 @@
     <ClCompile Include="Rtt\Rtt_WinImageProvider.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDevice.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDeviceManager.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinLocation.cpp" />
     <ClCompile Include="Rtt\Rtt_WinModalInteraction.cpp" />
     <ClCompile Include="Rtt\Rtt_WinPlatform.cpp" />
     <ClCompile Include="Rtt\Rtt_WinProjectSettings.cpp" />

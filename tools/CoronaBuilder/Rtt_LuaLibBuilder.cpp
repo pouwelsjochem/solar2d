@@ -26,8 +26,6 @@ namespace Rtt
 {
 
 
-// ----------------------------------------------------------------------------
-
 const char LuaLibBuilder::kName[] = "builder";
 
 int
@@ -37,7 +35,6 @@ LuaLibBuilder::Open( lua_State *L )
 	{
 		{ "fetch", &HTTPClient::fetch },
 		{ "download", &HTTPClient::download },
-
 		{ NULL, NULL }
 	};
 

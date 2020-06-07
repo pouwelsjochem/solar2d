@@ -158,7 +158,7 @@ TargetAndroidAppStore* TargetAndroidAppStore::GetByIndex(int index)
 }
 
 /// Fetches an Android app store build target by its unique string ID.
-/// @param stringId Unique ID of the store such as "google", "amazon", "nook", etc.
+/// @param stringId Unique ID of the store such as "google", "amazon", etc.
 /// @return Returns a pointer to the specified store.
 ///         Returns NULL if a store having the given ID was not found.
 TargetAndroidAppStore* TargetAndroidAppStore::GetByStringId(const char *stringId)

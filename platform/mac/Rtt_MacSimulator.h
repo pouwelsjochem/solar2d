@@ -56,10 +56,6 @@ class MacSimulator : public PlatformSimulator
 		// Optional callback for systems when the zoom/scale change finishes.
 		// On Mac, it is used to save the scale factor to user preferences so the next launch can be reopened at the same level.
 		virtual void DidChangeScale( float scalefactor );
-	
-	public:
-		virtual void SetStatusBarMode( MPlatform::StatusBarMode newValue );
-		virtual MPlatform::StatusBarMode GetStatusBarMode() const;
 
 	public:
 		GLView* GetScreenView() const;

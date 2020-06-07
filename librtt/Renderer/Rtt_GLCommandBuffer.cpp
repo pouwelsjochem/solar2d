@@ -66,8 +66,6 @@ namespace /*anonymous*/
 		kCommandEnableScissor,
 		kCommandDisableScissor,
 		kCommandSetScissorRegion,
-		kCommandEnableMultisample,
-		kCommandDisableMultisample,
 		kCommandClear,
 		kCommandDraw,
 		kCommandDrawIndexed,
@@ -328,6 +326,7 @@ GLCommandBuffer::Initialize()
 	glDisable( GL_STENCIL_TEST );
 	glDisable( GL_SCISSOR_TEST );
 	glDisable( GL_CULL_FACE );
+	glDisable( GL_MULTISAMPLE );
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glEnableVertexAttribArray( Geometry::kVertexPositionAttribute );
@@ -592,12 +591,6 @@ GLCommandBuffer::SetScissorRegion(int x, int y, int width, int height)
 	Write<GLint>(y);
 	Write<GLsizei>(width);
 	Write<GLsizei>(height);
-}
-
-void
-GLCommandBuffer::SetMultisampleEnabled( bool enabled )
-{
-	WRITE_COMMAND( enabled ? kCommandEnableMultisample : kCommandDisableMultisample );
 }
 
 void 
@@ -897,18 +890,6 @@ GLCommandBuffer::Execute( bool measureGPU )
 				GLsizei height = Read<GLsizei>();
 				glScissor( x, y, width, height );
 				DEBUG_PRINT( "Set scissor window x=%i, y=%i, width=%i, height=%i", x, y, width, height );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandEnableMultisample:
-			{
-				Rtt_glEnableMultisample();
-				DEBUG_PRINT( "Enable multisample test" );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandDisableMultisample:
-			{
-				Rtt_glDisableMultisample();
-				DEBUG_PRINT( "Disable multisample test" );
 				CHECK_ERROR_AND_BREAK;
 			}
 			case kCommandClear:

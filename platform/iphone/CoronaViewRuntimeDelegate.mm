@@ -121,18 +121,6 @@ CoronaViewRuntimeDelegate::InitializeConfig( const Runtime& sender, lua_State *L
 	lua_pop( L, 1 );
 }
 
-void
-CoronaViewRuntimeDelegate::DidLoadConfig( const Runtime& sender, lua_State *L ) const
-{
-	bool antialias = sender.GetDisplay().IsAntialiased();
-	if (antialias)
-	{
-		// TODO: Re-enable once we get this working properly
-		// GLKView *view = fOwner;
-		// view.drawableMultisample = GLKViewDrawableMultisample4X;
-	}
-}
-
 id< CoronaRuntime >
 CoronaViewRuntimeDelegate::GetPluginContext() const
 {

@@ -33,10 +33,6 @@ typedef enum GeometricProperty
 
 	kWidth,
 	kHeight,
-	kStageWidth,
-	kStageHeight,
-//	kStagePositionX,
-//	kStagePositionY,
 
 	kNumGeometricProperties
 }
@@ -53,7 +49,6 @@ struct Vertex2
 };
 
 // This is based on Apple/GLKit's GLKVector4.
-// Use Box2D's b2Vec2 for 2D vectors.
 union Vector4
 {
     struct { float x, y, z, w; };

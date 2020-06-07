@@ -49,7 +49,6 @@
 #include <CoreServices/CoreServices.h>
 #include <SystemConfiguration/SystemConfiguration.h>
 //#include <CoreFoundation/CFBundle.h>
-#import <CoreLocation/CoreLocation.h>
 
 #include "Rtt_Event.h"
 
@@ -257,7 +256,6 @@ NSString *kosVersionCurrent = @"10.15";  // should be updated as Apple releases 
 
 // These tags are defined on the various DeviceBuild dialogs in Interface Builder
 enum {
-	enableMonetizationTag = 1000,
 	osxSigningIdentitiesTag = 1001,
 };
 
@@ -560,8 +558,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @interface AppDelegate ()
 
 @property (nonatomic, readwrite, copy) NSString* fAppPath;
-@property (nonatomic, readwrite, copy) CLLocationManager *_locationManager;
-@property (nonatomic, readwrite, copy) CLLocation *_currentLocation;
 
 -(BOOL)setSkinIfAllowed:(Rtt::TargetDevice::Skin)skin;
 - (void) updateMenuForSkinChange;
@@ -585,8 +581,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @synthesize launchedWithFile;
 @synthesize allowLuaExit;
 @synthesize fHomeScreen;
-@synthesize _locationManager;
-@synthesize _currentLocation;
 @synthesize fAnalytics;
 
 +(BOOL)offlineModeAllowed {
@@ -1915,65 +1909,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 // END: Simulator UI (Preferences, Deauth, Open project)
 // -----------------------------------------------------------------------------
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-
-- (void) monetizationAlertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void  *)contextInfo
-{
-	if (returnCode == NSAlertFirstButtonReturn)
-	{
-		NSButton *monetizationEnabledBtn = (NSButton *) contextInfo;
-		[monetizationEnabledBtn setState:NSOnState];
-	}
-}
-
-- (void) monetizationLearnMore:(id)sender
-{
-	const char *learnMoreURL = "https://coronalabs.com/learnmore";
-
-	fConsolePlatform->OpenURL( learnMoreURL );
-}
-
-- (IBAction) monetizationEnabledClicked:(id)sender
-{
-	NSButton *monetizationEnabledBtn = (NSButton *) sender;
-
-	// If the user turns monetization off, warn them of what they're missing out on
-	if ([monetizationEnabledBtn state] == NSOffState)
-	{
-		NSString *titleText = @"Important!";
-		NSString *linkText = @"Learn More";
-		NSString *msgText = @"Disabling ad serving will limit your revenue potential. We encourage you to enable monetization to control which players see ads and IAP offers.\n\nAre you sure you want to disable monetization?";
-
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-
-		[alert setAlertStyle:NSWarningAlertStyle];
-		[alert setDelegate:self];
-
-		[alert setMessageText:titleText];
-		[alert setInformativeText:msgText];
-
-		// Button labels (see monetizationAlertDidEnd: above before changing)
-		[alert addButtonWithTitle:@"No"];
-		[alert addButtonWithTitle:@"Yes"];
-		[alert addButtonWithTitle:linkText];
-
-		// Fix up buttons: put focus ring on button #0, change action for button #2
-		NSArray *buttons = [alert buttons];
-		Rtt_ASSERT( [buttons count] == 3 );
-		[[alert window] makeFirstResponder:[buttons objectAtIndex:0]]; // stop the focus ring settling on the last button defined
-		[(NSButton *)[buttons objectAtIndex:2] setTarget:self];
-		[(NSButton *)[buttons objectAtIndex:2] setAction:@selector(monetizationLearnMore:)];
-
-		// Show the sheet
-		[alert beginSheetModalForWindow:[monetizationEnabledBtn window]
-						  modalDelegate:self
-						 didEndSelector:@selector(monetizationAlertDidEnd:returnCode:contextInfo:)
-							contextInfo:sender];
-	}
-}
-
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
-
 -(BOOL)runApp:(NSString*)appPath
 {
 	BOOL result = NO; // did launch?
@@ -2348,10 +2283,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		// Prevent subsequent launches from connecting to debugger --- must relaunch
 		// process to connect to debugger
 		fOptions.connectToDebugger = false;
-		
-		// The appdelegate handles location events independently of the runtime
-		// so we need to stop them here
-		[self endLocationUpdating];
 	}
 }
 
@@ -2872,64 +2803,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	return fSimulator ? fSimulator->GetWindow() : nil;
 }
 
-- (void) startLocationUpdating
-{
-	if (_locationManager == nil)
-	{
-		// Initialize CoreLocation
-		_locationManager = [[[CLLocationManager alloc] init] retain];
-		_locationManager.delegate = self;
-		_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-	}
-	
-	[_locationManager startUpdatingLocation];
-}
-
-- (void) endLocationUpdating
-{
-	if (_locationManager != nil)
-	{
-		[_locationManager stopUpdatingLocation];
-		[_locationManager release];
-		_locationManager = nil;
-	}
-}
-
-- (void) sendLocationEvent
-{
-	using namespace Rtt;
-
-	if (_currentLocation == nil || _locationManager == nil)
-	{
-		return;
-	}
-	
-	Runtime& runtime = self.simulator->GetPlayer()->GetRuntime();
-
-	if ( ! runtime.IsSuspended() )
-	{
-		LocationEvent e( _currentLocation.coordinate.latitude,
-						 _currentLocation.coordinate.longitude,
-						 _currentLocation.altitude,
-						 _currentLocation.horizontalAccuracy,
-						 _currentLocation.speed,
-						 _currentLocation.course,
-						 [_currentLocation.timestamp timeIntervalSince1970] );
-
-		runtime.DispatchEvent( e );
-	}
-}
-
-- (void) locationManager:(CLLocationManager *)manager
-	 didUpdateToLocation:(CLLocation *)newLocation
-		    fromLocation:(CLLocation *)oldLocation
-{
-	[_currentLocation release];
-	_currentLocation = [newLocation retain];
-	
-	[self sendLocationEvent];
-}
-
 /*
 static const int kCounterCycle = 30;
 
@@ -2998,12 +2871,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 {
 	// return ! [[NSUserDefaults standardUserDefaults] boolForKey:kEnableTVOSBuild];
 	return false;
-}
-
--(BOOL)isNookStoreBuildAvailable
-{
-	using namespace Rtt;
-	return [self isAllowedToBuild:TargetDevice::kNookPlatform];
 }
 
 -(void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void  *)contextInfo

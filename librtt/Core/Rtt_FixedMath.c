@@ -33,7 +33,7 @@ Rtt_EXPORT_BEGIN
 	#define tanf		(float)tan
 #endif
 */
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV ) || defined( Rtt_ANDROID_ENV )
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_ANDROID_ENV )
 #define M_LOG2_E	0.693147180559945309417
 #define log2f(a)	(float)(logf(a)/M_LOG2_E)
 #endif

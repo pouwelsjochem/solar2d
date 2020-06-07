@@ -26,12 +26,6 @@ simulator =
 	iosPointHeight = 812,
 	displayManufacturer = "Corona Labs Inc.",
 	displayName = "iPhone",
-	screenDressing = "iPhoneXScreenDressingBorderless.png",
-	statusBarDefault = "iPhoneXStatusBarBlack.png", 
-	statusBarTranslucent = "iPhoneXStatusBarWhite.png", 
-	statusBarBlack = "iPhoneXStatusBarBlack.png", 
-	statusBarLightTransparent = "iPhoneXStatusBarWhite.png",
-	statusBarDarkTransparent = "iPhoneXStatusBarBlack.png",
 	windowTitleBarName = "iPhone @3x",
 	defaultFontSize = 17 * 3,		-- Converts default font point size to pixels.
 }

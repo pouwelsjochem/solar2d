@@ -21,9 +21,6 @@
 		#include <GLES/gl.h>
 	#elif defined( Rtt_WIN_PHONE_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )
 		#include <GLES2/gl2.h>
-	#elif defined( Rtt_POWERVR_ENV )
-		#include <GLES/egl.h>
-		#include <GLES/gl.h>
 	#else
 		#error TODO: Add path to gl.h header
 	#endif

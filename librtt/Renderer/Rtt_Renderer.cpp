@@ -55,32 +55,14 @@ namespace /*anonymous*/
 	#endif
 
 	// ...
-	U32 ComputeRequiredVertices( Rtt::Geometry* geometry, bool wireframe )
+	U32 ComputeRequiredVertices( Rtt::Geometry* geometry )
 	{
-		if( wireframe )
+		switch( geometry->GetPrimitiveType() )
 		{
-			switch( geometry->GetPrimitiveType() )
-			{
-				case Rtt::Geometry::kTriangleStrip:
-				case Rtt::Geometry::kTriangleFan:
-					return 2 * ( 2 * ( geometry->GetVerticesUsed() - 2 ) + 1);
-				case Rtt::Geometry::kIndexedTriangles:
-					return 2 * geometry->GetIndicesUsed();
-				case Rtt::Geometry::kTriangles:
-					return 2 * geometry->GetVerticesUsed();
-				default:
-					return geometry->GetVerticesUsed();
-			}
-		}
-		else
-		{
-			switch( geometry->GetPrimitiveType() )
-			{
-				case Rtt::Geometry::kTriangleStrip:
-					return geometry->GetVerticesUsed() + 2;
-				default:
-					return geometry->GetVerticesUsed();
-			}
+			case Rtt::Geometry::kTriangleStrip:
+				return geometry->GetVerticesUsed() + 2;
+			default:
+				return geometry->GetVerticesUsed();
 		}
 	}
 }
@@ -136,10 +118,8 @@ Renderer::Renderer( Rtt_Allocator* allocator )
 	fMaskCountIndex( 0 ),
 	fMaskCount( allocator ),
 	fCurrentProgramMaskCount( 0 ),
-	fWireframeEnabled( false ),
 	fStatisticsEnabled( false ),
 	fScissorEnabled( false ),
-	fMultisampleEnabled( false ),
 	fFrameBufferObject( NULL ),
 	fInsertionLimit( std::numeric_limits<U32>::max() ),
 	fTimeDependencyCount( 0 )
@@ -338,22 +318,6 @@ Renderer::SetScissorEnabled( bool enabled )
 	DEBUG_PRINT( "Enabled scissor testing\n" );
 }
 
-bool
-Renderer::GetMultisampleEnabled() const
-{
-	return fMultisampleEnabled;
-}
-
-void
-Renderer::SetMultisampleEnabled( bool enabled )
-{
-	fMultisampleEnabled = enabled;
-	CheckAndInsertDrawCommand();
-	fBackCommandBuffer->SetMultisampleEnabled( enabled );
-	
-	DEBUG_PRINT( "Enabled multisample testing\n" );
-}
-
 FrameBufferObject* 
 Renderer::GetFrameBufferObject() const
 {
@@ -480,7 +444,7 @@ Renderer::Insert( const RenderData* data )
 
 	// Geometry that is stored on the GPU does not need to be copied
 	// over each frame. As a consequence, they can not be batched.	
-	if( geometry->GetStoredOnGPU() && !fWireframeEnabled )
+	if( geometry->GetStoredOnGPU() )
 	{
 		FlushBatch();
 
@@ -534,9 +498,9 @@ Renderer::Insert( const RenderData* data )
 		}
 		fPrevious.fGeometry = geometry;
 		
-		// Depending on batching, wireframe, etc, the amount of space
+		// Depending on batching, etc, the amount of space
 		// needed may be more than what is used by the Geometry itself.
-		const U32 verticesRequired = ComputeRequiredVertices( geometry, fWireframeEnabled );
+		const U32 verticesRequired = ComputeRequiredVertices( geometry );
 //		bool enoughSpace = fCurrentGeometry;
 //		if ( enoughSpace )
 //		{
@@ -562,19 +526,6 @@ Renderer::Insert( const RenderData* data )
 
 		// Update previous batch
 		fPreviousPrimitiveType = primitiveType;
-		
-		if( fWireframeEnabled )
-		{
-			if( fPreviousPrimitiveType != Geometry::kLineLoop )
-			{
-				fPreviousPrimitiveType = Geometry::kLines;
-			}
-			
-			if( geometry->GetStoredOnGPU() && !geometry->fGPUResource )
-			{
-				QueueCreate( geometry );
-			}
-		}
 	}
 	fRenderDataCount++;
 
@@ -692,7 +643,7 @@ Renderer::Insert( const RenderData* data )
 			QueueCreate( data->fProgram );
 		}
 
-		Program::Version version = fWireframeEnabled ? Program::kWireframe : static_cast<Program::Version>( MaskCount() );
+		Program::Version version = static_cast<Program::Version>( MaskCount() );
 		fBackCommandBuffer->BindProgram( data->fProgram, version );
 		fPrevious.fProgram = data->fProgram;
 		INCREMENT( fStatistics.fProgramBindCount );
@@ -859,18 +810,6 @@ Renderer::DestroyQueuedGPUResources()
 	fDestroyQueue.Remove(0, fDestroyQueue.Length(), false);
 }
 
-bool
-Renderer::GetWireframeEnabled() const
-{
-	return fWireframeEnabled;
-}
-
-void
-Renderer::SetWireframeEnabled( bool enabled )
-{
-	fWireframeEnabled = enabled;
-}
-
 U32
 Renderer::GetMaxTextureSize()
 {
@@ -1006,7 +945,7 @@ Renderer::UpdateBatch( bool batch, bool enoughSpace, bool storedOnGPU, U32 verti
 {
 	CheckAndInsertDrawCommand();
 
-	if( storedOnGPU && !fWireframeEnabled )
+	if( storedOnGPU )
 	{
 		fVertexOffset = fCachedVertexOffset;
 		fVertexCount = fCachedVertexCount;
@@ -1040,52 +979,23 @@ Renderer::CopyVertexData( Geometry* geometry, Geometry::Vertex* destination, boo
 {
 	const U32 verticesUsed = geometry->GetVerticesUsed();
 	const U32 vertexSize = sizeof(Geometry::Vertex);
-
-	if( fWireframeEnabled )
+	if( geometry->GetPrimitiveType() == Geometry::kTriangleStrip )
 	{
-		// Given the primitive type, convert the vertex data to lines
-		switch( geometry->GetPrimitiveType() )
-		{
-			case Geometry::kTriangleStrip:
-				CopyTriangleStripsAsLines( geometry, destination );
-				break;
-			case Geometry::kTriangleFan:
-				CopyTriangleFanAsLines( geometry, destination );
-				break;
-			case Geometry::kTriangles:
-				CopyTrianglesAsLines( geometry, destination );
-				break;
-			case Geometry::kIndexedTriangles:
-				CopyIndexedTrianglesAsLines( geometry, destination );
-				break;
-			case Geometry::kLineLoop:
-				memcpy( fCurrentVertex, geometry->GetVertexData(), verticesUsed * vertexSize );
-				break;
-			case Geometry::kLines:
-				memcpy( fCurrentVertex, geometry->GetVertexData(), verticesUsed * vertexSize );
-				break;
-		}
+		// Triangle strips are batched by adding degenerate triangles
+		// at the beginning and end of each strip.
+		memcpy( destination++, geometry->GetVertexData(), vertexSize );
+		
+		memcpy( destination, geometry->GetVertexData(), verticesUsed * vertexSize );
+		destination += verticesUsed;
+
+		memcpy( destination++, geometry->GetVertexData() + verticesUsed - 1, vertexSize );
+		fDegenerateVertexCount = 1;
 	}
 	else
 	{
-		if( geometry->GetPrimitiveType() == Geometry::kTriangleStrip )
-		{
-			// Triangle strips are batched by adding degenerate triangles
-			// at the beginning and end of each strip.
-			memcpy( destination++, geometry->GetVertexData(), vertexSize );
-
-			memcpy( destination, geometry->GetVertexData(), verticesUsed * vertexSize );
-			destination += verticesUsed;
-
-			memcpy( destination++, geometry->GetVertexData() + verticesUsed - 1, vertexSize );
-			fDegenerateVertexCount = 1;
-		}
-		else
-		{
-			// For data which does not exist on the GPU and is not batched,
-			// we still double buffer it to be threadsafe.
-			memcpy( fCurrentVertex, geometry->GetVertexData(), verticesUsed * vertexSize );
-		}
+		// For data which does not exist on the GPU and is not batched,
+		// we still double buffer it to be threadsafe.
+		memcpy( fCurrentVertex, geometry->GetVertexData(), verticesUsed * vertexSize );
 	}
 }
 

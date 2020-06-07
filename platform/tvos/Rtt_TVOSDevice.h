@@ -66,10 +66,6 @@ class TVOSDevice : public MPlatformDevice
 		virtual bool Deactivate( ActivationType key ) const;
 
 	public:
-		virtual void SetLocationAccuracy( Real meters ) const;
-		virtual void SetLocationThreshold( Real meters ) const;
-
-	public:
 		virtual DeviceOrientation::Type GetOrientation() const;
 
 	public:

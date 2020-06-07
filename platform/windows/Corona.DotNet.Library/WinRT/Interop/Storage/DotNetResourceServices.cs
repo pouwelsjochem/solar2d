@@ -3,7 +3,7 @@
 
 namespace CoronaLabs.Corona.WinRT.Interop.Storage
 {
-	/// <summary>Provides access to embedded resources, such as Corona's widget library images.</summary>
+	/// <summary>Provides access to embedded resources.</summary>
 	public class DotNetResourceServices : IResourceServices
 	{
 		#region Private Member Variables

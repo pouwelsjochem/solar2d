@@ -20,7 +20,6 @@
 @class CoronaViewController;
 @protocol CoronaOrientationObserver;
 @protocol CoronaGyroscopeObserver;
-@protocol CLLocationManagerDelegate;
 
 // C++ Forward Declarations
 namespace Rtt
@@ -59,7 +58,6 @@ class IPhonePlatformBase;
 @property (nonatomic, assign) id< CoronaViewLaunchDelegate > launchDelegate;
 
 @property (nonatomic, assign) id< CoronaOrientationObserver > orientationObserver;
-@property (nonatomic, assign) id< CLLocationManagerDelegate > locationObserver;
 @property (nonatomic, assign) id< CoronaGyroscopeObserver > gyroscopeObserver;
 
 + (Rtt::DeviceOrientation::Type)deviceOrientationForString:(NSString *)value;

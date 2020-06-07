@@ -22,9 +22,6 @@
     <activity android:name="com.ansca.corona.VideoActivity"
               android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
               android:configChanges="keyboardHidden|orientation" />
-    <activity android:name="com.ansca.corona.purchasing.StoreActivity"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-              android:configChanges="keyboardHidden|screenSize|orientation" />
     <provider android:name="com.ansca.corona.storage.FileContentProvider"
               android:authorities="com.ansca.corona.files"
               android:exported="true" />

@@ -93,12 +93,6 @@ class Renderer
 		// will only be applied if scissor testing is explicitly enabled.
 		void SetScissorEnabled( bool enabled );
 
-		// Get/Set the corresponding Renderer state for multisampling.
-		// This does NOT take care of any surface-related settings
-		// for multisampling b/c that's OS-specific.
-		bool GetMultisampleEnabled() const;
-		void SetMultisampleEnabled( bool enabled );
-
 		// Get the active FrameBufferObject or NULL if one does not exist.
 		FrameBufferObject* GetFrameBufferObject() const;
 
@@ -157,12 +151,6 @@ class Renderer
 		// The GPU resources denoted by the given pointer will be destroyed
 		// the next time a valid rendering context is available.
 		void QueueDestroy( GPUResource* resource );
-
-		// Return true if wireframe rendering is enabled. Disabled by default.
-		bool GetWireframeEnabled() const;
-
-		// Render triangles as outlines with no interior. Useful for debugging.
-		void SetWireframeEnabled( bool enabled );
 
 		static U32 GetMaxTextureSize();
 		static const char *GetGlString( const char *s );
@@ -279,7 +267,6 @@ class Renderer
 		Array< U32 > fMaskCount; // "Stack" of mask counts
 		U32 fCurrentProgramMaskCount;
 
-		bool fWireframeEnabled;
 		bool fStatisticsEnabled;
 		Statistics fStatistics;
 		Rtt_AbsoluteTime fStartTime;
@@ -289,7 +276,6 @@ class Renderer
 		S32 fViewport[4];
 		S32 fScissor[4];
 		bool fScissorEnabled;
-		bool fMultisampleEnabled;
 		FrameBufferObject* fFrameBufferObject;
 
 		RenderData fPrevious;

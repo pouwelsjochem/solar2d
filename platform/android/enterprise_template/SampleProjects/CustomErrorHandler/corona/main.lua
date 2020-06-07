@@ -6,9 +6,6 @@
 -- Import the UI Lua library.
 local ui = require("ui")
 
--- Hide the status bar.
-display.setStatusBar(display.HiddenStatusBar)
-
 -- Display a background.
 local background = display.newRect(0, 0, display.contentWidth, display.contentHeight)
 background:setFillColor(255, 165, 0)

@@ -86,11 +86,6 @@ class LuaDisplayObjectProxyVTable : public LuaProxyVTable
 		static int translate( lua_State *L );
 		static int scale( lua_State *L );
 		static int rotate( lua_State *L );
-		static int stageBounds( lua_State *L );
-//		static int stageWidth( lua_State *L );
-//		static int stageHeight( lua_State *L );
-		static int canvas( lua_State *L );
-//		static int length( lua_State *L );
 
 	protected:
 		LuaDisplayObjectProxyVTable() {}
@@ -147,56 +142,6 @@ class LuaShapeObjectProxyVTable : public LuaDisplayObjectProxyVTable
 
 	protected:
 		LuaShapeObjectProxyVTable() {}
-
-	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
-		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
-		virtual const LuaProxyVTable& Parent() const;
-};
-
-class LuaEmitterObjectProxyVTable : public LuaDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaEmitterObjectProxyVTable Self;
-		typedef LuaDisplayObjectProxyVTable Super;
-
-	public:
-		static const Self& Constant();
-
-	public:
-		static int start( lua_State *L );
-		static int stop( lua_State *L );
-		static int pause( lua_State *L );
-
-	protected:
-		LuaEmitterObjectProxyVTable() {}
-
-	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
-		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
-		virtual const LuaProxyVTable& Parent() const;
-};
-
-class LuaParticleSystemObjectProxyVTable : public LuaDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaParticleSystemObjectProxyVTable Self;
-		typedef LuaDisplayObjectProxyVTable Super;
-
-	public:
-		static const Self& Constant();
-
-	public:
-		static int ApplyForce( lua_State *L );
-		static int ApplyLinearImpulse( lua_State *L );
-		static int CreateGroup( lua_State *L );
-		static int CreateParticle( lua_State *L );
-		static int DestroyParticlesInShape( lua_State *L );
-		static int QueryRegion( lua_State *L );
-		static int RayCast( lua_State *L );
-
-	protected:
-		LuaParticleSystemObjectProxyVTable() {}
 
 	public:
 		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
@@ -370,19 +315,6 @@ class LuaPlatformTextBoxObjectProxyVTable : public LuaPlatformDisplayObjectProxy
 
 	public:
 		LuaPlatformTextBoxObjectProxyVTable();
-		static const Self& Constant();
-
-	public:
-		virtual const LuaProxyVTable& Parent() const;
-};
-
-class LuaPlatformMapViewObjectProxyVTable : public LuaPlatformDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaPlatformMapViewObjectProxyVTable Self;
-
-	public:
-		LuaPlatformMapViewObjectProxyVTable();
 		static const Self& Constant();
 
 	public:

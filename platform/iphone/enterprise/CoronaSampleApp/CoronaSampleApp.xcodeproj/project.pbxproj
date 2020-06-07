@@ -23,7 +23,6 @@
 		A484117915128D5D0074BD57 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116515128D5C0074BD57 /* AudioToolbox.framework */; };
 		A484117A15128D5D0074BD57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116615128D5C0074BD57 /* AVFoundation.framework */; };
 		A484117B15128D5D0074BD57 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116715128D5C0074BD57 /* CFNetwork.framework */; };
-		A484117C15128D5D0074BD57 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116815128D5C0074BD57 /* CoreLocation.framework */; };
 		A484117D15128D5D0074BD57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116915128D5C0074BD57 /* CoreMedia.framework */; };
 		A484117E15128D5D0074BD57 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116A15128D5C0074BD57 /* CoreMotion.framework */; };
 		A484117F15128D5D0074BD57 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116B15128D5D0074BD57 /* GameKit.framework */; };
@@ -66,7 +65,6 @@
 		A484116515128D5C0074BD57 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A484116615128D5C0074BD57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A484116715128D5C0074BD57 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		A484116815128D5C0074BD57 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		A484116915128D5C0074BD57 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A484116A15128D5C0074BD57 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		A484116B15128D5D0074BD57 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -107,7 +105,6 @@
 				A484117A15128D5D0074BD57 /* AVFoundation.framework in Frameworks */,
 				A484117B15128D5D0074BD57 /* CFNetwork.framework in Frameworks */,
 				A484112215114F700074BD57 /* CoreGraphics.framework in Frameworks */,
-				A484117C15128D5D0074BD57 /* CoreLocation.framework in Frameworks */,
 				A484117D15128D5D0074BD57 /* CoreMedia.framework in Frameworks */,
 				A484117E15128D5D0074BD57 /* CoreMotion.framework in Frameworks */,
 				A484112015114F700074BD57 /* Foundation.framework in Frameworks */,
@@ -160,7 +157,6 @@
 				A484116615128D5C0074BD57 /* AVFoundation.framework */,
 				A484116715128D5C0074BD57 /* CFNetwork.framework */,
 				A484112115114F700074BD57 /* CoreGraphics.framework */,
-				A484116815128D5C0074BD57 /* CoreLocation.framework */,
 				A484116915128D5C0074BD57 /* CoreMedia.framework */,
 				A484116A15128D5C0074BD57 /* CoreMotion.framework */,
 				A484111F15114F700074BD57 /* Foundation.framework */,

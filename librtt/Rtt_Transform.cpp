@@ -181,19 +181,6 @@ Transform::SetUserMatrix( Matrix* newValue )
 	}
 }
 
-void
-Transform::SetV1Compatibility( bool newValue )
-{
-	if ( newValue )
-	{
-		fBits.properties |= kIsV1Compatibility;
-	}
-	else
-	{
-		fBits.properties &= ~kIsV1Compatibility;
-	}
-}
-
 
 void
 Transform::Invalidate()
@@ -232,12 +219,6 @@ Transform::GetMatrix( const Vertex2 *anchorOffset )
 		if ( userMatrix )
 		{
 			fMatrix.Prepend( * userMatrix );
-		}
-
-		bool isV1 = IsV1Compatibility();
-		if ( isV1 && anchorOffset )
-		{
-			dx -= anchorOffset->x; dy -= anchorOffset->y;
 		}
 
 		fMatrix.Translate( dx, dy );

@@ -48,12 +48,6 @@
 	<string>NSContactsUsageDescription should be set to a valid usage description</string>
     <key>NSHomeKitUsageDescription</key>
 	<string>NSHomeKitUsageDescription should be set to a valid usage description</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-	<string>NSLocationAlwaysUsageDescription should be set to a valid usage description</string>
-    <key>NSLocationUsageDescription</key>
-	<string>NSLocationUsageDescription should be set to a valid usage description</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-	<string>NSLocationWhenInUseUsageDescription should be set to a valid usage description</string>
     <key>NSMicrophoneUsageDescription</key>
 	<string>NSMicrophoneUsageDescription should be set to a valid usage description</string>
     <key>NSMotionUsageDescription</key>

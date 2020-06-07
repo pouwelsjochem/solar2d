@@ -56,49 +56,6 @@ IPhonePlatformCore::GetDevice() const
 	return const_cast< IPhoneDevice& >( fDevice );
 }
 
-int
-IPhonePlatformCore::GetStatusBarHeight() const
-{
-    return Super::GetStatusBarHeight();
-}
-
-int
-IPhonePlatformCore::GetTopStatusBarHeightPixels() const
-{
-    int result = Super::GetTopStatusBarHeightPixels();
-    CGFloat scale_factor = [[UIScreen mainScreen] scale];
-
-// iOS 8's status bar height doesn't flip height/width Cored on orientation if building with the 8 SDK.
-// It reverts to the old behavior of flipping height/width Cored on orientation if building with < 8 SDK.
-#ifdef __IPHONE_8_0
-	if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0)
-	{
-		result = [UIApplication sharedApplication].statusBarFrame.size.height * scale_factor;
-	}
-	else
-#endif
-	{
-		UIInterfaceOrientation currentOrienation = [UIApplication sharedApplication].statusBarOrientation;
-		if ( UIInterfaceOrientationPortrait == currentOrienation ||
-			UIDeviceOrientationPortraitUpsideDown == currentOrienation)
-		{
-			result = [UIApplication sharedApplication].statusBarFrame.size.height * scale_factor;
-		}
-		else
-		{
-			result = [UIApplication sharedApplication].statusBarFrame.size.width * scale_factor;
-		}
-	}
-	
-    return result;
-}
-    
-int
-IPhonePlatformCore::GetBottomStatusBarHeightPixels() const
-{
-    return Super::GetBottomStatusBarHeightPixels();
-}
-
 bool
 IPhonePlatformCore::SaveImageToPhotoLibrary(const char* filePath) const
 {

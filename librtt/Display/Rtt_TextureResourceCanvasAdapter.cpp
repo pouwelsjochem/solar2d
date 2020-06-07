@@ -192,7 +192,7 @@ int TextureResourceCanvasAdapter::setBackground( lua_State *L )
 		TextureResourceCanvas *entry = (TextureResourceCanvas *)sender->GetUserdata();
 		if (entry) {
 			Color c = ColorZero();
-			c = LuaLibDisplay::toColor( L, 2, false );
+			c = LuaLibDisplay::toColor( L, 2 );
 			entry->SetClearColor( c );
 		}
 	}

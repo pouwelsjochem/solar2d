@@ -222,7 +222,6 @@ TargetDevice::ReleaseAllSkins()
 static const char kAndroidPlatformString[] = "Android";
 static const char kIOSPlatformString[] = "iOS";
 static const char kKindlePlatformString[] = "Amazon/Kindle";
-static const char kNookPlatformString[] = "Nook";
 static const char kWebPlatformString[] = "HTML5";
 static const char kLinuxPlatformString[] = "LINUX";
 static const char kWin32PlatformString[] = "Win32";
@@ -245,9 +244,6 @@ TargetDevice::StringForPlatform( TargetDevice::Platform platform )
 			break;
 		case kKindlePlatform:
 			result = kKindlePlatformString;
-			break;
-		case kNookPlatform:
-			result = kNookPlatformString;
 			break;
 		case kWebPlatform:
 			result = kWebPlatformString;
@@ -290,10 +286,6 @@ TargetDevice::PlatformForString( const char *str )
 		{
 			result = kKindlePlatform;
 		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kNookPlatformString ) )
-		{
-			result = kNookPlatform;
-		}
 		else if ( 0 == Rtt_StringCompareNoCase( str, kWebPlatformString ) )
 		{
 			result = kWebPlatform;
@@ -330,7 +322,6 @@ TargetDevice::PlatformForString( const char *str )
 static const char kAndroidPlatformTag[] = "android";
 static const char kIOSPlatformTag[] = "ios";
 static const char kKindlePlatformTag[] = "kindle";
-static const char kNookPlatformTag[] = "nook";
 static const char kWebPlatformTag[] = "html5";
 static const char kLinuxPlatformTag[] = "linux";
 static const char kWin32PlatformTag[] = "win32";
@@ -354,9 +345,6 @@ TargetDevice::TagForPlatform( TargetDevice::Platform platform )
 			break;
 		case kKindlePlatform:
 			result = kKindlePlatformTag;
-			break;
-		case kNookPlatform:
-			result = kNookPlatformTag;
 			break;
 		case kWebPlatform:
 			result = kWebPlatformTag;
@@ -398,10 +386,6 @@ TargetDevice::PlatformForTag( const char *str )
 		else if ( 0 == Rtt_StringCompareNoCase( str, kKindlePlatformTag ) )
 		{
 			result = kKindlePlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kNookPlatformTag ) )
-		{
-			result = kNookPlatform;
 		}
 		else if ( 0 == Rtt_StringCompareNoCase( str, kWebPlatformTag ) )
 		{
@@ -447,7 +431,6 @@ TargetDevice::VersionForPlatform( Platform platform )
 	{
 		case kAndroidPlatform:
 		case kKindlePlatform:
-		case kNookPlatform:
 			result = kAndroidOS4_0_3;
 			break;
 		case kOSXPlatform:
@@ -665,10 +648,6 @@ TargetDevice::PlatformForDeviceType( const char *typeName )
 		else if (substringSearchCallback(typeName, "macos"))
 		{
 			platformType = kOSXPlatform;
-		}
-		else if (substringSearchCallback(typeName, "nook"))
-		{
-			platformType = kNookPlatform;
 		}
 		else if (substringSearchCallback(typeName, "win32"))
 		{

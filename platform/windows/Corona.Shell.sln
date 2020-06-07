@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Corona.Shell", "Corona.Shell\Corona.Shell.vcxproj", "{9F3E032C-637C-4D20-98FC-7BB2D7F06AF6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D.Library.Win32", "Box2D.Library\Box2D.Library.Win32.vcxproj", "{EB74DA6F-6EBC-422E-8B7B-88A93AD5F8D6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLite.Library.Win32", "SQLite.Library\SQLite.Library.Win32.vcxproj", "{AE9CFC36-7BD6-4B1E-B17A-6EC1248EE733}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pthreads.Library.Win32", "Pthreads.Library.Win32\Pthreads.Library.Win32.vcxproj", "{A2E5AD7E-DE8D-486B-8D92-0F29B24397CC}"

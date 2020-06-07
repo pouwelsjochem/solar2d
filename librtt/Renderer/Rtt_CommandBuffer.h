@@ -82,7 +82,6 @@ class CommandBuffer
 		virtual void SetViewport( int x, int y, int width, int height ) = 0;
 		virtual void SetScissorEnabled( bool enabled ) = 0;
 		virtual void SetScissorRegion( int x, int y, int width, int height ) = 0;
-		virtual void SetMultisampleEnabled( bool enabled ) = 0;
 		virtual void Clear( Real r, Real g, Real b, Real a ) = 0;
 		virtual void Draw( U32 offset, U32 count, Geometry::PrimitiveType type ) = 0;
 		virtual void DrawIndexed( U32 offset, U32 count, Geometry::PrimitiveType type ) = 0;

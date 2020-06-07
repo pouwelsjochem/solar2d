@@ -8,7 +8,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #import <AppKit/NSView.h>
-#import <CoreLocation/CoreLocation.h>
 
 #import "CoronaCards/CoronaView.h"
 
@@ -63,13 +62,9 @@ namespace Rtt
 @property (nonatomic, readonly) Rtt::MacPlatform *_platform;
 @property (nonatomic, readonly) Rtt::CoronaViewRuntimeDelegate *_runtimeDelegate;
 @property (nonatomic, readonly, getter=projectSettings) Rtt::ProjectSettings *_projectSettings;
-@property (nonatomic, readwrite, copy) CLLocationManager *_locationManager;
-@property (nonatomic, readwrite, copy) CLLocation *_currentLocation;
 @property (nonatomic, readwrite, copy) NSDictionary *_launchParams;
 
 - (id)initWithPath:(NSString *)path frame:(NSRect)frame;
-- (void) startLocationUpdating;
-- (void) endLocationUpdating;
 
 @end
 

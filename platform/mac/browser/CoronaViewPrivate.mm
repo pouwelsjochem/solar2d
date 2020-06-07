@@ -86,8 +86,6 @@ CoronaViewListenerAdapter( lua_State *L )
 @synthesize _platform;
 @synthesize _runtimeDelegate;
 @synthesize _projectSettings;
-@synthesize _locationManager;
-@synthesize _currentLocation;
 @synthesize _launchParams;
 
 
@@ -641,83 +639,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	return frame;
 }
 //#endif // 0
-
-- (void) startLocationUpdating
-{
-	if (_locationManager == nil)
-	{
-		// Initialize CoreLocation
-		_locationManager = [[CLLocationManager alloc] init];
-		_locationManager.delegate = self;
-		_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-	}
-	
-	[self requestAuthorizationLocation];
-	
-	[_locationManager startUpdatingLocation];
-}
-
-- (void) endLocationUpdating
-{
-	if (_locationManager != nil)
-	{
-		[_locationManager stopUpdatingLocation];
-		[_locationManager release];
-		_locationManager = nil;
-	}
-}
-
-// > The user prompt contains the text from the NSLocationWhenInUseUsageDescription key
-// > in your app’s Info.plist file, and the presence of that key is required when calling
-// > this method.
-- (void) requestAuthorizationLocation
-{
-#if 0
-	// Calling requestWhenInUseAuthorization only does something if the authorization
-	// status is kCLAuthorizationStatusNotDetermined so if its something else we can
-	// skip this block
-	if ( [CLLocationManager authorizationStatus] != kCLAuthorizationStatusNotDetermined )
-	{
-		return;
-	}
-	
-	CLLocationManager *locationManager = _locationManager;
-	
-	if ( [locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)] )
-	{
-		[locationManager requestWhenInUseAuthorization];
-	}
-#endif // 0
-}
-
--(void) sendLocationEvent
-{
-	if (_currentLocation == nil)
-	{
-		return;
-	}
-	
-	NSDictionary *event = @{ @"name" : @"location",
-							 @"latitude" : [NSNumber numberWithDouble:_currentLocation.coordinate.latitude],
-							 @"longitude" : [NSNumber numberWithDouble:_currentLocation.coordinate.longitude],
-							 @"altitude" : [NSNumber numberWithDouble:_currentLocation.altitude],
-							 @"accuracy" : [NSNumber numberWithDouble:_currentLocation.horizontalAccuracy],
-							 @"speed" : [NSNumber numberWithDouble:_currentLocation.speed],
-							 @"direction" : [NSNumber numberWithDouble:_currentLocation.course],
-							 @"time" : [NSNumber numberWithDouble:[_currentLocation.timestamp timeIntervalSince1970]] };
-	
-	[self sendEvent:event];
-}
-
-- (void)locationManager:(CLLocationManager *)manager
-	didUpdateToLocation:(CLLocation *)newLocation
-		   fromLocation:(CLLocation *)oldLocation
-{
-	[_currentLocation release];
-	_currentLocation = [newLocation retain];
-	
-	[self sendLocationEvent];
-}
 
 // Interface for hosts to send "open URL" AppleScript events
 - (void) handleOpenURL:(NSString *)urlStr

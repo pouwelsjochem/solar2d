@@ -52,10 +52,8 @@ import dalvik.system.DexClassLoader;
 
 import com.ansca.corona.AudioRecorder.AudioByteBufferHolder;
 import com.ansca.corona.listeners.CoronaSplashScreenApiListener;
-import com.ansca.corona.listeners.CoronaStatusBarApiListener;
 import com.ansca.corona.listeners.CoronaStoreApiListener;
 import com.ansca.corona.listeners.CoronaSystemApiListener;
-import com.ansca.corona.maps.MapType;
 import com.ansca.corona.permissions.PermissionsSettings;
 import com.ansca.corona.permissions.PermissionsServices;
 import com.ansca.corona.permissions.PermissionState;
@@ -1078,7 +1076,6 @@ public class NativeToJavaBridge {
 			boolean didCreate = directory.mkdirs();
 			if (didCreate == false) {
 				// The default pictures directory will be unavailable on devices that do not have external storage.
-				// The "Nook Color" is one of those devices and B&N suggests that we hard code the path as follows.
 				directory = new java.io.File("/mnt/media/My Files/Pictures");
 				if (directory.exists() == false) {
 					// Failed to find the picture directory. Give up.
@@ -1513,77 +1510,22 @@ public class NativeToJavaBridge {
 		return runtime.getController().getIdleTimer();
 	}
 
-	protected static void callSetStatusBarMode(final int mode, CoronaRuntime runtime)
-	{
-		CoronaStatusBarApiListener listener = runtime.getController().getCoronaStatusBarApiListener();
-		if (listener != null) {
-			listener.setStatusBarMode(CoronaStatusBarSettings.fromCoronaIntId(mode));
-		}
-	}
-	
-	protected static int callGetStatusBarMode(CoronaRuntime runtime)
-	{
-		CoronaStatusBarSettings mode = CoronaStatusBarSettings.HIDDEN;
-		
-		synchronized (runtime.getController()) {
-			CoronaStatusBarApiListener listener = runtime.getController().getCoronaStatusBarApiListener();
-			if (listener != null) {
-				mode = listener.getStatusBarMode();
-			}
-		}
-		return mode.toCoronaIntId();
-	}
-	
-	protected static int callGetStatusBarHeight(CoronaRuntime runtime) {
-		int height = 0;
-		
-		synchronized (runtime.getController()) {
-			CoronaStatusBarApiListener listener = runtime.getController().getCoronaStatusBarApiListener();
-			if (listener != null) {
-				return listener.getStatusBarHeight();
-			}
-		}
-		return height;
-	}
-
 	protected static float[] callGetSafeAreaInsetPixels(CoronaRuntime runtime)
 	{
 		float[] result = new float[4];
 		synchronized (runtime.getController()) {
-			CoronaStatusBarApiListener listener = runtime.getController().getCoronaStatusBarApiListener();
-			CoronaStatusBarSettings statusBarMode = listener.getStatusBarMode();
-			boolean hasNavigationBar = listener.HasSoftwareKeys();
-			if (listener != null) {
-				if (listener.IsAndroidTV()) {
-					int contentHeight = JavaToNativeShim.getContentHeightInPixels(runtime);
-					int contentWidth = JavaToNativeShim.getContentWidthInPixels(runtime);
-					result[ 0 ] = result[ 3 ] = (float)Math.floor(contentHeight * 0.05f);
-					result[ 1 ] = result[ 2 ] = (float)Math.floor(contentWidth * 0.05f);
-				}
-				else {
-					result[ 0 ] = (statusBarMode != CoronaStatusBarSettings.HIDDEN) ? listener.getStatusBarHeight() : 0;
-					if (hasNavigationBar && runtime.getController().getSystemUiVisibility().contains("immersive"))
-					{
-						result[ 1 ] = result[ 2 ] = result[ 3 ] = 0;
-					} else {
-						int navBarIndex = 4;
-						if ((statusBarMode == CoronaStatusBarSettings.LIGHT_TRANSPARENT || 
-							 statusBarMode == CoronaStatusBarSettings.DARK_TRANSPARENT) && hasNavigationBar){
-								WindowOrientation currentOrientation = WindowOrientation.fromCurrentWindowUsing(runtime.getController().getContext());
-								navBarIndex = (currentOrientation == WindowOrientation.PORTRAIT_UPRIGHT) ? 3 : 2;
-						}
-						for (int i = 1; i < 4; i++) {
-							result[ i ] = (i == navBarIndex) ? listener.getNavigationBarHeight() : 0;
-						}
-					}
-				}
-			}
-			else { 
+			UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+			int uiMode = uiModeManager.getCurrentModeType();
+			if (uiMode == 4) { // returns true only for TV
+				int contentHeight = JavaToNativeShim.getContentHeightInPixels(runtime);
+				int contentWidth = JavaToNativeShim.getContentWidthInPixels(runtime);
+				result[ 0 ] = result[ 3 ] = (float)Math.floor(contentHeight * 0.05f);
+				result[ 1 ] = result[ 2 ] = (float)Math.floor(contentWidth * 0.05f);
+			} else { 
 				for (int i = 0; i < 4; i++) {
 					result [ i ] = 0;
 				}
 			}
-			
 		}
 		return result;
 	}
@@ -1681,11 +1623,6 @@ public class NativeToJavaBridge {
 	protected static boolean callHasGyroscope(CoronaRuntime runtime)
 	{
 		return runtime.getController().hasGyroscope();
-	}
-
-	protected static boolean callHasHeadingHardware(CoronaRuntime runtime)
-	{
-		return runtime.getController().hasHeadingHardware();
 	}
 	
 	protected static void callSetEventNotification( CoronaRuntime runtime, int eventType, boolean enable )
@@ -2251,16 +2188,6 @@ public class NativeToJavaBridge {
 		runtime.getController().vibrate();
 	}
 
-	protected static void callSetLocationAccuracy( double meters, CoronaRuntime runtime )
-	{
-		// TODO: unimplemented
-	}
-
-	protected static void callSetLocationThreshold( double meters, CoronaRuntime runtime )
-	{
-		runtime.getController().setLocationThreshold(meters);
-	}
-
 	protected static float callGetVolume( CoronaRuntime runtime, long id )
 	{
 		return runtime.getController().getMediaManager().getVolume( id );
@@ -2563,79 +2490,6 @@ public class NativeToJavaBridge {
 		return runtime.getViewManager().videoViewGetIsPlaying(id);
 	}
 
-	protected static void callMapViewCreate(CoronaRuntime runtime, int id, int left, int top, int width, int height) {
-		runtime.getViewManager().addMapView(id, left, top, width, height);
-	}
-
-	protected static boolean callMapViewIsCurrentLocationVisible(CoronaRuntime runtime, int id) {
-		return runtime.getViewManager().isCurrentLocationVisibleInMap(id);
-	}
-
-	protected static int callMapViewPushCurrentLocationToLua(CoronaRuntime runtime, int id, long luaStateMemoryAddress) {
-		return runtime.getViewManager().pushMapCurrentLocationToLua(id, luaStateMemoryAddress);
-	}
-
-	protected static boolean callMapViewIsScrollEnabled(CoronaRuntime runtime, int id) {
-		return runtime.getViewManager().isMapScrollEnabled(id);
-	}
-
-	protected static void callMapViewSetScrollEnabled(CoronaRuntime runtime, int id, boolean enabled) {
-		runtime.getViewManager().setMapScrollEnabled(id, enabled);
-	}
-
-	protected static boolean callMapViewIsZoomEnabled(CoronaRuntime runtime, int id) {
-		return runtime.getViewManager().isMapZoomEnabled(id);
-	}
-
-	protected static void callMapViewSetZoomEnabled(CoronaRuntime runtime, int id, boolean enabled) {
-		runtime.getViewManager().setMapZoomEnabled(id, enabled);
-	}
-
-	protected static String callMapViewGetType(CoronaRuntime runtime, int id) {
-		MapType mapType = runtime.getViewManager().getMapType(id);
-		if (mapType == null) {
-			mapType = MapType.STANDARD;
-		}
-		return mapType.toInvariantString();
-	}
-
-	protected static void callMapViewSetType(CoronaRuntime runtime, int id, String mapTypeName) {
-		MapType mapType = MapType.fromInvariantString(mapTypeName);
-		if (mapType != null) {
-			runtime.getViewManager().setMapType(id, mapType);
-		}
-	}
-
-	protected static int callMapViewAddMarker(
-		CoronaRuntime runtime, int id, double latitude, double longitude, String title, String subtitle, int listener, String imageFile)
-	{
-		com.ansca.corona.maps.MapMarker mapMarker = new com.ansca.corona.maps.MapMarker(latitude, longitude);
-		mapMarker.setTitle(title);
-		mapMarker.setSubtitle(subtitle);
-		mapMarker.setListener(listener);
-		mapMarker.setImageFile(imageFile);
-		return runtime.getViewManager().addMapMarker(id, mapMarker);
-	}
-
-	protected static void callMapViewRemoveMarker(CoronaRuntime runtime, int id, int markerId)
-	{
-		runtime.getViewManager().removeMapMarker(id, markerId);
-	}
-
-	protected static void callMapViewRemoveAllMarkers(int id, CoronaRuntime runtime) {
-		runtime.getViewManager().removeAllMapViewMarkers(id);
-	}
-
-	protected static void callMapViewSetCenter(CoronaRuntime runtime, int id, double latitude, double longitude, boolean isAnimated) {
-		runtime.getViewManager().setMapCenter(id, latitude, longitude, isAnimated);
-	}
-
-	protected static void callMapViewSetRegion(
-		CoronaRuntime runtime, int id, double latitude, double longitude, double latitudeSpan, double longitudeSpan, boolean isAnimated)
-	{
-		runtime.getViewManager().setMapRegion(id, latitude, longitude, latitudeSpan, longitudeSpan, isAnimated);
-	}
-
 	protected static int callCryptoGetDigestLength( String algorithm ) {
 		return Crypto.GetDigestLength(algorithm);
 	}
@@ -2646,266 +2500,6 @@ public class NativeToJavaBridge {
 
 	protected static byte[] callCryptoCalculateHMAC( String algorithm, byte[] key, byte[] data ) {
 		return Crypto.CalculateHMAC(algorithm, key, data);
-	}
-
-	protected static void callRequestNearestAddressFromCoordinates(CoronaRuntime runtime, long luaStateMemoryAddress) {
-		// Throw an exception if this application does not have the following permission.
-		android.content.Context context = CoronaEnvironment.getApplicationContext();
-		if (context != null) {
-			context.enforceCallingOrSelfPermission(android.Manifest.permission.INTERNET, null);
-		}
-
-		com.naef.jnlua.LuaState luaState = null;
-		if (runtime != null) {
-			luaState = runtime.getLuaState();
-		}
-
-		// Using coroutines will give a different lua state than what the runtime has so this is to verify its the same one
-		if (luaState == null || CoronaRuntimeProvider.getLuaStateMemoryAddress(luaState) != luaStateMemoryAddress) {
-			luaState = new com.naef.jnlua.LuaState(luaStateMemoryAddress);
-		}
-
-		luaState.checkArg(-1, CoronaLua.isListener(luaState, -1, "requestLocation"), "The third arguement of nearestAddress should be a listener.");
-		int functionListener = CoronaLua.newRef( luaState, -1 );
-		double longitude = luaState.checkNumber(-2);
-		double latitude = luaState.checkNumber(-3);
-		
-		final double latitudeFinal = latitude;
-		final double longitudeFinal = longitude;
-		final int functionListenerFinal = functionListener;
-
-		final CoronaRuntimeTaskDispatcher dispatcher = new CoronaRuntimeTaskDispatcher( luaState );
-		//This is run on a gl thread.  We do this so that we can make non blocking calls
-		Thread asyncOperation = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				android.location.Address address = null;
-				String errorMessage = null;
-
-				// Fetch the nearest address via the Geocoder.
-				try {
-					java.util.List<android.location.Address> addresses;
-					android.location.Geocoder geocoder;
-					geocoder = new android.location.Geocoder(CoronaEnvironment.getApplicationContext());
-					addresses = geocoder.getFromLocation(latitudeFinal, longitudeFinal, 1);
-					if ((addresses != null) && (addresses.size() > 0)) {
-						address = addresses.get(0);
-					}
-				}
-				catch (Exception ex) {
-					errorMessage = ex.getMessage();
-				}
-
-				if (errorMessage == null) {
-					errorMessage = "Address not found for given coordinates.";
-				}
-				final String errorMessageFinal = errorMessage;
-				final android.location.Address addressFinal = address;
-
-				//This is run on the gl thread
-				com.ansca.corona.CoronaRuntimeTask task = new com.ansca.corona.CoronaRuntimeTask() {
-					@Override
-					public void executeUsing(com.ansca.corona.CoronaRuntime runtime) {	
-						LuaState L = runtime.getLuaState();
-						CoronaLua.newEvent( L, "nearestAddress");
-						if (addressFinal != null) {
-							try {
-								if ( addressFinal.getThoroughfare() != null) {
-									L.pushString( addressFinal.getThoroughfare() );
-									L.setField( -2, "street" );
-								}
-								
-								if ( addressFinal.getSubThoroughfare() != null) {
-									L.pushString( addressFinal.getSubThoroughfare() );
-									L.setField( -2, "streetDetail" );
-								}
-								
-								if ( addressFinal.getLocality() != null) {
-									L.pushString( addressFinal.getLocality() );
-									L.setField( -2, "city" );
-								}
-								
-								if ( addressFinal.getSubLocality() != null) {
-									L.pushString( addressFinal.getSubLocality() );
-									L.setField( -2, "cityDetail" );
-								}
-								
-								if ( addressFinal.getAdminArea() != null) {
-									L.pushString( addressFinal.getAdminArea() );
-									L.setField( -2, "region" );
-								}
-								
-								if ( addressFinal.getSubAdminArea() != null) {
-									L.pushString( addressFinal.getSubAdminArea() );
-									L.setField( -2, "regionDetail" );
-								}
-								
-								if ( addressFinal.getPostalCode() != null) {
-									L.pushString( addressFinal.getPostalCode() );
-									L.setField( -2, "postalCode" );
-								}
-								
-								if ( addressFinal.getCountryName() != null) {
-									L.pushString( addressFinal.getCountryName() );
-									L.setField( -2, "country" );
-								}
-								
-								if ( addressFinal.getCountryCode() != null) {
-									L.pushString( addressFinal.getCountryCode() );
-									L.setField( -2, "countryCode" );
-								}
-								
-								CoronaLua.dispatchEvent( L, functionListenerFinal, 0 );
-							}
-							catch (Exception ex) {
-								ex.printStackTrace();
-							}
-						} else {
-							try {
-								L.pushBoolean( true );
-								L.setField( -2, CoronaLuaEvent.ISERROR_KEY );
-
-								L.pushString( errorMessageFinal );
-								L.setField( -2, "errorMessage" );
-
-								CoronaLua.dispatchEvent( L, functionListenerFinal, 0 );
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}
-						}
-						CoronaLua.deleteRef( L, functionListenerFinal);
-					}
-				};
-
-				dispatcher.send(task);
-			}
-		});
-		asyncOperation.start();
-	}
-
-	protected static void callRequestLocationAsync(final CoronaRuntime runtime, long luaStateMemoryAddress) {
-		// Throw an exception if this application does not have the following permission.
-		android.content.Context context = CoronaEnvironment.getApplicationContext();
-		if (context != null) {
-			context.enforceCallingOrSelfPermission(android.Manifest.permission.INTERNET, null);
-		}
-
-		//Get the lua state from the run time if it exists or from the memory address
-		com.naef.jnlua.LuaState luaState = null;
-		if (runtime != null) {
-			luaState = runtime.getLuaState();
-		}
-
-		// Using coroutines will give a different lua state than what the runtime has so this is to verify its the same one
-		if (luaState == null || CoronaRuntimeProvider.getLuaStateMemoryAddress(luaState) != luaStateMemoryAddress) {
-			luaState = new com.naef.jnlua.LuaState(luaStateMemoryAddress);
-		}
-
-		String locationString = null ;
-		luaState.checkArg(-1, CoronaLua.isListener(luaState, -1, "mapLocation"), "The third arguement of requestLocation should be a listener.");
-		final int functionListenerFinal = CoronaLua.newRef( luaState, -1 );
-		final String locationFinal = luaState.checkString(-2);
-		
-		final CoronaRuntimeTaskDispatcher dispatcher = runtime.getTaskDispatcher();
-
-		//This is run on a third thread.  We do this so that we can make none blocking calls
-		Thread asyncOperation = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Location location = NativeToJavaBridge.getLocationFromName(locationFinal);
-				
-				if (dispatcher != null) {
-					if (location != null) {
-						dispatcher.send(new com.ansca.corona.maps.MapRequestLocationTask(functionListenerFinal, location.getLatitude(), location.getLongitude(), locationFinal));
-					} else {
-						dispatcher.send(new com.ansca.corona.maps.MapRequestLocationFailedTask(functionListenerFinal, "", locationFinal));
-					}
-				}
-			}
-		});
-		asyncOperation.start();
-	}
-
-	/**
-	 * Given a location name, pushes the latitude and longitude to the lua stack.  The difference between this and callRequestLocationAsync
-	 * is that this is blocking and callRequestLocationAsync isn't blocking
-	 */
-	protected static int callPushLocationNameCoordinatesToLua(CoronaRuntime runtime, String locationName, long luaStateMemoryAddress) {
-		double latitude = 0;
-		double longitude = 0;
-
-		// Throw an exception if this application does not have the following permission.
-		android.content.Context context = CoronaEnvironment.getApplicationContext();
-		if (context != null) {
-			context.enforceCallingOrSelfPermission(android.Manifest.permission.INTERNET, null);
-		}
-
-		com.naef.jnlua.LuaState luaState = null;
-		if (runtime != null) {
-			luaState = runtime.getLuaState();
-		}
-		
-		// Using coroutines will give a different lua state than what the runtime has so this is to verify its the same one
-		if (luaState == null || CoronaRuntimeProvider.getLuaStateMemoryAddress(luaState) != luaStateMemoryAddress) {
-			luaState = new com.naef.jnlua.LuaState(luaStateMemoryAddress);
-		}
-
-		Location location = getLocationFromName(locationName);
-		if (location != null) {
-			latitude = location.getLatitude();
-			longitude = location.getLongitude();
-		}
-
-		// Push location coordinates to Lua.
-		luaState.pushNumber(latitude);
-		luaState.pushNumber(longitude);
-		return 2;
-	}
-
-
-	/**
-	 * Returns a location object with the latitude and longitude set from the supplied location name
-	 */
-	private static Location getLocationFromName(String locationName) {
-		Location locationObject = null;
-		if ((locationName != null) && (locationName.length() > 0)) {
-			android.net.http.AndroidHttpClient httpClient = null;
-			org.apache.http.HttpResponse httpResponse;
-			try {
-				//The sensor parameter is required but its not clear what effect it has on the request
-				String url = "http://maps.googleapis.com/maps/api/geocode/json?address=" +
-						java.net.URLEncoder.encode(locationName) + "&sensor=true";
-				httpClient = android.net.http.AndroidHttpClient.newInstance("Android");
-				httpResponse = httpClient.execute(new org.apache.http.client.methods.HttpGet(url));
-				if (httpResponse.getStatusLine().getStatusCode() == org.apache.http.HttpStatus.SC_OK) {
-					if (httpResponse.getEntity() != null) {
-						String responseMessage = org.apache.http.util.EntityUtils.toString(httpResponse.getEntity());
-
-						//main meat of parsing the json object returned from google
-						if ((responseMessage != null) && (responseMessage.length() > 0)) {
-							JSONObject response = new JSONObject(responseMessage);
-							JSONArray result = response.getJSONArray("results");
-							JSONObject result1 = result.getJSONObject(0);
-							JSONObject geo = result1.getJSONObject("geometry");
-							JSONObject location = geo.getJSONObject("location");
-							locationObject = new Location("Google");
-							locationObject.setLatitude(location.getDouble("lat"));
-							locationObject.setLongitude(location.getDouble("lng"));
-						}
-					}
-				}
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			finally {
-				if (httpClient != null) {
-					try { httpClient.close(); }
-					catch (Exception ex) { }
-				}
-			}
-		}
-		return locationObject;
 	}
 
 	protected static void callFlurryInit( String applicationId )
@@ -3095,10 +2689,6 @@ public class NativeToJavaBridge {
 		// Register for push notifications.
 		// If this is a new project number, then this method will automatically unregister the last project number.
 		gcmServices.register(projectNumber);
-	}
-
-	protected static void callGoogleSetMapsAPIKey(final CoronaRuntime runtime, String mapsKey) {
-		runtime.getController().SetGoogleMapsAPIKey(mapsKey);
 	}
 
 	protected static void callGooglePushNotificationsUnregister(CoronaRuntime runtime) {

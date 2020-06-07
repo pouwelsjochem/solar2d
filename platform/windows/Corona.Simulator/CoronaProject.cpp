@@ -227,10 +227,6 @@ CCoronaProject::RegistryGet( CString sSection )
     m_AliasPassword.RegistryGet( sSection, REGISTRY_ALIASPWD, GetAlias() );    
 	stringBuffer = pApp->GetProfileString(sSection, REGISTRY_CREATE_LIVE_BUILD, REGISTRY_CREATE_LIVE_BUILD_DEFAULT);
 	m_CreateLiveBuild = _ttoi(stringBuffer) ? true : false;
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	stringBuffer = pApp->GetProfileString(sSection, REGISTRY_ENABLE_MONETIZATION, REGISTRY_ENABLE_MONETIZATION_DEFAULT);
-	m_EnableMonetization = _ttoi(stringBuffer) ? true : false;
-#endif
 }
 
 // RegistryPut - save each value to the given section
@@ -262,10 +258,6 @@ CCoronaProject::RegistryPut( CString sSection )
 	m_AliasPassword.RegistryPut(sSection, REGISTRY_ALIASPWD, GetAlias());
 	stringBuffer.Format(_T("%d"), m_CreateLiveBuild);
 	pApp->WriteProfileString(sSection, REGISTRY_CREATE_LIVE_BUILD, stringBuffer);
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	stringBuffer.Format(_T("%d"), m_EnableMonetization);
-	pApp->WriteProfileString(sSection, REGISTRY_ENABLE_MONETIZATION, stringBuffer);
-#endif
 }
 
 bool
@@ -566,16 +558,6 @@ void CCoronaProject::SetCreateLiveBuild(bool createLiveBuild)
 	m_CreateLiveBuild = createLiveBuild;
 }
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-bool CCoronaProject::GetEnableMonetization()
-{
-	return m_EnableMonetization;
-}
-void CCoronaProject::SetEnableMonetization(bool enableMonetization)
-{
-	m_EnableMonetization = enableMonetization;
-}
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
 ///////////////////////////////////////////////////////////////////////////////
 // CEncryptedKeeper
 ///////////////////////////////////////////////////////////////////////////////

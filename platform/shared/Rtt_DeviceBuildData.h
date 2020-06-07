@@ -46,8 +46,6 @@ class DeviceBuildData
 		bool Initialize(
 				const char *appSettingsPath,
 				const char *buildSettingsPath,
-				bool includeFusePlugins,
-				bool usesMonetization,
 				bool liveBuild,
 				int debugBuildProcess);
 
@@ -55,9 +53,6 @@ class DeviceBuildData
 
 	private:
 		void PushCoronaPluginMetadata( lua_State *L );
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-		void AddRequiredPlugin( lua_State *L, const char *name );
-#endif
 		void AddPlugin( lua_State *L, const char *moduleName, int index );
 
 	protected:
@@ -82,9 +77,6 @@ class DeviceBuildData
 		int fBuildYear;
 		int fBuildRevision;
 		int fDebugBuildProcess;
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-		String fFuseStagingSuffix;
-#endif
 };
 
 // ----------------------------------------------------------------------------

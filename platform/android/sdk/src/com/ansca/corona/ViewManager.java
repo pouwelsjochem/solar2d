@@ -9,8 +9,6 @@
 
 package com.ansca.corona;
 
-import com.ansca.corona.maps.MapView;
-import com.ansca.corona.maps.MapType;
 import com.ansca.corona.permissions.PermissionsServices;
 import com.ansca.corona.permissions.PermissionsSettings;
 import com.ansca.corona.permissions.PermissionState;
@@ -21,7 +19,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -199,10 +196,6 @@ public class ViewManager {
 		// Traverse all views and stop any operations that they are currently performing.
 		synchronized (myDisplayObjects) {
 			for (android.view.View view : myDisplayObjects) {
-				if (view instanceof MapView) {
-					// Disable the map view's GPS.
-					((MapView)view).setCurrentLocationTrackingEnabled(false);
-				}
 				else if (view instanceof CoronaVideoView) {
 					// Suspend video playback.
 					((CoronaVideoView)view).suspend();
@@ -219,10 +212,6 @@ public class ViewManager {
 		// Traverse all views and restart them.
 		synchronized (myDisplayObjects) {
 			for (android.view.View view : myDisplayObjects) {
-				if (view instanceof MapView) {
-					// Re-enable the map view's GPS.
-					((MapView)view).setCurrentLocationTrackingEnabled(true);
-				}
 				else if (view instanceof CoronaVideoView) {
 					// Resume video's last playback state.
 					((CoronaVideoView)view).resume();
@@ -700,9 +689,6 @@ public class ViewManager {
 					((android.webkit.WebView)view).stopLoading();
 					((android.webkit.WebView)view).destroy();
 				}
-				else if (view instanceof MapView) {
-					((MapView)view).destroy();
-				}
 
 				// Set the view's ID to an invalid value.
 				// This causes any upcoming events that may get raised by the destroyed view to be ignored.
@@ -802,7 +788,7 @@ public class ViewManager {
 					
 					// Alpha blend the view via an animation object.
 					if ((newAlpha < 0.9999f) && (view.getVisibility() == View.VISIBLE)) {
-						if ((view instanceof android.webkit.WebView) || (view instanceof MapView)) {
+						if ((view instanceof android.webkit.WebView)) {
 							// A hardware accelerated WebView shows graphics glitches with animations applied to it.
 							// We must disable hardware acceleration permanently to work-around this issue.
 							setHardwareAccelerationEnabled(view, false);
@@ -827,11 +813,6 @@ public class ViewManager {
 				// Fetch the view.
 				View view = getDisplayObjectById(id);
 				if (view == null) {
-					return;
-				}
-
-				// Do not continue if the view's background cannot be hidden.
-				if (view instanceof MapView) {
 					return;
 				}
 				
@@ -903,11 +884,7 @@ public class ViewManager {
 		}
 		
 		// Determine if the view has a background.
-		if (view instanceof MapView) {
-			// Map views always have a background.
-			hasBackground = true;
-		}
-		else if (view instanceof android.webkit.WebView) {
+		if (view instanceof android.webkit.WebView) {
 			// Unlike other views, web views do not use drawable objects for their backgrounds.
 			// Their background colors must be retrieved specially.
 			int color = CoronaWebView.getBackgroundColorFrom((android.webkit.WebView)view);
@@ -1209,312 +1186,6 @@ public class ViewManager {
 			public void run() {
 				CookieManager manager = CookieManager.getInstance();
 				manager.removeAllCookie();
-			}
-		});
-	}
-
-	public void addMapView(final int id, final int left, final int top, final int width, final int height) {
-		// Throw an exception if this application does not have the following permission.
-		android.content.Context context = CoronaEnvironment.getApplicationContext();
-		if (context != null) {
-			context.enforceCallingOrSelfPermission(android.Manifest.permission.INTERNET, null);
-		}
-
-		// Create the map view on the main UI thread.
-		postOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				// Do not continue if the activity has just exited out.
-				if ((myContext == null) || (myAbsoluteViewLayout == null)) {
-					return;
-				}
-				
-				// Create and set up the map view.
-				MapView view = new MapView(myContext, myCoronaRuntime, myCoronaRuntime.getController());
-				view.setId(id);
-				view.setTag(new StringObjectHashMap());
-				
-				// Position the web view on screen.
-				LayoutParams layoutParams = new AbsoluteLayout.LayoutParams(width, height, left, top);
-				myAbsoluteViewLayout.addView(view, layoutParams);
-				view.bringToFront();
-				
-				// Add the view to the display object collection to be made accessible to the native side of Corona.
-				synchronized (myDisplayObjects) {
-					myDisplayObjects.add(view);
-				}
-			}
-		});
-	}
-
-	public int pushMapCurrentLocationToLua(int id, long luaStateMemoryAddress) {
-		// Fetch the Lua state object for the given memory address.
-		CoronaRuntime runtime = myCoronaRuntime;
-		if (runtime == null) {
-			return 0;
-		}
-		com.naef.jnlua.LuaState luaState = runtime.getLuaState();
-		if (luaState == null || CoronaRuntimeProvider.getLuaStateMemoryAddress(luaState) != luaStateMemoryAddress) {
-			return 0;
-		}
-
-		// Fetch the map view's current location data.
-		android.location.Location currentLocation = null;
-		MapView view = getDisplayObjectById(MapView.class, id);
-		if (view != null) {
-			currentLocation = view.getCurrentLocation();
-		}
-
-		// Push current location data onto the Lua stack.
-		luaState.newTable(0, 0);
-		int luaTableStackIndex = luaState.getTop();
-		if (currentLocation != null) {
-			luaState.pushNumber(currentLocation.getLatitude());
-			luaState.setField(luaTableStackIndex, "latitude");
-			luaState.pushNumber(currentLocation.getLongitude());
-			luaState.setField(luaTableStackIndex, "longitude");
-			luaState.pushNumber(currentLocation.getAltitude());
-			luaState.setField(luaTableStackIndex, "altitude");
-			luaState.pushNumber((double)currentLocation.getAccuracy());
-			luaState.setField(luaTableStackIndex, "accuracy");
-			luaState.pushNumber((double)currentLocation.getSpeed());
-			luaState.setField(luaTableStackIndex, "speed");
-			luaState.pushNumber((double)currentLocation.getBearing());
-			luaState.setField(luaTableStackIndex, "direction");
-			luaState.pushNumber((double)currentLocation.getTime());
-			luaState.setField(luaTableStackIndex, "time");
-			luaState.pushBoolean(true);
-			luaState.setField(luaTableStackIndex, "isUpdating");
-		}
-		else { 
-			// Figure out what the error is:
-			int errorCode = -3;
-			String errorMessage = "Current location is unknown.";
-
-			// Gather information about the environement we're running in.
-			Controller controller = null;
-			Context context = null;
-			controller = runtime.getController();
-			if (controller != null) {
-				context = controller.getContext();
-				if (context == null) {
-					Log.v("Corona", "ViewManager.pushMapCurrentLocationToLua() cannot continue because there is no Context!");
-					return 0;
-				}
-			} else {
-				Log.v("Corona", "ViewManager.pushMapCurrentLocationToLua() cannot continue because there is no Controller!");
-				return 0;
-			}
-			// TODO: TEST AND HANDLE SPECIAL COMBINATIONS OF PERMISSIONS AND INCLUSION/LACK OF LOCATION HARDWARE!
-			// The change would as significant as the one for CoronaSensorManager.java
-			// Based on: http://stackoverflow.com/questions/7990267/android-check-gps-availability-on-device
-			PackageManager pm = context.getPackageManager();
-			LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-			java.util.List<String> enabledLocationProviders = manager.getProviders(true);
-
-			// Gather info about the state of permissions in the app.
-			PermissionsServices permissionsServices = new PermissionsServices(CoronaEnvironment.getApplicationContext());
-			PermissionState fineLocationState = permissionsServices.getPermissionStateFor(
-				PermissionsServices.Permission.ACCESS_FINE_LOCATION);
-			PermissionState coarseLocationState = permissionsServices.getPermissionStateFor(
-				PermissionsServices.Permission.ACCESS_COARSE_LOCATION);
-
-			// Check if we have means to get the current location on this device!
-			if (!pm.hasSystemFeature(PackageManager.FEATURE_LOCATION)) {
-				errorCode = -2;
-				errorMessage = "Current location tracking is not available on this device.";
-			}
-			// Check if permisions are missing, and say that they're missing.
-			else if (fineLocationState == PermissionState.MISSING 
-				&& coarseLocationState == PermissionState.MISSING) {
-				errorCode = 1;
-				errorMessage = "App is missing location permissions.";
-			}
-			// Check if permission is denied.
-			else if (fineLocationState != PermissionState.GRANTED 
-				&& coarseLocationState != PermissionState.GRANTED) {
-
-				// Check if user hit "Never Ask Again" for permissions they're requesting and say that it's denied if so.
-				if ((fineLocationState == PermissionState.DENIED 
-						&& permissionsServices.shouldNeverAskAgain(PermissionsServices.Permission.ACCESS_FINE_LOCATION))
-					|| 
-					(coarseLocationState == PermissionState.DENIED
-						&& permissionsServices.shouldNeverAskAgain(PermissionsServices.Permission.ACCESS_COARSE_LOCATION))) {
-					errorCode = 2;
-					errorMessage = "Location is denied by user.";
-				} else {
-					// Request them both and say that status is pending.
-					permissionsServices.requestAllDeniedPermissionsInGroup(
-						PermissionsServices.PermissionGroup.LOCATION, new LocationRequestPermissionsResultHandler());
-
-					errorCode = 0;
-					errorMessage = "Pending user authorization.";
-				}
-			}
-			// Check if location services are disabled! 
-			// This is the case if there are no location providers, or there's just the passive location provider.
-			// The passive location provider may remain on even if the user has disabled location services.
-			else if (enabledLocationProviders == null 
-				|| enabledLocationProviders.isEmpty()
-				|| (enabledLocationProviders.size() == 1
-					&& enabledLocationProviders.get(0).equals("passive"))) {
-				errorCode = -1;
-				errorMessage = "Location services are disabled.";
-			}
-
-			// Push out the error details to Lua.
-			luaState.pushInteger(errorCode);
-			luaState.setField(luaTableStackIndex, "errorCode");
-			luaState.pushString(errorMessage);
-			luaState.setField(luaTableStackIndex, "errorMessage");
-		}
-		return 1;
-	}
-
-	public boolean isCurrentLocationVisibleInMap(int id) {
-		MapView view = getDisplayObjectById(MapView.class, id);
-		if (view == null) {
-			return false;
-		}
-		return view.isCurrentLocationVisible();
-	}
-
-	/** Default handling of the location permissions on Android 6+. */
-	public static class LocationRequestPermissionsResultHandler 
-		implements CoronaActivity.OnRequestPermissionsResultHandler {
-
-		@Override
-		public void onHandleRequestPermissionsResult(
-				CoronaActivity activity, int requestCode, String[] permissions, int[] grantResults) {
-			PermissionsSettings permissionsSettings = activity.unregisterRequestPermissionsResultHandler(this);
-
-			if (permissionsSettings != null) {
-				permissionsSettings.markAsServiced();
-			}
-		}
-	}
-
-	public boolean isMapScrollEnabled(int id) {
-		MapView view = getDisplayObjectById(MapView.class, id);
-		if (view == null) {
-			return false;
-		}
-		return view.isScrollEnabled();
-	}
-
-	public void setMapScrollEnabled(final int id, final boolean enabled) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				MapView view = getDisplayObjectById(MapView.class, id);
-				if (view != null) {
-					view.setScrollEnabled(enabled);
-				}
-			}
-		});
-	}
-
-	public boolean isMapZoomEnabled(int id) {
-		MapView view = getDisplayObjectById(MapView.class, id);
-		if (view == null) {
-			return false;
-		}
-		return view.isZoomEnabled();
-	}
-
-	public void setMapZoomEnabled(final int id, final boolean enabled) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				MapView view = getDisplayObjectById(MapView.class, id);
-				if (view != null) {
-					view.setZoomEnabled(enabled);
-				}
-			}
-		});
-	}
-
-	public MapType getMapType(int id) {
-		MapView view = getDisplayObjectById(MapView.class, id);
-		if (view == null) {
-			return MapType.STANDARD;
-		}
-		return view.getMapType();
-	}
-
-	public void setMapType(final int id, final MapType mapType) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				MapView view = getDisplayObjectById(MapView.class, id);
-				if (view != null) {
-					view.setMapType(mapType);
-				}
-			}
-		});
-	}
-
-	// An issue is if the user adds a marker and then tries to remove it right away then it might not happen
-	public int addMapMarker(final int id, final com.ansca.corona.maps.MapMarker mapMarker)
-	{
-		MapView view = getDisplayObjectById(MapView.class, id);
-		if (view != null) {
-			final int finalMarkerId = view.getNewMarkerId();
-			mapMarker.setMarkerId(finalMarkerId);
-			postOnUiThread(new Runnable() {
-				public void run() {
-					MapView view = getDisplayObjectById(MapView.class, id);
-					if (view != null) {
-						view.addMarker(mapMarker);
-					}
-				}
-			});
-			return finalMarkerId;
-		}
-		return 0;
-	}
-
-	public void removeMapMarker(final int id, final int markerId)
-	{
-		postOnUiThread(new Runnable() {
-			public void run() {
-				MapView view = getDisplayObjectById(MapView.class, id);
-				if (view != null) {
-					view.removeMarker(markerId);
-				}
-			}
-		});
-	}
-
-	public void removeAllMapViewMarkers(final int id) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				MapView view = getDisplayObjectById(MapView.class, id);
-				if (view != null) {
-					view.removeAllMarkers();
-				}
-			}
-		});
-	}
-
-	public void setMapCenter(final int id, final double latitude, final double longitude, final boolean isAnimated) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				MapView view = getDisplayObjectById(MapView.class, id);
-				if (view != null) {
-					view.setCenter(latitude, longitude, isAnimated);
-				}
-			}
-		});
-	}
-
-	public void setMapRegion(
-		final int id, final double latitude, final double longitude,
-		final double latitudeSpan, final double longitudeSpan, final boolean isAnimated)
-	{
-		postOnUiThread(new Runnable() {
-			public void run() {
-				MapView view = getDisplayObjectById(MapView.class, id);
-				if (view != null) {
-					view.setRegion(latitude, longitude, latitudeSpan, longitudeSpan, isAnimated);
-				}
 			}
 		});
 	}

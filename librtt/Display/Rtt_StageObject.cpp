@@ -49,12 +49,6 @@ StageObject::GetSelfBounds( Rect& rect ) const
 	fDisplay.GetContentRect( rect );
 }
 
-bool
-StageObject::ShouldOffsetWithAnchor() const
-{
-	return ( IsV1Compatibility() || Super::ShouldOffsetWithAnchor() );
-}
-
 void
 StageObject::InvalidateDisplay()
 {
@@ -65,18 +59,6 @@ const LuaProxyVTable&
 StageObject::ProxyVTable() const
 {
 	return LuaStageObjectProxyVTable::Constant();
-}
-
-void
-StageObject::SetV1Compatibility( bool newValue )
-{
-	Super::SetV1Compatibility( newValue );
-
-	if ( newValue )
-	{
-		SetAnchorX( 0.f );
-		SetAnchorY( 0.f );
-	}
 }
 
 bool

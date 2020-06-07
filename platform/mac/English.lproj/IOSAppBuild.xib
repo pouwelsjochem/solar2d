@@ -10,7 +10,6 @@
             <connections>
                 <outlet property="availableSimulatorsPopup" destination="0je-MZ-JEm" id="8Lm-3C-BgM"/>
                 <outlet property="fEnableLiveBuild" destination="fXj-CC-RFa" id="IqW-5p-ibC"/>
-                <outlet property="fEnableMonetization" destination="196" id="210"/>
                 <outlet property="fSigningIdentities" destination="26" id="90"/>
                 <outlet property="fSupportedDevices" destination="163" id="182"/>
                 <outlet property="fTargetIOSSDK" destination="192" id="198"/>
@@ -273,14 +272,6 @@ DQ
                             <menu key="menu" title="OtherViews" id="194"/>
                         </popUpButtonCell>
                     </popUpButton>
-                    <button identifier="123456" hidden="YES" tag="1000" id="196">
-                        <rect key="frame" x="18" y="18" width="234" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Enable Analytics and Monetization" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="197">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="203">
                         <rect key="frame" x="74" y="192" width="73" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

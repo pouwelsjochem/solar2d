@@ -128,49 +128,6 @@ class CoronaShowApiHandler implements com.ansca.corona.listeners.CoronaShowApiLi
 		else if (storeName.equals(com.ansca.corona.purchasing.StoreName.AMAZON)) {
 			return fCoronaRuntime.getController().openUrl("http://www.amazon.com/gp/mas/dl/android?p=" + packageName);
 		}
-		else if (storeName.equals(com.ansca.corona.purchasing.StoreName.NOOK)) {
-			if (settings == null) {
-				return false;
-			}
-			final String appStringId = (String)settings.get("nookAppEAN");
-			if ((appStringId == null) || (appStringId.length() <= 0)) {
-				return false;
-			}
-			activity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					CoronaActivity activity = fActivity;
-					if (activity == null) {
-						return;
-					}
-
-					boolean canShowCoronaStoreActivity = fCoronaRuntime.getController().canShowActivityFor(
-								new android.content.Intent(activity, com.ansca.corona.purchasing.StoreActivity.class));
-					android.content.Intent intent = new android.content.Intent();
-					if (WindowOrientation.fromCurrentWindowUsing(activity).isLandscape() && canShowCoronaStoreActivity) {
-						// The Corona activity window is currently in landscape mode.
-						// The Nook app store dialog takes 10-30 seconds to display because it does not
-						// support this orientation. So, we must display it via a portrait activity.
-						boolean isFullScreen = false;
-						if (activity.getStatusBarMode() == CoronaStatusBarSettings.HIDDEN) {
-							isFullScreen = true;
-						}
-						intent.setClass(activity, com.ansca.corona.purchasing.StoreActivity.class);
-						intent.putExtra(com.ansca.corona.purchasing.StoreActivity.EXTRA_FULL_SCREEN, isFullScreen);
-						intent.putExtra(com.ansca.corona.purchasing.StoreActivity.EXTRA_NOOK_APP_EAN, appStringId);
-						intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION);
-					}
-					else {
-						// The Corona activity window is currently in portrait mode.
-						// Display the Nook app store dialog, which only supports portrait orientations.
-						intent.setAction("com.bn.sdk.shop.details");
-						intent.putExtra("product_details_ean", appStringId);
-					}
-					activity.startActivity(intent);
-				}
-			});
-			return true;
-		}
 		else if (storeName.equals(com.ansca.corona.purchasing.StoreName.SAMSUNG)) {
 			return fCoronaRuntime.getController().openUrl("samsungapps://ProductDetail/" + packageName);
 		}

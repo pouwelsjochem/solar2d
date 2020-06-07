@@ -36,18 +36,6 @@ class SpriteObjectSequence
 		typedef S16 FrameIndex;
 
 	public:
-		typedef enum _Direction
-		{
-			kForward = 0,
-			kBounce,
-
-			kNumDirection
-		}
-		Direction;
-
-		static Direction DirectionForString( const char *value );
-
-	public:
 		static SpriteObjectSequence* Create( Rtt_Allocator *allocator, lua_State *L, int index );
 
 	protected:
@@ -58,8 +46,7 @@ class SpriteObjectSequence
 			Real *timeArray,
 			FrameIndex start,
 			FrameIndex numFrames,
-			int loopCount,
-			Direction loopDirection );
+			int loopCount);
 
 		// Assumes ownership of 'frames' and assumed alloc'd via Rtt_MALLOC
 		SpriteObjectSequence(
@@ -69,8 +56,7 @@ class SpriteObjectSequence
 			Real *timeArray,
 			FrameIndex *frames,
 			FrameIndex numFrames,
-			int loopCount,
-			Direction loopDirection );
+			int loopCount);
 
 	public:
 		~SpriteObjectSequence();
@@ -113,18 +99,15 @@ class SpriteObjectSequence
 		// Returns index in sheet of ith frame of the sequence.
 		// 'i' is the sequence index
 		// Note that 0 <= i < GetNumEffectiveFrames()
-		FrameIndex GetEffectiveFrame( int i, SpriteEvent::Phase *phase = NULL ) const;
+		FrameIndex GetEffectiveFrame(int i, SpriteEvent::Phase *phase = NULL ) const;
 
 	public:
 		// Returns number of frames in sequence.
-		// Note that if loop direction is kBounce, then this returns the number
-		// of frames in the effective sequence, not the base sequence
 		int GetEffectiveNumFrames() const;
 
 		bool IsConsecutiveFrames() const { return fStart >= 0; }
 
 		int GetLoopCount() const { return fLoopCount; }
-		Direction GetLoopDirection() const { return fLoopDirection; }
 
 	private:
 		ImageSheetPaint *fPaint;
@@ -137,7 +120,6 @@ class SpriteObjectSequence
 		FrameIndex fStart;		// Sequence is defined by consecutive frames in the sheet
 		FrameIndex *fFrames;	// or an array of frame indices. 
 		int fLoopCount;
-		Direction fLoopDirection;
 };
 
 class SpriteObject : public RectObject
@@ -186,8 +168,6 @@ class SpriteObject : public RectObject
 		void AddSequence( SpriteObjectSequence *sequence );
 
 	public:
-		// MDrawable
-		virtual void Prepare( const Display& display );
 //		virtual void Translate( Real dx, Real dy );
 //		virtual void Draw( Renderer& renderer ) const;
 

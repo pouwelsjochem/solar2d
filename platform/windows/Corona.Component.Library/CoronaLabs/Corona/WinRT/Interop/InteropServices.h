@@ -83,7 +83,7 @@ public ref class InteropServices sealed
 		/// <value>Reference to an object which provides networking features.</value>
 		property Networking::INetworkServices^ NetworkServices { Networking::INetworkServices^ get(); }
 
-		/// <summary>Gets an object used to access embedded resources such as Corona's widget library images.</summary>
+		/// <summary>Gets an object used to access embedded resources.</summary>
 		/// <value>Reference to an object which provides access to embedded resources.</value>
 		property Storage::IResourceServices^ ResourceServices { Storage::IResourceServices^ get(); };
 

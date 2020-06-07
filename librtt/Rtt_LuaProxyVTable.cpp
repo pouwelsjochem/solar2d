@@ -38,11 +38,7 @@
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_PlatformDisplayObject.h"
 #include "Rtt_Runtime.h"
-#include "Rtt_PhysicsWorld.h"
 #include "CoronaLua.h"
-
-#include "Rtt_ParticleSystemObject.h"
-#include "Display/Rtt_EmitterObject.h"
 
 #include "Core/Rtt_StringHash.h"
 
@@ -56,84 +52,11 @@ namespace Rtt
 {
 
 // ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-//
-// LuaProxyVTable
-//
-// ----------------------------------------------------------------------------
-    
-// Not sure of benefit of using lua c closures...
-// Seems like it'd use more memory
-// #define USE_C_CLOSURE
-
-#ifdef USE_C_CLOSURE
-const char LuaProxyVTable::kDelegateKey[] = "Delegate";
-#endif
-/*
-LuaProxyVTable::Self*
-LuaProxyVTable::GetSelf( lua_State *L, int index )
-{
-	Self** p = (Self**)luaL_checkudata( L, index, kDelegateKey );
-	return ( p ? *p : NULL );
-}
-
-int
-LuaProxyVTable::__index( lua_State *L )
-{
-	int result = 0;
-
-	Self* self = GetSelf( L, 1 );
-	if ( self )
-	{
-		const char* key = lua_tostring( L, 2 );
-		result = self->ValueForKey( L, key );
-	}
-
-	return result;
-}
-
-int
-LuaProxyVTable::__newindex( lua_State *L )
-{
-	Self* self = GetSelf( L, 1 );
-	if ( self )
-	{
-		const char* key = lua_tostring( L, 2 );
-		self->SetValueForKey( L, key, 3 );
-	}
-
-	return 0;
-}
-
-int
-LuaProxyVTable::__gcMeta( lua_State *L )
-{
-	Self* self = GetSelf( L, 1 );
-	if ( self )
-	{
-		Self** userdata = & self;
-		Rtt_ASSERT( (Self**)luaL_checkudata( L, index, kDelegateKey ) == userdata );
-
-		*userdata = NULL;
-		Rtt_DELETE( self );
-	}
-}
-*/
-
 bool
 LuaProxyVTable::SetValueForKey( lua_State *, MLuaProxyable&, const char [], int ) const
 {
 	return false;
 }
-
-/*
-int
-LuaProxyVTable::Length( lua_State * ) const
-{
-	return 0;
-}
-*/
 
 const LuaProxyVTable&
 LuaProxyVTable::Parent() const
@@ -216,25 +139,6 @@ LuaProxyVTable::DumpObjectProperties( lua_State *L, const MLuaProxyable& object,
 // LuaDisplayObjectProxyVTable
 //
 // ----------------------------------------------------------------------------
-
-/*
-#define Rtt_ASSERT_PROXY_TYPE( L, index, T )	\
-	Rtt_ASSERT(									\
-		IsProxyUsingCompatibleDelegate(			\
-			LuaProxy::GetProxy((L),(index)),	\
-			Lua ## T ## ProxyVTable::Constant() ) )
-
-
-#define Rtt_WARN_SIM_PROXY_TYPE2( L, index, T, API_T )		\
-	Rtt_WARN_SIM(											\
-		Rtt_VERIFY( IsProxyUsingCompatibleDelegate(			\
-			LuaProxy::GetProxy((L),(index)),				\
-			Lua ## T ## ProxyVTable::Constant() ) ),		\
-		( "ERROR: Argument(%d) is not of a %s\n", index, #API_T ) )
-
-#define Rtt_WARN_SIM_PROXY_TYPE( L, index, T )	Rtt_WARN_SIM_PROXY_TYPE2( L, index, T, T )
-*/
-
 const LuaDisplayObjectProxyVTable&
 LuaDisplayObjectProxyVTable::Constant()
 {
@@ -316,54 +220,6 @@ getParent( lua_State *L )
 		{
 			Rtt_ASSERT( o->GetStage() == o || o->IsOrphan() );
 			lua_pushnil( L );
-		}
-	}
-
-	return result;
-}
-
-static int
-setReferencePoint( lua_State *L )
-{
-	DisplayObject* o = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
-
-	int result = 0;
-	if ( o )
-	{
-		if ( ! o->IsV1Compatibility() )
-		{
-			luaL_error( L, "ERROR: object:setReferencePoint() is only available in graphicsCompatibility 1.0 mode. Use anchor points instead." );
-		}
-		else
-		{
-			bool anchorChildren = true;
-		
-			if ( lua_isnil( L, 2 ) )
-			{
-				Rtt_TRACE_SIM( ( "WARNING: object:setReferencePoint() was given a 'nil' value. The behavior is not defined.\n" ) );
-				o->ResetReferencePoint();
-
-				anchorChildren = false; // Restore to base case.
-			}
-			else
-			{
-				Rtt_WARN_SIM( lua_islightuserdata( L, 2 ), ( "WARNING: Invalid reference point constant passed to object:setReferencePoint()\n" ) );
-
-				DisplayObject::ReferencePoint location = (DisplayObject::ReferencePoint)EnumForUserdata(
-					LuaLibDisplay::ReferencePoints(),
-					lua_touserdata( L, 2 ),
-					DisplayObject::kNumReferencePoints,
-					DisplayObject::kReferenceCenter );
-				o->SetReferencePoint( LuaContext::GetRuntime( L )->Allocator(), location );
-			}
-			
-			GroupObject *g = o->AsGroupObject();
-			if ( g )
-			{
-				g->SetAnchorChildren( anchorChildren );
-			}
 		}
 	}
 
@@ -563,147 +419,6 @@ setHasListener( lua_State *L )
 	return 0;
 }
 
-/*
-int
-LuaDisplayObjectProxyVTable::length( lua_State *L )
-{
-	DisplayObject* o = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
-
-	int len = 0;
-
-	if ( o )
-	{
-		GroupObject* c = o->AsGroupObject();
-		if ( c ) { len = c->NumChildren(); }
-	}
-
-	lua_pushinteger( L, len );
-
-	return 1;
-}
-*/
-/*
-// TODO: too complicated; should break apart into smaller functions???
-static int
-moveAbove( lua_State *L )
-{
-	DisplayObject* childToMove = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-	DisplayObject* dstLocation = (DisplayObject*)LuaProxy::GetProxyableObject( L, 2 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 2, DisplayObject );
-
-	// Only move if dstLocation is above the child to be moved
-	if ( dstLocation
-		 && childToMove
-		 && dstLocation->IsAbove( * childToMove ) )
-	{
-		const StageObject* dstLocationStage = dstLocation->GetStage();
-		const StageObject* childToMoveStage = childToMove->GetStage();
-
-		// Only move if neither objects are the canvas
-		// And the dstLocation is in the canvas object tree
-		if ( dstLocationStage && dstLocationStage != dstLocation
-			 && childToMoveStage != childToMove )
-		{
-			GroupObject* parent = dstLocation->GetParent();
-
-			S32 index = parent->Find( *dstLocation );
-
-			Rtt_ASSERT( index >= 0 );
-			parent->Insert( index, childToMove );
-		}
-	}
-
-	return 0;
-}
-*/
-
-/*
-int
-LuaDisplayObjectProxyVTable::stageBounds( lua_State *L )
-{
-	DisplayObject* o = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
-
-	if ( o )
-	{
-		const Rect& r = o->StageBounds();
-
-		lua_createtable( L, 0, 4 );
-
-		const char xMin[] = "xMin";
-		const char yMin[] = "yMin";
-		const char xMax[] = "xMax";
-		const char yMax[] = "yMax";
-		const size_t kLen = sizeof( xMin ) - 1;
-
-		Rtt_STATIC_ASSERT( sizeof(char) == 1 );
-		Rtt_STATIC_ASSERT( sizeof(xMin) == sizeof(yMin) );
-		Rtt_STATIC_ASSERT( sizeof(xMin) == sizeof(xMax) );
-		Rtt_STATIC_ASSERT( sizeof(xMin) == sizeof(yMax) );
-
-		setProperty( L, xMin, kLen, r.xMin );
-		setProperty( L, yMin, kLen, r.yMin );
-		setProperty( L, xMax, kLen, r.xMax );
-		setProperty( L, yMax, kLen, r.yMax );
-
-		return 1;
-	}
-
-	return 0;
-}
-
-int
-LuaDisplayObjectProxyVTable::stageWidth( lua_State *L )
-{
-	DisplayObject* o = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
-
-	if ( o )
-	{
-		const Rect& r = o->StageBounds();
-		lua_pushinteger( L, Rtt_RealToInt( r.xMax - r.xMin ) );
-		return 1;
-	}
-
-	return 0;
-}
-
-int
-LuaDisplayObjectProxyVTable::stageHeight( lua_State *L )
-{
-	DisplayObject* o = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
-
-	if ( o )
-	{
-		const Rect& r = o->StageBounds();
-		lua_pushinteger( L, Rtt_RealToInt( r.yMax - r.yMin ) );
-		return 1;
-	}
-
-	return 0;
-}
-*/
-
-/*
-int
-LuaDisplayObjectProxyVTable::canvas( lua_State *L )
-{
-	DisplayObject* o = (DisplayObject*)LuaProxy::GetProxy( L, 1 )->GetProxyableObject();
-
-	LuaStageObject::PushOrCreateProxy( L, o->GetStage() );
-
-	return 1;
-}
-*/
-
 int
 LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
 {
@@ -722,36 +437,31 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 		"removeSelf",			// 5
 		"localToContent",		// 6
 		"contentToLocal",		// 7
-		"stageBounds#",         // 8 - DEPRECATED
-		"stageWidth#",			// 9 - DEPRECATED
-		"stageHeight#",         // 10 - DEPRECATED
-        "numChildren#",			// 11 - DEPRECATED
-		"length#",				// 12 - DEPRECATED
-		"isVisible",			// 13
-		"isHitTestable",		// 14
-		"alpha",				// 15
-		"parent",				// 16
-		"stage",				// 17
-		"x",					// 18
-		"y",					// 19
-		"anchorX",				// 20
-		"anchorY",				// 21
-		"contentBounds",		// 22
-		"contentWidth",         // 23
-		"contentHeight",		// 24
-		"toFront",				// 25
-		"toBack",				// 26
-		"setMask",				// 27
-		"maskX",				// 28
-		"maskY",				// 29
-		"maskScaleX",			// 30
-		"maskScaleY",			// 31
-		"maskRotation",         // 32
-		"isHitTestMasked",		// 33
-		"_setHasListener",		// 34
+		"isVisible",			// 8
+		"isHitTestable",		// 9
+		"alpha",				// 10
+		"parent",				// 11
+		"stage",				// 12
+		"x",					// 13
+		"y",					// 14
+		"anchorX",				// 15
+		"anchorY",				// 16
+		"contentBounds",		// 17
+		"contentWidth",         // 18
+		"contentHeight",		// 19
+		"toFront",				// 20
+		"toBack",				// 21
+		"setMask",				// 22
+		"maskX",				// 23
+		"maskY",				// 24
+		"maskScaleX",			// 25
+		"maskScaleY",			// 26
+		"maskRotation",         // 27
+		"isHitTestMasked",		// 28
+		"_setHasListener",		// 29
 	};
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 35, 33, 15, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 30, 29, 6, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -777,11 +487,6 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 			Lua::PushCachedFunction( L, getParent );
 		}
 		break;
-	case 4:
-		{
-			Lua::PushCachedFunction( L, setReferencePoint );
-		}
-		break;
 	case 5:
 		{
 			Lua::PushCachedFunction( L, removeSelf );
@@ -797,22 +502,22 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 			Lua::PushCachedFunction( L, contentToLocal );
 		}
 		break;
-	case 25:
+	case 20:
 		{
 			Lua::PushCachedFunction( L, toFront );
 		}
 		break;
-	case 26:
+	case 21:
 		{
 			Lua::PushCachedFunction( L, toBack );
 		}
 		break;
-	case 27:
+	case 22:
 		{
 			Lua::PushCachedFunction( L, setMask );
 		}
 		break;
-	case 34:
+	case 29:
 		{
 			Lua::PushCachedFunction( L, setHasListener );
 		}
@@ -825,15 +530,9 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 
 			switch ( index )
 			{
-			case 8:
-			case 22:
+			case 17:
 				{
-//					Rtt_WARN_SIM( strcmp( "stageBounds", key ) != 0, ( "WARNING: object.stageBounds has been deprecated. Use object.contentBounds instead\n" ) );
-
 					const Rect& r = o.StageBounds();
-
-	// Good way to catch autorotate bugs for bouncebehavior:
-	// Rtt_ASSERT( r.xMin >= 0 );
 
 					lua_createtable( L, 0, 4 );
 
@@ -864,58 +563,35 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 					setProperty( L, yMax, kLen, yMaxRect );
 				}
 				break;
-			case 9:
-			case 23:
+			case 18:
 				{
-					Rtt_WARN_SIM( strcmp( "stageWidth", key ) != 0, ( "WARNING: object.stageWidth has been deprecated. Use object.contentWidth instead\n" ) );
-
 					const Rect& r = o.StageBounds();
 					lua_pushinteger( L, Rtt_RealToInt( r.xMax - r.xMin ) );
 				}
 				break;
-			case 10:
-			case 24:
+			case 19:
 				{
-					Rtt_WARN_SIM( strcmp( "stageHeight", key ) != 0, ( "WARNING: object.stageHeight has been deprecated. Use object.contentHeight instead\n" ) );
-
 					const Rect& r = o.StageBounds();
 					lua_pushinteger( L, Rtt_RealToInt( r.yMax - r.yMin ) );
 				}
 				break;
-			case 11:
-				{
-					lua_pushnil( L );
-				}
-				break;
-			case 12:
-				{
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-					CoronaLuaWarning(L, "[Deprecated display object property] Replace object.length with group.numChildren");
-#endif
-					int len = 0;
-					const GroupObject* c = const_cast< DisplayObject& >( o ).AsGroupObject();
-					if ( c ) { len = c->NumChildren(); }
-
-					lua_pushinteger( L, len );
-				}
-				break;
-			case 13:
+			case 8:
 				{
 					lua_pushboolean( L, o.IsVisible() );
 				}
 				break;
-			case 14:
+			case 9:
 				{
 					lua_pushboolean( L, o.IsHitTestable() );
 				}
 				break;
-			case 15:
+			case 10:
 				{
 					lua_Number alpha = (float)o.Alpha() / 255.0;
 					lua_pushnumber( L, alpha );
 				}
 				break;
-			case 16:
+			case 11:
 				{
 					const StageObject *stage = o.GetStage();
 
@@ -944,7 +620,7 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 					}
 				}
 				break;
-			case 17:
+			case 12:
 				{
 					const StageObject* stage = o.GetStage();
 					if ( stage && stage->IsOnscreen() )
@@ -957,73 +633,59 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 					}
 				}
 				break;
-			case 18:
+			case 13:
 				{
-					Rtt_Real value = o.GetGeometricProperty( kOriginX );
-
-					if ( o.IsV1Compatibility() && o.IsV1ReferencePointUsed() )
-					{
-						Vertex2 p = o.GetAnchorOffset();
-						value -= p.x;
-					}
-					lua_pushnumber( L, value );
+					lua_pushnumber( L, o.GetGeometricProperty( kOriginX ) );
 				}
 				break;
-			case 19:
+			case 14:
 				{
-					Rtt_Real value = o.GetGeometricProperty( kOriginY );
-
-					if ( o.IsV1Compatibility() && o.IsV1ReferencePointUsed() )
-					{
-						Vertex2 p = o.GetAnchorOffset();
-						value -= p.y;
-					}
-					lua_pushnumber( L, value );
+					lua_pushnumber( L, o.GetGeometricProperty( kOriginY ) );
 				}
 				break;
-			case 20:
+			case 15:
 				{
 					Real anchorX = o.GetAnchorX();
 					lua_pushnumber( L, anchorX );
 				}
 				break;
-			case 21:
+			case 16:
 				{
 					Real anchorY = o.GetAnchorY();
 					lua_pushnumber( L, anchorY );
 				}
 				break;
-			case 28:
+			case 23:
 				{
 					Rtt_Real value = o.GetMaskGeometricProperty( kOriginX );
 					lua_pushnumber( L, value );
 				}
 				break;
-			case 29:
+			case 24:
 				{
 					Rtt_Real value = o.GetMaskGeometricProperty( kOriginY );
 					lua_pushnumber( L, value );
 				}
 				break;
-			case 30:
+			case 25:
 				{
 					Rtt_Real value = o.GetMaskGeometricProperty( kScaleX );
 					lua_pushnumber( L, value );
 				}
 				break;
-			case 31:
+			case 26:
 				{
 					Rtt_Real value = o.GetMaskGeometricProperty( kScaleY );
 					lua_pushnumber( L, value );
 				}
 				break;
-			case 32:
+			case 27:
 				{
 					Rtt_Real value = o.GetMaskGeometricProperty( kRotation );
 					lua_pushnumber( L, value );
 				}
 				break;
-            case 33:
+            case 28:
                 {
                     lua_pushboolean( L, o.IsHitTestMasked() );
                 }
@@ -1085,18 +747,6 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
 
         DumpObjectProperties( L, object, keys, numKeys, displayProperties );
 
-        const LuaProxyVTable *extensions = LuaProxy::GetProxy(L, 1)->GetExtensionsDelegate();
-        if ( extensions )
-        {
-            result = extensions->ValueForKey( L, object, key );
-
-            if (result == 1)
-            {
-                displayProperties.Append( ", " );
-                displayProperties.Append( lua_tostring( L, -1 ) );
-            }
-        }
-
         lua_pushfstring( L, "%s, %s", geometricProperties.GetString(), displayProperties.GetString() );
 
         result = 1;
@@ -1151,7 +801,7 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
 		"y",					// 6
 		"anchorX",				// 7
 		"anchorY",				// 8
-		"stageBounds",			// 9
+		"contentBounds",		// 9
 		"maskX",				// 10
 		"maskY",				// 11
 		"maskScaleX",			// 12
@@ -1160,7 +810,7 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
 		"isHitTestMasked",		// 15
 	};
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 16, 12, 6, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 16, 20, 6, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -1204,28 +854,12 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
 		break;
 	case 5:
 		{
-			Real newValue = luaL_toreal( L, valueIndex );
-
-			if ( o.IsV1Compatibility() && o.IsV1ReferencePointUsed() )
-			{
-				Vertex2 p = o.GetAnchorOffset();
-				newValue += p.x;
-			}
-
-			o.SetGeometricProperty( kOriginX, newValue );
+			o.SetGeometricProperty( kOriginX, luaL_toreal( L, valueIndex ) );
 		}
 		break;
 	case 6:
 		{
-			Real newValue = luaL_toreal( L, valueIndex );
-
-			if ( o.IsV1Compatibility() && o.IsV1ReferencePointUsed() )
-			{
-				Vertex2 p = o.GetAnchorOffset();
-				newValue += p.y;
-			}
-
-			o.SetGeometricProperty( kOriginY, newValue );
+			o.SetGeometricProperty( kOriginY, luaL_toreal( L, valueIndex ) );
 		}
 		break;
 	case 7:
@@ -1238,13 +872,6 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
 					newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
 				}
 				o.SetAnchorX( newValue );
-				
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-				if ( o.IsV1Compatibility() )
-                {
-                    CoronaLuaWarning(L, "o.anchorX is only supported in graphics 2.0. Your mileage may vary in graphicsCompatibility 1.0 mode");
-                }
-#endif
 			}
 			else
 			{
@@ -1263,13 +890,6 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
 					newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
 				}
 				o.SetAnchorY( newValue );
-				
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-				if ( o.IsV1Compatibility() )
-                {
-                    CoronaLuaWarning(L, "o.anchorY is only supported in graphics 2.0. Your mileage may vary in graphicsCompatibility 1.0 mode");
-                }
-#endif
 			}
 			else
 			{
@@ -1378,12 +998,12 @@ LuaLineObjectProxyVTable::setStrokeColor( lua_State *L )
 	{
 		if ( ! o->GetPath().GetStroke() )
 		{
-			Paint* p = LuaLibDisplay::LuaNewColor( L, 2, o->IsByteColorRange() );
+			Paint* p = LuaLibDisplay::LuaNewColor( L, 2 );
 			o->SetStroke( p );
 		}
 		else
 		{
-			Color c = LuaLibDisplay::toColor( L, 2, o->IsByteColorRange() );
+			Color c = LuaLibDisplay::toColor( L, 2 );
 			o->SetStrokeColor( c );
 		}
 	}
@@ -1454,69 +1074,51 @@ LuaLineObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object
     // deprecated properties have a trailing '#'
 	static const char * keys[] = 
 	{
-		"setColor#",		// 0 - DEPRECATED
-		"setStrokeColor",	// 1
-		"setStroke",		// 2
-		"append",			// 3
-		"blendMode",		// 4
-		"width#",			// 5 - DEPRECATED
-		"strokeWidth",		// 6
-		"stroke",			// 7
-		"anchorSegments",	// 8
+		"setStrokeColor",	// 0
+		"setStroke",		// 1
+		"append",			// 2
+		"blendMode",		// 3
+		"strokeWidth",		// 4
+		"stroke",			// 5
+		"anchorSegments",	// 6
 	};
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 9, 30, 4, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 7, 2, 1, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
 	switch ( index )
 	{
 	case 0:
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-		if (! static_cast< const LineObject& >( object ).IsV1Compatibility())
-        {
-            CoronaLuaWarning(L, "line:setColor() is deprecated. Use line:setStrokeColor() instead");
-        }
-#endif
-		// Fall through
-	case 1:
 		{
 			Lua::PushCachedFunction( L, Self::setStrokeColor );
 		}
 		break;
-	case 2:
+	case 1:
 		{
 			Lua::PushCachedFunction( L, Self::setStroke );
 		}
 		break;
-	case 3:
+	case 2:
 		{
 			Lua::PushCachedFunction( L, Self::append );
 		}
 		break;
-	case 4:
+	case 3:
 		{
 			const LineObject& o = static_cast< const LineObject& >( object );
 			RenderTypes::BlendType blend = o.GetBlend();
 			lua_pushstring( L, RenderTypes::StringForBlendType( blend ) );
 		}
         break;
-	case 5:
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-            if (! static_cast< const LineObject& >( object ).IsV1Compatibility())
-            {
-                CoronaLuaWarning(L, "line.width is deprecated. Use line.strokeWidth");
-            }
-#endif
-		// fall through
-	case 6:
+	case 4:
 		{
 			const LineObject& o = static_cast< const LineObject& >( object );
 			Rtt_WARN_SIM_PROXY_TYPE( L, 1, LineObject );
 			lua_pushnumber( L, Rtt_RealToFloat( o.GetStrokeWidth() ) );
 		}
         break;
-	case 7:
+	case 5:
 		{
 			const LineObject& o = static_cast< const LineObject& >( object );
 			Rtt_WARN_SIM_PROXY_TYPE( L, 1, LineObject );
@@ -1531,7 +1133,7 @@ LuaLineObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object
             }
 		}
         break;
-	case 8:
+	case 6:
 		{
 			const LineObject& o = static_cast< const LineObject& >( object );
 			Rtt_WARN_SIM_PROXY_TYPE( L, 1, LineObject );
@@ -1616,12 +1218,6 @@ LuaLineObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, c
 		}
         break;
 	case 5:
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-            if (! o.IsV1Compatibility())
-            {
-                CoronaLuaWarning(L, "line.width is deprecated. Use line.strokeWidth");
-            }
-#endif
 		// fall through
 	case 6:
 		{
@@ -1700,12 +1296,12 @@ LuaShapeObjectProxyVTable::setFillColor( lua_State *L )
 
 		if ( ! o->GetPath().GetFill() )
 		{
-			Paint* p = LuaLibDisplay::LuaNewColor( L, 2, o->IsByteColorRange() );
+			Paint* p = LuaLibDisplay::LuaNewColor( L, 2 );
 			o->SetFill( p );
 		}
 		else
 		{
-			Color c = LuaLibDisplay::toColor( L, 2, o->IsByteColorRange() );
+			Color c = LuaLibDisplay::toColor( L, 2 );
 			o->SetFillColor( c );
 		}
 	}
@@ -1724,12 +1320,12 @@ LuaShapeObjectProxyVTable::setStrokeColor( lua_State *L )
 	{
 		if ( ! o->GetPath().GetStroke() )
 		{
-			Paint* p = LuaLibDisplay::LuaNewColor( L, 2, o->IsByteColorRange() );
+			Paint* p = LuaLibDisplay::LuaNewColor( L, 2 );
 			o->SetStroke( p );
 		}
 		else
 		{
-			Color c = LuaLibDisplay::toColor( L, 2, o->IsByteColorRange() );
+			Color c = LuaLibDisplay::toColor( L, 2 );
 			o->SetStrokeColor( c );
 		}
 	}
@@ -2037,1259 +1633,6 @@ LuaShapeObjectProxyVTable::Parent() const
 
 // ----------------------------------------------------------------------------
 
-const LuaEmitterObjectProxyVTable&
-LuaEmitterObjectProxyVTable::Constant()
-{
-	static const Self kVTable;
-	return kVTable;
-}
-
-int
-LuaEmitterObjectProxyVTable::start( lua_State *L )
-{
-	EmitterObject* o = (EmitterObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, EmitterObject );
-
-	if ( o )
-	{
-#if 0
-		if ( lua_istable( L, 2 ) )
-		{
-			GradientPaint *gradient = LuaLibDisplay::LuaNewGradientPaint( L, 2 );
-			if ( gradient )
-			{
-				o->SetFill( gradient );
-
-				// Early return
-				return 0;
-			}
-		}
-#else
-		o->Start();
-#endif
-	}
-
-	return 0;
-}
-
-int
-LuaEmitterObjectProxyVTable::stop( lua_State *L )
-{
-	EmitterObject* o = (EmitterObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, EmitterObject );
-
-	if ( o )
-	{
-		o->Stop();
-	}
-
-	return 0;
-}
-
-int
-LuaEmitterObjectProxyVTable::pause( lua_State *L )
-{
-	EmitterObject* o = (EmitterObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, EmitterObject );
-
-	if ( o )
-	{
-		o->Pause();
-	}
-
-	return 0;
-}
-
-// IMPORTANT: This list MUST be kept in sync with the "EmitterObject_keys".
-enum
-{
-	// Read-write properties.
-	kEmitterObject_AbsolutePosition,
-	kEmitterObject_GravityX,
-	kEmitterObject_GravityY,
-	kEmitterObject_StartColorR,
-	kEmitterObject_StartColorG,
-	kEmitterObject_StartColorB,
-	kEmitterObject_StartColorA,
-	kEmitterObject_StartColorVarianceR,
-	kEmitterObject_StartColorVarianceG,
-	kEmitterObject_StartColorVarianceB,
-	kEmitterObject_StartColorVarianceA,
-	kEmitterObject_FinishColorR,
-	kEmitterObject_FinishColorG,
-	kEmitterObject_FinishColorB,
-	kEmitterObject_FinishColorA,
-	kEmitterObject_FinishColorVarianceR,
-	kEmitterObject_FinishColorVarianceG,
-	kEmitterObject_FinishColorVarianceB,
-	kEmitterObject_FinishColorVarianceA,
-	kEmitterObject_StartParticleSize,
-	kEmitterObject_StartParticleSizeVariance,
-	kEmitterObject_FinishParticleSize,
-	kEmitterObject_FinishParticleSizeVariance,
-	kEmitterObject_MaxRadius,
-	kEmitterObject_MaxRadiusVariance,
-	kEmitterObject_MinRadius,
-	kEmitterObject_MinRadiusVariance,
-	kEmitterObject_RotateDegreesPerSecond,
-	kEmitterObject_RotateDegreesPerSecondVariance,
-	kEmitterObject_RotationStart,
-	kEmitterObject_RotationStartVariance,
-	kEmitterObject_RotationEnd,
-	kEmitterObject_RotationEndVariance,
-	kEmitterObject_Speed,
-	kEmitterObject_SpeedVariance,
-	kEmitterObject_EmissionRateInParticlesPerSeconds,
-	kEmitterObject_RadialAcceleration,
-	kEmitterObject_RadialAccelerationVariance,
-	kEmitterObject_TangentialAcceleration,
-	kEmitterObject_TangentialAccelerationVariance,
-	kEmitterObject_SourcePositionVarianceX,
-	kEmitterObject_SourcePositionVarianceY,
-	kEmitterObject_RotationInDegrees,
-	kEmitterObject_RotationInDegreesVariance,
-	kEmitterObject_ParticleLifespanInSeconds,
-	kEmitterObject_ParticleLifespanInSecondsVariance,
-	kEmitterObject_Duration,
-
-	// Read Only Property
-	kEmitterObject_MaxParticles,
-
-	// Methods.
-	kEmitterObject_Start,
-	kEmitterObject_Stop,
-	kEmitterObject_Pause,
-
-	// Read-only properties.
-    kEmitterObject_State,
-};
-
-static const char * EmitterObject_keys[] = 
-{
-	// Read-write properties.
-	"absolutePosition",
-	"gravityx",
-	"gravityy",
-	"startColorRed",
-	"startColorGreen",
-	"startColorBlue",
-	"startColorAlpha",
-	"startColorVarianceRed",
-	"startColorVarianceGreen",
-	"startColorVarianceBlue",
-	"startColorVarianceAlpha",
-	"finishColorRed",
-	"finishColorGreen",
-	"finishColorBlue",
-	"finishColorAlpha",
-	"finishColorVarianceRed",
-	"finishColorVarianceGreen",
-	"finishColorVarianceBlue",
-	"finishColorVarianceAlpha",
-	"startParticleSize",
-	"startParticleSizeVariance",
-	"finishParticleSize",
-	"finishParticleSizeVariance",
-	"maxRadius",
-	"maxRadiusVariance",
-	"minRadius",
-	"minRadiusVariance",
-	"rotatePerSecond",
-	"rotatePerSecondVariance",
-	"rotationStart",
-	"rotationStartVariance",
-	"rotationEnd",
-	"rotationEndVariance",
-	"speed",
-	"speedVariance",
-	"emissionRateInParticlesPerSeconds",
-	"radialAcceleration",
-	"radialAccelVariance",
-	"tangentialAcceleration",
-	"tangentialAccelVariance",
-	"sourcePositionVariancex",
-	"sourcePositionVariancey",
-	"angle",
-	"angleVariance",
-	"particleLifespan",
-	"particleLifespanVariance",
-	"duration",
-
-	// read only properties
-	"maxParticles",
-
-	// Methods.
-	"start",
-	"stop",
-	"pause",
-
-	// Read-only properties.
-    "state",
-};
-
-static StringHash*
-GetEmitterObjectHash( lua_State *L )
-{
-	static StringHash sHash( *LuaContext::GetAllocator( L ), EmitterObject_keys, sizeof( EmitterObject_keys ) / sizeof(const char *), 52, 12, 14, __FILE__, __LINE__ );
-	return &sHash;
-}
-
-int
-LuaEmitterObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
-{
-	if ( ! key ) { return 0; }
-	
-	int result = 1;
-
-	StringHash *hash = GetEmitterObjectHash( L );
-	int index = hash->Lookup( key );
-
-	// EmitterObject* o = (EmitterObject*)LuaProxy::GetProxyableObject( L, 1 );
-	const EmitterObject& o = static_cast< const EmitterObject& >( object );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, EmitterObject );
-
-	switch ( index )
-	{
-	case kEmitterObject_AbsolutePosition:
-		{
-			GroupObject *p = o.GetAbsolutePosition();
-			if(p == NULL)
-			{
-				lua_pushboolean( L, false );
-			}
-			else if(p == EMITTER_ABSOLUTE_PARENT)
-			{
-				lua_pushboolean( L, false );
-			}
-			else
-			{
-				p->GetProxy()->PushTable( L );
-			}
-		}
-		break;
-	case kEmitterObject_GravityX:
-		{
-			lua_pushnumber( L, o.GetGravity().x );
-		}
-		break;
-	case kEmitterObject_GravityY:
-		{
-			lua_pushnumber( L, o.GetGravity().y );
-		}
-		break;
-	case kEmitterObject_StartColorR:
-		{
-			lua_pushnumber( L, o.GetStartColor().r );
-		}
-		break;
-	case kEmitterObject_StartColorG:
-		{
-			lua_pushnumber( L, o.GetStartColor().g );
-		}
-		break;
-	case kEmitterObject_StartColorB:
-		{
-			lua_pushnumber( L, o.GetStartColor().b );
-		}
-		break;
-	case kEmitterObject_StartColorA:
-		{
-			lua_pushnumber( L, o.GetStartColor().a );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceR:
-		{
-			lua_pushnumber( L, o.GetStartColorVariance().r );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceG:
-		{
-			lua_pushnumber( L, o.GetStartColorVariance().g );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceB:
-		{
-			lua_pushnumber( L, o.GetStartColorVariance().b );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceA:
-		{
-			lua_pushnumber( L, o.GetStartColorVariance().a );
-		}
-		break;
-	case kEmitterObject_FinishColorR:
-		{
-			lua_pushnumber( L, o.GetFinishColor().r );
-		}
-		break;
-	case kEmitterObject_FinishColorG:
-		{
-			lua_pushnumber( L, o.GetFinishColor().g );
-		}
-		break;
-	case kEmitterObject_FinishColorB:
-		{
-			lua_pushnumber( L, o.GetFinishColor().b );
-		}
-		break;
-	case kEmitterObject_FinishColorA:
-		{
-			lua_pushnumber( L, o.GetFinishColor().a );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceR:
-		{
-			lua_pushnumber( L, o.GetFinishColorVariance().r );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceG:
-		{
-			lua_pushnumber( L, o.GetFinishColorVariance().g );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceB:
-		{
-			lua_pushnumber( L, o.GetFinishColorVariance().b );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceA:
-		{
-			lua_pushnumber( L, o.GetFinishColorVariance().a );
-		}
-		break;
-	case kEmitterObject_StartParticleSize:
-		{
-			lua_pushnumber( L, o.GetStartParticleSize() );
-		}
-		break;
-	case kEmitterObject_StartParticleSizeVariance:
-		{
-			lua_pushnumber( L, o.GetStartParticleSizeVariance() );
-		}
-		break;
-	case kEmitterObject_FinishParticleSize:
-		{
-			lua_pushnumber( L, o.GetFinishParticleSize() );
-		}
-		break;
-	case kEmitterObject_FinishParticleSizeVariance:
-		{
-			lua_pushnumber( L, o.GetFinishParticleSizeVariance() );
-		}
-		break;
-	case kEmitterObject_MaxRadius:
-		{
-			lua_pushnumber( L, o.GetMaxRadius() );
-		}
-		break;
-	case kEmitterObject_MaxRadiusVariance:
-		{
-			lua_pushnumber( L, o.GetMaxRadiusVariance() );
-		}
-		break;
-	case kEmitterObject_MinRadius:
-		{
-			lua_pushnumber( L, o.GetMinRadius() );
-		}
-		break;
-	case kEmitterObject_MinRadiusVariance:
-		{
-			lua_pushnumber( L, o.GetMinRadiusVariance() );
-		}
-		break;
-	case kEmitterObject_RotateDegreesPerSecond:
-		{
-			lua_pushnumber( L, o.GetRotateDegreesPerSecond() );
-		}
-		break;
-	case kEmitterObject_RotateDegreesPerSecondVariance:
-		{
-			lua_pushnumber( L, o.GetRotateDegreesPerSecondVariance() );
-		}
-		break;
-	case kEmitterObject_RotationStart:
-		{
-			lua_pushnumber( L, o.GetRotationStart() );
-		}
-		break;
-	case kEmitterObject_RotationStartVariance:
-		{
-			lua_pushnumber( L, o.GetRotationStartVariance() );
-		}
-		break;
-	case kEmitterObject_RotationEnd:
-		{
-			lua_pushnumber( L, o.GetRotationEnd() );
-		}
-		break;
-	case kEmitterObject_RotationEndVariance:
-		{
-			lua_pushnumber( L, o.GetRotationEndVariance() );
-		}
-		break;
-	case kEmitterObject_Speed:
-		{
-			lua_pushnumber( L, o.GetSpeed() );
-		}
-		break;
-	case kEmitterObject_SpeedVariance:
-		{
-			lua_pushnumber( L, o.GetSpeedVariance() );
-		}
-		break;
-	case kEmitterObject_EmissionRateInParticlesPerSeconds:
-		{
-			lua_pushnumber( L, o.GetEmissionRateInParticlesPerSeconds() );
-		}
-		break;
-	case kEmitterObject_RadialAcceleration:
-		{
-			lua_pushnumber( L, o.GetRadialAcceleration() );
-		}
-		break;
-	case kEmitterObject_RadialAccelerationVariance:
-		{
-			lua_pushnumber( L, o.GetRadialAccelerationVariance() );
-		}
-		break;
-	case kEmitterObject_TangentialAcceleration:
-		{
-			lua_pushnumber( L, o.GetTangentialAcceleration() );
-		}
-		break;
-	case kEmitterObject_TangentialAccelerationVariance:
-		{
-			lua_pushnumber( L, o.GetTangentialAccelerationVariance() );
-		}
-		break;
-	case kEmitterObject_SourcePositionVarianceX:
-		{
-			lua_pushnumber( L, o.GetSourcePositionVariance().x );
-		}
-		break;
-	case kEmitterObject_SourcePositionVarianceY:
-		{
-			lua_pushnumber( L, o.GetSourcePositionVariance().y );
-		}
-		break;
-	case kEmitterObject_RotationInDegrees:
-		{
-			lua_pushnumber( L, o.GetRotationInDegrees() );
-		}
-		break;
-	case kEmitterObject_RotationInDegreesVariance:
-		{
-			lua_pushnumber( L, o.GetRotationInDegreesVariance() );
-		}
-		break;
-	case kEmitterObject_ParticleLifespanInSeconds:
-		{
-			lua_pushnumber( L, o.GetParticleLifespanInSeconds() );
-		}
-		break;
-	case kEmitterObject_ParticleLifespanInSecondsVariance:
-		{
-			lua_pushnumber( L, o.GetParticleLifespanInSecondsVariance() );
-		}
-		break;
-	case kEmitterObject_Duration:
-		{
-			lua_pushnumber( L, o.GetDuration() );
-		}
-		break;
-	case kEmitterObject_MaxParticles:
-		{
-			lua_pushinteger( L, o.GetMaxParticles() );
-		}
-		break;
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-
-	case kEmitterObject_Start:
-		{
-			Lua::PushCachedFunction( L, Self::start );
-		}
-		break;
-	case kEmitterObject_Stop:
-		{
-			Lua::PushCachedFunction( L, Self::stop );
-		}
-		break;
-	case kEmitterObject_Pause:
-		{
-			Lua::PushCachedFunction( L, Self::pause );
-		}
-		break;
-
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-
-	case kEmitterObject_State:
-		{
-			lua_pushstring( L, EmitterObject::GetStringForState( o.GetState() ) );
-		}
-		break;
-
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-
-    default:
-		{
-            result = Super::ValueForKey( L, object, key, overrideRestriction );
-		}
-		break;
-	}
-
-    if ( result == 1 && strcmp( key, "_properties" ) == 0 )
-    {
-        String emitterProperties(LuaContext::GetRuntime( L )->Allocator());
-        const char **keys = NULL;
-        const int numKeys = hash->GetKeys(keys);
-
-        DumpObjectProperties( L, object, keys, numKeys, emitterProperties );
-
-        lua_pushfstring( L, "{ %s, %s }", emitterProperties.GetString(), lua_tostring( L, -1 ) );
-        lua_remove( L, -2 ); // pop super properties
-        result = 1;
-    }
-
-	return result;
-}
-
-bool
-LuaEmitterObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const
-{
-	if ( ! key ) { return false; }
-
-	// EmitterObject* o = (EmitterObject*)LuaProxy::GetProxyableObject( L, 1 );
-	EmitterObject& o = static_cast< EmitterObject& >( object );
-    //const int numKeys = sizeof( EmitterObject_keys ) / sizeof( const char * );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, EmitterObject );
-
-	bool result = true;
-
-	StringHash *hash = GetEmitterObjectHash( L );
-	int index = hash->Lookup( key );
-
-	switch ( index )
-	{
-	case kEmitterObject_AbsolutePosition:
-		{
-			GroupObject *parentGroup = NULL;
-			if(lua_istable(L, valueIndex))
-			{
-				DisplayObject* parent = (DisplayObject*)LuaProxy::GetProxyableObject( L, valueIndex );
-				if(parent)
-				{
-					parentGroup = parent->AsGroupObject();
-				}
-			}
-
-			if(parentGroup == NULL)
-			{
-				o.SetAbsolutePosition( lua_toboolean( L, valueIndex )?EMITTER_ABSOLUTE_PARENT:NULL );
-			}
-			else
-			{
-				o.SetAbsolutePosition(parentGroup);
-				if(!o.ValidateEmitterParent())
-				{
-					CoronaLuaWarning(L, "if '%s' of Emitter Object is set to group object, it has to be one of it's parents", key);
-				}
-			}
-		}
-		break;
-	case kEmitterObject_GravityX:
-		{
-			o.GetGravity().x = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_GravityY:
-		{
-			o.GetGravity().y = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorR:
-		{
-			o.GetStartColor().r = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorG:
-		{
-			o.GetStartColor().g = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorB:
-		{
-			o.GetStartColor().b = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorA:
-		{
-			o.GetStartColor().a = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceR:
-		{
-			o.GetStartColorVariance().r = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceG:
-		{
-			o.GetStartColorVariance().g = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceB:
-		{
-			o.GetStartColorVariance().b = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartColorVarianceA:
-		{
-			o.GetStartColorVariance().a = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorR:
-		{
-			o.GetFinishColor().r = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorG:
-		{
-			o.GetFinishColor().g = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorB:
-		{
-			o.GetFinishColor().b = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorA:
-		{
-			o.GetFinishColor().a = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceR:
-		{
-			o.GetFinishColorVariance().r = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceG:
-		{
-			o.GetFinishColorVariance().g = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceB:
-		{
-			o.GetFinishColorVariance().b = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_FinishColorVarianceA:
-		{
-			o.GetFinishColorVariance().a = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_StartParticleSize:
-		{
-			o.SetStartParticleSize( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_StartParticleSizeVariance:
-		{
-			o.SetStartParticleSizeVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_FinishParticleSize:
-		{
-			o.SetFinishParticleSize( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_FinishParticleSizeVariance:
-		{
-			o.SetFinishParticleSizeVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_MaxRadius:
-		{
-			o.SetMaxRadius( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_MaxRadiusVariance:
-		{
-			o.SetMaxRadiusVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_MinRadius:
-		{
-			o.SetMinRadius( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_MinRadiusVariance:
-		{
-			o.SetMinRadiusVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RotateDegreesPerSecond:
-		{
-			o.SetRotateDegreesPerSecond( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RotateDegreesPerSecondVariance:
-		{
-			o.SetRotateDegreesPerSecondVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RotationStart:
-		{
-			o.SetRotationStart( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RotationStartVariance:
-		{
-			o.SetRotationStartVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RotationEnd:
-		{
-			o.SetRotationEnd( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RotationEndVariance:
-		{
-			o.SetRotationEndVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_Speed:
-		{
-			o.SetSpeed( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_SpeedVariance:
-		{
-			o.SetSpeedVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_EmissionRateInParticlesPerSeconds:
-		{
-			o.SetEmissionRateInParticlesPerSeconds( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RadialAcceleration:
-		{
-			o.SetRadialAcceleration( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RadialAccelerationVariance:
-		{
-			o.SetRadialAccelerationVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_TangentialAcceleration:
-		{
-			o.SetTangentialAcceleration( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_TangentialAccelerationVariance:
-		{
-			o.SetTangentialAccelerationVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_SourcePositionVarianceX:
-		{
-			o.GetSourcePositionVariance().x = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_SourcePositionVarianceY:
-		{
-			o.GetSourcePositionVariance().y = luaL_toreal( L, valueIndex );
-		}
-		break;
-	case kEmitterObject_RotationInDegrees:
-		{
-			o.SetRotationInDegrees( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_RotationInDegreesVariance:
-		{
-			o.SetRotationInDegreesVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_ParticleLifespanInSeconds:
-		{
-			o.SetParticleLifespanInSeconds( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_ParticleLifespanInSecondsVariance:
-		{
-			o.SetParticleLifespanInSecondsVariance( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case kEmitterObject_Duration:
-		{
-			o.SetDuration( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-
-	////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////
-	case kEmitterObject_MaxParticles:
-	case kEmitterObject_Start:
-	case kEmitterObject_Stop:
-	case kEmitterObject_Pause:
-	case kEmitterObject_State:
-		{
-			// Read-only properties
-			// no-op
-		}
-		break;
-
-	default:
-		{
-			result = Super::SetValueForKey( L, object, key, valueIndex );
-		}
-		break;
-	}
-
-	return result;
-}
-
-const LuaProxyVTable&
-LuaEmitterObjectProxyVTable::Parent() const
-{
-	return Super::Constant();
-}
-
-// ----------------------------------------------------------------------------
-
-const LuaParticleSystemObjectProxyVTable&
-LuaParticleSystemObjectProxyVTable::Constant()
-{
-	static const Self kVTable;
-	return kVTable;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::CreateGroup( lua_State *L )
-{
-	ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-
-	if ( o )
-	{
-		o->CreateGroup( L );
-	}
-
-	return 0;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::CreateParticle( lua_State *L )
-{
-	ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-
-	if ( o )
-	{
-		o->CreateParticle( L );
-	}
-
-	return 0;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::DestroyParticlesInShape( lua_State *L )
-{
-	ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-
-	if ( o )
-	{
-		return o->DestroyParticlesInShape( L );
-	}
-
-	return 0;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::RayCast( lua_State *L )
-{
-	ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-
-	if ( o )
-	{
-		return o->RayCast( L );
-	}
-
-	return 0;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::QueryRegion( lua_State *L )
-{
-	ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-
-	if ( o )
-	{
-		return o->QueryRegion( L );
-	}
-
-	return 0;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::ApplyForce( lua_State *L )
-{
-	ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-
-	if ( o )
-	{
-		o->ApplyForce( L );
-	}
-
-	return 0;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::ApplyLinearImpulse( lua_State *L )
-{
-	ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-
-	if ( o )
-	{
-		o->ApplyLinearImpulse( L );
-	}
-
-	return 0;
-}
-
-// IMPORTANT: This list MUST be kept in sync with the "ParticleSystemObject_keys".
-enum
-{
-	// Read-write properties.
-	kParticleSystemObject_particleDensity,
-	kParticleSystemObject_particleRadius,
-	kParticleSystemObject_particleDamping,
-	kParticleSystemObject_particleStrictContactCheck,
-	kParticleSystemObject_particleMaxCount,
-	kParticleSystemObject_particleGravityScale,
-	kParticleSystemObject_particleDestructionByAge,
-	kParticleSystemObject_particlePaused,
-	kParticleSystemObject_imageRadius,
-
-	// Read-only property.
-	kParticleSystemObject_particleMass,
-	kParticleSystemObject_particleCount,
-
-	// Methods.
-	kParticleSystemObject_ApplyForce,
-	kParticleSystemObject_ApplyLinearImpulse,
-	kParticleSystemObject_CreateGroup,
-	kParticleSystemObject_CreateParticle,
-	kParticleSystemObject_DestroyParticlesInShape,
-	kParticleSystemObject_QueryRegion,
-	kParticleSystemObject_RayCast,
-};
-
-static const char * ParticleSystemObject_keys[] = 
-{
-	// Read-write properties.
-	"particleDensity",
-	"particleRadius",
-	"particleDamping",
-	"particleStrictContactCheck",
-	"particleMaxCount",
-	"particleGravityScale",
-	"particleDestructionByAge",
-	"particlePaused",
-	"imageRadius",
-
-	// Read-only property.
-	"particleMass",
-	"particleCount",
-
-	// Methods.
-	"applyForce",
-	"applyLinearImpulse",
-	"createGroup",
-	"createParticle",
-	"destroyParticles",
-	"queryRegion",
-	"rayCast",
-};
-
-static StringHash*
-GetParticleSystemObjectHash( lua_State *L )
-{
-	static StringHash sHash( *LuaContext::GetAllocator( L ), ParticleSystemObject_keys, sizeof( ParticleSystemObject_keys ) / sizeof(const char *), 19, 28, 2, __FILE__, __LINE__ );
-	return &sHash;
-}
-
-int
-LuaParticleSystemObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
-{
-	if ( ! key ) { return 0; }
-	
-	int result = 1;
-	StringHash *hash = GetParticleSystemObjectHash( L );
-	int index = hash->Lookup( key );
-
-	// ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	const ParticleSystemObject& o = static_cast< const ParticleSystemObject& >( object );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-	const b2ParticleSystem *b2ps = o.GetB2ParticleSystem();
-
-	switch ( index )
-	{
-	case kParticleSystemObject_particleDensity:
-		{
-			lua_pushnumber( L, b2ps->GetDensity() );
-		}
-		break;
-
-	case kParticleSystemObject_particleRadius:
-		{
-			PhysicsWorld &physics = LuaContext::GetRuntime( L )->GetPhysicsWorld();
-
-			float world_scale_in_pixels_per_meter = physics.GetPixelsPerMeter();
-
-			lua_pushnumber( L, ( b2ps->GetRadius() * world_scale_in_pixels_per_meter ) );
-		}
-		break;
-
-	case kParticleSystemObject_particleDamping:
-		{
-			lua_pushnumber( L, b2ps->GetDamping() );
-		}
-		break;
-
-	case kParticleSystemObject_particleStrictContactCheck:
-		{
-			lua_pushboolean( L, b2ps->GetStrictContactCheck() );
-		}
-		break;
-
-	case kParticleSystemObject_particleMaxCount:
-		{
-			lua_pushnumber( L, b2ps->GetMaxParticleCount() );
-		}
-		break;
-
-	case kParticleSystemObject_particleGravityScale:
-		{
-			lua_pushnumber( L, b2ps->GetGravityScale() );
-		}
-		break;
-
-	case kParticleSystemObject_particleDestructionByAge:
-		{
-			lua_pushboolean( L, b2ps->GetDestructionByAge() );
-		}
-		break;
-
-	case kParticleSystemObject_particlePaused:
-		{
-			lua_pushboolean( L, b2ps->GetPaused() );
-		}
-		break;
-
-	case kParticleSystemObject_imageRadius:
-		{
-			lua_pushnumber( L, o.GetParticleRenderRadiusInContentUnits() );
-		}
-		break;
-
-	case kParticleSystemObject_particleMass:
-		{
-			lua_pushnumber( L, b2ps->GetParticleMass() );
-		}
-		break;
-
-	case kParticleSystemObject_particleCount:
-		{
-			lua_pushnumber( L, b2ps->GetParticleCount() );
-		}
-		break;
-
-	case kParticleSystemObject_ApplyForce:
-		{
-			Lua::PushCachedFunction( L, Self::ApplyForce );
-		}
-		break;
-
-	case kParticleSystemObject_ApplyLinearImpulse:
-		{
-			Lua::PushCachedFunction( L, Self::ApplyLinearImpulse );
-		}
-		break;
-
-	case kParticleSystemObject_CreateGroup:
-		{
-			Lua::PushCachedFunction( L, Self::CreateGroup );
-		}
-		break;
-
-	case kParticleSystemObject_CreateParticle:
-		{
-			Lua::PushCachedFunction( L, Self::CreateParticle );
-		}
-		break;
-
-	case kParticleSystemObject_DestroyParticlesInShape:
-		{
-			Lua::PushCachedFunction( L, Self::DestroyParticlesInShape );
-		}
-		break;
-
-	case kParticleSystemObject_QueryRegion:
-		{
-			Lua::PushCachedFunction( L, Self::QueryRegion );
-		}
-		break;
-
-	case kParticleSystemObject_RayCast:
-		{
-			Lua::PushCachedFunction( L, Self::RayCast );
-		}
-		break;
-
-	default:
-		{
-            result = Super::ValueForKey( L, object, key, overrideRestriction );
-		}
-		break;
-	}
-
-    // Because this is effectively a derived class, we will have successfully gotten a value
-    // for the "_properties" key from the parent and we now need to combine that with the
-    // properties of the child
-    if ( result == 1 && strcmp( key, "_properties" ) == 0 )
-    {
-        String psProperties(LuaContext::GetRuntime( L )->Allocator());
-        const char **keys = NULL;
-        const int numKeys = hash->GetKeys(keys);
-
-        DumpObjectProperties( L, object, keys, numKeys, psProperties );
-
-        lua_pushfstring( L, "{ %s, %s }", psProperties.GetString(), lua_tostring( L, -1 ) );
-        lua_remove( L, -2 ); // pop super properties
-        result = 1;
-    }
-
-	return result;
-}
-
-bool
-LuaParticleSystemObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const
-{
-	if ( ! key ) { return false; }
-
-	// ParticleSystemObject* o = (ParticleSystemObject*)LuaProxy::GetProxyableObject( L, 1 );
-	ParticleSystemObject& o = static_cast< ParticleSystemObject& >( object );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ParticleSystemObject );
-	b2ParticleSystem *b2ps = o.GetB2ParticleSystem();
-
-	bool result = true;
-
-	StringHash *hash = GetParticleSystemObjectHash( L );
-	int index = hash->Lookup( key );
-
-	switch ( index )
-	{
-	case kParticleSystemObject_particleDensity:
-		{
-			b2ps->SetDensity( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_particleRadius:
-		{
-			PhysicsWorld &physics = LuaContext::GetRuntime( L )->GetPhysicsWorld();
-
-			float world_scale_in_meters_per_pixel = physics.GetMetersPerPixel();
-
-			b2ps->SetRadius( luaL_toreal( L, valueIndex ) * world_scale_in_meters_per_pixel );
-		}
-		break;
-
-	case kParticleSystemObject_particleDamping:
-		{
-			b2ps->SetDamping( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_particleStrictContactCheck:
-		{
-			b2ps->SetStrictContactCheck( !! lua_toboolean( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_particleMaxCount:
-		{
-			b2ps->SetMaxParticleCount( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_particleGravityScale:
-		{
-			b2ps->SetGravityScale( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_particleDestructionByAge:
-		{
-			b2ps->SetDestructionByAge( !! lua_toboolean( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_particlePaused:
-		{
-			b2ps->SetPaused( !! lua_toboolean( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_imageRadius:
-		{
-			o.SetParticleRenderRadiusInContentUnits( luaL_toreal( L, valueIndex ) );
-		}
-		break;
-
-	case kParticleSystemObject_particleMass:
-	case kParticleSystemObject_particleCount:
-	case kParticleSystemObject_ApplyForce:
-	case kParticleSystemObject_ApplyLinearImpulse:
-	case kParticleSystemObject_CreateGroup:
-	case kParticleSystemObject_CreateParticle:
-	case kParticleSystemObject_DestroyParticlesInShape:
-	case kParticleSystemObject_QueryRegion:
-	case kParticleSystemObject_RayCast:
-		{
-			// Read-only properties
-			// no-op
-		}
-		break;
-
-	default:
-		{
-			result = Super::SetValueForKey( L, object, key, valueIndex );
-		}
-		break;
-	}
-
-	return result;
-}
-
-const LuaProxyVTable&
-LuaParticleSystemObjectProxyVTable::Parent() const
-{
-	return Super::Constant();
-}
-
-// ----------------------------------------------------------------------------
-
 const LuaSnapshotObjectProxyVTable&
 LuaSnapshotObjectProxyVTable::Constant()
 {
@@ -3383,7 +1726,7 @@ LuaSnapshotObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& ob
 		break;
 	case 5:
 		{
-			result = LuaLibDisplay::PushColorChannels( L, o.GetClearColor(), false );
+			result = LuaLibDisplay::PushColorChannels( L, o.GetClearColor() );
 		}
 		break;
 	case 6:
@@ -3468,7 +1811,7 @@ LuaSnapshotObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& objec
 	case 5:
 		{
 			Color c = ColorZero();
-			LuaLibDisplay::ArrayToColor( L, valueIndex, c, false );
+			LuaLibDisplay::ArrayToColor( L, valueIndex, c );
 			o.SetClearColor( c );
 		}
 		break;
@@ -3660,11 +2003,6 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
 				GroupObject& offscreenGroup =
 				* ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
 				offscreenGroup.Insert( -1, child, false );
-
-#ifdef Rtt_PHYSICS
-				child->RemoveExtensions();
-#endif
-				
 				child->DidMoveOffscreen();
 			}
 		}
@@ -3861,15 +2199,7 @@ LuaGroupObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, 
 	if ( 0 == strcmp( key, "anchorChildren" ) )
 	{
 		GroupObject& o = static_cast< GroupObject& >( object );
-
 		o.SetAnchorChildren( !! lua_toboolean( L, valueIndex ) );
-		
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-        if ( o.IsV1Compatibility() )
-        {
-            CoronaLuaWarning(L, "group.anchorChildren is only supported in graphics 2.0. Your mileage may vary in graphicsCompatibility 1.0 mode");
-        }
-#endif
 	}
 	else
 	{
@@ -4060,12 +2390,6 @@ LuaTextObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object
 			break;
         case 3: // setTextColor
 			{
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-				if ( o.IsV1Compatibility() )
-                {
-                    CoronaLuaWarning(L, "o:setTextColor() is deprecated. Use o:setFillColor() instead");
-                }
-#endif
 				Lua::PushCachedFunction( L, LuaShapeObjectProxyVTable::setFillColor );
             }
             break;
@@ -4334,7 +2658,7 @@ LuaEmbossedTextObjectProxyVTable::OnSetSize( lua_State *L )
 
 static U8
 GetEmbossedColorValueFromField(
-	lua_State *L, int tableIndex, const char *fieldName, U8 defaultValue, bool isByteValue)
+	lua_State *L, int tableIndex, const char *fieldName, U8 defaultValue)
 {
 	U8 value = defaultValue;
 	if (L && tableIndex && fieldName)
@@ -4342,16 +2666,8 @@ GetEmbossedColorValueFromField(
 		lua_getfield(L, tableIndex, fieldName);
 		if (lua_type(L, -1) == LUA_TNUMBER)
 		{
-			if (isByteValue)
-			{
-
-				value = (U8)Clamp((int)lua_tointeger(L, -1), 0, 255);
-			}
-			else
-			{
-				double decimalValue = Clamp(lua_tonumber(L, -1), 0.0, 1.0) * 255.0;
-				value = (U8)(decimalValue + 0.5);
-			}
+			double decimalValue = Clamp(lua_tonumber(L, -1), 0.0, 1.0) * 255.0;
+			value = (U8)(decimalValue + 0.5);
 		}
 		lua_pop(L, 1);
 	}
@@ -4386,14 +2702,10 @@ LuaEmbossedTextObjectProxyVTable::OnSetEmbossColor( lua_State *L )
 		lua_getfield(L, 2, "highlight");
 		if (lua_istable(L, -1))
 		{
-			highlightColor.r = GetEmbossedColorValueFromField(
-									L, -1, "r", highlightColor.r, textObjectPointer->IsByteColorRange());
-			highlightColor.g = GetEmbossedColorValueFromField(
-									L, -1, "g", highlightColor.g, textObjectPointer->IsByteColorRange());
-			highlightColor.b = GetEmbossedColorValueFromField(
-									L, -1, "b", highlightColor.b, textObjectPointer->IsByteColorRange());
-			highlightColor.a = GetEmbossedColorValueFromField(
-									L, -1, "a", highlightColor.a, textObjectPointer->IsByteColorRange());
+			highlightColor.r = GetEmbossedColorValueFromField(L, -1, "r", highlightColor.r);
+			highlightColor.g = GetEmbossedColorValueFromField(L, -1, "g", highlightColor.g);
+			highlightColor.b = GetEmbossedColorValueFromField(L, -1, "b", highlightColor.b);
+			highlightColor.a = GetEmbossedColorValueFromField(L, -1, "a", highlightColor.a);
 		}
 		lua_pop(L, 1);
 
@@ -4401,14 +2713,10 @@ LuaEmbossedTextObjectProxyVTable::OnSetEmbossColor( lua_State *L )
 		lua_getfield(L, 2, "shadow");
 		if (lua_istable(L, -1))
 		{
-			shadowColor.r = GetEmbossedColorValueFromField(
-									L, -1, "r", shadowColor.r, textObjectPointer->IsByteColorRange());
-			shadowColor.g = GetEmbossedColorValueFromField(
-									L, -1, "g", shadowColor.g, textObjectPointer->IsByteColorRange());
-			shadowColor.b = GetEmbossedColorValueFromField(
-									L, -1, "b", shadowColor.b, textObjectPointer->IsByteColorRange());
-			shadowColor.a = GetEmbossedColorValueFromField(
-									L, -1, "a", shadowColor.a, textObjectPointer->IsByteColorRange());
+			shadowColor.r = GetEmbossedColorValueFromField(L, -1, "r", shadowColor.r);
+			shadowColor.g = GetEmbossedColorValueFromField(L, -1, "g", shadowColor.g);
+			shadowColor.b = GetEmbossedColorValueFromField(L, -1, "b", shadowColor.b);
+			shadowColor.a = GetEmbossedColorValueFromField(L, -1, "a", shadowColor.a);
 		}
 		lua_pop(L, 1);
 	}
@@ -4463,27 +2771,6 @@ LuaPlatformTextBoxObjectProxyVTable::Constant()
 
 const LuaProxyVTable&
 LuaPlatformTextBoxObjectProxyVTable::Parent() const
-{
-	return Super::Constant();
-}
-
-// ----------------------------------------------------------------------------
-
-// Need explicit default constructor for const use by C++ spec
-LuaPlatformMapViewObjectProxyVTable::LuaPlatformMapViewObjectProxyVTable()
-	: LuaPlatformDisplayObjectProxyVTable()
-{
-}
-
-const LuaPlatformMapViewObjectProxyVTable&
-LuaPlatformMapViewObjectProxyVTable::Constant()
-{
-	static const Self kVTable;
-	return kVTable;
-}
-
-const LuaProxyVTable&
-LuaPlatformMapViewObjectProxyVTable::Parent() const
 {
 	return Super::Constant();
 }

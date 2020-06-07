@@ -17,7 +17,6 @@
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacFBConnect.h"
 #include "Rtt_MacImageProvider.h"
-#include "Rtt_MacMapViewObject.h"
 #include "Rtt_MacTextFieldObject.h"
 #include "Rtt_MacTextBoxObject.h"
 #include "Rtt_MacVideoPlayer.h"
@@ -671,49 +670,6 @@ MacPlatform::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
 	return SaveBitmap( bitmap, url );
 }
 
-void
-MacPlatform::GetPreference( Category category, Rtt::String * value ) const
-{
-	// TODO: Move this into MacGUIPlatform b/c it's simulator-specific
-
-#ifdef Rtt_AUTHORING_SIMULATOR
-    const char *result = NULL;
-	MacSimulator *simulator = ((AppDelegate*)[NSApp delegate]).simulator;
-	NSDictionary *properties = ( simulator ? simulator->GetProperties() : nil );
-	switch( category )
-	{
-		case MPlatform::kDefaultStatusBarFile:
-			result = [[properties valueForKey:@"statusBarDefaultFile"] UTF8String];
-			break;
-		case MPlatform::kDarkStatusBarFile:
-			result = [[properties valueForKey:@"statusBarBlackFile"] UTF8String];
-			break;
-		case MPlatform::kTranslucentStatusBarFile:
-			result = [[properties valueForKey:@"statusBarTranslucentFile"] UTF8String];
-			break;
-		case MPlatform::kLightTransparentStatusBarFile:
-			result = [[properties valueForKey:@"statusBarLightTransparentFile"] UTF8String];
-			break;
-		case MPlatform::kDarkTransparentStatusBarFile:
-			result = [[properties valueForKey:@"statusBarDarkTransparentFile"] UTF8String];
-			break;
-		case MPlatform::kScreenDressingFile:
-			result = [[properties valueForKey:@"screenDressingFile"] UTF8String];
-			break;
-		case MPlatform::kSubscription:
-			result = [[properties valueForKey:@"subscription"] UTF8String];
-			break;
-		default:
-			Super::GetPreference( category, value );
-			return;
-	}
-    
-    value->Set( result );
-#else
-    Super::GetPreference( category, value );
-#endif // Rtt_AUTHORING_SIMULATOR
-}
-
 #ifdef Rtt_AUTHORING_SIMULATOR
 ValueResult<Rtt::SharedConstStdStringPtr>
 MacPlatform::GetSimulatedAppPreferenceKeyFor(const char* keyName) const
@@ -921,26 +877,6 @@ MacPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
 }
 
 void
-MacPlatform::SetStatusBarMode( StatusBarMode newValue ) const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	MacSimulator *simulator = ((AppDelegate*)[NSApp delegate]).simulator;
-	if(simulator)
-	{
-		simulator->SetStatusBarMode(newValue);
-	}
-#endif
-}
-
-MPlatform::StatusBarMode
-MacPlatform::GetStatusBarMode() const
-{
-	// MacApp now hits this code
-//	Rtt_ASSERT_NOT_REACHED();
-	return MPlatform::kHiddenStatusBar;
-}
-
-void
 MacPlatform::SetIdleTimer( bool enabled ) const
 {
 	if (enabled)
@@ -1135,16 +1071,6 @@ MacPlatform::SetKeyboardFocus( PlatformDisplayObject *object ) const
 		// set the first responder back to the GLView?
 		[[fView window] performSelector:@selector(makeFirstResponder:) withObject:fView afterDelay:0.0];
 	}
-}
-
-PlatformDisplayObject *
-MacPlatform::CreateNativeMapView( const Rect& bounds ) const
-{
-#if Rtt_AUTHORING_SIMULATOR
-	Rtt_TRACE_SIM( ( "WARNING: Map views are not supported in the simulator. Please build for device.\n" ) );
-#endif // Rtt_AUTHORING_SIMULATOR
-
-	return Rtt_NEW( & GetAllocator(), MacMapViewObject( bounds ) );
 }
 
 PlatformDisplayObject *
@@ -2065,16 +1991,12 @@ void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Rea
 	MacSimulator *simulator = ((AppDelegate*)[NSApp delegate]).simulator;
 	NSDictionary *properties = (simulator != nil ? simulator->GetProperties() : nil);
 
-	float statusBarMult = (simulator && simulator->GetStatusBarMode()==kHiddenStatusBar)?0:1;
-
 	if (DeviceOrientation::IsSideways(GetDevice().GetOrientation()))
 	{
 		top = [[properties valueForKey:@"safeLandscapeScreenInsetTop"] floatValue];
 		left = [[properties valueForKey:@"safeLandscapeScreenInsetLeft"] floatValue];
 		bottom = [[properties valueForKey:@"safeLandscapeScreenInsetBottom"] floatValue];
 		right = [[properties valueForKey:@"safeLandscapeScreenInsetRight"] floatValue];
-
-		top += statusBarMult * [[properties valueForKey:@"safeLandscapeScreenInsetStatusBar"] floatValue];
 	}
 	else
 	{
@@ -2082,8 +2004,6 @@ void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Rea
 		left = [[properties valueForKey:@"safeScreenInsetLeft"] floatValue];
 		bottom = [[properties valueForKey:@"safeScreenInsetBottom"] floatValue];
 		right = [[properties valueForKey:@"safeScreenInsetRight"] floatValue];
-
-		top += statusBarMult * [[properties valueForKey:@"safeScreenInsetStatusBar"] floatValue];
 	}
 
 #else
@@ -2110,18 +2030,6 @@ MPlatformDevice&
 MacGUIPlatform::GetDevice() const
 {
 	return const_cast< MacDevice& >( fMacDevice );
-}
-
-void
-MacGUIPlatform::SetStatusBarMode( StatusBarMode newValue ) const
-{
-	fMacDevice.GetSimulator().SetStatusBarMode( newValue );
-}
-
-MPlatform::StatusBarMode
-MacGUIPlatform::GetStatusBarMode() const
-{
-	return fMacDevice.GetSimulator().GetStatusBarMode();
 }
 
 Real

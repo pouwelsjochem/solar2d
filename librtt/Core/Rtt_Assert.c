@@ -40,7 +40,7 @@ Rtt_EXPORT_BEGIN
 
 #if defined( Rtt_ANDROID_ENV )
 #include <android/log.h>
-#elif defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV )
+#elif defined( Rtt_WIN_ENV )
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -122,7 +122,7 @@ Rtt_VLogException(const char *format, va_list ap)
 
 #ifdef Rtt_VPRINTF_SUPPORTED
 
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV )
+#if defined( Rtt_WIN_ENV )
 	if (format != NULL)
 	{
 		// Acquire a string buffer that will fit the formatted text.

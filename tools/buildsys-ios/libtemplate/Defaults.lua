@@ -257,7 +257,6 @@ options.frameworks = {
 	'AVFoundation',
 	'CFNetwork',
 	'CoreGraphics',
-	'CoreLocation',
 	'CoreMedia',
 	'CoreMotion',
 	'CoreVideo',

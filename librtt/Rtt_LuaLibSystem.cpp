@@ -22,7 +22,6 @@
 #include "Rtt_Runtime.h"
 #include "Rtt_GPU.h"
 #include "Rtt_GPUStream.h"
-#include "Rtt_PhysicsWorld.h"
 #include "Rtt_PlatformInAppStore.h"
 #include "Rtt_PreferenceCollection.h"
 #include "Core/Rtt_String.h"
@@ -171,23 +170,10 @@ LuaLibSystem::getInfo( lua_State *L )
 		Runtime *runtime = LuaContext::GetRuntime( L );
 		lua_pushinteger( L, runtime->GetDisplay().GetMaxTextureSize() );
 	}
-	
-#ifdef OLD_GRAPHICS
-	else if ( Rtt_StringCompare( key, "maxTextureUnits" ) == 0 )
-	{
-		lua_pushinteger( L, GPUStream::GetMaxTextureUnits() );
-	}
-#endif
 	else if ( Rtt_StringCompare( key, "supportsScreenCapture" ) == 0 )
 	{
-#ifdef OLD_GRAPHICS
-		bool supportsScreenCapture = GPU::CheckIfContextSupportsExtension( "GL_OES_framebuffer_object" )
-			|| GPU::CheckIfContextSupportsExtension( "GL_EXT_framebuffer_object" ) 
-			|| GPU::CheckIfContextSupportsExtension( "GL_ARB_framebuffer_object" );
-#else
 		Rtt_ASSERT_NOT_IMPLEMENTED();
 		bool supportsScreenCapture = false;
-#endif
 		lua_pushboolean( L, supportsScreenCapture );
 	}
 	else if ( Rtt_StringCompare( key, "targetAppStore" ) == 0 )
@@ -971,34 +957,6 @@ setGyroscopeInterval( lua_State *L )
 }
 
 static int
-setLocationAccuracy( lua_State *L )
-{
-	Rtt_TRACE_SIM( ( "WARNING: Location updates are only available on the device.\n" ) );
-	Real distance = luaL_toreal( L, 1 );
-	if ( distance < Rtt_REAL_0 )
-	{
-		distance = Rtt_REAL_0;
-	}
-
-	LuaContext::GetPlatform( L ).GetDevice().SetLocationAccuracy( distance );
-	return 0;
-}
-
-static int
-setLocationThreshold( lua_State *L )
-{
-	Rtt_TRACE_SIM( ( "WARNING: Location updates are only available on the device.\n" ) );
-	Real distance = luaL_toreal( L, 1 );
-	if ( distance < Rtt_REAL_0 )
-	{
-		distance = Rtt_REAL_0;
-	}
-
-	LuaContext::GetPlatform( L ).GetDevice().SetLocationThreshold( distance );
-	return 0;
-}
-
-static int
 setTapDelay( lua_State *L )
 {
 	Real delay = luaL_toreal( L, 1 );
@@ -1221,13 +1179,7 @@ FileExists( lua_State *L )
 static const char kOrientationName[] = "orientation";
 static const char kAccelerometerName[] = "accelerometer";
 static const char kGyroscopeName[] = "gyroscope";
-static const char kLocationName[] = "location";
-static const char kHeadingName[] = "heading";
 static const char kMultitouchName[] = "multitouch";
-static const char kCollisionName[] = "collision";
-static const char kPreCollisionName[] = "preCollision";
-static const char kPostCollisionName[] = "postCollision";
-static const char kParticleCollisionName[] = "particleCollision";
 static const char kKeyName[] = "key";
 static const char kInputDeviceStatusName[] = "inputDeviceStatus";
 static const char kMouseName[] = "mouse";
@@ -1249,33 +1201,9 @@ EventTypeForName( const char *eventName )
 	{
 		result = MPlatformDevice::kGyroscopeEvent;
 	}
-	else if ( strcmp( kLocationName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kLocationEvent;
-	}
-	else if ( strcmp( kHeadingName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kHeadingEvent;
-	}
 	else if ( strcmp( kMultitouchName, eventName ) == 0 )
 	{
 		result = MPlatformDevice::kMultitouchEvent;
-	}
-	else if ( strcmp( kCollisionName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kCollisionEvent;
-	}
-	else if ( strcmp( kPreCollisionName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kPreCollisionEvent;
-	}
-	else if ( strcmp( kPostCollisionName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kPostCollisionEvent;
-	}
-	else if ( strcmp( kParticleCollisionName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kParticleCollisionEvent;
 	}
 	else if ( strcmp( kKeyName, eventName ) == 0 )
 	{
@@ -1308,30 +1236,6 @@ ActivationTypeForName( const char* name )
 	return result;
 }
 
-static PhysicsWorld::Properties
-MaskForEvent( MPlatformDevice::EventType t )
-{
-	PhysicsWorld::Properties result = 0;
-	switch( t )
-	{
-		case MPlatformDevice::kCollisionEvent:
-			result = PhysicsWorld::kCollisionListenerExists;
-			break;
-		case MPlatformDevice::kPreCollisionEvent:
-			result = PhysicsWorld::kPreCollisionListenerExists;
-			break;
-		case MPlatformDevice::kPostCollisionEvent:
-			result = PhysicsWorld::kPostCollisionListenerExists;
-			break;
-		case MPlatformDevice::kParticleCollisionEvent:
-			result = PhysicsWorld::kParticleCollisionListenerExists;
-			break;
-		default:
-			break;
-	}
-	return result;
-}
-
 int
 LuaLibSystem::BeginListener( lua_State *L )
 {
@@ -1342,14 +1246,6 @@ LuaLibSystem::BeginListener( lua_State *L )
 		if ( t > MPlatformDevice::kUnknownEvent )
 		{
 			Runtime *runtime = LuaContext::GetRuntime( L );
-#ifdef Rtt_PHYSICS
-			PhysicsWorld::Properties mask = MaskForEvent( t );
-			if ( mask > 0 )
-			{
-				runtime->GetPhysicsWorld().SetProperty( mask, true );
-			}
-			else
-#endif
 			{
 				runtime->Platform().GetDevice().BeginNotifications( t );
 			}
@@ -1369,14 +1265,6 @@ LuaLibSystem::EndListener( lua_State *L )
 		if ( t > MPlatformDevice::kUnknownEvent )
 		{
 			Runtime *runtime = LuaContext::GetRuntime( L );
-#ifdef Rtt_PHYSICS
-			PhysicsWorld::Properties mask = MaskForEvent( t );
-			if ( mask )
-			{
-				runtime->GetPhysicsWorld().SetProperty( mask, false );
-			}
-			else
-#endif
 			{
 				runtime->Platform().GetDevice().EndNotifications( t );
 			}
@@ -1509,8 +1397,6 @@ LuaLibSystem::Initialize( lua_State *L )
 		{ "getInputDevices", getInputDevices },
 		{ "setAccelerometerInterval", setAccelerometerInterval },
 		{ "setGyroscopeInterval", setGyroscopeInterval },
-		{ "setLocationAccuracy", setLocationAccuracy },
-		{ "setLocationThreshold", setLocationThreshold },
 		{ "setTapDelay", setTapDelay },
 		{ "activate", LuaLibSystem::Activate }, // public use
 		{ "deactivate", LuaLibSystem::Deactivate }, // public use

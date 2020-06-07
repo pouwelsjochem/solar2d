@@ -9,7 +9,6 @@ otool -l libplayer.a | grep -A 4 LC_LINKER_OPTION | grep string | grep -v '\-fra
 
 @import AssetsLibrary;
 @import AVKit;
-@import CoreLocation;
 @import CoreMotion;
 @import Foundation;
 @import GameController;

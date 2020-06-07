@@ -72,10 +72,6 @@ class MacConsoleDevice : public MPlatformDevice
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
 
 	public:
-		virtual void SetLocationAccuracy( Real meters ) const;
-		virtual void SetLocationThreshold( Real meters ) const;
-
-	public:
 		virtual DeviceOrientation::Type GetOrientation() const;
 
 	protected:
@@ -121,10 +117,6 @@ class MacDevice : public MacConsoleDevice
 		virtual void SetAccelerometerInterval( U32 frequency ) const;
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
 		virtual const char *GetPlatform() const;
-
-	public:
-		virtual void SetLocationAccuracy( Real meters ) const;
-		virtual void SetLocationThreshold( Real meters ) const;
 
 	public:
 		virtual DeviceOrientation::Type GetOrientation() const;

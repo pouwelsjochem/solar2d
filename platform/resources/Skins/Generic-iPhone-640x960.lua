@@ -16,15 +16,8 @@ simulator =
 	screenHeight = 960,
 	iosPointWidth = 320,
 	iosPointHeight = 480,
-	safeLandscapeScreenInsetStatusBar = 20 * 2,
-	safeScreenInsetStatusBar = 20 * 2,
 	displayManufacturer = "Corona Labs Inc.",
 	displayName = "iPhone",
-	statusBarDefault = "iPhone4StatusBarBlack.png",
-	statusBarTranslucent = "iPhone4StatusBarWhite.png",
-	statusBarBlack = "iPhone4StatusBarBlack.png",
-	statusBarLightTransparent = "iPhone4StatusBarWhite.png",
-	statusBarDarkTransparent = "iPhone4StatusBarBlack.png",
 	windowTitleBarName = "iPhone @2x",
 	defaultFontSize = 17 * 2,		-- Converts default font point size to pixels.
 }

@@ -24,13 +24,6 @@
 #if defined( Rtt_FEATURES_ALL )
 #endif
 
-#define Rtt_GAMEEDITION
-
-#ifdef Rtt_GAMEEDITION
-	#define Rtt_PHYSICS
-	#define Rtt_SPRITE
-#endif
-
 #ifdef Rtt_EMSCRIPTEN_ENV
 	#define Rtt_USE_WEBMIXER
 #elif Rtt_ANDROID_ENV
@@ -102,7 +95,6 @@
 	#define Rtt_ORIENTATION
 	#define Rtt_ACCELEROMETER
 	#define Rtt_CORE_MOTION
-	#define Rtt_CORE_LOCATION
 	#define Rtt_MULTITOUCH
 	#define Rtt_AUDIO_SESSION_PROPERTY
 
@@ -139,11 +131,6 @@
 
 	#define Rtt_OPENGL_CLIENT_SIDE_ARRAYS 1
 	#define Rtt_OPENGL_RESET_VERTEX_ARRAY 1
-
-	#ifdef Rtt_GAMEEDITION
-		#define Rtt_SPRITE
-	#endif
-
 #endif
 
 
@@ -227,10 +214,6 @@
 #endif
 	#define Rtt_OPENGL_CLIENT_SIDE_ARRAYS 1
 
-	#ifdef Rtt_GAMEEDITION
-		#define Rtt_SPRITE
-	#endif
-
 	#if defined( Rtt_DEBUG ) || defined( _DEBUG )
 		// Memory leak tracking
 		#ifndef _CRTDBG_MAP_ALLOC
@@ -257,29 +240,9 @@
 
 #endif
 
-#if defined( Rtt_POWERVR_ENV )
-
-	#define Rtt_USE_GLOBAL_VARIABLES
-	#define Rtt_VPRINTF_SUPPORTED
-	#define Rtt_USE_LIMITS
-	#define Rtt_ALLOCATOR_SYSTEM
-	#define Rtt_OPENGLES
-	#define Rtt_OPENGL_CLIENT_SIDE_ARRAYS 1
-	#define Rtt_OPENGL_RESET_VERTEX_ARRAY 1
-	#define Rtt_LUA_LFS
-
-#endif
-
 
 // Android
 // ----------------------------------------------------------------------------
-
-#if defined( Rtt_NOOK_ENV )
-	#ifndef Rtt_ANDROID_ENV
-		#define Rtt_ANDROID_ENV
-	#endif
-#endif
-
 #if defined( Rtt_ANDROID_ENV )
 
 	#define Rtt_DEVICE_ENV

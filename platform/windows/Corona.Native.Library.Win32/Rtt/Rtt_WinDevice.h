@@ -56,8 +56,6 @@ class WinDevice : public MPlatformDevice
 		virtual bool HasEventSource(EventType type) const;
 		virtual void SetAccelerometerInterval(U32 frequency) const;
 		virtual void SetGyroscopeInterval(U32 frequency) const;
-		virtual void SetLocationAccuracy(Real meters) const;
-		virtual void SetLocationThreshold(Real meters) const;
 		virtual DeviceOrientation::Type GetOrientation() const;
 
 	private:

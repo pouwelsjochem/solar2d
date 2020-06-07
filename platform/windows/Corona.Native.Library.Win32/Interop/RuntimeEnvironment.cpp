@@ -1677,7 +1677,7 @@ void RuntimeEnvironment::OnRuntimeTimerElapsed()
 		}
 	}
 
-	// Update the runtime's scene such as physics, sprites, etc.
+	// Update the runtime's scene such as sprites, etc.
 	// Note: This does not render the scene since the "kRenderAsync" property is set.
 	fEnteringFrameEvent.Raise(*this, EventArgs::kEmpty);
 	(*fRuntimePointer)();

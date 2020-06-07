@@ -795,17 +795,6 @@ ShaderFactory::LoadCompiledShaderVersions(lua_State *L, int modeTableIndex, Shad
 			shadersLoadedCount++;
 		}
 	}
-	lua_pop(L, 1);
-	lua_getfield(L, modeTableIndex, "wireframe");
-	if (lua_type(L, -1) == LUA_TSTRING)
-	{
-		bool wasLoaded = compiledShaders.Get(Program::kWireframe)->CopyFromHexadecimalString(lua_tostring(L, -1));
-		if (wasLoaded)
-		{
-			shadersLoadedCount++;
-		}
-	}
-	lua_pop(L, 1);
 
 	// Return true if all shader versions were successfully loaded.
 	bool wereAllShadersLoaded = (shadersLoadedCount >= Program::kNumVersions);

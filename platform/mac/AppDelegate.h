@@ -13,7 +13,6 @@
 //#import <AppKit/NSNibDeclarations.h>
 #import "GLView.h"
 #import <AppKit/AppKit.h>
-#import <CoreLocation/CoreLocation.h>
 #import "NSString+Extensions.h"
 
 #include "Rtt_PlatformSimulator.h"
@@ -52,7 +51,7 @@ namespace Rtt
 	class SimulatorAnalytics;
 }
 
-@interface AppDelegate : NSObject <NSMenuDelegate,NSAlertDelegate,GLViewDelegate, CLLocationManagerDelegate
+@interface AppDelegate : NSObject <NSMenuDelegate,NSAlertDelegate,GLViewDelegate
 #if !defined( Rtt_WEB_PLUGIN )
 	,NSUserNotificationCenterDelegate
 #endif
@@ -189,7 +188,6 @@ namespace Rtt
 @property (assign) IBOutlet NSMenuItem *ccc;
 -(BOOL)isLinuxBuildHidden;
 -(BOOL)isTVOSBuildHidden;
--(BOOL)isNookStoreBuildAvailable;
 
 -(IBAction)showPreferences:(id)sender;
 -(IBAction)deauthorizeConfirm:(id)sender;
@@ -220,8 +218,6 @@ namespace Rtt
 -(IBAction)toggleSuspendResume:(id)sender;
 
 -(NSWindow*)currentWindow;
-
--(void)sendLocationEvent;
 
 -(void)beginProgressSheet:(NSWindow*)parent;
 -(void)endProgressSheet;
@@ -274,8 +270,6 @@ namespace Rtt
 -(IBAction)customDeviceCancel:(id)sender;
 
 - (BOOL) alertShowHelp:(NSAlert *) alert;
-- (void) startLocationUpdating;
-- (void) endLocationUpdating;
 
 -(void)notifyWithTitle:(NSString*)title description:(NSString*)description iconData:(NSImage*)iconData;
 - (void) clearConsole;

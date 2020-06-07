@@ -24,7 +24,7 @@
 #include <string.h>
 #include <fcntl.h>
 
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV ) || defined( Rtt_NINTENDO_ENV )
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_NINTENDO_ENV )
 	#include <io.h>
 	#include <sys/stat.h>
 	static const unsigned S_IRUSR = _S_IREAD;     ///< read by user
@@ -136,59 +136,10 @@ GetFileSize( const char *filepath )
 	return statbuf.st_size;
 }
 
-/*
-#if defined( Rtt_DEBUG ) && !defined( Rtt_ANDROID_ENV )
-static bool
-Diff( const char *path1, const char *path2 )
-{
-	size_t len1 = GetFileSize( path1 );
-	size_t len2 = GetFileSize( path2 );
-
-	bool result = ( len1 == len2 );
-	if ( result )
-	{
-#if defined( Rtt_WIN_DESKTOP_ENV ) || defined( Rtt_POWERVR_ENV )
-		WinFile file1;
-		WinFile file2;
-
-		file1.Open( path1 );
-		file1.Open( path2 );
-		if ( !file1.IsOpen() || !file2.IsOpen() )
-			return false;
-
-		if ( file1.GetFileSize() != file2.GetFileSize() )
-			return false;
-
-		result = ( 0 == memcmp( file1.GetContents(), file2.GetContents(), file1.GetFileSize() ) );
-#elif defined( Rtt_WIN_PHONE_ENV )
-		//TODO: To be implemented later...
-		Rtt_ASSERT_NOT_IMPLEMENTED();
-#else
-		int fd1 = open( path1, O_RDONLY );
-		void *p1 = mmap( NULL, len1, PROT_READ, MAP_SHARED, fd1, 0 );
-
-		int fd2 = open( path2, O_RDONLY );
-		void *p2 = mmap( NULL, len2, PROT_READ, MAP_SHARED, fd2, 0 );
-
-		result = ( 0 == memcmp( p1, p2, len1 ) );
-
-		munmap( p2, len2 );
-		close( fd2 );
-
-		munmap( p1, len1 );
-		close( fd1 );
-#endif
-	}
-
-	return result;
-}
-#endif
-*/
-
 static char
 DirSeparator()
 {
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV )
+#if defined( Rtt_WIN_ENV )
 	return '\\';
 #else
 	return '/';
@@ -1114,7 +1065,7 @@ Archive::~Archive()
 #else
 	if ( Rtt_VERIFY( fData ) )
 	{
-#if defined( Rtt_WIN_DESKTOP_ENV ) || defined( Rtt_POWERVR_ENV )
+#if defined( Rtt_WIN_DESKTOP_ENV )
 		Rtt_FileMemoryUnmap( fData, fDataLen );
 #else
 //TODO: Merge this code with the Windows code block up above using the new Rtt_File*() functions.

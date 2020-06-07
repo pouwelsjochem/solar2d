@@ -133,7 +133,6 @@ settings =
 			},
 			UISupportedInterfaceOrientations = { "CORONA" },
 			UIApplicationExitsOnSuspend = false,
-			UIStatusBarHidden = true,
 			UIPrerenderedIcon = true,
 			LSApplicationQueriesSchemes = { "" },
 			FacebookAppID = "",
@@ -161,7 +160,6 @@ settings =
             {
             	"UIInterfaceOrientationLandscapeLeft", -- etc.
             },
-			UIViewControllerBasedStatusBarAppearance = false,
             CoronaUseIOS6LandscapeOnlyWorkaround = true,
             CoronaUseIOS7LandscapeOnlyWorkaround = true,
             CoronaUseIOS8LandscapeOnlyWorkaround = true,
@@ -187,10 +185,6 @@ settings =
 			NSHealthShareUsageDescription = "",
 			NSHealthUpdateUsageDescription = "",
 			NSHomeKitUsageDescription = "",
-			NSLocationAlwaysUsageDescription = "",
-			NSLocationUsageDescription = "DEPRECATED",
-			NSLocationAlwaysAndWhenInUseUsageDescription = "",
-			NSLocationWhenInUseUsageDescription = "",
 			NSMicrophoneUsageDescription = "",
 			NSMotionUsageDescription = "",
 			NSPhotoLibraryUsageDescription = "",
@@ -244,8 +238,6 @@ settings =
 			},
 			NSHumanReadableCopyright = "",
 			NSContactsUsageDescription = "",
-			NSLocationUsageDescription = "",
-			NSLocationWhenInUseUsageDescription = "",
 			NSAppTransportSecurity = {
 				NSAllowsArbitraryLoads = true,
 			    NSAllowsArbitraryLoadsInMedia = true,

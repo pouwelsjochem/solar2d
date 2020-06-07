@@ -175,11 +175,6 @@ const MCrypto& WinConsolePlatform::GetCrypto() const
 	return fCrypto;
 }
 
-MPlatform::StatusBarMode WinConsolePlatform::GetStatusBarMode() const
-{
-	return kDefaultStatusBar;
-}
-
 bool WinConsolePlatform::FileExists(const char *filename) const
 {
 	return (Rtt_FileExists(filename) != 0);

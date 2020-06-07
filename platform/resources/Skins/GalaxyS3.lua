@@ -18,11 +18,6 @@ simulator =
 	deviceImage = "GalaxyS3.png",
 	displayManufacturer = "samsung",
 	displayName = "GT-I9300",
-	statusBarDefault = "", 
-	statusBarTranslucent = "", 
-	statusBarBlack = "", 
-	statusBarLightTransparent = "",
-	statusBarDarkTransparent = "",
 	windowTitleBarName = "Samsung Galaxy S3",
 }
 simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

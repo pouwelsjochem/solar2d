@@ -60,7 +60,6 @@ class IPhoneImageProvider : public PlatformImageProvider
 		IPhoneMediaProvider* fMediaProvider;
 		IPhoneImagePickerControllerDelegate* fDelegate;
 		NSString *fDstPath;
-		bool iOS5statusBarHidden; // workaround for statusbar coming back in iOS 5.0 when hidden
 };
 
 // ----------------------------------------------------------------------------

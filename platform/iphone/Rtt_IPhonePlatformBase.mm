@@ -659,22 +659,6 @@ IPhonePlatformBase::GetStoreProvider( const ResourceHandle<lua_State>& handle ) 
 }
 
 void
-IPhonePlatformBase::SetStatusBarMode( MPlatform::StatusBarMode newValue ) const
-{
-//	Rtt_ASSERT_NOT_REACHED();
-}
-
-MPlatform::StatusBarMode
-IPhonePlatformBase::GetStatusBarMode() const
-{
-	MPlatform::StatusBarMode result = MPlatform::kHiddenStatusBar;
-
-//	Rtt_ASSERT_NOT_REACHED();
-
-	return result;
-}
-
-void
 IPhonePlatformBase::SetActivityIndicator( bool visible ) const
 {
 	Rtt_ASSERT_NOT_REACHED();
@@ -706,13 +690,6 @@ IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
 		// Dismiss keyboard
 		[GetView() dismissKeyboard];
 	}
-}
-
-PlatformDisplayObject*
-IPhonePlatformBase::CreateNativeMapView( const Rect& bounds ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return NULL;
 }
 
 PlatformDisplayObject*

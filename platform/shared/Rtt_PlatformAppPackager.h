@@ -54,8 +54,6 @@ class AppPackagerParams
 		String fBuildSettingsPath;
 		bool fIncludeBuildSettings;
 		mutable DeviceBuildData *fDeviceBuildData;
-		bool fIncludeFusePlugins;
-		bool fUsesMonetization;
 		bool fLiveBuild;
 		String fCoronaUser;
 
@@ -96,12 +94,6 @@ class AppPackagerParams
 		void SetStripDebug( bool newValue ) { fIsStripDebug = newValue; }
 		void SetBuildMessage( const char * newValue ) { fBuildMessage.Set( newValue ); }
 		const char * GetBuildMessage( ) { return fBuildMessage.GetString(); }
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-		bool UsesMonetization() const { return fUsesMonetization; }
-		void SetUsesMonetization( bool newValue ) { fUsesMonetization = newValue; }
-		bool IncludeFusePlugins() const { return fIncludeFusePlugins; }
-		void SetIncludeFusePlugins( bool newValue ) { fIncludeFusePlugins = newValue; }
-#endif
 
 		bool IsLiveBuild() const { return fLiveBuild; }
 		void SetLiveBuild( bool newValue ) { fLiveBuild = newValue; }

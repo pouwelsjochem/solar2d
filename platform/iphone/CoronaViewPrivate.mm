@@ -11,7 +11,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
-#import <CoreLocation/CoreLocation.h>
 
 #import "CoronaViewPrivate.h"
 #import "CoronaViewRuntimeDelegate.h"
@@ -207,7 +206,6 @@ CoronaViewListenerAdapter( lua_State *L )
 #ifdef Rtt_ORIENTATION
 							CoronaOrientationObserver,
 #endif
-							CLLocationManagerDelegate,
 							CoronaGyroscopeObserver,
 							CoronaOrientationProvider>
 {
@@ -355,7 +353,6 @@ CoronaViewListenerAdapter( lua_State *L )
 
 	_observerProxy = [[AppleWeakProxy alloc] initWithTarget:self];
 	_orientationObserver = (id< CoronaOrientationObserver >)_observerProxy;
-	_locationObserver = (id< CLLocationManagerDelegate >)_observerProxy;
 	_gyroscopeObserver = (id< CoronaGyroscopeObserver >)_observerProxy;
 }
 
@@ -775,7 +772,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	[_observerProxy release];
 	_observerProxy = nil;
 	_orientationObserver = nil;
-	_locationObserver = nil;
 	_gyroscopeObserver = nil;
 	
 	//Restore the context
@@ -1349,88 +1345,6 @@ PrintTouches( NSSet *touches, const char *header )
 		[self setForceTouchSupport:[currentTraits forceTouchCapability] == UIForceTouchCapabilityAvailable];
 	}
 }
-
-#ifdef Rtt_CORE_LOCATION
-
-// CLLocationManagerDelegate
-// ----------------------------------------------------------------------------
-#pragma mark # CLLocationManagerDelegate
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-{
-	using namespace Rtt;
-
-	double latitude = newLocation.coordinate.latitude;
-	double longitude = newLocation.coordinate.longitude;
-	double altitude = newLocation.altitude;
-	double accuracy = newLocation.horizontalAccuracy;
-	double speed = newLocation.speed;
-	double direction = newLocation.course;
-	double time = [newLocation.timestamp timeIntervalSince1970];
-
-	LocationEvent e( latitude, longitude, altitude, accuracy, speed, direction, time );
-	self.runtime->DispatchEvent( e );
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-	using namespace Rtt;
-
-	if ( kCLErrorLocationUnknown == error.code )
-	{
-		// Ignore this "error" which seems to occur spuriously
-		// Apple says: kCLErrorLocationUnknown: location is currently unknown, but CL will keep trying
-		return;
-	}
-
-	if ( kCLErrorDenied == error.code ) 
-	{
-		self.runtime->Platform().GetDevice().EndNotifications( MPlatformDevice::kLocationEvent );
-		self.runtime->Platform().GetDevice().EndNotifications( MPlatformDevice::kHeadingEvent );
-	}
-
-	LocationEvent e( [[error localizedDescription] UTF8String], (S32)[error code] );
-	self.runtime->DispatchEvent( e );
-
-/*
-	NSString *msg;
-	if (error.code == kCLErrorLocationUnknown) 
-	{
-		msg = @"Unable to obtain current location";
-	} 
-	else if (error.code == kCLErrorDenied) 
-	{
-		msg = @"Location access denied";
-		runtime->Platform().GetDevice().EndNotifications( MPlatformDevice::kLocationEvent );
-		runtime->Platform().GetDevice().EndNotifications( MPlatformDevice::kHeadingEvent );
-	} 
-	else if (error.code == kCLErrorNetwork)
-	{
-		msg = @"Network unavailable";
-	}
-
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Error"
-													message:msg
-												   delegate:nil
-										  cancelButtonTitle:@"OK"
-										  otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-*/
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
-{	
-	using namespace Rtt;
-	
-	double headingTrue = (double)[newHeading trueHeading];
-	double headingMagnetic = (double)[newHeading magneticHeading];
-
-	HeadingEvent e( headingTrue, headingMagnetic );
-	self.runtime->DispatchEvent( e );
-}
-
-#endif // Rtt_CORE_LOCATION
 
 // CoronaGyroscopeObserver
 // ----------------------------------------------------------------------------

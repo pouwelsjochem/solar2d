@@ -10,11 +10,6 @@ local ads = require("ads")
 local analytics = require("analytics")
 local facebook = require("facebook")
 
-
--- Hide the status bar.
-display.setStatusBar(display.HiddenStatusBar)
-
-
 -- Display an orange background.
 display.setDefault("background", 255, 165, 0)
 

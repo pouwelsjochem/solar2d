@@ -100,7 +100,7 @@ public ref class CoronaInteropSettings sealed
 		/// </value>
 		property Networking::INetworkServices^ NetworkServices;
 
-		/// <summary>Gets or sets an object used to access embedded resources such as Corona's widget library images.</summary>
+		/// <summary>Gets or sets an object used to access embedded resources.</summary>
 		/// <value>
 		///  <para>Reference to an object which provides access to embedded resources.</para>
 		///  <para>Set to null (the default) if this property has not been assigned yet.</para>

@@ -16,7 +16,7 @@
 
 namespace CoronaLabs { namespace Corona { namespace WinRT { namespace Interop { namespace Storage {
 
-/// <summary>Provides access to embedded resources, such as Corona's widget library images.</summary>
+/// <summary>Provides access to embedded resources</summary>
 public interface class IResourceServices
 {
 	/// <summary>Determines if the given resource name exists as an embedded file within the application's library.</summary>

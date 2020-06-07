@@ -7,12 +7,6 @@
     <ClCompile Include="..\..\ndk\generated\analytics.c">
       <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\composer.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\composer_scene.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\generated\CoronaPrototype.cpp">
       <Filter>generated</Filter>
     </ClCompile>
@@ -343,91 +337,10 @@
     <ClCompile Include="..\..\ndk\generated\ssl.cpp">
       <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\timer.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\generated\tp.cpp">
       <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\transition.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\transition_v1.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\generated\url.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_button.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_momentumScrolling.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_pickerWheel.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_progressView.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_scrollview.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_searchField.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_segmentedControl.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_slider.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_spinner.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_stepper.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_switch.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_tabbar.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_tableview.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_dark.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_dark_sheet.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_light.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_light_sheet.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_sheet.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios_sheet.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios7.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios7_sheet.cpp">
       <Filter>generated</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\external\luasocket\src\tcp.c">
@@ -616,13 +529,7 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayPath.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayV2.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_EmitterObject.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.cpp">
@@ -865,12 +772,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_DeviceOrientation.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_DisplayObjectExtensions.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_EllipsePath.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -940,9 +841,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibNative.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibPhysics.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibSQLite.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -968,21 +866,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Matrix.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_ParticleSystemObject.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsContact.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsContactListener.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsJoint.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsWorld.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioPlayer.cpp">
@@ -1016,9 +899,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformLocation.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.cpp">
@@ -1172,9 +1052,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Scheduler.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_SimpleCachedPath.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp">
@@ -1381,173 +1258,8 @@
     <ClCompile Include="..\..\..\..\plugins\shared\CoronaLuaLibraryShared.cpp">
       <Filter>plugins-shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2BlockAllocator.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2Body.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2BroadPhase.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2ChainAndCircleContact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2ChainAndPolygonContact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2ChainShape.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2CircleContact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2CircleShape.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2CollideCircle.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2CollideEdge.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2CollidePolygon.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2Collision.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2Contact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2ContactManager.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2ContactSolver.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2Distance.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2DistanceJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Draw.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2DynamicTree.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2EdgeAndCircleContact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2EdgeAndPolygonContact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2EdgeShape.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2Fixture.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2FreeList.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2FrictionJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2GearJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2Island.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2Joint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Math.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2MotorJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2MouseJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2Particle.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2ParticleAssembly.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2ParticleGroup.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2ParticleSystem.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2PolygonAndCircleContact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2PolygonContact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2PolygonShape.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2PrismaticJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2PulleyJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2RevoluteJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2RopeJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\b2Separator-cpp\b2Separator.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Settings.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2StackAllocator.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Stat.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2TimeOfImpact.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Timer.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2TrackedBlock.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2VoronoiDiagram.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2WeldJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2WheelJoint.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2World.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2WorldCallbacks.cpp">
-      <Filter>box2D</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_GLGeometry.cpp">
       <Filter>rtt\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\b2GLESDebugDraw.cpp">
-      <Filter>box2D</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\AndroidBaseImageDecoder.cpp">
       <Filter>Android</Filter>
@@ -1633,12 +1345,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDeviceManager.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidLocation.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidMapViewObject.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidModalInteraction.cpp">
       <Filter>Android</Filter>
     </ClCompile>
@@ -1692,9 +1398,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\external\sqlite3\sqlite3.c">
       <Filter>sqlite</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\external\smoothpolygon\SmoothPolygon.cpp">
-      <Filter>others</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\generated\mime_generated.cpp">
       <Filter>socket</Filter>
@@ -1780,9 +1483,6 @@
     </Filter>
     <Filter Include="libjpeg">
       <UniqueIdentifier>{9221fe31-bb64-4402-a014-80bb51e7fa57}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="box2D">
-      <UniqueIdentifier>{43ea43c2-f20e-42e5-b1a9-65252166490b}</UniqueIdentifier>
     </Filter>
     <Filter Include="rtt\Renderer">
       <UniqueIdentifier>{1c226d06-2dba-4aca-b1f7-3974e64c9ac6}</UniqueIdentifier>
@@ -2053,13 +1753,7 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayTypes.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayV2.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_EmitterObject.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.h">
@@ -2308,12 +2002,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_DeviceOrientation.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_DisplayObjectExtensions.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_EllipsePath.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_Event.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2392,9 +2080,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibNative.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibPhysics.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibSocket.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2461,24 +2146,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_MUpdatable.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_ParticleSystemObject.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsContact.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsContactListener.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsJoint.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsTypes.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsWorld.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioPlayer.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2510,9 +2177,6 @@
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformLocation.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformMediaProviderBase.h">
@@ -2629,9 +2293,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_Scheduler.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_SimpleCachedPath.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2709,9 +2370,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_GLGeometry.h">
       <Filter>rtt\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\b2GLESDebugDraw.h">
-      <Filter>box2D</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\AndroidBaseImageDecoder.h">
       <Filter>Android</Filter>
@@ -2795,12 +2453,6 @@
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDeviceManager.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidLocation.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidMapViewObject.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidModalInteraction.h">

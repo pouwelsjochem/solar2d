@@ -48,11 +48,6 @@ class LuaContext
 		static int Panic( lua_State* );
 
 	public:
-		static int OpenJson( lua_State *L );
-		static int OpenWidget( lua_State *L );
-		static int OpenStoryboard( lua_State *L );
-
-	public:
 		// Generic, re-entrant Lua callbacks
 		static int traceback( lua_State* L );
 		static int handleError( lua_State* L, const char *errorType, bool callErrorListener );
@@ -135,22 +130,6 @@ class LuaContext
 	public:
 		void UpdateStage( StageObject& stage ) const ;
 
-		#ifdef Rtt_AUTHORING_SIMULATOR
-			// Bit mask for modules
-			typedef enum
-			{
-				kPhysicsModuleMask = 0x1,
-				kSpriteModuleMask = 0x2,
-			}
-			ModuleMask;
-		
-			U32 GetModules() const { return fModules; }
-
-			// Register a lua module. This is used by the simulator to indicate to the build server
-			// that the module is being used, so it can select the appropriate template.
-			static void RegisterModule( lua_State *L, ModuleMask module );
-		#endif
-		
 	private:
 		lua_State* fL;
 		ResourceHandleOwner< lua_State > fHandle;

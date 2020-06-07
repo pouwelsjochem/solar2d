@@ -111,10 +111,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 	{
 		[self window].title = @"Build for Amazon/Kindle";
 	}
-	else if ( TargetDevice::kNookPlatform == targetPlatform )
-	{
-		[self window].title = @"Build for Nook";
-	}
 
 	if ( [self.androidAppPackage length] == 0 )
 	{
@@ -125,30 +121,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 	}
 
     self.appVersionCode = [NSNumber numberWithInt:[[appDelegate restoreAppSpecificPreference:@"androidAppVersionCode" defaultValue:@"1"] intValue]];
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-    // Temporary manual enabling of "Enable Monetization" checkbox
-    BOOL showMonetizationCheckbox  = NO;
-    NSString *showMonetizationCheckboxStr = [[NSUserDefaults standardUserDefaults] stringForKey:@"debugMonetizationPlugin"];
-
-    if (showMonetizationCheckboxStr != nil)
-    {
-        showMonetizationCheckbox = [showMonetizationCheckboxStr boolValue];
-    }
-
-    if (! showMonetizationCheckbox)
-    {
-        [fEnableMonetization setState:NSOffState];
-        [fEnableMonetization setHidden:YES];
-    }
-    else
-    {
-        // Restore the app specific setting for "Enable Monetization"
-        BOOL enableMonetization = [[appDelegate restoreAppSpecificPreference:@"enableMonetization" defaultValue:kValueNotSet] isEqualToString:kValueYes];
-        [fEnableMonetization setState:(enableMonetization ? NSOnState : NSOffState)];
-        [fEnableMonetization setHidden:NO];
-    }
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
 }
 
 - (BOOL) buildFormComplete
@@ -338,8 +310,7 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 
     Rtt_ASSERT(
                TargetDevice::kAndroidPlatform == targetPlatform
-               || TargetDevice::kKindlePlatform == targetPlatform
-               || TargetDevice::kNookPlatform == targetPlatform );
+               || TargetDevice::kKindlePlatform == targetPlatform);
 
     params = new AndroidAppPackagerParams(
                                           name,
@@ -365,18 +336,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 
     params->SetStripDebug( isStripDebug );
 	params->SetLiveBuild(isLiveBuild);
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-    // If "debugMonetizationPlugin" is set, honor the setting of the "Enable Monetization" checkbox
-    NSString *debugMonetizationPluginStr = [[NSUserDefaults standardUserDefaults] stringForKey:@"debugMonetizationPlugin"];
-    if ([debugMonetizationPluginStr boolValue])
-    {
-        BOOL includeFusePlugins = ([fEnableMonetization state] == NSOnState);
-
-        params->SetIncludeFusePlugins( includeFusePlugins );
-        params->SetUsesMonetization( includeFusePlugins );
-    }
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
 
 	NSString *kBuildSettings = @"build.settings";
 	params->SetBuildSettingsPath( [[self.projectPath stringByAppendingPathComponent:kBuildSettings] UTF8String]);
@@ -1169,9 +1128,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
     [appDelegate saveAppSpecificPreference:@"androidKeystore" value:[[fAndroidKeystore selectedItem] title]];
     [appDelegate saveAppSpecificPreference:@"androidKeystoreAlias" value:self.androidKeyAlias];
     [appDelegate saveAppSpecificPreference:@"androidTargetStore" value:self.targetStoreId];
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-    [appDelegate saveAppSpecificPreference:@"enableMonetization" value:(([fEnableMonetization state] == NSOnState) ? kValueYes : kValueNo)];
-#endif
 }
 
 - (BOOL)verifyBuildTools:(id)sender

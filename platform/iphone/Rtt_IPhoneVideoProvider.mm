@@ -76,8 +76,7 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 IPhoneVideoProvider::IPhoneVideoProvider( const ResourceHandle<lua_State> & handle )
-:	PlatformVideoProvider( handle ),
-	iOS5statusBarHidden( false )
+:	PlatformVideoProvider( handle )
 {
 	fDelegate = [[IPhoneVideoPickerControllerDelegate alloc] init];
 	fDelegate.callback = this;
@@ -151,13 +150,6 @@ IPhoneVideoProvider::DidDismiss( NSURL* movie, int duration, long fileSize )
 		videoProviderResult.Duration = duration;
 	}
 	Super::DidDismiss( AddProperties, & videoProviderResult );
-
-	// iOS 5.0 introduces a bug where the status bar comes back if it is hidden on dismiss.
-	// Seems to be fixed in 5.1 beta (unless iPod touch 4th gen was not originally affected)
-	if ( fMediaProvider->Internal_IsOS5_0() && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) )
-	{
-		[[UIApplication sharedApplication] setStatusBarHidden:iOS5statusBarHidden withAnimation:UIStatusBarAnimationNone];
-	}
 }
 
 // ----------------------------------------------------------------------------

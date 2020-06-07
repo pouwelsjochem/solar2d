@@ -64,7 +64,7 @@ class AndroidPlatform : public MPlatform
 
     public:
         virtual Rtt_Allocator& GetAllocator() const;
-        virtual RenderingStream* CreateRenderingStream( bool antialias ) const;
+        virtual RenderingStream* CreateRenderingStream() const;
         virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const;
         virtual PlatformBitmap* CreateBitmap( const char* filename, bool convertToGrayscale ) const;
         virtual PlatformBitmap* CreateBitmapMask( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[] , Real & baselineOffset ) const;
@@ -95,7 +95,6 @@ class AndroidPlatform : public MPlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
-		virtual PlatformDisplayObject* CreateNativeMapView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
@@ -151,13 +150,6 @@ class AndroidPlatform : public MPlatform
 		virtual PlatformImageProvider* GetImageProvider(const Rtt::ResourceHandle<lua_State> & handle) const;
 		virtual PlatformVideoProvider* GetVideoProvider(const Rtt::ResourceHandle<lua_State> & handle) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
-		virtual void SetStatusBarMode( MPlatform::StatusBarMode newValue ) const;
-		virtual MPlatform::StatusBarMode GetStatusBarMode() const;
-		virtual int GetStatusBarHeight() const;
-    
-        virtual int GetTopStatusBarHeightPixels()  const;
-        virtual int GetBottomStatusBarHeightPixels() const;
 
 		virtual void SetIdleTimer( bool enabled ) const;
 		virtual bool GetIdleTimer() const;

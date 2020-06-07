@@ -36,9 +36,6 @@ public class StoreName {
 	/** Identifies a store as Amazon's App Store. */
 	public static final String AMAZON = "amazon";
 	
-	/** Identifies a store as Barnes and Noble's Nook App Store. */
-	public static final String NOOK = "nook";
-	
 	/** Identifies a store as Samsung's App Store. */
 	public static final String SAMSUNG = "samsung";
 	
@@ -53,7 +50,6 @@ public class StoreName {
 		if (storeName != null) {
 			if (storeName.equals(StoreName.GOOGLE) ||
 				storeName.equals(StoreName.AMAZON) ||
-				storeName.equals(StoreName.NOOK) ||
 				storeName.equals(StoreName.SAMSUNG)) {
 				return true;
 			}

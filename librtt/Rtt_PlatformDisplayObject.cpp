@@ -39,12 +39,6 @@ PlatformDisplayObject::GetTextBoxObjectProxyVTable()
 }
 
 const LuaProxyVTable&
-PlatformDisplayObject::GetMapViewObjectProxyVTable()
-{
-	return LuaPlatformMapViewObjectProxyVTable::Constant();
-}
-
-const LuaProxyVTable&
 PlatformDisplayObject::GetWebViewObjectProxyVTable()
 {
 	return LuaPlatformWebViewObjectProxyVTable::Constant();

@@ -3,7 +3,6 @@
   <ImportGroup Label="PropertySheets">
     <Import Project="Corona.Rtt.Library.Win32.Externals.props" />
     <Import Project="..\LPeg.Library\LPeg.Library.Externals.props" />
-    <Import Project="..\Box2D.Library\Box2D.Library.Externals.props" />
     <Import Project="..\ALmixer.Library\ALmixer.Library.Win32.Externals.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -15,7 +14,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;..\..\..\plugins\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;..\..\..\plugins\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />

@@ -12,8 +12,6 @@
 #include "Display/Rtt_DisplayObject.h"
 #include "Display/Rtt_Display.h"
 
-#include "Rtt_DisplayObjectExtensions.h"
-
 #include "Display/Rtt_BitmapMask.h"
 #include "Display/Rtt_BitmapPaint.h"
 #include "Display/Rtt_Scene.h"
@@ -22,16 +20,9 @@
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaProxy.h"
 #include "Rtt_LuaProxyVTable.h"
-#include "Rtt_PhysicsWorld.h"
 #include "Rtt_RenderingStream.h"
 #include "Core/Rtt_StringHash.h"
 #include "Renderer/Rtt_Uniform.h"
-
-#ifdef Rtt_PHYSICS
-	#include "Rtt_Runtime.h"
-	#include "Box2D/Box2D.h"
-#endif
-
 
 #include "Display/Rtt_ShaderFactory.h"
 
@@ -89,24 +80,19 @@ DisplayObject::PropertyForKey( Rtt_Allocator *allocator, const char key[] )
 {
     GeometricProperty result = kNumGeometricProperties;
 
-#if 1
     // Note: Needs to match "typedef enum GeometricProperty" in librtt/Core/Rtt_Geometry.h
 	static const char * keys[] =
 	{
-        "xOrigin#",      // 0 - DEPRECATED
-		"yOrigin#",      // 1 - DEPRECATED
-		"xScale",        // 2
-		"yScale",        // 3
-		"rotation",      // 4
-		"width",         // 5
-		"height",        // 6
-        "stageWidth#",   // 7 - DEPRECATED
-		"stageHeight#"   // 8 - DEPRECATED
+		"xScale",        // 0
+		"yScale",        // 1
+		"rotation",      // 2
+		"width",         // 3
+		"height",        // 4
 	};
 
 	if ( !GeometricPropertiesHash )
 	{
-		static StringHash sHash( *allocator, keys, sizeof( keys ) / sizeof( const char * ), 9, 2, 3, __FILE__, __LINE__ );
+		static StringHash sHash( *allocator, keys, sizeof( keys ) / sizeof( const char * ), 5, 1, 1, __FILE__, __LINE__ );
 		GeometricPropertiesHash = &sHash;
 	}
 
@@ -116,47 +102,27 @@ DisplayObject::PropertyForKey( Rtt_Allocator *allocator, const char key[] )
 	{
 	case 0:
 		{
-			result = kOriginX;
+			result = kScaleX;
 		}
 		break;
 	case 1:
 		{
-			result = kOriginY;
+			result = kScaleY;
 		}
 		break;
 	case 2:
 		{
-			result = kScaleX;
+			result = kRotation;
 		}
 		break;
 	case 3:
 		{
-			result = kScaleY;
+			result = kWidth;
 		}
 		break;
 	case 4:
 		{
-			result = kRotation;
-		}
-		break;
-	case 5:
-		{
-			result = kWidth;
-		}
-		break;
-	case 6:
-		{
 			result = kHeight;
-		}
-		break;
-	case 7:
-		{
-			result = kStageWidth;
-		}
-		break;
-	case 8:
-		{
-			result = kStageHeight;
 		}
 		break;
 	default:
@@ -164,48 +130,6 @@ DisplayObject::PropertyForKey( Rtt_Allocator *allocator, const char key[] )
 		}
 		break;
 	}
-
-#else
-	// TODO: perfect hash
-	if ( strcmp( "xOrigin", key ) == 0 )
-	{
-		result = kOriginX;
-	}
-	else if ( strcmp( "yOrigin", key ) == 0 )
-	{
-		result = kOriginY;
-	}
-	else if ( strcmp( "xScale", key ) == 0 )
-	{
-		result = kScaleX;
-	}
-	else if ( strcmp( "yScale", key ) == 0 )
-	{
-		result = kScaleY;
-	}
-	else if ( strcmp( "rotation", key ) == 0 )
-	{
-		result = kRotation;
-	}
-	else if ( strcmp( "width", key ) == 0 )
-	{
-		result = kWidth;
-	}
-	else if ( strcmp( "height", key ) == 0 )
-	{
-		result = kHeight;
-	}
-	else if ( strcmp( "stageWidth", key ) == 0 )
-	{
-		result = kStageWidth;
-	}
-	else if ( strcmp( "stageHeight", key ) == 0 )
-	{
-		result = kStageHeight;
-	}
-
-
-#endif
 
 	return result;
 }
@@ -232,7 +156,6 @@ DisplayObject::DisplayObject()
 	fTransform(),
 	fStageBounds(),
 	fLuaProxy( NULL ),
-	fExtensions( NULL ),
 	fFocusId( NULL ),
 	fMask( NULL ),
 	fMaskUniform( NULL ),
@@ -269,7 +192,6 @@ DisplayObject::~DisplayObject()
 
 	QueueRelease( fMaskUniform );
 	Rtt_DELETE( fMask );
-	Rtt_DELETE( fExtensions );
 
 	// The final owner of fLuaProxy should be the Lua reference system
 	// So LuaProxy should be deleted when shutting down Lua triggers a GC
@@ -471,54 +393,12 @@ DisplayObject::Prepare( const Display& display )
 void
 DisplayObject::Translate( Real dx, Real dy )
 {
-	if( Rtt_RealIsZero( dx ) && Rtt_RealIsZero( dy ) )
-	{
-		// Nothing to do.
+	if( Rtt_RealIsZero( dx ) && Rtt_RealIsZero( dy ) ) {
 		return;
-	}
-
-//	if ( ! IsProperty( kIsTransformLocked ) )
-	{
+	} else {
 		fTransform.Translate( dx, dy );
-		
-#ifdef Rtt_PHYSICS
-		if ( fExtensions && ! IsProperty( kIsExtensionsLocked ) )
-		{
-			b2Body *body = fExtensions->GetBody();
-			if ( body )
-			{
-				StageObject *stage = GetStage();
-				if ( Rtt_VERIFY( stage ) )
-				{
-					const PhysicsWorld& physics = stage->GetDisplay().GetRuntime().GetPhysicsWorld();
-
-					if ( physics.GetWorld()->IsLocked() )
-					{
-						Rtt_TRACE_SIM( ( "ERROR: Cannot translate an object before collision is resolved.\n" ) );
-					}
-					else
-					{
-						Real scale = physics.GetPixelsPerMeter();
-						
-						float angle = body->GetAngle();
-						
-						Real x = fTransform.GetProperty( kOriginX );
-						Real y = fTransform.GetProperty( kOriginY );
-						
-						x = Rtt_RealDiv( x, scale );
-						y = Rtt_RealDiv( y, scale );
-						
-						b2Vec2 position( Rtt_RealToFloat( x ), Rtt_RealToFloat( y ) );
-						body->SetAwake( true );
-						body->SetTransform( position, angle );
-					}
-				}
-			}
-		}
-#endif
+		Invalidate( kGeometryFlag | kTransformFlag | kMaskFlag );
 	}
-
-	Invalidate( kGeometryFlag | kTransformFlag | kMaskFlag );
 }
 
 bool
@@ -537,17 +417,9 @@ DisplayObject::DidUpdateTransform( Matrix& srcToDst )
 void
 DisplayObject::Scale( Real sx, Real sy, bool isNewValue )
 {
-
 	// No-op unless one of them is not 1
-	if ( isNewValue
-		 || ( ! Rtt_RealIsOne( sx ) || ! Rtt_RealIsOne( sy ) ) )
-	{
+	if ( isNewValue || ( ! Rtt_RealIsOne( sx ) || ! Rtt_RealIsOne( sy ) ) ) {
 		fTransform.Scale( sx, sy, isNewValue );
-
-#ifdef Rtt_PHYSICS
-		// Box2D doesn't support scaling rigid bodies, so we can't do that here.
-#endif
-
 		Invalidate( kGeometryFlag | kTransformFlag | kStageBoundsFlag );
 	}
 }
@@ -558,44 +430,7 @@ DisplayObject::Rotate( Real deltaTheta )
 	// No-op unless deltaTheta is non-zero
 	if ( ! Rtt_RealIsZero( deltaTheta ) )
 	{
-		fTransform.Rotate( deltaTheta );
-		
-#ifdef Rtt_PHYSICS
-		if ( fExtensions && ! IsProperty( kIsExtensionsLocked ) )
-		{
-			b2Body *body = fExtensions->GetBody();
-			if ( body )
-			{
-				StageObject *stage = GetStage();
-				if ( Rtt_VERIFY( stage ) )
-				{
-					const PhysicsWorld& physics = stage->GetDisplay().GetRuntime().GetPhysicsWorld();
-
-					if ( physics.GetWorld()->IsLocked() )
-					{
-						Rtt_TRACE_SIM( ( "ERROR: Cannot rotate an object before collision is resolved.\n" ) );
-					}
-					else
-					{
-						Real scale = physics.GetPixelsPerMeter();
-						
-						Real x = fTransform.GetProperty( kOriginX );
-						Real y = fTransform.GetProperty( kOriginY );
-						Real angle = fTransform.GetProperty( kRotation );
-						
-						x = Rtt_RealDiv( x, scale );
-						y = Rtt_RealDiv( y, scale );
-						angle = Rtt_RealDegreesToRadians( angle );
-						
-						b2Vec2 position( Rtt_RealToFloat( x ), Rtt_RealToFloat( y ) );
-						body->SetAwake( true );
-						body->SetTransform( position, Rtt_RealToFloat( angle ) );
-					}
-				}
-			}
-		}
-#endif
-		
+		fTransform.Rotate( deltaTheta );	
 		Invalidate( kGeometryFlag | kTransformFlag | kStageBoundsFlag );
 	}
 }
@@ -855,74 +690,6 @@ DisplayObject::ApplyParentTransform( const DisplayObject& object, Rect& rect )
 			Self::ApplyParentTransform( *parent, rect );
 		}
 	}
-}
-
-void
-DisplayObject::SetReferencePoint( Rtt_Allocator* pAllocator, ReferencePoint location )
-{
-	Rtt_ASSERT( IsV1Compatibility() );
-
-	Rtt_ASSERT( location >= kReferenceCenter && location < kNumReferencePoints );
-
-	// In graphics 1.0, reference points were NULL until they were set.
-	// This property allows callers to mimic that behavior. This is important for
-	// groups that had reference points since a NULL reference point differed from
-	// a center ref point.
-	SetProperty( kIsV1ReferencePointUsed, true );
-
-	Rtt_Real anchorX = Rtt_REAL_HALF;
-	Rtt_Real anchorY = Rtt_REAL_HALF;
-
-	switch( location )
-	{
-		case kReferenceTopLeft:
-			anchorX = Rtt_REAL_0;
-			anchorY = Rtt_REAL_0;
-			break;
-		case kReferenceCenterLeft:
-			anchorX = Rtt_REAL_0;
-			break;
-		case kReferenceBottomLeft:
-			anchorX = Rtt_REAL_0;
-			anchorY = Rtt_REAL_1;
-			break;
-		case kReferenceTopCenter:
-			anchorY = Rtt_REAL_0;
-			break;
-		case kReferenceCenter:
-			break;
-		case kReferenceBottomCenter:
-			anchorY = Rtt_REAL_1;
-			break;
-		case kReferenceTopRight:
-			anchorX = Rtt_REAL_1;
-			anchorY = Rtt_REAL_0;
-			break;
-		case kReferenceCenterRight:
-			anchorX = Rtt_REAL_1;
-			break;
-		case kReferenceBottomRight:
-			anchorX = Rtt_REAL_1;
-			anchorY = Rtt_REAL_1;
-			break;
-		default:
-			Rtt_ASSERT_NOT_REACHED();
-			break;
-	}
-
-	SetAnchorX( anchorX );
-	SetAnchorY( anchorY );
-}
-
-void
-DisplayObject::ResetReferencePoint()
-{
-	Rtt_ASSERT( IsV1Compatibility() );
-
-	SetAnchorX( Rtt_REAL_HALF );
-	SetAnchorY( Rtt_REAL_HALF );
-
-	SetProperty( kIsV1ReferencePointUsed, false );
 }
 
 const Rect&
@@ -1362,32 +1129,6 @@ DisplayObject::GetMaskGeometricProperty( enum GeometricProperty p ) const
 }
 
 void
-DisplayObject::WillDraw( Renderer& renderer ) const
-{
-#ifdef OLD_GRAPHICS
-	if ( fMask )
-	{
-		BitmapPaint *paint = fMask->GetPaint();
-		paint->Begin( stream );
-		stream.PushTexture( paint );
-	}
-#endif
-}
-
-void
-DisplayObject::DidDraw( Renderer& renderer ) const
-{
-#ifdef OLD_GRAPHICS
-	if ( fMask )
-	{
-		const BitmapPaint *paint = stream.PopTexture(); Rtt_UNUSED( paint );
-		Rtt_ASSERT( fMask->GetPaint() == paint );
-		fMask->GetPaint()->End( stream );
-	}
-#endif
-}
-
-void
 DisplayObject::ResetTransform()
 {
 	fTransform.SetIdentity();
@@ -1499,32 +1240,6 @@ DisplayObject::GetGeometricProperty( enum GeometricProperty p ) const
 				}
 			}
 			break;
-		case kStageWidth:
-			{
-				const Rect& bounds = StageBounds();
-				if ( bounds.NotEmpty() )
-				{
-					result = bounds.xMax - bounds.xMin;
-				}
-			}
-			break;
-		case kStageHeight:
-			{
-				const Rect& bounds = StageBounds();
-				if ( bounds.NotEmpty() )
-				{
-					result = bounds.yMax - bounds.yMin;
-				}
-			}
-			break;
-			/*
-		case kStagePositionX:
-			Rtt_ASSERT_NOT_IMPLEMENTED();
-			break;
-		case kStagePositionY:
-			Rtt_ASSERT_NOT_IMPLEMENTED();
-			break;
-			*/
 		default:
 			result = fTransform.GetProperty( p );
 			break;
@@ -1618,13 +1333,6 @@ DisplayObject::ShouldOffsetWithAnchor() const
 }
 
 void
-DisplayObject::SetV1Compatibility( bool newValue )
-{
-	SetProperty( kIsV1Compatibility, newValue );
-	fTransform.SetV1Compatibility( newValue );
-}
-
-void
 DisplayObject::SetVisible( bool newValue )
 {
 	const bool oldValue = IsProperty( kIsVisible );
@@ -1653,12 +1361,6 @@ DisplayObject::SetHitTestMasked( bool newValue )
 			InvalidateStageBounds();
 		}
 	}
-}
-
-void
-DisplayObject::SetExtensionsLocked( bool newValue )
-{
-	SetProperty( kIsExtensionsLocked, newValue );
 }
 
 void
@@ -1768,37 +1470,6 @@ DisplayObject::SetProperty( U32 mask, bool value )
 	const Properties p = fProperties;
 	fProperties = ( value ? p | mask : p & ~mask );
 }
-
-#ifdef Rtt_PHYSICS
-bool
-DisplayObject::InitializeExtensions( Rtt_Allocator *allocator )
-{
-	// Should only extensions once!
-	if ( Rtt_VERIFY( ! fExtensions ) )
-	{
-		fExtensions = Rtt_NEW( allocator, DisplayObjectExtensions( * const_cast< Self* >( this ) ) );
-		GetProxy()->SetExtensionsDelegate( fExtensions );
-	}
-
-	return fExtensions;
-}
-
-void
-DisplayObject::RemoveExtensions()
-{
-	if ( fExtensions )
-	{
-		Rtt_DELETE( fExtensions );
-		fExtensions = NULL;
-
-		LuaProxy *proxy = GetProxy();
-		if ( proxy )
-		{
-			proxy->SetExtensionsDelegate( NULL );
-		}
-	}
-}
-#endif
 	
 void
 DisplayObject::AddedToParent( lua_State * L, GroupObject * parent )

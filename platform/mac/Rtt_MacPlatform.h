@@ -92,7 +92,6 @@ class MacPlatform : public ApplePlatform
 #endif
 
 	public:
-        virtual void GetPreference( Category category, Rtt::String * value ) const;
 		virtual Preference::ReadValueResult GetPreference( const char* categoryName, const char* keyName ) const;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
@@ -106,9 +105,6 @@ class MacPlatform : public ApplePlatform
 		virtual PlatformImageProvider * GetImageProvider( const ResourceHandle<lua_State> & handle ) const;
 		virtual PlatformVideoProvider * GetVideoProvider( const ResourceHandle<lua_State> & handle ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
-		virtual void SetStatusBarMode( StatusBarMode newValue ) const;
-		virtual StatusBarMode GetStatusBarMode() const;
 
 		virtual void SetIdleTimer( bool enabled ) const;
 		virtual bool GetIdleTimer() const;
@@ -129,7 +125,6 @@ class MacPlatform : public ApplePlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textField ) const;
 
-		virtual PlatformDisplayObject* CreateNativeMapView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
         virtual PlatformFBConnect* GetFBConnect() const;
@@ -214,8 +209,6 @@ class MacGUIPlatform : public MacPlatform
 		virtual PlatformSurface* CreateScreenSurface() const;
 
 	public:
-		virtual void SetStatusBarMode( StatusBarMode newValue ) const;
-		virtual StatusBarMode GetStatusBarMode() const;
 		virtual Real GetStandardFontSize() const;
 		virtual bool RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const;
 

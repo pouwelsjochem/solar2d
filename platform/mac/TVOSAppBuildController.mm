@@ -97,30 +97,6 @@ static NSString *kValueNone = @"None";
 {
     [super showWindow:sender];
 
-/*
-    // Temporary manual enabling of "Enable Monetization" checkbox
-    BOOL showMonetizationCheckbox  = NO;
-    NSString *showMonetizationCheckboxStr = [[NSUserDefaults standardUserDefaults] stringForKey:@"debugMonetizationPlugin"];
-
-    if (showMonetizationCheckboxStr != nil)
-    {
-        showMonetizationCheckbox = [showMonetizationCheckboxStr boolValue];
-    }
-
-    if (! showMonetizationCheckbox)
-    {
-        [fEnableMonetization setState:NSOffState];
-        [fEnableMonetization setHidden:YES];
-    }
-    else
-    {
-        // Restore the app specific setting for "Enable Monetization"
-        BOOL enableMonetization = [[appDelegate restoreAppSpecificPreference:@"enableMonetization" defaultValue:kValueNotSet] isEqualToString:kValueYes];
-        [fEnableMonetization setState:(enableMonetization ? NSOnState : NSOffState)];
-        [fEnableMonetization setHidden:NO];
-    }
-*/
-
 	if ([availableSimulatorsPopup numberOfItems] == 0)
 	{
 		NSDictionary *availableSimulators = [XcodeToolHelper loadSupportedIOSSimulatorDevices:@"tvOS"];
@@ -443,20 +419,6 @@ static NSString *kValueNone = @"None";
     params->SetStripDebug( isStripDebug );
 	params->SetLiveBuild(isLiveBuild);
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-/*
-    // If "debugMonetizationPlugin" is set, honor the setting of the "Enable Monetization" checkbox
-    NSString *debugMonetizationPluginStr = [[NSUserDefaults standardUserDefaults] stringForKey:@"debugMonetizationPlugin"];
-    if ([debugMonetizationPluginStr boolValue])
-    {
-        BOOL includeFusePlugins  = ([fEnableMonetization state] == NSOnState);
-
-        params->SetIncludeFusePlugins( includeFusePlugins );
-        params->SetUsesMonetization( includeFusePlugins );
-    }
-*/
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
-
 	NSString *kBuildSettings = @"build.settings";
 	params->SetBuildSettingsPath( [[self.projectPath stringByAppendingPathComponent:kBuildSettings] UTF8String]);
 
@@ -568,15 +530,6 @@ static NSString *kValueNone = @"None";
 
     [self saveBuildPreferences];
 }
-
-/*
-- (void) saveBuildPreferences
-{
-    [appDelegate saveAppSpecificPreference:@"enableMonetization" value:(([fEnableMonetization state] == NSOnState) ? kValueYes : kValueNo)];
-
-    [super saveBuildPreferences];
-}
-*/
 
 - (void) runAppInXcodeSimulator
 {

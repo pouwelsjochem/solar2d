@@ -83,10 +83,6 @@ CBuildResult appAndroidBuild(
 	const Rtt::TargetDevice::Platform targetPlatform,
 	const char *targetAppStoreName,
 	bool isDistribution, int versionCode, bool createLiveBuild 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	, bool includeFusePlugins,
-	bool enableMonetization
-#endif
 	)
 {
 	Rtt::WinPlatformServices *pServices = GetWinProperties()->GetServices();
@@ -144,11 +140,6 @@ CBuildResult appAndroidBuild(
 			kBuildSettings, Rtt::MPlatform::kResourceDir, Rtt::MPlatform::kTestFileExists, buildSettingsPath );
 	params.SetBuildSettingsPath( buildSettingsPath.GetString() );
 	params.SetLiveBuild(createLiveBuild);
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	params.SetIncludeFusePlugins( includeFusePlugins );
-	params.SetUsesMonetization( enableMonetization );
-#endif
 
 	TCHAR user[MAX_PATH];
 	DWORD ulen = MAX_PATH;

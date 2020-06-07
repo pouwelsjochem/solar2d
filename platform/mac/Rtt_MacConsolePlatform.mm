@@ -20,63 +20,6 @@
 
 #include "Core/Rtt_String.h"
 
-/*
-#include "Rtt_LuaLibNative.h"
-#include "Rtt_LuaResource.h"
-#include "Rtt_MacFBConnect.h"
-#include "Rtt_MacImageProvider.h"
-#include "Rtt_MacMapViewObject.h"
-#include "Rtt_MacTextFieldObject.h"
-#include "Rtt_MacTextBoxObject.h"
-#include "Rtt_MacVideoPlayer.h"
-#include "Rtt_MacViewSurface.h"
-#include "Rtt_MacVideoObject.h"
-#include "Rtt_MacWebPopup.h"
-#include "Rtt_MacWebViewObject.h"
-#include "Rtt_MacActivityIndicator.h"
-#include "Rtt_PlatformInAppStore.h"
-#include "Rtt_AppleInAppStore.h"
-#include "Rtt_PlatformPlayer.h"
-#include "Rtt_PlatformSimulator.h"
-#include "Rtt_RenderingStream.h"
-
-#include "Rtt_AppleConnection.h"
-#include "Rtt_Authorization.h" // used for string contants for preferences
-
-//#include "Rtt_AppleDictionaryWrapper.h"
-#include "Rtt_AppleConnection.h"
-#include "Rtt_MacSimulator.h"
-#include "Rtt_MacExitCallback.h"
-#import "AppDelegate.h"
-#import "GLView.h"
-
-#import <AppKit/NSAlert.h>
-#import <AppKit/NSApplication.h>
-#import <AppKit/NSFontManager.h>
-#import <AppKit/NSOpenGL.h>
-#import <AppKit/NSWindow.h>
-#import <Foundation/NSString.h>
-#import <SystemConfiguration/SystemConfiguration.h>
-#import <netinet/in.h>
-
-//#import <CoreFoundation/CoreFoundation.h>
-//#import <Security/Security.h>
-//#import <CoreServices/CoreServices.h>
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-	#import <Foundation/NSFileManager.h>
-	#import <Foundation/NSPathUtilities.h>
-	#import <Foundation/NSURL.h>
-	#include <CoreFoundation/CoreFoundation.h>
-	#include <ApplicationServices/ApplicationServices.h>
-#endif
-
-#include "Rtt_Lua.h"
-
-
-#include <pthread.h>
-*/
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -193,19 +136,6 @@ MacConsolePlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) 
 }
 
 void
-MacConsolePlatform::SetStatusBarMode( StatusBarMode newValue ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-}
-
-MPlatform::StatusBarMode
-MacConsolePlatform::GetStatusBarMode() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return MPlatform::kHiddenStatusBar;
-}
-
-void
 MacConsolePlatform::SetIdleTimer( bool enabled ) const
 {
 }
@@ -258,12 +188,6 @@ MacConsolePlatform::CreateNativeTextField( const Rect& bounds ) const
 void
 MacConsolePlatform::SetKeyboardFocus( PlatformDisplayObject *textObject ) const
 {
-}
-
-PlatformDisplayObject *
-MacConsolePlatform::CreateNativeMapView( const Rect& bounds ) const
-{
-	return NULL;
 }
 
 PlatformDisplayObject *

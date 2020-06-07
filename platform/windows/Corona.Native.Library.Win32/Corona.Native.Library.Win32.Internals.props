@@ -26,7 +26,6 @@ if not exist "$(SolutionDir)Bin\Corona" (
    mkdir "$(SolutionDir)Bin\Corona"
 )
 xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" "$(SolutionDir)Bin\Corona" /Y /I
-xcopy "..\..\..\subrepos\widget\*.png" "$(SolutionDir)Bin\Corona\Resources\Corona" /Y /I
 
 REM Do the following for debug and release DLL builds. (Skipped for Corona Simulator builds.)
 if $(TargetExt) == .dll (

@@ -370,9 +370,6 @@ endif
 #				-DRtt_REAL_FIXED 
 
 LIBALMIXER_DIR := $(CORONA_ROOT)/external/ALmixer
-LIBB2SEPARATORCPP_DIR := $(CORONA_ROOT)/external/b2Separator-cpp
-LIBBOX2D_DIR := $(CORONA_ROOT)/external/Box2D/Box2D
-LIBBOX2D_INC := $(CORONA_ROOT)/external/Box2D
 LIBJPEG_DIR := $(CORONA_ROOT)/external/libjpeg
 LIBLUA_DIR := $(CORONA_ROOT)/external/lua-5.1.3
 LIBOPENAL_DIR := $(CORONA_ROOT)/external/openal-soft_apportable/jni/OpenAL
@@ -401,7 +398,6 @@ LOCAL_C_INCLUDES := \
 	$(CORONA_ROOT)/plugins/shared \
 	$(CORONA_ROOT)/platform/android/ndk \
 	$(CORONA_ROOT)/platform/shared \
-	$(LIBBOX2D_INC) \
 	$(CORONA_ROOT) \
     $(LIBJPEG_DIR) \
     $(LIBB2SEPARATORCPP_DIR) \
@@ -425,35 +421,9 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/generated/loader_ccdata.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/loader_callback.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/launchpad.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/composer.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/composer_scene.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/timer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition_v1.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_button.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_momentumScrolling.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_pickerWheel.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_scrollview.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_slider.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_tabbar.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_tableview.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_progressView.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_searchField.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_segmentedControl.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_spinner.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_stepper.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_switch.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_android_sheet.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_android.cpp \
-    $(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_android_holo_dark.cpp \
-    $(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_android_holo_dark_sheet.cpp \
-    $(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_android_holo_light.cpp \
-    $(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_android_holo_light_sheet.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_ios_sheet.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_ios.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_ios7_sheet.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/widget_theme_ios7.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/shell.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidAudioPlayer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_LuaLibOpenSLES.cpp \
@@ -576,9 +546,7 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayDefaults.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayPath.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayV2.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_EmbossedTextObject.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_EmitterObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GradientPaint.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GradientPaintAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GroupObject.cpp \
@@ -653,11 +621,9 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Input/Rtt_PlatformInputDeviceManager.cpp \
 	$(CORONA_ROOT)/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp \
 	$(CORONA_ROOT)/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp \
-	$(CORONA_ROOT)/librtt/b2GLESDebugDraw.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Archive.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_CKWorkflow.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_DeviceOrientation.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_DisplayObjectExtensions.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Event.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_ExplicitTemplates.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_FilePath.cpp \
@@ -679,7 +645,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibMedia.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibNative.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibOpenAL.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_LuaLibPhysics.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibSQLite.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibSystem.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaProxy.cpp \
@@ -689,11 +654,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_LuaTableIterator.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaUserdataProxy.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Matrix.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_ParticleSystemObject.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PhysicsContact.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PhysicsContactListener.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PhysicsJoint.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PhysicsWorld.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformAudioPlayer.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformAudioRecorder.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformAudioSessionManager.cpp \
@@ -883,67 +843,6 @@ LIBSQLITE_FILES := \
   $(LIBSQLITE_DIR)/sqlite3.c \
   $(CORONA_ROOT)/external/lsqlite3-7/lsqlite3.c
 
-LIBBOX2D_FILES := \
-	$(LIBBOX2D_DIR)/Collision/b2BroadPhase.cpp \
-	$(LIBBOX2D_DIR)/Collision/b2CollideCircle.cpp \
-	$(LIBBOX2D_DIR)/Collision/b2CollideEdge.cpp \
-	$(LIBBOX2D_DIR)/Collision/b2CollidePolygon.cpp \
-	$(LIBBOX2D_DIR)/Collision/b2Collision.cpp \
-	$(LIBBOX2D_DIR)/Collision/b2Distance.cpp \
-	$(LIBBOX2D_DIR)/Collision/b2DynamicTree.cpp \
-	$(LIBBOX2D_DIR)/Collision/b2TimeOfImpact.cpp \
-	$(LIBBOX2D_DIR)/Collision/Shapes/b2ChainShape.cpp \
-	$(LIBBOX2D_DIR)/Collision/Shapes/b2CircleShape.cpp \
-	$(LIBBOX2D_DIR)/Collision/Shapes/b2EdgeShape.cpp \
-	$(LIBBOX2D_DIR)/Collision/Shapes/b2PolygonShape.cpp \
-	$(LIBBOX2D_DIR)/Common/b2BlockAllocator.cpp \
-	$(LIBBOX2D_DIR)/Common/b2Draw.cpp \
-	$(LIBBOX2D_DIR)/Common/b2FreeList.cpp \
-	$(LIBBOX2D_DIR)/Common/b2Math.cpp \
-	$(LIBBOX2D_DIR)/Common/b2Settings.cpp \
-	$(LIBBOX2D_DIR)/Common/b2StackAllocator.cpp \
-	$(LIBBOX2D_DIR)/Common/b2Stat.cpp \
-	$(LIBBOX2D_DIR)/Common/b2Timer.cpp \
-	$(LIBBOX2D_DIR)/Common/b2TrackedBlock.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/b2Body.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/b2ContactManager.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/b2Fixture.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/b2Island.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/b2World.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/b2WorldCallbacks.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2ChainAndCircleContact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2ChainAndPolygonContact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2CircleContact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2Contact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2ContactSolver.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2EdgeAndCircleContact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2PolygonAndCircleContact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Contacts/b2PolygonContact.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2DistanceJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2FrictionJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2GearJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2Joint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2MotorJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2MouseJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2PrismaticJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2PulleyJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2RevoluteJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2RopeJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2WeldJoint.cpp \
-	$(LIBBOX2D_DIR)/Dynamics/Joints/b2WheelJoint.cpp \
-	$(LIBBOX2D_DIR)/Particle/b2Particle.cpp \
-	$(LIBBOX2D_DIR)/Particle/b2ParticleAssembly.cpp \
-	$(LIBBOX2D_DIR)/Particle/b2ParticleGroup.cpp \
-	$(LIBBOX2D_DIR)/Particle/b2ParticleSystem.cpp \
-	$(LIBBOX2D_DIR)/Particle/b2VoronoiDiagram.cpp
-
-LIBB2SEPARATORCPP_FILES := \
-	$(LIBB2SEPARATORCPP_DIR)/b2Separator.cpp
-
-LIBSMOOTHPOLYGON_FILES := \
-	$(LIBSMOOTHPOLYGON_DIR)/SmoothPolygon.cpp
-
 LIBJPEG_FILES =  \
 	$(LIBJPEG_DIR)/jcapimin.c \
 	$(LIBJPEG_DIR)/jcapistd.c \
@@ -997,7 +896,6 @@ LOCAL_SRC_FILES := \
     JavaToNativeBridge.cpp \
     JavaToNativeShim.cpp \
 	NativeToJavaBridge.cpp \
-    $(LIBBOX2D_FILES) \
     $(PLATFORM_FILES) \
     $(LIBRTT_FILES) \
     $(LIBPLUGINS_FILES) \
@@ -1007,7 +905,6 @@ LOCAL_SRC_FILES := \
 	$(LIBLUAFILESYSTEM_FILES) \
     $(LIBSQLITE_FILES) \
     $(LIBPNG_FILES) \
-    $(LIBB2SEPARATORCPP_FILES) \
     $(LIBSMOOTHPOLYGON_FILES) \
 
 LOCAL_SHARED_LIBRARIES := liblua libjnlua5.1 $(MY_LINK_TO_LIBMPG) libopenal libalmixer cpufeatures

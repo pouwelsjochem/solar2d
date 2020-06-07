@@ -17,31 +17,21 @@
 #include "Rtt_IPhoneAudioSessionManager.h"
 #include "Rtt_IPhoneFont.h"
 
-//#include "Rtt_IPhoneImageProvider.h"
-//#include "Rtt_IPhoneVideoProvider.h"
-//#include "Rtt_IPhoneMapViewObject.h"
-//#include "Rtt_IPhoneWebPopup.h"
-//#include "Rtt_IPhoneWebViewObject.h"
-
 #include "Rtt_AppleInAppStore.h"
 #include "Rtt_IPhoneScreenSurface.h"
 #include "Rtt_IPhoneTextBoxObject.h"
 #include "Rtt_IPhoneTextFieldObject.h"
 #include "Rtt_IPhoneVideoObject.h"
-//#include "Rtt_IPhoneVideoPlayer.h"
 
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaLibSystem.h"
 #include "Rtt_LuaResource.h"
 
-//#import "AppDelegate.h"
 #import "CoronaViewPrivate.h"
 
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIDevice.h>
 #import <UIKit/UIGestureRecognizerSubclass.h>
-//#import <MessageUI/MFMailComposeViewController.h>
-//#import <MessageUI/MFMessageComposeViewController.h>
 
 #include "CoronaLua.h"
 // TODO: Remove when we remove support for iOS 3.x

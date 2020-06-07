@@ -68,10 +68,6 @@ class IPhoneDevice : public MPlatformDevice
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
 
 	public:
-		virtual void SetLocationAccuracy( Real meters ) const;
-		virtual void SetLocationThreshold( Real meters ) const;
-
-	public:
 		virtual DeviceOrientation::Type GetOrientation() const;
 
 	public:

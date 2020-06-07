@@ -3,10 +3,6 @@
 -- Copyright (C) 2012 Corona Labs Inc. All Rights Reserved.
 --------------------------------------------------------------------------------
 
-
--- Hide the Android status bar.
-display.setStatusBar(display.HiddenStatusBar)
-
 -- Display the background image.
 local background = display.newImage("paper_bkg.png", true)
 background.x = display.contentCenterX

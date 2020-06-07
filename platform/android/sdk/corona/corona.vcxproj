@@ -58,7 +58,6 @@
       <CppLanguageStandard>
       </CppLanguageStandard>
       <PreprocessorDefinitions>Rtt_DEVICE_SIMULATOR</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\..\;..\..\..\..\librtt;..\..\..\..\librtt/Corona;..\..\..\..\external/sqlite3;..\..\..\..\external/lua-5.1.3/src;..\..\..\..\external/rsa;..\..\..\..\external\LuaHashMap;..\..\..\..\external/openal-soft_apportable/jni/OpenAL/include/AL;..\..\..\..\external/ALmixer;..\..\..\..\external/ALmixer/Isolated;..\..\..\..\external/lpng1256;..\..\..\..\external/luasocket/src;..\..\..\..\external/lpeg;..\..\..\..\external/luafilesystem/src;..\..\..\..\plugins/shared;..\..\ndk;..\..\ndk\jni;..\..\..\..\platform/shared;..\..\..\..\external/Box2D;..\..\..\..\external/libjpeg;..\..\..\..\external/b2Separator-cpp;..\..\..\..\external/smoothpolygon;C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures</AdditionalIncludeDirectories>
       <AdditionalOptions>-DANDROID_NDK -DDISABLE_IMPORTGL -DRtt_ANDROID_ENV -DALMIXER_COMPILE_WITHOUT_SDL -DRtt_FEATURES_ALL  -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DOPENAL_FIXED_POINT -DOPENAL_FIXED_POINT_SHIFT=16 -DAVOID_TABLES %(AdditionalOptions)</AdditionalOptions>
       <GccExceptionHandling>true</GccExceptionHandling>
     </ClCompile>
@@ -74,7 +73,6 @@
       <CppLanguageStandard>
       </CppLanguageStandard>
       <PreprocessorDefinitions>Rtt_DEVICE_SIMULATOR</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\..\;..\..\..\..\librtt;..\..\..\..\librtt/Corona;..\..\..\..\external/sqlite3;..\..\..\..\external/lua-5.1.3/src;..\..\..\..\external/rsa;..\..\..\..\external\LuaHashMap;..\..\..\..\external/openal-soft_apportable/jni/OpenAL/include/AL;..\..\..\..\external/ALmixer;..\..\..\..\external/ALmixer/Isolated;..\..\..\..\external/lpng1256;..\..\..\..\external/luasocket/src;..\..\..\..\external/lpeg;..\..\..\..\external/luafilesystem/src;..\..\..\..\plugins/shared;..\..\ndk;..\..\ndk\jni;..\..\..\..\platform/shared;..\..\..\..\external/Box2D;..\..\..\..\external/libjpeg;..\..\..\..\external/b2Separator-cpp;..\..\..\..\external/smoothpolygon;C:\NVPACK1r6\android-ndk-r12b\sources\android\cpufeatures</AdditionalIncludeDirectories>
       <AdditionalOptions>-DANDROID_NDK -DDISABLE_IMPORTGL -DRtt_ANDROID_ENV -DALMIXER_COMPILE_WITHOUT_SDL -DRtt_FEATURES_ALL  -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DOPENAL_FIXED_POINT -DOPENAL_FIXED_POINT_SHIFT=16 -DAVOID_TABLES %(AdditionalOptions)</AdditionalOptions>
       <GccExceptionHandling>true</GccExceptionHandling>
     </ClCompile>
@@ -141,14 +139,11 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_RuntimeDelegate.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_RuntimeDelegatePlayer.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Scheduler.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_SimpleCachedPath.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_TesselatorStream.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Transform.cpp" />
     <ClCompile Include="..\..\..\..\plugins\shared\CoronaLuaLibraryShared.cpp" />
     <ClCompile Include="..\..\..\shared\Rtt_PlatformConnection.cpp" />
-    <ClCompile Include="..\..\..\..\external\b2Separator-cpp\b2Separator.cpp" />
-    <ClCompile Include="..\..\..\..\external\smoothpolygon\SmoothPolygon.cpp" />
     <ClCompile Include="..\..\..\..\external\libjpeg\jcapimin.c" />
     <ClCompile Include="..\..\..\..\external\libjpeg\jcapistd.c" />
     <ClCompile Include="..\..\..\..\external\libjpeg\jccoefct.c" />
@@ -188,59 +183,6 @@
     <ClCompile Include="..\..\..\..\external\libjpeg\jidctred.c" />
     <ClCompile Include="..\..\..\..\external\libjpeg\jmemmgr.c" />
     <ClCompile Include="..\..\..\..\external\libjpeg\jmem-android.c" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2BroadPhase.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2CollideCircle.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2CollideEdge.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2CollidePolygon.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2Collision.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2Distance.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2DynamicTree.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/b2TimeOfImpact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2ChainShape.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2CircleShape.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2EdgeShape.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Collision/Shapes/b2PolygonShape.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2BlockAllocator.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Draw.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2FreeList.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Math.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Settings.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2StackAllocator.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Stat.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2Timer.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Common/b2TrackedBlock.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2Body.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2ContactManager.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2Fixture.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2Island.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2World.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/b2WorldCallbacks.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2ChainAndCircleContact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2ChainAndPolygonContact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2CircleContact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2Contact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2ContactSolver.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2EdgeAndCircleContact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2EdgeAndPolygonContact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2PolygonAndCircleContact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Contacts/b2PolygonContact.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2DistanceJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2FrictionJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2GearJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2Joint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2MotorJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2MouseJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2PrismaticJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2PulleyJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2RevoluteJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2RopeJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2WeldJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Dynamics/Joints/b2WheelJoint.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2Particle.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2ParticleAssembly.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2ParticleGroup.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2ParticleSystem.cpp" />
-    <ClCompile Include="..\..\..\..\external\Box2D\Box2D\Particle/b2VoronoiDiagram.cpp" />
     <ClCompile Include="..\..\..\..\external\sqlite3\sqlite3.c" />
     <ClCompile Include="..\..\..\..\external\lsqlite3-7\lsqlite3.c" />
     <ClCompile Include="..\..\..\..\external\lpng1256\png.c" />
@@ -275,7 +217,6 @@
     <ClCompile Include="..\..\..\..\external\luasocket\src\udp.c" />
     <ClCompile Include="..\..\..\..\external\luasocket\src\unix.c" />
     <ClCompile Include="..\..\..\..\external\luasocket\src\usocket.c" />
-    <ClCompile Include="..\..\..\..\librtt\b2GLESDebugDraw.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Core\Rtt_Allocator.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Core\Rtt_Array.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Core\Rtt_ArrayTuple.cpp" />
@@ -311,9 +252,7 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayDefaults.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayPath.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayV2.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_EmitterObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GradientPaintAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GroupObject.cpp" />
@@ -418,8 +357,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_CachedPath.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_CKWorkflow.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_DisplayObjectExtensions.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_EllipsePath.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_FilePath.cpp" />
@@ -443,7 +380,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibMedia.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibNative.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibPhysics.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibSQLite.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibSystem.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaProxy.cpp" />
@@ -453,11 +389,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaTableIterator.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaUserdataProxy.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Matrix.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_ParticleSystemObject.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsContact.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsContactListener.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsJoint.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PhysicsWorld.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioPlayer.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioRecorder.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.cpp" />
@@ -469,7 +400,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFont.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformImageProvider.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformLocation.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformNotifier.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformReachability.cpp" />
@@ -505,8 +435,6 @@
     <ClCompile Include="..\..\ndk\AndroidZipFileEntry.cpp" />
     <ClCompile Include="..\..\ndk\generated\ads.c" />
     <ClCompile Include="..\..\ndk\generated\analytics.c" />
-    <ClCompile Include="..\..\ndk\generated\composer.cpp" />
-    <ClCompile Include="..\..\ndk\generated\composer_scene.cpp" />
     <ClCompile Include="..\..\ndk\generated\CoronaLibraryGenerated.cpp" />
     <ClCompile Include="..\..\ndk\generated\CoronaPrototype.cpp" />
     <ClCompile Include="..\..\ndk\generated\CoronaProvider.ads.c" />
@@ -619,35 +547,8 @@
     <ClCompile Include="..\..\ndk\generated\smtp.cpp" />
     <ClCompile Include="..\..\ndk\generated\socket.cpp" />
     <ClCompile Include="..\..\ndk\generated\ssl.cpp" />
-    <ClCompile Include="..\..\ndk\generated\timer.cpp" />
     <ClCompile Include="..\..\ndk\generated\tp.cpp" />
-    <ClCompile Include="..\..\ndk\generated\transition.cpp" />
-    <ClCompile Include="..\..\ndk\generated\transition_v1.cpp" />
     <ClCompile Include="..\..\ndk\generated\url.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_button.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_momentumScrolling.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_pickerWheel.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_progressView.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_scrollview.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_searchField.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_segmentedControl.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_slider.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_spinner.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_stepper.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_switch.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_tabbar.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_tableview.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_dark.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_dark_sheet.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_light.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_holo_light_sheet.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_android_sheet.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios7.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios7_sheet.cpp" />
-    <ClCompile Include="..\..\ndk\generated\widget_theme_ios_sheet.cpp" />
     <ClCompile Include="..\..\ndk\jni\importgl.c" />
     <ClCompile Include="..\..\ndk\jni\JavaToNativeBridge.cpp" />
     <ClCompile Include="..\..\ndk\jni\JavaToNativeShim.cpp" />
@@ -665,8 +566,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidImageProvider.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDevice.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDeviceManager.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidLocation.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidMapViewObject.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidModalInteraction.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidPlatform.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidRuntimeDelegate.cpp" />
@@ -717,7 +616,6 @@
     <ClInclude Include="..\..\..\..\external\luasocket\src\udp.h" />
     <ClInclude Include="..\..\..\..\external\luasocket\src\unix.h" />
     <ClInclude Include="..\..\..\..\external\luasocket\src\usocket.h" />
-    <ClInclude Include="..\..\..\..\librtt\b2GLESDebugDraw.h" />
     <ClInclude Include="..\..\..\..\librtt\Core\Rtt_Allocator.h" />
     <ClInclude Include="..\..\..\..\librtt\Core\Rtt_Array.h" />
     <ClInclude Include="..\..\..\..\librtt\Core\Rtt_ArrayTuple.h" />
@@ -781,9 +679,7 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayPath.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayTypes.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayV2.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_EmitterObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GradientPaintAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GroupObject.h" />
@@ -897,8 +793,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_CKWorkflow.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_CKWorkFlowConstants.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_DeviceOrientation.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_DisplayObjectExtensions.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_EllipsePath.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Event.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_FilePath.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_FillTesselatorStream.h" />
@@ -929,7 +823,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug386|Tegra-Android'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_LuaLibOpenSLES.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibPhysics.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibSocket.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibSQLite.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibSystem.h" />
@@ -952,12 +845,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_MReloadableResource.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_MRuntimeDelegate.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_MUpdatable.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_ParticleSystemObject.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsContact.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsContactListener.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsJoint.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsTypes.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PhysicsWorld.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioPlayer.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioRecorder.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.h" />
@@ -969,7 +856,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFont.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformImageProvider.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformLocation.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformMediaProviderBase.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformNotifier.h" />
@@ -993,7 +879,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_RuntimeDelegate.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_RuntimeDelegatePlayer.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Scheduler.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_SimpleCachedPath.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_SurfaceInfo.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_TesselatorStream.h" />
@@ -1035,8 +920,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidImageProvider.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDevice.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDeviceManager.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidLocation.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidMapViewObject.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidModalInteraction.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidPlatform.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidRuntimeDelegate.h" />

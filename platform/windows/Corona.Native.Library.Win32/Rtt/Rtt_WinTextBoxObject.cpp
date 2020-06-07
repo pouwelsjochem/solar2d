@@ -725,7 +725,7 @@ int WinTextBoxObject::OnSetTextColor(lua_State *L)
 	if (&displayObjectPointer->ProxyVTable() == &PlatformDisplayObject::GetTextFieldObjectProxyVTable())
 	{
 		ColorUnion colorConverter;
-		colorConverter.pixel = LuaLibDisplay::toColor(L, 2, displayObjectPointer->IsByteColorRange());
+		colorConverter.pixel = LuaLibDisplay::toColor(L, 2 );
 		COLORREF nativeColor = RGB(colorConverter.rgba.r, colorConverter.rgba.g, colorConverter.rgba.b);
 		if (displayObjectPointer->fTextBoxPointer)
 		{

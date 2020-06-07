@@ -39,15 +39,10 @@ class StageObject : public GroupObject
 		virtual void GetSelfBounds( Rect& rect ) const;
 
 	public:
-		virtual bool ShouldOffsetWithAnchor() const;
-
-	public:
 		void InvalidateDisplay();	// Invalidates Scene, so screen blit occurs
 
 	public:
 		virtual const LuaProxyVTable& ProxyVTable() const;
-
-		virtual void SetV1Compatibility( bool newValue );
 
 	public:
 		Display& GetDisplay() const { return fDisplay; }

@@ -39,9 +39,6 @@ class LuaLibDisplay
 		typedef LuaLibDisplay Self;
 
 	public:
-		static const char* ReferencePoints();
-
-	public:
 		static ShapeObject* PushImage(
 			lua_State *L,
 			Vertex2* topLeft,
@@ -70,10 +67,10 @@ class LuaLibDisplay
 		static Color toColorByte( lua_State *L, int index );
 
 	public:
-		static int PushColorChannels( lua_State *L, Color c, bool isBytes );
-		static Color toColor( lua_State *L, int index, bool isBytes );
-		static void ArrayToColor( lua_State *L, int index, Color& outColor, bool isBytes );
-		static Paint *LuaNewColor( lua_State *L, int index, bool isBytes );
+		static int PushColorChannels( lua_State *L, Color c);
+		static Color toColor( lua_State *L, int index);
+		static void ArrayToColor( lua_State *L, int index, Color& outColor);
+		static Paint *LuaNewColor( lua_State *L, int index);
 		static BitmapPaint *LuaNewBitmapPaint( lua_State *L, int index );
 		static GradientPaint *LuaNewGradientPaint( lua_State *L, int index );
 		static CompositePaint *LuaNewCompositePaint( lua_State *L, int index );

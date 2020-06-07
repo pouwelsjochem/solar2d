@@ -33,10 +33,6 @@ CBuildResult appAndroidBuild(Interop::SimulatorRuntimeEnvironment *pSim,
 							const Rtt::TargetDevice::Platform targetPlatform,
 							const char *targetAppStoreName,
 							bool isDistribution, int versionCode, bool createLiveBuild
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-							, bool includeFusePlugins
-							bool enableMonetization
-#endif
 							);
 
 CBuildResult appWebBuild(Interop::SimulatorRuntimeEnvironment *pSim,

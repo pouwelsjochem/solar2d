@@ -7,9 +7,6 @@
     <Filter Include="external\ALmixer">
       <UniqueIdentifier>{d4ee76e3-5eb8-4a50-87b9-415f9728700d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="external\b2Separator-cpp">
-      <UniqueIdentifier>{7bc8cb62-8a3b-49f2-96f5-9322ef7a0608}</UniqueIdentifier>
-    </Filter>
     <Filter Include="external\lpeg">
       <UniqueIdentifier>{fce2fa59-1849-40be-8902-8962389197fa}</UniqueIdentifier>
     </Filter>
@@ -82,23 +79,8 @@
     <Filter Include="subrepos">
       <UniqueIdentifier>{299b906e-7322-46b4-8765-0d2640d3aa70}</UniqueIdentifier>
     </Filter>
-    <Filter Include="subrepos\composer">
-      <UniqueIdentifier>{e3e50e3e-9a28-44dd-baa5-1eb540c8b0f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="subrepos\easing">
       <UniqueIdentifier>{8e2b1faf-4cc1-4642-bf2d-7c5ebd1f3d68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="subrepos\timer">
-      <UniqueIdentifier>{145786e4-c15f-434f-9649-a9ae5b1d3432}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="subrepos\transition">
-      <UniqueIdentifier>{734c610c-56a2-481a-bb8b-55d649af5cd5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="subrepos\widget">
-      <UniqueIdentifier>{a9d7639c-fbce-473a-8b1d-c90dd1361d4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="subrepos\widget\widgetLibrary">
-      <UniqueIdentifier>{66748d1f-62a4-4548-bc71-cabe53d016e4}</UniqueIdentifier>
     </Filter>
     <Filter Include="external\luafilesystem">
       <UniqueIdentifier>{a0d536ba-4def-4e83-8de9-61133dcd1e80}</UniqueIdentifier>
@@ -135,17 +117,11 @@
     <ClCompile Include="..\..\..\external\ALmixer\luaal.c">
       <Filter>external\ALmixer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\external\b2Separator-cpp\b2Separator.cpp">
-      <Filter>external\b2Separator-cpp</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\external\lsqlite3-7\lsqlite3.c">
       <Filter>external\lsqlite3</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\external\LuaHashMap\LuaHashMap.c">
       <Filter>external\LuaHashMap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\smoothpolygon\SmoothPolygon.cpp">
-      <Filter>external\smoothpolygon</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_DependencyLoader.cpp">
       <Filter>platform\shared</Filter>
@@ -154,9 +130,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformOpenALPlayer.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\b2GLESDebugDraw.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp">
@@ -169,12 +142,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_DeviceOrientation.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_DisplayObjectExtensions.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_EllipsePath.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp">
@@ -243,9 +210,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibOpenAL.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibPhysics.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibSQLite.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -271,21 +235,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Matrix.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_ParticleSystemObject.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsContact.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsContactListener.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsJoint.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsWorld.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioPlayer.cpp">
@@ -319,9 +268,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformLocation.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformModalInteraction.cpp">
@@ -370,9 +316,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Scheduler.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_SimpleCachedPath.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp">
@@ -546,13 +489,7 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayPath.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayV2.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_EmbossedTextObject.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_EmitterObject.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GradientPaint.cpp">
@@ -905,14 +842,8 @@
     <ClInclude Include="..\..\..\external\ALmixer\luaal.h">
       <Filter>external\ALmixer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\external\b2Separator-cpp\b2Separator.h">
-      <Filter>external\b2Separator-cpp</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\external\LuaHashMap\LuaHashMap.h">
       <Filter>external\LuaHashMap</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\smoothpolygon\SmoothPolygon.h">
-      <Filter>external\smoothpolygon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_DependencyLoader.h">
       <Filter>platform\shared</Filter>
@@ -924,9 +855,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformOpenALPlayer.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\b2GLESDebugDraw.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Archive.h">
@@ -945,12 +873,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_DeviceOrientation.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_DisplayObjectExtensions.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_EllipsePath.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Event.h">
@@ -1028,9 +950,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibOpenAL.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibPhysics.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibSocket.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -1097,24 +1016,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_MUpdatable.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_ParticleSystemObject.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsContact.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsContactListener.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsJoint.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsTypes.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsWorld.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioPlayer.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -1146,9 +1047,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformLocation.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformMediaProviderBase.h">
@@ -1197,9 +1095,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Scheduler.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_SimpleCachedPath.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.h">
@@ -1427,13 +1322,7 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayTypes.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayV2.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_EmbossedTextObject.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_EmitterObject.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_GradientPaint.h">
@@ -2119,95 +2008,11 @@
     <LuaToCpp Include="..\..\..\plugins\network\shared\network.lua">
       <Filter>plugins\network\shared</Filter>
     </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\composer\composer_scene.lua">
-      <Filter>subrepos\composer</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\composer\composer.lua">
-      <Filter>subrepos\composer</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\..\subrepos\easing\easing.lua">
       <Filter>subrepos\easing</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\subrepos\timer\timer.lua">
       <Filter>subrepos\timer</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\transition\transition_v1.lua">
-      <Filter>subrepos\transition</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\transition\transition.lua">
-      <Filter>subrepos\transition</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_light_sheet.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_sheet.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios_sheet.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios7.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios7_sheet.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_dark.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_dark_sheet.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_light.lua">
-      <Filter>subrepos\widget</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_stepper.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_switch.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_tabbar.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_tableview.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_button.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_momentumScrolling.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_pickerWheel.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_progressView.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_scrollview.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_searchField.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_segmentedControl.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_slider.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_spinner.lua">
-      <Filter>subrepos\widget\widgetLibrary</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\plugins\licensing\shared\licensing.lua">
       <Filter>plugins\licensing\shared</Filter>

@@ -16,7 +16,6 @@
 #include "Rtt_WinRTFBConnect.h"
 #include "Rtt_WinRTFont.h"
 #include "Rtt_WinRTImageProvider.h"
-#include "Rtt_WinRTMapViewObject.h"
 #include "Rtt_WinRTScreenSurface.h"
 #include "Rtt_WinRTStoreProvider.h"
 #include "Rtt_WinRTTimer.h"
@@ -638,30 +637,6 @@ bool WinRTPlatform::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
 	return SaveBitmap( bitmap, NULL, 1.0f );
 }
 
-void WinRTPlatform::SetStatusBarMode( MPlatform::StatusBarMode newValue ) const
-{
-}
-
-MPlatform::StatusBarMode WinRTPlatform::GetStatusBarMode() const
-{
-	return MPlatform::kDefaultStatusBar;
-}
-
-int WinRTPlatform::GetStatusBarHeight() const
-{
-	return 0;
-}
-    
-int WinRTPlatform::GetTopStatusBarHeightPixels()  const
-{
-	return 0;
-}
-    
-int WinRTPlatform::GetBottomStatusBarHeightPixels() const
-{
-    return 0;
-}
-
 int WinRTPlatform::SetSync( lua_State* L ) const
 {
 	return 0;
@@ -865,11 +840,6 @@ void WinRTPlatform::SetKeyboardFocus( PlatformDisplayObject * textObject ) const
 	{
 		//TODO: Remove keyboard focus from native display objects.
 	}
-}
-
-PlatformDisplayObject * WinRTPlatform::CreateNativeMapView( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), WinRTMapViewObject( bounds ) );
 }
 
 PlatformDisplayObject * WinRTPlatform::CreateNativeWebView( const Rect& bounds ) const

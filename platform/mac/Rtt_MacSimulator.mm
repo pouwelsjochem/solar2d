@@ -155,22 +155,6 @@ MacSimulator::Initialize(
 	platform->GetMacDevice().SetModel( [NSString stringWithExternalString:config.displayName.GetString()] );
 
 	// -------------
-
-	// Only add if default is available
-	if ( AddValueForKey( fProperties, config.statusBarDefaultFile.GetString(), @"statusBarDefaultFile" ) )
-	{
-		Rtt_VERIFY( AddValueForKey( fProperties, config.statusBarTranslucentFile.GetString(), @"statusBarTranslucentFile" ) );
-		Rtt_VERIFY( AddValueForKey( fProperties, config.statusBarBlackFile.GetString(), @"statusBarBlackFile" ) );
-		Rtt_VERIFY( AddValueForKey( fProperties, config.statusBarLightTransparentFile.GetString(), @"statusBarLightTransparentFile" ) );
-		Rtt_VERIFY( AddValueForKey( fProperties, config.statusBarDarkTransparentFile.GetString(), @"statusBarDarkTransparentFile" ) );
-		[fProperties setValue:[NSNumber numberWithInt:MPlatform::kTranslucentStatusBar] forKey:@"statusBarCurrent"];
-	}
-
-	if (config.screenDressingFile.GetString() != NULL)
-	{
-		AddValueForKey(fProperties, config.screenDressingFile.GetString(), @"screenDressingFile");
-	}
-
 	AppDelegate *delegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
 	[fProperties setValue:@"Solar2D" forKey:@"subscription"];
 	
@@ -185,12 +169,10 @@ MacSimulator::Initialize(
 	[fProperties setValue:[NSString stringWithExternalString:config.osName] forKey:@"osName"];
 
 	// Store the simulated device's safe screen area
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetStatusBar] forKey:@"safeScreenInsetStatusBar"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetTop] forKey:@"safeScreenInsetTop"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetLeft] forKey:@"safeScreenInsetLeft"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetBottom] forKey:@"safeScreenInsetBottom"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetRight] forKey:@"safeScreenInsetRight"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetStatusBar] forKey:@"safeLandscapeScreenInsetStatusBar"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetTop] forKey:@"safeLandscapeScreenInsetTop"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetLeft] forKey:@"safeLandscapeScreenInsetLeft"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetBottom] forKey:@"safeLandscapeScreenInsetBottom"];
@@ -219,7 +201,7 @@ MacSimulator::Initialize(
     
 	if ( NULL != device_image_file_cstr )
 	{
-		deviceImageFile = [skinDir stringByAppendingPathComponent:[NSString stringWithExternalString:device_image_file_cstr]];
+	deviceImageFile = [skinDir stringByAppendingPathComponent:[NSString stringWithExternalString:device_image_file_cstr]];
 	}
 	if ( NULL != display_name_cstr )
 	{
@@ -463,19 +445,6 @@ MacSimulator::DidChangeScale(float scalefactor)
 	
 	[savepref setObject:[NSNumber numberWithFloat:scalefactor] forKey:skinname];
 	[defaults setObject:savepref forKey:kUserPreferenceScaleFactorForSkin];
-}
-
-void
-MacSimulator::SetStatusBarMode( MPlatform::StatusBarMode newValue )
-{
-	[fProperties setValue:[NSNumber numberWithInt:newValue] forKey:@"statusBarCurrent"];
-}
-
-MPlatform::StatusBarMode
-MacSimulator::GetStatusBarMode() const
-{
-	NSNumber* number = (NSNumber*)[fProperties valueForKey:@"statusBarCurrent"];
-	return (MPlatform::StatusBarMode)[number intValue];
 }
 
 GLView*

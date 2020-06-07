@@ -24,11 +24,9 @@ namespace Rtt
 class BitmapMask;
 class BitmapPaint;
 class GroupObject;
-class EmitterObject;
 class ContainerObject;
 class CPUResource;
 class Display;
-class DisplayObjectExtensions;
 class LuaProxyVTable;
 class LuaUserdataProxy;
 class MEvent;
@@ -112,9 +110,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 			kIsForceDraw = 0x08,
 			kIsHitTestMasked = 0x10,
 			kIsOffScreen = 0x20,
-			kIsExtensionsLocked = 0x40,
-			kIsV1Compatibility = 0x80,
-			kIsV1ReferencePointUsed = 0x100,
 			kIsAnchorChildren = 0x200, // Group-specific property
 			kIsRenderedOffscreen = 0x400,
 			kIsRestricted = 0x800,
@@ -229,26 +224,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 		static void ApplyParentTransform( const DisplayObject& object, Rect& rect );
 
 	public:
-		typedef enum _ReferencePoint
-		{
-			kReferenceCenter = 0,
-			kReferenceTopLeft,
-			kReferenceTopCenter,
-			kReferenceTopRight,
-			kReferenceCenterRight,
-			kReferenceBottomRight,
-			kReferenceBottomCenter,
-			kReferenceBottomLeft,
-			kReferenceCenterLeft,
-
-			kNumReferencePoints
-		}
-		ReferencePoint;
-
-		void SetReferencePoint( Rtt_Allocator* pAllocator, ReferencePoint location );
-		void ResetReferencePoint();
-
-	public:
 		// Returns GetSelfBounds() transformed in dst space
 		const Rect& StageBounds() const;
 		bool Intersects( const DisplayObject& rhs ) const;
@@ -306,11 +281,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 		Real GetMaskGeometricProperty( enum GeometricProperty p ) const;
 
 	public:
-		// Surround calls to Draw() with these
-		virtual void WillDraw( Renderer& renderer ) const;
-		virtual void DidDraw( Renderer& renderer ) const;
-
-	public:
 		void ResetTransform();
 		virtual void SetSelfBounds( Real width, Real height );
 		void SetGeometricProperty( enum GeometricProperty p, Real newValue );
@@ -332,13 +302,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 		
 		// Controls whether the transform is offset by the anchor
 		virtual bool ShouldOffsetWithAnchor() const;
-		
-		bool IsV1Compatibility() const { return (fProperties & kIsV1Compatibility) != 0; }
-		virtual void SetV1Compatibility( bool newValue );
-
-		bool IsByteColorRange() const { return IsV1Compatibility(); }
-
-		bool IsV1ReferencePointUsed() const { return (fProperties & kIsV1ReferencePointUsed) != 0; }
 
 		bool IsRestricted() const { return (fProperties & kIsRestricted) != 0; }
 		void SetRestricted( bool newValue ) { SetProperty( kIsRestricted, newValue ); }
@@ -362,8 +325,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 		// NOTE: If no mask, always returns false.
 		Rtt_INLINE bool IsHitTestMasked() const { return fMask && (fProperties & kIsHitTestMasked) != 0; }
 		void SetHitTestMasked( bool newValue );
-
-		void SetExtensionsLocked( bool newValue );
 
 		void SetAnchorChildren( bool newValue );
 		bool IsAnchorChildren() const { return IsProperty( kIsAnchorChildren ); }
@@ -427,13 +388,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 			fListenerSet = ( value ? p | mask : p & ~mask );
 		}
 
-#ifdef Rtt_PHYSICS
-	public:
-		bool InitializeExtensions( Rtt_Allocator *allocator );
-		void RemoveExtensions();
-		DisplayObjectExtensions* GetExtensions() const { return fExtensions; }
-#endif
-
     public:
         void SetObjectDesc( const char *objectDesc ) { fObjectDesc = objectDesc; }
         const char *GetObjectDesc() const { return fObjectDesc; }
@@ -452,7 +406,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 		Transform fTransform;
 		mutable Rect fStageBounds;
 		mutable LuaProxy* fLuaProxy;
-		mutable DisplayObjectExtensions *fExtensions;
 		const void *fFocusId;
         const char *fObjectDesc;
         const char *fWhereDefined;
@@ -474,7 +427,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 
 		friend class DisplayObjectDrawGuard;
 		friend class GroupObject; // Access to CullOffscreen
-		friend class EmitterObject;
         friend class DisplayLibrary;
         friend class LuaDisplayObjectProxyVTable;
 };

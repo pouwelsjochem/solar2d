@@ -33,8 +33,7 @@ ImageFrame::ImageFrame( ImageSheet& owner, S32 x, S32 y, S32 w, S32 h, Real sx, 
 	fSrcHeight( h ),
 	fOffsetX( Rtt_REAL_0 ),
 	fOffsetY( Rtt_REAL_0 ),
-	fTextureCoords(),
-	fIsTrimmed( false )
+	fTextureCoords()
 /*
 	fSrcX( 0 ),
 	fSrcY( 0 ),
@@ -96,40 +95,6 @@ ImageFrame::UpdateUVVertex(Vertex2& vert ) const
 {
 	vert.x = fTextureCoords.xMin + fTextureCoords.Width() *vert.x;
 	vert.y = fTextureCoords.yMin + fTextureCoords.Height()*vert.y;
-}
-
-void
-ImageFrame::SetTrimData( S32 srcX, S32 srcY, S32 srcW, S32 srcH )
-{
-	// Trimmed sprites need to have an offset translation applied to actual RectPath
-	if ( srcW > fWidth || srcH > fHeight )
-	{
-		fSrcWidth = srcW;
-		fSrcHeight = srcH;
-
-		// If the image is trimmed, then the rect path corresponding to the
-		// frame is not centered at the origin in its local/self coordinates.
-		// Rather, the rect path corresponding to the original source frame
-		// is centered. Therefore, we need to calculate offsets to move
-		// the rect path to the proper location in its local coordinates.
-		// 
-		// See diagram below. The larger rect is the original source centered
-		// about the local origin. The smaller rect is the trimmed frame.
-		// The offset is the amount need to translate the smaller rect's center
-		// from 'o' to 'x'
-		// +-----------------------------------+
-		// |               +-------+           |
-		// |               |   x   |           |
-		// |               +-------+           |
-		// |                 o                 |
-		// |                                   |
-		// |                                   |
-		// |                                   |
-		// +-----------------------------------+
-		fOffsetX = srcX + Rtt_IntToReal( (fWidth - srcW) >> 1 );
-		fOffsetY = srcY + Rtt_IntToReal( (fHeight - srcH) >> 1 );
-		fIsTrimmed = ! Rtt_RealIsZero( fOffsetX ) || ! Rtt_RealIsZero( fOffsetY );
-	}
 }
 
 

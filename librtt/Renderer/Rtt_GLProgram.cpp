@@ -87,12 +87,6 @@ namespace /*anonymous*/
 			delete[] infoLog;
 		}
 	}
-	
-	const char* kWireframeSource =
-		"void main()" \
-		"{" \
-			"gl_FragColor = vec4(1.0);" \
-		"}";
 }
 
 // ----------------------------------------------------------------------------
@@ -132,7 +126,6 @@ GLProgram::Update( CPUResource* resource )
 	if( fData[Program::kMaskCount1].fProgram ) Update( Program::kMaskCount1, fData[Program::kMaskCount1] );
 	if( fData[Program::kMaskCount2].fProgram ) Update( Program::kMaskCount2, fData[Program::kMaskCount2] );
 	if( fData[Program::kMaskCount3].fProgram ) Update( Program::kMaskCount3, fData[Program::kMaskCount3] );
-	if( fData[Program::kWireframe].fProgram ) Update( Program::kWireframe, fData[Program::kWireframe]);
 }
 
 void 
@@ -253,8 +246,7 @@ GLProgram::UpdateShaderSource( Program* program, Program::Version version, Versi
 
 	// Fragment shader.
 	{
-		shader_source[4] = ( version == Program::kWireframe ) ? kWireframeSource : program->GetFragmentShaderSource();
-
+		shader_source[4] = program->GetFragmentShaderSource();
 		glShaderSource( data.fFragmentShader,
 						( sizeof(shader_source) / sizeof(shader_source[0]) ),
 						shader_source,

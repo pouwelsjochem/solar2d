@@ -28,7 +28,6 @@
 #include "Rtt_AndroidEventSound.h"
 #include "Rtt_AndroidFont.h"
 #include "Rtt_AndroidImageProvider.h"
-#include "Rtt_AndroidMapViewObject.h"
 #include "Rtt_AndroidScreenSurface.h"
 #include "Rtt_AndroidStoreProvider.h"
 #include "Rtt_AndroidTimer.h"
@@ -242,9 +241,8 @@ Rtt_Allocator& AndroidPlatform::GetAllocator() const
     return * fAllocator;
 }
 
-RenderingStream* AndroidPlatform::CreateRenderingStream( bool antialias ) const
+RenderingStream* AndroidPlatform::CreateRenderingStream() const
 {
-//	RenderingStream* result = Rtt_NEW( fAllocator, GPUMultisampleStream( fAllocator ) );
 	RenderingStream* result = Rtt_NEW( fAllocator, GPUStream( fAllocator ) );
 	
 	result->SetProperty( RenderingStream::kFlipHorizontalAxis, true );
@@ -601,35 +599,6 @@ AndroidPlatform::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
 	return SaveBitmap( bitmap, NULL, 1.0f );
 }
 
-void 
-AndroidPlatform::SetStatusBarMode( MPlatform::StatusBarMode newValue ) const
-{
-	fNativeToJavaBridge->SetStatusBarMode((int)newValue);
-}
-
-MPlatform::StatusBarMode 
-AndroidPlatform::GetStatusBarMode() const
-{
-	return (MPlatform::StatusBarMode)fNativeToJavaBridge->GetStatusBarMode();
-}
-
-int 
-AndroidPlatform::GetStatusBarHeight() const
-{
-	return fNativeToJavaBridge->GetStatusBarHeight();
-}
-    
-int
-AndroidPlatform::GetTopStatusBarHeightPixels()  const
-{
-    return fNativeToJavaBridge->GetStatusBarHeight();
-}
-    
-int AndroidPlatform::GetBottomStatusBarHeightPixels() const
-{
-    return 0;
-}
-
 int
 AndroidPlatform::SetSync( lua_State* L ) const
 {
@@ -881,12 +850,6 @@ AndroidPlatform::SetKeyboardFocus( PlatformDisplayObject * textObject ) const
 	{
 		fNativeToJavaBridge->DisplayObjectSetFocus(AndroidDisplayObjectRegistry::INVALID_ID, false);
 	}
-}
-
-PlatformDisplayObject *
-AndroidPlatform::CreateNativeMapView( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), AndroidMapViewObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge ) );
 }
 
 PlatformDisplayObject *

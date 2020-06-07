@@ -33,13 +33,7 @@ class MPlatformDevice
 			kOrientationEvent = 0,
 			kAccelerometerEvent,
 			kGyroscopeEvent,
-			kLocationEvent,
-			kHeadingEvent,
 			kMultitouchEvent,
-			kCollisionEvent,
-			kPreCollisionEvent,
-			kPostCollisionEvent,
-			kParticleCollisionEvent,
 			kMemoryWarningEvent,
 			kTrackingEvent,
 			kKeyEvent,
@@ -111,10 +105,6 @@ class MPlatformDevice
 		// event-driven system.activate/system.deactivate calls (BeginNotifications/EndNotifications above).
 		virtual bool Activate( ActivationType key ) const { return false; }
 		virtual bool Deactivate( ActivationType key ) const { return false; }
-
-	public:
-		virtual void SetLocationAccuracy( Real meters ) const = 0;
-		virtual void SetLocationThreshold( Real meters ) const = 0;
 
 	public:
 		virtual DeviceOrientation::Type GetOrientation() const = 0;

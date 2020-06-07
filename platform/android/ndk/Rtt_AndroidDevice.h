@@ -61,8 +61,6 @@ class AndroidDevice : public MPlatformDevice
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
 
 	public:
-		virtual void SetLocationAccuracy( Real meters ) const;
-		virtual void SetLocationThreshold( Real meters ) const;
 		virtual void SetOrientation( DeviceOrientation::Type orientation );
 
 	public:

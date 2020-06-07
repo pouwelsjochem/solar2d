@@ -16,7 +16,7 @@
 #include "Core/Rtt_Macros.h"
 #include "Core/Rtt_Fixed.h"
 
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV ) || defined( Rtt_NINTENDO_ENV )
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_NINTENDO_ENV )
 #define M_PI 3.1415926535897932384626f
 #endif
 
@@ -122,7 +122,7 @@ Rtt_FORCE_INLINE float Rtt_FloatMul( float a, float b ) { return a * b; }
 
 	Rtt_FORCE_INLINE Rtt_Real Rtt_RealSqrt( Rtt_Real a ) { return sqrtf( a ); }
 	Rtt_FORCE_INLINE Rtt_Real Rtt_RealLog2( Rtt_Real a ) { 
-#if defined( Rtt_ANDROID_ENV ) || defined ( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV )
+#if defined( Rtt_ANDROID_ENV ) || defined ( Rtt_WIN_ENV )
 		return logf( a ) / logf( 2 ); 
 #else
 		return log2f( a ); 

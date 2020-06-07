@@ -128,9 +128,6 @@ class NativeToJavaBridge
 		void SetIdleTimer( bool enabled );
 		bool GetIdleTimer() const;
 	
-		void SetStatusBarMode( int mode );
-		int GetStatusBarMode();
-		int GetStatusBarHeight();
 		void GetSafeAreaInsetsPixels(Rtt::Real &top, Rtt::Real &left, Rtt::Real &bottom, Rtt::Real &right);
 		
 		void ShowNativeAlert( const char * title, const char * msg, 
@@ -170,15 +167,12 @@ class NativeToJavaBridge
 		void GetSystemProperty( const char *name, Rtt::String *outValue );
 		long GetUptimeInMilliseconds();
 		void MakeLowerCase( Rtt::String *stringToConvert );
-	
-		void SetLocationAccuracy( double meters );
-		void SetLocationThreshold( double meters );
+		
 		void SetAccelerometerInterval( int frequency );
 		void SetGyroscopeInterval( int frequency );
 		void SetEventNotification( int eventType, bool enable );
 		bool HasAccelerometer();
 		bool HasGyroscope();
-		bool HasHeadingHardware();
 		void Vibrate();
 		
 		void DisplayObjectDestroy( int id );
@@ -243,21 +237,6 @@ class NativeToJavaBridge
 		bool VideoViewGetIsTouchTogglesPlay( int id );
 		void VideoViewTouchTogglesPlay( int id, bool toggle );
 		bool VideoViewGetIsPlaying( int id );
-
-		void MapViewCreate( int id, int left, int top, int width, int height );
-		bool MapViewIsCurrentLocationVisible( int id );
-		int MapViewPushCurrentLocationToLua( int id, lua_State *L );
-		bool MapViewIsScrollEnabled( int id );
-		void MapViewSetScrollEnabled( int id, bool enabled );
-		bool MapViewIsZoomEnabled( int id );
-		void MapViewSetZoomEnabled( int id, bool enabled );
-		void MapViewGetType( int id, Rtt::String *mapTypeResult );
-		void MapViewSetType( int id, const char *mapTypeName );
-		void MapViewSetCenter( int id, double latitude, double longitude, bool isAnimated );
-		void MapViewSetRegion( int id, double latitude, double longitude, double latitudeSpan, double longitudeSpan, bool isAnimated );
-		int MapViewAddMarker( int id, double latitude, double longitude, const char *title, const char *subtitle, int listener, const char *fileNameWithPath );
-		void MapViewRemoveMarker( int id, int markerId );
-		void MapViewRemoveAllMarkers( int id );
 		
 		int CryptoGetDigestLength( const char * algorithm );
 		void CryptoCalculateDigest( const char * algorithm, const Rtt::Data<const char> & data, U8 * digest );
@@ -272,11 +251,6 @@ class NativeToJavaBridge
 		void FlurryInit( const char * applicationKey ) const;
 		void FlurryEvent( const char * eventId ) const;
 	#endif
-	
-	public:
-		void RequestNearestAddressFromCoordinates( lua_State *L );
-		int PushLocationNameCoordinatesToLua( const char *locationName, lua_State *L );
-		void RequestLocationAsync( lua_State *L);
 
 	public:
 		void StoreInit( const char *storeName );
@@ -292,7 +266,6 @@ class NativeToJavaBridge
 		void NotificationCancelAll();
 		void GooglePushNotificationsRegister( const char *projectNumber );
 		void GooglePushNotificationsUnregister();
-		void SetGoogleMapsAPIKey( const char *mapsKey );
 
 	public:
 		void FetchInputDevice(int coronaDeviceId);

@@ -294,11 +294,9 @@ MacConsoleDevice::HasEventSource( EventType type ) const
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 		case MPlatformDevice::kMultitouchEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kOrientationEvent:
 			hasEventSource = false;
 			break;
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
 		case MPlatformDevice::kMouseEvent:
@@ -318,11 +316,7 @@ MacConsoleDevice::BeginNotifications( EventType type ) const
 	fTracker.BeginNotifications( type );
 
 #ifndef Rtt_NO_GUI
-	if (type == kLocationEvent)
-	{
-		[fView startLocationUpdating];
-	}
-	else if (kMouseEvent == type )
+	if (kMouseEvent == type )
 	{
 		[fView.glView setSendAllMouseEvents:YES];
 	}
@@ -335,11 +329,7 @@ MacConsoleDevice::EndNotifications( EventType type ) const
 	fTracker.EndNotifications( type );
 	
 #ifndef Rtt_NO_GUI
-	if (type == kLocationEvent)
-	{
-		[fView endLocationUpdating];
-	}
-	else if (kMouseEvent == type )
+	if (kMouseEvent == type )
 	{
 		[fView.glView setSendAllMouseEvents:NO];
 	}
@@ -359,16 +349,6 @@ MacConsoleDevice::SetAccelerometerInterval( U32 frequency ) const
 
 void
 MacConsoleDevice::SetGyroscopeInterval( U32 frequency ) const
-{
-}
-
-void
-MacConsoleDevice::SetLocationAccuracy( Real meters ) const
-{
-}
-
-void
-MacConsoleDevice::SetLocationThreshold( Real meters ) const
 {
 }
 
@@ -412,11 +392,9 @@ MacDevice::HasEventSource( EventType type ) const
 	{
 		case MPlatformDevice::kGyroscopeEvent:
 		case MPlatformDevice::kMultitouchEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMouseEvent:
 			hasEventSource = false;
 			break;
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
 			hasEventSource = true;
@@ -441,13 +419,7 @@ MacDevice::BeginNotifications( EventType type ) const
 #ifdef Rtt_AUTHORING_SIMULATOR
 	fSimulator.BeginNotifications( type );
 
-	if ( kLocationEvent == type )
-	{
-		// Tell the AppDelegate to start sending location updates
-		AppDelegate *delegate = (AppDelegate *)[NSApp delegate];
-		[delegate performSelectorOnMainThread:@selector(startLocationUpdating) withObject:nil waitUntilDone:NO];
-	}
-	else if (kMouseEvent == type )
+	if (kMouseEvent == type )
 	{
 		AppDelegate *delegate = (AppDelegate *)[NSApp delegate];
 		[delegate.layerHostView setSendAllMouseEvents:YES];
@@ -463,13 +435,7 @@ MacDevice::EndNotifications( EventType type ) const
 #ifdef Rtt_AUTHORING_SIMULATOR
 	fSimulator.EndNotifications( type );
 	
-	if ( kLocationEvent == type )
-	{
-		// Tell the AppDelegate to stop sending location updates
-		AppDelegate *delegate = (AppDelegate *)[NSApp delegate];
-		[delegate performSelectorOnMainThread:@selector(endLocationUpdating) withObject:nil waitUntilDone:NO];
-	}
-	else if (kMouseEvent == type )
+	if (kMouseEvent == type )
 	{
 		AppDelegate *delegate = (AppDelegate *)[NSApp delegate];
 		[delegate.layerHostView setSendAllMouseEvents:NO];
@@ -487,16 +453,6 @@ void
 MacDevice::SetGyroscopeInterval( U32 frequency ) const
 {
 	Rtt_WARN_SIM( frequency >= 10 && frequency <= 100, ( "WARNING: Gyroscope frequency on iPhone must be in the range [10,100] Hz" ) );
-}
-
-void
-MacDevice::SetLocationAccuracy( Real meters ) const
-{
-}
-
-void
-MacDevice::SetLocationThreshold( Real meters ) const
-{
 }
 
 DeviceOrientation::Type

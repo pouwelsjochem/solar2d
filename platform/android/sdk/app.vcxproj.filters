@@ -159,9 +159,6 @@
     <None Include="Z:\corona\main\platform\android\sdk\res\drawable-hdpi\ic_maps_indicator_current_position.png">
       <Filter>res\drawable-hdpi</Filter>
     </None>
-    <None Include="Z:\corona\main\platform\android\sdk\res\raw\corona_map_view2.html">
-      <Filter>res\raw</Filter>
-    </None>
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-hdpi\icon.png">
       <Filter>res\mipmap-hdpi</Filter>
     </None>
@@ -416,12 +413,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaStatusBarSettings.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaStatusBarApiHandler.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaSplashScreenApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -471,9 +462,6 @@
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\events\ImagePickerTask.java">
-      <Filter>src\com\ansca\corona\events</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\events\LocationTask.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\events\MediaEvent.java">
@@ -671,9 +659,6 @@
     <JCompile Include="src\com\ansca\corona\listeners\CoronaSplashScreenApiListener.java">
       <Filter>src\com\ansca\corona\listener</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\listeners\CoronaStatusBarApiListener.java">
-      <Filter>src\com\ansca\corona\listener</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\listeners\CoronaStoreApiListener.java">
       <Filter>src\com\ansca\corona\listener</Filter>
     </JCompile>
@@ -682,33 +667,6 @@
     </JCompile>
     <JCompile Include="src\com\ansca\corona\listeners\CoronaShowApiListener.java">
       <Filter>src\com\ansca\corona\listener</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapMarker.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapMarkerTask.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapRequestLocationFailedTask.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapRequestLocationTask.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapTappedTask.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapType.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapView.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapAddressReceivedTask.java">
-      <Filter>src\com\ansca\corona\map</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\map\MapAddressRequestFailedTask.java">
-      <Filter>src\com\ansca\corona\map</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\version\AndroidVersionSpecificFactory.java">
       <Filter>src\com\ansca\corona\version</Filter>
@@ -765,9 +723,6 @@
       <Filter>src\com\ansca\corona\purchasing</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\purchasing\Store.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreActivity.java">
       <Filter>src\com\ansca\corona\purchasing</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\purchasing\StoreName.java">

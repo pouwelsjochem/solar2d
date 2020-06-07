@@ -43,7 +43,6 @@ import android.content.pm.ResolveInfo;
 import com.ansca.corona.events.EventManager;
 import com.ansca.corona.listeners.CoronaShowApiListener;
 import com.ansca.corona.listeners.CoronaSplashScreenApiListener;
-import com.ansca.corona.listeners.CoronaStatusBarApiListener;
 import com.ansca.corona.listeners.CoronaStoreApiListener;
 import com.ansca.corona.listeners.CoronaSystemApiListener;
 
@@ -95,8 +94,6 @@ public class Controller {
 	private CoronaShowApiListener myCoronaShowApiListener;
 	// WHen to hide/show the splash screen
 	private CoronaSplashScreenApiListener myCoronaSplashScreenApiListener;
-	// Current status bar status, height, etc.
-	private CoronaStatusBarApiListener myCoronaStatusBarApiListener;
 	// store.init() store.purchase() etc.
 	private CoronaStoreApiListener myCoronaStoreApiListener;
 	// native.requestExit(), pushing in the launch intents
@@ -111,8 +108,6 @@ public class Controller {
 	private Handler myHandler;
 
 	private ResourceServices myResourceServices;
-
-	private String myGoogleMapsAPIKey;
 
 	enum RuntimeState {
 		Starting,
@@ -208,14 +203,6 @@ public class Controller {
 		return myCoronaSplashScreenApiListener;
 	}
 
-	void setCoronaStatusBarApiListener(CoronaStatusBarApiListener listener) {
-		myCoronaStatusBarApiListener = listener;
-	}
-
-	CoronaStatusBarApiListener getCoronaStatusBarApiListener() {
-		return myCoronaStatusBarApiListener;
-	}
-
 	void setCoronaStoreApiListener(CoronaStoreApiListener listener) {
 		myCoronaStoreApiListener = listener;
 	}
@@ -230,14 +217,6 @@ public class Controller {
 
 	CoronaSystemApiListener getCoronaSystemApiListener() {
 		return myCoronaSystemApiListener;
-	}
-
-	public void SetGoogleMapsAPIKey(String key) {
-		myGoogleMapsAPIKey = key;
-	}
-
-	public String GetGoogleMapsAPIKey() {
-		return myGoogleMapsAPIKey;
 	}
 
 	public IAndroidVersionSpecific getAndroidVersionSpecific() {
@@ -1423,33 +1402,6 @@ public class Controller {
 			}
 		});
 	}
-
-	/**
-	 * Displays a native alert stating that location permissions are missing from AndroidManifest.xml.
-	 */
-	void showLocationPermissionsMissingFromManifestAlert() {
-		// Display the alert dialog on the UI thread.
-		myHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				Context context = myContext;
-				if (context == null) {
-					return;
-				}
-
-				String message = "This application does not have permission to read your current location.\n\n" + 
-					"Ensure that your app is using at least one of the following permissions:\n " + 
-						"- ACCESS_COARSE_LOCATION\n - ACCESS_FINE_LOCATION";
-				Log.i("Corona", "ERROR: " + message);
-
-				AlertDialog.Builder builder = createAlertDialogBuilder(context);
-				builder.setTitle("Corona: Developer Error");
-				builder.setMessage(message);
-				builder.setPositiveButton(myResourceServices.getResources().getString(android.R.string.ok), null);
-				builder.show();
-			}
-		});
-	}
 	
 	/**
 	 * Displays an activity indicator dialog onscreen. It is displayed modally, meaning you cannot tap behind it.
@@ -1814,10 +1766,6 @@ public class Controller {
 		mySensorManager.setGyroscopeInterval(frequency);
 	}
 	
-	public void setLocationThreshold( double meters ) {
-		mySensorManager.setLocationThreshold(meters);
-	}
-	
 	/**
 	 * Determines if this device has an accelerometer sensor.
 	 * @return Returns true if this device has an accelerometer. Returns false if not.
@@ -1834,19 +1782,6 @@ public class Controller {
 	public boolean hasGyroscope()
 	{
 		return mySensorManager.hasGyroscope();
-	}
-
-	/**
-	 * Determines if this device has the ability to provide heading events.
-	 * @return Returns true if this device has heading hardware. Returns false if not.
-	 */
-	public boolean hasHeadingHardware()
-	{
-		return mySensorManager.hasHeadingHardware();
-	}
-	
-	public void setEventNotification( int eventType, boolean enable ) {
-		mySensorManager.setEventNotification(eventType, enable);
 	}
 
 	public void vibrate() {

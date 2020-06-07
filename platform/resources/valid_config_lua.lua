@@ -22,14 +22,12 @@ application = {
 	showRuntimeErrors = true,
 
 	content = {
-		graphicsCompatibility = 1,
 		width = 1,
 		height = 1,
 		xAlign = "",
 		yAlign = "",
 		scale = "letterBox",
 		fps = 60,
-		antialias = false,
 		audioPlayFrequency = 1,
 		imageSuffix = {
 		},

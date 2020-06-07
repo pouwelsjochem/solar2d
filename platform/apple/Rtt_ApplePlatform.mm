@@ -545,30 +545,9 @@ ApplePlatform::GetAllocator() const
 }
 
 RenderingStream*
-ApplePlatform::CreateRenderingStream( bool antialias ) const
+ApplePlatform::CreateRenderingStream() const
 {
-#ifdef OLD_GRAPHICS
-
-#ifdef Rtt_NO_GUI
 	return NULL;
-#else
-	RenderingStream* result = NULL;
-	if ( antialias )
-	{	
-		result = Rtt_NEW( fAllocator, GPUMultisampleStream( fAllocator ) );
-	}
-	else
-	{
-		result = Rtt_NEW( fAllocator, GPUStream( fAllocator ) );
-	}
-
-	result->SetProperty( RenderingStream::kFlipHorizontalAxis, true );
-	return result;
-#endif
-
-#else
-	return NULL;
-#endif
 }
 
 PlatformSurface*
@@ -1116,25 +1095,6 @@ ApplePlatform::GetAudioPlayer( const ResourceHandle<lua_State> & handle ) const
 
 // ----------------------------------------------------------------------------
 
-int 
-ApplePlatform::GetStatusBarHeight() const
-{
-	return 20;
-}
-    
-int
-ApplePlatform::GetTopStatusBarHeightPixels() const
-{
-    return 0;
-}
-int
-ApplePlatform::GetBottomStatusBarHeightPixels() const
-{
-    return 0;
-}
-
-// ----------------------------------------------------------------------------
-
 Real
 ApplePlatform::GetStandardFontSize() const
 {
@@ -1535,7 +1495,6 @@ ApplePlatform::PathForFile( const char* filename, Directory baseDir, U32 flags, 
 			{
 				// The file may be not be in the developer's project because it is
 				// a Corona resource file that will be available in the final device build.
-				// For example, image files used by the widget library.
 				path = PathForCoronaResourceFile( filename );
 				path = VerifyFileExists( path );
 			}

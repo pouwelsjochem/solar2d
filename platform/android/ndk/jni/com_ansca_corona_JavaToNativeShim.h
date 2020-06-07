@@ -33,10 +33,6 @@ extern "C" {
 #define com_ansca_corona_JavaToNativeShim_EventTypeAccelerometer 1L
 #undef com_ansca_corona_JavaToNativeShim_EventTypeGyroscope
 #define com_ansca_corona_JavaToNativeShim_EventTypeGyroscope 2L
-#undef com_ansca_corona_JavaToNativeShim_EventTypeLocation
-#define com_ansca_corona_JavaToNativeShim_EventTypeLocation 3L
-#undef com_ansca_corona_JavaToNativeShim_EventTypeHeading
-#define com_ansca_corona_JavaToNativeShim_EventTypeHeading 4L
 #undef com_ansca_corona_JavaToNativeShim_EventTypeMultitouch
 #define com_ansca_corona_JavaToNativeShim_EventTypeMultitouch 5L
 #undef com_ansca_corona_JavaToNativeShim_EventTypeNumTypes
@@ -301,14 +297,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeGyroscopeEve
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeLocationEvent
- * Signature: (DDDDDDD)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeLocationEvent
-  (JNIEnv *, jclass, jlong, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble, jdouble);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeOrientationChanged
  * Signature: (II)V
  */
@@ -477,34 +465,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativePopupClosedE
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeStoreTransactionEvent
   (JNIEnv *, jclass, jlong, jint, jint, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeMapAddressReceivedEvent
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMapAddressReceivedEvent
-  (JNIEnv *, jclass, jlong, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeMapAddressRequestFailedEvent
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMapAddressRequestFailedEvent
-  (JNIEnv *, jclass, jlong, jstring);
-
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMapRequestLocationFailedEvent
-  (JNIEnv *, jclass, jlong, jint, jstring, jstring);
-
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMapRequestLocationEvent
-  (JNIEnv *, jclass, jlong, jint, jdouble, jdouble, jstring);
-
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMapMarkerEvent
-  (JNIEnv *, jclass, jlong, jint, jint, jdouble, jdouble);
-
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMapTappedEvent
-  (JNIEnv *, jclass, jlong, jint, jdouble, jdouble);
 
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeVideoViewPrepared
   (JNIEnv *, jclass, jlong, jint);

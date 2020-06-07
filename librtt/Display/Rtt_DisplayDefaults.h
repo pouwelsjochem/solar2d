@@ -60,12 +60,7 @@ class DisplayDefaults
 
 		bool IsImageSheetSampledInsideFrame() const { return fIsImageSheetSampledInsideFrame;}
 		void SetImageSheetSampledInsideFrame( bool newValue ) { fIsImageSheetSampledInsideFrame = newValue; }
-	public:
-		bool IsV1Compatibility() const { return fV1Compatibility; }
-		void SetV1Compatibility( bool newValue ) { fV1Compatibility = newValue; }
-
-		bool IsByteColorRange() const { return IsV1Compatibility(); }
-		
+	public:	
 		bool ShouldPreloadTextures() const { return fPreloadTextures; }
 		void SetPreloadTextures( bool newValue ) { fPreloadTextures = newValue; }
 	
@@ -89,7 +84,6 @@ class DisplayDefaults
 		U8 fMinTextureFilter;
 		U8 fWrapX;
 		U8 fWrapY;
-		bool fV1Compatibility;
 		bool fPreloadTextures;
 		bool fIsNativeTextFieldFontSizeScaled;
 		bool fIsNativeTextBoxFontSizeScaled;

@@ -21,8 +21,6 @@
 
 #include "Rtt_SurfaceInfo.h"
 
-#define Rtt_3D	1
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -35,7 +33,6 @@ class MBitmapDelegate;
 class Paint;
 class PlatformSurface;
 class SurfaceProperties;
-struct Xform3D;
 class VertexArray;
 
 // ----------------------------------------------------------------------------
@@ -148,11 +145,6 @@ class RenderingStream
 		// Call prior to rendering, i.e. any submission to the stream
 		virtual void PrepareToRender();
 
-		virtual void UpdateProjection( bool useOriginalOrientation );
-
-		// Call whenever the actual window size you render to changes
-		virtual void UpdateViewport( S32 windowWidth, S32 windowHeight );
-
 		virtual S32 GetRenderedContentWidth() const;
 		virtual S32 GetRenderedContentHeight() const;
 
@@ -191,33 +183,19 @@ class RenderingStream
 		DeviceOrientation::Type GetSurfaceOrientation() const { return (DeviceOrientation::Type)fSurfaceOrientation; }
 
 	public:
-		virtual void SetMatrixMode( MatrixMode mode );
-		virtual void LoadIdentity();
-
-	public:
 		bool IsEnabled( CapabilityMask mask );
 		virtual void SetEnabled( CapabilityMask mask, bool value );
 
 	public:
-		virtual void SetTextureId( U32 textureId );
-		virtual void SetTextureParameter( TextureParameter param, TextureValue value );
-		virtual void SetTextureFunction( TextureFunction func );
-
-	public:
 		virtual void SetTextureCoordinates( const Vertex2 *coords, S32 numCoords );
-		virtual void PushTexture( const BitmapPaint *paint );
-		virtual const BitmapPaint* PopTexture();
 		virtual int GetTextureDepth() const;
 
 	public:
 		virtual void SetClearColor( const Paint& paint );
 		virtual RGBA GetClearColor();
-		virtual void Clear();
 
 	public:
 		virtual void SetColor( const RGBA& color );
-		virtual void BeginPaint( const Paint* paint );
-		virtual void EndPaint();
 
 		// Currently it's the Paint's responsibility to apply the "global" alpha
 		// to the Paint's color/texture/etc
@@ -229,11 +207,6 @@ class RenderingStream
 
 		// Assumes you pass screen coordinates, not content coordinates (most code is in content coordinates)
 		virtual void CaptureFrameBuffer( BufferBitmap& outBuffer, S32 xScreen, S32 yScreen, S32 wScreen, S32 hScreen );
-
-	public:
-		// Experimental
-		virtual void Begin3D( const Xform3D*, const Rect& bounds );
-		virtual void End3D( const Xform3D* );
 
 	public:
 		S32 DeviceWidth() const { return fDeviceWidth; }
@@ -289,29 +262,6 @@ class RenderingStream
 
 	public:
 		virtual S32 GetRelativeRotation(){return 0;}
-
-
-	protected:
-//		const Quad* SetCurrentMask( const Quad* newMask );
-//		friend class SimpleMasker;
-
-/*
-		virtual void Submit( const VertexArray& vertices ) = 0;
-
-		// General case: submit vertex arrays, requires calling 
-		virtual void Submit( RenderTypes::Mode mode, const Vertex2* vertices, const S32* counts, S32 numCounts ) = 0;
-		// virtual void Submit( const Mode modes[], const VertexCache caches[], S32 len ) = 0;
-
-	public:
-		// Optimized primitives: rect, rounded rect, circle, ellipse
-		// Intended to be called only when the srcToDst transform preserves the
-		// aspect ratio (uniform scale along x and y) and preserves orientation 
-		// (no rotation)
-		virtual void Submit( const Quad vertices ) = 0;
-		virtual void Submit( const Vertex2& origin, Real halfW, Real halfH, Real radius ) = 0;
-		virtual void Submit( const Vertex2& origin, Real radius ) = 0;
-		virtual void Submit( const Vertex2& origin, Real a, Real b ) = 0;
-*/
 	private:
 		const Quad* fSubmitBounds;
 		U8 fProperties;
@@ -322,7 +272,6 @@ class RenderingStream
 		U8 fContentOrientation;
 		U8 fSurfaceOrientation;
 		U8 fScaleMode;
-//		const Quad* fCurrentMask;
 		Real fSx;
 		Real fSy;
 		S32 fDeviceWidth;

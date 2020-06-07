@@ -19,7 +19,6 @@
 #include "Rtt_IPhoneImageProvider.h"
 #include "Rtt_IPhoneVideoProvider.h"
 #include "Rtt_AppleInAppStore.h"
-#include "Rtt_IPhoneMapViewObject.h"
 #include "Rtt_IPhoneScreenSurface.h"
 #include "Rtt_IPhoneVideoObject.h"
 #include "Rtt_IPhoneVideoPlayer.h"
@@ -240,37 +239,7 @@ IPhonePlatform::CreateBitmap( const char *path, bool convertToGrayscale ) const
 
 	return result;
 }
-int
-IPhonePlatform::GetStatusBarHeight() const
-{
-    return Super::GetStatusBarHeight();
-}
 
-int
-IPhonePlatform::GetTopStatusBarHeightPixels() const
-{
-    int result = Super::GetTopStatusBarHeightPixels();
-    CGFloat scale_factor = [[UIScreen mainScreen] scale];
-    UIInterfaceOrientation currentOrienation = [UIApplication sharedApplication].statusBarOrientation;
-    if ( UIInterfaceOrientationPortrait == currentOrienation ||
-        UIDeviceOrientationPortraitUpsideDown == currentOrienation)
-    {
-        result = [UIApplication sharedApplication].statusBarFrame.size.height * scale_factor;
-    }
-    else
-    {
-        result = [UIApplication sharedApplication].statusBarFrame.size.width * scale_factor;
-    }
-    
-    return result;
-}
-    
-int
-IPhonePlatform::GetBottomStatusBarHeightPixels() const
-{
-    return Super::GetBottomStatusBarHeightPixels();
-}
-    
 static Rtt_INLINE
 double DegreesToRadians( double degrees )
 {
@@ -497,92 +466,6 @@ IPhonePlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) cons
 		fInAppStoreProvider = Rtt_NEW( fAllocator, AppleStoreProvider( handle ) );
 	}
 	return fInAppStoreProvider;
-}
-
-void
-IPhonePlatform::SetStatusBarMode( MPlatform::StatusBarMode newValue ) const
-{
-	UIApplication* application = [UIApplication sharedApplication];
-
-    AppDelegate* delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    AppViewController* viewController = (AppViewController*)delegate.viewController;
-    
-	bool isHidden = application.statusBarHidden;
-	if ( MPlatform::kHiddenStatusBar == newValue )
-	{
-		if ( ! isHidden )
-		{
-			[application setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-            [viewController setPrefersStatusBarhidden:true];
-		}
-	}
-	else
-	{
-		if ( isHidden )
-		{
-			[application setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-            [viewController setPrefersStatusBarhidden:false];
-		}
-
-		switch( newValue )
-		{
-			case MPlatform::kDefaultStatusBar:
-			case MPlatform::kLightTransparentStatusBar:
-				[application setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-				 // This is needed because iOS 7 defaults to the dark style while Corona only has default and dark.  Making light the default lets the user choose without having to change the api.
-				[viewController setPreferredStatusBarStyle:UIStatusBarStyleLightContent];
-#endif
-				break;
-			case MPlatform::kTranslucentStatusBar:
-				[application setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
-				[viewController setPreferredStatusBarStyle:UIStatusBarStyleBlackTranslucent];
-				break;
-			case MPlatform::kDarkStatusBar:
-			case MPlatform::kDarkTransparentStatusBar:
-				[application setStatusBarStyle:UIStatusBarStyleBlackOpaque animated:YES];
-				[viewController setPreferredStatusBarStyle:UIStatusBarStyleDefault];
-				break;
-			default:
-				Rtt_ASSERT_NOT_REACHED();
-				break;
-		}
-	}
-	if ([viewController respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-		[viewController setNeedsStatusBarAppearanceUpdate];
-	}
-    
-}
-
-MPlatform::StatusBarMode
-IPhonePlatform::GetStatusBarMode() const
-{
-	MPlatform::StatusBarMode result = MPlatform::kHiddenStatusBar;
-
-	UIApplication* application = [UIApplication sharedApplication];
-
-	bool isHidden = application.statusBarHidden;
-	if ( ! isHidden )
-	{
-		UIStatusBarStyle style = application.statusBarStyle;
-		switch( style )
-		{
-			case UIStatusBarStyleDefault:
-				result = MPlatform::kDefaultStatusBar;
-				break;
-			case UIStatusBarStyleBlackTranslucent:
-				result = MPlatform::kTranslucentStatusBar;
-				break;
-			case UIStatusBarStyleBlackOpaque:
-				result = MPlatform::kDarkStatusBar;
-				break;
-			default:
-				Rtt_ASSERT_NOT_REACHED();
-				break;
-		}
-	}
-
-	return result;
 }
 
 // =====================================================================
@@ -908,19 +791,9 @@ IPhonePlatform::ShowPopup( lua_State *L, const char *name, int optionsIndex ) co
 			controller.messageComposeDelegate = fPopupControllerDelegate;
 
 			result = InitializeController( L, optionsIndex, controller );
-			if ( result )
-			{
-				// casenum:12085 The controller is messing up hidden status bars. This must be fetched before we present the controller.
-				BOOL isstatusbarhidden = [[UIApplication sharedApplication] isStatusBarHidden];
-				
+			if ( result ) { // casenum:12085 The controller is messing up hidden status bars. This must be fetched before we present the controller.
 				[viewController presentViewController:controller animated:YES completion:nil];
-				
-				// casenum:12085 The controller is messing up hidden status bars. Force the status bar to hidden to prevent it from reappearing.
-				if ( YES == isstatusbarhidden )
-				{
-					[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-				}
-
+				[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 			}
 
 			[controller release];
@@ -974,12 +847,6 @@ IPhonePlatform::HidePopup( const char *name ) const
 	Rtt_ASSERT_NOT_IMPLEMENTED();
 
 	return result;
-}
-
-PlatformDisplayObject*
-IPhonePlatform::CreateNativeMapView( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), IPhoneMapViewObject( bounds ) );
 }
 
 PlatformDisplayObject*

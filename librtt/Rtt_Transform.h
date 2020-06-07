@@ -82,19 +82,13 @@ class Transform
 	protected:
 		enum Constants
 		{
-			kIsValid = 0x1,
-			kIsV1Compatibility = 0x2,
-			
+			kIsValid = 0x1,			
 			kInvalidateMask = ~(kIsValid),
-			kUserMatrixMask = ~(kIsValid | kIsV1Compatibility),
+			kUserMatrixMask = ~(kIsValid),
 		};
 
 		void SetValid() { fBits.properties |= kIsValid; }
-
-	public:
-		void SetV1Compatibility( bool newValue );
-		bool IsV1Compatibility() const { return (fBits.properties & kIsV1Compatibility) ? true : false; }
-
+		
 	public:
 		bool IsValid() const { return (fBits.properties & kIsValid) ? true : false; }
 		void Invalidate();

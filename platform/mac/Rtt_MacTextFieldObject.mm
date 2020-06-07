@@ -362,8 +362,7 @@ MacTextFieldObject::setTextColor( lua_State *L )
 	PlatformDisplayObject *o = (PlatformDisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
 	if ( & o->ProxyVTable() == & PlatformDisplayObject::GetTextFieldObjectProxyVTable() )
 	{
-		bool isBytecolorRange = o->IsByteColorRange();
-		NSColor *c = MacTextObject::GetTextColor( L, 2, isBytecolorRange );
+		NSColor *c = MacTextObject::GetTextColor( L, 2 );
 		NSView *v = ((MacTextFieldObject*)o)->GetView();
 		Rtt_NSTextField *t = (Rtt_NSTextField*)v;
 		t.textColor = c;

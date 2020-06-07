@@ -26,7 +26,6 @@
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIDevice.h>
 #import <AudioToolbox/AudioServices.h>
-#import <CoreLocation/CoreLocation.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <GameController/GameController.h>
 
@@ -58,8 +57,6 @@ TVOSDevice::~TVOSDevice()
 	{
 		kOrientationEvent,
 		kAccelerometerEvent,
-		kLocationEvent,
-		kHeadingEvent,
 		kMultitouchEvent,
 	};
 	const int kEventsLen = sizeof( kEvents ) / sizeof( kEvents[0] );
@@ -262,13 +259,11 @@ TVOSDevice::HasEventSource( EventType type ) const
 	switch (type)
 	{
 		case MPlatformDevice::kAccelerometerEvent:
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
 			hasEventSource = true;
 			break;
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMultitouchEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 			break;
@@ -304,16 +299,6 @@ TVOSDevice::BeginNotifications( EventType type ) const
 			CORONA_LOG_WARNING( "Gyroscope events are not supported on this platform." );
 			break;
 		}
-		case MPlatformDevice::kLocationEvent:
-		{
-			[resourceManager addObserver:fView.locationObserver forKey:CoronaLocationResourceKey()];
-			break;
-		}
-		case MPlatformDevice::kHeadingEvent:
-		{
-			CORONA_LOG_WARNING( "Heading events are not supported on this platform." );
-			break;
-		}
 		case MPlatformDevice::kMultitouchEvent:
 		{
 			CORONA_LOG_WARNING( "Multitouch events are not supported on this platform." );
@@ -342,13 +327,6 @@ TVOSDevice::EndNotifications( EventType type ) const
 			break;
 		}
 		case MPlatformDevice::kGyroscopeEvent:
-			break;
-		case MPlatformDevice::kLocationEvent:
-		{
-			[resourceManager removeObserver:fView.locationObserver forKey:CoronaLocationResourceKey()];
-			break;
-		}
-		case MPlatformDevice::kHeadingEvent:
 			break;
 		case MPlatformDevice::kMultitouchEvent:
 			break;
@@ -388,44 +366,6 @@ bool
 TVOSDevice::DoesNotify( EventType type ) const
 {
 	return fTracker.DoesNotify( type );
-}
-
-void
-TVOSDevice::SetLocationAccuracy( Real meters ) const
-{
-	CLLocationAccuracy value = kCLLocationAccuracyThreeKilometers;
-	S32 d = Rtt_RealToInt( meters );
-
-	if ( d < 10 )
-	{
-		value = kCLLocationAccuracyBest;
-	}
-	else if ( d < 100 )
-	{
-		value = kCLLocationAccuracyNearestTenMeters;
-	}
-	else if ( d < 1000 )
-	{
-		value = kCLLocationAccuracyHundredMeters;
-	}
-	else if ( d < 3000 )
-	{
-		value = kCLLocationAccuracyKilometer;
-	}
-	else
-	{
-		value = kCLLocationAccuracyThreeKilometers;
-	}
-
-	CLLocationManager *locationManager = [CoronaSystemResourceManager sharedInstance].locationManager;
-	locationManager.desiredAccuracy = value;
-}
-
-void
-TVOSDevice::SetLocationThreshold( Real meters ) const
-{
-	CLLocationManager *locationManager = [CoronaSystemResourceManager sharedInstance].locationManager;
-	locationManager.distanceFilter = Rtt_RealToFloat( meters );
 }
 
 DeviceOrientation::Type

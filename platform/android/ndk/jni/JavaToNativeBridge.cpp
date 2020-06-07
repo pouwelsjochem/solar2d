@@ -38,7 +38,6 @@
 #include "Rtt_AndroidImageProvider.h"
 #include "Rtt_AndroidInputDeviceManager.h"
 #include "Rtt_AndroidInputDevice.h"
-#include "Rtt_AndroidMapViewObject.h"
 #include "Rtt_AndroidPlatform.h"
 #include "Rtt_AndroidRuntimeDelegate.h"
 #include "Rtt_AndroidStore.h"
@@ -64,7 +63,7 @@
 
 #include "importgl.h"
 
-#if defined( Rtt_SUPPORTS_NOOK ) && defined( Rtt_SUPPORTS_KINDLE )
+#if defined( Rtt_SUPPORTS_KINDLE )
 	#define Rtt_ENTERPRISE 1
 #endif
 
@@ -1066,24 +1065,6 @@ JavaToNativeBridge::GyroscopeEvent(double x, double y, double z, double deltaTim
 }
 
 void 
-JavaToNativeBridge::LocationEvent(double lat, double lon, double altitude, double accuracy, double speed, double bearing, double time)
-{
-	if ( NULL == fRuntime )
-	{
-		return;
-	}
-	
-	if ( time < 1.0 ) {
-		Rtt::HeadingEvent headingEvent( -1.0f, bearing );
-		fRuntime->DispatchEvent( headingEvent );
-	}
-	else {
-		Rtt::LocationEvent event( lat, lon, altitude, accuracy, speed, bearing, time );
-		fRuntime->DispatchEvent( event );
-	}
-}
-
-void 
 JavaToNativeBridge::OrientationChanged( int newOrientation, int oldOrientation )
 {
 	NativeTrace trace( "JavaToNativeBridge::OrientationChanged" );
@@ -1548,114 +1529,6 @@ JavaToNativeBridge::StoreTransactionEvent(
 	// The event object will be automatically deleted by the dispatcher.
 	Rtt::StoreTransactionEvent *eventPointer = Rtt_NEW(&allocator, Rtt::StoreTransactionEvent(transactionPointer));
 	storePointer->GetTransactionNotifier().ScheduleDispatch(eventPointer);
-}
-
-void
-JavaToNativeBridge::MapAddressReceivedEvent(
-	JNIEnv *env, jstring street, jstring streetDetails, jstring city, jstring cityDetails,
-	jstring region, jstring regionDetails, jstring postalCode, jstring country, jstring countryCode)
-{
-	// Validate.
-	if (!fRuntime)
-	{
-		return;
-	}
-	
-	// Get the Java string objects for the given Java references.
-	jstringResult streetJavaString(env, street);
-	jstringResult streetDetailsJavaString(env, streetDetails);
-	jstringResult cityJavaString(env, city);
-	jstringResult cityDetailsJavaString(env, cityDetails);
-	jstringResult regionJavaString(env, region);
-	jstringResult regionDetailsJavaString(env, regionDetails);
-	jstringResult postalCodeJavaString(env, postalCode);
-	jstringResult countryJavaString(env, country);
-	jstringResult countryCodeJavaString(env, countryCode);
-
-	// Raise the event.
-	Rtt::MapAddressEvent event(
-			streetJavaString.getUTF8(), streetDetailsJavaString.getUTF8(), cityJavaString.getUTF8(),
-			cityDetailsJavaString.getUTF8(), regionJavaString.getUTF8(), regionDetailsJavaString.getUTF8(),
-			postalCodeJavaString.getUTF8(), countryJavaString.getUTF8(), countryCodeJavaString.getUTF8());
-	fRuntime->DispatchEvent(event);
-}
-
-void
-JavaToNativeBridge::MapAddressRequestFailedEvent(JNIEnv *env, jstring errorMessage)
-{
-	if (fRuntime)
-	{
-		jstringResult errorMessageJavaString(env, errorMessage);
-		int errorCode = 0;
-		Rtt::MapAddressEvent event(errorMessageJavaString.getUTF8(), errorCode);
-		fRuntime->DispatchEvent(event);
-	}
-}
-
-void 
-JavaToNativeBridge::MapRequestLocationFailedEvent(JNIEnv *env, jint listenerId, jstring errorMessage, jstring originalRequest)
-{
-	lua_State* L = fRuntime->VMContext().L();
-	if (L)
-	{
-		jstringResult errorMessageJavaString(env, errorMessage);
-		jstringResult originalRequestJavaString(env, originalRequest);
-
-		// LuaResource check to see if the listener is a table or a function
-		Rtt::LuaResource* resource = Rtt_NEW( Rtt::LuaContext::GetAllocator( L ),
-										Rtt::LuaResource( Rtt::LuaContext::GetContext( L )->LuaState(), LUA_NOREF ) );
-		resource->SetRef(listenerId);
-		Rtt::MapLocationEvent e(errorMessageJavaString.getUTF8(), 0, originalRequestJavaString.getUTF8(), Rtt::MapLocationEvent::kRequestType);
-		resource->DispatchEvent(e);
-		luaL_unref(L, LUA_REGISTRYINDEX, listenerId);
-	}
-}
-
-void 
-JavaToNativeBridge::MapRequestLocationEvent(JNIEnv *env, jint listenerId, jdouble latitude, jdouble longitude, jstring originalRequest)
-{
-	lua_State* L = fRuntime->VMContext().L();
-	if (L)
-	{
-		jstringResult originalRequestJavaString(env, originalRequest);
-
-		// LuaResource check to see if the listener is a table or a function
-		Rtt::LuaResource* resource = Rtt_NEW( Rtt::LuaContext::GetAllocator( L ),
-										Rtt::LuaResource( Rtt::LuaContext::GetContext( L )->LuaState(), LUA_NOREF ) );
-		resource->SetRef(listenerId);
-		Rtt::MapLocationEvent e(latitude, longitude, originalRequestJavaString.getUTF8());
-		resource->DispatchEvent(e);
-		luaL_unref(L, LUA_REGISTRYINDEX, listenerId);
-	}
-}
-
-void
-JavaToNativeBridge::MapMarkerEvent(jint markerId, jint listenerId, jdouble latitude, jdouble longitude)
-{
-	lua_State* L = fRuntime->VMContext().L();
-	if (L)
-	{
-		// LuaResource check to see if the listener is a table or a function
-		Rtt::LuaResource* resource = Rtt_NEW( Rtt::LuaContext::GetAllocator( L ),
-										Rtt::LuaResource( Rtt::LuaContext::GetContext( L )->LuaState(), LUA_NOREF ) );
-		resource->SetRef(listenerId);
-		Rtt::MapMarkerEvent e( markerId, latitude, longitude );
-		resource->DispatchEvent(e);
-	}
-}
-
-void
-JavaToNativeBridge::MapTappedEvent(jint id, jdouble latitude, jdouble longitude)
-{
-	Rtt::AndroidMapViewObject *view = (Rtt::AndroidMapViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-	
-	// Raise the event.
-	Rtt::MapLocationEvent e(latitude, longitude);
-	view->DispatchEventWithTarget(e);
 }
 
 void

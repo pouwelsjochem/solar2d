@@ -438,19 +438,11 @@ bool WinDevice::HasEventSource(EventType type) const
 	switch (type)
 	{
 		case MPlatformDevice::kGyroscopeEvent:
-		case MPlatformDevice::kHeadingEvent:
-			hasEventSource = false;
-			break;
 		case MPlatformDevice::kMultitouchEvent:
 			hasEventSource = fInputDeviceManager.IsMultitouchSupported();
 			break;
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
-			// Only supported if running under the device simulator.
-			// This is because the Corona Simulator is able to simulate/mock these events.
-			hasEventSource = (deviceSimulatorPointer != nullptr);
-			break;
 		case MPlatformDevice::kInputDeviceStatusEvent:
 			if (deviceSimulatorPointer)
 			{
@@ -491,19 +483,6 @@ bool WinDevice::HasEventSource(EventType type) const
 void WinDevice::BeginNotifications(EventType type) const
 {
 	fTracker.BeginNotifications(type);
-
-	if (fEnvironment.GetDeviceSimulatorServices())
-	{
-		auto runtimePointer = fEnvironment.GetRuntime();
-		if (runtimePointer)
-		{
-			if (kLocationEvent == type)
-			{
-				LocationEvent event(37.448485, -122.158911, 0.0, 50.0, -1.0, -1.0, (double)time(nullptr));
-				runtimePointer->DispatchEvent(event);
-			}
-		}
-	}
 }
 
 void WinDevice::EndNotifications(EventType type) const
@@ -524,14 +503,6 @@ void WinDevice::SetAccelerometerInterval(U32 frequency) const
 void WinDevice::SetGyroscopeInterval(U32 frequency) const
 {
 	Rtt_WARN_SIM(frequency >= 10 && frequency <= 100, ("WARNING: Gyroscope frequency must be in the range [10,100] Hz"));
-}
-
-void WinDevice::SetLocationAccuracy(Real meters) const
-{
-}
-
-void WinDevice::SetLocationThreshold(Real meters) const
-{
 }
 
 DeviceOrientation::Type WinDevice::GetOrientation() const

@@ -40,21 +40,6 @@ android {
     }
 }
 
-tasks.create<Copy>("updateWidgetResources") {
-    group = "Corona"
-    val widgetResLocation = "$buildDir/generated/widgetResources"
-    from("../../../subrepos/widget/")
-    include("*.png")
-    into("$widgetResLocation/raw")
-    rename { "corona_asset_$it".replace("@", "_").toLowerCase() }
-    val task = this
-    android.libraryVariants.all {
-        registerGeneratedResFolders(files(widgetResLocation) {
-            builtBy(task)
-        })
-    }
-}
-
 dependencies {
     api(files("../../../plugins/build-core/network/android/network.jar"))
 }

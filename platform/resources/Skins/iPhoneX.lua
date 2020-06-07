@@ -27,12 +27,6 @@ simulator =
 	deviceImage = "iPhoneX.png",
 	displayManufacturer = "Apple",
 	displayName = "iPhone",
-	screenDressing = "iPhoneXScreenDressing.png",
-	statusBarDefault = "iPhoneXStatusBarBlack.png", 
-	statusBarTranslucent = "iPhoneXStatusBarWhite.png", 
-	statusBarBlack = "iPhoneXStatusBarBlack.png", 
-	statusBarLightTransparent = "iPhoneXStatusBarWhite.png",
-	statusBarDarkTransparent = "iPhoneXStatusBarBlack.png",
 	windowTitleBarName = "iPhone X",
 	defaultFontSize = 17 * 3,		-- Converts default font point size to pixels.
 }

@@ -137,14 +137,10 @@ Shader::UpdateCache( const TextureInfo& textureInfo, const RenderData& objectDat
 void
 Shader::RenderToTexture( Renderer& renderer, Geometry& cache ) const
 {
-	//if ( ! fOutputReady ) { return; }
 	fOutputReady = false;
 
-	//if ( fDirty )
 	if ( fTexture )
-	{
-		// ????: (optionally???) Copy geometry
-		
+	{		
 		// Save current state so we can restore it later
 		FrameBufferObject *fbo = renderer.GetFrameBufferObject();
 		Rtt::Real viewMatrix[16];
@@ -195,18 +191,10 @@ Shader::RenderToTexture( Renderer& renderer, Geometry& cache ) const
 			fRenderData->fGeometry = & cache; // Use same geometry
 			
 			Rtt::Real offscreenViewMatrix[16];
-			Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f,
-								  0.0f, 0.0f, 0.0f,
-								  0.0f, 1.0f, 0.0f,
-								  offscreenViewMatrix );
-			
+			Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, offscreenViewMatrix );
 			
 			Rtt::Real offscreenProjMatrix[16];
-			Rtt::CreateOrthoMatrix(
-								   bounds.xMin, bounds.xMax,
-								   bounds.yMin, bounds.yMax,
-								   0.0f, 1.0f, offscreenProjMatrix );
-			
+			Rtt::CreateOrthoMatrix(bounds.xMin, bounds.xMax, bounds.yMin, bounds.yMax, 0.0f, 1.0f, offscreenProjMatrix );
 			
 			renderer.SetFrameBufferObject( fFBO );
 			renderer.PushMaskCount();

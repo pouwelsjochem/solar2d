@@ -128,8 +128,6 @@ bool WinRTDevice::HasEventSource( EventType type ) const
 		case MPlatformDevice::kGyroscopeEvent:
 			hasEventSource = fGyroscopeHandler->GyroscopeMonitor->IsAvailable;
 			break;
-		case MPlatformDevice::kLocationEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
 		case MPlatformDevice::kMouseEvent:
 			break;
@@ -158,8 +156,6 @@ void WinRTDevice::BeginNotifications( EventType type ) const
 			fGyroscopeHandler->GyroscopeMonitor->Start();
 			break;
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
-		case MPlatformDevice::kHeadingEvent:
 			break;
 		case MPlatformDevice::kMultitouchEvent:
 			fEnvironment->InteropServices->InputDeviceServices->MultitouchEnabled = true;
@@ -183,8 +179,6 @@ void WinRTDevice::EndNotifications( EventType type ) const
 			fGyroscopeHandler->GyroscopeMonitor->Stop();
 			break;
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
-		case MPlatformDevice::kHeadingEvent:
 			break;
 		case MPlatformDevice::kMultitouchEvent:
 			fEnvironment->InteropServices->InputDeviceServices->MultitouchEnabled = false;
@@ -291,14 +285,6 @@ const char* WinRTDevice::GetArchitectureInfo() const
 PlatformInputDeviceManager& WinRTDevice::GetInputDeviceManager()
 {
 	return fInputDeviceManager;
-}
-
-void WinRTDevice::SetLocationAccuracy( Real meters ) const
-{
-}
-
-void WinRTDevice::SetLocationThreshold( Real meters ) const
-{
 }
 
 DeviceOrientation::Type WinRTDevice::GetOrientation() const

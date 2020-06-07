@@ -28,7 +28,6 @@
 		IBOutlet NSPopUpButton *fSigningIdentitiesAndroid;
 		DialogController *fAndroidPasswordController;
 		DialogController *fAndroidAliasPasswordController;
-        IBOutlet NSButton *fEnableMonetization;
 }
 
 @property (nonatomic, readwrite, copy) NSString* androidAppPackage;

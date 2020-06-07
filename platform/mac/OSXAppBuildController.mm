@@ -427,21 +427,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 	params->SetStripDebug( isStripDebug );
 	params->SetRuntime([appDelegate runtime]);
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	// Manual enabling of inclusion of Fuse plugins
-	BOOL includeFusePlugins  = NO;
-	NSString *includeFusePluginsStr = [[NSUserDefaults standardUserDefaults] stringForKey:@"debugMonetizationPlugin"];
-
-	if (includeFusePluginsStr != nil)
-	{
-		includeFusePlugins = [includeFusePluginsStr boolValue];
-	}
-
-	// params->SetIncludeFusePlugins( includeFusePlugins );
-
-	// params->SetUsesMonetization( ([fEnableMonetization state] == NSOnState) );
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
-
 	// Some IDEs will terminate us quite abruptly so make sure we're on disk before starting a long operation
 	[[NSUserDefaults standardUserDefaults] synchronize];
 

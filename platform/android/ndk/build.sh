@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # USAGE: ./build.sh device_type product_type [debug/release [clean]]
-# device_type:   generic, kindle, nook_only, all
+# device_type:   generic, kindle, all
 # product_type:  basic, all, trial, automation
 # build_config:  debug, release
 # build_type:    clean, incremental
@@ -80,37 +80,6 @@ $path/lua_to_native.sh $path/../../resources/loader_ccdata.lua $generated_files_
 $path/lua_to_native.sh $path/../../resources/loader_callback.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../resources/launchpad.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../../subrepos/easing/easing.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/composer/composer.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/composer/composer_scene.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/timer/timer.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/transition/transition.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/transition/transition_v1.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_button.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_momentumScrolling.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_pickerWheel.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_scrollview.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_slider.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_tabbar.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_tableview.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_progressView.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_searchField.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_segmentedControl.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_spinner.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_stepper.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widgetLibrary/widget_switch.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_android_sheet.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_android.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_android_holo_dark.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_android_holo_dark_sheet.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_android_holo_light.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_android_holo_light_sheet.lua $generated_files_path/
-# These are for iOS pre 7
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_ios_sheet.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_ios.lua $generated_files_path/
-# These are for iOS 7+
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_ios7_sheet.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../../subrepos/widget/widget_theme_ios7.lua $generated_files_path/
 $path/lua_to_native.sh $path/../ndk/shell.lua $generated_files_path/
 
 # Corona API
@@ -244,14 +213,6 @@ then
 elif [ "$DEVICE_TYPE" = "kindle" ]
 then
 	CFLAGS="-DRtt_SUPPORTS_KINDLE"
-elif [ "$DEVICE_TYPE" = "nook" ]
-then
-	CFLAGS="-DRtt_SUPPORTS_NOOK"
-elif [ "$DEVICE_TYPE" = "nook_only" ]
-then
-	CFLAGS="-DRtt_NOOK_ENV -DRtt_SUPPORTS_NOOK"
-else
-	CFLAGS="-DRtt_SUPPORTS_KINDLE -DRtt_SUPPORTS_NOOK"
 fi
 if [ "$PRODUCT_TYPE" = "automation" ]
 then

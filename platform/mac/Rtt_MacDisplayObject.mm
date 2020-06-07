@@ -89,13 +89,6 @@ MacDisplayObject::InitializeView( NSView *view )
 	fView = [view retain];
 	NSRect view_frame = [view frame];
 	fNSViewFrame = view_frame;
-	
-	// Note: Setting the reference point to center is not done in any of the other implementations because
-	// fSelfBounds is already centered/converted unlike this implementation.
-	// This solves the problem, but will possibly be a problem if/when we support object resizing.
-	// Either this code should be converted to center fSelfBounds initially or the 
-	// subclass virtual function will need to account for the offset.
-///	SetReferencePoint(NULL, kReferenceCenter );
 }
 
 void
@@ -483,9 +476,9 @@ MacDisplayObject::SetNativeProperty( lua_State *L, const char key[], int valueIn
 // ----------------------------------------------------------------------------
 
 NSColor*
-MacTextObject::GetTextColor( lua_State *L, int index, bool isByteColorRange )
+MacTextObject::GetTextColor( lua_State *L, int index )
 {
-	Color c = LuaLibDisplay::toColor(L,index,isByteColorRange);
+	Color c = LuaLibDisplay::toColor(L,index);
 	RGBA rgba = ( (ColorUnion*)(& c) )->rgba;
 	
 	CGFloat r = (CGFloat)rgba.r / 255.0f;

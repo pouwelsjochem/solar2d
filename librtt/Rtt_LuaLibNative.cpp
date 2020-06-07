@@ -316,17 +316,7 @@ newTextField( lua_State *L )
 	{
 		Rect bounds;
 		Display& display = runtime.GetDisplay();
-		if ( display.GetDefaults().IsV1Compatibility() )
-		{
-			bounds.xMin = x;
-			bounds.yMin = y;
-			bounds.xMax = x + w;
-			bounds.yMax = y + h;
-		}
-		else
-		{
-			bounds.Initialize( x, y, w, h );
-		}
+		bounds.Initialize( x, y, w, h );
 
 		PlatformDisplayObject *t = platform.CreateNativeTextField( bounds );
 
@@ -379,17 +369,7 @@ newTextBox( lua_State *L )
 	{
 		Rect bounds;
 		Display& display = runtime.GetDisplay();
-		if ( display.GetDefaults().IsV1Compatibility() )
-		{
-			bounds.xMin = x;
-			bounds.yMin = y;
-			bounds.xMax = x + w;
-			bounds.yMax = y + h;
-		}
-		else
-		{
-			bounds.Initialize( x, y, w, h );
-		}
+		bounds.Initialize( x, y, w, h );
 
 		PlatformDisplayObject *t = platform.CreateNativeTextBox( bounds );
 
@@ -420,59 +400,6 @@ newTextBox( lua_State *L )
 	return result;
 }
 
-// native.newMapView( left, top, width, height )
-static int
-newMapView( lua_State *L )
-{
-	int result = 0;
-
-	Runtime& runtime = * LuaContext::GetRuntime( L );
-	const MPlatform& platform = runtime.Platform();
-
-	Real x = luaL_toreal( L, 1 );
-	Real y = luaL_toreal( L, 2 );
-	Real w = luaL_toreal( L, 3 );
-	Real h = luaL_toreal( L, 4 );
-
-	if ( w > 0 && h > 0 )
-	{
-		Rect bounds;
-		Display& display = runtime.GetDisplay();
-		if ( display.GetDefaults().IsV1Compatibility() )
-		{
-			bounds.xMin = x;
-			bounds.yMin = y;
-			bounds.xMax = x + w;
-			bounds.yMax = y + h;
-		}
-		else
-		{
-			bounds.Initialize( x, y, w, h );
-		}
-
-		PlatformDisplayObject *t = platform.CreateNativeMapView( bounds );
-
-		if ( t )
-		{
-			t->Preinitialize( display );
-			t->SetHandle( & platform.GetAllocator(), runtime.VMContext().LuaState() );
-
-			result = LuaLibDisplay::AssignParentAndPushResult( L, display, t, NULL );
-
-			if ( Lua::IsListener( L, 5, PlatformDisplayObject::kUserInputEvent ) )
-			{
-				CoronaLuaWarning( L, "The 'listener' argument to native.newMapView( left, top, width, height [, listener] ) is deprecated. Call the object method o:addEventListener( '%s', listener ) instead",
-					PlatformDisplayObject::kUserInputEvent );
-				t->AddEventListener( L, 5, PlatformDisplayObject::kUserInputEvent );
-			}
-
-			t->Initialize();
-		}
-	}
-
-	return result;
-}
-
 // native.newWebView( left, top, width, height [,listener] )
 static int
 newWebView( lua_State *L )
@@ -492,17 +419,7 @@ newWebView( lua_State *L )
 	{
 		Rect bounds;
 		Display& display = runtime.GetDisplay();
-		if ( display.GetDefaults().IsV1Compatibility() )
-		{
-			bounds.xMin = x;
-			bounds.yMin = y;
-			bounds.xMax = x + w;
-			bounds.yMax = y + h;
-		}
-		else
-		{
-			bounds.Initialize( x, y, w, h );
-		}
+		bounds.Initialize( x, y, w, h );
 
 		PlatformDisplayObject *t = platform.CreateNativeWebView( bounds );
 
@@ -547,17 +464,7 @@ newVideo( lua_State *L )
 	{
 		Rect bounds;
 		Display& display = runtime.GetDisplay();
-		if ( display.GetDefaults().IsV1Compatibility() )
-		{
-			bounds.xMin = x;
-			bounds.yMin = y;
-			bounds.xMax = x + w;
-			bounds.yMax = y + h;
-		}
-		else
-		{
-			bounds.Initialize( x, y, w, h );
-		}
+		bounds.Initialize( x, y, w, h );
 
 		PlatformDisplayObject *t = platform.CreateNativeVideo( bounds );
 
@@ -879,7 +786,6 @@ LuaLibNative::Initialize( lua_State *L )
 		{ "cancelWebPopup", cancelWebPopup },
 		{ "newTextBox", newTextBox },
 		{ "newTextField", newTextField },
-		{ "newMapView", newMapView },
 		{ "newWebView", newWebView },
 		{ "newVideo", newVideo },
 		{ "requestExit", requestExitApplication },

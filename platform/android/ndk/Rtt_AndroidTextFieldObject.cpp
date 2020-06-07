@@ -78,8 +78,7 @@ AndroidTextFieldObject::setTextColor( lua_State *L )
 	if ( & o->ProxyVTable() == & PlatformDisplayObject::GetTextFieldObjectProxyVTable() )
 	{
 		int index = 2;
-		bool isByteColorRange = o->IsByteColorRange();
-		Color c = LuaLibDisplay::toColor( L, index, isByteColorRange );
+		Color c = LuaLibDisplay::toColor( L, index );
 		RGBA rgba = ( (ColorUnion*)(& c) )->rgba;
 		
 		int r = (int)rgba.r;

@@ -14,29 +14,12 @@
 
 #include "Renderer/Rtt_Geometry_Renderer.h"
 
-#include <Box2D/Common/b2Math.h>
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
 {
 
 // ----------------------------------------------------------------------------
-
-Xform3D::Xform3D()
-:	tx( Rtt_REAL_0 ),
-	ty( Rtt_REAL_0 ),
-	tz( Rtt_REAL_0 ),
-	angle( Rtt_REAL_0 ),
-	x( Rtt_REAL_0 ),
-	y( Rtt_REAL_0 ),
-	z( Rtt_REAL_0 ),
-	sx( Rtt_REAL_1 ),
-	sy( Rtt_REAL_1 )
-{
-}
-
-
 
 /*
 Matrix::Matrix( Real width, Real height, Real radius )
@@ -678,39 +661,6 @@ Matrix::ToGLMatrix3x3( Rtt_Real m[9] ) const
 	}
 
 	m[2] = Rtt_REAL_0;	m[5] = Rtt_REAL_0;	m[8] = Rtt_REAL_1;
-}
-
-void
-Matrix::Tob2Mat33( b2Mat33 &m ) const
-{
-	if ( IsIdentity() )
-	{
-		m.ex.x = 1.0f;
-		m.ex.y = 0.0f;
-		m.ex.z = 0.0f;
-
-		m.ey.x = 0.0f;
-		m.ey.y = 1.0f;
-		m.ey.z = 0.0f;
-
-		m.ez.x = 0.0f;
-		m.ez.y = 0.0f;
-		m.ez.z = 1.0f;
-	}
-	else
-	{
-		m.ex.x = fRow0[ 0 ];
-		m.ex.y = fRow1[ 0 ];
-		m.ex.z = 0.0f;
-
-		m.ey.x = fRow0[ 1 ];
-		m.ey.y = fRow1[ 1 ];
-		m.ey.z = 0.0f;
-
-		m.ez.x = fRow0[ 2 ];
-		m.ez.y = fRow1[ 2 ];
-		m.ez.z = 1.0f;
-	}
 }
 
 #ifdef Rtt_DEBUG

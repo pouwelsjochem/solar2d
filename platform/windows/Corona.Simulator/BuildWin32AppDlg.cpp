@@ -431,10 +431,6 @@ void CBuildWin32AppDlg::OnOK()
 	params.SetAppDescription(stringTranscoder.GetUTF8());
 	params.SetIncludeBuildSettings(true);
 	params.SetStripDebug(true);
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	params.SetIncludeFusePlugins(false);
-	params.SetUsesMonetization(false);
-#endif
 	params.SetRuntime(runtimeEnvironmentPointer->GetRuntime());
 	{
 		std::string utf8BuildSettingsPath(projectDirectoryPath.GetUTF8());

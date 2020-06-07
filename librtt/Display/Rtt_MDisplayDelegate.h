@@ -21,9 +21,6 @@ class Display;
 
 class MDisplayDelegate
 {
-	public:
-		virtual void WillDispatchFrameEvent( const Display& sender ) = 0;
-//		virtual void DidDispatchFrameEvent( const Display& sender );
 };
 
 // ----------------------------------------------------------------------------

@@ -64,9 +64,6 @@ static const char kObjectBlendModeString[] = "object.blendMode";
 static const char kLineStrokeString[] = "line.stroke";
 static const char kLineBlendModeString[] = "line.blendMode";
 static const char kDisplayColorSampleString[] = "display.colorSample()";
-static const char kGraphicsNewOutlineString[] = "graphics.newOutline()";
-static const char kDisplayNewEmitterString[] = "display.newEmitter()";
-static const char kPhysicsNewParticleSystemString[] = "physics.newParticleSystem()";
 
 const char *
 Display::StringForFeature( Feature value )
@@ -113,15 +110,6 @@ Display::StringForFeature( Feature value )
 			break;
 		case kDisplayColorSample:
 			result = kDisplayColorSampleString;
-			break;
-		case kGraphicsNewOutline:
-			result = kGraphicsNewOutlineString;
-			break;
-		case kDisplayNewEmitter:
-			result = kDisplayNewEmitterString;
-			break;
-		case kPhysicsNewParticleSystem:
-			result = kPhysicsNewParticleSystemString;
 			break;
 		default:
 			Rtt_ASSERT_NOT_IMPLEMENTED();
@@ -206,8 +194,6 @@ Display::Display( Runtime& owner )
 	fStream( Rtt_NEW( owner.GetAllocator(), GPUStream( owner.GetAllocator() ) ) ),
 	fTarget( owner.Platform().CreateScreenSurface() ),
 	fImageSuffix( LUA_REFNIL ),
-	fDrawMode( kDefaultDrawMode ),
-	fIsAntialiased( false ),
 	fIsCollecting( false ),
 	fIsRestricted( false ),
 	fAllowFeatureResult( false ), // When IsRestricted(), default to *not* allowing.
@@ -261,8 +247,6 @@ Display::Initialize( lua_State *L, int configIndex, DeviceOrientation::Type orie
 		if ( configIndex > 0 )
 		{
 			ReadRenderingConfig( L, configIndex, programHeader ); // assumes fStream is not NULL
-			bool isV1Compatibility = GetDefaults().IsV1Compatibility();
-			GetStage()->SetV1Compatibility( isV1Compatibility );
 		}
 
 		// When dynamic content scaling is active, the code thinks the screen has
@@ -351,18 +335,6 @@ Display::ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHea
 
 	lua_getfield( L, index, "height" );
 	int h = (int) lua_tointeger( L, -1 );
-	lua_pop( L, 1 );
-
-	lua_getfield( L, index, "graphicsCompatibility" );
-	bool isV1Compatibility = lua_tointeger( L, -1 );
-	if ( isV1Compatibility )
-	{
-#if defined(Rtt_AUTHORING_SIMULATOR)
-        CoronaLuaWarning(L, "V1 graphics compatibility is deprecated. Some features may not work as expected");
-#endif
-
-		GetDefaults().SetV1Compatibility( isV1Compatibility );
-	}
 	lua_pop( L, 1 );
 
 	ScaleMode scaleMode = ToScaleMode( L, index );
@@ -530,11 +502,6 @@ Display::Update()
 	fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
 
 	GetScene().QueueUpdateOfUpdatables();
-
-	if ( fDelegate )
-	{
-		fDelegate->WillDispatchFrameEvent( * this );
-	}
 
 	const FrameEvent& e = FrameEvent::Constant();
 	e.Dispatch( L, runtime );
@@ -715,12 +682,9 @@ Display::Capture( DisplayObject *object,
 	Real h_in_content_units = 0.0f;
 
 	Rtt::Real offscreenViewMatrix[16];
-	Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f,
-							0.0f, 0.0f, 0.0f,
-							0.0f, 1.0f, 0.0f,
-							offscreenViewMatrix );
-	Rtt::Real offscreenProjMatrix[16];
+	Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, offscreenViewMatrix );
 
+	Rtt::Real offscreenProjMatrix[16];
 	if ( object )
 	{
 		// Calculate the bounds of the given display object in pixels.
@@ -742,14 +706,7 @@ Display::Capture( DisplayObject *object,
 		y_in_content_units = objectBounds.yMin;
 		w_in_content_units = ( objectBounds.xMax - x_in_content_units );
 		h_in_content_units = ( objectBounds.yMax - y_in_content_units );
-
-		Rtt::CreateOrthoMatrix( x_in_content_units,
-								objectBounds.xMax,
-								y_in_content_units,
-								objectBounds.yMax,
-								0.0f,
-								1.0f,
-								offscreenProjMatrix );
+		Rtt::CreateOrthoMatrix( x_in_content_units, objectBounds.xMax, y_in_content_units, objectBounds.yMax, 0.0f, 1.0f, offscreenProjMatrix );
 	}
 	else // Full screen or screenBounds.
 	{
@@ -774,13 +731,7 @@ Display::Capture( DisplayObject *object,
 		w_in_content_units = ( bounds_to_use->xMax - x_in_content_units );
 		h_in_content_units = ( bounds_to_use->yMax - y_in_content_units );
 
-		Rtt::CreateOrthoMatrix( x_in_content_units,
-								bounds_to_use->xMax,
-								y_in_content_units,
-								bounds_to_use->yMax,
-								0.0f,
-								1.0f,
-								offscreenProjMatrix );
+		Rtt::CreateOrthoMatrix( x_in_content_units, bounds_to_use->xMax, y_in_content_units, bounds_to_use->yMax, 0.0f, 1.0f, offscreenProjMatrix );
 	}
 
 	// The source position to capture from.
@@ -1177,12 +1128,6 @@ Display::PushImageSuffixTable() const
 		}
 	}
 	return wasPushed;
-}
-
-GroupObject *
-Display::Overlay()
-{
-	return & GetScene().Overlay();
 }
 
 GroupObject *
@@ -1609,8 +1554,6 @@ Display::WindowSizeChanged()
 		RenderingStream *stream = fStream;
 		if ( stream && stream->IsProperty( RenderingStream::kInitialized ) )
 		{
-			stream->UpdateViewport( fTarget->Width(), fTarget->Height() );
-
 			// When surface is sideways (simulator), then the surface w,h
 			// need to be swapped to match the content w,h. 
 			S32 screenW = fTarget->DeviceWidth();
@@ -1831,12 +1774,6 @@ size_t
 Display::GetMaxVertexTextureUnits()
 {
 	return Renderer::GetMaxVertexTextureUnits();
-}
-
-void
-Display::SetWireframe( bool newValue )
-{
-	fRenderer->SetWireframeEnabled( newValue );
 }
 
 void

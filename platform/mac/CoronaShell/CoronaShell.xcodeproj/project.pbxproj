@@ -45,7 +45,6 @@
 		C2D927301ACA098800B7F9AC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C2D927331ACA098800B7F9AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		C2D927521ACA1C3800B7F9AC /* CoronaShell.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CoronaShell.icns; path = CoronaShell/CoronaShell.icns; sourceTree = "<group>"; };
-		C2F1CDA71B4F675D0006DC94 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +62,6 @@
 		C2D9271D1ACA098800B7F9AC = {
 			isa = PBXGroup;
 			children = (
-				C2F1CDA71B4F675D0006DC94 /* CoreLocation.framework */,
 				C22039371B4B21E600942B73 /* CoronaCards.framework */,
 				C2A3776C1B33C69F00BB5B88 /* Icon-osx.icns */,
 				C2D927521ACA1C3800B7F9AC /* CoronaShell.icns */,

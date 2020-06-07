@@ -323,8 +323,7 @@ MacTextBoxObject::setTextColor( lua_State *L )
 	PlatformDisplayObject *o = (PlatformDisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
 	if ( & o->ProxyVTable() == & PlatformDisplayObject::GetTextBoxObjectProxyVTable() )
 	{
-		bool isBytecolorRange = o->IsByteColorRange();
-		NSColor *c = MacTextObject::GetTextColor( L, 2, isBytecolorRange );
+		NSColor *c = MacTextObject::GetTextColor( L, 2 );
 		NSView *v = ((MacTextBoxObject*)o)->GetView();
 		NSScrollView *scrollview = (NSScrollView*)v;
 		Rtt_NSTextView *t = (Rtt_NSTextView*)[scrollview documentView];

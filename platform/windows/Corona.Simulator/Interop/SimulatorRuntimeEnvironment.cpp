@@ -384,8 +384,7 @@ SimulatorRuntimeEnvironment::DeviceSimulatorServices::DeviceSimulatorServices(
 	const Rtt::PlatformSimulator::Config* deviceConfigPointer)
 :	fEnvironmentPointer(environmentPointer),
 	fDeviceConfigPointer(deviceConfigPointer),
-	fCurrentOrientation(Rtt::DeviceOrientation::kUpright),
-	fCurrentStatusBar(Rtt::MPlatform::kTranslucentStatusBar)
+	fCurrentOrientation(Rtt::DeviceOrientation::kUpright)
 {
 	if (!fEnvironmentPointer || !fDeviceConfigPointer)
 	{
@@ -590,28 +589,6 @@ int SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetAdaptiveScreenHeigh
 	return length;
 }
 
-const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetStatusBarImageFilePathFor(
-	Rtt::MPlatform::StatusBarMode value) const
-{
-	switch (value)
-	{
-		case Rtt::MPlatform::kDefaultStatusBar:
-			return fDeviceConfigPointer->statusBarDefaultFile.GetString();
-		case Rtt::MPlatform::kTranslucentStatusBar:
-			return fDeviceConfigPointer->statusBarTranslucentFile.GetString();
-		case Rtt::MPlatform::kDarkStatusBar:
-			return fDeviceConfigPointer->statusBarBlackFile.GetString();
-		case Rtt::MPlatform::kLightTransparentStatusBar:
-			return fDeviceConfigPointer->statusBarLightTransparentFile.GetString();
-		case Rtt::MPlatform::kDarkTransparentStatusBar:
-			return fDeviceConfigPointer->statusBarDarkTransparentFile.GetString();
-		case Rtt::MPlatform::kScreenDressingFile:
-			return fDeviceConfigPointer->screenDressingFile.GetString();
-	}
-	return nullptr;
-}
-
-
 void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RotateClockwise()
 {
 	auto orientation = (Rtt::DeviceOrientation::Type)(fCurrentOrientation - 1);
@@ -776,16 +753,12 @@ const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetOSName() co
 
 void SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {
-	float multiplier = (GetStatusBar() == Rtt::MPlatform::kHiddenStatusBar) ? 0 : 1;
-
 	if (Rtt::DeviceOrientation::IsSideways(fCurrentOrientation))
 	{
 		top = fDeviceConfigPointer->safeLandscapeScreenInsetTop;
 		left = fDeviceConfigPointer->safeLandscapeScreenInsetLeft;
 		bottom = fDeviceConfigPointer->safeLandscapeScreenInsetBottom;
 		right = fDeviceConfigPointer->safeLandscapeScreenInsetRight;
-
-		top += multiplier * fDeviceConfigPointer->safeLandscapeScreenInsetStatusBar;
 	}
 	else
 	{
@@ -793,19 +766,7 @@ void SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSafeAreaInsetsPixe
 		left = fDeviceConfigPointer->safeScreenInsetLeft;
 		bottom = fDeviceConfigPointer->safeScreenInsetBottom;
 		right = fDeviceConfigPointer->safeScreenInsetRight;
-
-		top += multiplier * fDeviceConfigPointer->safeScreenInsetStatusBar;
 	}
-}
-
-Rtt::MPlatform::StatusBarMode SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetStatusBar() const
-{
-	return fCurrentStatusBar;
-}
-
-void SimulatorRuntimeEnvironment::DeviceSimulatorServices::SetStatusBar(Rtt::MPlatform::StatusBarMode newValue)
-{
-	fCurrentStatusBar = newValue;
 }
 
 #pragma endregion

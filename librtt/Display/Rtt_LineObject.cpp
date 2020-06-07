@@ -256,14 +256,7 @@ LineObject::SetAnchorSegments( bool should_anchor )
 bool
 LineObject::ShouldOffsetWithAnchor() const
 {
-	if( IsV1Compatibility() )
-	{
-		return Super::ShouldOffsetWithAnchor();
-	}
-	else
-	{
-		return fAnchorSegments;
-	}
+	return fAnchorSegments;
 }
 
 // ----------------------------------------------------------------------------

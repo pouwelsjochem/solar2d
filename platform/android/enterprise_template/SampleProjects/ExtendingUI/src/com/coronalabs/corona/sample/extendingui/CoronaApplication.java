@@ -29,49 +29,6 @@ public class CoronaApplication extends android.app.Application {
 		 */
 		@Override
 		public void onLoaded(com.ansca.corona.CoronaRuntime runtime) {
-			// Display custom UI on top of the Corona activity.
-			// Note that this method is called on the Corona runtime thread and not the main UI thread.
-			// In order to manipulate the UI, we must post a Runnable object to the main thread's message queue.
-			com.ansca.corona.CoronaEnvironment.getCoronaActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					// *** We're now running on the main UI thread. ***
-					
-					// Fetch the currently running CoronaActivity.
-					// Warning: Will return null if the activity has just been exited.
-					com.ansca.corona.CoronaActivity activity = com.ansca.corona.CoronaEnvironment.getCoronaActivity();
-					if (activity == null) {
-						return;
-					}
-					
-					// Display a title bar at the top of the screen.
-					TitleBar titleBar = new TitleBar(activity);
-					titleBar.setLayoutParams(new android.widget.FrameLayout.LayoutParams(
-								android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
-								android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-								android.view.Gravity.TOP));
-					activity.getOverlayView().addView(titleBar);
-					
-					// Display a toolbar at the bottom of the screen.
-					ToolBar toolBar = new ToolBar(activity);
-					toolBar.setLayoutParams(new android.widget.FrameLayout.LayoutParams(
-								android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
-								android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-								android.view.Gravity.BOTTOM));
-					if (android.os.Build.MODEL.toLowerCase().contains("kindle")) {
-						// The Kindle Fire displays a navigation bar overlaid on top of the Corona activity.
-						// Work-around this by padding our custom toolbar above the Kindle Fire's navigation bar.
-						int fullScreenFlag = android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
-						if ((activity.getWindow().getAttributes().flags & fullScreenFlag) != 0) {
-							((android.widget.FrameLayout.LayoutParams)toolBar.getLayoutParams()).bottomMargin = 20;
-						}
-						else {
-							((android.widget.FrameLayout.LayoutParams)toolBar.getLayoutParams()).bottomMargin = 60;
-						}
-					}
-					activity.getOverlayView().addView(toolBar);
-				}
-			});
 		}
 		
 		/**

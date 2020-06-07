@@ -958,47 +958,6 @@ bool WinPlatform::SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float
 	return true;
 }
 
-void WinPlatform::SetStatusBarMode(MPlatform::StatusBarMode newValue) const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	auto serviceSimulator = fEnvironment.GetDeviceSimulatorServices();
-	if (serviceSimulator)
-	{
-		serviceSimulator->SetStatusBar(newValue);
-	}
-#endif
-}
-
-MPlatform::StatusBarMode WinPlatform::GetStatusBarMode() const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	auto serviceSimulator = fEnvironment.GetDeviceSimulatorServices();
-	if (serviceSimulator)
-	{
-		serviceSimulator->GetStatusBar();
-	}
-#endif
-	return MPlatform::kHiddenStatusBar;
-}
-
-int WinPlatform::GetStatusBarHeight() const
-{
-	if (fEnvironment.GetDeviceSimulatorServices())
-	{
-		return 20;
-	}
-	return 0;
-}
-int WinPlatform::GetTopStatusBarHeightPixels()  const
-{
-	return GetStatusBarHeight();
-}
-
-int WinPlatform::GetBottomStatusBarHeightPixels() const
-{
-	return 0;
-}
-
 int WinPlatform::SetSync(lua_State* L) const
 {
 	return 0;
@@ -1246,48 +1205,6 @@ void WinPlatform::GetPreference(Category category, Rtt::String * value) const
 			}
 			break;
 		}
-		case kDefaultStatusBarFile:
-			deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer)
-			{
-				resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kDefaultStatusBar);
-			}
-			break;
-		case kDarkStatusBarFile:
-			deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer)
-			{
-				resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kDarkStatusBar);
-			}
-			break;
-		case kTranslucentStatusBarFile:
-			deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer)
-			{
-				resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kTranslucentStatusBar);
-			}
-			break;
-		case kLightTransparentStatusBarFile:
-			deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer)
-			{
-				resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kLightTransparentStatusBar);
-			}
-			break;
-		case kDarkTransparentStatusBarFile:
-			deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer)
-			{
-				resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kDarkTransparentStatusBar);
-			}
-			break;
-		case kScreenDressingFile:
-			deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer)
-			{
-				resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor((Rtt::MPlatform::StatusBarMode)kScreenDressingFile);
-			}
-			break;
 		case kSubscription:
 			resultPointer = "Solar2D";
 			break;
@@ -1462,12 +1379,6 @@ void WinPlatform::SetKeyboardFocus(PlatformDisplayObject *displayObjectPointer) 
 			renderSurfacePointer->SetFocus();
 		}
 	}
-}
-
-PlatformDisplayObject* WinPlatform::CreateNativeMapView(const Rect& bounds) const
-{
-	Rtt_TRACE_SIM(("WARNING: Map views are not supported in the simulator. Please build for device.\n"));
-	return nullptr;
 }
 
 PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const

@@ -14,7 +14,6 @@
 //Must include this for isinf usage in mapkit
 using namespace std;
 #import <MapKit/MapKit.h>
-#import "Rtt_IPhoneMapViewObject.h"
 
 #import "CoronaRuntime.h"
 #import "CoronaViewPrivate.h"
@@ -45,14 +44,8 @@ namespace Rtt
 
 - (void)setNextResponder:(UIResponder *)responder;
 
-- (BOOL)prefersStatusBarHidden;
-
-- (UIStatusBarStyle) preferredStatusBarStyle;
-
 @property (nonatomic, assign) BOOL prefersHomeIndicatorAutoHidden;
 @property (nonatomic, assign) UIRectEdge preferredScreenEdgesDeferringSystemGestures;
-@property (nonatomic, assign) bool prefersStatusBarhidden;
-@property (nonatomic, assign) UIStatusBarStyle preferredStatusBarStyle;
 
 @end
 
@@ -62,7 +55,6 @@ namespace Rtt
 							CoronaRuntime,
 							UIApplicationDelegate,
 							UIAccelerometerDelegate,
-							MKMapViewDelegate,
 							CoronaViewLaunchDelegate >
 {
 	UIWindow *window;

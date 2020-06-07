@@ -427,18 +427,6 @@ LuaProxy::__proxyindex( lua_State *L )
 
 		result = pDelegate->ValueForKey( L, * object, key ); // Search for key in C++ delegate
 
-#ifdef Rtt_PHYSICS
-		// Call extensions delegate if it exists. 
-		if ( ! result )
-		{
-			const LuaProxyVTable *extensions = proxy->GetExtensionsDelegate();
-			if ( extensions )
-			{
-				result = extensions->ValueForKey( L, *object, key );
-			}
-		}
-#endif
-
 		if ( ! result )
 		{
 			lua_getfield( L, 1, kClassFieldKey ); // table._class
@@ -547,18 +535,6 @@ LuaProxy::__proxynewindex( lua_State *L )
 			( "WARNING: Attempting to set property(%s) but no value was provided\n", key ) );
 
 		bool didSetValue = false;
-
-#ifdef Rtt_PHYSICS
-		// Call extensions delegate if it exists. This should be add-on behavior,
-		// not modify original behavior.  Therefore, it should return false for all
-		// keys that the original pDelegate handles.  It should return true only when
-		// it handles a new key that's not handled by the traditional LuaProxyVTable hierarchy.
-		const LuaProxyVTable *extensions = proxy->GetExtensionsDelegate();
-		if ( extensions )
-		{
-			didSetValue = extensions->SetValueForKey( L, *object, key, 3 );
-		}
-#endif
 
 		// Set value in LuaProxy for valid keys
 		if ( ! didSetValue )
@@ -669,9 +645,6 @@ SetSharedEnvironment( lua_State *L )
 LuaProxy::LuaProxy( lua_State *L, MLuaProxyable& object, const LuaProxyVTable& delegate, const char* className )
 :	fObject( & object ),
 	fDelegate( delegate ),
-#ifdef Rtt_PHYSICS
-	fExtensionsDelegate( NULL ),
-#endif
 	fTableRef( LUA_NOREF )
 {
 	LuaProxy** userdata = (LuaProxy**)lua_newuserdata( L, sizeof(LuaProxy*) );

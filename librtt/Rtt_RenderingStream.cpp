@@ -113,16 +113,6 @@ RenderingStream::PrepareToRender()
 {
 }
 
-void
-RenderingStream::UpdateProjection( bool )
-{
-}
-
-void
-RenderingStream::UpdateViewport( S32 windowWidth, S32 windowHeight )
-{
-}
-
 S32
 RenderingStream::GetRenderedContentWidth() const
 {
@@ -215,17 +205,6 @@ RenderingStream::SetTextureCoordinates( const Vertex2 *coords, S32 numCoords )
 {
 }
 
-void
-RenderingStream::PushTexture( const BitmapPaint *paint )
-{
-}
-
-const BitmapPaint*
-RenderingStream::PopTexture()
-{
-	return NULL;
-}
-
 int
 RenderingStream::GetTextureDepth() const
 {
@@ -249,21 +228,6 @@ RenderingStream::GetClearColor()
 }
 
 void
-RenderingStream::Clear()
-{
-}
-
-void
-RenderingStream::SetMatrixMode( MatrixMode mode )
-{
-}
-
-void
-RenderingStream::LoadIdentity()
-{
-}
-
-void
 RenderingStream::SetEnabled( CapabilityMask mask, bool value )
 {
 	const U32 p = fCapabilities;
@@ -271,66 +235,7 @@ RenderingStream::SetEnabled( CapabilityMask mask, bool value )
 }
 
 void
-RenderingStream::SetTextureId( U32 textureId )
-{
-}
-
-void
-RenderingStream::SetTextureParameter( TextureParameter param, TextureValue value )
-{
-}
-
-void
-RenderingStream::SetTextureFunction( TextureFunction func )
-{
-}
-
-void
 RenderingStream::SetColor( const RGBA& color )
-{
-}
-
-void
-RenderingStream::BeginPaint( const Paint* paint )
-{
-#ifdef OLD_GRAPHICS
-	static bool sShouldWarnLimitation = true;
-
-	if ( paint )
-	{
-		const BitmapPaint *bitmapPaint = (const BitmapPaint*)paint->AsPaint( Paint::kBitmap );
-		Rtt_ASSERT( ( bitmapPaint && paint->IsType( Paint::kBitmap ) ) || ! bitmapPaint );
-		bool isCurrentPaintTexture = ( NULL != bitmapPaint );
-
-		RenderTypes::BlendType paintBlend = paint->GetBlend();
-
-		bool isPremultiplied = isCurrentPaintTexture && bitmapPaint->GetBitmap().IsPremultiplied();
-		RenderTypes::BlendMode mode = RenderTypes::BlendModeForBlendType( paintBlend, isPremultiplied );
-
-		// LIMITATION: with screen blend modes and non-premultiplied alpha
-		if ( sShouldWarnLimitation
-			 && isCurrentPaintTexture
-			 && ( RenderTypes::kScreenNonPremultiplied == mode || RenderTypes::kMultiplyNonPremultiplied == mode ) )
-		{
-			const PlatformBitmap& bitmap = bitmapPaint->GetBitmap();
-			if ( bitmap.HasAlphaChannel() )
-			{
-				// Only warn once
-				sShouldWarnLimitation = false;
-
-				const char *str = RenderTypes::StringForBlendType( paintBlend ); Rtt_ASSERT( str );
-				Rtt_LogException( "WARNING: Because the image has an alpha channel but the platform OS could not load it with premultiplied alpha, '%s' blending will not work correctly. (This message will only appear once).\n", ( str ? str : "" ) );
-			}
-		}
-
-		// Set blend mode *before* calling Paint::Begin()
-		SetBlendMode( mode );
-	}
-#endif
-}
-
-void
-RenderingStream::EndPaint()
 {
 }
 
@@ -348,18 +253,6 @@ RenderingStream::SetAlpha( U8, bool )
 
 void
 RenderingStream::CaptureFrameBuffer( BufferBitmap&, S32 x, S32 y, S32 w, S32 h )
-{
-	Rtt_ASSERT_NOT_REACHED();
-}
-
-void
-RenderingStream::Begin3D( const Xform3D*, const Rect& bounds )
-{
-	Rtt_ASSERT_NOT_REACHED();
-}
-
-void
-RenderingStream::End3D( const Xform3D* )
 {
 	Rtt_ASSERT_NOT_REACHED();
 }

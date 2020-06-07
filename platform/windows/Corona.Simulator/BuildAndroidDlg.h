@@ -87,10 +87,6 @@ protected:
 	void DisplayWarningMessage(UINT nMessageID, CString filename); // override with additional info
 	UINT DisplayWarningMessageWithHelp(UINT nTitleID, UINT nMessageID, CString helpURL);
 	static void CALLBACK CBuildAndroidDlg::HelpCallback(LPHELPINFO lpHelpInfo);
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-public:
-	afx_msg void OnBnClickedEnableMonetization();
-#endif
 	afx_msg void OnBnClickedCreateLiveBuild();
 	void LogAnalytics(const char *eventName, const char *key = NULL, const char *value = NULL);
 

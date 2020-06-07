@@ -48,7 +48,6 @@ public class CoronaActivity extends Activity {
 	private com.ansca.corona.graphics.opengl.CoronaGLSurfaceView myGLView;
 	private android.widget.ImageView fSplashScreenView = null;
 	private com.ansca.corona.purchasing.StoreProxy myStore = null;
-	private CoronaStatusBarSettings myStatusBarMode;
 	private android.database.ContentObserver fAutoRotateObserver = null;
 	
 	private Controller fController;
@@ -215,7 +214,7 @@ public class CoronaActivity extends Activity {
 			ex.printStackTrace();
 		}
 
-		// Hide the status bar and show the window fullscreen, if possible.
+		// Show the window fullscreen, if possible.
 		// Note: Do not show the window in fullscreen mode if we want the keyboard to pan the app.
 		//       We do this because the Android OS does not support ADJUST_PAN when in fullscreen mode.
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -225,7 +224,7 @@ public class CoronaActivity extends Activity {
 					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
 					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 		}
-		setStatusBarMode(CoronaStatusBarSettings.HIDDEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		// When soft keyboard is shown, don't slide as that messes up text fields
 		getWindow().setSoftInputMode(
@@ -286,9 +285,6 @@ public class CoronaActivity extends Activity {
 
 		CoronaSplashScreenApiHandler splashScreenHandler = new CoronaSplashScreenApiHandler(this);
 		fController.setCoronaSplashScreenApiListener(splashScreenHandler);
-
-		CoronaStatusBarApiHandler statusBarHandler = new CoronaStatusBarApiHandler(this);
-		fController.setCoronaStatusBarApiListener(statusBarHandler);
 
 		CoronaStoreApiHandler storeHandler = new CoronaStoreApiHandler(this);
 		fController.setCoronaStoreApiListener(storeHandler);
@@ -1108,121 +1104,6 @@ public class CoronaActivity extends Activity {
 	public CoronaRuntimeTaskDispatcher getRuntimeTaskDispatcher() {
 		return myRuntimeTaskDispatcher;
 	}
-	
-	void setStatusBarMode(CoronaStatusBarSettings mode) {
-		// Do not continue if mode hasn't changed.
-		if (mode == myStatusBarMode) {
-			return;
-		}
-		
-		// Show/hide the statusbar.
-		if (mode == CoronaStatusBarSettings.HIDDEN) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-
-		} else if (mode == CoronaStatusBarSettings.DEFAULT
-				|| mode == CoronaStatusBarSettings.TRANSLUCENT
-				|| mode == CoronaStatusBarSettings.DARK
-				|| mode == CoronaStatusBarSettings.LIGHT_TRANSPARENT
-				|| mode == CoronaStatusBarSettings.DARK_TRANSPARENT) {
-
-			// Unhides it if its hidden
-			if (myStatusBarMode == CoronaStatusBarSettings.HIDDEN) {
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			}
-
-			CoronaStatusBarSettings fallbackMode = mode;
-
-			if (android.os.Build.VERSION.SDK_INT >= 23 && myGLView != null) {
-				int vis = myGLView.getSystemUiVisibility();
-				if ( fallbackMode == CoronaStatusBarSettings.DARK_TRANSPARENT ) {
-					vis = vis | android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-				} else {
-					vis = vis & (~android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-				}
-				myGLView.setSystemUiVisibility(vis);
-			} else if (fallbackMode == CoronaStatusBarSettings.DARK_TRANSPARENT) {
-				fallbackMode = CoronaStatusBarSettings.LIGHT_TRANSPARENT;
-			}
-
-			boolean transparent = fallbackMode == CoronaStatusBarSettings.LIGHT_TRANSPARENT
-					  		   || fallbackMode == CoronaStatusBarSettings.DARK_TRANSPARENT;
-			if(android.os.Build.VERSION.SDK_INT >= 21) {
-				if(transparent) {
-					getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-				} else {
-					getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-				}
-			} else if (transparent) {
-				fallbackMode = CoronaStatusBarSettings.TRANSLUCENT;
-			}
-
-			if (android.os.Build.VERSION.SDK_INT >= 19) {
-				// Make it translucent if its api level >= 19 and they're trying to set it to translucent
-				// else we untranslucent it
-				if (fallbackMode == CoronaStatusBarSettings.TRANSLUCENT) {
-					// FLAG_TRANSLUCENT_STATUS
-					getWindow().addFlags(67108864);
-				} else {
-					// FLAG_TRANSLUCENT_STATUS
-					getWindow().clearFlags(67108864);
-				}
-			}
-		} else {
-			return;
-		}
-		
-		myStatusBarMode = mode;
-	}
-	
-	CoronaStatusBarSettings getStatusBarMode() {
-		return myStatusBarMode;
-	}
-	
-	int getStatusBarHeight() {
-
-		// Gather some info on the device we're running on
-		String lowerCaseManufacturerName = android.os.Build.MANUFACTURER.toLowerCase();
-		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
-		int uiMode = uiModeManager.getCurrentModeType();
-		int height = 0;
-		
-		if (uiModeManager.getCurrentModeType() == 4) { // android.content.res.Configuration.UI_MODE_TYPE_TELEVISION
-			// This is a TV device, which does not have a status bar.
-			height = 0;
-		}
-		else if (lowerCaseManufacturerName.contains("amazon")) {
-			// This is an Amazon device, which has a custom-themed status bar.
-			height = getStatusBarHeightForAmazonDevices();
-		} 
-		else if (android.os.Build.MODEL.toLowerCase().contains("gamestick")) {
-			// This is a GameStick device, which does not have a statusbar.
-			height = 0;
-		}
-		else if (lowerCaseManufacturerName.contains("barnes") && lowerCaseManufacturerName.contains("noble")) {
-			// This is a Nook device, which does not have a statusbar at the top.
-			height = 0;
-		}
-		else if ((android.os.Build.VERSION.SDK_INT >= 11) && (android.os.Build.VERSION.SDK_INT <= 13)) {
-			// This is an Android 3.x device, which does not have a statusbar at the top.
-			height = 0;
-		}
-		else {
-			height = resolveStatusBarHeight();
-		}
-
-		return height;
-	}
-
-	/** 
-	 * Returns true if it is Android TV
-	*/
-	public boolean IsAndroidTV(){
-		UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
-		int uiMode = uiModeManager.getCurrentModeType();
-		return uiMode == 4; // returns true only for TV
-	}
 
 	/**
 	 * Returns true if device HAS software navigation bar or false if it hasn't
@@ -1255,94 +1136,6 @@ public class CoronaActivity extends Activity {
     }
 
 	/**
-	 * Retrieves the status bar height for Amazon devices, as they all have unique configurations.
-	 * These numbers are were published by Amazon, but have been removed:
-	 * The published numbers we're using are available at:
-	 * https://web.archive.org/web/20150907021907/https://developer.amazon.com/public/solutions/devices/fire-tablets/specifications/03-ux-specifications
-	 */
-	int getStatusBarHeightForAmazonDevices() {
-		int height = 0;
-
-		if (android.os.Build.MODEL.equals("Kindle Fire")) {
-			// This is a 1st generation Kindle Fire device (2011), which has its own custom themed statusbar.
-			// 27 is the published number, but we use 40 instead because their documentation is wrong: 
-			// https://forums.coronalabs.com/topic/28313-kindle-fire-20px-menu-bar-on-new-devices-also/
-			height = 40;
-		}
-		else if (android.os.Build.MODEL.equals("KFOT")) {
-			// This is a 2nd generation Kindle Fire device (2012), which has its own custom themed statusbar.
-			height = 27;
-		}
-		else if (android.os.Build.MODEL.equals("KFTT")) {
-			// This is a Kindle Fire HD 7" (2nd gen) device (2012), which has its own custom themed statusbar.
-			height = 35;
-		}
-		else if (android.os.Build.MODEL.equals("KFJWI") || android.os.Build.MODEL.equals("KFJWA")) {
-			// This is a Kindle Fire HD 8.9" (2nd gen) device (2012), which has its own custom themed statusbar.
-			height = 40;
-		}
-		else if (android.os.Build.MODEL.equals("KFSOWI")) {
-			// This is a Kindle Fire HD 7" (3rd gen) device (2013), which has its own custom themed statusbar.
-			height = 34;
-		}
-		else if (android.os.Build.MODEL.equals("KFTHWA") || android.os.Build.MODEL.equals("KFTHWI")) {
-			// This is a Kindle Fire HDX 7" (3rd gen) device (2013), which has its own custom themed statusbar.
-			height = 51;
-		}
-		else if (android.os.Build.MODEL.equals("KFAPWA") || android.os.Build.MODEL.equals("KFAPWI")) {
-			// This is a Kindle Fire HDX 8.9" (3rd gen) device (2013), which has its own custom themed statusbar.
-			height = 53;
-		}
-		else if (android.os.Build.MODEL.equals("KFARWI") && android.os.Build.VERSION.SDK_INT == 19) {
-			// This is a Kindle Fire HD 6 (4th gen) device (2014) running Fire OS 4.
-			// On Fire OS 4, it has its own custom themed statusbar, but Fire OS 5 and later follows a standard convention.
-			height = 34;
-		}
-		else if (android.os.Build.MODEL.equals("KFASWI")) {
-			// This is a Kindle Fire HD 7 (4th gen) device (2014), which has its own custom themed statusbar.
-			height = 34;
-		}
-		else if (android.os.Build.MODEL.equals("KFSAWA") || android.os.Build.MODEL.equals("KFSAWI")) {
-			// This is a Kindle Fire HDX 8.9 (4th gen) device (2014), which has its own custom themed statusbar.
-			height = 51;
-		}
-		else {
-			// This is one of: an Amazon device that conforms to a standard status bar height established with Fire OS 5,
-			// or it's a Fire Phone, which has android.os.Build.MODEL.equals("SD4930UR") and doesn't have a published status bar height.
-			height = resolveStatusBarHeight();
-		}
-
-		return height;
-	}
-
-	/**
-	 * Tries to get the staus bar height based on system resources.
-	 */
-	int resolveStatusBarHeight() {
-		int height = 0;
-
-		// Try to grab the height of the status bar from the resource for it.
-		// Fallback on manual calculation if the status bar resource isn't available for whatever reason.
-		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-			// Get the status bar height from the status bar resource.
-			height = getResources().getDimensionPixelSize(resourceId);
-
-		} else {
-			// Calculate the height of the statusbar based on the DPI scale factor.
-			// Note: DENSITY_MEDIUM (aka: mdpi) is the base DPI and uses a 1x scale factor.
-			//       Divide the device's "densityDpi" by "mdpi" to determine the native scaling factor.
-			final double UNSCALED_STATUS_BAR_HEIGHT = getUnscaledStatusBarHeight();
-			double density = (double)getResources().getDisplayMetrics().densityDpi;
-			double dpiScaleFactor = (density / (double)android.util.DisplayMetrics.DENSITY_MEDIUM);
-			height = (int)((UNSCALED_STATUS_BAR_HEIGHT * dpiScaleFactor) + 0.5);
-
-		}
-
-		return height;
-	}
-
-	/**
 	 * Tries to get the navigation bar height based on system resources.
 	 */
 	int resolveNavBarHeight() {
@@ -1352,25 +1145,6 @@ public class CoronaActivity extends Activity {
 		if (resourceId > 0)
 			height = getResources().getDimensionPixelSize(resourceId);
 		return height;
-	}
-
-	/**
-	 * Determines the unscaled status bar height for this device.
-	 */
-	double getUnscaledStatusBarHeight() {
-
-		if (android.os.Build.MANUFACTURER.toLowerCase().contains("amazon") && android.os.Build.VERSION.SDK_INT >= 22) {
-			// This device is running at least Fire OS 5, which has an unscaled status bar height of 24dp according to:
-			// https://developer.amazon.com/public/solutions/devices/fire-tablets/specifications/03-ux-specifications
-			return 24.0;
-		} 
-		else if (android.os.Build.VERSION.SDK_INT >= 23) {
-			// This device is running at least Android 6.0 where the unscaled status bar height was reduced to 24dp from 25dp.
-			return 24.0;
-		}
-		
-		// This is an Android 5.1.1 or lower device which has an unscaled status bar height of 25dp.
-		return 25.0;
 	}
 	
 	/**

@@ -165,16 +165,10 @@ void TextureResourceCanvas::Render(Rtt::Renderer &renderer, GroupObject *group, 
 
 	// Render all children to the offscreen texture
 	Rtt::Real offscreenViewMatrix[16];
-	Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f,
-						  0.0f, 0.0f, 0.0f,
-						  0.0f, 1.0f, 0.0f,
-						  offscreenViewMatrix );
+	Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, offscreenViewMatrix );
 	
 	Rtt::Real offscreenProjMatrix[16];
-	Rtt::CreateOrthoMatrix(
-						   contentBounds.xMin, contentBounds.xMax,
-						   contentBounds.yMin, contentBounds.yMax,
-						   0.0f, 1.0f, offscreenProjMatrix );
+	Rtt::CreateOrthoMatrix(contentBounds.xMin, contentBounds.xMax, contentBounds.yMin, contentBounds.yMax, 0.0f, 1.0f, offscreenProjMatrix );
 	
 	renderer.SetFrameBufferObject( fDstFBO );
 	renderer.PushMaskCount();
@@ -189,9 +183,7 @@ void TextureResourceCanvas::Render(Rtt::Renderer &renderer, GroupObject *group, 
 			renderer.Clear( color.rgba.r * inv255, color.rgba.g * inv255, color.rgba.b * inv255, color.rgba.a * inv255 );
 		}
 		
-		group->WillDraw( renderer );
 		group->Draw( renderer );
-		group->DidDraw( renderer );
 	}
 	renderer.PopMaskCount();
 	

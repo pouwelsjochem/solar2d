@@ -35,8 +35,6 @@
 #include "Renderer/Rtt_Texture.h"
 #include "Renderer/Rtt_VideoSource.h"
 
-#include "Display/Rtt_EmitterObject.h"
-
 #include "Corona/CoronaLibrary.h"
 #include "Corona/CoronaLua.h"
 
@@ -95,9 +93,6 @@ class DisplayLibrary
 		static const char kName[];
 
 	protected:
-		static const char kStatusBarModes[];
-
-	protected:
 		DisplayLibrary( Display& display );
 		~DisplayLibrary();
 
@@ -141,7 +136,6 @@ class DisplayLibrary
 		static int newLine( lua_State *L );
 		static int newImage( lua_State *L );
 		static int newImageRect( lua_State *L );
-		static int newEmitter( lua_State *L );
 		static int newText( lua_State *L );
 		static int newEmbossedText( lua_State *L );
 		static int newGroup( lua_State *L );
@@ -154,13 +148,11 @@ class DisplayLibrary
 		static int setDefault( lua_State *L );
 		static int getCurrentStage( lua_State *L );
 		static int collectOrphans( lua_State *L );
-		static int setStatusBar( lua_State *L );
 		static int capture( lua_State *L );
 		static int captureBounds( lua_State *L );
 		static int captureScreen( lua_State *L );
         static int save( lua_State *L );
 		static int colorSample( lua_State *L );
-		static int setDrawMode( lua_State *L );
 		static int getSafeAreaInsets( lua_State *L );
 
 	private:
@@ -172,7 +164,6 @@ class DisplayLibrary
 // ----------------------------------------------------------------------------
 
 const char DisplayLibrary::kName[] = "display";
-const char DisplayLibrary::kStatusBarModes[MPlatform::kNumModes + 1] = "0123";
 
 // ----------------------------------------------------------------------------
 
@@ -205,7 +196,6 @@ DisplayLibrary::Open( lua_State *L )
 		{ "newLine", newLine },
 		{ "newImage", newImage },
 		{ "newImageRect", newImageRect },
-		{ "newEmitter", newEmitter },
 		{ "newText", newText },
 		{ "newEmbossedText", newEmbossedText },
 		{ "newGroup", newGroup },
@@ -218,13 +208,11 @@ DisplayLibrary::Open( lua_State *L )
 		{ "setDefault", setDefault },
 		{ "getCurrentStage", getCurrentStage },
 		{ "_collectOrphans", collectOrphans },
-		{ "setStatusBar", setStatusBar },
 		{ "capture", capture },
 		{ "captureBounds", captureBounds },
 		{ "captureScreen", captureScreen },
 		{ "save", save },
 		{ "colorSample", colorSample },
-		{ "setDrawMode", setDrawMode },
 		{ "getSafeAreaInsets", getSafeAreaInsets },
 
 		{ NULL, NULL }
@@ -246,41 +234,6 @@ DisplayLibrary::Open( lua_State *L )
 		lua_pushlightuserdata( L, library );
 		lua_pushcclosure( L, ValueForKey, 1 ); // pop ud
 		CoronaLibrarySetExtension( L, -2 ); // pop closure
-
-		lua_pushlightuserdata( L, UserdataForEnum( kStatusBarModes, MPlatform::kHiddenStatusBar ) );
-		lua_setfield( L, -2, "HiddenStatusBar" );
-		lua_pushlightuserdata( L, UserdataForEnum( kStatusBarModes, MPlatform::kDefaultStatusBar ) );
-		lua_setfield( L, -2, "DefaultStatusBar" );
-		lua_pushlightuserdata( L, UserdataForEnum( kStatusBarModes, MPlatform::kTranslucentStatusBar ) );
-		lua_setfield( L, -2, "TranslucentStatusBar" );
-		lua_pushlightuserdata( L, UserdataForEnum( kStatusBarModes, MPlatform::kDarkStatusBar ) );
-		lua_setfield( L, -2, "DarkStatusBar" );
-		lua_pushlightuserdata( L, UserdataForEnum( kStatusBarModes, MPlatform::kLightTransparentStatusBar ) );
-		lua_setfield( L, -2, "LightTransparentStatusBar" );
-		lua_pushlightuserdata( L, UserdataForEnum( kStatusBarModes, MPlatform::kDarkTransparentStatusBar ) );
-		lua_setfield( L, -2, "DarkTransparentStatusBar" );
-
-
-
-		const char *refPts = LuaLibDisplay::ReferencePoints();
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceCenter ) );
-		lua_setfield( L, -2, "CenterReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceTopLeft ) );
-		lua_setfield( L, -2, "TopLeftReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceTopCenter ) );
-		lua_setfield( L, -2, "TopCenterReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceTopRight ) );
-		lua_setfield( L, -2, "TopRightReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceCenterRight ) );
-		lua_setfield( L, -2, "CenterRightReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceBottomRight ) );
-		lua_setfield( L, -2, "BottomRightReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceBottomCenter ) );
-		lua_setfield( L, -2, "BottomCenterReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceBottomLeft ) );
-		lua_setfield( L, -2, "BottomLeftReferencePoint" );
-		lua_pushlightuserdata( L, UserdataForEnum( refPts, DisplayObject::kReferenceCenterLeft ) );
-		lua_setfield( L, -2, "CenterLeftReferencePoint" );
 	}
 
 	return result;
@@ -316,119 +269,96 @@ DisplayLibrary::ValueForKey( lua_State *L )
 
 	static const char * keys[] = 
 	{
-		"stageWidth",			// 0
-		"contentWidth",			// 1
-		"stageHeight",			// 2
-		"contentHeight",		// 3
-		"viewableContentWidth",	// 4
-		"viewableContentHeight", // 5
-		"statusBarHeight",		// 6
-		"fps",					// 7
-		"currentStage",			// 8
-		"screenOriginX",		// 9
-		"screenOriginY",		// 10
-		"contentScaleX",		// 11
-		"contentScaleY",		// 12		
-		"contentCenterX",		// 13
-		"contentCenterY",		// 14
-		"imageSuffix",			// 15
-        "pixelWidth",			// 16
-        "pixelHeight",			// 17
-		"actualContentWidth", // 18
-		"actualContentHeight", // 19
-        "topStatusBarContentHeight",//20
-        "bottomStatusBarContentHeight",//21
-		"safeScreenOriginX", //22
-		"safeScreenOriginY", //23
-		"safeActualContentWidth", //24
-		"safeActualContentHeight", //25
+		"contentWidth",			// 0
+		"contentHeight",		// 1
+		"viewableContentWidth",	// 2
+		"viewableContentHeight",// 3
+		"fps",					// 4
+		"currentStage",			// 5
+		"screenOriginX",		// 6
+		"screenOriginY",		// 7
+		"contentScaleX",		// 8
+		"contentScaleY",		// 9
+		"contentCenterX",		// 10
+		"contentCenterY",		// 11
+		"imageSuffix",			// 12
+        "pixelWidth",			// 13
+        "pixelHeight",			// 14
+		"actualContentWidth", // 15
+		"actualContentHeight", // 16
+		"safeScreenOriginX", //17
+		"safeScreenOriginY", //18
+		"safeActualContentWidth", //19
+		"safeActualContentHeight", //20
 	};
 	
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 26, 26, 17, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 21, 12, 17, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
 	switch ( index )
 	{
-	case 0:	// "stageWidth"
-		{
-			CoronaLuaWarning( L, "display.stageWidth has been deprecated. Use display.contentWidth instead" );
-			lua_pushinteger( L, display.ContentWidthUpright() );
-		}
-		break;
-	case 1:	//"contentWidth"
+	case 0:	//"contentWidth"
 		{
 			lua_pushinteger( L, display.ContentWidthUpright() );
 		}
 		break;
-	case 2:	// "stageHeight"
-		{
-			CoronaLuaWarning( L, "display.stageHeight has been deprecated. Use display.contentHeight instead" );
-			lua_pushinteger( L, display.ContentHeightUpright() );
-		}
-		break;
-	case 3:	// "contentHeight"
+	case 1:	// "contentHeight"
 		{
 			lua_pushinteger( L, display.ContentHeightUpright() );
 		}
 		break;
-	case 4:	// "viewableContentWidth"
+	case 2:	// "viewableContentWidth"
 		{
 			lua_pushinteger( L, display.ViewableContentWidthUpright() );
 		}
 		break;
-	case 5:	// "viewableContentHeight"
+	case 3:	// "viewableContentHeight"
 		{
 			lua_pushinteger( L, display.ViewableContentHeightUpright() );
 		}
 		break;
-	case 6:	// "statusBarHeight"
-		{
-			Runtime& runtime = * LuaContext::GetRuntime( L );
-			lua_pushinteger( L, runtime.Platform().GetStatusBarHeight() );
-		}
-		break;
-	case 7:	// "fps"
+	case 4:	// "fps"
 		{
 			lua_pushinteger( L, display.GetRuntime().GetFPS() );
 		}
 		break;
-	case 8:	// "currentStage"
+	case 5:	// "currentStage"
 		{
 			display.GetStage()->GetProxy()->PushTable( L );
 		}
 		break;
-	case 9:	// "screenOriginX"
+	case 6:	// "screenOriginX"
 		{
 			lua_pushnumber( L, Rtt_RealToFloat( - display.GetXOriginOffset() ) );
 		}
 		break;
-	case 10:	// "screenOriginY"
+	case 7:	// "screenOriginY"
 		{
 			lua_pushnumber( L, Rtt_RealToFloat( - display.GetYOriginOffset() ) );
 		}
 		break;
-	case 11:	// "contentScaleX"
+	case 8:	// "contentScaleX"
 		{
 			lua_pushnumber( L, Rtt_RealToFloat( display.GetSxUpright() ) );
 		}
 		break;
-	case 12:	// "contentScaleY"
+	case 9:	// "contentScaleY"
 		{
 			lua_pushnumber( L, Rtt_RealToFloat( display.GetSyUpright() ) );
 		}
 		break;
-	case 13:	// "contentCenterX"
+	case 10:	// "contentCenterX"
 		{
 			lua_pushnumber( L, 0.5*display.ContentWidthUpright() );
 		}
 		break;
-	case 14:	// "contentCenterY"
+	case 11:	// "contentCenterY"
 		{
 			lua_pushnumber( L, 0.5*display.ContentHeightUpright() );
 		}
 		break;
-	case 15:	// "imageSuffix"
+	case 12:	// "imageSuffix"
 		{
 			String suffix( LuaContext::GetAllocator( L ) );
 			display.GetImageSuffix( suffix );
@@ -443,41 +373,27 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			}
 		}
 		break;
-	case 16:	// "pixelWidth"
+	case 13:	// "pixelWidth"
 		{
 			lua_pushnumber( L, display.DeviceWidth() );
 		}
 		break;
-	case 17:	// "pixelHeight"
+	case 14:	// "pixelHeight"
 		{
 			lua_pushnumber( L, display.DeviceHeight() );
 		}
 		break;
-	case 18:	// "actualContentWidth"
+	case 15:	// "actualContentWidth"
 		{
 			lua_pushnumber( L, display.ActualContentWidth() );
 		}
 		break;
-	case 19:	// "actualContentHeight"
+	case 16:	// "actualContentHeight"
 		{
 			lua_pushnumber( L, display.ActualContentHeight() );
 		}
 		break;
-    case 20:	// "topStatusBarContentHeight"
-		{
-            Runtime& runtime = * LuaContext::GetRuntime( L );
-            Real result = Rtt_RealMul(Rtt_IntToReal(runtime.Platform().GetTopStatusBarHeightPixels()),display.GetSy());
-			lua_pushnumber( L,  Rtt_RealToFloat(result));
-		}
-        break;
-    case 21:	// "bottomStatusBarContentHeight"
-		{
-            Runtime& runtime = * LuaContext::GetRuntime( L );
-            Real result = Rtt_RealMul(Rtt_IntToReal(runtime.Platform().GetBottomStatusBarHeightPixels()),display.GetSy());
-			lua_pushnumber( L, Rtt_RealToFloat(result));
-		}
-        break;
-	case 22: // safeScreenOriginX
+	case 17: // safeScreenOriginX
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
@@ -486,7 +402,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			lua_pushnumber( L, (left*display.GetSx()) - display.GetXOriginOffset() );
 		}
 		break;
-	case 23: // safeScreenOriginY
+	case 18: // safeScreenOriginY
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
@@ -495,7 +411,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			lua_pushnumber( L, (top*display.GetSy()) - display.GetYOriginOffset() );
 		}
 		break;
-	case 24: // safeActualContentWidth
+	case 19: // safeActualContentWidth
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
@@ -504,7 +420,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			lua_pushnumber( L, display.ActualContentWidth() - ((left + right)*display.GetSx()) );
 		}
 		break;
-	case 25: // safeActualContentHeight
+	case 20: // safeActualContentHeight
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
@@ -558,26 +474,6 @@ AssignDefaultFillColor( const Display& display, ShapeObject& o )
 	o.SetFill( p );
 }
 
-#ifdef OLD_GRAPHICS
-LinearGradientPaint*
-DisplayLibrary::newLinearGradient( lua_State *L, int index )
-{
-	LinearGradientPaint *p = NULL;
-
-	LinearGradientData **ud = (LinearGradientData **)luaL_checkudata( L, index, LinearGradientData::kMetatableName );
-	if ( ud )
-	{
-		LinearGradientData *data = *ud;
-		if ( data )
-		{
-			p = Paint::NewLinearGradient( LuaContext::GetRuntime( L )->Allocator(), * data );
-		}
-	}
-
-	return p;
-}
-#endif
-
 ShapeObject*
 DisplayLibrary::PushImage(
 	lua_State *L,
@@ -597,12 +493,6 @@ DisplayLibrary::PushImage(
 		{
 			Real x = topLeft->x;
 			Real y = topLeft->y;
-
-			if ( display.GetDefaults().IsV1Compatibility() )
-			{
-				x += Rtt_RealDiv2( w );
-				y += Rtt_RealDiv2( h );
-			}
 			v->Translate( x, y );
 		}
 		v->SetFill( paint );
@@ -751,11 +641,6 @@ DisplayLibrary::newPolygon( lua_State *L )
 		Rtt_DELETE( path );
 	}
 
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		CoronaLuaWarning( L, "display.newPolygon() is only supported in graphics 2.0. Your mileage may vary in graphicsCompatibility 1.0 mode" );
-	}
-
 	return result;
 }
 
@@ -836,11 +721,6 @@ DisplayLibrary::newMesh( lua_State *L )
 		Rtt_DELETE( path );
 	}
 	
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		CoronaLuaWarning( L, "display.newMesh() is only supported in graphics 2.0" );
-	}
-	
 	return result;
 }
 	
@@ -861,11 +741,6 @@ DisplayLibrary::newRect( lua_State *L )
 	ShapeObject* v = RectObject::NewRect( display.GetAllocator(), w, h );
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
 
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		x += Rtt_RealDiv2( w );
-		y += Rtt_RealDiv2( h );
-	}
 	v->Translate( x, y );
 	AssignDefaultFillColor( display, * v );
 
@@ -892,11 +767,6 @@ DisplayLibrary::newRoundedRect( lua_State *L )
 
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
 
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		x += Rtt_RealDiv2( w );
-		y += Rtt_RealDiv2( h );
-	}
 	v->Translate( x, y );
 	AssignDefaultFillColor( display, * v );
 
@@ -1221,35 +1091,6 @@ DisplayLibrary::newImageRect( lua_State *L )
 	return result;
 }
 
-// display.newEmitter( [parentGroup,] params_table, w, h )
-int
-DisplayLibrary::newEmitter( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-
-	if ( display.ShouldRestrict( Display::kDisplayNewEmitter ) )
-	{
-		return 0;
-	}
-
-	int result = 0;
-
-	EmitterObject *eo = Rtt_NEW( runtime.Allocator(), EmitterObject );
-	if( eo->Initialize( L, display ) )
-	{
-		result = LuaLibDisplay::AssignParentAndPushResult( L, display, eo, NULL );
-	}
-	else
-	{
-		Rtt_DELETE( eo );
-		luaL_error( L,
-					"ERROR: invalid EmitterObject" );
-	}
-
-	return result;
-}
-
 static int CreateTextObject( lua_State *L, bool isEmbossed )
 {
 	int result = 0;
@@ -1438,26 +1279,8 @@ static int CreateTextObject( lua_State *L, bool isEmbossed )
 	Real width = textObject->GetGeometricProperty( kWidth );
 	Real height = textObject->GetGeometricProperty( kHeight );
 	
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		x += Rtt_RealDiv2( width );
-		y += Rtt_RealDiv2( height );
-	}
 	textObject->Translate( x, y );
-	
-	// Set the default text color.
-	if (isEmbossed && display.GetDefaults().IsV1Compatibility())
-	{
-		// In graphics 1.0, embossed text is always black by default.
-		SharedPtr< TextureResource > resource = display.GetTextureFactory().GetDefault();
-		Paint *paintPointer = Paint::NewColor(display.GetAllocator(), resource, 0, 0, 0, 255);
-		textObject->SetFill( paintPointer );
-	}
-	else
-	{
-		// Setup the display object to use the default text color.
-		AssignDefaultFillColor( display, * textObject );
-	}
+	AssignDefaultFillColor( display, * textObject );
 	
 	return result;
 }
@@ -1551,11 +1374,6 @@ DisplayLibrary::newContainer( lua_State *L )
 {
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		CoronaLuaWarning( L, "display.newContainer() is only supported in graphics 2.0. Your mileage may vary in graphicsCompatibility 1.0 mode" );
-	}
-
 	return _newContainer( L );
 }
 
@@ -1607,11 +1425,6 @@ DisplayLibrary::newSnapshot( lua_State *L )
 	Real h = luaL_checkreal( L, nextArg++ );
 
 	SnapshotObject *o = Rtt_NEW( context, SnapshotObject( context, display, w, h ) );
-
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		CoronaLuaWarning( L, "display.newSnapshot() is only supported in graphics 2.0. Your mileage may vary in graphicsCompatibility 1.0 mode" );
-	}
 
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
 	
@@ -1691,24 +1504,14 @@ DisplayLibrary::newSprite( lua_State *L )
 }
 
 static int
-PushColor( lua_State *L, Color c, bool isBytes )
+PushColor( lua_State *L, Color c )
 {
 	ColorUnion color; color.pixel = c;
-	if ( isBytes )
-	{
-		lua_pushinteger( L, color.rgba.r );
-		lua_pushinteger( L, color.rgba.g );
-		lua_pushinteger( L, color.rgba.b );
-		lua_pushinteger( L, color.rgba.a );
-	}
-	else
-	{
-		float kInv255 = 1.f / 255.f;
-		lua_pushnumber( L, kInv255 * color.rgba.r );
-		lua_pushnumber( L, kInv255 * color.rgba.g );
-		lua_pushnumber( L, kInv255 * color.rgba.b );
-		lua_pushnumber( L, kInv255 * color.rgba.a );
-	}
+	float kInv255 = 1.f / 255.f;
+	lua_pushnumber( L, kInv255 * color.rgba.r );
+	lua_pushnumber( L, kInv255 * color.rgba.g );
+	lua_pushnumber( L, kInv255 * color.rgba.b );
+	lua_pushnumber( L, kInv255 * color.rgba.a );
 
 	return 4;
 }
@@ -1736,22 +1539,22 @@ DisplayLibrary::getDefault( lua_State *L )
 	else if ( Rtt_StringCompare( key, "fillColor" ) == 0 )
 	{
 		Color c = defaults.GetFillColor();
-		result = PushColor( L, c, defaults.IsByteColorRange() );
+		result = PushColor( L, c );
 	}
 	else if ( Rtt_StringCompare( key, "strokeColor" ) == 0 )
 	{
 		Color c = defaults.GetStrokeColor();
-		result = PushColor( L, c, defaults.IsByteColorRange() );
+		result = PushColor( L, c );
 	}
 	else if ( Rtt_StringCompare( key, "lineColor" ) == 0 )
 	{
 		Color c = defaults.GetLineColor();
-		result = PushColor( L, c, defaults.IsByteColorRange() );
+		result = PushColor( L, c );
 	}
 	else if ( Rtt_StringCompare( key, "background" ) == 0 )
 	{
 		Color c = defaults.GetClearColor();
-		result = PushColor( L, c, defaults.IsByteColorRange() );
+		result = PushColor( L, c );
 	}
 	else if ( Rtt_StringCompare( key, "magTextureFilter" ) == 0 )
 	{
@@ -1772,16 +1575,6 @@ DisplayLibrary::getDefault( lua_State *L )
 	{
 		RenderTypes::TextureWrap wrap = defaults.GetTextureWrapY();
 		lua_pushstring( L, RenderTypes::StringForTextureWrap( wrap ) );
-	}
-	else if ( Rtt_StringCompare( key, "graphicsCompatibility" ) == 0 )
-	{
-		int version = defaults.IsV1Compatibility() ? 1 : 2;
-		lua_pushinteger( L, version );
-	}
-	else if ( Rtt_StringCompare( key, "isByteColorRange" ) == 0 )
-	{
-		bool isByteColorRange = defaults.IsByteColorRange();
-		lua_pushboolean( L, isByteColorRange );
 	}
 	else if ( Rtt_StringCompare( key, "isNativeTextFieldFontSizeScaled" ) == 0 )
 	{
@@ -1827,7 +1620,7 @@ DisplayLibrary::setDefault( lua_State *L )
 	const char *key = lua_tostring( L, index++ );
 
 	DisplayDefaults& defaults = display.GetDefaults();
-	Color c = LuaLibDisplay::toColor( L, index, defaults.IsByteColorRange() );
+	Color c = LuaLibDisplay::toColor( L, index );
 
 	if ( Rtt_StringCompare( key, "anchorX" ) == 0 )
 	{
@@ -1951,21 +1744,6 @@ DisplayLibrary::getCurrentStage( lua_State *L )
 	return display.GetStage()->GetProxy()->PushTable( L );
 }
 
-/*
-static void*
-UserdataForStatusBarMode( MPlatform::StatusBarMode mode )
-{
-	return const_cast< char* >( & kStatusBarModes[mode] );
-}
-
-static MPlatform::StatusBarMode
-StatusBarModeForUserdata( void* p )
-{
-	U32 offset = (const char*)p - kStatusBarModes;
-	return offset < MPlatform::kNumModes ? (MPlatform::StatusBarMode)offset : MPlatform::kDefaultStatusBar;
-}
-*/
-
 int
 DisplayLibrary::collectOrphans( lua_State *L )
 {
@@ -1978,45 +1756,10 @@ DisplayLibrary::collectOrphans( lua_State *L )
 }
 
 int
-DisplayLibrary::setStatusBar( lua_State *L )
-{
-
-	MPlatform::StatusBarMode mode = (MPlatform::StatusBarMode)EnumForUserdata(
-		kStatusBarModes,
-		lua_touserdata( L, 1 ),
-		MPlatform::kNumModes,
-		MPlatform::kDefaultStatusBar );
-
-	if (lua_type( L, 1 ) != LUA_TLIGHTUSERDATA)
-	{
-		CoronaLuaWarning( L, "display.setStatusBar() parameter is a %s.  Expected a status bar mode",
-						 lua_typename( L, lua_type( L, 1 ) ) );
-	}
-	else
-	{
-		const MPlatform& platform = LuaContext::GetRuntime( L )->Platform();
-		platform.SetStatusBarMode( mode );
-	}
-
-#ifdef Rtt_AUTHORING_SIMULATOR
-	GroupObject& overlay = LuaContext::GetRuntime( L )->GetDisplay().GetScene().Overlay();
-	overlay.GetProxy()->PushTable( L ); // push self
-	lua_getfield( L, -1, "setStatusBarMode" ); // push function
-	lua_insert( L, -2 ); // swap self, function
-	lua_pushvalue( L, 1 ); // push mode
-
-	LuaContext::DoCall( L, 2, 0 );
-#endif
-
-	return 0;
-}
-
-int
 DisplayLibrary::capture( lua_State *L )
 {
 	if( lua_isnil( L, 1 ) )
 	{
-		// Nothing to do.
 		CoronaLuaWarning( L, "display.capture() first parameter was nil. Expected a display object" );
 		return 0;
 	}
@@ -2024,7 +1767,6 @@ DisplayLibrary::capture( lua_State *L )
 	LuaProxy* proxy = LuaProxy::GetProxy( L, 1 );
 	if( ! Rtt_VERIFY( proxy ) )
 	{
-		// Nothing to do.
 		return 0;
 	}
 
@@ -2034,36 +1776,19 @@ DisplayLibrary::capture( lua_State *L )
 	bool saveToFile = false;
 	bool cropObjectToScreenBounds = true;
 
-	if( lua_isboolean( L, 2 ) )
+	lua_getfield( L, -1, "saveToPhotoLibrary" );
+	if( lua_isboolean( L, -1 ) )
 	{
-		// [,saveToPhotoLibrary]
-		saveToFile = lua_toboolean( L, 2 );
+		saveToFile = lua_toboolean( L, -1 );
 	}
-	else if( lua_istable( L, 2 ) )
+	lua_pop( L, 1 );
+
+	lua_getfield( L, -1, "captureOffscreenArea" );
+	if( lua_isboolean( L, -1 ) )
 	{
-		// It's a table of options.
-
-		lua_getfield( L, -1, "saveToPhotoLibrary" );
-		if( lua_isboolean( L, -1 ) )
-		{
-			saveToFile = lua_toboolean( L, -1 );
-		}
-		lua_pop( L, 1 );
-
-		lua_getfield( L, -1, "isFullResolution" );
-		if( lua_isboolean( L, -1 ) )
-		{
-			cropObjectToScreenBounds = ( ! lua_toboolean( L, -1 ) );
-		}
-		lua_pop( L, 1 );
-
-		lua_getfield( L, -1, "captureOffscreenArea" );
-		if( lua_isboolean( L, -1 ) )
-		{
-			cropObjectToScreenBounds = ( ! lua_toboolean( L, -1 ) );
-		}
-		lua_pop( L, 1 );
+		cropObjectToScreenBounds = ( ! lua_toboolean( L, -1 ) );
 	}
+	lua_pop( L, 1 );
 
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
@@ -2077,8 +1802,6 @@ DisplayLibrary::capture( lua_State *L )
 	if( ! paint )
 	{
 		CoronaLuaError(L, "display.capture() unable to capture screen. The platform or device might not be supported" );
-
-		// Nothing to do.
 		return 0;
 	}
 
@@ -2096,7 +1819,6 @@ DisplayLibrary::capture( lua_State *L )
 	ShapeObject *v = PushImage( L, & topLeft, paint, display, NULL );
 	if( ! v )
 	{
-		// Nothing to do.
 		return 0;
 	}
 
@@ -2117,14 +1839,6 @@ DisplayLibrary::capture( lua_State *L )
 	Rtt_Real xScale = ( (float)( bounds.xMax - bounds.xMin ) / bitmapWidth );
 	Rtt_Real yScale = ( (float)( bounds.yMax - bounds.yMin ) / bitmapHeight );
 	v->Scale(xScale, yScale, true);
-
-	// Position.
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		Rtt_Real xOffset = Rtt_RealDiv(Rtt_RealMul(bitmapWidth, xScale) - bitmapWidth, Rtt_REAL_2);
-		Rtt_Real yOffset = Rtt_RealDiv(Rtt_RealMul(bitmapHeight, yScale) - bitmapHeight, Rtt_REAL_2);
-		v->Translate(xOffset, yOffset);
-	}
 
 	return 1;
 }
@@ -2178,23 +1892,6 @@ DisplayLibrary::captureScreen( lua_State *L )
 	Rtt_Real xScale = Rtt_RealDiv(Rtt_RealMul(Rtt_IntToReal(display.ScreenWidth()), display.GetSx()), bitmapWidth);
 	Rtt_Real yScale = Rtt_RealDiv(Rtt_RealMul(Rtt_IntToReal(display.ScreenHeight()), display.GetSy()), bitmapHeight);
 	v->Scale(xScale, yScale, true);
-
-	if ( display.GetDefaults().IsV1Compatibility() )
-	{
-		// Re-position the screenshot display object in case it has captured the areas around the content region.
-		// This can happen if letterboxing is enabled or if the content size does not match the aspect ratio of the device.
-		// In this case, the object should be moved in the top-left direction to be correctly centered.
-		S32 xPosition = 0;
-		S32 yPosition = 0;
-		display.ContentToScreen(xPosition, yPosition);
-
-		Rtt_Real xScreenOffset = Rtt_RealMul(Rtt_IntToReal(-xPosition), display.GetSx());
-		Rtt_Real yScreenOffset = Rtt_RealMul(Rtt_IntToReal(-yPosition), display.GetSy());
-
-		Rtt_Real xScaleOffset = Rtt_RealDiv(Rtt_RealMul(bitmapWidth, xScale) - bitmapWidth, Rtt_IntToReal(2));
-		Rtt_Real yScaleOffset = Rtt_RealDiv(Rtt_RealMul(bitmapHeight, yScale) - bitmapHeight, Rtt_IntToReal(2));
-		v->Translate(xScreenOffset + xScaleOffset, yScreenOffset + yScaleOffset);
-	}
 
 	return 1;
 }
@@ -2341,7 +2038,6 @@ DisplayLibrary::save( lua_State *L )
 {
 	if( lua_isnil( L, 1 ) )
 	{
-		// Nothing to do.
 		CoronaLuaWarning( L, "display.save() first parameter was nil. Expected a display object" );
 		return 0;
 	}
@@ -2349,7 +2045,6 @@ DisplayLibrary::save( lua_State *L )
 	LuaProxy* proxy = LuaProxy::GetProxy( L, 1 );
 	if( ! Rtt_VERIFY( proxy ) )
 	{
-		// Nothing to do.
 		return 0;
 	}
 
@@ -2359,83 +2054,42 @@ DisplayLibrary::save( lua_State *L )
 	bool cropObjectToScreenBounds = true;
 	ColorUnion backgroundColor;
 	bool backgroundColorHasBeenProvided = false;
-	float jpegQuality = 1.0f;
 
-	if( lua_istable( L, 2 ) )
+	// filename is required.
+	lua_getfield( L, -1, "filename" );
+	imageName = luaL_checkstring( L, -1 );
+	if( ! Rtt_VERIFY( imageName ) )
 	{
-		// It's a table of options.
-
-		// filename is required.
-		lua_getfield( L, -1, "filename" );
-		imageName = luaL_checkstring( L, -1 );
-		if( ! Rtt_VERIFY( imageName ) )
-		{
-			// Nothing to do.
-			lua_pop( L, 1 );
-			return 0;
-		}
+		// Nothing to do.
 		lua_pop( L, 1 );
-
-		lua_getfield( L, -1, "baseDir" );
-		baseDir = LuaLibSystem::ToDirectory( L, -1, MPlatform::kDocumentsDir );
-		if( ! LuaLibSystem::IsWritableDirectory( baseDir ) )
-		{
-			// If the given directory is not writable,
-			// then default to the Documents directory.
-			baseDir = MPlatform::kDocumentsDir;
-		}
-		lua_pop( L, 1 );
-
-		lua_getfield( L, -1, "isFullResolution" );
-		if( lua_isboolean( L, -1 ) )
-		{
-			cropObjectToScreenBounds = ( ! lua_toboolean( L, -1 ) );
-		}
-		lua_pop( L, 1 );
-
-		lua_getfield( L, -1, "captureOffscreenArea" );
-		if( lua_isboolean( L, -1 ) )
-		{
-			cropObjectToScreenBounds = ( ! lua_toboolean( L, -1 ) );
-		}
-		lua_pop( L, 1 );
-
-		lua_getfield( L, -1, "backgroundColor" );
-		backgroundColorHasBeenProvided = lua_istable( L, -1 );
-		if( backgroundColorHasBeenProvided )
-		{
-			LuaLibDisplay::ArrayToColor( L, -1, backgroundColor.pixel, false );
-		}
-		lua_pop( L, 1 );
-		
-		lua_getfield( L, -1, "jpegQuality" );
-		if( lua_isnumber( L, -1 ) )
-		{
-			jpegQuality = Clamp( lua_tonumber( L, -1 ), 0., 1. );
-		}
-		lua_pop( L, 1 );
+		return 0;
 	}
-	else
+	lua_pop( L, 1 );
+
+	lua_getfield( L, -1, "baseDir" );
+	baseDir = LuaLibSystem::ToDirectory( L, -1, MPlatform::kDocumentsDir );
+	if( ! LuaLibSystem::IsWritableDirectory( baseDir ) )
 	{
-		// Get the options, the old way.
-
-		// filename is required.
-		imageName = luaL_checkstring( L, 2 );
-		if( ! Rtt_VERIFY( imageName ) )
-		{
-			// Nothing to do.
-			return 0;
-		}
-
-		// baseDir is optional.
-		baseDir = LuaLibSystem::ToDirectory( L, 3, MPlatform::kDocumentsDir );
-		if( ! LuaLibSystem::IsWritableDirectory( baseDir ) )
-		{
-			// If the given directory is not writable,
-			// then default to the Documents directory.
-			baseDir = MPlatform::kDocumentsDir;
-		}
+		// If the given directory is not writable,
+		// then default to the Documents directory.
+		baseDir = MPlatform::kDocumentsDir;
 	}
+	lua_pop( L, 1 );
+
+	lua_getfield( L, -1, "captureOffscreenArea" );
+	if( lua_isboolean( L, -1 ) )
+	{
+		cropObjectToScreenBounds = ( ! lua_toboolean( L, -1 ) );
+	}
+	lua_pop( L, 1 );
+
+	lua_getfield( L, -1, "backgroundColor" );
+	backgroundColorHasBeenProvided = lua_istable( L, -1 );
+	if( backgroundColorHasBeenProvided )
+	{
+		LuaLibDisplay::ArrayToColor( L, -1, backgroundColor.pixel );
+	}
+	lua_pop( L, 1 );
 
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
@@ -2460,7 +2114,7 @@ DisplayLibrary::save( lua_State *L )
 	String bitmapPath( runtime->GetAllocator() );
 
 	platform.PathForFile( imageName, baseDir, MPlatform::kDefaultPathFlags, bitmapPath );
-	platform.SaveBitmap( paint->GetBitmap(), bitmapPath.GetString(), jpegQuality );
+	platform.SaveBitmap( paint->GetBitmap(), bitmapPath.GetString(), 1.0f );
 
 	Rtt_DELETE( paint );
 
@@ -2486,7 +2140,7 @@ DisplayLibrary::colorSample( lua_State *L )
 		char msg[ 128 ];
 		sprintf( msg,
 					"ERROR: display.colorSample() requires a function, or an object able to respond to %s",
-					MapLocationEvent::kName );
+					ColorSampleEvent::kName );
 		luaL_argerror( L, 3, msg );
 		return 0;
 	}
@@ -2514,44 +2168,6 @@ DisplayLibrary::colorSample( lua_State *L )
 	return 0;
 }
 
-static const char kForceRenderDrawName[] = "forceRender";
-static const char kWireframeDrawName[] = "wireframe";
-static const char kHybridDrawName[] = "hybrid";
-static const char kDebugDrawName[] = "debug";
-
-int
-DisplayLibrary::setDrawMode( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-
-	const char *drawType = lua_tostring( L, 1 );
-	
-	Display::DrawMode drawMode = Display::kDefaultDrawMode;
-	
-	if ( Rtt_StringCompare( kForceRenderDrawName, drawType ) == 0 )
-	{
-		CORONA_LOG_WARNING( "[display.setDrawMode()] The 'forceRender' mode is deprecated, as it is no longer necessary to force updates to time-based shader effects." );
-		drawMode = Display::kForceRenderDrawMode;
-	}
-	else if ( Rtt_StringCompare( kWireframeDrawName, drawType ) == 0 )
-	{
-		drawMode = Display::kWireframeDrawMode;
-	}
-	else if ( Rtt_StringCompare( kHybridDrawName, drawType ) == 0 ) 
-	{
-		drawMode = Display::kPhysicsHybridDrawMode;
-	}
-	else if ( Rtt_StringCompare( kDebugDrawName, drawType ) == 0 ) 
-	{
-		drawMode = Display::kPhysicsDebugDrawMode;
-	}
-
-	display.SetDrawMode( drawMode );
-
-	return 0;
-}
-
 int
 DisplayLibrary::getSafeAreaInsets( lua_State *L )
 {
@@ -2570,14 +2186,6 @@ DisplayLibrary::getSafeAreaInsets( lua_State *L )
 
 
 // ----------------------------------------------------------------------------
-
-static const char kReferencePoints[DisplayObject::kNumReferencePoints + 1] = "012345678";
-
-const char*
-LuaLibDisplay::ReferencePoints()
-{
-	return kReferencePoints; 
-}
 
 ShapeObject*
 LuaLibDisplay::PushImage(
@@ -2633,14 +2241,8 @@ LuaLibDisplay::AssignParentAndPushResult( lua_State *L, Display& display, Displa
 
 	// NOTE: V1 compatibility on an object can only be set on creation.
 	const DisplayDefaults& defaults = display.GetDefaults();
-	bool isV1Compatibility = defaults.IsV1Compatibility();
-	o->SetV1Compatibility( isV1Compatibility );
-
-	if ( ! isV1Compatibility )
-	{
-		o->SetAnchorX( defaults.GetAnchorX() );
-		o->SetAnchorY( defaults.GetAnchorY() );
-	}
+	o->SetAnchorX( defaults.GetAnchorX() );
+	o->SetAnchorY( defaults.GetAnchorY() );
 	
 	// NOTE: This restriction should only be set on creation.
 	// This is a performance optimization to make the initial restriction
@@ -2709,21 +2311,21 @@ LuaLibDisplay::toColorByte( lua_State *L, int index )
 }
 
 int
-LuaLibDisplay::PushColorChannels( lua_State *L, Color c, bool isBytes )
+LuaLibDisplay::PushColorChannels( lua_State *L, Color c )
 {
-	return PushColor( L, c, isBytes );
+	return PushColor( L, c);
 }
 
 Color
-LuaLibDisplay::toColor( lua_State *L, int index, bool isBytes )
+LuaLibDisplay::toColor( lua_State *L, int index )
 {
-	return ( isBytes ? toColorByte( L, index ) : toColorFloat( L, index ) );
+	return toColorFloat( L, index );
 }
 
 Paint*
-LuaLibDisplay::LuaNewColor( lua_State *L, int index, bool isBytes )
+LuaLibDisplay::LuaNewColor( lua_State *L, int index )
 {
-	Color c = Self::toColor( L, index, isBytes );
+	Color c = Self::toColor( L, index );
 	SharedPtr< TextureResource > resource = LuaContext::GetRuntime( L )->GetDisplay().GetTextureFactory().GetDefault();
 	Paint* p = Paint::NewColor( LuaContext::GetRuntime( L )->Allocator(), resource, c );
 	return p;
@@ -2814,7 +2416,7 @@ LuaLibDisplay::LuaNewBitmapPaint( lua_State *L, int paramsIndex )
 }
 
 void
-LuaLibDisplay::ArrayToColor( lua_State *L, int index, Color& outColor, bool isBytes )
+LuaLibDisplay::ArrayToColor( lua_State *L, int index, Color& outColor )
 {
 	int top = lua_gettop( L );
 
@@ -2828,7 +2430,7 @@ LuaLibDisplay::ArrayToColor( lua_State *L, int index, Color& outColor, bool isBy
 
 	if ( numArgs > 0 )
 	{
-		outColor = LuaLibDisplay::toColor( L, top+1, isBytes );
+		outColor = LuaLibDisplay::toColor( L, top+1 );
 	}
 
 	lua_pop( L, numArgs );
@@ -2845,23 +2447,17 @@ LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 	color1.rgba = kDefault;
 	color2.rgba = kDefault;
 
-	// We only support byte channels in old graphics (v1)-related functions
-	// TODO: Remove this once we remove graphics.newGradient()
-	lua_getfield( L, paramsIndex, "graphicsCompatibility" );
-	const bool isBytes = ( 1 == lua_tointeger( L, -1 ) );
-	lua_pop( L, 1 );
-
 	lua_getfield( L, paramsIndex, "color1" );
 	if ( lua_istable( L, -1 ) )
 	{
-		ArrayToColor( L, -1, color1.pixel, isBytes );
+		ArrayToColor( L, -1, color1.pixel );
 	}
 	lua_pop( L, 1 );
 
 	lua_getfield( L, paramsIndex, "color2" );
 	if ( lua_istable( L, -1 ) )
 	{
-		ArrayToColor( L, -1, color2.pixel, isBytes );
+		ArrayToColor( L, -1, color2.pixel );
 	}
 	lua_pop( L, 1 );
 
@@ -2941,9 +2537,6 @@ LuaLibDisplay::LuaNewPaint( lua_State *L, int index )
 
 	index = Lua::Normalize( L, index );
 
-	// We only support byte channels in old graphics (v1)-related functions
-	const bool isBytes = false;
-
 	if ( lua_istable( L, index ) )
 	{
 		lua_getfield( L, index, "type" );
@@ -2971,7 +2564,7 @@ LuaLibDisplay::LuaNewPaint( lua_State *L, int index )
 		{
 			// Assume it's a color array
 			Color c;
-			ArrayToColor( L, index, c, isBytes );
+			ArrayToColor( L, index, c );
 			
 			SharedPtr< TextureResource > resource = LuaContext::GetRuntime( L )->GetDisplay().GetTextureFactory().GetDefault();
 			result = Paint::NewColor( LuaContext::GetRuntime( L )->Allocator(), resource, c );
@@ -2980,7 +2573,7 @@ LuaLibDisplay::LuaNewPaint( lua_State *L, int index )
 	}
 	else if ( lua_type( L, index ) == LUA_TNUMBER )
 	{
-		result = LuaLibDisplay::LuaNewColor( L, index, isBytes );
+		result = LuaLibDisplay::LuaNewColor( L, index );
 	}
 
 	return result;

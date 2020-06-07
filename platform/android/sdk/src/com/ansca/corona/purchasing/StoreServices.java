@@ -150,14 +150,6 @@ public class StoreServices {
 			availableStores.add(StoreName.SAMSUNG);
 		}
 
-		// Add the Nook store to the collection if the device is detected to be a Nook.
-		// Note that we must do this because there is no Nook app store for us to find on this device.
-		String nookSystemPropertyValue = System.getProperty("ro.nook.manufacturer");
-		if ((lowerCaseManufacturerName.contains("barnes") && lowerCaseManufacturerName.contains("noble")) ||
-		    ((nookSystemPropertyValue != null) && (nookSystemPropertyValue.length() > 0))) {
-			availableStores.add(StoreName.NOOK);
-		}
-
 		// Return the results as a string array.
 		String[] availableStoreNames = null;
 		if (availableStores.size() > 0) {

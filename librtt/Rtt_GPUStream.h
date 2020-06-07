@@ -37,11 +37,6 @@ class GPUStream : public RenderingStream
 		typedef RenderingStream Super;
 		typedef GPUStream Self;
 
-#ifdef Rtt_DEBUG
-	public:
-		static void ToggleWireframe();
-#endif
-
 	public:
 		enum
 		{
@@ -63,10 +58,6 @@ class GPUStream : public RenderingStream
 						DeviceOrientation::Type contentOrientation );
 
 		virtual void PrepareToRender();
-		virtual void UpdateProjection( bool useOriginalOrientation );
-
-		// Call whenever the actual window size you render to changes
-		virtual void UpdateViewport( S32 windowWidth, S32 windowHeight );
 
 		virtual S32 GetRenderedContentWidth() const;
 		virtual S32 GetRenderedContentHeight() const;
@@ -77,8 +68,6 @@ class GPUStream : public RenderingStream
 		virtual void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 
 	protected:
-		void UpdateProjection( S32 contentWidth, S32 contentHeight );
-
 		static Real CalculateAlignmentOffset( Alignment alignment, Real contentLen, Real windowLen );
 		void UpdateOffsets( S32 renderedContentWidth, S32 renderedContentHeight );
 
@@ -103,21 +92,7 @@ class GPUStream : public RenderingStream
 		void PushMaskInternal( const BitmapPaint *mask, bool forceTextureCombiner );
 
 	public:
-		virtual void SetMatrixMode( MatrixMode mode );
-		virtual void LoadIdentity();
-
-	public:
-		virtual void SetEnabled( CapabilityMask mask, bool value );
-
-	public:
-		virtual void SetTextureId( U32 textureId );
-		virtual void SetTextureParameter( TextureParameter param, TextureValue value );
-		virtual void SetTextureFunction( TextureFunction func );
-
-	public:
 		virtual void SetTextureCoordinates( const Vertex2 *coords, S32 numCoords );
-		virtual void PushTexture( const BitmapPaint *bitmap );
-		virtual const BitmapPaint* PopTexture();
 		virtual int GetTextureDepth() const;
 		int GetActiveTextureCount() const { return fTextureStackNumActiveFrames; }
 		int GetActiveTextureIndex() const { return fTextureStackNumActiveFrames - 1; }
@@ -125,14 +100,6 @@ class GPUStream : public RenderingStream
 	public:
 		virtual void SetClearColor( const Paint& paint );
 		virtual RGBA GetClearColor();
-		virtual void Clear();
-
-	public:
-		virtual void SetColor( const RGBA& color );
-
-	public:
-		virtual void BeginPaint( const Paint* paint );
-		virtual void EndPaint();
 
 	protected:
 		const BitmapPaint* GetBitmap() const;
@@ -142,10 +109,6 @@ class GPUStream : public RenderingStream
 		virtual U8 SetAlpha( U8 newValue, bool accumuluate );
 
 		virtual void CaptureFrameBuffer( BufferBitmap& outBuffer, S32 x, S32 y, S32 w, S32 h );
-
-	public:
-		virtual void Begin3D( const Xform3D*, const Rect& bounds );
-		virtual void End3D( const Xform3D* );
 
 	public:
 		virtual S32 GetRelativeRotation(){return fRotation;}
@@ -204,35 +167,6 @@ class GPUStream : public RenderingStream
 	protected:
 		Rtt_Allocator* fAllocator;
 };
-
-// ----------------------------------------------------------------------------
-
-#ifdef OLD_GRAPHICS
-
-class GPUMultisampleStream : public GPUStream
-{
-	public:
-		typedef GPUStream Super;
-		typedef GPUMultisampleStream Self;
-
-	public:
-		GPUMultisampleStream( Rtt_Allocator* );
-
-	public:
-		virtual void BeginPaint( const Paint* paint );
-		virtual void EndPaint();
-
-	public:
-		virtual void Submit( RenderTypes::Mode mode, const Vertex2* vertices, const S32* counts, S32 numCounts );
-		virtual void Submit( const Quad vertices );
-		virtual void Submit( const Vertex2& origin, Real halfW, Real halfH, Real radius );
-		virtual void Submit( const Vertex2& origin, Real radius );
-		virtual void Submit( const Vertex2& origin, Real a, Real b );
-
-	protected:
-		const Paint* fPaint;
-};
-#endif
 
 // ----------------------------------------------------------------------------
 

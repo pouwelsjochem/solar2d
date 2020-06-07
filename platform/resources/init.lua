@@ -245,63 +245,11 @@ system.newEventDispatcher = function()
 	return EventDispatcher:new()
 end
 
-
--------------------------------------------------------------------------------
--- ExtendedEventDispatcher
--- * Corona's Runtime and display objects derive from this type.
--- * Globally enables physics event support when the 1st listener is added.
--------------------------------------------------------------------------------
-
-local ExtendedEventDispatcher = EventDispatcher:newClass()
-
--- For Physics collision events, we need to count *all* event listeners
--- and notify the system whether it should be dispatching those events
-local physicsListenerCount =
-{
-	collision = 0,
-	preCollision = 0,
-	postCollision = 0,
-	particleCollision = 0,
-}
-
-function ExtendedEventDispatcher:addEventListener( eventName, listener )
-	local wasAdded = EventDispatcher.addEventListener( self, eventName, listener )
-
-	if wasAdded then
-		local numListeners = physicsListenerCount[eventName]
-		if ( nil ~= numListeners ) then
-			if ( 0 == numListeners ) then
-				system.beginListener( eventName )
-			end
-			physicsListenerCount[eventName] = numListeners + 1
-		end
-	end
-	return wasAdded or nil
-end
-
-function ExtendedEventDispatcher:removeEventListener( eventName, listener )
-	local wasRemoved = EventDispatcher.removeEventListener( self, eventName, listener )
-
-	if wasRemoved then
-		local numListeners = physicsListenerCount[eventName]
-		if ( nil ~= numListeners ) then
-			numListeners = numListeners - 1
-			physicsListenerCount[eventName] = numListeners
-			if ( 0 >= numListeners ) then
-				system.endListener( eventName )
-			end
-		end
-	end
-
-	return wasRemoved or nil
-end
-
-
 -------------------------------------------------------------------------------
 -- Runtime
 -------------------------------------------------------------------------------
 
-Runtime = ExtendedEventDispatcher:newClass()
+Runtime = EventDispatcher:newClass()
 
 Runtime._proxy =
 {
@@ -309,7 +257,7 @@ Runtime._proxy =
 	__newindex = system.__proxynewindex
 }
 
-local needsHardwareSupport = { orientation=true, accelerometer=true, gyroscope=true, location=true, heading=true }
+local needsHardwareSupport = { orientation=true, accelerometer=true, gyroscope=true }
 
 function Runtime:addEventListener( eventName, listener )
 	local super = self._super
@@ -421,13 +369,13 @@ end
 -- DisplayObject
 -------------------------------------------------------------------------------
 
-local DisplayObject = ExtendedEventDispatcher:new()
+local DisplayObject = EventDispatcher:new()
 
 system.__proxyregister( "DisplayObject", DisplayObject )
 
 function DisplayObject:addEventListener( eventName, listener )
 	local noListeners = not self:respondsToEvent( eventName )
-	local wasAdded = ExtendedEventDispatcher.addEventListener( self, eventName, listener )
+	local wasAdded = EventDispatcher.addEventListener( self, eventName, listener )
 
 	if ( noListeners ) then
 		self:_setHasListener( eventName, true )
@@ -436,7 +384,7 @@ function DisplayObject:addEventListener( eventName, listener )
 end
 
 function DisplayObject:removeEventListener( eventName, listener )
-	local wasRemoved = ExtendedEventDispatcher.removeEventListener( self, eventName, listener )
+	local wasRemoved = EventDispatcher.removeEventListener( self, eventName, listener )
 
 	if ( not self:respondsToEvent( eventName ) ) then
 		self:_setHasListener( eventName, false )
@@ -553,23 +501,10 @@ end
 -- luacheck: ignore 111 -- Setting an undefined global variable.
 
 -------------------------------------------------------------------------------
--- timer
--------------------------------------------------------------------------------
-
-timer = require "timer"
-
-
--------------------------------------------------------------------------------
 -- Easing
 -------------------------------------------------------------------------------
 
 easing = require "easing"
-
--------------------------------------------------------------------------------
--- transition
--------------------------------------------------------------------------------
-
-transition = require "transition"
 
 -- luacheck: pop
 --------------------------------------------------------------------------------

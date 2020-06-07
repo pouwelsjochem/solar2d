@@ -18,11 +18,6 @@ simulator =
 	deviceImage = "KindleFireHD7.png",
 	displayManufacturer = "Amazon",
 	displayName = "KFTT",
-	statusBarDefault = "", 
-	statusBarTranslucent = "", 
-	statusBarBlack = "", 
-	statusBarLightTransparent = "",
-	statusBarDarkTransparent = "",
 	windowTitleBarName = 'Kindle Fire HD 7" (2012)',
 }
 simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

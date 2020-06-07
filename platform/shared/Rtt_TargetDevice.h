@@ -34,12 +34,11 @@ class TargetDevice
 			kAndroidPlatform = 1, // Android Marketplace
 			kOSXPlatform = 2, // Mac App Store
 			kKindlePlatform = 3, // Amazon app store (Android forks are considered separate platforms)
-			kNookPlatform = 4, // Nook store (Android forks are considered separate platforms)
-			kWebPlatform = 5, // Web (HTML5/WebGL)
-			kWin32Platform = 6, // Win32 Windows desktop app
-			kWinPhoneSilverlightPlatform = 7, // Windows Phone 8 Silverlight App
-			kTVOSPlatform = 8, // tvOS
-			kLinuxPlatform = 9, // Linux desktop
+			kWebPlatform = 4, // Web (HTML5/WebGL)
+			kWin32Platform = 5, // Win32 Windows desktop app
+			kWinPhoneSilverlightPlatform = 6, // Windows Phone 8 Silverlight App
+			kTVOSPlatform = 7, // tvOS
+			kLinuxPlatform = 8, // Linux desktop
 
 			kNumPlatforms
 		}

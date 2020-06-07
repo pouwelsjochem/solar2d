@@ -14,7 +14,7 @@
 
 // ----------------------------------------------------------------------------
 
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV )
+#if defined( Rtt_WIN_ENV )
 static time_t Win_mktimeUTC( struct tm *pTime );
 #endif
 
@@ -29,7 +29,7 @@ Rtt_VersionTimestamp(void)
 	t.tm_mon = Rtt_BUILD_MONTH - 1; // months are 0-based (jan = 0)
 	t.tm_year = Rtt_BUILD_YEAR - 1900;
 	t.tm_isdst = 0;
-#if !defined( Rtt_WIN_ENV ) && !defined( Rtt_POWERVR_ENV ) && !defined( Rtt_NINTENDO_ENV )
+#if !defined( Rtt_WIN_ENV ) && !defined( Rtt_NINTENDO_ENV )
 	t.tm_gmtoff = 0;
 	t.tm_zone = NULL;
 #endif
@@ -38,7 +38,7 @@ Rtt_VersionTimestamp(void)
 	// TODO: borked -- needs to be fixed for android
 	Rtt_ASSERT_NOT_IMPLEMENTED();
 	return mktime( & t );
-#elif defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV )
+#elif defined( Rtt_WIN_ENV )
 	return Win_mktimeUTC(&t);
 #elif defined( Rtt_NINTENDO_ENV )
 	return mktime(&t);
@@ -49,7 +49,7 @@ Rtt_VersionTimestamp(void)
 }
 
 
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV )
+#if defined( Rtt_WIN_ENV )
 // Convert time from mktime to UTC on Windows
 // Taken from last post on thread (with correction reversed!) at
 // http://social.msdn.microsoft.com/Forums/en/vcgeneral/thread/e28359bc-4995-48b6-ba2b-8ab4d6eef395

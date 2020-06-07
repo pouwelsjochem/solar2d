@@ -63,7 +63,7 @@ usage() {
 	echo "   product_type:   trial, basic, automation, coronacards, all (default)"
 	echo "   build_config:   debug (default) or release"
 	echo "   build_type:     incremental (default) or clean"
-	echo "   device_type:    generic, kindle, nook_only, all (default)"
+	echo "   device_type:    generic, kindle, all (default)"
 	exit 0
 }
 
@@ -100,9 +100,6 @@ elif [ "kindle" = "$4" ]
 then
 	echo "Building for Kindle Fire"
 	cp -Rf "$path/sdk/amazon_game_circle_res/" "$path/sdk/res/"
-elif [ "nook_only" = "$4" ]
-then
-	echo "Building for Nook devices only"
 else
 	echo "Building for all Android devices"
 	DEVICE_TYPE="all"
@@ -142,29 +139,6 @@ pushd "$path/sdk" > /dev/null
 	# 3) Generate an "external_libs_paths" file to be used by the build server.
 	$LUA -e "parameterArgTable={inputFile='$path/sdk/project.properties', absolutePathToInputFile='$path/sdk', templateDir='$path/template', externalLibsPathsFile='$path/template/external-libs-paths', absolutePathToAndroidSdk='$ANDROID_SDK'}" "$path/ParseAndroidProjectProperties.lua"
 	touch "$path/template/external-libs-paths"
-
-
-	# --------------------------------------------------------------------------------
-	# Copy widget library's image files to the resource directory.
-	# --------------------------------------------------------------------------------
-	
-	# Remove last files that were copied to the "res/raw" directory.
-	find "$path/sdk/res/raw" -type f -name "corona_asset_*" -delete
-
-	# Copy all Corona widget image files to the "res/raw" directory.
-	# The copied files must be renamed for the following reasons:
-	# 1) Replace illegal resource characters with underscores. This is an Android requirement.
-	# 2) Lower case all characters in the file name. This is an Android requirement.
-	# 3) Prefix the resource file wth "corona_asset_" so that Corona can identify them.
-	# shellcheck disable=SC2044
-	for SOURCE_FILE_NAME in $(find "$path/../../subrepos/widget" -maxdepth 1 -type f -iname "*.png")
-	do
-		TARGET_FILE_NAME=$(basename "$SOURCE_FILE_NAME")
-		TARGET_FILE_NAME=$(echo "$TARGET_FILE_NAME" | tr "[:upper:]" "[:lower:]")
-		TARGET_FILE_NAME=$(echo "$TARGET_FILE_NAME" | tr '@' '_')
-		TARGET_FILE_NAME=corona_asset_$TARGET_FILE_NAME
-		cp -Rf "$SOURCE_FILE_NAME" "$path/sdk/res/raw/$TARGET_FILE_NAME"
-	done
 
 
 	# ----------------------------------------

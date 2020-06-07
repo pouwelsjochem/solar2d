@@ -314,39 +314,32 @@ SnapshotObject::RenderToFBO(
 
 	// Render all children to the offscreen texture
 	Rtt::Real offscreenViewMatrix[16];
-	Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f,
-							0.0f, 0.0f, 0.0f,
-							0.0f, 1.0f, 0.0f,
-							offscreenViewMatrix );
+	Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, offscreenViewMatrix );
 
 	Rtt::Real offscreenProjMatrix[16];
-	Real texW = Rtt_IntToReal( dstFBO->GetTexture()->GetWidth() );
-	Real texH = Rtt_IntToReal( dstFBO->GetTexture()->GetHeight() );
+	Rtt::CreateOrthoMatrix( bounds.xMin, bounds.xMax, bounds.yMin, bounds.yMax, 0.0f, 1.0f, offscreenProjMatrix );
 
 	// The orthographic projection is set up so that the snapshot bounds
 	// are centered about the group's origin (0,0)
 	// TODO: Should we remove fContentBounds???
 
-	Rtt::CreateOrthoMatrix(
-		bounds.xMin, bounds.xMax,
-		bounds.yMin, bounds.yMax,
-		0.0f, 1.0f, offscreenProjMatrix );
-
 	renderer.SetFrameBufferObject( dstFBO );
 	renderer.PushMaskCount();
-	{
-		renderer.SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
-		renderer.SetViewport( 0, 0, texW, texH );
-		if ( clearColor )
-		{
-			ColorUnion color;
-			color.pixel = * clearColor;
-			const Real inv255 = 1.f / 255.f;
-			renderer.Clear( color.rgba.r * inv255, color.rgba.g * inv255, color.rgba.b * inv255, color.rgba.a * inv255 );
-		}
 
-		object.Draw( renderer );
+	Real texW = Rtt_IntToReal( dstFBO->GetTexture()->GetWidth() );
+	Real texH = Rtt_IntToReal( dstFBO->GetTexture()->GetHeight() );
+	renderer.SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
+	renderer.SetViewport( 0, 0, texW, texH );
+	if ( clearColor )
+	{
+		ColorUnion color;
+		color.pixel = * clearColor;
+		const Real inv255 = 1.f / 255.f;
+		renderer.Clear( color.rgba.r * inv255, color.rgba.g * inv255, color.rgba.b * inv255, color.rgba.a * inv255 );
 	}
+
+	object.Draw( renderer );
+
 	renderer.PopMaskCount();
 
 	// Restore state so further rendering is unaffected

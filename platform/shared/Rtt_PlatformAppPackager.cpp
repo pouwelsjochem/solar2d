@@ -130,8 +130,6 @@ AppPackagerParams::AppPackagerParams( const char* appName,
 	fAppPackage.Set( appPackage );
 	fCertType.Set( isDistributionBuild ? "distribution" : "developer" );
 	fTargetAppStoreName.Set( targetAppStoreName );
-	fIncludeFusePlugins = false;
-	fUsesMonetization = false;
 }
 
 AppPackagerParams::~AppPackagerParams()
@@ -186,8 +184,6 @@ AppPackagerParams::GetDeviceBuildData( const MPlatform& platform, const MPlatfor
 		fDeviceBuildData->Initialize(
 			appSettingsPath.GetString(),
 			buildSettingsPath,
-			fIncludeFusePlugins,
-			fUsesMonetization,
 			fLiveBuild,
 			debugBuildProcess);
 	}

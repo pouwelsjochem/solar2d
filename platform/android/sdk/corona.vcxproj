@@ -42,7 +42,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Tegra-Android'">
     <ClCompile>
       <CppLanguageStandard>gnu++11</CppLanguageStandard>
-      <AdditionalIncludeDirectories>Z:\corona\main\platform\android\ndk\jni;Z:\corona\main\librtt;Z:\corona\main\platform\shared;Z:\corona\main\platform\android\ndk;Z:\corona\main\external\lua-5.1.3\src;Z:\corona\main;Z:\corona\main\external\LuaHashMap;Z:\corona\main\librtt\Corona;C:\NVPACK1r6\android-ndk-r12b\platforms\android-24\arch-arm\usr\include\machine;Z:\corona\main\external\Box2D;Z:\corona\main\external\smoothpolygon;Z:\corona\main\external\ALmixer;Z:\corona\main\external\b2Separator-cpp;Z:\corona\main\external\openal-soft_apportable\jni\OpenAL\include\AL;Z:\corona\main\external\ALmixer\Isolated</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Z:\corona\main\platform\android\ndk\jni;Z:\corona\main\librtt;Z:\corona\main\platform\shared;Z:\corona\main\platform\android\ndk;Z:\corona\main\external\lua-5.1.3\src;Z:\corona\main;Z:\corona\main\external\LuaHashMap;Z:\corona\main\librtt\Corona;C:\NVPACK1r6\android-ndk-r12b\platforms\android-24\arch-arm\usr\include\machine;Z:\corona\main\external\smoothpolygon;Z:\corona\main\external\ALmixer;Z:\corona\main\external\openal-soft_apportable\jni\OpenAL\include\AL;Z:\corona\main\external\ALmixer\Isolated</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>Rtt_ANDROID_ENV;Rtt_DEBUG;ALMIXER_COMPILE_WITHOUT_SDL</PreprocessorDefinitions>
       <AdditionalOptions>-U"_WIN32" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -142,7 +142,6 @@
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-xhdpi\icon.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-xxhdpi\icon.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-xxxhdpi\icon.png" />
-    <None Include="Z:\corona\main\platform\android\sdk\res\raw\corona_map_view2.html" />
   </ItemGroup>
   <ItemGroup>
     <JCompile Include="src\com\ansca\corona\ActivityIndicatorDialog.java" />
@@ -173,8 +172,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaService.java" />
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSplashScreenApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaStatusBarApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaStatusBarSettings.java" />
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaVideoView.java" />

@@ -23,7 +23,6 @@
 #include "Rtt_Matrix.h"
 #include "Rtt_PlatformSurface.h"
 #include "Rtt_Runtime.h"
-#include "Rtt_PhysicsWorld.h"
 
 ////
 //
@@ -39,9 +38,6 @@
 namespace Rtt
 {
 
-//For DEBUG only
-#define Rtt_DisableOverlay 0
-
 // ----------------------------------------------------------------------------
 
 Scene::Scene( Rtt_Allocator* pAllocator, Display& owner)
@@ -52,7 +48,6 @@ Scene::Scene( Rtt_Allocator* pAllocator, Display& owner)
 	fOffscreenStage( Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) ) ),
 	fOrphanage( Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) ) ),
 	fSnapshotOrphanage( Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) ) ),
-	fOverlay( Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) ) ),
 	fProxyOrphanage( owner.GetAllocator() ),
 	fIsValid( false ),
 	fCounter( 0 ),
@@ -66,17 +61,10 @@ Scene::Scene( Rtt_Allocator* pAllocator, Display& owner)
 	fOffscreenStage->SetRestricted( isRestricted );
 	fOrphanage->SetRestricted( isRestricted );
 	fSnapshotOrphanage->SetRestricted( isRestricted );
-
-#ifdef Rtt_AUTHORING_SIMULATOR
-	fOverlay->SetRestricted( isRestricted );
-#endif
 }
 
 Scene::~Scene()
 {
-	Rtt_DELETE( fOverlay );
-	fOverlay = NULL;
-
 	Rtt_DELETE( fSnapshotOrphanage );
 	fSnapshotOrphanage = NULL;
 
@@ -163,14 +151,10 @@ Scene::QueueRelease( LuaUserdataProxy *proxy )
 bool
 Scene::IsValid() const
 {
-	U8 drawMode = fOwner.GetDrawMode();
-
 	// If any MUpdatable is active, then the scene SHOULDN'T be considered
 	// valid. This will trigger a call to DisplayObject::Prepare() of all
 	// fActiveUpdatable.
-	return ( fIsValid &&
-				( Display::kForceRenderDrawMode != drawMode ) &&
-				fActiveUpdatable.empty() );
+	return ( fIsValid && fActiveUpdatable.empty() );
 }
 
 void
@@ -194,8 +178,6 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget )
 {
 	Rtt_ASSERT( fCurrentStage );
 
-	U8 drawMode = fOwner.GetDrawMode();
-
 	if ( ! IsValid() )
 	{
 		const Rtt::Real kMillisecondsPerSecond = 1000.0f;
@@ -207,11 +189,6 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget )
 		
 		fOwner.GetTextureFactory().Preload( renderer );
 		fOwner.GetTextureFactory().UpdateTextures(renderer);
-
-		// Set antialiasing once:
-		// NOTE: Assumes Runtime::ReadConfig() has already have been called.
-		bool isMultisampleEnabled = fOwner.IsAntialiased();
-		renderer.SetMultisampleEnabled( isMultisampleEnabled );
 
 		renderer.SetViewport( 0, 0, fOwner.WindowWidth(), fOwner.WindowHeight() );
 		
@@ -226,32 +203,8 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget )
 		StageObject *canvas = fCurrentStage;
 		canvas->UpdateTransform( identity );
 		canvas->Prepare( fOwner );
-
-		canvas->WillDraw( renderer );
-		{
-			// In PhysicsDebugDrawMode, do NOT draw display objects
-			if ( drawMode < Display::kPhysicsDebugDrawMode )
-			{
-				fOwner.SetWireframe( Display::kWireframeDrawMode == drawMode );
-				canvas->Draw( renderer );
-				fOwner.SetWireframe( false );
-			}
-
-			// Only draw physics debug info for physics-based draw modes
-			if ( drawMode >= Display::kPhysicsHybridDrawMode )
-			{
-				fOwner.GetRuntime().GetPhysicsWorld().DebugDraw( renderer );
-			}
-		}
-		canvas->DidDraw( renderer );
-
-		// Draw overlay *last* because it goes above everything else.
-		// This draws the status bar of the device.
-
-#if Rtt_DisableOverlay == 0
-		RenderOverlay( fOwner, renderer, identity );
-#endif
-
+		canvas->Draw( renderer );
+		
 		renderer.EndFrame();
 
 		// When shader code depends on time, then frame is time-dependent.
@@ -291,35 +244,12 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, DisplayObject& obje
 		Matrix identity;
 		object.UpdateTransform( identity );
 		object.Prepare( fOwner );
-
-		object.WillDraw( renderer );
 		object.Draw( renderer );
-		object.DidDraw( renderer );
 
 		rTarget.Flush();
 
 		fIsValid = true;
 	}
-}
-
-void
-Scene::RenderOverlay( Display& display, Renderer& renderer, const Matrix& srcToDstSpace )
-{
-	GroupObject* overlay = fOverlay;
-	if ( overlay )
-	{
-		overlay->UpdateTransform( srcToDstSpace );
-		overlay->Prepare( display );
-		overlay->Draw( renderer );
-	}
-}
-
-StageObject&
-Scene::Overlay()
-{
-	Rtt_ASSERT( fOverlay );
-
-	return * fOverlay;
 }
 
 StageObject*

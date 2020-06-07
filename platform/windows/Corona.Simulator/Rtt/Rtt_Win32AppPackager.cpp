@@ -522,7 +522,7 @@ int Win32AppPackager::DoLocalBuild(const Win32AppPackager::BuildSettings& buildS
 #endif // ! Rtt_NO_GUI
 
 	// Unzip the Win32 app template to the "bin" directory.
-	// This app template contains the pre-compiled exe, libraries, widget assets, etc.
+	// This app template contains the pre-compiled exe, libraries, etc.
 	{
 		// Build a UTF-16 path to the Win32 app template zip file.
 		std::wstring zipFilePath;

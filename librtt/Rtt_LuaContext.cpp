@@ -44,9 +44,6 @@
 #include "Rtt_MRuntimeDelegate.h"
 #include "Core/Rtt_String.h"
 #include "Rtt_LuaLibGameNetwork.h"
-#ifdef Rtt_PHYSICS
-	#include "Rtt_LuaLibPhysics.h"
-#endif
 #include "Rtt_LuaLibInAppStore.h"
 
 #include <string.h>
@@ -591,7 +588,7 @@ LuaContext::InitializeLuaPath( lua_State* L, const MPlatform& platform )
 	lua_concat( L, 2 );
 	lua_setfield(L, luaPackageTableIndex, "path");
 	numPushed--;		// Setting the above field pops off the last string.
-#elif defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV ) || defined( Rtt_NINTENDO_ENV )
+#elif defined( Rtt_WIN_ENV ) || defined( Rtt_NINTENDO_ENV )
 	_putenv_s( LUA_PATH, lua_tostring( L, -1 ) );
 #else
 	Rtt_TRACE(( "LUA_PATH = %s\n", lua_tostring( L, -1 ) ));
@@ -631,7 +628,7 @@ LuaContext::InitializeLuaPath( lua_State* L, const MPlatform& platform )
 	lua_concat( L, 2 );
 	lua_setfield( L, luaPackageTableIndex, "cpath" );
 	numPushed--;		// Setting the above field pops off the last string.
-#elif defined( Rtt_WIN_ENV ) || defined( Rtt_POWERVR_ENV ) || defined(Rtt_NINTENDO_ENV )
+#elif defined( Rtt_WIN_ENV ) || defined(Rtt_NINTENDO_ENV )
 	_putenv_s( LUA_CPATH, lua_tostring( L, -1 ) );
 #else
 	Rtt_TRACE(( "LUA_CPATH = %s\n", lua_tostring( L, -1 ) ));
@@ -700,52 +697,11 @@ LuaContext::InitializeLuaCore( lua_State* L )
 #if defined( Rtt_SQLITE )
 		{ "sqlite3", LuaLibSQLite::Open },
 #endif
-#ifdef Rtt_PHYSICS
-		{ "physics", LuaLibPhysics::Open },
-#endif
 		{ "store", LuaLibStore::Open },
 		{ "easing", Lua::Open< luaload_easing> },
 		{ "launchpad", Lua::Open< luaload_launchpad> },
 		{ "dkjson", Lua::Open< luaload_dkjson > },
 		{ "json", Lua::Open< luaload_json > },
-		{ "widget", Lua::Open< luaload_widget > },
-		{ "widget_button", Lua::Open< luaload_widget_button > },
-		{ "widget_momentumScrolling", Lua::Open< luaload_widget_momentumScrolling > },
-		{ "widget_pickerWheel", Lua::Open< luaload_widget_pickerWheel > },
-		{ "widget_progressView", Lua::Open< luaload_widget_progressView > },
-		{ "widget_scrollview", Lua::Open< luaload_widget_scrollview > },
-		{ "widget_searchField", Lua::Open< luaload_widget_searchField > },
-		{ "widget_segmentedControl", Lua::Open< luaload_widget_segmentedControl > },
-		{ "widget_slider", Lua::Open< luaload_widget_slider > },
-		{ "widget_spinner", Lua::Open< luaload_widget_spinner > },
-		{ "widget_stepper", Lua::Open< luaload_widget_stepper > },
-		{ "widget_switch", Lua::Open< luaload_widget_switch > },
-		{ "widget_tabbar", Lua::Open< luaload_widget_tabbar > },
-		{ "widget_tableview", Lua::Open< luaload_widget_tableview > },
-#if !defined( Rtt_TVOS_ENV )
-		{ "widget_theme_android", Lua::Open< luaload_widget_theme_android > },
-		{ "widget_theme_android_sheet", Lua::Open< luaload_widget_theme_android_sheet > },
-		// These are for pre iOS 7
-		{ "widget_theme_ios", Lua::Open< luaload_widget_theme_ios > },
-		{ "widget_theme_ios_sheet", Lua::Open< luaload_widget_theme_ios_sheet > },
-#endif
-		// These are for iOS 7+
-		{ "widget_theme_ios7", Lua::Open< luaload_widget_theme_ios7 > },
-		{ "widget_theme_ios7_sheet", Lua::Open< luaload_widget_theme_ios7_sheet > },
-#if !defined( Rtt_TVOS_ENV )
-		{ "widget_theme_android_holo_light", Lua::Open< luaload_widget_theme_android_holo_light > },
-		{ "widget_theme_android_holo_light_sheet", Lua::Open< luaload_widget_theme_android_holo_light_sheet > },
-		{ "widget_theme_android_holo_dark", Lua::Open< luaload_widget_theme_android_holo_dark > },
-		{ "widget_theme_android_holo_dark_sheet", Lua::Open< luaload_widget_theme_android_holo_dark_sheet > },
-#endif
-
-		{ "composer", Lua::Open< luaload_composer > },
-		{ "composer_scene", Lua::Open< luaload_composer_scene > },
-		{ "timer", Lua::Open< luaload_timer> },
-		{ "transition", Lua::Open< luaload_transition > },
-#if !defined( Rtt_TVOS_ENV )
-		{ "transition-v1", Lua::Open< luaload_transition_v1 > },
-#endif
 #ifdef Rtt_DEBUGGER
 		{ "remdebug_engine", Lua::Open< luaload_remdebug_engine > },
 #endif
@@ -1295,18 +1251,6 @@ LuaContext::UpdateStage( StageObject& stage ) const
 
 	lua_pop( L, 1 );
 }
-
-#ifdef Rtt_AUTHORING_SIMULATOR
-
-void
-LuaContext::RegisterModule( lua_State *L, ModuleMask module )
-{
-	Runtime *runtime = GetRuntime( L );
-	LuaContext& context = runtime->VMContext();
-	context.fModules |= module;
-}
-
-#endif
     
 // ----------------------------------------------------------------------------
 

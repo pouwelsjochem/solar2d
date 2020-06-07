@@ -30,11 +30,9 @@
 #import "Rtt_IPhoneImageProvider.h"
 #import "Rtt_IPhoneTextBoxObject.h"
 #import "Rtt_IPhoneTextFieldObject.h"
-#import "Rtt_IPhoneMapViewObject.h"
 #import "Rtt_PlatformOpenALPlayer.h"
 #import "Rtt_PlatformAudioSessionManager.h"
 
-#import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import "Rtt_AppleCallback.h"
 #include "Rtt_IPhoneOrientation.h"
@@ -220,7 +218,6 @@ IsEnterprise()
 
 @implementation AppViewController
 
-@synthesize preferredStatusBarStyle = _preferredStatusBarStyle;
 @synthesize prefersHomeIndicatorAutoHidden;
 @synthesize preferredScreenEdgesDeferringSystemGestures;
 
@@ -244,12 +241,7 @@ IsEnterprise()
 
 - (BOOL)prefersStatusBarHidden
 {
-    return _prefersStatusBarhidden;
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-	return _preferredStatusBarStyle;
+    return YES;
 }
 
 - (UIResponder *)nextResponder
@@ -598,16 +590,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	runtime->SetProperty( Runtime::kIsEnterpriseFeature, isEnterprise );
 
 	UIInterfaceOrientation interfaceOrientation = viewController.interfaceOrientation;
-
-    // The UIStatusBarStyleLightContent enum doesn't exist in pre 7
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000
-    // This is needed because iOS 7 defaults to the dark style while Corona only has default and dark.  Making light the default lets the user choose without having to change the api.
-    [viewController setPreferredStatusBarStyle:UIStatusBarStyleLightContent];
-    if ([viewController respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-		[viewController setNeedsStatusBarAppearanceUpdate];
-	}
-
-#endif
     
 	// On iPad (iOS 3.2), viewController's interface orientation defaults to portrait 
 	// even if the iPad is landscape, so query the UIDevice
@@ -962,7 +944,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 #endif
 
 
-//	application.statusBarStyle = UIStatusBarStyleBlackTranslucent;
 //	[glView prepareOpenGL];
 
 	return [[self getCoronaAppDelegate] application:application didFinishLaunchingWithOptions:launchOptions];
@@ -1146,18 +1127,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	[[self getCoronaAppDelegate] performSelector:_cmd withObject:application];
 }
 
-/*
-- (void)application:(UIApplication *)application willChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration
-{
-	NSLog( @"willChangeStatusBarOrientation" );
-}
-
-- (void)application:(UIApplication *)application didChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration
-{
-	NSLog( @"didChangeStatusBarOrientation" );
-}
-*/
-
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
 	using namespace Rtt;
@@ -1249,20 +1218,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 		view.runtime->DispatchEvent( e );
 		lastAccelerometerTimeStamp = acceleration.timestamp;
 	}
-}
-
-// MKMapViewDelegate
-// ----------------------------------------------------------------------------
-
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
-{
-	if (![annotation respondsToSelector:@selector(annotationView)]) 
-	{
-		return nil;
-	}
-
-	// If this value is nil then the default pin is used.
-	return ((AddressAnnotationWithCallout*)annotation).annotationView;
 }
 
 // ----------------------------------------------------------------------------

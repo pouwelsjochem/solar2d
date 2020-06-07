@@ -76,22 +76,14 @@ PlatformSimulator::Config::Config( Rtt_Allocator & allocator )
 	supportsMouse( true ),
 	supportsMultipleAlerts( false ),
 	isAlertButtonOrderRightToLeft( true ),
-	statusBarDefaultFile( & allocator ),
-	statusBarTranslucentFile( & allocator ),
-	statusBarBlackFile( & allocator ),
-	statusBarLightTransparentFile( & allocator ),
-	statusBarDarkTransparentFile( & allocator ),
-	screenDressingFile( & allocator ),
 	screenOriginX(0.0f),
 	screenOriginY(0.0f),
 	screenWidth(0.0f),
 	screenHeight(0.0f),
-	safeScreenInsetStatusBar(0.0f),
 	safeScreenInsetTop(0.0f),
 	safeScreenInsetLeft(0.0f),
 	safeScreenInsetBottom(0.0f),
 	safeScreenInsetRight(0.0f),
-	safeLandscapeScreenInsetStatusBar(0.0f),
 	safeLandscapeScreenInsetTop(0.0f),
 	safeLandscapeScreenInsetLeft(0.0f),
 	safeLandscapeScreenInsetBottom(0.0f),
@@ -282,7 +274,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 		{
 			case TargetDevice::kAndroidPlatform:
 			case TargetDevice::kKindlePlatform:
-			case TargetDevice::kNookPlatform:
 				rConfig.osName.Set("android");
 				break;
 			case TargetDevice::kIPhonePlatform:
@@ -405,12 +396,10 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 		rConfig.screenWidth = (float) NumberForKey( L, "screenWidth", 400 );
 		rConfig.screenHeight = (float) NumberForKey( L, "screenHeight", 400 );
 
-		rConfig.safeScreenInsetStatusBar = (float) NumberForKey( L, "safeScreenInsetStatusBar", 0 );
 		rConfig.safeScreenInsetTop = (float) NumberForKey( L, "safeScreenInsetTop", 0 );
 		rConfig.safeScreenInsetLeft = (float) NumberForKey( L, "safeScreenInsetLeft", 0 );
 		rConfig.safeScreenInsetBottom = (float) NumberForKey( L, "safeScreenInsetBottom", 0 );
 		rConfig.safeScreenInsetRight = (float) NumberForKey( L, "safeScreenInsetRight", 0 );
-		rConfig.safeLandscapeScreenInsetStatusBar = (float) NumberForKey( L, "safeLandscapeScreenInsetStatusBar", 0 );
 		rConfig.safeLandscapeScreenInsetTop = (float) NumberForKey( L, "safeLandscapeScreenInsetTop", 0 );
 		rConfig.safeLandscapeScreenInsetLeft = (float) NumberForKey( L, "safeLandscapeScreenInsetLeft", 0 );
 		rConfig.safeLandscapeScreenInsetBottom = (float) NumberForKey( L, "safeLandscapeScreenInsetBottom", 0 );
@@ -419,12 +408,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 		rConfig.deviceImageFile.Set( StringForKey( L, "deviceImage", NULL ) );
 		rConfig.displayManufacturer.Set( StringForKey( L, "displayManufacturer", "unknown" ) );
 		rConfig.displayName.Set( StringForKey( L, "displayName", "Custom Device" ) );
-		rConfig.statusBarDefaultFile.Set( StringForKey( L, "statusBarDefault", NULL ) );
-		rConfig.statusBarTranslucentFile.Set( StringForKey( L, "statusBarTranslucent", NULL ) );
-		rConfig.statusBarBlackFile.Set( StringForKey( L, "statusBarBlack", NULL ) );
-		rConfig.statusBarLightTransparentFile.Set( StringForKey( L, "statusBarLightTransparent", NULL ) );
-		rConfig.statusBarDarkTransparentFile.Set( StringForKey( L, "statusBarDarkTransparent", NULL ) );
-		rConfig.screenDressingFile.Set( StringForKey( L, "screenDressing", NULL ) );
 		rConfig.supportsScreenRotation = BoolForKey( L, "supportsScreenRotation", true );
 		rConfig.hasAccelerometer = BoolForKey( L, "hasAccelerometer", true );
 		rConfig.isUprightOrientationPortrait = BoolForKey( L, "isUprightOrientationPortrait", (rConfig.screenHeight > rConfig.screenWidth) );
@@ -613,83 +596,6 @@ PlatformSimulator::LoadBuildSettings( const MPlatform& platform )
 	lua_close( L );
 }
 
-
-U32
-PlatformSimulator::GetModulesFromBuildSettings( const char* platformkeyname, bool& isdefined, bool& iserror )
-{
-	U32 moduleflags = 0;
-	iserror = false;
-	isdefined = false;
-	
-	lua_State *L = luaL_newstate();
-	
-	const char kBuildSettings[] = "build.settings";
-	
-	String filePath( & fPlatform->GetAllocator() );
-	fPlatform->PathForFile( kBuildSettings, MPlatform::kResourceDir, MPlatform::kTestFileExists, filePath );
-
-	const char *p = filePath.GetString();
-	if ( p
-		 && 0 == luaL_loadfile( L, p )
-		 && 0 == lua_pcall( L, 0, 0, 0 ) )
-	{
-		lua_getglobal( L, "settings" );
-		if ( lua_istable( L, -1 ) )
-		{
-			lua_getfield( L, -1, platformkeyname ); // "iphone" or "android" or "mac", etc
-			if ( lua_istable( L, -1 ) )
-			{
-				lua_getfield( L, -1, "components" ); // This must be a standard Lua array, not an associative array
-				if ( lua_istable( L, -1 ) )
-				{
-					isdefined = true;
-					// Must be a convential array or things won't work right.
-					int number_of_elements = (int) lua_objlen(L, -1);  /* get length of array */
-					for ( int i=1; i<=number_of_elements; i++ )
-					{
-						lua_rawgeti(L, -1, i);  /* array is at -1, pushes value at array[i] onto top of stack */
-						if ( lua_type( L, -1 ) == LUA_TSTRING )
-						{
-							// Add other keys like this here:
-							/*
-							if ( 0 == Rtt_StringCompareNoCase( lua_tostring( L, -1 ), "papaya" ) )
-							{
-								moduleflags = moduleflags | LuaContext::kPapayaModuleMask;
-							}
-							else
-							*/
-							{
-								// Intentionally ignoring unknown keys so people using later versions (daily builds)
-								// don't trip errors when reverting to an older build that doesn't know about the key.
-								// Warning might be okay, but don't fail the process.
-								Rtt_TRACE (("Warning: Unknown component in build.settings component array for device=%s at element at index=%d (%s).\n", platformkeyname, i, lua_tostring( L, -1 ) ) );
-							}
-						}
-						else
-						{
-							Rtt_TRACE (("Error: Invalid type in build.settings component array for device=%s. The element at index=%d is not a string.\n", platformkeyname, i) );
-						}
-						lua_pop( L, 1 ); // pop array[i] off the top of the stack. array is now on top of stack again.
-					}
-
-				}
-				lua_pop( L, 1 ); // pop components
-			}
-			lua_pop( L, 1 ); // pop platformkeyname
-		}
-		lua_pop( L, 1 ); // pop settings
-	}
-	else
-	{
-		iserror = true;
-	}
-	
-	lua_close( L );
-	
-	return moduleflags;
-}
-
-
 void
 PlatformSimulator::Start( const SimulatorOptions& options )
 {
@@ -744,12 +650,6 @@ PropertyMaskForEventType( MPlatformDevice::EventType type )
 		case MPlatformDevice::kGyroscopeEvent:
 			mask = PlatformSimulator::kGyroscopeEventMask;
 			break;
-		case MPlatformDevice::kLocationEvent:
-			mask = PlatformSimulator::kLocationEventMask;
-			break;
-		case MPlatformDevice::kHeadingEvent:
-			mask = PlatformSimulator::kHeadingEventMask;
-			break;
 		case MPlatformDevice::kMultitouchEvent:
 			mask = PlatformSimulator::kMultitouchEventMask;
 			break;
@@ -776,11 +676,6 @@ PlatformSimulator::BeginNotifications( MPlatformDevice::EventType type ) const
 			break;
 		case kGyroscopeEventMask:
 			Rtt_TRACE_SIM( ( "WARNING: Simulator does not support gyroscope events\n" ) );
-			break;
-		case kLocationEventMask:
-			break;
-		case kHeadingEventMask:
-			Rtt_TRACE_SIM( ( "WARNING: Simulator does not support heading events\n" ) );
 			break;
 		case kMultitouchEventMask:
 			Rtt_TRACE_SIM( ( "WARNING: Simulator does not support multitouch events\n" ) );

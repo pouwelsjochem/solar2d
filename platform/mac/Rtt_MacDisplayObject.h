@@ -93,7 +93,7 @@ class MacDisplayObject : public PlatformDisplayObject
 class MacTextObject
 {
 	public:
-		static NSColor* GetTextColor( lua_State *L, int index, bool isByteColorRange );
+		static NSColor* GetTextColor( lua_State *L, int index );
 };
 
 // ----------------------------------------------------------------------------

@@ -21,10 +21,8 @@ public class JavaToNativeShim {
 	public static final int EventTypeOrientation = 0;
 	public static final int EventTypeAccelerometer = 1;
 	public static final int EventTypeGyroscope = 2;
-	public static final int EventTypeLocation = 3;
-	public static final int EventTypeHeading = 4;
-	public static final int EventTypeMultitouch = 5;
-	public static final int EventTypeNumTypes = 6;
+	public static final int EventTypeMultitouch = 3;
+	public static final int EventTypeNumTypes = 4;
 
 	private static native String nativeGetVersion();
     private static native String nativeGetBuildId(long bridgeAddress);
@@ -78,7 +76,6 @@ public class JavaToNativeShim {
     private static native void nativeAxisEvent( long bridgeAddress, int coronaDeviceId, int axisIndex, float rawValue );
     private static native void nativeAccelerometerEvent( long bridgeAddress, double x, double y, double z, double deltaTime );
     private static native void nativeGyroscopeEvent( long bridgeAddress, double x, double y, double z, double deltaTime );
-    private static native void nativeLocationEvent( long bridgeAddress, double latitude, double longitude, double altitude, double accuracy, double speed, double bearing, double time );
     private static native void nativeOrientationChanged( long bridgeAddress, int newOrientation, int oldOrientation );
     private static native void nativeResizeEvent( long bridgeAddress );
     private static native void nativeAlertCallback( long bridgeAddress, int buttonIndex, boolean cancelled );
@@ -106,15 +103,6 @@ public class JavaToNativeShim {
 									long bridgeAddress, int state, int errorType, String errorMessage, String productId, String signature,
 									String receipt, String transactionId, String transactionTime,
 									String originalReceipt, String originalTransactionId, String originalTransactionTime );
-	private static native void nativeMapAddressReceivedEvent(
-									long bridgeAddress, String street, String streetDetails, String city, String cityDetails,
-									String region, String regionDetails, String postalCode,
-									String country, String countryDetails );
-	private static native void nativeMapMarkerEvent( long bridgeAddress, int markerId, int listenerId, double latitude, double longitude );
-	private static native void nativeMapAddressRequestFailedEvent( long bridgeAddress, String errorMessage );
-	private static native void nativeMapRequestLocationEvent( long bridgeAddress, int listener, double latitude, double longitude, String originalRequest );
-	private static native void nativeMapRequestLocationFailedEvent( long bridgeAddress, int listener, String errorMessage, String originalRequest );
-	private static native void nativeMapTappedEvent( long bridgeAddress, int id, double latitude, double longitude );
 	private static native void nativeVideoViewPrepared( long bridgeAddress, int id );
 	private static native void nativeVideoViewEnded( long bridgeAddress, int id );
 	private static native Object nativeGetCoronaRuntime( long bridgeAddress );
@@ -521,14 +509,6 @@ public class JavaToNativeShim {
 		nativeGyroscopeEvent( runtime.getJavaToNativeBridgeAddress(), x, y, z, deltaTime );
 	}
 	
-	public static void locationEvent( CoronaRuntime runtime, double latitude, double longitude, double altitude, double accuracy, double speed, double bearing, double time )
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeLocationEvent( runtime.getJavaToNativeBridgeAddress(), latitude, longitude, altitude, accuracy, speed, bearing, time );
-	}
-	
 	public static void orientationChanged( CoronaRuntime runtime, int newOrientation, int oldOrientation ) {
 		if (runtime == null || runtime.wasDisposed()) {
 			return;
@@ -718,59 +698,6 @@ public class JavaToNativeShim {
 				transactionTimeString, result.getOriginalReceipt(), result.getOriginalTransactionStringId(),
 				originalTransactionTimeString);
 	}
-
-	public static void mapAddressReceivedEvent(
-		CoronaRuntime runtime, String street, String streetDetails, String city, String cityDetails, String region, String regionDetails,
-		String postalCode, String country, String countryCode)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeMapAddressReceivedEvent(runtime.getJavaToNativeBridgeAddress(), 
-				street, streetDetails, city, cityDetails, region, regionDetails,
-				postalCode, country, countryCode);
-	}
-
-	public static void mapAddressRequestFailedEvent(CoronaRuntime runtime, String errorMessage)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeMapAddressRequestFailedEvent(runtime.getJavaToNativeBridgeAddress(), errorMessage);
-	}
-
-	public static void mapRequestLocationEvent(CoronaRuntime runtime, int listener, double latitude, double longitude, String originalRequest)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeMapRequestLocationEvent(runtime.getJavaToNativeBridgeAddress(), listener, latitude, longitude, originalRequest);
-	}
-
-	public static void mapRequestLocationFailed(CoronaRuntime runtime, int listener, String errorMsg, String originalRequest)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeMapRequestLocationFailedEvent(runtime.getJavaToNativeBridgeAddress(), listener, errorMsg, originalRequest);
-	}
-
-	public static void mapMarkerEvent(CoronaRuntime runtime, int markerId, int listenerId, double latitude, double longitude)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeMapMarkerEvent(runtime.getJavaToNativeBridgeAddress(), markerId, listenerId, latitude, longitude);
-	}
-
-	public static void mapTappedEvent(CoronaRuntime runtime, int id, double latitude, double longitude)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeMapTappedEvent(runtime.getJavaToNativeBridgeAddress(), id, latitude, longitude);
-	}
-	
 
 	public static void videoViewPrepared(CoronaRuntime runtime, int id)
 	{

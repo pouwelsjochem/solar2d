@@ -130,14 +130,9 @@ class LuaProxy
 		// Push associated table on stack. Nothing is pushed when returning false.
 		bool PushTable( lua_State *L ) const;
 
-	public:
-		const LuaProxyVTable* GetExtensionsDelegate() const { return fExtensionsDelegate; }
-		void SetExtensionsDelegate( const LuaProxyVTable *newValue ) { fExtensionsDelegate = newValue; }
-
 	private:
 		MLuaProxyable* fObject;
 		const LuaProxyVTable& fDelegate;
-		const LuaProxyVTable *fExtensionsDelegate;
 
 		int fTableRef; // id for associated Lua table that wraps this proxy
 

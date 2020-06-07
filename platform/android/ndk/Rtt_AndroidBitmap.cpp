@@ -73,8 +73,6 @@ AndroidBitmap::GetFormat() const
 {
 	// TODO: This may not be right. Looks like it *might* be kABGR,
 	// but the byte buffer may also be reversed so everything cancels out!
-	// TODO: If we fix this to be correct, we should also remove the hard-coded
-	// alpha channel index in GraphicsLibrary::newOutline()
 	return kRGBA;
 }
 

@@ -94,11 +94,6 @@ namespace Rtt
 		virtual PlatformImageProvider* GetImageProvider(const ResourceHandle<lua_State> & handle) const { return nullptr; };
 		virtual PlatformVideoProvider* GetVideoProvider(const ResourceHandle<lua_State> & handle) const { return nullptr; };
 		virtual PlatformStoreProvider* GetStoreProvider(const ResourceHandle<lua_State> & handle) const { return nullptr; };
-		virtual void SetStatusBarMode(MPlatform::StatusBarMode newValue) const { return; };
-		virtual MPlatform::StatusBarMode GetStatusBarMode() const;
-		virtual int GetStatusBarHeight() const { return 0; };
-		virtual int GetTopStatusBarHeightPixels()  const { return 0; };
-		virtual int GetBottomStatusBarHeightPixels() const { return 0; };
 		virtual void SetIdleTimer(bool enabled) const { return; };
 		virtual bool GetIdleTimer() const { return false; };
 		virtual NativeAlertRef ShowNativeAlert(
@@ -113,7 +108,6 @@ namespace Rtt
 		virtual PlatformDisplayObject* CreateNativeTextBox(const Rect& bounds) const { return nullptr; };
 		virtual PlatformDisplayObject* CreateNativeTextField(const Rect& bounds) const { return nullptr; };
 		virtual void SetKeyboardFocus(PlatformDisplayObject *textObject) const { return; };
-		virtual PlatformDisplayObject* CreateNativeMapView(const Rect& bounds) const { return nullptr; };
 		virtual PlatformDisplayObject* CreateNativeWebView(const Rect& bounds) const { return nullptr; };
 		virtual PlatformDisplayObject* CreateNativeVideo(const Rect& bounds) const { return nullptr; };
 		virtual Rtt_Real GetStandardFontSize() const { return 0.0; };

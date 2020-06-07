@@ -221,16 +221,6 @@ WinConsoleDevice::SetGyroscopeInterval( U32 frequency ) const
 {
 }
 
-void
-WinConsoleDevice::SetLocationAccuracy( Real meters ) const
-{
-}
-
-void
-WinConsoleDevice::SetLocationThreshold( Real meters ) const
-{
-}
-
 DeviceOrientation::Type
 WinConsoleDevice::GetOrientation() const
 {

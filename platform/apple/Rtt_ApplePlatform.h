@@ -83,7 +83,7 @@ class ApplePlatform : public MPlatform
 	// MPlatform
 	public:
 		virtual Rtt_Allocator& GetAllocator() const;
-		virtual RenderingStream* CreateRenderingStream( bool antialias ) const;
+		virtual RenderingStream* CreateRenderingStream() const;
 		virtual PlatformSurface* CreateOffscreenSurface( const PlatformSurface& parentDevice ) const;
 		virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const;
 		virtual PlatformBitmap* CreateBitmap( const char *filePath, bool convertToGrayscale ) const;
@@ -103,11 +103,6 @@ class ApplePlatform : public MPlatform
 		virtual PlatformAudioRecorder * CreateAudioRecorder( const ResourceHandle<lua_State> & handle, const char * filePath ) const;
 
 		virtual PlatformAudioPlayer* GetAudioPlayer( const ResourceHandle<lua_State> & handle ) const;
-
-		virtual int GetStatusBarHeight() const;
-        virtual int GetTopStatusBarHeightPixels()  const;
-        virtual int GetBottomStatusBarHeightPixels() const;
-    
 
 		virtual Real GetStandardFontSize() const;
 		virtual PlatformFont* CreateFont( PlatformFont::SystemFont fontType, Rtt_Real size ) const;

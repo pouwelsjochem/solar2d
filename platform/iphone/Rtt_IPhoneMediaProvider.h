@@ -55,7 +55,6 @@ class IPhoneMediaProvider
 		UIImagePickerController* fImagePicker;
 		UIPopoverController* fPopoverController;
 		NSString *fDstPath;
-		bool iOS5statusBarHidden; // workaround for statusbar coming back in iOS 5.0 when hidden
 };
 
 // ----------------------------------------------------------------------------

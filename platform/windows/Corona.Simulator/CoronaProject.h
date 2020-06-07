@@ -28,7 +28,6 @@
 #define REGISTRY_KEYSTOREPWD _T("Marker")
 #define REGISTRY_ALIASPWD _T("Marker2")
 #define REGISTRY_CREATE_LIVE_BUILD _T("CreateLiveBuild")
-#define REGISTRY_ENABLE_MONETIZATION _T("EnableMonetization")
 #define REGISTRY_COPYRIGHT _T("Copyright")
 #define REGISTRY_COMPANY_NAME _T("CompanyName")
 #define REGISTRY_APP_DESCRIPTION _T("AppDescription")
@@ -45,7 +44,6 @@
 #define REGISTRY_ALIAS_DEFAULT _T("")
 #define REGISTRY_SAVEDIR_DEFAULT _T("")
 #define REGISTRY_CREATE_LIVE_BUILD_DEFAULT _T("0")
-#define REGISTRY_ENABLE_MONETIZATION_DEFAULT _T("1")
 
 ///////////////////////////////////////////////////////////////////////////////
 // CEncryptedKeeper - manage encrypted registry entries
@@ -164,11 +162,6 @@ public:
 	bool GetCreateLiveBuild();
 	void SetCreateLiveBuild(bool createLiveBuild);
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	bool GetEnableMonetization();
-	void SetEnableMonetization(bool enableMonetization);
-#endif
-
 	CString GetCopyright() { return m_sCopyright; }
 	void SetCopyright(const CString& value) { m_sCopyright = value; }
 
@@ -218,11 +211,6 @@ protected:
 	Rtt::TargetDevice::Platform m_TargetPlatform;
 
 	bool m_CreateLiveBuild;
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	bool m_EnableMonetization;
-#endif
-
 	bool m_sCreateFBInstantArchive;
 };
 

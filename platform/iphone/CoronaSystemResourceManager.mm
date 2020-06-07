@@ -21,10 +21,8 @@
 #endif
 
 #import <UIKit/UIDevice.h>
-#import <CoreLocation/CoreLocation.h>
 
 @protocol UIAccelerometerDelegate;
-@protocol CLLocationManagerDelegate;
 
 
 // Resource Keys
@@ -46,22 +44,12 @@ NSString * const CoronaGyroscopeResourceKey()
 	return @"Gyroscope";
 }
 
-NSString * const CoronaLocationResourceKey()
-{
-	return @"Location";
-}
-
-NSString * const CoronaHeadingResourceKey()
-{
-	return @"Heading";
-}
-
 
 // CoronaSystemResourceManager()
 // ----------------------------------------------------------------------------
 #pragma mark # CoronaSystemResourceManager()
 
-@interface CoronaSystemResourceManager() <CLLocationManagerDelegate>
+@interface CoronaSystemResourceManager()
 
 @property (nonatomic, retain) NSMutableDictionary *observersByKey;
 
@@ -87,14 +75,6 @@ NSString * const CoronaHeadingResourceKey()
 #ifdef Rtt_CORE_MOTION
 - (void)addObserverGyroscope:(id )observer;
 - (void)removeObserverGyroscope:(id)observer;
-#endif
-
-#ifdef Rtt_CORE_LOCATION
-- (void)addObserverLocation:(id <CLLocationManagerDelegate>)observer;
-- (void)removeObserverLocation:(id <CLLocationManagerDelegate>)observer;
-
-- (void)addObserverHeading:(id <CLLocationManagerDelegate>)observer;
-- (void)removeObserverHeading:(id <CLLocationManagerDelegate>)observer;
 #endif
 
 @end
@@ -126,19 +106,13 @@ NSString * const CoronaHeadingResourceKey()
 	{
 		NSArray *keys = [NSArray arrayWithObjects:
 			CoronaAccelerometerResourceKey(),
-			CoronaLocationResourceKey(),
-
 #ifdef Rtt_ORIENTATION
 			CoronaOrientationResourceKey(),
 #endif
-
 #ifdef Rtt_CORE_MOTION
 			CoronaGyroscopeResourceKey(),
 #endif
 
-#ifdef Rtt_CORE_LOCATION
-			CoronaHeadingResourceKey(),
-#endif
 			nil];
 		sKeys = [[NSSet alloc] initWithArray:keys];
 	}
@@ -158,8 +132,6 @@ NSString * const CoronaHeadingResourceKey()
 
 - (void)dealloc
 {
-	[_locationManager release];
-
 #ifdef Rtt_CORE_MOTION
 	[_motionManager release];
 #endif
@@ -168,16 +140,6 @@ NSString * const CoronaHeadingResourceKey()
 	[_observersByKey release];
 
 	[super dealloc];
-}
-
-- (CLLocationManager *)locationManager
-{
-	if ( nil == _locationManager )
-	{
-		_locationManager = [[CLLocationManager alloc] init];
-	}
-	
-	return _locationManager;
 }
 
 #ifdef Rtt_CORE_MOTION
@@ -372,99 +334,6 @@ NSString * const CoronaHeadingResourceKey()
 
 #endif // Rtt_CORE_MOTION
 
-// -----------------------------------------------------------------------------
-
-#ifdef Rtt_CORE_LOCATION
-
-- (void)addObserverLocation:(id <CLLocationManagerDelegate>)observer
-{
-	if ( ! [self hasObserversForKey:CoronaLocationResourceKey()] )
-	{
-		[self requestAuthorizationLocation];
-		CLLocationManager *locationManager = [self locationManager];
-		locationManager.delegate = self;
-
-		locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-		[locationManager startUpdatingLocation];
-	}
-}
-
-- (void)removeObserverLocation:(id <CLLocationManagerDelegate>)observer
-{
-	if ( ! [self hasObserversForKey:CoronaLocationResourceKey()] )
-	{
-		CLLocationManager *locationManager = [self locationManager];
-		[locationManager stopUpdatingLocation];
-	}
-}
-
-// From (https://developer.apple.com/library/prerelease/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/index.html)
-// 
-// > The user prompt contains the text from the NSLocationWhenInUseUsageDescription key 
-// > in your app’s Info.plist file, and the presence of that key is required when calling
-// > this method.
-- (void)requestAuthorizationLocation
-{
-    CLLocationManager *locationManager = [self locationManager];
-    
-    // Set the background property if the background property is set in build.settings
-    //
-    // plist: UIBackgroundModes is an array containing keys. We want to find the key 'location'.
-    NSArray* modes = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIBackgroundModes"];
-    if ( [modes containsObject:@"location"] &&
-        [locationManager respondsToSelector:@selector(setAllowsBackgroundLocationUpdates:)] )
-    {
-        // This property is only available in iOS 9.0 and above
-        [self.locationManager setAllowsBackgroundLocationUpdates:YES];
-    }
-    
-	// Calling requestWhenInUseAuthorization only does something if the authorization
-	// status is kCLAuthorizationStatusNotDetermined so if its something else we can
-	// skip this block
-	if ( [CLLocationManager authorizationStatus] != kCLAuthorizationStatusNotDetermined )
-	{
-		return;
-	}
-	
-    // Requesting location authorization for the first time
-	if ( [locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)] )
-	{
-		[locationManager requestWhenInUseAuthorization];
-	}
-}
-
-// ----------------------------------------------------------------------------
-
-- (void)addObserverHeading:(id <CLLocationManagerDelegate>)observer
-{
-	if ( ! [self hasObserversForKey:CoronaHeadingResourceKey()] )
-	{
-		CLLocationManager *locationManager = [self locationManager];
-		locationManager.delegate = self;
-
-		if ([CLLocationManager headingAvailable])
-		{
-			[locationManager startUpdatingHeading];
-		}
-	}
-}
-
-- (void)removeObserverHeading:(id <CLLocationManagerDelegate>)observer
-{
-	if ( ! [self hasObserversForKey:CoronaHeadingResourceKey()] )
-	{
-		CLLocationManager *locationManager = [self locationManager];
-
-		if ([CLLocationManager headingAvailable])
-		{
-			[locationManager stopUpdatingHeading];
-		}
-	}
-}
-
-#endif // Rtt_CORE_LOCATION
-
-
 // Accelerometer
 // ----------------------------------------------------------------------------
 #pragma mark # Accelerometer
@@ -472,66 +341,6 @@ NSString * const CoronaHeadingResourceKey()
 // Gyroscope
 // ----------------------------------------------------------------------------
 #pragma mark # Gyroscope
-
-#ifdef Rtt_CORE_LOCATION
-
-// CLLocationManager (This multiplexes calls to observers)
-// ----------------------------------------------------------------------------
-#pragma mark # CLLocationManager
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
-{
-	NSSet *observers = [self observersForKey:CoronaLocationResourceKey()];
-	for ( id <CLLocationManagerDelegate> o in observers )
-	{
-		if ( [o respondsToSelector:@selector(locationManager:didUpdateToLocation:fromLocation:)] )
-		{
-			[o locationManager:manager didUpdateToLocation:newLocation fromLocation:oldLocation];
-		}
-	}
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-	NSSet *observers = [self observersForKey:CoronaLocationResourceKey()];
-	for ( id <CLLocationManagerDelegate> o in observers )
-	{
-		if ( [o respondsToSelector:@selector(locationManager:didFailWithError:)] )
-		{
-			[o locationManager:manager didFailWithError:error];
-		}
-	}
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
-{	
-	NSSet *observers = [self observersForKey:CoronaHeadingResourceKey()];
-	for ( id <CLLocationManagerDelegate> o in observers )
-	{
-		if ( [o respondsToSelector:@selector(locationManager:didUpdateHeading:)] )
-		{
-			[o locationManager:manager didUpdateHeading:newHeading];
-		}
-	}
-}
-
-- (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager
-{
-	return YES;
-}
-
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
-	NSSet *observers = [self observersForKey:CoronaLocationResourceKey()];
-	for ( id <CLLocationManagerDelegate> o in observers )
-	{
-		if ( [o respondsToSelector:@selector(locationManager:didChangeAuthorizationStatus:)] )
-		{
-			[o locationManager:manager didChangeAuthorizationStatus:status];
-		}
-	}
-}
-#endif // Rtt_CORE_LOCATION
 
 @end
 

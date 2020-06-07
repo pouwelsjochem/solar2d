@@ -24,14 +24,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\external\ALmixer\luaal.c" />
-    <ClCompile Include="..\..\..\external\b2Separator-cpp\b2Separator.cpp" />
     <ClCompile Include="..\..\..\external\hmac\hmac_sha2.c" />
     <ClCompile Include="..\..\..\external\hmac\sha2.c" />
     <ClCompile Include="..\..\..\external\lsqlite3-7\lsqlite3.c" />
     <ClCompile Include="..\..\..\external\luafilesystem\src\lfs.c" />
     <ClCompile Include="..\..\..\external\LuaHashMap\LuaHashMap.c" />
-    <ClCompile Include="..\..\..\external\smoothpolygon\SmoothPolygon.cpp" />
-    <ClCompile Include="..\..\..\librtt\b2GLESDebugDraw.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Allocator.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Array.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_ArrayTuple.cpp" />
@@ -76,9 +73,7 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayDefaults.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayObject.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayPath.cpp" />
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayV2.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_EmbossedTextObject.cpp" />
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_EmitterObject.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GradientPaint.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GradientPaintAdapter.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GroupObject.cpp" />
@@ -197,8 +192,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_CachedPath.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_CKWorkflow.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_DisplayObjectExtensions.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_EllipsePath.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_FilePath.cpp" />
@@ -221,7 +214,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibMedia.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibNative.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibOpenAL.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibPhysics.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibSQLite.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibSystem.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaProxy.cpp" />
@@ -231,11 +223,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_LuaTableIterator.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaUserdataProxy.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Matrix.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_ParticleSystemObject.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsContact.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsContactListener.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsJoint.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PhysicsWorld.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioPlayer.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioRecorder.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioSessionManager.cpp" />
@@ -247,7 +234,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformFont.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformImageProvider.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformLocation.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformModalInteraction.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformNotifier.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformOpenALPlayer.cpp" />
@@ -271,7 +257,6 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">..\..\..\external\luasocket\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Scheduler.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_SimpleCachedPath.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_TesselatorStream.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Transform.cpp" />
@@ -296,13 +281,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\external\ALmixer\luaal.h" />
-    <ClInclude Include="..\..\..\external\b2Separator-cpp\b2Separator.h" />
     <ClInclude Include="..\..\..\external\hmac\hmac_sha2.h" />
     <ClInclude Include="..\..\..\external\hmac\sha2.h" />
     <ClInclude Include="..\..\..\external\luafilesystem\src\lfs.h" />
     <ClInclude Include="..\..\..\external\LuaHashMap\LuaHashMap.h" />
-    <ClInclude Include="..\..\..\external\smoothpolygon\SmoothPolygon.h" />
-    <ClInclude Include="..\..\..\librtt\b2GLESDebugDraw.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Allocator.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Array.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_ArrayTuple.h" />
@@ -365,9 +347,7 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayObject.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayPath.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayTypes.h" />
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayV2.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_EmbossedTextObject.h" />
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_EmitterObject.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_GradientPaint.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_GradientPaintAdapter.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_GroupObject.h" />
@@ -480,8 +460,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_CKWorkflow.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_CKWorkFlowConstants.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_DeviceOrientation.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_DisplayObjectExtensions.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_EllipsePath.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Event.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_FilePath.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_FillTesselatorStream.h" />
@@ -507,7 +485,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibMedia.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibNative.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibOpenAL.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibPhysics.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibSocket.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibSQLite.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibSystem.h" />
@@ -530,12 +507,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_MReloadableResource.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_MRuntimeDelegate.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_MUpdatable.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_ParticleSystemObject.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsContact.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsContactListener.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsJoint.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsTypes.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PhysicsWorld.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioPlayer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioRecorder.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioSessionManager.h" />
@@ -547,7 +518,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformFont.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformImageProvider.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformLocation.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformMediaProviderBase.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformModalInteraction.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformNotifier.h" />
@@ -569,7 +539,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_RuntimeDelegate.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_RuntimeDelegatePlayer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Scheduler.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_SimpleCachedPath.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_SurfaceInfo.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_TesselatorStream.h" />
@@ -713,36 +682,7 @@
     <LuaToCpp Include="..\..\..\plugins\licensing\shared\CoronaProvider.licensing.lua" />
     <LuaToCpp Include="..\..\..\plugins\licensing\shared\licensing.lua" />
     <LuaToCpp Include="..\..\..\plugins\network\shared\network.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\composer\composer.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\composer\composer_scene.lua" />
     <LuaToCpp Include="..\..\..\subrepos\easing\easing.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\timer\timer.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\transition\transition.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\transition\transition_v1.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_button.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_momentumScrolling.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_pickerWheel.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_progressView.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_scrollview.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_searchField.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_segmentedControl.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_slider.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_spinner.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_stepper.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_switch.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_tabbar.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_tableview.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_dark.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_dark_sheet.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_light.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_light_sheet.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_sheet.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios7.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios7_sheet.lua" />
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios_sheet.lua" />
     <LuaToCpp Include="..\..\resources\config_require.lua" />
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\init.lua" />
@@ -755,9 +695,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ALmixer.Library\ALmixer.Library.Win32.vcxproj">
       <Project>{48c7494a-3a17-4e45-a61e-b4f143119148}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Box2D.Library\Box2D.Library.Win32.vcxproj">
-      <Project>{eb74da6f-6ebc-422e-8b7b-88a93ad5f8d6}</Project>
     </ProjectReference>
     <ProjectReference Include="..\CryptoPP.Library\CryptoPP.Library.Win32.vcxproj">
       <Project>{c3520d49-0731-4bcb-be0f-db3f33cd807e}</Project>

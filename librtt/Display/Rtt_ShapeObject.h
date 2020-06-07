@@ -54,7 +54,6 @@ class ShapeObject : public DisplayObject
 
 	public:
 		virtual bool HitTest( Real contentX, Real contentY );
-		virtual void DidUpdateTransform( Matrix& srcToDst );
 		virtual ShaderResource::ProgramMod GetProgramMod() const;
 
 	public:

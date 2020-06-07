@@ -92,12 +92,8 @@ AndroidDevice::HasEventSource( EventType type ) const
 		case MPlatformDevice::kGyroscopeEvent:
 			hasEventSource = fNativeToJavaBridge->HasGyroscope();
 			break;
-		case MPlatformDevice::kHeadingEvent:
-			hasEventSource = fNativeToJavaBridge->HasHeadingHardware();
-			break;
 		case MPlatformDevice::kInputDeviceStatusEvent:
 		case MPlatformDevice::kKeyEvent:
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kMouseEvent:
 		case MPlatformDevice::kMultitouchEvent:
 		case MPlatformDevice::kOrientationEvent:
@@ -122,10 +118,8 @@ AndroidDevice::BeginNotifications( EventType type ) const
 	switch( type )
 	{
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMultitouchEvent:
 			fNativeToJavaBridge->SetEventNotification( type, true );
 			break;
@@ -143,10 +137,8 @@ AndroidDevice::EndNotifications( EventType type ) const
 	switch( type )
 	{
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMultitouchEvent:
 			fNativeToJavaBridge->SetEventNotification( type, false );
 			break;
@@ -310,18 +302,6 @@ PlatformInputDeviceManager&
 AndroidDevice::GetInputDeviceManager()
 {
 	return fInputDeviceManager;
-}
-
-void 
-AndroidDevice::SetLocationAccuracy( Real meters ) const
-{
-	fNativeToJavaBridge->SetLocationAccuracy( meters );
-}
-
-void 
-AndroidDevice::SetLocationThreshold( Real meters ) const
-{
-	fNativeToJavaBridge->SetLocationThreshold( meters );
 }
 
 DeviceOrientation::Type 

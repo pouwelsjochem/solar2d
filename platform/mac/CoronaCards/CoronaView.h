@@ -8,7 +8,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #import <GLKit/GLKit.h>
-#import <CoreLocation/CoreLocation.h>
 
 typedef enum {
     kNormal,
@@ -18,11 +17,10 @@ typedef enum {
 } CoronaViewWindowMode;
 
 @protocol CoronaViewDelegate;
-@protocol CLLocationManagerDelegate;
 
 // ----------------------------------------------------------------------------
 
-@interface CoronaView : NSView < CLLocationManagerDelegate >
+@interface CoronaView : NSView
 
 @property (nonatomic, assign) id <CoronaViewDelegate> coronaViewDelegate;
 

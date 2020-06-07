@@ -11,8 +11,6 @@
 
 #include "Rtt_LuaAssert.h"
 
-#include "Rtt_PhysicsWorld.h"
-
 // We limit this code to the Mac simulator because it depends
 // on libunwind which isn't available for __arm__ on iOS.
 #if defined( __APPLE__ ) && defined( __x86_64__ )
@@ -275,12 +273,6 @@
 	{
 		lua_State *L = get_lua_State_from_current_callstack();
 		if( ! L )
-		{
-			// Nothing to do.
-			return;
-		}
-
-		if( ! Rtt::LuaContext::GetRuntime( L )->GetPhysicsWorld().GetLuaAssertEnabled() )
 		{
 			// Nothing to do.
 			return;

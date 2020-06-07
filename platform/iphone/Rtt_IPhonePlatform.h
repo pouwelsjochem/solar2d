@@ -46,9 +46,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual PlatformVideoProvider* GetVideoProvider( const ResourceHandle<lua_State> & handle ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
-		virtual void SetStatusBarMode( StatusBarMode newValue ) const;
-		virtual StatusBarMode GetStatusBarMode() const;
-
 		virtual void SetActivityIndicator( bool visible ) const;
 
 		virtual PlatformWebPopup* GetWebPopup() const;
@@ -57,7 +54,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
 
-		virtual PlatformDisplayObject* CreateNativeMapView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 

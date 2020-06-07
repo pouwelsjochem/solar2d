@@ -65,8 +65,7 @@ namespace Rtt
 
 IPhoneImageProvider::IPhoneImageProvider( const ResourceHandle<lua_State> & handle )
 :	PlatformImageProvider( handle ),
-	fDstPath( nil ),
-	iOS5statusBarHidden( false )
+	fDstPath( nil )
 {
 	fDelegate = [[IPhoneImagePickerControllerDelegate alloc] init];
 	fDelegate.callback = this;
@@ -193,13 +192,6 @@ IPhoneImageProvider::DidDismiss( UIImage* image, NSDictionary* editingInfo )
 	PlatformImageProvider::Parameters params( bitmap, NULL );
 	params.wasCompleted = (image != NULL);
 	Super::DidDismiss( AddProperties, & params );
-	
-	// iOS 5.0 introduces a bug where the status bar comes back if it is hidden on dismiss.
-	// Seems to be fixed in 5.1 beta (unless iPod touch 4th gen was not originally affected)
-	if ( fMediaProvider->Internal_IsOS5_0() && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) )
-	{
-		[[UIApplication sharedApplication] setStatusBarHidden:iOS5statusBarHidden withAnimation:UIStatusBarAnimationNone];
-	}
 }
 	
 /*

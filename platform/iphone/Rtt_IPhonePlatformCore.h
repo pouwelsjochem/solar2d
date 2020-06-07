@@ -52,11 +52,6 @@ class IPhonePlatformCore : public IPhonePlatformBase
 	public:
 		virtual MPlatformDevice& GetDevice() const;
 
-	public:
-		virtual int GetStatusBarHeight() const;
-		virtual int GetTopStatusBarHeightPixels() const;
-		virtual int GetBottomStatusBarHeightPixels() const;
-
 	protected:
 		bool SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, float jpegQuality ) const;
 

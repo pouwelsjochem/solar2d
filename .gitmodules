@@ -1,6 +1,3 @@
-[submodule "external/Box2D"]
-	path = external/Box2D
-	url = https://github.com/coronalabs/submodule-box2d.git
 [submodule "external/CryptoPP"]
 	path = external/CryptoPP
 	url = https://github.com/coronalabs/submodule-CryptoPP.git
@@ -22,12 +19,6 @@
 [submodule "external/openal-soft_apportable"]
 	path = external/openal-soft_apportable
 	url = https://github.com/coronalabs/submodule-openal-soft_apportable.git
-[submodule "platform/emscripten"]
-	path = platform/emscripten
-	url = https://github.com/coronalabs/submodule-platform-emscripten.git
-[submodule "platform/linux"]
-	path = platform/linux
-	url = https://github.com/coronalabs/submodule-platform-linux.git
 [submodule "plugins/build"]
 	path = plugins/build
 	url = https://github.com/coronalabs/submodule-plugins-build.git
@@ -36,34 +27,19 @@
 	url = https://github.com/coronalabs/submodule-plugins-build-core.git
 [submodule "plugins/gameNetwork"]
 	path = plugins/gameNetwork
-	url = https://github.com/coronalabs/submodule-plugins-gameNetwork.git
+	url = https://github.com/pouwelsjochem/submodule-plugins-gameNetwork.git
 [submodule "plugins/licensing"]
 	path = plugins/licensing
-	url = https://github.com/coronalabs/submodule-plugins-licensing
+	url = https://github.com/pouwelsjochem/submodule-plugins-licensing
 [submodule "plugins/network"]
 	path = plugins/network
-	url = https://github.com/coronalabs/submodule-plugins-network
+	url = https://github.com/pouwelsjochem/submodule-plugins-network
 [submodule "simulator-extensions/welcomescreen"]
 	path = simulator-extensions/welcomescreen
-	url = https://github.com/coronalabs/submodule-welcomescreen.git
-[submodule "subrepos/enterprise"]
-	path = subrepos/enterprise
-	url = https://github.com/coronalabs/submodule-native.git
+	url = https://github.com/pouwelsjochem/submodule-welcomescreen.git
 [submodule "subrepos/easing"]
 	path = subrepos/easing
 	url = https://github.com/coronalabs/framework-easing.git
-[submodule "subrepos/transition"]
-	path = subrepos/transition
-	url = https://github.com/coronalabs/framework-transition.git
-[submodule "subrepos/widget"]
-	path = subrepos/widget
-	url = https://github.com/coronalabs/framework-widget.git
-[submodule "subrepos/timer"]
-	path = subrepos/timer
-	url = https://github.com/coronalabs/framework-timer.git
-[submodule "subrepos/composer"]
-	path = subrepos/composer
-	url = https://github.com/coronalabs/framework-composer.git
 [submodule "external/openal-soft"]
 	path = external/openal-soft
 	url = https://github.com/coronalabs/openal-soft.git

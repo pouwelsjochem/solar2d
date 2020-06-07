@@ -3,9 +3,6 @@
 -- Copyright (C) 2012 Corona Labs Inc. All Rights Reserved.
 --------------------------------------------------------------------------------
 
--- Hide the status bar.
-display.setStatusBar(display.HiddenStatusBar)
-
 -- Display a white background.
 display.setDefault("background", 255, 255, 255)
 
@@ -25,8 +22,6 @@ for i = 1, 20 do
 	myStar.xScale = math.random(150)/100 + 0.5
 	myStar.yScale = myStar.xScale
 	
-	myStar:setReferencePoint( display.CenterReferencePoint )
-
 	local dr = math.random( 1, 4 )
 	myStar.dr = dr
 	if ( math.random() < 0.5 ) then

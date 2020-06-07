@@ -36,9 +36,6 @@
     <ClInclude Include="Rtt\Rtt_WinImageProvider.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinLocation.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinModalInteraction.h">
       <Filter>Rtt</Filter>
     </ClInclude>
@@ -357,9 +354,6 @@
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinImageProvider.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinLocation.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinModalInteraction.cpp">

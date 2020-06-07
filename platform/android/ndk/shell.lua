@@ -24,52 +24,6 @@ local function callOnShellComplete(param)
 end
 
 ---------------------------------------------------------------------------------------------------
--- This part is used for Corona Cards to show the trial overlay
----------------------------------------------------------------------------------------------------
-local overlay = params.overlay
-
-if params.showMessage then
-
-	local halfW = display.contentWidth * 0.5
-	local halfH = display.contentHeight * 0.5
-
-	local fontSize = 96 * display.contentScaleX
-	local lineSpace = fontSize * 0.6
-	local options = 
-	{
-		parent = overlay,
-		text = "CoronaCards",
-		x = halfW,
-		y = halfH-lineSpace,
-		font = native.systemFontBold,   
-		fontSize = fontSize,
-	}
-
-	local msg = display.newText( options )
-	msg:setFillColor( 0, .1 )
-
-	local msg = display.newText( options )
-	msg:setFillColor( 1, .4 )
-
-	local options =
-	{
-		parent = overlay,
-		text = "TRIAL",
-		x = halfW,
-		y = halfH+lineSpace,
-		font = native.systemFontBold,   
-		fontSize = fontSize * 1.5,
-	}
-
-	local msg = display.newText( options )
-	msg:setFillColor( 0, .3 )
-
-	local msg = display.newText( options )
-	msg:setFillColor( 1, .2 )
-
-end
-
----------------------------------------------------------------------------------------------------
 -- This part is used to check if Google Play Services is available
 ---------------------------------------------------------------------------------------------------
 
@@ -276,7 +230,7 @@ handleCheckingForExpansionFiles = function()
 	----------------------------------
 
 	verifyListener = function( event )
-		local widget = require("widget")
+		local widget = require("widget") -- TODO: Jochem: Replace this for our own implementation when we need this
 		local lfs = require "lfs"
 		local expansionFiles = event.expansionFiles
 		local hasSomething = next(expansionFiles, nil)

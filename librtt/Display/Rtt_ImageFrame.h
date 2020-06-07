@@ -29,24 +29,7 @@ class ImageFrame
 		ImageFrame( ImageSheet& owner, S32 x, S32 y, S32 w, S32 h, Real sx, Real sy, bool intrudeHalfTexel );
 
 	public:
-		void SetTrimData( S32 srcX, S32 srcY, S32 srcW, S32 srcH );
-		bool IsTrimmed() const { return fIsTrimmed; }
-
-	public:
 		void UpdateUVVertex(Vertex2& vert ) const;
-
-/*
-	public:
-		bool IsValid() const { return fTextureCoords[0].x != kCoordinateNegInfinity; }
-
-	protected:
-		void Invalidate() { fTextureCoords[0].x = kCoordinateNegInfinity; }
-
-	public:
-		void SetTrimData( S32 srcX, S32 srcY, S32 srcW, S32 srcH );
-		S32 GetSrcX() const { return fSrcX; }
-		S32 GetSrcY() const { return fSrcY; }
-*/
 
 	public:
 		// Content coords
@@ -87,7 +70,6 @@ class ImageFrame
 		// texture coord rect
 		Rect fTextureCoords;
 
-		bool fIsTrimmed;
 		// texture coordinates for frame
 //		Quad fTextureCoords; 
 /*

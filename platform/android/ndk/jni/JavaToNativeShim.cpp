@@ -384,12 +384,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeGyroscopeEvent(JNIEnv * env, jclass
 }
 
 JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeLocationEvent(JNIEnv * env, jclass c, jlong bridgeAddress, jdouble lat, jdouble lon, jdouble altitude, jdouble accuracy, jdouble speed, jdouble bearing, jdouble time)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->LocationEvent( lat, lon, altitude, accuracy, speed, bearing, time );
-}
-
-JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeOrientationChanged(JNIEnv * env, jclass c, jlong bridgeAddress, jint newOrientation, jint oldOrientation)
 {
 #ifdef Rtt_DEBUG
@@ -556,50 +550,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeStoreTransactionEvent(
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->StoreTransactionEvent(
 		env, state, errorType, errorMessage, productId, signature, receipt, transactionId, transactionTime,
 		originalReceipt, originalTransactionId, originalTransactionTime);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeMapAddressReceivedEvent(
-	JNIEnv * env, jclass cd, jlong bridgeAddress, jstring street, jstring streetDetails, jstring city, jstring cityDetails,
-	jstring region, jstring regionDetails, jstring postalCode, jstring country, jstring countryCode)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MapAddressReceivedEvent(
-		env, street, streetDetails, city, cityDetails, region, regionDetails, postalCode, country, countryCode);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeMapAddressRequestFailedEvent(
-	JNIEnv * env, jclass cd, jlong bridgeAddress, jstring errorMessage)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MapAddressRequestFailedEvent(env, errorMessage);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeMapRequestLocationFailedEvent(
-	JNIEnv * env, jclass cd, jlong bridgeAddress, jint listenerId, jstring errorMsg, jstring originalRequest)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MapRequestLocationFailedEvent(env, listenerId, errorMsg, originalRequest);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeMapRequestLocationEvent(
-	JNIEnv * env, jclass cd, jlong bridgeAddress, jint listenerId, jdouble latitude, jdouble longitude, jstring originalRequest)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MapRequestLocationEvent(env, listenerId, latitude, longitude, originalRequest);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeMapMarkerEvent(
-	JNIEnv * env, jclass, jlong bridgeAddress, jint markerId, jint listenerId, jdouble latitude, jdouble longitude)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MapMarkerEvent(markerId, listenerId, latitude, longitude);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeMapTappedEvent(
-	JNIEnv * env, jclass, jlong bridgeAddress, jint id, jdouble latitude, jdouble longitude)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MapTappedEvent(id, latitude, longitude);
 }
 
 JNIEXPORT void JNICALL

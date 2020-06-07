@@ -52,7 +52,6 @@ class GLCommandBuffer : public CommandBuffer
 		virtual void SetViewport( int x, int y, int width, int height );
 		virtual void SetScissorEnabled( bool enabled );
 		virtual void SetScissorRegion( int x, int y, int width, int height );
-		virtual void SetMultisampleEnabled( bool enabled );
 		virtual void Clear( Real r, Real g, Real b, Real a );
 		virtual void Draw( U32 offset, U32 count, Geometry::PrimitiveType type );
 		virtual void DrawIndexed( U32 offset, U32 count, Geometry::PrimitiveType type );

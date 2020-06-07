@@ -551,19 +551,6 @@ local function makeApp(arch, linuxappFolder, template, args, templateName)
 	end
 	log3("Copied app files from ", args.srcDir, ' to ', appFolder)
 
-	-- copy standard resources
-	local widgetsDir = pathJoin(localTmpDir, 'CONTENTS', 'usr', 'share', 'corona', 'res_widget')
-	if args.useStandartResources then
-		local ret = copyDir(widgetsDir, appFolder)
-		if ret ~= 0 then
-			return "Failed to copy standard resources"
-		end
-		log3("Copied startard resources")
-	end
-
-	-- remove res_widget folder from .deb because else it will common for all apps in the host
-	removeDir(widgetsDir)
-
 	-- compile .lua
 	local rc = compileScriptsAndMakeCAR(args.linuxParams, appFolder, appFolder, localTmpDir)
 	if not rc then

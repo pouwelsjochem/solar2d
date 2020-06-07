@@ -345,86 +345,6 @@ RectToCGRect( const Rtt::Rect& bounds, CGRect * outRect )
 	}
 }
 
-#if 0
-- (BOOL)shouldRotate:(UIDeviceOrientation)orientation
-{
-	BOOL result = NO;
-	if ( ! keyboardShown && orientation != currentOrientation )
-	{
-		switch ( orientation )
-		{
-			case UIDeviceOrientationLandscapeLeft:
-			case UIDeviceOrientationLandscapeRight:
-			case UIDeviceOrientationPortrait:
-			case UIDeviceOrientationPortraitUpsideDown:
-				result = YES;
-				break;
-			default:
-				break;
-		}
-	}
-
-	return result;
-}
-
-- (void)sizeToFitOrientation:(BOOL)transform
-{
-	if (transform)
-	{
-		fWebView.transform = CGAffineTransformIdentity;
-	}
-
-	CGRect frame = [UIScreen mainScreen].applicationFrame;
-	CGPoint center = CGPointMake( frame.origin.x + ceil(frame.size.width*0.5),
-								  frame.origin.y + ceil(frame.size.height*0.5) );
-
-	currentOrientation = [UIDevice currentDevice].orientation;
-
-	if ( UIInterfaceOrientationIsLandscape( currentOrientation ) )
-	{
-		CGFloat tmp = frame.size.width;
-		frame.size.width = frame.size.height;
-		frame.size.height = tmp;
-	}
-
-	fWebView.frame = frame;
-	fWebView.center = center;
-	
-	if ( transform )
-	{
-		switch( currentOrientation )
-		{
-			case UIInterfaceOrientationLandscapeLeft:
-				fWebView.transform = CGAffineTransformMakeRotation(M_PI*1.5);
-				break;
-			case UIInterfaceOrientationLandscapeRight:
-				fWebView.transform = CGAffineTransformMakeRotation(M_PI/2);
-				break;
-			case UIInterfaceOrientationPortraitUpsideDown:
-				fWebView.transform = CGAffineTransformMakeRotation(-M_PI);
-				break;
-			default:
-				break;
-		}
-	}
-}
-
-- (void)orientationDidChange:(void*)object
-{
-	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-	if ( [self shouldRotate:orientation] )
-	{
-		CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-		[UIView beginAnimations:nil context:nil];
-		[UIView setAnimationDuration:duration];
-
-		[self sizeToFitOrientation:YES];
-		[UIView commitAnimations];
-	}
-}
-
-#else
-
 - (void)orientationDidChange:(id)object
 {
 	UIInterfaceOrientation startingOrientation = initialOrientation;
@@ -454,8 +374,6 @@ RectToCGRect( const Rtt::Rect& bounds, CGRect * outRect )
 	newFrame.size = newSize;
 	fWebView.frame = newFrame;
 }
-
-#endif
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
 	NSURL *url = navigationAction.request.URL;

@@ -225,29 +225,6 @@ void AndroidRuntimeDelegate::DidLoadConfig(const Runtime& sender, lua_State *L) 
 		fNativeToJavaBridge->GooglePushNotificationsUnregister();
 	}
 	lua_settop( L, top );
-
-	const char *googleMapsAPIKey = NULL;
-	lua_getglobal( L, "application" );
-	if ( lua_istable( L, -1 ) )
-	{
-		lua_getfield( L, -1, "license" );
-		if ( lua_istable( L, -1 ) )
-		{
-			lua_getfield( L, -1, "google" );
-			if ( lua_istable( L, -1 ) )
-			{
-				lua_getfield( L, -1, "mapsKey" );
-				if ( lua_isstring( L, -1 ) )
-				{
-					googleMapsAPIKey = lua_tostring( L, -1 );
-				}
-			}
-		}
-	}
-	if ( googleMapsAPIKey != NULL ) {
-		fNativeToJavaBridge->SetGoogleMapsAPIKey( googleMapsAPIKey );
-	}
-	lua_settop( L, top );
 }
 
 // Called when the config is pushed to ensure we have something there

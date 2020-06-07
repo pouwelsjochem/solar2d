@@ -58,21 +58,6 @@ class RenderingStream;
 class Display
 {
 	public:
-		typedef enum _DrawMode
-		{
-			kForceRenderDrawMode = 0,	// Blit every frame
-			kInvalidateDrawMode,		// Only blits when invalidated
-			kWireframeDrawMode,			// Wireframe
-			kPhysicsHybridDrawMode,		// Overlay with Physics bodies
-			kPhysicsDebugDrawMode,		// Only draw Physics bodies
-			
-			kNumDrawModes,
-			
-			// Default
-			kDefaultDrawMode = kInvalidateDrawMode,
-		}
-		DrawMode;
-
 		typedef enum _ScaleMode
 		{
 			kNone = 0,
@@ -101,9 +86,6 @@ class Display
 			kLineStroke,
 			kLineBlendMode,
 			kDisplayColorSample,
-			kGraphicsNewOutline,
-			kDisplayNewEmitter,
-			kPhysicsNewParticleSystem,
 
 			kNumFeatures
 		}
@@ -188,7 +170,6 @@ class Display
 		virtual bool PushImageSuffixTable() const;
 
 	public:
-		virtual GroupObject *Overlay();
 		virtual GroupObject *Orphanage();
 		virtual GroupObject *HitTestOrphanage();
 
@@ -328,14 +309,6 @@ class Display
 		Scene& GetScene() { return *fScene; }
 		const Scene& GetScene() const { return *fScene; }
 
-		U8 GetDrawMode() const { return fDrawMode; }
-		void SetDrawMode( U8 newValue ) { fDrawMode = newValue; }
-
-		bool IsAntialiased() const { return fIsAntialiased; }
-		void SetAntialiased( bool newValue ) { fIsAntialiased = newValue; }
-
-		void SetWireframe( bool newValue );
-
 #if defined( Rtt_ANDROID_ENV ) && TEMPORARY_HACK
     // TODO: Remove this once TEMPORARY_HACK is removed in JavaToNativeBridge.cpp
 		RenderingStream& GetStream() { return * fStream; }
@@ -387,8 +360,6 @@ class Display
 		PlatformSurface *fTarget;
 		int fImageSuffix;
 
-		U8 fDrawMode; // stores current physics drawing mode; ranges from 0-2
-		bool fIsAntialiased;
 		bool fIsCollecting; // guards against nested calls to Collect()
 		bool fIsRestricted;
 		mutable bool fAllowFeatureResult;

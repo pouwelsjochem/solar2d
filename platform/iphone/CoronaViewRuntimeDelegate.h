@@ -32,7 +32,6 @@ class CoronaViewRuntimeDelegate : public RuntimeDelegate
         virtual void DidInitLuaLibraries( const Runtime& sender ) const;
 		virtual bool HasDependencies( const Runtime& sender ) const;
 		virtual void InitializeConfig( const Runtime& sender, lua_State *L ) const;
-		virtual void DidLoadConfig( const Runtime& sender, lua_State *L ) const;
 
 	protected:
 		virtual id< CoronaRuntime > GetPluginContext() const;

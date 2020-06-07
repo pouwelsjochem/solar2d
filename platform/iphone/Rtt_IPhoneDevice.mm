@@ -28,7 +28,6 @@
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIDevice.h>
 #import <AudioToolbox/AudioServices.h>
-#import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CommonCrypto/CommonDigest.h>
 
@@ -132,8 +131,6 @@ IPhoneDevice::~IPhoneDevice()
 		kOrientationEvent,
 		kAccelerometerEvent,
 		kGyroscopeEvent,
-		kLocationEvent,
-		kHeadingEvent,
 		kMultitouchEvent,
 	};
 	const int kEventsLen = sizeof( kEvents ) / sizeof( kEvents[0] );
@@ -342,8 +339,6 @@ IPhoneDevice::HasEventSource( EventType type ) const
 		}
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMultitouchEvent:
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
@@ -383,16 +378,6 @@ IPhoneDevice::BeginNotifications( EventType type ) const
 		case MPlatformDevice::kGyroscopeEvent:
 		{
 			[resourceManager addObserver:fView.gyroscopeObserver forKey:CoronaGyroscopeResourceKey()];
-			break;
-		}
-		case MPlatformDevice::kLocationEvent:
-		{
-			[resourceManager addObserver:fView.locationObserver forKey:CoronaLocationResourceKey()];
-			break;
-		}
-		case MPlatformDevice::kHeadingEvent:
-		{
-			[resourceManager addObserver:fView.locationObserver forKey:CoronaHeadingResourceKey()];
 			break;
 		}
 		case MPlatformDevice::kMultitouchEvent:
@@ -436,17 +421,6 @@ IPhoneDevice::EndNotifications( EventType type ) const
 			[resourceManager removeObserver:fView.gyroscopeObserver forKey:CoronaGyroscopeResourceKey()];
 			break;
 		}
-		case MPlatformDevice::kLocationEvent:
-		{
-			[resourceManager removeObserver:fView.locationObserver forKey:CoronaLocationResourceKey()];
-			break;
-		}
-		case MPlatformDevice::kHeadingEvent:
-		{
-			[resourceManager removeObserver:fView.locationObserver forKey:CoronaHeadingResourceKey()];
-
-			break;
-		}
 		case MPlatformDevice::kMultitouchEvent:
 		{
 			fView.multipleTouchEnabled = NO;
@@ -462,44 +436,6 @@ bool
 IPhoneDevice::DoesNotify( EventType type ) const
 {
 	return fTracker.DoesNotify( type );
-}
-
-void
-IPhoneDevice::SetLocationAccuracy( Real meters ) const
-{
-	CLLocationAccuracy value = kCLLocationAccuracyThreeKilometers;
-	S32 d = Rtt_RealToInt( meters );
-
-	if ( d < 10 )
-	{
-		value = kCLLocationAccuracyBest;
-	}
-	else if ( d < 100 )
-	{
-		value = kCLLocationAccuracyNearestTenMeters;
-	}
-	else if ( d < 1000 )
-	{
-		value = kCLLocationAccuracyHundredMeters;
-	}
-	else if ( d < 3000 )
-	{
-		value = kCLLocationAccuracyKilometer;
-	}
-	else
-	{
-		value = kCLLocationAccuracyThreeKilometers;
-	}
-
-	CLLocationManager *locationManager = [CoronaSystemResourceManager sharedInstance].locationManager;
-	locationManager.desiredAccuracy = value;
-}
-
-void
-IPhoneDevice::SetLocationThreshold( Real meters ) const
-{
-	CLLocationManager *locationManager = [CoronaSystemResourceManager sharedInstance].locationManager;
-	locationManager.distanceFilter = Rtt_RealToFloat( meters );
 }
 
 DeviceOrientation::Type

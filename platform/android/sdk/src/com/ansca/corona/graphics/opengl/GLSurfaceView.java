@@ -1158,7 +1158,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 if ((rendererName != null) && rendererName.equals("PowerVR SGX 540") &&
                     (view.mEGLConfigChooser instanceof ComponentSizeChooser) &&
                     (((ComponentSizeChooser)view.mEGLConfigChooser).getMinAlphaSize() > 0)) {
-                    // This OpenGL driver which is used by Kindle Fire and Nook Tablet has a bug where all alpha blended
+                    // This OpenGL driver which is used by Kindle Fire has a bug where all alpha blended
                     // polygons and the GL clear color are blended with black. We can work-around this bug by disabling
                     // the alpha channel. Alpha blended content will still work if surface uses 32-bit color PixelFormat.
                     int previousMinAlphaSize = ((ComponentSizeChooser)view.mEGLConfigChooser).getMinAlphaSize();

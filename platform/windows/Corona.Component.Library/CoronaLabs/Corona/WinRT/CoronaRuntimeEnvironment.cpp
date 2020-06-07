@@ -608,7 +608,7 @@ void CoronaRuntimeEnvironment::OnRuntimeTimerElapsed()
 	// Update the Corona runtime if scheduled to do so up above.
 	if (isTimeToUpdateRuntime)
 	{
-		// Update the runtime's scene such as sprites and physics.
+		// Update the runtime's scene such as sprites.
 		// Note: This does not render the scene since the "kRenderAsync" property is set.
 		(*fRuntimePointer)();
 		if (fCoronaControlAdapter)

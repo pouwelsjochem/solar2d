@@ -251,13 +251,6 @@
 			remoteGlobalIDString = A4FBC4F71A2D5479004D9A01;
 			remoteInfo = CoronaCore;
 		};
-		C2F1BB1A1EF48F3000D77BD7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C2F1BAFD1EF48F2F00D77BD7 /* ratatouille.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 50B013EB17558BCA00B822B8;
-			remoteInfo = Box2D;
-		};
 		C2F1BB1C1EF48F3000D77BD7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C2F1BAFD1EF48F2F00D77BD7 /* ratatouille.xcodeproj */;
@@ -1035,7 +1028,6 @@
 			children = (
 				C2F1BB171EF48F3000D77BD7 /* Corona Simulator.app */,
 				C2F1BB191EF48F3000D77BD7 /* libCoronaCore.a */,
-				C2F1BB1B1EF48F3000D77BD7 /* libBox2D.a */,
 				C2F1BB1D1EF48F3000D77BD7 /* liblua.a */,
 				C2F1BB1F1EF48F3000D77BD7 /* libluafilesystem.a */,
 				C2F1BB211EF48F3000D77BD7 /* librtt.a */,
@@ -1197,13 +1189,6 @@
 			fileType = archive.ar;
 			path = libCoronaCore.a;
 			remoteRef = C2F1BB181EF48F3000D77BD7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C2F1BB1B1EF48F3000D77BD7 /* libBox2D.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libBox2D.a;
-			remoteRef = C2F1BB1A1EF48F3000D77BD7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		C2F1BB1D1EF48F3000D77BD7 /* liblua.a */ = {

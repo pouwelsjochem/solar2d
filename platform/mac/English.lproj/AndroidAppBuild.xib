@@ -10,7 +10,6 @@
             <connections>
                 <outlet property="fAndroidKeystore" destination="271" id="323"/>
                 <outlet property="fEnableLiveBuild" destination="Gjp-0V-sW9" id="RCO-dW-Ccg"/>
-                <outlet property="fEnableMonetization" destination="268" id="378"/>
                 <outlet property="fSigningIdentitiesAndroid" destination="273" id="324"/>
                 <outlet property="fTargetStore" destination="278" id="358"/>
                 <outlet property="postBuildRadioGroup" destination="365" id="374"/>
@@ -365,14 +364,6 @@ DQ
                         <rect key="frame" x="176" y="59" width="336" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Create Live Build" bezelStyle="regularSquare" imagePosition="left" inset="2" id="qYU-Dy-ybK">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
-                    <button hidden="YES" misplaced="YES" tag="1000" id="268">
-                        <rect key="frame" x="18" y="18" width="234" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Enable Analytics and Monetization" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="322">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>

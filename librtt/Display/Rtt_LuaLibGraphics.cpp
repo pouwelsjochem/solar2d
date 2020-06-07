@@ -27,8 +27,6 @@
 #include "Rtt_LuaAux.h"
 #include "Rtt_LuaLibSystem.h"
 #include "Display/Rtt_BitmapPaint.h"
-#include "Rtt_PhysicsTypes.h"
-#include "SmoothPolygon.h"
 #include "Rtt_TextureFactory.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
@@ -71,11 +69,9 @@ class GraphicsLibrary
 
 	public:
 		static int newMask( lua_State *L );
-		static int newGradient( lua_State *L );
 		static int newImageSheet( lua_State *L );
 		static int defineEffect( lua_State *L );
 		static int listEffects( lua_State *L );
-		static int newOutline( lua_State *L ); // This returns an outline in texels.
 		static int newTexture( lua_State *L );
 		static int releaseTextures( lua_State *L );
         static int getFontMetrics( lua_State *L );
@@ -113,11 +109,9 @@ GraphicsLibrary::Open( lua_State *L )
 	{
 		{ "newMask", newMask },
 //		{ "newVertexArray", newVertexArray },
-		{ "newGradient", newGradient },
 		{ "newImageSheet", newImageSheet },
 		{ "defineEffect", defineEffect },
 		{ "listEffects", listEffects },
-		{ "newOutline", newOutline }, // This returns an outline in texels.
 		{ "newTexture", newTexture },
 		{ "releaseTextures", releaseTextures },
         { "getFontMetrics", getFontMetrics },
@@ -213,59 +207,6 @@ newVertexArray( lua_State *L )
 }
 */
 
-// graphics.newGradient( colorStart, colorEnd, direction )
-int
-GraphicsLibrary::newGradient( lua_State *L )
-{
-	if ( ! lua_istable( L, 1 ) )
-	{
-		luaL_typerror( L, 1, "table" );
-	}
-
-	if ( ! lua_istable( L, 2 ) )
-	{
-		luaL_typerror( L, 2, "table" );
-	}
-
-	if ( lua_type( L, 3 ) != LUA_TSTRING )
-	{
-		luaL_typerror( L, 3, "string" );
-	}
-
-	GraphicsLibrary *library = GraphicsLibrary::ToLibrary( L );
-	bool isV1Compatibility = library->GetDisplay().GetDefaults().IsV1Compatibility();
-	if ( ! isV1Compatibility )
-	{
-		Rtt_TRACE_SIM( (
-			"WARNING: graphics.newGradient() is deprecated. You can construct a table for the gradient instead. For example (assuming [0 to 1] color ranges):\n"
-			"\t{ type='gradient', color1={1,0,0,1}, color2={0,1,0,1}, direction='down' } \n" ) );
-	}
-
-	lua_newtable( L );
-	{
-		lua_pushvalue( L, 1 );
-		lua_setfield( L, -2, "color1" );
-
-		lua_pushvalue( L, 2 );
-		lua_setfield( L, -2, "color2" );
-
-		lua_pushvalue( L, 3 );
-		lua_setfield( L, -2, "direction" );
-
-		lua_pushstring( L, "gradient" );
-		lua_setfield( L, -2, "type" );
-
-		if ( library->GetDisplay().GetDefaults().IsByteColorRange() )
-		{
-			// Add a marker that the color channels are to be interpreted as [0-255]
-			lua_pushinteger( L, 1 );
-			lua_setfield( L, -2, "graphicsCompatibility" );
-		}
-	}
-	
-	return 1;
-}
-
 // graphics.newImageSheet( filename, [baseDir, ] options )
 int
 GraphicsLibrary::newImageSheet( lua_State *L )
@@ -318,250 +259,6 @@ GraphicsLibrary::listEffects( lua_State *L )
 
 	factory.PushList( L, c );
 	return 1;
-}
-
-static void
-b2Vec2Vector_to_lua_table( lua_State *L,
-							b2Vec2Vector &shape_outline_in_texels )
-{
-	size_t count = shape_outline_in_texels.size();
-	if( ! count )
-	{
-		// Nothing to do.
-		return;
-	}
-
-	// returns a Lua table of vertices {x1,y1, x2,y2, ... }
-	//
-	// We can use lua_newtable() here, but we know exactly how
-	// many records we'll put in the table ("count"). So we use
-	// lua_createtable() for better performance.
-	//
-	// 2: One for each of "x" and "y".
-	lua_createtable( L, 0, (int) ( count * 2 ) );
-
-	// Add the results in a flat list (lua table) of "x" and "y" coordinate
-	// in content-space of this vertex.
-	for( size_t i = 0;
-			i < count;
-			++i )
-	{
-		// -2 : This is used to refer to the table that was
-		// created above, using lua_createtable().
-		//
-		// lua_createtable() pushes a table to the top of the
-		// stack (at position "-1"). Then lua_pushnumber()
-		// pushes a number to the top of the stack (the new
-		// element at position "-1"). Now the table is right
-		// below the top of the stack (at position "-2").
-		//
-		// An alternative is to use lua_gettop() immediately
-		// after the creation of the above table. The index
-		// returned will refer to the table, and can be passed
-		// to every calls of lua_setfield() instead of "-2".
-
-		b2Vec2 &v = shape_outline_in_texels[ i ];
-
-		lua_pushnumber( L, v.x );
-		// Lua is one-based, so the first element must be at index 1.
-		lua_rawseti( L, -2, (int) ( ( i * 2 ) + 1 ) );
-
-		lua_pushnumber( L, v.y );
-		// Lua is one-based, so the second element must be at index 2.
-		lua_rawseti( L, -2, (int) ( ( i * 2 ) + 2 ) );
-	}
-}
-
-// graphics.newOutline( coarsenessInTexels, imageFileName [, baseDir] )
-// graphics.newOutline( coarsenessInTexels, imageSheet, frameIndex )
-// This returns an outline in texels.
-int
-GraphicsLibrary::newOutline( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-
-	if ( display.ShouldRestrict( Display::kGraphicsNewOutline ) )
-	{
-		return 0;
-	}
-
-	// coarseness in texels.
-	float coarseness_in_texels = std::max( (float)luaL_checknumber( L, 1 ),
-											1.0f );
-
-	PlatformBitmap *platform_bitmap = NULL;
-
-	int subregion_start_x = 0;
-	int subregion_start_y = 0;
-	int subregion_w = 0;
-	int subregion_h = 0;
-	int total_w = 0;
-	int total_h = 0;
-	BitmapPaint *paint = NULL;
-	
-	if( lua_isstring( L, 2 ) )
-	{
-		// imageFileName is mandatory.
-		const char *imageFileName = luaL_checkstring( L, 2 );
-		if( ! Rtt_VERIFY( imageFileName ) )
-		{
-			// Nothing to do.
-			return 0;
-		}
-
-		// baseDir is optional.
-		MPlatform::Directory baseDir = MPlatform::kResourceDir;
-		if ( lua_islightuserdata( L, 3 ) )
-		{
-			void *p = lua_touserdata( L, 3 );
-			baseDir = (MPlatform::Directory)EnumForUserdata( LuaLibSystem::Directories(),
-															 p,
-															 MPlatform::kNumDirs,
-															 MPlatform::kResourceDir );
-		}
-
-		// Load the image.
-		Runtime& runtime = display.GetRuntime();
-
-		paint = BitmapPaint::NewBitmap( runtime, imageFileName, baseDir, PlatformBitmap::kIsNearestAvailablePixelDensity );
-
-		platform_bitmap = paint->GetBitmap();
-
-		// Crop.
-		subregion_start_x = 0;
-		subregion_start_y = 0;
-		subregion_w = platform_bitmap->Width();
-		subregion_h = platform_bitmap->Height();
-		total_w = platform_bitmap->Width();
-		total_h = platform_bitmap->Height();
-	}
-	else if( lua_isuserdata( L, 2 ) )
-	{
-		ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, 2 );
-		if( ! ud )
-		{
-			// Nothing to do.
-			return 0;
-		}
-
-		int frameIndex = (int) lua_tointeger( L, 3 );
-		if ( frameIndex <= 0 )
-		{
-			Rtt_TRACE_SIM( ( "WARNING: graphics.newOutline( coarsenessInTexels, imageSheet, frameIndex ) given an invalid frameIndex (%d). Defaulting to 1.\n",
-							frameIndex ) );
-			frameIndex = 1;
-		}
-
-		// Map 1-based Lua indices to 0-based C indices
-		--frameIndex;
-
-		const AutoPtr< ImageSheet > &sheet = ud->GetSheet();
-		const ImageFrame *frame = sheet->GetFrame( frameIndex );
-		const SharedPtr< TextureResource > &texture_resource = sheet->GetTextureResource();
-
-		platform_bitmap = texture_resource->GetBitmap();
-
-		// Crop.
-		subregion_start_x = frame->GetPixelX();
-		subregion_start_y = frame->GetPixelY();
-		subregion_w = frame->GetPixelW();
-		subregion_h = frame->GetPixelH();
-		total_w = texture_resource->GetWidth();
-		total_h = texture_resource->GetHeight();
-	}
-	else
-	{
-		Rtt_TRACE_SIM(
-			( "ERROR: bad argument #2 to graphics.newOutline(): filename or image sheet expected, but got %s.\n",
-				lua_typename( L, lua_type( L, 2 ) ) ) );
-	}
-
-	// Sanity check.
-	{
-		PlatformBitmap::Format format = platform_bitmap->GetFormat();
-		size_t bytesPerPixel = PlatformBitmap::BytesPerPixel( format );
-
-		// 4: RGBA.
-		Rtt_ASSERT( bytesPerPixel == 4 );
-	}
-
-	// IMPORTANT:
-	//
-	// The output is a LIST of POINTS that OUTLINES ONE object
-	// in the input image.
-	//
-	// The object outlined is the FIRST one encountered using
-	// a left-to-right, top-to-bottom, scan of the input image.
-	//
-	// It's possible for the outline to be CONCAVE.
-
-	b2Vec2Vector shape_outline_in_texels;
-
-	const unsigned char *raw_bitmap_buffer = static_cast< const unsigned char * >( platform_bitmap->GetBits( NULL ) );
-
-	int alphaIndex;
-	PlatformBitmap::Format format = platform_bitmap->GetFormat();
-	if ( ! PlatformBitmap::GetColorByteIndexesFor( format, & alphaIndex, NULL, NULL, NULL ) )
-	{
-		alphaIndex = 0;
-	}
-#ifdef Rtt_ANDROID_ENV
-	// TODO: AndroidBitmap::GetFormat() is returning the wrong format,
-	// so we need to force this to the correct channel
-	alphaIndex = 3;
-#endif
-
-	// Note: We could add an option to center the output of MakeSmoothPolygon().
-	// Currently, the origin of the result is the first vertex of the first edge
-	// encountered.
-	shape_outline_in_texels = MakeSmoothPolygon( raw_bitmap_buffer,
-													subregion_start_x,
-													subregion_start_y,
-													subregion_w,
-													subregion_h,
-													total_w,
-													total_h,
-													coarseness_in_texels,
-													alphaIndex );
-
-	// This is NECESSARY because of the platform_bitmap->GetBits() above.
-	platform_bitmap->FreeBits();
-	Rtt_DELETE(paint);
-	
-#	if ENABLE_DEBUG_PRINT 
-
-		Rtt_Log( "%s\ntexture size : %d x %d\ncoarseness_in_texels : %f\nshape_outline_in_texels.size() : %d\n",
-					Rtt_FUNCTION,
-					w,
-					h,
-					coarseness_in_texels,
-					shape_outline_in_texels.size() );
-
-		// Print all vertices part of the outline.
-		{
-			for( size_t i = 0;
-					i < shape_outline_in_texels.size();
-					++i )
-			{
-				Rtt_Log( "%03d %3.1f %3.1f\n",
-							i,
-							shape_outline_in_texels[ i ].x,
-							shape_outline_in_texels[ i ].y );
-			}
-		}
-
-#	endif // ENABLE_DEBUG_PRINT
-
-	int top_index_before = lua_gettop( L );
-
-	b2Vec2Vector_to_lua_table( L,
-								shape_outline_in_texels );
-
-	// We want to return true if we're returning a result.
-	// Therefore we can compare the top index of the Lua stack before
-	// and after to know if we're returning a table of hits.
-	return ( top_index_before != lua_gettop( L ) );
 }
 
 //helper funciton to parse lua table to create bitmap resource

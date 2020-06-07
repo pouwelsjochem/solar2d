@@ -18,11 +18,6 @@ simulator =
 	deviceImage = "HTCSensation.png",
 	displayManufacturer = "HTC",
 	displayName = "Sensation",
-	statusBarDefault = "", 
-	statusBarTranslucent = "", 
-	statusBarBlack = "", 
-	statusBarLightTransparent = "",
-	statusBarDarkTransparent = "",
 	windowTitleBarName = "HTC Sensation",
 }
 simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

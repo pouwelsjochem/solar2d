@@ -237,11 +237,6 @@ void CBuildProgressDlg::BuildForAndroid()
     strAlias.SetTCHAR( fProjectSettingsPointer->GetAlias() );
     strAliasPwd.SetTCHAR( fProjectSettingsPointer->GetAliasPassword() );
     strSaveDir.SetTCHAR( fProjectSettingsPointer->GetSaveDir() );
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-	bool includeFusePlugins = AfxGetApp()->GetProfileInt(REGISTRY_SECTION, REGISTRY_DEBUG_MONETIZATION_PLUGIN,
-		REGISTRY_DEBUG_MONETIZATION_PLUGIN_DEFAULT) ? true : false;
-#endif
-
 
 	// Build the project. (This is a blocking call.)
 	fBuildResult = appAndroidBuild(
@@ -254,10 +249,6 @@ void CBuildProgressDlg::BuildForAndroid()
 							fProjectSettingsPointer->IsDistribution(),
 							fProjectSettingsPointer->GetAndroidVersionCode(),
 							fProjectSettingsPointer->GetCreateLiveBuild()
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-							, includeFusePlugins,
-							fProjectSettingsPointer->GetEnableMonetization()
-#endif
 							);
 
 	PostMessage(WMU_BUILD_COMPLETE, 0, 0);

@@ -136,7 +136,6 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 		// Set up OpenGL to render with a 32-bit color depth. (The default is 16-bit.)
 		// This must be done before setting the renderer below.
 		// Note: The alpha channel must be disabled for the "surface" to work-around an OpenGL driver bug on Kindle Fire
-		//       and Nook Tablet where all alpha blended polygons, including the GL clear color, will be blended with black.
 		//       Alpha blending of content will still work because of the 32-bit color PixelFormat set down below.
 		setEGLConfigChooser(8, 8, 8, 8, 0, 0);
 

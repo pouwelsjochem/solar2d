@@ -200,7 +200,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 				virtual int GetScreenHeightInPixels() const override;
 				virtual int GetAdaptiveScreenWidthInPixels() const override;
 				virtual int GetAdaptiveScreenHeightInPixels() const override;
-				virtual const char* GetStatusBarImageFilePathFor(Rtt::MPlatform::StatusBarMode value) const override;
 				virtual void RotateClockwise() override;
 				virtual void RotateCounterClockwise() override;
 				virtual void* ShowNativeAlert(
@@ -213,14 +212,11 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 				virtual void Shake() override;
 				virtual const char* GetOSName() const override;
 				virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const override;
-				virtual Rtt::MPlatform::StatusBarMode GetStatusBar() const override;
-				virtual void SetStatusBar(Rtt::MPlatform::StatusBarMode newValue) override;
 
 			private:
 				SimulatorRuntimeEnvironment* fEnvironmentPointer;
 				const Rtt::PlatformSimulator::Config* fDeviceConfigPointer;
 				Rtt::DeviceOrientation::Type fCurrentOrientation;
-				Rtt::MPlatform::StatusBarMode fCurrentStatusBar;
 		};
 
 		#pragma endregion

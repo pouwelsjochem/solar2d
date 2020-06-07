@@ -78,7 +78,7 @@ int luaL_initpath( lua_State *L, const MPlatform& platform, int index, String& o
 // pushed to Lua.
 // 
 // Ownership assumptions and usage consequences:
-// * Some other entity will own the actual userdata pointer (e.g. b2World owns b2Joint's).
+// * Some other entity will own the actual userdata pointer
 // * UserdataWrapper will have a *weak* pointer to the C pointer (userdata). Therefore:
 //		You should mark the pointer (the one you are wrapping) as invalid when
 //		the pointer is destroyed by calling Invalidate() on the wrapper, since

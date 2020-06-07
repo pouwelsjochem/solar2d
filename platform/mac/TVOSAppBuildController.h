@@ -19,7 +19,6 @@
         BOOL signingIdentitiesAdded;
 		NSMenuItem *currentTVOSSimulatorItem;
 
-//        IBOutlet NSButton *fEnableMonetization;
         BOOL fWarnedAboutUnsupportedSDK;
 
         IBOutlet NSWindow *packageSheet;

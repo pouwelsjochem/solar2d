@@ -43,12 +43,7 @@ static const char* kPathToCoronaExampleForQuickTestOfSampleDirectory = "pathToCo
 static const char* kPathToCoronaExamples = "pathToCoronaExamples";
 static const char* kGettingStartedURL = "gettingStartedURL";
 static const char* kProgrammingGuideURL = "programmingGuideURL";
-
-#ifdef Rtt_GAMEEDITION
 static NSString* const kDefaultPathToCoronaExampleForQuickTestOfSampleDirectory = @"Bridge/main.lua";
-#else
-static NSString* const kDefaultPathToCoronaExampleForQuickTestOfSampleDirectory = @"GettingStarted/HelloWorld/main.lua";
-#endif
 
 @class AppDelegate;
 
@@ -641,12 +636,9 @@ static NSString* const kDefaultPathToCoronaExampleForQuickTestOfSampleDirectory 
 {
     NSMetadataQuery* metadata_query = [[NSMetadataQuery alloc] init];
 	metadataQuery = metadata_query;
+	
 	// We use this file as the anchor or magnet file for Spotlight.
-#ifdef Rtt_GAMEEDITION
 	NSString* predicate_string = @"kMDItemDisplayName == 'About_Corona_Game_Edition_Sample_Code.txt'";
-#else
-	NSString* predicate_string = @"kMDItemDisplayName == 'About_Corona_Sample_Code.txt'";
-#endif
 	
 	if( NULL != welcomeLuaConfiguration )
 	{

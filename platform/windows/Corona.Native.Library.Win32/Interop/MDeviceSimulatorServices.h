@@ -50,7 +50,6 @@ class MDeviceSimulatorServices
 		virtual int GetScreenHeightInPixels() const = 0;
 		virtual int GetAdaptiveScreenWidthInPixels() const = 0;
 		virtual int GetAdaptiveScreenHeightInPixels() const = 0;
-		virtual const char* GetStatusBarImageFilePathFor(Rtt::MPlatform::StatusBarMode value) const = 0;
 		virtual void RotateClockwise() = 0;
 		virtual void RotateCounterClockwise() = 0;
 		virtual void* ShowNativeAlert(
@@ -63,8 +62,6 @@ class MDeviceSimulatorServices
 		virtual void Shake() = 0;
 		virtual const char* GetOSName() const = 0;
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const = 0;
-		virtual Rtt::MPlatform::StatusBarMode GetStatusBar() const = 0;
-		virtual void SetStatusBar(Rtt::MPlatform::StatusBarMode newValue) = 0;
 
 };
 

@@ -210,7 +210,6 @@ IPhoneMediaProvider::IPhoneMediaProvider()
 :	fImagePicker( nil ),
 	fPopoverController( nil ),
 	fDstPath( nil ),
-	iOS5statusBarHidden( false ),
 	fDelegate( nil )
 {
 }
@@ -279,13 +278,6 @@ IPhoneMediaProvider::MediaProviderTypeToImagePickerSourceType( int source )
 void
 IPhoneMediaProvider::Show( UIImagePickerControllerSourceType source, NSString* mediaTypes, NSObject<UIImagePickerControllerDelegate>* delegate, lua_State* L, int tableIndex, NSTimeInterval maxTime, UIImagePickerControllerQualityType quality )
 {
-	// iOS 5.0 introduces a bug where the status bar comes back if it is hidden on dismiss.
-	// Seems to be fixed in 5.1 beta (unless iPod touch 4th gen was not originally affected)
-	if ( Internal_IsOS5_0() && (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) )
-	{
-		iOS5statusBarHidden = [[UIApplication sharedApplication] isStatusBarHidden];
-	}
-	
 	if ( ! fDelegate )
 	{
 		fDelegate = [[IPhoneMediaPickerControllerDelegate alloc] init];

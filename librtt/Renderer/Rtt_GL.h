@@ -22,9 +22,6 @@
 	#elif defined( Rtt_ANDROID_ENV ) || defined( Rtt_WEBOS_ENV ) || defined( Rtt_WIN_PHONE_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )
 		#include <GLES2/gl2.h>
 		#include <GLES2/gl2ext.h>
-	#elif defined( Rtt_POWERVR_ENV )
-		#include <GLES/egl.h>
-		#include <GLES/gl.h>
 	#else
 		#error TODO: Add path to gl.h header
 	#endif
@@ -86,8 +83,6 @@ void GLLogError( const char* message, const char* file, int line );
 	#define Rtt_glBindFragDataLocation
 	#define Rtt_glClearDepth			glClearDepthf
 	#define Rtt_glDepthRange			glDepthRangef
-	#define Rtt_glDisableMultisample()
-	#define Rtt_glEnableMultisample()
 
 #else
 
@@ -104,8 +99,6 @@ void GLLogError( const char* message, const char* file, int line );
 	#define Rtt_glBindFragDataLocation( program, colorNumber, name )	glBindFragDataLocation( program, colorNumber, name )
 	#define Rtt_glClearDepth											glClearDepth
 	#define Rtt_glDepthRange											glDepthRange
-	#define Rtt_glDisableMultisample()									glDisable( GL_MULTISAMPLE )
-	#define Rtt_glEnableMultisample()									glEnable( GL_MULTISAMPLE )
 
 #endif
     

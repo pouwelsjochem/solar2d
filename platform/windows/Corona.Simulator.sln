@@ -10,8 +10,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Corona.Simulator", "Corona.
 		{6FED91A6-2850-4354-BA44-3282D222A25D} = {6FED91A6-2850-4354-BA44-3282D222A25D}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Box2D.Library.Win32", "Box2D.Library\Box2D.Library.Win32.vcxproj", "{EB74DA6F-6EBC-422E-8B7B-88A93AD5F8D6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Corona.Archiver", "Corona.Archiver\Corona.Archiver.vcxproj", "{7D790153-1892-4007-8FA5-E3B57CF1F7E2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Corona.Debugger", "Corona.Debugger\Corona.Debugger.vcxproj", "{3F8DDAA9-2A84-4CEE-BAC0-A6A17A7A78EB}"

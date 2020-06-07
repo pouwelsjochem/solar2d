@@ -208,9 +208,6 @@ public final class CoronaEnvironment {
 	 * @param context Context needed to access this application's directories. Cannot be null.
 	 * @return Returns a File object set to the specified directory.
 	 */
-
-	// WARNING: This is used in com.ansca.corona.maps.MapView via reflection so check there before
-	// making any changes to this method
 	static java.io.File getInternalResourceCachesDirectory(android.content.Context context) {
 		// Store the application context, if not done already.
 		setApplicationContext(context);
@@ -234,9 +231,6 @@ public final class CoronaEnvironment {
 	 * @param context Context needed to access this application's directories. Cannot be null.
 	 * @return Returns a File object set to the specified directory.
 	 */
-
-	// WARNING: This is used in com.ansca.corona.maps.MapView via reflection so check there before
-	// making any changes to this method
 	static java.io.File getInternalWebCachesDirectory(android.content.Context context) {
 		// Store the application context, if not done already.
 		setApplicationContext(context);

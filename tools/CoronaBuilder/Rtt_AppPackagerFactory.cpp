@@ -51,7 +51,6 @@ AppPackagerContext::AppPackagerContext( TargetDevice::Platform platform )
 	{
 		case TargetDevice::kAndroidPlatform:
 		case TargetDevice::kKindlePlatform:
-		case TargetDevice::kNookPlatform:
 			fRequiresJava = true;
 			break;
 		default:
@@ -235,8 +234,7 @@ AppPackagerFactory::CreatePackagerParams( lua_State *L, int index, TargetDevice:
 #endif
 #if defined(CORONABUILDER_ANDROID)
 	if (targetPlatform == TargetDevice::kAndroidPlatform
-		|| targetPlatform == TargetDevice::kKindlePlatform
-		|| targetPlatform == TargetDevice::kNookPlatform)
+		|| targetPlatform == TargetDevice::kKindlePlatform)
 	{
 		result = CreatePackagerParamsAndroid(L,
 											 index,

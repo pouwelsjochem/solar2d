@@ -42,7 +42,6 @@ class DisplayObject;
 class LuaContext;
 class MRuntimeDelegate;
 class RenderingStream;
-class PhysicsWorld;
 class BitmapPaint;
 class PlatformExitCallback;
 class PlatformSurface;
@@ -182,9 +181,6 @@ class Runtime : public MCallback,
 		void InitializeArchive( const char *filePath );
 		bool VerifyApplication( const char *filePath );
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-		void InitializeFuse( lua_State *L, int index );
-#endif
 		static int InitializeMetadataShim( lua_State *L );
 		void InitializeMetadata( lua_State *L, int index );
 
@@ -324,10 +320,6 @@ class Runtime : public MCallback,
 */
 
 	public:
-		PhysicsWorld& GetPhysicsWorld() { return * fPhysicsWorld; }
-		const PhysicsWorld& GetPhysicsWorld() const { return * fPhysicsWorld; }
-
-	public:
 		// MCallback
 		virtual void operator()();
 
@@ -340,10 +332,6 @@ class Runtime : public MCallback,
 		// MCriticalSection
 		virtual void Begin() const;
 		virtual void End() const;
-
-	public:
-		// MDisplayDelegate
-		virtual void WillDispatchFrameEvent( const Display& sender );
 
 #if defined(Rtt_AUTHORING_SIMULATOR)
 	public:
@@ -368,7 +356,6 @@ class Runtime : public MCallback,
 		PlatformTimer* fTimer;
 		Scheduler* fScheduler;
 		Archive* fArchive;
-		PhysicsWorld *fPhysicsWorld;
 	
 #ifdef Rtt_USE_ALMIXER
 		PlatformOpenALPlayer* fOpenALPlayer;

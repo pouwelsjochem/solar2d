@@ -215,9 +215,7 @@ GroupObject::Draw( Renderer& renderer ) const
 
 			if ( ! child->IsOffScreen() )
 			{
-				child->WillDraw( renderer );
 				child->Draw( renderer );
-				child->DidDraw( renderer );
 			}
 		}
 

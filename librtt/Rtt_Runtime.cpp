@@ -27,7 +27,6 @@
 #include "Rtt_MPlatform.h"
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_MRuntimeDelegate.h"
-#include "Rtt_PhysicsWorld.h"
 #include "Rtt_PlatformExitCallback.h"
 #include "Rtt_PlatformTimer.h"
 #include "Rtt_Scheduler.h"
@@ -142,30 +141,20 @@ int Runtime::ShellPluginCollector_Async(lua_State* L)
 #endif
 // ----------------------------------------------------------------------------
 
-// These iterations are reasonable default values. See http://www.box2d.org/forum/viewtopic.php?f=8&t=4396 for discussion.
-// NOT USED: const S32 kVelocityIterations = 8;
-// NOT_USED const S32 kPositionIterations = 3;
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-static const char kFusePluginName[] = "plugin.fuse";
-static const char kFusePublisherId[] = "com.coronalabs";
-#endif
-
 // ----------------------------------------------------------------------------
 
-Runtime::Runtime(const MPlatform& platform, MCallback* viewCallback)
-	: fAllocator(platform.GetAllocator()),
-	fPlatform(platform),
-	fStartTime(Rtt_GetAbsoluteTime()),
-	fStartTimeCorrection(0),
-	fSuspendTime(0),
-	fResourcesHead(Rtt_NEW(&fAllocator, CachedResource(*this, NULL))),
-	fDisplay(Rtt_NEW(&fAllocator, Display(*this))),
-	fVMContext(LuaContext::New(Allocator(), platform, this)),
-	fTimer(platform.CreateTimerWithCallback(viewCallback ? *viewCallback : *this)),
-	fScheduler(Rtt_NEW(&fAllocator, Scheduler(*this))),
-	fArchive(NULL),
-	fPhysicsWorld(Rtt_NEW(&fAllocator, PhysicsWorld(fAllocator))),
+Runtime::Runtime( const MPlatform& platform, MCallback *viewCallback )
+:	fAllocator( platform.GetAllocator() ),
+	fPlatform( platform ),
+	fStartTime( Rtt_GetAbsoluteTime() ),
+	fStartTimeCorrection( 0 ),
+	fSuspendTime( 0 ),
+	fResourcesHead( Rtt_NEW( & fAllocator, CachedResource( * this, NULL ) ) ),
+	fDisplay( Rtt_NEW( & fAllocator, Display( * this ) ) ),
+	fVMContext( LuaContext::New( Allocator(), platform, this ) ), 
+	fTimer( platform.CreateTimerWithCallback( viewCallback ? * viewCallback : * this ) ),
+	fScheduler( Rtt_NEW( & fAllocator, Scheduler( * this ) ) ),
+	fArchive( NULL ),
 #ifdef Rtt_USE_ALMIXER
 	fOpenALPlayer(NULL),
 #endif
@@ -248,20 +237,9 @@ Runtime::~Runtime()
 	// since it will count images loaded by shell.lua as being removed.
 	SetProperty( kIsApplicationExecuting, false );
 
-	fPhysicsWorld->WillDestroyDisplay();
-
 	// Must delete this *after* Lua is destroyed, since certain Lua finalizers
 	// rely on fDisplay being valid
 	Rtt_DELETE( fDisplay );
-	
-	// Technically, C++ rules say we should destroy fWorld before fDisplayList,
-	// but fDisplayList has display objects that own b2Body objects and require
-	// the fWorld to exist in order to call DestroyBody properly.  Therefore, we
-	// postpone destroying the world.  Muhahahaha!
-#ifdef Rtt_PHYSICS
-	fPhysicsWorld->StopWorld();
-	Rtt_DELETE( fPhysicsWorld );
-#endif
 
 	fResourcesHead->Release();
 #if defined(Rtt_AUTHORING_SIMULATOR)
@@ -313,7 +291,7 @@ LoadMainGuard::~LoadMainGuard()
 // (see AppDelegate.mm on iOS or CoronaActivity.java on Android)
 
 // LoadMainTask is used by the authoring simulator only. Its main purpose is to
-// wrap up code in shell.lua for displaying splash screen and status bars.
+// wrap up code in shell.lua for displaying splash screen.
 class LoadMainTask : public Task
 {
 	public:
@@ -449,62 +427,9 @@ pushShellArgs( lua_State* L )
 
 	lua_createtable( L, 0, 8 ); // params
 	{
-		// Pass overlay as first argument to shell.lua
-		GroupObject *overlay = runtime->GetDisplay().Overlay(); Rtt_ASSERT( overlay );
-		overlay->InitProxy( L );
-		overlay->GetProxy()->PushTable( L );
-		lua_setfield( L, -2, "overlay" ); // params.overlay
-
 		// Pass function to schedule LoadMainTask
 		lua_pushcfunction( L, onShellComplete );
 		lua_setfield( L, -2, "onShellComplete" ); // params.onShellComplete
-
-		// Pass table of status bar file names
-		lua_newtable( L );
-		{
-			platform.GetPreference( MPlatform::kDefaultStatusBarFile, &value );
-			if ( ! value.IsEmpty() )
-			{
-				lua_pushstring( L, value.GetString() );
-				lua_setfield( L, -2, "default" );
-			}
-
-			platform.GetPreference( MPlatform::kDarkStatusBarFile, &value );
-			if ( ! value.IsEmpty() )
-			{
-				lua_pushstring( L, value.GetString() );
-				lua_setfield( L, -2, "dark" );
-			}
-
-			platform.GetPreference( MPlatform::kTranslucentStatusBarFile, &value );
-			if ( ! value.IsEmpty() )
-			{
-				lua_pushstring( L, value.GetString() );
-				lua_setfield( L, -2, "translucent" );
-			}
-
-			platform.GetPreference( MPlatform::kLightTransparentStatusBarFile, &value );
-			if ( ! value.IsEmpty() )
-			{
-				lua_pushstring( L, value.GetString() );
-				lua_setfield( L, -2, "lightTransparent" );
-			}
-
-			platform.GetPreference( MPlatform::kDarkTransparentStatusBarFile, &value );
-			if ( ! value.IsEmpty() )
-			{
-				lua_pushstring( L, value.GetString() );
-				lua_setfield( L, -2, "darkTransparent" );
-			}
-
-			platform.GetPreference( MPlatform::kScreenDressingFile, &value );
-			if ( ! value.IsEmpty() )
-			{
-				lua_pushstring( L, value.GetString() );
-				lua_setfield( L, -2, "screenDressing" );
-			}
-		}
-		lua_setfield( L, -2, "statusBarFiles" ); // params.statusBarFiles
 
 		lua_pushboolean( L, runtime->IsProperty( Runtime::kIsDebuggerConnected ) );
 		lua_setfield( L, -2, "isDebuggerConnected" ); // params.isDebuggerConnected
@@ -550,24 +475,9 @@ pushShellArgs( lua_State* L )
 
 	lua_createtable( L, 0, 2 ); // params
 	{
-		// Pass overlay as first argument to shell.lua
-		GroupObject *overlay = runtime->GetDisplay().Overlay();
-		if (overlay)
-		{
-			overlay->InitProxy( L );
-			overlay->GetProxy()->PushTable( L );
-			lua_setfield( L, -2, "overlay" ); // params.overlay
-		
-			bool showTrialMessage = runtime->IsShowingTrialMessage();
-			lua_pushboolean(L, showTrialMessage);
-			lua_setfield(L, -2, "showMessage");
-		}
-		
-
 		// Pass function to schedule LoadMainTask
 		lua_pushcfunction( L, onShellComplete );
 		lua_setfield( L, -2, "onShellComplete" ); // params.onShellComplete
-
 	}
 
 	return result;
@@ -626,95 +536,6 @@ Runtime::InitializeArchive( const char *filePath )
 }
 
 static const char kApplication[] = "application";
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-
-// Extracts the metadata, and pass it to Fuse:
-//    local fuse = require "plugin.fuse"
-//    local params = ... -- from config.lua
-//    fuse._start( params )
-//
-// Assumes "application" table from config.lua is at index
-//
-/*
--- config.lua
-application =
-{
-	-- This is a PRIVATE override mechanism
-	-- This is for situations where we need to provide the developer a manual
-	-- override mechanism, e.g. the publisher relations team needs to do a one-off
-	fuse =
-	{
-		-- Format 1: single string
-		appKey = "string",
-
-		-- Format 2: table of strings
-		appKey = {
-			ios = "key",
-			android = "key",
-		}
-	},
-
-	-- Standard use case for Corona
-	-- This is generated by the build server
-	metadata =
-	{
-		appKey = nil,
-
-		-- In the future, we could change this to be a table (as above)
-		-- since plugins will have to recognize both formats
-	},
-	
-	-- Standard use case for CoronaEnterprise
-	-- Nothing. Just manually pass appKey:
-	--
-	-- [main.lua]
-	-- fuse.init( appKey, listener )
-}
-*/
-void
-Runtime::InitializeFuse( lua_State *L, int index )
-{
-	int top = lua_gettop( L );
-
-	index = Lua::Normalize( L, index );
-
-	// [Lua] local fuse = require "plugin.fuse"
-	// NOTE: Normally we'd use Lua::PushModule( "plugin.fuse" )
-	// but we want this to silently fail so we have to drop down
-	// and use low level calls instead.
-	lua_getglobal( L, "require" );
-	lua_pushstring( L, kFusePluginName );
-	int status = lua_pcall( L, 1, 1, 0 );
-
-	if ( 0 == status )
-	{
-		lua_getfield( L, -1, "_start" );
-
-		if ( LUA_TFUNCTION == lua_type( L, -1 ) )
-		{
-			// Enable manual-override
-			// [Lua] local params = application.fuse
-			lua_getfield( L, index, "fuse" ); // application.fuse from config.lua
-
-			if ( lua_isnil( L,  -1 ) )
-			{
-				// None found
-				lua_pop( L, 1 ); // pop nil
-
-				// Use server-provided metadata instead
-				// [Lua] local params = application.metadata
-				lua_getfield( L, index, "metadata" ); // application.metadata from config.lua
-			}
-			
-			// [Lua] fuse._start( params )
-			Lua::DoCall( L, 1, 0 );
-		}
-	}
-
-	lua_settop( L, top );
-}
-#endif // AUTO_INCLUDE_MONETIZATION_PLUGIN
 
 int
 Runtime::InitializeMetadataShim( lua_State *L )
@@ -787,20 +608,6 @@ Runtime::PushConfig( lua_State *L, bool shouldRestrictLibs )
 	lua_pushcclosure( L, InitializeMetadataShim, 1 );
 	lua_setglobal( L, "initializeMetadata" );
 	{
-	#ifdef Rtt_AUTHORING_SIMULATOR
-		if ( shouldRestrictLibs )
-		{
-			// NOTE: The build server Execute restrictLibs and config_require
-			Rtt::String value( GetAllocator() );
-			fPlatform.GetPreference( MPlatform::kSubscription, &value );
-
-			// [Lua] restrictLibs( value )
-			lua_pushcfunction( L, restrictLibs );
-			lua_pushstring( L, value.GetString() );
-			VMContext().DoCall( L, 1, 0 );
-		}
-	#endif
-
 		if ( IsProperty( kIsApplicationNotArchived ) )
 		{
 			// Load from individual Lua file
@@ -842,12 +649,7 @@ Runtime::PushConfig( lua_State *L, bool shouldRestrictLibs )
 		lua_getglobal( L, kApplication ); // application
 
 		if ( lua_istable( L, -1 ) )
-		{
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-			// Read server-generated metadata before popping application
-			InitializeFuse( L, -1 );
-#endif
-			
+		{			
 			lua_getfield( L, -1, "showRuntimeErrors" );
             bool runtimeErrorsExplicitlySet = ! lua_isnil( L, -1 );
             SetProperty( kShowRuntimeErrorsSet, runtimeErrorsExplicitlySet );
@@ -892,13 +694,6 @@ Runtime::ReadConfig( lua_State *L )
 	// Rtt_ASSERT( ! fDisplay );
 	Rtt_ASSERT( 1 == lua_gettop( L ) );	
 	Rtt_ASSERT( lua_istable( L, -1 ) );
-
-	lua_getfield( L, -1, "multisample" );
-	if ( lua_toboolean( L, -1 ) != 0 )
-	{
-		fDisplay->SetAntialiased( true );
-	}
-	lua_pop( L, 1 );
 
 	lua_getfield( L, -1, "fps" );
 	int fps = (int) lua_tointeger( L, -1 );
@@ -1106,12 +901,6 @@ Runtime::FindDownloadablePlugins( const char *simPlatformName )
 
 					lua_pop(L, 1); // pop value; keep 'key' for next iteration
 				}
-
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-				// Always download the fuse plugin stub
-				AddDownloadablePlugin(runtimeL, kFusePluginName, kFusePublisherId, downloadablePluginsIndex, false, NULL);
-#endif
-
 				lua_pop(runtimeL, 1); // pop downloadablePlugins table
 			}
 			lua_pop(L, 1); // pop plugins
@@ -1381,8 +1170,6 @@ Runtime::BeginRunLoop()
 {
 	const U32 kFps = fFPS;
 	const U32 kInterval = 1000 / kFps;
-
-	fPhysicsWorld->Initialize( GetFrameInterval() );
 
 	fDisplay->SetDelegate( this );
 	fDisplay->Start();
@@ -1763,10 +1550,6 @@ Runtime::UnloadResources()
 	while ( lua_next( L, t ) )
 	{
 		CachedResource* resource = (CachedResource*)lua_touserdata( L, -1 ); Rtt_ASSERT( ! resource || lua_type( L, -1 ) == LUA_TLIGHTUSERDATA );
-
-#ifdef OLD_GRAPHICS
-		resource->Unload();
-#endif
 		lua_pop( L, 1 );
 	}
 
@@ -1792,9 +1575,6 @@ Runtime::ReloadResources()
 	while ( lua_next( L, t ) )
 	{
 		CachedResource* resource = (CachedResource*)lua_touserdata( L, -1 ); Rtt_ASSERT( ! resource || lua_type( L, -1 ) == LUA_TLIGHTUSERDATA );
-#ifdef OLD_GRAPHICS
-		resource->Reload();
-#endif
 		lua_pop( L, 1 );
 	}
 
@@ -2016,12 +1796,6 @@ void
 Runtime::End() const
 {
 	fPlatform.EndRuntime( * this );
-}
-
-void
-Runtime::WillDispatchFrameEvent( const Display& sender )
-{
-	fPhysicsWorld->StepWorld( GetElapsedMS() );
 }
 
 // ----------------------------------------------------------------------------

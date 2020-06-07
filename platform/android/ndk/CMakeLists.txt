@@ -32,9 +32,7 @@ include_directories (
 	${CORONA_ROOT}/plugins/shared
 	${CORONA_ROOT}/platform/android/ndk
 	${CORONA_ROOT}/platform/shared
-	${CORONA_ROOT}/external/Box2D
     ${CORONA_ROOT}/external/libjpeg
-    ${CORONA_ROOT}/external/b2Separator-cpp
     ${CORONA_ROOT}/external/smoothpolygon
     ${ANDROID_NDK_ROOT}/sources/android/cpufeatures
 )
@@ -49,35 +47,6 @@ SET( LUA_SOURCES
 	"${CORONA_ROOT}/platform/resources/loader_callback.lua"
 	"${CORONA_ROOT}/platform/resources/launchpad.lua"
 	"${CORONA_ROOT}/subrepos/easing/easing.lua"
-	"${CORONA_ROOT}/subrepos/composer/composer.lua"
-	"${CORONA_ROOT}/subrepos/composer/composer_scene.lua"
-	"${CORONA_ROOT}/subrepos/timer/timer.lua"
-	"${CORONA_ROOT}/subrepos/transition/transition.lua"
-	"${CORONA_ROOT}/subrepos/transition/transition_v1.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_button.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_momentumScrolling.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_pickerWheel.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_scrollview.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_slider.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_tabbar.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_tableview.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_progressView.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_searchField.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_segmentedControl.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_spinner.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_stepper.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_switch.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_dark.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_dark_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_light.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_light_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios7_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios7.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaLibrary.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaPrototype.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaProvider.lua"
@@ -216,8 +185,6 @@ add_library( corona SHARED
 		Rtt_AndroidImageProvider.cpp
 		Rtt_AndroidInputDevice.cpp
 		Rtt_AndroidInputDeviceManager.cpp
-		Rtt_AndroidLocation.cpp
-		Rtt_AndroidMapViewObject.cpp
 		Rtt_AndroidModalInteraction.cpp
 		Rtt_AndroidDevice.cpp
 		Rtt_AndroidPlatform.cpp
@@ -259,35 +226,6 @@ add_library( corona SHARED
 		${Lua2CppOutputDir}/loader_ccdata.cpp
 		${Lua2CppOutputDir}/loader_callback.cpp
 		${Lua2CppOutputDir}/launchpad.cpp
-		${Lua2CppOutputDir}/composer.cpp
-		${Lua2CppOutputDir}/composer_scene.cpp
-		${Lua2CppOutputDir}/timer.cpp
-		${Lua2CppOutputDir}/transition.cpp
-		${Lua2CppOutputDir}/transition_v1.cpp
-		${Lua2CppOutputDir}/widget.cpp
-		${Lua2CppOutputDir}/widget_button.cpp
-		${Lua2CppOutputDir}/widget_momentumScrolling.cpp
-		${Lua2CppOutputDir}/widget_pickerWheel.cpp
-		${Lua2CppOutputDir}/widget_scrollview.cpp
-		${Lua2CppOutputDir}/widget_slider.cpp
-		${Lua2CppOutputDir}/widget_tabbar.cpp
-		${Lua2CppOutputDir}/widget_tableview.cpp
-		${Lua2CppOutputDir}/widget_progressView.cpp
-		${Lua2CppOutputDir}/widget_searchField.cpp
-		${Lua2CppOutputDir}/widget_segmentedControl.cpp
-		${Lua2CppOutputDir}/widget_spinner.cpp
-		${Lua2CppOutputDir}/widget_stepper.cpp
-		${Lua2CppOutputDir}/widget_switch.cpp
-		${Lua2CppOutputDir}/widget_theme_android_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_android.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_dark.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_dark_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_light.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_light_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_ios_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_ios.cpp
-		${Lua2CppOutputDir}/widget_theme_ios7_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_ios7.cpp
 		${Lua2CppOutputDir}/shell.cpp
 
 		${CORONA_ROOT}/external/luasocket/src/auxiliar.c
@@ -362,9 +300,7 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayDefaults.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayPath.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_DisplayV2.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_EmbossedTextObject.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_EmitterObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GradientPaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GradientPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GroupObject.cpp
@@ -439,11 +375,9 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Input/Rtt_PlatformInputDeviceManager.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp
-		${CORONA_ROOT}/librtt/b2GLESDebugDraw.cpp
 		${CORONA_ROOT}/librtt/Rtt_Archive.cpp
 		${CORONA_ROOT}/librtt/Rtt_CKWorkflow.cpp
 		${CORONA_ROOT}/librtt/Rtt_DeviceOrientation.cpp
-		${CORONA_ROOT}/librtt/Rtt_DisplayObjectExtensions.cpp
 		${CORONA_ROOT}/librtt/Rtt_Event.cpp
 		${CORONA_ROOT}/librtt/Rtt_ExplicitTemplates.cpp
 		${CORONA_ROOT}/librtt/Rtt_FilePath.cpp
@@ -465,7 +399,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_LuaLibMedia.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibNative.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibOpenAL.cpp
-		${CORONA_ROOT}/librtt/Rtt_LuaLibPhysics.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibSQLite.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibSystem.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaProxy.cpp
@@ -475,11 +408,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_LuaTableIterator.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaUserdataProxy.cpp
 		${CORONA_ROOT}/librtt/Rtt_Matrix.cpp
-		${CORONA_ROOT}/librtt/Rtt_ParticleSystemObject.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsContact.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsContactListener.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsJoint.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsWorld.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformAudioPlayer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformAudioRecorder.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformAudioSessionManager.cpp
@@ -491,7 +419,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_PlatformFont.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformImageProvider.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformLocation.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformModalInteraction.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformNotifier.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformOpenALPlayer.cpp
@@ -660,63 +587,6 @@ add_library( corona SHARED
 
 		${CORONA_ROOT}/external/sqlite3/sqlite3.c
 		${CORONA_ROOT}/external/lsqlite3-7/lsqlite3.c
-
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2BroadPhase.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2CollideCircle.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2CollideEdge.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2CollidePolygon.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2Collision.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2Distance.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2DynamicTree.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2TimeOfImpact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2CircleShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2EdgeShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2PolygonShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2BlockAllocator.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Draw.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2FreeList.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Math.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Settings.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2StackAllocator.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Stat.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Timer.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2TrackedBlock.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2Body.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2ContactManager.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2Fixture.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2Island.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2World.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2CircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2Contact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2ContactSolver.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2PolygonContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2DistanceJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2FrictionJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2GearJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2Joint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2MotorJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2MouseJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2PulleyJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2RopeJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2WeldJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2WheelJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2Particle.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2ParticleAssembly.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2ParticleGroup.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2ParticleSystem.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2VoronoiDiagram.cpp
-
-		${CORONA_ROOT}/external/b2Separator-cpp/b2Separator.cpp
-		${CORONA_ROOT}/external/smoothpolygon/SmoothPolygon.cpp
 
 		${CORONA_ROOT}/external/libjpeg/jcapimin.c
 		${CORONA_ROOT}/external/libjpeg/jcapistd.c

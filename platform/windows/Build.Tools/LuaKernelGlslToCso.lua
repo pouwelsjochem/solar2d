@@ -115,7 +115,7 @@ end
 -- Creates a fragment and vertex shader file for the given mode, version, and mask count,
 -- and then converts and compiles the OpenGL shaders into a Direct3D HLSL *.cso binary.
 -- @param shaderModeName Expected to be set to "default" or "mode25D".
--- @param shaderVersionName Expected to be set to "maskCount0", "maskCount1", "maskCount2", "maskCount3", or "wireframe".
+-- @param shaderVersionName Expected to be set to "maskCount0", "maskCount1", "maskCount2" or "maskCount3".
 -- @param maskCount Expected to be set to 0, 1, 2, or 3.
 -- @returns Returns the compiled HLSL binary as a string.
 local function createDirect3DShaderBinaryFor(shaderModeName, shaderVersionName, maskCount)
@@ -169,20 +169,9 @@ local function createDirect3DShaderBinaryFor(shaderModeName, shaderVersionName, 
 		os.exit(-1)
 	end
 	fragmentShaderFileHandle:write(shaderHeader)
-	if ("wireframe" == shaderVersionName) then
-		local wireframeSourceCode =
-		[[
-			void main()
-			{
-				gl_FragColor = vec4(1.0);
-			}
-		]]
-		fragmentShaderFileHandle:write(wireframeSourceCode)
-	else
-		fragmentShaderFileHandle:write(shell.fragment)
-		if (type(kernel.fragment) == "string") then
-			fragmentShaderFileHandle:write(kernel.fragment)
-		end
+	fragmentShaderFileHandle:write(shell.fragment)
+	if (type(kernel.fragment) == "string") then
+		fragmentShaderFileHandle:write(kernel.fragment)
 	end
 	io.close(fragmentShaderFileHandle)
 	fragmentShaderFileHandle = nil
@@ -240,7 +229,6 @@ local compiledShadersTable =
 		maskCount1 = { maskCount = 1 },
 		maskCount2 = { maskCount = 2 },
 		maskCount3 = { maskCount = 3 },
-		wireframe = { maskCount = 0 },
 	},
 	mode25D =
 	{
@@ -248,7 +236,6 @@ local compiledShadersTable =
 		maskCount1 = { maskCount = 1 },
 		maskCount2 = { maskCount = 2 },
 		maskCount3 = { maskCount = 3 },
-		wireframe = { maskCount = 0 },
 	},
 }
 

@@ -49,9 +49,6 @@ class MacConsolePlatform : public ApplePlatform
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 		virtual PlatformVideoProvider* GetVideoProvider( const ResourceHandle<lua_State> & handle ) const;
 
-		virtual void SetStatusBarMode( StatusBarMode newValue ) const;
-		virtual StatusBarMode GetStatusBarMode() const;
-
 		virtual void SetIdleTimer( bool enabled ) const;
 		virtual bool GetIdleTimer() const;
 
@@ -71,7 +68,6 @@ class MacConsolePlatform : public ApplePlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
-		virtual PlatformDisplayObject* CreateNativeMapView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
         virtual PlatformFBConnect* GetFBConnect() const;

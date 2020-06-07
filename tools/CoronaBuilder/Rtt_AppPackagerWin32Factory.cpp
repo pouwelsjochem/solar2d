@@ -176,10 +176,6 @@ AppPackagerFactory::CreatePackagerParamsWin32(
 			params->SetIncludeBuildSettings(true);
 			params->SetStripDebug(true);
 
-#ifdef AUTO_INCLUDE_MONETIZATION_PLUGIN
-			params.SetIncludeFusePlugins(false);
-			params.SetUsesMonetization(false);
-#endif
 			params->SetRuntime(NULL); // NEEDSWORK:  runtimeEnvironmentPointer->GetRuntime());
 
 			WinString projectDirectoryPath = projectPath;

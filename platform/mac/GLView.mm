@@ -164,10 +164,6 @@
 // pixel format definition
 + (NSOpenGLPixelFormat*) basicPixelFormat
 {
-
-//#if 0
-
-
     NSOpenGLPixelFormatAttribute attributes [] = {
         NSOpenGLPFANoRecovery,
 		NSOpenGLPFADoubleBuffer,	// double buffered
@@ -178,46 +174,6 @@
         (NSOpenGLPixelFormatAttribute)0
     };
     return [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes] autorelease];
-
-/*
-#else
-
-	CGLPixelFormatAttribute attributes[] =
-	{
-		kCGLPFADoubleBuffer,
-		kCGLPFADepthSize, (CGLPixelFormatAttribute)16,
-		kCGLPFAColorSize, (CGLPixelFormatAttribute)24,
-		kCGLPFAAlphaSize, (CGLPixelFormatAttribute)8,
-		kCGLPFAAccelerated,
-		kCGLPFANoRecovery,
-
-		// Need to explicitly request OpenGL 3.2 Core (otherwise, we use 2.1 legacy)
-	//	kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_3_2_Core,
-		// kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_Legacy,
-		(CGLPixelFormatAttribute)0
-	};
-    return [[NSOpenGLPixelFormat alloc] initWithCGLPixelFormatObj:attributes];
-
-NSOpenGLPixelFormatAttribute attributes1 [] = {
-        NSOpenGLPFAWindow,
-        NSOpenGLPFADoubleBuffer,	// double buffered
-        NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute)16, // 16 bit depth buffer
-		NSOpenGLPFAColorSize, (NSOpenGLPixelFormatAttribute)24,
-		NSOpenGLPFAAlphaSize, (NSOpenGLPixelFormatAttribute)8,
-		NSOpenGLPFAAccelerated,
-		NSOpenGLPFANoRecovery,
-		
-		//NSOpenGLPFASampleBuffers, (NSOpenGLPixelFormatAttribute)1,
-		//NSOpenGLPFASamples,(NSOpenGLPixelFormatAttribute)2,
-		
-        (NSOpenGLPixelFormatAttribute)nil
-    };
-    return [[[NSOpenGLPixelFormat alloc] initWithAttributes:attributes1] autorelease];
-	
-//#endif
-*/
-
-
 }
 
 - (void) setRuntime:(Rtt::Runtime *)runtime

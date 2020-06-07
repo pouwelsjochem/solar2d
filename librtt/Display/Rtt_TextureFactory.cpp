@@ -510,8 +510,7 @@ void
 TextureFactory::DidAddTexture( const TextureResource& resource )
 {
 	// Only count images from application towards total texture memory count.
-	// In the Corona simulator, we may load other images like the splash screen
-	// or status bar which should *not* count towards the total.
+	// In the Corona simulator, we may load other images like the splash screen which should *not* count towards the total.
 	Runtime& runtime = GetDisplay().GetRuntime();
 	if ( runtime.IsProperty( Runtime::kIsApplicationExecuting ) )
 	{

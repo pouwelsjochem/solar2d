@@ -101,7 +101,6 @@ class WinRTPlatform : public MPlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
-		virtual PlatformDisplayObject* CreateNativeMapView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
@@ -150,13 +149,6 @@ class WinRTPlatform : public MPlatform
 		virtual PlatformImageProvider* GetImageProvider(const Rtt::ResourceHandle<lua_State> & handle) const;
 		virtual PlatformVideoProvider* GetVideoProvider(const Rtt::ResourceHandle<lua_State> & handle) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
-		virtual void SetStatusBarMode( MPlatform::StatusBarMode newValue ) const;
-		virtual MPlatform::StatusBarMode GetStatusBarMode() const;
-		virtual int GetStatusBarHeight() const;
-    
-        virtual int GetTopStatusBarHeightPixels()  const;
-        virtual int GetBottomStatusBarHeightPixels() const;
 
 		virtual void SetIdleTimer( bool enabled ) const;
 		virtual bool GetIdleTimer() const;

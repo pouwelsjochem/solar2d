@@ -144,14 +144,6 @@ CoronaViewRuntimeDelegate::InitializeConfig( const Runtime& sender, lua_State *L
 void
 CoronaViewRuntimeDelegate::DidLoadConfig( const Runtime& sender, lua_State *L ) const
 {
-	bool antialias = sender.GetDisplay().IsAntialiased();
-	if (antialias)
-	{
-		// TODO: Re-enable once we get this working properly
-		// GLKView *view = fOwner;
-		// view.drawableMultisample = GLKViewDrawableMultisample4X;
-	}
-
     // If we were not able to load the "config.lua" file before Runtime::LoadApplication(), then try one more time here.
      	// Note: This can happen if the "config.lua" contains Corona Lua APIs, which requires a runtime to execute.
     if (fOwner._projectSettings->HasConfigLua() == false)

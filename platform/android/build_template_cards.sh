@@ -54,7 +54,7 @@ usage() {
 	echo "   product_type:   trial, basic, automation, coronacards, all (default)"
 	echo "   build_config:   debug (default) or release"
 	echo "   build_type:     incremental (default) or clean"
-	echo "   device_type:    generic, kindle, nook_only, all (default)"
+	echo "   device_type:    generic, kindle, all (default)"
 	exit 0
 }
 
@@ -83,9 +83,6 @@ then
 elif [ "kindle" = "$4" ]
 then
 	echo "Building for Kindle Fire"
-elif [ "nook_only" = "$4" ]
-then
-	echo "Building for Nook devices only"
 else
 	echo "Building for all Android devices"
 	DEVICE_TYPE="all"

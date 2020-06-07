@@ -17,7 +17,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -34,17 +33,8 @@ class CoronaSensorManager {
 	private boolean					myActiveSensors[] = new boolean[JavaToNativeShim.EventTypeNumTypes];
 	private AccelerometerMonitor	myAccelerometerMonitor;
 	private GyroscopeMonitor		myGyroscopeMonitor;
-	private Sensor					myOrientationSensor;
-	private SensorEventListener		myOrientationSensorListener;
-
-	private CoronaLocationListener  myLocationListener;
-	private PermissionsSettings     myLocationPermissionsSettings;
 	
     private SensorManager 			mySensorManager;
-    private LocationManager			myLocationManager;
-
-    private double					myLocationThreshold = 0;
-    private float					myLastHeading = -1.0f;
 
     private CoronaRuntime 			myCoronaRuntime;
 
@@ -74,7 +64,6 @@ class CoronaSensorManager {
 		}
 		
         mySensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        myLocationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);    
 		myAccelerometerMonitor = new AccelerometerMonitor();
 		myGyroscopeMonitor = new GyroscopeMonitor();
 		
@@ -143,165 +132,11 @@ class CoronaSensorManager {
 				case JavaToNativeShim.EventTypeGyroscope:
 					myGyroscopeMonitor.start();
 					break;
-						
-				case JavaToNativeShim.EventTypeHeading:
-					// Confusingly, Android refers to Compass as Orientation, because it also includes pitch and roll. 
-					// But for Corona Heading, all we want is azimuth.
-					myOrientationSensor = mySensorManager.getDefaultSensor( Sensor.TYPE_ORIENTATION );
-					myOrientationSensorListener = new SensorEventListener() {
-						@Override
-						public void onSensorChanged(SensorEvent event) {
-							synchronized (this)
-							{
-								// Do not continue if application is exiting.
-								Controller controller = myCoronaRuntime.getController();
-								if (controller == null) {
-									return;
-								}
-								
-								// All values are angles in degrees.
-								// values[0]: Azimuth, angle between the magnetic north direction and the Y axis, around the Z axis (0 to 359).
-								//            0 = North, 90 = East, 180 = South, 270 = West
-								// values[1]: Pitch, rotation around X axis (-180 to 180), with positive values when the z-axis moves toward the y-axis.
-								// values[2]: Roll, rotation around Y axis (-90 to 90), with positive values when the x-axis moves away from the z-axis.
-								float currentHeading = event.values[0];
-								
-								// Provide azimuth data relative to portrait orientation.
-								// That means devices that are naturally landscape such as tablets need to have this value rotated.
-								if (controller.isNaturalOrientationPortrait() == false) {
-									currentHeading -= 90.0f;
-									if (currentHeading < 0) {
-										currentHeading += 360.0f;
-									}
-								}
-								
-								// Only raise an event if the heading has changed.
-								if (myLastHeading != currentHeading) {
-									myLastHeading = currentHeading;
-									if (myCoronaRuntime != null && myCoronaRuntime.isRunning()) {
-										myCoronaRuntime.getTaskDispatcher().send(new com.ansca.corona.events.LocationTask(myLastHeading));
-									}
-								}
-							}
-						}
-						
-						@Override
-						public void onAccuracyChanged(Sensor arg0, int arg1) {
-						}
-					};
-					
-					mySensorManager.registerListener(myOrientationSensorListener, myOrientationSensor, SensorManager.SENSOR_DELAY_UI);
-					break;
-		
-				case JavaToNativeShim.EventTypeLocation:
-					// TODO: Redo all of how permissions and checking for location hardware is handled here!
-					// Do not continue if application is exiting.
-					Controller controller = myCoronaRuntime.getController();
-					Context context = null;
-					if (controller != null) {
-						context = controller.getContext();
-					}
-					if (context == null || controller == null) {
-						return;
-					}
-
-					// Do not continue if this device is unable to provide location data.
-					android.content.pm.PackageManager packageManager = context.getPackageManager();
-					boolean hasGps = packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_LOCATION_GPS);
-					boolean hasNetworkLocater = packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_LOCATION_NETWORK);
-					if (!hasGps && !hasNetworkLocater) {
-						Log.i("Corona", "WARNING: Unable to set up location listener. This device is incapable of providing location data.");
-						return;
-					}
-					
-					// Enable location tracking.
-					Location lastLocation = null;
-					final long minTime = 1000;
-					boolean isLocationListenerEnabled = false;
-					myLocationListener = new CoronaLocationListener();
-					if (hasGps && (context.checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-								   android.content.pm.PackageManager.PERMISSION_GRANTED)) {
-						myLocationListener.setSupportsGps();
-
-						myLocationManager.requestLocationUpdates(
-									LocationManager.GPS_PROVIDER, minTime, (float)myLocationThreshold, myLocationListener);
-						isLocationListenerEnabled = true;
-
-						lastLocation = myLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-					}
-					if (hasNetworkLocater && (context.checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-												   android.content.pm.PackageManager.PERMISSION_GRANTED)) {
-						myLocationListener.setSupportsNetwork();
-
-						myLocationManager.requestLocationUpdates(
-									LocationManager.NETWORK_PROVIDER, minTime, (float)myLocationThreshold, myLocationListener);
-						isLocationListenerEnabled = true;
-
-						if (lastLocation == null) {
-							lastLocation = myLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-						}
-					}
-					if (context.checkCallingOrSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-						myLocationManager.requestLocationUpdates(
-									LocationManager.PASSIVE_PROVIDER, minTime, (float)myLocationThreshold, myLocationListener);
-						isLocationListenerEnabled = true;
-
-						if (lastLocation == null) {
-							lastLocation = myLocationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-						}
-					}
-
-					// Dispatches the last known location.  If the user stays at the same place, the location listener's onLocationChanged function doesn't get called
-					// which makes it look like location services aren't working.
-					if (myCoronaRuntime != null && myCoronaRuntime.isRunning() && lastLocation != null) {
-						myCoronaRuntime.getTaskDispatcher().send(new com.ansca.corona.events.LocationTask(
-								lastLocation.getLatitude(),
-								lastLocation.getLongitude(),
-								lastLocation.getAltitude(),
-								(double)lastLocation.getAccuracy(),
-								(double)lastLocation.getSpeed(),
-								(double)lastLocation.getBearing(),
-								(double)lastLocation.getTime() / 1000.0));	// Convert milliseconds to seconds.);
-					}
-
-					if (isLocationListenerEnabled == false) {
-						// Request access to location services.
-						PermissionsServices permissionsServices = new PermissionsServices(CoronaEnvironment.getApplicationContext());
-						PermissionState fineLocationState = permissionsServices.getPermissionStateFor(
-							PermissionsServices.Permission.ACCESS_FINE_LOCATION);
-						PermissionState coarseLocationState = permissionsServices.getPermissionStateFor(
-							PermissionsServices.Permission.ACCESS_COARSE_LOCATION);
-						if (fineLocationState == PermissionState.MISSING && coarseLocationState == PermissionState.MISSING) {
-							showLocationPermissionsMissingFromManifestAlert();
-						} else if (fineLocationState == PermissionState.GRANTED || coarseLocationState == PermissionState.GRANTED) {
-							// We shouldn't hit this code since the granted case is handled when checking for location hardware.
-							// Log.d("Corona", "A Corona Engineer busted the Location enabling code!");
-						} else if (android.os.Build.VERSION.SDK_INT >= 23) { // There's at least one permission that's denied, so request all the denied ones!
-							if (myLocationPermissionsSettings == null) {
-								myLocationPermissionsSettings = new PermissionsSettings(permissionsServices.getRequestedPermissionsInStateForGroup(
-									PermissionState.DENIED, PermissionsServices.PermissionGroup.LOCATION));
-							}
-							if (myLocationPermissionsSettings.needsService()) { // TODO: Handle "Never Ask Again" here!
-								permissionsServices.requestPermissions(myLocationPermissionsSettings, new CoronaSensorManager.LocationRequestPermissionsResultHandler());
-							}
-						} else {
-							// Log.d("Corona", "Should never hit this!");
-						}
-					}
-					
-					break;
-				} // switch
+				}
 			} // run
 		} ); // runnable
 	}
 	
-	private void showLocationPermissionsMissingFromManifestAlert() {
-
-		Controller controller = myCoronaRuntime.getController();
-		if (controller != null) {
-			controller.showLocationPermissionsMissingFromManifestAlert();
-		}
-	}
 	/** Stores a copy of SensorEvent data. */
 	private class SensorMeasurement {
 		public int accuracy;
@@ -831,73 +666,6 @@ class CoronaSensorManager {
 		}
 	}
 	
-	/** Listens for location data from a LocationManager and outputs data to Corona's Lua listeners. */
-	private class CoronaLocationListener implements LocationListener {
-		private boolean fHasReceivedData = false;
-		private boolean fSupportsGps = false;
-		private boolean fSupportsNetwork = false;
-		
-		public void setSupportsGps() {
-			fSupportsGps = true;
-		}
-		
-		public void setSupportsNetwork() {
-			fSupportsNetwork = true;
-		}
-		
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extra)
-		{ }
-		
-		@Override
-		public void onProviderEnabled(String provider)
-		{ }
-		
-		@Override
-		public void onProviderDisabled(String provider)
-		{ }
-		
-		@Override
-		public void onLocationChanged(Location location) {
-			// Favor GPS data over Network data because it is more accurate.
-			// However, always accept the first data point because the network usually provides data before GPS.
-			if (location.getProvider().equals(LocationManager.GPS_PROVIDER) == false) {
-				if (fHasReceivedData && fSupportsGps && myLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-					return;
-				}
-			}
-			fHasReceivedData = true;
-
-			// Send location data to the Lua listener.
-			if (myCoronaRuntime != null && myCoronaRuntime.isRunning()) {
-				myCoronaRuntime.getTaskDispatcher().send(new com.ansca.corona.events.LocationTask(
-						location.getLatitude(),
-						location.getLongitude(),
-						location.getAltitude(),
-						(double)location.getAccuracy(),
-						(double)location.getSpeed(),
-						(double)location.getBearing(),
-						(double)location.getTime() / 1000.0));	// Convert milliseconds to seconds.);
-			}
-		}
-	}
-
-	/** Default handling of the location permission on Android 6+. */
-	private static class LocationRequestPermissionsResultHandler 
-		implements CoronaActivity.OnRequestPermissionsResultHandler {
-
-		@Override
-		public void onHandleRequestPermissionsResult(
-				CoronaActivity activity, int requestCode, String[] permissions, int[] grantResults) {
-
-			PermissionsSettings permissionsSettings = activity.unregisterRequestPermissionsResultHandler(this);
-
-			if (permissionsSettings != null) {
-				permissionsSettings.markAsServiced();
-			}
-		}
-	}
-	
 	/**
 	 * Stop event notifications for type
 	 * 
@@ -930,20 +698,6 @@ class CoronaSensorManager {
 				case JavaToNativeShim.EventTypeGyroscope:
 					myGyroscopeMonitor.stop();
 					break;
-				case JavaToNativeShim.EventTypeHeading:
-		            if ( myOrientationSensorListener != null ) {
-		            	mySensorManager.unregisterListener( myOrientationSensorListener ); 
-		            	myOrientationSensorListener = null;
-		            	myLastHeading = -1;
-		            }
-					break;
-				case JavaToNativeShim.EventTypeLocation:
-					if ( myLocationListener != null ) {
-						myLocationManager.removeUpdates( myLocationListener );
-						myLocationListener = null;
-					}
-					break;
-				}
 			}
 		} );
 	}
@@ -1043,21 +797,6 @@ class CoronaSensorManager {
 		}
 		return hasSensor;
 	}
-
-	/**
-	 * Determines if this device has the hardware to compute heading events.
-	 * @return Returns true if this device has said hardware. Returns false if not.
-	 */
-	public boolean hasHeadingHardware()
-	{
-		boolean hasSensor = false;
-
-		if (mySensorManager != null)
-		{
-			hasSensor = (mySensorManager.getSensorList(Sensor.TYPE_ORIENTATION).size() > 0);
-		}
-		return hasSensor;
-	}
 	
 	/**
 	 * Pause all notifications
@@ -1076,24 +815,6 @@ class CoronaSensorManager {
 			if ( myActiveSensors[i] )
 				startType( i );
 		}
-	}
-	
-	/**
-	 * Set the accuracy of the GPS
-	 * 
-	 * @param meters
-	 */
-	public void setLocationAccuracy( double meters ) {
-		// No notion of accuracy on Android
-	}
-
-	/**
-	 * Set the threshold for the GPS
-	 * 
-	 * @param meters
-	 */
-	public void setLocationThreshold( double meters ) {
-		myLocationThreshold = meters;
 	}
 	
 	/**

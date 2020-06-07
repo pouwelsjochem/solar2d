@@ -53,9 +53,6 @@
 		<activity android:name="com.ansca.corona.VideoActivity"
 		          android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
 		          android:configChanges="keyboardHidden|orientation|screenSize" />
-		<activity android:name="com.ansca.corona.purchasing.StoreActivity"
-		          android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-		          android:configChanges="keyboardHidden|screenSize|orientation" />
 		
 		<!-- Corona content provider required by the video player and mail app to access this app's local files. -->
 		<provider android:name="com.ansca.corona.FileContentProvider"

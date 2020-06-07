@@ -153,30 +153,6 @@ TestAppTraceback( lua_State* L )
 	[self printInfo:application];
 }
 
-- (void)application:(UIApplication *)application willChangeStatusBarOrientation:(UIInterfaceOrientation)newStatusBarOrientation duration:(NSTimeInterval)duration
-{
-	NSLog( @"[CoronaDelegate] %@.", NSStringFromSelector( _cmd ) );
-	[self printInfo:application];
-}
-
-- (void)application:(UIApplication *)application didChangeStatusBarOrientation:(UIInterfaceOrientation)oldStatusBarOrientation
-{
-	NSLog( @"[CoronaDelegate] %@.", NSStringFromSelector( _cmd ) );
-	[self printInfo:application];
-}
-
-- (void)application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
-{
-	NSLog( @"[CoronaDelegate] %@.", NSStringFromSelector( _cmd ) );
-	[self printInfo:application];
-}
-
-- (void)application:(UIApplication *)application didChangeStatusBarFrame:(CGRect)oldStatusBarFrame
-{
-	NSLog( @"[CoronaDelegate] %@.", NSStringFromSelector( _cmd ) );
-	[self printInfo:application];
-}
-
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
 	NSLog( @"[CoronaDelegate] %@.", NSStringFromSelector( _cmd ) );
