@@ -90,9 +90,7 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
         if ([postBuildRadioGroup selectedRow] == 1)
         {
             if (! [self isStoreBuild])
-            {
-				[self logEvent:@"build-bungled" key:@"reason" value:@"not-distribution-provisioning-profile"];
-				
+            {			
                 [self showError:@"Cannot Send To App Store" message:@"Only apps built with distribution profiles can be sent to the App Store.\n\nChoose a provisioning profile signed with an \"3rd Party Mac Developer\" certificate to build for the App Store." helpURL:@"https://docs.coronalabs.com/daily/guide/distribution/osxBuild/index.html#app-signing" parentWindow:[self window]];
 
                 result = NO;
@@ -296,7 +294,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 	
 	if ( ! [self validateProject] )
 	{
-		[self logEvent:@"build-bungled" key:@"reason" value:@"validate-project"];
 		return;
 	}
 
@@ -366,8 +363,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 	// Abort build if the build.settings is corrupt
 	if ( ! isvalidsettings )
 	{
-		[self logEvent:@"build-bungled" key:@"reason" value:@"bad-build-settings"];
-
         NSString *buildSettingsError = [NSString stringWithExternalString:osxPackager->GetErrorMesg()];
 
         Rtt_DELETE( osxPackager );
@@ -425,9 +420,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 	[[NSUserDefaults standardUserDefaults] synchronize];
 
 	// Do the actual build
-
-	[self logEvent:@"build"];
-
 	NSString* tmpDirBase = NSTemporaryDirectory();
 	size_t code = osxPackager->Build( params, [tmpDirBase UTF8String] );
 
@@ -435,36 +427,26 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 
 	if (code == PlatformAppPackager::kNoError)
 	{
-		[self logEvent:@"build-succeeded"];
-
 		[appDelegate notifyWithTitle:@"Corona Simulator"
 						 description:[NSString stringWithFormat:@"macOS build of \"%@\" complete", self.appName]
 							iconData:nil];
 
 		if (shouldOpenApplication)
 		{
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"open-application"];
-
 			[self openBuiltApplication];
 
 			[self closeBuild:self];
 		}
 		else if (shouldSendToAppStore)
 		{
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"send-to-app-store"];
-
 			[self beginAppStorePackageSheet:[self window] packager:osxPackager params:params];
 		}
         else if (shouldCreateDMG)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"create-dmg"];
-
             [self beginSelfDistPackageSheet:[self window] packager:osxPackager params:params];
         }
         else if (shouldShowApplication)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"show-app"];
-
             // Reveal built app in Finder
 
             NSString *message = [NSString stringWithFormat:@"Showing built macOS app *%@* in Finder", self.appName];
@@ -477,15 +459,11 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 		}
 		else
 		{
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"do-nothing"];
-
 			[self closeBuild:self];
 		}
 	}
     else
     {
-		[self logEvent:@"build-failed" key:@"reason" value:[NSString stringWithFormat:@"[%ld] %s", code, params->GetBuildMessage()]];
-
         NSDictionary* details = nil;
         NSError* error = nil;
         NSString *msg = nil;

@@ -244,7 +244,6 @@ static NSString *kValueNone = @"None";
 
     if ( ! [self validateProject] )
     {
-        [self logEvent:@"build-bungled" key:@"reason" value:@"validate-project"];
 		return;
     }
 
@@ -255,8 +254,6 @@ static NSString *kValueNone = @"None";
 
 	if ([[currentProvisioningProfileItem title] isEqualToString:kValueNone] && ! shouldOpenInXcodeSimulator)
 	{
-		[self logEvent:@"build-bungled" key:@"reason" value:@"no-provisioning-profile"];
-
 		[self showError:@"Provisioning Profile Needed" message:@"A provisioning profile is required to build for anything other than the Xcode AppleTV Simulator.\n\nPlease select a valid provisioning profile." helpURL:nil parentWindow:[self window]];
 
 		return;
@@ -329,8 +326,6 @@ static NSString *kValueNone = @"None";
     // Abort build if the build.settings is invalid
     if ( ! isvalidsettings )
     {
-		[self logEvent:@"build-bungled" key:@"reason" value:@"bad-build-settings"];
-
         NSString *buildSettingsError = [NSString stringWithExternalString:packager->GetErrorMesg()];
 
         Rtt_DELETE( packager );
@@ -353,8 +348,6 @@ static NSString *kValueNone = @"None";
 	ProjectSettings projectSettings; projectSettings.LoadFromDirectory( [self.projectPath UTF8String] );
 	if ( ! projectSettings.IsLandscapeSupported() )
 	{
-		[self logEvent:@"build-bungled" key:@"reason" value:@"not-landscape"];
-
 		[self showError:@"Unsupported Orientation" message:@"tvOS apps run exclusively in landscape orientation.\n\nEnsure that both your app and build.settings supports landscape." helpURL:nil parentWindow:buildWindow];
 		
 		return;
@@ -391,8 +384,6 @@ static NSString *kValueNone = @"None";
         Rtt_DELETE( packager );
         packager = NULL;
 
-		[self logEvent:@"build-bungled" key:@"reason" value:@"no-application-id"];
-
         [self showError:@"Cannot determine a valid application id for this application" message:@"Please check you are using the correct Provisioning Profile and try again." helpURL:nil parentWindow:buildWindow];
 
         return;
@@ -425,8 +416,6 @@ static NSString *kValueNone = @"None";
     // Do the actual build
     __block size_t code = PlatformAppPackager::kNoError;
 
-	[self logEvent:@"build"];
-
     void (^performBuild)() = ^()
     {
         // Some IDEs will terminate us quite abruptly so make sure we're on disk before starting a long operation
@@ -440,22 +429,17 @@ static NSString *kValueNone = @"None";
 
 	if (appDelegate.stopRequested)
 	{
-		[self logEvent:@"build-stopped"];
-
 		Rtt_Log("WARNING: Build stopped by request");
 		[self showMessage:@"Build Stopped" message:@"Build stopped by request" helpURL:nil parentWindow:[self window]];
 	}
 	else if (code == PlatformAppPackager::kNoError)
     {
-	[self logEvent:@"build-succeeded"];
-
         [appDelegate notifyWithTitle:@"Corona Simulator"
                          description:[NSString stringWithFormat:@"tvOS build of \"%@\" complete", self.appName]
                             iconData:nil];
         
 		if(isLiveBuild)
 		{
-			[self logEvent:@"build-is-live-build"];
 			NSString *liveServerPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"];
 			[[NSWorkspace sharedWorkspace] openFile:self.projectPath withApplication:liveServerPath andDeactivate:NO];
 		}
@@ -463,26 +447,18 @@ static NSString *kValueNone = @"None";
         if (shouldSendToDevice)
         {
             // Send to device
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"send-to-device"];
-
             [self sendAppToDevice];
         }
         else if (shouldOpenInXcodeSimulator)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"open-sim"];
-
 			[self runAppInXcodeSimulator];
         }
         else if (shouldSendToAppStore)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"send-to-app-store"];
-
             [self sendToAppStore:buildWindow packager:packager params:params];
 		}
         else if (shouldShowApplication)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"show-app"];
-
             // Reveal built app or ipa in Finder
 			NSString *extension = ([self isStoreBuild] ? @"ipa" : @"app");
 			NSString *bundleFile = [[self appBundleFile] stringByReplacingOccurrencesOfString:@"app" withString:extension options:0 range:NSMakeRange([[self appBundleFile] length] - 3, 3)];
@@ -498,15 +474,11 @@ static NSString *kValueNone = @"None";
         else
         {
             // Do nothing
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"do-nothing"];
-
             [self closeBuild:self];
         }
     }
     else
     {
-		[self logEvent:@"build-failed" key:@"reason" value:[NSString stringWithFormat:@"[%ld] %s", code, params->GetBuildMessage()]];
-
         NSString *msg = nil;
 
         [appDelegate notifyWithTitle:@"Corona Simulator"
@@ -568,8 +540,6 @@ static NSString *kValueNone = @"None";
 	{
 		NSString *errorMsg = @"*Corona Simulator* encountered an error installing the app:\n\n";
 
-		[self logEvent:@"build-bungled" key:@"reason" value:@"sim-install-error"];
-
 		[self showError:@"Xcode tvOS Simulator Problem" message:[errorMsg stringByAppendingString:tvosSimulatorOutput] helpURL:nil parentWindow:[self window]];
 	}
 	else
@@ -623,8 +593,6 @@ static NSString *kValueNone = @"None";
         {
             if (! [self isStoreBuild])
             {
-				[self logEvent:@"build-bungled" key:@"reason" value:@"not-distribution-provisioning-profile"];
-
                 [self showError:@"Cannot Send To App Store" message:@"Only apps built with distribution profiles can be sent to the App Store.\n\nChoose a provisioning profile signed with an \"iPhone Distribution\" certificate and note that the provisioning profile used should not specify any devices (i.e. is not \"ad hoc\")." helpURL:@"https://docs.coronalabs.com/guide/distribution/iOSBuild/index.html#build-process" parentWindow:[self window]];
 
                 result = NO;
@@ -742,9 +710,7 @@ static NSString *kValueNone = @"None";
 		NSArray *buttons = @[ installXcodeBtn,dailyBuildBtn,  @"Cancel Build" ];
 
 		if ( sdkRoot == nil || [sdkRoot isEqualToString:@""] )
-		{
-			[self logEvent:@"build-bungled" key:@"reason" value:@"no-xcode"];
-			
+		{			
 			// No Xcode found
 			title = @"Xcode Required";
 
@@ -752,8 +718,6 @@ static NSString *kValueNone = @"None";
 		}
 		else
 		{
-			[self logEvent:@"build-bungled" key:@"reason" value:@"invalid-xcode"];
-
 			// xcode-select gave us a path, but a component could not be found.
 			title = @"Xcode Compatibility Problem";
 
@@ -996,8 +960,6 @@ static NSString *kValueNone = @"None";
 	}
 	else if ([ideviceinstallerOutput contains:@"ERROR:"] || [ideviceinstallerOutput contains:@"Error occurred:"])
 	{
-		[self logEvent:@"build-bungled" key:@"reason" value:@"failed-to-copy-to-device"];
-
 		NSString *errorMsg = @"*ideviceinstaller* encountered an error installing the app:\n\n";
 
 		[self showError:@"App Installation Problem" message:[errorMsg stringByAppendingString:ideviceinstallerOutput] helpURL:nil parentWindow:[self window]];

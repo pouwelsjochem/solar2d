@@ -61,11 +61,6 @@ using namespace Rtt;
 			result = [validator runWebAppNameValidation:[self appName]];
 		}
 		[validator release];
-
-		if ( ! result )
-		{
-			[self logEvent:@"build-bungled" key:@"reason" value:@"invalid-web-project"];
-		}
 	}
 
 	return result;
@@ -234,9 +229,7 @@ using namespace Rtt;
 	
 	// Abort build if the build.settings is corrupt
 	if ( ! isvalidsettings )
-	{
-		[self logEvent:@"build-bungled" key:@"reason" value:@"bad-build-settings"];
-		
+	{		
 		NSString *buildSettingsError = [NSString stringWithExternalString:packager->GetErrorMesg()];
 		
 		Rtt_DELETE( packager );
@@ -282,25 +275,19 @@ using namespace Rtt;
 	[self runLengthyOperationForWindow:[self window] delayProgressWindowBy:0 allowStop:YES withBlock:performBuild];
 	
 	if (appDelegate.stopRequested)
-	{
-		[self logEvent:@"build-stopped"];
-		
+	{		
 		Rtt_Log("WARNING: Build stopped by request");
 		[self showMessage:@"Build Stopped" message:@"Build stopped by request" helpURL:nil parentWindow:[self window]];
 	}
 	else if (code == PlatformAppPackager::kNoError)
-	{
-		[self logEvent:@"build-succeeded"];
-		
+	{		
 		[appDelegate notifyWithTitle:@"Corona Simulator"
 										 description:[NSString stringWithFormat:@"HTML5 build of \"%@\" complete", self.appName]
 												iconData:nil];
 		
 	//	if (shouldShowApplication)
 	//	{
-			// Reveal built app in Finder
-	//		[self logEvent:@"build-post-action" key:@"post-action" value:@"show-app"];
-			
+			// Reveal built app in Finder		
 	//		NSString *message = [NSString stringWithFormat:@"Showing built HTML5 app *%@* in Finder", self.appName];
 			
 	//		[[NSWorkspace sharedWorkspace] selectFile:[self appBundleFile] inFileViewerRootedAtPath:@""];
@@ -323,21 +310,9 @@ using namespace Rtt;
 
 			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"html5ProjectBuilt" object:nil userInfo:@{@"root":dstHtmlPath} deliverImmediately:YES];
 		});
-
-
-	//	}
-	//	else
-	//	{
-			// Do nothing
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"do-nothing"];
-			
-		//	[self closeBuild:self];
-	//	}
 	}
 	else
-	{
-		[self logEvent:@"build-failed" key:@"reason" value:[NSString stringWithFormat:@"[%ld] %s", code, params->GetBuildMessage()]];
-		
+	{		
 		NSString *msg = @"";
 		
 		[appDelegate notifyWithTitle:@"Corona Simulator"

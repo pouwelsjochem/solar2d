@@ -252,7 +252,6 @@ static NSString *kValueNone = @"None";
 
     if ( ! [self validateProject] )
     {
-        [self logEvent:@"build-bungled" key:@"reason" value:@"validate-project"];
         return;
     }
 
@@ -343,8 +342,6 @@ static NSString *kValueNone = @"None";
         Rtt_DELETE( iosPackager );
         iosPackager = NULL;
 
-        [self logEvent:@"build-bungled" key:@"reason" value:@"bad-build-settings"];
-
         [self showModalSheet:@"Error in build.settings" message:[NSString stringWithFormat:@"There is an error in `build.settings`:\n\n`%@`\n\nPlease correct and retry the build.", buildSettingsError] buttonLabels:@[@"Dismiss", @"Edit build.settings" ] alertStyle:NSCriticalAlertStyle helpURL:nil parentWindow:buildWindow completionHandler: ^(NSModalResponse returnCode)
              {
                  if (returnCode == NSAlertSecondButtonReturn)
@@ -421,8 +418,6 @@ static NSString *kValueNone = @"None";
     // Do the actual build
     __block size_t code = PlatformAppPackager::kNoError;
 
-	[self logEvent:@"build"];
-
     void (^performBuild)() = ^()
     {
         // Some IDEs will terminate us quite abruptly so make sure we're on disk before starting a long operation
@@ -436,23 +431,17 @@ static NSString *kValueNone = @"None";
 
 	if (appDelegate.stopRequested)
 	{
-		[self logEvent:@"build-stopped"];
-
 		Rtt_Log("WARNING: Build stopped by request");
 		[self showMessage:@"Build Stopped" message:@"Build stopped by request" helpURL:nil parentWindow:[self window]];
 	}
     else if (code == PlatformAppPackager::kNoError)
     {
-	[self logEvent:@"build-succeeded"];
-
         [appDelegate notifyWithTitle:@"Corona Simulator"
                          description:[NSString stringWithFormat:@"iOS build of \"%@\" complete", self.appName]
                             iconData:nil];
         
 		if(isLiveBuild)
 		{
-			[self logEvent:@"build-is-live-build"];
-
 			NSString *liveServerPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"];
 			[[NSWorkspace sharedWorkspace] openFile:self.projectPath withApplication:liveServerPath andDeactivate:NO];
 		}
@@ -460,26 +449,18 @@ static NSString *kValueNone = @"None";
         if (shouldSendToDevice)
         {
             // Send to device
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"send-to-device"];
-
             [self sendAppToDevice];
         }
         else if (shouldOpenInXcodeSimulator)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"open-sim"];
-
             [self runAppInXcodeSimulator:targetDevice];
         }
         else if (shouldSendToAppStore)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"send-to-app-store"];
-
 			[self sendToAppStore:buildWindow packager:iosPackager params:params];
         }
         else if (shouldShowApplication)
         {
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"show-app"];
-
             // Reveal built app or ipa in Finder
 			NSString *extension = ([self isStoreBuild] ? @"ipa" : @"app");
 			NSString *bundleFile = [[self appBundleFile] stringByReplacingOccurrencesOfString:@"app" withString:extension options:0 range:NSMakeRange([[self appBundleFile] length] - 3, 3)];
@@ -495,15 +476,11 @@ static NSString *kValueNone = @"None";
         else
         {
             // Do nothing
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"do-nothing"];
-
             [self closeBuild:self];
         }
     }
     else
     {
-		[self logEvent:@"build-failed" key:@"reason" value:[NSString stringWithFormat:@"[%ld] %s", code, params->GetBuildMessage()]];
-
 		NSString *msg = nil;
 
         [appDelegate notifyWithTitle:@"Corona Simulator"
@@ -637,8 +614,6 @@ static NSString *kValueNone = @"None";
         {
             if (! [self isStoreBuild])
             {
-				[self logEvent:@"build-bungled" key:@"reason" value:@"not-distribution-provisioning-profile"];
-
                 [self showError:@"Cannot Send To App Store" message:@"Only apps built with distribution profiles can be sent to the App Store.\n\nChoose a provisioning profile signed with an \"iPhone Distribution\" certificate and note that the provisioning profile used should not specify any devices (i.e. is not \"ad hoc\")." helpURL:@"https://docs.coronalabs.com/guide/distribution/iOSBuild/index.html#build-process" parentWindow:[self window]];
 
                 result = NO;
@@ -761,8 +736,6 @@ static NSString *kValueNone = @"None";
 			title = @"Xcode Required";
 
 			msg = [NSString stringWithFormat:@"The Xcode iOS SDK could not be found. Please install Xcode (or use `xcode-select` to choose an existing installation).\n\nXcode is required by Corona and needs to be installed to build iOS applications.\n\nPress the *%@* button to go to the App Store and get Xcode.  When it is installed, build for iOS again.\n", installXcodeBtn];
-
-			[self logEvent:@"build-bungled" key:@"reason" value:@"ios-sdk-not-found"];
 		}
 		else
 		{
@@ -771,8 +744,6 @@ static NSString *kValueNone = @"None";
 
 			msg = [NSString stringWithFormat:@"Corona can't find the following components in the\nXcode %g iOS SDK located at *%@*:\n\n%@\n\nPlease update Corona to the latest [Daily Build](%@) (it might also be necessary to re-install Xcode)",
 						 [XcodeToolHelper getXcodeVersion], sdkRoot, error_string, kDailyBuildsURL];
-
-			[self logEvent:@"build-bungled" key:@"reason" value:@"ios-sdk-incomplete"];
 		}
 
 		NSInteger alertResult = [self showModalSheet:title message:msg buttonLabels:buttons alertStyle:NSCriticalAlertStyle helpURL:helpURL parentWindow:[self window] completionHandler:nil];

@@ -197,8 +197,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 	{
 		[self showError:@"Invalid Android Package Identifier" message:[NSString stringWithFormat:@"\"*%@*\" is not a valid Android package identifier.\n\nThe *Package* identifier must be a full Java-language-style package name for the application. The name should be unique. The name may contain uppercase or lowercase letters ('A' through 'Z'), numbers, and underscores ('_'). However, individual package name parts may only start with letters.", self.androidAppPackage] helpURL:nil parentWindow:[self window]];
 
-		[self logEvent:@"build-bungled" key:@"reason" value:@"bad-package-identifier"];
-
 		return;
 	}
 
@@ -286,8 +284,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
     // Abort build if the build.settings is corrupt
     if ( ! isvalidsettings )
     {
-		[self logEvent:@"build-bungled" key:@"reason" value:@"bad-build-settings"];
-
         NSString *buildSettingsError = [NSString stringWithExternalString:androidPackager->GetErrorMesg()];
 
         Rtt_DELETE( androidPackager );
@@ -348,8 +344,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
     // Do the actual build
     __block size_t code = PlatformAppPackager::kNoError;
 
-	[self logEvent:@"build" key:@"store" value:self.targetStoreId];
-
     void (^performBuild)() = ^()
     {
         NSString* tmpDirBase = NSTemporaryDirectory();
@@ -360,23 +354,17 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 
 	if (appDelegate.stopRequested)
 	{
-		[self logEvent:@"build-stopped"];
-
 		Rtt_Log("WARNING: Build stopped by request");
 		[self showMessage:@"Build Stopped" message:@"Build stopped by request" helpURL:nil parentWindow:[self window]];
 	}
 	else if (code == PlatformAppPackager::kNoError)
     {
-	[self logEvent:@"build-succeeded"];
-
         [appDelegate notifyWithTitle:@"Corona Simulator"
                          description:[NSString stringWithFormat:@"Android build of \"%@\" complete", self.appName]
                             iconData:nil];
 
 		if(isLiveBuild)
 		{
-			[self logEvent:@"build-is-live-build"];
-
 			NSString *liveServerPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"];
 			[[NSWorkspace sharedWorkspace] openFile:self.projectPath withApplication:liveServerPath andDeactivate:NO];
 		}
@@ -384,15 +372,11 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
         if (shouldSendToDevice)
         {
             // Send to device
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"send-to-device"];
-
             [self sendAppToDevice];
         }
         else if (shouldShowApplication)
         {
             // Reveal built app in Finder
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"show-app"];
-
             NSString *message = [NSString stringWithFormat:@"Showing built Android app *%@* in Finder", self.appName];
 
             [[NSWorkspace sharedWorkspace] selectFile:[self appBundleFile] inFileViewerRootedAtPath:@""];
@@ -404,15 +388,11 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
         else
         {
             // Do nothing
-			[self logEvent:@"build-post-action" key:@"post-action" value:@"do-nothing"];
-
             [self closeBuild:self];
         }
     }
     else
     {
-		[self logEvent:@"build-failed" key:@"reason" value:[NSString stringWithFormat:@"[%ld] %s", code, params->GetBuildMessage()]];
-
         NSString *msg = @"";
 
         [appDelegate notifyWithTitle:@"Corona Simulator"
@@ -820,11 +800,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 			result = [validator runAndroidFileValidationTestsInProjectPath:[self projectPath]];
 		}
 		[validator release];
-
-		if ( ! result )
-		{
-			[self logEvent:@"build-invalid-project"];
-		}
 	}
 
 	if (result)
