@@ -182,8 +182,6 @@ external/facebook-android-sdk/facebook/bin
 external/facebook-android-sdk/facebook/gen
 external/papaya-corona-sdk-global-1.7.1/Library/bin
 external/papaya-corona-sdk-global-1.7.1/Library/gen
-external/SuperRewards-Android-SDK/bin
-external/SuperRewards-Android-SDK/gen
 local.properties
 platform/android/sdk/src/com/ansca/corona/SplashScreenBeacon.java
 platform/android/template/template/
