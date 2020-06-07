@@ -18,7 +18,6 @@ display.pixelWidth = 320
 stoplist = {"imageSuffix", "shaderPrecision"}
 
 application = {
-	launchPad = true,
 	showRuntimeErrors = true,
 
 	content = {

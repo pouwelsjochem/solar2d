@@ -29,13 +29,11 @@
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaFile.h"
 #include "Rtt_LuaResource.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "WinString.h"
 #include "WinGlobalProperties.h"
 #include "CoronaInterface.h"
 #include "Simulator.h"
 #include "MessageDlg.h"
-#include "Rtt_LaunchPad.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_PlatformSurface.h"
 
@@ -54,23 +52,6 @@ static UINT GetStatusMessageResourceIdFor(int resultCode)
 	}
 	return resourceId;
 }
-
-static void LogAnalytics(const char *target, const char *eventName, const char *key = NULL, const char *value = NULL)
-{
-	Rtt_ASSERT(GetWinProperties()->GetAnalytics() != NULL);
-	Rtt_ASSERT(eventName != NULL && strlen(eventName) > 0);
-
-	static std::map<std::string, std::string> keyValues;
-	keyValues["target"] = target;
-
-	if (key != NULL && strlen(key) > 0 && value != NULL)
-	{
-		keyValues[key] = value;
-	}
-
-	GetWinProperties()->GetAnalytics()->Log(eventName, keyValues);
-}
-
 
 // appAndroidBuild - login to server, showing password dialog if necessary,
 // put parameters in AppAndroidPackager, set up temp directory, and BUILD APP
@@ -97,8 +78,6 @@ CBuildResult appAndroidBuild(
 	bool wasSuccessful = packager.ReadBuildSettings( srcDir );
 	if (!wasSuccessful)
 	{
-		LogAnalytics( "android", "build-bungled", "reason", "bad-build-settings" );
-
 		CString message;
 		message.LoadString(IDS_BUILD_SETTINGS_FILE_ERROR);
 		return CBuildResult(5, message);
@@ -110,8 +89,6 @@ CBuildResult appAndroidBuild(
     if( ! Rtt_StringIsEmpty( customBuildId ) )
 	{
 		Rtt_Log("\nUsing custom Build Id %s\n", customBuildId );
-
-		LogAnalytics( "android", "build-with-custom-id", "custom-id", customBuildId );
 	}
 
 	// these are currently unused
@@ -185,8 +162,6 @@ CBuildResult appAndroidBuild(
 	else if (0 == code)
 	{
 		statusMessage.LoadString(GetStatusMessageResourceIdFor(code));
-
-		LogAnalytics( "android", "build-succeeded" );
 	}
 	else
 	{
@@ -196,10 +171,6 @@ CBuildResult appAndroidBuild(
 
 		serverMsg.Append("\r\nMore information may be available in the Simulator console");
 		statusMessage.Format(IDS_BUILD_ERROR_FORMAT_MESSAGE, code, serverMsg.GetTCHAR());
-
-		CStringA logMesg;
-		logMesg.Format("[%ld] %s", code, params.GetBuildMessage());
-		LogAnalytics( "android", "build-failed", "reason", logMesg);
 	}
 	return CBuildResult(code, statusMessage);
 }
@@ -225,8 +196,6 @@ CBuildResult appWebBuild(
 	bool wasSuccessful = packager.ReadBuildSettings( srcDir );
 	if (!wasSuccessful)
 	{
-		LogAnalytics( "web", "build-bungled", "reason", "bad-build-settings" );
-
 		CString message;
 		message.LoadString(IDS_BUILD_SETTINGS_FILE_ERROR);
 		return CBuildResult(5, message);
@@ -238,8 +207,6 @@ CBuildResult appWebBuild(
 	if( ! Rtt_StringIsEmpty( customBuildId ) )
 	{
 		Rtt_Log("\nUsing custom Build Id %s\n", customBuildId );
-
-		LogAnalytics( "web", "build-with-custom-id", customBuildId );
 	}
 
 	// these are currently unused
@@ -282,8 +249,6 @@ CBuildResult appWebBuild(
 	if (0 == code)
 	{
 		statusMessage.LoadString(GetStatusMessageResourceIdFor(code));
-
-		LogAnalytics( "web", "build-succeeded" );
 	}
 	else
 	{
@@ -293,10 +258,6 @@ CBuildResult appWebBuild(
 
 		serverMsg.Append("\r\nMore information may be available in the Simulator console");		
 		statusMessage.Format(IDS_BUILD_ERROR_FORMAT_MESSAGE, code, serverMsg.GetTCHAR());
-
-		CStringA logMesg;
-		logMesg.Format("[%ld] %s", code, params.GetBuildMessage());
-		LogAnalytics( "web", "build-failed", "reason", logMesg);
 	}
 	return CBuildResult(code, statusMessage);
 }
@@ -322,8 +283,6 @@ CBuildResult appLinuxBuild(
 	bool wasSuccessful = packager.ReadBuildSettings( srcDir );
 	if (!wasSuccessful)
 	{
-		LogAnalytics( "linux", "build-bungled", "reason", "bad-build-settings" );
-
 		CString message;
 		message.LoadString(IDS_BUILD_SETTINGS_FILE_ERROR);
 		return CBuildResult(5, message);
@@ -335,8 +294,6 @@ CBuildResult appLinuxBuild(
 	if( ! Rtt_StringIsEmpty( customBuildId ) )
 	{
 		Rtt_Log("\nUsing custom Build Id %s\n", customBuildId );
-
-		LogAnalytics( "linux", "build-with-custom-id", customBuildId );
 	}
 
 	// these are currently unused
@@ -378,8 +335,6 @@ CBuildResult appLinuxBuild(
 	if (0 == code)
 	{
 		statusMessage.LoadString(GetStatusMessageResourceIdFor(code));
-
-		LogAnalytics( "linux", "build-succeeded" );
 	}
 	else
 	{
@@ -389,10 +344,6 @@ CBuildResult appLinuxBuild(
 
 		serverMsg.Append("\r\nMore information may be available in the Simulator console");		
 		statusMessage.Format(IDS_BUILD_ERROR_FORMAT_MESSAGE, code, serverMsg.GetTCHAR());
-
-		CStringA logMesg;
-		logMesg.Format("[%ld] %s", code, params.GetBuildMessage());
-		LogAnalytics( "linux", "build-failed", "reason", logMesg);
 	}
 	return CBuildResult(code, statusMessage);
 }

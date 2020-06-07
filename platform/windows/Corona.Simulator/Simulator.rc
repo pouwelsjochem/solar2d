@@ -998,7 +998,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_BUILDUPSELL         "Your subscription restricts device builds on %s to Trial mode.  Upgrade your subscription to get access to priority device builds."
-    IDS_TRIALBUILD          "Do you want to build more powerful apps? Upgrade to Pro and get access to Daily Builds, analytics, in-app purchases and more."
+    IDS_TRIALBUILD          "Do you want to build more powerful apps? Upgrade to Pro and get access to Daily Builds, in-app purchases and more."
     IDS_ANDROIDBUILD        "Build for Android"
     IDS_KEYSTORE_ATLEASTONE "Please choose a keystore with at least one valid key alias."
     IDS_OPENGL_VERSION_WARNING 
@@ -1038,7 +1038,7 @@ BEGIN
     IDS_CONTINUETRIAL       "Continue"
     IDS_CORONATRIAL         "Corona Trial"
     IDS_TRIALTHANKS_d       "Thanks for downloading Corona.  You have been using the trial for %d day(s).  Click Buy Now to share your app with the world.  If you already bought, click Already Purchased."
-    IDS_TRIALFUN_d          "We hope you�re having a blast with Corona! Upgrade to Pro and build apps with features like analytics and in-app purchases. Take your apps to the next level."
+    IDS_TRIALFUN_d          "We hope you�re having a blast with Corona! Upgrade to Pro and build apps with features like in-app purchases. Take your apps to the next level."
     IDS_BRIDGE_NOTE         "Joints and damping"
     IDS_CHAINS_NOTE         "Joints chained together"
     IDS_EGGBREAKER_NOTE     "Collisions"

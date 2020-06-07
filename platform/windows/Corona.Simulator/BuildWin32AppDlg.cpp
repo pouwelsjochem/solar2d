@@ -18,7 +18,6 @@
 #include "CoronaProject.h"
 #include "BrowseDirDialog.h"
 #include "MessageDlg.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_Win32AppPackager.h"
 #include "Rtt_Win32AppPackagerParams.h"
 #include "Rtt_WinPlatform.h"
@@ -215,7 +214,6 @@ void CBuildWin32AppDlg::OnOK()
 	{
 		DisplayWarningMessage(IDS_BUILD_APP_NAME_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_APPNAME)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_APP_NAME_NOT_PROVIDED");
 		return;
 	}
 
@@ -226,7 +224,6 @@ void CBuildWin32AppDlg::OnOK()
 	{
 		DisplayWarningMessage(IDS_BUILD_EXE_FILE_NAME_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_EXE_FILE_NAME)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_EXE_FILE_NAME_NOT_PROVIDED");
 		return;
 	}
 	TCHAR invalidFileCharacters[] = L"\\/:*?\"<>|";
@@ -241,7 +238,6 @@ void CBuildWin32AppDlg::OnOK()
 		}
 		DisplayWarningMessage(IDS_BUILD_EXE_FILE_NAME_CHARS_INVALID, extraText);
 		GetDlgItem(IDC_BUILD_EXE_FILE_NAME)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_EXE_FILE_NAME_INVALID");
 		return;
 	}
 
@@ -252,7 +248,6 @@ void CBuildWin32AppDlg::OnOK()
 	{
 		DisplayWarningMessage(IDS_BUILD_VERSION_STRING_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_VERSION_NAME)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_VERSION_NAME_NOT_PROVIDED");
 		return;
 	}
 	{
@@ -302,7 +297,6 @@ void CBuildWin32AppDlg::OnOK()
 		{
 			DisplayWarningMessage(IDS_BUILD_WIN32_VERSION_STRING_INVALID);
 			GetDlgItem(IDC_BUILD_VERSION_NAME)->SetFocus();
-			LogAnalytics("build-bungled", "reason", "BUILD_VERSION_NAME_INVALID");
 			return;
 		}
 	}
@@ -315,14 +309,12 @@ void CBuildWin32AppDlg::OnOK()
 	{
 		DisplayWarningMessage(IDS_BUILD_PATH_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_PATH_NOT_PROVIDED");
 		return;
 	}
 	if (rootDestinationDirectoryPath.Compare(fProjectPointer->GetDir()) == 0)
 	{
 		DisplayWarningMessage(IDS_BUILD_PATH_INVALID);
 		GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_PATH_INVALID");
 		return;
 	}
 	if (::PathIsDirectory(rootDestinationDirectoryPath) == FALSE)
@@ -334,7 +326,6 @@ void CBuildWin32AppDlg::OnOK()
 		{
 			DisplayWarningMessage(IDS_BUILD_PATH_CREATION_FAILED, rootDestinationDirectoryPath);
 			GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-			LogAnalytics("build-bungled", "reason", "BUILD_PATH_CREATION_FAILED");
 			return;
 		}
 	}
@@ -393,7 +384,6 @@ void CBuildWin32AppDlg::OnOK()
 	bool wasBuildSettingsFileRead = packager.ReadBuildSettings(projectDirectoryPath.GetUTF8());
 	if (!wasBuildSettingsFileRead)
 	{
-		LogAnalytics("build-bungled", "reason", "bad-build-settings");
 		DisplayWarningMessage(IDS_BUILD_SETTINGS_FILE_ERROR);
 		return;
 	}
@@ -407,9 +397,6 @@ void CBuildWin32AppDlg::OnOK()
 	fProjectPointer->SetAppDescription(appDescription);
 	fProjectPointer->SetSaveDir(rootDestinationDirectoryPath);
 	fProjectPointer->Save();
-
-	// Log to the analytics system that the user is building for Win32.
-	LogAnalytics("build");
 
 	// Configure the Win32 app packager's parameters.
 	Rtt::Win32AppPackagerParams::CoreSettings paramsSettings{};
@@ -479,15 +466,11 @@ void CBuildWin32AppDlg::OnOK()
 		MessageBoxW(errorMessage.GetUTF16(), title, MB_OK | MB_ICONEXCLAMATION);
 
 		// Log the build failure.
-		CStringA logMesg;
-		logMesg.Format("[%ld] %s", buildResultCode, params.GetBuildMessage());
-		LogAnalytics("build-failed", "reason", logMesg);
 		Rtt_LogException(params.GetBuildMessage());
 		return;
 	}
 
 	// Log that the build was successful.
-	LogAnalytics("build-succeeded");
 	time_t elapsedTime = (time(NULL) - startTime);
 	Rtt_LogException("Win32 desktop app build succeeded in %lld second%s", elapsedTime, (elapsedTime == 1 ? "" : "s"));
 
@@ -566,45 +549,6 @@ void CBuildWin32AppDlg::DisplayWarningMessage(UINT messageID, const TCHAR* extra
 		message.Append(extraText);
 	}
 	MessageBox(message, title, MB_OK | MB_ICONWARNING);
-}
-
-
-void CBuildWin32AppDlg::LogAnalytics(const char *eventName, const char *key /* = NULL */, const char *value /* = NULL */)
-{
-	Rtt_ASSERT(GetWinProperties()->GetAnalytics() != NULL);
-	Rtt_ASSERT(eventName != NULL && strlen(eventName) > 0);
-
-	// NEEDSWORK: this is horrible
-	size_t numItems = 2;
-	char **dataKeys = (char **)calloc(sizeof(char *), numItems);
-	char **dataValues = (char **)calloc(sizeof(char *), numItems);
-
-	dataKeys[0] = _strdup("target");
-	dataValues[0] = _strdup("win32");
-	if (key != NULL && value != NULL)
-	{
-		dataKeys[1] = _strdup(key);
-		dataValues[1] = _strdup(value);
-	}
-	else
-	{
-		numItems = 1;
-	}
-
-	if (GetWinProperties()->GetAnalytics() != NULL)
-	{
-		GetWinProperties()->GetAnalytics()->Log(eventName, numItems, dataKeys, dataValues);
-	}
-
-	free(dataKeys[0]);
-	free(dataValues[0]);
-	if (numItems > 1)
-	{
-		free(dataKeys[1]);
-		free(dataValues[1]);
-	}
-	free(dataKeys);
-	free(dataValues);
 }
 
 #pragma endregion

@@ -25,7 +25,6 @@ namespace Rtt
 // bytecodes via luaL_loadbuffer. The corresponding .cpp file is dynamically generated.
 
 int luaload_easing(lua_State* L);
-int luaload_launchpad(lua_State* L);
 
 int luaload_dkjson(lua_State* L);
 int luaload_json(lua_State* L);

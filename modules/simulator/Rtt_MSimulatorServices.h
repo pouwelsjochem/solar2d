@@ -47,7 +47,6 @@ class MSimulatorServices
         virtual void OpenTextEditor(const char *filename) const = 0;
         virtual void OpenColorPanel(double r, double g, double b, double a, LuaResource* callback) const = 0;
 		virtual void SetBuildMessage(const char *buildMessage) const = 0;
-		virtual void SendAnalytics(const char *eventName, const char *keyName, const char *value) const = 0;
 		virtual bool RelaunchProject( ) const = 0;
 		virtual bool EditProject( const char *name ) const = 0;
 		virtual bool ShowProjectFiles( const char *name ) const = 0;

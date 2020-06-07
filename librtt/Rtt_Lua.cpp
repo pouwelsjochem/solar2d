@@ -341,14 +341,6 @@ Lua::DispatchRuntimeEvent( lua_State *L, int nresults )
 		{
 			PushRuntime( L ); Rtt_ASSERT( lua_istable( L, -1 ) );
 			
-			if ( ! lua_istable( L, -1 ) )
-			{
-				// This can happen in simulatorAnalytics.lua
-				Rtt_LogException( "[Lua::DispatchRuntimeEvent()] ERROR: 'Runtime' is not valid.\n");
-				lua_pop( L, 2 ); // pop Runtime and event
-				goto exit_gracefully;
-			}
-			
 			lua_getfield( L, -1, "dispatchEvent" ); Rtt_ASSERT( lua_isfunction( L, -1 ) );
 
 			// Reorder so dispatchEvent is below Runtime. And Runtime is below event.
@@ -1006,13 +998,6 @@ Lua::RuntimeDispatchEvent( lua_State* L, int index, int nresults )
 	
 	PushRuntime( L ); Rtt_ASSERT( lua_istable( L, -1 ) );
     
-    if ( ! lua_istable( L, -1 ) )
-    {
-        // This can happen in simulatorAnalytics.lua
-        Rtt_LogException( "ERROR: no runtime to send event to\n");
-        
-        return;
-    }
 	lua_getfield( L, -1, "dispatchEvent" ); Rtt_ASSERT( lua_isfunction( L, -1 ) );
 	lua_insert( L, -2 ); // swap stack positions for "Runtime" and "dispatchEvent"
 	int nargs = lua_gettop( L ) - top; Rtt_ASSERT( 2 == nargs );

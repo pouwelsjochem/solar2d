@@ -569,33 +569,6 @@ openColorPanel( lua_State *L )
     return 0;
 }
 
-static int
-analytics( lua_State *L )
-{
-	Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
-	MSimulatorServices *simulator = (MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-	const char *eventName = NULL;
-	const char *keyName = NULL;
-	const char *value = NULL;
-
-	if ( lua_isstring( L, 1 ) && lua_isstring( L, 2 ) && lua_isstring( L, 3 ) )
-	{
-		eventName = lua_tostring( L, 1 );
-		keyName = lua_tostring( L, 2 );
-		value = lua_tostring( L, 3 );
-
-		simulator->SendAnalytics(eventName, keyName, value);
-	}
-	else
-	{
-#ifdef Rtt_DEBUG
-		luaL_error( L, "ERROR: simulator.analytics(event, key, value) requires 3 string arguments" );
-#endif
-	}
-
-	return 0;
-}
-
 // ----------------------------------------------------------------------------
 
 const char LuaLibSimulator::kName[] = "simulator";
@@ -622,7 +595,6 @@ LuaLibSimulator::Open( lua_State *L )
 		{ "setWindowTitle", setWindowTitle },
 		{ "openTextEditor", openTextEditor },
 		{ "openColorPanel", openColorPanel },
-		{ "analytics", analytics },
 
 		{ NULL, NULL }
 	};

@@ -115,7 +115,7 @@ void CMainFrame::OnClose()
     app->PutRotation( pView->GetRotation() );
     app->PutDisplayName( pView->GetDisplayName() );
 
-	// Stop simulation. This also posts user feedback/analytics to the sever if enabled.
+	// Stop simulation. This also posts user feedback to the server if enabled.
 	pView->StopSimulation();
 
 	// Close the window.

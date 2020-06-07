@@ -119,10 +119,6 @@ class ApplePlatform : public MPlatform
 		virtual void CancelNotification( void *notificationId ) const;
 
 	public:
-		virtual void FlurryInit( const char * applicationKey ) const;
-		virtual void FlurryEvent( const char * eventId ) const;
-
-	public:
 		virtual void SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const;
 		virtual int PushNativeProperty( lua_State *L, const char *key ) const;
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;

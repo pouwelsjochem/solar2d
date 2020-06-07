@@ -14,7 +14,6 @@
 #include "SimulatorView.h"
 #include "Rtt_WinPlatform.h"
 #include "Rtt_TargetDevice.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Simulator.h"
 #include "SimulatorView.h"
 #include "WinGlobalProperties.h"
@@ -284,14 +283,6 @@ void WinSimulatorServices::OpenColorPanel(double r, double g, double b, double a
 void WinSimulatorServices::SetBuildMessage(const char *message) const
 {
 	Rtt_TRACE_SIM( ( "WARNING: SetBuildMessage not available on Windows\n" ) );
-}
-
-void WinSimulatorServices::SendAnalytics(const char *eventName, const char *keyName, const char *value) const
-{
-	if (GetWinProperties()->GetAnalytics() != NULL)
-	{
-		GetWinProperties()->GetAnalytics()->Log(eventName, keyName, value);
-	}
 }
 
 bool WinSimulatorServices::RelaunchProject() const

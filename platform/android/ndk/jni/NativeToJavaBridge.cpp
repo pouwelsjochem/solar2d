@@ -3426,30 +3426,6 @@ NativeToJavaBridge::ExternalizeResource( const char * assetName, Rtt::String * r
 	}
 }
 
-
-#ifdef Rtt_FLURRY
-void
-NativeToJavaBridge::FlurryInit( const char * applicationKey ) const
-{
-	if ( !applicationKey )
-		return;
-	
-	CallStringMethod( "callFlurryInit", applicationKey );
-	HandleJavaException();
-}
-
-void
-NativeToJavaBridge::FlurryEvent( const char * eventId ) const
-{
-	if ( !eventId )
-		return;
-	
-	CallStringMethod( "callFlurryEvent", eventId );
-	HandleJavaException();
-}
-
-#endif
-
 void
 NativeToJavaBridge::StoreInit( const char *storeName )
 {

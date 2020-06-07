@@ -64,9 +64,6 @@ class CBuildWin32AppDlg : public CDialog
 		/// </returns>
 		bool HasRanBuiltApp() const;
 
-		/// <summary>Logs analytics including target platform and optional key/value.</summary>
-		void LogAnalytics(const char *eventName, const char *key = NULL, const char *value = NULL);
-
 		// Dialog Data
 		enum { IDD = IDD_BUILD_WIN32_APP };
 

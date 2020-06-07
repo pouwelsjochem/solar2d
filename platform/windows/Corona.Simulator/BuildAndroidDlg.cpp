@@ -25,7 +25,6 @@
 #include "CoronaInterface.h"
 #include "Core/Rtt_Build.h"
 #include "Rtt_AndroidSupportTools.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_TargetDevice.h"
 #include "Rtt_TargetAndroidAppStore.h"
 #include <Shlwapi.h>
@@ -581,7 +580,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_APP_NAME_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_APPNAME)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_APP_NAME_NOT_PROVIDED");
 		return;
 	}
     GetDlgItemText(IDC_BUILD_VERSION_CODE, sValue);
@@ -590,7 +588,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_VERSION_NUMBER_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_VERSION_CODE)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_APP_VERSION_NUMBER_NOT_PROVIDED");
 		return;
 	}
 	iVersionCode = _ttoi(sValue);
@@ -598,7 +595,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_INVALID_ANDROID_APP_VERSION_NUMBER);
 		GetDlgItem(IDC_BUILD_VERSION_CODE)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "INVALID_ANDROID_APP_VERSION_NUMBER");
 		return;
 	}
 	GetDlgItemText(IDC_BUILD_VERSION_NAME, sVersionName);
@@ -607,7 +603,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_VERSION_NAME_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_VERSION_NAME)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_VERSION_NAME_NOT_PROVIDED");
 		return;
 	}
 	GetDlgItemText(IDC_BUILD_PACKAGE, sPackageName);
@@ -616,7 +611,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_PACKAGE_NAME_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_PACKAGE)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_PACKAGE_NAME_NOT_PROVIDED");
 		return;
 	}
 	stringBuffer.SetTCHAR(sPackageName);
@@ -624,7 +618,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_VALID_PACKAGE);
 		GetDlgItem(IDC_BUILD_PACKAGE)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "bad-package-identifier");
 		return;
 	}
 	pComboBox = (CComboBox*)GetDlgItem(IDC_BUILD_TARGET_APP_STORE);
@@ -637,7 +630,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_TARGET_APP_STORE_NOT_SELECTED);
 		pComboBox->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_TARGET_APP_STORE_NOT_SELECTED");
 		return;
 	}
     GetDlgItemText(IDC_BUILD_KEYSTORE, sKeystore);
@@ -646,14 +638,12 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_ANDROID_KEYSTORE_FILE_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_KEYSTORE)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "ANDROID_KEYSTORE_FILE_NOT_PROVIDED");
 		return;
 	}
 	if (::PathFileExists(sKeystore) == FALSE)
 	{
 		DisplayWarningMessage(IDS_ANDROID_KEYSTORE_FILE_NOT_FOUND, sKeystore);
 		GetDlgItem(IDC_BUILD_KEYSTORE)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "ANDROID_KEYSTORE_FILE_NOT_FOUND");
 		return;
 	}
     GetDlgItemText(IDC_BUILD_KEYALIAS, sKeyAlias);
@@ -662,7 +652,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_ANDROID_KEYALIAS_NOT_SELECTED);
 		GetDlgItem(IDC_BUILD_KEYALIAS)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "ANDROID_KEYALIAS_NOT_SELECTED");
 		return;
 	}
     GetDlgItemText(IDC_BUILD_SAVETO, sBuildDir);
@@ -671,14 +660,12 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_PATH_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_PATH_NOT_PROVIDED");
 		return;
 	}
 	if (sBuildDir.Compare(m_pProject->GetDir()) == 0)
 	{
 		DisplayWarningMessage(IDS_BUILD_PATH_INVALID);
 		GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-		LogAnalytics("build-bungled", "reason", "BUILD_PATH_INVALID" );
 		return;
 	}
 	if (::PathIsDirectory(sBuildDir) == FALSE)
@@ -690,7 +677,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 		{
 			DisplayWarningMessage(IDS_BUILD_PATH_CREATION_FAILED, sBuildDir);
 			GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-			LogAnalytics("build-bungled", "reason", "BUILD_PATH_CREATION_FAILED");
 			return;
 		}
 	}
@@ -704,7 +690,7 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	m_pProject->SetKeystorePath(sKeystore);
 	m_pProject->SetAlias(sKeyAlias);
 	m_pProject->SetSaveDir(sBuildDir);
-	m_pProject->SetTargetOS(_T("Android 2.3.3"));		// <- This string is only used by logging/analytics.
+	m_pProject->SetTargetOS(_T("Android 2.3.3"));		// <- This string is only used by logging.
 	m_pProject->SetCreateLiveBuild(isLiveBuild);
 
 	// Update global build settings in registry.
@@ -736,7 +722,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 			passwordDlg.SetKey( _T("Key alias: ") + sKeyAlias );
 			if (passwordDlg.DoModal() != IDOK)
 			{
-				LogAnalytics("build-bungled", "reason", "cancel-android-key-password");
 				return;
 			}
 			sAliasPassword = passwordDlg.GetPassword();
@@ -760,8 +745,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 			}
 		}
 	}
-
-	LogAnalytics("build", "store", pTargetStore->GetStringId());
 
 	m_pProject->Save();
 	CBuildProgressDlg buildDialog;
@@ -928,42 +911,4 @@ void CBuildAndroidDlg::OnBnClickedCreateLiveBuild()
 			}
 		}
 	}
-}
-
-void CBuildAndroidDlg::LogAnalytics(const char *eventName, const char *key, const char *value)
-{
-	Rtt_ASSERT(GetWinProperties()->GetAnalytics() != NULL);
-	Rtt_ASSERT(eventName != NULL && strlen(eventName) > 0);
-
-	// NEEDSWORK: this is horrible
-	size_t numItems = 2;
-	char **dataKeys = (char **)calloc(sizeof(char *), numItems);
-	char **dataValues = (char **)calloc(sizeof(char *), numItems);
-
-	dataKeys[0] = _strdup("target");
-	dataValues[0] = _strdup("android");
-	if (key != NULL && value != NULL)
-	{
-		dataKeys[1] = _strdup(key);
-		dataValues[1] = _strdup(value);
-	}
-	else
-	{
-		numItems = 1;
-	}
-
-	if (GetWinProperties()->GetAnalytics() != NULL)
-	{
-		GetWinProperties()->GetAnalytics()->Log(eventName, numItems, dataKeys, dataValues);
-	}
-
-	free(dataKeys[0]);
-	free(dataValues[0]);
-	if (numItems > 1)
-	{
-		free(dataKeys[1]);
-		free(dataValues[1]);
-	}
-	free(dataKeys);
-	free(dataValues);
 }

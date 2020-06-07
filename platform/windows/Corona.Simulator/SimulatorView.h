@@ -161,7 +161,6 @@ class CSimulatorView : public CView
 		void RunCoronaProject(CString &projectPath);
 		void ScaleRect(CRect& rect, float scale);
 		Rtt::TargetDevice::Skin SkinIDFromMenuID(UINT nID);
-		int GetAnalyticsSkinId();
 		bool InitSkin(Rtt::TargetDevice::Skin skinId);
 		bool InitializeSimulation(Rtt::TargetDevice::Skin skinId);
 		void SetRotation(int rotation);

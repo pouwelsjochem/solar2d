@@ -78,7 +78,6 @@ $path/lua_to_native.sh $path/../../resources/dkjson.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../resources/runtime.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../resources/loader_ccdata.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../resources/loader_callback.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../resources/launchpad.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../../subrepos/easing/easing.lua $generated_files_path/
 $path/lua_to_native.sh $path/../ndk/shell.lua $generated_files_path/
 
@@ -90,10 +89,6 @@ $path/lua_to_native.sh $path/../../../librtt/Corona/CoronaProvider.lua $generate
 # ads plugin
 $BIN_DIR/lua2c.sh $path/../../../plugins/ads/shared/ads.lua $generated_files_path/. $LUA2C_CONFIGURATION $LUA_DIR
 $BIN_DIR/lua2c.sh $path/../../../plugins/ads/shared/CoronaProvider.ads.lua $generated_files_path/. $LUA2C_CONFIGURATION $LUA_DIR
-
-# analytics plugin
-$BIN_DIR/lua2c.sh $path/../../../plugins/analytics/shared/analytics.lua $generated_files_path/. $LUA2C_CONFIGURATION $LUA_DIR
-$BIN_DIR/lua2c.sh $path/../../../plugins/analytics/shared/CoronaProvider.analytics.lua $generated_files_path/. $LUA2C_CONFIGURATION $LUA_DIR
 
 # Shaders
 $path/lua_to_native.sh $path/../../../librtt/Display/Shader/kernel_composite_add_gl.lua $generated_files_path/

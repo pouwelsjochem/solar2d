@@ -114,8 +114,6 @@ class WinPlatform : public MPlatform
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const;
 		virtual void ReleaseNotification(void *notificationId) const;
 		virtual void CancelNotification(void *notificationId) const;
-		virtual void FlurryInit(const char * applicationKey) const;
-		virtual void FlurryEvent(const char * eventId) const;
 		virtual void SetNativeProperty(lua_State *L, const char *key, int valueIndex) const;
 		virtual int PushNativeProperty(lua_State *L, const char *key) const;
 		virtual int PushSystemInfo(lua_State *L, const char *key) const;

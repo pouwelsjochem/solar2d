@@ -19,7 +19,6 @@
 #import "Rtt_IPhoneDisplayObject.h"
 
 #include "Rtt_LuaAux.h"
-#include "Rtt_LaunchPad.h"
 #include "Rtt_Runtime.h"
 //#include "Rtt_LuaResource.h"
 #include "Rtt_Event.h"

@@ -31,7 +31,6 @@
 #include "Interop\Ipc\AsyncPipeReader.h"
 #include "Interop\Storage\RegistryStoredPreferences.h"
 #include "Rtt_Version.h"    // Rtt_STRING_BUILD and Rtt_STRING_BUILD_DATE
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_JavaHost.h"   // GetJavaHome()
 
 
@@ -447,24 +446,6 @@ BOOL CSimulatorApp::InitInstance()
 		return FALSE;
 	}
 
-#if 0
-	// For now, at least, record all user's analytics (it's a free product, after all)
-	// TODO: at some point remove the inactive checkbox from the preferences dialog
-
-	// Start recording usage feedback to be posted to Corona Labs' server later.
-	Rtt::SimulatorAnalytics *pAnalytics = GetWinProperties()->GetAnalytics();
-	if (pAnalytics)
-	{
-		const Rtt::AuthorizationTicket *ticket = GetWinProperties()->GetTicket();
-		if ( ticket && ticket->IsSubscriptionCurrent() )
-		{
-			// Enable/disable analytics based on the "User Feedback" setting set in the preferences window.
-			bool isEnabled = AfxGetApp()->GetProfileInt(REGISTRY_SECTION, REGISTRY_ANALYTICS, REGISTRY_ANALYTICS_DEFAULT) ? true : false;
-			pAnalytics->SetParticipating(isEnabled);
-		}
-	}
-#endif
-
 	// This application has been initialized and is authorized to continue.
 	// Returning TRUE allows this application to continue running.
 	return TRUE;
@@ -874,13 +855,6 @@ int CSimulatorApp::ExitInstance()
 	WriteProfileInt(REGISTRY_SECTION, REGISTRY_ROTATION, GetRotation());
 	WriteProfileInt(REGISTRY_SECTION, REGISTRY_XPOS, m_WP.rcNormalPosition.left);
     WriteProfileInt( REGISTRY_SECTION, REGISTRY_YPOS, m_WP.rcNormalPosition.top);
-
-	// End the analytics session, if enabled.
-	auto analyticsPointer = GetWinProperties()->GetAnalytics();
-	if (analyticsPointer)
-	{
-		analyticsPointer->EndSession();
-	}
 
 	// Close the logging window if currently running.
 	if (m_outputViewerProcessPointer)

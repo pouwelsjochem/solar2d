@@ -40,7 +40,6 @@ static const char kDeviceOSKey[] = "deviceOS";
 static const char kClientDeviceIdKey[] = "clientDeviceId";
 static const char kClientVersionKey[] = "clientVersion";
 static const char kClientOSKey[] = "clientOS";
-static const char kUsesLaunchPadKey[] = "usesLaunchPad";
 static const char kLanguageKey[] = "language";
 #endif // NOT_USED
 	

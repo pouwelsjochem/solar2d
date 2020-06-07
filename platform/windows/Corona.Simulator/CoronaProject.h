@@ -152,8 +152,6 @@ public:
 	CString GetTargetOS() { return m_sTargetOS; }
 	void SetTargetOS( CString sTargetOS ) { m_sTargetOS = sTargetOS; }
 
-	CStringA GetAnalyticsSessionId() { return m_sAnalyticsSessionId; }
-
 	bool IsDistribution();
 
 	Rtt::TargetDevice::Platform GetTargetPlatform();
@@ -200,7 +198,6 @@ protected:
 	CString m_sCompanyName;
 	CString m_sAppDescription;
 	CString m_sExeFileName;
-	CStringA m_sAnalyticsSessionId;
 
 	bool m_sUseStandartResources;
 

@@ -205,10 +205,10 @@ public ref class CoronaRuntimeEnvironment sealed
 		property Platform::String^ CachesDirectoryPath { Platform::String^ get(); }
 
 		/// <summary>
-		///  <para>Gets the directory path that Corona uses to store files for its internal features, such as analytics.</para>
+		///  <para>Gets the directory path that Corona uses to store files for its internal features.</para>
 		///  <para>This directory is not made available in Lua.</para>
 		/// </summary>
-		/// <value>Directory path used by Corona to store files for its own internal usage, such as analytics.</value>
+		/// <value>Directory path used by Corona to store files for its own internal usage.</value>
 		property Platform::String^ InternalDirectoryPath { Platform::String^ get(); }
 
 		/// <summary>
@@ -366,7 +366,7 @@ public ref class CoronaRuntimeEnvironment sealed
 		static property Platform::String^ DefaultCachesDirectoryPath { Platform::String^ get(); }
 
 		/// <summary>
-		///  <para>Gets the default path that Corona will use to store files for its internal features, such as analytics.</para>
+		///  <para>Gets the default path that Corona will use to store files for its internal features.</para>
 		///  <para>This directory is not made available in Lua.</para>
 		/// </summary>
 		/// <remarks>

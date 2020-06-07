@@ -71,9 +71,6 @@
     <ClInclude Include="..\..\shared\Rtt_PlatformSimulator.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_SimulatorAnalytics.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_JavaHost.h">
       <Filter>%28root%29\librtt</Filter>
     </ClInclude>
@@ -141,7 +138,6 @@
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\html_blocks.h">
       <Filter>%28root%29\external\sundown</Filter>
     </ClInclude>
-    <ClInclude Include="AnalyticsProvider.h" />
     <ClInclude Include="..\..\shared\Rtt_LinuxAppPackager.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
@@ -205,9 +201,6 @@
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformSimulator.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_SimulatorAnalytics.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_TargetAndroidAppStore.cpp">
@@ -274,7 +267,6 @@
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\html.c">
       <Filter>%28root%29\external\sundown</Filter>
     </ClCompile>
-    <ClCompile Include="AnalyticsProvider.cpp" />
     <ClCompile Include="..\..\shared\Rtt_LinuxAppPackager.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
@@ -341,9 +333,6 @@
   <ItemGroup>
     <LuaToCpp Include="..\..\android\create_build_properties.lua">
       <Filter>%28root%29\platform\android</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\simulatorAnalytics.lua">
-      <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\shell.lua">
       <Filter>%28root%29\platform\resources</Filter>

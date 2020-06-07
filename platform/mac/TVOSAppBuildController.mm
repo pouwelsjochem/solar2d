@@ -336,8 +336,6 @@ static NSString *kValueNone = @"None";
         Rtt_DELETE( packager );
         packager = NULL;
 
-        // fAnalytics->Log( "build-bad-build-settings", NULL );
-
         [self showModalSheet:@"Error in build.settings" message:[NSString stringWithFormat:@"There is an error in `build.settings`:\n\n`%@`\n\nPlease correct and retry the build.", buildSettingsError] buttonLabels:@[@"Dismiss", @"Edit build.settings" ] alertStyle:NSCriticalAlertStyle helpURL:nil parentWindow:buildWindow completionHandler: ^(NSModalResponse returnCode)
              {
                  if (returnCode == NSAlertSecondButtonReturn)
@@ -751,8 +749,6 @@ static NSString *kValueNone = @"None";
 			title = @"Xcode Required";
 
 			msg = [NSString stringWithFormat:@"The Xcode tvOS SDK could not be found. Please install Xcode (or use `xcode-select` to choose an existing installation).\n\nXcode is required by Corona and needs to be installed to build tvOS applications.\n\nPress the *%@* button to go to the App Store and get Xcode.  When it is installed, build for tvOS again.\n", installXcodeBtn];
-
-			// fAnalytics->Log("bad-tvos-sdk", "not-found");
 		}
 		else
 		{
@@ -763,8 +759,6 @@ static NSString *kValueNone = @"None";
 
 			msg = [NSString stringWithFormat:@"Corona can't find the following components in the\nXcode %g tvOS SDK located at *%@*:\n\n%@\n\nPlease update Corona to the latest [Daily Build](%@) (it might also be necessary to re-install Xcode)",
 						 [XcodeToolHelper getXcodeVersion], sdkRoot, error_string, kDailyBuildsURL];
-
-			// fAnalytics->Log("bad-tvos-sdk", "incomplete");
 		}
 
 		NSInteger alertResult = [self showModalSheet:title message:msg buttonLabels:buttons alertStyle:NSCriticalAlertStyle helpURL:helpURL parentWindow:[self window] completionHandler:nil];

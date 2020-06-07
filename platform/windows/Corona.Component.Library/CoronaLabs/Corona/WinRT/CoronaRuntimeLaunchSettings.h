@@ -100,11 +100,11 @@ public ref class CoronaRuntimeLaunchSettings sealed
 		property Platform::String^ CachesDirectoryPath;
 
 		/// <summary>
-		///  <para>Gets or sets the directory path Corona will use for its internal features, such as analytics.</para>
+		///  <para>Gets or sets the directory path Corona will use for its internal features.</para>
 		///  <para>This directory is not made available in Lua.</para>
 		/// </summary>
 		/// <value>
-		///  <para>Directory path used by Corona to store files for its own internal usage, such as analytics.</para>
+		///  <para>Directory path used by Corona to store files for its own internal usage.</para>
 		///  <para>Corona will automatically create the directory if it does not exist on startup.</para>
 		///  <para>When setting this property, it is recommended to set it to an absolute path.</para>
 		///  <para>

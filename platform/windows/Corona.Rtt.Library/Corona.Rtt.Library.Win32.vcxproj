@@ -208,7 +208,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_LuaData.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibCrypto.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibFacebook.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibFlurry.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibInAppStore.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibMedia.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibNative.cpp" />
@@ -260,7 +259,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_TesselatorStream.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Transform.cpp" />
     <ClCompile Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.cpp" />
-    <ClCompile Include="..\..\..\plugins\analytics\shared\CoronaAnalyticsLibrary.cpp" />
     <ClCompile Include="..\..\..\plugins\gameNetwork\shared\CoronaGameNetworkLibrary.cpp" />
     <ClCompile Include="..\..\..\plugins\licensing\shared\CoronaLicensingLibrary.cpp" />
     <ClCompile Include="..\..\..\plugins\network\win32\CharsetTranscoder.cpp" />
@@ -478,7 +476,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_LuaGCInhibitor.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibCrypto.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibFacebook.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibFlurry.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibInAppStore.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibMedia.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibNative.h" />
@@ -542,7 +539,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_TesselatorStream.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Transform.h" />
     <ClInclude Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.h" />
-    <ClInclude Include="..\..\..\plugins\analytics\shared\CoronaAnalyticsLibrary.h" />
     <ClInclude Include="..\..\..\plugins\gameNetwork\shared\CoronaGameNetworkLibrary.h" />
     <ClInclude Include="..\..\..\plugins\licensing\shared\CoronaLicensingLibrary.h" />
     <ClInclude Include="..\..\..\plugins\network\win32\CharsetTranscoder.h" />
@@ -673,8 +669,6 @@
     <LuaToCpp Include="..\..\..\librtt\Display\Shader\shell_default_gl.lua" />
     <LuaToCpp Include="..\..\..\plugins\ads\shared\ads.lua" />
     <LuaToCpp Include="..\..\..\plugins\ads\shared\CoronaProvider.ads.lua" />
-    <LuaToCpp Include="..\..\..\plugins\analytics\shared\analytics.lua" />
-    <LuaToCpp Include="..\..\..\plugins\analytics\shared\CoronaProvider.analytics.lua" />
     <LuaToCpp Include="..\..\..\plugins\gameNetwork\shared\CoronaProvider.gameNetwork.lua" />
     <LuaToCpp Include="..\..\..\plugins\gameNetwork\shared\gameNetwork.lua" />
     <LuaToCpp Include="..\..\..\plugins\licensing\shared\CoronaProvider.licensing.lua" />
@@ -688,7 +682,6 @@
     <LuaToCpp Include="..\..\resources\loader_callback.lua" />
     <LuaToCpp Include="..\..\resources\loader_ccdata.lua" />
     <LuaToCpp Include="..\..\resources\runtime.lua" />
-    <LuaToCpp Include="..\..\resources\launchpad.lua" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALmixer.Library\ALmixer.Library.Win32.vcxproj">

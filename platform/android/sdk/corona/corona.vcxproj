@@ -375,7 +375,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaData.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibCrypto.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibFacebook.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibMedia.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibNative.cpp" />
@@ -433,11 +432,9 @@
     <ClCompile Include="..\..\ndk\AndroidOperationResult.cpp" />
     <ClCompile Include="..\..\ndk\AndroidZipFileEntry.cpp" />
     <ClCompile Include="..\..\ndk\generated\ads.c" />
-    <ClCompile Include="..\..\ndk\generated\analytics.c" />
     <ClCompile Include="..\..\ndk\generated\CoronaLibraryGenerated.cpp" />
     <ClCompile Include="..\..\ndk\generated\CoronaPrototype.cpp" />
     <ClCompile Include="..\..\ndk\generated\CoronaProvider.ads.c" />
-    <ClCompile Include="..\..\ndk\generated\CoronaProvider.analytics.c" />
     <ClCompile Include="..\..\ndk\generated\CoronaProvider.cpp" />
     <ClCompile Include="..\..\ndk\generated\dkjson.cpp" />
     <ClCompile Include="..\..\ndk\generated\easing.cpp" />
@@ -533,7 +530,6 @@
     <ClCompile Include="..\..\ndk\generated\kernel_generator_random_gl.cpp" />
     <ClCompile Include="..\..\ndk\generated\kernel_generator_stripes_gl.cpp" />
     <ClCompile Include="..\..\ndk\generated\kernel_generator_sunbeams_gl.cpp" />
-    <ClCompile Include="..\..\ndk\generated\launchpad.cpp" />
     <ClCompile Include="..\..\ndk\generated\loader_callback.cpp" />
     <ClCompile Include="..\..\ndk\generated\loader_ccdata.cpp" />
     <ClCompile Include="..\..\ndk\generated\ltn12.cpp" />
@@ -587,9 +583,7 @@
     <None Include="..\..\..\..\librtt\Core\Rtt_Assert.m" />
     <None Include="..\..\..\..\librtt\Rtt_LuaCoronaBaseLib.m" />
     <None Include="..\..\ndk\generated\ads.lu" />
-    <None Include="..\..\ndk\generated\analytics.lu" />
     <None Include="..\..\ndk\generated\CoronaProvider.ads.lu" />
-    <None Include="..\..\ndk\generated\CoronaProvider.analytics.lu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\external\ALmixer\luaal.h">
@@ -813,7 +807,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaGCInhibitor.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibCrypto.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibFacebook.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibMedia.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibNative.h" />

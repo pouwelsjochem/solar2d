@@ -42,7 +42,6 @@ namespace Rtt
 {
 	class WinPlatform;
 	class WinPlatformServices;
-	class SimulatorAnalytics;
 };
 
 
@@ -68,7 +67,6 @@ class WinGlobalProperties
 		void SetResourcesDir(const char *sDir);
 		Rtt::WinPlatform *GetPlatform();
 		Rtt::WinPlatformServices *GetServices() { return m_pServices; }
-		Rtt::SimulatorAnalytics *GetAnalytics() { return m_pAnalytics; }
 
 		static WinGlobalProperties* GetInstance();
 
@@ -79,7 +77,6 @@ class WinGlobalProperties
 		char *m_sResourcesDir;
 		Interop::SimulatorRuntimeEnvironment *m_pEnvironment;
 		Rtt::WinPlatformServices *m_pServices;
-		Rtt::SimulatorAnalytics *m_pAnalytics;
 };
 
 WinGlobalProperties *GetWinProperties();

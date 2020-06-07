@@ -420,7 +420,6 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/generated/dkjson.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/loader_ccdata.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/loader_callback.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/launchpad.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/timer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition_v1.cpp \
@@ -639,7 +638,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_LuaData.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibCrypto.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibFacebook.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_LuaLibFlurry.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibInAppStore.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibMedia.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibNative.cpp \
@@ -925,7 +923,7 @@ LOCAL_MODULE := plugins
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_SHARED_LIBRARIES := ads analytics
+LOCAL_SHARED_LIBRARIES := ads
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -933,7 +931,6 @@ include $(BUILD_SHARED_LIBRARY)
 ########################################################################################################
 
 $(call import-module,ads)
-$(call import-module,analytics)
 
 $(call import-module,cpufeatures)
 

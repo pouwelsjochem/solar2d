@@ -40,8 +40,6 @@ application.metadata = {
     build = "42", -- either "developer" or nil (where nil means distribution/store)
 }
 
--- application.launchPad = false -- not set is the same as true
-
 EOF
 
     echo "********* user($USER_ID) sub($SUB_TYPE) mode($MODE_TYPE)"

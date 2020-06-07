@@ -698,7 +698,6 @@ LuaContext::InitializeLuaCore( lua_State* L )
 #endif
 		{ "store", LuaLibStore::Open },
 		{ "easing", Lua::Open< luaload_easing> },
-		{ "launchpad", Lua::Open< luaload_launchpad> },
 		{ "dkjson", Lua::Open< luaload_dkjson > },
 		{ "json", Lua::Open< luaload_json > },
 #ifdef Rtt_DEBUGGER

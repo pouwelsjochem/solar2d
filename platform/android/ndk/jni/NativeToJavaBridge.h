@@ -246,11 +246,6 @@ class NativeToJavaBridge
 		void ExternalizeResource( const char * assetName, Rtt::String * result );
 
 		void ShowSplashScreen();
-	
-	#ifdef Rtt_FLURRY
-		void FlurryInit( const char * applicationKey ) const;
-		void FlurryEvent( const char * eventId ) const;
-	#endif
 
 	public:
 		void StoreInit( const char *storeName );

@@ -45,7 +45,6 @@ SET( LUA_SOURCES
 	"${CORONA_ROOT}/platform/resources/runtime.lua"
 	"${CORONA_ROOT}/platform/resources/loader_ccdata.lua"
 	"${CORONA_ROOT}/platform/resources/loader_callback.lua"
-	"${CORONA_ROOT}/platform/resources/launchpad.lua"
 	"${CORONA_ROOT}/subrepos/easing/easing.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaLibrary.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaPrototype.lua"
@@ -225,7 +224,6 @@ add_library( corona SHARED
 		${Lua2CppOutputDir}/dkjson.cpp
 		${Lua2CppOutputDir}/loader_ccdata.cpp
 		${Lua2CppOutputDir}/loader_callback.cpp
-		${Lua2CppOutputDir}/launchpad.cpp
 		${Lua2CppOutputDir}/shell.cpp
 
 		${CORONA_ROOT}/external/luasocket/src/auxiliar.c
@@ -393,7 +391,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_LuaData.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibCrypto.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibFacebook.cpp
-		${CORONA_ROOT}/librtt/Rtt_LuaLibFlurry.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibInAppStore.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibMedia.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibNative.cpp

@@ -168,12 +168,7 @@ class AndroidPlatform : public MPlatform
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const;
 		virtual void ReleaseNotification( void *notificationId ) const;
 		virtual void CancelNotification( void *notificationId ) const;
-
-#ifdef Rtt_FLURRY
-		virtual void FlurryInit( const char * applicationKey ) const;
-		virtual void FlurryEvent( const char * eventId ) const;
-#endif
-
+		
 	public:
 		virtual void SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const;
 		virtual int PushNativeProperty( lua_State *L, const char *key ) const;

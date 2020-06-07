@@ -150,7 +150,7 @@ public final class CoronaEnvironment {
 	 * Gets the path to Corona's internal caches directory.
 	 * <p>
 	 * This directory is not made available in Lua. It is a directory used by Corona to
-	 * store information for its internal features such as analytics.
+	 * store information for its internal features.
 	 * <p>
 	 * This directory is located in internal storage. Its files will be automatically deleted
 	 * by the operating system if internal storage is low on space.

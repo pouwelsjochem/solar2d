@@ -2609,10 +2609,6 @@ void RuntimeEnvironment::RuntimeDelegate::InitializeConfig(const Rtt::Runtime& s
 		}
 		int applicationLuaTableIndex = lua_gettop(L);
 
-		// Disable launchpad analytics until we have a working replacement.
-		lua_pushboolean(L, 0);
-		lua_setfield(L, applicationLuaTableIndex, "launchPad");
-
 		// Query for the "metadata" field, which is used by CoronaCards.
 		lua_getfield(L, applicationLuaTableIndex, kMetadata);
 		{

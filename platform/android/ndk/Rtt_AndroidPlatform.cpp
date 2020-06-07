@@ -966,22 +966,6 @@ AndroidPlatform::CancelNotification( void *notificationId ) const
 
 // ----------------------------------------------------------------------------
 
-#ifdef Rtt_FLURRY
-void
-AndroidPlatform::FlurryInit( const char * applicationKey ) const
-{
-	fNativeToJavaBridge->FlurryInit( applicationKey );
-}
-
-void
-AndroidPlatform::FlurryEvent( const char * eventId ) const
-{
-	fNativeToJavaBridge->FlurryEvent( eventId );
-}
-#endif
-
-// ----------------------------------------------------------------------------
-
 void
 AndroidPlatform::SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const
 {

@@ -346,7 +346,6 @@ DeviceBuildData::AddPlugin( lua_State *L, const char *moduleName, int index )
 //		clientPlatform = ,
 //		dailyBuildYear = , -- [new]
 //		dailyBuildRevision = , -- [new]
-//		isLaunchPadActive = , -- launchPad
 //
 //		plugins = {
 //			-- enforce uniqueness of name on a per-project basis
@@ -418,10 +417,6 @@ DeviceBuildData::PushTable( lua_State *L ) const
 
 	lua_pushinteger( L, fDebugBuildProcess );
 	lua_setfield( L, -2, kDebugBuildProcessKey );
-
-	// TODO: Remove server dependency then remove this
-	lua_pushboolean( L, false );
-	lua_setfield( L, -2, "isLaunchPadActive" );
 
 	// Plugins
 	lua_getfield( L, LUA_REGISTRYINDEX, kPluginsMetadataKey );

@@ -360,8 +360,8 @@ typedef void (^ReceivedDataHandler)(NSData*);
 		{
 			statusCode = [((NSHTTPURLResponse *)response) statusCode];
 			
-			// Report the error response in the Simulator (if it's not about our analytics)
-			if (statusCode >= 400 && strstr([customConnection.url UTF8String], "http://stats.coronalabs.com/analytics/") == NULL)
+			// Report the error response in the Simulator
+			if (statusCode >= 400)
 			{
 				// Report the unsuccessful response in the Simulator pour l'aidez le debugging
 				Rtt_TRACE_SIM( ( "Warning: Network request got %ld response: %s", statusCode, [customConnection.url UTF8String] ) );
@@ -389,8 +389,8 @@ typedef void (^ReceivedDataHandler)(NSData*);
 
 	const char *errorMessage = [s UTF8String];
 
-	// Report the error in the Simulator (if it's not about our analytics which sometimes times out)
-	if (errorMessage != NULL && strstr(errorMessage, "http://stats.coronalabs.com/analytics/") == NULL)
+	// Report the error in the Simulator
+	if (errorMessage != NULL)
 	{
 		Rtt_TRACE_SIM( ( "Error on network request: %s: %s", [customConnection.url UTF8String], errorMessage ) );
 	}
@@ -1179,18 +1179,6 @@ ApplePlatform::ReleaseNotification( void *notificationId ) const
 
 void
 ApplePlatform::CancelNotification( void *notificationId ) const
-{
-}
-
-// ----------------------------------------------------------------------------
-
-void
-ApplePlatform::FlurryInit( const char * applicationKey ) const
-{
-}
-
-void
-ApplePlatform::FlurryEvent( const char * eventId ) const
 {
 }
 

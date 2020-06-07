@@ -216,15 +216,11 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 		{
 			// No Xcode found
 			detailMsg = [NSString stringWithFormat:@"The Xcode macOS SDK could not be found. Please install Xcode."];
-
-			// fAnalytics->Log("bad-osx-sdk", "not-found");
 		}
 		else
 		{
 			// xcode-select gave us a path, but a component could not be found.
 			detailMsg = [NSString stringWithFormat:@"The Xcode macOS SDK located at \"%@\" is missing the following components:\n\n%@\nPlease re-install Xcode.", sdkRoot, error_string];
-
-			// fAnalytics->Log("bad-osx-sdk", "incomplete");
 		}
 
 		NSString *msg = [NSString stringWithFormat:@"%@\n\nXcode is required by Corona and needs to be installed to build macOS applications.\n\nPress the \"%@\" button to go to the App Store and get Xcode.  When it is installed, build for macOS again.\n", detailMsg, installBtn];
@@ -376,8 +372,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 
         Rtt_DELETE( osxPackager );
         osxPackager = NULL;
-
-        // fAnalytics->Log( "build-bad-build-settings", NULL );
 
         [self showModalSheet:@"Error in build.settings" message:[NSString stringWithFormat:@"There is an error in `build.settings`:\n\n`%@`\n\nPlease correct and retry the build.", buildSettingsError] buttonLabels:@[@"Dismiss", @"Edit build.settings" ] alertStyle:NSCriticalAlertStyle helpURL:nil parentWindow:buildWindow completionHandler: ^(NSModalResponse returnCode)
          {

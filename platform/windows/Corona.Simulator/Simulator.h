@@ -50,7 +50,6 @@
 #define REGISTRY_ZOOM _T("Zoom")
 #define REGISTRY_ROTATION _T("Rotation")
 #define REGISTRY_NOWELCOME _T("NoWelcome")
-#define REGISTRY_ANALYTICS _T("Analytics")
 #define REGISTRY_SHOWERRORS _T("ShowRuntimeErrors")
 #define REGISTRY_AUTOOPEN _T("AutoOpenLastProject")
 #define REGISTRY_RELAUNCHSIM _T("RelaunchSimulatorWhenProjectModified")
@@ -72,7 +71,6 @@
 #define REGISTRY_ZOOM_DEFAULT 0
 #define REGISTRY_ROTATION_DEFAULT 0
 #define REGISTRY_NOWELCOME_DEFAULT 0
-#define REGISTRY_ANALYTICS_DEFAULT 1  // advise user?
 #define REGISTRY_SHOWERRORS_DEFAULT 1
 #define REGISTRY_AUTOOPEN_DEFAULT 0
 #define REGISTRY_RELAUNCHSIM_DEFAULT RELAUNCH_SIM_ASK // ask every time

@@ -58,12 +58,6 @@
     <Filter Include="plugins\ads\shared">
       <UniqueIdentifier>{e798b05b-7a2f-4d6f-8aa9-d36b89f239bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="plugins\analytics">
-      <UniqueIdentifier>{604142d4-1071-417c-a96a-c403296e509b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="plugins\analytics\shared">
-      <UniqueIdentifier>{49a34b1f-d721-4af4-8095-a37c633091da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="plugins\network">
       <UniqueIdentifier>{2daa00ac-2d16-4e9f-90ef-b32a628d5d6f}</UniqueIdentifier>
     </Filter>
@@ -190,9 +184,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibFacebook.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibFlurry.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibInAppStore.cpp">
@@ -777,9 +768,6 @@
     <ClCompile Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.cpp">
       <Filter>plugins\ads\shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\plugins\analytics\shared\CoronaAnalyticsLibrary.cpp">
-      <Filter>plugins\analytics\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\plugins\network\win32\NetworkLibrary.cpp">
       <Filter>plugins\network\win32</Filter>
     </ClCompile>
@@ -927,9 +915,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibFacebook.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibFlurry.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibInAppStore.h">
@@ -1616,9 +1601,6 @@
     <ClInclude Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.h">
       <Filter>plugins\ads\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\plugins\analytics\shared\CoronaAnalyticsLibrary.h">
-      <Filter>plugins\analytics\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\plugins\network\win32\WinTimer.h">
       <Filter>plugins\network\win32</Filter>
     </ClInclude>
@@ -1697,9 +1679,6 @@
       <Filter>platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\runtime.lua">
-      <Filter>platform\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\launchpad.lua">
       <Filter>platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\config_require.lua">
@@ -1992,12 +1971,6 @@
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\plugins\ads\shared\ads.lua">
       <Filter>plugins\ads\shared</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\plugins\analytics\shared\CoronaProvider.analytics.lua">
-      <Filter>plugins\analytics\shared</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\plugins\analytics\shared\analytics.lua">
-      <Filter>plugins\analytics\shared</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\plugins\network\shared\network.lua">
       <Filter>plugins\network\shared</Filter>

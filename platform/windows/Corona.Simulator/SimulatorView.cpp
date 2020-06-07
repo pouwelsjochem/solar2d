@@ -25,7 +25,6 @@
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_RenderingStream.h"
 #include "Rtt_Runtime.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_WinPlatform.h"
 #include "Rtt_WinSimulatorServices.h"
 #include "Simulator.h"
@@ -173,7 +172,6 @@ CSimulatorView::~CSimulatorView()
 {
 	CStringA relaunchCountStr;
 	relaunchCountStr.Format("%d", mRelaunchCount);
-    GetWinProperties()->GetAnalytics()->Log("relaunch", "count", relaunchCountStr);
 
 	if (mRuntimeEnvironmentPointer)
 	{
@@ -521,7 +519,6 @@ void CSimulatorView::OnViewHomeScreen()
 	GetParentFrame()->OnUpdateFrameTitle(FALSE);
 	SetRotation(0);
 	RunCoronaProject(((CSimulatorApp*)AfxGetApp())->GetResourceDir() + _T("\\homescreen"));
-	GetWinProperties()->GetAnalytics()->Log("show-welcome", NULL);
 
 }
 
@@ -529,8 +526,6 @@ void CSimulatorView::OnViewHomeScreen()
 void CSimulatorView::OnViewConsole()
 {
 	((CSimulatorApp*)AfxGetApp())->GetOutputViewerProcessPointer()->RequestShowMainWindow();
-
-	GetWinProperties()->GetAnalytics()->Log("show-console", NULL);
 }
 
 // OnViewShake - handle Shake menu item
@@ -542,7 +537,6 @@ void CSimulatorView::OnViewShake()
 		mShakeNum = 0;
 		AfxGetMainWnd()->GetWindowRect(&mShakeOriginRect);
 		SetTimer(TIMER_ID_SHAKE_WINDOW, SIM_SHAKE_PERIOD, NULL);
-		GetWinProperties()->GetAnalytics()->Log("shake", NULL);
 	}
 }
 
@@ -563,8 +557,6 @@ void CSimulatorView::OnUpdateViewSuspend(CCmdUI *pCmdUI)
 	CString sCaption;
 	sCaption.LoadString(id);
 	pCmdUI->SetText( sCaption );
-
-	GetWinProperties()->GetAnalytics()->Log("suspend-resume", "type", CStringA(sCaption));
 }
 
 // OnViewRotateLeft - change rotation value, tell corona core, update skin
@@ -593,7 +585,6 @@ void CSimulatorView::OnViewRotateLeft()
 		mRuntimeEnvironmentPointer->GetDeviceSimulatorServices()->RotateCounterClockwise();
 	}
     UpdateSimulatorSkin();
-	GetWinProperties()->GetAnalytics()->Log("rotate", "direction", "left");
 }
 
 // OnViewRotateRight - change rotation value, tell corona core, update skin
@@ -622,7 +613,6 @@ void CSimulatorView::OnViewRotateRight()
 		mRuntimeEnvironmentPointer->GetDeviceSimulatorServices()->RotateClockwise();
 	}
 	UpdateSimulatorSkin();
-	GetWinProperties()->GetAnalytics()->Log("rotate", "direction", "right");
 }
 
 void CSimulatorView::OnViewNavigateBack()
@@ -654,7 +644,6 @@ void CSimulatorView::OnViewNavigateBack()
 	auto windowPointer = &mCoronaContainerControl.GetCoronaControl();
 	windowPointer->PostMessage(WM_KEYDOWN, VK_BROWSER_BACK, 0L);
 	windowPointer->PostMessage(WM_KEYUP, VK_BROWSER_BACK, 0x40000000L);
-	GetWinProperties()->GetAnalytics()->Log("back", nullptr);
 }
 
 /// Called when the top most file in the "Most Recent Files" list is clicked on in the menu.
@@ -682,8 +671,6 @@ void CSimulatorView::OnFileMRU1()
 	else
 	{
 		// Open the selected file for simulation.
-		GetWinProperties()->GetAnalytics()->Log("open-recent", NULL);
-
 		GetDocument()->GetDocTemplate()->OpenDocumentFile(fileName);
 	}
 }
@@ -718,12 +705,8 @@ void CSimulatorView::OnPreferences()
 	if (result != IDOK)
 	{
 		// No changes were made.
-		GetWinProperties()->GetAnalytics()->Log("preferences", "result", "not-changed");
-
 		return;
 	}
-
-	GetWinProperties()->GetAnalytics()->Log("preferences", "result", "changed");
 
 	// If we're currently running a project, then update its "Show runtime error" setting.
 	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
@@ -783,8 +766,6 @@ void CSimulatorView::OnFileOpen()
 		  }
 		  else 
 		  {
-			  GetWinProperties()->GetAnalytics()->Log("open-project", NULL);
-
 			  GetDocument()->GetDocTemplate()->OpenDocumentFile(filename);
 		  }
 	}
@@ -826,7 +807,6 @@ void CSimulatorView::OnFileOpenSampleProject()
 
 	WinString projectName;
 	projectName.SetTCHAR(GetDocument()->GetTitle());
-	GetWinProperties()->GetAnalytics()->Log("open-sample", "sample", projectName.GetUTF8());
 }
 
 /// <summary>Opens a dialog to build the currently selected project for Android.</summary>
@@ -1024,12 +1004,10 @@ void CSimulatorView::OnFileOpenInEditor()
 			::ShellExecute(nullptr, _T("open"), GetDocument()->GetPath(), nullptr, nullptr, SW_SHOWNORMAL);
 			WinString appName;
 			appName.SetTCHAR(fileAssociation);
-			GetWinProperties()->GetAnalytics()->Log( "open-in-editor", "editor", appName.GetUTF8() );
 		}
 		else
 		{
 			::ShellExecute(nullptr, nullptr, _T("notepad.exe"), GetDocument()->GetPath(), nullptr, SW_SHOWNORMAL);
-			GetWinProperties()->GetAnalytics()->Log( "open-in-editor", "editor", "notepad" );
 		}
 	}
 	catch (...)
@@ -1091,9 +1069,7 @@ void CSimulatorView::OnShowProjectFiles()
 	
 	// Display the project folder in the default file viewer. Typically "Windows Explorer".
 	try { ::ShellExecute(nullptr, _T("open"), projectPath, nullptr, nullptr, SW_SHOWNORMAL); }
-	catch (...) { }
-	            
-	GetWinProperties()->GetAnalytics()->Log("show-project-files", nullptr);
+	catch (...) { }	            
 }
 
 /// Enables or disables the "Show Project Files" menu item.
@@ -1117,7 +1093,6 @@ void CSimulatorView::OnShowProjectSandbox()
 	if (CSimulatorApp::CheckDirExists(utf16DirectoryPath))
 	{
 		::ShellExecuteW(nullptr, L"open", utf16DirectoryPath, nullptr, nullptr, SW_SHOWNORMAL);
-		GetWinProperties()->GetAnalytics()->Log("show-sandbox", nullptr);
 	}
 }
 
@@ -1201,8 +1176,6 @@ void CSimulatorView::OnClearProjectSandbox()
 		SHFileOperation(&shFileOp);
 
 		Rtt_Log("Project sandbox and preferences cleared");
-
-		GetWinProperties()->GetAnalytics()->Log("clear-sandbox", nullptr);
 
 		StartSimulation();
 	}
@@ -1330,15 +1303,9 @@ void CSimulatorView::OnWindowViewAs( UINT nID )
 		skinId = SkinIDFromMenuID(nID);
 	}
 
-	if (skinId == Rtt::TargetDevice::kCustomSkin)
-	{
-		GetWinProperties()->GetAnalytics()->Log("change-skin", "skin", "custom-device" );
-	}
-	else
+	if (skinId != Rtt::TargetDevice::kCustomSkin)
 	{
 		CString skinName(Rtt::TargetDevice::LabelForSkin(skinId));
-
-		GetWinProperties()->GetAnalytics()->Log("change-skin", "skin", CStringA(skinName) );
 	}
 
 	// Display the selected device skin
@@ -1727,16 +1694,6 @@ void CSimulatorView::StartSimulation()
 		StopSimulation();
 	}
 
-	Rtt::SimulatorAnalytics *pAnalytics = GetWinProperties()->GetAnalytics();
-	if (pAnalytics && (GetDocument()->GetPath().GetLength() > 0))
-	{
-		// Log this project open
-		pAnalytics->Log(
-			"open-project",
-			"skin",
-			Rtt::TargetDevice::LabelForSkin( (Rtt::TargetDevice::Skin)GetAnalyticsSkinId() ) );
-	}
-
 	// Run the currently selected Corona project set in this view's document.
 	RunCoronaProject();
 }
@@ -1752,8 +1709,7 @@ void CSimulatorView::RestartSimulation()
 	}
 
 	// Record the "Restart" to the usage feedback to be posted to Corona Labs' server later.
-	Rtt::SimulatorAnalytics *pAnalytics = GetWinProperties()->GetAnalytics();
-	if (pAnalytics && (GetDocument()->GetPath().GetLength() > 0))
+	if (GetDocument()->GetPath().GetLength() > 0)
 	{
 	    ++mRelaunchCount;
 	}
@@ -2327,14 +2283,6 @@ Rtt::TargetDevice::Skin CSimulatorView::SkinIDFromMenuID( UINT nMenuID )
 	Rtt::TargetDevice::Skin skinID = (Rtt::TargetDevice::Skin) ( nMenuID - ID_VIEWAS_BEGIN );
 
 	return skinID;
-}
-
-/// Gets a unique integer ID for the currently selected device skin.
-/// @return Returns a unique skin ID of type Rtt::TargetDevice for the current skin selection.
-///         Returns Rtt::TargetDevice::kUnknownSkin if the current skin selction is unknown.
-int CSimulatorView::GetAnalyticsSkinId()
-{
-	return m_nSkinId;
 }
 
 // SetRotation - validate rotation value and set member variable

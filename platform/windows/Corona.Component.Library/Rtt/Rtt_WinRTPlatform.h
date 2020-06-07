@@ -169,9 +169,6 @@ class WinRTPlatform : public MPlatform
 		virtual void ReleaseNotification( void *notificationId ) const;
 		virtual void CancelNotification( void *notificationId ) const;
 
-		virtual void FlurryInit(const char * applicationKey) const;
-		virtual void FlurryEvent(const char * eventId) const;
-
 	public:
 		virtual void SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const;
 		virtual int PushNativeProperty( lua_State *L, const char *key ) const;

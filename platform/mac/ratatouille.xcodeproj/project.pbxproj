@@ -37,8 +37,6 @@
 		000CE79712B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */; };
 		000CE79A12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */; };
 		000CE79B12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */; };
-		000CE79C12B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F012B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp */; };
-		000CE79D12B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F112B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h */; };
 		000CE79E12B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */; };
 		000CE79F12B73EE300D9B6A4 /* Rtt_LuaLibMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */; };
 		000CE7A012B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */; };
@@ -114,7 +112,6 @@
 		000CE8D412B7400900D9B6A4 /* iPhonePackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8CF12B7400900D9B6A4 /* iPhonePackageApp.lua */; };
 		000CE8D512B7400900D9B6A4 /* runtime.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D012B7400900D9B6A4 /* runtime.lua */; };
 		000CE8D612B7400900D9B6A4 /* shell.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D112B7400900D9B6A4 /* shell.lua */; };
-		000CE8D712B7400900D9B6A4 /* simulatorAnalytics.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D212B7400900D9B6A4 /* simulatorAnalytics.lua */; };
 		000CE8F912B7404400D9B6A4 /* ListKeyStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8DE12B7404400D9B6A4 /* ListKeyStore.cpp */; };
 		000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8EA12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp */; };
 		000CE90212B7404400D9B6A4 /* Rtt_PlatformPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8F212B7404400D9B6A4 /* Rtt_PlatformPlayer.cpp */; };
@@ -472,7 +469,6 @@
 		A43FE9BD14F057DA0042FA41 /* Rtt_ArrayTupleStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43FE9BB14F057D80042FA41 /* Rtt_ArrayTupleStruct.cpp */; };
 		A43FE9C314F068400042FA41 /* Rtt_ArrayTuple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43FE9C114F0683F0042FA41 /* Rtt_ArrayTuple.cpp */; };
 		A44308DC164C755600B9117B /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44308DA164C74BE00B9117B /* libplugins.a */; };
-		A4592FAA1433CF31008B4E6D /* Rtt_SimulatorAnalytics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4592FA81433CF30008B4E6D /* Rtt_SimulatorAnalytics.cpp */; };
 		A45EBE1418E6465A0010C678 /* Rtt_WebAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A45EBE1218E6465A0010C678 /* Rtt_WebAppPackager.cpp */; };
 		A46AC88017820BEB00BE6805 /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */; };
 		A46AC88C17820CA400BE6805 /* Rtt_ShapeAdapterRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */; };
@@ -502,7 +498,6 @@
 		A49186831641FB0D00A39286 /* CoronaLibrary.lua in Sources */ = {isa = PBXBuildFile; fileRef = A49186151641DD6100A39286 /* CoronaLibrary.lua */; };
 		A49186841641FB0D00A39286 /* CoronaPrototype.lua in Sources */ = {isa = PBXBuildFile; fileRef = A491861B1641DD6100A39286 /* CoronaPrototype.lua */; };
 		A49186851641FB0D00A39286 /* CoronaProvider.lua in Sources */ = {isa = PBXBuildFile; fileRef = A491861C1641DD6100A39286 /* CoronaProvider.lua */; };
-		A491868F1641FE2600A39286 /* analytics.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A491867C1641F25900A39286 /* analytics.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A492760C17B98BAF00DAD62A /* Rtt_CompositePaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A492760A17B98BAE00DAD62A /* Rtt_CompositePaint.cpp */; };
 		A492764D17BADABA00DAD62A /* kernel_composite_add_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A492763817BADA8800DAD62A /* kernel_composite_add_gl.lua */; };
 		A492764E17BADABA00DAD62A /* kernel_composite_average_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A492763917BADA8800DAD62A /* kernel_composite_average_gl.lua */; };
@@ -584,7 +579,6 @@
 		A4FBC56A1A2D59F4004D9A01 /* Rtt_PlatformObjectWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CEA1512B7469B00D9B6A4 /* Rtt_PlatformObjectWrapper.cpp */; };
 		C200AAEA19626D86005828AA /* CoronaPListSupport.lua in Resources */ = {isa = PBXBuildFile; fileRef = C200AAE919626D86005828AA /* CoronaPListSupport.lua */; };
 		C200AAEB19627074005828AA /* CoronaPListSupport.lua in Sources */ = {isa = PBXBuildFile; fileRef = C200AAE919626D86005828AA /* CoronaPListSupport.lua */; };
-		C2038B101DDCF1970071594F /* AnalyticsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2038B0F1DDCF1970071594F /* AnalyticsProvider.mm */; };
 		C208322C1AA514B0005D2680 /* AndroidValidation.lua in Sources */ = {isa = PBXBuildFile; fileRef = 008955B3133F0EA600699C04 /* AndroidValidation.lua */; };
 		C208322D1AA54ADD005D2680 /* remdebug_engine.lua in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C8612B720C90057F594 /* remdebug_engine.lua */; };
 		C20F8AD81AD78CAB0034BD21 /* SDKList.m in Sources */ = {isa = PBXBuildFile; fileRef = C20F8AD71AD78CAB0034BD21 /* SDKList.m */; };
@@ -661,7 +655,6 @@
 		C229E0211B32221B00D87A7C /* Rtt_LuaLibCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */; };
 		C229E0221B32221B00D87A7C /* Rtt_LuaLibDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */; };
 		C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */; };
-		C229E0241B32221B00D87A7C /* Rtt_LuaLibFlurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F112B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h */; };
 		C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */; };
 		C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */; };
 		C229E0281B32221B00D87A7C /* Rtt_LuaLibMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */; };
@@ -851,7 +844,6 @@
 		C229E0FB1B32221B00D87A7C /* Rtt_LuaLibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6E912B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp */; };
 		C229E0FC1B32221B00D87A7C /* Rtt_LuaLibDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328809176A621100ACB6FF /* Rtt_LuaLibDisplay.cpp */; };
 		C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */; };
-		C229E0FE1B32221B00D87A7C /* Rtt_LuaLibFlurry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F012B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp */; };
 		C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */; };
 		C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */; };
 		C229E1021B32221B00D87A7C /* Rtt_LuaLibMedia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */; };
@@ -1054,11 +1046,8 @@
 		C229E1DD1B32221B00D87A7C /* runtime.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D012B7400900D9B6A4 /* runtime.lua */; };
 		C229E1DE1B32221B00D87A7C /* shell.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D112B7400900D9B6A4 /* shell.lua */; };
 		C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A43288A1176A626B00ACB6FF /* shell_default_gl.lua */; };
-		C229E1E01B32221B00D87A7C /* simulatorAnalytics.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D212B7400900D9B6A4 /* simulatorAnalytics.lua */; };
 		C229E1E71B32221B00D87A7C /* webPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A425457318E4FD1800EE06A8 /* webPackageApp.lua */; };
 		C231262F1B8FC1B20061A232 /* android_sendapp.sh in Resources */ = {isa = PBXBuildFile; fileRef = C231262E1B8FC1B20061A232 /* android_sendapp.sh */; };
-		C231BDE01C0F7BF800494B37 /* launchpad.lua in Sources */ = {isa = PBXBuildFile; fileRef = C20EF65C1C0E542200DF0532 /* launchpad.lua */; };
-		C231BDE11C0F7CBC00494B37 /* launchpad.lua in Sources */ = {isa = PBXBuildFile; fileRef = C20EF65C1C0E542200DF0532 /* launchpad.lua */; };
 		C2427BFC1919481B0011CE7A /* CustomDevice.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2427BFB1919481B0011CE7A /* CustomDevice.xib */; };
 		C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C244C1001A8183B1008DBA56 /* network.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = 0727BA8616E68FE800981C4B /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -1079,7 +1068,6 @@
 		C26E84821A5DE1AE008950FB /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733FB12B6F6BC0057F594 /* liblua.a */; };
 		C26E84831A5DE1AE008950FB /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733F312B6F6740057F594 /* librtt.a */; };
 		C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		C279452F1B585BD60046B6E8 /* analytics.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A491867C1641F25900A39286 /* analytics.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27945301B585BD60046B6E8 /* gameNetwork.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A41AC1B516A75A7600AD331A /* gameNetwork.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A4F12C2316D43662002BCCFB /* licensing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27E338D1A71748C00DDED18 /* CoronaCards.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992961A6B135500E99F46 /* CoronaCards.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1575,13 +1563,6 @@
 			remoteGlobalIDString = A47B5B6815F9BA95001D60AB;
 			remoteInfo = ads;
 		};
-		A491867B1641F25900A39286 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A49186401641DDB800A39286;
-			remoteInfo = analytics;
-		};
 		A4B66AB5176A7A370077B2BF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A4B66AB1176A7A370077B2BF /* libtachyon.xcodeproj */;
@@ -1844,7 +1825,6 @@
 				A41AC1B916A75A9E00AD331A /* gameNetwork.dylib in CopyFiles */,
 				0727BA8716E68FE800981C4B /* network.dylib in CopyFiles */,
 				A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */,
-				A491868F1641FE2600A39286 /* analytics.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1864,7 +1844,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */,
-				C279452F1B585BD60046B6E8 /* analytics.dylib in Copy Frameworks and dylibs */,
 				C27945301B585BD60046B6E8 /* gameNetwork.dylib in Copy Frameworks and dylibs */,
 				C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */,
 				C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */,
@@ -1896,8 +1875,6 @@
 		000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibCrypto.h; sourceTree = "<group>"; };
 		000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibFacebook.cpp; sourceTree = "<group>"; };
 		000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibFacebook.h; sourceTree = "<group>"; };
-		000CE6F012B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibFlurry.cpp; sourceTree = "<group>"; };
-		000CE6F112B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibFlurry.h; sourceTree = "<group>"; };
 		000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibMedia.cpp; sourceTree = "<group>"; };
 		000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibMedia.h; sourceTree = "<group>"; };
 		000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibNative.cpp; sourceTree = "<group>"; };
@@ -1978,7 +1955,6 @@
 		000CE8CF12B7400900D9B6A4 /* iPhonePackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = iPhonePackageApp.lua; path = ../resources/iPhonePackageApp.lua; sourceTree = SOURCE_ROOT; };
 		000CE8D012B7400900D9B6A4 /* runtime.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.lua; path = ../resources/runtime.lua; sourceTree = SOURCE_ROOT; };
 		000CE8D112B7400900D9B6A4 /* shell.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shell.lua; path = ../resources/shell.lua; sourceTree = SOURCE_ROOT; };
-		000CE8D212B7400900D9B6A4 /* simulatorAnalytics.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = simulatorAnalytics.lua; path = ../resources/simulatorAnalytics.lua; sourceTree = SOURCE_ROOT; };
 		000CE8DE12B7404400D9B6A4 /* ListKeyStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListKeyStore.cpp; sourceTree = "<group>"; };
 		000CE8DF12B7404400D9B6A4 /* ListKeyStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListKeyStore.h; sourceTree = "<group>"; };
 		000CE8E912B7404400D9B6A4 /* Rtt_MPlatformServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MPlatformServices.h; sourceTree = "<group>"; };
@@ -2589,8 +2565,6 @@
 		A43FE9BC14F057D90042FA41 /* Rtt_ArrayTupleStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_ArrayTupleStruct.h; sourceTree = "<group>"; };
 		A43FE9C114F0683F0042FA41 /* Rtt_ArrayTuple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_ArrayTuple.cpp; sourceTree = "<group>"; };
 		A43FE9C214F068400042FA41 /* Rtt_ArrayTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_ArrayTuple.h; sourceTree = "<group>"; };
-		A4592FA81433CF30008B4E6D /* Rtt_SimulatorAnalytics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_SimulatorAnalytics.cpp; sourceTree = "<group>"; };
-		A4592FA91433CF31008B4E6D /* Rtt_SimulatorAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SimulatorAnalytics.h; sourceTree = "<group>"; };
 		A45EBE1218E6465A0010C678 /* Rtt_WebAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_WebAppPackager.cpp; path = ../shared/Rtt_WebAppPackager.cpp; sourceTree = "<group>"; };
 		A45EBE1318E6465A0010C678 /* Rtt_WebAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_WebAppPackager.h; path = ../shared/Rtt_WebAppPackager.h; sourceTree = "<group>"; };
 		A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorRect.cpp; path = Display/Rtt_TesselatorRect.cpp; sourceTree = "<group>"; };
@@ -2729,10 +2703,7 @@
 		A4F36554146C44200019808D /* AndroidAppBuildController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AndroidAppBuildController.mm; sourceTree = "<group>"; };
 		A4FBC4F71A2D5479004D9A01 /* libCoronaCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCoronaCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C200AAE919626D86005828AA /* CoronaPListSupport.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaPListSupport.lua; path = ../platform/resources/CoronaPListSupport.lua; sourceTree = "<group>"; };
-		C2038B0F1DDCF1970071594F /* AnalyticsProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnalyticsProvider.mm; sourceTree = "<group>"; };
-		C2038B111DDCF1BD0071594F /* AnalyticsProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnalyticsProvider.h; sourceTree = "<group>"; };
 		C2088D251D8A1B8300F2AD0B /* device-support */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "device-support"; path = "../resources/device-support"; sourceTree = "<group>"; };
-		C20EF65C1C0E542200DF0532 /* launchpad.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = launchpad.lua; path = ../platform/resources/launchpad.lua; sourceTree = "<group>"; };
 		C20F8AD61AD78CAB0034BD21 /* SDKList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDKList.h; sourceTree = "<group>"; };
 		C20F8AD71AD78CAB0034BD21 /* SDKList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDKList.m; sourceTree = "<group>"; };
 		C21732AF1B1EAE3B00F79CB8 /* OSXAppBuildController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSXAppBuildController.h; sourceTree = "<group>"; };
@@ -3006,8 +2977,6 @@
 				000CE8F312B7404400D9B6A4 /* Rtt_PlatformPlayer.h */,
 				000CE8F412B7404400D9B6A4 /* Rtt_PlatformSimulator.cpp */,
 				000CE8F512B7404400D9B6A4 /* Rtt_PlatformSimulator.h */,
-				A4592FA81433CF30008B4E6D /* Rtt_SimulatorAnalytics.cpp */,
-				A4592FA91433CF31008B4E6D /* Rtt_SimulatorAnalytics.h */,
 				0718C13716E94A9D00FD5F45 /* Rtt_TargetAndroidAppStore.cpp */,
 				0718C13816E94A9D00FD5F45 /* Rtt_TargetAndroidAppStore.h */,
 				A42C5BFC12D56EFE0046B8A6 /* Rtt_TargetDevice.cpp */,
@@ -3391,8 +3360,6 @@
 				000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */,
 				000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */,
 				000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */,
-				000CE6F012B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp */,
-				000CE6F112B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h */,
 				00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */,
 				00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */,
 				000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */,
@@ -3519,11 +3486,9 @@
 				A4E76F181399772500AFB095 /* create_build_properties.lua */,
 				000CE8CE12B7400900D9B6A4 /* init.lua */,
 				000CE8CF12B7400900D9B6A4 /* iPhonePackageApp.lua */,
-				C20EF65C1C0E542200DF0532 /* launchpad.lua */,
 				C263C53B1B2145AB001ABE94 /* OSXPackageApp.lua */,
 				000CE8D012B7400900D9B6A4 /* runtime.lua */,
 				000CE8D112B7400900D9B6A4 /* shell.lua */,
-				000CE8D212B7400900D9B6A4 /* simulatorAnalytics.lua */,
 				A40A90781BD9A5C1001D2038 /* tvosPackageApp.lua */,
 				C2AF1E4F1DA6D80B00907A65 /* ValidateSettings.lua */,
 				A425457318E4FD1800EE06A8 /* webPackageApp.lua */,
@@ -3713,8 +3678,6 @@
 				00B73D1712B720C90057F594 /* VersionLabel.m */,
 				0028FC3E14FEC5E400B40EC3 /* XcodeToolHelper.h */,
 				0028FC3F14FEC5E400B40EC3 /* XcodeToolHelper.m */,
-				C2038B111DDCF1BD0071594F /* AnalyticsProvider.h */,
-				C2038B0F1DDCF1970071594F /* AnalyticsProvider.mm */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -4248,7 +4211,6 @@
 				A44308DA164C74BE00B9117B /* libplugins.a */,
 				A491860B1641DCFD00A39286 /* plugins.old.dylib */,
 				A491860D1641DCFD00A39286 /* ads.dylib */,
-				A491867C1641F25900A39286 /* analytics.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4650,7 +4612,6 @@
 				C2DA96371B46460F00DAF684 /* Rtt_LuaLibDisplay.h in Headers */,
 				000CE79B12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h in Headers */,
 				F5C40DC31CB68788004F7789 /* Rtt_TesselatorMesh.h in Headers */,
-				000CE79D12B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h in Headers */,
 				C2DA96321B46460F00DAF684 /* Rtt_LuaLibGraphics.h in Headers */,
 				C2DA96381B46460F00DAF684 /* Rtt_LuaLibInAppStore.h in Headers */,
 				000CE79F12B73EE300D9B6A4 /* Rtt_LuaLibMedia.h in Headers */,
@@ -4914,7 +4875,6 @@
 				C229E0221B32221B00D87A7C /* Rtt_LuaLibDisplay.h in Headers */,
 				C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */,
 				F5C40DC51CB68789004F7789 /* Rtt_TesselatorMesh.h in Headers */,
-				C229E0241B32221B00D87A7C /* Rtt_LuaLibFlurry.h in Headers */,
 				C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */,
 				C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */,
 				C229E0281B32221B00D87A7C /* Rtt_LuaLibMedia.h in Headers */,
@@ -5419,13 +5379,6 @@
 			remoteRef = A491860C1641DCFD00A39286 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		A491867C1641F25900A39286 /* analytics.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = analytics.dylib;
-			remoteRef = A491867B1641F25900A39286 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		A4B66AB6176A7A370077B2BF /* libtachyon.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -5728,7 +5681,6 @@
 				C2AF1E571DA6F24500907A65 /* valid_build_settings.lua in Sources */,
 				C2AF1E581DA6F24500907A65 /* valid_config_lua.lua in Sources */,
 				C2AF1E511DA6D8C700907A65 /* ValidateSettings.lua in Sources */,
-				C231BDE01C0F7BF800494B37 /* launchpad.lua in Sources */,
 				F5DB5B1921136F9400EC5CBC /* linuxPackageApp.lua in Sources */,
 				A40A907A1BD9A5EA001D2038 /* tvosPackageApp.lua in Sources */,
 				C26429501B66F88000469D7F /* Rtt_TargetDevice.cpp in Sources */,
@@ -5810,7 +5762,6 @@
 				000CE79612B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp in Sources */,
 				A4328868176A621200ACB6FF /* Rtt_LuaLibDisplay.cpp in Sources */,
 				000CE79A12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp in Sources */,
-				000CE79C12B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp in Sources */,
 				A432886A176A621200ACB6FF /* Rtt_LuaLibGraphics.cpp in Sources */,
 				00572B8B12D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				000CE79E12B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp in Sources */,
@@ -6023,7 +5974,6 @@
 				000CE8D512B7400900D9B6A4 /* runtime.lua in Sources */,
 				000CE8D612B7400900D9B6A4 /* shell.lua in Sources */,
 				A43288B9176A67E600ACB6FF /* shell_default_gl.lua in Sources */,
-				000CE8D712B7400900D9B6A4 /* simulatorAnalytics.lua in Sources */,
 				A425457418E4FD6400EE06A8 /* webPackageApp.lua in Sources */,
 				F5A752291BFA40F000CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
 			);
@@ -6150,7 +6100,6 @@
 				A4FBC56A1A2D59F4004D9A01 /* Rtt_PlatformObjectWrapper.cpp in Sources */,
 				000CE90212B7404400D9B6A4 /* Rtt_PlatformPlayer.cpp in Sources */,
 				000CE90312B7404400D9B6A4 /* Rtt_PlatformSimulator.cpp in Sources */,
-				A4592FAA1433CF31008B4E6D /* Rtt_SimulatorAnalytics.cpp in Sources */,
 				0718C13916E94A9D00FD5F45 /* Rtt_TargetAndroidAppStore.cpp in Sources */,
 				A45EBE1418E6465A0010C678 /* Rtt_WebAppPackager.cpp in Sources */,
 				F57D17761BE2713B00AABAC1 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
@@ -6163,7 +6112,6 @@
 				004ADB3B1468C54400D732FC /* SkinlessSimulatorWindow.mm in Sources */,
 				00B73D9012B720CA0057F594 /* SkinnableWindow.mm in Sources */,
 				00B73DB012B720CA0057F594 /* TextEditorSupport.m in Sources */,
-				C2038B101DDCF1970071594F /* AnalyticsProvider.mm in Sources */,
 				C2678C1F1B85753800864110 /* AppleAppBuildController.mm in Sources */,
 				00C8225E13452C80005D1EEB /* ValidationSupportMacUI.m in Sources */,
 				A40A90771BD9A4B1001D2038 /* Rtt_TVOSAppPackager.mm in Sources */,
@@ -6223,7 +6171,6 @@
 				C2AF1E591DA6F39900907A65 /* valid_build_settings.lua in Sources */,
 				C2AF1E5A1DA6F39900907A65 /* valid_config_lua.lua in Sources */,
 				C2AF1E521DA6D8E500907A65 /* ValidateSettings.lua in Sources */,
-				C231BDE11C0F7CBC00494B37 /* launchpad.lua in Sources */,
 				A40A907B1BD9A5F2001D2038 /* tvosPackageApp.lua in Sources */,
 				C26429511B66F89000469D7F /* Rtt_TargetDevice.cpp in Sources */,
 				C229E0B01B32221B00D87A7C /* CoronaAssert.c in Sources */,
@@ -6304,7 +6251,6 @@
 				C229E0FB1B32221B00D87A7C /* Rtt_LuaLibCrypto.cpp in Sources */,
 				C229E0FC1B32221B00D87A7C /* Rtt_LuaLibDisplay.cpp in Sources */,
 				C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */,
-				C229E0FE1B32221B00D87A7C /* Rtt_LuaLibFlurry.cpp in Sources */,
 				C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */,
 				C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				C229E1021B32221B00D87A7C /* Rtt_LuaLibMedia.cpp in Sources */,
@@ -6519,7 +6465,6 @@
 				C229E1DD1B32221B00D87A7C /* runtime.lua in Sources */,
 				C229E1DE1B32221B00D87A7C /* shell.lua in Sources */,
 				C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */,
-				C229E1E01B32221B00D87A7C /* simulatorAnalytics.lua in Sources */,
 				C229E1E71B32221B00D87A7C /* webPackageApp.lua in Sources */,
 				F5A7522A1BFA40F000CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
 			);

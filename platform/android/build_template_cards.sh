@@ -165,7 +165,6 @@ pushd "$path/sdk" > /dev/null
 	cp -Rf "$path/sdk/libs/armeabi-v7a/" "$CARDS_OUTPUT_DIR/libs/armeabi-v7a"
 	rm -Rf "$CARDS_OUTPUT_DIR/libs/armeabi-v7a/libmpg123.so"
 	rm -Rf "$CARDS_OUTPUT_DIR/libs/armeabi-v7a/libads.so"
-	rm -Rf "$CARDS_OUTPUT_DIR/libs/armeabi-v7a/libanalytics.so"
 	rm -Rf "$CARDS_OUTPUT_DIR/libs/armeabi-v7a/libCoronaProvider.gameNetwork.corona.so"
 	rm -Rf "$CARDS_OUTPUT_DIR/libs/armeabi-v7a/libgameNetwork.so"
 	rm -Rf "$CARDS_OUTPUT_DIR/libs/armeabi-v7a/liblicensing.so"

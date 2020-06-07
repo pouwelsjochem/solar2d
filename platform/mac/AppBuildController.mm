@@ -22,7 +22,6 @@
 
 #import "NSAlert-OAExtensions.h"
 #import "ValidationSupportMacUI.h"
-#include "Rtt_SimulatorAnalytics.h"
 
 // ----------------------------------------------------------------------------
 
@@ -119,8 +118,6 @@ static NSString *kValueNotSet = @"not set";
 		fSigningIdentities = nil;
 
         self.projectPath = projPath;
-
-		fAnalytics = NULL;
 
 		platformName = @"none";
 		platformTitle = @"OS";
@@ -383,11 +380,6 @@ static NSString *kValueNotSet = @"not set";
 	ValidationSupportMacUI *validator = [[ValidationSupportMacUI alloc] initWithParentWindow:buildWindow];
 	result = [validator runCommonFileValidationTestsInProjectPath:[self projectPath]];
 	[validator release];
-
-	if ( ! result )
-	{
-		[self logEvent:"build-invalid-generic-project"];
-	}
 #endif // NOT_USED
 
 	return result;
@@ -470,57 +462,6 @@ static NSString *kValueNotSet = @"not set";
 - (NSString *)appBundleFile
 {
     return [self appPackagePath];
-}
-
-- (void)setAnalytics:(Rtt::SimulatorAnalytics *)analytics
-{
-	fAnalytics = analytics;
-}
-
-- (void)logEvent:(NSString *)eventName
-{
-	Rtt_ASSERT(eventName != nil && [eventName length] > 0);
-
-	NSDictionary *keyValues = @{ @"target" : [self platformName] };
-
-	[self logEvent:eventName keyValues:keyValues];
-}
-
-- (void)logEvent:(NSString *)eventName key:(NSString *)eventDataKey value:(NSString *)eventDataValue
-{
-	Rtt_ASSERT(eventName != nil && [eventName length] > 0);
-	Rtt_ASSERT(eventDataKey != nil && [eventDataKey length] > 0);
-	Rtt_ASSERT(eventDataValue != nil && [eventDataValue length] > 0);
-
-	NSDictionary *keyValues = @{ @"target" : [self platformName], eventDataKey : eventDataValue };
-
-	[self logEvent:eventName keyValues:keyValues];
-}
-
-- (void)logEvent:(NSString *)eventName keyValues:(NSDictionary *)keyValues
-{
-	Rtt_ASSERT(fAnalytics != NULL);
-	Rtt_ASSERT(eventName != nil && [eventName length] > 0);
-
-	size_t numItems = [keyValues count];
-	char **dataKeys = (char **) calloc(sizeof(char *), numItems);
-	char **dataValues = (char **) calloc(sizeof(char *), numItems);
-
-	if ( fAnalytics != NULL )
-	{
-		size_t i = 0;
-		for (NSString *key in keyValues)
-		{
-			dataKeys[i] = strdup([key UTF8String]);
-			dataValues[i] = strdup([keyValues[key] UTF8String]);
-			++i;
-		}
-
-		fAnalytics->Log( [eventName UTF8String], numItems, dataKeys, dataValues);
-
-		free(dataKeys);
-		free(dataValues);
-	}
 }
 
 -(void)closeBuild:(id)sender

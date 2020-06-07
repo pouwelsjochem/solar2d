@@ -4,16 +4,10 @@
     <ClCompile Include="..\..\ndk\generated\ads.c">
       <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\analytics.c">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\generated\CoronaPrototype.cpp">
       <Filter>generated</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\generated\CoronaProvider.ads.c">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\CoronaProvider.analytics.c">
       <Filter>generated</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\generated\CoronaProvider.cpp">
@@ -299,9 +293,6 @@
       <Filter>generated</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\generated\kernel_generator_sunbeams_gl.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\launchpad.cpp">
       <Filter>generated</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\generated\loader_callback.cpp">
@@ -824,9 +815,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibFacebook.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.cpp">
@@ -1422,13 +1410,7 @@
     <None Include="..\..\ndk\generated\ads.lu">
       <Filter>generated</Filter>
     </None>
-    <None Include="..\..\ndk\generated\analytics.lu">
-      <Filter>generated</Filter>
-    </None>
     <None Include="..\..\ndk\generated\CoronaProvider.ads.lu">
-      <Filter>generated</Filter>
-    </None>
-    <None Include="..\..\ndk\generated\CoronaProvider.analytics.lu">
       <Filter>generated</Filter>
     </None>
     <None Include="..\..\..\..\librtt\Core\Rtt_Assert.m">
@@ -2060,9 +2042,6 @@
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibFacebook.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.h">

@@ -258,8 +258,6 @@
 	#define Rtt_NETWORK
 	#define Rtt_LUA_LFS
 
-	#define Rtt_FLURRY
-
 #endif
 
 

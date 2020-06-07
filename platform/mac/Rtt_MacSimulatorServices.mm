@@ -17,7 +17,6 @@
 #import "SampleCodeLocator.h"
 #include "Rtt_TargetDevice.h"
 #include "Rtt_SimulatorRecents.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacPlatform.h"
@@ -552,15 +551,6 @@ MacSimulatorServices::SetBuildMessage(const char *message) const
 	if ([windowController respondsToSelector:@selector(setBuildMessage:)])
 	{
 		[windowController setBuildMessage:[NSString stringWithExternalString:message]];
-	}
-}
-
-void
-MacSimulatorServices::SendAnalytics(const char *eventName, const char *keyName, const char *value) const
-{
-	if (fOwner.analytics != nil)
-	{
-		fOwner.analytics->Log(eventName, keyName, value);
 	}
 }
 

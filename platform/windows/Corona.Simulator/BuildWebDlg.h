@@ -66,5 +66,4 @@ public:
 
 protected:
 	void DisplayWarningMessage(UINT nMessageID);
-	void LogAnalytics(const char *eventName, const char *key = NULL, const char *value = NULL);
 };

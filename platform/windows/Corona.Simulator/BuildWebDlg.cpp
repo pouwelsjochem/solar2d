@@ -23,7 +23,6 @@
 #include "ListKeyStore.h"
 #include "CoronaInterface.h"
 #include "Core/Rtt_Build.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_TargetDevice.h"
 #include <Shlwapi.h>
 
@@ -185,7 +184,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_APP_NAME_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_APPNAME)->SetFocus();
-		LogAnalytics( "build-bungled", "reason", "BUILD_APP_NAME_NOT_PROVIDED" );
 		return;
 	}
     GetDlgItemText(IDC_BUILD_VERSION_CODE, sValue);
@@ -194,7 +192,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_VERSION_NUMBER_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_VERSION_CODE)->SetFocus();
-		LogAnalytics( "build-bungled", "reason", "BUILD_APP_VERSION_NUMBER_NOT_PROVIDED" );
 		return;
 	}
 	iVersionCode = _ttoi(sValue);
@@ -202,7 +199,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_INVALID_WEB_APP_VERSION_NUMBER);
 		GetDlgItem(IDC_BUILD_VERSION_CODE)->SetFocus();
-		LogAnalytics( "build-bungled", "reason", "INVALID_WEB_APP_VERSION_NUMBER" );
 		return;
 	}
 
@@ -216,7 +212,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_PATH_NOT_PROVIDED);
 		GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-		LogAnalytics( "build-bungled", "reason", "BUILD_PATH_NOT_PROVIDED" );
 		return;
 	}
 
@@ -224,7 +219,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
 	{
 		DisplayWarningMessage(IDS_BUILD_PATH_INVALID);
 		GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-		LogAnalytics( "build-bungled", "reason", "BUILD_PATH_INVALID" );
 		return;
 	}
 
@@ -237,7 +231,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
 		{
 			DisplayWarningMessage(IDS_BUILD_PATH_CREATION_FAILED);
 			GetDlgItem(IDC_BUILD_SAVETO)->SetFocus();
-			LogAnalytics( "build-bungled", "reason", "BUILD_PATH_CREATION_FAILED" );
 			return;
 		}
 	}
@@ -247,8 +240,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
 	m_pProject->SetSaveDir(sBuildDir);
 
 	// Save all project settings and then build the project.
-
-	LogAnalytics( "build" );
 
 	m_pProject->Save();
 	CBuildProgressDlg buildDialog;
@@ -310,42 +301,4 @@ void CBuildWebDlg::DisplayWarningMessage(UINT nMessageID)
 	title.LoadString(IDS_WARNING);
 	message.LoadString(nMessageID);
 	MessageBox(message, title, MB_OK | MB_ICONWARNING);
-}
-
-void CBuildWebDlg::LogAnalytics(const char *eventName, const char *key, const char *value)
-{
-	Rtt_ASSERT(GetWinProperties()->GetAnalytics() != NULL);
-	Rtt_ASSERT(eventName != NULL && strlen(eventName) > 0);
-
-	// NEEDSWORK: this is horrible
-	size_t numItems = 2;
-	char **dataKeys = (char **)calloc(sizeof(char *), numItems);
-	char **dataValues = (char **)calloc(sizeof(char *), numItems);
-
-	dataKeys[0] = _strdup("target");
-	dataValues[0] = _strdup("web");
-	if (key != NULL && value != NULL)
-	{
-		dataKeys[1] = _strdup(key);
-		dataValues[1] = _strdup(value);
-	}
-	else
-	{
-		numItems = 1;
-	}
-
-	if (GetWinProperties()->GetAnalytics() != NULL)
-	{
-		GetWinProperties()->GetAnalytics()->Log(eventName, numItems, dataKeys, dataValues);
-	}
-
-	free(dataKeys[0]);
-	free(dataValues[0]);
-	if (numItems > 1)
-	{
-		free(dataKeys[1]);
-		free(dataValues[1]);
-	}
-	free(dataKeys);
-	free(dataValues);
 }

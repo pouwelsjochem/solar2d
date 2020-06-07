@@ -55,8 +55,6 @@
 @class NSNotification;
 
 // -------------------------
-
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_TargetDevice.h"
 #include "Rtt_TargetAndroidAppStore.h"
 
@@ -581,7 +579,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @synthesize launchedWithFile;
 @synthesize allowLuaExit;
 @synthesize fHomeScreen;
-@synthesize fAnalytics;
 
 +(BOOL)offlineModeAllowed {
 	static BOOL allowed = [[NSUserDefaults standardUserDefaults] boolForKey:@"allowOfflineMode"];
@@ -602,7 +599,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		[self checkOSVersionAndWarn];
 
 		fConsolePlatform = new Rtt::MacConsolePlatform;
-		fAnalytics = new Rtt::SimulatorAnalytics( * fConsolePlatform );
 		fRelaunchCount = 0;
 
 		fSdkRoot = nil;
@@ -865,9 +861,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     
     if ( [self setSkinIfAllowed:skinID] )
     {
-        [self launchSimulator:sender];
-        
-        fAnalytics->Log("change-skin", "skin", Rtt::TargetDevice::LabelForSkin( (Rtt::TargetDevice::Skin)fSkin ) );
+        [self launchSimulator:sender];        
     }
 }
 
@@ -1237,9 +1231,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void) loadExtension:(ExtensionParams *) extParams
 {
     Rtt_TRACE(("Starting extension: %s", [extParams.path UTF8String]));
-    
-    fAnalytics->Log("loadExtension", "extension", [[extParams.path lastPathComponent] UTF8String]);
-    
+        
     __block CoronaWindowController *extView = [[[CoronaWindowController alloc] initWithPath:extParams.path width:extParams.width height:extParams.height title:extParams.title resizable:extParams.resizable showWindowTitle:extParams.showWindowTitle] autorelease];
     Rtt::RuntimeDelegate *delegate = new Rtt::HomeScreenRuntimeDelegate( extView, extParams.path );
     [extView setRuntimeDelegate:delegate];
@@ -1533,8 +1525,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         return NSTerminateNow;
     }
 
-	fAnalytics->Log("relaunch", "count", [[NSString stringWithFormat:@"%ld", fRelaunchCount] UTF8String]);
-
     NSArray *windows = [NSApp windows];
     for (NSWindow *window in windows)
     {
@@ -1583,11 +1573,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     // This is used by the Simulator Console to know when the session is over
     NSLog(@"Corona Simulator: Goodbye");
 
-    if ( fAnalytics )
-    {
-        fAnalytics->EndSession();
-    }
-
     // Restore the preference since the Simulator didn't crash
     [[NSUserDefaults standardUserDefaults] setBool:fOpenLastProject forKey:kOpenLastProjectOnSimulatorLaunch];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -1598,7 +1583,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	[fPasswordController release];
 
 	[fSdkRoot release];
-	delete fAnalytics;
 	delete fConsolePlatform;
 
 	[dstPath release];
@@ -1710,8 +1694,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 -(IBAction)showPreferences:(id)sender
 {
-	fAnalytics->Log("preferences", NULL);
-
 	if ( ! fPreferencesWindow )
 	{
 		[NSBundle loadNibNamed:@"Preferences" owner:self];
@@ -1801,9 +1783,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
             // Only launch simulator with new skin if we actually were allowed to change skins
             if ( [self setSkinIfAllowed:skin] )
             {
-                [self launchSimulator:sender];
-                
-                fAnalytics->Log("change-skin", "skin", Rtt::TargetDevice::LabelForSkin( (Rtt::TargetDevice::Skin)fSkin ) );
+                [self launchSimulator:sender];                
             }
         }
     }
@@ -2010,9 +1990,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         
         if( [fileURL isFileURL] && [[NSFileManager defaultManager] fileExistsAtPath:path] )
         {            
-            [self application:nil openFile:path];
-            
-            fAnalytics->Log("relaunch-auto-last-project");
+            [self application:nil openFile:path];            
         }
     }
 	else
@@ -2198,9 +2176,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		
 		if( NO == isbadurl )
 		{
-			[self application:nil openFile:[fileUrl path]];
-            
-            fAnalytics->Log("openurl", NULL);
+			[self application:nil openFile:[fileUrl path]];            
 		}
 		else
 		{
@@ -2300,8 +2276,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		NSString *sandboxPath = platform.GetSandboxPath(); Rtt_ASSERT( sandboxPath );
 
 		[[NSWorkspace sharedWorkspace] selectFile:nil inFileViewerRootedAtPath:sandboxPath];
-
-		fAnalytics->Log("show-sandbox", NULL);
 	}
 }
 
@@ -2310,8 +2284,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	if (! [fAppPath isEqualToString:@""])
 	{
 		[[NSWorkspace sharedWorkspace] selectFile:nil inFileViewerRootedAtPath:fAppPath];
-
-		fAnalytics->Log("show-project-files", NULL);
 	}
 }
 
@@ -2412,8 +2384,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			[[NSUserDefaults standardUserDefaults] removeObjectForKey:prefKey];
 		}
 	}
-
-	fAnalytics->Log("clear-sandbox", NULL);
 
 	Rtt_Log("Project sandbox and preferences cleared");
 
@@ -2584,8 +2554,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		// In the case where the simulator was closed, the welcome window was brought back, and the user hits relaunch,
 		// we need to close the welcome window.
 		[self closeWelcomeWindow];
-
-		fAnalytics->Log("open-project", "skin", Rtt::TargetDevice::LabelForSkin( (Rtt::TargetDevice::Skin)fSkin ));
 	}
 
 	const char *resourcePath = [self.fAppPath UTF8String];
@@ -2740,8 +2708,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     if (fSimulator != NULL)
     {
         fSimulator->Rotate( false );
-
-        fAnalytics->Log("rotate", "direction", "left");
     }
 }
 
@@ -2750,8 +2716,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     if (fSimulator != NULL)
     {
         fSimulator->Rotate( true );
-
-        fAnalytics->Log("rotate", "direction", "right");
     }
 }
 
@@ -2760,8 +2724,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	if (fSimulator != NULL)
 	{
 		fSimulator->Shake();
-
-		fAnalytics->Log("shake", NULL);
 	}
 }
 
@@ -2776,8 +2738,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		{
 			[self close:sender];
 		}
-
-		fAnalytics->Log("back", NULL);
 	}
 }
 
@@ -2785,8 +2745,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 {
 	if ( fSimulator )
 	{
-        fAnalytics->Log("suspend-resume", "type", [[self suspendResumeLabel] UTF8String]);
-
         // If the Shift key is down, tell the GLView not to display the graphical suspended state
         [[self layerHostView] setAllowOverlay:(([[NSApp currentEvent] modifierFlags] & NSShiftKeyMask) != NSShiftKeyMask)];
         
@@ -2917,8 +2875,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
     {
         fIOSAppBuildController = [[IOSAppBuildController alloc] initWithWindowNibName:@"IOSAppBuild"
                                                                           projectPath:fAppPath];
-
-		[fIOSAppBuildController setAnalytics:fAnalytics];
     }
 
     Rtt_ASSERT(fIOSAppBuildController != nil);
@@ -2954,8 +2910,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
     {
         fAndroidAppBuildController = [[AndroidAppBuildController alloc] initWithWindowNibName:@"AndroidAppBuild"
                                                                                   projectPath:fAppPath];
-
-		[fAndroidAppBuildController setAnalytics:fAnalytics];
     }
 
     Rtt_ASSERT(fAndroidAppBuildController);
@@ -2990,8 +2944,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	if ( ! fWebAppBuildController )
 	{
 		fWebAppBuildController = [[WebAppBuildController alloc] initWithWindowNibName:@"WebAppBuild" projectPath:fAppPath];
-		
-		[fWebAppBuildController setAnalytics:fAnalytics];
 	}
 	
 	Rtt_ASSERT(fWebAppBuildController);
@@ -3026,8 +2978,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	{
 		fLinuxAppBuildController = [[LinuxAppBuildController alloc] initWithWindowNibName:@"LinuxAppBuild"
 																				projectPath:fAppPath];
-		
-		[fLinuxAppBuildController setAnalytics:fAnalytics];
 	}
 	
 	Rtt_ASSERT(fLinuxAppBuildController);
@@ -3062,8 +3012,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	{
 		fOSXAppBuildController = [[OSXAppBuildController alloc] initWithWindowNibName:@"OSXAppBuild"
                                                                           projectPath:fAppPath];
-
-		[fOSXAppBuildController setAnalytics:fAnalytics];
 	}
     
     Rtt_ASSERT(fOSXAppBuildController);
@@ -3100,8 +3048,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	{
 		fTVOSAppBuildController = [[TVOSAppBuildController alloc] initWithWindowNibName:@"TVOSAppBuild"
                                                                           projectPath:fAppPath];
-
-		[fTVOSAppBuildController setAnalytics:fAnalytics];
 	}
     
     Rtt_ASSERT(fTVOSAppBuildController);
@@ -3297,14 +3243,11 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 - (IBAction) presentWelcomeWindow:(id)sender
 {
 	[self showWelcomeWindow];
-
-	fAnalytics->Log("show-welcome", "skin", Rtt::TargetDevice::LabelForSkin( (Rtt::TargetDevice::Skin)fSkin ));
 }
 
 // Show the new project dialog, the Welcome window needs to be shown to host it
 - (IBAction) presentNewProject:(id)sender
 {
-    fAnalytics->Log("new-project", NULL);
     [self showWelcomeWindow];
     // Give the Welcome window time to fade into view
     [fHomeScreen performSelector:@selector(newProject) withObject:nil afterDelay:0.250];
@@ -3328,19 +3271,9 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 {
 	TextEditorSupport_LaunchTextEditorWithFile([self.fAppPath stringByAppendingPathComponent:@"main.lua"], 0);
     
-    // Log what happened with analytics (probably better done in the callee but then it would need a pointer to the analytics instance)
 	NSString* app_path = nil;
 	NSString* file_extension = nil;
 	BOOL foundApp = [[NSWorkspace sharedWorkspace] getInfoForFile:self.fAppPath application:&app_path type:&file_extension];
-    if (foundApp)
-    {
-        NSString* base_app_name = [app_path lastPathComponent];
-        fAnalytics->Log( "open-in-editor", "editor", [base_app_name UTF8String] );
-    }
-    else
-    {
-        fAnalytics->Log( "open-in-editor", "editor", "TextEdit.app" );
-    }
 }
 
 // returns YES if the user approves and the similator is relaunched

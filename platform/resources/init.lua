@@ -1159,28 +1159,6 @@ system.getInfo = function( ... )
 end
 
 --------------------------------------------------------------------------------
--- Launch Analytics
---------------------------------------------------------------------------------
-
--- luacheck: push
--- luacheck: ignore 121 -- Setting a read-only global variable.
-
-function sendLaunchAnalytics()
-	local buildId
-	-- If we are not running in the Simulator, send launch analytics
-	if "simulator" ~= system.getInfo( "environment" ) then
-		local coronaLaunchAnalytics = require("launchpad")
-
-		if coronaLaunchAnalytics then
-			pcall( function() buildId=coronaLaunchAnalytics.launchAnalytics() end )
-		end
-	end
-	return buildId
-end
-
--- luacheck: pop
-
---------------------------------------------------------------------------------
 -- Startup Logging
 --------------------------------------------------------------------------------
 

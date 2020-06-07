@@ -948,14 +948,6 @@ void WinRTPlatform::CancelNotification( void *notificationId ) const
 	}
 }
 
-void WinRTPlatform::FlurryInit(const char *applicationKey) const
-{
-}
-
-void WinRTPlatform::FlurryEvent(const char *eventId) const
-{
-}
-
 void WinRTPlatform::SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const
 {
 	// Validate arguments.

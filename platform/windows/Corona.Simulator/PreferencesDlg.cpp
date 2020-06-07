@@ -116,12 +116,6 @@ void CPreferencesDlg::OnOK()
 {
     CSimulatorApp *pApp = (CSimulatorApp *)AfxGetApp();
 
-#if 0
-    CButton *pAnalytics = (CButton *)GetDlgItem( IDC_ANALYTICS );
-    bool bAnalytics = (pAnalytics->GetCheck() == BST_CHECKED);
-    pApp->WriteProfileInt( REGISTRY_SECTION, REGISTRY_ANALYTICS, (int)bAnalytics );
-#endif
-
     CButton *pNoWelcome = (CButton *)GetDlgItem( IDC_NOWELCOME );
     bool bNoWelcome = (pNoWelcome->GetCheck() == BST_CHECKED);
 	pApp->EnableHomeScreen(!bNoWelcome);

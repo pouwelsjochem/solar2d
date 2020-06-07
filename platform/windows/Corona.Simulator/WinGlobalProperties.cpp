@@ -11,7 +11,6 @@
 #include "WinGlobalProperties.h"
 #include "Core\Rtt_Build.h"
 #include "Interop\SimulatorRuntimeEnvironment.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_WinPlatform.h"
 #include "Rtt_WinPlatformServices.h"
 #include <string.h>
@@ -33,8 +32,7 @@ WinGlobalProperties::WinGlobalProperties()
 	m_sRegistryProfile(nullptr),
 	m_sResourcesDir(nullptr),
 	m_pEnvironment(nullptr),
-	m_pServices(nullptr),
-	m_pAnalytics(nullptr)
+	m_pServices(nullptr)
 {
 	// Create a new runtime environment assigned the given window handle. (Used as a parent for native alert dialogs.)
 	// We do not set up the runtime environment to create an Rtt::Runtime object since there is no project to run.
@@ -55,9 +53,6 @@ WinGlobalProperties::WinGlobalProperties()
 
 	// Create authorization objects using the above runtime environment's platform.
 	m_pServices = new Rtt::WinPlatformServices(*platformPointer);
-
-	// Create an analytics object for the given platform.
-	m_pAnalytics = new Rtt::SimulatorAnalytics(*platformPointer, m_pEnvironment->GetLuaPackageLoaderCallback());
 }
 
 WinGlobalProperties::~WinGlobalProperties()
@@ -76,11 +71,6 @@ WinGlobalProperties::~WinGlobalProperties()
 	{
 		delete m_sResourcesDir;
 		m_sResourcesDir = nullptr;
-	}
-	if (m_pAnalytics)
-	{
-		delete m_pAnalytics;
-		m_pAnalytics = nullptr;
 	}
 	if (m_pServices)
 	{

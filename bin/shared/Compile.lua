@@ -197,7 +197,6 @@ end
 
 -- Ignore the given Bundle ID and App ID for Android Enterprise builds.
 -- This is because most enterprise users do not know to set the package name in the "build.xml" file.
--- Corona's launchpad analytics will use the Android app's package name at runtime instead.
 if "android" == TARGET_PLATFORM then
 	BUNDLE_ID = nil
 	APP_ID = nil

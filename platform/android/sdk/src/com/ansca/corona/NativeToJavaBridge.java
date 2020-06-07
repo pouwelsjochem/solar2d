@@ -2501,14 +2501,6 @@ public class NativeToJavaBridge {
 	protected static byte[] callCryptoCalculateHMAC( String algorithm, byte[] key, byte[] data ) {
 		return Crypto.CalculateHMAC(algorithm, key, data);
 	}
-
-	protected static void callFlurryInit( String applicationId )
-	{
-	}
-
-	protected static void callFlurryEvent( String eventId )
-	{
-	}
 	
 	protected static void callStoreInit(CoronaRuntime runtime, final String storeName) {
 		CoronaStoreApiListener listener = runtime.getController().getCoronaStoreApiListener();

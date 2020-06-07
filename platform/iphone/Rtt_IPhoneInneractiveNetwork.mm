@@ -16,7 +16,6 @@
 
 #include "Core/Rtt_String.h"
 #include "Rtt_LuaAux.h"
-#include "Rtt_LaunchPad.h"
 #include "Rtt_Event.h"
 
 #import "InneractiveAd.h"

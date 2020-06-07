@@ -1055,25 +1055,6 @@ Runtime::LoadApplication( const LoadParameters& parameters )
 			fDelegate->DidLoadConfig( * this, L );
 		}
 
-		// Send launch analytics.  The function is defined in init.lua so that its lifetime is
-		// sufficient to make asynchronous network requests.  We call it here because the
-		// "application" table from "config.lua" is needed for some data items.
-		lua_getglobal( L, "sendLaunchAnalytics" ); Rtt_ASSERT( lua_isfunction( L, -1 ) );
-
-		if ( Lua::DoCall(L, 0, 1) == 0)
-		{
-			if(lua_isstring(L, -1))
-			{
-				fBuildId.Set(lua_tostring(L,-1));
-			}
-			lua_pop(L, 1);
-		}
-		else
-		{
-			// Intended to be silent on failure in release builds
-			Rtt_TRACE(("init: launchAnalytics failed"));
-		}
-
 		PopAndClearConfig( L );
 		
 		// ---------------------------------------------------------------

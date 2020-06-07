@@ -252,7 +252,6 @@
 #define IDC_ANSCALOGO                   1041
 #define IDC_COMMAND1                    1042
 #define IDC_DEAUTHORIZE                 1043
-#define IDC_ANALYTICS                   1044
 #define IDC_NOWELCOME                   1045
 #define IDC_PROGRESSWND_TEXT            1045
 #define IDC_SHOW_RUNTIME_ERRORS         1046

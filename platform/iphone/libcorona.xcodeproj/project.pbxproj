@@ -564,7 +564,6 @@
 		A4C9CB2E17BAE2950071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2D17BAE2840071753E /* kernel_generator_marchingAnts_gl.lua */; };
 		A4C9CB3017BAE2F50071753E /* kernel_generator_checkerboard_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2F17BAE2E80071753E /* kernel_generator_checkerboard_gl.lua */; };
 		A4E76F5313A935CC00AFB095 /* json.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F5213A935CC00AFB095 /* json.lua */; };
-		C20EF66F1C0E832B00DF0532 /* launchpad.lua in Sources */ = {isa = PBXBuildFile; fileRef = C20EF66E1C0E824000DF0532 /* launchpad.lua */; };
 		C2756C261C57220300BE3194 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C241C57220300BE3194 /* NSString+Extensions.h */; };
 		C2756C271C57220300BE3194 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C251C57220300BE3194 /* NSString+Extensions.m */; };
 		C2A8710D1D4BE48000AF3326 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */; };
@@ -1306,7 +1305,6 @@
 		A4C9CB2D17BAE2840071753E /* kernel_generator_marchingAnts_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_marchingAnts_gl.lua; path = Display/Shader/kernel_generator_marchingAnts_gl.lua; sourceTree = "<group>"; };
 		A4C9CB2F17BAE2E80071753E /* kernel_generator_checkerboard_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_checkerboard_gl.lua; path = Display/Shader/kernel_generator_checkerboard_gl.lua; sourceTree = "<group>"; };
 		A4E76F5213A935CC00AFB095 /* json.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = json.lua; path = ../resources/json.lua; sourceTree = SOURCE_ROOT; };
-		C20EF66E1C0E824000DF0532 /* launchpad.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = launchpad.lua; path = ../platform/resources/launchpad.lua; sourceTree = "<group>"; };
 		C2756C241C57220300BE3194 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../platform/apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C2756C251C57220300BE3194 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../platform/apple/NSString+Extensions.m"; sourceTree = "<group>"; };
 		C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_FileSystem.cpp; sourceTree = "<group>"; };
@@ -1797,7 +1795,6 @@
 		000DCCFC12B06E6800042A5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C20EF66E1C0E824000DF0532 /* launchpad.lua */,
 				0790F87318B6DFA100D0E6B1 /* loader_ccdata.lua */,
 				070F398D18CFEAD700BC2BEE /* loader_callback.lua */,
 				000DCCFD12B06E9400042A5E /* init.lua */,
@@ -2869,7 +2866,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C20EF66F1C0E832B00DF0532 /* launchpad.lua in Sources */,
 				C2C55AA8194F6DEB0050B6CA /* dkjson.lua in Sources */,
 				508D56B4195B8AA500556891 /* kernel_filter_step_gl.lua in Sources */,
 				508D56B5195B8AA500556891 /* kernel_filter_water_gl.lua in Sources */,

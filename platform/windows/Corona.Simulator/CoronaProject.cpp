@@ -71,19 +71,6 @@ CCoronaProject::Init( CString sPath )
 	// Extract the project's path without the file name.
 	CString sDirectory = RemoveMainLua( m_sPath );
 
-	// Build a session ID string for analytics. This is an MD5 hash of the project path without the file name.
-	U8 hash[CryptoPP::Weak1::MD5::DIGESTSIZE];
-	WinString path;
-	path.SetTCHAR(sDirectory);
-	CryptoPP::Weak1::MD5 md5;
-	md5.CalculateDigest(hash, (const byte*)path.GetUTF8(), strlen(path.GetUTF8()));
-	char *p = m_sAnalyticsSessionId.GetBuffer((CryptoPP::Weak1::MD5::DIGESTSIZE * 2) + 1);
-	for (int index = 0; index < CryptoPP::Weak1::MD5::DIGESTSIZE; index++)
-	{
-		p += sprintf_s(p, 3, "%02x", hash[index]);
-	}
-	m_sAnalyticsSessionId.ReleaseBuffer();
-
     // Use lower-case version of path as section
     CString sSection = GetDir();
     sSection.MakeLower();

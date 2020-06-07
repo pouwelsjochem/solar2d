@@ -120,8 +120,6 @@ namespace Rtt
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const { return nullptr; };
 		virtual void ReleaseNotification(void *notificationId) const { return; };
 		virtual void CancelNotification(void *notificationId) const { return; };
-		virtual void FlurryInit(const char * applicationKey) const { return; };
-		virtual void FlurryEvent(const char * eventId) const { return; };
 		virtual void SetNativeProperty(lua_State *L, const char *key, int valueIndex) const { return; };
 		virtual int PushNativeProperty(lua_State *L, const char *key) const { return 0; };
 		virtual int PushSystemInfo(lua_State *L, const char *key) const { return 0; };

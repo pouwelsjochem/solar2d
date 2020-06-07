@@ -128,12 +128,10 @@
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformPlayer.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformSimulator.h" />
-    <ClInclude Include="..\..\shared\Rtt_SimulatorAnalytics.h" />
     <ClInclude Include="..\..\shared\Rtt_TargetAndroidAppStore.h" />
     <ClInclude Include="..\..\shared\Rtt_TargetDevice.h" />
     <ClInclude Include="..\..\shared\Rtt_WebAppPackager.h" />
     <ClInclude Include="AboutDlg.h" />
-    <ClInclude Include="AnalyticsProvider.h" />
     <ClInclude Include="BuildAndroidDlg.h" />
     <ClInclude Include="BuildLinuxDlg.h" />
     <ClInclude Include="BuildProgressDlg.h" />
@@ -195,12 +193,10 @@
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformPlayer.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformSimulator.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_SimulatorAnalytics.cpp" />
     <ClCompile Include="..\..\shared\Rtt_TargetAndroidAppStore.cpp" />
     <ClCompile Include="..\..\shared\Rtt_TargetDevice.cpp" />
     <ClCompile Include="..\..\shared\Rtt_WebAppPackager.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="AnalyticsProvider.cpp" />
     <ClCompile Include="BuildAndroidDlg.cpp" />
     <ClCompile Include="BuildLinuxDlg.cpp" />
     <ClCompile Include="BuildProgressDlg.cpp" />
@@ -248,7 +244,6 @@
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua" />
     <LuaToCpp Include="..\..\resources\linuxPackageApp.lua" />
     <LuaToCpp Include="..\..\resources\shell.lua" />
-    <LuaToCpp Include="..\..\resources\simulatorAnalytics.lua" />
     <LuaToCpp Include="..\..\resources\webPackageApp.lua" />
   </ItemGroup>
   <ItemGroup>

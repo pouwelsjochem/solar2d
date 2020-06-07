@@ -48,7 +48,6 @@ namespace Rtt
 	class MacConsolePlatform;
 	class MacPlatformServices;
 	class MacSimulator;
-	class SimulatorAnalytics;
 }
 
 @interface AppDelegate : NSObject <NSMenuDelegate,NSAlertDelegate,GLViewDelegate
@@ -62,7 +61,6 @@ namespace Rtt
 	Rtt::SimulatorOptions fOptions;
 
 	Rtt::MacConsolePlatform *fConsolePlatform;
-	Rtt::SimulatorAnalytics *fAnalytics;
 
 	NSString *fSdkRoot;
 
@@ -169,7 +167,6 @@ namespace Rtt
 @property (nonatomic, readwrite) BOOL stopRequested;
 @property (nonatomic, readwrite) float buildDownloadProgess;
 @property (nonatomic, readwrite) BOOL respondsToBackKey;
-@property (nonatomic, readonly, getter=analytics) Rtt::SimulatorAnalytics *fAnalytics;
 
 +(BOOL)offlineModeAllowed;
 

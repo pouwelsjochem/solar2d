@@ -20,7 +20,6 @@ namespace Rtt
 	class AppPackagerParams;
 	class MPlatformServices;
 	class PlatformAppPackager;
-	class SimulatorAnalytics;
 }
 
 // ----------------------------------------------------------------------------
@@ -35,7 +34,6 @@ namespace Rtt
 		IBOutlet NSPopUpButton* fSigningIdentities;
 		IBOutlet NSButton *fEnableLiveBuild;
 
-		Rtt::SimulatorAnalytics *fAnalytics;
 		NSString *platformName;
 		NSString *platformTitle;
         Rtt::MacSimulatorServices *simulatorServices;
@@ -75,11 +73,6 @@ namespace Rtt
 - (const char *)dstDir;
 - (NSString *)appPackagePath;
 - (NSString *)appBundleFile;
-
-- (void)setAnalytics:(Rtt::SimulatorAnalytics *)analytics;
-- (void)logEvent:(NSString *)eventName;
-- (void)logEvent:(NSString *)eventName key:(NSString *)eventDataKey value:(NSString *)eventDataValue;
-- (void)logEvent:(NSString *)eventName keyValues:(NSDictionary *)keyValues;
 
 // Build methods to override
 - (BOOL)validateProject;

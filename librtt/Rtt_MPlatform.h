@@ -222,12 +222,6 @@ class MPlatform
 
 		// Pass "NULL" to cancel all pending notifications
 		virtual void CancelNotification( void *notificationId ) const = 0;
-	
-	public:
-		// TODO: This is a crap interface. Who designed it? No one should model theirs after this.
-		// If you need help, come to me (Walter) 
-		virtual void FlurryInit( const char * applicationKey ) const = 0;
-		virtual void FlurryEvent( const char * eventId ) const = 0;
 
 	public:
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const = 0;
