@@ -1464,16 +1464,6 @@ namespace Rtt
 		}
 	}
 
-PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const
-{
-	return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
-}
-	PlatformDisplayObject* WinPlatform::CreateNativeMapView(const Rect& bounds) const
-	{
-		Rtt_TRACE_SIM(("WARNING: Map views are not supported in the simulator. Please build for device.\n"));
-		return nullptr;
-	}
-
 	PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const
 	{
 		return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
