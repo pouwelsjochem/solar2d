@@ -440,9 +440,6 @@
     <Image Include="res\exampleNativeInput.ico">
       <Filter>res</Filter>
     </Image>
-    <Image Include="res\exampleOpenFeint.ico">
-      <Filter>res</Filter>
-    </Image>
     <Image Include="res\examplePlatform.ico">
       <Filter>res</Filter>
     </Image>

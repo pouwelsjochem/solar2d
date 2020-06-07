@@ -289,7 +289,6 @@
     <Image Include="res\exampleMultipuck.ico" />
     <Image Include="res\exampleMultitouch.ico" />
     <Image Include="res\exampleNativeInput.ico" />
-    <Image Include="res\exampleOpenFeint.ico" />
     <Image Include="res\examplePlatform.ico" />
     <Image Include="res\examplePolyLines.ico" />
     <Image Include="res\exampleSimplePool.ico" />

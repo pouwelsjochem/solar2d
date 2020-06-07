@@ -376,7 +376,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibCrypto.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibFacebook.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibGameNetwork.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibMedia.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibNative.cpp" />
@@ -815,7 +814,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibCrypto.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibFacebook.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibGameNetwork.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibMedia.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibNative.h" />

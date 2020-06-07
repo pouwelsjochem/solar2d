@@ -829,9 +829,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibGameNetwork.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -2066,9 +2063,6 @@
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibFlurry.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibGameNetwork.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.h">

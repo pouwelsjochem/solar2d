@@ -180,8 +180,6 @@ platform/android/template/externals
 platform/android/template/res
 external/facebook-android-sdk/facebook/bin
 external/facebook-android-sdk/facebook/gen
-external/OpenFeintSDK.1.9.3/OpenFeintAPI/bin
-external/OpenFeintSDK.1.9.3/OpenFeintAPI/gen
 external/papaya-corona-sdk-global-1.7.1/Library/bin
 external/papaya-corona-sdk-global-1.7.1/Library/gen
 external/SuperRewards-Android-SDK/bin

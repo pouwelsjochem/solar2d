@@ -551,7 +551,6 @@
 		A4D24B21143FC36500E583D1 /* NewProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4D24B20143FC36500E583D1 /* NewProject.xib */; };
 		A4D24B24143FD1E300E583D1 /* NewProjectController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4D24B23143FD1E200E583D1 /* NewProjectController.mm */; };
 		A4DF586A1BE44A3000B17862 /* codesign-framework.sh in Resources */ = {isa = PBXBuildFile; fileRef = A4DF58691BE44A3000B17862 /* codesign-framework.sh */; };
-		A4E6329516712E4E00F37549 /* Rtt_LuaLibGameNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4E6329316712E4E00F37549 /* Rtt_LuaLibGameNetwork.cpp */; };
 		A4E76F191399772500AFB095 /* create_build_properties.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F181399772500AFB095 /* create_build_properties.lua */; };
 		A4E76F6D13A99D5200AFB095 /* json.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F6C13A99D5200AFB095 /* json.lua */; };
 		A4ED10AE14D2931000ECF49E /* Rtt_Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4ED10AC14D2930F00ECF49E /* Rtt_Lua.cpp */; };
@@ -663,7 +662,6 @@
 		C229E0221B32221B00D87A7C /* Rtt_LuaLibDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */; };
 		C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */; };
 		C229E0241B32221B00D87A7C /* Rtt_LuaLibFlurry.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F112B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h */; };
-		C229E0251B32221B00D87A7C /* Rtt_LuaLibGameNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = A4E6329416712E4E00F37549 /* Rtt_LuaLibGameNetwork.h */; };
 		C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */; };
 		C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */; };
 		C229E0281B32221B00D87A7C /* Rtt_LuaLibMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */; };
@@ -854,7 +852,6 @@
 		C229E0FC1B32221B00D87A7C /* Rtt_LuaLibDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328809176A621100ACB6FF /* Rtt_LuaLibDisplay.cpp */; };
 		C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */; };
 		C229E0FE1B32221B00D87A7C /* Rtt_LuaLibFlurry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F012B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp */; };
-		C229E0FF1B32221B00D87A7C /* Rtt_LuaLibGameNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4E6329316712E4E00F37549 /* Rtt_LuaLibGameNetwork.cpp */; };
 		C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */; };
 		C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */; };
 		C229E1021B32221B00D87A7C /* Rtt_LuaLibMedia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */; };
@@ -1154,7 +1151,6 @@
 		C2DA96101B46460F00DAF684 /* Rtt_DisplayTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F6176A621100ACB6FF /* Rtt_DisplayTypes.h */; };
 		C2DA96111B46460F00DAF684 /* Rtt_ImageSheetUserdata.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328806176A621100ACB6FF /* Rtt_ImageSheetUserdata.h */; };
 		C2DA96121B46460F00DAF684 /* Rtt_DisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F3176A621100ACB6FF /* Rtt_DisplayObject.h */; };
-		C2DA96131B46460F00DAF684 /* Rtt_LuaLibGameNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = A4E6329416712E4E00F37549 /* Rtt_LuaLibGameNetwork.h */; };
 		C2DA96141B46460F00DAF684 /* Rtt_MUpdatable.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E06F2C1963988C003451E8 /* Rtt_MUpdatable.h */; };
 		C2DA96151B46460F00DAF684 /* Rtt_PaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032217739AD80064ABA0 /* Rtt_PaintAdapter.h */; };
 		C2DA96161B46460F00DAF684 /* Rtt_ContainerObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287ED176A621100ACB6FF /* Rtt_ContainerObject.h */; };
@@ -2723,8 +2719,6 @@
 		A4D24B22143FD1E200E583D1 /* NewProjectController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewProjectController.h; sourceTree = "<group>"; };
 		A4D24B23143FD1E200E583D1 /* NewProjectController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewProjectController.mm; sourceTree = "<group>"; };
 		A4DF58691BE44A3000B17862 /* codesign-framework.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "codesign-framework.sh"; path = "../../bin/xcode/codesign-framework.sh"; sourceTree = "<group>"; };
-		A4E6329316712E4E00F37549 /* Rtt_LuaLibGameNetwork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibGameNetwork.cpp; sourceTree = "<group>"; };
-		A4E6329416712E4E00F37549 /* Rtt_LuaLibGameNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibGameNetwork.h; sourceTree = "<group>"; };
 		A4E76F181399772500AFB095 /* create_build_properties.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = create_build_properties.lua; path = ../platform/android/create_build_properties.lua; sourceTree = "<group>"; };
 		A4E76F6C13A99D5200AFB095 /* json.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = json.lua; path = ../platform/resources/json.lua; sourceTree = "<group>"; };
 		A4ED10AC14D2930F00ECF49E /* Rtt_Lua.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Lua.cpp; sourceTree = "<group>"; };
@@ -3399,8 +3393,6 @@
 				000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */,
 				000CE6F012B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp */,
 				000CE6F112B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h */,
-				A4E6329316712E4E00F37549 /* Rtt_LuaLibGameNetwork.cpp */,
-				A4E6329416712E4E00F37549 /* Rtt_LuaLibGameNetwork.h */,
 				00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */,
 				00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */,
 				000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */,
@@ -4659,7 +4651,6 @@
 				000CE79B12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h in Headers */,
 				F5C40DC31CB68788004F7789 /* Rtt_TesselatorMesh.h in Headers */,
 				000CE79D12B73EE300D9B6A4 /* Rtt_LuaLibFlurry.h in Headers */,
-				C2DA96131B46460F00DAF684 /* Rtt_LuaLibGameNetwork.h in Headers */,
 				C2DA96321B46460F00DAF684 /* Rtt_LuaLibGraphics.h in Headers */,
 				C2DA96381B46460F00DAF684 /* Rtt_LuaLibInAppStore.h in Headers */,
 				000CE79F12B73EE300D9B6A4 /* Rtt_LuaLibMedia.h in Headers */,
@@ -4924,7 +4915,6 @@
 				C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */,
 				F5C40DC51CB68789004F7789 /* Rtt_TesselatorMesh.h in Headers */,
 				C229E0241B32221B00D87A7C /* Rtt_LuaLibFlurry.h in Headers */,
-				C229E0251B32221B00D87A7C /* Rtt_LuaLibGameNetwork.h in Headers */,
 				C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */,
 				C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */,
 				C229E0281B32221B00D87A7C /* Rtt_LuaLibMedia.h in Headers */,
@@ -5821,7 +5811,6 @@
 				A4328868176A621200ACB6FF /* Rtt_LuaLibDisplay.cpp in Sources */,
 				000CE79A12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp in Sources */,
 				000CE79C12B73EE300D9B6A4 /* Rtt_LuaLibFlurry.cpp in Sources */,
-				A4E6329516712E4E00F37549 /* Rtt_LuaLibGameNetwork.cpp in Sources */,
 				A432886A176A621200ACB6FF /* Rtt_LuaLibGraphics.cpp in Sources */,
 				00572B8B12D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				000CE79E12B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp in Sources */,
@@ -6316,7 +6305,6 @@
 				C229E0FC1B32221B00D87A7C /* Rtt_LuaLibDisplay.cpp in Sources */,
 				C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */,
 				C229E0FE1B32221B00D87A7C /* Rtt_LuaLibFlurry.cpp in Sources */,
-				C229E0FF1B32221B00D87A7C /* Rtt_LuaLibGameNetwork.cpp in Sources */,
 				C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */,
 				C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				C229E1021B32221B00D87A7C /* Rtt_LuaLibMedia.cpp in Sources */,

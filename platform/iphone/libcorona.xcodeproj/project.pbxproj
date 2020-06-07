@@ -509,8 +509,6 @@
 		A48B91CF178A9CA30072EAF7 /* Rtt_SharedCount.h in Headers */ = {isa = PBXBuildFile; fileRef = A48B91CB178A9CA30072EAF7 /* Rtt_SharedCount.h */; };
 		A48B91D0178A9CA30072EAF7 /* Rtt_SharedCountImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = A48B91CC178A9CA30072EAF7 /* Rtt_SharedCountImpl.h */; };
 		A48B91D1178A9CA30072EAF7 /* Rtt_SharedPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = A48B91CD178A9CA30072EAF7 /* Rtt_SharedPtr.h */; };
-		A48D02551670945E00E0FF62 /* Rtt_LuaLibGameNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48D02531670945E00E0FF62 /* Rtt_LuaLibGameNetwork.cpp */; };
-		A48D02561670945E00E0FF62 /* Rtt_LuaLibGameNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = A48D02541670945E00E0FF62 /* Rtt_LuaLibGameNetwork.h */; };
 		A48DA9571852FE84009D1F93 /* Rtt_RuntimeDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9551852FE84009D1F93 /* Rtt_RuntimeDelegate.cpp */; };
 		A48DA9581852FE84009D1F93 /* Rtt_RuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A48DA9561852FE84009D1F93 /* Rtt_RuntimeDelegate.h */; };
 		A49186F916421CF900A39286 /* CoronaAssert.c in Sources */ = {isa = PBXBuildFile; fileRef = A49186ED16421CF900A39286 /* CoronaAssert.c */; };
@@ -1253,8 +1251,6 @@
 		A48B91CB178A9CA30072EAF7 /* Rtt_SharedCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SharedCount.h; sourceTree = "<group>"; };
 		A48B91CC178A9CA30072EAF7 /* Rtt_SharedCountImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SharedCountImpl.h; sourceTree = "<group>"; };
 		A48B91CD178A9CA30072EAF7 /* Rtt_SharedPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SharedPtr.h; sourceTree = "<group>"; };
-		A48D02531670945E00E0FF62 /* Rtt_LuaLibGameNetwork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibGameNetwork.cpp; sourceTree = "<group>"; };
-		A48D02541670945E00E0FF62 /* Rtt_LuaLibGameNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibGameNetwork.h; sourceTree = "<group>"; };
 		A48DA9551852FE84009D1F93 /* Rtt_RuntimeDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RuntimeDelegate.cpp; sourceTree = "<group>"; };
 		A48DA9561852FE84009D1F93 /* Rtt_RuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RuntimeDelegate.h; sourceTree = "<group>"; };
 		A49186ED16421CF900A39286 /* CoronaAssert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CoronaAssert.c; path = Corona/CoronaAssert.c; sourceTree = "<group>"; };
@@ -1588,8 +1584,6 @@
 				000DCAF512B05F3E00042A5E /* Rtt_LuaGCInhibitor.h */,
 				000DCAF612B05F3E00042A5E /* Rtt_LuaLibCrypto.cpp */,
 				000DCAF712B05F3E00042A5E /* Rtt_LuaLibCrypto.h */,
-				A48D02531670945E00E0FF62 /* Rtt_LuaLibGameNetwork.cpp */,
-				A48D02541670945E00E0FF62 /* Rtt_LuaLibGameNetwork.h */,
 				0044F1D812CAB806006EB396 /* Rtt_LuaLibInAppStore.cpp */,
 				0044F1D712CAB806006EB396 /* Rtt_LuaLibInAppStore.h */,
 				000DCAFE12B05F3E00042A5E /* Rtt_LuaLibMedia.cpp */,
@@ -2520,7 +2514,6 @@
 				A491870016421CF900A39286 /* CoronaLog.h in Headers */,
 				A491870116421CF900A39286 /* CoronaMacros.h in Headers */,
 				A491870416421F4500A39286 /* CoronaLuaLibrary.h in Headers */,
-				A48D02561670945E00E0FF62 /* Rtt_LuaLibGameNetwork.h in Headers */,
 				A41AC11616A5FD0000AD331A /* Rtt_LuaFrameworks.h in Headers */,
 				A40C523C16F847CD00AE2ECF /* CoronaVersion.h in Headers */,
 				A474289B17694EB000C63853 /* Rtt_BitmapMask.h in Headers */,
@@ -3066,7 +3059,6 @@
 				A49186FB16421CF900A39286 /* CoronaEvent.cpp in Sources */,
 				A49186FD16421CF900A39286 /* CoronaLibrary.cpp in Sources */,
 				A49186FF16421CF900A39286 /* CoronaLog.c in Sources */,
-				A48D02551670945E00E0FF62 /* Rtt_LuaLibGameNetwork.cpp in Sources */,
 				A41AC11216A5E03600AD331A /* easing.lua in Sources */,
 				A4E76F5313A935CC00AFB095 /* json.lua in Sources */,
 				A40C523B16F847CD00AE2ECF /* CoronaVersion.c in Sources */,

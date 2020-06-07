@@ -640,7 +640,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibCrypto.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibFacebook.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibFlurry.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_LuaLibGameNetwork.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibInAppStore.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibMedia.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibNative.cpp \

@@ -141,7 +141,7 @@
 		A4551F3B1BAA182D00FB3BDF /* Rtt_CachedPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E9C1BAA182C00FB3BDF /* Rtt_CachedPath.cpp */; };
 		A4551F3C1BAA182D00FB3BDF /* Rtt_CKWorkflow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E9E1BAA182C00FB3BDF /* Rtt_CKWorkflow.cpp */; };
 		A4551F3D1BAA182D00FB3BDF /* Rtt_DeviceOrientation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA11BAA182C00FB3BDF /* Rtt_DeviceOrientation.cpp */; };
-		A4551F3E1BAA182D00FB3BDF /* Rtt_		A4551F3F1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA51BAA182C00FB3BDF /* Rtt_Event.cpp */; };
+		A4551F3E1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA51BAA182C00FB3BDF /* Rtt_Event.cpp */; };
 		A4551F401BAA182D00FB3BDF /* Rtt_ExplicitTemplates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA71BAA182C00FB3BDF /* Rtt_ExplicitTemplates.cpp */; };
 		A4551F411BAA182D00FB3BDF /* Rtt_FilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA81BAA182C00FB3BDF /* Rtt_FilePath.cpp */; };
 		A4551F421BAA182D00FB3BDF /* Rtt_GPUStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EAB1BAA182C00FB3BDF /* Rtt_GPUStream.cpp */; };
@@ -154,7 +154,6 @@
 		A4551F491BAA182D00FB3BDF /* Rtt_LuaCoronaBaseLib.m in Sources */ = {isa = PBXBuildFile; fileRef = A4551EB91BAA182C00FB3BDF /* Rtt_LuaCoronaBaseLib.m */; };
 		A4551F4A1BAA182D00FB3BDF /* Rtt_LuaData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EBA1BAA182C00FB3BDF /* Rtt_LuaData.cpp */; };
 		A4551F4B1BAA182D00FB3BDF /* Rtt_LuaLibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EBF1BAA182C00FB3BDF /* Rtt_LuaLibCrypto.cpp */; };
-		A4551F4C1BAA182D00FB3BDF /* Rtt_LuaLibGameNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EC11BAA182C00FB3BDF /* Rtt_LuaLibGameNetwork.cpp */; };
 		A4551F4D1BAA182D00FB3BDF /* Rtt_LuaLibInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EC31BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.cpp */; };
 		A4551F4E1BAA182D00FB3BDF /* Rtt_LuaLibMedia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EC51BAA182C00FB3BDF /* Rtt_LuaLibMedia.cpp */; };
 		A4551F4F1BAA182D00FB3BDF /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EC71BAA182C00FB3BDF /* Rtt_LuaLibNative.cpp */; };
@@ -1161,8 +1160,6 @@
 		A4551EBE1BAA182C00FB3BDF /* Rtt_LuaGCInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaGCInhibitor.h; path = ../../librtt/Rtt_LuaGCInhibitor.h; sourceTree = "<group>"; };
 		A4551EBF1BAA182C00FB3BDF /* Rtt_LuaLibCrypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibCrypto.cpp; path = ../../librtt/Rtt_LuaLibCrypto.cpp; sourceTree = "<group>"; };
 		A4551EC01BAA182C00FB3BDF /* Rtt_LuaLibCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibCrypto.h; path = ../../librtt/Rtt_LuaLibCrypto.h; sourceTree = "<group>"; };
-		A4551EC11BAA182C00FB3BDF /* Rtt_LuaLibGameNetwork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibGameNetwork.cpp; path = ../../librtt/Rtt_LuaLibGameNetwork.cpp; sourceTree = "<group>"; };
-		A4551EC21BAA182C00FB3BDF /* Rtt_LuaLibGameNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibGameNetwork.h; path = ../../librtt/Rtt_LuaLibGameNetwork.h; sourceTree = "<group>"; };
 		A4551EC31BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibInAppStore.cpp; path = ../../librtt/Rtt_LuaLibInAppStore.cpp; sourceTree = "<group>"; };
 		A4551EC41BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibInAppStore.h; path = ../../librtt/Rtt_LuaLibInAppStore.h; sourceTree = "<group>"; };
 		A4551EC51BAA182C00FB3BDF /* Rtt_LuaLibMedia.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibMedia.cpp; path = ../../librtt/Rtt_LuaLibMedia.cpp; sourceTree = "<group>"; };
@@ -2370,8 +2367,6 @@
 				A4551EBE1BAA182C00FB3BDF /* Rtt_LuaGCInhibitor.h */,
 				A4551EBF1BAA182C00FB3BDF /* Rtt_LuaLibCrypto.cpp */,
 				A4551EC01BAA182C00FB3BDF /* Rtt_LuaLibCrypto.h */,
-				A4551EC11BAA182C00FB3BDF /* Rtt_LuaLibGameNetwork.cpp */,
-				A4551EC21BAA182C00FB3BDF /* Rtt_LuaLibGameNetwork.h */,
 				A4551EC31BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.cpp */,
 				A4551EC41BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.h */,
 				A4551EC51BAA182C00FB3BDF /* Rtt_LuaLibMedia.cpp */,
@@ -3712,7 +3707,6 @@
 				A4DD477D1BB2490800FD988E /* kernel_generator_stripes_gl.lua in Sources */,
 				A4DD477E1BB2490800FD988E /* kernel_generator_sunbeams_gl.lua in Sources */,
 				A4DD477F1BB2490800FD988E /* shell_default_gl.lua in Sources */,
-				A4551F4C1BAA182D00FB3BDF /* Rtt_LuaLibGameNetwork.cpp in Sources */,
 				A4551F671BAA182D00FB3BDF /* Rtt_PlatformEventSound.cpp in Sources */,
 				A4551E001BAA17CF00FB3BDF /* Rtt_RectPath.cpp in Sources */,
 				A4551F621BAA182D00FB3BDF /* Rtt_PlatformAudioPlayer.cpp in Sources */,
