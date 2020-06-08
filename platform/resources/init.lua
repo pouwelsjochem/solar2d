@@ -14,7 +14,6 @@
 -- luacheck: globals network
 -- luacheck: globals Runtime
 
--- TODO: Move this out of global namespace
 local function getOrCreateTable( receiver, index )
 	local t = receiver[index]
 	if nil == t then
@@ -39,29 +38,6 @@ function Object:newClass( o )
 	o._super = self
 	return o
 end
-
---[[
-local function printTable( t, label, level )
-	if label then print( label ) end
-	level = level or 1
-
-	if t then
-		for k,v in pairs( t ) do
-			local prefix = ""
-			for i=1,level do
-				prefix = prefix .. "\t"
-			end
-
-			print( prefix .. "[" .. tostring(k) .. "] = " .. tostring(v) )
-			if type( v ) == "table" then
-				print( prefix .. "{" )
-				printTable( v, nil, level + 1 )
-				print( prefix .. "}" )
-			end
-		end
-	end
-end
---]]
 
 -------------------------------------------------------------------------------
 -- EventDispatcher
@@ -409,15 +385,6 @@ local Shape = DisplayObject:newClass()
 local Text = DisplayObject:newClass()
 --luacheck: pop
 
--- print( "DisplayObject = " .. DisplayObject )
--- print( "Group = " .. Group )
--- print( "Container = " .. Container )
--- print( "Stage = " .. Stage )
--- print( "Line = " .. Line )
--- print( "Shape = " .. Shape )
--- print( "Text = " ..  Text )
-
-
 -------------------------------------------------------------------------------
 -- display
 -------------------------------------------------------------------------------
@@ -488,12 +455,6 @@ display.remove = function( object )
 			method( object ) -- same as object:removeSelf()
 		end
 	end
-end
-
--- display function to create retina-compatible text for double-pixel devices
-function display.newRetinaText( ... )
-	print( "WARNING: display.newRetinaText() has been deprecated. display.newText() is now retina-aware." )
-	return display.newText( ... )
 end
 
 -------------------------------------------------------------------------------
@@ -575,91 +536,6 @@ network._dispatchStatus = function( address, event )
 	end
 end
 --]]
-
---------------------------------------------------------------------------------
--- luacheck: push
--- luacheck: ignore 122 -- Mutating a read-only global variable.
-
--- table.indexOf( array, object ) returns the integer index of object in array.
--- Returns 'nil' if not in array. The search goes through the length of the array
--- as determined by #array, whose value is undefined if there are holes.
-table.indexOf = function( t, object )
-	local result
-
-	if "table" == type( t ) then
-		for i=1,#t do
-			if object == t[i] then
-				result = i
-				break
-			end
-		end
-	end
-
-	return result
-end
-
--- table.copy( array, ... ) returns a shallow copy of array, i.e. the portion
--- of the array (table) with integer keys. A variable number of additional
--- arrays can be passed in as optional arguments. If an array has a hole (a nil
--- entry), copying in a given source array stops at the last consecutive item
--- prior to the hole.
---
--- Note: In Lua, the function table.concat() is equivalent to JavaScript's
--- array.join(). Hence, the following function is called copy().
-table.copy = function( t, ... )
-	-- dst, dstStart are an optional pair
-	local copyShallow = function( src, dst, dstStart )
-		local result = dst or {}
-		local resultStart = 0
-		if dst and dstStart then
-			resultStart = dstStart
-		end
-		local resultLen = 0 -- actually, the number of src items copied
-		if "table" == type( src ) then
-			resultLen = #src
-			for i=1,resultLen do
-				local value = src[i]
-				if nil ~= value then
-					result[i + resultStart] = value
-				else
-					resultLen = i - 1
-					break;
-				end
-			end
-		end
-		return result,resultLen
-	end
-
-	local result, resultStart = copyShallow( t )
-
-	local srcs = { ... }
-	for i=1,#srcs do
-		local _,len = copyShallow( srcs[i], result, resultStart )
-		resultStart = resultStart + len
-	end
-
-	return result
-end
-
---------------------------------------------------------------------------------
-
--- math.round( num ) rounds num to the nearest integer following the same behavior 
--- as the JavaScript version.
-math.round = function(num) 
-	return math.floor(num+.5)
-end
-
---------------------------------------------------------------------------------
-
-function string.starts( s, prefix )
-	return string.sub(s,1,string.len(prefix)) == prefix
-end
-
-function string.ends( s, suffix )
-	return suffix == '' or string.sub(s,-string.len(suffix)) == suffix
-end
-
--- luacheck: pop
 
 --------------------------------------------------------------------------------
 -- Start: Special internal handlers for system events
