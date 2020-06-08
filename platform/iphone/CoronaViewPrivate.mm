@@ -1600,9 +1600,6 @@ DispatchEvent( Rtt_UITextView *textView, int startpos, int numdeleted, const cha
 	[fActiveText resignFirstResponder];
 }
 
-#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
-
-
 #ifndef Rtt_TVOS_ENV
 
 // Called when the UIKeyboardWillShowNotification is sent
@@ -1626,47 +1623,9 @@ DispatchEvent( Rtt_UITextView *textView, int startpos, int numdeleted, const cha
 			CGFloat xOffset = 0.f;
 			CGFloat yOffset = 0.f;
 			
-			bool useDefaultOffset = true;
-			if ( SYSTEM_VERSION_LESS_THAN( @"8.0" ) )
-			{
-#ifdef Rtt_ORIENTATION
-				UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-
-				switch ( orientation )
-				{
-					case UIInterfaceOrientationLandscapeRight:
-					{
-						xOffset = CGRectGetMinY( activeTextRect ) - CGRectGetMaxX( keyboardRect );
-						useDefaultOffset = false;
-						break;
-					}
-
-					case UIInterfaceOrientationLandscapeLeft:
-					{
-						xOffset = CGRectGetMinX( keyboardRect ) - CGRectGetMaxY( activeTextRect );
-						useDefaultOffset = false;
-						break;
-					}
-
-					case UIInterfaceOrientationPortraitUpsideDown:
-					{
-						yOffset = CGRectGetMaxY( keyboardRect ) - (self.bounds.size.height - CGRectGetMaxY( activeTextRect ));
-						useDefaultOffset = false;
-						break;
-					}
-					
-					default:
-						break;
-				}
-#endif
-			}
-			
-			if ( useDefaultOffset )
-			{
-				yOffset = CGRectGetMinY( keyboardRect ) - CGRectGetMaxY( activeTextRect );
-			}
-
-			if ( yOffset < 0.f || ( ! useDefaultOffset ) )
+		
+			yOffset = CGRectGetMinY( keyboardRect ) - CGRectGetMaxY( activeTextRect );
+			if ( yOffset < 0.f )
 			{
 				NSTimeInterval animationDuration;
 				[[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
@@ -1718,10 +1677,7 @@ DispatchEvent( Rtt_UITextView *textView, int startpos, int numdeleted, const cha
 
 			UIView *v = self.window;
 
-//			CGFloat yOffset = fKeyboardOffset;
-			
-			if ( fWindowOffset.y < 0.f
-				 || ( SYSTEM_VERSION_LESS_THAN( @"8.0" ) && ! CGPointEqualToPoint( fWindowOffset, CGPointZero ) ) )
+			if ( fWindowOffset.y < 0.f )
 			{
 				[UIView beginAnimations:nil context:NULL];
 				[UIView animateWithDuration:animationDuration
