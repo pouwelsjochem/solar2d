@@ -140,8 +140,12 @@ function PluginCollectorSolar2DDirectory:collect(destination, plugin, pluginTabl
     if not pluginEntry then
         return "Solar2D Directory: plugin " .. plugin .. " was not found at Solar2D Directory"
     end
+
     local pluginObject = pluginEntry.plugin
     local repoOwner = pluginEntry.repo
+    if pluginObject.e then
+        return "! " .. pluginObject.e
+    end
 
     local build = tonumber(params.build)
     local vFoundBuid, vFoundObject, vFoundBuildName
@@ -161,8 +165,10 @@ function PluginCollectorSolar2DDirectory:collect(destination, plugin, pluginTabl
         hasPlatform = hasPlatform or vFoundObject[i] == pluginPlatform
     end
     if not hasPlatform then
-        log("Solar2D Directory: skipped plugin " .. plugin .. " because platform " .. pluginPlatform .. " is not supported")
-        return params.canSkip
+        if params.canSkip then
+            log("Solar2D Directory: skipped plugin " .. plugin .. " because platform " .. pluginPlatform .. " is not supported")
+        end
+        return params.canSkip or "Solar2D Directory: skipped plugin " .. plugin .. " because platform " .. pluginPlatform .. " is not supported"
     end
     local repoName = pluginObject.p or (pluginTable.publisherId .. '-' .. plugin)
     local downloadURL = "https://github.com/" .. repoOwner .. "/" .. repoName .. "/releases/download/" .. pluginObject.r .. "/" .. vFoundBuildName .. "-" .. pluginPlatform .. ".tgz"
@@ -406,6 +412,9 @@ local function fetchSinglePluginNoFallbacks(dstDir, plugin, pluginTable, pluginP
             ok = true
             break
         elseif type(result) == 'string' then
+            if result:sub(1,2) == "! " then
+                return result
+            end    
             err = err .. '\n\t' .. result
         end
     end
@@ -427,6 +436,9 @@ local function fetchSinglePlugin(dstDir, plugin, pluginTable, basePluginPlatform
     for i = 1, numFallbacks do
         local fallbackRes = fetchSinglePluginNoFallbacks(dstDir, plugin, pluginTable, fallbackChain[i], params, pluginLocators, i == numFallbacks)
         if not fallbackRes then return end -- success
+        if fallbackRes:sub(1,2) == "! " then
+            return fallbackRes
+        end
         if res then
             res = res .. "\n" .. fallbackRes
         else
@@ -503,6 +515,9 @@ local function CollectCoronaPlugins(params)
         if type(pluginTable) ~= 'table' then return 'Invalid plugin table for ' .. plugin end
         local result = fetchSinglePlugin(dstDir, plugin, pluginTable, pluginPlatform, params, pluginLocators)
         if type(result) == 'string'  then
+            if result:sub(1,2) == "! " then
+                return result:sub(3)
+            end
             if params.continueOnError then
                 ret = (ret or "") .. result .. "\n"
             else
@@ -521,6 +536,9 @@ local function CollectCoronaPlugins(params)
             log("Collecting dependency " .. plugin)
             local result = fetchSinglePlugin(dstDir, plugin, pluginTable, pluginPlatform, params, pluginLocators)
             if type(result) == 'string'  then
+                if result:sub(1,2) == "! " then
+                    return result:sub(3)
+                end
                 if params.continueOnError then
                     ret = (ret or "") .. result .. "\n"
                 else
@@ -546,12 +564,12 @@ local function CollectCoronaPlugins(params)
                     end
                     local lua51Dir = pathJoin(params.extractLocation, "lua_51")
                     if ret and isDir(lua51Dir) then
-                        if isWindows then
-                            exec("move " .. quoteString(lua51Dir) .. SEP .. "* " .. quoteString(params.extractLocation))
-                        else
-                            exec("mv " .. quoteString(lua51Dir) .. SEP .. "* " .. quoteString(params.extractLocation))
+                        for file in lfs.dir(lua51Dir) do
+                            if file ~= "." and file ~= ".." then
+                                os.rename(pathJoin(lua51Dir, file), pathJoin(params.extractLocation, file))
+                            end
                         end
-                        exec("rmdir " .. quoteString(pathJoin(params.extractLocation, "lua_51")))
+                        exec("rmdir " .. quoteString(lua51Dir))
                     end
                 else
                     if isWindows then
