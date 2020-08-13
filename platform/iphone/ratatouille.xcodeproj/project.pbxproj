@@ -1934,7 +1934,6 @@
 						DevelopmentTeam = BG2J43EA88;
 					};
 					A4693558169D62DA00723568 = {
-						DevelopmentTeam = BG2J43EA88;
 						LastSwiftMigration = 0820;
 					};
 					A47098A4169E9F2400D31091 = {
@@ -3241,7 +3240,9 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = BG2J43EA88;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -3257,6 +3258,7 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = ios;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
@@ -3268,7 +3270,9 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = BG2J43EA88;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -3284,6 +3288,7 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = ios;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
@@ -3296,7 +3301,9 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = BG2J43EA88;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -3312,6 +3319,7 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = ios;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
@@ -3324,7 +3332,9 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = BG2J43EA88;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -3340,6 +3350,7 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = ios;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
