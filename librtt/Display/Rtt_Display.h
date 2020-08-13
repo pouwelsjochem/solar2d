@@ -222,19 +222,7 @@ class Display
 		// Width and height in OS-defined points
 		virtual Real PointsWidth() const;
 		virtual Real PointsHeight() const;
-/*
-		void SetXOriginOffset( Real newValue ) { fXOriginOffset = newValue; }
-		void SetYOriginOffset( Real newValue ) { fYOriginOffset = newValue; }
 
-		void SwapContentSize();
-		void SwapContentScale();
-        void SwapContentAlign();
-
-		// Sets how the content is aligned
-		void SetContentAlignment( Alignment xAlign, Alignment yAlign );
-		Alignment GetXAlign() const { return (Alignment)fXAlign; }
-		Alignment GetYAlign() const { return (Alignment)fYAlign; }
-*/
 		// Sets the scaling mode and updates content scale factors based on window size
 		virtual void SetScaleMode( ScaleMode mode, Rtt_Real screenWidth, Rtt_Real screenHeight );
 		virtual ScaleMode GetScaleMode() const;

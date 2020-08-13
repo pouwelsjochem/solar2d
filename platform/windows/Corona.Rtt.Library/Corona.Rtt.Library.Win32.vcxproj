@@ -189,7 +189,6 @@
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_VideoTexture.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_CachedPath.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_CKWorkflow.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp" />
@@ -452,7 +451,6 @@
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_VideoSource.h" />
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_VideoTexture.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Archive.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_CachedPath.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Callback.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_CKWorkflow.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_CKWorkFlowConstants.h" />

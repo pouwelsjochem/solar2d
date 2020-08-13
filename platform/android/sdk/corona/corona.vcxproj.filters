@@ -754,9 +754,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Archive.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_CachedPath.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_CKWorkflow.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -1964,9 +1961,6 @@
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_Archive.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_CachedPath.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_Callback.h">

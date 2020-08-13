@@ -55,8 +55,6 @@ static const char kDisplayNewSnapshotString[] = "display.newSnapshot()";
 static const char kGraphicsDefineEffectGraphString[] = "graphics.defineEffect( { graph } )";
 static const char kGraphicsDefineEffectFragmentString[] = "graphics.defineEffect( { fragment } )";
 static const char kGraphicsDefineEffectVertexString[] = "graphics.defineEffect( { vertex } )";
-// NOT USED: static const char kPaintEffectString[] = "paint.effect";
-// NOT USED: static const char kObjectBlendEquationString[] = "paint.blendEquation";
 static const char kObjectPathString[] = "object.path";
 static const char kObjectFillString[] = "object.fill";
 static const char kObjectStrokeString[] = "object.stroke";
@@ -395,52 +393,6 @@ Display::ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHea
 				Rtt_ASSERT( lua_gettop( L ) == top );
 			#endif
 		}
-
-		lua_getfield( L, index, "xAlign" );
-		Alignment xAlign = kAlignmentCenter;
-		const char *alignValue = lua_tostring( L, -1 );
-		{
-			if ( alignValue )
-			{
-				if ( 0 == Rtt_StringCompareNoCase( alignValue, "left" ) )
-				{
-					xAlign = kAlignmentLeft;
-				}
-				else if ( 0 == Rtt_StringCompareNoCase( alignValue, "center" ) )
-				{
-					xAlign = kAlignmentCenter;
-				}
-				else if ( 0 == Rtt_StringCompareNoCase( alignValue, "right" ) )
-				{
-					xAlign = kAlignmentRight;
-				}
-			}
-		}
-		lua_pop( L, 1 );
-
-		lua_getfield( L, index, "yAlign" );
-		Alignment yAlign = kAlignmentCenter;
-		alignValue = lua_tostring( L, -1 );
-		{
-			if ( alignValue )
-			{
-				if ( 0 == Rtt_StringCompareNoCase( alignValue, "top" ) )
-				{
-					yAlign = kAlignmentTop;
-				}
-				else if ( 0 == Rtt_StringCompareNoCase( alignValue, "center" ) )
-				{
-					yAlign = kAlignmentCenter;
-				}
-				else if ( 0 == Rtt_StringCompareNoCase( alignValue, "bottom" ) )
-				{
-					yAlign = kAlignmentBottom;
-				}
-			}
-		}
-		lua_pop( L, 1 );
-
-		fStream->SetContentAlignment( xAlign, yAlign );
 	}
 
 	Rtt_ASSERT( 1 == lua_gettop( L ) );	

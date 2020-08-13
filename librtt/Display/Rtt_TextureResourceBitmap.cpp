@@ -97,53 +97,6 @@ TextureResourceBitmap::CreateVideo(TextureFactory& factory)
 	return result;
 }
 			
-/*
-static Texture::Filter
-Convert( RenderTypes::TextureFilter filter )
-{
-	Texture::Filter result = Texture::kLinear;
-
-	switch ( filter )
-	{
-		case RenderTypes::kNearestTextureFilter:
-			result = Texture::kNearest;
-			break;
-		case RenderTypes::kLinearTextureFilter:
-			result = Texture::kLinear;
-			break;
-		default:
-			Rtt_ASSERT_NOT_IMPLEMENTED();
-			break;
-	}
-
-	return result;
-}
-
-static Texture::Wrap
-Convert( RenderTypes::TextureWrap wrap )
-{
-	Texture::Wrap result = Texture::kClampToEdge;
-
-	switch ( wrap )
-	{
-		case RenderTypes::kClampToEdgeWrap:
-			result = Texture::kClampToEdge;
-			break;
-		case RenderTypes::kRepeatWrap:
-			result = Texture::kRepeat;
-			break;
-		case RenderTypes::kMirroredRepeatWrap:
-			result = Texture::kMirroredRepeat;
-			break;
-		default:
-			Rtt_ASSERT_NOT_IMPLEMENTED();
-			break;
-	}
-
-	return result;
-}
-*/
-
 TextureResourceBitmap *
 TextureResourceBitmap::Create(
 	TextureFactory& factory,
@@ -160,30 +113,6 @@ TextureResourceBitmap::Create(
 
 	return result;
 }
-
-#if 0
-TextureResourceBitmap *
-TextureResourceBitmap::Create(
-	TextureFactory& factory,
-	PlatformBitmap *bitmap )
-{
-	Display& display = factory.GetDisplay();
-	Texture *texture = Rtt_NEW( display.GetAllocator(),
-		TextureVolatile(
-			display.GetAllocator(),
-			bitmap->Width(),
-			bitmap->Height(),
-			PlatformBitmapTexture::Convert( bitmap->GetFormat() ),
-			Convert( bitmap->GetMagFilter() ),
-			Convert( bitmap->GetWrapX() ),
-			Convert( bitmap->GetWrapY() ) ) );
-	TextureResourceBitmap *result =
-		Rtt_NEW( display.GetAllocator(), TextureResourceBitmap( factory, texture, bitmap ) );
-
-	return result;
-}
-#endif
-
 
 TextureResourceBitmap::TextureResourceBitmap(
 	TextureFactory &factory,

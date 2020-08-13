@@ -2636,21 +2636,6 @@ void RuntimeEnvironment::RuntimeDelegate::DidLoadConfig(const Rtt::Runtime& send
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	Gdiplus::GdiplusStartup(&fEnvironmentPointer->fGdiPlusToken, &gdiplusStartupInput, nullptr);
 
-	// If we were not able to load the "config.lua" file before Runtime::LoadApplication(), then try one more time here.
-	// Note: This can happen if the "config.lua" contains Corona Lua APIs, which requires a runtime to execute.
-	if (fEnvironmentPointer->fProjectSettings.HasConfigLua() == false)
-	{
-		// Load the "config.lua" file.
-		fEnvironmentPointer->fProjectSettings.LoadFrom(sender);
-
-		// If successful, update the window hosting the Corona runtime according to the loaded settings above.
-		auto windowPointer = fEnvironmentPointer->fMainWindowPointer;
-		if (windowPointer && fEnvironmentPointer->fProjectSettings.HasConfigLua())
-		{
-			fEnvironmentPointer->UpdateMainWindowUsing(fEnvironmentPointer->fReadOnlyProjectSettings);
-		}
-	}
-
 	// Notify the system that we have loaded the "config.lua" file and we are about to execute the "shell.lua" file.
 	fEnvironmentPointer->fLoadedEvent.Raise(*fEnvironmentPointer, EventArgs::kEmpty);
 }

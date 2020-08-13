@@ -230,12 +230,6 @@ class RenderingStream
 
 		void SwapContentSize();
 		void SwapContentScale();
-        void SwapContentAlign();
-
-		// Sets how the content is aligned
-		void SetContentAlignment( Alignment xAlign, Alignment yAlign );
-		Alignment GetXAlign() const { return (Alignment)fXAlign; }
-		Alignment GetYAlign() const { return (Alignment)fYAlign; }
 
 		// Sets the scaling mode and updates content scale factors based on window size
 		void SetScaleMode( Display::ScaleMode mode, Rtt_Real screenWidth, Rtt_Real screenHeight );

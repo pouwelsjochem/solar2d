@@ -144,15 +144,7 @@ CoronaViewRuntimeDelegate::InitializeConfig( const Runtime& sender, lua_State *L
 void
 CoronaViewRuntimeDelegate::DidLoadConfig( const Runtime& sender, lua_State *L ) const
 {
-    // If we were not able to load the "config.lua" file before Runtime::LoadApplication(), then try one more time here.
-     	// Note: This can happen if the "config.lua" contains Corona Lua APIs, which requires a runtime to execute.
-    if (fOwner._projectSettings->HasConfigLua() == false)
-    {
-        // Load the "config.lua" file.
-        fOwner._projectSettings->LoadFrom(sender);
-		
 
-    }
 }
 
 id< CoronaRuntime >

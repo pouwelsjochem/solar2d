@@ -57,7 +57,6 @@
 #include "Rtt_Matrix.h"
 #include "Rtt_MPlatform.h"
 #include "Display/Rtt_OpenPath.h"
-#include "Rtt_RenderingStream.h"
 #include "Rtt_Runtime.h"
 #include "Display/Rtt_SpriteObject.h"
 #include "Display/Rtt_TextObject.h"
@@ -1652,10 +1651,6 @@ DisplayLibrary::setDefault( lua_State *L )
 	{
 		defaults.SetLineColor( c );
 	}
-//	else if ( Rtt_StringCompare( key, "textColor" ) == 0 )
-//	{
-//		defaults.SetTextColor( c );
-//	}
 	else if ( Rtt_StringCompare( key, "background" ) == 0 )
 	{
 		defaults.SetClearColor( c );

@@ -102,8 +102,6 @@
 		000DCB9F12B05F3E00042A5E /* Rtt_VersionTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAC612B05F3D00042A5E /* Rtt_VersionTimestamp.h */; };
 		000DCBA012B05F3E00042A5E /* Rtt_Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAC712B05F3D00042A5E /* Rtt_Archive.cpp */; };
 		000DCBA112B05F3E00042A5E /* Rtt_Archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAC812B05F3D00042A5E /* Rtt_Archive.h */; };
-		000DCBA412B05F3E00042A5E /* Rtt_CachedPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCACB12B05F3D00042A5E /* Rtt_CachedPath.cpp */; };
-		000DCBA512B05F3E00042A5E /* Rtt_CachedPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCACC12B05F3D00042A5E /* Rtt_CachedPath.h */; };
 		000DCBAE12B05F3E00042A5E /* Rtt_DeviceOrientation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAD512B05F3D00042A5E /* Rtt_DeviceOrientation.cpp */; };
 		000DCBAF12B05F3E00042A5E /* Rtt_DeviceOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAD612B05F3D00042A5E /* Rtt_DeviceOrientation.h */; };
 		000DCBBB12B05F3E00042A5E /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAE212B05F3E00042A5E /* Rtt_Event.cpp */; };
@@ -806,8 +804,6 @@
 		000DCAC612B05F3D00042A5E /* Rtt_VersionTimestamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_VersionTimestamp.h; sourceTree = "<group>"; };
 		000DCAC712B05F3D00042A5E /* Rtt_Archive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Archive.cpp; sourceTree = "<group>"; };
 		000DCAC812B05F3D00042A5E /* Rtt_Archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Archive.h; sourceTree = "<group>"; };
-		000DCACB12B05F3D00042A5E /* Rtt_CachedPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_CachedPath.cpp; sourceTree = "<group>"; };
-		000DCACC12B05F3D00042A5E /* Rtt_CachedPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_CachedPath.h; sourceTree = "<group>"; };
 		000DCAD512B05F3D00042A5E /* Rtt_DeviceOrientation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_DeviceOrientation.cpp; sourceTree = "<group>"; };
 		000DCAD612B05F3D00042A5E /* Rtt_DeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_DeviceOrientation.h; sourceTree = "<group>"; };
 		000DCAE212B05F3E00042A5E /* Rtt_Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Event.cpp; sourceTree = "<group>"; };
@@ -1545,8 +1541,6 @@
 				C2756C251C57220300BE3194 /* NSString+Extensions.m */,
 				000DCAC712B05F3D00042A5E /* Rtt_Archive.cpp */,
 				000DCAC812B05F3D00042A5E /* Rtt_Archive.h */,
-				000DCACB12B05F3D00042A5E /* Rtt_CachedPath.cpp */,
-				000DCACC12B05F3D00042A5E /* Rtt_CachedPath.h */,
 				075B71F018CA5881006C4956 /* Rtt_CKWorkflow.cpp */,
 				075B71EF18CA5881006C4956 /* Rtt_CKWorkflow.h */,
 				075B71F118CA5881006C4956 /* Rtt_CKWorkFlowConstants.h */,
@@ -2429,7 +2423,6 @@
 				000DCB9D12B05F3E00042A5E /* Rtt_Version.h in Headers */,
 				000DCB9F12B05F3E00042A5E /* Rtt_VersionTimestamp.h in Headers */,
 				000DCBA112B05F3E00042A5E /* Rtt_Archive.h in Headers */,
-				000DCBA512B05F3E00042A5E /* Rtt_CachedPath.h in Headers */,
 				000DCBAF12B05F3E00042A5E /* Rtt_DeviceOrientation.h in Headers */,
 				000DCBBC12B05F3E00042A5E /* Rtt_Event.h in Headers */,
 				000DCBC012B05F3E00042A5E /* Rtt_GPU.h in Headers */,
@@ -2983,7 +2976,6 @@
 				000DCB9912B05F3E00042A5E /* Rtt_Time.c in Sources */,
 				000DCB9E12B05F3E00042A5E /* Rtt_VersionTimestamp.c in Sources */,
 				000DCBA012B05F3E00042A5E /* Rtt_Archive.cpp in Sources */,
-				000DCBA412B05F3E00042A5E /* Rtt_CachedPath.cpp in Sources */,
 				000DCBAE12B05F3E00042A5E /* Rtt_DeviceOrientation.cpp in Sources */,
 				A48DA9571852FE84009D1F93 /* Rtt_RuntimeDelegate.cpp in Sources */,
 				000DCBBB12B05F3E00042A5E /* Rtt_Event.cpp in Sources */,

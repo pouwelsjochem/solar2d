@@ -117,7 +117,6 @@ JavaToNativeBridge::Init(
 		    Rtt::DeviceOrientation::IsSideways(fView->GetOrientation()))
 		{
 			stream.SwapContentSize();
-			stream.SwapContentAlign();
 		}
 		stream.UpdateContentScale(width, height);
 

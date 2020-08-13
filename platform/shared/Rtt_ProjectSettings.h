@@ -56,14 +56,6 @@ class ProjectSettings
 		 */
 		bool LoadFromDirectory(const char* directoryPath);
 
-		/**
-		 * Fetches "config.lua" information from the given Corona runtime.
-		 * Information loaded from the runtime will then be provided by this object's getter methods.
-		 * @param runtime Reference to the Corona runtime that has already loaded a "config.lua" file.
-		 * @return Always returns true.
-		 */
-		bool LoadFrom(const Rtt::Runtime& runtime);
-
 		/** Resets this object's "build.settings" related information back to their defaults. */
 		virtual void ResetBuildSettings();
 

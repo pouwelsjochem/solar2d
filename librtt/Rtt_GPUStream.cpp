@@ -357,25 +357,12 @@ GPUStream::UpdateOffsets( S32 renderedContentWidth, S32 renderedContentHeight )
 	S32 contentW = ContentWidth();
 	S32 contentH = ContentHeight();
 
-	Alignment xAlign = GetXAlign();
-	Alignment yAlign = GetYAlign();
-
-	// When the launch orientation and current orientation are perpendicular
-	// (one is sideways and one is vertical), then swap so that x/yAlign are
-	// oriented the same as w/h and contentW/H.
-	DeviceOrientation::Type launchOrientation = GetLaunchOrientation();
-	DeviceOrientation::Type orientation = Super::GetContentOrientation();
-	if ( DeviceOrientation::IsSideways( launchOrientation ) != DeviceOrientation::IsSideways( orientation ) )
-	{
-		Swap( xAlign, yAlign );
-	}
-
 	// Location of origin
 	Real xOrigin = - Rtt_RealDiv2( Rtt_IntToReal( w ) );
 	Real yOrigin = - Rtt_RealDiv2( Rtt_IntToReal( h ) ); 
 
-	fXVertexOffset = CalculateAlignmentOffset( xAlign, contentW, w );
-	fYVertexOffset = CalculateAlignmentOffset( yAlign, contentH, h );
+	fXVertexOffset = -Rtt_RealDiv2( contentW );
+	fYVertexOffset = -Rtt_RealDiv2( contentH );
 
 	// Update origin offset
 	Real x = fXVertexOffset - xOrigin;

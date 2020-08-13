@@ -68,7 +68,6 @@ class GPUStream : public RenderingStream
 		virtual void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 
 	protected:
-		static Real CalculateAlignmentOffset( Alignment alignment, Real contentLen, Real windowLen );
 		void UpdateOffsets( S32 renderedContentWidth, S32 renderedContentHeight );
 
 		virtual void Reshape( S32 contentWidth, S32 contentHeight );

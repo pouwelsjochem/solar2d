@@ -25,8 +25,6 @@ namespace Rtt
 RenderingStream::RenderingStream()
 :	fSubmitBounds( NULL ),
 	fProperties( 0 ),
-	fXAlign( kAlignmentCenter ),
-	fYAlign( kAlignmentCenter ),
 	fLaunchOrientation( DeviceOrientation::kUpright ),
 	fContentOrientation( DeviceOrientation::kUpright ),
 	fSurfaceOrientation( DeviceOrientation::kUpright ),
@@ -87,7 +85,6 @@ RenderingStream::Initialize(
 	{
 		SwapContentSize();
 		SwapContentScale();
-		SwapContentAlign();
 	}
 	
 	fLaunchOrientation = launchOrientation;
@@ -282,22 +279,6 @@ RenderingStream::SwapContentScale()
 	{
 		Swap( fSx, fSy );
 	}
-}
-    
-void
-RenderingStream::SwapContentAlign()
-{
-    if ( ! IsProperty( kInhibitSwap ) )
-    {
-        Swap( fXAlign, fYAlign );
-    }
-}
-
-void
-RenderingStream::SetContentAlignment( Alignment xAlign, Alignment yAlign )
-{
-	fXAlign = xAlign;
-	fYAlign = yAlign;
 }
 
 void
