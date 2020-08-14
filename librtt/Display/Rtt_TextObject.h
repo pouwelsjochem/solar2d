@@ -84,8 +84,6 @@ class TextObject : public RectObject
 		// MDrawable
 		virtual bool UpdateTransform( const Matrix& parentToDstSpace );
 		virtual void GetSelfBounds( Rect& rect ) const;
-		virtual void Prepare( const Display& display );
-		virtual void Draw( Renderer& renderer ) const;
 
 	public:
 		virtual const LuaProxyVTable& ProxyVTable() const;

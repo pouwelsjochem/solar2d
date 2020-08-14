@@ -156,10 +156,9 @@ Renderer::Initialize()
 }
 
 void 
-Renderer::BeginFrame( Real totalTime, Real deltaTime, Real contentScaleX, Real contentScaleY )
+Renderer::BeginFrame( Real totalTime, Real deltaTime, Real contentScaleX )
 {
 	fContentScaleX = contentScaleX;
-	fContentScaleY = contentScaleY;
 
 	// NOTE: No nested calls allowed
 
@@ -183,7 +182,7 @@ Renderer::BeginFrame( Real totalTime, Real deltaTime, Real contentScaleX, Real c
 	fTotalTime->SetValue( totalTime );
 	fBackCommandBuffer->BindUniform( fTotalTime, Uniform::kTotalTime );
 
-	fContentScale->SetValue( contentScaleX, contentScaleY );
+	fContentScale->SetValue( contentScaleX, fContentScaleX );
 	fBackCommandBuffer->BindUniform( fContentScale, Uniform::kContentScale );
 
 	fDeltaTime->SetValue( deltaTime );
@@ -573,7 +572,7 @@ Renderer::Insert( const RenderData* data )
 		if( data->fFillTexture0->IsRetina() )
 		{
 			f2 = ( f0 / fContentScaleX );
-			f3 = ( f1 / fContentScaleY );
+			f3 = ( f1 / fContentScaleX );
 		}
 		else
 		{
@@ -611,7 +610,7 @@ Renderer::Insert( const RenderData* data )
 		if( data->fFillTexture1->IsRetina() )
 		{
 			f2 = ( f0 / fContentScaleX );
-			f3 = ( f1 / fContentScaleY );
+			f3 = ( f1 / fContentScaleX );
 		}
 		else
 		{

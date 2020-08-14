@@ -118,7 +118,7 @@ JavaToNativeBridge::Init(
 		{
 			stream.SwapContentSize();
 		}
-		stream.UpdateContentScale(width, height);
+		stream.UpdateContentScale(width);
 
 		fRuntime->RestartRenderer((Rtt::DeviceOrientation::Type)orientation);
 		display.GetScene().Invalidate();
@@ -915,8 +915,8 @@ JavaToNativeBridge::MouseEvent(
 	}
 
 	// Convert x/y scroll deltas from pixels to Corona content coordinates.
-	Rtt_Real contentScrollX = Rtt_RealMul(Rtt_IntToReal(scrollX), fRuntime->GetDisplay().GetSxUpright());
-	Rtt_Real contentScrollY = Rtt_RealMul(Rtt_IntToReal(scrollY), fRuntime->GetDisplay().GetSyUpright());
+	Rtt_Real contentScrollX = Rtt_RealMul(Rtt_IntToReal(scrollX), fRuntime->GetDisplay().GetScreenToContentScale());
+	Rtt_Real contentScrollY = Rtt_RealMul(Rtt_IntToReal(scrollY), fRuntime->GetDisplay().GetScreenToContentScale());
 
 	// Dispatch a "mouse" event to Lua.
 	Rtt::MouseEvent event(

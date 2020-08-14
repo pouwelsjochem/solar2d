@@ -29,8 +29,7 @@ RenderingStream::RenderingStream()
 	fContentOrientation( DeviceOrientation::kUpright ),
 	fSurfaceOrientation( DeviceOrientation::kUpright ),
 	fScaleMode( Display::kNone ),
-	fSx( Rtt_REAL_1 ), // default to identity
-	fSy( Rtt_REAL_1 ), // default to identity
+	fScreenToContentScale( Rtt_REAL_1 ), // uninitialized
 	fContentWidth( -1 ), // uninitialized
 	fContentHeight( -1 ), // uninitialized
 	fXOriginOffset( Rtt_REAL_0 ),
@@ -79,12 +78,9 @@ RenderingStream::Initialize(
 
 	// If app is landscape, swap fContentWidth and fContentHeight b/c these values
 	// are the dimensions of the upright virtual screen that the content was created for. 
-	// Also swap fSx, fSy for landscape. The original values are from the physical
-	// dimensions, which we assume is portrait.
 	if ( DeviceOrientation::IsSideways( launchOrientation ) )
 	{
 		SwapContentSize();
-		SwapContentScale();
 	}
 	
 	fLaunchOrientation = launchOrientation;
@@ -177,11 +173,6 @@ RenderingStream::SetContentOrientation( DeviceOrientation::Type newOrientation )
 
 	Rtt_ASSERT( IsProperty( kInitialized ) );
 
-	if ( ShouldSwap( GetContentOrientation(), newOrientation ) )
-	{
-		SwapContentScale();
-	}
-
 	fContentOrientation = newOrientation;
 }
 
@@ -254,15 +245,6 @@ RenderingStream::CaptureFrameBuffer( BufferBitmap&, S32 x, S32 y, S32 w, S32 h )
 	Rtt_ASSERT_NOT_REACHED();
 }
 
-/*
-void
-RenderingStream::SetScale( Real sx, Real sy )
-{
-	fSx = sx;
-	fSy = sy;
-}
-*/
-
 void
 RenderingStream::SwapContentSize()
 {
@@ -273,22 +255,13 @@ RenderingStream::SwapContentSize()
 }
 
 void
-RenderingStream::SwapContentScale()
-{
-	if ( ! IsProperty( kInhibitSwap ) )
-	{
-		Swap( fSx, fSy );
-	}
-}
-
-void
 RenderingStream::SetScaleMode( Display::ScaleMode mode, Rtt_Real screenWidth, Rtt_Real screenHeight )
 {
 	Rtt_ASSERT( fContentWidth > 0 && fContentHeight > 0 );
 
 	fScaleMode = mode;
 
-	UpdateContentScale( screenWidth, screenHeight );
+	UpdateContentScale( screenWidth );
 }
 
 // Gets the width of the screen.
@@ -297,7 +270,7 @@ RenderingStream::ScreenWidth() const
 {
 	Rtt_Real originOffset = GetXOriginOffset();
 	Rtt_Real margins = Rtt_RealMul(Rtt_IntToReal(2), originOffset);
-	S32 result = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(ContentWidth()) + margins, GetSx()) + Rtt_REAL_HALF);
+	S32 result = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(ContentWidth()) + margins, GetScreenToContentScale()) + Rtt_REAL_HALF);
 
 	// TODO: Does this account for Alignment? Let's assert for now:
 	Rtt_ASSERT( DeviceWidth() == result );
@@ -311,7 +284,7 @@ RenderingStream::ScreenHeight() const
 {
 	Rtt_Real originOffset = GetYOriginOffset();
 	Rtt_Real margins = Rtt_RealMul(Rtt_IntToReal(2), originOffset);
-	S32 result = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(ContentHeight()) + margins, GetSy()) + Rtt_REAL_HALF);
+	S32 result = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(ContentHeight()) + margins, GetScreenToContentScale()) + Rtt_REAL_HALF);
 
 	// TODO: Does this account for Alignment? Let's assert for now:
 	Rtt_ASSERT( DeviceHeight() == result );
@@ -332,13 +305,12 @@ RenderingStream::ContentToScreen( S32& x, S32& y ) const
 void
 RenderingStream::ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const
 {
-	Rtt_Real xScreen = GetSx();
-	x = Rtt_RealToInt(Rtt_RealDiv(GetXOriginOffset() + Rtt_IntToReal(x), xScreen) + Rtt_REAL_HALF);
-	w = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(w), xScreen) + Rtt_REAL_HALF);
+	Rtt_Real screenToContentScale = GetScreenToContentScale();
+	x = Rtt_RealToInt(Rtt_RealDiv(GetXOriginOffset() + Rtt_IntToReal(x), screenToContentScale) + Rtt_REAL_HALF);
+	w = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(w), screenToContentScale) + Rtt_REAL_HALF);
 
-	Rtt_Real yScreen = GetSy();
-	y = Rtt_RealToInt(Rtt_RealDiv(GetYOriginOffset() + Rtt_IntToReal(y), yScreen) + Rtt_REAL_HALF);
-	h = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(h), yScreen) + Rtt_REAL_HALF);
+	y = Rtt_RealToInt(Rtt_RealDiv(GetYOriginOffset() + Rtt_IntToReal(y), screenToContentScale) + Rtt_REAL_HALF);
+	h = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(h), screenToContentScale) + Rtt_REAL_HALF);
 }
 
 void
@@ -356,11 +328,11 @@ RenderingStream::ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const
 }
 
 void
-RenderingStream::UpdateContentScale( Rtt_Real screenWidth, Rtt_Real screenHeight )
+RenderingStream::UpdateContentScale( Rtt_Real screenWidth )
 {
-	Rtt_ASSERT( fContentWidth > 0 && fContentHeight > 0 );
+	Rtt_ASSERT( fContentWidth > 0 );
 
-	Display::UpdateContentScale( screenWidth, screenHeight, fContentWidth, fContentHeight, GetScaleMode(), fSx, fSy );
+	fScreenToContentScale = Display::CalculateScreenToContentScaleFor( screenWidth, fContentWidth );
 }
 
 void
@@ -383,15 +355,6 @@ RenderingStream::SetProperty( U32 mask, bool value )
 	const U8 p = fProperties;
 	fProperties = ( value ? p | mask : p & ~mask );
 }
-/*
-const Quad*
-RenderingStream::SetCurrentMask( const Quad* newMask )
-{
-	const Quad* result = fCurrentMask;
-	fCurrentMask = newMask;
-	return result;
-}
-*/
 
 // ----------------------------------------------------------------------------
 

@@ -202,8 +202,6 @@ class Display
 		S32 ContentHeightUpright() const;
 		S32 ViewableContentWidthUpright() const;
 		S32 ViewableContentHeightUpright() const;
-		Real GetSxUpright() const;
-		Real GetSyUpright() const;
 		
 		
 	public:
@@ -213,8 +211,7 @@ class Display
 		virtual S32 ScreenWidth() const;
 		virtual S32 ScreenHeight() const;
 
-		virtual Real GetSx() const;
-		virtual Real GetSy() const;
+		virtual Real GetScreenToContentScale() const;
 
 		virtual Real GetXOriginOffset() const;
 		virtual Real GetYOriginOffset() const;
@@ -233,13 +230,10 @@ class Display
 
 	public:
 		// Generalized function for calculating proper content scaling factors
-		static void UpdateContentScale(
-						Rtt_Real screenWidth, Rtt_Real screenHeight,
-						S32 contentWidth, S32 contentHeight,
-						Display::ScaleMode scaleMode,
-						Rtt_Real& outSx, Rtt_Real& outSy );
+		static Rtt_Real CalculateScreenToContentScaleFor(Rtt_Real screenWidth, S32 contentWidth);
+		virtual Rtt_Real CalculateScreenToContentScale() const;
+		virtual Rtt_Real CalculateContentToScreenScale() const;
 
-		virtual void CalculateContentToScreenScale( Real& outSx, Real& outSy ) const;
 		virtual void GetContentRect( Rect& outRect ) const;
 		virtual const Rect& GetScreenContentBounds() const;
 

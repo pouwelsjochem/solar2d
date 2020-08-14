@@ -406,7 +406,7 @@ MacTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		float fontSize = [[textfield font] pointSize];
 		if ( fIsFontSizeScaled )
 		{
-			fontSize *= GetStage()->GetDisplay().GetSxUpright();
+			fontSize *= GetStage()->GetDisplay().GetScreenToContentScale();
 		}
 		fontSize /= GetSimulatorScale();
 		lua_pushnumber( L, fontSize );
@@ -417,7 +417,7 @@ MacTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		float fontSize = [textfield.font pointSize];
 		if ( fIsFontSizeScaled )
 		{
-			fontSize *= display.GetSxUpright();
+			fontSize *= display.GetScreenToContentScale();
 		}
 		fontSize /= GetSimulatorScale();
 		MacFont *font = Rtt_NEW( LuaContext::GetAllocator( L ), MacFont( [textfield font] ) );
@@ -472,7 +472,7 @@ MacTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 	else if ( strcmp( "margin", key ) == 0 )
 	{
 		// The margin/padding between the edge of this field and its text in content coordinates.
-		float value = 2.0f * GetStage()->GetDisplay().GetSxUpright();
+		float value = 2.0f * GetStage()->GetDisplay().GetScreenToContentScale();
 		lua_pushnumber( L, value );
 	}
 	else
@@ -511,7 +511,7 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 			fontSize = (float)lua_tonumber( L, valueIndex );
 			if ( fIsFontSizeScaled )
 			{
-				fontSize /= display.GetSxUpright();
+				fontSize /= display.GetScreenToContentScale();
 			}
 		}
 		if ( fontSize < 1.0f )
@@ -537,7 +537,7 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 			{
 				if ( fIsFontSizeScaled )
 				{
-					fontSize /= GetStage()->GetDisplay().GetSxUpright();
+					fontSize /= GetStage()->GetDisplay().GetScreenToContentScale();
 				}
 			}
 			else

@@ -678,7 +678,7 @@ void WinInputDeviceManager::OnReceivedMessage(
 						charactersToScroll = 1;
 					}
 					scrollWheelDeltaX *= (fontSize * (float)charactersToScroll) / (float)WHEEL_DELTA;
-					scrollWheelDeltaX *= runtimePointer->GetDisplay().GetSxUpright();
+					scrollWheelDeltaX *= runtimePointer->GetDisplay().GetScreenToContentScale();
 				}
 				if (scrollWheelDeltaY != 0)
 				{
@@ -694,7 +694,7 @@ void WinInputDeviceManager::OnReceivedMessage(
 						// Also, invert the scroll so that down heads towards the positive direction.
 						scrollWheelDeltaY *= (fontSize * (float)linesToScroll) / (float)WHEEL_DELTA;
 						scrollWheelDeltaY *= -1.0f;
-						scrollWheelDeltaY *= runtimePointer->GetDisplay().GetSyUpright();
+						scrollWheelDeltaY *= runtimePointer->GetDisplay().GetScreenToContentScale();
 					}
 					else
 					{

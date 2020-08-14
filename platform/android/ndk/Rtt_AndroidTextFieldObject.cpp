@@ -152,7 +152,7 @@ AndroidTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		if ( fIsFontSizeScaled )
 		{
 			// Convert pixel size to Corona scaled content units.
-			fontSize *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetSxUpright();
+			fontSize *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetScreenToContentScale();
 		}
 		else
 		{
@@ -167,7 +167,7 @@ AndroidTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		if ( fIsFontSizeScaled )
 		{
 			// Convert pixel size to Corona scaled content units.
-			fontSize *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetSxUpright();
+			fontSize *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetScreenToContentScale();
 		}
 		else
 		{
@@ -260,7 +260,7 @@ AndroidTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		if (fIsSingleLine)
 		{
 			float value = (float)fNativeToJavaBridge->GetDefaultTextFieldPaddingInPixels();
-			value *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetSxUpright();
+			value *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetScreenToContentScale();
 			lua_pushnumber( L, value );
 		}
 	}
@@ -296,7 +296,7 @@ AndroidTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valu
 			if ( fIsFontSizeScaled )
 			{
 				// Convert Corona scaled content size to pixels.
-				fontSize /= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetSxUpright();
+				fontSize /= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetScreenToContentScale();
 			}
 			else
 			{
@@ -325,7 +325,7 @@ AndroidTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valu
 				if ( fIsFontSizeScaled )
 				{
 					// Convert Corona scaled content size to pixels.
-					fontSize /= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetSxUpright();
+					fontSize /= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetScreenToContentScale();
 				}
 				else
 				{

@@ -28,8 +28,7 @@ namespace Rtt
 
 PlatformWebPopup::PlatformWebPopup()
 :	fCallback( NULL ),
-	fContentToScreenSx( Rtt_REAL_1 ),
-	fContentToScreenSy( Rtt_REAL_1 ),
+	fContentToScreenScale( Rtt_REAL_1 ),
 	fInCallback( false )
 {
 }
@@ -44,11 +43,7 @@ PlatformWebPopup::~PlatformWebPopup()
 void
 PlatformWebPopup::Preinitialize( const Display& display )
 {
-	Real sx, sy;
-	display.CalculateContentToScreenScale( sx, sy );
-
-	SetContentToScreenSx( Rtt_RealDiv( Rtt_REAL_1, sx ) );
-	SetContentToScreenSy( Rtt_RealDiv( Rtt_REAL_1, sy ) );
+	SetContentToScreenScale( display.CalculateContentToScreenScale() );
 }
 
 
@@ -58,9 +53,7 @@ void
 PlatformWebPopup::GetScreenBounds( const Display& display, Rect& outBounds ) const
 {
 	outBounds = GetStageBounds();
-
-	PlatformDisplayObject::CalculateScreenBounds(
-		display, fContentToScreenSx, fContentToScreenSy, outBounds );
+	PlatformDisplayObject::CalculateScreenBounds(display, fContentToScreenScale, outBounds );
 }
 
 bool

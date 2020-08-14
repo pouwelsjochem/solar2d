@@ -276,22 +276,21 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		"currentStage",			// 5
 		"screenOriginX",		// 6
 		"screenOriginY",		// 7
-		"contentScaleX",		// 8
-		"contentScaleY",		// 9
-		"contentCenterX",		// 10
-		"contentCenterY",		// 11
-		"imageSuffix",			// 12
-        "pixelWidth",			// 13
-        "pixelHeight",			// 14
-		"actualContentWidth", // 15
-		"actualContentHeight", // 16
-		"safeScreenOriginX", //17
-		"safeScreenOriginY", //18
-		"safeActualContentWidth", //19
-		"safeActualContentHeight", //20
+		"contentScale",			// 8
+		"contentCenterX",		// 9
+		"contentCenterY",		// 10
+		"imageSuffix",			// 11
+        "pixelWidth",			// 12
+        "pixelHeight",			// 13
+		"actualContentWidth", // 14
+		"actualContentHeight", // 15
+		"safeScreenOriginX", //16
+		"safeScreenOriginY", //17
+		"safeActualContentWidth", //18
+		"safeActualContentHeight", //19
 	};
 	
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 21, 12, 17, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 20, 28, 17, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -337,27 +336,22 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			lua_pushnumber( L, Rtt_RealToFloat( - display.GetYOriginOffset() ) );
 		}
 		break;
-	case 8:	// "contentScaleX"
+	case 8:	// "contentScale"
 		{
-			lua_pushnumber( L, Rtt_RealToFloat( display.GetSxUpright() ) );
+			lua_pushnumber( L, Rtt_RealToFloat( display.GetScreenToContentScale() ) );
 		}
 		break;
-	case 9:	// "contentScaleY"
-		{
-			lua_pushnumber( L, Rtt_RealToFloat( display.GetSyUpright() ) );
-		}
-		break;
-	case 10:	// "contentCenterX"
+	case 9:	// "contentCenterX"
 		{
 			lua_pushnumber( L, 0.5*display.ContentWidthUpright() );
 		}
 		break;
-	case 11:	// "contentCenterY"
+	case 10:	// "contentCenterY"
 		{
 			lua_pushnumber( L, 0.5*display.ContentHeightUpright() );
 		}
 		break;
-	case 12:	// "imageSuffix"
+	case 11:	// "imageSuffix"
 		{
 			String suffix( LuaContext::GetAllocator( L ) );
 			display.GetImageSuffix( suffix );
@@ -372,60 +366,60 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			}
 		}
 		break;
-	case 13:	// "pixelWidth"
+	case 12:	// "pixelWidth"
 		{
 			lua_pushnumber( L, display.DeviceWidth() );
 		}
 		break;
-	case 14:	// "pixelHeight"
+	case 13:	// "pixelHeight"
 		{
 			lua_pushnumber( L, display.DeviceHeight() );
 		}
 		break;
-	case 15:	// "actualContentWidth"
+	case 14:	// "actualContentWidth"
 		{
 			lua_pushnumber( L, display.ActualContentWidth() );
 		}
 		break;
-	case 16:	// "actualContentHeight"
+	case 15:	// "actualContentHeight"
 		{
 			lua_pushnumber( L, display.ActualContentHeight() );
 		}
 		break;
-	case 17: // safeScreenOriginX
+	case 16: // safeScreenOriginX
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
 			Rtt_Real top, left, bottom, right;
 			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, (left*display.GetSx()) - display.GetXOriginOffset() );
+			lua_pushnumber( L, (left*display.GetScreenToContentScale()) - display.GetXOriginOffset() );
 		}
 		break;
-	case 18: // safeScreenOriginY
+	case 17: // safeScreenOriginY
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
 			Rtt_Real top, left, bottom, right;
 			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, (top*display.GetSy()) - display.GetYOriginOffset() );
+			lua_pushnumber( L, (top*display.GetScreenToContentScale()) - display.GetYOriginOffset() );
 		}
 		break;
-	case 19: // safeActualContentWidth
+	case 18: // safeActualContentWidth
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
 			Rtt_Real top, left, bottom, right;
 			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, display.ActualContentWidth() - ((left + right)*display.GetSx()) );
+			lua_pushnumber( L, display.ActualContentWidth() - ((left + right)*display.GetScreenToContentScale()) );
 		}
 		break;
-	case 20: // safeActualContentHeight
+	case 19: // safeActualContentHeight
 		{
 			Runtime& runtime = * LuaContext::GetRuntime( L );
 
 			Rtt_Real top, left, bottom, right;
 			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, display.ActualContentHeight() - ((top + bottom)*display.GetSy()) );
+			lua_pushnumber( L, display.ActualContentHeight() - ((top + bottom)*display.GetScreenToContentScale()) );
 		}
 		break;
 	default:
@@ -524,64 +518,6 @@ DisplayLibrary::PushImage(
 	ShapeObject* v = PushImage( L, topLeft, paint, display, parent, width, height );
 
     v->SetObjectDesc("ImageObject");
-    
-	/*
-	// TODO: Figure out what to do with this block once Android is ready...
-
-	// Check if the image was downscaled/downsampled when loaded from file. This happens if it exceeds texture size limits.
-	// If the image was downscaled, then scale up the display object to match the size of the original unscaled image.
-	if ( v && paint->GetBitmap().WasScaled() && (paint->GetBitmap().GetScale() > 0) )
-	{
-		Real scale = Rtt_RealDiv( Rtt_REAL_1, paint->GetBitmap().GetScale() );
-		Real lastWidth = width;
-		Real lastHeight = height;
-		width = Rtt_RealMul( width, scale );
-		height = Rtt_RealMul( height, scale );
-		v->Translate( Rtt_RealDiv2( width - lastWidth ), Rtt_RealDiv2( height - lastHeight ) );
-		v->Scale( scale, scale, false );
-	}
-
-	// If full resolution property has not been set, then automatically downscale the longest length to fit the stage's longest length.
-	// For example, a landscape sized image will be downscaled to fit a portrait stage's height.
-	// The intent is to allow loading portrait/landscape orientation images on startup for apps that support orientation changes.
-	if ( v && ! paint->GetBitmap().IsProperty(PlatformBitmap::kIsBitsFullResolution) )
-	{
-		Real w = width;
-		Real h = height;
-
-		const PlatformSurface& surface = runtime.Surface();
-		S32 wMax = surface.DeviceWidth();
-		S32 hMax = surface.DeviceHeight();
-
-		// Align longest image edge to the longest screen edge to calculate proper scale.
-		// If image is landscape and screen size is portrait (or vice versa), 
-		// then swap screen dimensions. 
-		bool isImageLandscape = w > h;
-		bool isScreenLandscape = wMax > hMax;
-		if ( isImageLandscape ^ isScreenLandscape )
-		{
-			Swap( wMax, hMax );
-		}
-
-		Real scale = Rtt_REAL_1;
-		if ( w > wMax || h > hMax )
-		{
-			Real scaleW = Rtt_RealDivNonZeroB( Rtt_IntToReal( wMax ), w );
-			Real scaleH = Rtt_RealDivNonZeroB( Rtt_IntToReal( hMax ), h );
-			scale = ( scaleH < scaleW ? scaleH : scaleW );
-		}
-
-		if (scale < Rtt_REAL_1)
-		{
-			Real lastWidth = width;
-			Real lastHeight = height;
-			width = Rtt_RealMul(width, scale);
-			height = Rtt_RealMul(height, scale);
-			v->Translate(Rtt_RealDiv2( width - lastWidth ), Rtt_RealDiv2( height - lastHeight ));
-			v->Scale(scale, scale, false);
-		}
-	}
-	*/
 	
 	return v;
 }
@@ -1884,9 +1820,8 @@ DisplayLibrary::captureScreen( lua_State *L )
 	const Rtt_Real bitmapWidth = Rtt_IntToReal(paint->GetTexture()->GetWidth());
 	const Rtt_Real bitmapHeight = Rtt_IntToReal(paint->GetTexture()->GetHeight());
 
-	Rtt_Real xScale = Rtt_RealDiv(Rtt_RealMul(Rtt_IntToReal(display.ScreenWidth()), display.GetSx()), bitmapWidth);
-	Rtt_Real yScale = Rtt_RealDiv(Rtt_RealMul(Rtt_IntToReal(display.ScreenHeight()), display.GetSy()), bitmapHeight);
-	v->Scale(xScale, yScale, true);
+	Rtt_Real targetScreenshotScale = Rtt_RealDiv(Rtt_RealMul(Rtt_IntToReal(display.ScreenWidth()), display.GetScreenToContentScale()), bitmapWidth);
+	v->Scale(targetScreenshotScale, targetScreenshotScale, true);
 
 	return 1;
 }
@@ -2172,10 +2107,10 @@ DisplayLibrary::getSafeAreaInsets( lua_State *L )
 	Rtt_Real top, left, bottom, right;
 	runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
 
-	lua_pushnumber( L, top*display.GetSy() );
-	lua_pushnumber( L, left*display.GetSx() );
-	lua_pushnumber( L, bottom*display.GetSy() );
-	lua_pushnumber( L, right*display.GetSx() );
+	lua_pushnumber( L, top * display.GetScreenToContentScale() );
+	lua_pushnumber( L, left * display.GetScreenToContentScale() );
+	lua_pushnumber( L, bottom * display.GetScreenToContentScale() );
+	lua_pushnumber( L, right * display.GetScreenToContentScale() );
 	return 4;
 }
 

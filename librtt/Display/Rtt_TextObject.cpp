@@ -33,19 +33,6 @@
 #	undef CreateFont
 #endif
 
-// [Experimental Feature]
-// If the below is defined, text objects will be offsetted and rendered to the nearest screen pixel.
-// This prevents the text from looking blurry/fuzzy if the text bitmap lands between screen pixels,
-// causing the GPU to interpolate the text's bitmap pixels between screen pixels.
-// Notes:
-// - This issue is only noticeable on screens with a low DPI, which is typically the case on desktop platforms.
-// - This feature won't prevent scaled or rotated text objects from looking blurry.
-// - Currently only defined on Win32 to minimize any unforseen negative impacts this change might cause.
-// - Theoretically, GL_NEAREST should do this for us, but it doesn't work with Corona's masks. (Why?)
-#if defined(Rtt_WIN_DESKTOP_ENV)
-#	define Rtt_RENDER_TEXT_TO_NEAREST_PIXEL
-#endif
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -172,7 +159,7 @@ TextObject::TextObject( Display& display, const char text[], PlatformFont *font,
 	if ( ! fOriginalFont )
 	{
 		const MPlatform& platform = display.GetRuntime().Platform();
-		Real standardFontSize = platform.GetStandardFontSize() * display.GetSxUpright();
+		Real standardFontSize = platform.GetStandardFontSize() * display.GetScreenToContentScale();
 		fOriginalFont = platform.CreateFont( PlatformFont::kSystemFont, standardFontSize );
 	}
 
@@ -217,11 +204,6 @@ TextObject::Initialize()
 {
 	Rtt_ASSERT( fOriginalFont );
 
-	// Fetch the content scales.
-	Real sx = fDisplay.GetSxUpright();
-	Real sy = fDisplay.GetSyUpright();
-	bool shouldScale = ! Rtt_RealIsOne( sx ) || ! Rtt_RealIsOne( sy );
-
 	// If the rendering system has been scaled, then use a font with a scaled font size.
 	UpdateScaledFont();
 	PlatformFont *font = fScaledFont ? fScaledFont : fOriginalFont;
@@ -230,10 +212,13 @@ TextObject::Initialize()
 	Real pixelW = fWidth;
 	Real pixelH = fHeight;
 	bool isTextBox = ( pixelW > Rtt_REAL_0 );
+
+	Real screenToContentScale = fDisplay.GetScreenToContentScale();
+	bool shouldScale = ! Rtt_RealIsOne( screenToContentScale );
 	if ( shouldScale && isTextBox )
 	{
-		pixelW = Rtt_RealDiv( pixelW, sx );
-		pixelH = Rtt_RealDiv( pixelH, sy );
+		pixelW = Rtt_RealDiv( pixelW, screenToContentScale );
+		pixelH = Rtt_RealDiv( pixelH, screenToContentScale );
 	}
 
 	// Get the text to be rendered.
@@ -260,9 +245,9 @@ TextObject::Initialize()
 	// bitmap returns dimensions in pixels, so convert to content coords
 	if ( shouldScale )
 	{
-		contentW = Rtt_RealMul( contentW, sx );
-		contentH = Rtt_RealMul( contentH, sy );
-		fBaselineOffset = Rtt_RealMul( fBaselineOffset , sy );
+		contentW = Rtt_RealMul( contentW, screenToContentScale );
+		contentH = Rtt_RealMul( contentH, screenToContentScale );
+		fBaselineOffset = Rtt_RealMul( fBaselineOffset , screenToContentScale );
 	}
 
 	if ( isTextBox )
@@ -289,11 +274,10 @@ TextObject::UpdateScaledFont()
 	// Fetch the content scaling factor from the rendering system.
 	// Note: There is a bug in the Corona Simulator where the scales are wrongly swapped when rotating
 	//       to an orientation that the app does not support. The below code works-around this issue.
-	Real scale = fDisplay.GetSxUpright();
 
 	// Scale the font's point size.
 	Real fontSizeEpsilon = Rtt_FloatToReal( 0.1f );
-	Real scaledFontSize = Rtt_RealDiv( fOriginalFont->Size(), scale );
+	Real scaledFontSize = Rtt_RealDiv( fOriginalFont->Size(), fDisplay.GetScreenToContentScale() );
 
 	// Create a scaled font, if necessary.
 	if ((scaledFontSize >= (fOriginalFont->Size() + fontSizeEpsilon)) ||
@@ -376,91 +360,6 @@ TextObject::GetSelfBounds( Rect& rect ) const
 	}
 }
 
-void
-TextObject::Prepare( const Display& display )
-{
-#ifdef Rtt_RENDER_TEXT_TO_NEAREST_PIXEL
-	Real offsetX = Rtt_REAL_0;
-	Real offsetY = Rtt_REAL_0;
-
-	// The base display object must be prepared first.
-	// This generates/updates its text bitmap and updates its transformation matrix.
-	Super::Prepare( display );
-	if ( IsInitialized() == false )
-	{
-		return;
-	}
-
-	// Fetch this text object's geometry/vertices based on the bitmap generated above.
-	const Geometry *geometryPointer = GetFillData().fGeometry;
-	if ( !geometryPointer )
-	{
-		return;
-	}
-
-	// Calculate offsets so that this object's bitmap pixels line-up with the closest screen pixels.
-	// This prevents the bitmap from appearing blurry/fuzzy onscreen. (Avoids interpolation between screen pixels.)
-	Rect bounds;
-	ClosedPath& path = GetPath();
-	path.GetSelfBounds( bounds );
-	Matrix translationMatrix( GetSrcToDstMatrix() );
-	{
-		offsetX = translationMatrix.Tx() + Rtt_RealMul( bounds.Width(), GetAnchorX() - Rtt_REAL_HALF );
-		offsetX -= Rtt_RealMul( bounds.Width(), GetAnchorX() );
-		offsetX += display.GetXOriginOffset();
-		offsetX = Rtt_RealDiv( offsetX, fDisplay.GetSx() );                           // Convert to pixels.
-		offsetX = Rtt_FloatToReal( floorf( Rtt_RealToFloat( offsetX ) ) ) - offsetX;  // Round-down to nearest pixel.
-		offsetX = Rtt_RealMul( offsetX, fDisplay.GetSx() );                           // Convert to content coordinates.
-	}
-	{
-		offsetY = translationMatrix.Ty() + Rtt_RealMul( bounds.Height(), GetAnchorY() - Rtt_REAL_HALF );
-		offsetY -= Rtt_RealMul( bounds.Height(), GetAnchorY() );
-		offsetY += display.GetYOriginOffset();
-		offsetY = Rtt_RealDiv( offsetY, fDisplay.GetSy() );                           // Convert to pixels.
-		offsetY = Rtt_FloatToReal( floorf( Rtt_RealToFloat( offsetY ) ) ) - offsetY;  // Round-down to nearest pixel.
-		offsetY = Rtt_RealMul( offsetY, fDisplay.GetSy() );                           // Convert to content coordinates.
-	}
-
-	// Apply the above offsets to this object's temporary geometry and mask uniform, to be used by Draw() method later.
-	// Note: Don't apply to base class' geometry. We do not want this object's (x,y) properties to change in Lua.
-	{
-		// Offset uniform to nearest screen pixel.
-		translationMatrix.Translate( offsetX, offsetY );
-		UpdateMaskUniform( *fMaskUniform, translationMatrix, *GetMask() );
-	}
-	{
-		// Offset geometry to nearest screen pixel.
-		//TODO: Avoid memory allocation.
-		QueueRelease( fGeometry );
-		fGeometry = Rtt_NEW( display.GetAllocator(), Geometry( *geometryPointer ) );
-		for ( int index = (int)fGeometry->GetVerticesUsed() - 1; index >= 0; index-- )
-		{
-			Geometry::Vertex *vertexPointer = &(fGeometry->GetVertexData()[index]);
-			vertexPointer->x += offsetX;
-			vertexPointer->y += offsetY;
-		}
-	}
-#else
-	Super::Prepare( display );
-#endif
-}
-
-void
-TextObject::Draw( Renderer& renderer ) const
-{
-#ifdef Rtt_RENDER_TEXT_TO_NEAREST_PIXEL
-	if ( ShouldDraw() )
-	{
-		RenderData fillData = GetFillData();
-		fillData.fGeometry = fGeometry;
-		fillData.fMaskUniform = fMaskUniform;
-		GetFillShader()->Draw( renderer, fillData );
-	}
-#else
-	Super::Draw( renderer );
-#endif
-}
-
 const LuaProxyVTable&
 TextObject::ProxyVTable() const
 {
@@ -503,7 +402,7 @@ TextObject::SetSize( Real newValue )
 		// If the given font size is invalid, then use the system's default font size.
 		if ( newValue < Rtt_REAL_1 )
 		{
-			newValue = fDisplay.GetRuntime().Platform().GetStandardFontSize() * fDisplay.GetSxUpright();
+			newValue = fDisplay.GetRuntime().Platform().GetStandardFontSize() * fDisplay.GetScreenToContentScale();
 		}
 
 		// Update the font and text bitmap, but only if the font size has changed.

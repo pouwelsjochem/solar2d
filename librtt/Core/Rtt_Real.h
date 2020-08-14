@@ -133,7 +133,7 @@ Rtt_FORCE_INLINE float Rtt_FloatMul( float a, float b ) { return a * b; }
 	Rtt_FORCE_INLINE Rtt_Real Rtt_RealTan( Rtt_Real a ) { return tanf( a ); }
 
 	Rtt_FORCE_INLINE Rtt_Real Rtt_IntToReal( S32 a )		{ return (Rtt_Real)a; }
-	Rtt_FORCE_INLINE S32      Rtt_RealToInt( Rtt_Real a )	{ return (S32)a; }
+	Rtt_FORCE_INLINE S32      Rtt_RealToInt( Rtt_Real a )	{ return (S32)a; } // truncates floating point
 	Rtt_FORCE_INLINE Rtt_Real Rtt_FloatToReal( float a )	{ return a; }
 	Rtt_FORCE_INLINE float    Rtt_RealToFloat( Rtt_Real a )	{ return a; }
 

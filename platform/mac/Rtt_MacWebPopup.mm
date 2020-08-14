@@ -246,30 +246,7 @@ MacWebPopup::~MacWebPopup()
 void
 MacWebPopup::Preinitialize( const Display& display )
 {
-	S32 contentW = display.ContentWidth();
-	S32 contentH = display.ContentHeight();
-
-	// We need to grab the scaled width and height
-	S32 screenW = display.ScaledWidth();
-	S32 screenH = display.ScaledHeight();
-
-	Real sx, sy;
-	display.CalculateContentToScreenScale( sx, sy );
-	
-	Display::ScaleMode scalemode = display.GetScaleMode();
-	// Special hack for Native widgets: The problem is that when no content scaling is set in config.lua,
-	// sx and sy get stuck at 1, but I really need the scale factor to be applied to get internal transformations to work correctly.
-	// So in UpdateContentScale, the sx,sy get changed under content scaling modes. My workaround is to not touch
-	// anything if those modes are set. But if no mode is set and sx and sy have not been altered, I will compute the screen scale
-	// based on the differences between content and screen.
-	if ( Rtt_RealIsOne(sx) && Rtt_RealIsOne(sy) && Display::kNone == scalemode )
-	{
-		sx = Rtt_RealDiv( contentW, screenW );
-		sy = Rtt_RealDiv( contentH, screenH );
-	}
-
-	SetContentToScreenSx( Rtt_RealDiv( Rtt_REAL_1, sx ) );
-	SetContentToScreenSy( Rtt_RealDiv( Rtt_REAL_1, sy ) );
+	SetContentToScreenScale( display.CalculateContentToScreenScale() );
 }
 	
 void

@@ -432,7 +432,7 @@ IPhoneTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		if ( fIsFontSizeScaled )
 		{
 			Display &display = GetStage()->GetDisplay();
-			fontSize *= display.GetSxUpright();
+			fontSize *= display.GetScreenToContentScale();
 			fontSize *= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 		}
 		lua_pushnumber( L, fontSize );
@@ -443,7 +443,7 @@ IPhoneTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		if ( fIsFontSizeScaled )
 		{
 			Display &display = GetStage()->GetDisplay();
-			fontSize *= display.GetSxUpright();
+			fontSize *= display.GetScreenToContentScale();
 			fontSize *= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 		}
 		IPhoneFont *font = Rtt_NEW( LuaContext::GetAllocator( L ), IPhoneFont( t.font ) );
@@ -514,7 +514,7 @@ IPhoneTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 	else if ( strcmp( "margin", key ) == 0 )
 	{
 		// The margin/padding between the edge of this field and its text in content coordinates.
-		float value = 4.0f * GetStage()->GetDisplay().GetSxUpright();
+		float value = 4.0f * GetStage()->GetDisplay().GetScreenToContentScale();
 		value *= ((IPhonePlatformBase&)GetStage()->GetDisplay().GetRuntime().Platform()).GetView().contentScaleFactor;
 		lua_pushnumber( L, value );
 	}
@@ -556,7 +556,7 @@ IPhoneTextFieldObject::SetValueForKey( lua_State *L, const char key[], int value
 			fontSize = (float)lua_tonumber( L, valueIndex );
 			if ( fIsFontSizeScaled )
 			{
-				fontSize /= display.GetSxUpright();
+				fontSize /= display.GetScreenToContentScale();
 				fontSize /= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 			}
 		}
@@ -581,7 +581,7 @@ IPhoneTextFieldObject::SetValueForKey( lua_State *L, const char key[], int value
 			{
 				if ( fIsFontSizeScaled )
 				{
-					fontSize /= display.GetSxUpright();
+					fontSize /= display.GetScreenToContentScale();
 					fontSize /= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 				}
 			}

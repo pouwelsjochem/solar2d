@@ -515,26 +515,19 @@ GraphicsLibrary::getFontMetrics( lua_State *L )
 		// Return platform-dependent font metrics
 		Self *library = ToLibrary( L );
 		Display& display = library->GetDisplay();
+		Real screenToContentScale = display.GetScreenToContentScale();
 
-		// See: TextObject::UpdateScaledFont()
+		// Scale the font's point size.
+		Real fontSizeEpsilon = Rtt_FloatToReal( 0.1f );
+		Real scaledFontSize = Rtt_RealDiv( font->Size(), screenToContentScale );
+		// Create a scaled font, if necessary.
+		if ((scaledFontSize >= (font->Size() + fontSizeEpsilon)) ||
+			(scaledFontSize <= (font->Size() - fontSizeEpsilon)))
 		{
-			Real scale = display.GetSxUpright();
-
-			// Scale the font's point size.
-			Real fontSizeEpsilon = Rtt_FloatToReal( 0.1f );
-			Real scaledFontSize = Rtt_RealDiv( font->Size(), scale );
-
-			// Create a scaled font, if necessary.
-			if ((scaledFontSize >= (font->Size() + fontSizeEpsilon)) ||
-				(scaledFontSize <= (font->Size() - fontSizeEpsilon)))
-			{
-				font->SetSize(scaledFontSize);
-			}
+			font->SetSize(scaledFontSize);
 		}
 
 		Rtt::FontMetricsMap metrics = platform.GetFontMetrics( *font );
-
-		Real sy = display.GetSyUpright();
 
 		// Pushing into the 'metrics' Lua table and fetching results
 		if ( metrics.size() > 0 )
@@ -544,7 +537,7 @@ GraphicsLibrary::getFontMetrics( lua_State *L )
 				// Iterate over the KV pair in metrics map adding KV pairs to Lua table
 				for ( Rtt::FontMetricsMap::iterator it = metrics.begin(); it!= metrics.end(); ++it )
 				{
-					lua_pushnumber( L, Rtt_RealMul(sy, it->second) );
+					lua_pushnumber( L, Rtt_RealMul(screenToContentScale, it->second) );
 					lua_setfield( L, -2, it->first.c_str() );
 				}
 				result = 1;

@@ -526,7 +526,7 @@ LuaLibNative::CreateFont( lua_State *L, const MPlatform& platform, int index, Re
 		// Note: A font size of zero indicates that a size was not provided in Lua.
 		if ( fontSize < Rtt_REAL_1 )
 		{
-			fontSize = platform.GetStandardFontSize() * LuaContext::GetRuntime( L )->GetDisplay().GetSxUpright();
+			fontSize = platform.GetStandardFontSize() * LuaContext::GetRuntime( L )->GetDisplay().GetScreenToContentScale();
 		}
 		
 		// Create a new font object.

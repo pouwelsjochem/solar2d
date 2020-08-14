@@ -405,7 +405,7 @@ MacTextBoxObject::ValueForKey( lua_State *L, const char key[] ) const
 		float fontSize = [[textbox font] pointSize];
 		if ( fIsFontSizeScaled )
 		{
-			fontSize *= GetStage()->GetDisplay().GetSxUpright();
+			fontSize *= GetStage()->GetDisplay().GetScreenToContentScale();
 		}
 		fontSize /= GetSimulatorScale();
 		lua_pushnumber( L, fontSize );
@@ -416,7 +416,7 @@ MacTextBoxObject::ValueForKey( lua_State *L, const char key[] ) const
 		float fontSize = [textbox.font pointSize];
 		if ( fIsFontSizeScaled )
 		{
-			fontSize *= display.GetSxUpright();
+			fontSize *= display.GetScreenToContentScale();
 		}
 		fontSize /= GetSimulatorScale();
 		MacFont *font = Rtt_NEW( LuaContext::GetAllocator( L ), MacFont( [textbox font] ) );
@@ -496,7 +496,7 @@ MacTextBoxObject::SetValueForKey( lua_State *L, const char key[], int valueIndex
 			fontSize = (float)lua_tonumber( L, valueIndex );
 			if ( fIsFontSizeScaled )
 			{
-				fontSize /= display.GetSxUpright();
+				fontSize /= display.GetScreenToContentScale();
 			}
 		}
 		if ( fontSize < 1.0f )
@@ -522,7 +522,7 @@ MacTextBoxObject::SetValueForKey( lua_State *L, const char key[], int valueIndex
 			{
 				if ( fIsFontSizeScaled )
 				{
-					fontSize /= GetStage()->GetDisplay().GetSxUpright();
+					fontSize /= GetStage()->GetDisplay().GetScreenToContentScale();
 				}
 			}
 			else

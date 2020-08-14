@@ -610,7 +610,7 @@ Display::Capture( DisplayObject *object,
 		}
 	}
 
-	fRenderer->BeginFrame( 0.1f, 0.1f, GetSx(), GetSy() );
+	fRenderer->BeginFrame( 0.1f, 0.1f, GetScreenToContentScale() );
 
 	////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////
@@ -935,10 +935,8 @@ Display::ReloadResources()
 void
 Display::GetImageSuffix( String& outSuffix ) const
 {
-	Rtt_Real sx = fStream->GetSx();
-	Rtt_Real sy = fStream->GetSy();
-
-	if ( Rtt_RealIsOne( sx ) && Rtt_RealIsOne( sy ) )
+	Rtt_Real screenToContentScale = fStream->GetScreenToContentScale();
+	if ( Rtt_RealIsOne( screenToContentScale ) )
 	{
 		// Use original file since content scale is 1:1
 	}
@@ -951,7 +949,7 @@ Display::GetImageSuffix( String& outSuffix ) const
 				int top = lua_gettop( L );
 			#endif
 
-			Real contentScale = Rtt_RealDivNonZeroAB( Rtt_REAL_1, Rtt_RealDiv2( sx + sx ) );
+			Real contentToScreenScale = Rtt_RealDivNonZeroAB( Rtt_REAL_1, screenToContentScale );
 
 			lua_rawgeti( L, LUA_REGISTRYINDEX, fImageSuffix ); // t
 
@@ -966,7 +964,7 @@ Display::GetImageSuffix( String& outSuffix ) const
 				lua_rawget( L, -2 ); // scale = item.scale (pops "scale")
 				Real scale = luaL_toreal( L, -1 );
 				lua_pop( L, 1 ); // pop scale
-				if ( contentScale >= scale )
+				if ( contentToScreenScale >= scale )
 				{
 					lua_pushstring( L, "suffix" );
 					lua_rawget( L, -2 ); // suffix = item.suffix (pops "suffix")
@@ -992,10 +990,9 @@ Display::GetImageFilename( const char *filename, MPlatform::Directory baseDir, S
 {
 	bool result = false;
 
-	Rtt_Real sx = fStream->GetSx();
-	Rtt_Real sy = fStream->GetSy();
+	Rtt_Real screenToContentScale = fStream->GetScreenToContentScale();
 
-	if ( Rtt_RealIsOne( sx ) && Rtt_RealIsOne( sy ) )
+	if ( Rtt_RealIsOne( screenToContentScale ) )
 	{
 		// Use original file since content scale is 1:1
 	}
@@ -1012,7 +1009,7 @@ Display::GetImageFilename( const char *filename, MPlatform::Directory baseDir, S
 					int top = lua_gettop( L );
 				#endif
 
-				Real contentScale = Rtt_RealDivNonZeroAB( Rtt_REAL_1, Rtt_RealDiv2( sx + sx ) );
+				Real contentToScreenScale = Rtt_RealDivNonZeroAB( Rtt_REAL_1, screenToContentScale );
 
 				lua_rawgeti( L, LUA_REGISTRYINDEX, fImageSuffix ); // t
 
@@ -1025,7 +1022,7 @@ Display::GetImageFilename( const char *filename, MPlatform::Directory baseDir, S
 					lua_rawget( L, -2 ); // scale = item.scale (pops "scale")
 					Real scale = luaL_toreal( L, -1 );
 					lua_pop( L, 1 ); // pop scale
-					if ( contentScale >= scale )
+					if ( contentToScreenScale >= scale )
 					{
 						// Found a candidate suffix
 						lua_pushlstring( L, filename, extension - filename );
@@ -1112,7 +1109,6 @@ Display::ViewableContentWidth() const
 {
 	// The viewable content width is the smaller of the rendered content width
 	// or the content width itself. The rendered width is the window width 
-	// in *scaled* units as determined by UpdateContentScale().
 	// 
 	// Depending on the relationship of aspect ratios between the window and
 	// the content, the rendered width might be larger (kLetterbox)
@@ -1238,18 +1234,6 @@ Display::ViewableContentHeightUpright() const
 	return ( IsUpright() ? ViewableContentHeight() : ViewableContentWidth() );
 }
 
-Real
-Display::GetSxUpright() const
-{
-	return ( IsUpright() ? GetSx() : GetSy() );
-}
-
-Real
-Display::GetSyUpright() const
-{
-	return ( IsUpright() ? GetSy() : GetSx() );
-}
-
 // ----------------------------------------------------------------------------
 
 S32
@@ -1277,15 +1261,9 @@ Display::ScreenHeight() const
 }
 
 Real
-Display::GetSx() const
+Display::GetScreenToContentScale() const
 {
-	return fStream->GetSx();
-}
-
-Real
-Display::GetSy() const
-{
-	return fStream->GetSy();
+	return fStream->GetScreenToContentScale();
 }
 
 Real
@@ -1345,58 +1323,17 @@ Display::ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const
 }
 
 // Generalized function for calculating proper content scaling factors
-void
-Display::UpdateContentScale(
-					Rtt_Real screenWidth, Rtt_Real screenHeight,
-					S32 contentW, S32 contentH,
-					ScaleMode scaleMode,
-					Rtt_Real& outSx, Rtt_Real& outSy )
+Rtt_Real
+Display::CalculateScreenToContentScaleFor(Rtt_Real screenWidth, S32 contentWidth)
 {
-	Rtt_ASSERT( contentW > 0 && contentH > 0 );
-
-	// We used to skip this if the scaleMode was kNone. However, on some platforms,
-	// the screen dimensions are virtual (i.e. 'points' on iOS/Mac retina displays)
-	// whereas the content pixels are the physical pixels when the mode is kNone.
-	const Rtt_Real contentWidth = Rtt_IntToReal( contentW );
-	const Rtt_Real contentHeight = Rtt_IntToReal( contentH );
-
-	const Rtt_Real screenAspect = Rtt_RealDiv( screenWidth, screenHeight );
-	const Rtt_Real contentAspect = Rtt_RealDiv( contentWidth, contentHeight );
-
-	Rtt_Real scaleX = Rtt_REAL_1;
-	Rtt_Real scaleY = Rtt_REAL_1;
-
-	switch( scaleMode )
-	{
-		case kZoomEven:
-			scaleX = scaleY = ( screenAspect > contentAspect
-								? Rtt_RealDiv( contentWidth, screenWidth )
-								: Rtt_RealDiv( contentHeight, screenHeight ) );
-			break;
-		case kAdaptive:
-		case kZoomStretch:
-		case kNone:
-			scaleX = Rtt_RealDiv( contentWidth, screenWidth );
-			scaleY = Rtt_RealDiv( contentHeight, screenHeight );
-			break;
-		case kLetterbox:
-			scaleX = scaleY = ( screenAspect > contentAspect
-								? Rtt_RealDiv( contentHeight, screenHeight )
-								: Rtt_RealDiv( contentWidth, screenWidth ) );
-			break;
-		default:
-			break;
-	}
-
-	outSx = scaleX;
-	outSy = scaleY;
+	Rtt_ASSERT( contentWidth > 0 );
+	return Rtt_RealDiv( Rtt_IntToReal( contentWidth ), screenWidth );
 }
 
-void
-Display::CalculateContentToScreenScale( Real& outSx, Real& outSy ) const
+Rtt_Real
+Display::CalculateScreenToContentScale() const
 {
 	S32 contentW = ContentWidth();
-	S32 contentH = ContentHeight();
 
 	// We need to grab the OS width and height in points
 	S32 screenW = PointsWidth();
@@ -1413,13 +1350,13 @@ Display::CalculateContentToScreenScale( Real& outSx, Real& outSy ) const
 		Swap( screenW, screenH );
 	}
 
-	outSx = Rtt_REAL_1;
-	outSy = Rtt_REAL_1;
-	Display::UpdateContentScale(
-		screenW, screenH,
-		contentW, contentH,
-		fStream->GetScaleMode(),
-		outSx, outSy );
+	return Display::CalculateScreenToContentScaleFor(screenW, contentW);
+}
+
+Rtt_Real
+Display::CalculateContentToScreenScale() const
+{
+	Rtt_RealToInt ( Rtt_RealDiv( Rtt_REAL_1, Display::CalculateScreenToContentScale() ) );
 }
 
 void
@@ -1545,7 +1482,7 @@ Display::WindowSizeChanged()
 			}
 
 			// Update the display's content scales using the new widths and heights up above.
-			stream->UpdateContentScale( screenW, screenH );
+			stream->UpdateContentScale( screenW );
 		}
 	}
 	runtime.End();

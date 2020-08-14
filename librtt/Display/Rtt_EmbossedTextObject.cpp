@@ -226,8 +226,7 @@ EmbossedTextObject::Prepare( const Display& display )
 
 		// Set the offset to 1 pixel to the bottom-right of the foreground text.
 		// Convert this offset to content coordinates.
-		offsetX = display.GetSx();
-		offsetY = display.GetSy();
+		offsetX = offsetY = display.GetScreenToContentScale();
 
 		// Update the highlight text's vertices, colors, and mask coordinates.
 		QueueRelease( fHighlightGeometry );
@@ -263,8 +262,7 @@ EmbossedTextObject::Prepare( const Display& display )
 
 		// Set the offset to 1 pixel to the top-left of the foreground text.
 		// Convert this offset to content coordinates.
-		offsetX = -display.GetSx();
-		offsetY = -display.GetSy();
+		offsetX = offsetY = -display.GetScreenToContentScale();
 
 		// Update the shadow text's vertices, colors, and mask coordinates.
 		QueueRelease( fShadowGeometry );

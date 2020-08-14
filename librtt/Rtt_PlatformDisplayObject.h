@@ -76,19 +76,12 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		lua_State* GetL() const;
 
 	public:
-		static void CalculateScreenBounds(
-						const Display& display,
-						Real contentToScreenSx,
-						Real contentToScreenSy,
-						Rect& inOutBounds );
-
+		static void CalculateScreenBounds(const Display& display, Real contentToScreenScale, Rect& inOutBounds );
 		void GetScreenBounds( Rect& outBounds ) const;
 
 	public:
-		void SetContentToScreenSx( Real newValue ) { fContentToScreenSx = newValue; }
-		void SetContentToScreenSy( Real newValue ) { fContentToScreenSy = newValue; }
-		Real GetContentToScreenSx() const { return fContentToScreenSx; }
-		Real GetContentToScreenSy() const { return fContentToScreenSy; }
+		void SetContentToScreenScale( Real newValue ) { fContentToScreenScale = newValue; }
+		Real GetContentToScreenScale() const { return fContentToScreenScale; }
 
 		void GetContentOffsets( Real& outX, Real& outY ) const;
 
@@ -102,8 +95,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 
 	protected:
 		ResourceHandle< lua_State > *fHandle;
-		Real fContentToScreenSx;
-		Real fContentToScreenSy;
+		Real fContentToScreenScale;
 };
 
 // ----------------------------------------------------------------------------

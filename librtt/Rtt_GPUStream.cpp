@@ -165,16 +165,11 @@ GPUStream::Initialize(
 		}
 		//#endif
 
-		Real sx = GetSx();
-		if ( ! Rtt_RealIsOne( sx ) )
+		Real screenToContentScale = GetScreenToContentScale();
+		if ( ! Rtt_RealIsOne( screenToContentScale ) )
 		{
-			w = Rtt_RealToInt( Rtt_RealMul( sx, Rtt_IntToReal( w ) ) );
-		}
-
-		Real sy = GetSy();
-		if ( ! Rtt_RealIsOne( sy ) )
-		{
-			h = Rtt_RealToInt( Rtt_RealMul( sy, Rtt_IntToReal( h ) ) );
+			w = Rtt_RealToInt( Rtt_RealMul( screenToContentScale, Rtt_IntToReal( w ) ) );
+			h = Rtt_RealToInt( Rtt_RealMul( screenToContentScale, Rtt_IntToReal( h ) ) );
 		}
 
 		fRenderedContentWidth = w;
@@ -216,7 +211,6 @@ GPUStream::ViewableContentWidth() const
 {
 	// The viewable content width is the smaller of the rendered content width
 	// or the content width itself. The rendered width is the window width 
-	// in *scaled* units as determined by UpdateContentScale().
 	// 
 	// Depending on the relationship of aspect ratios between the window and
 	// the content, the rendered width might be larger (kLetterbox)
@@ -254,11 +248,11 @@ GPUStream::ActualContentWidth() const
 			DeviceOrientation::Type currentOrientation = Super::GetContentOrientation();
 			if ( DeviceOrientation::IsSideways( currentOrientation ) )
 			{
-				result = DeviceHeight() * GetSy();
+				result = DeviceHeight() * GetScreenToContentScale();
 			}
 			else
 			{
-				result = DeviceWidth() * GetSx();
+				result = DeviceWidth() * GetScreenToContentScale();
 			}
 			break;
 		}
@@ -298,11 +292,11 @@ GPUStream::ActualContentHeight() const
 			DeviceOrientation::Type currentOrientation = Super::GetContentOrientation();
 			if ( DeviceOrientation::IsSideways( currentOrientation ) )
 			{
-				result = DeviceWidth() * GetSx();
+				result = DeviceWidth() * GetScreenToContentScale();
 			}
 			else
 			{
-				result = DeviceHeight() * GetSy();
+				result = DeviceHeight() * GetScreenToContentScale();
 			}
 			break;
 		}
@@ -317,32 +311,6 @@ GPUStream::ActualContentHeight() const
 		default:
 			Rtt_ASSERT( ScreenHeight() == DeviceHeight() );
 			result = DeviceHeight();
-			break;
-	}
-
-	return result;
-}
-
-Real
-GPUStream::CalculateAlignmentOffset( Alignment alignment, Real contentLen, Real windowLen )
-{
-	Real result = Rtt_REAL_0;
-
-	switch ( alignment )
-	{
-		case kAlignmentLeft:
-			Rtt_STATIC_ASSERT( kAlignmentTop == kAlignmentLeft );
-			result = - Rtt_RealDiv2( windowLen );
-			break;
-		case kAlignmentCenter:
-			result = - Rtt_RealDiv2( contentLen );
-			break;
-		case kAlignmentRight:
-			Rtt_STATIC_ASSERT( kAlignmentBottom == kAlignmentRight );
-			result = - Rtt_RealDiv2( Rtt_RealMul2( contentLen ) - windowLen );
-			break;
-		default:
-			Rtt_ASSERT_NOT_REACHED();
 			break;
 	}
 
@@ -466,7 +434,6 @@ GPUStream::UpdateContentOrientation( DeviceOrientation::Type newOrientation )
 		{
 			Swap( w, h );
 			SwapContentSize();
-			SwapContentScale();
 			// Don't swap vertex offsets or origin offsets.
 			// These are updated via a call to Reshape() which calls UpdateOffsets()
 		}

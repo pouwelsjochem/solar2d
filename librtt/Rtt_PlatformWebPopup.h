@@ -82,16 +82,13 @@ class PlatformWebPopup : public MLuaTableBridge
 		void GetScreenBounds( const Display& display, Rect& outBounds ) const;
 
 	public:
-		void SetContentToScreenSx( Real newValue ) { fContentToScreenSx = newValue; }
-		void SetContentToScreenSy( Real newValue ) { fContentToScreenSy = newValue; }
-		Real GetContentToScreenSx() const { return fContentToScreenSx; }
-		Real GetContentToScreenSy() const { return fContentToScreenSy; }
+		void SetContentToScreenScale( Real newValue ) { fContentToScreenScale = newValue; }
+		Real GetContentToScreenScale() const { return fContentToScreenScale; }
 
 	private:
 		LuaResource *fCallback;
 		mutable bool fInCallback;
-		Real fContentToScreenSx;
-		Real fContentToScreenSy;
+		Real fContentToScreenScale;
 		Rect fRect;
 };
 

@@ -1103,9 +1103,9 @@ void
 HitEvent::ScreenToContent( const Display& display, Real xScreen, Real yScreen, Real& outXContent, Real& outYContent )
 {
 	// Scale point: map screen coord to content coord
-	outXContent = Rtt_RealMul( xScreen, display.GetSx() );
+	outXContent = Rtt_RealMul( xScreen, display.GetScreenToContentScale() );
 	outXContent -= display.GetXOriginOffset();
-	outYContent = Rtt_RealMul( yScreen, display.GetSy() );
+	outYContent = Rtt_RealMul( yScreen, display.GetScreenToContentScale() );
 	outYContent -= display.GetYOriginOffset();
 }
 

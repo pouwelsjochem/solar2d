@@ -54,8 +54,7 @@ PlatformDisplayObject::GetVideoObjectProxyVTable()
 
 PlatformDisplayObject::PlatformDisplayObject()
 :	fHandle( NULL ),
-	fContentToScreenSx( Rtt_REAL_1 ),
-	fContentToScreenSy( Rtt_REAL_1 )
+	fContentToScreenScale( Rtt_REAL_1 )
 {
 }
 
@@ -67,11 +66,7 @@ PlatformDisplayObject::~PlatformDisplayObject()
 void
 PlatformDisplayObject::Preinitialize( const Display& display )
 {
-	Real sx, sy;
-	display.CalculateContentToScreenScale( sx, sy );
-
-	SetContentToScreenSx( Rtt_RealDiv( Rtt_REAL_1, sx ) );
-	SetContentToScreenSy( Rtt_RealDiv( Rtt_REAL_1, sy ) );
+	SetContentToScreenScale( display.CalculateContentToScreenScale() );
 }
 
 int
@@ -110,17 +105,13 @@ PlatformDisplayObject::GetL() const
 
 // TODO: Is this duplication of code in RenderingStream/GPUStream which was used by screen capture
 void
-PlatformDisplayObject::CalculateScreenBounds(
-	const Display& display,
-	Real contentToScreenSx,
-	Real contentToScreenSy,
-	Rect& inOutBounds )
+PlatformDisplayObject::CalculateScreenBounds(const Display& display, Real contentToScreenScale, Rect& inOutBounds)
 {
 	Real offsetX = display.GetXOriginOffset();
 	Real offsetY = display.GetYOriginOffset();
 
 	inOutBounds.Translate( offsetX, offsetY );
-	inOutBounds.Scale( contentToScreenSx, contentToScreenSy );
+	inOutBounds.Scale( contentToScreenScale, contentToScreenScale );
 }
 
 void
@@ -132,7 +123,7 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 	GetContentOffsets( offsetX, offsetY );
 
 	outBounds.Translate( offsetX, offsetY );
-	outBounds.Scale( GetContentToScreenSx(), GetContentToScreenSy() );
+	outBounds.Scale( GetContentToScreenScale(), GetContentToScreenScale() );
 }
 
 void

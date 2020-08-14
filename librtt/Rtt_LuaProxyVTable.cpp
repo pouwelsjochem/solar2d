@@ -2650,7 +2650,7 @@ LuaEmbossedTextObjectProxyVTable::OnSetSize( lua_State *L )
 	{
 		Runtime& runtime = * LuaContext::GetRuntime( L );
 		const Display& display = runtime.GetDisplay();
-		Real fontSize = Rtt_RealDiv( luaL_toreal( L, 2 ), display.GetSx() );
+		Real fontSize = Rtt_RealDiv( luaL_toreal( L, 2 ), display.GetScreenToContentScale() );
 		textObjectPointer->SetSize( fontSize );
 	}
 	return 0;

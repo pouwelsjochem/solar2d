@@ -284,7 +284,7 @@ IPhoneTextBoxObject::ValueForKey( lua_State *L, const char key[] ) const
 		if ( fIsFontSizeScaled )
 		{
 			Display &display = GetStage()->GetDisplay();
-			fontSize *= display.GetSxUpright();
+			fontSize *= display.GetScreenToContentScale();
 			fontSize *= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 		}
 		lua_pushnumber( L, fontSize );
@@ -295,7 +295,7 @@ IPhoneTextBoxObject::ValueForKey( lua_State *L, const char key[] ) const
 		if ( fIsFontSizeScaled )
 		{
 			Display &display = GetStage()->GetDisplay();
-			fontSize *= display.GetSxUpright();
+			fontSize *= display.GetScreenToContentScale();
 			fontSize *= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 		}
 		IPhoneFont *font = Rtt_NEW( LuaContext::GetAllocator( L ), IPhoneFont( t.font ) );
@@ -372,7 +372,7 @@ IPhoneTextBoxObject::SetValueForKey( lua_State *L, const char key[], int valueIn
 			fontSize = (float)lua_tonumber( L, valueIndex );
 			if ( fIsFontSizeScaled )
 			{
-				fontSize /= display.GetSxUpright();
+				fontSize /= display.GetScreenToContentScale();
 				fontSize /= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 			}
 		}
@@ -397,7 +397,7 @@ IPhoneTextBoxObject::SetValueForKey( lua_State *L, const char key[], int valueIn
 			{
 				if ( fIsFontSizeScaled )
 				{
-					fontSize /= display.GetSxUpright();
+					fontSize /= display.GetScreenToContentScale();
 					fontSize /= ((IPhonePlatformBase&)display.GetRuntime().Platform()).GetView().contentScaleFactor;
 				}
 			}

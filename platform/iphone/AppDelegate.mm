@@ -750,15 +750,12 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	bounds.xMax = x;
 	bounds.yMax = y;
 
-	Rtt_Real sx, sy;
 	const Display& display = view.runtime->GetDisplay();
-	display.CalculateContentToScreenScale( sx, sy );
-	bool shouldScale = ! Rtt_RealEqual( Rtt_REAL_1, sx ) || ! Rtt_RealEqual( Rtt_REAL_1, sy );
-	if ( shouldScale )
+
+	Rtt_Real contentToScreenScale = display.CalculateContentToScreenScale();
+	if ( !Rtt_RealIsOne(contentToScreenScale) )
 	{
-		sx = Rtt_RealDiv( Rtt_REAL_1, sx );
-		sy = Rtt_RealDiv( Rtt_REAL_1, sy );
-		PlatformDisplayObject::CalculateScreenBounds( display, sx, sy, bounds );
+		PlatformDisplayObject::CalculateScreenBounds( display, contentToScreenScale, bounds );
 	}
 
 	CGPoint result = { Rtt_RealToFloat( bounds.xMin ), Rtt_RealToFloat( bounds.yMin ) };

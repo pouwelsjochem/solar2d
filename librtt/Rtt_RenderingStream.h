@@ -219,8 +219,7 @@ class RenderingStream
 		S32 ScreenWidth() const;
 		S32 ScreenHeight() const;
 
-		Real GetSx() const { return fSx; }
-		Real GetSy() const { return fSy; }
+		Real GetScreenToContentScale() const { return fScreenToContentScale; }
 
 		Real GetXOriginOffset() const { return fXOriginOffset; }
 		Real GetYOriginOffset() const { return fYOriginOffset; }
@@ -229,7 +228,6 @@ class RenderingStream
 		void SetYOriginOffset( Real newValue ) { fYOriginOffset = newValue; }
 
 		void SwapContentSize();
-		void SwapContentScale();
 
 		// Sets the scaling mode and updates content scale factors based on window size
 		void SetScaleMode( Display::ScaleMode mode, Rtt_Real screenWidth, Rtt_Real screenHeight );
@@ -241,7 +239,7 @@ class RenderingStream
 		virtual void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 
 		// Call this method when the window size changes
-		void UpdateContentScale( Rtt_Real screenWidth, Rtt_Real screenHeight );
+		void UpdateContentScale( Real screenWidth );
 
 	protected:
 		const Quad* SubmitBounds() const { return fSubmitBounds; }
@@ -266,8 +264,7 @@ class RenderingStream
 		U8 fContentOrientation;
 		U8 fSurfaceOrientation;
 		U8 fScaleMode;
-		Real fSx;
-		Real fSy;
+		Real fScreenToContentScale;
 		S32 fDeviceWidth;
 		S32 fDeviceHeight;
 		S32 fContentWidth;	// Content size is the size at which the content was originally authored

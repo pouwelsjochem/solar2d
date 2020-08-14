@@ -54,7 +54,7 @@ class Renderer
 		// Perform any per-frame preparation. Total time is the time in seconds
 		// since the start of the application. Delta time is the amount of time
 		// in seconds it took to complete the previous frame.
-		virtual void BeginFrame( Real totalTime, Real deltaTime, Real contentScaleX, Real contentScaleY );
+		virtual void BeginFrame( Real totalTime, Real deltaTime, Real contentScale );
 
 		// Perform any per-frame finalization.
 		virtual void EndFrame();
@@ -294,7 +294,6 @@ class Renderer
 		Geometry* fCurrentGeometry;
 
 		Real fContentScaleX; // Temporary holder.
-		Real fContentScaleY; // Temporary holder.
 
 		U32 fTimeDependencyCount;
 };

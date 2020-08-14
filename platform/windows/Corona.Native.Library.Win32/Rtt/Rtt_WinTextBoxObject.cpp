@@ -157,7 +157,7 @@ int WinTextBoxObject::ValueForKey(lua_State *L, const char key[]) const
 			{
 				fontSizeConverter.ConvertTo(Gdiplus::UnitPixel);
 				fontSize = fontSizeConverter.GetSize();
-				fontSize *= Rtt_RealToFloat(GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetSxUpright());
+				fontSize *= Rtt_RealToFloat(GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetScreenToContentScale());
 			}
 			else
 			{
@@ -189,7 +189,7 @@ int WinTextBoxObject::ValueForKey(lua_State *L, const char key[]) const
 		if (fIsFontSizeScaled)
 		{
 			auto fontSize = fontPointer->Size();
-			fontSize = Rtt_RealMul(fontSize, GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetSxUpright());
+			fontSize = Rtt_RealMul(fontSize, GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetScreenToContentScale());
 			fontPointer->SetSize(fontSize);
 		}
 		else
@@ -293,7 +293,7 @@ int WinTextBoxObject::ValueForKey(lua_State *L, const char key[]) const
 		auto clientHeight = fTextBoxPointer->GetClientHeight();
 		auto margin = (double)(controlHeight - clientHeight) / 2.0;
 		margin++;
-		margin *= (double)Rtt_RealToFloat(GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetSxUpright());
+		margin *= (double)Rtt_RealToFloat(GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetScreenToContentScale());
 		lua_pushnumber(L, margin);
 	}
 	else if (strcmp("placeholder", key) == 0)
@@ -373,7 +373,7 @@ bool WinTextBoxObject::SetValueForKey(lua_State *L, const char key[], int valueI
 			{
 				if (fIsFontSizeScaled)
 				{
-					fontSize /= GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetSxUpright();
+					fontSize /= GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetScreenToContentScale();
 				}
 				else
 				{
@@ -422,7 +422,7 @@ bool WinTextBoxObject::SetValueForKey(lua_State *L, const char key[], int valueI
 				{
 					// Convert Corona scaled content size to pixels.
 					auto fontSize = fontSettings.GetPixelSize();
-					fontSize /= GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetSxUpright();
+					fontSize /= GetRuntimeEnvironment().GetRuntime()->GetDisplay().GetScreenToContentScale();
 					fontSettings.SetPixelSize(fontSize);
 				}
 				else
