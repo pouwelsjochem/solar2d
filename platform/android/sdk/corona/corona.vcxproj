@@ -354,7 +354,6 @@
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_VideoTexture.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Archive.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_CKWorkflow.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
@@ -413,8 +412,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Resource.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Runtime.cpp" />
     <ClCompile Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.cpp" />
-    <ClCompile Include="..\..\..\shared\Rtt_DependencyLoader.cpp" />
-    <ClCompile Include="..\..\..\shared\Rtt_DependencyUtilsAndroid.cpp" />
     <ClCompile Include="..\..\ndk\AndroidBaseImageDecoder.cpp" />
     <ClCompile Include="..\..\ndk\AndroidBaseNativeImageDecoder.cpp" />
     <ClCompile Include="..\..\ndk\AndroidBinaryReader.cpp" />
@@ -781,8 +778,6 @@
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_VideoTexture.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Archive.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Callback.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_CKWorkflow.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_CKWorkFlowConstants.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_DeviceOrientation.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Event.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_FilePath.h" />
@@ -875,7 +870,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_WorkFlowConstants.h" />
     <ClInclude Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h" />
     <ClInclude Include="..\..\..\..\plugins\shared\CoronaLuaLibraryShared.h" />
-    <ClInclude Include="..\..\..\shared\Rtt_DependencyLoader.h" />
     <ClInclude Include="..\..\..\shared\Rtt_PlatformConnection.h" />
     <ClInclude Include="..\..\ndk\AndroidBaseImageDecoder.h" />
     <ClInclude Include="..\..\ndk\AndroidBaseNativeImageDecoder.h" />

@@ -25,7 +25,6 @@ class MRuntimeDelegate
 {
 	public:
 		virtual void DidInitLuaLibraries( const Runtime& sender ) const = 0;
-		virtual bool HasDependencies( const Runtime& sender ) const = 0;
 
     public:
         virtual void WillLoadMain( const Runtime& sender ) const = 0;

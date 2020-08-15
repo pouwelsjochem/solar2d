@@ -719,11 +719,6 @@ class RuntimeEnvironment
 				/// <param name="L">The Lua state that the "config.lua" settings is currently loaded into.</param>
 				virtual void DidLoadConfig(const Rtt::Runtime& sender, lua_State *L) const;
 
-				/// <summary>Determines if the Corona library is licensed and authorized to continue.</summary>
-				/// <param name="sender">The Corona runtime that is raising this event.</param>
-				/// <returns>Returns true if the Corona library is licensed/authorized. Returns false if not.</returns>
-				virtual bool HasDependencies(const Rtt::Runtime& sender) const;
-
 				/// <summary>
 				///  <para>Called just before the "main.lua" get executed.</para>
 				///  <para>This is the application's opportunity to register custom APIs into Lua.</para>

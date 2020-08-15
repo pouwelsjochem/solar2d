@@ -1288,9 +1288,6 @@ namespace Rtt
 					resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor((Rtt::MPlatform::StatusBarMode)kScreenDressingFile);
 				}
 				break;
-			case kSubscription:
-				resultPointer = "Solar2D";
-				break;
 			default:
 				resultPointer = nullptr;
 				//			Rtt_ASSERT_NOT_REACHED();

@@ -147,7 +147,6 @@ class RenderTypes
 	public:
 		static const char* StringForBlendType( BlendType value );
 		static BlendType BlendTypeForString( const char *str );
-		static bool IsRestrictedBlendType( BlendType value );
 
 		static BlendType PorterDuffForBlendMode( const BlendMode& mode );
 		static BlendType BlendTypeForBlendMode( const BlendMode& mode, bool isPremultiplied );

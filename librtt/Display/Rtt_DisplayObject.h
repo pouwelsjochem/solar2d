@@ -112,7 +112,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 			kIsOffScreen = 0x20,
 			kIsAnchorChildren = 0x200, // Group-specific property
 			kIsRenderedOffscreen = 0x400,
-			kIsRestricted = 0x800,
 
 			// NOTE: Current maximum of 16 PropertyMasks!!!
 		};
@@ -302,9 +301,6 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 		
 		// Controls whether the transform is offset by the anchor
 		virtual bool ShouldOffsetWithAnchor() const;
-
-		bool IsRestricted() const { return (fProperties & kIsRestricted) != 0; }
-		void SetRestricted( bool newValue ) { SetProperty( kIsRestricted, newValue ); }
 
 		Rtt_INLINE bool IsVisible() const { return (fProperties & kIsVisible) != 0; }
 		void SetVisible( bool newValue );

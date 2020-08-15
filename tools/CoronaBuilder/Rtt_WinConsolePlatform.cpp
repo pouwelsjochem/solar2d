@@ -314,9 +314,6 @@ void WinConsolePlatform::GetPreference(Category category, Rtt::String * value) c
 			}
 			break;
 		}
-		case kSubscription:
-			resultPointer = "Solar2D";
-			break;
 		default:
 			resultPointer = nullptr;
 			Rtt_ASSERT_NOT_REACHED();

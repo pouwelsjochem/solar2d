@@ -51,7 +51,7 @@ fi
 
 usage() {
 	echo "USAGE: $0 [product_type] [build_config] [build_type] [device_type]"
-	echo "   product_type:   trial, basic, automation, coronacards, all (default)"
+	echo "   product_type:   basic, coronacards, all (default)"
 	echo "   build_config:   debug (default) or release"
 	echo "   build_type:     incremental (default) or clean"
 	echo "   device_type:    generic, kindle, all (default)"

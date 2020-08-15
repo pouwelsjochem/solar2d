@@ -60,7 +60,7 @@ fi
 
 usage() {
 	echo "USAGE: $0 [product_type] [build_config] [build_type] [device_type]"
-	echo "   product_type:   trial, basic, automation, coronacards, all (default)"
+	echo "   product_type:   basic, coronacards, all (default)"
 	echo "   build_config:   debug (default) or release"
 	echo "   build_type:     incremental (default) or clean"
 	echo "   device_type:    generic, kindle, all (default)"
@@ -72,7 +72,7 @@ then
 	usage
 fi
 
-if [ -z "$1" ] || ([ "all" != "$1" ] && [ "basic" != "$1" ] && [ "trial" != "$1" ] && [ "automation" != "$1" ] && [ "coronacards" != "$1" ] )
+if [ -z "$1" ] || ([ "all" != "$1" ] && [ "basic" != "$1" ] && [ "coronacards" != "$1" ] )
 then
 	echo 'Defaulting to "all" product template'
 	PRODUCT_TYPE="all"

@@ -62,8 +62,7 @@ class LuaProxyVTable
 		static int __gcMeta( lua_State *L );
 
 	public:
-        // "overrideRestriction" is only used by introspection, it is otherwise false
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const = 0;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const = 0;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 //		virtual int Length( lua_State *L ) const;
 		virtual const LuaProxyVTable& Parent() const;
@@ -91,7 +90,7 @@ class LuaDisplayObjectProxyVTable : public LuaProxyVTable
 		LuaDisplayObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 		
 		// Removes child at index from parent and pushes onto the stack. Pushes nil
@@ -120,7 +119,7 @@ class LuaLineObjectProxyVTable : public LuaDisplayObjectProxyVTable
 		LuaLineObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };
@@ -144,7 +143,7 @@ class LuaShapeObjectProxyVTable : public LuaDisplayObjectProxyVTable
 		LuaShapeObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };
@@ -166,7 +165,7 @@ class LuaSnapshotObjectProxyVTable : public LuaShapeObjectProxyVTable
 		LuaSnapshotObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 
 		virtual const LuaProxyVTable& Parent() const;
@@ -185,7 +184,7 @@ class LuaCompositeObjectProxyVTable : public LuaDisplayObjectProxyVTable
 		LuaCompositeObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };
 
@@ -212,7 +211,7 @@ class LuaGroupObjectProxyVTable : public LuaDisplayObjectProxyVTable
 		LuaGroupObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };
@@ -233,7 +232,7 @@ class LuaStageObjectProxyVTable : public LuaGroupObjectProxyVTable
 		LuaStageObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };
 
@@ -250,7 +249,7 @@ class LuaTextObjectProxyVTable : public LuaShapeObjectProxyVTable
 		LuaTextObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };
@@ -268,7 +267,7 @@ class LuaEmbossedTextObjectProxyVTable : public LuaTextObjectProxyVTable
 		LuaEmbossedTextObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 		virtual const LuaProxyVTable& Parent() const;
 
@@ -291,7 +290,7 @@ class LuaPlatformDisplayObjectProxyVTable : public LuaDisplayObjectProxyVTable
 		LuaPlatformDisplayObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 };
 
@@ -366,7 +365,7 @@ class LuaSpriteObjectProxyVTable : public LuaShapeObjectProxyVTable
 		LuaSpriteObjectProxyVTable() {}
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };

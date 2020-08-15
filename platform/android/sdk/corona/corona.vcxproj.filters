@@ -754,9 +754,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Archive.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_CKWorkflow.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_DeviceOrientation.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -962,12 +959,6 @@
       <Filter>rtt\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.cpp">
-      <Filter>plugins-shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\shared\Rtt_DependencyLoader.cpp">
-      <Filter>plugins-shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\shared\Rtt_DependencyUtilsAndroid.cpp">
       <Filter>plugins-shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\external\lpng1256\pngerror.c">
@@ -1966,12 +1957,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_Callback.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_CKWorkflow.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_CKWorkFlowConstants.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_DeviceOrientation.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2234,9 +2219,6 @@
       <Filter>rtt\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h">
-      <Filter>plugins-shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\shared\Rtt_DependencyLoader.h">
       <Filter>plugins-shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\external\lpng1256\png.h">

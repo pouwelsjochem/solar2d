@@ -192,10 +192,7 @@ Display::Display( Runtime& owner )
 	fStream( Rtt_NEW( owner.GetAllocator(), GPUStream( owner.GetAllocator() ) ) ),
 	fTarget( owner.Platform().CreateScreenSurface() ),
 	fImageSuffix( LUA_REFNIL ),
-	fIsCollecting( false ),
-	fIsRestricted( false ),
-	fAllowFeatureResult( false ), // When IsRestricted(), default to *not* allowing.
-	fShouldRestrictFeature( 0 )
+	fIsCollecting( false )
 {
 }
 
@@ -1677,123 +1674,6 @@ Display::Collect( lua_State *L )
 	}
 }
 
-// NOTE: Only call this when IsRestricted() is true. Do NOT call otherwise.
-// When IsRestricted() is true, then we call this function to see if a feature
-// can still be used, e.g. demo mode for Simulator
-bool
-Display::AllowFeature( Feature value ) const
-{
-	const char kGraphicsType[] = "graphics";
-	const char *feature = StringForFeature( value );
-
-	// Always show message unless this flag is explicitly set to true
-	if ( ! fAllowFeatureResult )
-	{
-		if ( feature )
-		{
-			lua_State *L = fOwner.VMContext().L();
-			
-			Rtt_LUA_STACK_GUARD( L );
-
-			Lua::NewEvent( L, "featureRestriction" );
-			lua_pushstring( L, feature );
-			lua_setfield( L, -2, "feature" );
-			lua_pushstring( L, kGraphicsType );
-			lua_setfield( L, -2, "type" );
-			Lua::DispatchRuntimeEvent( L, 0 );
-			
-#ifdef Rtt_AUTHORING_SIMULATOR
-			// Enable demo mode *only* in simulator
-			// NOTE: We toggle the value here so that we can show the message at least once.
-			fAllowFeatureResult = true;
-#endif
-		}
-	}
-
-	// Always show this message for subscriptions below Pro.
-	Rtt_TRACE_SIM( ( "WARNING: %s is a premium %s feature that requires a Pro (or higher) subscription. To view your project on a device, you must upgrade your subscription.\n", feature, kGraphicsType ) );
-
-	return fAllowFeatureResult;
-}
-
-void
-Display::SetRestrictedFeature( Feature feature, bool shouldRestrict )
-{
-	U32 mask = GetRestrictedFeatureMask( feature );
-	const U32 p = fShouldRestrictFeature;
-	fShouldRestrictFeature = ( shouldRestrict ? p | mask : p & ~mask );
-}
-
-bool
-Display::IsRestrictedFeature( Feature feature ) const
-{
-	U32 mask = GetRestrictedFeatureMask( feature );
-	return ( fShouldRestrictFeature & mask );
-}
-
-bool
-Display::ShouldRestrictFeature( Feature feature ) const
-{
-	bool result = IsRestrictedFeature( feature ) && ! AllowRestrictedFeature( feature );
-
-	// TODO: Remove this check once we migrate from ShouldRestrict => ShouldRestrictFeature
-	if ( ! Display::IsEnterpriseFeature( feature ) )
-	{
-		// 'result' should match old behavior of ShouldRestrict
-		Rtt_ASSERT( ShouldRestrict( feature ) == result );
-	}
-
-	return result;
-}
-
-bool
-Display::AllowRestrictedFeature( Feature value ) const
-{
-	const char kGraphicsType[] = "graphics";
-	const char *feature = StringForFeature( value );
-
-	// Always show message unless this flag is explicitly set to true
-	// Further, only Pro features will be allowed in "demo" mode
-	if ( ! fAllowFeatureResult && IsProFeature( value ) )
-	{
-		if ( feature )
-		{
-			lua_State *L = fOwner.VMContext().L();
-			
-			Rtt_LUA_STACK_GUARD( L );
-
-			Lua::NewEvent( L, "featureRestriction" );
-			lua_pushstring( L, feature );
-			lua_setfield( L, -2, "feature" );
-			lua_pushstring( L, kGraphicsType );
-			lua_setfield( L, -2, "type" );
-			lua_pushstring( L, GetTierString( value ) );
-			lua_setfield( L, -2, "tier" );
-			Lua::DispatchRuntimeEvent( L, 0 );
-			
-#ifdef Rtt_AUTHORING_SIMULATOR
-			// Enable demo mode *only* in simulator
-			// NOTE: We toggle the value here so that we can show the message at least once.
-			fAllowFeatureResult = true;
-#endif
-		}
-	}
-
-	// Always show this message for subscriptions below the required subscription tier.
-	Rtt_TRACE_SIM( ( "WARNING: %s is a premium %s feature that requires a %s subscription. To view your project on a device, you must upgrade your subscription.\n", feature, kGraphicsType, GetTierString( value ) ) );
-
-	return fAllowFeatureResult;
-}
-
-U32
-Display::GetRestrictedFeatureMask( Feature feature )
-{
-	// Mask can only accomodate 32 features
-	Rtt_STATIC_ASSERT( kNumFeatures < (sizeof(U32)*8) );
-
-	U32 mask = 1 << (feature);
-	return mask;
-}
 
 // ----------------------------------------------------------------------------
 

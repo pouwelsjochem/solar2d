@@ -18,8 +18,6 @@
 #include "Rtt_Runtime.h"
 #include "Rtt_ProjectSettings.h"
 
-// #include "Rtt_DependencyLoader.h"
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -39,20 +37,7 @@ CoronaViewRuntimeDelegate::~CoronaViewRuntimeDelegate()
 void
 CoronaViewRuntimeDelegate::DidInitLuaLibraries( const Runtime& sender ) const
 {
-	// lua_State *L = sender.VMContext().L();
-	// Corona::IOSLoader::Register( L, GetPluginContext() );
-	
-	//Add verification library
-	//Lua::InsertPackageLoader( L, & (Corona::DependencyLoader::CCDataLoader), -1 );
-    
     PreloadLibraries( sender );
-}
-
-bool
-CoronaViewRuntimeDelegate::HasDependencies( const Runtime& sender ) const
-{
-	// None of our callers implement licensing
-	return true;
 }
 
 void

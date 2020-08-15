@@ -27,12 +27,6 @@ RuntimeDelegate::DidInitLuaLibraries( const Runtime& sender ) const
 {
 }
 
-bool
-RuntimeDelegate::HasDependencies( const Runtime& sender ) const
-{
-	return true;
-}
-
 void
 RuntimeDelegate::WillLoadMain( const Runtime& sender ) const
 {

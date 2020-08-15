@@ -156,7 +156,6 @@ MacSimulator::Initialize(
 
 	// -------------
 	AppDelegate *delegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-	[fProperties setValue:@"Solar2D" forKey:@"subscription"];
 	
 	// Store the simulated device's default font size.
 	[fProperties setValue:[NSNumber numberWithFloat:config.defaultFontSize] forKey:@"defaultFontSize"];

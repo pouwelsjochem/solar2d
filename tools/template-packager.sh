@@ -15,15 +15,12 @@ function package {
 
   # pull the ./ off the front of the path, and convert slashes to underscores
   subname=$(echo $dir | cut -c 3- | tr / _)
-  # build full tar ball name, eg: 2012.759_template_iphone_5.0_trial.tar.bz
+  # build full tar ball name, eg: 2012.759_template_iphone_5.0.tar.bz
   name=$(echo $build_num"_template_"$subname.tar.bz)
 
   # move into template dir so tar paths are correct during extraction
   cd $dir
-
-  # copy in the config_require.lua file into the templates
-  cp ${WORKSPACE}/platform/resources/config_require.lua ./
-
+  
   # make a tar.bz of the template dir
   tar -cjf ../../../$name ./
 

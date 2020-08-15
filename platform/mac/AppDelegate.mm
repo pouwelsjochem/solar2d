@@ -557,7 +557,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 @property (nonatomic, readwrite, copy) NSString* fAppPath;
 
--(BOOL)setSkinIfAllowed:(Rtt::TargetDevice::Skin)skin;
+-(void)setSkin:(Rtt::TargetDevice::Skin)skin;
 - (void) updateMenuForSkinChange;
 - (void) restoreUserSkinSetting;
 - (void) saveUserSkinSetting;
@@ -858,11 +858,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     Rtt::TargetDevice::Skin skinID = (Rtt::TargetDevice::Skin) [menuItem tag];
 
     // NSLog(@"viewAsAction: %d: %s", skinID, Rtt::TargetDevice::LuaObjectFileFromSkin(skinID));
-    
-    if ( [self setSkinIfAllowed:skinID] )
-    {
-        [self launchSimulator:sender];        
-    }
+    [self setSkin:skinID];
+    [self launchSimulator:sender];
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu
@@ -956,7 +953,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         ++itemCount;
     }
     
-    // If they're a "Pro" user they can define a custom device
 	[viewAsMenu insertItem:[NSMenuItem separatorItem] atIndex:viewAsItemCount];
 	++viewAsItemCount;
 	
@@ -1778,10 +1774,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
             }
             
             // Only launch simulator with new skin if we actually were allowed to change skins
-            if ( [self setSkinIfAllowed:skin] )
-            {
-                [self launchSimulator:sender];                
-            }
+            [self setSkin:skin];
+            [self launchSimulator:sender];
         }
     }
 }
@@ -1951,21 +1945,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     return nil;
 }
 
--(BOOL)shouldSimulateSkin:(Rtt::TargetDevice::Skin)skin
-{
-    return YES;  // we don't limit skins bu subscription type anymore
-}
 
-
--(BOOL)setSkinIfAllowed:(Rtt::TargetDevice::Skin)skin
+-(void)setSkin:(Rtt::TargetDevice::Skin)skin
 {
-	BOOL result = ( [self shouldSimulateSkin:skin] );
-	if ( result )
-	{
-		// Using accessor because I want to trigger change notifications for bindings
-		self.fSkin = skin;
-	}
-	return result;
+	self.fSkin = skin;
 }
 
 
@@ -2407,7 +2390,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	if ( result )
 	{
-		result = [self setSkinIfAllowed:skin];
+		result = [self setSkin:skin];
 	}
 
 	return result;

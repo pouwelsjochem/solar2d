@@ -280,7 +280,6 @@ application.metadata = {
     %s
     %s
     userId = "%s",
-    subscription = "enterprise",
     mode = "%s",
 }
 ]]

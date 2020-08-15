@@ -106,8 +106,6 @@ PaintAdapter::ValueForKey(
 		switch ( index )
 		{
 			case 4:
-				// TODO: For extra protection, this should be protected by Display::ShouldRestrict()
-				// We get it for free right now b/c access to paint properties are restricted
 				paint->PushShader( L );
 				result = 1;
 				break;
@@ -120,8 +118,6 @@ PaintAdapter::ValueForKey(
 				}
 				break;
 			case 6:
-				// TODO: For extra protection, this should be protected by Display::ShouldRestrict()
-				// We get it for free right now b/c access to paint properties are restricted
 				{
 					RenderTypes::BlendEquation eq = paint->GetBlendEquation();
 					lua_pushstring( L, RenderTypes::StringForBlendEquation( eq ) );
@@ -180,8 +176,6 @@ PaintAdapter::SetValueForKey(
 		switch ( index )
 		{
 			case 4:
-				// TODO: For extra protection, this should be protected by Display::ShouldRestrict()
-				// We get it for free right now b/c access to paint properties are restricted
 				{
 					Shader *shader = NULL;
 
@@ -267,8 +261,6 @@ PaintAdapter::SetValueForKey(
 				}
 				break;
 			case 6:
-				// TODO: For extra protection, this should be protected by Display::ShouldRestrict()
-				// We get it for free right now b/c access to paint properties are restricted
 				{
 					const char *v = lua_tostring( L, valueIndex );
 					RenderTypes::BlendEquation blendEquation = RenderTypes::BlendEquationForString( v );

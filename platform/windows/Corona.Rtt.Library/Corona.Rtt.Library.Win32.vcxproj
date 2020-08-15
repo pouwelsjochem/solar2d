@@ -189,7 +189,6 @@
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_VideoTexture.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_CKWorkflow.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
@@ -269,8 +268,6 @@
     <ClCompile Include="..\..\..\plugins\network\win32\WinTimer.cpp" />
     <ClCompile Include="..\..\..\plugins\shared\CoronaLuaLibrary.cpp" />
     <ClCompile Include="..\..\..\plugins\shared\CoronaLuaLibraryMetadata.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_DependencyLoader.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_DependencyUtilsWin.cpp" />
     <ClCompile Include="..\..\shared\Rtt_NativeWindowMode.cpp" />
     <ClCompile Include="..\..\shared\Rtt_ProjectSettings.cpp" />
     <ClCompile Include="..\..\shared\Rtt_ReadOnlyProjectSettings.cpp" />
@@ -452,8 +449,6 @@
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_VideoTexture.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Archive.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Callback.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_CKWorkflow.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_CKWorkFlowConstants.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_DeviceOrientation.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Event.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_FilePath.h" />
@@ -551,8 +546,6 @@
     <ClInclude Include="..\..\..\plugins\network\win32\WinTimer.h" />
     <ClInclude Include="..\..\..\plugins\shared\CoronaLuaLibrary.h" />
     <ClInclude Include="..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h" />
-    <ClInclude Include="..\..\shared\Rtt_DependencyLoader.h" />
-    <ClInclude Include="..\..\shared\Rtt_DependencyUtils.h" />
     <ClInclude Include="..\..\shared\Rtt_NativeWindowMode.h" />
     <ClInclude Include="..\..\shared\Rtt_ProjectSettings.h" />
     <ClInclude Include="..\..\shared\Rtt_ReadOnlyProjectSettings.h" />
@@ -673,7 +666,6 @@
     <LuaToCpp Include="..\..\..\plugins\licensing\shared\licensing.lua" />
     <LuaToCpp Include="..\..\..\plugins\network\shared\network.lua" />
     <LuaToCpp Include="..\..\..\subrepos\easing\easing.lua" />
-    <LuaToCpp Include="..\..\resources\config_require.lua" />
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\init.lua" />
     <LuaToCpp Include="..\..\resources\json.lua" />

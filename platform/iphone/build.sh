@@ -21,4 +21,3 @@ xcodebuild -project "$path"/../mac/car.xcodeproj -target car -configuration Rele
 
 # Corona Simulator
 xcodebuild -project "$path"/ratatouille.xcodeproj -target rttplayer -configuration Release-template -sdk iphoneos 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
-xcodebuild -project "$path"/ratatouille.xcodeproj -target rttplayer -configuration Release-template-trial -sdk iphoneos 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"

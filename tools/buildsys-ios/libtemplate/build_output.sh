@@ -87,7 +87,6 @@ end
 application.metadata = {
 	appName = "$appName",
 	appPackageId = "$appPackage",
-	subscription = "oss",
 	build = "$build",
 }
 EOF

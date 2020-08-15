@@ -1484,22 +1484,11 @@ bool CSimulatorView::LoadSkinResources()
 	
 	GetFilePaths(systemSkinFilesGlob, filePaths);
 
-	// Only "Pro" users get to have custom skins.  For business purposes, the ability to
-	// use Daily Builds equates to "Pro and above"
-#ifdef WE_FIXED_THE_APP_INITIALIZATION_ORDER
-	// TODO: Unfortunately the app initialization process is sufficiently convoluted that we have
-	// a chicken and egg issue here.  One day we'll figure it out, until then everyone on
-	// Windows gets user defined skins, not just Pro
-	const Rtt::AuthorizationTicket *ticket = GetWinProperties()->GetTicket();
-	if ( ticket && ticket->IsDailyBuildAllowed() )
-#endif
-	{
-		CString userSkinsGlob;
+	CString userSkinsGlob;
 
-		userSkinsGlob = mUserSkinsDir + _T("*.lua");
+	userSkinsGlob = mUserSkinsDir + _T("*.lua");
 
-		GetFilePaths(CString(userSkinsGlob), filePaths);
-	}
+	GetFilePaths(CString(userSkinsGlob), filePaths);
 
 	// Put the skins into a data structure we can share with core code
 	char **skinPaths;

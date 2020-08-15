@@ -58,7 +58,7 @@ mkdir -pv "$path/template-dSYM"
 # $1 device (e.g. ipad or iphone)
 # $2 architecture (e.g. device or simulator)
 # $3 version
-# $4 configuration (e.g. trial, basic)
+# $4 configuration (e.g. basic)
 # $5 target (e.g. template)
 # $6 extension (e.g. 'app' or 'a')
 build_target() {
@@ -127,9 +127,6 @@ build_target() {
 build_target "iphone" "device" "$SDK_VERSION" "basic" "template"
 checkError
 
-# iPhone trial
-ln -s basic "$path/template/iphone/$SDK_VERSION/trial"
-
 # iPhone all is now the same as basic
 ln -s basic "$path/template/iphone/$SDK_VERSION/all"
 
@@ -150,9 +147,6 @@ mv -v "$TEMPLATE_DIR"/libtemplate.a "$LIBTEMPLATE_DIR"/.
 
 # iPhone basic (i.e. for subscribers)
 build_target "iphone" "simulator" "$SDK_VERSION" "basic" "template"
-
-# iPhone trial
-ln -s basic "$path/template/iphone-sim/$SDK_VERSION/trial"
 
 # iPhone all is now the same as basic
 ln -s basic "$path/template/iphone-sim/$SDK_VERSION/all"

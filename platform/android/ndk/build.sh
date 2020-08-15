@@ -2,7 +2,6 @@
 
 # USAGE: ./build.sh device_type product_type [debug/release [clean]]
 # device_type:   generic, kindle, all
-# product_type:  basic, all, trial, automation
 # build_config:  debug, release
 # build_type:    clean, incremental
 # Default is debug/incremental
@@ -209,20 +208,11 @@ elif [ "$DEVICE_TYPE" = "kindle" ]
 then
 	CFLAGS="-DRtt_SUPPORTS_KINDLE"
 fi
-if [ "$PRODUCT_TYPE" = "automation" ]
-then
-	CFLAGS="${CFLAGS} -DRtt_OSEXIT_ON_LUAERROR"
-else
-	if [ "$PRODUCT_TYPE" = "trial" ]
-	then
-		CFLAGS="${CFLAGS} -DRtt_TRIAL"
-	fi
 
-	if [ "$OPTIM_FLAGS" = "debug" ]
-	then
-		CFLAGS="${CFLAGS} -DRtt_DEBUG -g"
-		FLAGS="$FLAGS NDK_DEBUG=1"
-	fi
+if [ "$OPTIM_FLAGS" = "debug" ]
+then
+	CFLAGS="${CFLAGS} -DRtt_DEBUG -g"
+	FLAGS="$FLAGS NDK_DEBUG=1"
 fi
 
 if [ "$PRODUCT_TYPE" != "coronacards" ]

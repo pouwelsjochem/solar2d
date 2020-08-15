@@ -134,7 +134,6 @@ class NativeToJavaBridge
 			const char ** labels, int numLabels, Rtt::LuaResource * resource );
 		void CancelNativeAlert( int which );
 		void AlertCallback( int which, bool cancelled );
-		void ShowTrialAlert();
 		void ShowNativeActivityIndicator();
 		void CloseNativeActivityIndicator();
 		bool HasMediaSource( int mediaSourceType );

@@ -92,7 +92,6 @@ application.metadata = {
     appPackageId = "$BUNDLE_ID",
     appId = "$APP_ID",
     userId = "",
-    subscription = "enterprise",
     mode = "$MODE",
 }
 EOF

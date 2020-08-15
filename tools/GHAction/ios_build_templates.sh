@@ -92,7 +92,6 @@ fi
             (
                 set -e
                 cd "$TEMPLATE_DIR/${PLATFORM}/${IOS_VER}/$BASIC"
-                cp -X "$WORKSPACE/platform/resources/config_require.lua" ./
                 mkdir -p libtemplate
                 cp -X "$WORKSPACE/tools/buildsys-ios/libtemplate/build_output.sh" libtemplate/ || true
                 rm -f "${ARCHIVE}"

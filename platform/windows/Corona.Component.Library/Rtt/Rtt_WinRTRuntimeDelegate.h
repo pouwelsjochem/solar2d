@@ -46,11 +46,6 @@ class WinRTRuntimeDelegate : public RuntimeDelegatePlayer
 		/// <summary>Called just after all core Lua libraries have been loaded into the runtime's Lua state.</summary>
 		/// <param name="sender">The Corona runtime that is raising this event.</param>
 		virtual void DidInitLuaLibraries(const Runtime& sender) const;
-
-		/// <summary>Determines if the Corona library is licensed and authorized to continue.</summary>
-		/// <param name="sender">The Corona runtime that is raising this event.</param>
-		/// <returns>Returns true if the Corona library is licensed/authorized. Returns false if not.</returns>
-		virtual bool HasDependencies(const Runtime& sender) const;
 		
 		/// <summary>
 		///  <para>Called just before the "main.lua" file has been loaded.</para>

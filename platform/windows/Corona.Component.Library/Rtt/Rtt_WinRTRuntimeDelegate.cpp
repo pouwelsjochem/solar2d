@@ -14,8 +14,6 @@
 Rtt_DISABLE_WIN_XML_COMMENT_COMPILER_WARNINGS_BEGIN
 #	include "Core/Rtt_Build.h"
 #	include "Core/Rtt_String.h"
-#	include "Rtt_CKWorkflow.h"
-#	include "Rtt_DependencyLoader.h"
 #	include "Rtt_Lua.h"
 #	include "Rtt_LuaContext.h"
 #	include "Rtt_Runtime.h"
@@ -86,60 +84,6 @@ void WinRTRuntimeDelegate::DidInitLuaLibraries(const Runtime& sender) const
 	RuntimeDelegatePlayer::DidInitLuaLibraries(sender);
 
 //TODO: Add plugin path to Lua::InsertPackageLoader() function.
-}
-
-bool WinRTRuntimeDelegate::HasDependencies(const Runtime& sender) const
-{
-#if 1
-	// CoronaCards for WP8 is now free and should no longer require a license file.
-	return true;
-#else
-	// Always return true if not using CoronaCards/Kit.
-	// Note: Authorization is typically done via the signature attached to the "resource.car" in this case.
-	bool isNotUsingCoronaKit = !sender.IsProperty(Rtt::Runtime::kIsCoronaKit);
-	if (isNotUsingCoronaKit)
-	{
-		return true;
-	}
-
-	// *** The runtime is set up for CoronaCards. Handle its licensing below. ***
-
-	// Check if the CoronaCards license file exists.
-	bool wasLicenseFileFound = false;
-	{
-		FILE *fileHandle = nullptr;
-		auto utf16LicenseFilePath = fEnvironment->ResourceDirectoryPath + L"\\license.ccdata";
-		::_wfopen_s(&fileHandle, utf16LicenseFilePath->Data(), L"r");
-		if (fileHandle)
-		{
-			::fclose(fileHandle);
-			wasLicenseFileFound = true;
-		}
-	}
-
-	// Display a trial watermark if the license was not found.
-	// Note: Android and iOS display a native alert message instead, which exits the app when a button has been pressed.
-	//       We're lowerig the barrier on this platform so that the Corona project created by our Visual Studio extension
-	//       will "just work", which would hopefully provide a better developer experience when trying out our SDK.
-	if (false == wasLicenseFileFound)
-	{
-		// Flag the Corona runtime to display a trial watermark.
-		sender.SetShowingTrialMessage(true);
-
-		// Log a message indicating where the developer can obtain a valid license file.
-		Rtt::CKWorkflow workflow;
-		auto alertSettings = workflow.CreateAlertSettingsFor(Rtt::CKWorkflow::kMissingLicense, "coronacards");
-		Rtt_LogException(
-				"[CoronaCards Trial Notice]\r\n"
-				"   Corona is currently in trial mode. To obtain a valid license, please go here:\r\n"
-				"   %s\r\n",
-				alertSettings.ActionButtonUrl.c_str());
-		return true;
-	}
-
-	// Load and validate the CoronaCards license.
-	return Corona::DependencyLoader::CCDependencyCheck(sender);
-#endif
 }
 
 void WinRTRuntimeDelegate::WillLoadMain(const Runtime& sender) const

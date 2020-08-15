@@ -1448,7 +1448,7 @@ LuaLibSystem::Initialize( lua_State *L )
 }
 
 int
-LuaLibSystem::ValueForKey( lua_State *L, const MLuaProxyable&, const char key[], bool overrideRestriction /* = false */ ) const
+LuaLibSystem::ValueForKey( lua_State *L, const MLuaProxyable&, const char key[] ) const
 {
 	if ( strcmp( "orientation", key ) == 0 )
 	{

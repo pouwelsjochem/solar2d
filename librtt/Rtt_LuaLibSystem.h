@@ -80,7 +80,7 @@ class LuaLibSystem : public LuaProxyVTable
 		static void Initialize( lua_State *L );
 
 	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const;
+		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 };
 
 // ----------------------------------------------------------------------------

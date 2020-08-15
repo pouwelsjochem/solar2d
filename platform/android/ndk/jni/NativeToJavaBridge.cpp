@@ -1184,12 +1184,6 @@ NativeToJavaBridge::AlertCallback( int which , bool cancelled)
 }
 
 void
-NativeToJavaBridge::ShowTrialAlert()
-{
-	CallVoidMethod( "callShowTrialAlert" );
-}
-
-void
 NativeToJavaBridge::ShowNativeActivityIndicator()
 {
 	NativeTrace trace( "NativeToJavaBridge::ShowNativeActivityIndicator" );

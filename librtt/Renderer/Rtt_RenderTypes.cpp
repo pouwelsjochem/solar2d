@@ -220,27 +220,6 @@ RenderTypes::BlendTypeForString( const char *str )
 	return result;
 }
 
-bool
-RenderTypes::IsRestrictedBlendType( BlendType value )
-{
-	bool result = true;
-
-
-	switch ( value )
-	{
-		case kNormal:
-		case kAdditive:
-		case kScreen:
-		case kMultiply:
-			result = false;
-			break;
-		default:
-			break;
-	}
-	
-	return result;
-}
-
 // PorterDuff only operates in premultiplied.
 // NOTE: For non-premultiplied, we use the premultiplied values
 RenderTypes::BlendType

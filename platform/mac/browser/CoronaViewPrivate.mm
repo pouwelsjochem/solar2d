@@ -426,26 +426,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	}
 }
 
-/*
-- (void)initializeRuntimeWithPlatform:(Rtt::MacPlatform *)platform runtimeDelegate:(Rtt::CoronaViewRuntimeDelegate *)runtimeDelegate
-{
-    using namespace Rtt;
-
-    if ( ! _runtime )
-    {
-        _platform = ( platform ? platform : new MacPlatform( ) );
-        _runtime = new Runtime( * _platform );
-
-		_runtimeDelegate = ( runtimeDelegate ? runtimeDelegate : new CoronaViewRuntimeDelegate( self ) );
-
-        _runtime->SetDelegate( _runtimeDelegate );
-
-		//bool isCoronaKit = Rtt::MacTemplate::IsProperty( MacTemplate::kIsCoronaKit );
-		//_runtime->SetProperty( Rtt::Runtime::kIsCoronaKit, isCoronaKit );
-    }
-}
-*/
-
 - (void)willBeginRunLoop:(NSDictionary *)params
 {
 	using namespace Rtt;

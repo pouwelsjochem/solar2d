@@ -168,7 +168,6 @@ Runtime::Runtime( const MPlatform& platform, MCallback *viewCallback )
 	fDownloadablePluginsRef(LUA_NOREF),
 	fDownloadablePluginsCount(0),
 	fDelegate(NULL),
-	fShowingTrialMessages(false),
 #ifdef Rtt_AUTHORING_SIMULATOR
 	m_fAsyncListener(nullptr),
 	m_fAsyncResultStr(nullptr),
@@ -385,39 +384,6 @@ exitCallback( lua_State* L )
 	return 0;
 }
 
-
-
-int luaload_config_require(lua_State* L);
-
-// restrictLibs( subscription )
-static int
-restrictLibs( lua_State *L )
-{
-	// Create application.metadata global table that luaload_config_require
-	// assumes already exists
-	lua_newtable( L ); // t1
-	{
-		lua_newtable( L ); // t2
-
-		lua_pushstring( L, "developer" ); // push 'developer'
-		lua_setfield( L, -2, "mode" ); // t2.mode = 'developer'
-
-		lua_pushvalue( L, 1 ); // push subscription
-		lua_setfield( L, -2, "subscription" ); // t2.subscription = subscription
-
-	}
-	lua_setfield( L, -2, "metadata" ); // t1 = t2
-
-	lua_setglobal( L, "application" ); // application = t2
-
-	(void) Rtt_VERIFY( 0 == Lua::DoBuffer( L, luaload_config_require, NULL ) );
-
-	lua_pushnil( L );
-	lua_setglobal( L, "application" ); // application = nil
-
-	return 0;
-}
-
 static int
 pushShellArgs( lua_State* L )
 {
@@ -537,65 +503,8 @@ Runtime::InitializeArchive( const char *filePath )
 
 static const char kApplication[] = "application";
 
-int
-Runtime::InitializeMetadataShim( lua_State *L )
-{
-	Runtime *runtime = (Runtime *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-	runtime->InitializeMetadata( L, 1 );
-	return 0;
-}
-
-void
-Runtime::InitializeMetadata( lua_State *L, int index )
-{
-	index = Lua::Normalize( L, index );
-	lua_getfield( L, index, "permissions" );
-	{
-		if ( lua_istable( L, -1 ) )
-		{
-			lua_getfield( L, -1, "advancedGraphics" );
-			{
-				bool canUseAdvancedGraphics = (bool)lua_toboolean( L, -1 );
-
-				// TODO: SetRestricted() is deprecated in favor of SetRestrictedFeature().
-				// Once we migrate all calls from ShouldRestrict => ShouldRestrictFeature,
-				// we can remove this call, as it's no longer needed.
-				GetDisplay().SetRestricted( ! canUseAdvancedGraphics );
-
-				// TODO: As part of migrating to ShouldRestrictFeature(),
-				// we need to verify this works!!! Below is untested!!!
-				if ( ! canUseAdvancedGraphics )
-				{
-					// Set 'false' for *all* features
-					for ( int i = Display::kDisplayNewSnapshot; i < Display::kNumFeatures; i++ )
-					{
-						Display::Feature f = (Display::Feature)i;
-						GetDisplay().SetRestrictedFeature( f, false );
-					}
-				}
-			}
-			lua_pop( L, 1 );
-
-			lua_getfield( L, -1, "customFragment" );
-			{
-				bool canUseCustomShaders = (bool)lua_toboolean( L, -1 );
-				GetDisplay().SetRestrictedFeature( Display::kGraphicsDefineEffectFragment, ! canUseCustomShaders );
-			}
-			lua_pop( L, 1 );
-
-			lua_getfield( L, -1, "customVertex" );
-			{
-				bool canUseCustomShaders = (bool)lua_toboolean( L, -1 );
-				GetDisplay().SetRestrictedFeature( Display::kGraphicsDefineEffectVertex, ! canUseCustomShaders );
-			}
-			lua_pop( L, 1 );
-		}
-	}
-	lua_pop( L, 1 );
-}
-
 bool
-Runtime::PushConfig( lua_State *L, bool shouldRestrictLibs )
+Runtime::PushConfig( lua_State *L )
 {
 	bool result = false;
 
@@ -603,40 +512,31 @@ Runtime::PushConfig( lua_State *L, bool shouldRestrictLibs )
 
 	Rtt_ASSERT( 0 == lua_gettop( L ) );
 
-	// [Lua] initializeMetadata = & Runtime::initializeMetadataShim
-	lua_pushlightuserdata( L, this );
-	lua_pushcclosure( L, InitializeMetadataShim, 1 );
-	lua_setglobal( L, "initializeMetadata" );
+	if ( IsProperty( kIsApplicationNotArchived ) )
 	{
-		if ( IsProperty( kIsApplicationNotArchived ) )
-		{
-			// Load from individual Lua file
-			const char kConfig[] = Rtt_LUA_SCRIPT_FILE( "config" );
+		// Load from individual Lua file
+		const char kConfig[] = Rtt_LUA_SCRIPT_FILE( "config" );
 
-			String filePath( GetAllocator() );
-			fPlatform.PathForFile( kConfig, MPlatform::kResourceDir, MPlatform::kTestFileExists, filePath );
-			const char *path = filePath.GetString();
-			if ( path )
-			{
-				status = VMContext().DoFile( path, 0, true );
-			}
-			else
-			{
-				// other cases assume a non-zero status means there's an error msg on the stack
-				// so push a "fake" error msg on the stack so we are consistent with those cases
-				lua_pushnil( L );
-			}
+		String filePath( GetAllocator() );
+		fPlatform.PathForFile( kConfig, MPlatform::kResourceDir, MPlatform::kTestFileExists, filePath );
+		const char *path = filePath.GetString();
+		if ( path )
+		{
+			status = VMContext().DoFile( path, 0, true );
 		}
 		else
 		{
-			// Load from resource.car
-			const char kConfig[] = Rtt_LUA_OBJECT_FILE( "config" );
-			status = GetArchive()->DoResource( L, kConfig, 0 );
+			// other cases assume a non-zero status means there's an error msg on the stack
+			// so push a "fake" error msg on the stack so we are consistent with those cases
+			lua_pushnil( L );
 		}
 	}
-	// [Lua] initializeMetadata = nil
-	lua_pushnil( L );
-	lua_setglobal( L, "initializeMetadata" );
+	else
+	{
+		// Load from resource.car
+		const char kConfig[] = Rtt_LUA_OBJECT_FILE( "config" );
+		status = GetArchive()->DoResource( L, kConfig, 0 );
+	}
 
 	// Check config.lua was loaded successfully
 	if ( 0 == status )
@@ -1025,8 +925,7 @@ Runtime::LoadApplication( const LoadParameters& parameters )
 		// ---------------------------------------------------------------
 
 		lua_State *L = VMContext().L();
-		bool shouldRestrictLibs = ! ( launchOptions & kUnlockFeatures );
-		bool hasConfig = PushConfig( L, shouldRestrictLibs );
+		bool hasConfig = PushConfig( L );
 		if ( hasConfig )
 		{
 			if ( fDelegate )
@@ -1073,32 +972,20 @@ Runtime::LoadApplication( const LoadParameters& parameters )
 		bool connectToDebugger = ( launchOptions & kConnectToDebugger );
 		SetProperty( kIsDebuggerConnected, connectToDebugger );
 		
-		//If there's no delegate to check "dependencies" for CoronaKit, then exit
-		if ( fDelegate )
+		// If kLaunchDeviceShell is set, run shell.lua which will, in turn, run main.lua (via onShellComplete())
+		if ( launchOptions & kLaunchDeviceShell )
 		{
-			// Obfuscated name - for CoronaKit we check "dependencies", everywhere else always returns true
-			if ( fDelegate->HasDependencies( *this ) ) // license check
-			{
-				// If kLaunchDeviceShell is set, run shell.lua which will, in turn, run main.lua (via onShellComplete())
-				if ( launchOptions & kLaunchDeviceShell )
-				{
-					// Load and invoke shell.lua bytecodes
-					bool retVal = Rtt_VERIFY( 0 == fVMContext->DoBuffer( luaload_shell, false, pushShellArgs ) );
-					result = retVal ? Runtime::kSuccess : Runtime::kGeneralFail;
-				}
-				else
-				{
-					// If kLaunchDeviceShell is not set, just schedule main.lua
-					LoadMainTask* e = Rtt_NEW( Allocator(), LoadMainTask( NULL ) );
-					GetScheduler().Append( e );
-					
-					result = Runtime::kSuccess;
-				}
-			}
-			else
-			{
-				result = Runtime::kSecurityIssue;
-			}
+			// Load and invoke shell.lua bytecodes
+			bool retVal = Rtt_VERIFY( 0 == fVMContext->DoBuffer( luaload_shell, false, pushShellArgs ) );
+			result = retVal ? Runtime::kSuccess : Runtime::kGeneralFail;
+		}
+		else
+		{
+			// If kLaunchDeviceShell is not set, just schedule main.lua
+			LoadMainTask* e = Rtt_NEW( Allocator(), LoadMainTask( NULL ) );
+			GetScheduler().Append( e );
+			
+			result = Runtime::kSuccess;
 		}
 	}
 
@@ -1493,18 +1380,6 @@ Runtime::SetSuspendOverrideProperty( U32 mask, bool value )
 {
 	const U32 p = fSuspendOverrideProperties;
 	fSuspendOverrideProperties = ( value ? p | mask : p & ~mask );
-}
-
-void
-Runtime::SetShowingTrialMessage( bool showMsg ) const
-{
-	fShowingTrialMessages = showMsg;
-}
-
-bool
-Runtime::IsShowingTrialMessage()
-{
-	return fShowingTrialMessages;
 }
 
 PlatformExitCallback*

@@ -1539,11 +1539,6 @@ public class NativeToJavaBridge {
 	{
 		runtime.getController().cancelNativeAlert( which );
 	}
-
-	protected static void callShowTrialAlert(CoronaRuntime runtime)
-	{
-		runtime.getController().showTrialAlert();
-	}
 	
 	protected static void callShowNativeActivityIndicator(CoronaRuntime runtime)
 	{

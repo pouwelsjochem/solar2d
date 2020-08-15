@@ -520,7 +520,6 @@
 		A492766017BADABA00DAD62A /* kernel_composite_subtract_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A492764B17BADA8F00DAD62A /* kernel_composite_subtract_gl.lua */; };
 		A492766117BADABA00DAD62A /* kernel_composite_vividLight_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A492764C17BADA8F00DAD62A /* kernel_composite_vividLight_gl.lua */; };
 		A498B85616DD64580091A148 /* Rtt_DeviceBuildData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A498B85416DD64580091A148 /* Rtt_DeviceBuildData.cpp */; };
-		A4A0B56316F1B131006D5373 /* config_require.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4A0B56216F1B0C5006D5373 /* config_require.lua */; };
 		A4A47E5B14D28B9800B5111C /* Rtt_LuaAux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A47E5914D28B9800B5111C /* Rtt_LuaAux.cpp */; };
 		A4A5DE06177BA2B0001EE9E5 /* Rtt_ShaderData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A5DE02177BA2A1001EE9E5 /* Rtt_ShaderData.cpp */; };
 		A4A5DE08177BA2B0001EE9E5 /* Rtt_ShaderDataAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A5DE04177BA2A9001EE9E5 /* Rtt_ShaderDataAdapter.cpp */; };
@@ -942,7 +941,6 @@
 		C229E16F1B32221B00D87A7C /* Rtt_VersionTimestamp.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BE512B71BF20057F594 /* Rtt_VersionTimestamp.c */; };
 		C229E1701B32221B00D87A7C /* Rtt_VertexCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883F176A621200ACB6FF /* Rtt_VertexCache.cpp */; };
 		C229E1711B32221B00D87A7C /* Rtt_WeakCount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8BC178A25F300BE6805 /* Rtt_WeakCount.cpp */; };
-		C229E1781B32221B00D87A7C /* config_require.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4A0B56216F1B0C5006D5373 /* config_require.lua */; };
 		C229E1791B32221B00D87A7C /* create_build_properties.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F181399772500AFB095 /* create_build_properties.lua */; };
 		C229E17A1B32221B00D87A7C /* dkjson.lua in Sources */ = {isa = PBXBuildFile; fileRef = C2DB261B194B643000B0BA05 /* dkjson.lua */; };
 		C229E17B1B32221B00D87A7C /* easing.lua in Sources */ = {isa = PBXBuildFile; fileRef = A41AC0E516A5DAD300AD331A /* easing.lua */; };
@@ -2638,7 +2636,6 @@
 		A492764C17BADA8F00DAD62A /* kernel_composite_vividLight_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_vividLight_gl.lua; path = Display/Shader/kernel_composite_vividLight_gl.lua; sourceTree = "<group>"; };
 		A498B85416DD64580091A148 /* Rtt_DeviceBuildData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_DeviceBuildData.cpp; sourceTree = "<group>"; };
 		A498B85516DD64580091A148 /* Rtt_DeviceBuildData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_DeviceBuildData.h; sourceTree = "<group>"; };
-		A4A0B56216F1B0C5006D5373 /* config_require.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = config_require.lua; path = ../platform/resources/config_require.lua; sourceTree = "<group>"; };
 		A4A47E5914D28B9800B5111C /* Rtt_LuaAux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaAux.cpp; sourceTree = "<group>"; };
 		A4A47E5A14D28B9800B5111C /* Rtt_LuaAux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaAux.h; sourceTree = "<group>"; };
 		A4A5DE02177BA2A1001EE9E5 /* Rtt_ShaderData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShaderData.cpp; path = Display/Rtt_ShaderData.cpp; sourceTree = "<group>"; };
@@ -3471,7 +3468,6 @@
 				1F46A96521136B51009CC875 /* linuxPackageApp.lua */,
 				C2AF1E531DA6F0ED00907A65 /* valid_build_settings.lua */,
 				C2AF1E541DA6F0ED00907A65 /* valid_config_lua.lua */,
-				A4A0B56216F1B0C5006D5373 /* config_require.lua */,
 				C200AAE919626D86005828AA /* CoronaPListSupport.lua */,
 				F53C32832404E25600BC2BED /* CoronaBuilderPluginCollector.lua */,
 				F5FFADB123FFC798004E61A9 /* CoronaOfflineiOSPackager.lua */,
@@ -5859,7 +5855,6 @@
 				00B73C1112B71BF20057F594 /* Rtt_VersionTimestamp.c in Sources */,
 				A432889E176A621200ACB6FF /* Rtt_VertexCache.cpp in Sources */,
 				A46AC8C9178A260300BE6805 /* Rtt_WeakCount.cpp in Sources */,
-				A4A0B56316F1B131006D5373 /* config_require.lua in Sources */,
 				A4E76F191399772500AFB095 /* create_build_properties.lua in Sources */,
 				C2DB261C194B652100B0BA05 /* dkjson.lua in Sources */,
 				F5B248521B57123B0087FFBC /* Rtt_TextureResourceAdapter.cpp in Sources */,
@@ -6348,7 +6343,6 @@
 				C229E16F1B32221B00D87A7C /* Rtt_VersionTimestamp.c in Sources */,
 				C229E1701B32221B00D87A7C /* Rtt_VertexCache.cpp in Sources */,
 				C229E1711B32221B00D87A7C /* Rtt_WeakCount.cpp in Sources */,
-				C229E1781B32221B00D87A7C /* config_require.lua in Sources */,
 				C229E1791B32221B00D87A7C /* create_build_properties.lua in Sources */,
 				C229E17A1B32221B00D87A7C /* dkjson.lua in Sources */,
 				F5B248531B57123B0087FFBC /* Rtt_TextureResourceAdapter.cpp in Sources */,

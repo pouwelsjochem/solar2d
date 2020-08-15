@@ -185,11 +185,6 @@ JavaToNativeBridge::Init(
 			fIsResourcesLoaded = true;
 			fView->SetCallback( fRuntime );
 			fRuntime->BeginRunLoop();
-
-#if defined( Rtt_TRIAL )
-			// Display a nag window for trial builds.
-			fNativeToJavaBridge->ShowTrialAlert();
-#endif
 		}
 		else
 		{

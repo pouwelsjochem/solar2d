@@ -15,8 +15,6 @@
 #include "Rtt_Runtime.h"
 #include "NativeToJavaBridge.h"
 
-#include "Rtt_DependencyLoader.h"
-
 #include <android/log.h>
 #include <dlfcn.h>
 
@@ -145,18 +143,11 @@ AndroidRuntimeDelegate::DidInitLuaLibraries( const Runtime& sender ) const
 
 	if (fIsCoronaKit)
 	{
-		// Lua::InsertPackageLoader( L, & (Corona::DependencyLoader::CCDataLoader), -1 );
 		//When require is called in corona kit this will read the file form the assets dir instead of resource.car
 		Lua::InsertPackageLoader( L, & FileLoader, -1, fNativeToJavaBridge );
 	}
 	Lua::InsertPackageLoader( L, & JavaLuaLoader, -1, fNativeToJavaBridge );
 	Lua::InsertPackageLoader( L, & AndroidZipSoLoader, -1 );
-}
-
-bool
-AndroidRuntimeDelegate::HasDependencies( const Runtime& sender ) const
-{
-	return ( !fIsCoronaKit ) || ( Corona::DependencyLoader::CCDependencyCheck( sender ) );
 }
 
 /// Called just before the "main.lua" file has been loaded.

@@ -117,9 +117,6 @@
     <ClCompile Include="..\..\..\external\LuaHashMap\LuaHashMap.c">
       <Filter>external\LuaHashMap</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_DependencyLoader.cpp">
-      <Filter>platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformNotifier.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -127,9 +124,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_CKWorkflow.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_DeviceOrientation.cpp">
@@ -789,9 +783,6 @@
     <ClCompile Include="..\..\..\external\hmac\sha2.c">
       <Filter>external\hmac</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_DependencyUtilsWin.cpp">
-      <Filter>platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\plugins\licensing\shared\CoronaLicensingLibrary.cpp">
       <Filter>plugins\licensing\shared</Filter>
     </ClCompile>
@@ -827,12 +818,6 @@
     <ClInclude Include="..\..\..\external\LuaHashMap\LuaHashMap.h">
       <Filter>external\LuaHashMap</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_DependencyLoader.h">
-      <Filter>platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_DependencyUtils.h">
-      <Filter>platform\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformNotifier.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -843,12 +828,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Callback.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_CKWorkflow.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_CKWorkFlowConstants.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_DeviceOrientation.h">
@@ -1673,9 +1652,6 @@
       <Filter>platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\runtime.lua">
-      <Filter>platform\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\config_require.lua">
       <Filter>platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\dkjson.lua">

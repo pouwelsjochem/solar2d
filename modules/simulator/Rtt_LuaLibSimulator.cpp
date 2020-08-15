@@ -152,15 +152,6 @@ show( lua_State *L )
 }
 
 static int
-getSubscription( lua_State *L )
-{
-	lua_pushstring( L, "Solar2D" );
-	lua_pushinteger( L, 0 );
-
-	return 2;
-}
-
-static int
 getCurrProjectPath( lua_State *L )
 {
     Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
@@ -579,7 +570,6 @@ LuaLibSimulator::Open( lua_State *L )
 	const luaL_Reg kVTable[] =
 	{
 		{ "show", show },
-		{ "getSubscription", getSubscription },
 		{ "getRecentProjects", getRecentProjects },
 		{ "getCurrentProjectPath", getCurrProjectPath },
 		{ "runExtension", runExtension },

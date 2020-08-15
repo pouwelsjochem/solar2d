@@ -297,9 +297,6 @@
 		0724699B17DA43BA000A1641 /* Rtt_MCPUResourceObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0724699817DA43BA000A1641 /* Rtt_MCPUResourceObserver.h */; };
 		0724699C17DA43BA000A1641 /* Rtt_CPUResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0724699917DA43BA000A1641 /* Rtt_CPUResourcePool.cpp */; };
 		0724699D17DA43BA000A1641 /* Rtt_CPUResourcePool.h in Headers */ = {isa = PBXBuildFile; fileRef = 0724699A17DA43BA000A1641 /* Rtt_CPUResourcePool.h */; };
-		075B71F218CA5881006C4956 /* Rtt_CKWorkflow.h in Headers */ = {isa = PBXBuildFile; fileRef = 075B71EF18CA5881006C4956 /* Rtt_CKWorkflow.h */; };
-		075B71F318CA5881006C4956 /* Rtt_CKWorkflow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 075B71F018CA5881006C4956 /* Rtt_CKWorkflow.cpp */; };
-		075B71F418CA5881006C4956 /* Rtt_CKWorkFlowConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 075B71F118CA5881006C4956 /* Rtt_CKWorkFlowConstants.h */; };
 		078BDB9D1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078BDB9B1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp */; };
 		078BDB9E1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 078BDB9C1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h */; };
 		0790F87418B6DFE800D0E6B1 /* loader_ccdata.lua in Sources */ = {isa = PBXBuildFile; fileRef = 0790F87318B6DFA100D0E6B1 /* loader_ccdata.lua */; };
@@ -919,7 +916,6 @@
 		000DCC7312B0609700042A5E /* luaal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = luaal.h; path = ../external/ALmixer/luaal.h; sourceTree = "<group>"; };
 		000DCCFD12B06E9400042A5E /* init.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = init.lua; path = ../resources/init.lua; sourceTree = SOURCE_ROOT; };
 		000DCCFE12B06E9400042A5E /* runtime.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.lua; path = ../resources/runtime.lua; sourceTree = SOURCE_ROOT; };
-		000DCED912B0824800042A5E /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
 		000DCEDB12B0824800042A5E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		000DCFFB12B084DA00042A5E /* lsqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lsqlite3.c; path = "../../external/lsqlite3-7/lsqlite3.c"; sourceTree = SOURCE_ROOT; };
 		000DD00012B0853500042A5E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -1035,9 +1031,6 @@
 		0724699817DA43BA000A1641 /* Rtt_MCPUResourceObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MCPUResourceObserver.h; path = Renderer/Rtt_MCPUResourceObserver.h; sourceTree = "<group>"; };
 		0724699917DA43BA000A1641 /* Rtt_CPUResourcePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CPUResourcePool.cpp; path = Display/Rtt_CPUResourcePool.cpp; sourceTree = "<group>"; };
 		0724699A17DA43BA000A1641 /* Rtt_CPUResourcePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CPUResourcePool.h; path = Display/Rtt_CPUResourcePool.h; sourceTree = "<group>"; };
-		075B71EF18CA5881006C4956 /* Rtt_CKWorkflow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_CKWorkflow.h; sourceTree = "<group>"; };
-		075B71F018CA5881006C4956 /* Rtt_CKWorkflow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_CKWorkflow.cpp; sourceTree = "<group>"; };
-		075B71F118CA5881006C4956 /* Rtt_CKWorkFlowConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_CKWorkFlowConstants.h; sourceTree = "<group>"; };
 		077EEE2D16CD9F7B009024CA /* Rtt_MRuntimeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rtt_MRuntimeDelegate.h; sourceTree = "<group>"; };
 		078BDB9B1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_EmbossedTextObject.cpp; path = Display/Rtt_EmbossedTextObject.cpp; sourceTree = "<group>"; };
 		078BDB9C1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_EmbossedTextObject.h; path = Display/Rtt_EmbossedTextObject.h; sourceTree = "<group>"; };
@@ -1541,9 +1534,6 @@
 				C2756C251C57220300BE3194 /* NSString+Extensions.m */,
 				000DCAC712B05F3D00042A5E /* Rtt_Archive.cpp */,
 				000DCAC812B05F3D00042A5E /* Rtt_Archive.h */,
-				075B71F018CA5881006C4956 /* Rtt_CKWorkflow.cpp */,
-				075B71EF18CA5881006C4956 /* Rtt_CKWorkflow.h */,
-				075B71F118CA5881006C4956 /* Rtt_CKWorkFlowConstants.h */,
 				000DCAD512B05F3D00042A5E /* Rtt_DeviceOrientation.cpp */,
 				000DCAD612B05F3D00042A5E /* Rtt_DeviceOrientation.h */,
 				000DCAE212B05F3E00042A5E /* Rtt_Event.cpp */,
@@ -2009,7 +1999,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				000DCED912B0824800042A5E /* libobjc.dylib */,
 				000DD00012B0853500042A5E /* libsqlite3.dylib */,
 				000DCEDB12B0824800042A5E /* libz.dylib */,
 			);
@@ -2479,8 +2468,6 @@
 				000DCC3C12B05F3E00042A5E /* Rtt_StrokeTesselatorStream.h in Headers */,
 				000DCC3E12B05F3E00042A5E /* Rtt_TesselatorStream.h in Headers */,
 				000DCC4212B05F3E00042A5E /* Rtt_Transform.h in Headers */,
-				075B71F218CA5881006C4956 /* Rtt_CKWorkflow.h in Headers */,
-				075B71F418CA5881006C4956 /* Rtt_CKWorkFlowConstants.h in Headers */,
 				000DCEFC12B082EF00042A5E /* luaal.h in Headers */,
 				0044F0E012CA9D74006EB396 /* Rtt_PlatformInAppStore.h in Headers */,
 				0044F1D912CAB806006EB396 /* Rtt_LuaLibInAppStore.h in Headers */,
@@ -3016,7 +3003,6 @@
 				000DCC3112B05F3E00042A5E /* Rtt_Scheduler.cpp in Sources */,
 				000DCC3B12B05F3E00042A5E /* Rtt_StrokeTesselatorStream.cpp in Sources */,
 				000DCC3D12B05F3E00042A5E /* Rtt_TesselatorStream.cpp in Sources */,
-				075B71F318CA5881006C4956 /* Rtt_CKWorkflow.cpp in Sources */,
 				000DCC4112B05F3E00042A5E /* Rtt_Transform.cpp in Sources */,
 				F58787891C80ADCA0033F1D4 /* Rtt_TextureResourceExternal.cpp in Sources */,
 				000DCCFF12B06E9400042A5E /* init.lua in Sources */,
@@ -3268,68 +3254,6 @@
 			};
 			name = "Release-template";
 		};
-		000DC8B412B046F600042A5E /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_PASCAL_STRINGS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					Rtt_IPHONE_ENV,
-					Rtt_TRIAL,
-					NDEBUG,
-					LUA_USE_OBJC_EXCEPTIONS,
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					../../external/smoothpolygon,
-					/System/Library/Frameworks/OpenAL.framework/Headers,
-					../../external/luasocket/src,
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				SDKROOT = iphoneos;
-				SEPARATE_STRIP = YES;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = (
-					../../librtt,
-					.,
-				);
-			};
-			name = "Release-template-trial";
-		};
 		000DC8D612B04E5400042A5E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3354,14 +3278,6 @@
 				SWIFT_VERSION = 3.0;
 			};
 			name = "Release-template";
-		};
-		000DC8D912B04E5400042A5E /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = lua;
-				SWIFT_VERSION = 3.0;
-			};
-			name = "Release-template-trial";
 		};
 		000DCA8012B05CE200042A5E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3418,24 +3334,6 @@
 			};
 			name = "Release-template";
 		};
-		000DCA8312B05CE200042A5E /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_BITCODE = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					ALMIXER_COMPILE_WITHOUT_SDL,
-				);
-				OTHER_CPLUSPLUSFLAGS = (
-					"$(inherited)",
-					"-fno-implicit-templates",
-					"-fno-operator-names",
-				);
-				PRODUCT_NAME = rtt;
-				SWIFT_VERSION = 3.0;
-			};
-			name = "Release-template-trial";
-		};
 		000DCC5212B05FF200042A5E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3476,19 +3374,6 @@
 			};
 			name = "Release-template";
 		};
-		000DCC5512B05FF200042A5E /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					ENABLE_ALMIXER_THREADS,
-					ALMIXER_COMPILE_WITHOUT_SDL,
-				);
-				PRODUCT_NAME = almixer;
-				SWIFT_VERSION = 3.0;
-			};
-			name = "Release-template-trial";
-		};
 		00537D87154F752C008CEF00 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3512,14 +3397,6 @@
 				SWIFT_VERSION = 3.0;
 			};
 			name = "Release-template";
-		};
-		00537D8A154F752C008CEF00 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = "Release-template-trial";
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3734,31 +3611,6 @@
 			};
 			name = "Release-template";
 		};
-		C2F911351CDC0F20004A5564 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CODE_SIGN_IDENTITY = "-";
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				EXECUTABLE_PREFIX = "";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.0;
-			};
-			name = "Release-template-trial";
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3768,7 +3620,6 @@
 				000DC8D612B04E5400042A5E /* Debug */,
 				000DC8D712B04E5400042A5E /* Release */,
 				000DC8D812B04E5400042A5E /* Release-template */,
-				000DC8D912B04E5400042A5E /* Release-template-trial */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3779,7 +3630,6 @@
 				000DCA8012B05CE200042A5E /* Debug */,
 				000DCA8112B05CE200042A5E /* Release */,
 				000DCA8212B05CE200042A5E /* Release-template */,
-				000DCA8312B05CE200042A5E /* Release-template-trial */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3790,7 +3640,6 @@
 				000DCC5212B05FF200042A5E /* Debug */,
 				000DCC5312B05FF200042A5E /* Release */,
 				000DCC5412B05FF200042A5E /* Release-template */,
-				000DCC5512B05FF200042A5E /* Release-template-trial */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3801,7 +3650,6 @@
 				00537D87154F752C008CEF00 /* Debug */,
 				00537D88154F752C008CEF00 /* Release */,
 				00537D89154F752C008CEF00 /* Release-template */,
-				00537D8A154F752C008CEF00 /* Release-template-trial */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3812,7 +3660,6 @@
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
 				000DC8B212B046E800042A5E /* Release-template */,
-				000DC8B412B046F600042A5E /* Release-template-trial */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3823,7 +3670,6 @@
 				C2F911321CDC0F20004A5564 /* Debug */,
 				C2F911331CDC0F20004A5564 /* Release */,
 				C2F911341CDC0F20004A5564 /* Release-template */,
-				C2F911351CDC0F20004A5564 /* Release-template-trial */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

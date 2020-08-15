@@ -365,7 +365,6 @@ LOCAL_CPPFLAGS += -fvisibility=hidden -ffunction-sections -fdata-sections
 ifeq ($(APP_OPTIM),release)
 	LOCAL_LDFLAGS += -Wl,--gc-sections
 endif
-#                -DRtt_TRIAL
 #                -DRtt_DEBUG \
 #				-DRtt_REAL_FIXED 
 
@@ -621,7 +620,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp \
 	$(CORONA_ROOT)/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Archive.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_CKWorkflow.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_DeviceOrientation.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Event.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_ExplicitTemplates.cpp \
@@ -806,9 +804,6 @@ LIBPLUGINS_FILES := \
 	$(LIBPLUGINS_DIR)/CoronaLuaLibraryMetadata.cpp
 
 LIBSHARED_DIR := $(CORONA_ROOT)/platform/shared
-LIBSHARED_FILES := \
-	$(LIBSHARED_DIR)/Rtt_DependencyLoader.cpp \
-	$(LIBSHARED_DIR)/Rtt_DependencyUtilsAndroid.cpp
 
 LIBPNG_FILES := \
 	$(LIBPNG_DIR)/png.c \
@@ -896,7 +891,6 @@ LOCAL_SRC_FILES := \
     $(PLATFORM_FILES) \
     $(LIBRTT_FILES) \
     $(LIBPLUGINS_FILES) \
-    $(LIBSHARED_FILES) \
     $(LIBLUASOCKET_FILES) \
 	$(LIBLPEG_FILES) \
 	$(LIBLUAFILESYSTEM_FILES) \

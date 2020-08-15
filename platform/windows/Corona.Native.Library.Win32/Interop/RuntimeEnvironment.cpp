@@ -26,8 +26,6 @@
 #include "Interop\UI\Window.h"
 #include "ApplicationServices.h"
 #include "MDeviceSimulatorServices.h"
-#include "Rtt_CKWorkflow.h"
-#include "Rtt_DependencyLoader.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_NativeWindowMode.h"
@@ -1373,13 +1371,6 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 			::UpdateWindow(fRenderSurfacePointer->GetWindowHandle());
 		}
 	}
-	else if (Rtt::Runtime::kSecurityIssue == result)
-	{
-		// A CoronaCards licensing error occurred.
-		// Leave the runtime in the "Starting" state because it'll run the "loader_callback.lua" script
-		// in this case which displays a native alert on how to correct the licensing issue.
-		return OperationResult::FailedWith(L"Licensing error.");
-	}
 	else
 	{
 		// Failed to load the Corona "resource.car" or "main.lua" file.
@@ -2638,58 +2629,6 @@ void RuntimeEnvironment::RuntimeDelegate::DidLoadConfig(const Rtt::Runtime& send
 
 	// Notify the system that we have loaded the "config.lua" file and we are about to execute the "shell.lua" file.
 	fEnvironmentPointer->fLoadedEvent.Raise(*fEnvironmentPointer, EventArgs::kEmpty);
-}
-
-bool RuntimeEnvironment::RuntimeDelegate::HasDependencies(const Rtt::Runtime& sender) const
-{
-#if 1
-	return true;
-#else
-	// Always return true if not using CoronaCards/Kit.
-	// Note: Authorization is typically done via the signature attached to the "resource.car" in this case.
-	bool isNotUsingCoronaKit = !sender.IsProperty(Rtt::Runtime::kShouldVerifyLicense);
-	if (isNotUsingCoronaKit)
-	{
-		return true;
-	}
-
-	// *** The runtime is set up for CoronaCards. Handle its licensing below. ***
-
-	// Check if the CoronaCards license file exists.
-	bool wasLicenseFileFound = false;
-	{
-		Rtt::String utf8LicenseFilePath(&fEnvironmentPointer->fPlatformPointer->GetAllocator());
-		fEnvironmentPointer->fPlatformPointer->PathForFile(
-			"license.ccdata", Rtt::MPlatform::kResourceDir, Rtt::MPlatform::kTestFileExists, utf8LicenseFilePath);
-		if (utf8LicenseFilePath.IsEmpty() == false)
-		{
-			wasLicenseFileFound = true;
-		}
-	}
-
-	// Display a trial watermark if the license was not found.
-	// Note: Android and iOS display a native alert message instead, which exits the app when a button has been pressed.
-	//       We're lowering the barrier on this platform so that the Corona project created by our Visual Studio extension
-	//       will "just work", which would hopefully provide a better developer experience when trying out our SDK.
-	if (false == wasLicenseFileFound)
-	{
-		// Flag the Corona runtime to display a trial watermark.
-		sender.SetShowingTrialMessage(true);
-
-		// Log a message indicating where the developer can obtain a valid license file.
-		Rtt::CKWorkflow workflow;
-		auto alertSettings = workflow.CreateAlertSettingsFor(Rtt::CKWorkflow::kMissingLicense, "coronacards");
-		Rtt_LogException(
-			"[CoronaCards Trial Notice]\r\n"
-			"   Corona is currently in trial mode. To obtain a valid license, please go here:\r\n"
-			"   %s\r\n",
-			alertSettings.ActionButtonUrl.c_str());
-		return true;
-	}
-
-	// Load and validate the CoronaCards license.
-	return Corona::DependencyLoader::CCDependencyCheck(sender);
-#endif
 }
 
 void RuntimeEnvironment::RuntimeDelegate::WillLoadMain(const Rtt::Runtime& sender) const

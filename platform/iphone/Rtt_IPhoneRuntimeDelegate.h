@@ -38,7 +38,6 @@ class IPhoneRuntimeDelegate : public CoronaViewRuntimeDelegate
 
     public:
 		virtual void DidInitLuaLibraries( const Runtime& sender ) const;
-		//virtual bool HasDependencies( const Runtime& sender ) const;
 		virtual void WillLoadMain( const Runtime& sender ) const;
 		virtual void DidLoadMain( const Runtime& sender ) const;
 		virtual void DidLoadConfig( const Runtime& sender, lua_State *L ) const;

@@ -36,7 +36,6 @@ application.metadata = {
     appPackageId = "com.anscamobile.$PROJECT_NAME",
     appId = "0123456789",
     userId = "345", -- drupal user id
-    subscription = "pro", -- either "trial", "pro", "indie-ios", "indie-android"
     mode = "developer", -- either "developer" or nil (where nil means distribution/store)
 }
 EOF

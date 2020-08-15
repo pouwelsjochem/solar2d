@@ -84,7 +84,6 @@ class Runtime : public MCallback,
 			// TODO: Add suffix "MaskSet" to improve clarity
 			//
 			// NOTE: Do not use these in IsProperty b/c it violates the semantics, e.g.
-			//   IsProperty( kIsCoronaKit ) == IsProperty( kIsLuaParserAvailable )
 			kIsEnterpriseFeature =
 				( kIsLuaParserAvailable
 				  | kIsCustomEffectsAvailable ),
@@ -104,15 +103,14 @@ class Runtime : public MCallback,
 			kConnectToDebugger = 0x1,
 			kLaunchDeviceShell = 0x2,
 			kDisableAudio = 0x4, // Needed for new welcome window because OpenAL based system doesn't handle multiple instances
-			kUnlockFeatures = 0x8, // NOTE: see PushConfig
+			kCoronaCardsOption = 0x8,
 
 			// Convenience defaults
 			kDeviceLaunchOption = kLaunchDeviceShell,
 			kSimulatorLaunchOption = kLaunchDeviceShell,
-			kCoronaViewOption = (  kLaunchDeviceShell | kDisableAudio | kUnlockFeatures ),
+			kCoronaViewOption = (  kLaunchDeviceShell | kDisableAudio ),
 			kHTML5LaunchOption = ( kLaunchDeviceShell ),
 			kWebPluginLaunchOption = 0, // TODO: Remove???
-			kCoronaCardsOption = ( kUnlockFeatures ),
 			kLinuxLaunchOption = ( kLaunchDeviceShell ),
 
 #ifdef Rtt_AUTHORING_SIMULATOR
@@ -139,8 +137,7 @@ class Runtime : public MCallback,
 		typedef enum _LoadApplicationReturnCodes
 		{
 			kSuccess		= 0,
-			kGeneralFail	= 1,
-			kSecurityIssue	= 2,
+			kGeneralFail	= 1
 		}
 		LoadApplicationReturnCodes;
 	
@@ -181,10 +178,7 @@ class Runtime : public MCallback,
 		void InitializeArchive( const char *filePath );
 		bool VerifyApplication( const char *filePath );
 
-		static int InitializeMetadataShim( lua_State *L );
-		void InitializeMetadata( lua_State *L, int index );
-
-		bool PushConfig( lua_State *L, bool shouldRestrictLibs ); // loads config.lua and pushes application.content to top of stack
+		bool PushConfig( lua_State *L ); // loads config.lua and pushes application.content to top of stack
 		void ReadConfig( lua_State *L ); // call before fDisplay is instantiated
 		void PopAndClearConfig( lua_State *L );
 
@@ -287,9 +281,6 @@ class Runtime : public MCallback,
 		void SetSuspendOverrideProperty( U32 mask, bool value );
 	
 		bool IsCoronaKit() const { return kIsCoronaKit == ( fProperties & kIsCoronaKit ); }
-		
-		void SetShowingTrialMessage( bool showMsg ) const;
-		bool IsShowingTrialMessage();
 	
 	public:
 		PlatformExitCallback* GetExitCallback();
@@ -371,7 +362,6 @@ class Runtime : public MCallback,
 		int fDownloadablePluginsRef;
 		int fDownloadablePluginsCount;
 		const MRuntimeDelegate *fDelegate;
-		mutable bool fShowingTrialMessages;
 
 	private:
 		friend class LoadMainTask;

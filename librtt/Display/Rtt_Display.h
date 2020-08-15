@@ -298,31 +298,6 @@ class Display
 
 		void Collect( lua_State *L );
 
-	public:
-		// TODO: Remove in favor of SetRestrictedFeature/IsRestrictedFeature/ShouldRestrictFeature
-		void SetRestricted( bool newValue ) { fIsRestricted = newValue; }
-		bool IsRestricted() const { return fIsRestricted; }
-		bool ShouldRestrict( Feature feature ) const
-		{
-			return IsRestricted() && ! AllowFeature( feature );
-		}
-
-	protected:
-		// TODO: Remove when we remove ShouldRestrict() above.
-		bool AllowFeature( Feature value ) const;
-
-	public:
-		// New features should go through these
-		void SetRestrictedFeature( Feature feature, bool shouldRestrict );
-		bool IsRestrictedFeature( Feature feature ) const;
-		bool ShouldRestrictFeature( Feature feature ) const;
-
-	protected:
-		bool AllowRestrictedFeature( Feature value ) const;
-
-	protected:
-		static U32 GetRestrictedFeatureMask( Feature feature );
-
 	private:
 		Runtime& fOwner;
 		MDisplayDelegate *fDelegate;
@@ -343,10 +318,6 @@ class Display
 		int fImageSuffix;
 
 		bool fIsCollecting; // guards against nested calls to Collect()
-		bool fIsRestricted;
-		mutable bool fAllowFeatureResult;
-//		U8 fScaleMode;
-		U32 fShouldRestrictFeature;
 };
 
 // ----------------------------------------------------------------------------

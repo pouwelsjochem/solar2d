@@ -27,7 +27,6 @@ class AndroidRuntimeDelegate : public RuntimeDelegatePlayer
 		virtual ~AndroidRuntimeDelegate();
 		
 		virtual void DidInitLuaLibraries( const Runtime& sender ) const;
-		virtual bool HasDependencies( const Runtime& sender ) const;
 		virtual void WillLoadMain(const Runtime& sender) const;
 		virtual void DidLoadMain(const Runtime& sender) const;
 		virtual void WillLoadConfig(const Runtime& sender, lua_State *L) const;

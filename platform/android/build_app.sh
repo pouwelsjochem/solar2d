@@ -30,7 +30,7 @@ usage() {
 	echo "   ndk__path: optional override to env variable ANDROID_NDK"
 	echo "   sdk__path: optional override to env variable ANDROID_SDK"
 	echo "   device_type: optional override to specify generic, kindle, or all"
-	echo "   product_type: optional override to specify trial, basic, automation, coronacards, or all"
+	echo "   product_type: optional override to specify basic, coronacards, or all"
 	echo "NOTE: if ndk_path is supplied, so must sdk_path"
 	exit -1
 }

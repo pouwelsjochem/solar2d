@@ -48,7 +48,6 @@ do
 
 		ARCHIVE="$(pwd)/2100.9999_template_${PLATFORM}_${TVOS_VER}_basic.tar.bz"
 
-		cp -X ../resources/config_require.lua "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/"
 		mkdir -p "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/libtemplate/"
 		cp -X ../../tools/buildsys-ios/libtemplate/build_output.sh "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/libtemplate/"
 		touch license.ccdata
@@ -58,9 +57,7 @@ do
 		cd "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/" || exit
 
 		# the excludes are common detritus due to a test app in platform/test/assets2
-		tar cvjf "${ARCHIVE}" --exclude='CoronaSimLogo-256.png' --exclude='*.jpg' --exclude='Icon*.png' ./libtemplate ./template.app ./config_require.lua
-
-		rm config_require.lua
+		tar cvjf "${ARCHIVE}" --exclude='CoronaSimLogo-256.png' --exclude='*.jpg' --exclude='Icon*.png' ./libtemplate ./template.app
 
 		echo "Built ${ARCHIVE}"
 		)

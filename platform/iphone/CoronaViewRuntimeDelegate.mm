@@ -21,7 +21,6 @@
 
 #ifdef Rtt_IPHONE_ENV
 	#include "Rtt_IPhoneTemplate.h"
-	#include "Rtt_DependencyLoader.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -45,24 +44,6 @@ CoronaViewRuntimeDelegate::DidInitLuaLibraries( const Runtime& sender ) const
 {
 	lua_State *L = sender.VMContext().L();
 	Corona::IOSLoader::Register( L, GetPluginContext() );
-	
-	//Add verification library
-	//Lua::InsertPackageLoader( L, & (Corona::DependencyLoader::CCDataLoader), -1 );
-}
-
-bool
-CoronaViewRuntimeDelegate::HasDependencies( const Runtime& sender ) const
-{
-#ifdef Rtt_IPHONE_ENV
-	bool isCoronaCards = IPhoneTemplate::IsProperty( IPhoneTemplate::kIsCoronaKit );
-	bool result = ( ! isCoronaCards ) || ( Corona::DependencyLoader::CCDependencyCheck( sender ) );
-	return result;
-#elif Rtt_TVOS_ENV
-	return true;
-#else
-	Rtt_ASSERT_NOT_IMPLEMENTED();
-	return false;
-#endif
 }
 
 void

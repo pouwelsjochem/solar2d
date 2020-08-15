@@ -119,7 +119,6 @@ platform/win32/simulator/Setup/Intermediate/*
 platform/win32/CoronaLibrary_lua.cpp
 platform/win32/CoronaPrototype.cpp
 platform/win32/CoronaProvider.cpp
-platform/win32/config_require.cpp
 platform/win32/create_build_properties.cpp
 platform/win32/easing.cpp
 platform/win32/init.cpp

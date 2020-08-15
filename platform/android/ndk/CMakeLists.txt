@@ -374,7 +374,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_Archive.cpp
-		${CORONA_ROOT}/librtt/Rtt_CKWorkflow.cpp
 		${CORONA_ROOT}/librtt/Rtt_DeviceOrientation.cpp
 		${CORONA_ROOT}/librtt/Rtt_Event.cpp
 		${CORONA_ROOT}/librtt/Rtt_ExplicitTemplates.cpp
@@ -554,9 +553,6 @@ add_library( corona SHARED
 
 		${CORONA_ROOT}/plugins/shared/CoronaLuaLibrary.cpp
 		${CORONA_ROOT}/plugins/shared/CoronaLuaLibraryMetadata.cpp
-
-		${CORONA_ROOT}/platform/shared/Rtt_DependencyLoader.cpp
-		${CORONA_ROOT}/platform/shared/Rtt_DependencyUtilsAndroid.cpp
 
 		${CORONA_ROOT}/external/lpng1256/png.c
 		${CORONA_ROOT}/external/lpng1256/pngerror.c

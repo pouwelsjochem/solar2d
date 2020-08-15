@@ -1110,36 +1110,6 @@ public class Controller {
 			}
 		});
 	}
-	
-	/**
-	 * Displays a native alert message indicating that this is a trial version.
-	 * Also provides a "Learn More" button which takes the user to Ansca's website for buying a non-trial version.
-	 */
-	public void showTrialAlert() {
-		// Display the alert dialog on the UI thread.
-		myHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				Context context = myContext;
-				if (context == null) {
-					return;
-				}
-
-				AlertDialog.Builder builder = createAlertDialogBuilder(context);
-				DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int which) {
-						openUrl("http://www.coronalabs.com/products/corona-sdk/?utm_source=corona-sdk&utm_medium=corona-sdk&utm_campaign=trial-popup");
-					}
-				};
-				builder.setTitle("Corona Trial");
-				builder.setMessage("This message only appears in the trial version");
-				builder.setPositiveButton(myResourceServices.getResources().getString(android.R.string.ok), null);
-				builder.setNeutralButton("Learn More", clickListener);
-				builder.show();
-			}
-		});
-	}
 
 	/**
 	 * Displays a native alert message indicating that the store.* library is no longer supported on Android.

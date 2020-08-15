@@ -1343,11 +1343,6 @@ DisplayLibrary::newSnapshot( lua_State *L )
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
 
-	if ( display.ShouldRestrict( Display::kDisplayNewSnapshot ) )
-	{
-		return 0;
-	}
-
 	Rtt_Allocator* context = display.GetAllocator();
 
 	// [parentGroup,]
@@ -2057,11 +2052,6 @@ DisplayLibrary::colorSample( lua_State *L )
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
 
-	if ( display.ShouldRestrict( Display::kDisplayColorSample ) )
-	{
-		return 0;
-	}
-
 	float pos_x = lua_tonumber( L, 1 );
 	float pos_y = lua_tonumber( L, 2 );
 
@@ -2173,11 +2163,6 @@ LuaLibDisplay::AssignParentAndPushResult( lua_State *L, Display& display, Displa
 	const DisplayDefaults& defaults = display.GetDefaults();
 	o->SetAnchorX( defaults.GetAnchorX() );
 	o->SetAnchorY( defaults.GetAnchorY() );
-	
-	// NOTE: This restriction should only be set on creation.
-	// This is a performance optimization to make the initial restriction
-	// check fast. Any subsequent checking can be more expensive.
-	o->SetRestricted( display.IsRestricted() );
 
 	LuaProxy* proxy = o->GetProxy(); Rtt_ASSERT( proxy );
 	return proxy->PushTable( L );

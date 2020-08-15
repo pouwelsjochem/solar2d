@@ -54,13 +54,6 @@ Scene::Scene( Rtt_Allocator* pAllocator, Display& owner)
 	fActiveUpdatable()
 {
 	fOffscreenStage->SetRenderedOffScreen( true );
- 
-	// Set restrictions on root display objects
-	bool isRestricted = owner.IsRestricted();
-	fCurrentStage->SetRestricted( isRestricted );
-	fOffscreenStage->SetRestricted( isRestricted );
-	fOrphanage->SetRestricted( isRestricted );
-	fSnapshotOrphanage->SetRestricted( isRestricted );
 }
 
 Scene::~Scene()

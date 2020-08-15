@@ -111,10 +111,6 @@ checkError
 CONFIG=Release
 
 XCODE_TARGET=libplayer
-if [ "trial" = "$TARGET" ]
-then
-	XCODE_TARGET=libplayer-trial
-fi
 
 xcodebuild -project "$PLATFORM_DIR"/iphone/ratatouille.xcodeproj -target ${XCODE_TARGET} -configuration $CONFIG -sdk iphoneos 2>&1 | tee -a "$FULL_LOG_FILE" | grep -E -v "$XCODE_LOG_FILTERS"
 checkError

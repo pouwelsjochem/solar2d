@@ -55,7 +55,6 @@ END_MESSAGE_MAP()
 
 // OnInitDialog - restore settings from m_pProject if available.
 // Choose likely defaults for non-saved settings.
-// Check for trial users, who can only use installed debug.keystore
 BOOL CBuildLinuxDlg::OnInitDialog()
 {
 	WinString stringConverter;

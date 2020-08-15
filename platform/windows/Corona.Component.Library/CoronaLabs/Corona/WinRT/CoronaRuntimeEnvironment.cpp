@@ -730,12 +730,6 @@ void CoronaRuntimeEnvironment::OnRenderFrame(Interop::Graphics::IRenderSurface ^
 				timerPointer->SetInterval(1);
 			}
 		}
-		else if (Rtt::Runtime::kSecurityIssue == result)
-		{
-			// A CoronaCards licensing error occurred.
-			// Leave the runtime in the "Starting" state because it'll run the "loader_callback.lua" script
-			// in this case which displays a native alert on how to correct the licensing issue.
-		}
 		else
 		{
 			// Failed to load the Corona "resource.car" or "main.lua" file.

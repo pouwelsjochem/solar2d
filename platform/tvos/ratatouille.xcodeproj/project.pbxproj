@@ -138,7 +138,6 @@
 		A4551E981BAA180C00FB3BDF /* CoronaLua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E8D1BAA180C00FB3BDF /* CoronaLua.cpp */; };
 		A4551E991BAA180C00FB3BDF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A4551E921BAA180C00FB3BDF /* CoronaVersion.c */; };
 		A4551F3A1BAA182D00FB3BDF /* Rtt_Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E9A1BAA182C00FB3BDF /* Rtt_Archive.cpp */; };
-		A4551F3C1BAA182D00FB3BDF /* Rtt_CKWorkflow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E9E1BAA182C00FB3BDF /* Rtt_CKWorkflow.cpp */; };
 		A4551F3D1BAA182D00FB3BDF /* Rtt_DeviceOrientation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA11BAA182C00FB3BDF /* Rtt_DeviceOrientation.cpp */; };
 		A4551F3E1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA51BAA182C00FB3BDF /* Rtt_Event.cpp */; };
 		A4551F401BAA182D00FB3BDF /* Rtt_ExplicitTemplates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA71BAA182C00FB3BDF /* Rtt_ExplicitTemplates.cpp */; };
@@ -1123,9 +1122,6 @@
 		A4551E931BAA180C00FB3BDF /* CoronaVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaVersion.h; path = ../../librtt/Corona/CoronaVersion.h; sourceTree = "<group>"; };
 		A4551E9A1BAA182C00FB3BDF /* Rtt_Archive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Archive.cpp; path = ../../librtt/Rtt_Archive.cpp; sourceTree = "<group>"; };
 		A4551E9B1BAA182C00FB3BDF /* Rtt_Archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Archive.h; path = ../../librtt/Rtt_Archive.h; sourceTree = "<group>"; };
-		A4551E9E1BAA182C00FB3BDF /* Rtt_CKWorkflow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CKWorkflow.cpp; path = ../../librtt/Rtt_CKWorkflow.cpp; sourceTree = "<group>"; };
-		A4551E9F1BAA182C00FB3BDF /* Rtt_CKWorkflow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CKWorkflow.h; path = ../../librtt/Rtt_CKWorkflow.h; sourceTree = "<group>"; };
-		A4551EA01BAA182C00FB3BDF /* Rtt_CKWorkFlowConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CKWorkFlowConstants.h; path = ../../librtt/Rtt_CKWorkFlowConstants.h; sourceTree = "<group>"; };
 		A4551EA11BAA182C00FB3BDF /* Rtt_DeviceOrientation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DeviceOrientation.cpp; path = ../../librtt/Rtt_DeviceOrientation.cpp; sourceTree = "<group>"; };
 		A4551EA21BAA182C00FB3BDF /* Rtt_DeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DeviceOrientation.h; path = ../../librtt/Rtt_DeviceOrientation.h; sourceTree = "<group>"; };
 		A4551EA51BAA182C00FB3BDF /* Rtt_Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Event.cpp; path = ../../librtt/Rtt_Event.cpp; sourceTree = "<group>"; };
@@ -2325,9 +2321,6 @@
 				A4DD47DA1BB25CC800FD988E /* Lua Resources */,
 				A4551E9A1BAA182C00FB3BDF /* Rtt_Archive.cpp */,
 				A4551E9B1BAA182C00FB3BDF /* Rtt_Archive.h */,
-				A4551E9E1BAA182C00FB3BDF /* Rtt_CKWorkflow.cpp */,
-				A4551E9F1BAA182C00FB3BDF /* Rtt_CKWorkflow.h */,
-				A4551EA01BAA182C00FB3BDF /* Rtt_CKWorkFlowConstants.h */,
 				A4551EA11BAA182C00FB3BDF /* Rtt_DeviceOrientation.cpp */,
 				A4551EA21BAA182C00FB3BDF /* Rtt_DeviceOrientation.h */,
 				A4551EA51BAA182C00FB3BDF /* Rtt_Event.cpp */,
@@ -3803,7 +3796,6 @@
 				A4384F531BAA1F49005750A3 /* Reachability.m in Sources */,
 				A4551DF81BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.cpp in Sources */,
 				A4551E1C1BAA17CF00FB3BDF /* Rtt_TesselatorLine.cpp in Sources */,
-				A4551F3C1BAA182D00FB3BDF /* Rtt_CKWorkflow.cpp in Sources */,
 				A4551E021BAA17CF00FB3BDF /* Rtt_Shader.cpp in Sources */,
 				A4551DDE1BAA17CF00FB3BDF /* Rtt_BitmapMask.cpp in Sources */,
 				A4551E151BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp in Sources */,

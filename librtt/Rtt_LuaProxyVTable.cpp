@@ -108,12 +108,7 @@ LuaProxyVTable::DumpObjectProperties( lua_State *L, const MLuaProxyable& object,
             continue;
         }
 
-        // Note that the "overrideRestriction" parameter is set to true so that we don't
-        // restrict access to certain properties based on license tier (this means that
-        // Starter users can see some properties they can't use but makes debugger logic
-        // much easier)
-		int res = ValueForKey(L, object, keys[k], true);
-
+		int res = ValueForKey(L, object, keys[k]);
         if (res > 0)
         {
 			buf[0] = '\0';
@@ -420,7 +415,7 @@ setHasListener( lua_State *L )
 }
 
 int
-LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[]) const
 {
 	if ( ! key ) { return 0; }
 	
@@ -1029,14 +1024,10 @@ LuaLineObjectProxyVTable::setStroke( lua_State *L, int valueIndex )
 
 	if ( Rtt_VERIFY( o ) )
 	{
-		if ( ! o->IsRestricted()
-			 || ! o->GetStage()->GetDisplay().ShouldRestrict( Display::kLineStroke ) )
-		{
-			// Use factory method to create paint
-			Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
+		// Use factory method to create paint
+		Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
 
-			o->SetStroke( paint );
-		}
+		o->SetStroke( paint );
 	}
 	return 0;
 }
@@ -1065,7 +1056,7 @@ LuaLineObjectProxyVTable::append( lua_State *L )
 }
 
 int
-LuaLineObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaLineObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	if ( ! key ) { return 0; }
 	
@@ -1144,7 +1135,7 @@ LuaLineObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object
 
 	default:
 		{
-			result = Super::ValueForKey( L, object, key, overrideRestriction );
+			result = Super::ValueForKey( L, object, key );
 		}
 		break;
 	}
@@ -1204,16 +1195,6 @@ LuaLineObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, c
 		{
 			const char *v = lua_tostring( L, valueIndex );
 			RenderTypes::BlendType blend = RenderTypes::BlendTypeForString( v );
-			if ( RenderTypes::IsRestrictedBlendType( blend ) )
-			{
-				if ( o.IsRestricted()
-					 && o.GetStage()->GetDisplay().ShouldRestrict( Display::kLineBlendMode ) )
-				{
-					CoronaLuaWarning(L, "using 'normal' blend because '%s' is a premium feature",
-						RenderTypes::StringForBlendType( blend ) );
-					blend = RenderTypes::kNormal;
-				}
-			}
 			o.SetBlend( blend );
 		}
         break;
@@ -1343,14 +1324,8 @@ LuaShapeObjectProxyVTable::setFill( lua_State *L, int valueIndex )
 
 	if ( Rtt_VERIFY( o ) )
 	{
-		if ( ! o->IsRestricted()
-			 || ! o->GetStage()->GetDisplay().ShouldRestrict( Display::kObjectFill ) )
-		{
-			// Use factory method to create paint
-			Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
-
-			o->SetFill( paint );
-		}
+		Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
+		o->SetFill( paint );
 	}
 	return 0;
 }
@@ -1365,20 +1340,15 @@ LuaShapeObjectProxyVTable::setStroke( lua_State *L, int valueIndex )
 
 	if ( Rtt_VERIFY( o ) )
 	{
-		if ( ! o->IsRestricted()
-			 || ! o->GetStage()->GetDisplay().ShouldRestrict( Display::kObjectStroke ) )
-		{
-			// Use factory method to create paint
-			Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
-
-			o->SetStroke( paint );
-		}
+		// Use factory method to create paint
+		Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
+		o->SetStroke( paint );
 	}
 	return 0;
 }
 
 int
-LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	if ( ! key ) { return 0; }
 	
@@ -1408,60 +1378,33 @@ LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
 	{
 	case 0:
 		{
-			if ( overrideRestriction
-                 || ! o.IsRestricted()
-				 || ! o.GetStage()->GetDisplay().ShouldRestrict( Display::kObjectPath ) )
-			{
-                o.GetPath().PushProxy( L );
-			}
-			else
-			{
-				lua_pushnil( L );
-			}
+            o.GetPath().PushProxy( L );
 		}
 		break;
 	case 1:
 		{
-            if ( overrideRestriction
-                 || ! o.IsRestricted()
-				 || ! o.GetStage()->GetDisplay().ShouldRestrict( Display::kObjectFill ) )
+			const Paint *paint = o.GetPath().GetFill();
+			if ( paint )
 			{
-				const Paint *paint = o.GetPath().GetFill();
-				if ( paint )
-				{
-					paint->PushProxy( L );
-				}
-                else
-                {
-                    lua_pushnil( L );
-                }
+				paint->PushProxy( L );
 			}
-			else
-			{
-				lua_pushnil( L );
-			}
+            else
+            {
+                lua_pushnil( L );
+            }
 		}
 		break;
 	case 2:
 		{
-            if ( overrideRestriction
-                 || ! o.IsRestricted()
-				 || ! o.GetStage()->GetDisplay().ShouldRestrict( Display::kObjectStroke ) )
+			const Paint *paint = o.GetPath().GetStroke();
+			if ( paint )
 			{
-				const Paint *paint = o.GetPath().GetStroke();
-				if ( paint )
-				{
-					paint->PushProxy( L );
-				}
-                else
-                {
-                    lua_pushnil( L );
-                }
+				paint->PushProxy( L );
 			}
-			else
-			{
-				lua_pushnil( L );
-			}
+            else
+            {
+                lua_pushnil( L );
+            }
 		}
 		break;
 	case 3:
@@ -1492,7 +1435,7 @@ LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
 		break;
 	default:
 		{
-             result = Super::ValueForKey( L, object, key, overrideRestriction );
+             result = Super::ValueForKey( L, object, key );
 		}
 		break;
 	}
@@ -1582,16 +1525,6 @@ LuaShapeObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, 
 		{
 			const char *v = lua_tostring( L, valueIndex );
 			RenderTypes::BlendType blend = RenderTypes::BlendTypeForString( v );
-			if ( RenderTypes::IsRestrictedBlendType( blend ) )
-			{
-				if ( o.IsRestricted()
-					 && o.GetStage()->GetDisplay().ShouldRestrict( Display::kObjectBlendMode ) )
-				{
-					CoronaLuaWarning(L, "using 'normal' blend because '%s' is a premium feature",
-						RenderTypes::StringForBlendType( blend ) );
-					blend = RenderTypes::kNormal;
-				}
-			}
 			o.SetBlend( blend );
 		}
 		break;
@@ -1677,7 +1610,7 @@ GetSnapshotHash( lua_State *L )
 }
 
 int
-LuaSnapshotObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaSnapshotObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	if ( ! key )
     {
@@ -1742,7 +1675,7 @@ LuaSnapshotObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& ob
 		break;
 	default:
 		{
-			result = Super::ValueForKey( L, object, key, overrideRestriction );
+			result = Super::ValueForKey( L, object, key );
 		}
 		break;
 	}
@@ -1847,7 +1780,7 @@ LuaCompositeObjectProxyVTable::Constant()
 }
 
 int
-LuaCompositeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaCompositeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	return 0;
 }
@@ -2152,7 +2085,7 @@ LuaGroupObjectProxyVTable::PushMethod( lua_State *L, const GroupObject& o, const
         const int numKeys = hash->GetKeys(keys);
 
         DumpObjectProperties( L, o, keys, numKeys, snapshotProperties );
-        Super::ValueForKey( L, o, "_properties", true );
+        Super::ValueForKey( L, o, "_properties" );
 
         lua_pushfstring( L, "{ %s, %s }", snapshotProperties.GetString(), lua_tostring( L, -1 ) );
         lua_remove( L, -2 ); // pop super properties
@@ -2163,7 +2096,7 @@ LuaGroupObjectProxyVTable::PushMethod( lua_State *L, const GroupObject& o, const
 }
 
 int
-LuaGroupObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaGroupObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	int result = 0;
 
@@ -2180,7 +2113,7 @@ LuaGroupObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
 
 		if ( 0 == result )
 		{
-			result = Super::ValueForKey( L, object, key, overrideRestriction );
+			result = Super::ValueForKey( L, object, key );
 		}
 	}
 
@@ -2278,7 +2211,7 @@ LuaStageObjectProxyVTable::Constant()
 }
 
 int
-LuaStageObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaStageObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	Rtt_WARN_SIM_PROXY_TYPE( L, 1, StageObject );
 
@@ -2309,7 +2242,7 @@ LuaStageObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
             break;
         default:
             {
-                result = Super::ValueForKey( L, object, key, overrideRestriction );
+                result = Super::ValueForKey( L, object, key );
             }
             break;
     }
@@ -2345,7 +2278,7 @@ LuaTextObjectProxyVTable::Constant()
 }
 
 int
-LuaTextObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaTextObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	if ( ! key ) { return 0; }
 	
@@ -2400,7 +2333,7 @@ LuaTextObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object
             break;
 		default:
 			{
-				result = Super::ValueForKey( L, object, key, overrideRestriction );
+				result = Super::ValueForKey( L, object, key );
 			}
 			break;
 	}
@@ -2486,7 +2419,7 @@ LuaTextObjectProxyVTable::Parent() const
 // ----------------------------------------------------------------------------
 
 int
-LuaPlatformDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaPlatformDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	if ( ! key ) { return 0; }
 
@@ -2494,7 +2427,7 @@ LuaPlatformDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxya
 	const PlatformDisplayObject& o = static_cast< const PlatformDisplayObject& >( object );
 	Rtt_WARN_SIM_PROXY_TYPE( L, 1, PlatformDisplayObject );
 
-	int result = o.ValueForKey( L, key ) || Super::ValueForKey( L, object, key, overrideRestriction );
+	int result = o.ValueForKey( L, key ) || Super::ValueForKey( L, object, key );
 
 	if ( 0 == result )
 	{
@@ -2555,7 +2488,7 @@ LuaEmbossedTextObjectProxyVTable::Constant()
 }
 
 int
-LuaEmbossedTextObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaEmbossedTextObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	if ( ! key ) { return 0; }
 	
@@ -2592,10 +2525,10 @@ LuaEmbossedTextObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable
 			// Resetting the foreground text color will revert the embossed colors back to their defaults.
 			textObject.UseDefaultHighlightColor();
 			textObject.UseDefaultShadowColor();
-			result = Super::ValueForKey( L, object, key, overrideRestriction );
+			result = Super::ValueForKey( L, object, key );
 			break;
 		default:
-			result = Super::ValueForKey( L, object, key, overrideRestriction );
+			result = Super::ValueForKey( L, object, key );
 			break;
 	}
 
@@ -2899,7 +2832,7 @@ LuaSpriteObjectProxyVTable::setFrame( lua_State *L )
 }
 
 int
-LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[], bool overrideRestriction /* = false */ ) const
+LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
 	if ( ! key ) { return 0; }
 	
@@ -2990,7 +2923,7 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 		break;
 	default:
 		{
-			result = Super::ValueForKey( L, object, key, overrideRestriction );
+			result = Super::ValueForKey( L, object, key );
 		}
 		break;
 	}
