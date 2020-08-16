@@ -60,23 +60,6 @@ public:
 	virtual bool AllowsAudioDuringScreenLock() const;
 	
 	virtual bool IsInInterruption() const;
-	
-	
-	// Assestion: AudioSessionPropertyID is defined as UInt32 
-
-	// Returns a type as defined in <objc/runtime.h>
-	/*
-	char GetPropertyType(AudioSessionPropertyID the_property) const;
-	UInt32 GetPropertyUInt32(AudioSessionPropertyID the_property) const;
-	Float32 GetPropertyFloat32(AudioSessionPropertyID the_property) const;
-	Float64 GetPropertyFloat64(AudioSessionPropertyID the_property) const;
-	bool GetPropertyBool(AudioSessionPropertyID the_property) const;
-
-	void SetProperty( AudioSessionPropertyID the_property, Float32 value );
-	void SetProperty( AudioSessionPropertyID the_property, Float64 value );
-	void SetProperty( AudioSessionPropertyID the_property, UInt32 value );
-	void SetProperty( AudioSessionPropertyID the_property, bool value );
-*/
 };
 }
 #endif // _Rtt_PlatformAudioSessionManager_H__

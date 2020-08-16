@@ -245,7 +245,6 @@ options.sdkType = "iphoneos" -- default (see keys in options.archSlices for othe
 -- in the metadata: 
 -- 
 -- Accounts.framework
--- AdSupport.framework
 -- AddressBook.framework
 -- AddressBookUI.framework
 -- Accounts.framework
@@ -262,6 +261,7 @@ options.frameworks = {
 	'CoreText',
 	'GameKit',
 	'GLKit',
+	'Foundation',
 	'ImageIO',
 	'MapKit',
 	'MediaPlayer',
@@ -280,7 +280,6 @@ options.frameworksOptional = {
 	'GameController',
 	'AssetsLibrary',
 	'Photos',
-	'Foundation', -- NOTE: This is optional b/c libFuseAds.a references an iOS7 API
 	'Twitter',
 }
 

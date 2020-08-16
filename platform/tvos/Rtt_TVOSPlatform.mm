@@ -34,8 +34,6 @@
 #import <UIKit/UIGestureRecognizerSubclass.h>
 
 #include "CoronaLua.h"
-// TODO: Remove when we remove support for iOS 3.x
-#include "Rtt_AppleBitmap.h"
 
 #include "Rtt_TouchInhibitor.h"
 

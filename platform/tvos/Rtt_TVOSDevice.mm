@@ -223,15 +223,6 @@ TVOSDevice::GetUniqueIdentifier( IdentifierType t ) const
         case MPlatformDevice::kUdidIdentifier:
             //result = "98765432109876543210";
             break;
-#ifdef USE_IOS_AD_SUPPORT
-        // Apple doesn't allow this anymore 2014-02-01
-        case MPlatformDevice::kIOSAdvertisingIdentifier:
-            if (NSClassFromString(@"ASIdentifierManager"))
-            {
-                result = [[[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString] UTF8String];
-            }
-            break;
-#endif // USE_IOS_AD_SUPPORT
         case MPlatformDevice::kIOSIdentifierForVendor:
             if ([[UIDevice currentDevice] respondsToSelector:@selector(identifierForVendor)])
             {

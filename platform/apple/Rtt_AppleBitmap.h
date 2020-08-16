@@ -113,9 +113,7 @@ class AppleFileBitmap : public AppleBitmap
 };
 
 #if defined( Rtt_IPHONE_ENV ) || defined( Rtt_TVOS_ENV )
-// We use this in 2 situations:
 // * Some API's only give access to UIImage, not CGImage.
-// * For actual image files, we have to use this for iOS 3.x b/c it doesn't have ImageIO (which we weak link to)
 class IPhoneFileBitmap : public AppleFileBitmap
 {
 	public:

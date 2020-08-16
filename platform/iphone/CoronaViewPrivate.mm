@@ -109,8 +109,6 @@ CreatePlatform( CoronaView *view )
 
 	// This should be the only place in this file where we call locationInView:
 	CGPoint result = [self locationInView:view];
-
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 	// Compiler macro is insufficient if you are building against the 4.0 SDK for new features, but
 	// also want to support older OS's. You need a runtime check as well.
 	if([view respondsToSelector:@selector(contentScaleFactor)])
@@ -120,8 +118,7 @@ CreatePlatform( CoronaView *view )
 		result.x *= scale;
 		result.y *= scale;
 	}
-#endif
-
+	
 	return result;
 }
 

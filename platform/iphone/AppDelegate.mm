@@ -49,134 +49,6 @@
 
 // ----------------------------------------------------------------------------
 
-//Commented out (4/22/14), but kept around since we may need to add backwards compatibility back in
-
-////THIS HACK IS NOW CHECKING for >= 7.0 && < 8.0 as an arbitary cap off point
-////The underlying orientation functionality will be revised/updated according to a new design documention (wip)
-//static bool Internal_IsGreaterIOS7_0Less8_0()
-//{
-//    /* [[UIDevice currentDevice] systemVersion] returns "4.0", "3.1.3" and so on. */
-//    NSString* ver = [[UIDevice currentDevice] systemVersion];
-//	
-//    /* I assume that the default iOS version will be 7.0, that is why I set this to 7.0 */
-//    double version = 7.0;
-//	
-//    if ([ver length]>=3)
-//    {
-//        /*
-//		 The version string has the format major.minor.revision (eg. "3.1.3").
-//		 I am not interested in the revision part of the version string, so I can do this.
-//		 It will return the float value for "3.1", because substringToIndex is called first.
-//		 */
-//        version = [[ver substringToIndex:3] doubleValue];
-//    }
-//    return (version >= 7.0 && version < 8.0);
-//}
-//
-//static bool Internal_IsIOS6_0()
-//{
-//    /* [[UIDevice currentDevice] systemVersion] returns "4.0", "3.1.3" and so on. */
-//    NSString* ver = [[UIDevice currentDevice] systemVersion];
-//	
-//    /* I assume that the default iOS version will be 6.0, that is why I set this to 6.0 */
-//    double version = 6.0;
-//	
-//    if ([ver length]>=3)
-//    {
-//        /*
-//		 The version string has the format major.minor.revision (eg. "3.1.3").
-//		 I am not interested in the revision part of the version string, so I can do this.
-//		 It will return the float value for "3.1", because substringToIndex is called first.
-//		 */
-//        version = [[ver substringToIndex:3] doubleValue];
-//    }
-//    return (version == 6.0);
-//}
-//
-//static bool Internal_UseIOS_LandscapeWorkaround()
-//{
-//	// Only run workaround for iPhone/iPod touch, not iPad (or anything else like AppleTV
-//	if ( UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone )
-//	{
-//		return false;
-//	}
-//	// Only run workaround for iOS 6.0.x and 7.0
-//	if( Internal_IsIOS6_0() )
-//	{
-//		// Look for a special Info.plist key of our choosing if the user wants to opt-in.
-//		NSBundle* bundle = [NSBundle mainBundle];
-//		id value = [bundle objectForInfoDictionaryKey:@"CoronaUseIOS6LandscapeOnlyWorkaround"];
-//		if ( value && [value isKindOfClass:[NSNumber class]])
-//		{
-//			BOOL usehack = [(NSNumber*)value boolValue];
-//			return ( usehack == YES );
-//		}
-//	}
-//	else if ( Internal_IsGreaterIOS7_0Less8_0() )
-//	{
-//		NSBundle* bundle = [NSBundle mainBundle];
-//		id value = [bundle objectForInfoDictionaryKey:@"CoronaUseIOS7LandscapeOnlyWorkaround"];
-//		if ( value && [value isKindOfClass:[NSNumber class]])
-//		{
-//			BOOL usehack = [(NSNumber*)value boolValue];
-//			return ( usehack == YES );
-//		}
-//	}
-//	return false;
-//}
-//
-//// Workaround to allow media.playVideo to work in all orientations while app is fixed in portrait
-//// This is no longer an iOS6.0 fix but works on iOS5 and iOS6
-//static bool Internal_UseIOS6_0_PortraitWorkaround()
-//{
-//    // I removed the check for iOS 6.0 because the fix is needed in 6.1 (and above).
-//    // The fix was also tested in iOS 5.1.
-//    
-//    // Only run workaround for iPhone/iPod touch, iPad, not anything else like AppleTV
-//    if ( UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone    &&
-//        UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
-//    {
-//        return false;
-//    }
-//    
-//    // Look for a special Info.plist key of our choosing if the user wants to opt-in.
-//    NSBundle* bundle = [NSBundle mainBundle];
-//    id value = [bundle objectForInfoDictionaryKey:@"CoronaUseIOS6PortraitOnlyWorkaround"];
-//    if ( value && [value isKindOfClass:[NSNumber class]])
-//    {
-//        BOOL usehack = [(NSNumber*)value boolValue];
-//        
-//        // This hack only works if the app is portrait-only app
-//        // Check to see if landscapeLeft/landscapeRight modes are supported
-//        bool foundleft = false;
-//		bool foundright = false;
-//		id value = [bundle objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
-//		if ( value && [value isKindOfClass:[NSArray class]])
-//		{
-//			for(NSString* supported in value)
-//			{
-//				if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] )
-//				{
-//					foundleft = true;
-//				}
-//				else if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeRight"] )
-//				{
-//					foundright = true;
-//				}
-//			}
-//		}
-//		if( foundleft || foundright)
-//		{
-//			// Exit if landscape mode found
-//			return false;
-//		}
-//        return ( usehack == YES );
-//    }
-//    return false;
-//}
-
-// ----------------------------------------------------------------------------
-
 static Class sCoronaDelegateClass = nil;
 
 static Class CoronaGetDelegateClass()
@@ -199,20 +71,6 @@ IsEnterprise()
 {
 	return nil != CoronaGetDelegateClass();
 }
-
-// ----------------------------------------------------------------------------
-/*
-@interface AppView : UIView
-@end
-
-@implementation AppView
-
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
-{
-}
-
-@end
-*/
 
 // ----------------------------------------------------------------------------
 
@@ -256,54 +114,22 @@ IsEnterprise()
 }
 
 // Because willRotateToInterfaceOrientation is not called in iOS 6, we need to do what it used to do here.
-// Note that Apple's design is decoupling orientation from layout for a whole bunch of reasons (see WWDC videos).
 - (void) viewWillLayoutSubviews
 {
 	CoronaView *coronaView = (CoronaView *)self.view;
-
 	[coronaView notifyRuntimeAboutOrientationChange:[self interfaceOrientation]];
 	
 	// When returning from other views (like SafariView) we have to check if size (orientation) was changed
 	[coronaView didOrientationChange:nil];
 }
 
-// Not called in iOS 6.
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toOrientation duration:(NSTimeInterval)duration
 {
 	CoronaView *coronaView = (CoronaView *)self.view;
 	[coronaView notifyRuntimeAboutOrientationChange:toOrientation];
-	
-#if 0
-	UIInterfaceOrientation orientation = self.interfaceOrientation;
-	AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-	delegate.runtime->Stream().Rotate( IPhoneOrientation::ConvertOrientation( orientation ), false );
-
-	// UIView *view = delegate.view;
-//	bool shouldSwap =
-//		( UIInterfaceOrientationIsPortrait( orientation ) && UIInterfaceOrientationIsLandscape( fromOrientation ) )
-//		|| ( UIInterfaceOrientationIsPortrait( fromOrientation ) && UIInterfaceOrientationIsLandscape( orientation ) );
-
-/*
-	if ( shouldSwap )
-	{
-		CGSize oldSize = view.frame.size;
-		view.frame.size.width = oldSize.height;
-		view.frame.size.height = oldSize.width;
-	}
-*/
-#endif
 }
-
-// Needed for iOS 6
-- (BOOL) shouldAutorotate
-{
-    return YES;
-}
-
-
 
 //This specifies the orientation support at the View Controller level
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
 - (NSUInteger) supportedInterfaceOrientations
 {
 	UIInterfaceOrientationMask result = UIInterfaceOrientationMaskAll;
@@ -325,65 +151,7 @@ IsEnterprise()
 		}
 	}
 	return result;
-
-//Commented out (4/22/14), but kept around since we may need to add backwards compatibility back in
-//#ifdef OLD_HACKS
-//	// For iOS 6 landscape-only crashes with Game Center and a few other Apple view controllers.
-//	if( Internal_UseIOS_LandscapeWorkaround() )
-//	{
-//		// If the user has a landscape-left-only or landscape-right-only app,
-//		// we want to return a different key than if both landscape-left and landscape-right.
-//		// Since this is a workaround, it is also implied that if the user doesn't specify any keys,
-//		// the behavior is left-and-right.
-//		// So we need to look for
-//		// - no keys (UIInterfaceOrientationMaskLandscape)
-//		// - left-only (UIInterfaceOrientationMaskLandscapeLeft)
-//		// - right-only (UIInterfaceOrientationMaskLandscapeRight)
-//		// - both (UIInterfaceOrientationMaskLandscape)
-//		bool foundleft = false;
-//		bool foundright = false;
-//		NSUInteger result = 0;
-//		NSBundle* bundle = [NSBundle mainBundle];
-//		id value = [bundle objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
-//		if ( value && [value isKindOfClass:[NSArray class]])
-//		{
-//			for(NSString* supported in value)
-//			{
-//				if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] )
-//				{
-//					foundleft = true;
-//					result = UIInterfaceOrientationMaskLandscapeLeft;
-//				}
-//				else if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeRight"] )
-//				{
-//					foundright = true;
-//					result = UIInterfaceOrientationMaskLandscapeRight;
-//				}
-//			}
-//		}
-//		if( foundleft != foundright)
-//		{
-//			// We saved which one in result.
-//			return result;
-//		}
-//		else
-//		{
-//			// Return both for either both or none.
-//			return UIInterfaceOrientationMaskLandscape;
-//		}
-//	}
-//    else if (Internal_UseIOS6_0_PortraitWorkaround())
-//    {
-//        return UIInterfaceOrientationMaskPortrait;
-//    }
-//	
-//	// Default, non-hacky behavior.
-//	return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight| UIInterfaceOrientationMaskPortraitUpsideDown;
-//#endif
-
 }
-#endif
-
 
 @end
 
@@ -431,7 +199,6 @@ IsEnterprise()
 }
 
 //This specifies the orientation support at the App level
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 60000
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)windowArg
 {
 	NSUInteger result = UIInterfaceOrientationMaskAll;
@@ -447,105 +214,7 @@ IsEnterprise()
 	}
 
 	return result;
-
-//Commented out (4/22/14), but kept around since we may need to add backwards compatibility back in
-//#ifdef OLD_HACKS
-//
-//	// For iOS 6 landscape-only crashes with Game Center and a few other Apple view controllers.
-//	if( Internal_UseIOS_LandscapeWorkaround() )
-//	{
-//		return UIInterfaceOrientationMaskAll;
-//	}
-//	
-//    // For iOS6 apps that should show the presented controller in all orientations
-//    if (Internal_UseIOS6_0_PortraitWorkaround())
-//    {
-//        UIViewController* rootViewController = (UIViewController*)self.window.rootViewController;
-//        if (rootViewController)
-//        {
-//            UIViewController* topViewController = rootViewController.presentedViewController;
-//            if (topViewController)
-//            {
-//                if ([topViewController respondsToSelector:@selector(allowOrientationOverride)])
-//                {
-//                    return [topViewController supportedInterfaceOrientations];
-//                }
-//            }
-//        }
-//    }
-//
-//	NSUInteger result = 0;
-//	
-//	NSBundle *bundle = [NSBundle mainBundle];
-//	id value = [bundle objectForInfoDictionaryKey:@"UISupportedInterfaceOrientations"];
-//	if ( value && [value isKindOfClass:[NSArray class]])
-//	{
-//		for(NSString* supported in value)
-//		{
-//			if ( [supported isEqualToString:@"UIInterfaceOrientationPortrait"] )
-//			{
-//				result |= UIInterfaceOrientationMaskPortrait;
-//			}
-//			else if ( [supported isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"] )
-//			{
-//				result |= UIInterfaceOrientationMaskPortraitUpsideDown;
-//			}
-//			else if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] )
-//			{
-//				result |= UIInterfaceOrientationMaskLandscapeLeft;
-//			}
-//			else if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeRight"] )
-//			{
-//				result |= UIInterfaceOrientationMaskLandscapeRight;
-//			}
-//		}
-//
-//		// If the array does not contain any valid orientation value, assign sensible default
-//		if ( 0 == result )
-//		{
-//			result = UIInterfaceOrientationMaskPortrait;
-//		}
-//
-//		return result;
-//	}
-//
-//	value = [bundle objectForInfoDictionaryKey:@"UIInterfaceOrientation"];
-//	if ( value && [value isKindOfClass:[NSString class]] )
-//	{
-//		// TODO: This blows. This is a complete duplicate of the inner loop above...
-//		NSString* supported = (NSString*)value;
-//		if ( [supported isEqualToString:@"UIInterfaceOrientationPortrait"] )
-//		{
-//			result |= UIInterfaceOrientationMaskPortrait;
-//		}
-//		else if ( [supported isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"] )
-//		{
-//			result |= UIInterfaceOrientationMaskPortraitUpsideDown;
-//		}
-//		else if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] )
-//		{
-//			result |= UIInterfaceOrientationMaskLandscapeLeft;
-//		}
-//		else if ( [supported isEqualToString:@"UIInterfaceOrientationLandscapeRight"] )
-//		{
-//			result |= UIInterfaceOrientationMaskLandscapeRight;
-//		}
-//
-//		// If the array does not contain any valid orientation value, assign sensible default
-//		if ( 0 == result )
-//		{
-//			result = UIInterfaceOrientationMaskPortrait;
-//		}
-//
-//		return result;
-//	}
-//
-//	return UIInterfaceOrientationMaskPortrait;
-//	
-//#endif
-
 }
-#endif
 
 static void
 SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Runtime *runtime )
@@ -934,15 +603,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	// NOTE: Default status bar style is set in Info.plist
 	[self initializeWithApplication:application options:launchOptions];
 
-#if 0
-	IPhoneImageProvider* p = new IPhoneImageProvider;
-	p->BeginSession( * runtime );
-	p->Show( PlatformConstant::kPhotoLibrary );
-#endif
-
-
-//	[glView prepareOpenGL];
-
 	return [[self getCoronaAppDelegate] application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -959,12 +619,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 		fCoronaDelegate = nil;
 		
 		[view terminate];
-
-//		Rtt_DELETE( runtime );
-//		runtime = NULL;
-//
-//		Rtt_DELETE( platform );
-//		platform = NULL;
 	}
 }
 
@@ -1282,93 +936,5 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 		[NSException raise:@"Corona Runtime Error" format:@"%@", alertView.message];
 	}
 }
-
-/*
-// NSURLConnection Delegate Methods
-// ----------------------------------------------------------------------------
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-	// This method is called incrementally as the server sends data; we must concatenate the data to assemble the response
-
-	CustomURLConnection *customConnection = (CustomURLConnection *)connection;
-		
-	[customConnection.fData appendData:data];
-	
-	//NSString *responseNSString = [[NSString alloc] initWithData:customConnection.fData encoding:NSASCIIStringEncoding];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	// This method is called when the response is complete and no further data is coming
-	
-	using namespace Rtt;
-	
-	CustomURLConnection *customConnection = (CustomURLConnection *)connection;
-	LuaResource *resource = customConnection.fResource;
-	NSMutableData *data = customConnection.fData;
-	NSNumber *NSconnectionType = customConnection.fConnectionType;
-	int connectionType = [NSconnectionType intValue];
-		
-	NSString *responseNSString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];	
-	const char *responseString = [responseNSString UTF8String];
-	
-	printf("RAW RESPONSE: %s", responseString);
-	
-	BOOL isError = false;
-		
-	if ( resource )
-	{
-		// Default is NetworkConnectionType
-		switch ( connectionType )
-		{
-			case NetworkRequestEvent::kDownloadConnectionType:
-				// TODO: implement download event
-				break;
-			case NetworkRequestEvent::kImageConnectionType:
-				RemoteImageEvent::DispatchEvent( resource, responseString, isError );
-				break;
-			default:
-				NetworkRequestEvent::DispatchEvent( resource, responseString, isError );
-				break;
-		}		
-	}
-	
-	[responseNSString release];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response 
-{
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error 
-{
-	using namespace Rtt;
-	
-	CustomURLConnection *customConnection = (CustomURLConnection *)connection;
-	LuaResource *resource = customConnection.fResource;
-	const char *responseString = ""; // Return empty string rather than null, for Lua print-friendliness?
-	NSNumber *NSconnectionType = customConnection.fConnectionType;
-	int connectionType = [NSconnectionType intValue];
-	BOOL isError = true;
-	
-	if ( resource )
-	{
-		// Default is NetworkConnectionType
-		switch ( connectionType )
-		{
-			case NetworkRequestEvent::kDownloadConnectionType:
-				// TODO: implement download event
-				break;
-			case NetworkRequestEvent::kImageConnectionType:
-				RemoteImageEvent::DispatchEvent( resource, responseString, isError );
-				break;
-			default:
-				NetworkRequestEvent::DispatchEvent( resource, responseString, isError );
-				break;
-		}		
-	}
-}
-*/
 
 @end

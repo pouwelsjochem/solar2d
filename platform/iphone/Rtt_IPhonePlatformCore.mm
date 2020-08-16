@@ -22,13 +22,6 @@
 #include "Rtt_LuaLibSystem.h"
 //#include "Rtt_LuaResource.h"
 
-#ifdef USE_IOS_AD_SUPPORT
-#import <AdSupport/ASIdentifierManager.h>
-#endif // USE_IOS_AD_SUPPORT
-
-// TODO: Remove when we remove support for iOS 3.x
-#include "Rtt_AppleBitmap.h"
-
 #include "Rtt_TouchInhibitor.h"
 
 #import "CoronaCards/CoronaView.h"
@@ -233,26 +226,7 @@ IPhonePlatformCore::PushSystemInfo( lua_State *L, const char *key ) const
 
 	// Push the requested system information to Lua.
 	int pushedValues = 0;
-#ifdef USE_IOS_AD_SUPPORT
-    // Apple doesn't allow this anymore 2014-02-01
-	if ( Rtt_StringCompare( key, "iosAdvertisingTrackingEnabled" ) == 0 )
-	{
-		bool result = YES;
-		
-		if (NSClassFromString(@"ASIdentifierManager") && ![[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled])
-		{
-			result = NO;
-		}
-
-		lua_pushboolean( L, result );
-		pushedValues = 1;
-	}
-	else
-#endif // USE_IOS_AD_SUPPORT
-	{
-		// Attempt to fetch the requested system info from the base class.
-		pushedValues = Super::PushSystemInfo(L, key);
-	}
+	pushedValues = Super::PushSystemInfo(L, key);
 
 	// Return the number of values pushed into Lua.
 	return pushedValues;
@@ -261,14 +235,12 @@ IPhonePlatformCore::PushSystemInfo( lua_State *L, const char *key ) const
 void
 IPhonePlatformCore::RegisterUserNotificationSettings(int type) const
 {
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 #ifdef Rtt_DEBUG
 	// Make sure our constants are the same as whats provided by apple.
 	Rtt_ASSERT( Rtt_UIUserNotificationTypeNone == UIUserNotificationTypeNone );
 	Rtt_ASSERT( Rtt_UIUserNotificationTypeBadge == UIUserNotificationTypeBadge );
 	Rtt_ASSERT( Rtt_UIUserNotificationTypeSound == UIUserNotificationTypeSound );
 	Rtt_ASSERT( Rtt_UIUserNotificationTypeAlert == UIUserNotificationTypeAlert );
-#endif
 #endif
 	
 	// These functions were added in iOS 8 and have to be called or notifications won't work correctly.  Even though this part if just for setting notifications, we're asking for the other permissions because
@@ -310,8 +282,6 @@ IPhonePlatformCore::SetNativeProperty( lua_State *L, const char *key, int valueI
 	UIApplication *app = [UIApplication sharedApplication];
 	NSString *k = [NSString stringWithUTF8String:key];
 
-// TODO: Remove this once we update Jenkins to XCode 4.2 (the current compiler does not like @try/@catch)
-#if 1
 	if ( [k isEqualToString:@"applicationIconBadgeNumber"] )
 	{
 		RegisterUserNotificationSettings();
@@ -325,41 +295,6 @@ IPhonePlatformCore::SetNativeProperty( lua_State *L, const char *key, int valueI
 	{
 		app.networkActivityIndicatorVisible = lua_toboolean( L, valueIndex );
 	}
-#else
-	if ( IsNativeKeySupported( k ) )
-	{
-		@try
-		{
-			int t = lua_type( L, valueIndex );
-
-			id value = nil;
-
-			switch ( t )
-			{
-				case LUA_TBOOLEAN:
-					value = [NSNumber numberWithBool:lua_toboolean( L, valueIndex )];
-					break;
-
-				case LUA_TNUMBER:
-					value = [NSNumber numberWithInt:lua_tointeger( L, valueIndex )];
-					break;
-
-				default:
-					Rtt_ASSERT_NOT_IMPLEMENTED();
-					break;
-			}
-
-			if ( value )
-			{
-				[app setValue:value forKey:k];
-			}
-		}
-		@catch ( NSException *exception )
-		{
-			NSLog( @"%@", [exception description] );
-		}
-	}
-#endif
 }
 
 int

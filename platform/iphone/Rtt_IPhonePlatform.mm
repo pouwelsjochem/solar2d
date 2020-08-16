@@ -37,13 +37,8 @@
 #import <UIKit/UIGestureRecognizerSubclass.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import <MessageUI/MFMessageComposeViewController.h>
-#ifdef USE_IOS_AD_SUPPORT
-#import <AdSupport/ASIdentifierManager.h>
-#endif // USE_IOS_AD_SUPPORT
 
 #include "CoronaLua.h"
-// TODO: Remove when we remove support for iOS 3.x
-#include "Rtt_AppleBitmap.h"
 
 #include "Rtt_TouchInhibitor.h"
 
@@ -187,241 +182,6 @@ IPhonePlatform::~IPhonePlatform()
 	Rtt_DELETE( fVideoPlayer );
 //	[fView release];
 }
-
-// =====================================================================
-
-#if 0
-
-MPlatformDevice&
-IPhonePlatform::GetDevice() const
-{
-	return const_cast< IPhoneDevice& >( fDevice );
-}
-
-PlatformSurface*
-IPhonePlatform::CreateScreenSurface() const
-{
-	return Rtt_NEW( fAllocator, IPhoneScreenSurface( fView ) );
-}
-PlatformTimer*
-IPhonePlatform::CreateTimerWithCallback( MCallback& callback ) const
-{
-	AppDelegate* delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-	GLKViewController* viewController = (GLKViewController*)delegate.viewController;
-	
-	return Rtt_NEW( fAllocator, IPhoneTimer( callback, viewController ) );
-}
-
-// TODO: Remove when we remove support for iOS 3.x
-PlatformBitmap*
-IPhonePlatform::CreateBitmap( const char *path, bool convertToGrayscale ) const
-{
-	PlatformBitmap *result = NULL;
-
-	// UILocalNotification only exists in iOS 4.x and later
-	Class myClass = NSClassFromString( @"UILocalNotification" );
-	if ( ! myClass )
-	{
-		// Fallback for iOS 3.x
-		if ( path )
-		{
-			UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:path]];
-			if ( Rtt_VERIFY( image ) )
-			{
-				result = Rtt_NEW( & GetAllocator(), IPhoneFileBitmap( image, convertToGrayscale ) );
-			}
-		}
-	}
-	else
-	{
-		result = Super::CreateBitmap( path, convertToGrayscale );
-	}
-
-	return result;
-}
-
-static Rtt_INLINE
-double DegreesToRadians( double degrees )
-{
-	return degrees * M_PI/180;
-}
-    
-bool
-IPhonePlatform::SaveImageToPhotoLibrary(const char* filePath) const
-{
-    UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:filePath]];
-    if (image)
-    {
-        UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-    }
-    
-    return true;
-}
-    
-bool
-IPhonePlatform::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) const
-{
-	Rtt_ASSERT( bitmap );
-	PlatformBitmap::Orientation orientation = bitmap->GetOrientation();
-	bool isSideways = PlatformBitmap::kLeft == orientation || PlatformBitmap::kRight == orientation;
-
-	const void* buffer = bitmap->GetBits( & GetAllocator() );
-	size_t w = bitmap->Width();
-	size_t h = bitmap->Height();
-	size_t wDst = w;
-	size_t hDst = h;
-	if ( isSideways )
-	{
-		Swap( wDst, hDst );
-	}
-
-	size_t bytesPerPixel = PlatformBitmap::BytesPerPixel( bitmap->GetFormat() );
-//	size_t bitsPerPixel = (bytesPerPixel << 3);
-	size_t bytesPerRow = w*bytesPerPixel;
-	NSInteger numBytes = h*bytesPerRow;
-//	const size_t kBitsPerComponent = 8;
-
-#if 0
-	NSData* data = [NSData dataWithBytesNoCopy:& buffer length:numBytes freeWhenDone:NO];
-	UIImage* image = [UIImage imageWithData:data];
-	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-#else
-
-
-
-	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault);
-	CGBitmapInfo dstBitmapInfo = CGBitmapInfo(kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big);
-    bool enablePngAlphaSave = false;
-    NSString *lowercase = [filePath lowercaseString];
-    if ( [lowercase hasSuffix:@"png"] )
-    {
-        enablePngAlphaSave = true;
-		srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast);
-        dstBitmapInfo = kCGImageAlphaPremultipliedLast;
-
-    }
-
-	CGDataProviderRef dataProvider = CGDataProviderCreateWithData( NULL, buffer, numBytes, NULL );
-	CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
-	CGImageRef imageRef = CGImageCreate(w, h, 8, 32, w*bytesPerPixel,
-                                        colorspace, srcBitmapInfo, dataProvider,
-                                        NULL, true, kCGRenderingIntentDefault);
-    
-
-	Rtt_ASSERT( w == CGImageGetWidth( imageRef ) );
-	Rtt_ASSERT( h == CGImageGetHeight( imageRef ) );
-    
-    
-	//void* pixels = calloc( bytesPerRow, h );
-	CGContextRef context = CGBitmapContextCreate(NULL, wDst, hDst, 8, wDst*bytesPerPixel, colorspace, dstBitmapInfo);
-
-	// On iPhone, when the image is sideways, we have to rotate the bits b/c when 
-	// we read them in using glReadPixels, the window buffer is physically oriented 
-	// as upright, so glReadPixels returns them assuming the buffer is physically
-	// oriented upright, rather than sideways.
-	if ( isSideways )
-	{
-		S32 angle = - ( bitmap->DegreesToUprightBits() );
-		CGFloat dx = (CGFloat)wDst;
-		CGFloat dy = (CGFloat)hDst;
-		if ( 90 == angle )
-		{
-			dy = 0.f;
-		}
-		if ( -90 == angle )
-		{
-			dx = 0.f;
-		}
-
-		CGContextTranslateCTM( context, dx, dy );
-		CGContextRotateCTM( context, DegreesToRadians( angle ) );
-	}
-	else if ( PlatformBitmap::kDown == orientation )
-	{
-		CGContextTranslateCTM( context, wDst, hDst );
-		CGContextRotateCTM( context, DegreesToRadians( 180 ) );
-	}
-
-	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
-	CGImageRef flippedImageRef = CGBitmapContextCreateImage(context);
-	UIImage* image = [[UIImage alloc] initWithCGImage:flippedImageRef];
-
-	if ( ! filePath )
-	{
-		UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-	}
-	else
-	{
-		NSData *imageData = nil;
-        if (enablePngAlphaSave)
-		{
-            imageData = UIImagePNGRepresentation( image );
-		}
-        else
-		{
-            imageData = UIImageJPEGRepresentation( image, 1.0 );
-		}
-        
-        [imageData writeToFile:filePath atomically:YES];
-	}
-
-	[image release];
-	CGImageRelease( flippedImageRef );
-	CGColorSpaceRelease( colorspace );
-	CGContextRelease( context );
-	//free( pixels );
-
-
-//	UIImage* image = [[UIImage alloc] initWithCGImage:imageRef];
-//	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-//	[image release];
-
-	CGImageRelease( imageRef );
-	CGDataProviderRelease( dataProvider );
-#endif
-
-	bitmap->FreeBits();
-
-	return true;
-}
-
-bool
-IPhonePlatform::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
-{
-	return SaveBitmap( bitmap, [NSString stringWithUTF8String:filePath] );
-}
-
-bool
-IPhonePlatform::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
-{
-	return SaveBitmap( bitmap, (NSString*)NULL );
-}
-
-bool
-IPhonePlatform::OpenURL( const char* url ) const
-{
-	bool result = false;
-
-	if ( url )
-	{
-		UIApplication *sharedApplication = [UIApplication sharedApplication];
-		NSURL* urlPlatform = [NSURL URLWithString:[NSString stringWithUTF8String:url]];
-		if ( [sharedApplication canOpenURL:urlPlatform] )
-		{
-			result = Rtt_VERIFY( [sharedApplication openURL:urlPlatform] );
-		}
-	}
-
-	return result;
-}
-
-PlatformAudioSessionManager * 
-IPhonePlatform::GetAudioSessionManager( const ResourceHandle<lua_State> & handle ) const
-{
-	return IPhoneAudioSessionManager::GetInstance( handle );
-}
-
-#endif // 0
 
 // =====================================================================
 	
@@ -805,7 +565,6 @@ IPhonePlatform::ShowPopup( lua_State *L, const char *name, int optionsIndex ) co
 	}
 	else if ( !Rtt_StringCompareNoCase( name, "rateApp" ) || !Rtt_StringCompareNoCase( name, "appStore" ) )
 	{
-		bool showWriteReviewScreen = !Rtt_StringCompareNoCase( name, "rateApp" );
 		const char *appStringId = NULL;
 		if ( lua_istable( L, optionsIndex ) )
 		{
@@ -819,15 +578,8 @@ IPhonePlatform::ShowPopup( lua_State *L, const char *name, int optionsIndex ) co
 		if ( appStringId )
 		{
 			char url[256];
-			if (showWriteReviewScreen && ([[[UIDevice currentDevice] systemVersion] doubleValue] < 6.0))
-			{
-				snprintf( url, sizeof(url), "itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%s", appStringId );
-			}
-			else
-			{
-				snprintf( url, sizeof(url), "itms-apps://itunes.apple.com/%s/app/id%s",
-						[[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode] UTF8String], appStringId );
-			}
+			snprintf( url, sizeof(url), "itms-apps://itunes.apple.com/%s/app/id%s",
+					[[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode] UTF8String], appStringId );
 			result = OpenURL( url );
 		}
 		else

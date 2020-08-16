@@ -140,27 +140,6 @@ int
 PluginLibrary::show( lua_State *L )
 {
 	const char *message = "Error: Could not display UIReferenceLibraryViewController. This feature requires iOS 5 or later.";
-
-/*
-	if ( [UIReferenceLibraryViewController class] )
-	{
-		id<CoronaRuntime> runtime = (id<CoronaRuntime>)CoronaLuaGetContext( L );
-
-		const char kDefaultWord[] = "corona";
-		const char *word = lua_tostring( L, 1 );
-		if ( ! word )
-		{
-			word = kDefaultWord;
-		}
-
-		UIReferenceLibraryViewController *controller = [[[UIReferenceLibraryViewController alloc] initWithTerm:[NSString stringWithUTF8String:word]] autorelease];
-
-		// Present the controller modally.
-		[runtime.appViewController presentModalViewController:controller animated:YES];
-
-		message = @"Success. Displaying UIReferenceLibraryViewController for 'corona'.";
-	}
-*/
 	Self *library = ToLibrary( L );
 
 	// Create event and add message to it

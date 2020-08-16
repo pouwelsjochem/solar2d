@@ -329,17 +329,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 		[self setAudioSessionActive:true];
 	}
 	
-	// TODO: Remove the iOS version check.  Setting the category to kAudioSessionCategory_PlayAndRecord seemed to work on iOS 6/7 devices but
-	// we just don't want to risk breaking anything which is why we have the version check.
-	if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0)
-	{
-		category = kAudioSessionCategory_PlayAndRecord;
-	}
-	else
-	{
-		category = kAudioSessionCategory_RecordAudio;
-	}
-	
+	category = kAudioSessionCategory_PlayAndRecord;
 	
 	//	UInt32 category = kAudioSessionCategory_RecordAudio;
 	error = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(category), &category);

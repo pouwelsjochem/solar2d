@@ -25,80 +25,6 @@
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
-static bool Internal_IsIOS6_0()
-{
-    /* [[UIDevice currentDevice] systemVersion] returns "4.0", "3.1.3" and so on. */
-    NSString* ver = [[UIDevice currentDevice] systemVersion];
-	
-    /* I assume that the default iOS version will be 6.0, that is why I set this to 6.0 */
-    double version = 6.0;
-	
-    if ([ver length]>=3)
-    {
-        /*
-		 The version string has the format major.minor.revision (eg. "3.1.3").
-		 I am not interested in the revision part of the version string, so I can do this.
-		 It will return the float value for "3.1", because substringToIndex is called first.
-		 */
-        version = [[ver substringToIndex:3] doubleValue];
-    }
-    return (version == 6.0);
-}
-static bool Internal_IsIOS7_0()
-{
-    /* [[UIDevice currentDevice] systemVersion] returns "4.0", "3.1.3" and so on. */
-    NSString* ver = [[UIDevice currentDevice] systemVersion];
-	
-    /* I assume that the default iOS version will be 6.0, that is why I set this to 6.0 */
-    double version = 7.0;
-	
-    if ([ver length]>=3)
-    {
-        /*
-		 The version string has the format major.minor.revision (eg. "3.1.3").
-		 I am not interested in the revision part of the version string, so I can do this.
-		 It will return the float value for "3.1", because substringToIndex is called first.
-		 */
-        version = [[ver substringToIndex:3] doubleValue];
-    }
-    return (version == 7.0);
-}
-static bool Internal_UseIOS_IPadPhotoPickerLandscapeWorkaround()
-{
-
-	// Only run workaround for iPhone/iPod touch, not iPad (or anything else like AppleTV
-	if ( UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad )
-	{
-		return false;
-	}
-
-	// Only run workaround for iOS 6.0.x
-	if( Internal_IsIOS6_0() )
-	{
-		// Look for a special Info.plist key of our choosing if the user wants to opt-in.
-		// We make users opt-in to avoid accidentally breaking cases that work, such as supporting all orientations.
-		NSBundle* bundle = [NSBundle mainBundle];
-		id value = [bundle objectForInfoDictionaryKey:@"CoronaUseIOS6IPadPhotoPickerLandscapeOnlyWorkaround"];
-		if ( value && [value isKindOfClass:[NSNumber class]])
-		{
-			BOOL usehack = [(NSNumber*)value boolValue];
-			return ( usehack == YES );
-		}
-	}
-	else if( Internal_IsIOS7_0() )
-	{
-		NSBundle* bundle = [NSBundle mainBundle];
-		id value = [bundle objectForInfoDictionaryKey:@"CoronaUseIOS7IPadPhotoPickerLandscapeOnlyWorkaround"];
-		if ( value && [value isKindOfClass:[NSNumber class]])
-		{
-			BOOL usehack = [(NSNumber*)value boolValue];
-			return ( usehack == YES );
-		}
-	}
-	
-	return false;
-}
-
 // Callback/Notification glue code
 @interface IPhoneMediaPickerControllerDelegate : NSObject< UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIPopoverControllerDelegate >
 {
@@ -167,37 +93,6 @@ static bool Internal_UseIOS_IPadPhotoPickerLandscapeWorkaround()
 }
 
 @end
-/* For iOS 6.0 on iPad, we needed to override shouldAutorotate to avoid a landscape-only crash. 
- * This is the only reason we use a subclass of UIImagePickerController instead of using it directly.
- */
-@interface IPhonePickerController : UIImagePickerController
-@end
-
-@implementation IPhonePickerController
-- (BOOL) shouldAutorotate
-{
-	// Only iOS 6/7 iPad
-	if ( Internal_UseIOS_IPadPhotoPickerLandscapeWorkaround() )
-	{
-		// Disable to avoid crashes. Still seems to rotate if you flip 180 degrees despite this setting.
-		return NO;
-	}
-	else
-	{
-		return [super shouldAutorotate];		
-	}
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
-
--(UIViewController *)childViewControllerForStatusBarHidden
-{
-    return nil;
-}
-@end
 
 // ----------------------------------------------------------------------------
 
@@ -227,27 +122,6 @@ IPhoneMediaProvider::~IPhoneMediaProvider()
 void
 IPhoneMediaProvider::Initialize()
 {
-}
-
-bool
-IPhoneMediaProvider::Internal_IsOS5_0()
-{
-    /* [[UIDevice currentDevice] systemVersion] returns "4.0", "3.1.3" and so on. */
-    NSString* ver = [[UIDevice currentDevice] systemVersion];
-	
-    /* I assume that the default iOS version will be 5.0, that is why I set this to 5.0 */
-    double version = 5.0;
-	
-    if ([ver length]>=3)
-    {
-        /*
-		 The version string has the format major.minor.revision (eg. "3.1.3").
-		 I am not interested in the revision part of the version string, so I can do this.
-		 It will return the float value for "3.1", because substringToIndex is called first.
-		 */
-        version = [[ver substringToIndex:3] doubleValue];
-    }
-    return (version == 5.0);
 }
 
 UIImagePickerControllerSourceType
@@ -288,11 +162,7 @@ IPhoneMediaProvider::Show( UIImagePickerControllerSourceType source, NSString* m
 	
 	if ( ! fImagePicker )
 	{
-		
-		/* For iOS 6.0 on iPad, we needed to override shouldAutorotate to avoid a landscape-only crash.
-		 * This is the only reason we use a subclass of UIImagePickerController instead of using it directly.
-		 */
-		fImagePicker = [[IPhonePickerController alloc] init];
+		fImagePicker = [[UIImagePickerController alloc] init];
 		fImagePicker.delegate = fDelegate;
 		// Source of where to get the media, eg. photo library, camera roll, or the camera
 		fImagePicker.sourceType = source;

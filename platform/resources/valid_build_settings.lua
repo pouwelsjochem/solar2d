@@ -136,7 +136,6 @@ settings =
 			UIPrerenderedIcon = true,
 			LSApplicationQueriesSchemes = { "" },
 			FacebookAppID = "",
-			CoronaUseIOS6PortraitOnlyWorkaround = true,
 			CFBundleIdentifier = "",
 			CFBundleShortVersionString = "",
 			CFBundleDisplayName = "",
@@ -160,11 +159,7 @@ settings =
             {
             	"UIInterfaceOrientationLandscapeLeft", -- etc.
             },
-            CoronaUseIOS6LandscapeOnlyWorkaround = true,
-            CoronaUseIOS7LandscapeOnlyWorkaround = true,
             CoronaUseIOS8LandscapeOnlyWorkaround = true,
-            CoronaUseIOS7IPadPhotoPickerLandscapeOnlyWorkaround = true,
-            CoronaUseIOS6IPadPhotoPickerLandscapeOnlyWorkaround = true,
 			UIBackgroundModes = {'remote-notification'},
 			CoronaWindowMovesWhenKeyboardAppears = false,
 			CFBundleLocalizations = {

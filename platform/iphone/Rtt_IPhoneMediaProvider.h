@@ -42,7 +42,6 @@ class IPhoneMediaProvider
 	public:
 		virtual void Show( UIImagePickerControllerSourceType source, NSString* mediaTypes, NSObject<UIImagePickerControllerDelegate>* delegate, lua_State* L, int tableIndex, NSTimeInterval maxTime, UIImagePickerControllerQualityType quality );
 		UIImagePickerControllerSourceType MediaProviderTypeToImagePickerSourceType( int source );
-		bool Internal_IsOS5_0();
 
 	public:
 		void DidDismiss( UIImage* image, NSDictionary* editingInfo );
