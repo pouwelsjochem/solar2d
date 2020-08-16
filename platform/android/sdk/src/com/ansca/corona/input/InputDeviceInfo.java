@@ -343,15 +343,7 @@ public class InputDeviceInfo implements Cloneable {
 	 *         Returns an empty collection if an input device for the given ID was not found.
 	 */
 	static java.util.List<InputDeviceInfo> collectionFromAndroidDeviceId(int id) {
-		java.util.List<InputDeviceInfo> collection;
-
-		if (android.os.Build.VERSION.SDK_INT >= 9) {
-			collection = ApiLevel9.fetchDeviceInfoFromAndroidDeviceId(id);
-		}
-		else {
-			collection = new java.util.ArrayList<InputDeviceInfo>();
-		}
-		return collection;
+		return ApiLevel9.fetchDeviceInfoFromAndroidDeviceId(id);
 	}
 
 	/**
@@ -371,10 +363,8 @@ public class InputDeviceInfo implements Cloneable {
 	 */
 	static java.util.List<InputDeviceInfo> collectionFromAllAndroidDevices() {
 		java.util.ArrayList<InputDeviceInfo> collection = new java.util.ArrayList<InputDeviceInfo>();
-		if (android.os.Build.VERSION.SDK_INT >= 9) {
-			for (int androidDeviceId : ApiLevel9.fetchAndroidDeviceIds()) {
-				collection.addAll(ApiLevel9.fetchDeviceInfoFromAndroidDeviceId(androidDeviceId));
-			}
+		for (int androidDeviceId : ApiLevel9.fetchAndroidDeviceIds()) {
+			collection.addAll(ApiLevel9.fetchDeviceInfoFromAndroidDeviceId(androidDeviceId));
 		}
 		return collection;
 	}
@@ -443,15 +433,8 @@ public class InputDeviceInfo implements Cloneable {
 
 				// Fetch all axis input sources from the input device.
 				// This should be a subset of the primary input sources above.
-				// Note: Axis input is only supported on API Level 12 or higher systems.
-				InputDeviceTypeSet remainingAxisInputSources = null;
-				if (android.os.Build.VERSION.SDK_INT >= 12) {
-					remainingAxisInputSources = ApiLevel12.getAxisSourcesFrom(inputDevice);
-					primaryInputSources.addAll(remainingAxisInputSources);
-				}
-				else {
-					remainingAxisInputSources = new InputDeviceTypeSet();
-				}
+				InputDeviceTypeSet remainingAxisInputSources = ApiLevel12.getAxisSourcesFrom(inputDevice);
+				primaryInputSources.addAll(remainingAxisInputSources);
 
 				// Fetch the primary input source from the device.
 				// This source will be used as the device type for one Corona device object made up of
@@ -488,21 +471,15 @@ public class InputDeviceInfo implements Cloneable {
 				// Create a Corona device info object for the primary input source.
 				InputDeviceInfo deviceInfo = createDeviceInfoFor(inputDevice, primaryDeviceType);
 				deviceInfo.fInputSources.addAll(primaryInputSources);
-				if (android.os.Build.VERSION.SDK_INT >= 12) {
-					for (InputDeviceType axisInputSource : primaryInputSources) {
-						deviceInfo.fAxisCollection.addAll(
-								ApiLevel12.getAxisInfoFrom(inputDevice, axisInputSource));
-					}
+				for (InputDeviceType axisInputSource : primaryInputSources) {
+					deviceInfo.fAxisCollection.addAll(ApiLevel12.getAxisInfoFrom(inputDevice, axisInputSource));
 				}
 				collection.add(deviceInfo);
 
 				// Create a Corona device info object for all remaining axis input sources.
 				for (InputDeviceType axisInputSource : remainingAxisInputSources) {
 					deviceInfo = createDeviceInfoFor(inputDevice, axisInputSource);
-					if (android.os.Build.VERSION.SDK_INT >= 12) {
-						deviceInfo.fAxisCollection.addAll(
-								ApiLevel12.getAxisInfoFrom(inputDevice, axisInputSource));
-					}
+					deviceInfo.fAxisCollection.addAll(ApiLevel12.getAxisInfoFrom(inputDevice, axisInputSource));
 					collection.add(deviceInfo);
 				}
 			}

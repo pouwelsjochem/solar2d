@@ -599,8 +599,7 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 	public PermissionsServices(android.content.Context context) {
 		super(context);
 		synchronized(PermissionsServices.class) {
-			if (sPreviouslyRequestedPermissions == null 
-				&& android.os.Build.VERSION.SDK_INT >= 11) {
+			if (sPreviouslyRequestedPermissions == null) {
 				ApiLevel11.initializePreviouslyRequestedPermissions(context);
 			}
 			if (sPlatformAgnosticPermissionGroupMap.isEmpty()) {
@@ -664,9 +663,7 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 					sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_CALL_LOG, PermissionGroup.PHONE);
 					sMarshmallowPermissionToPermissionGroupMap.put(Permission.WRITE_CALL_LOG, PermissionGroup.PHONE);
 				}
-				if (android.os.Build.VERSION.SDK_INT >= 14) {
-					sMarshmallowPermissionToPermissionGroupMap.put(Permission.ADD_VOICEMAIL, PermissionGroup.PHONE);
-				}
+				sMarshmallowPermissionToPermissionGroupMap.put(Permission.ADD_VOICEMAIL, PermissionGroup.PHONE);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.USE_SIP, PermissionGroup.PHONE);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.PROCESS_OUTGOING_CALLS, PermissionGroup.PHONE);
 
@@ -740,9 +737,7 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 					phoneGroupPermissions.add(Permission.READ_CALL_LOG);
 					phoneGroupPermissions.add(Permission.WRITE_CALL_LOG);
 				}
-				if (android.os.Build.VERSION.SDK_INT >= 14) {
-					phoneGroupPermissions.add(Permission.ADD_VOICEMAIL);
-				}
+				phoneGroupPermissions.add(Permission.ADD_VOICEMAIL);
 				phoneGroupPermissions.add(Permission.USE_SIP);
 				phoneGroupPermissions.add(Permission.PROCESS_OUTGOING_CALLS);
 

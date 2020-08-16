@@ -473,11 +473,8 @@ public final class NotificationServices extends com.ansca.corona.ApplicationCont
 					if (android.os.Build.VERSION.SDK_INT >= 16) {
 						notification = NotificationServices.ApiLevel16.createNotificationFrom(context, statusBarSettings);
 					}
-					else if (android.os.Build.VERSION.SDK_INT >= 11) {
-						notification = NotificationServices.ApiLevel11.createNotificationFrom(context, statusBarSettings);
-					}
 					else {
-						notification = NotificationServices.ApiLevel1.createNotificationFrom(context, statusBarSettings);
+						notification = NotificationServices.ApiLevel11.createNotificationFrom(context, statusBarSettings);
 					}
 
 					// Update the Android system's status bar.

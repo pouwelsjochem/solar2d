@@ -57,14 +57,9 @@ public class RaiseKeyEventTask implements com.ansca.corona.CoronaRuntimeTask {
 		}
 		
 		// Send the key event to Lua and determine if it is to be overriden.
-		boolean isCommandPressed = false;
-		boolean isCtrlPressed = false;
-		boolean isShiftPressed = fKeyEvent.isShiftPressed();
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			isCommandPressed = ApiLevel11.isMetaPressedFor(fKeyEvent);
-			isCtrlPressed = ApiLevel11.isCtrlPressedFor(fKeyEvent);
-			isShiftPressed |= ApiLevel11.isCapsLockOnFor(fKeyEvent);
-		}
+		boolean isCommandPressed = ApiLevel11.isMetaPressedFor(fKeyEvent);
+		boolean isCtrlPressed = ApiLevel11.isCtrlPressedFor(fKeyEvent);
+		boolean isShiftPressed = fKeyEvent.isShiftPressed() | ApiLevel11.isCapsLockOnFor(fKeyEvent);
 		boolean wasKeyOverridden = com.ansca.corona.JavaToNativeShim.keyEvent(runtime, 
 										fDevice,
 										com.ansca.corona.input.KeyPhase.from(fKeyEvent),

@@ -916,15 +916,13 @@ public class ViewManager {
 		}
 		
 		// Enable/disable hardware acceleration via reflection.
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			try {
-				java.lang.reflect.Method setLayerTypeMethod = android.view.View.class.getMethod(
-						"setLayerType", new Class[] {Integer.TYPE, android.graphics.Paint.class});
-				int layerType = enabled ? 2 : 1;
-				setLayerTypeMethod.invoke(view, new Object[] {layerType, null});
-			}
-			catch (Exception ex) { }
+		try {
+			java.lang.reflect.Method setLayerTypeMethod = android.view.View.class.getMethod(
+					"setLayerType", new Class[] {Integer.TYPE, android.graphics.Paint.class});
+			int layerType = enabled ? 2 : 1;
+			setLayerTypeMethod.invoke(view, new Object[] {layerType, null});
 		}
+		catch (Exception ex) { }
 	}
 	
 	public void addVideoView(final int id, final int left, final int top, final int width, final int height)

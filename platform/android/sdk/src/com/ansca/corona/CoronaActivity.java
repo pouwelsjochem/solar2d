@@ -1921,17 +1921,6 @@ public class CoronaActivity extends Activity {
 						// Log.v("Corona", "showCoronaSplashScreen: new: "+ nw +"x"+ nh +"; ratio: "+ widthRatio + "x" + heightRatio);
 
 						imageView.setImageBitmap(scaled);
-
-						// On Android 2.3.3 we can help low memory devices by forcing the source bitmap to be recycled
-						// but only if Bitmap.createScaledBitmap() didn't return the same image
-						// if (android.os.Build.VERSION.SDK_INT <= 10)
-						// {
-						// 	if (scaled.getWidth() != d.getWidth() || scaled.getHeight() != d.getHeight())
-						// 	{
-						// 		// We got a different bitmap back after scaling, it's safe to recycle the old one
-						// 		d.recycle();
-						// 	}
-						// }
 					}
 
 					FrameLayout.LayoutParams layoutParams;

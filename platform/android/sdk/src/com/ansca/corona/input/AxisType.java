@@ -232,15 +232,7 @@ public class AxisType {
 	 * @return Returns the unique symbolic name for the axis type.
 	 */
 	public String toAndroidSymbolicName() {
-		String symbolicName;
-
-		if (android.os.Build.VERSION.SDK_INT >= 12) {
-			symbolicName = ApiLevel12.getSymbolicNameFromAndroidIntegerId(fAndroidIntegerId);
-		}
-		else {
-			symbolicName = Integer.toString(fAndroidIntegerId);
-		}
-		return symbolicName;
+		return ApiLevel12.getSymbolicNameFromAndroidIntegerId(fAndroidIntegerId);
 	}
 
 	/**

@@ -85,11 +85,8 @@ public class InputDeviceMonitor {
 		if (android.os.Build.VERSION.SDK_INT >= 16) {
 			fEventHandler = ApiLevel16.createEventHandlerWith(this);
 		}
-		else if (android.os.Build.VERSION.SDK_INT >= 9) {
-			fEventHandler = ApiLevel9.createEventHandlerWith(this);
-		}
 		else {
-			fEventHandler = null;
+			fEventHandler = ApiLevel9.createEventHandlerWith(this);
 		}
 	}
 

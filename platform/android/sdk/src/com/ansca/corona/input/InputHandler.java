@@ -154,11 +154,6 @@ public class InputHandler {
 			return false;
 		}
 
-		// Do not continue if running on an Android OS that does not support axis input.
-		if (android.os.Build.VERSION.SDK_INT < 12) {
-			return false;
-		}
-
 		// Fetch the input device that generated this key event.
 		InputDeviceInterface inputDevice = null;
 		if (event.getDeviceId() > 0) {
@@ -222,24 +217,15 @@ public class InputHandler {
 		TouchPoint mousePoint = new TouchPoint(event.getX(), event.getY(), event.getEventTime());
 
 		// Fetch the mouse's button states.
-		boolean isPrimaryButtonPressed = false;
-		boolean isSecondaryButtonPressed = false;
-		boolean isMiddleButtonPressed = false;
-		if (android.os.Build.VERSION.SDK_INT >= 14) {
-			isPrimaryButtonPressed = ApiLevel14.isPrimaryMouseButtonPressedFor(event);
-			isSecondaryButtonPressed = ApiLevel14.isSecondaryMouseButtonPressedFor(event);
-			isMiddleButtonPressed = ApiLevel14.isMiddleMouseButtonPressedFor(event);
-		}
-		else if ((actionState == android.view.MotionEvent.ACTION_DOWN) ||
-		         (actionState == android.view.MotionEvent.ACTION_MOVE)) {
-			isPrimaryButtonPressed = true;
-		}
+		boolean isPrimaryButtonPressed = ApiLevel14.isPrimaryMouseButtonPressedFor(event);
+		boolean isSecondaryButtonPressed = ApiLevel14.isSecondaryMouseButtonPressedFor(event);
+		boolean isMiddleButtonPressed = ApiLevel14.isMiddleMouseButtonPressedFor(event);
 
 		// Fetch the mouse's scroll wheel deltas in pixels, if provided.
 		float scrollX = 0;
 		float scrollY = 0;
 		final int ACTION_SCROLL = 8;	// = android.view.MotionEvent.ACTION_SCROLL
-		if ((android.os.Build.VERSION.SDK_INT >= 12) && (actionState == ACTION_SCROLL)) {
+		if (actionState == ACTION_SCROLL) {
 			// Fetch the normalized scroll wheel values. (Ranges between -1.0 to 1.0)
 			final int AXIS_VSCROLL = 9;
 			final int AXIS_HSCROLL = 10;

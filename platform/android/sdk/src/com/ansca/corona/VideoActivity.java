@@ -49,16 +49,7 @@ public class VideoActivity extends android.app.Activity {
 
 		// Wrap this activity context with a new context using the newest theme available on the system.
 		// This way, child views can use the newest theme and this activity can use the fullscreen theme.
-		int themeId;
-		if (android.os.Build.VERSION.SDK_INT >= 14) {
-			themeId = 16974120;		// android.R.style.Theme_DeviceDefault
-		}
-		else if (android.os.Build.VERSION.SDK_INT >= 11) {
-			themeId = 16973931;		// android.R.style.Theme_Holo
-		}
-		else {
-			themeId = android.R.style.Theme_Dialog;
-		}
+		int themeId = 16974120;		// android.R.style.Theme_DeviceDefault
 		android.view.ContextThemeWrapper themedContextWrapper;
 		themedContextWrapper = new android.view.ContextThemeWrapper(this, themeId);
 

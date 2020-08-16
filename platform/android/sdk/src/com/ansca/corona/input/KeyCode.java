@@ -55,19 +55,7 @@ public class KeyCode {
 	 * @return Returns the unique symbolic name of the key code.
 	 */
 	public String toAndroidSymbolicName() {
-		String symbolicName;
-
-		if (android.os.Build.VERSION.SDK_INT >= 12) {
-			symbolicName = ApiLevel12.getSymbolicNameFromKeyCode(fAndroidNumericId);
-		}
-		else if ((fAndroidNumericId > android.view.KeyEvent.KEYCODE_UNKNOWN) &&
-		         (fAndroidNumericId <= android.view.KeyEvent.getMaxKeyCode())) {
-			symbolicName = Integer.toString(fAndroidNumericId);
-		}
-		else {
-			symbolicName = "KEYCODE_UNKNOWN";
-		}
-		return symbolicName;
+		return ApiLevel12.getSymbolicNameFromKeyCode(fAndroidNumericId);
 	}
 
 	/**

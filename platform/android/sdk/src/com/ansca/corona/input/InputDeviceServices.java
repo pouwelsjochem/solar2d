@@ -63,10 +63,8 @@ public final class InputDeviceServices extends com.ansca.corona.ApplicationConte
 		}
 
 		// Fetch all Android managed input devices, if not done already.
-		if (android.os.Build.VERSION.SDK_INT >= 9) {
-			if (sDeviceCollection.size() <= 0) {
-				fetchAll();
-			}
+		if (sDeviceCollection.size() <= 0) {
+			fetchAll();
 		}
 	}
 
@@ -267,12 +265,6 @@ public final class InputDeviceServices extends com.ansca.corona.ApplicationConte
 	 * connection states or configurations have changed.
 	 */
 	private static void updateCollection() {
-		// Do not continue if running on an Android 2.2 or older operating systems.
-		// Android does not support access to input devices on these older systems.
-		if (android.os.Build.VERSION.SDK_INT < 9) {
-			return;
-		}
-		
 		// Create a clone of the main device connection.
 		// This allows us to easily iterate it in a thread safe manner below.
 		InputDeviceInterfaceCollection deviceCollection = null;
@@ -326,12 +318,6 @@ public final class InputDeviceServices extends com.ansca.corona.ApplicationConte
 	 *           Matches an ID returned by Android's InputDevice.getDeviceIds() method.
 	 */
 	private static void updateCollectionWithAndroidDeviceId(int id) {
-		// Do not continue if running on an Android 2.2 or older operating systems.
-		// Android does not support access to input devices on these older systems.
-		if (android.os.Build.VERSION.SDK_INT < 9) {
-			return;
-		}
-
 		// Fetch all device information for the given Android device ID.
 		java.util.List<InputDeviceInfo> collection = InputDeviceInfo.collectionFromAndroidDeviceId(id);
 

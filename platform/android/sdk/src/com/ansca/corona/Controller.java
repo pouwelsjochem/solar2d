@@ -1393,11 +1393,8 @@ public class Controller {
 						if (android.os.Build.VERSION.SDK_INT >= 21) {
 							themeId = 16974393;		// android.R.style.Theme_Material_Light_Dialog
 						}
-						else if (android.os.Build.VERSION.SDK_INT >= 11) {
-							themeId = 16973935;		// android.R.style.Theme_Holo_Dialog
-						}
 						else {
-							themeId = android.R.style.Theme_Dialog;
+							themeId = 16973935;		// android.R.style.Theme_Holo_Dialog
 						}
 						android.view.ContextThemeWrapper contextWrapper;
 						contextWrapper = new android.view.ContextThemeWrapper(context, themeId);
@@ -1865,8 +1862,7 @@ public class Controller {
 	
 	void setSystemUiVisibility(final String visibility) {
 		final com.ansca.corona.graphics.opengl.CoronaGLSurfaceView glView = myGLView;
-		if (glView == null || android.os.Build.VERSION.SDK_INT < 11 ||
-			android.os.Build.MANUFACTURER.equals("BN LLC")) {
+		if (glView == null || android.os.Build.MANUFACTURER.equals("BN LLC")) {
 			return;
 		}
 
@@ -1875,7 +1871,7 @@ public class Controller {
 				int vis = -1;
 				if (visibility.equals("immersiveSticky") && (
 					(android.os.Build.VERSION.SDK_INT >= 19) ||
-					(android.os.Build.MANUFACTURER.equals("Amazon") && android.os.Build.VERSION.SDK_INT >= 14))) {
+					(android.os.Build.MANUFACTURER.equals("Amazon")))) {
 						// For Amazon devices, we can't do all of immersiveSticky mode, but we can at least go into super fullscreen mode.
 						// See: https://developer.amazon.com/public/solutions/devices/fire-tablets/app-development/01--screen-layout-and-resolution#Understand How Fullscreen Modes Affect Layout
 						// 0x00001000 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY lets touch events pass to the corona app
@@ -1885,7 +1881,7 @@ public class Controller {
 						vis = 0x00001000 | 0x00000002 | 0x00000004 | 0x00000200;
 				} else if (visibility.equals("immersive") && (
 					(android.os.Build.VERSION.SDK_INT >= 19) ||
-					(android.os.Build.MANUFACTURER.equals("Amazon") && android.os.Build.VERSION.SDK_INT >= 14))) {
+					(android.os.Build.MANUFACTURER.equals("Amazon")))) {
 						// For Amazon devices, we can't do all of immersive mode, but we can at least go into super fullscreen mode.
 						// See: https://developer.amazon.com/public/solutions/devices/fire-tablets/app-development/01--screen-layout-and-resolution#Understand How Fullscreen Modes Affect Layout
 						// 0x00000800 View.SYSTEM_UI_FLAG_IMMERSIVE lets touch events pass to the corona app
@@ -1931,8 +1927,7 @@ public class Controller {
 
 		if (glView == null) {
 			return "unknown";
-		} else if (android.os.Build.VERSION.SDK_INT < 11 || 
-			android.os.Build.MANUFACTURER.equals("BN LLC")) {
+		} else if (android.os.Build.MANUFACTURER.equals("BN LLC")) {
 			return "default";
 		}
 

@@ -28,12 +28,7 @@ public class ViewInputHandler extends InputHandler {
 	public ViewInputHandler(com.ansca.corona.Controller controller) {
 		super(controller);
 
-		if (android.os.Build.VERSION.SDK_INT >= 12) {
-			fEventHandler = ApiLevel12.createEventHandlerWith(this);
-		}
-		else {
-			fEventHandler = new EventHandler(this);
-		}
+		fEventHandler = ApiLevel12.createEventHandlerWith(this);
 		fView = null;
 	}
 

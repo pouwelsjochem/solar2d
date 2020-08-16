@@ -163,18 +163,7 @@ public class InputDeviceType {
 			return null;
 		}
 
-		// Fetch the device type from the given input event.
-		InputDeviceType deviceType;
-		if (android.os.Build.VERSION.SDK_INT >= 9) {
-			// Fetch the device type by the event's source ID.
-			int sourceId = ApiLevel9.getSourceIdFrom(event);
-			deviceType = InputDeviceType.fromAndroidSourceId(sourceId);
-		}
-		else {
-			// For older operating systems, we have to assume that motion events come from a touchscreen.
-			deviceType = InputDeviceType.TOUCHSCREEN;
-		}
-		return deviceType;
+		return InputDeviceType.fromAndroidSourceId(ApiLevel9.getSourceIdFrom(event));
 	}
 
 	/**
@@ -194,18 +183,7 @@ public class InputDeviceType {
 			return null;
 		}
 
-		// Fetch the device type from the given input event.
-		InputDeviceType deviceType;
-		if (android.os.Build.VERSION.SDK_INT >= 9) {
-			// Fetch the device type by the event's source ID.
-			int sourceId = ApiLevel9.getSourceIdFrom(event);
-			deviceType = InputDeviceType.fromAndroidSourceId(sourceId);
-		}
-		else {
-			// For older operating systems, we have to assume that key events come from a keyboard.
-			deviceType = InputDeviceType.KEYBOARD;
-		}
-		return deviceType;
+		return InputDeviceType.fromAndroidSourceId(ApiLevel9.getSourceIdFrom(event));
 	}
 
 	/**
