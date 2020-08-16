@@ -92,7 +92,7 @@ namespace Rtt
 void 
 GLTexture::Create( CPUResource* resource )
 {
-	Rtt_ASSERT( CPUResource::kTexture == resource->GetType() || CPUResource::kVideoTexture == resource->GetType() );
+	Rtt_ASSERT( CPUResource::kTexture == resource->GetType() );
 	Texture* texture = static_cast<Texture*>( resource );
 
 	GLuint name = 0;

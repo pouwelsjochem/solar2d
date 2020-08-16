@@ -288,7 +288,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_BitmapPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ImageSheetPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_BufferBitmap.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_CameraPaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ClosedPath.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_CompositeObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_CompositePaint.cpp
@@ -549,7 +548,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureBitmap.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureVolatile.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_Uniform.cpp
-		${CORONA_ROOT}/librtt/Renderer/Rtt_VideoTexture.cpp
 
 		${CORONA_ROOT}/plugins/shared/CoronaLuaLibrary.cpp
 		${CORONA_ROOT}/plugins/shared/CoronaLuaLibraryMetadata.cpp

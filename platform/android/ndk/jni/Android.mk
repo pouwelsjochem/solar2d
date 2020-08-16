@@ -534,7 +534,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_BitmapPaintAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ImageSheetPaintAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_BufferBitmap.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_CameraPaint.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ClosedPath.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_CompositeObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_CompositePaint.cpp \
@@ -796,7 +795,6 @@ LIBRTT_FILES := \
 	$(TACHYON_DIR)/Rtt_TextureBitmap.cpp \
 	$(TACHYON_DIR)/Rtt_TextureVolatile.cpp \
 	$(TACHYON_DIR)/Rtt_Uniform.cpp \
-	$(TACHYON_DIR)/Rtt_VideoTexture.cpp \
 
 LIBPLUGINS_DIR := $(CORONA_ROOT)/plugins/shared
 LIBPLUGINS_FILES := \

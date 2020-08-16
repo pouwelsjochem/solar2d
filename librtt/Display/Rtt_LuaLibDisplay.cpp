@@ -12,7 +12,6 @@
 #include "Display/Rtt_LuaLibDisplay.h"
 
 #include "Display/Rtt_BitmapPaint.h"
-#include "Display/Rtt_CameraPaint.h"
 #include "Display/Rtt_ClosedPath.h"
 #include "Display/Rtt_CompositePaint.h"
 #include "Display/Rtt_ContainerObject.h"
@@ -33,7 +32,6 @@
 #include "Display/Rtt_StageObject.h"
 #include "Display/Rtt_TextureFactory.h"
 #include "Renderer/Rtt_Texture.h"
-#include "Renderer/Rtt_VideoSource.h"
 
 #include "Corona/CoronaLibrary.h"
 #include "Corona/CoronaLua.h"
@@ -1617,16 +1615,6 @@ DisplayLibrary::setDefault( lua_State *L )
 	
 		defaults.SetPreloadTextures( preloadTextures );
 	}
-	else if ( Rtt_StringCompare( key, "cameraSource" ) == 0 )
-	{
-		VideoSource source = kCamera;
-		const char *value = lua_tostring( L, index );
-		if ( Rtt_StringCompare( value, "front" ) == 0 )
-		{
-			source = kCameraFront;
-		}
-		display.GetTextureFactory().SetVideoSource(source);
-	}
 	else if ( Rtt_StringCompare( key, "isNativeTextFieldFontSizeScaled" ) == 0 )
 	{
 		bool value = lua_toboolean( L, index ) ? true : false;
@@ -2425,19 +2413,6 @@ LuaLibDisplay::LuaNewCompositePaint( lua_State *L, int paramsIndex )
 	return result;
 }
 
-CameraPaint *
-LuaLibDisplay::LuaNewCameraPaint( lua_State *L, int paramsIndex )
-{
-	Runtime *runtime = LuaContext::GetRuntime( L );
-	Display& display = runtime->GetDisplay();
-	
-	SharedPtr< TextureResource > resource = display.GetTextureFactory().GetVideo();
-	
-	CameraPaint *result = Rtt_NEW( LuaContext::GetAllocator( L ), CameraPaint( resource ) );
-
-	return result;
-}
-
 // object.fill = { r, g, b, a }
 // object.fill = { type="image", baseDir=, filename= }
 // object.fill = { type="image", sheet=, frame= }
@@ -2469,10 +2444,6 @@ LuaLibDisplay::LuaNewPaint( lua_State *L, int index )
 			else if ( 0 == strcmp( "composite", paintType ) )
 			{
 				result = LuaNewCompositePaint( L, index );
-			}
-			else if ( 0 == strcmp( "camera", paintType ) )
-			{
-				result = LuaNewCameraPaint( L, index );
 			}
 		}
 		else

@@ -242,7 +242,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_BitmapPaint.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_BitmapPaintAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_BufferBitmap.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CameraPaint.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CompositeObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CompositePaint.cpp" />
@@ -352,7 +351,6 @@
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_TextureBitmap.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_TextureVolatile.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_VideoTexture.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Archive.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp" />
@@ -657,7 +655,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BitmapPaint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BitmapPaintAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BufferBitmap.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CameraPaint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CompositeObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CompositePaint.h" />
@@ -774,8 +771,6 @@
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_TextureBitmap.h" />
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_TextureVolatile.h" />
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.h" />
-    <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_VideoSource.h" />
-    <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_VideoTexture.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Archive.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Callback.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_DeviceOrientation.h" />

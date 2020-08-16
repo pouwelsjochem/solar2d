@@ -17,11 +17,6 @@
 #include "Renderer/Rtt_CPUResource.h"
 #include "Core/Rtt_Assert.h"
 
-// TODO: Temporary hack
-#ifdef Rtt_IPHONE_ENV
-#include "../platform/iphone/Rtt_IPhoneGLVideoTexture.h"
-#endif
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -46,9 +41,6 @@ GLRenderer::Create( const CPUResource* resource )
 		case CPUResource::kProgram: return new GLProgram;
 		case CPUResource::kTexture: return new GLTexture;
 		case CPUResource::kUniform: return NULL;
-#ifdef Rtt_IPHONE_ENV
-		case CPUResource::kVideoTexture: return new IPhoneGLVideoTexture;
-#endif
 		default: Rtt_ASSERT_NOT_REACHED(); return NULL;
 	}
 }

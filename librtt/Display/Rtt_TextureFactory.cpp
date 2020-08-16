@@ -18,7 +18,6 @@
 #include "Display/Rtt_TextureFactory.h"
 #include "Display/Rtt_TextureResource.h"
 #include "Renderer/Rtt_Renderer.h"
-#include "Renderer/Rtt_VideoTexture.h"
 
 #include "Display/Rtt_TextureResourceBitmap.h"
 #include "Display/Rtt_TextureResourceCanvas.h"
@@ -41,8 +40,6 @@ TextureFactory::TextureFactory( Display& display )
 	fDisplay( display ),
 	fDefault(),
 	fContainerMask(),
-	fVideo(),
-	fVideoSource(kCamera),
 	fTextureMemoryUsed( 0 ),
 	fCreateQueue( display.GetAllocator() )
 {
@@ -344,55 +341,6 @@ TextureFactory::GetDefault()
 	
 	// Return by value to ensure ref count doesn't go to 0
 	return result;
-}
-
-SharedPtr< TextureResource >
-TextureFactory::GetVideo()
-{
-
-	SharedPtr< TextureResource > result( fVideo );
-
-	// Check if ptr is valid, recreate resource if needed
-	if ( result.IsNull() )
-	{
-#if defined( Rtt_IPHONE_ENV )
-
-		result = SharedPtr< TextureResource >( TextureResourceBitmap::CreateVideo(* this ) );
-		
-		VideoTexture *videoTexture = static_cast<VideoTexture*>(& result->GetTexture());
-		videoTexture->SetSource(fVideoSource);
-		
-#else
-	#if defined( Rtt_OPENGLES )
-		const Texture::Format kFormat = Texture::kRGBA;
-	#else
-		const Texture::Format kFormat = Texture::kBGRA;
-	#endif
-		result = SharedPtr< TextureResource >( TextureResourceBitmap::CreateDefault(* this, kFormat, Texture::kNearest ) );
-#endif
-		
-		fVideo = result; // Store weak ptr to resource
-	}
-	
-	// Return by value to ensure ref count doesn't go to 0
-	return result;
-}
-
-void
-TextureFactory::SetVideoSource( VideoSource source )
-{
-
-#if defined( Rtt_IPHONE_ENV )
-	fVideoSource = source;
-	SharedPtr< TextureResource > currentResource( fVideo );
-	// Check if ptr is valid, recreate resource if needed
-	if ( currentResource.NotNull() )
-	{
-		VideoTexture *videoTexture = static_cast<VideoTexture*>(& currentResource->GetTexture());
-		videoTexture->SetSource(fVideoSource);
-	}
-#endif
-
 }
 
 // Create an 8x8 mask with a 2 pixel thick black border and a white interior

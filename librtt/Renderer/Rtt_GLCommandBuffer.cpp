@@ -30,11 +30,6 @@
 
 #define ENABLE_DEBUG_PRINT	0
 
-// TODO: Temporary hack
-#ifdef Rtt_IPHONE_ENV
-#include "../platform/iphone/Rtt_IPhoneGLVideoTexture.h"
-#endif
-
 // ----------------------------------------------------------------------------
 
 namespace /*anonymous*/

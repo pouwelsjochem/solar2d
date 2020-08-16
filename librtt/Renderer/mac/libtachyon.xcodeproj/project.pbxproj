@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		07CFCF8D17DAA95E0039EF04 /* Rtt_MCPUResourceObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 07CFCF8C17DAA95E0039EF04 /* Rtt_MCPUResourceObserver.h */; };
-		A47359EC17D86C3E00D39BAE /* Rtt_VideoTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47359EA17D86C3E00D39BAE /* Rtt_VideoTexture.cpp */; };
-		A47359ED17D86C3E00D39BAE /* Rtt_VideoTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = A47359EB17D86C3E00D39BAE /* Rtt_VideoTexture.h */; };
 		A48B91B2178A86A20072EAF7 /* Rtt_TextureVolatile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48B91B0178A86A20072EAF7 /* Rtt_TextureVolatile.cpp */; };
 		A48B91B3178A86A20072EAF7 /* Rtt_TextureVolatile.h in Headers */ = {isa = PBXBuildFile; fileRef = A48B91B1178A86A20072EAF7 /* Rtt_TextureVolatile.h */; };
 		A4B66A6B176A77730077B2BF /* Rtt_CommandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66A3F176A77730077B2BF /* Rtt_CommandBuffer.cpp */; };
@@ -63,8 +61,6 @@
 /* Begin PBXFileReference section */
 		07CFCF8C17DAA95E0039EF04 /* Rtt_MCPUResourceObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MCPUResourceObserver.h; path = ../Rtt_MCPUResourceObserver.h; sourceTree = "<group>"; };
 		A43287DA176A610100ACB6FF /* libtachyon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtachyon.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A47359EA17D86C3E00D39BAE /* Rtt_VideoTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_VideoTexture.cpp; path = ../Rtt_VideoTexture.cpp; sourceTree = "<group>"; };
-		A47359EB17D86C3E00D39BAE /* Rtt_VideoTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_VideoTexture.h; path = ../Rtt_VideoTexture.h; sourceTree = "<group>"; };
 		A48B91B0178A86A20072EAF7 /* Rtt_TextureVolatile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureVolatile.cpp; path = ../Rtt_TextureVolatile.cpp; sourceTree = "<group>"; };
 		A48B91B1178A86A20072EAF7 /* Rtt_TextureVolatile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureVolatile.h; path = ../Rtt_TextureVolatile.h; sourceTree = "<group>"; };
 		A4B66A3F176A77730077B2BF /* Rtt_CommandBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CommandBuffer.cpp; path = ../Rtt_CommandBuffer.cpp; sourceTree = "<group>"; };
@@ -194,8 +190,6 @@
 				A48B91B1178A86A20072EAF7 /* Rtt_TextureVolatile.h */,
 				A4B66A69176A77730077B2BF /* Rtt_Uniform.cpp */,
 				A4B66A6A176A77730077B2BF /* Rtt_Uniform.h */,
-				A47359EA17D86C3E00D39BAE /* Rtt_VideoTexture.cpp */,
-				A47359EB17D86C3E00D39BAE /* Rtt_VideoTexture.h */,
 			);
 			name = Renderer;
 			sourceTree = SOURCE_ROOT;
@@ -232,7 +226,6 @@
 				A4DCC6F31774EE0E00C29C87 /* Rtt_GeometryPool.h in Headers */,
 				A48B91B3178A86A20072EAF7 /* Rtt_TextureVolatile.h in Headers */,
 				07CFCF8D17DAA95E0039EF04 /* Rtt_MCPUResourceObserver.h in Headers */,
-				A47359ED17D86C3E00D39BAE /* Rtt_VideoTexture.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,7 +304,6 @@
 				A4B66A95176A77730077B2BF /* Rtt_Uniform.cpp in Sources */,
 				A4DCC6F21774EE0E00C29C87 /* Rtt_GeometryPool.cpp in Sources */,
 				A48B91B2178A86A20072EAF7 /* Rtt_TextureVolatile.cpp in Sources */,
-				A47359EC17D86C3E00D39BAE /* Rtt_VideoTexture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

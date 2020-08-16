@@ -40,7 +40,6 @@ class CPUResource
 			kProgram,
 			kTexture,
 			kUniform,
-			kVideoTexture,
 			kNumResourceTypes,
 		}
 		ResourceType;

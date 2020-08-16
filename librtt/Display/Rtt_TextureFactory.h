@@ -12,7 +12,6 @@
 
 #include "Core/Rtt_SharedPtr.h"
 #include "Renderer/Rtt_Texture.h"
-#include "Renderer/Rtt_VideoSource.h"
 #include "Display/Rtt_TextureResource.h"
 
 #include <string>
@@ -104,8 +103,6 @@ class TextureFactory
 			
 		SharedPtr< TextureResource > GetDefault();
 		SharedPtr< TextureResource > GetContainerMask();
-		SharedPtr< TextureResource > GetVideo();
-		void SetVideoSource( VideoSource source );
 
 	public:
 		void AddToPreloadQueueByKey(std::string cacheKey);
@@ -170,8 +167,6 @@ class TextureFactory
 		Display &fDisplay;
 		WeakPtr< TextureResource > fDefault;
 		WeakPtr< TextureResource > fContainerMask;
-		WeakPtr< TextureResource > fVideo;
-		VideoSource fVideoSource;
 		
 		S32 fTextureMemoryUsed;
 		

@@ -48,9 +48,6 @@ class TextureResourceBitmap : public TextureResource
 			TextureFactory& factory,
 			Texture::Format format,
 			Texture::Filter filter);
-			
-		static Self *CreateVideo(
-			TextureFactory& factory);
 	
 	protected:
 		TextureResourceBitmap(

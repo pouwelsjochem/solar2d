@@ -438,9 +438,6 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_BufferBitmap.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_CameraPaint.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ClosedPath.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
@@ -727,9 +724,6 @@
       <Filter>librtt\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_Uniform.cpp">
-      <Filter>librtt\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Renderer\Rtt_VideoTexture.cpp">
       <Filter>librtt\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_CommandBuffer.cpp">
@@ -1241,9 +1235,6 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_BufferBitmap.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_CameraPaint.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ClosedPath.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
@@ -1545,12 +1536,6 @@
       <Filter>librtt\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_Uniform.h">
-      <Filter>librtt\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Renderer\Rtt_VideoSource.h">
-      <Filter>librtt\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Renderer\Rtt_VideoTexture.h">
       <Filter>librtt\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_CommandBuffer.h">

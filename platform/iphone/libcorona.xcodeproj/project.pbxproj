@@ -345,8 +345,6 @@
 		50FE9BE517A2FEE5002762DD /* kernel_filter_sharpenLuminance_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50FE9BE417A2FE13002762DD /* kernel_filter_sharpenLuminance_gl.lua */; };
 		A40C523B16F847CD00AE2ECF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A40C523916F847CD00AE2ECF /* CoronaVersion.c */; };
 		A40C523C16F847CD00AE2ECF /* CoronaVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = A40C523A16F847CD00AE2ECF /* CoronaVersion.h */; };
-		A413942A17D3D05F0060CB7A /* Rtt_CameraPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A413942817D3D05E0060CB7A /* Rtt_CameraPaint.cpp */; };
-		A413942B17D3D05F0060CB7A /* Rtt_CameraPaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A413942917D3D05F0060CB7A /* Rtt_CameraPaint.h */; };
 		A413942D17D41CC50060CB7A /* kernel_composite_yuv420f_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A413942C17D41C530060CB7A /* kernel_composite_yuv420f_gl.lua */; };
 		A41AC11216A5E03600AD331A /* easing.lua in Sources */ = {isa = PBXBuildFile; fileRef = A41AC10F16A5DFE800AD331A /* easing.lua */; };
 		A41AC11616A5FD0000AD331A /* Rtt_LuaFrameworks.h in Headers */ = {isa = PBXBuildFile; fileRef = A41AC11516A5FCFF00AD331A /* Rtt_LuaFrameworks.h */; };
@@ -1080,8 +1078,6 @@
 		50FE9BE417A2FE13002762DD /* kernel_filter_sharpenLuminance_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_sharpenLuminance_gl.lua; path = Display/Shader/kernel_filter_sharpenLuminance_gl.lua; sourceTree = "<group>"; };
 		A40C523916F847CD00AE2ECF /* CoronaVersion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CoronaVersion.c; path = Corona/CoronaVersion.c; sourceTree = "<group>"; };
 		A40C523A16F847CD00AE2ECF /* CoronaVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaVersion.h; path = Corona/CoronaVersion.h; sourceTree = "<group>"; };
-		A413942817D3D05E0060CB7A /* Rtt_CameraPaint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CameraPaint.cpp; path = Display/Rtt_CameraPaint.cpp; sourceTree = "<group>"; };
-		A413942917D3D05F0060CB7A /* Rtt_CameraPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CameraPaint.h; path = Display/Rtt_CameraPaint.h; sourceTree = "<group>"; };
 		A413942C17D41C530060CB7A /* kernel_composite_yuv420f_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_yuv420f_gl.lua; path = Display/Shader/kernel_composite_yuv420f_gl.lua; sourceTree = "<group>"; };
 		A41AC10F16A5DFE800AD331A /* easing.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = easing.lua; path = ../../subrepos/easing/easing.lua; sourceTree = SOURCE_ROOT; };
 		A41AC11516A5FCFF00AD331A /* Rtt_LuaFrameworks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaFrameworks.h; sourceTree = "<group>"; };
@@ -2052,8 +2048,6 @@
 				A475034B1774DBBC0064ABA0 /* Rtt_BitmapPaintAdapter.h */,
 				A474284117694EB000C63853 /* Rtt_BufferBitmap.cpp */,
 				A474284217694EB000C63853 /* Rtt_BufferBitmap.h */,
-				A413942817D3D05E0060CB7A /* Rtt_CameraPaint.cpp */,
-				A413942917D3D05F0060CB7A /* Rtt_CameraPaint.h */,
 				A474284317694EB000C63853 /* Rtt_ClosedPath.cpp */,
 				A474284417694EB000C63853 /* Rtt_ClosedPath.h */,
 				A474284717694EB000C63853 /* Rtt_CompositeObject.cpp */,
@@ -2584,7 +2578,6 @@
 				0720212E17C8177E00B6D424 /* Rtt_ShaderInput.h in Headers */,
 				0724699B17DA43BA000A1641 /* Rtt_MCPUResourceObserver.h in Headers */,
 				0724699D17DA43BA000A1641 /* Rtt_CPUResourcePool.h in Headers */,
-				A413942B17D3D05F0060CB7A /* Rtt_CameraPaint.h in Headers */,
 				0304FE89178E3AF80047CC04 /* Rtt_InputDeviceCollection.h in Headers */,
 				0304FE8B178E3AF80047CC04 /* Rtt_InputDeviceDescriptor.h in Headers */,
 				0304FE8D178E3AF80047CC04 /* Rtt_InputDeviceType.h in Headers */,
@@ -3115,7 +3108,6 @@
 				0720212A17C8177E00B6D424 /* Rtt_ShaderCompositeAdapter.cpp in Sources */,
 				0720212C17C8177E00B6D424 /* Rtt_ShaderResource.cpp in Sources */,
 				0724699C17DA43BA000A1641 /* Rtt_CPUResourcePool.cpp in Sources */,
-				A413942A17D3D05F0060CB7A /* Rtt_CameraPaint.cpp in Sources */,
 				0304FE88178E3AF80047CC04 /* Rtt_InputDeviceCollection.cpp in Sources */,
 				0304FE8A178E3AF80047CC04 /* Rtt_InputDeviceDescriptor.cpp in Sources */,
 				0304FE8C178E3AF80047CC04 /* Rtt_InputDeviceType.cpp in Sources */,

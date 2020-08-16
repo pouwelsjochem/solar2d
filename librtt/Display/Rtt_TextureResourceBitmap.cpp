@@ -18,7 +18,6 @@
 #include "Renderer/Rtt_TextureBitmap.h"
 
 #include "Display/Rtt_BufferBitmap.h"
-#include "Renderer/Rtt_VideoTexture.h"
 #include "Rtt_TextureResourceBitmapAdapter.h"
 
 // ----------------------------------------------------------------------------
@@ -80,20 +79,6 @@ TextureResourceBitmap::CreateDefault(
 	TextureResourceBitmap *result =
 		Rtt_NEW( display.GetAllocator(), TextureResourceBitmap( factory, texture, NULL ) );
 
-	return result;
-}
-
-
-TextureResourceBitmap *
-TextureResourceBitmap::CreateVideo(TextureFactory& factory)
-{
-	Display& display = factory.GetDisplay();
-
-	VideoTexture *texture = Rtt_NEW( allocator, VideoTexture( display.GetAllocator() ) );
-			
-	TextureResourceBitmap *result =
-		Rtt_NEW( display.GetAllocator(), TextureResourceBitmap( factory, texture, NULL ) );
-		
 	return result;
 }
 			

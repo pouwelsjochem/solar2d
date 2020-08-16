@@ -61,7 +61,6 @@
 		A4551DDF1BAA17CF00FB3BDF /* Rtt_BitmapPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D441BAA17CF00FB3BDF /* Rtt_BitmapPaint.cpp */; };
 		A4551DE01BAA17CF00FB3BDF /* Rtt_BitmapPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D461BAA17CF00FB3BDF /* Rtt_BitmapPaintAdapter.cpp */; };
 		A4551DE11BAA17CF00FB3BDF /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D481BAA17CF00FB3BDF /* Rtt_BufferBitmap.cpp */; };
-		A4551DE21BAA17CF00FB3BDF /* Rtt_CameraPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D4A1BAA17CF00FB3BDF /* Rtt_CameraPaint.cpp */; };
 		A4551DE31BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D4C1BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp */; };
 		A4551DE41BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D4E1BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp */; };
 		A4551DE51BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D501BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp */; };
@@ -323,7 +322,6 @@
 		A4D938581BAA271F00DF2214 /* Rtt_TextureBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D9383B1BAA271E00DF2214 /* Rtt_TextureBitmap.cpp */; };
 		A4D938591BAA271F00DF2214 /* Rtt_TextureVolatile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D9383D1BAA271E00DF2214 /* Rtt_TextureVolatile.cpp */; };
 		A4D9385A1BAA271F00DF2214 /* Rtt_Uniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D9383F1BAA271E00DF2214 /* Rtt_Uniform.cpp */; };
-		A4D9385B1BAA271F00DF2214 /* Rtt_VideoTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D938411BAA271E00DF2214 /* Rtt_VideoTexture.cpp */; };
 		A4DD46E51BB225DA00FD988E /* libalmixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4384F751BAA20E0005750A3 /* libalmixer.a */; };
 		A4DD46E71BB225DA00FD988E /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4AD17531BAA14A600BCF507 /* liblua.a */; };
 		A4DD46E81BB225DA00FD988E /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4AD31151BAB8852006A0C97 /* libluasocket.a */; };
@@ -872,8 +870,6 @@
 		A4551D471BAA17CF00FB3BDF /* Rtt_BitmapPaintAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_BitmapPaintAdapter.h; path = ../../librtt/Display/Rtt_BitmapPaintAdapter.h; sourceTree = "<group>"; };
 		A4551D481BAA17CF00FB3BDF /* Rtt_BufferBitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_BufferBitmap.cpp; path = ../../librtt/Display/Rtt_BufferBitmap.cpp; sourceTree = "<group>"; };
 		A4551D491BAA17CF00FB3BDF /* Rtt_BufferBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_BufferBitmap.h; path = ../../librtt/Display/Rtt_BufferBitmap.h; sourceTree = "<group>"; };
-		A4551D4A1BAA17CF00FB3BDF /* Rtt_CameraPaint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CameraPaint.cpp; path = ../../librtt/Display/Rtt_CameraPaint.cpp; sourceTree = "<group>"; };
-		A4551D4B1BAA17CF00FB3BDF /* Rtt_CameraPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CameraPaint.h; path = ../../librtt/Display/Rtt_CameraPaint.h; sourceTree = "<group>"; };
 		A4551D4C1BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ClosedPath.cpp; path = ../../librtt/Display/Rtt_ClosedPath.cpp; sourceTree = "<group>"; };
 		A4551D4D1BAA17CF00FB3BDF /* Rtt_ClosedPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ClosedPath.h; path = ../../librtt/Display/Rtt_ClosedPath.h; sourceTree = "<group>"; };
 		A4551D4E1BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CompositeObject.cpp; path = ../../librtt/Display/Rtt_CompositeObject.cpp; sourceTree = "<group>"; };
@@ -1522,8 +1518,6 @@
 		A4D9383E1BAA271E00DF2214 /* Rtt_TextureVolatile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureVolatile.h; path = ../../librtt/Renderer/Rtt_TextureVolatile.h; sourceTree = "<group>"; };
 		A4D9383F1BAA271E00DF2214 /* Rtt_Uniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Uniform.cpp; path = ../../librtt/Renderer/Rtt_Uniform.cpp; sourceTree = "<group>"; };
 		A4D938401BAA271E00DF2214 /* Rtt_Uniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Uniform.h; path = ../../librtt/Renderer/Rtt_Uniform.h; sourceTree = "<group>"; };
-		A4D938411BAA271E00DF2214 /* Rtt_VideoTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_VideoTexture.cpp; path = ../../librtt/Renderer/Rtt_VideoTexture.cpp; sourceTree = "<group>"; };
-		A4D938421BAA271E00DF2214 /* Rtt_VideoTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_VideoTexture.h; path = ../../librtt/Renderer/Rtt_VideoTexture.h; sourceTree = "<group>"; };
 		A4DD47021BB2476F00FD988E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A4DD47031BB2476F00FD988E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A4DD47041BB2476F00FD988E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1886,8 +1880,6 @@
 				A4551D471BAA17CF00FB3BDF /* Rtt_BitmapPaintAdapter.h */,
 				A4551D481BAA17CF00FB3BDF /* Rtt_BufferBitmap.cpp */,
 				A4551D491BAA17CF00FB3BDF /* Rtt_BufferBitmap.h */,
-				A4551D4A1BAA17CF00FB3BDF /* Rtt_CameraPaint.cpp */,
-				A4551D4B1BAA17CF00FB3BDF /* Rtt_CameraPaint.h */,
 				A4551D4C1BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp */,
 				A4551D4D1BAA17CF00FB3BDF /* Rtt_ClosedPath.h */,
 				A4551D4E1BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp */,
@@ -2773,8 +2765,6 @@
 				A4D9383E1BAA271E00DF2214 /* Rtt_TextureVolatile.h */,
 				A4D9383F1BAA271E00DF2214 /* Rtt_Uniform.cpp */,
 				A4D938401BAA271E00DF2214 /* Rtt_Uniform.h */,
-				A4D938411BAA271E00DF2214 /* Rtt_VideoTexture.cpp */,
-				A4D938421BAA271E00DF2214 /* Rtt_VideoTexture.h */,
 			);
 			name = librenderer;
 			sourceTree = "<group>";
@@ -3764,7 +3754,6 @@
 				A4551F441BAA182D00FB3BDF /* Rtt_Lua.cpp in Sources */,
 				A4551E101BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.cpp in Sources */,
 				A4551F591BAA182D00FB3BDF /* Rtt_LuaTableIterator.cpp in Sources */,
-				A4551DE21BAA17CF00FB3BDF /* Rtt_CameraPaint.cpp in Sources */,
 				A4551F411BAA182D00FB3BDF /* Rtt_FilePath.cpp in Sources */,
 				A4551F571BAA182D00FB3BDF /* Rtt_LuaResource.cpp in Sources */,
 				A4551DE31BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp in Sources */,
@@ -3988,7 +3977,6 @@
 				A4D938451BAA271F00DF2214 /* Rtt_FrameBufferObject.cpp in Sources */,
 				A4D938571BAA271F00DF2214 /* Rtt_Texture.cpp in Sources */,
 				A4D938581BAA271F00DF2214 /* Rtt_TextureBitmap.cpp in Sources */,
-				A4D9385B1BAA271F00DF2214 /* Rtt_VideoTexture.cpp in Sources */,
 				A4D9384A1BAA271F00DF2214 /* Rtt_GLFrameBufferObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

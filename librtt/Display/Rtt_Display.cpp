@@ -16,7 +16,6 @@
 #include "Display/Rtt_DisplayDefaults.h"
 #include "Display/Rtt_MDisplayDelegate.h"
 #include "Display/Rtt_BitmapPaint.h"
-#include "Display/Rtt_CameraPaint.h"
 #include "Display/Rtt_Paint.h"
 #include "Display/Rtt_Scene.h"
 #include "Display/Rtt_ShaderFactory.h"
@@ -198,7 +197,6 @@ Display::Display( Runtime& owner )
 
 Display::~Display()
 {
-	CameraPaint::Finalize();
 	Paint::Finalize();
 
 	lua_State *L = GetL();

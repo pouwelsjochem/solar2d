@@ -482,7 +482,6 @@
 		A46AC8DD178A26D900BE6805 /* Rtt_TextureResource.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8D6178A26C200BE6805 /* Rtt_TextureResource.h */; };
 		A47290001AE827C400BC088D /* CoronaLuaObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = A4728FFC1AE827C400BC088D /* CoronaLuaObjC.h */; };
 		A47290011AE827C400BC088D /* CoronaLuaObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4728FFD1AE827C400BC088D /* CoronaLuaObjC.mm */; };
-		A47359DE17D86C0700D39BAE /* Rtt_CameraPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47359DC17D86C0700D39BAE /* Rtt_CameraPaint.cpp */; };
 		A47359F217D86D3A00D39BAE /* kernel_composite_yuv420f_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A47359F117D86D2200D39BAE /* kernel_composite_yuv420f_gl.lua */; };
 		A475032717739C000064ABA0 /* Rtt_GradientPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A475032517739BFD0064ABA0 /* Rtt_GradientPaintAdapter.cpp */; };
 		A475032B17739C060064ABA0 /* Rtt_BitmapPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A475032917739C050064ABA0 /* Rtt_BitmapPaintAdapter.cpp */; };
@@ -611,7 +610,6 @@
 		C229DFF31B32221B00D87A7C /* Rtt_BitmapPaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032A17739C050064ABA0 /* Rtt_BitmapPaintAdapter.h */; };
 		C229DFF41B32221B00D87A7C /* Rtt_BufferBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287E7176A621100ACB6FF /* Rtt_BufferBitmap.h */; };
 		C229DFF51B32221B00D87A7C /* Rtt_Build.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BC412B71BF20057F594 /* Rtt_Build.h */; };
-		C229DFF71B32221B00D87A7C /* Rtt_CameraPaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A47359DD17D86C0700D39BAE /* Rtt_CameraPaint.h */; };
 		C229DFF81B32221B00D87A7C /* Rtt_ClosedPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287E9176A621100ACB6FF /* Rtt_ClosedPath.h */; };
 		C229DFF91B32221B00D87A7C /* Rtt_CompositeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287EB176A621100ACB6FF /* Rtt_CompositeObject.h */; };
 		C229DFFA1B32221B00D87A7C /* Rtt_CompositePaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A492760B17B98BAE00DAD62A /* Rtt_CompositePaint.h */; };
@@ -793,7 +791,6 @@
 		C229E0C71B32221B00D87A7C /* Rtt_BitmapPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A475032917739C050064ABA0 /* Rtt_BitmapPaintAdapter.cpp */; };
 		C229E0C81B32221B00D87A7C /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E6176A621100ACB6FF /* Rtt_BufferBitmap.cpp */; };
 		C229E0C91B32221B00D87A7C /* Rtt_CPUResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0724699117D99D41000A1641 /* Rtt_CPUResourcePool.cpp */; };
-		C229E0CB1B32221B00D87A7C /* Rtt_CameraPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47359DC17D86C0700D39BAE /* Rtt_CameraPaint.cpp */; };
 		C229E0CC1B32221B00D87A7C /* Rtt_ClosedPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E8176A621100ACB6FF /* Rtt_ClosedPath.cpp */; };
 		C229E0CD1B32221B00D87A7C /* Rtt_CompositeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EA176A621100ACB6FF /* Rtt_CompositeObject.cpp */; };
 		C229E0CE1B32221B00D87A7C /* Rtt_CompositePaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A492760A17B98BAE00DAD62A /* Rtt_CompositePaint.cpp */; };
@@ -1129,7 +1126,6 @@
 		C2DA95EC1B46460F00DAF684 /* librtt-simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229E2071B32221B00D87A7C /* librtt-simulator.a */; };
 		C2DA960C1B46460F00DAF684 /* lundump_swap.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7348312B6F8C30057F594 /* lundump_swap.c */; };
 		C2DA960D1B46460F00DAF684 /* luac.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7343012B6F7530057F594 /* luac.c */; };
-		C2DA960E1B46460F00DAF684 /* Rtt_CameraPaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A47359DD17D86C0700D39BAE /* Rtt_CameraPaint.h */; };
 		C2DA960F1B46460F00DAF684 /* Rtt_GroupObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287FC176A621100ACB6FF /* Rtt_GroupObject.h */; };
 		C2DA96101B46460F00DAF684 /* Rtt_DisplayTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F6176A621100ACB6FF /* Rtt_DisplayTypes.h */; };
 		C2DA96111B46460F00DAF684 /* Rtt_ImageSheetUserdata.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328806176A621100ACB6FF /* Rtt_ImageSheetUserdata.h */; };
@@ -2582,8 +2578,6 @@
 		A46AC8D6178A26C200BE6805 /* Rtt_TextureResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResource.h; path = Display/Rtt_TextureResource.h; sourceTree = "<group>"; };
 		A4728FFC1AE827C400BC088D /* CoronaLuaObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaObjC.h; path = ../apple/CoronaLuaObjC.h; sourceTree = "<group>"; };
 		A4728FFD1AE827C400BC088D /* CoronaLuaObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaLuaObjC.mm; path = ../apple/CoronaLuaObjC.mm; sourceTree = "<group>"; };
-		A47359DC17D86C0700D39BAE /* Rtt_CameraPaint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CameraPaint.cpp; path = Display/Rtt_CameraPaint.cpp; sourceTree = "<group>"; };
-		A47359DD17D86C0700D39BAE /* Rtt_CameraPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CameraPaint.h; path = Display/Rtt_CameraPaint.h; sourceTree = "<group>"; };
 		A47359F117D86D2200D39BAE /* kernel_composite_yuv420f_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_yuv420f_gl.lua; path = Display/Shader/kernel_composite_yuv420f_gl.lua; sourceTree = "<group>"; };
 		A475032217739AD80064ABA0 /* Rtt_PaintAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PaintAdapter.h; path = Display/Rtt_PaintAdapter.h; sourceTree = "<group>"; };
 		A475032517739BFD0064ABA0 /* Rtt_GradientPaintAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GradientPaintAdapter.cpp; path = Display/Rtt_GradientPaintAdapter.cpp; sourceTree = "<group>"; };
@@ -3923,8 +3917,6 @@
 				A475032A17739C050064ABA0 /* Rtt_BitmapPaintAdapter.h */,
 				A43287E6176A621100ACB6FF /* Rtt_BufferBitmap.cpp */,
 				A43287E7176A621100ACB6FF /* Rtt_BufferBitmap.h */,
-				A47359DC17D86C0700D39BAE /* Rtt_CameraPaint.cpp */,
-				A47359DD17D86C0700D39BAE /* Rtt_CameraPaint.h */,
 				A43287E8176A621100ACB6FF /* Rtt_ClosedPath.cpp */,
 				A43287E9176A621100ACB6FF /* Rtt_ClosedPath.h */,
 				A43287EA176A621100ACB6FF /* Rtt_CompositeObject.cpp */,
@@ -4551,7 +4543,6 @@
 				C2DA96691B46460F00DAF684 /* Rtt_BitmapPaintAdapter.h in Headers */,
 				C2DA96341B46460F00DAF684 /* Rtt_BufferBitmap.h in Headers */,
 				00B73BF012B71BF20057F594 /* Rtt_Build.h in Headers */,
-				C2DA960E1B46460F00DAF684 /* Rtt_CameraPaint.h in Headers */,
 				C2DA961A1B46460F00DAF684 /* Rtt_ClosedPath.h in Headers */,
 				C2DA96271B46460F00DAF684 /* Rtt_CompositeObject.h in Headers */,
 				C2DA964C1B46460F00DAF684 /* Rtt_CompositePaint.h in Headers */,
@@ -4813,7 +4804,6 @@
 				C229DFF31B32221B00D87A7C /* Rtt_BitmapPaintAdapter.h in Headers */,
 				C229DFF41B32221B00D87A7C /* Rtt_BufferBitmap.h in Headers */,
 				C229DFF51B32221B00D87A7C /* Rtt_Build.h in Headers */,
-				C229DFF71B32221B00D87A7C /* Rtt_CameraPaint.h in Headers */,
 				C229DFF81B32221B00D87A7C /* Rtt_ClosedPath.h in Headers */,
 				C229DFF91B32221B00D87A7C /* Rtt_CompositeObject.h in Headers */,
 				C229DFFA1B32221B00D87A7C /* Rtt_CompositePaint.h in Headers */,
@@ -5697,7 +5687,6 @@
 				A475032B17739C060064ABA0 /* Rtt_BitmapPaintAdapter.cpp in Sources */,
 				A4328845176A621200ACB6FF /* Rtt_BufferBitmap.cpp in Sources */,
 				C2E993341A6B2FEC00E99F46 /* Rtt_CPUResourcePool.cpp in Sources */,
-				A47359DE17D86C0700D39BAE /* Rtt_CameraPaint.cpp in Sources */,
 				A4328847176A621200ACB6FF /* Rtt_ClosedPath.cpp in Sources */,
 				A4328849176A621200ACB6FF /* Rtt_CompositeObject.cpp in Sources */,
 				A492760C17B98BAF00DAD62A /* Rtt_CompositePaint.cpp in Sources */,
@@ -6184,7 +6173,6 @@
 				C229E0C71B32221B00D87A7C /* Rtt_BitmapPaintAdapter.cpp in Sources */,
 				C229E0C81B32221B00D87A7C /* Rtt_BufferBitmap.cpp in Sources */,
 				C229E0C91B32221B00D87A7C /* Rtt_CPUResourcePool.cpp in Sources */,
-				C229E0CB1B32221B00D87A7C /* Rtt_CameraPaint.cpp in Sources */,
 				C229E0CC1B32221B00D87A7C /* Rtt_ClosedPath.cpp in Sources */,
 				C229E0CD1B32221B00D87A7C /* Rtt_CompositeObject.cpp in Sources */,
 				C229E0CE1B32221B00D87A7C /* Rtt_CompositePaint.cpp in Sources */,

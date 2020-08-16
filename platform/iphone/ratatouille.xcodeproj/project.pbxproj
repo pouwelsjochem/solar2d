@@ -177,7 +177,6 @@
 		A48E9C00183F57B400F67CB3 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C1169DED9200723568 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */; };
 		A48E9C01183F57B400F67CB3 /* Rtt_IPhoneDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C6169DED9200723568 /* Rtt_IPhoneDevice.mm */; };
 		A48E9C02183F57B400F67CB3 /* Rtt_IPhoneFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936CC169DED9200723568 /* Rtt_IPhoneFont.mm */; };
-		A48E9C03183F57B400F67CB3 /* Rtt_IPhoneGLVideoTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4D0AF6517D1848A000C432B /* Rtt_IPhoneGLVideoTexture.mm */; };
 		A48E9C04183F57B400F67CB3 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A482FAE9183D7F460005831B /* Rtt_IPhonePlatformBase.mm */; };
 		A48E9C05183F57B400F67CB3 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E0169DED9200723568 /* Rtt_IPhoneScreenSurface.mm */; };
 		A48E9C06183F57B400F67CB3 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0720731117CD2C93004720D2 /* Rtt_IPhoneTimer.mm */; };
@@ -212,8 +211,6 @@
 		A4C3189C1A6EDD4500F186DF /* AppleWeakProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C318991A6EDD4400F186DF /* AppleWeakProxy.h */; };
 		A4C3189D1A6EDD4500F186DF /* AppleWeakProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C3189A1A6EDD4400F186DF /* AppleWeakProxy.mm */; };
 		A4C3189E1A6EDD4500F186DF /* AppleWeakProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C3189A1A6EDD4400F186DF /* AppleWeakProxy.mm */; };
-		A4D0AF6617D1848B000C432B /* Rtt_IPhoneGLVideoTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = A4D0AF6417D1848A000C432B /* Rtt_IPhoneGLVideoTexture.h */; };
-		A4D0AF6717D1848B000C432B /* Rtt_IPhoneGLVideoTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4D0AF6517D1848A000C432B /* Rtt_IPhoneGLVideoTexture.mm */; };
 		A4DF585A1BE4059000B17862 /* Rtt_IPhoneText.mm in Sources */ = {isa = PBXBuildFile; fileRef = A47AB0EF1A72EEA2001D3FFA /* Rtt_IPhoneText.mm */; };
 		A4DF585B1BE4059000B17862 /* Rtt_IPhoneTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E2169DED9200723568 /* Rtt_IPhoneTextBoxObject.mm */; };
 		A4DF585C1BE4059000B17862 /* Rtt_IPhoneTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E4169DED9200723568 /* Rtt_IPhoneTextFieldObject.mm */; };
@@ -728,8 +725,6 @@
 		A4C318711A69A4E000F186DF /* CoronaGyroscopeObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGyroscopeObserver.h; path = platform/iphone/CoronaGyroscopeObserver.h; sourceTree = "<group>"; };
 		A4C318991A6EDD4400F186DF /* AppleWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleWeakProxy.h; sourceTree = "<group>"; };
 		A4C3189A1A6EDD4400F186DF /* AppleWeakProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppleWeakProxy.mm; sourceTree = "<group>"; };
-		A4D0AF6417D1848A000C432B /* Rtt_IPhoneGLVideoTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneGLVideoTexture.h; path = platform/iphone/Rtt_IPhoneGLVideoTexture.h; sourceTree = "<group>"; };
-		A4D0AF6517D1848A000C432B /* Rtt_IPhoneGLVideoTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneGLVideoTexture.mm; path = platform/iphone/Rtt_IPhoneGLVideoTexture.mm; sourceTree = "<group>"; };
 		A4EF76F51A352B43002D3BEF /* CoronaCardsTest-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoronaCardsTest-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4EF76F61A352B43002D3BEF /* CoronaCards.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoronaCards.framework; path = Library/Frameworks/CoronaCards.framework; sourceTree = DEVELOPER_DIR; };
 		A4EF770F1A352B43002D3BEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -989,8 +984,6 @@
 				A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */,
 				A46936CB169DED9200723568 /* Rtt_IPhoneFont.h */,
 				A46936CC169DED9200723568 /* Rtt_IPhoneFont.mm */,
-				A4D0AF6417D1848A000C432B /* Rtt_IPhoneGLVideoTexture.h */,
-				A4D0AF6517D1848A000C432B /* Rtt_IPhoneGLVideoTexture.mm */,
 				A46936D1169DED9200723568 /* Rtt_IPhoneImageProvider.h */,
 				A46936D2169DED9200723568 /* Rtt_IPhoneImageProvider.mm */,
 				F81D00D1180DBE0F00E05CB1 /* Rtt_IPhoneMediaProvider.h */,
@@ -1553,7 +1546,6 @@
 				A4B2D52518402BDE001311C9 /* Rtt_IPhoneOrientation.h in Headers */,
 				A480725C16CACD6E00960127 /* CoronaLuaIOS.h in Headers */,
 				A47AB0F01A72EEA2001D3FFA /* Rtt_IPhoneText.h in Headers */,
-				A4D0AF6617D1848B000C432B /* Rtt_IPhoneGLVideoTexture.h in Headers */,
 				F5A7520E1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2327,7 +2319,6 @@
 				F564C3731BE430F900C241E6 /* Rtt_AppleInputDevice.mm in Sources */,
 				A4B2D52D184038AA001311C9 /* Rtt_AppleReachability.mm in Sources */,
 				A48E9C06183F57B400F67CB3 /* Rtt_IPhoneTimer.mm in Sources */,
-				A48E9C03183F57B400F67CB3 /* Rtt_IPhoneGLVideoTexture.mm in Sources */,
 				A41AC4DB184DE09400313BF9 /* Rtt_IPhoneTemplate-CoronaCards.mm in Sources */,
 				A48E9C07183F57B400F67CB3 /* Rtt_TouchInhibitor.mm in Sources */,
 				A4B2D530184039D1001311C9 /* Rtt_AppleCallback.mm in Sources */,
@@ -2421,7 +2412,6 @@
 				A4FA8057170BFF09002A7FC9 /* Rtt_IPhoneNativeObject.mm in Sources */,
 				0720731917CD2CC2004720D2 /* Rtt_IPhoneTimer.mm in Sources */,
 				A482FAEB183D7F460005831B /* Rtt_IPhonePlatformBase.mm in Sources */,
-				A4D0AF6717D1848B000C432B /* Rtt_IPhoneGLVideoTexture.mm in Sources */,
 				078DA95B176FD45500A5193E /* Rtt_AppleTextAlignment.mm in Sources */,
 				F5A7520F1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
 			);

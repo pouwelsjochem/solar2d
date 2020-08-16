@@ -20,7 +20,6 @@ namespace Rtt
 {
 
 class BitmapPaint;
-class CameraPaint;
 class CompositePaint;
 class GradientPaint;
 class GroupObject;
@@ -74,7 +73,6 @@ class LuaLibDisplay
 		static BitmapPaint *LuaNewBitmapPaint( lua_State *L, int index );
 		static GradientPaint *LuaNewGradientPaint( lua_State *L, int index );
 		static CompositePaint *LuaNewCompositePaint( lua_State *L, int index );
-		static CameraPaint *LuaNewCameraPaint( lua_State *L, int index );
 		static Paint *LuaNewPaint( lua_State *L, int index );
 };
 

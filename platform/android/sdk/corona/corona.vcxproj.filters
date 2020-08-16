@@ -490,9 +490,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_BufferBitmap.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CameraPaint.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
@@ -938,9 +935,6 @@
       <Filter>rtt\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.cpp">
-      <Filter>rtt\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_VideoTexture.cpp">
       <Filter>rtt\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_CommandBuffer.cpp">
@@ -1687,9 +1681,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BufferBitmap.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CameraPaint.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
@@ -2210,12 +2201,6 @@
       <Filter>rtt\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.h">
-      <Filter>rtt\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_VideoSource.h">
-      <Filter>rtt\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_VideoTexture.h">
       <Filter>rtt\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h">

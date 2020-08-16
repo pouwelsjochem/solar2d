@@ -31,7 +31,6 @@
 		A4B93F7217596600003466CC /* Rtt_Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B93F5817596600003466CC /* Rtt_Texture.cpp */; };
 		A4B93F7317596600003466CC /* Rtt_TextureBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B93F5A17596600003466CC /* Rtt_TextureBitmap.cpp */; };
 		A4B93F7417596600003466CC /* Rtt_Uniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B93F5C17596600003466CC /* Rtt_Uniform.cpp */; };
-		A4D0AF6317D1843D000C432B /* Rtt_VideoTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D0AF6117D1843A000C432B /* Rtt_VideoTexture.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -96,8 +95,6 @@
 		A4B93F5B17596600003466CC /* Rtt_TextureBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureBitmap.h; path = ../Rtt_TextureBitmap.h; sourceTree = "<group>"; };
 		A4B93F5C17596600003466CC /* Rtt_Uniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Uniform.cpp; path = ../Rtt_Uniform.cpp; sourceTree = "<group>"; };
 		A4B93F5D17596600003466CC /* Rtt_Uniform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Uniform.h; path = ../Rtt_Uniform.h; sourceTree = "<group>"; };
-		A4D0AF6117D1843A000C432B /* Rtt_VideoTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_VideoTexture.cpp; path = ../Rtt_VideoTexture.cpp; sourceTree = "<group>"; };
-		A4D0AF6217D1843B000C432B /* Rtt_VideoTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_VideoTexture.h; path = ../Rtt_VideoTexture.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,8 +183,6 @@
 				A48B91D3178A9CBB0072EAF7 /* Rtt_TextureVolatile.h */,
 				A4B93F5C17596600003466CC /* Rtt_Uniform.cpp */,
 				A4B93F5D17596600003466CC /* Rtt_Uniform.h */,
-				A4D0AF6117D1843A000C432B /* Rtt_VideoTexture.cpp */,
-				A4D0AF6217D1843B000C432B /* Rtt_VideoTexture.h */,
 			);
 			name = Renderer;
 			sourceTree = SOURCE_ROOT;
@@ -273,7 +268,6 @@
 				A4B93F7417596600003466CC /* Rtt_Uniform.cpp in Sources */,
 				9A5AC47D1770C3D0000DA193 /* Rtt_GeometryPool.cpp in Sources */,
 				A48B91D4178A9CBB0072EAF7 /* Rtt_TextureVolatile.cpp in Sources */,
-				A4D0AF6317D1843D000C432B /* Rtt_VideoTexture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
