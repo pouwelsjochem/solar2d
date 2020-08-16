@@ -402,9 +402,6 @@
     <Image Include="res\exampleGPS.ico">
       <Filter>res</Filter>
     </Image>
-    <Image Include="res\exampleInneractive.ico">
-      <Filter>res</Filter>
-    </Image>
     <Image Include="res\exampleInternet.ico">
       <Filter>res</Filter>
     </Image>

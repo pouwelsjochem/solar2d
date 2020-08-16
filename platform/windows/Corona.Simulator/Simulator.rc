@@ -127,8 +127,6 @@ IDI_ACTIVITY_INDICATOR  ICON                    "res\\exampleActivityIndicator.i
 
 IDI_MICROPHONE          ICON                    "res\\exampleMicrophone.ico"
 
-IDI_INNERACTIVE         ICON                    "res\\exampleInneractive.ico"
-
 IDI_TWITTER             ICON                    "res\\exampleTwitter.ico"
 
 IDI_MAIL                ICON                    "res\\exampleMail.ico"

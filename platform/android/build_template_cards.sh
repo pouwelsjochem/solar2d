@@ -112,13 +112,6 @@ pushd "$path/sdk" > /dev/null
 	find "$path/sdk/res/raw" -type f -name "corona_asset_*" -delete
 
 	# ----------------------------------------
-	# Prepare plugins
-	# ----------------------------------------
-	# preparePlugin "ads-inmobi"
-	# preparePlugin "ads-inneractive"
-	
-
-	# ----------------------------------------
 	# Build Corona Template
 	# ----------------------------------------
 

@@ -2390,7 +2390,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	if ( result )
 	{
-		result = [self setSkin:skin];
+		[self setSkin:skin];
 	}
 
 	return result;

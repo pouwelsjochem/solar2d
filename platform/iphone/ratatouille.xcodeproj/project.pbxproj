@@ -2886,7 +2886,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 				);
@@ -2918,7 +2917,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 				);
@@ -2951,7 +2949,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 				);
@@ -2979,7 +2976,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
@@ -3009,7 +3005,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
@@ -3040,7 +3035,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
@@ -3053,69 +3047,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = ios;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template";
-		};
-		A47098D1169E9F2400D31091 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				DSTROOT = /tmp/libplayer.dst;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = player;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		A47098D2169E9F2400D31091 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/libplayer.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = player;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		A47098D3169E9F2400D31091 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/libplayer.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = player;
-				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -3268,7 +3199,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
@@ -3294,7 +3224,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
@@ -3321,7 +3250,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
@@ -3763,8 +3691,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
 					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios/FacebookSDK.framework/Versions/A\"",
@@ -3786,8 +3712,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
 					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios/FacebookSDK.framework/Versions/A\"",
@@ -3810,8 +3734,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
 					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios/FacebookSDK.framework/Versions/A\"",

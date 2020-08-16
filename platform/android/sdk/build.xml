@@ -117,14 +117,6 @@
               tofile="res/raw/corona_3rd_party_licenses.txt"/>
 	</target>
 
-<!--
-    // This doesn't work b/c of chicken and egg issues.
-    // We have to prebuild them before this is done.
-	<target name="-post-compile">
-        <exec executable="../build_plugins.sh" />
-	</target>
--->
-
     <!-- Copy 3rd party JAR libraries to this project's "libs" directory and the build templates "coreJars" directory. -->
     <!-- Note: We can't do this as a pre-build step or else the compiler will not find these libraries. -->
     <macrodef name="copy-libraries">

@@ -53,7 +53,6 @@
 #define IDI_ACTIVITY_INDICATOR          369
 #define IDI_MICROPHONE                  370
 #define IDD_BUILD_LINUX                 371
-#define IDI_INNERACTIVE                 372
 #define IDI_TWITTER                     373
 #define IDI_MAIL                        374
 #define IDD_RELAUNCH_PREF               375

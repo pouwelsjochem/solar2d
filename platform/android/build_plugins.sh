@@ -37,6 +37,3 @@ build()
 		ant release
 	popd > /dev/null
 }
-
-build ads-inmobi
-build ads-inneractive

@@ -250,7 +250,6 @@ options.sdkType = "iphoneos" -- default (see keys in options.archSlices for othe
 -- AddressBookUI.framework
 -- Accounts.framework
 -- Social.framework
--- iAds.framework
 -- 
 options.frameworks = {
 	'AudioToolbox',

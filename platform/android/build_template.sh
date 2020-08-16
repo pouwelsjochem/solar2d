@@ -140,14 +140,6 @@ pushd "$path/sdk" > /dev/null
 	$LUA -e "parameterArgTable={inputFile='$path/sdk/project.properties', absolutePathToInputFile='$path/sdk', templateDir='$path/template', externalLibsPathsFile='$path/template/external-libs-paths', absolutePathToAndroidSdk='$ANDROID_SDK'}" "$path/ParseAndroidProjectProperties.lua"
 	touch "$path/template/external-libs-paths"
 
-
-	# ----------------------------------------
-	# Prepare plugins
-	# ----------------------------------------
-	# preparePlugin "ads-inmobi"
-	# preparePlugin "ads-inneractive"
-	
-
 	# ----------------------------------------
 	# Build Corona Template
 	# ----------------------------------------
