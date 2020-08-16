@@ -37,11 +37,6 @@
 
 #import "CoronaViewPrivate.h"
 
-// Legacy (pre-iOS8) iPhone-only
-#ifdef Rtt_IPHONE_ENV
-	#define Rtt_IPHONE_LEGACY_ALERT 1
-#endif
-
 // ----------------------------------------------------------------------------
 
 @interface CustomAlertController : UIAlertController
@@ -72,36 +67,6 @@
 }
 
 @end
-
-// ----------------------------------------------------------------------------
-
-
-// ----------------------------------------------------------------------------
-
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-
-@interface CustomAlertView : UIAlertView
-{
-	Rtt::LuaResource *fResource;
-}
-@property (nonatomic, readwrite, assign) Rtt::LuaResource *fResource;
-@end
-
-
-@implementation CustomAlertView
-
-@synthesize fResource;
-
--(void)dealloc
-{
-	Rtt_DELETE( fResource );
-
-	[super dealloc];
-}
-
-@end
-
-#endif // Rtt_IPHONE_LEGACY_ALERT
 
 // ----------------------------------------------------------------------------
 
@@ -145,11 +110,7 @@
 	
 	id object = [fWrappers objectForKey:k];
 
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-	id result = Rtt_VERIFY( ! object || [object isKindOfClass:[CustomAlertView class]] || [object isKindOfClass:[CustomAlertController class]] ) ? object : nil;
-#else
 	id result = Rtt_VERIFY( [object isKindOfClass:[CustomAlertController class]] ) ? object : nil;
-#endif
 
 	[k release];
 
@@ -169,54 +130,12 @@
 {
 	NSString *k = [[NSString alloc] initWithFormat:@"%lx", (unsigned long) key];
 	
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-	Rtt_ASSERT( [fWrappers objectForKey:k]
-				&& ( [[fWrappers objectForKey:k] isKindOfClass:[CustomAlertView class]]
-					 || [[fWrappers objectForKey:k] isKindOfClass:[CustomAlertController class]]));
-#else
 	Rtt_ASSERT( [fWrappers objectForKey:k]
 				&& [[fWrappers objectForKey:k] isKindOfClass:[CustomAlertController class]] );
-#endif
 
 	[fWrappers removeObjectForKey:k];
 	[k release];
 }
-
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-
--(void)alertView:(UIAlertView *)alertView didCloseWithButtonIndex:(NSInteger)buttonIndex cancelled:(BOOL)cancelled
-{
-	if ( Rtt_VERIFY( [alertView isKindOfClass:[CustomAlertView class]] ) )
-	{
-		CustomAlertView *alert = (CustomAlertView*)alertView;
-
-		if ( [self objectForKey:alert] )
-		{
-			Rtt::LuaResource *resource = alert.fResource;
-
-			// Remove alert from dictionary before calling Lua callback
-			[self removeObjectForKey:alert];
-
-			if ( resource )
-			{
-				Rtt::LuaLibNative::AlertComplete( * resource, (S32)buttonIndex, cancelled );
-			}
-		}
-	}
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	[self alertView:alertView didCloseWithButtonIndex:buttonIndex cancelled:NO];
-}
-
--(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-	[self alertView:alertView didCloseWithButtonIndex:buttonIndex cancelled:YES];
-	[alertView release];
-}
-
-#endif // Rtt_IPHONE_LEGACY_ALERT
 
 @end
 
@@ -326,85 +245,54 @@ IPhonePlatformBase::ShowNativeAlert(
 	NSString *t = [[NSString alloc] initWithUTF8String:title];
 	NSString *m = [[NSString alloc] initWithUTF8String:msg];
 	
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-	// TODO: Remove this if-expr when we drop support for pre-iOS 8.
-	if(NSClassFromString( @"UIAlertController" ))
-#endif
+	CustomAlertController *alertController = [CustomAlertController
+												  alertControllerWithTitle:t
+												  message:m
+												  preferredStyle:UIAlertControllerStyleAlert];
+	
+	alertController.fResource = resource;
+	alertController.fDelegate = fDelegate;
+	[fDelegate setObject:alertController forKey:alertController];
+	
+	for ( U32 i = 0; i < numButtons; i++ )
 	{
-		// iOS8 controller
-		CustomAlertController *alertController = [CustomAlertController
-													  alertControllerWithTitle:t
-													  message:m
-													  preferredStyle:UIAlertControllerStyleAlert];
+		const char *label = buttonLabels[i]; Rtt_ASSERT( label );
+		NSString *l = [[NSString alloc] initWithUTF8String:label];
 		
-		alertController.fResource = resource;
-		alertController.fDelegate = fDelegate;
-		[fDelegate setObject:alertController forKey:alertController];
-		
-		for ( U32 i = 0; i < numButtons; i++ )
-		{
-			const char *label = buttonLabels[i]; Rtt_ASSERT( label );
-			NSString *l = [[NSString alloc] initWithUTF8String:label];
+		U32 buttonIndex = i;
+		void (^handler)(UIAlertAction*) = ^(UIAlertAction *action) {
+#ifdef Rtt_TVOS_ENV
+			// Restore the cached controllerUserInteractionEnabled state set when the alert was displayed.
+			GCEventViewController* controller = (GCEventViewController*)(GetView().viewController.parentViewController);
+			controller.controllerUserInteractionEnabled = fCachedControllerUserInteractionStatus;
+#endif
+				
+			[alertController dismissViewControllerAnimated:YES completion:nil];
 			
-			U32 buttonIndex = i;
-			void (^handler)(UIAlertAction*) = ^(UIAlertAction *action) {
-#ifdef Rtt_TVOS_ENV
-				// Restore the cached controllerUserInteractionEnabled state set when the alert was displayed.
-				GCEventViewController* controller = (GCEventViewController*)(GetView().viewController.parentViewController);
-				controller.controllerUserInteractionEnabled = fCachedControllerUserInteractionStatus;
-#endif
-				
-				[alertController dismissViewControllerAnimated:YES completion:nil];
-				
-				if ( resource )
-				{
-					Rtt::LuaLibNative::AlertComplete( * resource, buttonIndex, false );
-				}
-			};
-			UIAlertAction *action = [UIAlertAction
-									 actionWithTitle:l
-									 style:UIAlertActionStyleDefault
-									 handler:handler];
-			[alertController addAction:action];
-			[l release];
-		}
+			if ( resource )
+			{
+				Rtt::LuaLibNative::AlertComplete( * resource, buttonIndex, false );
+			}
+		};
+		UIAlertAction *action = [UIAlertAction
+								 actionWithTitle:l
+								 style:UIAlertActionStyleDefault
+								 handler:handler];
+		[alertController addAction:action];
+		[l release];
+	}
 		
 #ifdef Rtt_TVOS_ENV
-		// On tvOS, native alerts need to respond to game controllers. We try to protect the user and set controllerUserInteractionEnabled
-		// for the relevent view controller. As we do not know if this is being called on a main menu or not, we store/restore the state
-		// before/after the alert is displayed.
-		GCEventViewController* controller = (GCEventViewController*)(GetView().viewController.parentViewController);
-		fCachedControllerUserInteractionStatus = controller.controllerUserInteractionEnabled;
-		controller.controllerUserInteractionEnabled = YES;
+	// On tvOS, native alerts need to respond to game controllers. We try to protect the user and set controllerUserInteractionEnabled
+	// for the relevent view controller. As we do not know if this is being called on a main menu or not, we store/restore the state
+	// before/after the alert is displayed.
+	GCEventViewController* controller = (GCEventViewController*)(GetView().viewController.parentViewController);
+	fCachedControllerUserInteractionStatus = controller.controllerUserInteractionEnabled;
+	controller.controllerUserInteractionEnabled = YES;
 #endif
 		
-		[viewController presentViewController:alertController animated:YES completion:nil];
-		ret = alertController;
-	}
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-	else
-	{
-		CustomAlertView *alertView = [[CustomAlertView alloc]
-									initWithTitle:t
-									message:m
-									delegate:fDelegate
-									cancelButtonTitle:nil
-									otherButtonTitles:nil];
-		alertView.fResource = resource;
-		[fDelegate setObject:alertView forKey:alertView];
-
-		for ( U32 i = 0; i < numButtons; i++ )
-		{
-			const char *label = buttonLabels[i]; Rtt_ASSERT( label );
-			NSString *l = [[NSString alloc] initWithUTF8String:label];
-			(void)Rtt_VERIFY( (U32)[alertView addButtonWithTitle:l] == i );
-			[l release];
-		}
-
-		[alertView show];
-		ret = alertView;
-	}
-#endif // Rtt_IPHONE_LEGACY_ALERT
+	[viewController presentViewController:alertController animated:YES completion:nil];
+	ret = alertController;
 	
 	[m release];
 	[t release];
@@ -417,12 +305,7 @@ IPhonePlatformBase::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 {
 	id object = [fDelegate objectForKey:alert];
 	
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-	// TODO: Remove this if-expr when we drop support for pre-iOS 8.
-	if ( [object isKindOfClass:[CustomAlertController class]] )
-#else
 	if ( object != nil )
-#endif
 	{
 #ifdef Rtt_TVOS_ENV
 		// Restore the cached controllerUserInteractionEnabled state set when the alert was displayed.
@@ -443,14 +326,6 @@ IPhonePlatformBase::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 			[alertController dismissViewControllerAnimated:YES completion:nil];
 		}
 	}
-#ifdef Rtt_IPHONE_LEGACY_ALERT
-	else if ( [object isKindOfClass:[CustomAlertView class]] )
-	{
-		CustomAlertView *alertView = object;
-		[alertView dismissWithClickedButtonIndex:index animated:true];
-		[fDelegate removeObjectForKey:alert];
-	}
-#endif // Rtt_IPHONE_LEGACY_ALERT
 }
 
 PlatformDisplayObject*

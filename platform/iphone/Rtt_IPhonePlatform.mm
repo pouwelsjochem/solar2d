@@ -149,24 +149,12 @@ IPhonePlatform::IPhonePlatform( CoronaView *view )
 		| UIViewAutoresizingFlexibleBottomMargin];
 	[indicator release];
 
-	if( NSClassFromString( @"UIAlertController" ) )
-	{
-		// IOS 8 and after
+	// Always force activity view to be the top-most child of CoronaView
+	fActivityView.layer.zPosition = MAXFLOAT;
+	[view addSubview:fActivityView];
 
-		// Always force activity view to be the top-most child of CoronaView
-		fActivityView.layer.zPosition = MAXFLOAT;
-		[view addSubview:fActivityView];
-
-		// Prevent touches from bleeding through the activity view
-		[fActivityView addGestureRecognizer:[[CoronaNullGestureRecognizer alloc] init]];
-	}
-	else
-	{
-		// Legacy: Pre-IOS8
-		AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-		UIWindow *window = delegate.window;
-		[window insertSubview:fActivityView aboveSubview:delegate.view];
-	}
+	// Prevent touches from bleeding through the activity view
+	[fActivityView addGestureRecognizer:[[CoronaNullGestureRecognizer alloc] init]];
 
 	fActivityView.hidden = YES;
 }
