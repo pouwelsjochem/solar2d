@@ -57,7 +57,7 @@ GPUStream::GetMaxTextureUnits()
 	// For some reason GL_MAX_TEXTURE_IMAGE_UNITS is not defined on Android...
 	glGetIntegerv( GL_MAX_TEXTURE_UNITS, & maxTextureUnits );
 	Rtt_ASSERT( maxTextureUnits > 1 ); // OpenGL-ES 1.x mandates at least 2
-#elif !defined( Rtt_WIN_PHONE_ENV ) && !defined( Rtt_EMSCRIPTEN_ENV )
+#elif !defined( Rtt_EMSCRIPTEN_ENV )
 	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, & maxTextureUnits );
 	Rtt_ASSERT( maxTextureUnits > 1 ); // OpenGL-ES 1.x mandates at least 2
 #endif

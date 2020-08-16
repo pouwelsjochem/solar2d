@@ -240,11 +240,11 @@ function Runtime:addEventListener( eventName, listener )
 	local noListeners = not self:respondsToEvent( eventName )
 	local wasAdded = super.addEventListener( self, eventName, listener )
 
-	-- If a "key" event listener is installed on a simulated iOS/tvOS/WinPhone device,
+	-- If a "key" event listener is installed on a simulated iOS/tvOS device,
 	-- warn it wont be effective on a real device
 	if eventName and eventName == "key" and system.getInfo("environment") == "simulator" then
 		local osName = system.getInfo("platform")
-		if osName == "ios" or osName == "tvos" or osName == "winphone" then
+		if osName == "ios" or osName == "tvos" then
 			print("WARNING: Runtime:addEventListener: real "..osName.." devices don't generate 'key' events")
 		end
 	end

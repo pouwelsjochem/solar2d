@@ -288,9 +288,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 			case TargetDevice::kWin32Platform:
 				rConfig.osName.Set("win32");
 				break;
-			case TargetDevice::kWinPhoneSilverlightPlatform:
-				rConfig.osName.Set("winphone");
-				break;
 			default:
 				rConfig.osName.Set("simulator");
 				break;
@@ -303,7 +300,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 			case TargetDevice::kOSXPlatform:
 			case TargetDevice::kTVOSPlatform:
 			case TargetDevice::kWin32Platform:
-			case TargetDevice::kWinPhoneSilverlightPlatform:
 				rConfig.supportsKeyEvents = true;
 				break;
 			default:
@@ -320,7 +316,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 			case TargetDevice::kOSXPlatform:
 			case TargetDevice::kTVOSPlatform:
 			case TargetDevice::kWin32Platform:
-			case TargetDevice::kWinPhoneSilverlightPlatform:
 				rConfig.supportsKeyEventsFromKeyboard = true;
 				break;
 			default:
@@ -332,7 +327,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 		{
 			case TargetDevice::kAndroidPlatform:
 			case TargetDevice::kWin32Platform:
-			case TargetDevice::kWinPhoneSilverlightPlatform:
 				rConfig.supportsBackKey = true;
 				break;
 			default:
@@ -371,7 +365,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 		switch (rConfig.platform)
 		{
 			case TargetDevice::kWin32Platform:
-			case TargetDevice::kWinPhoneSilverlightPlatform:
 				rConfig.supportsMultipleAlerts = true;
 				break;
 			default:
@@ -383,7 +376,6 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 		switch (rConfig.platform)
 		{
 			case TargetDevice::kWin32Platform:
-			case TargetDevice::kWinPhoneSilverlightPlatform:
 				rConfig.isAlertButtonOrderRightToLeft = false;
 				break;
 			default:

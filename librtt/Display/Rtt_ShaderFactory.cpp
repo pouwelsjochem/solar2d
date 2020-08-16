@@ -20,10 +20,6 @@
 #include "Display/Rtt_ShaderName.h"
 #include "Display/Rtt_ShaderResource.h"
 #include "Renderer/Rtt_Program.h"
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	#include "Renderer/Rtt_ShaderBinary.h"
-	#include "Renderer/Rtt_ShaderBinaryVersions.h"
-#endif
 #include "Renderer/Rtt_Uniform.h"
 #include "Rtt_Lua.h"
 #include "Rtt_Runtime.h"
@@ -121,32 +117,6 @@ ShaderFactory::Initialize()
 
 	lua_checkstack( L, 6 );
 
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	// Load precompiled shaders from the default kernel Lua script.
-	if ( ShaderBuiltin::PushDefaultKernel( L ) )
-	{
-		lua_getfield( L, -1, "compiledShaders" );
-		if ( lua_istable( L, -1 ) )
-		{
-			ShaderBinaryVersions compiledDefaultShaders(fAllocator);
-			ShaderBinaryVersions compiled25DShaders(fAllocator);
-			bool wasLoaded = LoadAllCompiledShaders(L, lua_gettop(L), compiledDefaultShaders, compiled25DShaders);
-			if (wasLoaded)
-			{
-				Program *program = NewProgram(compiledDefaultShaders, ShaderResource::kDefault);
-				if (program)
-				{
-					SharedPtr< ShaderResource > resource(
-									Rtt_NEW(fAllocator, ShaderResource(program, ShaderTypes::kCategoryDefault)));
-					Program *program25D = NewProgram(compiled25DShaders, ShaderResource::k25D);
-					resource->SetProgramMod(ShaderResource::k25D, program25D);
-					fDefaultShader = Rtt_NEW(fAllocator, Shader(fAllocator, resource, NULL));
-					result = true;
-				}
-			}
-		}
-	}
-#else
 	// Load the default shell and kernel shader source code to be dynamically compiled later.
 	if ( ShaderBuiltin::PushDefaultShell( L ) )
 	{
@@ -191,7 +161,6 @@ ShaderFactory::Initialize()
 			}
 		}
 	}
-#endif
 
 	lua_settop( L, top );
 
@@ -203,50 +172,6 @@ ShaderFactory::Initialize()
 	return result;
 }
 
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-Program *
-ShaderFactory::NewProgram(ShaderBinaryVersions &compiledShaders, ShaderResource::ProgramMod mod) const
-{
-	// Fetch the allocator.
-	Rtt_Allocator *allocatorPointer = fOwner.GetRuntime().Allocator();
-
-	// Store the given compiled shaders into a new program object.
-	Program *programPointer = Rtt_NEW(allocatorPointer, Program(allocatorPointer));
-	if (programPointer)
-	{
-		programPointer->GetCompiledShaders()->CopyFrom(&compiledShaders);
-	}
-
-	// Return the new program containing the given shaders.
-	return programPointer;
-}
-
-SharedPtr< ShaderResource >
-ShaderFactory::NewShaderResource(
-	ShaderTypes::Category category, const char *name,
-	ShaderBinaryVersions &compiledDefaultShaders, ShaderBinaryVersions &compiled25DShaders)
-{
-	// Caller is not allowed to create a "default" shader.
-	if (ShaderTypes::kCategoryDefault == category)
-	{
-		return SharedPtr< ShaderResource >();
-	}
-
-	// Check if the given shader was already created.
-	// Note: Caller should check for existence and avoid creating a duplicate shader resource.
-	Rtt_ASSERT( NULL == FindPrototype( category, name ) );
-
-	// Create a new resource object and have it store the given compiled shaders.
-	Program *program = NewProgram( compiledDefaultShaders, ShaderResource::kDefault );
-	SharedPtr< ShaderResource > result( Rtt_NEW( fAllocator, ShaderResource( program, category, name ) ) );
-	Program *program25D = NewProgram( compiled25DShaders, ShaderResource::k25D );
-	result->SetProgramMod( ShaderResource::k25D, program25D );
-
-	// Return the resource storing the given compiled shaders.
-	return result;
-}
-
-#else
 Program *
 ShaderFactory::NewProgram(
 		const char *shellVert,
@@ -373,7 +298,6 @@ ShaderFactory::NewShaderResource(
 
 	return result;
 }
-#endif
 
 // This is an internal factory method:
 // * it creates the full-loaded prototype
@@ -681,130 +605,6 @@ ShaderFactory::InitializeBindings( lua_State *L, int shaderIndex, const SharedPt
 	resource->SetUsesUniforms( usesUniforms );
 }
 
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-bool
-ShaderFactory::LoadAllCompiledShaders(
-	lua_State *L, int compiledShadersTableIndex,
-	ShaderBinaryVersions &compiledDefaultShaders, ShaderBinaryVersions &compiled25DShaders)
-{
-	int shaderModesLoadedCount = 0;
-
-	// Validate arguments.
-	if (!L || !compiledShadersTableIndex)
-	{
-		return false;
-	}
-
-	// Make sure that the given index references a Lua table.
-	if (!lua_istable(L, compiledShadersTableIndex))
-	{
-		return false;
-	}
-
-	// Free the previously loaded shader binaries, if any.
-	compiledDefaultShaders.FreeAllShaders();
-	compiled25DShaders.FreeAllShaders();
-
-	// Fetch the default compiled shaders.
-	lua_getfield(L, compiledShadersTableIndex, "default");
-	if (lua_istable(L, -1))
-	{
-		bool wasLoaded = LoadCompiledShaderVersions(L, lua_gettop(L), compiledDefaultShaders);
-		if (wasLoaded)
-		{
-			shaderModesLoadedCount++;
-		}
-	}
-	lua_pop(L, 1);
-
-	// Fetch the 2.5D compiled shaders.
-	lua_getfield(L, compiledShadersTableIndex, "mode25D");
-	if (lua_istable(L, -1))
-	{
-		bool wasLoaded = LoadCompiledShaderVersions(L, lua_gettop(L), compiled25DShaders);
-		if (wasLoaded)
-		{
-			shaderModesLoadedCount++;
-		}
-	}
-	lua_pop(L, 1);
-
-	// Return true if all shader modes/versions were successfully loaded from Lua.
-	bool wereAllShadersLoaded = (shaderModesLoadedCount >= ShaderResource::kNumProgramMods);
-	Rtt_ASSERT(wereAllShadersLoaded);
-	return wereAllShadersLoaded;
-}
-
-bool
-ShaderFactory::LoadCompiledShaderVersions(lua_State *L, int modeTableIndex, ShaderBinaryVersions &compiledShaders)
-{
-	int shadersLoadedCount = 0;
-
-	// Validate arguments.
-	if (!L || !modeTableIndex)
-	{
-		return false;
-	}
-
-	// Make sure that the given index references a Lua table.
-	if (!lua_istable(L, modeTableIndex))
-	{
-		return false;
-	}
-
-	// Free the previously loaded shader binaries, if any.
-	compiledShaders.FreeAllShaders();
-
-	// Load all of the compiled shader versions.
-	lua_getfield(L, modeTableIndex, "maskCount0");
-	if (lua_type(L, -1) == LUA_TSTRING)
-	{
-		bool wasLoaded = compiledShaders.Get(Program::kMaskCount0)->CopyFromHexadecimalString(lua_tostring(L, -1));
-		if (wasLoaded)
-		{
-			shadersLoadedCount++;
-		}
-	}
-	lua_pop(L, 1);
-	lua_getfield(L, modeTableIndex, "maskCount1");
-	if (lua_type(L, -1) == LUA_TSTRING)
-	{
-		bool wasLoaded = compiledShaders.Get(Program::kMaskCount1)->CopyFromHexadecimalString(lua_tostring(L, -1));
-		if (wasLoaded)
-		{
-			shadersLoadedCount++;
-		}
-	}
-	lua_pop(L, 1);
-	lua_getfield(L, modeTableIndex, "maskCount2");
-	if (lua_type(L, -1) == LUA_TSTRING)
-	{
-		bool wasLoaded = compiledShaders.Get(Program::kMaskCount2)->CopyFromHexadecimalString(lua_tostring(L, -1));
-		if (wasLoaded)
-		{
-			shadersLoadedCount++;
-		}
-	}
-	lua_pop(L, 1);
-	lua_getfield(L, modeTableIndex, "maskCount3");
-	if (lua_type(L, -1) == LUA_TSTRING)
-	{
-		bool wasLoaded = compiledShaders.Get(Program::kMaskCount3)->CopyFromHexadecimalString(lua_tostring(L, -1));
-		if (wasLoaded)
-		{
-			shadersLoadedCount++;
-		}
-	}
-
-	// Return true if all shader versions were successfully loaded.
-	bool wereAllShadersLoaded = (shadersLoadedCount >= Program::kNumVersions);
-	Rtt_ASSERT(wereAllShadersLoaded);
-	return wereAllShadersLoaded;
-}
-
-#endif
-
-
 ShaderComposite *
 ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *name)
 {
@@ -838,20 +638,6 @@ ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *nam
 							Rtt_LUA_STACK_GUARD( L );
 
 							SharedPtr< ShaderResource > resource;
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-							ShaderBinaryVersions compiledDefaultShaders( fAllocator );
-							ShaderBinaryVersions compiled25DShaders( fAllocator );
-
-							lua_getfield( L, tableIndex, "compiledShaders" );
-							bool wasLoaded = LoadAllCompiledShaders(
-													L, lua_gettop( L ), compiledDefaultShaders, compiled25DShaders );
-							if ( wasLoaded )
-							{
-								resource = NewShaderResource( category, name, compiledDefaultShaders, compiled25DShaders );
-							}
-							lua_pop( L, 1 );
-
-#else
 							lua_getfield( L, tableIndex, "vertex" );
 							const char *kernelVert = lua_tostring( L, -1 );
 
@@ -860,7 +646,6 @@ ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *nam
 
 							resource = NewShaderResource( category, name, kernelVert, kernelFrag );
 							lua_pop( L, 2 ); // pop 2 strings
-#endif
 
 							if (resource.NotNull())
 							{

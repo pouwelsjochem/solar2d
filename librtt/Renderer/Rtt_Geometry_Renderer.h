@@ -70,19 +70,10 @@ class Geometry : public CPUResource
 		typedef U16 Index;
 
 		// Generic vertex attribute indices
-#ifdef Rtt_WIN_PHONE_ENV
-		// Note: These are the indexes that the pre-compiled shaders have assigned to these attributes on Windows Phone.
-		//       This is not a good solution. These should be assigned when compiling the shaders or fetched at runtime.
-		static const U32 kVertexPositionAttribute = 1;
-		static const U32 kVertexTexCoordAttribute = 2;
-		static const U32 kVertexColorScaleAttribute = 0;
-		static const U32 kVertexUserDataAttribute = 3;
-#else
 		static const U32 kVertexPositionAttribute = 0;
 		static const U32 kVertexTexCoordAttribute = 1;
 		static const U32 kVertexColorScaleAttribute = 2;
 		static const U32 kVertexUserDataAttribute = 3;
-#endif
 
 	public:
 		// If storeOnGPU is true, a copy of the vertex data will be stored

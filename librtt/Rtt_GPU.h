@@ -19,7 +19,7 @@
 		#include <gles/gl.h>
 	#elif defined( Rtt_ANDROID_ENV ) || defined( Rtt_WEBOS_ENV )
 		#include <GLES/gl.h>
-	#elif defined( Rtt_WIN_PHONE_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )
+	#elif defined( defined( Rtt_EMSCRIPTEN_ENV )
 		#include <GLES2/gl2.h>
 	#else
 		#error TODO: Add path to gl.h header

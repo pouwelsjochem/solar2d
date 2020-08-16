@@ -8,11 +8,6 @@ kernel.name = "frostedGlass"
 
 kernel.isTimeDependent = true
 
-kernel.unsupportedPlatforms =
-{
-	WinPhone = true,
-}
-
 kernel.vertexData =
 {
 	{

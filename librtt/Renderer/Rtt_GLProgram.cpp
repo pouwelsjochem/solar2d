@@ -12,16 +12,9 @@
 #include "Renderer/Rtt_CommandBuffer.h"
 #include "Renderer/Rtt_Geometry_Renderer.h"
 #include "Renderer/Rtt_Texture.h"
-#ifdef Rtt_USE_PRECOMPILED_SHADERS
-	#include "Renderer/Rtt_ShaderBinary.h"
-	#include "Renderer/Rtt_ShaderBinaryVersions.h"
-#endif
 #include "Core/Rtt_Assert.h"
 #include <cstdio>
 #include <string.h> // memset.
-#ifdef Rtt_WIN_PHONE_ENV
-	#include <GLES2/gl2ext.h>
-#endif
 
 
 // To reduce memory consumption and startup cost, defer the
@@ -136,10 +129,8 @@ GLProgram::Destroy()
 		VersionData& data = fData[i];
 		if( data.fProgram )
 		{
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 			glDeleteShader( data.fVertexShader );
 			glDeleteShader( data.fFragmentShader );
-#endif
 			glDeleteProgram( data.fProgram );
 			GL_CHECK_ERROR();
 			Reset( data );
@@ -166,20 +157,16 @@ GLProgram::Bind( Program::Version version )
 void
 GLProgram::Create( Program::Version version, VersionData& data )
 {
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	data.fVertexShader = glCreateShader( GL_VERTEX_SHADER );
 	data.fFragmentShader = glCreateShader( GL_FRAGMENT_SHADER );
 	GL_CHECK_ERROR();
-#endif
 
 	data.fProgram = glCreateProgram();
 	GL_CHECK_ERROR();
 
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	glAttachShader( data.fProgram, data.fVertexShader );
 	glAttachShader( data.fProgram, data.fFragmentShader );
 	GL_CHECK_ERROR();
-#endif
 	
 	Update( version, data );
 }
@@ -200,7 +187,6 @@ CountLines( const char **segments, int numSegments )
 void
 GLProgram::UpdateShaderSource( Program* program, Program::Version version, VersionData& data )
 {
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	char maskBuffer[] = "#define MASK_COUNT 0\n";
 	switch( version )
 	{
@@ -253,7 +239,6 @@ GLProgram::UpdateShaderSource( Program* program, Program::Version version, Versi
 						NULL );
 		GL_CHECK_ERROR();
 	}
-#endif
 }
 
 void
@@ -261,38 +246,17 @@ GLProgram::Update( Program::Version version, VersionData& data )
 {
 	Program* program = static_cast<Program*>( fResource );
 
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	glBindAttribLocation( data.fProgram, Geometry::kVertexPositionAttribute, "a_Position" );
 	glBindAttribLocation( data.fProgram, Geometry::kVertexTexCoordAttribute, "a_TexCoord" );
 	glBindAttribLocation( data.fProgram, Geometry::kVertexColorScaleAttribute, "a_ColorScale" );
 	glBindAttribLocation( data.fProgram, Geometry::kVertexUserDataAttribute, "a_UserData" );
 	GL_CHECK_ERROR();
-#endif
 
 	UpdateShaderSource( program,
 						version,
 						data );
 
-#ifdef Rtt_USE_PRECOMPILED_SHADERS
-	ShaderBinary *shaderBinary = program->GetCompiledShaders()->Get(version);
-	glProgramBinaryOES(data.fProgram, GL_PROGRAM_BINARY_ANGLE, shaderBinary->GetBytes(), shaderBinary->GetByteCount());
-	GL_CHECK_ERROR();
-	GLint linkResult = 0;
-	glGetProgramiv(data.fProgram, GL_LINK_STATUS, &linkResult);
-	if (!linkResult)
-	{
-		const int MAX_MESSAGE_LENGTH = 1024;
-		char message[MAX_MESSAGE_LENGTH];
-		GLint resultLength = 0;
-		glGetProgramInfoLog(data.fProgram, MAX_MESSAGE_LENGTH, &resultLength, message);
-		Rtt_LogException(message);
-	}
-	int locationIndex;
-	locationIndex = glGetAttribLocation(data.fProgram, "a_Position");
-	locationIndex = glGetAttribLocation(data.fProgram, "a_TexCoord");
-	locationIndex = glGetAttribLocation(data.fProgram, "a_ColorScale");
-	locationIndex = glGetAttribLocation(data.fProgram, "a_UserData");
-#else
+
 	bool isVerbose = program->IsCompilerVerbose();
 	int kernelStartLine = 0;
 
@@ -315,7 +279,6 @@ GLProgram::Update( Program::Version version, VersionData& data )
 	glLinkProgram( data.fProgram );
 	CheckProgramLinkStatus( data.fProgram, isVerbose );
 	GL_CHECK_ERROR();
-#endif
 
 	data.fUniformLocations[Uniform::kViewProjectionMatrix] = glGetUniformLocation( data.fProgram, "u_ViewProjectionMatrix" );
 	GL_CHECK_ERROR();

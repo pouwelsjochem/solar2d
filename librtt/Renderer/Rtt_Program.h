@@ -15,9 +15,6 @@
 
 // ----------------------------------------------------------------------------
 
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	namespace Rtt { class ShaderBinaryVersions; }
-#endif
 struct Rtt_Allocator;
 
 namespace Rtt
@@ -77,9 +74,6 @@ class Program : public CPUResource
 
 		ShaderResource *GetShaderResource() { return fResource; }
 		void SetShaderResource( ShaderResource *resource ) { fResource = resource; }
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-		ShaderBinaryVersions* GetCompiledShaders() const { return fCompiledShaders; }
-#endif
 
 		int GetVertexShellNumLines() const { return fVertexShellNumLines; }
 		void SetVertexShellNumLines( int newValue ) { fVertexShellNumLines = newValue; }
@@ -95,9 +89,7 @@ class Program : public CPUResource
 		char *fVertexShaderSource;
 		char *fFragmentShaderSource;
 		char *fHeaderSource;
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-		ShaderBinaryVersions *fCompiledShaders;
-#endif
+
 		int fVertexShellNumLines;
 		int fFragmentShellNumLines;
 		ShaderResource *fResource;

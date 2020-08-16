@@ -11,9 +11,6 @@
 #include "Core/Rtt_Config.h"
 #include "Core/Rtt_Allocator.h"
 #include "Core/Rtt_Assert.h"
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	#include "Renderer/Rtt_ShaderBinaryVersions.h"
-#endif
 
 #include <cstring>
 #include <stddef.h>
@@ -84,22 +81,12 @@ Program::Program( Rtt_Allocator* allocator )
 	fFragmentShellNumLines( 0 ),
 	fCompilerVerbose( false )
 {
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	fCompiledShaders = NULL;
-	if (allocator)
-	{
-		fCompiledShaders = Rtt_NEW(allocator, ShaderBinaryVersions(allocator));
-	}
-#endif
+
 }
 
 Program::~Program()
 {
 	Deallocate();
-
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	Rtt_DELETE(fCompiledShaders);
-#endif
 }
 
 CPUResource::ResourceType 
@@ -125,13 +112,6 @@ Program::Deallocate()
 	fHeaderSource = NULL;
 	fVertexShaderSource = NULL;
 	fFragmentShaderSource = NULL;
-
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	if (fCompiledShaders)
-	{
-		fCompiledShaders->FreeAllShaders();
-	}
-#endif
 }
 
 void 

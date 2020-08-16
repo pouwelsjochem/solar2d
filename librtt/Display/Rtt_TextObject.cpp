@@ -25,9 +25,6 @@
 #include "Display/Rtt_PlatformBitmap.h"
 #include "Rtt_PlatformFont.h"
 #include "Rtt_Runtime.h"
-#ifdef Rtt_WIN_PHONE_ENV
-#	include <vector>
-#endif
 
 #ifdef Rtt_WIN_ENV
 #	undef CreateFont
@@ -82,65 +79,6 @@ TextObject::Reload( DisplayObject& parent )
 	}
 }
 
-// ------------------------------------------------------------------------------------------------------------------------
-// The following code only applies to Windows Phone 8.0.
-// It is needed because Windows Phone 8.0 can only render text to bitmap while Corona is not synchonrized/blocking
-// the Direct3D thread or else deadlock will occur. So, Corona must create the text bitmap before rendering.
-// ------------------------------------------------------------------------------------------------------------------------
-#ifdef Rtt_WIN_PHONE_ENV
-typedef std::vector<TextObject*> TextObjectCollection;
-
-/// Gets a collection used to store all TextObjects that exist for all runtime instances.
-/// A TextObject constructor is expected to add an instance of itself to this collection and remove itself upon destruction.
-static TextObjectCollection& GetCollection()
-{
-	static TextObjectCollection sCollection;
-	return sCollection;
-}
-
-bool
-TextObject::IsUpdateNeededFor(Display& display)
-{
-	TextObjectCollection& collection = GetCollection();
-	TextObjectCollection::iterator iter;
-	TextObject* textObjectPointer;
-
-	for (iter = collection.begin(); iter != collection.end(); iter++)
-	{
-		textObjectPointer = *iter;
-		if (textObjectPointer && (&display == &(textObjectPointer->fDisplay)))
-		{
-			if (textObjectPointer->IsInitialized() == false)
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-void
-TextObject::UpdateAllBelongingTo(Display& display)
-{
-	TextObjectCollection& collection = GetCollection();
-	TextObjectCollection::iterator iter;
-	TextObject* textObjectPointer;
-
-	for (iter = collection.begin(); iter != collection.end(); iter++)
-	{
-		textObjectPointer = *iter;
-		if (textObjectPointer && (&display == &(textObjectPointer->fDisplay)))
-		{
-			if (textObjectPointer->IsInitialized() == false)
-			{
-				textObjectPointer->Initialize();
-			}
-		}
-	}
-}
-
-#endif
-
 // w,h are in content coordinates
 // font's size is in pixel coordinates
 TextObject::TextObject( Display& display, const char text[], PlatformFont *font, Real w, Real h, const char alignment[] )
@@ -170,10 +108,6 @@ TextObject::TextObject( Display& display, const char text[], PlatformFont *font,
 	Initialize();
 	SetHitTestMasked(false);
 
-#ifdef Rtt_WIN_PHONE_ENV
-	GetCollection().push_back(this);
-#endif
-
     SetObjectDesc( "TextObject" );
 }
 
@@ -184,19 +118,6 @@ TextObject::~TextObject()
 
 	QueueRelease( fMaskUniform );
 	QueueRelease( fGeometry );
-
-#ifdef Rtt_WIN_PHONE_ENV
-	TextObjectCollection& collection = GetCollection();
-	TextObjectCollection::iterator iter;
-	for (iter = collection.begin(); iter != collection.end(); iter++)
-	{
-		if (this == *iter)
-		{
-			collection.erase(iter);
-			break;
-		}
-	}
-#endif
 }
 
 bool

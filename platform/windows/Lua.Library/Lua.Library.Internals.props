@@ -20,7 +20,6 @@
       call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)"
    )
 
-   if not "$(CanReferenceWinRT)" == "true" (
    mkdir "$(SolutionDir)Bin\Lua"
    copy /y "$(TargetPath)" "$(SolutionDir)Bin\Lua"
 
@@ -35,7 +34,7 @@
       mkdir "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
       copy /y "$(TargetDir)$(TargetName).lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
    )
-)
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

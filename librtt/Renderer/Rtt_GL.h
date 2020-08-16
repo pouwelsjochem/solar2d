@@ -19,7 +19,7 @@
 		#include <OpenGLES/ES2/glext.h>
 	#elif defined( Rtt_SYMBIAN_ENV )
 		#include <gles/gl.h>
-	#elif defined( Rtt_ANDROID_ENV ) || defined( Rtt_WEBOS_ENV ) || defined( Rtt_WIN_PHONE_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )
+	#elif defined( Rtt_ANDROID_ENV ) || defined( Rtt_WEBOS_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )
 		#include <GLES2/gl2.h>
 		#include <GLES2/gl2ext.h>
 	#else
@@ -70,15 +70,9 @@ void GLLogError( const char* message, const char* file, int line );
 // Hide any differences between OpenGL versions
 #if defined( Rtt_OPENGLES )
 
-	#if defined( Rtt_WIN_PHONE_ENV )
-		#define Rtt_glBindVertexArray( id )
-		#define Rtt_glDeleteVertexArrays( count, names )
-		#define Rtt_glGenVertexArrays( count, names )
-	#else
-		#define Rtt_glBindVertexArray( id )								glBindVertexArrayOES( id )
-		#define Rtt_glDeleteVertexArrays( count, names )				glDeleteVertexArraysOES( count, names )
-		#define Rtt_glGenVertexArrays( count, names )					glGenVertexArraysOES( count, names )
-	#endif
+	#define Rtt_glBindVertexArray( id )								glBindVertexArrayOES( id )
+	#define Rtt_glDeleteVertexArrays( count, names )				glDeleteVertexArraysOES( count, names )
+	#define Rtt_glGenVertexArrays( count, names )					glGenVertexArraysOES( count, names )
 
 	#define Rtt_glBindFragDataLocation
 	#define Rtt_glClearDepth			glClearDepthf

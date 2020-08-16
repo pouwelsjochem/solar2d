@@ -571,7 +571,6 @@ Rtt_EXPORT int Rtt_FileExistsWithSameCase(const char *filePath, const char *root
 	return result;
 }
 
-#ifndef Rtt_WIN_PHONE_ENV
 Rtt_EXPORT void* Rtt_FileMemoryMap(int fileDescriptor, size_t byteOffset, size_t byteCount, int canWrite)
 {
 	void *memoryMapPointer = NULL;
@@ -1224,5 +1223,3 @@ extern "C"
 }
 
 #endif
-
-#endif // ! Rtt_WIN_PHONE_ENV

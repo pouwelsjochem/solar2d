@@ -33,9 +33,6 @@ if NOT "%optionalArgument%"=="" (
 	if "%optionalArgument%"=="/debug" (
 		set isDebugFlagSet=1
 	)
-	if "%optionalArgument%"=="/cso" (
-		set isCsoFlagSet=1
-	)
 	if "%optionalArgument%"=="/functionName" (
 		set baseFunctionName=%~2
 		shift
@@ -78,20 +75,6 @@ if NOT EXIST "%targetPath%" mkdir "%targetPath%"
 REM Go to this batch file's directory.
 cd "%batchFileDirectoryPath%"
 
-
-REM If the "/cso" flag was set, then check if we were given a "kernel_*.lua".
-REM If so, then we need to convert its OpenGL shader code into compiled Direct3D HLSL.
-if NOT DEFINED isCsoFlagSet goto OnSkipShaderCompilation
-if "%sourceFileName:~0,7%" NEQ "kernel_" goto OnSkipShaderCompilation
-set compiledKernelFilePath=%intermediatePath%\%sourceFileName%_compiled.lua
-"%luaAppPath%\lua.exe" LuaKernelGlslToCso.lua "%sourceFilePath%" "%compiledKernelFilePath%" "%intermediatePath%" "..\..\..\external\Angle\bin\Win32\winrtcompiler.exe"
-if ERRORLEVEL 2 goto OnError
-if ERRORLEVEL 1 goto OnSkipShaderCompilation
-set sourceFilePath=%compiledKernelFilePath%
-:OnSkipShaderCompilation
-set ERRORLEVEL=0
-
-
 REM Compile the Lua script to byte code and generate a C++ file for it.
 set luaDebugReleaseFlag=-ORELEASE
 if DEFINED isDebugFlagSet set luaDebugReleaseFlag=-ODEBUG
@@ -113,16 +96,12 @@ goto:eof
 echo Compiles a Lua file to byte code and then generates a C++ file containing
 echo that byte code and a function for executing it.
 echo.
-echo Usage:    LuaToCppFile.bat [LuaAppPath] [IntermediatePath] [SourceFile] [TargetPath] [/debug] [/cso] [/functionName = "FunctionName"] [/moduleName = "modulename"]
+echo Usage:    LuaToCppFile.bat [LuaAppPath] [IntermediatePath] [SourceFile] [TargetPath] [/debug] [/functionName = "FunctionName"] [/moduleName = "modulename"]
 echo   [LuaAppPath]       The path to the lua.exe and luac.exe files.
 echo   [IntermediatePath] Path to where temporary files are built to.
 echo   [SourceFile]       The Lua path\file name to be converted.
 echo   [TargetPath]       The path to where the C++ file should be created.
 echo   [/debug]           Optional argument compiling Lua scripts with debug symbols.
-echo   [/cso]             Optional argument which tells this build tool to convert
-echo                        the glsl shader code in "kernel_*.lua" files into
-echo                        compiled Direct3D hlsl binary (aka: *.cso files).
-echo                        Expected to be used by Windows Phone 8.0 builds.
 echo   [/functionName]    The C function name to generate, excluding the
 echo                        "lua_load_" or "CoronaPluginLuaLoad_" prefix.
 echo                        Will use the source file's name if not provided.

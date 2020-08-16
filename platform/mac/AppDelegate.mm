@@ -232,7 +232,6 @@ static const int       kCustomDevicePlatformiOSTag = 3002;
 static const int       kCustomDevicePlatformmacOSTag = 3003;
 static const int       kCustomDevicePlatformtvOSTag = 3004;
 static const int       kCustomDevicePlatformWindowsTag = 3005;
-static const int       kCustomDevicePlatformWindowsPhoneTag = 3006;
 static const NSInteger kCustomDeviceMinWidth = 150;
 static const NSInteger kCustomDeviceMinHeight = 150;
 static const NSInteger kCustomDeviceMaxWidth = 4096;
@@ -2575,9 +2574,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 					break;
 				case kCustomDevicePlatformWindowsTag:
 					customDevicePlatform = @"win32-custom";
-					break;
-				case kCustomDevicePlatformWindowsPhoneTag:
-					customDevicePlatform = @"winphone-custom";
 					break;
 				default:
 					customDevicePlatform = @"simulator-custom";  // shouldn't happen

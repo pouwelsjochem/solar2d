@@ -26,12 +26,7 @@ namespace /*anonymous*/
 {
 	using namespace Rtt;
 
-#if defined( Rtt_WIN_PHONE_ENV )
-	bool isVertexArrayObjectSupported()
-	{
-		return false;
-	}
-#elif defined( Rtt_EMSCRIPTEN_ENV )
+#if defined( Rtt_EMSCRIPTEN_ENV )
 	#ifdef Rtt_EGL
 		PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES = NULL;
 		PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOES = NULL;

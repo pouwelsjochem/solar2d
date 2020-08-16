@@ -39,9 +39,7 @@ namespace /*anonymous*/
 			case Texture::kLuminance:	internalFormat = GL_LUMINANCE;	sourceFormat = GL_LUMINANCE;	sourceType = GL_UNSIGNED_BYTE; break;
 			case Texture::kRGB:			internalFormat = GL_RGB;		sourceFormat = GL_RGB;			sourceType = GL_UNSIGNED_BYTE; break;
 			case Texture::kRGBA:		internalFormat = GL_RGBA;		sourceFormat = GL_RGBA;			sourceType = GL_UNSIGNED_BYTE; break;
-#if defined( Rtt_WIN_PHONE_ENV )
-			case Texture::kBGRA:		internalFormat = GL_BGRA_EXT;	sourceFormat = GL_BGRA_EXT;		sourceType = GL_UNSIGNED_BYTE; break;
-#elif !defined( Rtt_OPENGLES )
+#if !defined( Rtt_OPENGLES )
 			case Texture::kARGB:		internalFormat = GL_RGBA8;		sourceFormat = GL_BGRA;			sourceType = GL_UNSIGNED_INT_8_8_8_8_REV; break;
 			case Texture::kBGRA:		internalFormat = GL_RGBA8;		sourceFormat = GL_BGRA;			sourceType = GL_UNSIGNED_INT_8_8_8_8; break;
 			case Texture::kABGR:		internalFormat = GL_ABGR_EXT;	sourceFormat = GL_ABGR_EXT;		sourceType = GL_UNSIGNED_BYTE; break;

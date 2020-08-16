@@ -30,9 +30,6 @@ class ShaderName;
 class ShaderData;
 class ShaderResource;
 class LuaMap;
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-	class ShaderBinaryVersions;
-#endif
 
 // ----------------------------------------------------------------------------
 		
@@ -54,14 +51,6 @@ class ShaderFactory
 
 	protected:
 		bool Initialize();
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-		Program *NewProgram(ShaderBinaryVersions &compiledShaders, ShaderResource::ProgramMod mod ) const;
-		SharedPtr< ShaderResource > NewShaderResource(
-				ShaderTypes::Category category,
-				const char *name,
-				ShaderBinaryVersions &compiledDefaultShaders,
-				ShaderBinaryVersions &compiled25DShaders);
-#else
 		Program *NewProgram(
 				const char *shellVert,
 				const char *shellFrag,
@@ -73,7 +62,6 @@ class ShaderFactory
 				const char *name,
 				const char *kernelVert,
 				const char *kernelFrag );
-#endif
 		Shader *NewShaderPrototype( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
 
 	private:
@@ -82,12 +70,6 @@ class ShaderFactory
 		bool BindUniformDataMap( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
 		void BindTimeTransform( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
 		void InitializeBindings( lua_State *L, int shaderIndex, const SharedPtr< ShaderResource >& resource );
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-		bool LoadAllCompiledShaders(
-					lua_State *L, int compiledShadersTableIndex,
-					ShaderBinaryVersions &compiledDefaultShaders, ShaderBinaryVersions &compiled25DShaders);
-		bool LoadCompiledShaderVersions(lua_State *L, int modeTableIndex, ShaderBinaryVersions &compiledShaders);
-#endif
 
 	protected:
 //		Shader *NewShader( lua_State *L, int index );

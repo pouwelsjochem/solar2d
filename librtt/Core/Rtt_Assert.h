@@ -17,16 +17,6 @@ Rtt_EXPORT void Rtt_LogEnable(void);
 Rtt_EXPORT void Rtt_LogDisable(void);
 Rtt_EXPORT int Rtt_LogIsEnabled(void);
 
-// WinRT based Corona apps need to set the logging function dynamically via a callback.
-// This is because the logging function to be used depends on if the app is running under the Managed or Native debugger.
-// - The Managed debugger will only show log output from the .NET "System.Diagnostics.Debug" class.
-// - The Native debugger will only show log output from the OutputDebugString() C/C++ function.
-#ifdef Rtt_WIN_PHONE_ENV
-	Rtt_EXPORT typedef void(*Rtt_LogHandlerCallback)(const char*);
-	Rtt_EXPORT void Rtt_LogSetHandler(Rtt_LogHandlerCallback callback);
-	Rtt_EXPORT Rtt_LogHandlerCallback Rtt_LogGetHandler(void);
-#endif
-
 #if defined( Rtt_MAC_ENV ) || defined(EMSCRIPTEN)
 	// On OSX we can easily validate printf-style function arguments
 	Rtt_EXPORT int Rtt_Log( const char *format, ... ) __attribute__ ((format (printf, 1, 2)));

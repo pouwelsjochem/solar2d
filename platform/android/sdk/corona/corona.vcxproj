@@ -345,8 +345,6 @@
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_RenderData.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_Renderer.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_RenderTypes.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_ShaderBinary.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_ShaderBinaryVersions.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_Texture.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_TextureBitmap.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_TextureVolatile.cpp" />
@@ -765,8 +763,6 @@
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_RenderData.h" />
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_Renderer.h" />
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_RenderTypes.h" />
-    <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_ShaderBinary.h" />
-    <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_ShaderBinaryVersions.h" />
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_Texture.h" />
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_TextureBitmap.h" />
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_TextureVolatile.h" />

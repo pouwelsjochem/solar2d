@@ -195,28 +195,12 @@ static int Rtt_LuaCoronaBaseLib_print(lua_State *L)
 		}
 
 		/* Print the final concatenated string to stdout and the Visual Studio debugger, if available. */
-#ifdef Rtt_WIN_PHONE_ENV
-		{
-			Rtt_LogHandlerCallback logCallback = Rtt_LogGetHandler();
-			if (logCallback)
-			{
-				/* Note: It's more efficient to invoke this callback directly because it avoids having   */
-				/*       the Rtt_LogException() function from doing a sprintf() string format operation. */
-				logCallback(stringPointer);
-			}
-			else
-			{
-				Rtt_LogException("%s", stringPointer);
-			}
-		}
-#else
 		if (IsDebuggerPresent())
 		{
 			OutputDebugStringA(stringPointer);
 		}
 		fwrite(stringPointer, sizeof(char), stringLength, stdout);
 		fflush(stdout);
-#endif
 
 		/* If we've made a modified copy of the Lua string up above, then delete it. */
 		if (stringPointer != luaStringPointer)

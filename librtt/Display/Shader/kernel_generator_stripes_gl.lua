@@ -6,11 +6,6 @@ kernel.category = "generator"
 
 kernel.name = "stripes"
 
-kernel.unsupportedPlatforms =
-{
-	WinPhone = true,
-}
-
 -- This is the model for "kernel_filter_marchingAnts_gl.lua".
 
 kernel.uniformData =

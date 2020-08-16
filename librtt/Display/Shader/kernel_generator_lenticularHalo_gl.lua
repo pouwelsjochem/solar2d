@@ -6,11 +6,6 @@ kernel.category = "generator"
 
 kernel.name = "lenticularHalo"
 
-kernel.unsupportedPlatforms =
-{
-	WinPhone = true,
-}
-
 kernel.vertexData =
 {
 	{

@@ -19,7 +19,6 @@ LPCTSTR CustomDevicePlatformNames[] = {
 	L"macOS",
 	L"tvOS",
 	L"Windows",
-	L"Windows Phone",
 	NULL
 };
 
@@ -29,7 +28,6 @@ LPCTSTR CustomDevicePlatformTags[] = {
 	L"macos",
 	L"tvos",
 	L"win32",
-	L"winphone",
 	NULL
 };
 

@@ -518,10 +518,9 @@ LuaContext::GetDefaultErrorHandler()
 void
 LuaContext::InitializeLuaPath( lua_State* L, const MPlatform& platform )
 {
-	// Note 1: WinRT does not support environment variables. So, we must add paths to Lua's package path instead.
-	// Note 2: On Win32, we also push paths to Lua's package path so that we can support multiple runtime instances.
-	// Note 3: We should actually do this on *all* plaforms so that we can support multiple Corona instances as well.
-#if defined( Rtt_WIN_PHONE_ENV ) || (defined( Rtt_WIN_ENV ) && ( _MSC_VER >= 1800 ))
+	// Note 1: On Win32, we also push paths to Lua's package path so that we can support multiple runtime instances.
+	// Note 2: We should actually do this on *all* plaforms so that we can support multiple Corona instances as well.
+#if (defined( Rtt_WIN_ENV ) && ( _MSC_VER >= 1800 ))
 #	define Rtt_LUA_CONTEXT_SET_PACKAGE_PATH 
 #endif
 

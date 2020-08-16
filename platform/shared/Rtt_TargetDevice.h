@@ -23,7 +23,6 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-// NOTE: The values for these constants correspond to values used in `corona_service.module`
 class TargetDevice
 {
 	public:
@@ -36,9 +35,8 @@ class TargetDevice
 			kKindlePlatform = 3, // Amazon app store (Android forks are considered separate platforms)
 			kWebPlatform = 4, // Web (HTML5/WebGL)
 			kWin32Platform = 5, // Win32 Windows desktop app
-			kWinPhoneSilverlightPlatform = 6, // Windows Phone 8 Silverlight App
-			kTVOSPlatform = 7, // tvOS
-			kLinuxPlatform = 8, // Linux desktop
+			kTVOSPlatform = 6, // tvOS
+			kLinuxPlatform = 7, // Linux desktop
 
 			kNumPlatforms
 		}

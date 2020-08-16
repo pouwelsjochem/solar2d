@@ -39,31 +39,6 @@ class TextObject : public RectObject
 	public:
 		static void Unload( DisplayObject& parent );
 		static void Reload( DisplayObject& parent );
-#ifdef Rtt_WIN_PHONE_ENV
-		/// <summary>
-		///  <para>Determines if at least 1 text object is flagged as uninitialized for the given display.</para>
-		///  <para>This determines if a call to UpdateAllBelongingTo() </para>
-		/// </summary>
-		/// <returns>
-		///  <para>
-		///   Returns true if at least 1 text object is uninitialized. This means that the caller needs to
-		///   call the static UpdateAllBelongingTo() method to update the uninitialized text objects.
-		///  </para>
-		///  <para>Returns false if all text objects are updated or if no text objects exist.</para>
-		/// </returns>
-		static bool IsUpdateNeededFor(Display& display);
-
-		/// <summary>
-		///  <para>Creates bitmaps for all text objects flagged as uninitialized for the given display.</para>
-		///  <para>This function is only available to Windows Phone builds of Corona.</para>
-		///  <para>
-		///   This function is needed because text cannot be rendered to a bitmap while Corona is synchronized
-		///   with the Direct3D thread. Will cause deadlock.
-		///  </para>
-		/// </summary>
-		/// <param name="display">Reference to one Corona runtime's display object.</param>
-		static void UpdateAllBelongingTo(Display& display);
-#endif
 
 	public:
 		// TODO: Use a string class instead...

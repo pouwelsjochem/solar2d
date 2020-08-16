@@ -6,11 +6,6 @@ kernel.category = "generator"
 
 kernel.name = "perlinNoise"
 
-kernel.unsupportedPlatforms =
-{
-	WinPhone = true,
-}
-
 kernel.uniformData =
 {
 	{

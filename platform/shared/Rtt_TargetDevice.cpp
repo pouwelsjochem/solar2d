@@ -226,7 +226,6 @@ static const char kWebPlatformString[] = "HTML5";
 static const char kLinuxPlatformString[] = "LINUX";
 static const char kWin32PlatformString[] = "Win32";
 static const char kOSXPlatformString[] = "OSX";
-static const char kWinPhoneSilverlightPlatformString[] = "WinPhoneSilverlight";
 static const char kTVOSPlatformString[] = "tvOS";
 
 const char*
@@ -256,9 +255,6 @@ TargetDevice::StringForPlatform( TargetDevice::Platform platform )
 			break;
 		case kOSXPlatform:
 			result = kOSXPlatformString;
-			break;
-		case kWinPhoneSilverlightPlatform:
-			result = kWinPhoneSilverlightPlatformString;
 			break;
 		case kTVOSPlatform:
 			result = kTVOSPlatformString;
@@ -306,10 +302,6 @@ TargetDevice::PlatformForString( const char *str )
 		{
 			result = kOSXPlatform;
 		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kWinPhoneSilverlightPlatformString ) )
-		{
-			result = kWinPhoneSilverlightPlatform;
-		}
 		else if ( 0 == Rtt_StringCompareNoCase( str, kTVOSPlatformString ) )
 		{
 			result = kTVOSPlatform;
@@ -327,7 +319,6 @@ static const char kLinuxPlatformTag[] = "linux";
 static const char kWin32PlatformTag[] = "win32";
 static const char kOSXPlatformTag1[] = "osx";
 static const char kOSXPlatformTag2[] = "macos";
-static const char kWinPhoneSilverlightPlatformTag[] = "winphonesilverlight";
 static const char kTVOSPlatformTag[] = "tvos";
 
 const char*
@@ -357,9 +348,6 @@ TargetDevice::TagForPlatform( TargetDevice::Platform platform )
 			break;
 		case kOSXPlatform:
 			result = kOSXPlatformTag2;
-			break;
-		case kWinPhoneSilverlightPlatform:
-			result = kWinPhoneSilverlightPlatformTag;
 			break;
 		case kTVOSPlatform:
 			result = kTVOSPlatformTag;
@@ -407,10 +395,6 @@ TargetDevice::PlatformForTag( const char *str )
 				  0 == Rtt_StringCompareNoCase( str, kOSXPlatformTag2 ) )
 		{
 			result = kOSXPlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kWinPhoneSilverlightPlatformTag ) )
-		{
-			result = kWinPhoneSilverlightPlatform;
 		}
 		else if ( 0 == Rtt_StringCompareNoCase( str, kTVOSPlatformTag ) )
 		{
@@ -652,10 +636,6 @@ TargetDevice::PlatformForDeviceType( const char *typeName )
 		else if (substringSearchCallback(typeName, "win32"))
 		{
 			platformType = kWin32Platform;
-		}
-		else if (substringSearchCallback(typeName, "winphone"))
-		{
-			platformType = kWinPhoneSilverlightPlatform;
 		}
 	}
 

@@ -708,12 +708,6 @@
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_RenderTypes.cpp">
       <Filter>librtt\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Renderer\Rtt_ShaderBinary.cpp">
-      <Filter>librtt\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Renderer\Rtt_ShaderBinaryVersions.cpp">
-      <Filter>librtt\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_Texture.cpp">
       <Filter>librtt\Renderer</Filter>
     </ClCompile>
@@ -1518,12 +1512,6 @@
       <Filter>librtt\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_RenderTypes.h">
-      <Filter>librtt\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Renderer\Rtt_ShaderBinary.h">
-      <Filter>librtt\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Renderer\Rtt_ShaderBinaryVersions.h">
       <Filter>librtt\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_Texture.h">

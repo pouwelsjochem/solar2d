@@ -6,11 +6,6 @@ kernel.category = "filter"
 
 kernel.name = "blurHorizontal"
 
-kernel.unsupportedPlatforms =
-{
-	WinPhone = true,
-}
-
 kernel.vertexData =
 {
 	{

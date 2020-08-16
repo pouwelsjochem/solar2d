@@ -189,20 +189,6 @@
 
 #endif
 
-#if defined( Rtt_WIN_PHONE_ENV )
-
-	#ifndef Rtt_WIN_ENV
-		#define Rtt_WIN_ENV
-	#endif
-	#ifndef Rtt_USE_PRECOMPILED_SHADERS
-		#define Rtt_USE_PRECOMPILED_SHADERS
-	#endif
-	#define Rtt_OPENGLES
-	#define Rtt_DEVICE_ENV
-	#define Rtt_NETWORK
-
-#endif
-
 #if defined( Rtt_WIN_ENV )
 
 	#define Rtt_USE_GLOBAL_VARIABLES

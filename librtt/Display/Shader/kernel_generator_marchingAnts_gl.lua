@@ -8,11 +8,6 @@ kernel.name = "marchingAnts"
 
 kernel.isTimeDependent = true
 
-kernel.unsupportedPlatforms =
-{
-	WinPhone = true,
-}
-
 -- This is based on "kernel_filter_stripesGenerator_gl.lua", without parameters.
 
 kernel.vertex =
