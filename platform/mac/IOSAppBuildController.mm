@@ -196,7 +196,7 @@ static NSString *kValueNone = @"None";
 
 	[self willChangeValueForKey:@"buildFormComplete"];
 
-	[self populateTargetIOSSDK:[self window] showBeta:[appDelegate isDailyBuild]];
+	[self populateTargetIOSSDK:[self window] showBeta:true];
 
 	[self didChangeValueForKey:@"buildFormComplete"];
 }
@@ -409,6 +409,10 @@ static NSString *kValueNone = @"None";
 
     params->SetStripDebug( isStripDebug );
 	params->SetLiveBuild(isLiveBuild);
+	if(currentSDK.customTemplate)
+	{
+		params->SetCustomTemplate([currentSDK.customTemplate UTF8String]);
+	}
 
 	NSString *kBuildSettings = @"build.settings";
 	params->SetBuildSettingsPath( [[self.projectPath stringByAppendingPathComponent:kBuildSettings] UTF8String]);

@@ -303,8 +303,11 @@ Display::Update()
 
 	GetScene().QueueUpdateOfUpdatables();
 
-	const FrameEvent& e = FrameEvent::Constant();
-	e.Dispatch( L, runtime );
+	const FrameEvent& fe = FrameEvent::Constant();
+	fe.Dispatch( L, runtime );
+	
+	const RenderEvent& re = RenderEvent::Constant();
+	re.Dispatch( L, runtime );
 }
 
 void

@@ -228,8 +228,6 @@ namespace Rtt
 -(void)notifyRuntimeError:(NSString *)message;
 - (NSString *) getOSVersion;
 
-- (BOOL) isDailyBuild;
-
 - (IBAction) presentWelcomeWindow:(id)sender;
 - (void) closeWelcomeWindow;
 

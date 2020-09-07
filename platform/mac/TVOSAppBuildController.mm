@@ -194,7 +194,7 @@ static NSString *kValueNone = @"None";
 		}
 	}
 
-	[self populateTargetSDK:[self window] showBeta:[appDelegate isDailyBuild]];
+	[self populateTargetSDK:[self window] showBeta:true];
 }
 
 - (void) didSelectSimulator:(NSMenuItem *)menuItem
@@ -398,6 +398,10 @@ static NSString *kValueNone = @"None";
 
     params->SetStripDebug( isStripDebug );
 	params->SetLiveBuild(isLiveBuild);
+	if(currentSDK.customTemplate)
+	{
+		params->SetCustomTemplate([currentSDK.customTemplate UTF8String]);
+	}
 
 	NSString *kBuildSettings = @"build.settings";
 	params->SetBuildSettingsPath( [[self.projectPath stringByAppendingPathComponent:kBuildSettings] UTF8String]);
