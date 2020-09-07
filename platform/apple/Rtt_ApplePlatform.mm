@@ -26,9 +26,6 @@
 
 	#include "Rtt_AppleBitmap.h"
 	#include "Rtt_AppleFont.h"
-	#include "Rtt_AppleAudioPlayer.h"
-	#include "Rtt_AppleAudioRecorder.h"
-	#include "Rtt_AppleEventSound.h"
 	#include "Rtt_AppleReachability.h"
 #endif
 
@@ -485,7 +482,6 @@ ApplePlatform::ApplePlatform()
 	fResourcePath( nil ),
 	fProjectResourcePath( nil ),
 	fSkinResourcePath( nil ),
-	fAudioPlayer( NULL ),
 	fHttpPostDelegate( nil ),
 	fCustomConnectionDelegate( nil ),
 	fCrypto(),
@@ -499,10 +495,6 @@ ApplePlatform::~ApplePlatform()
 	[fCustomConnectionDelegate release];
     [fProjectResourcePath release];
     [fSkinResourcePath release];
-
-#ifndef Rtt_NO_GUI
-	Rtt_DELETE( fAudioPlayer );
-#endif // Rtt_NO_GUI
 	[fResourcePath release];
 	Rtt_AllocatorDestroy( fAllocator );
 }
@@ -1020,77 +1012,6 @@ ApplePlatform::DeletePreferences( const char* categoryName, const char** keyName
 	
 	// We've successfully deleted the given preferences.
 	return OperationResult::kSucceeded;
-}
-
-// ----------------------------------------------------------------------------
-	
-PlatformEventSound *
-ApplePlatform::CreateEventSound( const ResourceHandle<lua_State> &handle, const char * filePath ) const
-{
-#ifdef Rtt_NO_GUI
-	return NULL;
-#else
-	AppleEventSound * eventSound = Rtt_NEW( GetAllocator(), AppleEventSound( handle ) );
-	
-	if ( ! eventSound->Load( filePath ) )
-	{
-		Rtt_DELETE( eventSound );
-		eventSound = NULL;
-	}
-	
-	return eventSound;
-#endif
-}
-
-void
-ApplePlatform::ReleaseEventSound( PlatformEventSound * sound ) const
-{
-#ifdef Rtt_NO_GUI
-#else
-	sound->ReleaseOnComplete();
-#endif
-}
-
-void
-ApplePlatform::PlayEventSound( PlatformEventSound * sound ) const
-{
-#ifdef Rtt_NO_GUI
-#else
-	sound->Play();
-#endif
-}
-
-
-// ----------------------------------------------------------------------------
-	
-PlatformAudioRecorder * 
-ApplePlatform::CreateAudioRecorder( const ResourceHandle<lua_State> & handle, const char * filePath ) const
-{
-#ifdef Rtt_NO_GUI
-	return NULL;
-#else
-	AppleAudioRecorder * recorder = Rtt_NEW( GetAllocator(), AppleAudioRecorder( handle, GetAllocator(), filePath ) );
-	
-	return recorder;
-#endif
-}
-
-
-// ----------------------------------------------------------------------------
-	
-PlatformAudioPlayer*
-ApplePlatform::GetAudioPlayer( const ResourceHandle<lua_State> & handle ) const
-{
-#ifdef Rtt_NO_GUI
-	return NULL;
-#else
-	if ( ! fAudioPlayer )
-	{
-		fAudioPlayer = Rtt_NEW( fAllocator, AppleAudioPlayer( handle ) );
-	}
-
-	return fAudioPlayer;
-#endif
 }
 
 // ----------------------------------------------------------------------------

@@ -293,18 +293,6 @@
     <JCompile Include="src\com\ansca\corona\Controller.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\CameraView.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\CameraServices.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\CameraActivity.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\AudioRecorder.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\ApplicationContextProvider.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -312,9 +300,6 @@
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\ViewManager.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\VideoActivity.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\TimeSpan.java">
@@ -341,9 +326,6 @@
     <JCompile Include="src\com\ansca\corona\MessageBasedTimer.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\MediaManager.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\MailSettings.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -357,9 +339,6 @@
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaView.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaVideoView.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java">

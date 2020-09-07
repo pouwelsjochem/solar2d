@@ -38,7 +38,6 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		// Derived class should return these when implementing the ProxyVTable() method
 		static const LuaProxyVTable& GetTextFieldObjectProxyVTable();
 		static const LuaProxyVTable& GetTextBoxObjectProxyVTable();
-		static const LuaProxyVTable& GetVideoObjectProxyVTable();
 
 	public:
 		typedef enum _TextAlignment

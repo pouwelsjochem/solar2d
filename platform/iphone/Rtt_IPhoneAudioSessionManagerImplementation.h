@@ -44,21 +44,7 @@
 
 + (id) sharedManager;
 
-
-/**
- * Will set the recording mode if not active.
- * Current behavior will reactivate automatic mode if not set.
- * This may change in the future.
- */
-- (void) setImplicitRecordingModeIfNecessary; 
-- (void) restoreAudioSessionCategoryIfNecessary; ///< will restore the previous audio session if in automatic mode
-
-- (UInt32) audioSessionCategory;
-- (void) setAudioSessionCategory:(UInt32)category; ///< tries to preserve automatic session management
 - (void) setManualAudioSessionCategory:(UInt32)category; ///< Disables automatic session management
-
-- (void) prepareAudioSystemForMoviePlayback;
-- (void) restoreAudioSystemFromMoviePlayback;
 
 /**
  * Reads the Info.plist for the UIBackgroundModes to find if audio is set.

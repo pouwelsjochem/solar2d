@@ -16,34 +16,6 @@ import com.ansca.corona.SmsSettings;
 /** The interface has the funcations that will show a new window/overlay */
 public interface CoronaShowApiListener{
 	/**
-	 * Called from media.selectPhoto().  The lua script wants to select a photo from the gallery
-	 * How the information gets back to the lua side is up to the CoronaKit developer.
-	 * @param destinationFilePath The location of the requested save location.
-	 */
-	public void showSelectImageWindowUsing(String destinationFilePath);
-	
-	/**
-	 * Called from media.selectPhoto().  The lua script wants to receive a photo from the camera.  
-	 * How the information gets back to the lua side is up to the CoronaKit developer.
-	 * @param destinationFilePath The location of the requested save location.
-	 */
-	public void showCameraWindowForImage(String destinationFilePath);
-	
-	/**
-	 * Called from media.selectVideo().  The lua script wants to select a video from the gallery
-	 * How the information gets back to the lua side is up to the CoronaKit developer.
-	 */
-	public void showSelectVideoWindow();
-	
-	/**
-	 * Called from media.selectVideo().  The lua script wants to retrieve a video from the camera.
-	 * How the information gets back to the lua side is up to the CoronaKit developer.
-	 * @param maxVideoTime the preferred maximum length of the video.
-	 * @param videoQuality the quality of the video.  0 for medium/low quality and 1 for high quality.
-	 */
-	public void showCameraWindowForVideo(int maxVideoTime, int videoQuality);
-
-	/**
 	 * Called from native.showPopup().  The lua script wants to send an email with the settings.
 	 * @param mailSettings the settings the lua script passed made into an object.
 	 */

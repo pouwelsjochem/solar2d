@@ -48,18 +48,6 @@ IPhonePlatformCore::GetDevice() const
 	return const_cast< IPhoneDevice& >( fDevice );
 }
 
-bool
-IPhonePlatformCore::SaveImageToPhotoLibrary(const char* filePath) const
-{
-    UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:filePath]];
-    if (image)
-    {
-        UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-    }
-    
-    return true;
-}
-
 static Rtt_INLINE
 double DegreesToRadians( double degrees )
 {
@@ -185,12 +173,6 @@ bool
 IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const
 {
 	return SaveBitmap( bitmap, [NSString stringWithUTF8String:filePath], jpegQuality );
-}
-
-bool
-IPhonePlatformCore::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
-{
-	return SaveBitmap( bitmap, (NSString*)NULL, 1.0f );
 }
 
 Real

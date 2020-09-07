@@ -453,17 +453,7 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 		 * &emsp; Constant Value: "android.permission-group.CALENDAR"
 		 */
 		public static final String CALENDAR = "android.permission-group.CALENDAR"; // android.Manifest.permission_group.CALENDAR
-
-		/** 
-		 * Used for permissions that are associated with accessing camera or capturing images/video from the device.
-		 * <p>
-		 * Added in 
-		 * <a href="http://developer.android.com/about/versions/android-4.2.html">API Level 17</a>
-		 * <p>
-		 * &emsp; Constant Value: "android.permission-group.CAMERA"
-		 */
-		public static final String CAMERA = "android.permission-group.CAMERA"; // android.Manifest.permission_group.CAMERA
-
+		
 		/** 
 		 * Used for runtime permissions related to contacts and profiles on this device.
 		 * <p>

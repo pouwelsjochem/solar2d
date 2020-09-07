@@ -287,30 +287,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeAlertCallbac
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeSoundEndCallback
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeSoundEndCallback
-  (JNIEnv *, jclass, jlong, jlong);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeVideoEndCallback
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeVideoEndCallback
-  (JNIEnv *, jclass, jlong, jlong);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeRecordCallback
- * Signature: (II)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeRecordCallback
-  (JNIEnv *, jclass, jlong, jlong, jint);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeTextEvent
  * Signature: (IZZ)V
  */
@@ -359,17 +335,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeAdsRequestEv
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeAdsRequestEvent
- * Signature: (ILjava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeImagePickerEvent
-  (JNIEnv *, jclass, jlong, jstring);
-
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeVideoPickerEvent
-  (JNIEnv *, jclass, jlong, jstring, jint, jlong);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeMemoryWarningEvent
  * Signature: ()V
  */
@@ -391,12 +356,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativePopupClosedE
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeStoreTransactionEvent
   (JNIEnv *, jclass, jlong, jint, jint, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring);
-
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeVideoViewPrepared
-  (JNIEnv *, jclass, jlong, jint);
-
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeVideoViewEnded
-  (JNIEnv *, jclass, jlong, jint);
 
 JNIEXPORT jobject JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeGetCoronaRuntime
   (JNIEnv *, jclass, jlong);

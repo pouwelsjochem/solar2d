@@ -35,10 +35,6 @@ namespace Rtt
 	class PlatformSurface;
 	class PlatformTimer;
 	class RenderingStream;
-	class WinAudioPlayer;
-	class WinImageProvider;
-	class WinVideoPlayer;
-	class WinVideoProvider;
 }
 class WinGLView;
 
@@ -72,9 +68,7 @@ namespace Rtt
 			const char str[], const PlatformFont& font, Real w, Real h, const char alignmentStringId[]) const {
 			return NULL;
 		};
-		virtual bool SaveImageToPhotoLibrary(const char* filePath) const { return false; };
 		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float jpegQuality) const { return false; };
-		virtual bool AddBitmapToPhotoLibrary(PlatformBitmap* bitmap) const { return false; };
 		virtual const MCrypto& GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String * value) const;
 		virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const;
@@ -83,15 +77,6 @@ namespace Rtt
 		virtual bool OpenURL(const char* url) const { return false; };
 		virtual int CanOpenURL(const char* url) const { return 0; };
 		virtual void HttpPost(const char* url, const char* key, const char* value) const { return; };
-		virtual PlatformEventSound * CreateEventSound(const ResourceHandle<lua_State> & handle, const char* filePath) const { return nullptr; };
-		virtual void ReleaseEventSound(PlatformEventSound * soundID) const { return; };
-		virtual void PlayEventSound(PlatformEventSound * soundID) const { return; };
-		virtual PlatformAudioRecorder * CreateAudioRecorder(const ResourceHandle<lua_State> & handle, const char * filePath) const { return nullptr; };
-		virtual PlatformAudioPlayer * GetAudioPlayer(const ResourceHandle<lua_State> & handle) const { return nullptr; };
-		virtual PlatformAudioPlayer * GetAudioPlayer() const { return nullptr; };
-		virtual PlatformVideoPlayer* GetVideoPlayer(const ResourceHandle<lua_State> & handle) const { return nullptr; };
-		virtual PlatformImageProvider* GetImageProvider(const ResourceHandle<lua_State> & handle) const { return nullptr; };
-		virtual PlatformVideoProvider* GetVideoProvider(const ResourceHandle<lua_State> & handle) const { return nullptr; };
 		virtual PlatformStoreProvider* GetStoreProvider(const ResourceHandle<lua_State> & handle) const { return nullptr; };
 		virtual void SetIdleTimer(bool enabled) const { return; };
 		virtual bool GetIdleTimer() const { return false; };
@@ -106,7 +91,6 @@ namespace Rtt
 		virtual PlatformDisplayObject* CreateNativeTextBox(const Rect& bounds) const { return nullptr; };
 		virtual PlatformDisplayObject* CreateNativeTextField(const Rect& bounds) const { return nullptr; };
 		virtual void SetKeyboardFocus(PlatformDisplayObject *textObject) const { return; };
-		virtual PlatformDisplayObject* CreateNativeVideo(const Rect& bounds) const { return nullptr; };
 		virtual Rtt_Real GetStandardFontSize() const { return 0.0; };
 		virtual S32 GetFontNames(lua_State *L, int index) const { return 0; };
 		virtual PlatformFont* CreateFont(PlatformFont::SystemFont fontType, Rtt_Real size) const { return nullptr; };
@@ -159,10 +143,6 @@ namespace Rtt
 
 		Interop::RuntimeEnvironment& fEnvironment;
 		WinDevice fDevice;
-		mutable WinAudioPlayer* fAudioPlayer;
-		mutable WinVideoPlayer* fVideoPlayer;
-		mutable WinImageProvider* fImageProvider;
-		mutable WinVideoProvider* fVideoProvider;
 		mutable PlatformFBConnect *fFBConnect;
 		WinExitCallback fExitCallback;
 		mutable bool fIsIdleTimerEnabled;

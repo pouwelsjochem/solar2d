@@ -73,27 +73,6 @@ PlatformAudioSessionManager::GetAudioSessionActive() const
 	return true;
 }
 
-void
-PlatformAudioSessionManager::SetImplicitRecordingModeIfNecessary()
-{
-}
-
-void
-PlatformAudioSessionManager::RestoreAudioSessionCategoryIfNecessary()
-{
-}
-
-void
-PlatformAudioSessionManager::PrepareAudioSystemForMoviePlayback()
-{
-}
-
-void
-PlatformAudioSessionManager::RestoreAudioSystemFromMoviePlayback()
-{
-}
-
-
 bool
 PlatformAudioSessionManager::SupportsBackgroundAudio() const
 {

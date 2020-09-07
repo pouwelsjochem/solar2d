@@ -3,12 +3,6 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Rtt\Rtt_WinAudioPlayer.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinAudioRecorder.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinBitmap.h">
       <Filter>Rtt</Filter>
     </ClInclude>
@@ -24,16 +18,10 @@
     <ClInclude Include="Rtt\Rtt_WinDisplayObject.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinEventSound.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinFBConnect.h">
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinFont.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinImageProvider.h">
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinModalInteraction.h">
@@ -51,16 +39,6 @@
     <ClInclude Include="Rtt\Rtt_WinTimer.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinVideoObject.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinVideoPlayer.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinVideoProvider.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="WinSound.h" />
     <ClInclude Include="WinString.h" />
     <ClInclude Include="WinFile.h" />
     <ClInclude Include="Interop\RuntimeEnvironment.h">
@@ -314,12 +292,6 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinAudioPlayer.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinAudioRecorder.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinBitmap.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
@@ -335,16 +307,10 @@
     <ClCompile Include="Rtt\Rtt_WinDisplayObject.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinEventSound.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinFBConnect.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinFont.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinImageProvider.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinModalInteraction.cpp">
@@ -362,16 +328,6 @@
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinVideoObject.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinVideoPlayer.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinVideoProvider.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="WinSound.cpp" />
     <ClCompile Include="WinString.cpp" />
     <ClCompile Include="WinFile.cpp" />
     <ClCompile Include="Interop\RuntimeEnvironment.cpp">

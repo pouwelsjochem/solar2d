@@ -79,7 +79,6 @@ public class Controller {
 
 	private boolean 				myIdleEnabled;
 
-	private MediaManager			myMediaManager;
 	private CoronaSensorManager		mySensorManager;
 
 	private IAndroidVersionSpecific	myAndroidVersion;
@@ -124,7 +123,6 @@ public class Controller {
 		myRuntime = runtime;
 		myHasRenderedFirstFrame = false;
 		myBridge = new NativeToJavaBridge( myContext );
-        myMediaManager = new MediaManager( myRuntime, myContext );
         mySensorManager = new CoronaSensorManager( myRuntime );
         mySystemMonitor = new SystemMonitor( myRuntime, myContext );
         // This will create a handler that will be attached to the main thread
@@ -161,7 +159,6 @@ public class Controller {
 	}
 	
 	synchronized void init() {
-		myMediaManager.init();
 		mySensorManager.init();
 		mySystemMonitor.start();
 		myTimerMilliseconds = 0;
@@ -243,7 +240,6 @@ public class Controller {
 		// Create the OpenGL surface and initialize the Corona renderer by "resuming" the OpenGL view.
 		myGLView.onResume();
 		requestEventRender();
-		myMediaManager.resumeAll();
 		mySensorManager.resume();
 		startTimer();
 		internalSetIdleTimer(myIdleEnabled);
@@ -261,7 +257,6 @@ public class Controller {
 		// If we don't do this then there won't be one last onDrawFrame call which means the runtime won't be stopped!
 		requestEventRender();
 
-		myMediaManager.pauseAll();
 		internalSetIdleTimer(true);
 	}
 	
@@ -270,7 +265,6 @@ public class Controller {
 		closeNativeActivityIndicator();
 		stopTimer();
 		mySensorManager.stop();
-		myMediaManager.release();
 		mySystemMonitor.stop();
 		myEventManager.removeAllEvents();
 		JavaToNativeShim.destroy(myRuntime);
@@ -350,10 +344,6 @@ public class Controller {
 
 	public NativeToJavaBridge getBridge() {
 		return myBridge;
-	}
-
-	public MediaManager getMediaManager() {
-		return myMediaManager;
 	}
 
 	public SystemMonitor getSystemMonitor() {
@@ -1429,144 +1419,6 @@ public class Controller {
 				}
 			}
 		});
-	}
-	
-	// Image source type IDs matching PlatformImageProvider::Source enum on the C++ side.
-	private static final int IMAGE_SOURCE_PHOTO_LIBRARY = 0;
-	private static final int IMAGE_SOURCE_CAMERA = 1;
-	private static final int IMAGE_SOURCE_SAVED_PHOTOS_ALBUM = 2;
-
-	private static final int MEDIA_CAPTURE_QUALITY_LOW = 0;
-	private static final int MEDIA_CAPTURE_QUALITY_MEDIUM = 1;
-	private static final int MEDIA_CAPTURE_QUALITY_HIGH = 2;
-	
-	/**
-	 * Determines if the device has the given media source type.
-	 * @param mediaSourceType Unique integer ID specifying which media source to check for such as the Camera or Photo Library.
-	 *                        This integer ID comes from C++ enum PlatformImageProvider::Source.
-	 */
-	public boolean hasMediaSource(final int mediaSourceType) {
-		boolean hasSource = false;
-		switch (mediaSourceType) {
-			case IMAGE_SOURCE_PHOTO_LIBRARY:
-			case IMAGE_SOURCE_SAVED_PHOTOS_ALBUM:
-				hasSource = true;
-				break;
-			case IMAGE_SOURCE_CAMERA:
-				hasSource = CameraServices.hasCamera();
-				break;
-		}
-		return hasSource;
-	}
-	
-	/**
-	 * Determines if the app has access to the given media source type.
-	 * @param mediaSourceType Unique integer ID specifying which media source to check for such as the Camera or Photo Library.
-	 *                        This integer ID comes from C++ enum PlatformImageProvider::Source.
-	 */
-	public boolean hasAccessToMediaSource(final int mediaSourceType) {
-		boolean hasAccessToSource = false;
-		switch (mediaSourceType) {
-			case IMAGE_SOURCE_PHOTO_LIBRARY:
-			case IMAGE_SOURCE_SAVED_PHOTOS_ALBUM:
-				hasAccessToSource = true;
-				break;
-			case IMAGE_SOURCE_CAMERA:
-				hasAccessToSource = (CameraServices.hasCamera() && CameraServices.hasPermission());
-				break;
-		}
-		return hasAccessToSource;
-	}
-
-	/**
-	 * Displays an image picker activity for selecting an image to be displayed in Corona.
-	 * @param imageSourceType Unique integer ID specifying what kind of window to display such as the camera or photo library.
-	 *                        This integer ID comes from C++ enum PlatformImageProvider::Source.
-	 * @param destinationFilePath Set to a path\file name to save the selected photo to.
-	 *                            It is okay to set this to null or empty string. For camera shots, a file name will be automatically
-	 *                            generated and saved to the cache directory.
-	 */
-	public void showImagePickerWindow(final int imageSourceType, final String destinationFilePath) {
-		// Display the requested window for image selection via the UI thread.
-		myHandler.post( new Runnable() {
-			public void run() {
-				synchronized (this) {
-					// Do not continue if the app is about to exit.
-					if (myCoronaShowApiListener == null) {
-						return;
-					}
-
-					// Display the requested window for image selection.
-					switch (imageSourceType) {
-						case IMAGE_SOURCE_PHOTO_LIBRARY:
-						case IMAGE_SOURCE_SAVED_PHOTOS_ALBUM:
-							myCoronaShowApiListener.showSelectImageWindowUsing(destinationFilePath);
-							break;
-							
-						case IMAGE_SOURCE_CAMERA:
-							myCoronaShowApiListener.showCameraWindowForImage(destinationFilePath);
-							break;
-							
-						default:
-							Log.v("Corona", "The given image source is not supported.");
-							return;
-					}
-				}
-			}
-		} );
-	}
-
-	/**
-	 * Displays video picker activity for selecting a video file to be returned to corona
-	 * @param videoSourceType Unique integer ID specifying what kind of window to display such as the camera or photo library.
-	 *                        This integer ID comes from C++ enum PlatformMediaProviderBase::Source.
-	 * @param maxTime The maximum time lime of a captured video.
-	 * @param quality Unique inter ID specifying what the quality of a captured video should be.
-	 */
-	public void showVideoPickerWindow(final int videoSourceType, final int maxTime, final int quality) {
-		// Display the requested window for video selection via the UI thread.
-		myHandler.post( new Runnable() {
-			public void run() {
-				synchronized (this) {
-					// Do not continue if the app is about to exit.
-					if (myCoronaShowApiListener == null) {
-						return;
-					}
-
-					// Display the requested window for video selection.
-					switch (videoSourceType) {
-						case IMAGE_SOURCE_PHOTO_LIBRARY:
-						case IMAGE_SOURCE_SAVED_PHOTOS_ALBUM:
-							myCoronaShowApiListener.showSelectVideoWindow();
-							break;
-							
-						case IMAGE_SOURCE_CAMERA:
-							int maxVideoTime = maxTime;
-							int videoQuality = quality;
-
-							if (maxVideoTime < 1) {
-								maxVideoTime = java.lang.Integer.MAX_VALUE;
-							}
-
-							// You can only pass one of 2 possible values, 0 for low quality and 1 for high quality.  There is no medium quality.
-							if (videoQuality == MEDIA_CAPTURE_QUALITY_LOW ||
-								videoQuality == MEDIA_CAPTURE_QUALITY_MEDIUM) {
-								
-								videoQuality = 0;
-							} else {
-								videoQuality = 1;
-							}
-
-							myCoronaShowApiListener.showCameraWindowForVideo(maxVideoTime, videoQuality);
-							break;
-							
-						default:
-							Log.v("Corona", "The given video source is not supported.");
-							return;
-					}
-				}
-			}
-		} );
 	}
 
 	/**

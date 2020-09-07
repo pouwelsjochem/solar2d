@@ -33,8 +33,6 @@
 		000CE79712B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */; };
 		000CE79A12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */; };
 		000CE79B12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */; };
-		000CE79E12B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */; };
-		000CE79F12B73EE300D9B6A4 /* Rtt_LuaLibMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */; };
 		000CE7A012B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */; };
 		000CE7A112B73EE300D9B6A4 /* Rtt_LuaLibNative.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F512B73EE300D9B6A4 /* Rtt_LuaLibNative.h */; };
 		000CE7A212B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F612B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp */; };
@@ -61,22 +59,14 @@
 		000CE7C312B73EE300D9B6A4 /* Rtt_MPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71712B73EE300D9B6A4 /* Rtt_MPlatform.h */; };
 		000CE7C412B73EE300D9B6A4 /* Rtt_MPlatformDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71812B73EE300D9B6A4 /* Rtt_MPlatformDevice.h */; };
 		000CE7C512B73EE300D9B6A4 /* Rtt_MReloadableResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71912B73EE300D9B6A4 /* Rtt_MReloadableResource.h */; };
-		000CE7CC12B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72012B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.cpp */; };
-		000CE7CD12B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72112B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.h */; };
-		000CE7CE12B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72212B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.cpp */; };
-		000CE7CF12B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72312B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.h */; };
 		000CE7D212B73EE300D9B6A4 /* Rtt_PlatformData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72612B73EE300D9B6A4 /* Rtt_PlatformData.cpp */; };
 		000CE7D312B73EE300D9B6A4 /* Rtt_PlatformData.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72712B73EE300D9B6A4 /* Rtt_PlatformData.h */; };
 		000CE7D412B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */; };
 		000CE7D512B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */; };
-		000CE7D612B73EE300D9B6A4 /* Rtt_PlatformEventSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72A12B73EE300D9B6A4 /* Rtt_PlatformEventSound.cpp */; };
-		000CE7D712B73EE300D9B6A4 /* Rtt_PlatformEventSound.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72B12B73EE300D9B6A4 /* Rtt_PlatformEventSound.h */; };
 		000CE7D812B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */; };
 		000CE7D912B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */; };
 		000CE7DA12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */; };
 		000CE7DB12B73EE300D9B6A4 /* Rtt_PlatformFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */; };
-		000CE7DC12B73EE300D9B6A4 /* Rtt_PlatformImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73012B73EE300D9B6A4 /* Rtt_PlatformImageProvider.cpp */; };
-		000CE7DD12B73EE300D9B6A4 /* Rtt_PlatformImageProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73112B73EE300D9B6A4 /* Rtt_PlatformImageProvider.h */; };
 		000CE7E212B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73612B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.cpp */; };
 		000CE7E312B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73712B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h */; };
 		000CE7E412B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73812B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp */; };
@@ -87,8 +77,6 @@
 		000CE7E912B73EE300D9B6A4 /* Rtt_PlatformSurface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */; };
 		000CE7EA12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */; };
 		000CE7EB12B73EE300D9B6A4 /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */; };
-		000CE7EC12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */; };
-		000CE7ED12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */; };
 		000CE7F212B73EE300D9B6A4 /* Rtt_RenderingStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74612B73EE300D9B6A4 /* Rtt_RenderingStream.cpp */; };
 		000CE7F312B73EE300D9B6A4 /* Rtt_RenderingStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74712B73EE300D9B6A4 /* Rtt_RenderingStream.h */; };
 		000CE7F412B73EE300D9B6A4 /* Rtt_Resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74812B73EE300D9B6A4 /* Rtt_Resource.cpp */; };
@@ -244,13 +232,11 @@
 		00B73D8B12B720CA0057F594 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CD912B720C90057F594 /* main.m */; };
 		00B73D9712B720CA0057F594 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
 		00B73D9812B720CA0057F594 /* Rtt_MacFBConnect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */; };
-		00B73D9A12B720CA0057F594 /* Rtt_MacImageProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF612B720C90057F594 /* Rtt_MacImageProvider.mm */; };
 		00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */; };
 		00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */; };
 		00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */; };
 		00B73DA012B720CA0057F594 /* Rtt_MacTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */; };
 		00B73DA112B720CA0057F594 /* Rtt_MacTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */; };
-		00B73DA312B720CA0057F594 /* Rtt_MacVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */; };
 		00B73DA612B720CA0057F594 /* ButtonTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0F12B720C90057F594 /* ButtonTextField.m */; };
 		00B73DA712B720CA0057F594 /* ResponderPassthroughTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1112B720C90057F594 /* ResponderPassthroughTextField.m */; };
 		00B73DA812B720CA0057F594 /* ButtonImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1312B720C90057F594 /* ButtonImageView.m */; };
@@ -305,9 +291,6 @@
 		072020EF17C58DA100B6D424 /* kernel_filter_blurVertical_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 072020E717C58D8A00B6D424 /* kernel_filter_blurVertical_gl.lua */; };
 		072020F017C58DA100B6D424 /* kernel_filter_levels_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 072020E817C58D8A00B6D424 /* kernel_filter_levels_gl.lua */; };
 		0727BA8716E68FE800981C4B /* network.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0727BA8616E68FE800981C4B /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		0797EB4D181F0BED00FA57B5 /* Rtt_PlatformMediaProviderBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0797EB4C181F0BED00FA57B5 /* Rtt_PlatformMediaProviderBase.h */; };
-		0797EB57181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */; };
-		0797EB5D181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB5C181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm */; };
 		1F34F53D21115FB2006EE117 /* Rtt_LinuxAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F34F53321115FB1006EE117 /* Rtt_LinuxAppPackager.cpp */; };
 		1F34F54021116446006EE117 /* LinuxAppBuild.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F34F53E21116445006EE117 /* LinuxAppBuild.xib */; };
 		1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F34F5412111661E006EE117 /* LinuxAppBuildController.mm */; };
@@ -523,7 +506,6 @@
 		A4B66B2517728D070077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B2317728CF10077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp */; };
 		A4B71B9413F4BDC7009428CF /* Rtt_LuaResourceOwner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */; };
 		A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		A4BEDC9B14BE81320028BE25 /* Rtt_MacVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */; };
 		A4C9CB2C17BAE2480071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */; };
 		A4C9CB3217BAE36E0071753E /* kernel_generator_checkerboard_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB3117BAE35A0071753E /* kernel_generator_checkerboard_gl.lua */; };
 		A4D24B21143FC36500E583D1 /* NewProject.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4D24B20143FC36500E583D1 /* NewProject.xib */; };
@@ -538,13 +520,11 @@
 		A4FBC5221A2D55A2004D9A01 /* liblpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C2A08C2A1950DF2B002B7532 /* liblpeg.a */; };
 		A4FBC5231A2D55A2004D9A01 /* libtachyon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B66AB6176A7A370077B2BF /* libtachyon.a */; };
 		A4FBC5261A2D5623004D9A01 /* libCoronaCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FBC4F71A2D5479004D9A01 /* libCoronaCore.a */; };
-		A4FBC54C1A2D5734004D9A01 /* Rtt_AppleAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91212B7413200D9B6A4 /* Rtt_AppleAudioPlayer.cpp */; };
 		A4FBC54E1A2D5734004D9A01 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91712B7413200D9B6A4 /* Rtt_AppleBitmap.mm */; };
 		A4FBC54F1A2D5734004D9A01 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91912B7413200D9B6A4 /* Rtt_AppleCallback.mm */; };
 		A4FBC5511A2D5734004D9A01 /* Rtt_AppleCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91C12B7413200D9B6A4 /* Rtt_AppleCrypto.cpp */; };
 		A4FBC5521A2D5734004D9A01 /* Rtt_AppleData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91F12B7413200D9B6A4 /* Rtt_AppleData.mm */; };
 		A4FBC5531A2D5734004D9A01 /* Rtt_AppleDictionaryWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */; };
-		A4FBC5541A2D5734004D9A01 /* Rtt_AppleEventSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92212B7413200D9B6A4 /* Rtt_AppleEventSound.cpp */; };
 		A4FBC5551A2D5734004D9A01 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */; };
 		A4FBC5561A2D5734004D9A01 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DB13678536008DDB3D /* Rtt_AppleReachability.mm */; };
 		A4FBC5571A2D5734004D9A01 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 078DA94A176FBE4900A5193E /* Rtt_AppleTextAlignment.mm */; };
@@ -636,7 +616,6 @@
 		C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */; };
 		C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */; };
 		C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */; };
-		C229E0281B32221B00D87A7C /* Rtt_LuaLibMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */; };
 		C229E0291B32221B00D87A7C /* Rtt_LuaLibNative.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F512B73EE300D9B6A4 /* Rtt_LuaLibNative.h */; };
 		C229E02A1B32221B00D87A7C /* Rtt_LuaLibOpenAL.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F712B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.h */; };
 		C229E02C1B32221B00D87A7C /* Rtt_LuaLibSQLite.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE70112B73EE300D9B6A4 /* Rtt_LuaLibSQLite.h */; };
@@ -667,28 +646,21 @@
 		C229E0491B32221B00D87A7C /* Rtt_OpenPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328810176A621100ACB6FF /* Rtt_OpenPath.h */; };
 		C229E04A1B32221B00D87A7C /* Rtt_Paint.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328812176A621100ACB6FF /* Rtt_Paint.h */; };
 		C229E04B1B32221B00D87A7C /* Rtt_PaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032217739AD80064ABA0 /* Rtt_PaintAdapter.h */; };
-		C229E0511B32221B00D87A7C /* Rtt_PlatformAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72112B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.h */; };
-		C229E0521B32221B00D87A7C /* Rtt_PlatformAudioRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72312B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.h */; };
 		C229E0531B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 006E5C4D13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.h */; };
 		C229E0541B32221B00D87A7C /* Rtt_PlatformBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328814176A621100ACB6FF /* Rtt_PlatformBitmap.h */; };
 		C229E0551B32221B00D87A7C /* Rtt_PlatformBitmapTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328816176A621100ACB6FF /* Rtt_PlatformBitmapTexture.h */; };
 		C229E0561B32221B00D87A7C /* Rtt_PlatformData.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72712B73EE300D9B6A4 /* Rtt_PlatformData.h */; };
 		C229E0571B32221B00D87A7C /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */; };
-		C229E0581B32221B00D87A7C /* Rtt_PlatformEventSound.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72B12B73EE300D9B6A4 /* Rtt_PlatformEventSound.h */; };
 		C229E0591B32221B00D87A7C /* Rtt_PlatformExitCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */; };
 		C229E05A1B32221B00D87A7C /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */; };
 		C229E05B1B32221B00D87A7C /* Rtt_PlatformFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */; };
-		C229E05C1B32221B00D87A7C /* Rtt_PlatformImageProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73112B73EE300D9B6A4 /* Rtt_PlatformImageProvider.h */; };
 		C229E05D1B32221B00D87A7C /* Rtt_PlatformInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8A12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h */; };
-		C229E05E1B32221B00D87A7C /* Rtt_PlatformMediaProviderBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0797EB4C181F0BED00FA57B5 /* Rtt_PlatformMediaProviderBase.h */; };
 		C229E05F1B32221B00D87A7C /* Rtt_PlatformModalInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73712B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h */; };
 		C229E0601B32221B00D87A7C /* Rtt_PlatformNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73912B73EE300D9B6A4 /* Rtt_PlatformNotifier.h */; };
 		C229E0611B32221B00D87A7C /* Rtt_PlatformOpenALPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73B12B73EE300D9B6A4 /* Rtt_PlatformOpenALPlayer.h */; };
 		C229E0621B32221B00D87A7C /* Rtt_PlatformReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 006DC6DE13678AB5008DDB3D /* Rtt_PlatformReachability.h */; };
 		C229E0631B32221B00D87A7C /* Rtt_PlatformSurface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */; };
 		C229E0641B32221B00D87A7C /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */; };
-		C229E0651B32221B00D87A7C /* Rtt_PlatformVideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */; };
-		C229E0661B32221B00D87A7C /* Rtt_PlatformVideoProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0797EB56181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.h */; };
 		C229E0681B32221B00D87A7C /* Rtt_Real.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD712B71BF20057F594 /* Rtt_Real.h */; };
 		C229E0691B32221B00D87A7C /* Rtt_RectObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328818176A621100ACB6FF /* Rtt_RectObject.h */; };
 		C229E06A1B32221B00D87A7C /* Rtt_RectPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A432881A176A621100ACB6FF /* Rtt_RectPath.h */; };
@@ -818,7 +790,6 @@
 		C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */; };
 		C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */; };
 		C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */; };
-		C229E1021B32221B00D87A7C /* Rtt_LuaLibMedia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */; };
 		C229E1031B32221B00D87A7C /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */; };
 		C229E1041B32221B00D87A7C /* Rtt_LuaLibOpenAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F612B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp */; };
 		C229E1061B32221B00D87A7C /* Rtt_LuaLibSQLite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE70012B73EE300D9B6A4 /* Rtt_LuaLibSQLite.cpp */; };
@@ -834,18 +805,14 @@
 		C229E1141B32221B00D87A7C /* Rtt_OpenPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880F176A621100ACB6FF /* Rtt_OpenPath.cpp */; };
 		C229E1151B32221B00D87A7C /* Rtt_Paint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328811176A621100ACB6FF /* Rtt_Paint.cpp */; };
 		C229E1161B32221B00D87A7C /* Rtt_PaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A475032D1773A6820064ABA0 /* Rtt_PaintAdapter.cpp */; };
-		C229E11C1B32221B00D87A7C /* Rtt_PlatformAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72012B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.cpp */; };
-		C229E11D1B32221B00D87A7C /* Rtt_PlatformAudioRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72212B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.cpp */; };
 		C229E11E1B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006E5C4C13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.cpp */; };
 		C229E11F1B32221B00D87A7C /* Rtt_PlatformBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328813176A621100ACB6FF /* Rtt_PlatformBitmap.cpp */; };
 		C229E1201B32221B00D87A7C /* Rtt_PlatformBitmapTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328815176A621100ACB6FF /* Rtt_PlatformBitmapTexture.cpp */; };
 		C229E1211B32221B00D87A7C /* Rtt_PlatformData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72612B73EE300D9B6A4 /* Rtt_PlatformData.cpp */; };
 		C229E1221B32221B00D87A7C /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */; };
-		C229E1231B32221B00D87A7C /* Rtt_PlatformEventSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72A12B73EE300D9B6A4 /* Rtt_PlatformEventSound.cpp */; };
 		C229E1241B32221B00D87A7C /* Rtt_PlatformExitCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002D74A912FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp */; };
 		C229E1251B32221B00D87A7C /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */; };
 		C229E1261B32221B00D87A7C /* Rtt_PlatformFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */; };
-		C229E1271B32221B00D87A7C /* Rtt_PlatformImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73012B73EE300D9B6A4 /* Rtt_PlatformImageProvider.cpp */; };
 		C229E1281B32221B00D87A7C /* Rtt_PlatformInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00572B8912D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp */; };
 		C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043D17A3774E00681DED /* Rtt_PlatformInputAxis.cpp */; };
 		C229E12A1B32221B00D87A7C /* Rtt_PlatformInputDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE6C178E18B00047CC04 /* Rtt_PlatformInputDevice.cpp */; };
@@ -856,8 +823,6 @@
 		C229E1301B32221B00D87A7C /* Rtt_PlatformReachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DD13678AB5008DDB3D /* Rtt_PlatformReachability.cpp */; };
 		C229E1311B32221B00D87A7C /* Rtt_PlatformSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73C12B73EE300D9B6A4 /* Rtt_PlatformSurface.cpp */; };
 		C229E1321B32221B00D87A7C /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */; };
-		C229E1331B32221B00D87A7C /* Rtt_PlatformVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */; };
-		C229E1341B32221B00D87A7C /* Rtt_PlatformVideoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */; };
 		C229E1361B32221B00D87A7C /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043F17A3774E00681DED /* Rtt_ReadOnlyInputAxisCollection.cpp */; };
 		C229E1371B32221B00D87A7C /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE70178E18B00047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp */; };
 		C229E1381B32221B00D87A7C /* Rtt_RectObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328817176A621100ACB6FF /* Rtt_RectObject.cpp */; };
@@ -1050,11 +1015,6 @@
 		C2A377761B34CA6300BB5B88 /* Rtt_MacActivityIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B71145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm */; };
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
-		C2A3777B1B34D3A000BB5B88 /* Rtt_PlatformVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */; };
-		C2A3777C1B34D3A000BB5B88 /* Rtt_PlatformVideoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */; };
-		C2A3777D1B34D3A000BB5B88 /* Rtt_MacVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */; };
-		C2A3777E1B34D3A000BB5B88 /* Rtt_MacVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */; };
-		C2A3777F1B34D3A000BB5B88 /* Rtt_MacVideoProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB5C181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
 		C2ADB45A1B6C1C31008C9BF2 /* OSXAppPackageSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2ADB4591B6C1C31008C9BF2 /* OSXAppPackageSheet.xib */; };
 		C2AEAC1718E23E5D004F30FE /* _coronatest.jar in Resources */ = {isa = PBXBuildFile; fileRef = C2AEAC1418E23B34004F30FE /* _coronatest.jar */; };
@@ -1094,7 +1054,6 @@
 		C2D3DA6C1B179DA000137331 /* Rtt_NativeWindowMode.h in Headers */ = {isa = PBXBuildFile; fileRef = C2D3DA691B179DA000137331 /* Rtt_NativeWindowMode.h */; };
 		C2D3DA6D1B179DA000137331 /* Rtt_NativeWindowMode.h in Headers */ = {isa = PBXBuildFile; fileRef = C2D3DA691B179DA000137331 /* Rtt_NativeWindowMode.h */; };
 		C2D495461B3A33FE0049DA4E /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44308DA164C74BE00B9117B /* libplugins.a */; };
-		C2D4954B1B3E04320049DA4E /* Rtt_MacImageProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF612B720C90057F594 /* Rtt_MacImageProvider.mm */; };
 		C2DA95EC1B46460F00DAF684 /* librtt-simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229E2071B32221B00D87A7C /* librtt-simulator.a */; };
 		C2DA960C1B46460F00DAF684 /* lundump_swap.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7348312B6F8C30057F594 /* lundump_swap.c */; };
 		C2DA960D1B46460F00DAF684 /* luac.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7343012B6F7530057F594 /* luac.c */; };
@@ -1148,7 +1107,6 @@
 		C2DA96451B46460F00DAF684 /* Rtt_GradientPaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032617739BFE0064ABA0 /* Rtt_GradientPaintAdapter.h */; };
 		C2DA96461B46460F00DAF684 /* Rtt_WeakPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8B9178A25EA00BE6805 /* Rtt_WeakPtr.h */; };
 		C2DA96471B46460F00DAF684 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 006DC6D613678511008DDB3D /* Reachability.h */; };
-		C2DA96481B46460F00DAF684 /* Rtt_PlatformVideoProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0797EB56181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.h */; };
 		C2DA96491B46460F00DAF684 /* Rtt_MRuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */; };
 		C2DA964A1B46460F00DAF684 /* Rtt_ShapeAdapterRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B2417728CF90077B2BF /* Rtt_ShapeAdapterRoundedRect.h */; };
 		C2DA964B1B46460F00DAF684 /* Rtt_ImageFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328800176A621100ACB6FF /* Rtt_ImageFrame.h */; };
@@ -1198,14 +1156,11 @@
 		C2E992F61A6B1A3100E99F46 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE90E12B7410200D9B6A4 /* CoronaViewPrivate.mm */; };
 		C2E992F71A6B1A3100E99F46 /* CoronaWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AB4479143E385700607F77 /* CoronaWindowController.mm */; };
 		C2E992F81A6B1A3100E99F46 /* GLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CDE12B720C90057F594 /* GLView.mm */; };
-		C2E992F91A6B1A3100E99F46 /* Rtt_AppleAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91212B7413200D9B6A4 /* Rtt_AppleAudioPlayer.cpp */; };
-		C2E992FA1A6B1A3100E99F46 /* Rtt_AppleAudioRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91412B7413200D9B6A4 /* Rtt_AppleAudioRecorder.mm */; };
 		C2E992FB1A6B1A3100E99F46 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91712B7413200D9B6A4 /* Rtt_AppleBitmap.mm */; };
 		C2E992FC1A6B1A3100E99F46 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91912B7413200D9B6A4 /* Rtt_AppleCallback.mm */; };
 		C2E992FE1A6B1A3100E99F46 /* Rtt_AppleCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91C12B7413200D9B6A4 /* Rtt_AppleCrypto.cpp */; };
 		C2E992FF1A6B1A3100E99F46 /* Rtt_AppleData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91F12B7413200D9B6A4 /* Rtt_AppleData.mm */; };
 		C2E993001A6B1A3100E99F46 /* Rtt_AppleDictionaryWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */; };
-		C2E993011A6B1A3100E99F46 /* Rtt_AppleEventSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92212B7413200D9B6A4 /* Rtt_AppleEventSound.cpp */; };
 		C2E993021A6B1A3100E99F46 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */; };
 		C2E993031A6B1A3100E99F46 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DB13678536008DDB3D /* Rtt_AppleReachability.mm */; };
 		C2E993041A6B1A3100E99F46 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 078DA94A176FBE4900A5193E /* Rtt_AppleTextAlignment.mm */; };
@@ -1263,7 +1218,6 @@
 		C2FCD3CD1B377A8400EF7B02 /* Rtt_MacKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F07AF1B2901DC006FA0FB /* Rtt_MacKeyServices.mm */; };
 		C2FCD3D81B377CDB00EF7B02 /* Rtt_KeyName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C111FC91B2A41B200DF8BE8 /* Rtt_KeyName.cpp */; };
 		C2FCD3E11B38CF4B00EF7B02 /* Rtt_IOSAppPackager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CE912B720C90057F594 /* Rtt_IOSAppPackager.mm */; };
-		C2FCD3E21B38CF7800EF7B02 /* Rtt_AppleAudioRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91412B7413200D9B6A4 /* Rtt_AppleAudioRecorder.mm */; };
 		C2FCD3E31B38D03C00EF7B02 /* AndroidAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F36554146C44200019808D /* AndroidAppBuildController.mm */; };
 		C2FCD3E41B38D06000EF7B02 /* AppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B00FA014565609008FB6E6 /* AppBuildController.mm */; };
 		C2FCD3E61B38D0BD00EF7B02 /* WebAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A425454E18DB9EF400EE06A8 /* WebAppBuildController.mm */; };
@@ -1829,8 +1783,6 @@
 		000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibCrypto.h; sourceTree = "<group>"; };
 		000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibFacebook.cpp; sourceTree = "<group>"; };
 		000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibFacebook.h; sourceTree = "<group>"; };
-		000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibMedia.cpp; sourceTree = "<group>"; };
-		000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibMedia.h; sourceTree = "<group>"; };
 		000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibNative.cpp; sourceTree = "<group>"; };
 		000CE6F512B73EE300D9B6A4 /* Rtt_LuaLibNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibNative.h; sourceTree = "<group>"; };
 		000CE6F612B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibOpenAL.cpp; sourceTree = "<group>"; };
@@ -1858,22 +1810,14 @@
 		000CE71712B73EE300D9B6A4 /* Rtt_MPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MPlatform.h; sourceTree = "<group>"; };
 		000CE71812B73EE300D9B6A4 /* Rtt_MPlatformDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MPlatformDevice.h; sourceTree = "<group>"; };
 		000CE71912B73EE300D9B6A4 /* Rtt_MReloadableResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MReloadableResource.h; sourceTree = "<group>"; };
-		000CE72012B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformAudioPlayer.cpp; sourceTree = "<group>"; };
-		000CE72112B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformAudioPlayer.h; sourceTree = "<group>"; };
-		000CE72212B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformAudioRecorder.cpp; sourceTree = "<group>"; };
-		000CE72312B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformAudioRecorder.h; sourceTree = "<group>"; };
 		000CE72612B73EE300D9B6A4 /* Rtt_PlatformData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformData.cpp; sourceTree = "<group>"; };
 		000CE72712B73EE300D9B6A4 /* Rtt_PlatformData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformData.h; sourceTree = "<group>"; };
 		000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformDisplayObject.cpp; sourceTree = "<group>"; };
 		000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
-		000CE72A12B73EE300D9B6A4 /* Rtt_PlatformEventSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformEventSound.cpp; sourceTree = "<group>"; };
-		000CE72B12B73EE300D9B6A4 /* Rtt_PlatformEventSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformEventSound.h; sourceTree = "<group>"; };
 		000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFBConnect.cpp; sourceTree = "<group>"; };
 		000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
 		000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFont.cpp; sourceTree = "<group>"; };
 		000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFont.h; sourceTree = "<group>"; };
-		000CE73012B73EE300D9B6A4 /* Rtt_PlatformImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformImageProvider.cpp; sourceTree = "<group>"; };
-		000CE73112B73EE300D9B6A4 /* Rtt_PlatformImageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformImageProvider.h; sourceTree = "<group>"; };
 		000CE73212B73EE300D9B6A4 /* Rtt_PlatformListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformListener.cpp; sourceTree = "<group>"; };
 		000CE73312B73EE300D9B6A4 /* Rtt_PlatformListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformListener.h; sourceTree = "<group>"; };
 		000CE73612B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformModalInteraction.cpp; sourceTree = "<group>"; };
@@ -1886,8 +1830,6 @@
 		000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformSurface.h; sourceTree = "<group>"; };
 		000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformTimer.cpp; sourceTree = "<group>"; };
 		000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformTimer.h; sourceTree = "<group>"; };
-		000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformVideoPlayer.cpp; sourceTree = "<group>"; };
-		000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformVideoPlayer.h; sourceTree = "<group>"; };
 		000CE74612B73EE300D9B6A4 /* Rtt_RenderingStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RenderingStream.cpp; sourceTree = "<group>"; };
 		000CE74712B73EE300D9B6A4 /* Rtt_RenderingStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RenderingStream.h; sourceTree = "<group>"; };
 		000CE74812B73EE300D9B6A4 /* Rtt_Resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Resource.cpp; sourceTree = "<group>"; };
@@ -1917,10 +1859,6 @@
 		000CE90912B7409400D9B6A4 /* sha2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha2.h; sourceTree = "<group>"; };
 		000CE90D12B7410200D9B6A4 /* CoronaViewPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaViewPrivate.h; path = browser/CoronaViewPrivate.h; sourceTree = "<group>"; };
 		000CE90E12B7410200D9B6A4 /* CoronaViewPrivate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaViewPrivate.mm; path = browser/CoronaViewPrivate.mm; sourceTree = "<group>"; };
-		000CE91212B7413200D9B6A4 /* Rtt_AppleAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AppleAudioPlayer.cpp; path = ../apple/Rtt_AppleAudioPlayer.cpp; sourceTree = "<group>"; };
-		000CE91312B7413200D9B6A4 /* Rtt_AppleAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleAudioPlayer.h; path = ../apple/Rtt_AppleAudioPlayer.h; sourceTree = "<group>"; };
-		000CE91412B7413200D9B6A4 /* Rtt_AppleAudioRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleAudioRecorder.mm; path = ../apple/Rtt_AppleAudioRecorder.mm; sourceTree = "<group>"; };
-		000CE91512B7413200D9B6A4 /* Rtt_AppleAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleAudioRecorder.h; path = ../apple/Rtt_AppleAudioRecorder.h; sourceTree = "<group>"; };
 		000CE91612B7413200D9B6A4 /* Rtt_AppleBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleBitmap.h; path = ../apple/Rtt_AppleBitmap.h; sourceTree = "<group>"; };
 		000CE91712B7413200D9B6A4 /* Rtt_AppleBitmap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleBitmap.mm; path = ../apple/Rtt_AppleBitmap.mm; sourceTree = "<group>"; };
 		000CE91812B7413200D9B6A4 /* Rtt_AppleCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleCallback.h; path = ../apple/Rtt_AppleCallback.h; sourceTree = "<group>"; };
@@ -1931,8 +1869,6 @@
 		000CE91F12B7413200D9B6A4 /* Rtt_AppleData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleData.mm; path = ../apple/Rtt_AppleData.mm; sourceTree = "<group>"; };
 		000CE92012B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleDictionaryWrapper.h; path = ../apple/Rtt_AppleDictionaryWrapper.h; sourceTree = "<group>"; };
 		000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleDictionaryWrapper.mm; path = ../apple/Rtt_AppleDictionaryWrapper.mm; sourceTree = "<group>"; };
-		000CE92212B7413200D9B6A4 /* Rtt_AppleEventSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AppleEventSound.cpp; path = ../apple/Rtt_AppleEventSound.cpp; sourceTree = "<group>"; };
-		000CE92312B7413200D9B6A4 /* Rtt_AppleEventSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleEventSound.h; path = ../apple/Rtt_AppleEventSound.h; sourceTree = "<group>"; };
 		000CE92412B7413200D9B6A4 /* Rtt_AppleFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleFont.h; path = ../apple/Rtt_AppleFont.h; sourceTree = "<group>"; };
 		000CE92512B7413200D9B6A4 /* Rtt_ApplePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ApplePlatform.h; path = ../apple/Rtt_ApplePlatform.h; sourceTree = "<group>"; };
 		000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_ApplePlatform.mm; path = ../apple/Rtt_ApplePlatform.mm; sourceTree = "<group>"; };
@@ -2176,8 +2112,6 @@
 		00B73CF312B720C90057F594 /* Rtt_MacFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacFBConnect.h; sourceTree = "<group>"; };
 		00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacFBConnect.mm; sourceTree = "<group>"; };
 		00B73CF512B720C90057F594 /* Rtt_MacFont.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacFont.mm; sourceTree = "<group>"; };
-		00B73CF612B720C90057F594 /* Rtt_MacImageProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacImageProvider.mm; sourceTree = "<group>"; };
-		00B73CF712B720C90057F594 /* Rtt_MacImageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacImageProvider.h; sourceTree = "<group>"; };
 		00B73CF812B720C90057F594 /* Rtt_MacPlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacPlatform.mm; sourceTree = "<group>"; };
 		00B73CF912B720C90057F594 /* Rtt_MacPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacPlatform.h; sourceTree = "<group>"; };
 		00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacRemotePlayerHost.mm; sourceTree = "<group>"; };
@@ -2192,8 +2126,6 @@
 		00B73D0512B720C90057F594 /* Rtt_MacTextFieldObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacTextFieldObject.h; sourceTree = "<group>"; };
 		00B73D0612B720C90057F594 /* Rtt_MacViewSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewSurface.mm; sourceTree = "<group>"; };
 		00B73D0712B720C90057F594 /* Rtt_MacViewSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewSurface.h; sourceTree = "<group>"; };
-		00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacVideoPlayer.mm; sourceTree = "<group>"; };
-		00B73D0912B720C90057F594 /* Rtt_MacVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacVideoPlayer.h; sourceTree = "<group>"; };
 		00B73D0E12B720C90057F594 /* ButtonTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonTextField.h; sourceTree = "<group>"; };
 		00B73D0F12B720C90057F594 /* ButtonTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonTextField.m; sourceTree = "<group>"; };
 		00B73D1012B720C90057F594 /* ResponderPassthroughTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResponderPassthroughTextField.h; sourceTree = "<group>"; };
@@ -2294,11 +2226,6 @@
 		078BDB8F1811B0B600C17D9A /* Rtt_EmbossedTextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_EmbossedTextObject.h; path = Display/Rtt_EmbossedTextObject.h; sourceTree = "<group>"; };
 		078DA949176FBE4900A5193E /* Rtt_AppleTextAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTextAlignment.h; path = ../apple/Rtt_AppleTextAlignment.h; sourceTree = "<group>"; };
 		078DA94A176FBE4900A5193E /* Rtt_AppleTextAlignment.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleTextAlignment.mm; path = ../apple/Rtt_AppleTextAlignment.mm; sourceTree = "<group>"; };
-		0797EB4C181F0BED00FA57B5 /* Rtt_PlatformMediaProviderBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformMediaProviderBase.h; sourceTree = "<group>"; };
-		0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformVideoProvider.cpp; sourceTree = "<group>"; };
-		0797EB56181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformVideoProvider.h; sourceTree = "<group>"; };
-		0797EB5B181F0CC400FA57B5 /* Rtt_MacVideoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacVideoProvider.h; sourceTree = "<group>"; };
-		0797EB5C181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacVideoProvider.mm; sourceTree = "<group>"; };
 		0799601317EBC78000A632B9 /* Rtt_MacViewCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewCallback.h; sourceTree = "<group>"; };
 		0799601417EBC78000A632B9 /* Rtt_MacViewCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewCallback.mm; sourceTree = "<group>"; };
 		0799601D17F0FFF100A632B9 /* Rtt_SimulatorRecents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SimulatorRecents.h; path = ../../modules/simulator/Rtt_SimulatorRecents.h; sourceTree = "<group>"; };
@@ -2616,8 +2543,6 @@
 		A4B66B2417728CF90077B2BF /* Rtt_ShapeAdapterRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterRoundedRect.h; path = Display/Rtt_ShapeAdapterRoundedRect.h; sourceTree = "<group>"; };
 		A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaResourceOwner.cpp; sourceTree = "<group>"; };
 		A4B71B9213F4BDC2009428CF /* Rtt_LuaResourceOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaResourceOwner.h; sourceTree = "<group>"; };
-		A4BEDC9914BE81320028BE25 /* Rtt_MacVideoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacVideoObject.h; sourceTree = "<group>"; };
-		A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacVideoObject.mm; sourceTree = "<group>"; };
 		A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_marchingAnts_gl.lua; path = Display/Shader/kernel_generator_marchingAnts_gl.lua; sourceTree = "<group>"; };
 		A4C9CB3117BAE35A0071753E /* kernel_generator_checkerboard_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_checkerboard_gl.lua; path = Display/Shader/kernel_generator_checkerboard_gl.lua; sourceTree = "<group>"; };
 		A4D24B20143FC36500E583D1 /* NewProject.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewProject.xib; sourceTree = "<group>"; };
@@ -3277,8 +3202,6 @@
 				000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */,
 				00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */,
 				00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */,
-				000CE6F212B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp */,
-				000CE6F312B73EE300D9B6A4 /* Rtt_LuaLibMedia.h */,
 				000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */,
 				000CE6F512B73EE300D9B6A4 /* Rtt_LuaLibNative.h */,
 				000CE6F612B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp */,
@@ -3315,31 +3238,22 @@
 				000CE71912B73EE300D9B6A4 /* Rtt_MReloadableResource.h */,
 				A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */,
 				50E06F2C1963988C003451E8 /* Rtt_MUpdatable.h */,
-				000CE72012B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.cpp */,
-				000CE72112B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.h */,
-				000CE72212B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.cpp */,
-				000CE72312B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.h */,
 				006E5C4C13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.cpp */,
 				006E5C4D13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.h */,
 				000CE72612B73EE300D9B6A4 /* Rtt_PlatformData.cpp */,
 				000CE72712B73EE300D9B6A4 /* Rtt_PlatformData.h */,
 				000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */,
 				000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */,
-				000CE72A12B73EE300D9B6A4 /* Rtt_PlatformEventSound.cpp */,
-				000CE72B12B73EE300D9B6A4 /* Rtt_PlatformEventSound.h */,
 				002D74A912FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp */,
 				002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */,
 				000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */,
 				000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */,
 				000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */,
 				000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */,
-				000CE73012B73EE300D9B6A4 /* Rtt_PlatformImageProvider.cpp */,
-				000CE73112B73EE300D9B6A4 /* Rtt_PlatformImageProvider.h */,
 				00572B8912D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp */,
 				00572B8A12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h */,
 				000CE73212B73EE300D9B6A4 /* Rtt_PlatformListener.cpp */,
 				000CE73312B73EE300D9B6A4 /* Rtt_PlatformListener.h */,
-				0797EB4C181F0BED00FA57B5 /* Rtt_PlatformMediaProviderBase.h */,
 				000CE73612B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.cpp */,
 				000CE73712B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h */,
 				000CE73812B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp */,
@@ -3352,10 +3266,6 @@
 				000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */,
 				000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */,
 				000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */,
-				000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */,
-				000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */,
-				0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */,
-				0797EB56181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.h */,
 				03C89D521D6FE7B2004CD668 /* Rtt_Preference.cpp */,
 				03C89D531D6FE7B2004CD668 /* Rtt_Preference.h */,
 				03C89D541D6FE7B2004CD668 /* Rtt_PreferenceCollection.cpp */,
@@ -3533,8 +3443,6 @@
 				002D72E112FB2C30006C7E9B /* Rtt_MacExitCallback.mm */,
 				00B73CF312B720C90057F594 /* Rtt_MacFBConnect.h */,
 				00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */,
-				00B73CF712B720C90057F594 /* Rtt_MacImageProvider.h */,
-				00B73CF612B720C90057F594 /* Rtt_MacImageProvider.mm */,
 				4C0F07AE1B290192006FA0FB /* Rtt_MacKeyServices.h */,
 				4C0F07AF1B2901DC006FA0FB /* Rtt_MacKeyServices.mm */,
 				00B73CFB12B720C90057F594 /* Rtt_MacRemotePlayerHost.h */,
@@ -3549,12 +3457,6 @@
 				00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */,
 				00B73D0512B720C90057F594 /* Rtt_MacTextFieldObject.h */,
 				00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */,
-				A4BEDC9914BE81320028BE25 /* Rtt_MacVideoObject.h */,
-				A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */,
-				00B73D0912B720C90057F594 /* Rtt_MacVideoPlayer.h */,
-				00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */,
-				0797EB5B181F0CC400FA57B5 /* Rtt_MacVideoProvider.h */,
-				0797EB5C181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm */,
 				00B73CD812B720C90057F594 /* Rtt_Player.pch */,
 				A4AB446F143BE11100607F77 /* SampleCodeLocator.h */,
 				A4AB4470143BE11200607F77 /* SampleCodeLocator.mm */,
@@ -4245,10 +4147,6 @@
 				A4728FFD1AE827C400BC088D /* CoronaLuaObjC.mm */,
 				C2F7D7AF1C57281D0083EC74 /* NSString+Extensions.h */,
 				C2F7D7B01C57281D0083EC74 /* NSString+Extensions.m */,
-				000CE91312B7413200D9B6A4 /* Rtt_AppleAudioPlayer.h */,
-				000CE91212B7413200D9B6A4 /* Rtt_AppleAudioPlayer.cpp */,
-				000CE91512B7413200D9B6A4 /* Rtt_AppleAudioRecorder.h */,
-				000CE91412B7413200D9B6A4 /* Rtt_AppleAudioRecorder.mm */,
 				000CE91612B7413200D9B6A4 /* Rtt_AppleBitmap.h */,
 				000CE91712B7413200D9B6A4 /* Rtt_AppleBitmap.mm */,
 				000CE91812B7413200D9B6A4 /* Rtt_AppleCallback.h */,
@@ -4259,8 +4157,6 @@
 				000CE91F12B7413200D9B6A4 /* Rtt_AppleData.mm */,
 				000CE92012B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.h */,
 				000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */,
-				000CE92312B7413200D9B6A4 /* Rtt_AppleEventSound.h */,
-				000CE92212B7413200D9B6A4 /* Rtt_AppleEventSound.cpp */,
 				000CE92412B7413200D9B6A4 /* Rtt_AppleFont.h */,
 				F54D1E111CA35968000B280E /* Rtt_AppleFont.mm */,
 				000CE92512B7413200D9B6A4 /* Rtt_ApplePlatform.h */,
@@ -4504,7 +4400,6 @@
 				F5C40DC31CB68788004F7789 /* Rtt_TesselatorMesh.h in Headers */,
 				C2DA96321B46460F00DAF684 /* Rtt_LuaLibGraphics.h in Headers */,
 				C2DA96381B46460F00DAF684 /* Rtt_LuaLibInAppStore.h in Headers */,
-				000CE79F12B73EE300D9B6A4 /* Rtt_LuaLibMedia.h in Headers */,
 				000CE7A112B73EE300D9B6A4 /* Rtt_LuaLibNative.h in Headers */,
 				F5C40DCA1CB68830004F7789 /* Rtt_ShapeAdapterMesh.h in Headers */,
 				000CE7A312B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.h in Headers */,
@@ -4540,21 +4435,16 @@
 				C2DA96171B46460F00DAF684 /* Rtt_Paint.h in Headers */,
 				C2DA96151B46460F00DAF684 /* Rtt_PaintAdapter.h in Headers */,
 				C2DA96621B46460F00DAF684 /* Rtt_ResourceHandle.h in Headers */,
-				000CE7CD12B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.h in Headers */,
-				000CE7CF12B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.h in Headers */,
 				C2DA963B1B46460F00DAF684 /* Rtt_PlatformAudioSessionManager.h in Headers */,
 				C2DA96431B46460F00DAF684 /* Rtt_PlatformBitmap.h in Headers */,
 				C2DA96191B46460F00DAF684 /* Rtt_PlatformBitmapTexture.h in Headers */,
 				000CE7D312B73EE300D9B6A4 /* Rtt_PlatformData.h in Headers */,
 				000CE7D512B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h in Headers */,
 				03D1C5661D70CCDA00DB02EE /* Rtt_ValueResult.h in Headers */,
-				000CE7D712B73EE300D9B6A4 /* Rtt_PlatformEventSound.h in Headers */,
 				002D74AA12FB438A006C7E9B /* Rtt_PlatformExitCallback.h in Headers */,
 				000CE7D912B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h in Headers */,
 				000CE7DB12B73EE300D9B6A4 /* Rtt_PlatformFont.h in Headers */,
-				000CE7DD12B73EE300D9B6A4 /* Rtt_PlatformImageProvider.h in Headers */,
 				00572B8E12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h in Headers */,
-				0797EB4D181F0BED00FA57B5 /* Rtt_PlatformMediaProviderBase.h in Headers */,
 				000CE7E312B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h in Headers */,
 				F5B5A7521B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */,
 				000CE7E512B73EE300D9B6A4 /* Rtt_PlatformNotifier.h in Headers */,
@@ -4562,9 +4452,7 @@
 				006DC6E013678AB5008DDB3D /* Rtt_PlatformReachability.h in Headers */,
 				000CE7E912B73EE300D9B6A4 /* Rtt_PlatformSurface.h in Headers */,
 				000CE7EB12B73EE300D9B6A4 /* Rtt_PlatformTimer.h in Headers */,
-				000CE7ED12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h in Headers */,
 				03D1C55E1D70CCB200DB02EE /* Rtt_PreferenceValue.h in Headers */,
-				C2DA96481B46460F00DAF684 /* Rtt_PlatformVideoProvider.h in Headers */,
 				C2DA96291B46460F00DAF684 /* Rtt_Real.h in Headers */,
 				C2DA965C1B46460F00DAF684 /* Rtt_RectObject.h in Headers */,
 				C2DA96531B46460F00DAF684 /* Rtt_RectPath.h in Headers */,
@@ -4760,7 +4648,6 @@
 				F5C40DC51CB68789004F7789 /* Rtt_TesselatorMesh.h in Headers */,
 				C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */,
 				C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */,
-				C229E0281B32221B00D87A7C /* Rtt_LuaLibMedia.h in Headers */,
 				C229E0291B32221B00D87A7C /* Rtt_LuaLibNative.h in Headers */,
 				F5C40DCB1CB68830004F7789 /* Rtt_ShapeAdapterMesh.h in Headers */,
 				C229E02A1B32221B00D87A7C /* Rtt_LuaLibOpenAL.h in Headers */,
@@ -4795,21 +4682,16 @@
 				C229E0491B32221B00D87A7C /* Rtt_OpenPath.h in Headers */,
 				C229E04A1B32221B00D87A7C /* Rtt_Paint.h in Headers */,
 				C229E04B1B32221B00D87A7C /* Rtt_PaintAdapter.h in Headers */,
-				C229E0511B32221B00D87A7C /* Rtt_PlatformAudioPlayer.h in Headers */,
-				C229E0521B32221B00D87A7C /* Rtt_PlatformAudioRecorder.h in Headers */,
 				C229E0531B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.h in Headers */,
 				C229E0541B32221B00D87A7C /* Rtt_PlatformBitmap.h in Headers */,
 				C229E0551B32221B00D87A7C /* Rtt_PlatformBitmapTexture.h in Headers */,
 				C229E0561B32221B00D87A7C /* Rtt_PlatformData.h in Headers */,
 				C229E0571B32221B00D87A7C /* Rtt_PlatformDisplayObject.h in Headers */,
-				C229E0581B32221B00D87A7C /* Rtt_PlatformEventSound.h in Headers */,
 				03D1C5651D70CCD900DB02EE /* Rtt_ValueResult.h in Headers */,
 				C229E0591B32221B00D87A7C /* Rtt_PlatformExitCallback.h in Headers */,
 				C229E05A1B32221B00D87A7C /* Rtt_PlatformFBConnect.h in Headers */,
 				C229E05B1B32221B00D87A7C /* Rtt_PlatformFont.h in Headers */,
-				C229E05C1B32221B00D87A7C /* Rtt_PlatformImageProvider.h in Headers */,
 				C229E05D1B32221B00D87A7C /* Rtt_PlatformInAppStore.h in Headers */,
-				C229E05E1B32221B00D87A7C /* Rtt_PlatformMediaProviderBase.h in Headers */,
 				C229E05F1B32221B00D87A7C /* Rtt_PlatformModalInteraction.h in Headers */,
 				C229E0601B32221B00D87A7C /* Rtt_PlatformNotifier.h in Headers */,
 				F5B5A7531B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */,
@@ -4817,8 +4699,6 @@
 				C229E0621B32221B00D87A7C /* Rtt_PlatformReachability.h in Headers */,
 				C229E0631B32221B00D87A7C /* Rtt_PlatformSurface.h in Headers */,
 				C229E0641B32221B00D87A7C /* Rtt_PlatformTimer.h in Headers */,
-				C229E0651B32221B00D87A7C /* Rtt_PlatformVideoPlayer.h in Headers */,
-				C229E0661B32221B00D87A7C /* Rtt_PlatformVideoProvider.h in Headers */,
 				03D1C55D1D70CCB100DB02EE /* Rtt_PreferenceValue.h in Headers */,
 				C229E0681B32221B00D87A7C /* Rtt_Real.h in Headers */,
 				C229E0691B32221B00D87A7C /* Rtt_RectObject.h in Headers */,
@@ -5640,7 +5520,6 @@
 				000CE79A12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp in Sources */,
 				A432886A176A621200ACB6FF /* Rtt_LuaLibGraphics.cpp in Sources */,
 				00572B8B12D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp in Sources */,
-				000CE79E12B73EE300D9B6A4 /* Rtt_LuaLibMedia.cpp in Sources */,
 				000CE7A012B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp in Sources */,
 				000CE7A212B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp in Sources */,
 				000CE7AC12B73EE300D9B6A4 /* Rtt_LuaLibSQLite.cpp in Sources */,
@@ -5656,18 +5535,14 @@
 				A432886E176A621200ACB6FF /* Rtt_OpenPath.cpp in Sources */,
 				A4328870176A621200ACB6FF /* Rtt_Paint.cpp in Sources */,
 				A475032E1773A6840064ABA0 /* Rtt_PaintAdapter.cpp in Sources */,
-				000CE7CC12B73EE300D9B6A4 /* Rtt_PlatformAudioPlayer.cpp in Sources */,
-				000CE7CE12B73EE300D9B6A4 /* Rtt_PlatformAudioRecorder.cpp in Sources */,
 				006E5C4E13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.cpp in Sources */,
 				A4328872176A621200ACB6FF /* Rtt_PlatformBitmap.cpp in Sources */,
 				A4328874176A621200ACB6FF /* Rtt_PlatformBitmapTexture.cpp in Sources */,
 				000CE7D212B73EE300D9B6A4 /* Rtt_PlatformData.cpp in Sources */,
 				000CE7D412B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp in Sources */,
-				000CE7D612B73EE300D9B6A4 /* Rtt_PlatformEventSound.cpp in Sources */,
 				002D74AB12FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp in Sources */,
 				000CE7D812B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp in Sources */,
 				000CE7DA12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp in Sources */,
-				000CE7DC12B73EE300D9B6A4 /* Rtt_PlatformImageProvider.cpp in Sources */,
 				00572B8D12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp in Sources */,
 				03D1C5571D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C2E993431A6B2FEC00E99F46 /* Rtt_PlatformInputAxis.cpp in Sources */,
@@ -5680,8 +5555,6 @@
 				03D1C55C1D70CCAE00DB02EE /* Rtt_PreferenceValue.cpp in Sources */,
 				000CE7E812B73EE300D9B6A4 /* Rtt_PlatformSurface.cpp in Sources */,
 				000CE7EA12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp in Sources */,
-				000CE7EC12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp in Sources */,
-				0797EB57181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp in Sources */,
 				C2E993461A6B2FEC00E99F46 /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				C2E993471A6B2FEC00E99F46 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				A4328876176A621200ACB6FF /* Rtt_RectObject.cpp in Sources */,
@@ -5950,7 +5823,6 @@
 				00B73D9712B720CA0057F594 /* Rtt_MacDisplayObject.mm in Sources */,
 				002D72E212FB2C30006C7E9B /* Rtt_MacExitCallback.mm in Sources */,
 				00B73D9812B720CA0057F594 /* Rtt_MacFBConnect.mm in Sources */,
-				00B73D9A12B720CA0057F594 /* Rtt_MacImageProvider.mm in Sources */,
 				4C0F07B01B2901DC006FA0FB /* Rtt_MacKeyServices.mm in Sources */,
 				00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */,
 				00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */,
@@ -5959,9 +5831,6 @@
 				1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */,
 				00B73DA012B720CA0057F594 /* Rtt_MacTextBoxObject.mm in Sources */,
 				00B73DA112B720CA0057F594 /* Rtt_MacTextFieldObject.mm in Sources */,
-				A4BEDC9B14BE81320028BE25 /* Rtt_MacVideoObject.mm in Sources */,
-				00B73DA312B720CA0057F594 /* Rtt_MacVideoPlayer.mm in Sources */,
-				0797EB5D181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm in Sources */,
 				C21733781B20F21A00F79CB8 /* Rtt_OSXAppPackager.mm in Sources */,
 				000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */,
 				000CEA1212B7467E00D9B6A4 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
@@ -6000,14 +5869,11 @@
 				A4FBC55C1A2D574D004D9A01 /* CoronaViewPrivate.mm in Sources */,
 				A4FBC55B1A2D5746004D9A01 /* CoronaWindowController.mm in Sources */,
 				A4FBC55E1A2D57D2004D9A01 /* GLView.mm in Sources */,
-				A4FBC54C1A2D5734004D9A01 /* Rtt_AppleAudioPlayer.cpp in Sources */,
-				C2FCD3E21B38CF7800EF7B02 /* Rtt_AppleAudioRecorder.mm in Sources */,
 				A4FBC54E1A2D5734004D9A01 /* Rtt_AppleBitmap.mm in Sources */,
 				A4FBC54F1A2D5734004D9A01 /* Rtt_AppleCallback.mm in Sources */,
 				A4FBC5511A2D5734004D9A01 /* Rtt_AppleCrypto.cpp in Sources */,
 				A4FBC5521A2D5734004D9A01 /* Rtt_AppleData.mm in Sources */,
 				A4FBC5531A2D5734004D9A01 /* Rtt_AppleDictionaryWrapper.mm in Sources */,
-				A4FBC5541A2D5734004D9A01 /* Rtt_AppleEventSound.cpp in Sources */,
 				A4FBC5551A2D5734004D9A01 /* Rtt_ApplePlatform.mm in Sources */,
 				A4FBC5561A2D5734004D9A01 /* Rtt_AppleReachability.mm in Sources */,
 				A4FBC5571A2D5734004D9A01 /* Rtt_AppleTextAlignment.mm in Sources */,
@@ -6115,7 +5981,6 @@
 				C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */,
 				C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */,
 				C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */,
-				C229E1021B32221B00D87A7C /* Rtt_LuaLibMedia.cpp in Sources */,
 				C229E1031B32221B00D87A7C /* Rtt_LuaLibNative.cpp in Sources */,
 				C229E1041B32221B00D87A7C /* Rtt_LuaLibOpenAL.cpp in Sources */,
 				C229E1061B32221B00D87A7C /* Rtt_LuaLibSQLite.cpp in Sources */,
@@ -6131,18 +5996,14 @@
 				C229E1141B32221B00D87A7C /* Rtt_OpenPath.cpp in Sources */,
 				C229E1151B32221B00D87A7C /* Rtt_Paint.cpp in Sources */,
 				C229E1161B32221B00D87A7C /* Rtt_PaintAdapter.cpp in Sources */,
-				C229E11C1B32221B00D87A7C /* Rtt_PlatformAudioPlayer.cpp in Sources */,
-				C229E11D1B32221B00D87A7C /* Rtt_PlatformAudioRecorder.cpp in Sources */,
 				C229E11E1B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.cpp in Sources */,
 				C229E11F1B32221B00D87A7C /* Rtt_PlatformBitmap.cpp in Sources */,
 				C229E1201B32221B00D87A7C /* Rtt_PlatformBitmapTexture.cpp in Sources */,
 				C229E1211B32221B00D87A7C /* Rtt_PlatformData.cpp in Sources */,
 				C229E1221B32221B00D87A7C /* Rtt_PlatformDisplayObject.cpp in Sources */,
-				C229E1231B32221B00D87A7C /* Rtt_PlatformEventSound.cpp in Sources */,
 				C229E1241B32221B00D87A7C /* Rtt_PlatformExitCallback.cpp in Sources */,
 				C229E1251B32221B00D87A7C /* Rtt_PlatformFBConnect.cpp in Sources */,
 				C229E1261B32221B00D87A7C /* Rtt_PlatformFont.cpp in Sources */,
-				C229E1271B32221B00D87A7C /* Rtt_PlatformImageProvider.cpp in Sources */,
 				C229E1281B32221B00D87A7C /* Rtt_PlatformInAppStore.cpp in Sources */,
 				03D1C5581D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */,
@@ -6155,8 +6016,6 @@
 				03D1C55B1D70CCAE00DB02EE /* Rtt_PreferenceValue.cpp in Sources */,
 				C229E1311B32221B00D87A7C /* Rtt_PlatformSurface.cpp in Sources */,
 				C229E1321B32221B00D87A7C /* Rtt_PlatformTimer.cpp in Sources */,
-				C229E1331B32221B00D87A7C /* Rtt_PlatformVideoPlayer.cpp in Sources */,
-				C229E1341B32221B00D87A7C /* Rtt_PlatformVideoProvider.cpp in Sources */,
 				C229E1361B32221B00D87A7C /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				C229E1371B32221B00D87A7C /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				C229E1381B32221B00D87A7C /* Rtt_RectObject.cpp in Sources */,
@@ -6332,21 +6191,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				F57AE2071F051610000A4245 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
-				C2D4954B1B3E04320049DA4E /* Rtt_MacImageProvider.mm in Sources */,
 				C2FBA8321B053642002BFE73 /* CoronaLuaObjC.mm in Sources */,
 				C2E992F61A6B1A3100E99F46 /* CoronaViewPrivate.mm in Sources */,
 				C2F8377C1AC2105A00D33D6E /* CoronaViewRuntimeDelegate.mm in Sources */,
 				C2E992F71A6B1A3100E99F46 /* CoronaWindowController.mm in Sources */,
 				C2E992F81A6B1A3100E99F46 /* GLView.mm in Sources */,
-				C2E992F91A6B1A3100E99F46 /* Rtt_AppleAudioPlayer.cpp in Sources */,
 				F57D17681BE25B2800AABAC1 /* Rtt_AppleInputDeviceManager.mm in Sources */,
-				C2E992FA1A6B1A3100E99F46 /* Rtt_AppleAudioRecorder.mm in Sources */,
 				C2E992FB1A6B1A3100E99F46 /* Rtt_AppleBitmap.mm in Sources */,
 				C2E992FC1A6B1A3100E99F46 /* Rtt_AppleCallback.mm in Sources */,
 				C2E992FE1A6B1A3100E99F46 /* Rtt_AppleCrypto.cpp in Sources */,
 				C2E992FF1A6B1A3100E99F46 /* Rtt_AppleData.mm in Sources */,
 				C2E993001A6B1A3100E99F46 /* Rtt_AppleDictionaryWrapper.mm in Sources */,
-				C2E993011A6B1A3100E99F46 /* Rtt_AppleEventSound.cpp in Sources */,
 				C2E993021A6B1A3100E99F46 /* Rtt_ApplePlatform.mm in Sources */,
 				C2E993031A6B1A3100E99F46 /* Rtt_AppleReachability.mm in Sources */,
 				C2E993041A6B1A3100E99F46 /* Rtt_AppleTextAlignment.mm in Sources */,
@@ -6367,11 +6222,8 @@
 				C2A377751B34C8D800BB5B88 /* Rtt_MacTextBoxObject.mm in Sources */,
 				F57AE2051F051610000A4245 /* Rtt_AppleInAppStore.mm in Sources */,
 				C2A377701B34BA3D00BB5B88 /* Rtt_MacTextFieldObject.mm in Sources */,
-				C2A3777D1B34D3A000BB5B88 /* Rtt_MacVideoObject.mm in Sources */,
 				F57D17771BE2713B00AABAC1 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
-				C2A3777E1B34D3A000BB5B88 /* Rtt_MacVideoPlayer.mm in Sources */,
 				F57D17721BE25E1200AABAC1 /* Rtt_AppleInputDevice.mm in Sources */,
-				C2A3777F1B34D3A000BB5B88 /* Rtt_MacVideoProvider.mm in Sources */,
 				C2E9930B1A6B1A3100E99F46 /* Rtt_MacViewCallback.mm in Sources */,
 				C2E9930C1A6B1A3100E99F46 /* Rtt_MacViewSurface.mm in Sources */,
 				F57AE2061F051610000A4245 /* Rtt_AppleInAppStoreApple.mm in Sources */,
@@ -6379,8 +6231,6 @@
 				C2E9934F1A6B335D00E99F46 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
 				C2E993531A6B3D3900E99F46 /* Rtt_PlatformExitCallback.cpp in Sources */,
 				C2E993501A6B338900E99F46 /* Rtt_PlatformObjectWrapper.cpp in Sources */,
-				C2A3777B1B34D3A000BB5B88 /* Rtt_PlatformVideoPlayer.cpp in Sources */,
-				C2A3777C1B34D3A000BB5B88 /* Rtt_PlatformVideoProvider.cpp in Sources */,
 				C2D3DA5A1B179C2400137331 /* Rtt_ProjectSettings.cpp in Sources */,
 				C2D3DA5E1B179C2400137331 /* Rtt_ReadOnlyProjectSettings.cpp in Sources */,
 				C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */,

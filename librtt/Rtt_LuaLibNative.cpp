@@ -267,43 +267,6 @@ newTextBox( lua_State *L )
 	return result;
 }
 
-// native.newVideo( left, top, width, height )
-// IMPORTANT NOTE: native.newVideo is overridden in init.lua to do extra things to handle application suspend/resume correctly.
-// The overridden init.lua version calls into this version and then does additional things like saving the video handle in a weak list.
-static int
-newVideo( lua_State *L )
-{
-	int result = 0;
-
-	Runtime& runtime = * LuaContext::GetRuntime( L );
-	const MPlatform& platform = runtime.Platform();
-
-	Real x = luaL_toreal( L, 1 );
-	Real y = luaL_toreal( L, 2 );
-	Real w = luaL_toreal( L, 3 );
-	Real h = luaL_toreal( L, 4 );
-
-	if ( w > 0 && h > 0 )
-	{
-		Rect bounds;
-		Display& display = runtime.GetDisplay();
-		bounds.Initialize( x, y, w, h );
-
-		PlatformDisplayObject *t = platform.CreateNativeVideo( bounds );
-
-		if ( t )
-		{
-			t->Preinitialize( display );
-			t->SetHandle( & platform.GetAllocator(), runtime.VMContext().LuaState() );
-
-			result = LuaLibDisplay::AssignParentAndPushResult( L, display, t, NULL );
-			t->Initialize();
-		}
-	}
-
-	return result;
-}
-
 // native.requestExit()
 static int
 requestExitApplication( lua_State *L )
@@ -607,7 +570,6 @@ LuaLibNative::Initialize( lua_State *L )
 		{ "setActivityIndicator", setActivityIndicator },
 		{ "newTextBox", newTextBox },
 		{ "newTextField", newTextField },
-		{ "newVideo", newVideo },
 		{ "requestExit", requestExitApplication },
 		{ "newFont", newFont },
 		{ "getFontNames", getFontNames },

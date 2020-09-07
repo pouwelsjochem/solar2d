@@ -72,31 +72,6 @@ IPhoneAudioSessionManager::GetAudioSessionActive() const
 	return (bool)[[Rtt_IPhoneAudioSessionManagerImplementation sharedManager] audioSessionActive];
 }
 
-void
-IPhoneAudioSessionManager::SetImplicitRecordingModeIfNecessary()
-{
-	[[Rtt_IPhoneAudioSessionManagerImplementation sharedManager] setImplicitRecordingModeIfNecessary];
-}
-
-void
-IPhoneAudioSessionManager::RestoreAudioSessionCategoryIfNecessary()
-{
-	[[Rtt_IPhoneAudioSessionManagerImplementation sharedManager] restoreAudioSessionCategoryIfNecessary];
-}
-
-void
-IPhoneAudioSessionManager::PrepareAudioSystemForMoviePlayback()
-{
-	[[Rtt_IPhoneAudioSessionManagerImplementation sharedManager] prepareAudioSystemForMoviePlayback];
-}
-
-void
-IPhoneAudioSessionManager::RestoreAudioSystemFromMoviePlayback()
-{
-	[[Rtt_IPhoneAudioSessionManagerImplementation sharedManager] restoreAudioSystemFromMoviePlayback];
-}
-
-
 bool
 IPhoneAudioSessionManager::SupportsBackgroundAudio() const
 {

@@ -19,10 +19,7 @@
 namespace Rtt
 {
 
-class IPhoneImageProvider;
-class IPhoneVideoProvider;
 class AppleStoreProvider;
-class IPhoneVideoPlayer;
 
 // ----------------------------------------------------------------------------
 
@@ -40,9 +37,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual ~IPhonePlatform();
 
 	public:
-		virtual PlatformVideoPlayer* GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const;
-		virtual PlatformImageProvider* GetImageProvider( const ResourceHandle<lua_State> & handle ) const;
-		virtual PlatformVideoProvider* GetVideoProvider( const ResourceHandle<lua_State> & handle ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
 		virtual void SetActivityIndicator( bool visible ) const;
@@ -50,8 +44,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
-
-		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 	public:
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const;
@@ -65,9 +57,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
 
 	private:
-		mutable IPhoneVideoPlayer *fVideoPlayer;
-		mutable IPhoneImageProvider *fImageProvider;
-		mutable IPhoneVideoProvider *fVideoProvider;
 		mutable AppleStoreProvider *fInAppStoreProvider;
 		UIView *fActivityView;
 		id fPopupControllerDelegate;

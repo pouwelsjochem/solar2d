@@ -114,8 +114,6 @@
 		000DCBCE12B05F3E00042A5E /* Rtt_LuaGCInhibitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAF512B05F3E00042A5E /* Rtt_LuaGCInhibitor.h */; };
 		000DCBCF12B05F3E00042A5E /* Rtt_LuaLibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAF612B05F3E00042A5E /* Rtt_LuaLibCrypto.cpp */; };
 		000DCBD012B05F3E00042A5E /* Rtt_LuaLibCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAF712B05F3E00042A5E /* Rtt_LuaLibCrypto.h */; };
-		000DCBD712B05F3E00042A5E /* Rtt_LuaLibMedia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAFE12B05F3E00042A5E /* Rtt_LuaLibMedia.cpp */; };
-		000DCBD812B05F3E00042A5E /* Rtt_LuaLibMedia.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAFF12B05F3E00042A5E /* Rtt_LuaLibMedia.h */; };
 		000DCBD912B05F3E00042A5E /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB0012B05F3E00042A5E /* Rtt_LuaLibNative.cpp */; };
 		000DCBDA12B05F3E00042A5E /* Rtt_LuaLibNative.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB0112B05F3E00042A5E /* Rtt_LuaLibNative.h */; };
 		000DCBDB12B05F3E00042A5E /* Rtt_LuaLibOpenAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB0212B05F3E00042A5E /* Rtt_LuaLibOpenAL.cpp */; };
@@ -144,22 +142,14 @@
 		000DCBFC12B05F3E00042A5E /* Rtt_MPlatform.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB2312B05F3E00042A5E /* Rtt_MPlatform.h */; };
 		000DCBFD12B05F3E00042A5E /* Rtt_MPlatformDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB2412B05F3E00042A5E /* Rtt_MPlatformDevice.h */; };
 		000DCBFE12B05F3E00042A5E /* Rtt_MReloadableResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB2512B05F3E00042A5E /* Rtt_MReloadableResource.h */; };
-		000DCC0512B05F3E00042A5E /* Rtt_PlatformAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB2C12B05F3E00042A5E /* Rtt_PlatformAudioPlayer.cpp */; };
-		000DCC0612B05F3E00042A5E /* Rtt_PlatformAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB2D12B05F3E00042A5E /* Rtt_PlatformAudioPlayer.h */; };
-		000DCC0712B05F3E00042A5E /* Rtt_PlatformAudioRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB2E12B05F3E00042A5E /* Rtt_PlatformAudioRecorder.cpp */; };
-		000DCC0812B05F3E00042A5E /* Rtt_PlatformAudioRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB2F12B05F3E00042A5E /* Rtt_PlatformAudioRecorder.h */; };
 		000DCC0B12B05F3E00042A5E /* Rtt_PlatformData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3212B05F3E00042A5E /* Rtt_PlatformData.cpp */; };
 		000DCC0C12B05F3E00042A5E /* Rtt_PlatformData.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3312B05F3E00042A5E /* Rtt_PlatformData.h */; };
 		000DCC0D12B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3412B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp */; };
 		000DCC0E12B05F3E00042A5E /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */; };
-		000DCC0F12B05F3E00042A5E /* Rtt_PlatformEventSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3612B05F3E00042A5E /* Rtt_PlatformEventSound.cpp */; };
-		000DCC1012B05F3E00042A5E /* Rtt_PlatformEventSound.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3712B05F3E00042A5E /* Rtt_PlatformEventSound.h */; };
 		000DCC1112B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */; };
 		000DCC1212B05F3E00042A5E /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */; };
 		000DCC1312B05F3E00042A5E /* Rtt_PlatformFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3A12B05F3E00042A5E /* Rtt_PlatformFont.cpp */; };
 		000DCC1412B05F3E00042A5E /* Rtt_PlatformFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3B12B05F3E00042A5E /* Rtt_PlatformFont.h */; };
-		000DCC1512B05F3E00042A5E /* Rtt_PlatformImageProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3C12B05F3E00042A5E /* Rtt_PlatformImageProvider.cpp */; };
-		000DCC1612B05F3E00042A5E /* Rtt_PlatformImageProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3D12B05F3E00042A5E /* Rtt_PlatformImageProvider.h */; };
 		000DCC1B12B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4212B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp */; };
 		000DCC1C12B05F3E00042A5E /* Rtt_PlatformModalInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4312B05F3E00042A5E /* Rtt_PlatformModalInteraction.h */; };
 		000DCC1D12B05F3E00042A5E /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4412B05F3E00042A5E /* Rtt_PlatformNotifier.cpp */; };
@@ -170,8 +160,6 @@
 		000DCC2212B05F3E00042A5E /* Rtt_PlatformSurface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4912B05F3E00042A5E /* Rtt_PlatformSurface.h */; };
 		000DCC2312B05F3E00042A5E /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4A12B05F3E00042A5E /* Rtt_PlatformTimer.cpp */; };
 		000DCC2412B05F3E00042A5E /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4B12B05F3E00042A5E /* Rtt_PlatformTimer.h */; };
-		000DCC2512B05F3E00042A5E /* Rtt_PlatformVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4C12B05F3E00042A5E /* Rtt_PlatformVideoPlayer.cpp */; };
-		000DCC2612B05F3E00042A5E /* Rtt_PlatformVideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4D12B05F3E00042A5E /* Rtt_PlatformVideoPlayer.h */; };
 		000DCC2B12B05F3E00042A5E /* Rtt_RenderingStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB5212B05F3E00042A5E /* Rtt_RenderingStream.cpp */; };
 		000DCC2C12B05F3E00042A5E /* Rtt_RenderingStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB5312B05F3E00042A5E /* Rtt_RenderingStream.h */; };
 		000DCC2D12B05F3E00042A5E /* Rtt_Resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB5412B05F3E00042A5E /* Rtt_Resource.cpp */; };
@@ -293,9 +281,6 @@
 		07912E3B17A1C86A001ABDE0 /* kernel_filter_iris_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3717A1C856001ABDE0 /* kernel_filter_iris_gl.lua */; };
 		07912E3C17A1C86A001ABDE0 /* kernel_generator_linearGradient_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3817A1C856001ABDE0 /* kernel_generator_linearGradient_gl.lua */; };
 		07912E3D17A1C86A001ABDE0 /* kernel_generator_random_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3917A1C856001ABDE0 /* kernel_generator_random_gl.lua */; };
-		0797EB6B181F0F5300FA57B5 /* Rtt_PlatformMediaProviderBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 0797EB6A181F0F5300FA57B5 /* Rtt_PlatformMediaProviderBase.h */; };
-		0797EB6E181F0F6A00FA57B5 /* Rtt_PlatformVideoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB6C181F0F6900FA57B5 /* Rtt_PlatformVideoProvider.cpp */; };
-		0797EB6F181F0F6A00FA57B5 /* Rtt_PlatformVideoProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0797EB6D181F0F6900FA57B5 /* Rtt_PlatformVideoProvider.h */; };
 		07EB77C6178DD3450089B3C5 /* Rtt_SurfaceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 07EB77C5178DD3450089B3C5 /* Rtt_SurfaceInfo.h */; };
 		50310F1217C819EA00293685 /* kernel_filter_crystallize_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50310F1117C819DE00293685 /* kernel_filter_crystallize_gl.lua */; };
 		5038C05E17B4686A003139F4 /* kernel_filter_crosshatch_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 5038C05D17B4684F003139F4 /* kernel_filter_crosshatch_gl.lua */; };
@@ -800,8 +785,6 @@
 		000DCAF512B05F3E00042A5E /* Rtt_LuaGCInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaGCInhibitor.h; sourceTree = "<group>"; };
 		000DCAF612B05F3E00042A5E /* Rtt_LuaLibCrypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibCrypto.cpp; sourceTree = "<group>"; };
 		000DCAF712B05F3E00042A5E /* Rtt_LuaLibCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibCrypto.h; sourceTree = "<group>"; };
-		000DCAFE12B05F3E00042A5E /* Rtt_LuaLibMedia.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibMedia.cpp; sourceTree = "<group>"; };
-		000DCAFF12B05F3E00042A5E /* Rtt_LuaLibMedia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibMedia.h; sourceTree = "<group>"; };
 		000DCB0012B05F3E00042A5E /* Rtt_LuaLibNative.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibNative.cpp; sourceTree = "<group>"; };
 		000DCB0112B05F3E00042A5E /* Rtt_LuaLibNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibNative.h; sourceTree = "<group>"; };
 		000DCB0212B05F3E00042A5E /* Rtt_LuaLibOpenAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibOpenAL.cpp; sourceTree = "<group>"; };
@@ -830,22 +813,14 @@
 		000DCB2312B05F3E00042A5E /* Rtt_MPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MPlatform.h; sourceTree = "<group>"; };
 		000DCB2412B05F3E00042A5E /* Rtt_MPlatformDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MPlatformDevice.h; sourceTree = "<group>"; };
 		000DCB2512B05F3E00042A5E /* Rtt_MReloadableResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MReloadableResource.h; sourceTree = "<group>"; };
-		000DCB2C12B05F3E00042A5E /* Rtt_PlatformAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformAudioPlayer.cpp; sourceTree = "<group>"; };
-		000DCB2D12B05F3E00042A5E /* Rtt_PlatformAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformAudioPlayer.h; sourceTree = "<group>"; };
-		000DCB2E12B05F3E00042A5E /* Rtt_PlatformAudioRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformAudioRecorder.cpp; sourceTree = "<group>"; };
-		000DCB2F12B05F3E00042A5E /* Rtt_PlatformAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformAudioRecorder.h; sourceTree = "<group>"; };
 		000DCB3212B05F3E00042A5E /* Rtt_PlatformData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformData.cpp; sourceTree = "<group>"; };
 		000DCB3312B05F3E00042A5E /* Rtt_PlatformData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformData.h; sourceTree = "<group>"; };
 		000DCB3412B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformDisplayObject.cpp; sourceTree = "<group>"; };
 		000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
-		000DCB3612B05F3E00042A5E /* Rtt_PlatformEventSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformEventSound.cpp; sourceTree = "<group>"; };
-		000DCB3712B05F3E00042A5E /* Rtt_PlatformEventSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformEventSound.h; sourceTree = "<group>"; };
 		000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFBConnect.cpp; sourceTree = "<group>"; };
 		000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
 		000DCB3A12B05F3E00042A5E /* Rtt_PlatformFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFont.cpp; sourceTree = "<group>"; };
 		000DCB3B12B05F3E00042A5E /* Rtt_PlatformFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFont.h; sourceTree = "<group>"; };
-		000DCB3C12B05F3E00042A5E /* Rtt_PlatformImageProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformImageProvider.cpp; sourceTree = "<group>"; };
-		000DCB3D12B05F3E00042A5E /* Rtt_PlatformImageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformImageProvider.h; sourceTree = "<group>"; };
 		000DCB3E12B05F3E00042A5E /* Rtt_PlatformListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformListener.cpp; sourceTree = "<group>"; };
 		000DCB3F12B05F3E00042A5E /* Rtt_PlatformListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformListener.h; sourceTree = "<group>"; };
 		000DCB4212B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformModalInteraction.cpp; sourceTree = "<group>"; };
@@ -858,8 +833,6 @@
 		000DCB4912B05F3E00042A5E /* Rtt_PlatformSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformSurface.h; sourceTree = "<group>"; };
 		000DCB4A12B05F3E00042A5E /* Rtt_PlatformTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformTimer.cpp; sourceTree = "<group>"; };
 		000DCB4B12B05F3E00042A5E /* Rtt_PlatformTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformTimer.h; sourceTree = "<group>"; };
-		000DCB4C12B05F3E00042A5E /* Rtt_PlatformVideoPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformVideoPlayer.cpp; sourceTree = "<group>"; };
-		000DCB4D12B05F3E00042A5E /* Rtt_PlatformVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformVideoPlayer.h; sourceTree = "<group>"; };
 		000DCB5212B05F3E00042A5E /* Rtt_RenderingStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RenderingStream.cpp; sourceTree = "<group>"; };
 		000DCB5312B05F3E00042A5E /* Rtt_RenderingStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RenderingStream.h; sourceTree = "<group>"; };
 		000DCB5412B05F3E00042A5E /* Rtt_Resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Resource.cpp; sourceTree = "<group>"; };
@@ -1015,9 +988,6 @@
 		07912E3717A1C856001ABDE0 /* kernel_filter_iris_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_iris_gl.lua; path = Display/Shader/kernel_filter_iris_gl.lua; sourceTree = "<group>"; };
 		07912E3817A1C856001ABDE0 /* kernel_generator_linearGradient_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_linearGradient_gl.lua; path = Display/Shader/kernel_generator_linearGradient_gl.lua; sourceTree = "<group>"; };
 		07912E3917A1C856001ABDE0 /* kernel_generator_random_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_random_gl.lua; path = Display/Shader/kernel_generator_random_gl.lua; sourceTree = "<group>"; };
-		0797EB6A181F0F5300FA57B5 /* Rtt_PlatformMediaProviderBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformMediaProviderBase.h; sourceTree = "<group>"; };
-		0797EB6C181F0F6900FA57B5 /* Rtt_PlatformVideoProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformVideoProvider.cpp; sourceTree = "<group>"; };
-		0797EB6D181F0F6900FA57B5 /* Rtt_PlatformVideoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformVideoProvider.h; sourceTree = "<group>"; };
 		07EB77C5178DD3450089B3C5 /* Rtt_SurfaceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SurfaceInfo.h; sourceTree = "<group>"; };
 		50310F1117C819DE00293685 /* kernel_filter_crystallize_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_crystallize_gl.lua; path = Display/Shader/kernel_filter_crystallize_gl.lua; sourceTree = "<group>"; };
 		5038C05D17B4684F003139F4 /* kernel_filter_crosshatch_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_crosshatch_gl.lua; path = Display/Shader/kernel_filter_crosshatch_gl.lua; sourceTree = "<group>"; };
@@ -1538,8 +1508,6 @@
 				000DCAF712B05F3E00042A5E /* Rtt_LuaLibCrypto.h */,
 				0044F1D812CAB806006EB396 /* Rtt_LuaLibInAppStore.cpp */,
 				0044F1D712CAB806006EB396 /* Rtt_LuaLibInAppStore.h */,
-				000DCAFE12B05F3E00042A5E /* Rtt_LuaLibMedia.cpp */,
-				000DCAFF12B05F3E00042A5E /* Rtt_LuaLibMedia.h */,
 				000DCB0012B05F3E00042A5E /* Rtt_LuaLibNative.cpp */,
 				000DCB0112B05F3E00042A5E /* Rtt_LuaLibNative.h */,
 				000DCB0212B05F3E00042A5E /* Rtt_LuaLibOpenAL.cpp */,
@@ -1574,29 +1542,20 @@
 				000DCB2512B05F3E00042A5E /* Rtt_MReloadableResource.h */,
 				077EEE2D16CD9F7B009024CA /* Rtt_MRuntimeDelegate.h */,
 				50E06F38196398C4003451E8 /* Rtt_MUpdatable.h */,
-				000DCB2C12B05F3E00042A5E /* Rtt_PlatformAudioPlayer.cpp */,
-				000DCB2D12B05F3E00042A5E /* Rtt_PlatformAudioPlayer.h */,
-				000DCB2E12B05F3E00042A5E /* Rtt_PlatformAudioRecorder.cpp */,
-				000DCB2F12B05F3E00042A5E /* Rtt_PlatformAudioRecorder.h */,
 				00622ECF13AA927400886E28 /* Rtt_PlatformAudioSessionManager.cpp */,
 				00622ED013AA927500886E28 /* Rtt_PlatformAudioSessionManager.h */,
 				000DCB3212B05F3E00042A5E /* Rtt_PlatformData.cpp */,
 				000DCB3312B05F3E00042A5E /* Rtt_PlatformData.h */,
 				000DCB3412B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp */,
 				000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */,
-				000DCB3612B05F3E00042A5E /* Rtt_PlatformEventSound.cpp */,
-				000DCB3712B05F3E00042A5E /* Rtt_PlatformEventSound.h */,
 				000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */,
 				000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */,
 				000DCB3A12B05F3E00042A5E /* Rtt_PlatformFont.cpp */,
 				000DCB3B12B05F3E00042A5E /* Rtt_PlatformFont.h */,
-				000DCB3C12B05F3E00042A5E /* Rtt_PlatformImageProvider.cpp */,
-				000DCB3D12B05F3E00042A5E /* Rtt_PlatformImageProvider.h */,
 				0044F0DF12CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp */,
 				0044F0DE12CA9D74006EB396 /* Rtt_PlatformInAppStore.h */,
 				000DCB3E12B05F3E00042A5E /* Rtt_PlatformListener.cpp */,
 				000DCB3F12B05F3E00042A5E /* Rtt_PlatformListener.h */,
-				0797EB6A181F0F5300FA57B5 /* Rtt_PlatformMediaProviderBase.h */,
 				000DCB4212B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp */,
 				000DCB4312B05F3E00042A5E /* Rtt_PlatformModalInteraction.h */,
 				000DCB4412B05F3E00042A5E /* Rtt_PlatformNotifier.cpp */,
@@ -1609,10 +1568,6 @@
 				000DCB4912B05F3E00042A5E /* Rtt_PlatformSurface.h */,
 				000DCB4A12B05F3E00042A5E /* Rtt_PlatformTimer.cpp */,
 				000DCB4B12B05F3E00042A5E /* Rtt_PlatformTimer.h */,
-				000DCB4C12B05F3E00042A5E /* Rtt_PlatformVideoPlayer.cpp */,
-				000DCB4D12B05F3E00042A5E /* Rtt_PlatformVideoPlayer.h */,
-				0797EB6C181F0F6900FA57B5 /* Rtt_PlatformVideoProvider.cpp */,
-				0797EB6D181F0F6900FA57B5 /* Rtt_PlatformVideoProvider.h */,
 				03D1C5241D70C15E00DB02EE /* Rtt_Preference.cpp */,
 				03D1C5251D70C15E00DB02EE /* Rtt_Preference.h */,
 				03D1C5261D70C15E00DB02EE /* Rtt_PreferenceCollection.cpp */,
@@ -2377,7 +2332,6 @@
 				000DCBCD12B05F3E00042A5E /* Rtt_LuaFile.h in Headers */,
 				000DCBCE12B05F3E00042A5E /* Rtt_LuaGCInhibitor.h in Headers */,
 				000DCBD012B05F3E00042A5E /* Rtt_LuaLibCrypto.h in Headers */,
-				000DCBD812B05F3E00042A5E /* Rtt_LuaLibMedia.h in Headers */,
 				000DCBDA12B05F3E00042A5E /* Rtt_LuaLibNative.h in Headers */,
 				000DCBDC12B05F3E00042A5E /* Rtt_LuaLibOpenAL.h in Headers */,
 				000DCBE212B05F3E00042A5E /* Rtt_LuaLibSocket.h in Headers */,
@@ -2398,21 +2352,16 @@
 				000DCBFD12B05F3E00042A5E /* Rtt_MPlatformDevice.h in Headers */,
 				000DCBFE12B05F3E00042A5E /* Rtt_MReloadableResource.h in Headers */,
 				03D1C51F1D70C12800DB02EE /* Rtt_OperationResult.h in Headers */,
-				000DCC0612B05F3E00042A5E /* Rtt_PlatformAudioPlayer.h in Headers */,
-				000DCC0812B05F3E00042A5E /* Rtt_PlatformAudioRecorder.h in Headers */,
 				000DCC0C12B05F3E00042A5E /* Rtt_PlatformData.h in Headers */,
 				000DCC0E12B05F3E00042A5E /* Rtt_PlatformDisplayObject.h in Headers */,
-				000DCC1012B05F3E00042A5E /* Rtt_PlatformEventSound.h in Headers */,
 				000DCC1212B05F3E00042A5E /* Rtt_PlatformFBConnect.h in Headers */,
 				000DCC1412B05F3E00042A5E /* Rtt_PlatformFont.h in Headers */,
-				000DCC1612B05F3E00042A5E /* Rtt_PlatformImageProvider.h in Headers */,
 				000DCC1C12B05F3E00042A5E /* Rtt_PlatformModalInteraction.h in Headers */,
 				000DCC1E12B05F3E00042A5E /* Rtt_PlatformNotifier.h in Headers */,
 				000DCC2012B05F3E00042A5E /* Rtt_PlatformOpenALPlayer.h in Headers */,
 				000DCC2212B05F3E00042A5E /* Rtt_PlatformSurface.h in Headers */,
 				03D1C5211D70C13300DB02EE /* Rtt_SharedStringPtr.h in Headers */,
 				000DCC2412B05F3E00042A5E /* Rtt_PlatformTimer.h in Headers */,
-				000DCC2612B05F3E00042A5E /* Rtt_PlatformVideoPlayer.h in Headers */,
 				000DCC2C12B05F3E00042A5E /* Rtt_RenderingStream.h in Headers */,
 				000DCC2E12B05F3E00042A5E /* Rtt_Resource.h in Headers */,
 				000DCC3012B05F3E00042A5E /* Rtt_Runtime.h in Headers */,
@@ -2552,8 +2501,6 @@
 				0707FA6517FCEECA00303473 /* Rtt_ShaderProxy.h in Headers */,
 				078BDB9E1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h in Headers */,
 				F5EEB6DD1B74027F00D34C41 /* Rtt_TextureResourceAdapter.h in Headers */,
-				0797EB6B181F0F5300FA57B5 /* Rtt_PlatformMediaProviderBase.h in Headers */,
-				0797EB6F181F0F6A00FA57B5 /* Rtt_PlatformVideoProvider.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2919,7 +2866,6 @@
 				000DCBC912B05F3E00042A5E /* Rtt_Lua.cpp in Sources */,
 				000DCBCB12B05F3E00042A5E /* Rtt_LuaContext.cpp in Sources */,
 				000DCBCF12B05F3E00042A5E /* Rtt_LuaLibCrypto.cpp in Sources */,
-				000DCBD712B05F3E00042A5E /* Rtt_LuaLibMedia.cpp in Sources */,
 				F5EEB6DC1B74027F00D34C41 /* Rtt_TextureResourceAdapter.cpp in Sources */,
 				000DCBD912B05F3E00042A5E /* Rtt_LuaLibNative.cpp in Sources */,
 				000DCBDB12B05F3E00042A5E /* Rtt_LuaLibOpenAL.cpp in Sources */,
@@ -2930,20 +2876,15 @@
 				000DCBED12B05F3E00042A5E /* Rtt_LuaResource.cpp in Sources */,
 				000DCBEF12B05F3E00042A5E /* Rtt_LuaTableIterator.cpp in Sources */,
 				000DCBF112B05F3E00042A5E /* Rtt_Matrix.cpp in Sources */,
-				000DCC0512B05F3E00042A5E /* Rtt_PlatformAudioPlayer.cpp in Sources */,
-				000DCC0712B05F3E00042A5E /* Rtt_PlatformAudioRecorder.cpp in Sources */,
 				000DCC0B12B05F3E00042A5E /* Rtt_PlatformData.cpp in Sources */,
 				000DCC0D12B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp in Sources */,
-				000DCC0F12B05F3E00042A5E /* Rtt_PlatformEventSound.cpp in Sources */,
 				000DCC1112B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp in Sources */,
 				000DCC1312B05F3E00042A5E /* Rtt_PlatformFont.cpp in Sources */,
-				000DCC1512B05F3E00042A5E /* Rtt_PlatformImageProvider.cpp in Sources */,
 				000DCC1B12B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp in Sources */,
 				000DCC1D12B05F3E00042A5E /* Rtt_PlatformNotifier.cpp in Sources */,
 				000DCC1F12B05F3E00042A5E /* Rtt_PlatformOpenALPlayer.cpp in Sources */,
 				000DCC2112B05F3E00042A5E /* Rtt_PlatformSurface.cpp in Sources */,
 				000DCC2312B05F3E00042A5E /* Rtt_PlatformTimer.cpp in Sources */,
-				000DCC2512B05F3E00042A5E /* Rtt_PlatformVideoPlayer.cpp in Sources */,
 				000DCC2B12B05F3E00042A5E /* Rtt_RenderingStream.cpp in Sources */,
 				000DCC2D12B05F3E00042A5E /* Rtt_Resource.cpp in Sources */,
 				000DCC2F12B05F3E00042A5E /* Rtt_Runtime.cpp in Sources */,
@@ -3073,7 +3014,6 @@
 				0397047417A3780900681DED /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				0707FA6417FCEECA00303473 /* Rtt_ShaderProxy.cpp in Sources */,
 				078BDB9D1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp in Sources */,
-				0797EB6E181F0F6A00FA57B5 /* Rtt_PlatformVideoProvider.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

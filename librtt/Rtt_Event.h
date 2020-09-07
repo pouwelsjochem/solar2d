@@ -192,24 +192,6 @@ class SystemEvent : public VirtualEvent
 		friend class Runtime;
 };
 
-// ----------------------------------------------------------------------------
-
-// Immediately broadcast to "Runtime"
-class InternalSystemEvent : public SystemEvent
-{
-	public:
-		typedef SystemEvent Super;
-
-	protected:
-		// System events should be bottlenecked via Runtime
-		InternalSystemEvent( Type type );
-
-	public:
-		virtual const char* Name() const;
-
-		friend class Runtime;
-};
-
 
 // ----------------------------------------------------------------------------
 
@@ -1089,42 +1071,6 @@ class PopupClosedEvent : public VirtualEvent
 	private:
 		const char *fPopupName;
 		bool fWasCanceled;
-};
-
-// ----------------------------------------------------------------------------
-
-// Local event
-class VideoEvent : public VirtualEvent
-{
-	public:
-		typedef VirtualEvent Super;
-		typedef VideoEvent Self;
-
-	public:
-		typedef enum Phase
-		{
-			kReady = 0,
-			kEnded,
-
-			kNumPhases
-		}
-		Phase;
-
-	public:
-		static const char kName[];
-
-	public:
-		static const char* StringForPhase( Phase type );
-
-	public:
-		VideoEvent( Phase phase );
-
-	public:
-		virtual const char* Name() const;
-		virtual int Push( lua_State *L ) const;
-
-	private:
-		Phase fPhase;
 };
 
 // ----------------------------------------------------------------------------

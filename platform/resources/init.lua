@@ -538,93 +538,6 @@ end
 --]]
 
 --------------------------------------------------------------------------------
--- Start: Special internal handlers for system events
---------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------
-	-- Start: native.VideoView section (Special internal handlers for system events)
-------------------------------------------------------------------------------------
--- VideoViews need to be paused on suspend and resumed on application resume.
--- Note: These variables are also used by native.newVideo override section.
-local _weakTableOfAllVideos = {}
-local _weakTableOfAllSuspendedVideos = {}
-do
-	local s_weakmetatable = {}
-	s_weakmetatable.__mode = "kv"
-	setmetatable(_weakTableOfAllVideos, s_weakmetatable)
-	setmetatable(_weakTableOfAllSuspendedVideos, s_weakmetatable)
-end
-
-local function ClearSuspendedVideoList()
-	-- Do not set the table to {} because I want to reuse the existing table.
-	-- Otherwise, I will lose the metatable that specifies the weak-property
-	for k, _ in pairs(_weakTableOfAllSuspendedVideos) do
-		_weakTableOfAllSuspendedVideos[k] = nil
-	end
-end
-
-local function SuspendAllPlayingVideos()
-	-- erase all entries from the suspended video list to clean it up from possible previous usage
-	ClearSuspendedVideoList()
-
-	for k, _ in pairs(_weakTableOfAllVideos) do
-		if not k.isPaused then
-			-- when object:removeSelf() is called, all we have is a plain Lua table
-			-- so check "pause" property to make sure it's a function
-			if type( k.pause ) == "function" then
-				_weakTableOfAllSuspendedVideos[k] = k
-				k:pause()
-			else
-				-- remove reference to native video object that no longer exists
-				_weakTableOfAllVideos[k] = nil
-			end
-		end
-	end
-end
-
-local function ResumeAllSuspendedVideos()
-	for  k, _ in pairs(_weakTableOfAllSuspendedVideos) do
-		if type( k.play ) == "function" then
-			k:play()
-		end
-	end
-
-	-- List is now stale. Clean up
-	ClearSuspendedVideoList()
-end
-------------------------------------------------------------------------------------
-	-- End: native.VideoView section (Special internal handlers for system events)
-------------------------------------------------------------------------------------
-
--- luacheck: push
--- luacheck: ignore 542 -- An empty if branch.
-
-local function onInternalSystemEvent( event )
-	if  "applicationExit" == event.type then
-		-- Create the unique file before exiting
-
-	elseif "applicationOpen" == event.type then
-
-	elseif "applicationSuspend" == event.type then
-		SuspendAllPlayingVideos()
-
-	elseif "applicationResume" == event.type then
-		ResumeAllSuspendedVideos()
-	else
-
-	end
-end
-
--- luacheck: pop
-
-Runtime:addEventListener( "_internalSystem", onInternalSystemEvent )
-
---------------------------------------------------------------------------------
--- End: Special internal handlers for system events
---------------------------------------------------------------------------------
-
-
---------------------------------------------------------------------------------
 -- Override/modify standard Lua functions
 --------------------------------------------------------------------------------
 
@@ -749,23 +662,12 @@ end
 --------------------------------------------------------------------------------
 
 _coronaPreservedLuaFunctions.native = _coronaPreservedLuaFunctions.native or {}
-_coronaPreservedLuaFunctions.native.newVideo = native.newVideo
 _coronaPreservedLuaFunctions.native.canShowPopup = native.canShowPopup
 _coronaPreservedLuaFunctions.native.showPopup = native.showPopup
 _coronaPreservedLuaFunctions.native.newTextField = native.newTextField
 _coronaPreservedLuaFunctions.native.newTextBox = native.newTextBox
 _coronaPreservedLuaFunctions.system = _coronaPreservedLuaFunctions.system or {}
 _coronaPreservedLuaFunctions.system.getInfo = system.getInfo
-
--- We need to hijack the newVideo view function so we can keep a list of all living videos
--- so that we can pause them on app suspend and resume them on app resume.
-native.newVideo = function (...)
-	local video = _coronaPreservedLuaFunctions.native.newVideo(...)
-	-- We don't really need both a key and value, but because these objects may be collected,
-	-- we can't really use array semantics because there will be holes.
-	_weakTableOfAllVideos[video] = video
-	return video
-end
 
 native._getProvider = function( category, name )
 	if not name then

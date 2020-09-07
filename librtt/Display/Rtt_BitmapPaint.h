@@ -42,8 +42,7 @@ class BitmapPaint : public Paint
 		// Load bitmap mask from file or reuse bitmap from image cache
 		static BitmapPaint* NewBitmap( Runtime& runtime, const FilePath& data, U32 flags, bool isMask );
 
-		// Wrap platform bitmap in Paint-compatible interface. Typically used
-		// in conjunction with PlatformImageProvider
+		// Wrap platform bitmap in Paint-compatible interface.
 		static BitmapPaint* NewBitmap( TextureFactory& factory, PlatformBitmap* bitmap, bool sharedTexture );
 
 		// Device text: create bitmap from string

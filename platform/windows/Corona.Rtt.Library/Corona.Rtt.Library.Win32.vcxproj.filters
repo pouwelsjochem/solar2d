@@ -168,9 +168,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibInAppStore.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibMedia.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibNative.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -204,12 +201,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_Matrix.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioPlayer.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioRecorder.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioSessionManager.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -217,9 +208,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformDisplayObject.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformEventSound.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformExitCallback.cpp">
@@ -231,7 +219,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformFont.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformImageProvider.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
@@ -250,12 +237,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformTimer.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoPlayer.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoProvider.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Rendering.cpp">
@@ -851,9 +832,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibInAppStore.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibMedia.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibNative.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -926,12 +904,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_MUpdatable.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioPlayer.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioRecorder.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioSessionManager.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -939,9 +911,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformDisplayObject.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformEventSound.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformExitCallback.h">
@@ -953,13 +922,9 @@
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformFont.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformImageProvider.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformMediaProviderBase.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformModalInteraction.h">
@@ -978,12 +943,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformTimer.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoPlayer.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoProvider.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Rendering.h">

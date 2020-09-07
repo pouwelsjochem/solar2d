@@ -359,7 +359,6 @@
 				F5261127250013F900671DFE /* Rtt_Uniform.cpp in Sources */,
 				F5261128250013F900671DFE /* Rtt_GeometryPool.cpp in Sources */,
 				F5261129250013F900671DFE /* Rtt_TextureVolatile.cpp in Sources */,
-				F526112A250013F900671DFE /* Rtt_VideoTexture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

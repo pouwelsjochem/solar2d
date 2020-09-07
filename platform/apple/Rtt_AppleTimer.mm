@@ -21,7 +21,6 @@
 #endif
 
 #ifdef Rtt_IPHONE_ENV
-	#include "Rtt_IPhoneConstants.h"
 	#import <UIKit/UIDevice.h>
 #endif
 

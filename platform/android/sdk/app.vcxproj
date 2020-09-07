@@ -192,10 +192,6 @@
   <ItemGroup>
     <JCompile Include="src\com\ansca\corona\ActivityIndicatorDialog.java" />
     <JCompile Include="src\com\ansca\corona\ApplicationContextProvider.java" />
-    <JCompile Include="src\com\ansca\corona\AudioRecorder.java" />
-    <JCompile Include="src\com\ansca\corona\CameraActivity.java" />
-    <JCompile Include="src\com\ansca\corona\CameraServices.java" />
-    <JCompile Include="src\com\ansca\corona\CameraView.java" />
     <JCompile Include="src\com\ansca\corona\Controller.java" />
     <JCompile Include="src\com\ansca\corona\CoronaActivity.java" />
     <JCompile Include="src\com\ansca\corona\CoronaApiHandler.java" />
@@ -219,7 +215,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaSplashScreenApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaVideoView.java" />
     <JCompile Include="src\com\ansca\corona\CoronaView.java" />
     <JCompile Include="src\com\ansca\corona\Crypto.java" />
     <JCompile Include="src\com\ansca\corona\events\AccelerometerTask.java" />
@@ -227,9 +222,6 @@
     <JCompile Include="src\com\ansca\corona\events\Event.java" />
     <JCompile Include="src\com\ansca\corona\events\EventManager.java" />
     <JCompile Include="src\com\ansca\corona\events\GyroscopeTask.java" />
-    <JCompile Include="src\com\ansca\corona\events\ImagePickerTask.java" />
-    <JCompile Include="src\com\ansca\corona\events\MediaEvent.java" />
-    <JCompile Include="src\com\ansca\corona\events\MediaPickerTask.java" />
     <JCompile Include="src\com\ansca\corona\events\NotificationReceivedTask.java" />
     <JCompile Include="src\com\ansca\corona\events\NotificationRegistrationTask.java" />
     <JCompile Include="src\com\ansca\corona\events\ResizeTask.java" />
@@ -237,8 +229,6 @@
     <JCompile Include="src\com\ansca\corona\events\SoundEndedTask.java" />
     <JCompile Include="src\com\ansca\corona\events\TextEditingTask.java" />
     <JCompile Include="src\com\ansca\corona\events\TextTask.java" />
-    <JCompile Include="src\com\ansca\corona\events\VideoEndedTask.java" />
-    <JCompile Include="src\com\ansca\corona\events\VideoPickerTask.java" />
     <JCompile Include="src\com\ansca\corona\FileContentProvider.java" />
     <JCompile Include="src\com\ansca\corona\graphics\FontServices.java" />
     <JCompile Include="src\com\ansca\corona\graphics\FontSettings.java" />
@@ -289,7 +279,6 @@
     <JCompile Include="src\com\ansca\corona\listeners\CoronaStoreApiListener.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaSystemApiListener.java" />
     <JCompile Include="src\com\ansca\corona\MailSettings.java" />
-    <JCompile Include="src\com\ansca\corona\MediaManager.java" />
     <JCompile Include="src\com\ansca\corona\MessageBasedTimer.java" />
     <JCompile Include="src\com\ansca\corona\NativeToJavaBridge.java" />
     <JCompile Include="src\com\ansca\corona\notifications\AlarmManagerBroadcastReceiver.java" />
@@ -324,7 +313,6 @@
     <JCompile Include="src\com\ansca\corona\storage\PackageServices.java" />
     <JCompile Include="src\com\ansca\corona\storage\PackageState.java" />
     <JCompile Include="src\com\ansca\corona\storage\ResourceServices.java" />
-    <JCompile Include="src\com\ansca\corona\storage\UniqueFileNameBuilder.java" />
     <JCompile Include="src\com\ansca\corona\storage\ZipFileEntryInputStream.java" />
     <JCompile Include="src\com\ansca\corona\storage\ZipResourceFile.java" />
     <JCompile Include="src\com\ansca\corona\SystemMonitor.java" />
@@ -335,7 +323,6 @@
     <JCompile Include="src\com\ansca\corona\version\android8\AndroidVersionSpecific.java" />
     <JCompile Include="src\com\ansca\corona\version\AndroidVersionSpecificFactory.java" />
     <JCompile Include="src\com\ansca\corona\version\IAndroidVersionSpecific.java" />
-    <JCompile Include="src\com\ansca\corona\VideoActivity.java" />
     <JCompile Include="src\com\ansca\corona\ViewManager.java" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

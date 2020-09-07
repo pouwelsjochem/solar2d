@@ -169,17 +169,13 @@ add_library( corona SHARED
 		jni/JavaToNativeShim.cpp
 		jni/NativeToJavaBridge.cpp
 
-		Rtt_AndroidAudioPlayer.cpp
 		Rtt_LuaLibOpenSLES.cpp
         Rtt_PlatformOpenSLESPlayer.cpp
-		Rtt_AndroidAudioRecorder.cpp
 		Rtt_AndroidBitmap.cpp
 		Rtt_AndroidCrypto.cpp
 		Rtt_AndroidData.cpp
 		Rtt_AndroidDisplayObject.cpp
-		Rtt_AndroidEventSound.cpp
 		Rtt_AndroidFont.cpp
-		Rtt_AndroidImageProvider.cpp
 		Rtt_AndroidInputDevice.cpp
 		Rtt_AndroidInputDeviceManager.cpp
 		Rtt_AndroidModalInteraction.cpp
@@ -193,9 +189,6 @@ add_library( corona SHARED
 		Rtt_AndroidSystemOpenEvent.cpp
 		Rtt_AndroidTimer.cpp
 		Rtt_AndroidTextFieldObject.cpp
-		Rtt_AndroidVideoObject.cpp
-		Rtt_AndroidVideoPlayer.cpp
-		Rtt_AndroidVideoProvider.cpp
 		AndroidBinaryReader.cpp
 		AndroidBinaryReadResult.cpp
 		AndroidDisplayObjectRegistry.cpp
@@ -383,7 +376,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_LuaLibCrypto.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibFacebook.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibInAppStore.cpp
-		${CORONA_ROOT}/librtt/Rtt_LuaLibMedia.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibNative.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibOpenAL.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibSQLite.cpp
@@ -395,16 +387,12 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_LuaTableIterator.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaUserdataProxy.cpp
 		${CORONA_ROOT}/librtt/Rtt_Matrix.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformAudioPlayer.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformAudioRecorder.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformAudioSessionManager.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformData.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformDisplayObject.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformEventSound.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformExitCallback.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformFBConnect.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformFont.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformImageProvider.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformModalInteraction.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformNotifier.cpp
@@ -412,8 +400,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_PlatformReachability.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformSurface.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformTimer.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformVideoPlayer.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformVideoProvider.cpp
 		${CORONA_ROOT}/librtt/Rtt_Preference.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceValue.cpp

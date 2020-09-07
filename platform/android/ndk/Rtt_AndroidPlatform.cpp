@@ -21,20 +21,13 @@
 #include "Rtt_Runtime.h"
 
 #include "Rtt_AndroidPlatform.h"
-#include "Rtt_AndroidAudioPlayer.h"
-#include "Rtt_AndroidAudioRecorder.h"
 #include "Rtt_AndroidBitmap.h"
 #include "Rtt_PlatformExitCallback.h"
-#include "Rtt_AndroidEventSound.h"
 #include "Rtt_AndroidFont.h"
-#include "Rtt_AndroidImageProvider.h"
 #include "Rtt_AndroidScreenSurface.h"
 #include "Rtt_AndroidStoreProvider.h"
 #include "Rtt_AndroidTimer.h"
 #include "Rtt_AndroidTextFieldObject.h"
-#include "Rtt_AndroidVideoObject.h"
-#include "Rtt_AndroidVideoPlayer.h"
-#include "Rtt_AndroidVideoProvider.h"
 
 #include "AndroidDisplayObjectRegistry.h"
 #include "AndroidGLView.h"
@@ -67,10 +60,6 @@ AndroidPlatform::AndroidPlatform(
   :	fAllocator( Rtt_AllocatorCreate() ),
 	fView( pView ),
 	fDevice( *fAllocator, ntjb ),
-	fAudioPlayer( NULL ),
-	fVideoPlayer( NULL ),
-	fImageProvider( NULL ),
-	fVideoProvider( NULL ),
 	fPackage( fAllocator ),
 	fDocumentsDir( fAllocator ),
 	fApplicationSupportDir( fAllocator ),
@@ -105,10 +94,6 @@ AndroidPlatform::AndroidPlatform(
 AndroidPlatform::~AndroidPlatform()
 {
 	Rtt_DELETE( fStoreProvider );
-	Rtt_DELETE( fVideoPlayer );
-	Rtt_DELETE( fAudioPlayer );
-	Rtt_DELETE( fImageProvider );
-	Rtt_DELETE( fVideoProvider );
 	Rtt_DELETE( fDisplayObjectRegistry );
 }
 
@@ -155,39 +140,6 @@ int
 AndroidPlatform::CanOpenURL( const char* url ) const
 {
 	return fNativeToJavaBridge->CanOpenUrl( url ) ? 1 : 0;
-}
-
-PlatformVideoPlayer*
-AndroidPlatform::GetVideoPlayer(const Rtt::ResourceHandle<lua_State> & handle) const
-{
-	if ( ! fVideoPlayer )
-	{
-		fVideoPlayer = Rtt_NEW( fAllocator, AndroidVideoPlayer( handle, *fAllocator, fNativeToJavaBridge ) );
-	}
-
-	return fVideoPlayer;
-}
-
-PlatformImageProvider*
-AndroidPlatform::GetImageProvider(const Rtt::ResourceHandle<lua_State> & handle) const
-{
-	if ( ! fImageProvider )
-	{
-		fImageProvider = Rtt_NEW( fAllocator, AndroidImageProvider(handle, fNativeToJavaBridge) );
-	}
-
-	return fImageProvider;	
-}
-
-PlatformVideoProvider*
-AndroidPlatform::GetVideoProvider(const Rtt::ResourceHandle<lua_State> & handle) const
-{
-	if ( ! fVideoProvider )
-	{
-		fVideoProvider = Rtt_NEW( fAllocator, AndroidVideoProvider(handle, fNativeToJavaBridge) );
-	}
-
-	return fVideoProvider;	
 }
 
 PlatformStoreProvider*
@@ -524,55 +476,12 @@ AndroidPlatform::GetFontMetrics( const PlatformFont& font ) const
 	return result;
 }
 
-PlatformEventSound * 
-AndroidPlatform::CreateEventSound( const ResourceHandle<lua_State> & handle, const char* filePath ) const
-{
-	AndroidEventSound *p = Rtt_NEW( fAllocator, AndroidEventSound( handle, *fAllocator, fNativeToJavaBridge ) );
-	p->Load( filePath );
-	return p;
-}
-
-void 
-AndroidPlatform::ReleaseEventSound( PlatformEventSound * soundID ) const
-{
-	Rtt_DELETE( soundID );
-}
-
-void 
-AndroidPlatform::PlayEventSound( PlatformEventSound * soundID ) const
-{
-	soundID->Play();
-}
-
-PlatformAudioPlayer * 
-AndroidPlatform::GetAudioPlayer( const ResourceHandle<lua_State> & handle ) const
-{
-    if ( ! fAudioPlayer )
-    {
-        fAudioPlayer = Rtt_NEW( fAllocator, AndroidAudioPlayer( handle, *fAllocator, fNativeToJavaBridge ) );
-    }
-
-    return fAudioPlayer;
-}
-
-PlatformAudioRecorder * 
-AndroidPlatform::CreateAudioRecorder(const Rtt::ResourceHandle<lua_State> & handle, const char * filePath) const
-{
-    return Rtt_NEW( fAllocator, AndroidAudioRecorder( handle, *fAllocator, filePath, fNativeToJavaBridge ) );
-}
-
 void AndroidPlatform::RaiseError( MPlatform::Error e, const char * reason ) const
 {
     const char kNull[] = "(null)";
 
     if ( ! reason ) { reason = kNull; }
     Rtt_TRACE( ( "MPlatformFactory error(%d): %s\n", e, kNull ) );
-}
-
-bool
-AndroidPlatform::SaveImageToPhotoLibrary(const char* filePath) const
-{
-	return fNativeToJavaBridge->SaveImageToPhotoLibrary(filePath);
 }
 
 bool 
@@ -587,12 +496,6 @@ AndroidPlatform::SaveBitmap( PlatformBitmap * bitmap, const char * filePath, flo
 	bitmap->SwapRGB();
 
 	return retflag;
-}
-
-bool
-AndroidPlatform::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
-{
-	return SaveBitmap( bitmap, NULL, 1.0f );
 }
 
 int
@@ -835,12 +738,6 @@ AndroidPlatform::SetKeyboardFocus( PlatformDisplayObject * textObject ) const
 	{
 		fNativeToJavaBridge->DisplayObjectSetFocus(AndroidDisplayObjectRegistry::INVALID_ID, false);
 	}
-}
-
-PlatformDisplayObject *
-AndroidPlatform::CreateNativeVideo( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), AndroidVideoObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge ) );
 }
 
 PlatformDisplayObject *

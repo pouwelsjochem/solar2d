@@ -67,7 +67,6 @@ class IPhonePlatformBase : public ApplePlatform
 
 		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
-		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		virtual Real GetStandardFontSize() const;
 		virtual S32 GetFontNames( lua_State *L, int index ) const;
@@ -78,11 +77,6 @@ class IPhonePlatformBase : public ApplePlatform
 
 #if Rtt_IPHONE_PLATFORM_STUB
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const;
-		virtual bool SaveImageToPhotoLibrary(const char* filePath) const;
-		virtual bool AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const;
-		virtual PlatformVideoPlayer* GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const;
-		virtual PlatformImageProvider* GetImageProvider( const ResourceHandle<lua_State> & handle ) const;
-		virtual PlatformVideoProvider* GetVideoProvider( const ResourceHandle<lua_State> & handle ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
 		virtual void SetActivityIndicator( bool visible ) const;

@@ -226,18 +226,14 @@
     <ClInclude Include="Interop\ValueChangedEventArgs.h" />
     <ClInclude Include="Interop\ValueResult.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Rtt\Rtt_WinAudioPlayer.h" />
-    <ClInclude Include="Rtt\Rtt_WinAudioRecorder.h" />
     <ClInclude Include="Rtt\Rtt_WinBitmap.h" />
     <ClInclude Include="Rtt\Rtt_WinCrypto.h" />
     <ClInclude Include="Rtt\Rtt_WinData.h" />
     <ClInclude Include="Rtt\Rtt_WinDevice.h" />
     <ClInclude Include="Rtt\Rtt_WinDisplayObject.h" />
-    <ClInclude Include="Rtt\Rtt_WinEventSound.h" />
     <ClInclude Include="Rtt\Rtt_WinExitCallback.h" />
     <ClInclude Include="Rtt\Rtt_WinFBConnect.h" />
     <ClInclude Include="Rtt\Rtt_WinFont.h" />
-    <ClInclude Include="Rtt\Rtt_WinImageProvider.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDevice.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDeviceManager.h" />
     <ClInclude Include="Rtt\Rtt_WinModalInteraction.h" />
@@ -246,13 +242,9 @@
     <ClInclude Include="Rtt\Rtt_WinScreenSurface.h" />
     <ClInclude Include="Rtt\Rtt_WinTextBoxObject.h" />
     <ClInclude Include="Rtt\Rtt_WinTimer.h" />
-    <ClInclude Include="Rtt\Rtt_WinVideoObject.h" />
-    <ClInclude Include="Rtt\Rtt_WinVideoPlayer.h" />
-    <ClInclude Include="Rtt\Rtt_WinVideoProvider.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WinFile.h" />
-    <ClInclude Include="WinSound.h" />
     <ClInclude Include="WinString.h" />
   </ItemGroup>
   <ItemGroup>
@@ -337,18 +329,14 @@
     <ClCompile Include="Interop\UI\WebBrowserNavigatingEventArgs.cpp" />
     <ClCompile Include="Interop\UI\WebBrowserNavigationFailedEventArgs.cpp" />
     <ClCompile Include="Interop\UI\Window.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinAudioPlayer.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinAudioRecorder.cpp" />
     <ClCompile Include="Rtt\Rtt_WinBitmap.cpp" />
     <ClCompile Include="Rtt\Rtt_WinCrypto.cpp" />
     <ClCompile Include="Rtt\Rtt_WinData.cpp" />
     <ClCompile Include="Rtt\Rtt_WinDevice.cpp" />
     <ClCompile Include="Rtt\Rtt_WinDisplayObject.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinEventSound.cpp" />
     <ClCompile Include="Rtt\Rtt_WinExitCallback.cpp" />
     <ClCompile Include="Rtt\Rtt_WinFBConnect.cpp" />
     <ClCompile Include="Rtt\Rtt_WinFont.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinImageProvider.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDevice.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDeviceManager.cpp" />
     <ClCompile Include="Rtt\Rtt_WinModalInteraction.cpp" />
@@ -357,9 +345,6 @@
     <ClCompile Include="Rtt\Rtt_WinScreenSurface.cpp" />
     <ClCompile Include="Rtt\Rtt_WinTextBoxObject.cpp" />
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinVideoObject.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinVideoPlayer.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinVideoProvider.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.App|Win32'">Create</PrecompiledHeader>
@@ -367,7 +352,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release.App|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WinFile.cpp" />
-    <ClCompile Include="WinSound.cpp" />
     <ClCompile Include="WinString.cpp" />
   </ItemGroup>
   <ItemGroup>

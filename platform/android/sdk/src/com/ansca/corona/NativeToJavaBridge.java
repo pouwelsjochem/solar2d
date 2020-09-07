@@ -51,7 +51,6 @@ import android.util.Log;
 
 import dalvik.system.DexClassLoader;
 
-import com.ansca.corona.AudioRecorder.AudioByteBufferHolder;
 import com.ansca.corona.listeners.CoronaSplashScreenApiListener;
 import com.ansca.corona.listeners.CoronaStoreApiListener;
 import com.ansca.corona.listeners.CoronaSystemApiListener;
@@ -295,10 +294,6 @@ public class NativeToJavaBridge {
 		if (runtime != null) {
 			runtime.onResumed();
 		}
-	}
-	
-	protected static void callOnAudioEnabled() {
-		MediaManager.onUsingAudio();
 	}
 	
 	protected static int callInvokeLuaErrorHandler(long luaStateMemoryAddress)
@@ -1048,156 +1043,6 @@ public class NativeToJavaBridge {
 		return wasCopied;
 	}
 
-	/**
-	 * Generates a unique file name in the shared pictures directory on external storage.
-	 * <p>
-	 * Note that this method does not create a file in the pictures directory. This method only generates
-	 * a unique name that the caller can use to create a new file.
-	 * @param fileExtensionName The extension string to be appended to the file name.
-	 *                          <p>
-	 *                          If given null or empty string, then this method will generate a unique
-	 *                          file name without an extension.
-	 * @return Returns a file object containing a path and file name that is unique in the pictures directory.
-	 *         <p>
-	 *         Returns null if failed to find the pictures directory or unable to generate a unique file name.
-	 */
-	protected static java.io.File createUniqueFileNameInPicturesDirectory(String fileExtensionName) {
-		// Make sure the given extension string is valid and is prefixed with a period.
-		// Note: This method allows files without extensions.
-		if (fileExtensionName == null) {
-			fileExtensionName = "";
-		}
-		else if ((fileExtensionName.length() > 0) && (fileExtensionName.startsWith(".") == false)) {
-			fileExtensionName = "." + fileExtensionName;
-		}
-
-		// Fetch the default pictures directory on external storage.
-		// Create the directory if it does not already exist.
-		java.io.File directory = android.os.Environment.getExternalStoragePublicDirectory(
-										android.os.Environment.DIRECTORY_PICTURES);
-		if (directory.exists() == false) {
-			boolean didCreate = directory.mkdirs();
-			if (didCreate == false) {
-				// The default pictures directory will be unavailable on devices that do not have external storage.
-				directory = new java.io.File("/mnt/media/My Files/Pictures");
-				if (directory.exists() == false) {
-					// Failed to find the picture directory. Give up.
-					return null;
-				}
-			}
-		}
-
-		// Fetch this application's name.
-		String applicationName = CoronaEnvironment.getApplicationName();
-
-		// Create a unique file name in the directory.
-		java.io.File uniqueFile = null;
-		try {
-			for (int index = 1; index <= 10000; index++) {
-				String fileName = applicationName + " Picture " + Integer.toString(index) + fileExtensionName;
-				java.io.File nextFile = new java.io.File(directory, fileName);
-				if (nextFile.exists() == false) {
-					uniqueFile = nextFile;
-					break;
-				}
-			}
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return uniqueFile;
-	}
-
-	/**
-	 * Copies the given file to the default pictures directory.
-	 * Warning: User must define: android.permission.WRITE_EXTERNAL_STORAGE
-	 * @param filePathName The path and name of the image file to be copied. Cannot be null or empty.
-	 * @return Returns true if the given image file was successfully copied to the pictures directory.
-	 *         <p>
-	 *         Returns false if given an invalid argument or if failed to copy the file.
-	 */
-	protected static boolean callSaveImageToPhotoLibrary( CoronaRuntime runtime, String filePathName ) {
-		// Validate.
-		if ((filePathName == null) || (filePathName.length() <= 0)) {
-			return false;
-		}
-
-		// Fetch the controller.
-		Controller controller = runtime.getController();
-		if (controller == null) {
-			return false;
-		}
-
-		// Create a file services object used to easily copy files.
-		com.ansca.corona.storage.FileServices fileServices;
-		fileServices = new com.ansca.corona.storage.FileServices(CoronaEnvironment.getApplicationContext());
-
-		// Generate a unique file name in the default pictures directory.
-		String fileExtensionName = fileServices.getExtensionFrom(filePathName);
-		java.io.File destinationFile = createUniqueFileNameInPicturesDirectory(fileExtensionName);
-		if (destinationFile == null) {
-			return false;
-		}
-		String destinationFilePathName = destinationFile.getPath();
-
-		SaveImageToPhotoLibraryRequestPermissionsResultHandler resultHandler 
-			= new SaveImageToPhotoLibraryRequestPermissionsResultHandler(
-				runtime, fileServices, filePathName, destinationFilePathName);
-
-		return resultHandler.handleSaveMedia();		
-	}
-
-	/**
-	 * Save a bitmap.
-	 * Warning: User must define: android.permission.WRITE_EXTERNAL_STORAGE
-	 * 
-	 */
-	protected static boolean callSaveBitmap( CoronaRuntime runtime, int[] pixels, int width, int height, int quality, String filePathName )
-	{
-		// Validate.
-		if (runtime.getController() == null) {
-			Log.v( "Corona", "callSaveBitmap has invalid controller" );
-			return false;
-		}
-
-		CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
-		if (activity == null) {
-			Log.v( "Corona", "callSaveBitmap has null CoronaActivity" );
-			return false;
-		}
-		
-		// If a file name was not provided, then generate a unique file name in the pictures directory.
-		boolean addToPhotoLibrary = false;
-		if ((filePathName == null) || (filePathName.length() <= 0)) {
-			filePathName = null;
-			java.io.File newFile = createUniqueFileNameInPicturesDirectory(".png");
-			if (newFile == null) {
-				Log.i( "Corona", "ERROR: Failed to save bitmap to the photo library." );
-				return false;
-			}
-			filePathName = newFile.getPath();
-			addToPhotoLibrary = true;
-		}
-		
-		// Copy the pixel array into a bitmap object.
-		android.graphics.Bitmap bitmap = null;
-		try {
-			bitmap = android.graphics.Bitmap.createBitmap(
-							pixels, width, height, android.graphics.Bitmap.Config.ARGB_8888);
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		if (bitmap == null) {
-			return false;
-		}
-		
-		SaveBitmapRequestPermissionsResultHandler resultHandler = new SaveBitmapRequestPermissionsResultHandler(
-			runtime, bitmap, quality, filePathName, addToPhotoLibrary);
-
-		return resultHandler.handleSaveMedia();
-	}
-
 	/** Default handling of the write external storage permission for saving media on Android 6+. */
 	private abstract static class SaveMediaRequestPermissionsResultHandler 
 		implements CoronaActivity.OnRequestPermissionsResultHandler {
@@ -1256,89 +1101,6 @@ public class NativeToJavaBridge {
 		}
 
 		abstract public boolean executeSaveMedia();
-	}
-
-	/** Default handling of the write external storage permission for saveBitmap() on Android 6+. */
-	private static class SaveBitmapRequestPermissionsResultHandler 
-		extends NativeToJavaBridge.SaveMediaRequestPermissionsResultHandler {
-
-		// Arguments for the saveBitmap() method that we can now call safely.
-		private Bitmap fBitmap;
-		private int fQuality;
-		private String fFilePathName;
-		private boolean fAddToPhotoLibrary;
-
-		public SaveBitmapRequestPermissionsResultHandler(
-			CoronaRuntime runtime, Bitmap bitmap, int quality, String filePathName, boolean addToPhotoLibrary) {
-			super(runtime);
-
-			fBitmap = bitmap;
-			fQuality = quality;
-			fFilePathName = filePathName;
-			fAddToPhotoLibrary = addToPhotoLibrary;
-		}
-
-		@Override
-		public boolean handleSaveMedia() {
-			// We only check for External storage permission if the user wants to add to the Photo library.
-			if (fAddToPhotoLibrary) {
-				return super.handleSaveMedia();
-			}
-			return executeSaveMedia();
-		}
-
-		@Override
-		public boolean executeSaveMedia() {
-			boolean wasSaved = fCoronaRuntime.getController().saveBitmap(fBitmap, fQuality, fFilePathName);
-			if (wasSaved && fAddToPhotoLibrary) {
-				fCoronaRuntime.getController().addImageFileToPhotoGallery(fFilePathName);
-			}
-			// fBitmap.recycle();
-			return wasSaved;
-		}
-	}
-
-	/** Default handling of the write external storage permission for saveImageToPhotoLibrary() on Android 6+. */
-	private static class SaveImageToPhotoLibraryRequestPermissionsResultHandler 
-		extends NativeToJavaBridge.SaveMediaRequestPermissionsResultHandler {
-
-		// Arguments/dependencies for the saveImageToPhotoLibrary() method that we can now call safely.
-		private com.ansca.corona.storage.FileServices fFileServices;
-		private String fSourceFilePathName;
-		private String fDestinationFilePathName;
-
-		public SaveImageToPhotoLibraryRequestPermissionsResultHandler(
-			CoronaRuntime runtime, com.ansca.corona.storage.FileServices fileServices,
-				String sourceFilePathName, String destinationFilePathName) {
-			super(runtime);
-
-			fFileServices = fileServices;
-			fSourceFilePathName = sourceFilePathName;
-			fDestinationFilePathName = destinationFilePathName;
-		}
-
-		@Override
-		public boolean executeSaveMedia() {
-			// Validate arguments.
-			if (fFileServices == null 
-				|| fSourceFilePathName == null 
-				|| fSourceFilePathName.length() <= 0 
-				|| fCoronaRuntime == null 
-				|| fCoronaRuntime.getController() == null) {
-				return false;
-			}
-
-			// Copy the given file to the pictures directory.
-			boolean wasCopied = fFileServices.copyFile(fSourceFilePathName, fDestinationFilePathName);
-			if (wasCopied) {
-				// Add the image the Android gallery via the media scanner.
-				fCoronaRuntime.getController().addImageFileToPhotoGallery(fDestinationFilePathName);
-			} else {
-				return false;
-			}
-
-			return true;
-		}
 	}
 	
 	protected static boolean callRenderText(
@@ -1463,11 +1225,6 @@ public class NativeToJavaBridge {
 		runtime.getController().getEventManager().loadSound( id, soundName );
 	}
 
-	protected static void callLoadEventSound( CoronaRuntime runtime, long id, String soundName )
-	{
-		runtime.getController().getEventManager().loadEventSound(id, soundName);
-	}
-
 	protected static void callPlaySound( CoronaRuntime runtime, long id, String soundName, boolean loop )
 	{
 		runtime.getController().getEventManager().playSound(id, soundName, loop);
@@ -1486,11 +1243,6 @@ public class NativeToJavaBridge {
 	protected static void callResumeSound( long id, CoronaRuntime runtime )
 	{
 		runtime.getController().getEventManager().resumeSound(id);
-	}
-
-	protected static void callPlayVideo( CoronaRuntime runtime, long id, String url, boolean mediaControlsEnabled )
-	{
-		runtime.getController().getMediaManager().playVideo( id, url, mediaControlsEnabled );
 	}
 
 	protected static boolean callCanOpenUrl( CoronaRuntime runtime, String url )
@@ -1551,26 +1303,6 @@ public class NativeToJavaBridge {
 	protected static void callCloseNativeActivityIndicator(CoronaRuntime runtime)
 	{
 		runtime.getController().closeNativeActivityIndicator();
-	}
-	
-	protected static boolean callHasMediaSource(CoronaRuntime runtime, int mediaSourceType)
-	{
-		return runtime.getController().hasMediaSource(mediaSourceType);
-	}
-	
-	protected static boolean callHasAccessToMediaSource(CoronaRuntime runtime, int mediaSourceType)
-	{
-		return runtime.getController().hasAccessToMediaSource(mediaSourceType);
-	}
-
-	protected static void callShowImagePicker(CoronaRuntime runtime, int imageSourceType, String destinationFilePath)
-	{
-		runtime.getController().showImagePickerWindow(imageSourceType, destinationFilePath);
-	}
-
-	protected static void callShowVideoPicker(CoronaRuntime runtime, int videoSourceType, int maxTime, int quality)
-	{
-		runtime.getController().showVideoPickerWindow(videoSourceType, maxTime, quality);
 	}
 	
 	protected static boolean callCanShowPopup(CoronaRuntime runtime, String name)
@@ -2180,16 +1912,6 @@ public class NativeToJavaBridge {
 		runtime.getController().vibrate();
 	}
 
-	protected static float callGetVolume( CoronaRuntime runtime, long id )
-	{
-		return runtime.getController().getMediaManager().getVolume( id );
-	}
-	
-	protected static void callSetVolume( CoronaRuntime runtime, long id, float v )
-	{
-		runtime.getController().getMediaManager().setVolume( id, v );
-	}
-
 	protected static int callTextFieldCreate( CoronaRuntime runtime, int id, int left, int top, int width, int height, boolean isSingleLine )
 	{
 		runtime.getViewManager().addTextView(id, left, top, width, height, isSingleLine);
@@ -2356,100 +2078,6 @@ public class NativeToJavaBridge {
 	protected static void callDisplayObjectSetFocus( CoronaRuntime runtime, int id, boolean focus )
 	{
 		runtime.getViewManager().setTextViewFocus(id, focus);
-	}
-	
-	protected static boolean callRecordStart( CoronaRuntime runtime, String file, long id )
-	{
-		return runtime.getController().getMediaManager().getAudioRecorder( id ).startRecording( file );
-	}
-	
-	protected static void callRecordStop( long id, CoronaRuntime runtime )
-	{
-		runtime.getController().getMediaManager().getAudioRecorder( id ).stopRecording();
-	}
-	
-	protected static ByteBuffer callRecordGetBytes( CoronaRuntime runtime, long id )
-	{
-		AudioByteBufferHolder buffer = runtime.getController().getMediaManager().getAudioRecorder( id ).getNextBuffer();
-		if ( buffer != null ) {
-			ByteBuffer directBuffer = buffer.myBuffer;
-			return directBuffer;
-		}
-			
-		return null;
-	}
-	
-	protected static int callRecordGetCurrentByteCount( CoronaRuntime runtime, long id )
-	{
-		AudioByteBufferHolder buffer = runtime.getController().getMediaManager().getAudioRecorder( id ).getCurrentBuffer();
-		if ( buffer != null )
-			return buffer.myValidBytes;
-		return 0;
-	}
-	
-	protected static void callRecordReleaseCurrentBuffer( long id, CoronaRuntime runtime )
-	{
-		runtime.getController().getMediaManager().getAudioRecorder( id ).releaseCurrentBuffer();
-	}
-
-	protected static void callVideoViewCreate(CoronaRuntime runtime, int id, int left, int top, int width, int height)
-	{
-		runtime.getViewManager().addVideoView(id, left, top, width, height);
-	}
-
-	protected static void callVideoViewLoad(CoronaRuntime runtime, int id, String path)
-	{
-		runtime.getViewManager().videoViewLoad(id, path);
-	}
-
-	protected static void callVideoViewPlay(CoronaRuntime runtime, int id)
-	{
-		runtime.getViewManager().videoViewPlay(id);
-	}
-	
-	protected static void callVideoViewPause(CoronaRuntime runtime, int id)
-	{
-		runtime.getViewManager().videoViewPause(id);
-	}
-
-	protected static void callVideoViewSeek(CoronaRuntime runtime, int id, int seekTo)
-	{
-		runtime.getViewManager().videoViewSeek(id, seekTo);
-	}
-
-	protected static int callVideoViewGetCurrentTime(CoronaRuntime runtime, int id)
-	{
-		return runtime.getViewManager().videoViewGetCurrentTime(id);
-	}
-
-	protected static int callVideoViewGetTotalTime(CoronaRuntime runtime, int id)
-	{
-		return runtime.getViewManager().videoViewGetTotalTime(id);
-	}
-
-	protected static boolean callVideoViewGetIsMuted(CoronaRuntime runtime, int id)
-	{
-		return runtime.getViewManager().videoViewGetIsMuted(id);
-	}
-
-	protected static void callVideoViewMute(CoronaRuntime runtime, int id, boolean mute)
-	{
-		runtime.getViewManager().videoViewMute(id, mute);
-	}
-
-	protected static boolean callVideoViewGetIsTouchTogglesPlay(CoronaRuntime runtime, int id)
-	{
-		return runtime.getViewManager().videoViewGetIsTouchTogglesPlay(id);
-	}
-
-	protected static void callVideoViewTouchTogglesPlay(CoronaRuntime runtime, int id, boolean toggle)
-	{
-		runtime.getViewManager().videoViewTouchTogglesPlay(id, toggle);
-	}
-
-	protected static boolean callVideoViewGetIsPlaying(CoronaRuntime runtime, int id)
-	{
-		return runtime.getViewManager().videoViewGetIsPlaying(id);
 	}
 
 	protected static int callCryptoGetDigestLength( String algorithm ) {

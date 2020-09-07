@@ -15,8 +15,7 @@ package com.ansca.corona.storage;
  * private directory under internal storage, as well as its asset files within the APK's "assets"
  * directory or within Google Play expansion files. This class is needed because other applications
  * do not have permission to access this application's private files for tasks such as attaching files
- * to an e-mail, posting a photo to a social media app, playing a local video file on an external
- * video player, etc.
+ * to an e-mail, posting a photo to a social media app etc.
  * <p>
  * In order for another application to access a file belonging to this application, you must create
  * a "content://" URI which references that file by calling this class' createContentUriForFile() method.

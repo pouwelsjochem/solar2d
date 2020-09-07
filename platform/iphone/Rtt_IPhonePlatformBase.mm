@@ -23,12 +23,10 @@
 #include "Rtt_IPhoneTextBoxObject.h"
 #include "Rtt_IPhoneTextFieldObject.h"
 #include "Rtt_IPhoneTimer.h"
-#include "Rtt_IPhoneVideoObject.h"
 
 #include "Rtt_AppleFont.h"
 #include "Rtt_IPhoneFont.h"
 #include "Rtt_IPhoneScreenSurface.h"
-#include "Rtt_IPhoneVideoObject.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaResource.h"
@@ -339,12 +337,6 @@ IPhonePlatformBase::CreateNativeTextField( const Rect& bounds ) const
 	return Rtt_NEW( & GetAllocator(), IPhoneTextFieldObject( bounds ) );
 }
 
-PlatformDisplayObject*
-IPhonePlatformBase::CreateNativeVideo( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), IPhoneVideoObject( bounds ) );
-}
-
 // ----------------------------------------------------------------------------
 
 Real
@@ -488,41 +480,6 @@ IPhonePlatformBase::SaveBitmap( PlatformBitmap* bitmap, const char* filePath, fl
 {
 	Rtt_ASSERT_NOT_REACHED();
 	return false;
-}
-
-bool
-IPhonePlatformBase::SaveImageToPhotoLibrary(const char* filePath) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return false;
-}
-
-bool
-IPhonePlatformBase::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return false;
-}
-
-PlatformVideoPlayer*
-IPhonePlatformBase::GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return NULL;
-}
-
-PlatformImageProvider*
-IPhonePlatformBase::GetImageProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return NULL;
-}
-
-PlatformVideoProvider*
-IPhonePlatformBase::GetVideoProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return NULL;
 }
 
 PlatformStoreProvider*

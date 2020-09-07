@@ -980,15 +980,7 @@ Runtime::OnSystemEvent( SystemEvent::Type t )
 
 	SystemEvent e( t );
 	DispatchEvent( e );
-}
-
-void
-Runtime::OnInternalSystemEvent( SystemEvent::Type t )
-{
-	InternalSystemEvent e( t );
-	DispatchEvent( e );
-}
-	
+}	
 	
 void
 Runtime::CoronaInvokeSystemSuspendEvent()
@@ -1000,10 +992,6 @@ Runtime::CoronaInvokeSystemSuspendEvent()
 	{
 		// Invoke the user system event
 		OnSystemEvent( SystemEvent::kOnAppSuspend );
-		// Always do our suspend after the user so we don't get in the user's way, 
-		// e.g. shut down systems so their calls fail,
-		// e.g. suspend video objects which they may want to handle different (destroy objects)
-		OnInternalSystemEvent( SystemEvent::kOnAppSuspend );
 	}
 }
 
@@ -1014,8 +1002,6 @@ Runtime::CoronaInvokeSystemResumeEvent()
 	Rtt_ASSERT( fIsSuspended <= 0 );
 	if ( 0 == fIsSuspended )
 	{
-		// Always do our resume first so the user is oblvious that we were actually doing things.
-		OnInternalSystemEvent( SystemEvent::kOnAppResume );
 		// Invoke the user system event
 		OnSystemEvent( SystemEvent::kOnAppResume );
 	}
@@ -1040,7 +1026,7 @@ Runtime::CoronaAllSuspend()
 	getOpenSLES_player()->SuspendPlayer();
 #endif
 
-	// Suspend platform specific items (like video players)
+	// Suspend platform specific items
 	fPlatform.Suspend();
 }
 	
@@ -1203,7 +1189,7 @@ Runtime::CoronaResumeAll()
 	getOpenSLES_player()->ResumePlayer();
 #endif
 
-	// Resume platform specific items (like video players)
+	// Resume platform specific items
 	fPlatform.Resume();
 
 	// Notify the runtime's owner that the runtime has just been resumed.

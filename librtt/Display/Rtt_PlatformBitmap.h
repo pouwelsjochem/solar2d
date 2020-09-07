@@ -61,9 +61,7 @@ class PlatformBitmap
 		{
 			kIsPremultiplied = 0x1,
 
-			// The properties kIsBitsFullResolution and kIsBitsAutoRotated were
-			// added so that full-resolution images can be saved to the photo library
-			// at the proper orientation.
+			// The properties kIsBitsFullResolution and kIsBitsAutoRotated
 			// 
 			// When kIsBitsAutoRotated is true, then Bits() will return an "upright",
 			// pre-rotated buffer.  In this case, BitsWidth/Height() and Width/Height()

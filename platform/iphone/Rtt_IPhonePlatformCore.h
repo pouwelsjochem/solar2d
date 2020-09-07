@@ -19,10 +19,6 @@
 namespace Rtt
 {
 
-class IPhoneImageProvider;
-class IPhoneVideoProvider;
-class IPhoneVideoPlayer;
-
 // ----------------------------------------------------------------------------
 
 // This is the default implementation of MPlatform for use on iOS devices.
@@ -56,9 +52,7 @@ class IPhonePlatformCore : public IPhonePlatformBase
 		bool SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, float jpegQuality ) const;
 
 	public:
-		virtual bool SaveImageToPhotoLibrary(const char* filePath) const;
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const;
-		virtual bool AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const;
 		/// virtual bool OpenURL( const char* url ) const;
 
 		/// virtual void SetIdleTimer( bool enabled ) const;

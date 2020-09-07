@@ -37,53 +37,6 @@ public class EventManager {
 	public synchronized void removeAllEvents() {
 		myEvents.clear();
 	}
-	
-	public void loadSound( long id, String name )
-	{
-		myController.getMediaManager().loadSound( id, name);
-	}
-
-	public void loadEventSound( long id, String name )
-	{
-		myController.getMediaManager().loadEventSound( id, name );
-	}
-
-	public void playSound( long id, String soundName, boolean loop )
-	{
-		MediaEvent e = new MediaEvent( myController, id, soundName, MediaEvent.Event.PlaySound );
-		
-		e.setLooping( loop );
-		
-		addEvent( e );
-	}
-
-	public void stopSound( long id )
-	{
-		Event e = new MediaEvent( myController, id, MediaEvent.Event.StopSound );
-		
-		addEvent( e );
-	}
-
-	public void pauseSound( long id )
-	{
-		Event e = new MediaEvent( myController, id, MediaEvent.Event.PauseSound );
-		
-		addEvent( e );
-	}
-
-	public void resumeSound( long id )
-	{
-		Event e = new MediaEvent( myController, id, MediaEvent.Event.ResumeSound );
-		
-		addEvent( e );
-	}
-
-	public void playVideo( long id, String name )
-	{
-		Event e = new MediaEvent( myController, id, name, MediaEvent.Event.PlayVideo );
-		
-		addEvent( e );
-	}
 
 	public void sendEvents()
 	{

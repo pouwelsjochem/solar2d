@@ -693,7 +693,7 @@ DisplayLibrary::newLine( lua_State *L )
 	return result;
 }
 
-// display.newImage( [parentGroup,] filename [, baseDirectory] [, x, y] [,isFullResolution] )
+// display.newImage( [parentGroup,] filename [, baseDirectory] [, x, y] )
 // display.newImage( [parentGroup,] imageSheet, frameIndex [, x, y] )
 int
 DisplayLibrary::newImage( lua_State *L )
@@ -736,16 +736,8 @@ DisplayLibrary::newImage( lua_State *L )
 		}
 		p = & topLeft;
 
-		U32 flags = 0;
-
-		// [,isFullResolution]
-		if ( lua_isboolean( L, nextArg ) && lua_toboolean( L, nextArg ) )
-		{
-			flags |= PlatformBitmap::kIsBitsFullResolution;
-		}
-
 		Runtime& runtime = library->GetDisplay().GetRuntime();
-		BitmapPaint *paint = BitmapPaint::NewBitmap( runtime, imageName, baseDir, flags );
+		BitmapPaint *paint = BitmapPaint::NewBitmap( runtime, imageName, baseDir, 0x0 );
 
 		if ( paint && paint->GetBitmap() && paint->GetBitmap()->NumBytes() == 0 )
 		{
@@ -1593,15 +1585,7 @@ DisplayLibrary::capture( lua_State *L )
 	DisplayObject* displayObject = (DisplayObject*)(proxy->Object());
 
 	// Default values for options.
-	bool saveToFile = false;
 	bool cropObjectToScreenBounds = true;
-
-	lua_getfield( L, -1, "saveToPhotoLibrary" );
-	if( lua_isboolean( L, -1 ) )
-	{
-		saveToFile = lua_toboolean( L, -1 );
-	}
-	lua_pop( L, 1 );
 
 	lua_getfield( L, -1, "captureOffscreenArea" );
 	if( lua_isboolean( L, -1 ) )
@@ -1615,21 +1599,11 @@ DisplayLibrary::capture( lua_State *L )
 	Runtime *runtime = & display.GetRuntime();
 
 	// Do a screenshot of the given display object.
-	BitmapPaint *paint = display.CaptureDisplayObject( displayObject,
-														saveToFile,
-														false,
-														cropObjectToScreenBounds );
+	BitmapPaint *paint = display.CaptureDisplayObject( displayObject, cropObjectToScreenBounds );
 	if( ! paint )
 	{
 		CoronaLuaError(L, "display.capture() unable to capture screen. The platform or device might not be supported" );
 		return 0;
-	}
-
-	// Add the screenshot to the photo library if set.
-	if( saveToFile )
-	{
-		bool didAdd = runtime->Platform().AddBitmapToPhotoLibrary( paint->GetBitmap() );
-		Rtt_WARN_SIM( didAdd, ( "WARNING: Simulator does not support adding screen shots to photo library\n" ) );
 	}
 	
 	// Create a bitmap display object and have it returned to Lua.
@@ -1666,31 +1640,16 @@ DisplayLibrary::capture( lua_State *L )
 int
 DisplayLibrary::captureScreen( lua_State *L )
 {
-	bool saveToFile = ( lua_isboolean( L, 1 ) &&
-							lua_toboolean( L, 1 ) );
-
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
 	Runtime *runtime = & display.GetRuntime();
 
 	// Do a screenshot.
-	BitmapPaint *paint = display.CaptureScreen( saveToFile,
-												false );
+	BitmapPaint *paint = display.CaptureScreen();
 	if( ! paint )
 	{
 		CoronaLuaError( L, "display.captureScreen() unable to capture screen. The platform or device might not be supported" );
 		return 0;
-	}
-
-	// Add the screenshot to the photo library if set.
-	if( saveToFile )
-	{
-		bool didAdd = runtime->Platform().AddBitmapToPhotoLibrary( paint->GetBitmap() );
-
-		if (! didAdd)
-		{
-			CoronaLuaWarning( L, "display.captureScreen() unable to capture screen" );
-		}
 	}
 
 	// Note: This screenshot will be automatically rendered on top of the display. If the user does
@@ -1798,9 +1757,6 @@ DisplayLibrary::captureBounds( lua_State *L )
 	GetRect( L, bounds );
 
 	// Capture the specified bounds of the screen.
-	bool saveToFile = ( lua_isboolean( L, 2 ) &&
-							lua_toboolean( L, 2 ) );
-
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
 	Runtime *runtime = & display.GetRuntime();
@@ -1808,20 +1764,11 @@ DisplayLibrary::captureBounds( lua_State *L )
 	bounds.Intersect(display.GetScreenContentBounds());
 
 	// Do a screenshot.
-	BitmapPaint *paint = display.CaptureBounds( &bounds,
-												saveToFile,
-												false );
+	BitmapPaint *paint = display.CaptureBounds( &bounds );
 	if( ! paint )
 	{
 		CoronaLuaError( L, "display.CaptureBounds() unable to capture screen bounds. The platform or device might not be supported" );
 		return 0;
-	}
-	
-	// Add the screenshot to the photo library if the second argument was set.
-	if( saveToFile )
-	{
-		bool didAdd = runtime->Platform().AddBitmapToPhotoLibrary( paint->GetBitmap() );
-		Rtt_WARN_SIM( didAdd, ( "WARNING: Simulator does not support adding screen shots to photo library\n" ) );
 	}
 	
 	// Create a display object for the screenshot and push it into Lua.

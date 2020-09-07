@@ -22,38 +22,6 @@ class CoronaShowApiHandler implements com.ansca.corona.listeners.CoronaShowApiLi
 	}
 
 	@Override
-	public void showSelectImageWindowUsing(String destinationFilePath) {
-		if (fActivity == null) {
-			return;
-		}
-		fActivity.showSelectImageWindowUsing(destinationFilePath);
-	}
-
-	@Override
-	public void showCameraWindowForImage(String destinationFilePath) {
-		if (fActivity == null) {
-			return;
-		}
-		fActivity.showCameraWindowForImage(destinationFilePath);
-	}
-
-	@Override
-	public void showSelectVideoWindow() {
-		if (fActivity == null) {
-			return;
-		}
-		fActivity.showSelectVideoWindow();
-	}
-
-	@Override
-	public void showCameraWindowForVideo(int maxVideoTime, int videoQuality) {
-		if (fActivity == null) {
-			return;
-		}
-		fActivity.showCameraWindowForVideo(maxVideoTime, videoQuality);
-	}
-
-	@Override
 	public void showSendMailWindowUsing(MailSettings mailSettings) {
 		if (fActivity == null) {
 			return;

@@ -45,8 +45,6 @@ namespace Rtt
 {
 	
 // ----------------------------------------------------------------------------
-
-//static const char kEventSound[] = "media.EventSound";
 	
 #ifdef Rtt_USE_ALMIXER
 
@@ -153,7 +151,6 @@ loadSoundAll( lua_State *L )
 			// Store callback *prior* to pushing result
 			//			soundData->SetListenerRef( nextArg );
 			
-			//			LuaContext::PushUserdata( L, soundID, kEventSound );
 			lua_pushlightuserdata( L, sound_data);
 		}
 		else
@@ -269,7 +266,6 @@ loadSoundStream( lua_State *L )
 			// Store callback *prior* to pushing result
 			//			soundData->SetListenerRef( nextArg );
 			
-			//			LuaContext::PushUserdata( L, soundID, kEventSound );
 			lua_pushlightuserdata( L, sound_data);
 		}
 		else

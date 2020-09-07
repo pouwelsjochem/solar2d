@@ -34,21 +34,15 @@ class MCallback;
 class MCrypto;
 class MPlatformDevice;
 class RenderingStream;
-class PlatformAudioPlayer;
-class PlatformAudioRecorder;
 class PlatformBitmap;
 class PlatformDisplayObject;
 class PlatformExitCallback;
-class PlatformEventSound;
 class PlatformFBConnect;
 class PlatformFont;
-class PlatformImageProvider;
 class PlatformOpenALPlayer;
 class PlatformStoreProvider;
 class PlatformSurface;
 class PlatformTimer;
-class PlatformVideoPlayer;
-class PlatformVideoProvider;
 class PreferenceCollection;
 class Runtime;
 struct Rect;
@@ -142,9 +136,7 @@ class MPlatform
 		virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const = 0;
 		virtual PlatformBitmap* CreateBitmap( const char *filePath, bool convertToGrayscale ) const = 0;
 		virtual PlatformBitmap* CreateBitmapMask( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset ) const = 0;
-		virtual bool SaveImageToPhotoLibrary(const char* filePath) const = 0;
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const = 0;
-		virtual bool AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const = 0;
         virtual bool OpenURL( const char* url ) const = 0;
 		// Return values of CanOpenURL: -1 Unknown; 0 No; 1 Yes
 		virtual int CanOpenURL( const char* url ) const = 0;
@@ -156,17 +148,6 @@ class MPlatform
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const = 0;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const = 0;
 
-		virtual PlatformEventSound * CreateEventSound( const ResourceHandle<lua_State> & handle, const char* filePath ) const = 0;
-
-		virtual void ReleaseEventSound( PlatformEventSound * soundID ) const = 0;
-		virtual void PlayEventSound( PlatformEventSound * soundID ) const = 0;
-
-		virtual PlatformAudioRecorder * CreateAudioRecorder( const ResourceHandle<lua_State> & handle, const char * filePath ) const = 0;
-
-		virtual PlatformAudioPlayer * GetAudioPlayer( const ResourceHandle<lua_State> & handle ) const = 0;
-		virtual PlatformVideoPlayer * GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const = 0;
-		virtual PlatformImageProvider * GetImageProvider( const ResourceHandle<lua_State> & handle ) const = 0;
-		virtual PlatformVideoProvider * GetVideoProvider( const ResourceHandle<lua_State> & handle ) const = 0;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const = 0;
     
 		virtual void SetIdleTimer( bool enabled ) const = 0;
@@ -196,7 +177,6 @@ class MPlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const = 0;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const = 0;
 		
-		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const = 0;
         virtual PlatformFBConnect* GetFBConnect() const = 0;
 
 		virtual Rtt_Real GetStandardFontSize() const = 0;

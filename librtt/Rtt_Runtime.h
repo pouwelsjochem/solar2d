@@ -189,7 +189,6 @@ class Runtime : public MCallback,
 
 	protected:
 		void OnSystemEvent( SystemEvent::Type t );
-		void OnInternalSystemEvent( SystemEvent::Type t );
 
 	public:
 		// Pauses run loop. If already suspended, then no-op.

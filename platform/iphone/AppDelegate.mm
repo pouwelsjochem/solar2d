@@ -16,7 +16,6 @@
 #import "CoronaDelegate.h"
 
 #include "Rtt_Event.h"
-#include "Rtt_IPhoneConstants.h"
 #include "Rtt_IPhoneDevice.h"
 #include "Rtt_IPhonePlatformBase.h"
 #include "Rtt_IPhonePlatform.h"
@@ -27,7 +26,6 @@
 
 #include "Display/Rtt_Display.h"
 
-#import "Rtt_IPhoneImageProvider.h"
 #import "Rtt_IPhoneTextBoxObject.h"
 #import "Rtt_IPhoneTextFieldObject.h"
 #import "Rtt_PlatformOpenALPlayer.h"

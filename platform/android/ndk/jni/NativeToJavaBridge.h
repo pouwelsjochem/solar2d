@@ -96,7 +96,6 @@ class NativeToJavaBridge
 		bool LoadImage(
 				const char *filePath, AndroidImageData& imageData, bool convertToGrayscale,
 				int maxWidth, int maxHeight, bool loadImageInfoOnly);
-		bool SaveImageToPhotoLibrary( const char *fileName );
 		bool SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char * path, int quality );
 	
 		bool RenderText(
@@ -108,19 +107,15 @@ class NativeToJavaBridge
 		void SetTimer( int milliseconds );
 		void CancelTimer();
 	
-		void LoadSound( uintptr_t id, const char * name, bool eventSound );
+		void LoadSound( uintptr_t id, const char * name );
 		void PlaySound( uintptr_t id, const char * name, bool loop );
 		void StopSound( uintptr_t id );
 		void PauseSound( uintptr_t id );
 		void ResumeSound( uintptr_t id );
 		void SetVolume( uintptr_t id, float volume );
-		void SoundEndCallback( uintptr_t id );
 		float GetVolume( uintptr_t id ) const;
 	
 		void HttpPost( const char* url, const char* key, const char* value );
-	
-		void PlayVideo( uintptr_t id, const char * url, bool mediaControlsEnabled );
-		void VideoEndCallback( uintptr_t id );
 	
 		bool CanOpenUrl( const char* url );
 		bool OpenUrl( const char * url );
@@ -136,10 +131,6 @@ class NativeToJavaBridge
 		void AlertCallback( int which, bool cancelled );
 		void ShowNativeActivityIndicator();
 		void CloseNativeActivityIndicator();
-		bool HasMediaSource( int mediaSourceType );
-		bool HasAccessToMediaSource( int mediaSourceType );
-		void ShowImagePicker( int imageSourceType, const char *destinationFilePath );
-		void ShowVideoPicker( int videoSourceType, int maxTime, int quality );
 		bool CanShowPopup( const char *name );
 		void ShowSendMailPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );
 		void ShowSendSmsPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );
@@ -211,22 +202,8 @@ class NativeToJavaBridge
 		bool RecordStart( uintptr_t id, const char * file );
 		void RecordStop( uintptr_t id );
 		bool RecordGetBytes( uintptr_t id, Rtt::Data<char> & result );
-		void RecordCallback( uintptr_t id, int status );
 		void RecordReleaseCurrentBuffer( uintptr_t id );
 
-		void VideoViewCreate( int id, int left, int top, int width, int height );
-		void VideoViewLoad( int id, const char * source );
-		void VideoViewPlay( int id );
-		void VideoViewPause( int id );
-		void VideoViewSeek( int id, int seekTo );
-		int VideoViewGetCurrentTime( int id );
-		int VideoViewGetTotalTime( int id );
-		bool VideoViewGetIsMuted( int id );
-		void VideoViewMute( int id, bool mute);
-		bool VideoViewGetIsTouchTogglesPlay( int id );
-		void VideoViewTouchTogglesPlay( int id, bool toggle );
-		bool VideoViewGetIsPlaying( int id );
-		
 		int CryptoGetDigestLength( const char * algorithm );
 		void CryptoCalculateDigest( const char * algorithm, const Rtt::Data<const char> & data, U8 * digest );
 		void CryptoCalculateHMAC( const char * algorithm, const Rtt::Data<const char> & key, const Rtt::Data<const char> & data, 

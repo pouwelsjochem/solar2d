@@ -718,12 +718,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformTimer.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformVideoPlayer.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformVideoProvider.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Preference.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -799,9 +793,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibMedia.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibNative.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -832,12 +823,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Matrix.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioPlayer.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioRecorder.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -847,9 +832,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformEventSound.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -857,9 +839,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFont.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformImageProvider.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
@@ -1249,12 +1228,6 @@
     <ClCompile Include="..\..\ndk\AndroidZipFileEntry.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidAudioPlayer.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidAudioRecorder.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidBitmap.cpp">
       <Filter>Android</Filter>
     </ClCompile>
@@ -1273,13 +1246,7 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidDisplayObject.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidEventSound.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidFont.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidImageProvider.cpp">
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDevice.cpp">
@@ -1316,15 +1283,6 @@
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidTimer.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidVideoObject.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidVideoPlayer.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidVideoProvider.cpp">
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\external\lsqlite3-7\lsqlite3.c">
@@ -1882,12 +1840,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformTimer.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformVideoPlayer.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformVideoProvider.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_Preference.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -1972,9 +1924,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibMedia.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibNative.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2044,12 +1993,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_MUpdatable.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioPlayer.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioRecorder.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2057,9 +2000,6 @@
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformEventSound.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.h">
@@ -2071,13 +2011,7 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFont.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformImageProvider.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformMediaProviderBase.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.h">
@@ -2293,12 +2227,6 @@
     <ClInclude Include="..\..\ndk\AndroidZipFileEntry.h">
       <Filter>Android</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidAudioPlayer.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidAudioRecorder.h">
-      <Filter>Android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidBitmap.h">
       <Filter>Android</Filter>
     </ClInclude>
@@ -2317,13 +2245,7 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidDisplayObject.h">
       <Filter>Android</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidEventSound.h">
-      <Filter>Android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidFont.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidImageProvider.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDevice.h">
@@ -2360,15 +2282,6 @@
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidTimer.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidVideoObject.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidVideoPlayer.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidVideoProvider.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_PlatformOpenSLESPlayer.h">

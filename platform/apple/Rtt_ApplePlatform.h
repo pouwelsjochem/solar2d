@@ -36,7 +36,6 @@ namespace Rtt
 
 struct KeyValuePair;
 
-class AppleAudioPlayer;
 class RenderingStream;
 
 // ----------------------------------------------------------------------------
@@ -95,14 +94,6 @@ class ApplePlatform : public MPlatform
 		virtual Preference::ReadValueResult GetPreference( const char* categoryName, const char* keyName ) const;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
-
-		virtual PlatformEventSound * CreateEventSound( const ResourceHandle<lua_State> &handle, const char* filePath ) const;
-		virtual void ReleaseEventSound( PlatformEventSound * soundID ) const;
-		virtual void PlayEventSound( PlatformEventSound * soundID ) const;
-
-		virtual PlatformAudioRecorder * CreateAudioRecorder( const ResourceHandle<lua_State> & handle, const char * filePath ) const;
-
-		virtual PlatformAudioPlayer* GetAudioPlayer( const ResourceHandle<lua_State> & handle ) const;
 
 		virtual Real GetStandardFontSize() const;
 		virtual PlatformFont* CreateFont( PlatformFont::SystemFont fontType, Rtt_Real size ) const;
@@ -191,7 +182,6 @@ class ApplePlatform : public MPlatform
 		NSString *fResourcePath;
         NSString *fProjectResourcePath;
         NSString *fSkinResourcePath;
-		mutable AppleAudioPlayer* fAudioPlayer;
 		mutable id fHttpPostDelegate;
 		mutable id fCustomConnectionDelegate;
 		AppleCrypto fCrypto;

@@ -370,33 +370,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeAlertCallback(JNIEnv * env, jclass 
 }
 
 JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeSoundEndCallback(JNIEnv * env, jclass cd, jlong bridgeAddress, jlong id )
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->SoundEndCallback( id );
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeVideoEndCallback(JNIEnv * env, jclass cd, jlong bridgeAddress, jlong id )
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->VideoEndCallback( id );
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeRecordCallback(JNIEnv * env, jclass c, jlong bridgeAddress, jlong id, jint status )
-{
-#ifdef DEBUG
-    __android_log_print(ANDROID_LOG_INFO, "Corona", "record callback %x %d", id, status );
-#endif
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->RecordCallback( id, status );
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeSetAudioRecorderState(JNIEnv * env, jclass cd, jlong bridgeAddress, jlong id, jboolean isRecording)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->SetAudioRecorderState( id, isRecording );
-}
-
-JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeTextEvent(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jboolean hasFocus, jboolean isDone )
 {
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->TextEvent( id, hasFocus, isDone );
@@ -436,30 +409,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeAdsRequestEvent(JNIEnv * env, jclas
 }
 
 JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeImagePickerEvent(JNIEnv * env, jclass cd, jlong bridgeAddress, jstring selectedImageFileName )
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->ImagePickerEvent(env, selectedImageFileName);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeAbortShowingImageProvider(JNIEnv * env, jclass cd, jlong bridgeAddress)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->AbortShowingImageProvider();
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeVideoPickerEvent(JNIEnv * env, jclass cd, jlong bridgeAddress, jstring selectedVideoFileName, jint duration, jlong size )
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->VideoPickerEvent(env, selectedVideoFileName, duration, size);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeAbortShowingVideoProvider(JNIEnv * env, jclass cd, jlong bridgeAddress)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->AbortShowingVideoProvider();
-}
-
-JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeMemoryWarningEvent(JNIEnv * env, jclass cd, jlong bridgeAddress )
 {
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MemoryWarningEvent();
@@ -480,20 +429,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeStoreTransactionEvent(
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->StoreTransactionEvent(
 		env, state, errorType, errorMessage, productId, signature, receipt, transactionId, transactionTime,
 		originalReceipt, originalTransactionId, originalTransactionTime);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeVideoViewPrepared(
-	JNIEnv * env, jclass cd, jlong bridgeAddress, jint id)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->VideoViewPreparedEvent(id);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeVideoViewEnded(
-	JNIEnv * env, jclass cd, jlong bridgeAddress, jint id)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->VideoViewEndedEvent(id);
 }
 
 JNIEXPORT jobject JNICALL

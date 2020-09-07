@@ -16,12 +16,8 @@
 
 #include "Rtt_IPhoneAudioSessionManager.h"
 #include "Rtt_IPhoneFont.h"
-#include "Rtt_IPhoneImageProvider.h"
-#include "Rtt_IPhoneVideoProvider.h"
 #include "Rtt_AppleInAppStore.h"
 #include "Rtt_IPhoneScreenSurface.h"
-#include "Rtt_IPhoneVideoObject.h"
-#include "Rtt_IPhoneVideoPlayer.h"
 
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaLibSystem.h"
@@ -119,11 +115,7 @@ namespace Rtt
 
 IPhonePlatform::IPhonePlatform( CoronaView *view )
 :	Super( view ),
-	fVideoPlayer( NULL ),
 	fInAppStoreProvider( NULL ),
-	fImageProvider( NULL ),
-	fVideoProvider( NULL ),
-//	fDelegate( [[AlertViewDelegate alloc] init] ),
 	fPopupControllerDelegate( [[PopupControllerDelegate alloc] init] )
 {
 //	[pView retain];
@@ -163,45 +155,11 @@ IPhonePlatform::~IPhonePlatform()
 //	[fDelegate release];
 //	[fPeoplePickerDelegate release];
 	Rtt_DELETE( fInAppStoreProvider );
-	Rtt_DELETE( fVideoPlayer );
 //	[fView release];
 }
 
 // =====================================================================
 	
-PlatformVideoPlayer*
-IPhonePlatform::GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const
-{
-	if ( ! fVideoPlayer )
-	{
-		fVideoPlayer = Rtt_NEW( fAllocator, IPhoneVideoPlayer( handle ) );
-	}
-
-	return fVideoPlayer;
-}
-
-PlatformImageProvider*
-IPhonePlatform::GetImageProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	if ( ! fImageProvider )
-	{
-		fImageProvider = Rtt_NEW( fAllocator, IPhoneImageProvider( handle ) );
-	}
-
-	return fImageProvider;	
-}
-
-PlatformVideoProvider*
-IPhonePlatform::GetVideoProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	if ( ! fVideoProvider )
-	{
-		fVideoProvider = Rtt_NEW( fAllocator, IPhoneVideoProvider( handle ) );
-	}
-	
-	return fVideoProvider;
-}
-
 PlatformStoreProvider*
 IPhonePlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
 {
@@ -572,12 +530,6 @@ IPhonePlatform::HidePopup( const char *name ) const
 	Rtt_ASSERT_NOT_IMPLEMENTED();
 
 	return result;
-}
-
-PlatformDisplayObject*
-IPhonePlatform::CreateNativeVideo( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), IPhoneVideoObject( bounds ) );
 }
 
 void*

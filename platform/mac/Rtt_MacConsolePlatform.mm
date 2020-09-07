@@ -82,19 +82,7 @@ MacConsolePlatform::CreateOffscreenSurface( const PlatformSurface& ) const
 }
 
 bool
-MacConsolePlatform::SaveImageToPhotoLibrary(const char* filePath) const
-{
-    return true;
-}
-    
-bool
 MacConsolePlatform::SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const
-{
-	return false;
-}
-
-bool
-MacConsolePlatform::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
 {
 	return false;
 }
@@ -109,24 +97,6 @@ int
 MacConsolePlatform::CanOpenURL( const char* url ) const
 {
 	return -1;
-}
-	
-PlatformVideoPlayer *
-MacConsolePlatform::GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const
-{
-	return NULL;
-}
-
-PlatformImageProvider*
-MacConsolePlatform::GetImageProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	return NULL;
-}
-
-PlatformVideoProvider*
-MacConsolePlatform::GetVideoProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	return NULL;
 }
 
 PlatformStoreProvider*
@@ -182,12 +152,6 @@ MacConsolePlatform::CreateNativeTextField( const Rect& bounds ) const
 void
 MacConsolePlatform::SetKeyboardFocus( PlatformDisplayObject *textObject ) const
 {
-}
-
-PlatformDisplayObject *
-MacConsolePlatform::CreateNativeVideo( const Rect& bounds ) const
-{
-	return NULL;
 }
 
 S32

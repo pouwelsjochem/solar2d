@@ -259,42 +259,36 @@ Display::GetStageOffscreen()
 }
 
 BitmapPaint *
-Display::CaptureScreen( bool save_to_file,
-						bool output_file_will_be_png_format )
+Display::CaptureScreen()
 {
 	return Capture( NULL,
 					NULL,
-					save_to_file,
-					output_file_will_be_png_format,
+					false,
+					false,
 					false,
 					NULL,
 					NULL );
 }
 
 BitmapPaint *
-Display::CaptureBounds( Rect *screenBounds,
-						bool will_be_saved_to_file,
-						bool output_file_will_be_png_format )
+Display::CaptureBounds( Rect *screenBounds )
 {
 	return Capture( NULL,
 					screenBounds,
-					will_be_saved_to_file,
-					output_file_will_be_png_format,
+					false,
+					false,
 					false,
 					NULL,
 					NULL );
 }
 
 BitmapPaint *
-Display::CaptureDisplayObject( DisplayObject *object,
-								bool will_be_saved_to_file,
-								bool output_file_will_be_png_format,
-								bool crop_object_to_screen_bounds )
+Display::CaptureDisplayObject( DisplayObject *object, bool crop_object_to_screen_bounds )
 {
 	return Capture( object,
 					NULL,
-					will_be_saved_to_file,
-					output_file_will_be_png_format,
+					false,
+					false,
 					crop_object_to_screen_bounds,
 					NULL,
 					NULL );

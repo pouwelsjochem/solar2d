@@ -31,8 +31,6 @@ extern NSString* const kBuildFolderPath;
 extern NSString* const kKeyStoreFolderPath;
 extern NSString* const kKeyStoreFolderPathAndFile;
 extern NSString* const kDstFolderPath;
-extern NSString* const kImageFolderPath;
-extern NSString* const kVideoFolderPath;
 extern NSString* const kDidAgreeToLicense;
 extern NSString* const kUserPreferenceUsersCurrentSelectedSkin;
 extern NSString* const kUserPreferenceCustomBuildID;
@@ -49,7 +47,6 @@ namespace Rtt
 
 class MacConsoleDevice;
 class MacFBConnect;
-class MacVideoPlayer;
 class MacViewSurface;
 class MacActivityIndicator;
 class PlatformSimulator;
@@ -93,15 +90,10 @@ class MacPlatform : public ApplePlatform
 		virtual Preference::ReadValueResult GetPreference( const char* categoryName, const char* keyName ) const;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
-		virtual bool SaveImageToPhotoLibrary(const char* filePath) const;
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const;
-		virtual bool AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const;
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
-		virtual PlatformVideoPlayer * GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const;
-		virtual PlatformImageProvider * GetImageProvider( const ResourceHandle<lua_State> & handle ) const;
-		virtual PlatformVideoProvider * GetVideoProvider( const ResourceHandle<lua_State> & handle ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
 		virtual void SetIdleTimer( bool enabled ) const;
@@ -121,7 +113,6 @@ class MacPlatform : public ApplePlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textField ) const;
 
-		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
         virtual PlatformFBConnect* GetFBConnect() const;
 
 		virtual S32 GetFontNames( lua_State *L, int index ) const;
@@ -174,7 +165,6 @@ class MacPlatform : public ApplePlatform
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
-		mutable MacVideoPlayer *fVideoPlayer;
 		mutable MacActivityIndicator* fActivityIndicator;
 #if Rtt_AUTHORING_SIMULATOR
 		mutable MacFBConnect *fFBConnect;

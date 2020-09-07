@@ -46,8 +46,6 @@
 #include "Rtt_MacPlatform.h"
 #include "Rtt_Display.h"
 #include "Rtt_MacDisplayObject.h"
-#include "Rtt_MacVideoObject.h"
-#include "Rtt_MacVideoPlayer.h"
 #import "SPILDTopLayerView.h"
 
 #include "Display/Rtt_Display.h"
@@ -529,12 +527,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 
 	for( NSView* displayview in subviews )
 	{
-		if ( [displayview isKindOfClass:[Rtt_VideoPlayerView class]] )
-		{
-			Rtt::MacVideoPlayer* displayobject = (Rtt::MacVideoPlayer*)[(Rtt_VideoPlayerView *)displayview owner];
-			displayobject->SetNeedsRecomputeFromRotationOrScale();
-		}
-		else if ( [displayview isKindOfClass:[SPILDTopLayerView class]] )
+		if ( [displayview isKindOfClass:[SPILDTopLayerView class]] )
 		{
 			// Another kludge. Because the activity indicator is not a display object and because it is a single, modal instance,
 			// and because it is in a C++ wrapper that has no built-in notion of redisplay or callbacks,
@@ -621,33 +614,6 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 - (void) suspendNativeDisplayObjects:(bool) showOverlay
 {
 #if Rtt_AUTHORING_SIMULATOR
-	// TODO: Figure out what 'suspend' really means for native display objects.
-	// Right now, we know we need to suspend video.
-	NSArray* subviews = [self subviews];
-
-	for( NSView* displayview in subviews )
-	{
-		if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
-		{
-			[(Rtt_VideoObjectView *)displayview setSuspended:YES];
-		}
-		/*
-		else if ( [displayview isKindOfClass:[Rtt_VideoPlayerView class]] )
-		{
-			[(Rtt_VideoPlayerView *)displayview setSuspended:YES];
-		}
-		 */
-		else if ( [displayview isKindOfClass:[SPILDTopLayerView class]] )
-		{
-			// Another kludge. Because the activity indicator is not a display object and because it is a single, modal instance,
-			// and because it is in a C++ wrapper that has no built-in notion of redisplay or callbacks,
-			// it is easier to use a performWithDelay here to force an update.
-		}
-		else if( [displayview respondsToSelector:@selector(owner)] )
-		{
-		}
-	}
-    
     if (showOverlay && self.allowOverlay)
     {
         if ( nil == suspendedOverlay )
@@ -674,33 +640,6 @@ static U32 *sTouchId; // any arbitrary pointer value will do
         [suspendedOverlay release];
         suspendedOverlay = nil;
     }
-
-    // TODO: Figure out what 'suspend' really means for native display objects.
-	// Right now, we know we need to suspend video.
-	NSArray* subviews = [self subviews];
-	
-	for( NSView* displayview in subviews )
-	{
-		if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
-		{
-			[(Rtt_VideoObjectView *)displayview setSuspended:NO];
-		}
-		/*
-		else if ( [displayview isKindOfClass:[Rtt_VideoPlayerView class]] )
-		{
-			[(Rtt_VideoPlayerView *)displayview setSuspended:NO];
-		}
-		 */
-		else if ( [displayview isKindOfClass:[SPILDTopLayerView class]] )
-		{
-			// Another kludge. Because the activity indicator is not a display object and because it is a single, modal instance,
-			// and because it is in a C++ wrapper that has no built-in notion of redisplay or callbacks,
-			// it is easier to use a performWithDelay here to force an update.
-		}
-		else if( [displayview respondsToSelector:@selector(owner)] )
-		{
-		}
-	}
 #endif // Rtt_AUTHORING_SIMULATOR
 }
 

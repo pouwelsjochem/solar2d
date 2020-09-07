@@ -251,7 +251,6 @@ pushd "$path/sdk" > /dev/null
 		"$JAVA_SOURCE_PATH/storage/FileServices.java" \
 		"$JAVA_SOURCE_PATH/storage/PackageServices.java" \
 		"$JAVA_SOURCE_PATH/storage/PackageState.java" \
-		"$JAVA_SOURCE_PATH/storage/UniqueFileNameBuilder.java" \
 		"$JAVA_SOURCE_PATH/storage/ZipFileEntryInputStream.java" > "$JAVA_DOC_LOGFILE" 2>&1
 
 	# Copy files needed by the Android "Tools" directory.

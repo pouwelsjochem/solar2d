@@ -44,17 +44,8 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		
-		<!-- Other Corona activities that can be launched by the main Corona activity. -->
-		<activity android:name="com.ansca.corona.CameraActivity"
-		          android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-		          android:configChanges="keyboardHidden|orientation|screenSize"
-		          android:screenOrientation="portrait" />
-		<activity android:name="com.ansca.corona.VideoActivity"
-		          android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-		          android:configChanges="keyboardHidden|orientation|screenSize" />
-		
-		<!-- Corona content provider required by the video player and mail app to access this app's local files. -->
+
+		<!-- Corona content provider required by the mail app to access this app's local files. -->
 		<provider android:name="com.ansca.corona.FileContentProvider"
 		          android:authorities="com.dchan.GoogleLVLTestApp.files" />
 		

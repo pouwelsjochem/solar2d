@@ -25,7 +25,6 @@
 #include "Rtt_LuaCoronaBaseLib.h"
 #include "Rtt_LuaLibCrypto.h"
 #include "Rtt_LuaLibFacebook.h"
-#include "Rtt_LuaLibMedia.h"
 #if defined ( Rtt_USE_ALMIXER )
 #include "Rtt_LuaLibOpenAL.h"
 #endif
@@ -776,7 +775,6 @@ LuaContext::InitializeRttCore( lua_State* L, Runtime *runtime )
 	// Init built-in libs
 	LuaLibSystem::Initialize( L );
 	LuaLibDisplay::Initialize( L, runtime->GetDisplay() );
-	LuaLibMedia::Initialize( L );
 #if defined ( Rtt_USE_ALMIXER )
 	LuaLibOpenAL::Initialize( L );
 #endif

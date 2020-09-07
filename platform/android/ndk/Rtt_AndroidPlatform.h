@@ -25,11 +25,7 @@ class NativeToJavaBridge;
 namespace Rtt
 {
 
-class AndroidAudioPlayer;
-class AndroidImageProvider;
 class AndroidStoreProvider;
-class AndroidVideoPlayer;
-class AndroidVideoProvider;
 class PlatformBitmap;
 class PlatformSurface;
 class PlatformTimer;
@@ -68,13 +64,7 @@ class AndroidPlatform : public MPlatform
         virtual PlatformBitmap* CreateBitmap( const char* filename, bool convertToGrayscale ) const;
         virtual PlatformBitmap* CreateBitmapMask( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[] , Real & baselineOffset ) const;
 
-        virtual PlatformEventSound * CreateEventSound( const ResourceHandle<lua_State> & handle, const char* filePath ) const;
 		 virtual FontMetricsMap GetFontMetrics( const PlatformFont& font ) const;
-        virtual void ReleaseEventSound( PlatformEventSound * soundID ) const;
-        virtual void PlayEventSound( PlatformEventSound * soundID ) const;
-
-        virtual PlatformAudioPlayer* GetAudioPlayer( const ResourceHandle<lua_State> & handle ) const;
-		virtual PlatformAudioRecorder * CreateAudioRecorder(const Rtt::ResourceHandle<lua_State> & handle, const char * filePath) const;
 
 		virtual const MCrypto& GetCrypto() const;
 		virtual void GetPreference( Category category, Rtt::String * value ) const;
@@ -91,8 +81,6 @@ class AndroidPlatform : public MPlatform
 		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
-
-		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		PlatformDisplayObject* GetNativeDisplayObjectById( const int objectId ) const;
 
@@ -133,15 +121,10 @@ class AndroidPlatform : public MPlatform
         char* CopyString( const char* src, bool useAllocator = true ) const;
 
 	public:
-        virtual bool SaveImageToPhotoLibrary(const char* filePath) const;
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const;
-		virtual bool AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const;
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
-		virtual PlatformVideoPlayer* GetVideoPlayer(const Rtt::ResourceHandle<lua_State> & handle) const;
-		virtual PlatformImageProvider* GetImageProvider(const Rtt::ResourceHandle<lua_State> & handle) const;
-		virtual PlatformVideoProvider* GetVideoProvider(const Rtt::ResourceHandle<lua_State> & handle) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
 		virtual void SetIdleTimer( bool enabled ) const;
@@ -174,15 +157,11 @@ class AndroidPlatform : public MPlatform
 
 	protected:
         Rtt_Allocator* fAllocator;
-        mutable AndroidAudioPlayer* fAudioPlayer;
 //        mutable id fHttpPostDelegate;
 
 	private:
 		AndroidGLView* fView;
 		AndroidDevice fDevice;
-		mutable AndroidVideoPlayer* fVideoPlayer;
-		mutable AndroidImageProvider* fImageProvider;
-		mutable AndroidVideoProvider* fVideoProvider;
 //		AlertViewDelegate *fDelegate;
 		String fPackage;
 		String fDocumentsDir;

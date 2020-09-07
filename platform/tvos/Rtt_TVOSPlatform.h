@@ -19,10 +19,7 @@
 namespace Rtt
 {
 
-class IPhoneImageProvider;
-class IPhoneVideoProvider;
 class AppleStoreProvider;
-class IPhoneVideoPlayer;
 
 // ----------------------------------------------------------------------------
 
@@ -54,7 +51,6 @@ class TVOSPlatform : public IPhonePlatformBase
 
 	private:
 		TVOSDevice fDevice;
-//		mutable IPhoneVideoPlayer *fVideoPlayer;
 		mutable AppleStoreProvider *fInAppStoreProvider;
 		UIView *fActivityView;
 		id fPopupControllerDelegate;

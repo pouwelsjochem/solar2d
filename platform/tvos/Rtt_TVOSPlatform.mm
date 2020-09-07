@@ -21,7 +21,6 @@
 #include "Rtt_IPhoneScreenSurface.h"
 #include "Rtt_IPhoneTextBoxObject.h"
 #include "Rtt_IPhoneTextFieldObject.h"
-#include "Rtt_IPhoneVideoObject.h"
 
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaLibSystem.h"
@@ -93,7 +92,6 @@ namespace Rtt
 TVOSPlatform::TVOSPlatform( CoronaView *view )
 :	Super( view ),
 	fDevice( GetAllocator(), view ),
-//	fVideoPlayer( NULL ),
 	fInAppStoreProvider( NULL )
 {
 	UIScreen *screen = [UIScreen mainScreen];
@@ -128,7 +126,6 @@ TVOSPlatform::~TVOSPlatform()
 {
 	[fActivityView release];
 	Rtt_DELETE( fInAppStoreProvider );
-//	Rtt_DELETE( fVideoPlayer );
 }
 
 // =====================================================================

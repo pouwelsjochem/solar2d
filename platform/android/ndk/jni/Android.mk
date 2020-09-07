@@ -420,17 +420,13 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition_v1.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/shell.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidAudioPlayer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_LuaLibOpenSLES.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_PlatformOpenSLESPlayer.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidAudioRecorder.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidBitmap.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidCrypto.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidData.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidDisplayObject.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidEventSound.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidFont.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidImageProvider.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDevice.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDeviceManager.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidLocation.cpp \
@@ -446,9 +442,6 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidSystemOpenEvent.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTimer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTextFieldObject.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidVideoObject.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidVideoPlayer.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidVideoProvider.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReader.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReadResult.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidDisplayObjectRegistry.cpp \
@@ -628,7 +621,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibCrypto.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibFacebook.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibInAppStore.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_LuaLibMedia.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibNative.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibOpenAL.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibSQLite.cpp \
@@ -640,16 +632,12 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_LuaTableIterator.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaUserdataProxy.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Matrix.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformAudioPlayer.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformAudioRecorder.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformAudioSessionManager.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformData.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformDisplayObject.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformEventSound.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformExitCallback.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformFBConnect.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformFont.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformImageProvider.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformInAppStore.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformLocation.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformModalInteraction.cpp \
@@ -658,8 +646,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformReachability.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformSurface.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformTimer.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformVideoPlayer.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformVideoProvider.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Preference.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PreferenceCollection.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PreferenceValue.cpp \

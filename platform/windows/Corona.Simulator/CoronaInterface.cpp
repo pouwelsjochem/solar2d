@@ -23,7 +23,6 @@
 #include "Rtt_AndroidAppPackager.h"
 #include "Rtt_WebAppPackager.h"
 #include "Rtt_LinuxAppPackager.h"
-#include "Rtt_WinAudioPlayer.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"

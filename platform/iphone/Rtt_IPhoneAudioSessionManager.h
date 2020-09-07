@@ -45,14 +45,7 @@ public:
 	
 	virtual bool SetAudioSessionActive( bool is_active );
 	virtual bool GetAudioSessionActive() const;
-	
-	virtual void SetImplicitRecordingModeIfNecessary();
-	virtual void RestoreAudioSessionCategoryIfNecessary();
-	
-	virtual void PrepareAudioSystemForMoviePlayback();
-	virtual void RestoreAudioSystemFromMoviePlayback();
 
-	
 	virtual bool SupportsBackgroundAudio() const;
 	virtual bool AllowsAudioDuringScreenLock() const;
 	

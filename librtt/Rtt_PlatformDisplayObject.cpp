@@ -38,12 +38,6 @@ PlatformDisplayObject::GetTextBoxObjectProxyVTable()
 	return LuaPlatformTextBoxObjectProxyVTable::Constant();
 }
 
-const LuaProxyVTable&
-PlatformDisplayObject::GetVideoObjectProxyVTable()
-{
-	return LuaPlatformVideoObjectProxyVTable::Constant();
-}
-
 // ----------------------------------------------------------------------------
 
 PlatformDisplayObject::PlatformDisplayObject()

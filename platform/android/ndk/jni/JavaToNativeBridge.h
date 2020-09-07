@@ -80,28 +80,18 @@ class JavaToNativeBridge
 		void GyroscopeEvent(double x, double y, double z, double deltaTime);
 		void ResizeEvent();
 		void AlertCallback(int which, bool cancelled);
-		void SoundEndCallback( long id );
-		void VideoEndCallback( long id );
-		void RecordCallback( long id, int status );
-		void SetAudioRecorderState( long id, bool isRecording );
 		void TextEvent( int id, bool hasFocus, bool isDone );
 		void TextEditingEvent( JNIEnv *env, int id, int startPos, int numDeleted, jstring newCharacters, jstring oldString, jstring newString );
 		void MultitouchEventBegin();
 		void MultitouchEventAdd( JNIEnv * env, int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure );
 		void MultitouchEventEnd();
 		void AdsRequestEvent(bool isError);
-		void ImagePickerEvent(JNIEnv *env, jstring selectedImageFileName);
-		void AbortShowingImageProvider();
-		void VideoPickerEvent(JNIEnv *env, jstring selectedVideoFileName, jint duration, jlong size);
-		void AbortShowingVideoProvider();
 		void MemoryWarningEvent();
 		void PopupClosedEvent(JNIEnv *env, jstring popupName, jboolean wasCanceled);
 		void StoreTransactionEvent(
 					JNIEnv *env, jint state, jint errorType, jstring errorMessage, jstring productId, jstring signature,
 					jstring receipt, jstring transactionId, jstring transactionTime,
 					jstring originalReceipt, jstring originalTransactionId, jstring originalTransactionTime);
-		void VideoViewPreparedEvent(jint id);
-		void VideoViewEndedEvent(jint id);
 		const char* GetBuildId();
 
 	public:

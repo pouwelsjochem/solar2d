@@ -74,27 +74,17 @@ public class JavaToNativeShim {
     private static native void nativeGyroscopeEvent( long bridgeAddress, double x, double y, double z, double deltaTime );
     private static native void nativeResizeEvent( long bridgeAddress );
     private static native void nativeAlertCallback( long bridgeAddress, int buttonIndex, boolean cancelled );
-    private static native void nativeSoundEndCallback( long bridgeAddress, long id );
-    private static native void nativeVideoEndCallback( long bridgeAddress, long id );
-    private static native void nativeRecordCallback( long bridgeAddress, long id, int status );
-    private static native void nativeSetAudioRecorderState( long bridgeAddress, long id, boolean isRecording );
     private static native void nativeTextEvent( long bridgeAddress, int id, boolean focusLost, boolean isDone );
 	private static native void nativeTextEditingEvent( long bridgeAddress, int id, int startPos, int numDeleted, String newCharacters, String oldString, String newString );
     private static native void nativeMultitouchEventBegin(long bridgeAddress);
     private static native void nativeMultitouchEventAdd( long bridgeAddress, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int id, float pressure );
     private static native void nativeMultitouchEventEnd( long bridgeAddress );
-    private static native void nativeImagePickerEvent( long bridgeAddress, String selectedImageFileName );
-	private static native void nativeAbortShowingImageProvider( long bridgeAddress );
-	private static native void nativeVideoPickerEvent( long bridgeAddress, String selectedVideoFileName, int duration, long size );
-	private static native void nativeAbortShowingVideoProvider( long bridgeAddress );
 	private static native void nativeMemoryWarningEvent( long bridgeAddress );
 	private static native void nativePopupClosedEvent( long bridgeAddress, String popupName, boolean isError );
 	private static native void nativeStoreTransactionEvent(
 									long bridgeAddress, int state, int errorType, String errorMessage, String productId, String signature,
 									String receipt, String transactionId, String transactionTime,
 									String originalReceipt, String originalTransactionId, String originalTransactionTime );
-	private static native void nativeVideoViewPrepared( long bridgeAddress, int id );
-	private static native void nativeVideoViewEnded( long bridgeAddress, int id );
 	private static native Object nativeGetCoronaRuntime( long bridgeAddress );
 
 	// Load all C/C++ libraries and their dependencies.
@@ -481,34 +471,6 @@ public class JavaToNativeShim {
 		nativeAlertCallback( runtime.getJavaToNativeBridgeAddress(), buttonIndex, cancelled );
 	}
 	
-	public static void soundEndCallback( CoronaRuntime runtime, long id ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeSoundEndCallback( runtime.getJavaToNativeBridgeAddress(), id );
-	}
-	
-	public static void videoEndCallback( CoronaRuntime runtime, long id ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeVideoEndCallback( runtime.getJavaToNativeBridgeAddress(), id );
-	}
-	
-	public static void recordCallback( CoronaRuntime runtime, long id, int status ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeRecordCallback( runtime.getJavaToNativeBridgeAddress(), id, status );
-	}
-
-	public static void setAudioRecorderState( CoronaRuntime runtime, long id, boolean isRecording ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeSetAudioRecorderState( runtime.getJavaToNativeBridgeAddress(), id, isRecording );
-	}
-	
 	public static void textEvent( CoronaRuntime runtime, int id, boolean hasFocus, boolean isDone ) {
 		if (runtime == null || runtime.wasDisposed() || !runtime.getViewManager().hasDisplayObjectWithId(id)) {
 			return;
@@ -521,52 +483,6 @@ public class JavaToNativeShim {
 			return;
 		}
 		nativeTextEditingEvent(runtime.getJavaToNativeBridgeAddress(), id, startPos, numDeleted, newCharacters, oldString, newString);
-	}
-	
-	public static void imagePickerEvent( CoronaRuntime runtime, String selectedImageFileName )
-	{
-		if (selectedImageFileName == null) {
-			selectedImageFileName = "";
-		}
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeImagePickerEvent( runtime.getJavaToNativeBridgeAddress(), selectedImageFileName );
-	}
-
-	public static void abortShowingImageProvider( CoronaRuntime runtime )
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeAbortShowingImageProvider(runtime.getJavaToNativeBridgeAddress());
-	}
-
-	/**
-	 * Creates and sends a video pick event on the native side.
-	 * @param runtime context
-	 * @param selectedVideoFileName The selected video file.  It can be a path or a uri.
-	 * @param duration The number of seconds of the video in milliseconds.  The event created will be in seconds.
-	 * @param size The size of the video in bytes.
-	 */
-	public static void videoPickerEvent( CoronaRuntime runtime, String selectedVideoFileName, int duration, long size )
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		if (selectedVideoFileName == null) {
-			selectedVideoFileName = "";
-		}
-		duration = (int)duration/1000;
-		nativeVideoPickerEvent( runtime.getJavaToNativeBridgeAddress(), selectedVideoFileName, duration, size );
-	}
-
-	public static void abortShowingVideoProvider( CoronaRuntime runtime )
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeAbortShowingVideoProvider(runtime.getJavaToNativeBridgeAddress());
 	}
 	
 	public static void memoryWarningEvent( CoronaRuntime runtime )
@@ -613,22 +529,6 @@ public class JavaToNativeShim {
 				result.getProductName(), result.getSignature(), result.getReceipt(), result.getTransactionStringId(),
 				transactionTimeString, result.getOriginalReceipt(), result.getOriginalTransactionStringId(),
 				originalTransactionTimeString);
-	}
-
-	public static void videoViewPrepared(CoronaRuntime runtime, int id)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeVideoViewPrepared(runtime.getJavaToNativeBridgeAddress(), id);
-	}
-
-	public static void videoViewEnded(CoronaRuntime runtime, int id)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeVideoViewEnded(runtime.getJavaToNativeBridgeAddress(), id);
 	}
 
 	public static CoronaRuntime getCoronaRuntimeFromBridge(long address) {

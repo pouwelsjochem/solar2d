@@ -674,7 +674,6 @@ manifestKeys.USER_CORONA_ACTIVITY_ATTRIBUTES = stringBuffer
 -- Create "uses-feature" tags.
 
 -- We don't want the uses portrait feature since it will remove the landscape only devices
--- which is caused by the CameraActivity's screenOrientation property in the manifest
 table.insert(usesFeatures, {name = "android.hardware.screen.landscape", required = required})
 
 stringBuffer = ""

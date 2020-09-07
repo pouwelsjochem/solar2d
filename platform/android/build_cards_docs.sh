@@ -31,7 +31,6 @@ CORONA_JAVA_FILES="$JAVA_SOURCE_PATH/package-info.java
 	$JAVA_SOURCE_PATH/storage/FileServices.java
 	$JAVA_SOURCE_PATH/storage/PackageServices.java
 	$JAVA_SOURCE_PATH/storage/PackageState.java
-	$JAVA_SOURCE_PATH/storage/UniqueFileNameBuilder.java
 	$JAVA_SOURCE_PATH/storage/ZipFileEntryInputStream.java"
 
 javadoc -d "$JAVA_DOC_OUTPUT_PATH" -link http://docs.oracle.com/javase/7/docs/api/ -sourcepath "$path/../../external/JNLua/src/main/java" com.naef.jnlua $CORONA_JAVA_FILES

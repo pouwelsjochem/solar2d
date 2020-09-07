@@ -86,17 +86,11 @@ class Display
 		virtual StageObject *GetStage();
 		virtual StageObject *GetStageOffscreen();
 
-		BitmapPaint *CaptureScreen( bool save_to_file,
-									bool output_file_will_be_png_format );
+		BitmapPaint *CaptureScreen();
 
-		BitmapPaint *CaptureBounds( Rect *screenBounds,
-									bool will_be_saved_to_file,
-									bool output_file_will_be_png_format );
+		BitmapPaint *CaptureBounds( Rect *screenBounds);
 
-		BitmapPaint *CaptureDisplayObject( DisplayObject *object,
-											bool will_be_saved_to_file,
-											bool output_file_will_be_png_format,
-											bool crop_object_to_screen_bounds );
+		BitmapPaint *CaptureDisplayObject( DisplayObject *object, bool crop_object_to_screen_bounds );
 
 		BitmapPaint *CaptureSave( DisplayObject *object,
 									bool crop_object_to_screen_bounds,

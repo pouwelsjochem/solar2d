@@ -75,7 +75,7 @@ public class ViewManager {
 	
 	/**
 	 * Gets the view that is overlaid on top of the OpenGL view.
-	 * UI objects such as text fields, video views, web views, ads, etc. should be added to this view.
+	 * UI objects such as text fields, ads, etc. should be added to this view.
 	 * @return Returns a FrameLayout view. Returns null if its CoronaActivity is not available.
 	 */
 	public android.widget.FrameLayout getOverlayView()
@@ -127,19 +127,6 @@ public class ViewManager {
 	}
 	
 	/**
-	 * Fetches a CoronaVideoView object by its unique ID.
-	 * @param id The unique integer ID assigned to the object via the View.setId() method.
-	 * @return Returns the specified display object. Returns null if not found.
-	 */
-	private CoronaVideoView getCoronaVideoViewById(int id) {
-		CoronaVideoView.CenteredLayout videoLayout = getDisplayObjectById(CoronaVideoView.CenteredLayout.class, id);
-		if (videoLayout != null) {
-			return videoLayout.getVideoView();
-		}
-		return getDisplayObjectById(CoronaVideoView.class, id);
-	}
-
-	/**
 	 * Determines if a display object having the given ID exists.
 	 * @param id The unique integer ID assigned to the object via the View.setId() method.
 	 * @return Returns true if a display object having the given ID exists. Returns false if not.
@@ -180,35 +167,11 @@ public class ViewManager {
 	}
 	
 	public void suspend() {
-		// Traverse all views and stop any operations that they are currently performing.
-		synchronized (myDisplayObjects) {
-			for (android.view.View view : myDisplayObjects) {
-				if (view instanceof CoronaVideoView) {
-					// Suspend video playback.
-					((CoronaVideoView)view).suspend();
-				}
-				else if (view instanceof CoronaVideoView.CenteredLayout) {
-					// Suspend video playback.
-					((CoronaVideoView.CenteredLayout)view).getVideoView().suspend();
-				}
-			}
-		}
+
 	}
 
 	public void resume() {
-		// Traverse all views and restart them.
-		synchronized (myDisplayObjects) {
-			for (android.view.View view : myDisplayObjects) {
-				if (view instanceof CoronaVideoView) {
-					// Resume video's last playback state.
-					((CoronaVideoView)view).resume();
-				}
-				else if (view instanceof CoronaVideoView.CenteredLayout) {
-					// Resume video's last playback state.
-					((CoronaVideoView.CenteredLayout)view).getVideoView().resume();
-				}
-			}
-		}
+
 	}
 
 	public void addTextView(
@@ -587,7 +550,7 @@ public class ViewManager {
 		myContentView.addView(glView);
 		
 		// Add an invisible overlay view to the root content view.
-		// This is a view container for all UI objects such as text fields, web views, video views, ads, etc.
+		// This is a view container for all UI objects such as text fields, ads, etc.
 		// Add an AbsoluteLayout to this overlay view, which can be used to set pixel positions of native fields.
 		myOverlayView = new android.widget.FrameLayout(myContext);
 		myAbsoluteViewLayout = new android.widget.AbsoluteLayout(myContext);
@@ -849,141 +812,6 @@ public class ViewManager {
 			setLayerTypeMethod.invoke(view, new Object[] {layerType, null});
 		}
 		catch (Exception ex) { }
-	}
-	
-	public void addVideoView(final int id, final int left, final int top, final int width, final int height)
-	{
-		postOnUiThread(new Runnable() {
-			public void run() {
-				// Validate.
-				if ((myContext == null) || (myAbsoluteViewLayout == null)) {
-					return;
-				}
-
-				// Create a video view centered within a FrameLayout container.
-				CoronaVideoView.CenteredLayout view = new CoronaVideoView.CenteredLayout(myContext, myCoronaRuntime);
-				view.setId(id);
-				view.setTag(new StringObjectHashMap());
-				LayoutParams layoutParams = new AbsoluteLayout.LayoutParams(width, height, left, top);
-				myAbsoluteViewLayout.addView(view, layoutParams);
-				view.bringToFront();
-				view.getVideoView().setZOrderOnTop(true);
-
-				// Add the view to the display object collection to be made accessible to the native side of Corona.
-				synchronized (myDisplayObjects) {
-					myDisplayObjects.add(view);
-				}
-			}
-		});
-	}
-
-	public void videoViewLoad(final int id, final String path) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				CoronaVideoView view = getCoronaVideoViewById(id);
-				MediaManager mediaManager = myCoronaRuntime.getController().getMediaManager();
-				if (view != null && mediaManager != null) {
-					view.setVideoURIUsingCoronaProxy(mediaManager.createVideoURLFromString(path, myContext));
-				}
-			}
-		});
-	}
-	
-	public void videoViewPlay(final int id) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				CoronaVideoView view = getCoronaVideoViewById(id);
-				if (view != null) {
-					view.start();
-				}
-			}
-		});
-	}
-
-	public void videoViewPause(final int id) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				CoronaVideoView view = getCoronaVideoViewById(id);
-				if (view != null) {
-					view.pause();
-				}
-			}
-		});
-	}
-
-	public void videoViewSeek(final int id, final int time) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				CoronaVideoView view = getCoronaVideoViewById(id);
-				if (view != null) {
-					// The time we get from lua is in seconds but the seekTo function takes milliseconds
-					view.seekTo(time*1000);
-				}
-			}
-		});
-	}
-
-	public int videoViewGetCurrentTime(final int id) {
-		CoronaVideoView view = getCoronaVideoViewById(id);
-		if (view != null) {
-			// The time we get from the view is in milliseconds but we want to return it in seconds
-			return view.getCurrentPosition()/1000;
-		}
-		return 0;
-	}
-
-	public int videoViewGetTotalTime(final int id) {
-		CoronaVideoView view = getCoronaVideoViewById(id);
-		if (view != null) {
-			return view.getDuration()/1000;
-		}
-		return 0;
-	}
-
-	public boolean videoViewGetIsMuted(final int id) {
-		CoronaVideoView view = getCoronaVideoViewById(id);
-		if (view != null) {
-			return view.isMuted();
-		}
-		return false;
-	}
-
-	public void videoViewMute(final int id, final boolean mute) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				CoronaVideoView view = getCoronaVideoViewById(id);
-				if (view != null) {
-					view.mute(mute);
-				}
-			}
-		});
-	}
-
-	public boolean videoViewGetIsTouchTogglesPlay(final int id) {
-		CoronaVideoView view = getCoronaVideoViewById(id);
-		if (view != null) {
-			return view.isTouchTogglesPlay();
-		}
-		return false;
-	}
-
-	public void videoViewTouchTogglesPlay(final int id, final boolean toggle) {
-		postOnUiThread(new Runnable() {
-			public void run() {
-				CoronaVideoView view = getCoronaVideoViewById(id);
-				if (view != null) {
-					view.touchTogglesPlay(toggle);
-				}
-			}
-		});
-	}
-	
-	public boolean videoViewGetIsPlaying(final int id) {
-		CoronaVideoView view = getCoronaVideoViewById(id);
-		if (view != null) {
-			return view.isPlaying();
-		}
-		return false;
 	}
 	
 }

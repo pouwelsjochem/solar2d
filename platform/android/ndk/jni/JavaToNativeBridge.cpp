@@ -32,9 +32,7 @@
 #include "librtt/Input/Rtt_InputDeviceType.h"
 #include "librtt/Input/Rtt_PlatformInputAxis.h"
 #include "librtt/Input/Rtt_ReadOnlyInputDeviceCollection.h"
-#include "Rtt_AndroidAudioRecorder.h"
 #include "Rtt_AndroidDisplayObject.h"
-#include "Rtt_AndroidImageProvider.h"
 #include "Rtt_AndroidInputDeviceManager.h"
 #include "Rtt_AndroidInputDevice.h"
 #include "Rtt_AndroidPlatform.h"
@@ -44,8 +42,6 @@
 #include "Rtt_AndroidStoreTransaction.h"
 #include "Rtt_AndroidSystemOpenEvent.h"
 #include "Rtt_AndroidTextFieldObject.h"
-#include "Rtt_AndroidVideoObject.h"
-#include "Rtt_AndroidVideoProvider.h"
 
 #include "JavaToNativeBridge.h"
 #include "AndroidImageData.h"
@@ -1019,46 +1015,6 @@ JavaToNativeBridge::AlertCallback( int which, bool cancelled )
 }
 
 void
-JavaToNativeBridge::SoundEndCallback( long id )
-{
-	if (fNativeToJavaBridge != NULL)
-	{
-		fNativeToJavaBridge->SoundEndCallback((uintptr_t)id);
-	}
-}
-
-void
-JavaToNativeBridge::VideoEndCallback( long id )
-{
-	if (fNativeToJavaBridge != NULL)
-	{
-		fNativeToJavaBridge->VideoEndCallback((uintptr_t)id);
-	}
-}
-
-void
-JavaToNativeBridge::RecordCallback( long id, int status )
-{
-	if (fNativeToJavaBridge != NULL)
-	{
-		fNativeToJavaBridge->RecordCallback((uintptr_t)id, status);
-	}
-}
-
-void
-JavaToNativeBridge::SetAudioRecorderState( long id, bool isRecording )
-{
-	if (fPlatform && fRuntime)
-	{
-		Rtt::AndroidAudioRecorder *audioRecorderPointer = (Rtt::AndroidAudioRecorder*) (uintptr_t)id;
-		if (audioRecorderPointer)
-		{
-			audioRecorderPointer->SetRunningState( isRecording );
-		}
-	}
-}
-
-void
 JavaToNativeBridge::TextEvent( int id, bool hasFocus, bool isDone )
 {
 	// Validate.
@@ -1158,60 +1114,6 @@ JavaToNativeBridge::AdsRequestEvent( bool isError )
 }
 
 void
-JavaToNativeBridge::ImagePickerEvent( JNIEnv *env, jstring selectedImageFileName )
-{
-	if (fPlatform && fRuntime && env)
-	{
-		Rtt::AndroidImageProvider *imageProviderPointer = (Rtt::AndroidImageProvider*)(fPlatform->GetImageProvider(fRuntime->VMContext().LuaState()));
-		if (imageProviderPointer)
-		{
-			jstringResult selectedImageFileNameResult( env, selectedImageFileName );
-			imageProviderPointer->CloseWithResult(selectedImageFileNameResult.getUTF8());
-		}
-	}
-}
-
-void
-JavaToNativeBridge::AbortShowingImageProvider()
-{
-	if (fPlatform && fRuntime)
-	{
-		Rtt::AndroidImageProvider *imageProviderPointer = (Rtt::AndroidImageProvider*)(fPlatform->GetImageProvider(fRuntime->VMContext().LuaState()));
-		if (imageProviderPointer)
-		{
-			imageProviderPointer->Abort();
-		}
-	}
-}
-
-void
-JavaToNativeBridge::VideoPickerEvent( JNIEnv *env, jstring selectedVideoFileName, jint duration, jlong size )
-{
-	if (fPlatform && fRuntime && env)
-	{
-		Rtt::AndroidVideoProvider *videoProviderPointer = (Rtt::AndroidVideoProvider*)(fPlatform->GetVideoProvider(fRuntime->VMContext().LuaState()));
-		if (videoProviderPointer)
-		{
-			jstringResult selectedVideoFileNameResult( env, selectedVideoFileName );
-			videoProviderPointer->CloseWithResult(selectedVideoFileNameResult.getUTF8(), duration, size);
-		}
-	}
-}
-
-void
-JavaToNativeBridge::AbortShowingVideoProvider()
-{
-	if (fPlatform && fRuntime)
-	{
-		Rtt::AndroidVideoProvider *videoProviderPointer = (Rtt::AndroidVideoProvider*)(fPlatform->GetVideoProvider(fRuntime->VMContext().LuaState()));
-		if (videoProviderPointer)
-		{
-			videoProviderPointer->Abort();
-		}
-	}
-}
-
-void
 JavaToNativeBridge::MemoryWarningEvent()
 {
 	if (fRuntime)
@@ -1292,46 +1194,6 @@ JavaToNativeBridge::StoreTransactionEvent(
 	// The event object will be automatically deleted by the dispatcher.
 	Rtt::StoreTransactionEvent *eventPointer = Rtt_NEW(&allocator, Rtt::StoreTransactionEvent(transactionPointer));
 	storePointer->GetTransactionNotifier().ScheduleDispatch(eventPointer);
-}
-
-void
-JavaToNativeBridge::VideoViewPreparedEvent(jint id)
-{
-// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-
-	// Fetch the display object by ID.
-	Rtt::AndroidVideoObject *view = (Rtt::AndroidVideoObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-
-	Rtt::VideoEvent e( Rtt::VideoEvent::kReady );
-	view->DispatchEventWithTarget( e );
-}
-
-void
-JavaToNativeBridge::VideoViewEndedEvent(jint id)
-{
-	// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-
-	// Fetch the display object by ID.
-	Rtt::AndroidVideoObject *view = (Rtt::AndroidVideoObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-
-	Rtt::VideoEvent e( Rtt::VideoEvent::kEnded );
-	view->DispatchEventWithTarget( e );
 }
 
 const char*

@@ -16,13 +16,9 @@
 #include "Rtt_LuaResource.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacFBConnect.h"
-#include "Rtt_MacImageProvider.h"
 #include "Rtt_MacTextFieldObject.h"
 #include "Rtt_MacTextBoxObject.h"
-#include "Rtt_MacVideoPlayer.h"
 #include "Rtt_MacViewSurface.h"
-#include "Rtt_MacVideoObject.h"
-#include "Rtt_MacVideoProvider.h"
 #include "Rtt_MacActivityIndicator.h"
 #include "Rtt_MacFont.h"
 #include "Rtt_PlatformInAppStore.h"
@@ -80,8 +76,6 @@ NSString* const kBuildFolderPath = @"buildFolderPath";
 NSString* const kKeyStoreFolderPath = @"keyStoreFolderPath";
 NSString* const kKeyStoreFolderPathAndFile = @"keyStoreFolderPathAndFile";
 NSString* const kDstFolderPath = @"dstFolderPath";
-NSString* const kImageFolderPath = @"imageFolderPath";
-NSString* const kVideoFolderPath = @"videoFolderPath";
 NSString* const kDidAgreeToLicense = @"didAgreeToLicense";
 NSString* const kUserPreferenceUsersCurrentSelectedSkin = @"skin";
 NSString* const kUserPreferenceCustomBuildID = @"userPreferenceCustomBuildID";
@@ -374,7 +368,6 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fDevice( GetAllocator(), view ),
 	fMutexCount( 0 ),
 	fDelegate( [[AlertDelegate alloc] init] ),
-	fVideoPlayer( NULL ),
 	fActivityIndicator( NULL ),
 #if Rtt_AUTHORING_SIMULATOR
 	fFBConnect( NULL ),
@@ -399,7 +392,6 @@ MacPlatform::~MacPlatform()
 	Rtt_DELETE( fFBConnect );
 #endif // Rtt_AUTHORING_SIMULATOR
 	Rtt_DELETE( fActivityIndicator );
-	Rtt_DELETE( fVideoPlayer ) ;
 	[fDelegate release];
 	pthread_mutex_destroy( & fMutex );
 
@@ -531,30 +523,6 @@ MacPlatform::CreateMacImage( Rtt_Allocator* pAllocator, PlatformBitmap& bitmap )
 }
 
 bool
-MacPlatform::SaveImageToPhotoLibrary(const char* filePath) const
-{
-    NSFileManager* fileMgr = [NSFileManager defaultManager];
-    NSString* filebase = @"Picture";
-    bool bDone = false;
-    for ( int i = 1; false == bDone && i < 1000; i++ )
-    {
-        NSString* relativePath = [NSString stringWithFormat:@"Desktop/%@ %d.jpg", filebase, i];
-        NSString* path = [NSHomeDirectory() stringByAppendingPathComponent:relativePath];
-        
-        NSString* source = [NSString stringWithExternalString:filePath];
-        if ( ! [fileMgr fileExistsAtPath:path] )
-        {
-            Rtt_TRACE_SIM( ( "NOTE: Simulator does not actually add images to the photo library. Image is being saved as: \"%s\"\n", [path UTF8String] ) );
-            NSError* error = nil;
-            [fileMgr copyItemAtPath:source toPath:path error:&error];
-            bDone = true;
-        }
-    }
-
-    return true;
-}
-
-bool
 MacPlatform::SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const
 {
 	const void* buffer = bitmap->GetBits( & GetAllocator() );
@@ -643,26 +611,6 @@ bool
 MacPlatform::SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const
 {
 	return SaveBitmap( bitmap, [NSURL fileURLWithPath:[NSString stringWithExternalString:filePath]] );
-}
-
-bool
-MacPlatform::AddBitmapToPhotoLibrary( PlatformBitmap* bitmap ) const
-{
-	NSFileManager* fileMgr = [NSFileManager defaultManager];
-	NSURL* url = nil;
-	NSString* filebase = @"Picture";
-	for ( int i = 1; nil == url; i++ )
-	{
-		NSString* relativePath = [NSString stringWithFormat:@"Pictures/%@ %d.jpg", filebase, i];
-		NSString* path = [NSHomeDirectory() stringByAppendingPathComponent:relativePath];
-		if ( ! [fileMgr fileExistsAtPath:path] )
-		{
-			Rtt_TRACE_SIM( ( "NOTE: screen captured to: \"~/%s\"\n", [relativePath UTF8String] ) );
-			url = [NSURL fileURLWithPath:path];
-		}
-	}
-
-	return SaveBitmap( bitmap, url );
 }
 
 #ifdef Rtt_AUTHORING_SIMULATOR
@@ -832,28 +780,6 @@ MacPlatform::CanOpenURL( const char *url ) const
 	}
 	return result;
 }
-    
-PlatformVideoPlayer *
-MacPlatform::GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const
-{
-	if ( ! fVideoPlayer )
-	{
-		fVideoPlayer = Rtt_NEW( Allocator(), MacVideoPlayer( handle ) );
-	}
-	return fVideoPlayer;
-}
-
-PlatformImageProvider *
-MacPlatform::GetImageProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	return Rtt_NEW( Allocator(), MacImageProvider( handle ) );
-}
-
-PlatformVideoProvider *
-MacPlatform::GetVideoProvider( const ResourceHandle<lua_State> & handle ) const
-{
-	return Rtt_NEW( Allocator(), MacVideoProvider( handle ) );
-}
 
 PlatformStoreProvider*
 MacPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
@@ -999,25 +925,13 @@ MacPlatform::SetActivityIndicator( bool visible ) const
 void
 MacPlatform::Suspend() const
 {
-	// suspend  MacVideoPlayer *fVideoPlayer;
-	if (fVideoPlayer != NULL)
-	{
-		fVideoPlayer->SetSuspended(true);
-	}
 
-	// suspend  MacActivityIndicator* fActivityIndicator;
 }
 
 void
 MacPlatform::Resume() const
 {
-	// resume  MacVideoPlayer *fVideoPlayer;
-	if (fVideoPlayer != NULL)
-	{
-		fVideoPlayer->SetSuspended(false);
-	}
 
-	// resume  MacActivityIndicator* fActivityIndicator;
 }
 
 PlatformDisplayObject*
@@ -1052,12 +966,6 @@ MacPlatform::SetKeyboardFocus( PlatformDisplayObject *object ) const
 		// set the first responder back to the GLView?
 		[[fView window] performSelector:@selector(makeFirstResponder:) withObject:fView afterDelay:0.0];
 	}
-}
-
-PlatformDisplayObject*
-MacPlatform::CreateNativeVideo( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), MacVideoObject( bounds ) );
 }
 
 S32

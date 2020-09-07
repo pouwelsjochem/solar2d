@@ -242,20 +242,6 @@ SystemEvent::Push( lua_State *L ) const
 
 	return 1;
 }
-
-// ----------------------------------------------------------------------------
-
-InternalSystemEvent::InternalSystemEvent( Type type )
-:	SystemEvent( type )
-{
-}
-	
-const char*
-InternalSystemEvent::Name() const
-{
-	static const char kName[] = "_internalSystem";
-	return kName;
-}
 	
 // ----------------------------------------------------------------------------
 	
@@ -2215,59 +2201,6 @@ PopupClosedEvent::Push( lua_State *L ) const
 		lua_setfield( L, -2, "cancelled" );
 	}
 	
-	return 1;
-}
-
-// ----------------------------------------------------------------------------
-
-const char VideoEvent::kName[] = "video";
-
-const char*
-VideoEvent::StringForPhase( Phase type )
-{
-	const char* result = NULL;
-	static const char kReadyString[] = "ready";
-	static const char kEndedString[] = "ended";
-
-	switch( type )
-	{
-		case kReady:
-			result = kReadyString;
-			break;
-		case kEnded:
-			result = kEndedString;
-			break;
-		default:
-			break;
-	}
-
-	return result;
-}
-
-VideoEvent::VideoEvent( Phase phase )
-:	fPhase( phase )
-{
-}
-
-const char*
-VideoEvent::Name() const
-{
-	return Self::kName;
-}
-
-int
-VideoEvent::Push( lua_State *L ) const
-{
-	if ( Rtt_VERIFY( Super::Push( L ) ) )
-	{
-		const char *phase = StringForPhase( fPhase );
-		if ( Rtt_VERIFY( phase ) )
-		{
-			lua_pushstring( L, phase );
-			lua_setfield( L, -2, kPhaseKey );
-		}
-	}
-
 	return 1;
 }
 

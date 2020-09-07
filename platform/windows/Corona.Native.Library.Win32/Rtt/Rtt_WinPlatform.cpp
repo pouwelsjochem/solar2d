@@ -32,20 +32,13 @@
 #include "Rtt_PlatformInAppStore.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_String.h"
-#include "Rtt_WinAudioPlayer.h"
-#include "Rtt_WinAudioRecorder.h"
 #include "Rtt_WinBitmap.h"
 #include "Rtt_WinCrypto.h"
-#include "Rtt_WinEventSound.h"
 #include "Rtt_WinFBConnect.h"
 #include "Rtt_WinFont.h"
-#include "Rtt_WinImageProvider.h"
 #include "Rtt_WinScreenSurface.h"
 #include "Rtt_WinTextBoxObject.h"
 #include "Rtt_WinTimer.h"
-#include "Rtt_WinVideoObject.h"
-#include "Rtt_WinVideoPlayer.h"
-#include "Rtt_WinVideoProvider.h"
 #include "WinString.h"
 #include <algorithm>
 #include <Gdiplus.h>
@@ -71,10 +64,6 @@ namespace Rtt
 	WinPlatform::WinPlatform(Interop::RuntimeEnvironment& environment)
 		: fEnvironment(environment),
 		fDevice(environment),
-		fAudioPlayer(nullptr),
-		fVideoPlayer(nullptr),
-		fImageProvider(nullptr),
-		fVideoProvider(nullptr),
 		fFBConnect(nullptr),
 		fExitCallback(environment),
 		fIsIdleTimerEnabled(true)
@@ -140,8 +129,6 @@ namespace Rtt
 
 		// Delete platform's owned objects.
 		Rtt_DELETE(fFBConnect);
-		Rtt_DELETE(fVideoPlayer);
-		Rtt_DELETE(fAudioPlayer);
 	}
 
 	MPlatformDevice& WinPlatform::GetDevice() const
@@ -157,71 +144,6 @@ namespace Rtt
 	PlatformSurface* WinPlatform::CreateOffscreenSurface(const PlatformSurface& parent) const
 	{
 		return nullptr;
-	}
-
-	/// Saves the given bitmap to Window's "My Pictures\Corona Simulator" directory.
-	/// @param bitmap The bitmap object to be saved. Cannot be NULL.
-	/// @return Returns TRUE if successfully saved given bitmap to file.
-	///         Returns FALSE if unable to save or was given an invalid bitmap object.
-	bool WinPlatform::AddBitmapToPhotoLibrary(PlatformBitmap* bitmap) const
-	{
-		WinString appName;
-		wchar_t utf16FileName[MAX_PATH];
-		wchar_t utf16PathName[MAX_PATH];
-		HRESULT hr;
-		int result;
-		int index;
-
-		// Validate.
-		if (nullptr == bitmap)
-		{
-			return false;
-		}
-
-		// Fetch the app name to be used for the directory path below.
-		if (Interop::ApplicationServices::IsCoronaSdkApp())
-		{
-			appName.SetUTF16(L"Corona Simulator");
-		}
-		else
-		{
-			CopyAppNameTo(appName);
-		}
-
-		// Create a directory under "My Pictures" for the simulator to save pictures to, if not done already.
-		utf16PathName[0] = L'\0';
-		hr = ::SHGetFolderPathW(nullptr, CSIDL_MYPICTURES, nullptr, 0, utf16PathName);
-		if (hr != S_OK)
-		{
-			return false;
-		}
-		if (appName.IsEmpty() == false)
-		{
-			wcscat_s(utf16PathName, MAX_PATH, L"\\");
-			wcscat_s(utf16PathName, MAX_PATH, appName.GetUTF16());
-		}
-		result = ::SHCreateDirectoryExW(nullptr, utf16PathName, nullptr);
-
-		// Create a unique file name for this bitmap in the destination directory.
-		utf16FileName[0] = L'\0';
-		for (index = 1;; index++)
-		{
-			swprintf_s(utf16FileName, MAX_PATH, L"%s\\Picture %d.png", utf16PathName, index);
-			if (_waccess_s(utf16FileName, 0) == ENOENT)
-			{
-				// Generated file name is unique. Break and proceed to save bitmap to file.
-				break;
-			}
-			if (index >= 10000)
-			{
-				// Give up trying to find a unique file name.
-				return false;
-			}
-		}
-
-		// Save the bitmap to file.
-		WinString finalFilePath(utf16FileName);
-		return SaveBitmap(bitmap, finalFilePath.GetUTF8(), 1.0f);
 	}
 
 	/// Determines if the given URL can be opened by the OpenURL() method.
@@ -408,34 +330,6 @@ namespace Rtt
 		return metrics;
 	}
 
-	PlatformVideoPlayer* WinPlatform::GetVideoPlayer(const ResourceHandle<lua_State>& handle) const
-	{
-		if (!fVideoPlayer)
-		{
-			fVideoPlayer = Rtt_NEW(&GetAllocator(), WinVideoPlayer(handle));
-		}
-		return fVideoPlayer;
-	}
-
-	PlatformImageProvider* WinPlatform::GetImageProvider(const ResourceHandle<lua_State>& handle) const
-	{
-		if (!fImageProvider)
-		{
-			fImageProvider = Rtt_NEW(&GetAllocator(), WinImageProvider(handle));
-		}
-		return fImageProvider;
-	}
-
-	PlatformVideoProvider*
-		WinPlatform::GetVideoProvider(const ResourceHandle<lua_State>& handle) const
-	{
-		if (!fVideoProvider)
-		{
-			fVideoProvider = Rtt_NEW(&GetAllocator(), WinVideoProvider(handle));
-		}
-		return fVideoProvider;
-	}
-
 	PlatformStoreProvider* WinPlatform::GetStoreProvider(const ResourceHandle<lua_State>& handle) const
 	{
 		return nullptr;
@@ -598,44 +492,6 @@ namespace Rtt
 		}
 		return Rtt_NEW(&GetAllocator(), WinTextBitmap(
 			fEnvironment, str, (const WinFont&)font, integerWidth, integerHeight, *alignmentPointer, baselineOffset));
-	}
-
-	PlatformEventSound* WinPlatform::CreateEventSound(const ResourceHandle<lua_State>& handle, const char* filePath) const
-	{
-		WinEventSound* player = new WinEventSound(fEnvironment, handle);
-		player->Load(filePath);
-		return player;
-	}
-
-	void WinPlatform::ReleaseEventSound(PlatformEventSound* soundID) const
-	{
-		delete soundID;
-	}
-
-	void WinPlatform::PlayEventSound(PlatformEventSound* soundID) const
-	{
-		soundID->Play();
-	}
-
-	PlatformAudioRecorder* WinPlatform::CreateAudioRecorder(
-		const ResourceHandle<lua_State>& handle, const char* filePath) const
-	{
-		return Rtt_NEW(&GetAllocator(), WinAudioRecorder(handle, GetAllocator(), filePath));
-	}
-
-	PlatformAudioPlayer* WinPlatform::GetAudioPlayer(const ResourceHandle<lua_State>& handle) const
-	{
-		if (!fAudioPlayer)
-		{
-			fAudioPlayer = Rtt_NEW(&GetAllocator(), WinAudioPlayer(fEnvironment, handle));
-		}
-		return fAudioPlayer;
-	}
-
-	// This version just returns an existing player for appSoundNotify()
-	PlatformAudioPlayer* WinPlatform::GetAudioPlayer() const
-	{
-		return fAudioPlayer;
 	}
 
 	void WinPlatform::RaiseError(MPlatform::Error e, const char* reason) const
@@ -827,17 +683,6 @@ namespace Rtt
 		}
 		free(pImageCodecInfo);
 		return index;
-	}
-
-	bool WinPlatform::SaveImageToPhotoLibrary(const char* filePath) const
-	{
-		PlatformBitmap* bitmap = CreateBitmap(filePath, false);
-		if (bitmap)
-		{
-			AddBitmapToPhotoLibrary(bitmap);
-			Rtt_DELETE(bitmap);
-		}
-		return true;
 	}
 
 	// Saves the given bitmap to file.
@@ -1363,12 +1208,6 @@ namespace Rtt
 				renderSurfacePointer->SetFocus();
 			}
 		}
-	}
-
-	PlatformDisplayObject* WinPlatform::CreateNativeVideo(const Rect& bounds) const
-	{
-		Rtt_TRACE_SIM(("WARNING: Native video objects are not supported in the simulator. Please build for device.\n"));
-		return Rtt_NEW(&GetAllocator(), WinVideoObject(fEnvironment, bounds));
 	}
 
 	Rtt_Real WinPlatform::GetStandardFontSize() const

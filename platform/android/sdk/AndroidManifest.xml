@@ -15,13 +15,6 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name="com.ansca.corona.CameraActivity"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-              android:configChanges="keyboardHidden|orientation"
-              android:screenOrientation="portrait" />
-    <activity android:name="com.ansca.corona.VideoActivity"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-              android:configChanges="keyboardHidden|orientation" />
     <provider android:name="com.ansca.corona.storage.FileContentProvider"
               android:authorities="com.ansca.corona.files"
               android:exported="true" />
