@@ -196,17 +196,6 @@ MacConsolePlatform::GetFontNames( lua_State *L, int index ) const
 	return 0;
 }
 
-void
-MacConsolePlatform::SetTapDelay( Rtt_Real delay ) const
-{
-}
-
-Rtt_Real
-MacConsolePlatform::GetTapDelay() const
-{
-	return 0.;
-}
-
 PlatformFBConnect*
 MacConsolePlatform::GetFBConnect() const
 {

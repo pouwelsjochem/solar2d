@@ -664,46 +664,14 @@ class MultitouchEvent : public VirtualEvent
 class RelativeTouchEvent : public TouchEvent
 {
 	public:
-		RelativeTouchEvent( Real x, Real y, Phase phase, U64 tapCount = 0 );
+		RelativeTouchEvent( Real x, Real y, Phase phase );
 	
 	public:
 		static const char kName[];
 	
 	public:
 		virtual const char* Name() const;
-		virtual int Push( lua_State *L ) const;
 		virtual void Dispatch( lua_State *L, Runtime& runtime ) const;
-	
-	private:
-		U64 fNumTaps;
-};
-
-// ----------------------------------------------------------------------------
-
-// Dispatched to target
-class TapEvent : public HitEvent
-{
-	public:
-		typedef HitEvent Super;
-
-	public:
-		static const char kName[];
-
-	public:
-		TapEvent( Real x, Real y, S32 numTaps );
-
-	public:
-		virtual const char* Name() const;
-		virtual int Push( lua_State *L ) const;
-
-	protected:
-		virtual U32 GetListenerMask() const;
-
-	public:
-		Rtt_FORCE_INLINE S32 NumTaps() const { return fNumTaps; }
-
-	private:
-		S32 fNumTaps;
 };
 
 // ----------------------------------------------------------------------------

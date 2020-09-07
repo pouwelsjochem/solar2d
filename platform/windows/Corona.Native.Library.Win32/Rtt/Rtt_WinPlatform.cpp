@@ -1529,15 +1529,6 @@ namespace Rtt
 		return fontPointer;
 	}
 
-	void WinPlatform::SetTapDelay(Rtt_Real delay) const
-	{
-	}
-
-	Rtt_Real WinPlatform::GetTapDelay() const
-	{
-		return Rtt_REAL_1;
-	}
-
 	PlatformFBConnect* WinPlatform::GetFBConnect() const
 	{
 		if (!fFBConnect)

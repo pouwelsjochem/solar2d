@@ -243,18 +243,6 @@ TVOSPlatform::HidePopup( const char *name ) const
 }
 
 void
-TVOSPlatform::SetTapDelay( Rtt_Real delay ) const
-{
-	GetView().tapDelay = delay;
-}
-
-Rtt_Real
-TVOSPlatform::GetTapDelay() const
-{
-	return GetView().tapDelay;
-}
-
-void
 TVOSPlatform::RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const
 {
     NSLog(@"Runtime Error: %s: %s\n%s", errorType, message, stacktrace);

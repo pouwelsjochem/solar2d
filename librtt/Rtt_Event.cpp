@@ -1431,9 +1431,8 @@ MultitouchEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 
 const char RelativeTouchEvent::kName[] = "relativeTouch";
 
-RelativeTouchEvent::RelativeTouchEvent( Real x, Real y, Phase phase, U64 tapCount )
-:	TouchEvent( x, y, Rtt_REAL_0, Rtt_REAL_0, phase, kPressureInvalid ),
-	fNumTaps( tapCount )
+RelativeTouchEvent::RelativeTouchEvent( Real x, Real y, Phase phase )
+:	TouchEvent( x, y, Rtt_REAL_0, Rtt_REAL_0, phase, kPressureInvalid )
 {
 }
 
@@ -1441,26 +1440,6 @@ const char*
 RelativeTouchEvent::Name() const
 {
 	return RelativeTouchEvent::kName;
-}
-
-int
-RelativeTouchEvent::Push( lua_State *L ) const
-{
-	if ( Rtt_VERIFY( TouchEvent::Push( L ) ) )
-	{
-		Rtt_ASSERT( lua_istable( L, -1 ) );
-		
-		const char kTapCountKey[] = "tapCount";
-		
-		// On relativeTouch ended events, supply the tap count.
-		if ( GetPhase() == TouchEvent::kEnded )
-		{
-			lua_pushinteger( L, fNumTaps );
-			lua_setfield( L, -2, kTapCountKey );
-		}
-	}
-	
-	return 1;
 }
 
 // TouchEvents try to adjust based on content scaling and screen origins. For relative touch events, we
@@ -1471,46 +1450,6 @@ void
 RelativeTouchEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 {
 	VirtualEvent::Dispatch( L, runtime );
-}
-
-// ----------------------------------------------------------------------------
-
-const char TapEvent::kName[] = "tap";
-
-TapEvent::TapEvent( Real x, Real y, S32 numTaps )
-:	Super( x, y ),
-	fNumTaps( numTaps )
-{
-}
-
-const char*
-TapEvent::Name() const
-{
-	return kName;
-}
-
-int
-TapEvent::Push( lua_State *L ) const
-{
-	if ( Rtt_VERIFY( Super::Push( L ) ) )
-	{
-		Rtt_ASSERT( lua_istable( L, -1 ) );
-
-		const char kNumTapsKey[] = "numTaps";
-
-//		Rtt_TRACE( ( "[TapEvent::Push] numTaps(%d)\n", fNumTaps ) );
-
-		lua_pushinteger( L, fNumTaps );
-		lua_setfield( L, -2, kNumTapsKey );
-	}
-
-	return 1;
-}
-
-U32
-TapEvent::GetListenerMask() const
-{
-	return DisplayObject::kTapListener;
 }
 
 // ----------------------------------------------------------------------------
@@ -1539,8 +1478,6 @@ DragEvent::Push( lua_State *L ) const
 
 		const char kXDeltaKey[] = "xDelta";
 		const char kYDeltaKey[] = "yDelta";
-
-//		Rtt_TRACE( ( "[TapEvent::Push] numTaps(%d)\n", fNumTaps ) );
 
 		lua_pushinteger( L, Rtt_RealToInt( fDeltaX ) );
 		lua_setfield( L, -2, kXDeltaKey );

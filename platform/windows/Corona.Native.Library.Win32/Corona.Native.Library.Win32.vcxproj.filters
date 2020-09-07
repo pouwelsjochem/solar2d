@@ -307,9 +307,6 @@
     <ClInclude Include="Interop\UI\WebBrowserNavigationFailedEventArgs.h">
       <Filter>Interop\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Interop\Input\TapTracker.h">
-      <Filter>Interop\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Interop\Nullable.h">
       <Filter>Interop</Filter>
     </ClInclude>
@@ -583,9 +580,6 @@
     </ClCompile>
     <ClCompile Include="Interop\UI\WebBrowserNavigationFailedEventArgs.cpp">
       <Filter>Interop\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Interop\Input\TapTracker.cpp">
-      <Filter>Interop\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

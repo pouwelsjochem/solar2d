@@ -94,60 +94,9 @@
 - (void)dispatchEvent:(Rtt::MEvent*)event;
 @end
 
-
-@interface TapEventWrapper : NSObject
-{
-	Rtt::TapEvent *event;
-}
-
-- (id)initWithTapEvent:(Rtt::TapEvent*)inEvent;
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@property (nonatomic, readonly) Rtt::TapEvent *event;
-#else
-- (Rtt::TapEvent*)event;
-#endif
-
-@end
-
-
-@implementation TapEventWrapper
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-@synthesize event;
-#else
-- (Rtt::TapEvent*)event
-{
-	return event;
-}
-#endif
-
-- (id)initWithTapEvent:(Rtt::TapEvent*)inEvent
-{
-	self = [super init];
-	if ( self )
-	{
-		event = inEvent;
-	}
-
-	return self;
-}
-
-- (void)dealloc
-{
-	delete event;
-
-	[super dealloc];
-}
-
-@end
-
-
-
 @implementation GLView
 
 @synthesize fRuntime;
-@synthesize fTapDelay;
 @synthesize backingScaleFactor;
 @synthesize isReady;
 @synthesize sendAllMouseEvents;
@@ -176,11 +125,6 @@
 {
 	fRuntime = runtime;
 }
-- (void)initCommon
-{
-	fFirstClickTime = 0.;
-	fTapDelay = 0.;
-}
 
 - (id)initWithFrame:(NSRect)frameRect
 {
@@ -195,7 +139,6 @@
 
 		fRuntime = NULL;
 		fDelegate = nil;
-		[self initCommon];
         fCursorRects = [[NSMutableArray alloc] initWithCapacity:18];
 
 		sendAllMouseEvents = YES;
@@ -398,11 +341,6 @@
 	}
 }
 
-- (void)dispatchTapEvent:(TapEventWrapper*)e
-{
-	[self dispatchEvent:e.event];
-}
-
 // TODO: This function needs to be kept in sync with PlatformSimulator::AdjustPoint(),
 // and should eventually call it directly.
 - (void)adjustPoint:(NSPoint*)p
@@ -421,8 +359,7 @@
 	return p;
 }
 
-static const float kTapTolerance = 1.;
-static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value will do
+static U32 *sTouchId; // any arbitrary pointer value will do
 
 - (void)rightMouseDown:(NSEvent*)event
 {
@@ -482,17 +419,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 	[self dispatchMouseEvent:MouseEvent::kDown event:event];
     
 	fStartPosition = p;
-	float tClick = fRuntime->GetElapsedMS();
-	if ( tClick - fFirstClickTime > 250 )
-	{
-		fFirstClickTime = tClick;
-		fNumTaps = 1;
-	}
-	else if ( fabs( fStartPosition.x - p.x ) <= kTapTolerance
-		 && fabs( fStartPosition.y - p.y ) <= kTapTolerance )
-	{
-		fNumTaps++;
-	}
 
 #if Rtt_AUTHORING_SIMULATOR
 	float pressure = lastTouchPressure;
@@ -511,11 +437,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 	else
 	{
 		[self dispatchEvent: (&t)];
-	}
-
-	if ( fTapDelay > 0. && fNumTaps > 1 )
-	{
-		[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	}
 }
 
@@ -585,28 +506,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 	else
 	{
 		[self dispatchEvent: (&t)];
-	}
-
-	if ( fNumTaps > 0 )
-	{
-		if ( fabs( fStartPosition.x - p.x ) <= kTapTolerance
-			 && fabs( fStartPosition.y - p.y ) <= kTapTolerance )
-		{
-			TapEvent* tapEvent = new TapEvent( p.x, p.y, fNumTaps );
-			TapEventWrapper* e = [[TapEventWrapper alloc] initWithTapEvent:tapEvent];
-
-			NSTimeInterval delayInSeconds = fTapDelay;
-			if ( delayInSeconds > 0. )
-			{
-				[self performSelector:@selector(dispatchTapEvent:) withObject:e afterDelay:delayInSeconds];
-			}
-			else
-			{
-				[self dispatchTapEvent:e];
-			}
-
-			[e release];
-		}
 	}
 
 //	NSDEBUG( @"mouseUp(%g,%g)", p.x, p.y );

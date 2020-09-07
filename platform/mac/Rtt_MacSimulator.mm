@@ -224,7 +224,6 @@ MacSimulator::Initialize(
 
 	Runtime& runtime = GetPlayer()->GetRuntime();
 	screenView.runtime = & runtime;
-	runtime.SetProperty( Runtime::kIsOrientationLocked, Super::IsProperty( Super::kIsOrientationLocked ) );
 	
 	//Initialize Joystick support
 	AppleInputDeviceManager& macDeviceManager = (AppleInputDeviceManager&)runtime.Platform().GetDevice().GetInputDeviceManager();

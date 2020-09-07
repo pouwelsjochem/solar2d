@@ -27,11 +27,8 @@ namespace Rtt
 {
 	Rtt::Runtime* fRuntime;
 	NSPoint fStartPosition;
-	float fFirstClickTime;
-	NSTimeInterval fTapDelay;
 
 	id< GLViewDelegate > fDelegate;
-	U8 fNumTaps;
 
 	NSRect nativeFrameRect; // currently only settable via initWithFrame:
 	SPILDTopLayerView* suspendedOverlay;
@@ -47,7 +44,6 @@ namespace Rtt
 }
 
 @property (nonatomic, readwrite, getter=runtime, setter=setRuntime:) Rtt::Runtime *fRuntime;
-@property (nonatomic, readwrite, getter=tapDelay, setter=setTapDelay:) NSTimeInterval fTapDelay;
 @property (nonatomic, assign) CGFloat backingScaleFactor;
 @property (nonatomic, assign) BOOL isReady;
 @property (nonatomic, assign) BOOL sendAllMouseEvents;

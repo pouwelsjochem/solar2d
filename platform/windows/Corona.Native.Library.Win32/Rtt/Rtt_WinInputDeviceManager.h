@@ -11,7 +11,6 @@
 
 #include "Input\Rtt_PlatformInputDeviceManager.h"
 #include "Interop\Input\InputDeviceMonitor.h"
-#include "Interop\Input\TapTracker.h"
 #include "Interop\UI\RenderSurfaceControl.h"
 #include "Interop\RuntimeEnvironment.h"
 #include "Rtt_Event.h"
@@ -319,16 +318,6 @@ namespace Rtt
 		///  </para>
 		/// </summary>
 		TouchPointState fTouchPointStates[kMaxTouchPoints];
-
-		/// <summary>
-		///  <para>Tracker used to determine if the received touch events should trigger a Lua "tap" event.</para>
-		///  <para>Received touch events are expected to be passed to this object's UpdateWith() method.</para>
-		///  <para>
-		///   After calling UpdateWith(), you are expected to call HasTapOccurred() to determine if
-		///   a "tap" event should be dispatched.
-		///  </para>
-		/// </summary>
-		Interop::Input::TapTracker fTapTracker;
 
 		/// <summary>
 		///  <para>Set true if member variable "fLastMouseMovePoint" is storing a valid value.</para>

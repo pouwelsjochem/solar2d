@@ -62,7 +62,6 @@ public class JavaToNativeShim {
     			float accuracy, boolean isAbsolute);
     private static native void nativeInputDeviceStatusEvent(
     			long bridgeAddress, int coronaDeviceId, boolean hasConnectionStateChanged, boolean wasReconfigured);
-    private static native void nativeTapEvent( long bridgeAddress, int x, int y, int count );
     private static native void nativeTouchEvent( long bridgeAddress, int x, int y, int xStart, int yStart, int type, long timestamp, int id, float pressure );
     private static native void nativeMouseEvent(
     			long bridgeAddress, int x, int y, int scrollX, int scrollY, long timestamp,
@@ -364,14 +363,6 @@ public class JavaToNativeShim {
 				CoronaEnvironment.getInternalCachesDirectory(context).getAbsolutePath(),
 				fileServices.getExpansionFileDirectory().getAbsolutePath(),
 				width, height, isCoronaKit);
-	}
-
-	public static void tapEvent( CoronaRuntime runtime, int x, int y, int count )
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeTapEvent( runtime.getJavaToNativeBridgeAddress(), x, y, count );
 	}
 	
 	public static void mouseEvent(

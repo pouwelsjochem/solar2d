@@ -61,7 +61,6 @@ class PlatformSimulator
 			kUninitializedMask = 0x0,
 
 			kIsAppStartedMask = 0x0001,
-			kIsOrientationLocked = 0x0002,
 
 			// Event Masks
 			kAccelerometerEventMask = 0x0100,

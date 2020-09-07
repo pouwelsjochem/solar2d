@@ -274,12 +274,9 @@
     <JCompile Include="src\com\ansca\corona\input\RaiseKeyEventTask.java" />
     <JCompile Include="src\com\ansca\corona\input\RaiseMouseEventTask.java" />
     <JCompile Include="src\com\ansca\corona\input\RaiseMultitouchEventTask.java" />
-    <JCompile Include="src\com\ansca\corona\input\RaiseTapEventTask.java" />
     <JCompile Include="src\com\ansca\corona\input\RaiseTouchEventTask.java" />
     <JCompile Include="src\com\ansca\corona\input\ReadOnlyAxisInfoCollection.java" />
     <JCompile Include="src\com\ansca\corona\input\ReadOnlyInputDeviceTypeSet.java" />
-    <JCompile Include="src\com\ansca\corona\input\TapTracker.java" />
-    <JCompile Include="src\com\ansca\corona\input\TapTrackerCollection.java" />
     <JCompile Include="src\com\ansca\corona\input\TouchPhase.java" />
     <JCompile Include="src\com\ansca\corona\input\TouchPoint.java" />
     <JCompile Include="src\com\ansca\corona\input\TouchTracker.java" />

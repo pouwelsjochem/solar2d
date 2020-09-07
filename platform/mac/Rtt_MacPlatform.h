@@ -126,9 +126,6 @@ class MacPlatform : public ApplePlatform
 
 		virtual S32 GetFontNames( lua_State *L, int index ) const;
 
-		virtual void SetTapDelay( Rtt_Real delay ) const;
-		virtual Rtt_Real GetTapDelay() const;
-
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const;

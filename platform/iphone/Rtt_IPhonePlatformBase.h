@@ -88,9 +88,6 @@ class IPhonePlatformBase : public ApplePlatform
 		virtual void SetActivityIndicator( bool visible ) const;
 
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
-		
-		virtual void SetTapDelay( Rtt_Real delay ) const;
-		virtual Rtt_Real GetTapDelay() const;
 
 		virtual PlatformFBConnect* GetFBConnect() const;
 

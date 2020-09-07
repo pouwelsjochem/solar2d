@@ -105,8 +105,6 @@ class WinPlatform : public MPlatform
 		virtual S32 GetFontNames(lua_State *L, int index) const;
 		virtual PlatformFont* CreateFont(PlatformFont::SystemFont fontType, Rtt_Real size) const;
 		virtual PlatformFont* CreateFont(const char *fontName, Rtt_Real size) const;
-		virtual void SetTapDelay(Rtt_Real delay) const;
-		virtual Rtt_Real GetTapDelay() const;
 		virtual PlatformFBConnect* GetFBConnect() const;
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const;
 		virtual void ReleaseNotification(void *notificationId) const;

@@ -119,48 +119,6 @@ CreatePlatform( CoronaView *view )
 
 @end
 
-// TapEventWrapper
-// ----------------------------------------------------------------------------
-#pragma mark # TapEventWrapper
-
-@interface TapEventWrapper : NSObject
-{
-	Rtt::TapEvent *event;
-}
-
-- (id)initWithTouch:(UITouch*)touch inView:(CoronaView*)view;
-
-@property (nonatomic, readonly) Rtt::TapEvent *event;
-
-@end
-
-
-@implementation TapEventWrapper
-
-@synthesize event;
-
-- (id)initWithTouch:(UITouch*)touch inView:(CoronaView*)view
-{
-	self = [super init];
-	if ( self )
-	{
-		CGPoint p = [touch locationInCoronaView:view];
-		event = new Rtt::TapEvent( Rtt_FloatToReal( p.x ), Rtt_FloatToReal( p.y ), (S32)touch.tapCount );
-//		Rtt_TRACE( ( "TapEventWrapper create(%p)\n", event ) );
-	}
-
-	return self;
-}
-
-- (void)dealloc
-{
-	delete event;
-
-	[super dealloc];
-}
-
-@end
-
 // CoronaViewListenerAdapter
 // ----------------------------------------------------------------------------
 #pragma mark # CoronaViewListenerAdapter
@@ -200,7 +158,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	NSString *fResourcePath;
 	CFMutableDictionaryRef fTouchesData;
 	CGPoint fStartTouchPosition;
-	NSTimeInterval fTapDelay;
 	int fInhibitCount; // used by TouchInhibitor
 	int fSuspendCount;
 	int fLastContentHeight;
@@ -234,7 +191,6 @@ CoronaViewListenerAdapter( lua_State *L )
 - (void)applicationWillResignActive:(NSNotification *)notification;
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
 
-- (void)dispatchTapEvent:(TapEventWrapper*)event;
 - (void)dispatchEvent:(Rtt::MEvent*)event;
 
 - (void)pollAndDispatchMotionEvents;
@@ -253,14 +209,12 @@ CoronaViewListenerAdapter( lua_State *L )
 // ----------------------------------------------------------------------------
 
 @synthesize fInhibitCount;
-@synthesize fTapDelay;
 
 // Bottleneck for startup
 - (void)initCommon
 {
 	fResourcePath = nil;
 	fTouchesData = nil;
-	fTapDelay = 0.;
 	fInhibitCount = 0;
 	fSuspendCount = 0;
 	_observeSuspendResume = YES;
@@ -672,13 +626,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	}
 }
 
-
-- (void)dispatchTapEvent:(TapEventWrapper*)e;
-{
-//	Rtt_TRACE( ( "dispatchTapEventWrapper(%p) numTaps(%d)\n", e, e.event->NumTaps() ) );
-	[self dispatchEvent:e.event];
-}
-
 - (void)dispatchEvent:(Rtt::MEvent*)e;
 {
 	using namespace Rtt;
@@ -863,14 +810,6 @@ PrintTouches( NSSet *touches, const char *header )
 		t.SetId( touch );
 		[self dispatchEvent: (&t)];
 	}
-
-	// Rtt_TRACE(  ( "touch(%p)\n\tphase(%d)\n", touch, touch.phase ) );
-	// Rtt_TRACE(  ( "touch(%p)\n\tbegin(%d)\n", touch, touch.tapCount ) );
-
-	if ( fTapDelay > 0. && touch.tapCount > 1 )
-	{
-		[NSObject cancelPreviousPerformRequestsWithTarget:self]; // selector:@selector(dispatchTapEvent:) object:@"tapSingle"];
-	}
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -904,9 +843,6 @@ PrintTouches( NSSet *touches, const char *header )
 		[self dispatchEvent: (&t)];
 	}
 
-	// Rtt_TRACE(  ( "touch(%p)\n\tphase(%d)\n", touch, touch.phase ) );
-	// Rtt_TRACE(  ( "touch(%p)\n\tmove(%d)\n", touch, touch.tapCount ) );
-
 #ifndef Rtt_TVOS_ENV
 	Rtt::DragEvent e( fStartTouchPosition.x, fStartTouchPosition.y, currentTouchPosition.x, currentTouchPosition.y );
 	[self dispatchEvent: (&e)];
@@ -933,7 +869,7 @@ PrintTouches( NSSet *touches, const char *header )
 	{
 #ifdef Rtt_TVOS_ENV
 		CGPoint currentTouchPosition = { [touch locationInView:self].x - [self center].x, [touch locationInView:self].y - [self center].y };
-		Rtt::RelativeTouchEvent t( currentTouchPosition.x, currentTouchPosition.y, Rtt::TouchEvent::kEnded, [touch tapCount] );
+		Rtt::RelativeTouchEvent t( currentTouchPosition.x, currentTouchPosition.y, Rtt::TouchEvent::kEnded );
 #else
 		CGPoint currentTouchPosition = [touch locationInCoronaView:self];
 		Rtt::Real pressure = [self getForceTouchSupport] ? [touch force] : Rtt::TouchEvent::kPressureInvalid;
@@ -945,30 +881,12 @@ PrintTouches( NSSet *touches, const char *header )
 
 	// Rtt_TRACE(  ( "touch(%p)\n\tphase(%d)\n", touch, touch.phase ) );
 	
-	// If the touch moved, the tapCount is zero
-	if ( touch.tapCount > 0 )
-	{
 #ifdef Rtt_TVOS_ENV
 		// On tvOS, we provide a key event for the tap rather than a true tap event.
 		// The tap count can still be obtained from ended-phase "RelativeTouchEvent" events.
 		Rtt::KeyEvent e( NULL, Rtt::KeyEvent::kDown, Rtt::KeyName::kButtonZ, 0, false, false, false, false );
 		[self dispatchEvent:(&e)];
-#else
-		TapEventWrapper* e = [[TapEventWrapper alloc] initWithTouch:touch inView:self];
-
-		NSTimeInterval delayInSeconds = fTapDelay;
-		if ( delayInSeconds > 0. )
-		{
-			[self performSelector:@selector(dispatchTapEvent:) withObject:e afterDelay:delayInSeconds];
-		}
-		else
-		{
-			[self dispatchTapEvent:e];
-		}
-
-		[e release];
 #endif
-	}
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event

@@ -580,20 +580,6 @@ IPhonePlatform::CreateNativeVideo( const Rect& bounds ) const
 	return Rtt_NEW( & GetAllocator(), IPhoneVideoObject( bounds ) );
 }
 
-void
-IPhonePlatform::SetTapDelay( Rtt_Real delay ) const
-{
-	AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-	((CoronaView*)delegate.view).tapDelay = delay;
-}
-
-Rtt_Real
-IPhonePlatform::GetTapDelay() const
-{
-	AppDelegate *delegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-	return ((CoronaView*)delegate.view).tapDelay;
-}
-
 void*
 IPhonePlatform::CreateAndScheduleNotification( lua_State *L, int index ) const
 {

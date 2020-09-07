@@ -25,9 +25,6 @@ public class InputHandler {
 	/** Collection of touch trackers which keep track of touch events from multiple devices and pointers. */
 	private TouchTrackerCollection fTouchTrackers;
 
-	/** Collection of trap trackers used to detect taps from multiple touch sources. */
-	private TapTrackerCollection fTapTrackers;
-
 	/** Used to check whether multitouch is enabled. **/
 	private com.ansca.corona.Controller fController;
 
@@ -35,7 +32,6 @@ public class InputHandler {
 	public InputHandler(com.ansca.corona.Controller controller) {
 		fTaskDispatcher = null;
 		fTouchTrackers = new TouchTrackerCollection();
-		fTapTrackers = new TapTrackerCollection();
 		fController = controller;
 	}
 
@@ -136,7 +132,6 @@ public class InputHandler {
 		wasHandled |= handleAxisEvent(event);
 		wasHandled |= handleMouseEvent(event);
 		wasHandled |= handleTouchEvent(event);
-		wasHandled |= handleTapEvent(event);
 
 		// Returns true if this handler has consumed the given event.
 		return wasHandled;
@@ -480,44 +475,6 @@ public class InputHandler {
 		// Consume the event by returning true.
 		return true;
     }
-
-	/**
-	 * Posts tap events to Corona if the given motion event provides them.
-	 * @param event The motion event to be processed by Corona.
-	 * @return Returns true if Corona has handled the given event. Returns false if not.
-	 */
-	private boolean handleTapEvent(android.view.MotionEvent event) {
-		// Validate.
-		if (event == null) {
-			return false;
-		}
-
-		// Do not continue if Corona "tap" events cannot be produced from the given motion event.
-		InputDeviceType deviceType = InputDeviceType.from(event);
-		if ((deviceType != InputDeviceType.TOUCHSCREEN) &&
-		    (deviceType != InputDeviceType.STYLUS) &&
-		    (deviceType != InputDeviceType.MOUSE)) {
-			return false;
-		}
-
-		// Fetch the device's tap tracker.
-		TapTracker tapTracker = fTapTrackers.getByDeviceId(event.getDeviceId());
-		if (tapTracker == null) {
-			tapTracker = new TapTracker(event.getDeviceId());
-			fTapTrackers.add(tapTracker);
-		}
-
-		// Update the tap tracker with the given touch event data.
-		tapTracker.updateWith(event);
-
-		// Raise a tap event, if occurred.
-		if (tapTracker.hasTapOccurred() && (fTaskDispatcher != null)) {
-			fTaskDispatcher.send(new RaiseTapEventTask(tapTracker.getTapPoint(), tapTracker.getTapCount()));
-		}
-
-		// Consume the event by returning true.
-		return true;
-	}
 
 
 	/**

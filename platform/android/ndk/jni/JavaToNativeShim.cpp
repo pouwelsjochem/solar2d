@@ -307,12 +307,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeRender( JNIEnv * env, jclass c, jlo
 }
 
 JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeTapEvent(JNIEnv * env, jclass c, jlong bridgeAddress, jint x, jint y, jint count)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->TapEvent( x, y, count );
-}
-
-JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeTouchEvent(
 	JNIEnv * env, jclass c, jlong bridgeAddress, jint x, jint y, jint xStart, jint yStart, jint touchType, jlong timestamp, jint touchId, jfloat pressure)
 {

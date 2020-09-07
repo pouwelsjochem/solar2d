@@ -768,18 +768,6 @@ JavaToNativeBridge::ApplicationOpenEvent()
 	fRuntime->DispatchEvent(e);
 }
 
-void
-JavaToNativeBridge::TapEvent(int x, int y, int count)
-{
-	NativeTrace trace( "JavaToNativeBridge::TapEvent" );
-	if ( fRuntime == NULL )
-		return;
-
-	Rtt::TapEvent e( Rtt_FloatToReal( x ), Rtt_FloatToReal( y ), count );
-
-	fRuntime->DispatchEvent( e );
-}
-
 // TODO: Remove this function since there is an identical one in Rtt::TouchEvent
 static Rtt::TouchEvent::Phase
 phaseForType( int touchType )

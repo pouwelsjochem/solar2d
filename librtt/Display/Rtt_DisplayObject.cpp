@@ -44,10 +44,6 @@ DisplayObject::MaskForString( const char *name )
 		{
 			result = kTouchListener;
 		}
-		else if ( 0 == strcmp( name, TapEvent::kName ) )
-		{
-			result = kTapListener;
-		}
 		else if ( 0 == strcmp( name, SpriteEvent::kName ) )
 		{
 			result = kSpriteListener;

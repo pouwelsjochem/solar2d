@@ -1075,30 +1075,6 @@ MacPlatform::GetFontNames( lua_State *L, int index ) const
 	return numFonts;
 }
 
-
-void
-MacPlatform::SetTapDelay( Rtt_Real delay ) const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	AppDelegate *delegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-	delegate.simulator->GetScreenView().tapDelay = delay;
-#else
-	Rtt_ASSERT_NOT_IMPLEMENTED();
-#endif
-}
-
-Rtt_Real
-MacPlatform::GetTapDelay() const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	AppDelegate *delegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-	return delegate.simulator->GetScreenView().tapDelay;
-#else
-	Rtt_ASSERT_NOT_IMPLEMENTED();
-	return Rtt_REAL_0;
-#endif
-}
-
 int
 MacPlatform::PushSystemInfo( lua_State *L, const char *key ) const
 {

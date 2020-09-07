@@ -956,19 +956,6 @@ setGyroscopeInterval( lua_State *L )
 	return 0;
 }
 
-static int
-setTapDelay( lua_State *L )
-{
-	Real delay = luaL_toreal( L, 1 );
-	if ( delay < Rtt_REAL_0 )
-	{
-		delay = Rtt_REAL_0;
-	}
-
-	LuaContext::GetPlatform( L ).SetTapDelay( delay );
-	return 0;
-}
-
 static const char kDirs[MPlatform::kNumDirs + 1] = "01234567";
 
 // Need default constructor for const use by C++ spec
@@ -1392,7 +1379,6 @@ LuaLibSystem::Initialize( lua_State *L )
 		{ "getInputDevices", getInputDevices },
 		{ "setAccelerometerInterval", setAccelerometerInterval },
 		{ "setGyroscopeInterval", setGyroscopeInterval },
-		{ "setTapDelay", setTapDelay },
 		{ "activate", LuaLibSystem::Activate }, // public use
 		{ "deactivate", LuaLibSystem::Deactivate }, // public use
 

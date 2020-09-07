@@ -896,21 +896,6 @@ AndroidPlatform::CreateFont( const char *fontName, Rtt_Real size ) const
 	return Rtt_NEW( fAllocator, AndroidFont( *fAllocator, fontName, size, isBold ) );
 }
 
-void
-AndroidPlatform::SetTapDelay( Rtt_Real delay ) const
-{
-	// TODO: unimplemented
-//	Rtt_ASSERT_UNIMPLEMENTED();
-}
-
-Rtt_Real
-AndroidPlatform::GetTapDelay() const
-{
-	// TODO: unimplemented
-//	Rtt_ASSERT_UNIMPLEMENTED();
-	return 1.0f;
-}
-
 PlatformFBConnect*
 AndroidPlatform::GetFBConnect() const
 {

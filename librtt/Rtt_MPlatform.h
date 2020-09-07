@@ -206,9 +206,6 @@ class MPlatform
 		// Returns NULL if fontName is NULL;
 		virtual PlatformFont* CreateFont( const char *fontName, Rtt_Real size ) const = 0;
 
-		virtual void SetTapDelay( Rtt_Real delay ) const = 0;
-		virtual Rtt_Real GetTapDelay() const = 0;
-
 	public:
 		// Creates notification based on table at 'index'. Returns notificationId
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const = 0;

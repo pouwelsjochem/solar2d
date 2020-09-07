@@ -223,14 +223,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeInputDeviceS
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeTapEvent
- * Signature: (III)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeTapEvent
-  (JNIEnv *, jclass, jlong, jint, jint, jint);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeTouchEvent
  * Signature: (IIIIIJI)V
  */

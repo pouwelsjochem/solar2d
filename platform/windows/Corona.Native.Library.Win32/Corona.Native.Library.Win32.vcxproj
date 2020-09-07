@@ -179,7 +179,6 @@
     <ClInclude Include="Interop\Input\KeyEventArgs.h" />
     <ClInclude Include="Interop\Input\MInputDeviceHandler.h" />
     <ClInclude Include="Interop\Input\ModifierKeyStates.h" />
-    <ClInclude Include="Interop\Input\TapTracker.h" />
     <ClInclude Include="Interop\Input\VibrationRequestManager.h" />
     <ClInclude Include="Interop\Input\XInputDeviceHandler.h" />
     <ClInclude Include="Interop\Input\XInputInterface.h" />
@@ -302,7 +301,6 @@
     <ClCompile Include="Interop\Input\Key.cpp" />
     <ClCompile Include="Interop\Input\KeyEventArgs.cpp" />
     <ClCompile Include="Interop\Input\ModifierKeyStates.cpp" />
-    <ClCompile Include="Interop\Input\TapTracker.cpp" />
     <ClCompile Include="Interop\Input\VibrationRequestManager.cpp" />
     <ClCompile Include="Interop\Input\XInputDeviceHandler.cpp" />
     <ClCompile Include="Interop\Input\XInputInterface.cpp" />

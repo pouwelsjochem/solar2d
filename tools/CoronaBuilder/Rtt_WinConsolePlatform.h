@@ -111,8 +111,6 @@ namespace Rtt
 		virtual S32 GetFontNames(lua_State *L, int index) const { return 0; };
 		virtual PlatformFont* CreateFont(PlatformFont::SystemFont fontType, Rtt_Real size) const { return nullptr; };
 		virtual PlatformFont* CreateFont(const char *fontName, Rtt_Real size) const { return nullptr; };
-		virtual void SetTapDelay(Rtt_Real delay) const { return; };
-		virtual Rtt_Real GetTapDelay() const { return 0.0; };
 		virtual PlatformFBConnect* GetFBConnect() const { return nullptr; };
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const { return nullptr; };
 		virtual void ReleaseNotification(void *notificationId) const { return; };

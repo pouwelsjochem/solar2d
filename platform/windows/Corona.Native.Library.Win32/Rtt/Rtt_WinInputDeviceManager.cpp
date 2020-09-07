@@ -247,9 +247,6 @@ void WinInputDeviceManager::SetWaitCursorEnabled(bool value)
 				}
 			}
 		}
-
-		// Clear our tap detection handler.
-		fTapTracker.Reset();
 	}
 }
 
@@ -441,8 +438,6 @@ void WinInputDeviceManager::OnDiscoveredDevice(
 void WinInputDeviceManager::OnReceivedMessage(
 	Interop::UI::UIComponent& sender, Interop::UI::HandleMessageEventArgs& arguments)
 {
-	static const int kTapTolerance = 1;
-
 	// Do not continue if the message was already handled.
 	if (arguments.WasHandled())
 	{
@@ -483,17 +478,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 				touchInputStatePointer->HasStarted = true;
 				touchInputStatePointer->StartPoint = point;
 				touchInputStatePointer->LastPoint = point;
-
-				// Update our simulated touch "tap" tracker for a single or double mouse click.
-				// Note: The Lua "tap" event will be dispatched later, when the mouse button has been released.
-				fTapTracker.Reset();
-				fTapTracker.SetInputDeviceType(Interop::Input::TapTracker::InputDeviceType::kMouse);
-				fTapTracker.UpdateWith(point, Rtt::TouchEvent::kBegan);
-				if (arguments.GetMessageId() == WM_LBUTTONDBLCLK)
-				{
-					fTapTracker.UpdateWith(point, Rtt::TouchEvent::kEnded);
-					fTapTracker.UpdateWith(point, Rtt::TouchEvent::kBegan);
-				}
 
 				// Dispatch a "touch" event to Corona.
 				OnReceivedTouchEvent(0, point, point, Rtt::TouchEvent::kBegan);
@@ -582,7 +566,7 @@ void WinInputDeviceManager::OnReceivedMessage(
 			// Dispatch a "mouse" event to Corona.
 			OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
-			// Only dispatch a "touch" and "tap" event if:
+			// Only dispatch a "touch" event if:
 			// - Corona has dispatched a "began" touch event phase.
 			// - The touch events were not canceled, such as by showing a wait cursor.
 			auto touchInputStatePointer = &fTouchPointStates[0];
@@ -594,15 +578,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 
 				// Dispatch a "touch" event to Corona.
 				OnReceivedTouchEvent(0, point, touchInputStatePointer->StartPoint, Rtt::TouchEvent::kEnded);
-
-				// Dispatch a "tap" event if mouse button was released in the same position it was pressed in.
-				fTapTracker.SetInputDeviceType(Interop::Input::TapTracker::InputDeviceType::kMouse);
-				fTapTracker.UpdateWith(point, Rtt::TouchEvent::kEnded);
-				if (fTapTracker.HasTapOccurred())
-				{
-					Rtt::TapEvent event(Rtt_IntToReal(point.x), Rtt_IntToReal(point.y), fTapTracker.GetTapCount());
-					runtimePointer->DispatchEvent(event);
-				}
 			}
 
 			// Flag the message as handled.
@@ -853,18 +828,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 					OnReceivedTouchEvent(
 							(uint32_t)touchPointStateIndex, touchPointStatePointer->LastPoint,
 							touchPointStatePointer->StartPoint, phase);
-
-					// If this is the first/primary finger on the screen, then determine if a "tap" has occurred.
-					if (touchInputPointer->dwFlags & TOUCHEVENTF_PRIMARY)
-					{
-						fTapTracker.SetInputDeviceType(Interop::Input::TapTracker::InputDeviceType::kTouchscreen);
-						fTapTracker.UpdateWith(point, phase);
-						if (fTapTracker.HasTapOccurred())
-						{
-							Rtt::TapEvent event(Rtt_IntToReal(point.x), Rtt_IntToReal(point.y), fTapTracker.GetTapCount());
-							runtimePointer->DispatchEvent(event);
-						}
-					}
 				}
 			}
 

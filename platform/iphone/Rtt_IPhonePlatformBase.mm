@@ -563,19 +563,6 @@ IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
 
 #if Rtt_IPHONE_PLATFORM_STUB
 
-void
-IPhonePlatformBase::SetTapDelay( Rtt_Real delay ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-}
-
-Rtt_Real
-IPhonePlatformBase::GetTapDelay() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return Rtt_REAL_0;
-}
-
 PlatformFBConnect*
 IPhonePlatformBase::GetFBConnect() const
 {

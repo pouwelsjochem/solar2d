@@ -59,19 +59,18 @@ class Runtime : public MCallback,
 	public:
 		typedef enum _Properties
 		{
-			kIsOrientationLocked      = 0x1,
-			kIsDebuggerConnected      = 0x2,
-			kIsApplicationLoaded      = 0x4,
-			kIsApplicationExecuting   = 0x8,
-			kIsUsingCustomCode        = 0x10,
-			kUseExitOnErrorHandler    = 0x20,
-			kShowRuntimeErrors        = 0x40,
-			kIsLuaParserAvailable     = 0x80,
-			kDeferUpdate              = 0x100,
-			kRenderAsync              = 0x200,
-			kIsApplicationNotArchived = 0x400,
-			kIsSimulatorExtension     = 0x800,
-			kShowRuntimeErrorsSet     = 0x1000,
+			kIsDebuggerConnected      = 0x1,
+			kIsApplicationLoaded      = 0x2,
+			kIsApplicationExecuting   = 0x4,
+			kIsUsingCustomCode        = 0x8,
+			kUseExitOnErrorHandler    = 0x10,
+			kShowRuntimeErrors        = 0x20,
+			kIsLuaParserAvailable     = 0x40,
+			kDeferUpdate              = 0x80,
+			kRenderAsync              = 0x100,
+			kIsApplicationNotArchived = 0x200,
+			kIsSimulatorExtension     = 0x400,
+			kShowRuntimeErrorsSet     = 0x800,
 		}
 		Properties;
 

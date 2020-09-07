@@ -53,9 +53,6 @@ class IPhonePlatform : public IPhonePlatformCore
 
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
-		virtual void SetTapDelay( Rtt_Real delay ) const;
-		virtual Rtt_Real GetTapDelay() const;
-
 	public:
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const;
 		virtual void ReleaseNotification( void *notificationId ) const;

@@ -49,9 +49,6 @@ class TVOSPlatform : public IPhonePlatformBase
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
 
-		virtual void SetTapDelay( Rtt_Real delay ) const;
-		virtual Rtt_Real GetTapDelay() const;
-
 	public:
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
 

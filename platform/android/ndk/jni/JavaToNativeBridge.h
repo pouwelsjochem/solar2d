@@ -68,7 +68,6 @@ class JavaToNativeBridge
 		void Resume();
 		void DispatchEventInLua();
 		void ApplicationOpenEvent();
-		void TapEvent(int x, int y, int count);
 		void TouchEvent(int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure );
 		void MouseEvent(
 				int x, int y, int scrollX, int scrollY, long timestamp,
