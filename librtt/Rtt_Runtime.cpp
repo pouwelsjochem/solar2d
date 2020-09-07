@@ -192,7 +192,6 @@ Runtime::Runtime( const MPlatform& platform, MCallback *viewCallback )
 		// Simulator does not use resource.car file
 		SetProperty( kIsApplicationNotArchived, true );
 		SetProperty( kIsLuaParserAvailable, true );
-		SetProperty( kShouldVerifyLicense, true );
 	#endif
 }
 
@@ -852,11 +851,6 @@ Runtime::LoadApplication( U32 launchOptions )
 		if ( ! IsProperty( kIsLuaParserAvailable ) )
 		{
 			fVMContext->DisableParser( ( launchOptions & kConnectToDebugger ) );
-		}
-
-		if ( ! IsProperty( kIsCustomEffectsAvailable ) )
-		{
-			
 		}
 
 		if ( ! IsProperty( kIsApplicationNotArchived ) )

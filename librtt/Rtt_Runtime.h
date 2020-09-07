@@ -67,13 +67,11 @@ class Runtime : public MCallback,
 			kUseExitOnErrorHandler    = 0x20,
 			kShowRuntimeErrors        = 0x40,
 			kIsLuaParserAvailable     = 0x80,
-			kIsCustomEffectsAvailable = 0x100,
-			kDeferUpdate              = 0x200,
-			kRenderAsync              = 0x400,
-			kIsApplicationNotArchived = 0x800,
-			kShouldVerifyLicense      = 0x1000,
-			kIsSimulatorExtension     = 0x2000,
-			kShowRuntimeErrorsSet     = 0x4000,
+			kDeferUpdate              = 0x100,
+			kRenderAsync              = 0x200,
+			kIsApplicationNotArchived = 0x400,
+			kIsSimulatorExtension     = 0x800,
+			kShowRuntimeErrorsSet     = 0x1000,
 		}
 		Properties;
 
@@ -83,16 +81,9 @@ class Runtime : public MCallback,
 			// TODO: Add suffix "MaskSet" to improve clarity
 			//
 			// NOTE: Do not use these in IsProperty b/c it violates the semantics, e.g.
-			kIsEnterpriseFeature =
-				( kIsLuaParserAvailable
-				  | kIsCustomEffectsAvailable ),
-			kIsCoronaKit =
-				( kIsLuaParserAvailable
-				  | kShouldVerifyLicense ),
-			kEmscriptenMaskSet =
-				( kIsLuaParserAvailable ),
-			kLinuxMaskSet =
-				( kIsLuaParserAvailable ),
+			kIsCoronaKit = ( kIsLuaParserAvailable ),
+			kEmscriptenMaskSet = ( kIsLuaParserAvailable ),
+			kLinuxMaskSet = ( kIsLuaParserAvailable ),
 		};
 
 	public:

@@ -65,14 +65,6 @@ FOUNDATION_EXPORT void CoronaSetDelegateClass( Class c )
 
 // ----------------------------------------------------------------------------
 
-static bool
-IsEnterprise()
-{
-	return nil != CoronaGetDelegateClass();
-}
-
-// ----------------------------------------------------------------------------
-
 @implementation AppViewController
 
 @synthesize prefersHomeIndicatorAutoHidden;
@@ -204,10 +196,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	[view initializeRuntimeWithPlatform:platform runtimeDelegate:runtimeDelegate];
 
 	Runtime *runtime = view.runtime; // runtime is valid after the "initializeRuntime" call
-
-	// Permissioning: Features available only to Enterprise
-	bool isEnterprise = IsEnterprise();
-	runtime->SetProperty( Runtime::kIsEnterpriseFeature, isEnterprise );
 
 #ifdef Rtt_CUSTOM_CODE
 	runtime->SetProperty( Runtime::kIsUsingCustomCode, true );

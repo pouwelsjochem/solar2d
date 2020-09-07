@@ -1251,10 +1251,8 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 	fRuntimePointer->SetDelegate(&fRuntimeDelegate);
 	fRuntimePointer->SetProperty(Rtt::Runtime::kDeferUpdate, true);
 	fRuntimePointer->SetProperty(Rtt::Runtime::kIsApplicationNotArchived, hasMainLuaFile);
-	fRuntimePointer->SetProperty(Rtt::Runtime::kIsCustomEffectsAvailable, true);
 	fRuntimePointer->SetProperty(Rtt::Runtime::kIsLuaParserAvailable, true);
 	fRuntimePointer->SetProperty(Rtt::Runtime::kRenderAsync, true);
-	fRuntimePointer->SetProperty(Rtt::Runtime::kShouldVerifyLicense, true);
 
 	// Load and run the Corona project.
 	fRuntimeState = RuntimeState::kStarting;

@@ -57,31 +57,6 @@ class RenderingStream;
 class Display
 {
 	public:
-		// List of all premium features (Pro and Enterprise)
-		typedef enum _Feature
-		{
-			kDisplayNewSnapshot,
-			kGraphicsDefineEffectGraph,
-			kGraphicsDefineEffectFragment,
-			kGraphicsDefineEffectVertex,
-			kObjectPath,
-			kObjectFill,
-			kObjectStroke,
-			kObjectBlendMode,
-			kLineStroke,
-			kLineBlendMode,
-			kDisplayColorSample,
-
-			kNumFeatures
-		}
-		Feature;
-		
-		static const char *StringForFeature( Feature value );
-		static bool IsProFeature( Feature value );
-		static bool IsEnterpriseFeature( Feature value );
-		static const char *GetTierString( Feature value );
-
-	public:
 		Display( Runtime& owner );
 		virtual ~Display();
 

@@ -150,9 +150,6 @@ JavaToNativeBridge::Init(
 		fRuntime->SetDelegate(fRuntimeDelegate);
 
 		fNativeToJavaBridge->FetchAllInputDevices();
-#ifdef Rtt_ENTERPRISE
-		fRuntime->SetProperty( Rtt::Runtime::kIsEnterpriseFeature, true );
-#endif
 
 		fRuntime->SetProperty( Rtt::Runtime::kIsCoronaKit, isCoronaKit );
 		if (isCoronaKit)
