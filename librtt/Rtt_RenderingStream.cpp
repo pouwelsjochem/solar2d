@@ -11,9 +11,29 @@
 
 #include "Rtt_RenderingStream.h"
 
+#include "Display/Rtt_PlatformBitmap.h"
+#include "Display/Rtt_BufferBitmap.h"
+#include "Display/Rtt_Paint.h"
 #include "Rtt_PlatformSurface.h"
+#include "Display/Rtt_VertexCache.h"
+#include "Renderer/Rtt_RenderTypes.h"
 
-#include "Display/Rtt_BitmapPaint.h"
+#if defined( Rtt_WIN_DESKTOP_ENV )
+	#if defined(Rtt_EMSCRIPTEN_ENV)
+		#include <GL/glew.h>
+	#elif defined(Rtt_LINUX_ENV)
+		#ifdef _WIN32
+			#include <GL/glew.h>
+		#else
+			#include <GL/gl.h>
+			#include <GL/glext.h>
+		#endif
+	#else
+	#include "glext.h"
+	static PFNGLACTIVETEXTUREPROC glActiveTexture;
+	static PFNGLCLIENTACTIVETEXTUREPROC glClientActiveTexture;
+	#endif
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -22,21 +42,62 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-RenderingStream::RenderingStream()
-:	fSubmitBounds( NULL ),
-	fProperties( 0 ),
-	fLaunchOrientation( DeviceOrientation::kUpright ),
-	fContentOrientation( DeviceOrientation::kUpright ),
-	fSurfaceOrientation( DeviceOrientation::kUpright ),
-	fScaleMode( Display::kNone ),
-	fScreenToContentScale( Rtt_REAL_1 ), // uninitialized
+#define Rtt_PAINT_TRIANGLES( expr ) (expr)
+
+// ----------------------------------------------------------------------------
+
+int
+RenderingStream::GetMaxTextureUnits()
+{
+	GLint maxTextureUnits = 2;
+#if defined( Rtt_ANDROID_ENV )
+	// For some reason GL_MAX_TEXTURE_IMAGE_UNITS is not defined on Android...
+	glGetIntegerv( GL_MAX_TEXTURE_UNITS, & maxTextureUnits );
+	Rtt_ASSERT( maxTextureUnits > 1 ); // OpenGL-ES 1.x mandates at least 2
+#elif !defined( Rtt_EMSCRIPTEN_ENV )
+	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, & maxTextureUnits );
+	Rtt_ASSERT( maxTextureUnits > 1 ); // OpenGL-ES 1.x mandates at least 2
+#endif
+	return maxTextureUnits;
+}
+
+#ifdef Rtt_REAL_FIXED
+	static const GLenum kDataType = GL_FIXED;
+#else
+	static const GLenum kDataType = GL_FLOAT;
+#endif
+
+GLenum
+RenderingStream::GetDataType()
+{
+	return kDataType;
+}
+
+RenderingStream::RenderingStream( Rtt_Allocator* pAllocator )
+:	fProperties( 0 ),
+	fDeviceWidth( -1 ), // uninitialized
+	fDeviceHeight( -1 ), // uninitialized
 	fContentWidth( -1 ), // uninitialized
 	fContentHeight( -1 ), // uninitialized
-	fXOriginOffset( Rtt_REAL_0 ),
-	fYOriginOffset( Rtt_REAL_0 ),
+	fScaledContentWidth( -1 ), // uninitialized
+	fScaledContentHeight( -1 ), // uninitialized
+	fMinContentWidth( -1 ), // uninitialized
+	fMaxContentWidth( -1 ), // uninitialized
+	fMinContentHeight( -1 ), // uninitialized
+	fMaxContentHeight( -1 ), // uninitialized
+	fScreenToContentScale( Rtt_REAL_1 ), // uninitialized
+	fContentToScreenScale( Rtt_REAL_1 ), // uninitialized
+	fXScreenOffset( 0 ),
+	fYScreenOffset( 0 ),
 	fScreenContentBounds(),
-	fCapabilities( 0 )
+	fAllocator( pAllocator )
 {
+#if defined( Rtt_WIN_DESKTOP_ENV )
+	if  ( glActiveTexture == NULL ) {
+		glActiveTexture = (PFNGLACTIVETEXTUREPROC) wglGetProcAddress("glActiveTexture");
+		glClientActiveTexture = (PFNGLCLIENTACTIVETEXTUREPROC) wglGetProcAddress("glClientActiveTexture");
+	}
+#endif
 }
 
 RenderingStream::~RenderingStream()
@@ -44,253 +105,181 @@ RenderingStream::~RenderingStream()
 }
 
 void
-RenderingStream::Preinitialize( S32 contentW, S32 contentH )
+RenderingStream::SetContentSizeRestrictions( S32 minContentWidth, S32 maxContentWidth, S32 minContentHeight, S32 maxContentHeight )
 {
-	fContentWidth = contentW;
-	fContentHeight = contentH;
+	fMinContentWidth = minContentWidth;
+	fMinContentHeight = minContentHeight;
+	fMaxContentWidth = maxContentWidth;
+	fMaxContentHeight = maxContentHeight;
 }
 
 void
-RenderingStream::Initialize(
-					const PlatformSurface& surface,
-					DeviceOrientation::Type launchOrientation )
+RenderingStream::SetOptimalContentSize( S32 deviceWidth, S32 deviceHeight )
 {
-	SetProperty( kInitialized, true );
+	fDeviceWidth = deviceWidth;
+	fDeviceHeight = deviceHeight;
 
-	fDeviceWidth = surface.DeviceWidth();
-	fDeviceHeight = surface.DeviceHeight();
-
-	// If content w,h are not specified in config.lua, then default to dimensions of surface.
-	// Device w,h is assumed to be unrotated, i.e. dimensions of device when upright.
-	if ( fContentWidth < 0 || fContentHeight < 0 )
-	{
-		if ( Display::kAdaptive == fScaleMode )
+	if (fMinContentWidth == 0) { // Temporary for welcome screen support
+		fXScreenOffset = 0;
+		fYScreenOffset = 0;
+		fContentWidth = 1280;
+		fContentHeight = 720;
+		fContentToScreenScale = 1;
+	} else {
+		fXScreenOffset = -1;
+		fYScreenOffset = -1;
+		// S32 scaleWithMostSpace = ceil(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(fMaxContentWidth)));
+		// S32 scaleWithLeastSpace = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(fMinContentWidth)));
+		for(S32 contentToScreenScale=1; contentToScreenScale <= 20; contentToScreenScale++)
 		{
-			fContentWidth = surface.AdaptiveWidth();
-			fContentHeight = surface.AdaptiveHeight();
+			S32 contentWidthForScale = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(contentToScreenScale)));
+			S32 contentHeightForScale = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceHeight), Rtt_IntToReal(contentToScreenScale)));
+			if (contentWidthForScale >= fMinContentWidth && contentHeightForScale >= fMinContentHeight) {
+				S32 clampedContentWidth = Min(contentWidthForScale, fMaxContentWidth);
+				S32 clampedContentHeight = Min(contentHeightForScale, fMaxContentHeight);
+
+				S32 xOffsetForScale = (fDeviceWidth - (clampedContentWidth * contentToScreenScale)) / 2;
+				S32 yOffsetForScale = (fDeviceHeight - (clampedContentHeight * contentToScreenScale)) / 2;
+				if (fXScreenOffset == -1 || (xOffsetForScale + yOffsetForScale) <= (fXScreenOffset + fYScreenOffset))
+				{
+					fXScreenOffset = xOffsetForScale;
+					fYScreenOffset = yOffsetForScale;
+					fContentWidth = Min(contentWidthForScale, fMaxContentWidth);
+					fContentHeight = Min(contentHeightForScale, fMaxContentHeight);
+					fContentToScreenScale = contentToScreenScale;
+				}
+			}
 		}
-		else
+	}
+
+	fScreenToContentScale = Rtt_RealDiv( Rtt_REAL_1, Rtt_RealToInt(fContentToScreenScale) );
+	fScaledContentWidth = fContentWidth * fContentToScreenScale;
+	fScaledContentHeight = fContentHeight * fContentToScreenScale;
+
+	// The bounds of the screen in content coordinates.
+	Rect& bounds = GetScreenContentBounds();
+	bounds.xMin = 0;
+	bounds.yMin = 0;
+	bounds.xMax = fContentWidth;
+	bounds.yMax = fContentHeight;
+}
+
+GLenum
+GPU_GetPixelFormat( PlatformBitmap::Format format )
+{
+#	ifdef Rtt_OPENGLES
+
+		switch ( format )
 		{
-			fContentWidth = surface.DeviceWidth();
-			fContentHeight = surface.DeviceHeight();
+			case PlatformBitmap::kRGBA:
+				return GL_RGBA;
+			case PlatformBitmap::kMask:
+				return GL_ALPHA;
+			case PlatformBitmap::kRGB:
+			case PlatformBitmap::kBGRA:
+			case PlatformBitmap::kARGB:
+			default:
+				Rtt_ASSERT_NOT_IMPLEMENTED();
+				return GL_ALPHA;
 		}
-	}
 
-	// If app is landscape, swap fContentWidth and fContentHeight b/c these values
-	// are the dimensions of the upright virtual screen that the content was created for. 
-	if ( DeviceOrientation::IsSideways( launchOrientation ) )
-	{
-		SwapContentSize();
-	}
-	
-	fLaunchOrientation = launchOrientation;
-	fContentOrientation = launchOrientation;
-	SetSurfaceOrientation( surface.GetOrientation() );
+#	else // Not Rtt_OPENGLES.
+
+		switch ( format )
+		{
+			case PlatformBitmap::kBGRA:
+			case PlatformBitmap::kARGB:
+				return GL_BGRA;
+			case PlatformBitmap::kRGBA:
+				return GL_RGBA;
+			case PlatformBitmap::kRGB:
+				return GL_BGR;
+			case PlatformBitmap::kMask:
+				return GL_ALPHA;
+			default:
+				Rtt_ASSERT_NOT_IMPLEMENTED();
+				return GL_ALPHA;
+		}
+
+#	endif // Rtt_OPENGLES
 }
 
+GLenum
+GPU_GetPixelType( PlatformBitmap::Format format )
+{
+#	ifdef Rtt_OPENGLES
+
+		switch( format )
+		{
+			case PlatformBitmap::kMask:
+				return GL_UNSIGNED_BYTE;
+			case PlatformBitmap::kBGRA:
+			case PlatformBitmap::kARGB:
+			case PlatformBitmap::kRGBA:
+			default:
+				Rtt_ASSERT_NOT_IMPLEMENTED();
+				return GL_UNSIGNED_BYTE;
+		}
+
+#	else // Not Rtt_OPENGLES.
+
+		switch( format )
+		{
+			case PlatformBitmap::kBGRA:
+				#ifdef Rtt_BIG_ENDIAN
+					return GL_UNSIGNED_INT_8_8_8_8_REV;
+				#else
+					return GL_UNSIGNED_INT_8_8_8_8;
+				#endif
+			case PlatformBitmap::kARGB:
+				#ifdef Rtt_BIG_ENDIAN
+					return GL_UNSIGNED_INT_8_8_8_8;
+				#else
+					return GL_UNSIGNED_INT_8_8_8_8_REV;
+				#endif
+			case PlatformBitmap::kRGBA:
+				#ifdef Rtt_BIG_ENDIAN
+					return GL_UNSIGNED_INT_8_8_8_8_REV;
+				#else
+					return GL_UNSIGNED_INT_8_8_8_8;
+				#endif
+			case PlatformBitmap::kMask:
+				return GL_UNSIGNED_BYTE;
+			default:
+				Rtt_ASSERT_NOT_IMPLEMENTED();
+				return GL_UNSIGNED_BYTE;
+		}
+
+#	endif // Rtt_OPENGLES
+}
+
+// Performs a screen capture and outputs the image to the given "outBuffer" bitmap.
 void
-RenderingStream::Reinitialize(
-					const PlatformSurface& surface,
-					DeviceOrientation::Type launchOrientation )
+RenderingStream::CaptureFrameBuffer( BufferBitmap& outBuffer, S32 xScreen, S32 yScreen, S32 wScreen, S32 hScreen )
 {
-	SetProperty( kInitialized, false );
+//	GLint x = Rtt_RealToInt( bounds.xMin );
+//	GLint y = Rtt_RealToInt( bounds.yMin );
+//	GLint w = Rtt_RealToInt( bounds.xMax ) - x;
+//	GLint h = Rtt_RealToInt( bounds.yMax ) - y;
+#ifdef Rtt_OPENGLES
+	const GLenum kFormat = GL_RGBA;
+	const GLenum kType = GL_UNSIGNED_BYTE;
+#else
+	PlatformBitmap::Format format = outBuffer.GetFormat();
+	const GLenum kFormat = GPU_GetPixelFormat( format );
+	GLenum kType = GPU_GetPixelType( format );
+#endif
 
-	Rtt_ASSERT( ! IsProperty( kInhibitSwap ) );
-	SetProperty( kInhibitSwap, true );
-	Initialize( surface, launchOrientation );
-	SetProperty( kInhibitSwap, false );
+	glReadPixels( xScreen,
+					yScreen,
+					wScreen,
+					hScreen,
+					kFormat,
+					kType,
+					outBuffer.WriteAccess() );
 }
 
-void
-RenderingStream::PrepareToRender()
-{
-}
-
-S32
-RenderingStream::GetRenderedContentWidth() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return -1;
-}
-
-S32
-RenderingStream::GetRenderedContentHeight() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return -1;
-}
-
-Rtt_Real
-RenderingStream::ViewableContentWidth() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return Rtt_REAL_0;
-}
-
-Rtt_Real
-RenderingStream::ViewableContentHeight() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return Rtt_REAL_0;
-}
-
-Rtt_Real
-RenderingStream::ActualContentWidth() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return Rtt_REAL_0;
-}
-
-Rtt_Real
-RenderingStream::ActualContentHeight() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return Rtt_REAL_0;
-}
-
-void
-RenderingStream::Reshape( S32 renderedContentWidth, S32 renderedContentHeight )
-{
-}
-
-bool
-RenderingStream::ShouldSwap( DeviceOrientation::Type srcOrientation, DeviceOrientation::Type dstOrientation )
-{
-	bool isSrcLandscape = DeviceOrientation::IsSideways( srcOrientation );
-	bool isDstLandscape = DeviceOrientation::IsSideways( dstOrientation );
-
-	Rtt_ASSERT( isSrcLandscape || DeviceOrientation::IsUpright( srcOrientation ) );
-	Rtt_ASSERT( isDstLandscape || DeviceOrientation::IsUpright( dstOrientation ) );
-
-	// If they are not the same, then swap
-	return ( isSrcLandscape != isDstLandscape );
-}
-
-void
-RenderingStream::SetContentOrientation( DeviceOrientation::Type newOrientation )
-{
-	Rtt_ASSERT( newOrientation >= DeviceOrientation::kUnknown && newOrientation <= DeviceOrientation::kNumTypes );
-
-	Rtt_ASSERT( IsProperty( kInitialized ) );
-
-	fContentOrientation = newOrientation;
-}
-
-void
-RenderingStream::SetOrientation( DeviceOrientation::Type newOrientation, bool autoRotate )
-{
-	Rtt_ASSERT_NOT_REACHED();
-}
-
-DeviceOrientation::Type
-RenderingStream::GetRelativeOrientation() const
-{
-	return DeviceOrientation::GetRelativeOrientation( GetContentOrientation(), GetSurfaceOrientation() );
-}
-
-void
-RenderingStream::SetTextureCoordinates( const Vertex2 *coords, S32 numCoords )
-{
-}
-
-int
-RenderingStream::GetTextureDepth() const
-{
-	return 0;
-}
-
-void
-RenderingStream::SetClearColor( const Paint& paint )
-{
-}
-
-RGBA
-RenderingStream::GetClearColor()
-{
-	RGBA color;
-	color.r = 0;
-	color.g = 0;
-	color.b = 0;
-	color.a = 0;
-	return color;
-}
-
-void
-RenderingStream::SetEnabled( CapabilityMask mask, bool value )
-{
-	const U32 p = fCapabilities;
-	fCapabilities = ( value ? p | mask : p & ~mask );
-}
-
-void
-RenderingStream::SetColor( const RGBA& color )
-{
-}
-
-U8
-RenderingStream::GetAlpha() const
-{
-	return 0xFF;
-}
-
-U8
-RenderingStream::SetAlpha( U8, bool )
-{
-	return 0xFF;
-}
-
-void
-RenderingStream::CaptureFrameBuffer( BufferBitmap&, S32 x, S32 y, S32 w, S32 h )
-{
-	Rtt_ASSERT_NOT_REACHED();
-}
-
-void
-RenderingStream::SwapContentSize()
-{
-	if ( ! IsProperty( kInhibitSwap ) )
-	{
-		Swap( fContentWidth, fContentHeight );
-	}
-}
-
-void
-RenderingStream::SetScaleMode( Display::ScaleMode mode, Rtt_Real screenWidth, Rtt_Real screenHeight )
-{
-	Rtt_ASSERT( fContentWidth > 0 && fContentHeight > 0 );
-
-	fScaleMode = mode;
-
-	UpdateContentScale( screenWidth );
-}
-
-// Gets the width of the screen.
-S32
-RenderingStream::ScreenWidth() const
-{
-	Rtt_Real originOffset = GetXOriginOffset();
-	Rtt_Real margins = Rtt_RealMul(Rtt_IntToReal(2), originOffset);
-	S32 result = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(ContentWidth()) + margins, GetScreenToContentScale()) + Rtt_REAL_HALF);
-
-	// TODO: Does this account for Alignment? Let's assert for now:
-	Rtt_ASSERT( DeviceWidth() == result );
-
-	return result;
-}
-
-// Gets the height of the screen.
-S32
-RenderingStream::ScreenHeight() const
-{
-	Rtt_Real originOffset = GetYOriginOffset();
-	Rtt_Real margins = Rtt_RealMul(Rtt_IntToReal(2), originOffset);
-	S32 result = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(ContentHeight()) + margins, GetScreenToContentScale()) + Rtt_REAL_HALF);
-
-	// TODO: Does this account for Alignment? Let's assert for now:
-	Rtt_ASSERT( DeviceHeight() == result );
-
-	return result;
-}
+// ----------------------------------------------------------------------------
 
 // Converts the given content coordinates to pixel coordinates.
 void
@@ -306,10 +295,9 @@ void
 RenderingStream::ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const
 {
 	Rtt_Real screenToContentScale = GetScreenToContentScale();
-	x = Rtt_RealToInt(Rtt_RealDiv(GetXOriginOffset() + Rtt_IntToReal(x), screenToContentScale) + Rtt_REAL_HALF);
+	x = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(x), screenToContentScale) + GetXScreenOffset() + Rtt_REAL_HALF);
 	w = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(w), screenToContentScale) + Rtt_REAL_HALF);
-
-	y = Rtt_RealToInt(Rtt_RealDiv(GetYOriginOffset() + Rtt_IntToReal(y), screenToContentScale) + Rtt_REAL_HALF);
+	y = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(y), screenToContentScale) + GetYScreenOffset() + Rtt_REAL_HALF);
 	h = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(h), screenToContentScale) + Rtt_REAL_HALF);
 }
 
@@ -321,32 +309,18 @@ RenderingStream::ContentToPixels( S32& x, S32& y ) const
 	ContentToPixels(x, y, w, h);
 }
 
+/// Converts the given content coordinates to pixel coordinates relative to OpenGL's origin.
 void
 RenderingStream::ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const
 {
-	ContentToScreen(x, y, w, h);
-}
+	// First convert content coordinates to screen coordinates.
+	ContentToScreen(x, y, w, h);	
 
-void
-RenderingStream::UpdateContentScale( Rtt_Real screenWidth )
-{
-	Rtt_ASSERT( fContentWidth > 0 );
-
-	fScreenToContentScale = Display::CalculateScreenToContentScaleFor( screenWidth, fContentWidth );
-}
-
-void
-RenderingStream::WillSubmitArray( const Quad& submitBounds )
-{
-	Rtt_ASSERT( ! fSubmitBounds );
-	fSubmitBounds = & submitBounds;
-}
-
-void
-RenderingStream::DidSubmitArray()
-{
-	Rtt_ASSERT( fSubmitBounds );
-	fSubmitBounds = NULL;
+	// Flip the coordinates relative to OpenGL's origin, which is typically the bottom left corner.
+	if (IsProperty(RenderingStream::kFlipHorizontalAxis))
+	{
+		y = ((S32)fDeviceHeight - y) - h;
+	}
 }
 
 void
@@ -357,8 +331,5 @@ RenderingStream::SetProperty( U32 mask, bool value )
 }
 
 // ----------------------------------------------------------------------------
-
 } // namespace Rtt
-
 // ----------------------------------------------------------------------------
-

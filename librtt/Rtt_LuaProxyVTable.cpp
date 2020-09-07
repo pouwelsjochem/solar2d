@@ -2711,27 +2711,6 @@ LuaPlatformTextBoxObjectProxyVTable::Parent() const
 // ----------------------------------------------------------------------------
 
 // Need explicit default constructor for const use by C++ spec
-LuaPlatformWebViewObjectProxyVTable::LuaPlatformWebViewObjectProxyVTable()
-	: LuaPlatformDisplayObjectProxyVTable()
-{
-}
-
-const LuaPlatformWebViewObjectProxyVTable&
-LuaPlatformWebViewObjectProxyVTable::Constant()
-{
-	static const Self kVTable;
-	return kVTable;
-}
-
-const LuaProxyVTable&
-LuaPlatformWebViewObjectProxyVTable::Parent() const
-{
-	return Super::Constant();
-}
-
-// ----------------------------------------------------------------------------
-
-// Need explicit default constructor for const use by C++ spec
 LuaPlatformVideoObjectProxyVTable::LuaPlatformVideoObjectProxyVTable()
 	: LuaPlatformDisplayObjectProxyVTable()
 {

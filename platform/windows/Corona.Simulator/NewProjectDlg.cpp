@@ -27,8 +27,8 @@ IMPLEMENT_DYNAMIC(CNewProjectDlg, CDialog)
 /// Creates a "New Project" window.
 CNewProjectDlg::CNewProjectDlg(CWnd* pParent /*=NULL*/)
 :	CDialog(CNewProjectDlg::IDD, pParent),
-	fPhoneScreenSize(320, 480),
-	fTabletScreenSize(768, 1024)
+	fPhoneDeviceSize(320, 480),
+	fTabletDeviceSize(768, 1024)
 {
 }
 
@@ -47,15 +47,15 @@ void CNewProjectDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_APP_NAME_EDIT_BOX, fAppNameEditBox);
 	DDX_Control(pDX, IDC_APP_LOCATION_EDIT_BOX, fProjectLocationEditBox);
-	DDX_Control(pDX, IDC_SCREEN_SIZE_COMBO_BOX, fScreenSizeComboBox);
-	DDX_Control(pDX, IDC_SCREEN_WIDTH_EDIT_BOX, fScreenWidthEditBox);
-	DDX_Control(pDX, IDC_SCREEN_HEIGHT_EDIT_BOX, fScreenHeightEditBox);
+	DDX_Control(pDX, IDC_SCREEN_SIZE_COMBO_BOX, fDeviceSizeComboBox);
+	DDX_Control(pDX, IDC_SCREEN_WIDTH_EDIT_BOX, fDeviceWidthEditBox);
+	DDX_Control(pDX, IDC_SCREEN_HEIGHT_EDIT_BOX, fDeviceHeightEditBox);
 }
 
 BEGIN_MESSAGE_MAP(CNewProjectDlg, CDialog)
 	ON_BN_CLICKED(IDC_BROWSE_BUTTON, &CNewProjectDlg::OnClickedBrowseButton)
 	ON_EN_CHANGE(IDC_APP_NAME_EDIT_BOX, &CNewProjectDlg::OnChangeAppNameEditBox)
-	ON_CBN_SELCHANGE(IDC_SCREEN_SIZE_COMBO_BOX, &CNewProjectDlg::OnScreenSizeComboBoxSelectionChanged)
+	ON_CBN_SELCHANGE(IDC_SCREEN_SIZE_COMBO_BOX, &CNewProjectDlg::OnDeviceSizeComboBoxSelectionChanged)
 	ON_BN_CLICKED(IDC_TEMPLATE_EBOOK, &CNewProjectDlg::OnClickedTemplateEbook)
 END_MESSAGE_MAP()
 
@@ -97,8 +97,8 @@ BOOL CNewProjectDlg::OnInitDialog()
 	UpdateProjectLocationField();
 
 	// Set a maximum character limit for the screen width/height edit boxes.
-	fScreenWidthEditBox.SetLimitText(5);
-	fScreenHeightEditBox.SetLimitText(5);
+	fDeviceWidthEditBox.SetLimitText(5);
+	fDeviceHeightEditBox.SetLimitText(5);
 
 	// Make all of the project template text bold.
 	buttonPointer = (CButton*)GetDlgItem(IDC_TEMPLATE_BLANK);
@@ -118,22 +118,18 @@ BOOL CNewProjectDlg::OnInitDialog()
 	buttonPointer = (CButton*)GetDlgItem(IDC_TEMPLATE_BLANK);
 	buttonPointer->SetCheck(BST_CHECKED);
 
-	// Check the "Upright" orientation button by default.
-	buttonPointer = (CButton*)GetDlgItem(IDC_ORIENTATION_UPRIGHT);
-	buttonPointer->SetCheck(BST_CHECKED);
-
 	// Set up screen size ComboBox.
 	stringBuffer.LoadString(IDS_SCREEN_SIZE_PHONE);
-	index = fScreenSizeComboBox.AddString(stringBuffer);
-	fScreenSizeComboBox.SetItemData(index, (DWORD_PTR)&fPhoneScreenSize);
-	fScreenSizeComboBox.SetCurSel(index);
+	index = fDeviceSizeComboBox.AddString(stringBuffer);
+	fDeviceSizeComboBox.SetItemData(index, (DWORD_PTR)&fPhoneDeviceSize);
+	fDeviceSizeComboBox.SetCurSel(index);
 	stringBuffer.LoadString(IDS_SCREEN_SIZE_TABLET);
-	index = fScreenSizeComboBox.AddString(stringBuffer);
-	fScreenSizeComboBox.SetItemData(index, (DWORD_PTR)&fTabletScreenSize);
+	index = fDeviceSizeComboBox.AddString(stringBuffer);
+	fDeviceSizeComboBox.SetItemData(index, (DWORD_PTR)&fTabletDeviceSize);
 	stringBuffer.LoadString(IDS_SCREEN_SIZE_CUSTOM);
-	index = fScreenSizeComboBox.AddString(stringBuffer);
-	fScreenSizeComboBox.SetItemData(index, NULL);
-	OnScreenSizeComboBoxSelectionChanged();
+	index = fDeviceSizeComboBox.AddString(stringBuffer);
+	fDeviceSizeComboBox.SetItemData(index, NULL);
+	OnDeviceSizeComboBoxSelectionChanged();
 
 	// Return TRUE unless you set the focus to a control.
 	return TRUE;
@@ -148,30 +144,30 @@ void CNewProjectDlg::OnChangeAppNameEditBox()
 
 /// Called when the user selects a new screen size from the ComboBox.
 /// Updates the width and height edit fields.
-void CNewProjectDlg::OnScreenSizeComboBoxSelectionChanged()
+void CNewProjectDlg::OnDeviceSizeComboBoxSelectionChanged()
 {
 	CSize *sizePointer;
 	int index;
 
 	// Fetch the selected item.
-	index = fScreenSizeComboBox.GetCurSel();
+	index = fDeviceSizeComboBox.GetCurSel();
 	if (index < 0)
 	{
 		return;
 	}
 
 	// Update the width/height edit fields according to the current selection.
-	sizePointer = (CSize*)fScreenSizeComboBox.GetItemData(index);
+	sizePointer = (CSize*)fDeviceSizeComboBox.GetItemData(index);
 	if (sizePointer)
 	{
 		CString text;
 		text.Format(_T("%d"), sizePointer->cx);
-		fScreenWidthEditBox.SetWindowText(text);
+		fDeviceWidthEditBox.SetWindowText(text);
 		text.Format(_T("%d"), sizePointer->cy);
-		fScreenHeightEditBox.SetWindowText(text);
+		fDeviceHeightEditBox.SetWindowText(text);
 	}
-	fScreenWidthEditBox.EnableWindow(sizePointer ? FALSE : TRUE);
-	fScreenHeightEditBox.EnableWindow(sizePointer ? FALSE : TRUE);
+	fDeviceWidthEditBox.EnableWindow(sizePointer ? FALSE : TRUE);
+	fDeviceHeightEditBox.EnableWindow(sizePointer ? FALSE : TRUE);
 }
 
 /// Displays a directory selection dialog for the user to select a root project directory.
@@ -192,13 +188,13 @@ void CNewProjectDlg::OnClickedTemplateEbook()
 
 	// The "eBook" template was designed to use a tablet screen size.
 	// Find the tablet preset in the combo box and select it.
-	for (index = 0; index < fScreenSizeComboBox.GetCount(); index++)
+	for (index = 0; index < fDeviceSizeComboBox.GetCount(); index++)
 	{
-		sizePointer = (CSize*)fScreenSizeComboBox.GetItemData(index);
-		if (sizePointer == &fTabletScreenSize)
+		sizePointer = (CSize*)fDeviceSizeComboBox.GetItemData(index);
+		if (sizePointer == &fTabletDeviceSize)
 		{
-			fScreenSizeComboBox.SetCurSel(index);
-			OnScreenSizeComboBoxSelectionChanged();
+			fDeviceSizeComboBox.SetCurSel(index);
+			OnDeviceSizeComboBoxSelectionChanged();
 			return;
 		}
 	}
@@ -211,11 +207,10 @@ void CNewProjectDlg::OnOK()
 	CString projectPath;
 	CString templatePath;
 	CStringA templateName;
-	CStringA defaultOrientationName;
 	CString stringBuffer;
 	WinString stringConverter;
-	int screenWidth;
-	int screenHeight;
+	int deviceWidth;
+	int deviceHeight;
 
 	// Fetch and validate field values.
 	fAppNameEditBox.GetWindowText(applicationName);
@@ -276,44 +271,35 @@ void CNewProjectDlg::OnOK()
 	templatePath = ((CSimulatorApp*)AfxGetApp())->GetResourceDir() + _T("\\homescreen\\templates");
 
 	// Fetch and validate screen width.
-	screenWidth = 0;
-	fScreenWidthEditBox.GetWindowText(stringBuffer);
+	deviceWidth = 0;
+	fDeviceWidthEditBox.GetWindowText(stringBuffer);
 	stringBuffer.Trim();
 	if (stringBuffer.GetLength() > 0)
 	{
-		screenWidth = _ttoi(stringBuffer);
+		deviceWidth = _ttoi(stringBuffer);
 	}
-	if (screenWidth < 1)
+	if (deviceWidth < 1)
 	{
 		DisplayWarningMessage(IDS_PROJECT_SCREEN_WIDTH_IS_INVALID);
-		fScreenWidthEditBox.SetFocus();
+		fDeviceWidthEditBox.SetFocus();
 		return;
 	}
 
 	// Fetch and validate screen height.
-	screenHeight = 0;
-	fScreenHeightEditBox.GetWindowText(stringBuffer);
+	deviceHeight = 0;
+	fDeviceHeightEditBox.GetWindowText(stringBuffer);
 	stringBuffer.Trim();
 	if (stringBuffer.GetLength() > 0)
 	{
-		screenHeight = _ttoi(stringBuffer);
+		deviceHeight = _ttoi(stringBuffer);
 	}
-	if (screenHeight < 1)
+	if (deviceHeight < 1)
 	{
 		DisplayWarningMessage(IDS_PROJECT_SCREEN_HEIGHT_IS_INVALID);
-		fScreenHeightEditBox.SetFocus();
+		fDeviceHeightEditBox.SetFocus();
 		return;
 	}
 
-	// Fetch default orientation selection.
-	if (((CButton*)GetDlgItem(IDC_ORIENTATION_SIDEWAYS))->GetCheck() == BST_CHECKED)
-	{
-		defaultOrientationName = "landscapeRight";
-	}
-	else
-	{
-		defaultOrientationName = "portrait";
-	}
 
 	// If the given project path does not exist, then create the project directory.
 	// If the directory does exist, then make sure an existing project is not already there.
@@ -360,14 +346,11 @@ void CNewProjectDlg::OnOK()
 		lua_pushstring( L, templateName );
 		lua_setfield( L, -2, "template" );
 
-		lua_pushinteger( L, screenWidth );
+		lua_pushinteger( L, deviceWidth );
 		lua_setfield( L, -2, "width" );
 
-		lua_pushinteger( L, screenHeight );
+		lua_pushinteger( L, deviceHeight );
 		lua_setfield( L, -2, "height" );
-
-		lua_pushstring( L, defaultOrientationName );
-		lua_setfield( L, -2, "orientation" );
 
 		stringConverter.SetTCHAR(projectPath);
 		lua_pushstring( L, stringConverter.GetUTF8() );

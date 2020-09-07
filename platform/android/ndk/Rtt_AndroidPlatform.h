@@ -30,7 +30,6 @@ class AndroidImageProvider;
 class AndroidStoreProvider;
 class AndroidVideoPlayer;
 class AndroidVideoProvider;
-class AndroidWebPopup;
 class PlatformBitmap;
 class PlatformSurface;
 class PlatformTimer;
@@ -85,8 +84,6 @@ class AndroidPlatform : public MPlatform
 
 		virtual void SetActivityIndicator( bool visible ) const;
 
-		virtual PlatformWebPopup* GetWebPopup() const;
-
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
@@ -95,7 +92,6 @@ class AndroidPlatform : public MPlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
-		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		PlatformDisplayObject* GetNativeDisplayObjectById( const int objectId ) const;
@@ -191,7 +187,6 @@ class AndroidPlatform : public MPlatform
 		mutable AndroidImageProvider* fImageProvider;
 		mutable AndroidVideoProvider* fVideoProvider;
 //		AlertViewDelegate *fDelegate;
-		mutable AndroidWebPopup *fWebPopup;
 		String fPackage;
 		String fDocumentsDir;
 		String fApplicationSupportDir;

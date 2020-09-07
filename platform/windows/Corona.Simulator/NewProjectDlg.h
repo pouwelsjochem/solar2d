@@ -36,17 +36,17 @@ private:
 
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnChangeAppNameEditBox();
-	afx_msg void OnScreenSizeComboBoxSelectionChanged();
+	afx_msg void OnDeviceSizeComboBoxSelectionChanged();
 	afx_msg void OnClickedBrowseButton();
 	afx_msg void OnClickedTemplateEbook();
 
 	CEdit fAppNameEditBox;
 	CEdit fProjectLocationEditBox;
-	CComboBox fScreenSizeComboBox;
-	CEdit fScreenWidthEditBox;
-	CEdit fScreenHeightEditBox;
-	CSize fPhoneScreenSize;
-	CSize fTabletScreenSize;
+	CComboBox fDeviceSizeComboBox;
+	CEdit fDeviceWidthEditBox;
+	CEdit fDeviceHeightEditBox;
+	CSize fPhoneDeviceSize;
+	CSize fTabletDeviceSize;
 	CFont fBoldRadioButtonFont;
 	CString fNewProjectPath;
 };

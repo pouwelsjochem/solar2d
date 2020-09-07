@@ -14,7 +14,6 @@
 
 #include "Rtt_PlatformAppPackager.h"
 #include "Core/Rtt_String.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_TargetDevice.h"
 #include <string>
 
@@ -86,10 +85,6 @@ class AndroidAppPackager : public PlatformAppPackager
 		virtual bool VerifyConfiguration() const;
 		bool IsUsingExpansionFile() const { return fIsUsingExpansionFile; }
 
-//		const StringArray & GetAndroidPermissions() const { return fPermissions; }
-//		DeviceOrientation::Type GetDefaultOrientation() const { return fDefaultOrientation; }
-//		bool SupportsOrientationChange() const { return fSupportsOrientationChange; }
-
 	protected:
 		bool CreateBuildProperties( const AppPackagerParams& params, const char *tmpDir );
 		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
@@ -100,11 +95,6 @@ class AndroidAppPackager : public PlatformAppPackager
 		String fResourcesDir;
 		bool fIsUsingExpansionFile;
 		
-		 // TODO: This belongs in params
-//		StringArray fPermissions;
-//		String fVersionCode;
-//		DeviceOrientation::Type fDefaultOrientation;
-//		bool fSupportsOrientationChange;
 };
 
 // ----------------------------------------------------------------------------

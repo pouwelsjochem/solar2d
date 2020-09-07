@@ -442,7 +442,6 @@ bool WinDevice::HasEventSource(EventType type) const
 			hasEventSource = fInputDeviceManager.IsMultitouchSupported();
 			break;
 		case MPlatformDevice::kAccelerometerEvent:
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
 			if (deviceSimulatorPointer)
 			{
@@ -505,26 +504,6 @@ void WinDevice::SetGyroscopeInterval(U32 frequency) const
 	Rtt_WARN_SIM(frequency >= 10 && frequency <= 100, ("WARNING: Gyroscope frequency must be in the range [10,100] Hz"));
 }
 
-DeviceOrientation::Type WinDevice::GetOrientation() const
-{
-	// If we're simulating a device, then use the current simulated orientation.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		return deviceSimulatorServicesPointer->GetOrientation();
-	}
-
-	// Use the Corona project's default orientation, if provided.
-	auto orientation = fEnvironment.GetProjectSettings().GetDefaultOrientation();
-	if (Rtt::DeviceOrientation::IsInterfaceOrientation(orientation))
-	{
-		return orientation;
-	}
-
-	// If all else fails, default to an upright orientation.
-	return Rtt::DeviceOrientation::kUpright;
-}
-
 Rtt::MPlatformDevice::EnvironmentType WinDevice::GetEnvironment() const
 {
 #ifdef Rtt_AUTHORING_SIMULATOR
@@ -545,16 +524,7 @@ const char* WinDevice::GetPlatformName() const
 
 const char* WinDevice::GetPlatform() const
 {
-#ifdef Rtt_AUTHORING_SIMULATOR
-	// If we're simulating a device, then use the current simulated orientation.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		return deviceSimulatorServicesPointer->GetOSName();
-	}
-#else
 	return "win32";
-#endif
 }
 
 const char* WinDevice::GetPlatformVersion() const

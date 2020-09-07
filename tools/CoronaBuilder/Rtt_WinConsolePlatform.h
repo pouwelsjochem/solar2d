@@ -39,7 +39,6 @@ namespace Rtt
 	class WinImageProvider;
 	class WinVideoPlayer;
 	class WinVideoProvider;
-	class WinWebPopup;
 }
 class WinGLView;
 
@@ -101,14 +100,12 @@ namespace Rtt
 			U32 buttonCount, LuaResource *resourcePointer) const { return nullptr; };
 		virtual void CancelNativeAlert(NativeAlertRef alertReference, S32 buttonIndex) const { return; };
 		virtual void SetActivityIndicator(bool visible) const { return; };
-		virtual PlatformWebPopup* GetWebPopup() const { return nullptr; };
 		virtual bool CanShowPopup(const char *name) const { return false; };
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const { return false; };
 		virtual bool HidePopup(const char *name) const { return false; };
 		virtual PlatformDisplayObject* CreateNativeTextBox(const Rect& bounds) const { return nullptr; };
 		virtual PlatformDisplayObject* CreateNativeTextField(const Rect& bounds) const { return nullptr; };
 		virtual void SetKeyboardFocus(PlatformDisplayObject *textObject) const { return; };
-		virtual PlatformDisplayObject* CreateNativeWebView(const Rect& bounds) const { return nullptr; };
 		virtual PlatformDisplayObject* CreateNativeVideo(const Rect& bounds) const { return nullptr; };
 		virtual Rtt_Real GetStandardFontSize() const { return 0.0; };
 		virtual S32 GetFontNames(lua_State *L, int index) const { return 0; };
@@ -168,7 +165,6 @@ namespace Rtt
 		mutable WinVideoPlayer* fVideoPlayer;
 		mutable WinImageProvider* fImageProvider;
 		mutable WinVideoProvider* fVideoProvider;
-		mutable WinWebPopup *fWebPopup;
 		mutable PlatformFBConnect *fFBConnect;
 		WinExitCallback fExitCallback;
 		mutable bool fIsIdleTimerEnabled;

@@ -16,9 +16,6 @@
     <Filter Include="external\LuaHashMap">
       <UniqueIdentifier>{6e041820-e8d0-4741-86eb-e411b3d23e18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="external\smoothpolygon">
-      <UniqueIdentifier>{a20ecf38-7461-4a45-8dec-3d3f29368f4a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="platform">
       <UniqueIdentifier>{157854b3-d3fb-4ce6-ab8f-88825fa2e236}</UniqueIdentifier>
     </Filter>
@@ -126,9 +123,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_DeviceOrientation.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -136,12 +130,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_FilePath.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_FillTesselatorStream.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_GPUStream.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_HitTestObject.cpp">
@@ -270,9 +258,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoProvider.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformWebPopup.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Rendering.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -295,12 +280,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Scheduler.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_TesselatorStream.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Transform.cpp">
@@ -818,22 +797,13 @@
     <ClInclude Include="..\..\..\librtt\Rtt_Callback.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_DeviceOrientation.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Event.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_FilePath.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_FillTesselatorStream.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_GPU.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_GPUStream.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_HitTestObject.h">
@@ -1016,9 +986,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoProvider.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformWebPopup.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Rendering.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -1037,13 +1004,7 @@
     <ClInclude Include="..\..\..\librtt\Rtt_Scheduler.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_SurfaceInfo.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_TesselatorStream.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Transform.h">
@@ -1622,9 +1583,6 @@
       <Filter>platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\loader_ccdata.lua">
-      <Filter>platform\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\runtime.lua">
       <Filter>platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\dkjson.lua">

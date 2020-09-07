@@ -24,12 +24,10 @@ namespace Rtt
 		IBOutlet NSWindow *fWindow;
 		NSString *fProjectName;
 		NSInteger fTemplateIndex;
-		IBOutlet NSPopUpButton *fScreenSize;
-		NSInteger fScreenSizeIndex;
-		NSNumber *fScreenWidth;
-		NSNumber *fScreenHeight;
-		NSInteger fOrientationIndex;
-		//IBOutlet NSMatrix *fOrientation;
+		IBOutlet NSPopUpButton *fDeviceSize;
+		NSInteger fDeviceSizeIndex;
+		NSNumber *fDeviceWidth;
+		NSNumber *fDeviceHeight;
 
 		NSString *fResourcePath;
 
@@ -42,10 +40,9 @@ namespace Rtt
 @property (nonatomic, readonly, assign, getter=window) NSWindow *fWindow;
 @property (nonatomic, readwrite, assign, getter=projectName, setter=setProjectName:) NSString *fProjectName;
 @property (nonatomic, readwrite, assign, getter=templateIndex, setter=setTemplateIndex:) NSInteger fTemplateIndex;
-@property (nonatomic, readwrite, assign, getter=screenSizeIndex, setter=setScreenSizeIndex:) NSInteger fScreenSizeIndex;
-@property (nonatomic, readwrite, assign, getter=screenWidth, setter=setScreenWidth:) NSNumber *fScreenWidth;
-@property (nonatomic, readwrite, assign, getter=screenHeight, setter=setScreenHeight:) NSNumber *fScreenHeight;
-@property (nonatomic, readwrite, assign, getter=orientationIndex, setter=setOrientationIndex:) NSInteger fOrientationIndex;
+@property (nonatomic, readwrite, assign, getter=deviceSizeIndex, setter=setDeviceSizeIndex:) NSInteger fDeviceSizeIndex;
+@property (nonatomic, readwrite, assign, getter=deviceWidth, setter=setDeviceWidth:) NSNumber *fDeviceWidth;
+@property (nonatomic, readwrite, assign, getter=deviceHeight, setter=setDeviceHeight:) NSNumber *fDeviceHeight;
 @property (nonatomic, readwrite, retain, getter=projectPath, setter=setProjectPath:) NSString *fProjectPath;
 
 @property (nonatomic, readwrite, assign, getter=services, setter=setServices:) const Rtt::MSimulatorServices *fServices;

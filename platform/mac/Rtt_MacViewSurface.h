@@ -29,11 +29,9 @@ class MacViewSurface : public PlatformSurface
 
 	public:
 		typedef PlatformSurface Super;
-		typedef PlatformSurfaceDelegate Delegate;
 
 	public:
 		MacViewSurface( GLView* view );
-		MacViewSurface( GLView* view, S32 adaptiveWidth, S32 adaptiveHeight );
 		virtual ~MacViewSurface();
 
 	public:
@@ -44,24 +42,12 @@ class MacViewSurface : public PlatformSurface
 		virtual S32 Width() const;
 		virtual S32 Height() const;
 
-		virtual S32 AdaptiveWidth() const;
-		virtual S32 AdaptiveHeight() const;
-
-	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
-
 	public:
 		virtual S32 DeviceWidth() const;
 		virtual S32 DeviceHeight() const;
 
-	public:
-		virtual void SetDelegate( Delegate* delegate );
-
 	private:
 		GLView* fView;
-		Delegate* fDelegate;
-		S32 fAdaptiveWidth;
-		S32 fAdaptiveHeight;
 };
 
 // ----------------------------------------------------------------------------

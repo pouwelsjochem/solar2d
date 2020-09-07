@@ -83,18 +83,13 @@ TextureResourceBitmap::CreateDefault(
 }
 			
 TextureResourceBitmap *
-TextureResourceBitmap::Create(
-	TextureFactory& factory,
-	PlatformBitmap *bitmap,
-	bool isRetina )
+TextureResourceBitmap::Create(TextureFactory& factory, PlatformBitmap *bitmap )
 {
 	Display& display = factory.GetDisplay();
 	Texture *texture = Rtt_NEW( display.GetAllocator(),
 		PlatformBitmapTexture( display.GetAllocator(), * bitmap ) );
 	TextureResourceBitmap *result =
 		Rtt_NEW( display.GetAllocator(), TextureResourceBitmap( factory, texture, bitmap ) );
-
-	texture->SetRetina( isRetina );
 
 	return result;
 }

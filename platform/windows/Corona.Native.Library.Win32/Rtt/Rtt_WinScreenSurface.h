@@ -37,15 +37,12 @@ class WinScreenSurface : public PlatformSurface
 		WinScreenSurface(Interop::RuntimeEnvironment& environment);
 		virtual ~WinScreenSurface();
 
-		DeviceOrientation::Type GetOrientation() const;
 		virtual void SetCurrent() const;
 		virtual void Flush() const;
 		virtual S32 Width() const;
 		virtual S32 Height() const;
 		virtual S32 DeviceWidth() const;
 		virtual S32 DeviceHeight() const;
-		virtual S32 AdaptiveWidth() const;
-		virtual S32 AdaptiveHeight() const;
 
 	private:
 		Interop::RuntimeEnvironment& fEnvironment;

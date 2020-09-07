@@ -76,16 +76,6 @@
 		A4693569169D62DA00723568 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000DCD9612B0759700042A5E /* MainWindow-iPad.xib */; };
 		A469356B169D62DA00723568 /* Corona3rdPartyLicenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = 004A5F321368DA41003BD9DA /* Corona3rdPartyLicenses.txt */; };
 		A46935B8169D62DA00723568 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 000DCED912B0824800042A5E /* libobjc.dylib */; };
-		A4693643169D69EF00723568 /* libplayer-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4841095151147BE0074BD57 /* libplayer-core.a */; };
-		A4693645169D69EF00723568 /* LibPlayerPrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A484115115115CE20074BD57 /* LibPlayerPrefix.pch */; };
-		A4693646169D69EF00723568 /* CoronaApplicationMain.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7C151AA23A00486F8A /* CoronaApplicationMain.h */; };
-		A4693647169D69EF00723568 /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7E151AA23A00486F8A /* CoronaDelegate.h */; };
-		A4693648169D69EF00723568 /* CoronaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7F151AA23A00486F8A /* CoronaRuntime.h */; };
-		A469364A169D69EF00723568 /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A491870616421FBE00A39286 /* CoronaIOSLoader.h */; };
-		A4693674169D6A0700723568 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
-		A4693675169D6A0700723568 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000DCD9612B0759700042A5E /* MainWindow-iPad.xib */; };
-		A4693677169D6A0700723568 /* Corona3rdPartyLicenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = 004A5F321368DA41003BD9DA /* Corona3rdPartyLicenses.txt */; };
-		A4693698169D6A0700723568 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 000DCED912B0824800042A5E /* libobjc.dylib */; };
 		A46936B7169DED4700723568 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936B4169DED4700723568 /* AppDelegate.mm */; };
 		A46936BC169DED6500723568 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936B9169DED6500723568 /* CoronaViewPrivate.mm */; };
 		A46936F0169DED9300723568 /* Rtt_IPhoneAudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936BF169DED9200723568 /* Rtt_IPhoneAudioSessionManager.mm */; };
@@ -100,10 +90,7 @@
 		A4693727169DED9300723568 /* Rtt_IPhoneTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E4169DED9200723568 /* Rtt_IPhoneTextFieldObject.mm */; };
 		A469372A169DED9300723568 /* Rtt_IPhoneVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E6169DED9200723568 /* Rtt_IPhoneVideoObject.mm */; };
 		A469372D169DED9300723568 /* Rtt_IPhoneVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E8169DED9200723568 /* Rtt_IPhoneVideoPlayer.mm */; };
-		A4693730169DED9300723568 /* Rtt_IPhoneWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936EA169DED9200723568 /* Rtt_IPhoneWebPopup.mm */; };
-		A4693733169DED9300723568 /* Rtt_IPhoneWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */; };
 		A4698839169E642E00EAA645 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
-		A469883A169E642E00EAA645 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
 		A47098A8169E9F2400D31091 /* Rtt_IPhoneTemplate-Sub.mm in Sources */ = {isa = PBXBuildFile; fileRef = A469881B169E23B200EAA645 /* Rtt_IPhoneTemplate-Sub.mm */; };
 		A47098AA169E9F2400D31091 /* libplayer-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4841095151147BE0074BD57 /* libplayer-core.a */; };
 		A47098AC169E9F2400D31091 /* LibPlayerPrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A484115115115CE20074BD57 /* LibPlayerPrefix.pch */; };
@@ -125,7 +112,6 @@
 		A47AB0F11A72EEA2001D3FFA /* Rtt_IPhoneText.mm in Sources */ = {isa = PBXBuildFile; fileRef = A47AB0EF1A72EEA2001D3FFA /* Rtt_IPhoneText.mm */; };
 		A480725C16CACD6E00960127 /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A480725D16CACD6E00960127 /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
-		A480725E16CACD6E00960127 /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A480725F16CACD6E00960127 /* CoronaLuaIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */; };
 		A482FAA6183D74950005831B /* CoronaCards.h in Copy Files */ = {isa = PBXBuildFile; fileRef = A482FAA5183D74950005831B /* CoronaCards.h */; };
 		A482FACD183D75070005831B /* CoronaCards.h in Headers */ = {isa = PBXBuildFile; fileRef = A482FAA5183D74950005831B /* CoronaCards.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -152,7 +138,6 @@
 		A48411DD1512A0570074BD57 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 002078EF13B51A3C00D575C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
 		A48B827316D595B600CA01A1 /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
 		A48B827416D595C100CA01A1 /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
-		A48B827516D595C900CA01A1 /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
 		A48DA9621852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9601852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		A48DA9631852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A48DA9611852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.h */; };
 		A48DA9791853094C009D1F93 /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A48DA9771853094C009D1F93 /* CoronaIOSLoader.h */; };
@@ -183,10 +168,6 @@
 		A48E9C07183F57B400F67CB3 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BFB183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm */; };
 		A49186D416421AEC00A39286 /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A49186A91642195200A39286 /* libplugins.a */; };
 		A491870716421FBE00A39286 /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A491870616421FBE00A39286 /* CoronaIOSLoader.h */; };
-		A4B2D52518402BDE001311C9 /* Rtt_IPhoneOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B2D52318402BDE001311C9 /* Rtt_IPhoneOrientation.h */; };
-		A4B2D52618402BDE001311C9 /* Rtt_IPhoneOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B2D52318402BDE001311C9 /* Rtt_IPhoneOrientation.h */; };
-		A4B2D52718402BDE001311C9 /* Rtt_IPhoneOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B2D52418402BDE001311C9 /* Rtt_IPhoneOrientation.mm */; };
-		A4B2D52818402BDE001311C9 /* Rtt_IPhoneOrientation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B2D52418402BDE001311C9 /* Rtt_IPhoneOrientation.mm */; };
 		A4B2D529184038AA001311C9 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD2C12B073A000042A5E /* Rtt_AppleBitmap.mm */; };
 		A4B2D52A184038AA001311C9 /* Rtt_AppleCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD3112B073A000042A5E /* Rtt_AppleCrypto.cpp */; };
 		A4B2D52B184038AA001311C9 /* Rtt_AppleEventSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD3712B073A000042A5E /* Rtt_AppleEventSound.cpp */; };
@@ -202,7 +183,6 @@
 		A4B2D5391842DBE1001311C9 /* CoronaViewRuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B2D5361842DBE1001311C9 /* CoronaViewRuntimeDelegate.h */; };
 		A4B2D53A1842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B2D5371842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm */; };
 		A4B2D53B1842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B2D5371842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm */; };
-		A4C3184C1A67B5B800F186DF /* CoronaOrientationObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C3184B1A67B5B800F186DF /* CoronaOrientationObserver.h */; };
 		A4C318521A67B65100F186DF /* CoronaSystemResourceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C318501A67B65100F186DF /* CoronaSystemResourceManager.h */; };
 		A4C318531A67B65100F186DF /* CoronaSystemResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C318511A67B65100F186DF /* CoronaSystemResourceManager.mm */; };
 		A4C318721A69A4E000F186DF /* CoronaGyroscopeObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C318711A69A4E000F186DF /* CoronaGyroscopeObserver.h */; };
@@ -231,13 +211,6 @@
 		A4F2ADEF16E0AF2E00814C7B /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A4F2ADF816E0AF5F00814C7B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
 		A4F2ADF916E0AF6F00814C7B /* libplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A47098D5169E9F2400D31091 /* libplayer.a */; };
-		A4F2ADFE16E0AF7D00814C7B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
-		A4F2AE0216E0AF7D00814C7B /* LibPlayerPrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A484115115115CE20074BD57 /* LibPlayerPrefix.pch */; };
-		A4F2AE0316E0AF7D00814C7B /* CoronaApplicationMain.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7C151AA23A00486F8A /* CoronaApplicationMain.h */; };
-		A4F2AE0416E0AF7D00814C7B /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7E151AA23A00486F8A /* CoronaDelegate.h */; };
-		A4F2AE0516E0AF7D00814C7B /* CoronaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7F151AA23A00486F8A /* CoronaRuntime.h */; };
-		A4F2AE0616E0AF7D00814C7B /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A491870616421FBE00A39286 /* CoronaIOSLoader.h */; };
-		A4F2AE2616E0AF7D00814C7B /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A4F5C39F184536A000E5ED54 /* AppDelegateTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F5C39C184536A000E5ED54 /* AppDelegateTest.mm */; };
 		A4F5C3A0184536A000E5ED54 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F5C39E184536A000E5ED54 /* ViewController.mm */; };
 		A4F5C3A5184536D900E5ED54 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F5C3A4184536D900E5ED54 /* main.mm */; };
@@ -265,9 +238,7 @@
 		F5A7520E1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
 		F5A7520F1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5A7520D1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm */; };
 		F5A752151BFA401000CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
-		F5A752181BFA401700CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
 		F5A752191BFA401800CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
-		F5A7521A1BFA401800CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
 		F5FD0AE32373933C0066F6A6 /* AutoLinkModules.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FD0AE02373933C0066F6A6 /* AutoLinkModules.m */; };
 		F81D159B180D9F32003FCBF9 /* Rtt_IPhoneMediaProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = F81D159A180D9F32003FCBF9 /* Rtt_IPhoneMediaProvider.mm */; };
 		F81D63B21A609F8B00C7ADAA /* CoronaAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F81D63B01A609F8B00C7ADAA /* CoronaAppDelegate.h */; };
@@ -277,20 +248,6 @@
 
 /* Begin PBXBuildRule section */
 		A46935C1169D62DA00723568 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.lua";
-			fileType = pattern.proxy;
-			inputFiles = (
-			);
-			isEditable = 1;
-			outputFiles = (
-				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/$(INPUT_FILE_BASE).lu",
-			);
-			runOncePerArchitecture = 0;
-			script = "TOOLSDIR=\"$PROJECT_DIR/../../bin/mac\"\nif [ -e \"$TOOLSDIR/lua\" ]; then\n    LUA_DIR=\"$TOOLSDIR\"\nelse\n    echo \"ERROR: cannot find 'lua' in $TOOLSDIR\"\n    exit 1\nfi\n\n\"$LUA_DIR\"/lua $SRCROOT/../../bin/rcc.lua -c \"$LUA_DIR\" -O$CONFIGURATION -o \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\"/$INPUT_FILE_BASE.lu $INPUT_FILE_PATH\n";
-		};
-		A46936A2169D6A0700723568 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.lua";
@@ -404,13 +361,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = A4B93ED917596543003466CC;
 			remoteInfo = tachyon;
-		};
-		A46936AB169D6A6C00723568 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A4841094151147BE0074BD57;
-			remoteInfo = libplayer;
 		};
 		A47098D6169EA0F400D31091 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -662,10 +612,6 @@
 		A46936E6169DED9200723568 /* Rtt_IPhoneVideoObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneVideoObject.mm; path = platform/iphone/Rtt_IPhoneVideoObject.mm; sourceTree = "<group>"; };
 		A46936E7169DED9200723568 /* Rtt_IPhoneVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneVideoPlayer.h; path = platform/iphone/Rtt_IPhoneVideoPlayer.h; sourceTree = "<group>"; };
 		A46936E8169DED9200723568 /* Rtt_IPhoneVideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneVideoPlayer.mm; path = platform/iphone/Rtt_IPhoneVideoPlayer.mm; sourceTree = "<group>"; };
-		A46936E9169DED9200723568 /* Rtt_IPhoneWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneWebPopup.h; path = platform/iphone/Rtt_IPhoneWebPopup.h; sourceTree = "<group>"; };
-		A46936EA169DED9200723568 /* Rtt_IPhoneWebPopup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneWebPopup.mm; path = platform/iphone/Rtt_IPhoneWebPopup.mm; sourceTree = "<group>"; };
-		A46936EB169DED9300723568 /* Rtt_IPhoneWebViewObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneWebViewObject.h; path = platform/iphone/Rtt_IPhoneWebViewObject.h; sourceTree = "<group>"; };
-		A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneWebViewObject.mm; path = platform/iphone/Rtt_IPhoneWebViewObject.mm; sourceTree = "<group>"; };
 		A4693764169DF23D00723568 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4698817169E225600EAA645 /* Rtt_IPhoneTemplate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTemplate.h; path = libtemplate/Rtt_IPhoneTemplate.h; sourceTree = "<group>"; };
 		A469881B169E23B200EAA645 /* Rtt_IPhoneTemplate-Sub.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "Rtt_IPhoneTemplate-Sub.mm"; path = "libtemplate/Rtt_IPhoneTemplate-Sub.mm"; sourceTree = "<group>"; };
@@ -714,12 +660,9 @@
 		A48E9BFB183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_TouchInhibitor.mm; path = platform/iphone/Rtt_TouchInhibitor.mm; sourceTree = "<group>"; };
 		A49186961642195200A39286 /* plugins.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = plugins.xcodeproj; sourceTree = "<group>"; };
 		A491870616421FBE00A39286 /* CoronaIOSLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaIOSLoader.h; path = ../../plugins/ios/CoronaIOSLoader.h; sourceTree = "<group>"; };
-		A4B2D52318402BDE001311C9 /* Rtt_IPhoneOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneOrientation.h; path = platform/iphone/Rtt_IPhoneOrientation.h; sourceTree = "<group>"; };
-		A4B2D52418402BDE001311C9 /* Rtt_IPhoneOrientation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneOrientation.mm; path = platform/iphone/Rtt_IPhoneOrientation.mm; sourceTree = "<group>"; };
 		A4B2D5361842DBE1001311C9 /* CoronaViewRuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaViewRuntimeDelegate.h; path = platform/iphone/CoronaViewRuntimeDelegate.h; sourceTree = "<group>"; };
 		A4B2D5371842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaViewRuntimeDelegate.mm; path = platform/iphone/CoronaViewRuntimeDelegate.mm; sourceTree = "<group>"; };
 		A4B93F9217596F60003466CC /* libtachyon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libtachyon.xcodeproj; path = ../../librtt/Renderer/ios/libtachyon.xcodeproj; sourceTree = "<group>"; };
-		A4C3184B1A67B5B800F186DF /* CoronaOrientationObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaOrientationObserver.h; path = platform/iphone/CoronaOrientationObserver.h; sourceTree = "<group>"; };
 		A4C318501A67B65100F186DF /* CoronaSystemResourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaSystemResourceManager.h; path = platform/iphone/CoronaSystemResourceManager.h; sourceTree = "<group>"; };
 		A4C318511A67B65100F186DF /* CoronaSystemResourceManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaSystemResourceManager.mm; path = platform/iphone/CoronaSystemResourceManager.mm; sourceTree = "<group>"; };
 		A4C318711A69A4E000F186DF /* CoronaGyroscopeObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGyroscopeObserver.h; path = platform/iphone/CoronaGyroscopeObserver.h; sourceTree = "<group>"; };
@@ -803,22 +746,6 @@
 			files = (
 				A46935B8169D62DA00723568 /* libobjc.dylib in Frameworks */,
 				A47098E4169EAB5C00D31091 /* libplayer.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4693642169D69EF00723568 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4693643169D69EF00723568 /* libplayer-core.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A469367B169D6A0700723568 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4693698169D6A0700723568 /* libobjc.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,7 +886,6 @@
 				A46936B3169DED4700723568 /* AppDelegate.h */,
 				A46936B4169DED4700723568 /* AppDelegate.mm */,
 				A4C318711A69A4E000F186DF /* CoronaGyroscopeObserver.h */,
-				A4C3184B1A67B5B800F186DF /* CoronaOrientationObserver.h */,
 				A4C318501A67B65100F186DF /* CoronaSystemResourceManager.h */,
 				A4C318511A67B65100F186DF /* CoronaSystemResourceManager.mm */,
 				F81D63B01A609F8B00C7ADAA /* CoronaAppDelegate.h */,
@@ -990,8 +916,6 @@
 				F81D159A180D9F32003FCBF9 /* Rtt_IPhoneMediaProvider.mm */,
 				A4FA8054170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.h */,
 				A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */,
-				A4B2D52318402BDE001311C9 /* Rtt_IPhoneOrientation.h */,
-				A4B2D52418402BDE001311C9 /* Rtt_IPhoneOrientation.mm */,
 				A46936DD169DED9200723568 /* Rtt_IPhonePlatform.h */,
 				A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */,
 				A482FAE8183D7F460005831B /* Rtt_IPhonePlatformBase.h */,
@@ -1016,10 +940,6 @@
 				A46936E8169DED9200723568 /* Rtt_IPhoneVideoPlayer.mm */,
 				F87434AA180629540024ECFD /* Rtt_IPhoneVideoProvider.h */,
 				F87434AB180629540024ECFD /* Rtt_IPhoneVideoProvider.mm */,
-				A46936E9169DED9200723568 /* Rtt_IPhoneWebPopup.h */,
-				A46936EA169DED9200723568 /* Rtt_IPhoneWebPopup.mm */,
-				A46936EB169DED9300723568 /* Rtt_IPhoneWebViewObject.h */,
-				A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */,
 				A48E9BFA183EFFC500F67CB3 /* Rtt_TouchInhibitor.h */,
 				A48E9BFB183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm */,
 			);
@@ -1471,20 +1391,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		A4693644169D69EF00723568 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4693645169D69EF00723568 /* LibPlayerPrefix.pch in Headers */,
-				A4693646169D69EF00723568 /* CoronaApplicationMain.h in Headers */,
-				F5A752181BFA401700CCDB94 /* CoronaLuaObjCHelper.h in Headers */,
-				A4693647169D69EF00723568 /* CoronaDelegate.h in Headers */,
-				A4693648169D69EF00723568 /* CoronaRuntime.h in Headers */,
-				A469364A169D69EF00723568 /* CoronaIOSLoader.h in Headers */,
-				A480725E16CACD6E00960127 /* CoronaLuaIOS.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A47098AB169E9F2400D31091 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1507,7 +1413,6 @@
 				A482FACD183D75070005831B /* CoronaCards.h in Headers */,
 				A4C3189C1A6EDD4500F186DF /* AppleWeakProxy.h in Headers */,
 				A48DA9791853094C009D1F93 /* CoronaIOSLoader.h in Headers */,
-				A4B2D52618402BDE001311C9 /* Rtt_IPhoneOrientation.h in Headers */,
 				A4728FF11AE8176F00BC088D /* CoronaLuaObjC.h in Headers */,
 				F564C3711BE430F900C241E6 /* Rtt_AppleInputDevice.h in Headers */,
 				A4586814183EE425004C260A /* CoronaView.h in Headers */,
@@ -1533,7 +1438,6 @@
 				A48E9BF8183EF42400F67CB3 /* CoronaViewControllerPrivate.h in Headers */,
 				A4C3189B1A6EDD4400F186DF /* AppleWeakProxy.h in Headers */,
 				A4C318521A67B65100F186DF /* CoronaSystemResourceManager.h in Headers */,
-				A4C3184C1A67B5B800F186DF /* CoronaOrientationObserver.h in Headers */,
 				A415ECAE1BD861A1003E7114 /* Rtt_IPhonePlatformCore.h in Headers */,
 				F81D63B21A609F8B00C7ADAA /* CoronaAppDelegate.h in Headers */,
 				A48E9BFC183EFFC500F67CB3 /* Rtt_TouchInhibitor.h in Headers */,
@@ -1543,7 +1447,6 @@
 				F564C3701BE430F900C241E6 /* Rtt_AppleInputDevice.h in Headers */,
 				A40D2F5D1887699100B4A354 /* CoronaViewPluginContext.h in Headers */,
 				A4B2D5381842DBE1001311C9 /* CoronaViewRuntimeDelegate.h in Headers */,
-				A4B2D52518402BDE001311C9 /* Rtt_IPhoneOrientation.h in Headers */,
 				A480725C16CACD6E00960127 /* CoronaLuaIOS.h in Headers */,
 				A47AB0F01A72EEA2001D3FFA /* Rtt_IPhoneText.h in Headers */,
 				F5A7520E1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h in Headers */,
@@ -1561,20 +1464,6 @@
 				A4F2ADCE16E0AF2E00814C7B /* CoronaRuntime.h in Headers */,
 				A4F2ADCF16E0AF2E00814C7B /* CoronaIOSLoader.h in Headers */,
 				A4F2ADEF16E0AF2E00814C7B /* CoronaLuaIOS.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4F2AE0116E0AF7D00814C7B /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4F2AE0216E0AF7D00814C7B /* LibPlayerPrefix.pch in Headers */,
-				A4F2AE0316E0AF7D00814C7B /* CoronaApplicationMain.h in Headers */,
-				F5A7521A1BFA401800CCDB94 /* CoronaLuaObjCHelper.h in Headers */,
-				A4F2AE0416E0AF7D00814C7B /* CoronaDelegate.h in Headers */,
-				A4F2AE0516E0AF7D00814C7B /* CoronaRuntime.h in Headers */,
-				A4F2AE0616E0AF7D00814C7B /* CoronaIOSLoader.h in Headers */,
-				A4F2AE2616E0AF7D00814C7B /* CoronaLuaIOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1676,7 +1565,6 @@
 				A482FAF7183EB72F0005831B /* PBXTargetDependency */,
 				A482FAF9183EB72F0005831B /* PBXTargetDependency */,
 				A482FAFB183EB72F0005831B /* PBXTargetDependency */,
-				A482FB01183EB72F0005831B /* PBXTargetDependency */,
 				A482FB03183EB72F0005831B /* PBXTargetDependency */,
 			);
 			name = CoronaCards;
@@ -1701,7 +1589,6 @@
 				A44D43F6164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D43F8164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D43FA164B1FD300CFE7B3 /* PBXTargetDependency */,
-				A44D43FC164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D43FE164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D41D7164A1D9C00CFE7B3 /* PBXTargetDependency */,
 			);
@@ -1978,17 +1865,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4693673169D6A0700723568 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A48B827516D595C900CA01A1 /* CoronaResources.bundle in Resources */,
-				A4693674169D6A0700723568 /* MainWindow.xib in Resources */,
-				A4693675169D6A0700723568 /* MainWindow-iPad.xib in Resources */,
-				A4693677169D6A0700723568 /* Corona3rdPartyLicenses.txt in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A48B825A16D594AA00CA01A1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2087,7 +1963,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "ditto -V \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\"";
+			shellScript = "ditto -V \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A43E5D3F185EE55C0055BC21 /* Copy Corona Project Files */ = {
@@ -2162,7 +2038,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "# Location of toolchain\nTOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\nLUAC=\"$TOOLCHAIN_DIR/luac\"\nCAR=\"$TOOLCHAIN_DIR/car\"\n\n# If a folder called assets2 exists, use that instead of assets because assets2 wasn't put accidentally under hg revision control.\necho \"$PROJECT_DIR\"/../test/assets2/main.lua \nif [ -f \"$PROJECT_DIR\"/../test/assets2/main.lua ]; then\n    echo \"$CONFIGURATION: Building resource.corona-archive\"\n\n\t$TOOLCHAIN_DIR/CopyResources.sh $CONFIGURATION \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\" \"$LUA_DIR\"\n\n    echo \"EXECUTABLE_FOLDER_PATH $EXECUTABLE_FOLDER_PATH\"\n\n    CONFIG_META=\"$BUILT_PRODUCTS_DIR/config.metadata.lua\"\n    PROJECT_NAME=`basename \"$PROJECT_DIR\"`\necho \"Creating $CONFIG_META...\"\ncat <<EOF > \"$CONFIG_META\"\n-- Ensure existence of \"application\" table\nif not application or type( application ) ~= \"table\" then\n    application = {}\nend\n\napplication.metadata = {\n    appName = \"$PROJECT_NAME\",\n    appVersion = \"1.0\",\n    appPackageId = \"com.anscamobile.$PROJECT_NAME\",\n    appId = \"0123456789\",\n    userId = \"345\", -- drupal user id\n    subscription = \"pro\", -- either \"trial\", \"pro\", \"indie-ios\", \"indie-android\"\n    mode = \"developer\", -- either \"developer\" or nil (where nil means distribution/store)\n    build = \"42\",\n}\n\nEOF\n\n\techo \"********* user($USER_ID) sub($SUB_TYPE) mode($MODE_TYPE)\"\n\tCONFIG_REQUIRE=\"$PROJECT_DIR\"/../resources/config_require.lua\n\n\t# Write out new config.lu into input dir\n\t# \n\t# Our library restriction code relies on metadata and hijacking of 'require'\n\t# This code is implemented by these 2 blocks: (\"$CONFIG_META\" \"$CONFIG_REQUIRE\").\n\t# \n\t# IMPORTANT: We must _prepend_ this library restriction code at the BEGINNING!\n\t# That is, it must execute BEFORE the original config.lua ($CONFIG_SRC).\n\t# If we put it after the original config.lua, then the developer could bypass\n\t# our restriction code via a 'return' at the end of the original config.lua.\n\t#\n\t# NOTE: Historically, we just appended the original with \"$CONFIG_META\". We\n\t# continue to append $CONFIG_META at the end even though we also prepend at the\n\t# beginning. This is because in the pre-library-restriction world, we always\n\t# appended this, so to avoid any unforseen backward compatibility issues, we \n\t# continue to append it.\n\t# \n\n    # Concatenate config.metadata.lua into config.lu overwriting original config.lu\n    CONFIG_DST=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/config.lu\"\n    CONFIG_SRC=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/config.orig.lu\"\n    if [ ! -e \"$CONFIG_DST\" ];\n    then\n        touch \"$CONFIG_SRC\"\n    else\n        mv \"$CONFIG_DST\" \"$CONFIG_SRC\"\n    fi\n   \n\tif [ -e \"$CONFIG_REQUIRE\" ]\n\tthen\n\t\t# Enforce library restriction\n\t\techo \"********** Enforce Library Restriction *******\"\n        \"$LUAC\" -s -o \"$CONFIG_DST\" \"$CONFIG_META\" \"$CONFIG_REQUIRE\" \"$CONFIG_SRC\" \"$CONFIG_META\"\n\telse\n\t\t# Backwards compatibility for pre-Colossus (pre-Free) era\n\t\techo \"********** Backwards compatibility  *******\"\n        \"$LUAC\" -s -o \"$CONFIG_DST\" \"$CONFIG_SRC\" \"$CONFIG_META\"\n\tfi\n\n    rm \"$CONFIG_SRC\"\n    rm \"$CONFIG_META\"\n\n    # Create resource.corona-archive from *.lu\n\techo Archiving \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/*.lu\" into \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/resource.corona-archive\"\n\t\"$CAR\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/resource.corona-archive\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"*.lu\n\n\techo Removing: \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/*.lu\"\n\trm -f \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"*.lu\nelse\n\techo \"Skipping creation of resource.corona-archive for template builds\"\nfi\n";
+			shellScript = "# Location of toolchain\nTOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\nLUAC=\"$TOOLCHAIN_DIR/luac\"\nCAR=\"$TOOLCHAIN_DIR/car\"\n\n# If a folder called assets2 exists, use that instead of assets because assets2 wasn't put accidentally under hg revision control.\necho \"$PROJECT_DIR\"/../test/assets2/main.lua \nif [ -f \"$PROJECT_DIR\"/../test/assets2/main.lua ]; then\n    echo \"$CONFIGURATION: Building resource.corona-archive\"\n\n\t$TOOLCHAIN_DIR/CopyResources.sh $CONFIGURATION \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\" \"$LUA_DIR\"\n\n    echo \"EXECUTABLE_FOLDER_PATH $EXECUTABLE_FOLDER_PATH\"\n\n    CONFIG_META=\"$BUILT_PRODUCTS_DIR/config.metadata.lua\"\n    PROJECT_NAME=`basename \"$PROJECT_DIR\"`\necho \"Creating $CONFIG_META...\"\ncat <<EOF > \"$CONFIG_META\"\n-- Ensure existence of \"application\" table\nif not application or type( application ) ~= \"table\" then\n    application = {}\nend\n\napplication.metadata = {\n    appName = \"$PROJECT_NAME\",\n    appVersion = \"1.0\",\n    appPackageId = \"com.anscamobile.$PROJECT_NAME\",\n    appId = \"0123456789\",\n    userId = \"345\", -- drupal user id\n    subscription = \"pro\", -- either \"trial\", \"pro\", \"indie-ios\", \"indie-android\"\n    mode = \"developer\", -- either \"developer\" or nil (where nil means distribution/store)\n    build = \"42\",\n}\n\n-- application.launchPad = false -- not set is the same as true\n\nEOF\n\n\techo \"********* user($USER_ID) sub($SUB_TYPE) mode($MODE_TYPE)\"\n\tCONFIG_REQUIRE=\"$PROJECT_DIR\"/../resources/config_require.lua\n\n\t# Write out new config.lu into input dir\n\t# \n\t# Our library restriction code relies on metadata and hijacking of 'require'\n\t# This code is implemented by these 2 blocks: (\"$CONFIG_META\" \"$CONFIG_REQUIRE\").\n\t# \n\t# IMPORTANT: We must _prepend_ this library restriction code at the BEGINNING!\n\t# That is, it must execute BEFORE the original config.lua ($CONFIG_SRC).\n\t# If we put it after the original config.lua, then the developer could bypass\n\t# our restriction code via a 'return' at the end of the original config.lua.\n\t#\n\t# NOTE: Historically, we just appended the original with \"$CONFIG_META\". We\n\t# continue to append $CONFIG_META at the end even though we also prepend at the\n\t# beginning. This is because in the pre-library-restriction world, we always\n\t# appended this, so to avoid any unforseen backward compatibility issues, we \n\t# continue to append it.\n\t# \n\n    # Concatenate config.metadata.lua into config.lu overwriting original config.lu\n    CONFIG_DST=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/config.lu\"\n    CONFIG_SRC=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/config.orig.lu\"\n    if [ ! -e \"$CONFIG_DST\" ];\n    then\n        touch \"$CONFIG_SRC\"\n    else\n        mv \"$CONFIG_DST\" \"$CONFIG_SRC\"\n    fi\n   \n\tif [ -e \"$CONFIG_REQUIRE\" ]\n\tthen\n\t\t# Enforce library restriction\n\t\techo \"********** Enforce Library Restriction *******\"\n        \"$LUAC\" -s -o \"$CONFIG_DST\" \"$CONFIG_META\" \"$CONFIG_REQUIRE\" \"$CONFIG_SRC\" \"$CONFIG_META\"\n\telse\n\t\t# Backwards compatibility for pre-Colossus (pre-Free) era\n\t\techo \"********** Backwards compatibility  *******\"\n        \"$LUAC\" -s -o \"$CONFIG_DST\" \"$CONFIG_SRC\" \"$CONFIG_META\"\n\tfi\n\n    rm \"$CONFIG_SRC\"\n    rm \"$CONFIG_META\"\n\n    # Create resource.corona-archive from *.lu\n\tcd \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\n\techo Archiving \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/*.lu\" into \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/resource.corona-archive\"\n\t\"$CAR\" resource.corona-archive *.lu\n\n\techo Removing: \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/*.lu\"\n\trm -f *.lu\nelse\n\techo \"Skipping creation of resource.corona-archive for template builds\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A46935BF169D62DA00723568 /* Script: build.settings to Info.plist */ = {
@@ -2178,36 +2054,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "TOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\nLUA=\"$TOOLCHAIN_DIR/lua\"\n\nASSETS_DIR=\"$PROJECT_DIR\"/../test/assets\nif [ -d \"$PROJECT_DIR\"/../test/assets2 ]\nthen\n    ASSETS_DIR=\"$PROJECT_DIR\"/../test/assets2\nfi\n\necho Running \"$LUA\" \"$PROJECT_DIR\"/../../bin/mac/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\nLUA_PATH=\"$PROJECT_DIR/../../platform/resources/?.lua\" export LUA_PATH\n\"$LUA\" \"$PROJECT_DIR\"/../../bin/mac/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A469369E169D6A0700723568 /* Script: CopyResources and resource.corona-archive */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Script: CopyResources and resource.corona-archive";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "# Location of toolchain\nTOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\n# If a folder called assets2 exists, use that instead of assets because assets2 wasn't put accidentally under hg revision control.\necho \"$PROJECT_DIR\"/../test/assets2/main.lua \nif [ -f \"$PROJECT_DIR\"/../test/assets2/main.lua ]; then\n    echo \"$CONFIGURATION: Building resource.corona-archive\"\n\n\t$TOOLCHAIN_DIR/CopyResources.sh $CONFIGURATION \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\" \"$BUILT_PRODUCTS_DIR\"\n\n    echo \"EXECUTABLE_FOLDER_PATH $EXECUTABLE_FOLDER_PATH\"\n\n    CONFIG_META=\"$BUILT_PRODUCTS_DIR/config.metadata.lua\"\n    PROJECT_NAME=`basename \"$PROJECT_DIR\"`\necho \"Creating $CONFIG_META...\"\ncat <<EOF > \"$CONFIG_META\"\n-- Ensure existence of \"application\" table\nif not application or type( application ) ~= \"table\" then\n    application = {}\nend\n\napplication.metadata = {\n    appName = \"$PROJECT_NAME\",\n    appVersion = \"1.0\",\n    appPackageId = \"com.anscamobile.$PROJECT_NAME\",\n    appId = \"0123456789\",\n    userId = \"345\", -- drupal user id\n    subscription = \"pro\", -- either \"trial\", \"pro\", \"indie-ios\", \"indie-android\"\n    mode = \"developer\", -- either \"developer\" or nil (where nil means distribution/store)\n}\nEOF\n\n    # Concatenate config.metadata.lua into config.lu overwriting original config.lu\n    LUAC=$TOOLCHAIN_DIR/luac\n    CONFIG_DST=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/config.lu\"\n    CONFIG_SRC=\"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/config.orig.lu\"\n    if [ ! -e \"$CONFIG_DST\" ];\n    then\n        touch \"$CONFIG_SRC\"\n    else\n        mv \"$CONFIG_DST\" \"$CONFIG_SRC\"\n    fi\n   \n    \"$LUAC\" -s -o \"$CONFIG_DST\" \"$CONFIG_SRC\" \"$CONFIG_META\"\n    rm \"$CONFIG_SRC\"\n    rm \"$CONFIG_META\"\n\n    # Create resource.corona-archive from *.lu\n\techo Archiving \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/*.lu\" into \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/resource.corona-archive\"\n\t$TOOLCHAIN_DIR/car \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/resource.corona-archive\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"*.lu\n\n\techo Removing: \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/*.lu\"\n\trm -f \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"*.lu\nelse\n\techo \"Skipping creation of resource.corona-archive for template builds\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		A46936A0169D6A0700723568 /* Script: build.settings to Info.plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Script: build.settings to Info.plist";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Location of toolchain\nTOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\n\nASSETS_DIR=\"$PROJECT_DIR\"/../test/assets\nif [ -d \"$PROJECT_DIR\"/../test/assets2 ]\nthen\n    ASSETS_DIR=\"$PROJECT_DIR\"/../test/assets2\nfi\n\necho Running \"$TOOLCHAIN_DIR\"/lua \"TOOLCHAIN_DIR/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\nLUA_PATH=\"$PROJECT_DIR/../../platform/resources/?.lua\" export LUA_PATH\n\"$TOOLCHAIN_DIR\"/lua \"$TOOLCHAIN_DIR/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A482FACE183D79A50005831B /* ShellScript */ = {
@@ -2283,14 +2129,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4693679169D6A0700723568 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A469883A169E642E00EAA645 /* main.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A47098A7169E9F2400D31091 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2339,7 +2177,6 @@
 				A48E9BFF183F57B400F67CB3 /* Rtt_IPhoneAudioSessionManager.mm in Sources */,
 				A48E9C05183F57B400F67CB3 /* Rtt_IPhoneScreenSurface.mm in Sources */,
 				F564C3771BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm in Sources */,
-				A4B2D52818402BDE001311C9 /* Rtt_IPhoneOrientation.mm in Sources */,
 				A4B2D531184039DD001311C9 /* Rtt_AppleTextAlignment.mm in Sources */,
 				A4DF585A1BE4059000B17862 /* Rtt_IPhoneText.mm in Sources */,
 				A4B2D52B184038AA001311C9 /* Rtt_AppleEventSound.cpp in Sources */,
@@ -2367,7 +2204,6 @@
 				A48410E915114A260074BD57 /* Rtt_AppleInAppStoreApple.mm in Sources */,
 				A48410EA15114A260074BD57 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
 				A48410EB15114A260074BD57 /* Rtt_ApplePlatform.mm in Sources */,
-				A4B2D52718402BDE001311C9 /* Rtt_IPhoneOrientation.mm in Sources */,
 				A48410EC15114A260074BD57 /* Rtt_AppleReachability.mm in Sources */,
 				A48410ED15114A260074BD57 /* Rtt_AppleTimer.mm in Sources */,
 				A48410EE15114A3B0074BD57 /* Rtt_AppleAudioPlayer.cpp in Sources */,
@@ -2400,9 +2236,7 @@
 				F564C3721BE430F900C241E6 /* Rtt_AppleInputDevice.mm in Sources */,
 				F87434AD180629540024ECFD /* Rtt_IPhoneVideoProvider.mm in Sources */,
 				A48E9BFD183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm in Sources */,
-				A4693730169DED9300723568 /* Rtt_IPhoneWebPopup.mm in Sources */,
 				A40D2F5E1887699100B4A354 /* CoronaViewPluginContext.mm in Sources */,
-				A4693733169DED9300723568 /* Rtt_IPhoneWebViewObject.mm in Sources */,
 				F564C37E1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				A480725F16CACD6E00960127 /* CoronaLuaIOS.mm in Sources */,
 				F5A454721CA3554D0084583A /* Rtt_AppleFont.mm in Sources */,
@@ -2456,14 +2290,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4F2ADFD16E0AF7D00814C7B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4F2ADFE16E0AF7D00814C7B /* main.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2511,11 +2337,6 @@
 			isa = PBXTargetDependency;
 			name = tachyon;
 			targetProxy = A46885E818062D3E00381941 /* PBXContainerItemProxy */;
-		};
-		A46936AC169D6A6C00723568 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A4841094151147BE0074BD57 /* libplayer-core */;
-			targetProxy = A46936AB169D6A6C00723568 /* PBXContainerItemProxy */;
 		};
 		A47098D7169EA0F400D31091 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2956,11 +2777,11 @@
 		A46935C3169D62DA00723568 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -2975,7 +2796,7 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = ios;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
@@ -2985,11 +2806,11 @@
 		A46935C4169D62DA00723568 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -3004,7 +2825,7 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = ios;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
@@ -3015,11 +2836,11 @@
 		A46935C5169D62DA00723568 /* Release-template */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -3034,9 +2855,63 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = ios;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
+				SWIFT_VERSION = 3.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-template";
+		};
+		A47098D1169E9F2400D31091 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DSTROOT = /tmp/libplayer.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = player;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		A47098D2169E9F2400D31091 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/libplayer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = player;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A47098D3169E9F2400D31091 /* Release-template */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/libplayer.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = player;
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};

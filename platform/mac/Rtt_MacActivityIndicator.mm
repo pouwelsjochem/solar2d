@@ -41,7 +41,6 @@ MacActivityIndicator::ShowActivityIndicator()
 	
 	AppDelegate* delegate = (AppDelegate*)[NSApp delegate];	
 	GLView* hostview = [delegate layerHostView];
-//	[fIndicatorView setFrameSize:[hostview frame].size];
 	NSSize size = [hostview frame].size;
 	fIndicatorView = [[SPILDTopLayerView alloc] initWithFrame:NSMakeRect(0, 0, size.width, size.height)];
 

@@ -43,7 +43,6 @@ WinTextBoxObject::WinTextBoxObject(Interop::RuntimeEnvironment& environment, con
 	fTextBoxPointer(nullptr),
 	fIsSingleLine(isSingleLine),
 	fIsFontSizeScaled(true),
-	fCachedSimulatorZoomScale(1.0),
 	fIsPlaceholderTextNil(true),
 	fResizedEventHandler(this, &WinTextBoxObject::OnResized),
 	fGainedFocusEventHandler(this, &WinTextBoxObject::OnGainedFocus),
@@ -103,9 +102,6 @@ bool WinTextBoxObject::Initialize()
 	fTextBoxPointer->GetLostFocusEventHandlers().Add(&fLostFocusEventHandler);
 	fTextBoxPointer->GetTextChangedEventHandlers().Add(&fTextChangedEventHandler);
 	fTextBoxPointer->GetPressedEnterKeyEventHandlers().Add(&fPressedEnterKeyEventHandler);
-
-	// Apply the simulator's zoom scale to the text box's font size, if applicable.
-	ApplySimulatorZoomScale();
 
 	// Let the base class finish initialization of this object.
 	return WinDisplayObject::Initialize();
@@ -169,10 +165,6 @@ int WinTextBoxObject::ValueForKey(lua_State *L, const char key[]) const
 		{
 			fontSize = Rtt_RealToFloat(GetRuntimeEnvironment().GetPlatform()->GetStandardFontSize());
 		}
-		if (GetRuntimeEnvironment().GetDeviceSimulatorServices())
-		{
-			fontSize /= (float)fCachedSimulatorZoomScale;
-		}
 		lua_pushnumber(L, fontSize);
 	}
 	else if (strcmp("font", key) == 0)
@@ -202,7 +194,6 @@ int WinTextBoxObject::ValueForKey(lua_State *L, const char key[]) const
 		if (GetRuntimeEnvironment().GetDeviceSimulatorServices())
 		{
 			float fontSize = Rtt_RealToFloat(fontPointer->Size());
-			fontSize /= (float)fCachedSimulatorZoomScale;
 			fontPointer->SetSize(Rtt_FloatToReal(fontSize));
 		}
 		result = LuaLibNative::PushFont(L, fontPointer);
@@ -386,10 +377,6 @@ bool WinTextBoxObject::SetValueForKey(lua_State *L, const char key[], int valueI
 			{
 				fontSize = Rtt_RealToFloat(GetRuntimeEnvironment().GetPlatform()->GetStandardFontSize());
 			}
-			if (GetRuntimeEnvironment().GetDeviceSimulatorServices())
-			{
-				fontSize *= (float)fCachedSimulatorZoomScale;
-			}
 			HDC deviceContextHandle = ::GetDC(fTextBoxPointer->GetWindowHandle());
 			if (deviceContextHandle)
 			{
@@ -434,12 +421,6 @@ bool WinTextBoxObject::SetValueForKey(lua_State *L, const char key[], int valueI
 			{
 				auto defaultFontSize = GetRuntimeEnvironment().GetPlatform()->GetStandardFontSize();
 				fontSettings.SetPixelSize(Rtt_RealToFloat(defaultFontSize));
-			}
-			if (GetRuntimeEnvironment().GetDeviceSimulatorServices())
-			{
-				auto fontSize = fontSettings.GetPixelSize();
-				fontSize *= (float)fCachedSimulatorZoomScale;
-				fontSettings.SetPixelSize(fontSize);
 			}
 			HDC deviceContextHandle = ::GetDC(fTextBoxPointer->GetWindowHandle());
 			auto font = Interop::Graphics::Font(
@@ -596,11 +577,6 @@ bool WinTextBoxObject::SetValueForKey(lua_State *L, const char key[], int valueI
 
 
 #pragma region Private Static Functions
-void WinTextBoxObject::OnResized(Interop::UI::Control& sender, const Interop::EventArgs& arguments)
-{
-	ApplySimulatorZoomScale();
-}
-
 void WinTextBoxObject::OnGainedFocus(Interop::UI::Control& sender, const Interop::EventArgs& arguments)
 {
 	// Ignore this event if this is a read-only text box.
@@ -666,53 +642,6 @@ void WinTextBoxObject::OnPressedEnterKey(Interop::UI::TextBox& sender, Interop::
 
 	// Flag the enter key as handled.
 	arguments.SetHandled();
-}
-
-void WinTextBoxObject::ApplySimulatorZoomScale()
-{
-	// Do not continue if not running under the simulator.
-	auto deviceSimulatorServicesPointer = GetRuntimeEnvironment().GetDeviceSimulatorServices();
-	if (!deviceSimulatorServicesPointer)
-	{
-		return;
-	}
-
-	// Fetch the current zoom scale.
-	double currentZoomScale = deviceSimulatorServicesPointer->GetZoomScale();
-	if (currentZoomScale <= 0)
-	{
-		currentZoomScale = 1.0;
-	}
-
-	// Do not continue if the zoom level hasn't changed.
-	if (std::abs(currentZoomScale - fCachedSimulatorZoomScale) < DBL_EPSILON)
-	{
-		return;
-	}
-
-	// Update the text box's font size.
-	HDC deviceContextHandle = ::GetDC(fTextBoxPointer->GetWindowHandle());
-	if (deviceContextHandle)
-	{
-		// Fetch the text box's current font settings.
-		Interop::Graphics::FontSettings fontSettings;
-		fontSettings.CopyFrom(deviceContextHandle, fTextBoxPointer->GetFont());
-
-		// Apply the zoom scale to the font size.
-		double scaledFontSize = (double)fontSettings.GetPixelSize();
-		scaledFontSize /= fCachedSimulatorZoomScale;
-		scaledFontSize *= currentZoomScale;
-		fontSettings.SetPixelSize((float)scaledFontSize);
-
-		// Create a new scaled font and assign it to the text box.
-		auto font = Interop::Graphics::Font(
-				deviceContextHandle, GetRuntimeEnvironment().GetFontServices(), fontSettings);
-		fTextBoxPointer->SetFont(font);
-		::ReleaseDC(fTextBoxPointer->GetWindowHandle(), deviceContextHandle);
-	}
-
-	// Update the cached zoom scale. This must be done last.
-	fCachedSimulatorZoomScale = currentZoomScale;
 }
 
 #pragma endregion

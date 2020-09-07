@@ -120,4 +120,4 @@ class Tesselator
 
 // ----------------------------------------------------------------------------
 
-#endif // _Rtt_TesselatorStream_H__
+#endif // _Rtt_Tesselator_H__

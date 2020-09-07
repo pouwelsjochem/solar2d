@@ -11,7 +11,6 @@
 #define _Rtt_MPlatformDevice_H__
 
 #include "Rtt_MCallback.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Core/Rtt_Assert.h"
 #include "Core/Rtt_Real.h"
 
@@ -30,7 +29,6 @@ class MPlatformDevice
 		typedef enum _EventType
 		{
 			kUnknownEvent = -1,
-			kOrientationEvent = 0,
 			kAccelerometerEvent,
 			kGyroscopeEvent,
 			kMultitouchEvent,
@@ -105,9 +103,6 @@ class MPlatformDevice
 		// event-driven system.activate/system.deactivate calls (BeginNotifications/EndNotifications above).
 		virtual bool Activate( ActivationType key ) const { return false; }
 		virtual bool Deactivate( ActivationType key ) const { return false; }
-
-	public:
-		virtual DeviceOrientation::Type GetOrientation() const = 0;
 };
 
 // Use this to implement MPlatformDevice::DoesNotify

@@ -461,34 +461,6 @@ int luaload_shell(lua_State* L);
 
 // ----------------------------------------------------------------------------
 
-// TODO: Remove this wrapper
-S32
-Runtime::ViewableContentWidth() const
-{
-	return fDisplay->ViewableContentWidth();
-}
-
-// TODO: Remove this wrapper
-S32
-Runtime::ViewableContentHeight() const
-{
-	return fDisplay->ViewableContentHeight();
-}
-
-// TODO: Remove this wrapper
-S32
-Runtime::WindowWidth() const
-{
-	return fDisplay->WindowWidth();
-}
-
-// TODO: Remove this wrapper
-S32
-Runtime::WindowHeight() const
-{
-	return fDisplay->WindowHeight();
-}
-
 void
 Runtime::InitializeArchive( const char *filePath )
 {
@@ -861,35 +833,9 @@ Runtime::ClearLaunchArgs()
 	}
 }
 
-Runtime::LoadParameters::LoadParameters()
-:	launchOptions( kDefaultLaunchOption ),
-	orientation( DeviceOrientation::kUpright ),
-	contentWidth( -1 ),
-	contentHeight( -1 )
-{
-}
-
-void
-Runtime::LoadParameters::UpdateConfig( lua_State *L, int configIndex ) const
-{
-	Rtt_ASSERT( configIndex > 0 );
-
-	if ( contentWidth > 0 && contentHeight > 0 )
-	{
-		lua_pushinteger( L, contentWidth );
-		lua_setfield( L, configIndex, "width" );
-
-		lua_pushinteger( L, contentHeight );
-		lua_setfield( L, configIndex, "height" );
-	}
-}
-
 Runtime::LoadApplicationReturnCodes
-Runtime::LoadApplication( const LoadParameters& parameters )
+Runtime::LoadApplication( U32 launchOptions )
 {
-	U32 launchOptions = parameters.launchOptions;
-	DeviceOrientation::Type orientation = parameters.orientation;
-
 	LoadApplicationReturnCodes result = Runtime::kGeneralFail;
 
 	const char kArchive[] = Rtt_CAR_FILE( "resource" );
@@ -939,15 +885,14 @@ Runtime::LoadApplication( const LoadParameters& parameters )
 			// Always create a table to simplify logic later
 			lua_createtable( L, 0, 2 );
 		}
-		int configIndex = lua_gettop( L );
-		parameters.UpdateConfig( L, configIndex );
 
 		// We need a runtime guard to lock in the OpenGL context.
 		// The runtime guard is re-entrant safe. It doesn't look like we invoke multiple runtime guards (though I didn't verify),
 		// but it should be safe to do.
 		RuntimeGuard guard( * this );
 
-		fDisplay->Initialize( L, configIndex, orientation );
+		int configIndex = lua_gettop( L );
+		fDisplay->Initialize( L, configIndex );
 
 		if ( fDelegate )
 		{
@@ -996,41 +941,6 @@ Runtime::LoadApplication( const LoadParameters& parameters )
 
 exit_gracefully:
 	return result;
-}
-
-Runtime::LoadApplicationReturnCodes
-Runtime::LoadApplication( U32 launchOptions, DeviceOrientation::Type orientation )
-{
-	LoadParameters parameters;
-	parameters.launchOptions = launchOptions;
-	parameters.orientation = orientation;
-	
-	return LoadApplication( parameters );
-}
-
-// TODO: Remove this wrapper
-void
-Runtime::SetContentOrientation( DeviceOrientation::Type newOrientation )
-{
-	Rtt_ASSERT( fDisplay );
-
-	fDisplay->SetContentOrientation( newOrientation );
-}
-
-// TODO: Remove this wrapper
-void
-Runtime::WindowDidRotate( DeviceOrientation::Type newOrientation, bool isNewOrientationSupported )
-{
-	Rtt_ASSERT( fDisplay );
-
-	fDisplay->WindowDidRotate( newOrientation, isNewOrientationSupported );
-}
-
-// TODO: Remove this wrapper
-void
-Runtime::WindowSizeChanged()
-{
-	fDisplay->WindowSizeChanged();
 }
 
 void
@@ -1442,19 +1352,6 @@ Runtime::ReloadResources()
 #endif
 }
 
-// TODO: Remove this wrapper
-void
-Runtime::RestartRenderer()
-{
-	fDisplay->Restart();
-}
-
-void
-Runtime::RestartRenderer( DeviceOrientation::Type orientation )
-{
-	fDisplay->Restart( orientation );
-}
-
 CachedResource*
 Runtime::LookupResource( const char key[] )
 {
@@ -1532,20 +1429,6 @@ Runtime::GetAllocator() const
 	return Allocator();
 }
 
-// TODO: Remove this wrapper
-void
-Runtime::GetImageSuffix( String& outSuffix )
-{
-	fDisplay->GetImageSuffix( outSuffix );
-}
-
-// TODO: Remove this wrapper
-bool
-Runtime::GetImageFilename( const char *filename, MPlatform::Directory baseDir, String& outFilename )
-{
-	return fDisplay->GetImageFilename( filename, baseDir, outFilename );
-}
-
 lua_State*
 Runtime::PushResourceRegistry()
 {
@@ -1571,19 +1454,7 @@ Runtime::PushResourceRegistry()
 
 	return L;
 }
-/*
-void
-Runtime::BeginOrientationListener()
-{
-	fPlatform.GetDevice().SetOrientationCallback( & fListener );
-}
 
-void
-Runtime::EndOrientationListener()
-{
-	fPlatform.GetDevice().SetOrientationCallback( NULL );
-}
-*/
 void
 Runtime::operator()()
 {
@@ -1632,14 +1503,6 @@ Runtime::Render()
 	}
 
 	fDisplay->Render();
-}
-
-void
-Runtime::Blit()
-{
-	Rtt_ASSERT( fDisplay );
-
-	fDisplay->Blit();
 }
 
 void

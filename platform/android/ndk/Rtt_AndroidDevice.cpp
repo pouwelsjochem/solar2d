@@ -38,7 +38,6 @@ AndroidDevice::AndroidDevice( Rtt_Allocator& allocator, NativeToJavaBridge *ntjb
 	fOSIdentifier( NULL ),
 	fPlatformVersion( NULL ),
 	fProduct( NULL ),
-	fOrientation( DeviceOrientation::kUnknown ),
 	fNativeToJavaBridge( ntjb )
 {
 }
@@ -53,12 +52,6 @@ AndroidDevice::~AndroidDevice()
 	Rtt_DELETE( fModel );
 	Rtt_DELETE( fManufacturer );
 	Rtt_DELETE( fName );
-}
-
-void
-AndroidDevice::SetOrientation( DeviceOrientation::Type orientation )
-{
-	fOrientation = orientation;
 }
 
 void
@@ -96,7 +89,6 @@ AndroidDevice::HasEventSource( EventType type ) const
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kMouseEvent:
 		case MPlatformDevice::kMultitouchEvent:
-		case MPlatformDevice::kOrientationEvent:
 			hasEventSource = true;
 			break;
 		default:
@@ -117,7 +109,6 @@ AndroidDevice::BeginNotifications( EventType type ) const
 
 	switch( type )
 	{
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 		case MPlatformDevice::kMultitouchEvent:
@@ -136,7 +127,6 @@ AndroidDevice::EndNotifications( EventType type ) const
 
 	switch( type )
 	{
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 		case MPlatformDevice::kMultitouchEvent:
@@ -302,12 +292,6 @@ PlatformInputDeviceManager&
 AndroidDevice::GetInputDeviceManager()
 {
 	return fInputDeviceManager;
-}
-
-DeviceOrientation::Type 
-AndroidDevice::GetOrientation() const
-{
-	return fOrientation;
 }
 
 

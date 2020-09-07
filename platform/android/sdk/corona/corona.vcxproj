@@ -58,11 +58,13 @@
       <CppLanguageStandard>
       </CppLanguageStandard>
       <PreprocessorDefinitions>Rtt_DEVICE_SIMULATOR</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\..\;..\..\..\..\librtt;..\..\..\..\librtt/Corona;..\..\..\..\external/sqlite3;..\..\..\..\external/lua-5.1.3/src;..\..\..\..\external/rsa;..\..\..\..\external\LuaHashMap;..\..\..\..\external/openal-soft_apportable/jni/OpenAL/include/AL;..\..\..\..\external/ALmixer;..\..\..\..\external/ALmixer/Isolated;..\..\..\..\external/lpng1256;..\..\..\..\external/luasocket/src;..\..\..\..\external/lpeg;..\..\..\..\external/luafilesystem/src;..\..\..\..\plugins/shared;..\..\ndk;..\..\ndk\jni;..\..\..\..\platform/shared;..\..\..\..\external/libjpeg;C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures</AdditionalIncludeDirectories>
       <AdditionalOptions>-DANDROID_NDK -DDISABLE_IMPORTGL -DRtt_ANDROID_ENV -DALMIXER_COMPILE_WITHOUT_SDL -DRtt_FEATURES_ALL  -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DOPENAL_FIXED_POINT -DOPENAL_FIXED_POINT_SHIFT=16 -DAVOID_TABLES %(AdditionalOptions)</AdditionalOptions>
       <GccExceptionHandling>true</GccExceptionHandling>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\libs;$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\;..\..\..\..\librtt;..\..\..\..\librtt/Corona;..\..\..\..\external/sqlite3;..\..\..\..\external/lua-5.1.3/src;..\..\..\..\external/rsa;..\..\..\..\external\LuaHashMap;..\..\..\..\external/openal-soft_apportable/jni/OpenAL/include/AL;..\..\..\..\external/ALmixer;..\..\..\..\external/ALmixer/Isolated;..\..\..\..\external/lpng1256;..\..\..\..\external/luasocket/src;..\..\..\..\external/lpeg;..\..\..\..\external/luafilesystem/src;..\..\..\..\plugins/shared;..\..\ndk;..\..\ndk\jni;..\..\..\..\platform/shared;..\..\..\..\external/libjpeg;C:\NVPACK1r6\android-ndk-r12b\sources\android\cpufeatures</AdditionalIncludeDirectories>
       <AdditionalDependencies>jnlua5.1;lua;OpenSLES;almixer;mpg123;openal</AdditionalDependencies>
       <AdditionalOptions>-lGLESv2 -lEGL -ljnigraphics -ldl -llog -lz %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(OutDir)\libcorona.so</OutputFile>
@@ -139,8 +141,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_RuntimeDelegate.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_RuntimeDelegatePlayer.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Scheduler.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_TesselatorStream.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Transform.cpp" />
     <ClCompile Include="..\..\..\..\plugins\shared\CoronaLuaLibraryShared.cpp" />
     <ClCompile Include="..\..\..\shared\Rtt_PlatformConnection.cpp" />
@@ -350,12 +350,9 @@
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_TextureVolatile.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Archive.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_FilePath.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_FillTesselatorStream.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_GPUStream.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_HitTestObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_ImageGroupObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_JavaHost.cpp" />
@@ -399,7 +396,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformTimer.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformVideoPlayer.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformVideoProvider.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Preference.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PreferenceCollection.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PreferenceValue.cpp" />
@@ -560,15 +556,12 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidStore.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidStoreProvider.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidStoreTransaction.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidSurface.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidTextFieldObject.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidTimer.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidVideoObject.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidVideoPlayer.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidVideoProvider.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidWebPopup.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidWebViewObject.cpp" />
     <ClCompile Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.c" />
   </ItemGroup>
   <ItemGroup>
@@ -769,12 +762,9 @@
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Archive.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Callback.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_DeviceOrientation.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Event.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_FilePath.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_FillTesselatorStream.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_GPU.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_GPUStream.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_HitTestObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_ImageGroupObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_JavaHost.h" />
@@ -843,7 +833,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformTimer.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformVideoPlayer.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformVideoProvider.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Preference.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PreferenceCollection.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PreferenceValue.h" />
@@ -854,9 +843,7 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_RuntimeDelegate.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_RuntimeDelegatePlayer.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Scheduler.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_SurfaceInfo.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_TesselatorStream.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Transform.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_WorkFlowConstants.h" />
     <ClInclude Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h" />
@@ -901,15 +888,12 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidStore.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidStoreProvider.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidStoreTransaction.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidSurface.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidTextFieldObject.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidTimer.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidVideoObject.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidVideoPlayer.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidVideoProvider.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidWebPopup.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidWebViewObject.h" />
     <ClInclude Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

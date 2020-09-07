@@ -373,7 +373,6 @@ LIBJPEG_DIR := $(CORONA_ROOT)/external/libjpeg
 LIBLUA_DIR := $(CORONA_ROOT)/external/lua-5.1.3
 LIBOPENAL_DIR := $(CORONA_ROOT)/external/openal-soft_apportable/jni/OpenAL
 LIBPNG_DIR := $(CORONA_ROOT)/external/lpng1256
-LIBSMOOTHPOLYGON_DIR := $(CORONA_ROOT)/external/smoothpolygon
 LIBSQLITE_DIR := $(CORONA_ROOT)/external/sqlite3
 LUAFILESYSTEM_DIR := $(CORONA_ROOT)/external/luafilesystem
 LUALPEG_DIR := $(CORONA_ROOT)/external/lpeg
@@ -399,8 +398,6 @@ LOCAL_C_INCLUDES := \
 	$(CORONA_ROOT)/platform/shared \
 	$(CORONA_ROOT) \
     $(LIBJPEG_DIR) \
-    $(LIBB2SEPARATORCPP_DIR) \
-    $(LIBSMOOTHPOLYGON_DIR) \
 
 # files that are not compiled
 EXTERNAL_FILES_OLD  := \
@@ -446,15 +443,12 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidStore.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidStoreProvider.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidStoreTransaction.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidSurface.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidSystemOpenEvent.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTimer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTextFieldObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidVideoObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidVideoPlayer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidVideoProvider.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidWebPopup.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidWebViewObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReader.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReadResult.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidDisplayObjectRegistry.cpp \
@@ -619,11 +613,9 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp \
 	$(CORONA_ROOT)/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Archive.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_DeviceOrientation.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Event.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_ExplicitTemplates.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_FilePath.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_GPUStream.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_HitTestObject.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_KeyName.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Lua.cpp \
@@ -668,7 +660,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformTimer.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformVideoPlayer.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformVideoProvider.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformWebPopup.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Preference.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PreferenceCollection.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PreferenceValue.cpp \
@@ -894,7 +885,6 @@ LOCAL_SRC_FILES := \
 	$(LIBLUAFILESYSTEM_FILES) \
     $(LIBSQLITE_FILES) \
     $(LIBPNG_FILES) \
-    $(LIBSMOOTHPOLYGON_FILES) \
 
 LOCAL_SHARED_LIBRARIES := liblua libjnlua5.1 $(MY_LINK_TO_LIBMPG) libopenal libalmixer cpufeatures
 LOCAL_LDLIBS := -lGLESv2 -lEGL -ljnigraphics -ldl -llog -lz -lOpenSLES

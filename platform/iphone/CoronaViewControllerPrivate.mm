@@ -26,21 +26,9 @@
 
 @implementation CoronaViewController
 
-//// To support resizing windows we'll have to implement something here.
-//-(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-//{
-//#ifdef Rtt_ORIENTATION
-//	CoronaView *coronaView = (CoronaView *)self.view;
-//	[coronaView notifyRuntimeAboutOrientationChange:[self interfaceOrientation]];
-//#endif
-//}
-
 -(void)viewWillLayoutSubviews
 {
-#ifdef Rtt_ORIENTATION
-	CoronaView *coronaView = (CoronaView *)self.view;
-	[coronaView notifyRuntimeAboutOrientationChange:[self interfaceOrientation]];
-#endif
+
 }
 
 

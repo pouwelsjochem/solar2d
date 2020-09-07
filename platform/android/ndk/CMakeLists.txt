@@ -33,7 +33,6 @@ include_directories (
 	${CORONA_ROOT}/platform/android/ndk
 	${CORONA_ROOT}/platform/shared
     ${CORONA_ROOT}/external/libjpeg
-    ${CORONA_ROOT}/external/smoothpolygon
     ${ANDROID_NDK_ROOT}/sources/android/cpufeatures
 )
 
@@ -42,7 +41,6 @@ SET( LUA_SOURCES
 	"${CORONA_ROOT}/platform/resources/init.lua"
 	"${CORONA_ROOT}/platform/resources/json.lua"
 	"${CORONA_ROOT}/platform/resources/dkjson.lua"
-	"${CORONA_ROOT}/platform/resources/runtime.lua"
 	"${CORONA_ROOT}/platform/resources/loader_ccdata.lua"
 	"${CORONA_ROOT}/platform/resources/loader_callback.lua"
 	"${CORONA_ROOT}/subrepos/easing/easing.lua"
@@ -192,15 +190,12 @@ add_library( corona SHARED
 		Rtt_AndroidStore.cpp
 		Rtt_AndroidStoreProvider.cpp
 		Rtt_AndroidStoreTransaction.cpp
-		Rtt_AndroidSurface.cpp
 		Rtt_AndroidSystemOpenEvent.cpp
 		Rtt_AndroidTimer.cpp
 		Rtt_AndroidTextFieldObject.cpp
 		Rtt_AndroidVideoObject.cpp
 		Rtt_AndroidVideoPlayer.cpp
 		Rtt_AndroidVideoProvider.cpp
-		Rtt_AndroidWebPopup.cpp
-		Rtt_AndroidWebViewObject.cpp
 		AndroidBinaryReader.cpp
 		AndroidBinaryReadResult.cpp
 		AndroidDisplayObjectRegistry.cpp
@@ -373,11 +368,9 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_Archive.cpp
-		${CORONA_ROOT}/librtt/Rtt_DeviceOrientation.cpp
 		${CORONA_ROOT}/librtt/Rtt_Event.cpp
 		${CORONA_ROOT}/librtt/Rtt_ExplicitTemplates.cpp
 		${CORONA_ROOT}/librtt/Rtt_FilePath.cpp
-		${CORONA_ROOT}/librtt/Rtt_GPUStream.cpp
 		${CORONA_ROOT}/librtt/Rtt_HitTestObject.cpp
 		${CORONA_ROOT}/librtt/Rtt_KeyName.cpp
 		${CORONA_ROOT}/librtt/Rtt_Lua.cpp
@@ -421,7 +414,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_PlatformTimer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformVideoPlayer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformVideoProvider.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformWebPopup.cpp
 		${CORONA_ROOT}/librtt/Rtt_Preference.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceValue.cpp

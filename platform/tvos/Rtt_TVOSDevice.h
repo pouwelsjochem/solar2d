@@ -11,7 +11,6 @@
 #define _Rtt_TVOSDevice_H__
 
 #include "Rtt_MPlatformDevice.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_AppleInputDeviceManager.h"
 
 #import <UIKit/UIApplication.h>
@@ -66,16 +65,11 @@ class TVOSDevice : public MPlatformDevice
 		virtual bool Deactivate( ActivationType key ) const;
 
 	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
-
-	public:
-///		DeviceOrientation::Type GetPreviousOrientationAndUpdate( UIDeviceOrientation newValue );
 
 	private:
 		Rtt_Allocator &fAllocator;
 		CoronaView *fView; // Weak ref
 		DeviceNotificationTracker fTracker;
-		mutable DeviceOrientation::Type fPreviousOrientation;
 		AppleInputDeviceManager fInputDeviceManager;
 };
 

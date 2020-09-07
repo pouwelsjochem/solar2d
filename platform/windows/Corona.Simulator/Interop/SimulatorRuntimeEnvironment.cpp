@@ -121,8 +121,7 @@ SimulatorRuntimeEnvironment::CreationResult SimulatorRuntimeEnvironment::CreateU
 		{
 			return CreationResult::FailedWith(L"Failed to load device configuration for the simulator.");
 		}
-		if ((settings.DeviceConfigPointer->screenWidth <= 0) ||
-		    (settings.DeviceConfigPointer->screenHeight <= 0))
+		if ((settings.DeviceConfigPointer->deviceWidth <= 0) || (settings.DeviceConfigPointer->deviceHeight <= 0))
 		{
 			return CreationResult::FailedWith(L"Device configuration to simulate has an invalid screen width and height.");
 		}
@@ -383,8 +382,7 @@ SimulatorRuntimeEnvironment::DeviceSimulatorServices::DeviceSimulatorServices(
 	SimulatorRuntimeEnvironment* environmentPointer,
 	const Rtt::PlatformSimulator::Config* deviceConfigPointer)
 :	fEnvironmentPointer(environmentPointer),
-	fDeviceConfigPointer(deviceConfigPointer),
-	fCurrentOrientation(Rtt::DeviceOrientation::kUpright)
+	fDeviceConfigPointer(deviceConfigPointer)
 {
 	if (!fEnvironmentPointer || !fDeviceConfigPointer)
 	{
@@ -407,41 +405,6 @@ const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetModelName()
 	return fDeviceConfigPointer->displayName.GetString();
 }
 
-double SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetZoomScale() const
-{
-	// Fetch the surface's current client bounds.
-	auto surfacePointer = fEnvironmentPointer->GetRenderSurface();
-	if (!surfacePointer)
-	{
-		return 1.0;
-	}
-	auto clientBounds = surfacePointer->GetClientBounds();
-	auto clientWidth = clientBounds.right - clientBounds.left;
-	auto clientHeight = clientBounds.bottom - clientBounds.top;
-	if ((clientWidth <= 0) || (clientHeight <= 0))
-	{
-		return 1.0;
-	}
-
-	// Determine the zoom level scale by comparing the surface size with the simulated device screen size.
-	// Note: This assumes that the surface width and height is zoomed proportionally.
-	double scale = 1.0;
-	switch (fCurrentOrientation)
-	{
-		case Rtt::DeviceOrientation::kSidewaysRight:
-		case Rtt::DeviceOrientation::kSidewaysLeft:
-			scale = (double)clientHeight / (double)fDeviceConfigPointer->screenWidth;
-			break;
-		case Rtt::DeviceOrientation::kUpright:
-		case Rtt::DeviceOrientation::kUpsideDown:
-			scale = (double)clientWidth / (double)fDeviceConfigPointer->screenWidth;
-			break;
-	}
-
-	// Return the zoom level scale.
-	return scale;
-}
-
 bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsLuaExitAllowed() const
 {
 	auto applicationPointer = ((CSimulatorApp*)::AfxGetApp());
@@ -450,11 +413,6 @@ bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsLuaExitAllowed() co
 		return applicationPointer->IsLuaExitAllowed();
 	}
 	return false;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsScreenRotationSupported() const
-{
-	return fDeviceConfigPointer->supportsScreenRotation;
 }
 
 bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsMouseSupported() const
@@ -497,16 +455,6 @@ bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsAlertButtonOrderRig
 	return fDeviceConfigPointer->isAlertButtonOrderRightToLeft;
 }
 
-Rtt::DeviceOrientation::Type SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetOrientation() const
-{
-	return fCurrentOrientation;
-}
-
-void SimulatorRuntimeEnvironment::DeviceSimulatorServices::SetOrientation(Rtt::DeviceOrientation::Type value)
-{
-	fCurrentOrientation = value;
-}
-
 POINT SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSimulatedPointFromClient(const POINT& value)
 {
 	// Fetch the Corona runtime, if available.
@@ -523,33 +471,6 @@ POINT SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSimulatedPointFro
 		return value;
 	}
 
-	// Convert the given Windows client coordinate to the simulator's current orientation.
-	POINT coronaContentCoordinate = value;
-	const Rtt::Display& display = runtimePointer->GetDisplay();
-	switch (display.GetRelativeOrientation())
-	{
-		case Rtt::DeviceOrientation::kSidewaysRight:
-			coronaContentCoordinate.x = value.y;
-			coronaContentCoordinate.y = surfacePointer->GetClientWidth() - value.x;
-			break;
-		case Rtt::DeviceOrientation::kSidewaysLeft:
-			coronaContentCoordinate.x = surfacePointer->GetClientHeight() - value.y;
-			coronaContentCoordinate.y = value.x;
-			break;
-		case Rtt::DeviceOrientation::kUpsideDown:
-			coronaContentCoordinate.x = surfacePointer->GetClientWidth() - value.x;
-			coronaContentCoordinate.y = surfacePointer->GetClientHeight() - value.y;
-			break;
-	}
-
-	// Apply the simulator's current zoom level scale.
-	auto zoomScale = GetZoomScale();
-	if (zoomScale > 0)
-	{
-		coronaContentCoordinate.x = (LONG)((double)coronaContentCoordinate.x / zoomScale);
-		coronaContentCoordinate.y = (LONG)((double)coronaContentCoordinate.y / zoomScale);
-	}
-
 	// Return the simulated coordinate.
 	return coronaContentCoordinate;
 }
@@ -557,64 +478,6 @@ POINT SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSimulatedPointFro
 double SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetDefaultFontSize() const
 {
 	return fDeviceConfigPointer->defaultFontSize;
-}
-
-int SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetScreenWidthInPixels() const
-{
-	return (int)(fDeviceConfigPointer->screenWidth + 0.5f);
-}
-
-int SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetScreenHeightInPixels() const
-{
-	return (int)(fDeviceConfigPointer->screenHeight + 0.5f);
-}
-
-int SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetAdaptiveScreenWidthInPixels() const
-{
-	int length = (int)fDeviceConfigPointer->GetAdaptiveWidth();
-	if (length <= 0)
-	{
-		length = GetScreenWidthInPixels();
-	}
-	return length;
-}
-
-int SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetAdaptiveScreenHeightInPixels() const
-{
-	int length = (int)fDeviceConfigPointer->GetAdaptiveHeight();
-	if (length <= 0)
-	{
-		length = GetScreenHeightInPixels();
-	}
-	return length;
-}
-
-void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RotateClockwise()
-{
-	auto orientation = (Rtt::DeviceOrientation::Type)(fCurrentOrientation - 1);
-	if (Rtt::DeviceOrientation::kUnknown == orientation)
-	{
-		orientation = Rtt::DeviceOrientation::kSidewaysLeft;
-	}
-	else if (Rtt::DeviceOrientation::kFaceUp == orientation)
-	{
-		orientation = Rtt::DeviceOrientation::kUpright;
-	}
-	fCurrentOrientation = orientation;
-}
-
-void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RotateCounterClockwise()
-{
-	auto orientation = (Rtt::DeviceOrientation::Type)(fCurrentOrientation + 1);
-	if (Rtt::DeviceOrientation::kUnknown == orientation)
-	{
-		orientation = Rtt::DeviceOrientation::kSidewaysLeft;
-	}
-	else if (Rtt::DeviceOrientation::kFaceUp == orientation)
-	{
-		orientation = Rtt::DeviceOrientation::kUpright;
-	}
-	fCurrentOrientation = orientation;
 }
 
 void* SimulatorRuntimeEnvironment::DeviceSimulatorServices::ShowNativeAlert(
@@ -710,42 +573,6 @@ void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RequestTerminate()
 	::PostMessage(viewPointer->GetSafeHwnd(), WM_COMMAND, ID_FILE_CLOSE, 0);
 }
 
-void SimulatorRuntimeEnvironment::DeviceSimulatorServices::Shake()
-{
-	// Fetch the Corona runtime.
-	auto runtimePointer = fEnvironmentPointer->GetRuntime();
-
-	// Do not continue if currently suspended or terminated.
-	if (!runtimePointer || runtimePointer->IsSuspended())
-	{
-		return;
-	}
-
-	// Generate accelerometer data that simulates a shake event.
-	double deltaTime = 0.1;
-	double instant[] = { 1.5, 1.5, 1.5 };
-	double gravity[] = { 0.0, 0.0, 0.0 };
-	switch (fCurrentOrientation)
-	{
-		case Rtt::DeviceOrientation::kUpright:
-			gravity[1] = -1.0;
-			break;
-		case Rtt::DeviceOrientation::kUpsideDown:
-			gravity[1] = 1.0;
-			break;
-		case Rtt::DeviceOrientation::kSidewaysLeft:
-			gravity[0] = 1.0;
-			break;
-		case Rtt::DeviceOrientation::kSidewaysRight:
-			gravity[0] = -1.0;
-			break;
-	}
-
-	// Dispatch an accelerometer event.
-	Rtt::AccelerometerEvent event(gravity, instant, instant, true, deltaTime);
-	runtimePointer->DispatchEvent(event);
-}
-
 const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetOSName() const
 {
 	return fDeviceConfigPointer->osName.GetString();
@@ -753,20 +580,10 @@ const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetOSName() co
 
 void SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {
-	if (Rtt::DeviceOrientation::IsSideways(fCurrentOrientation))
-	{
-		top = fDeviceConfigPointer->safeLandscapeScreenInsetTop;
-		left = fDeviceConfigPointer->safeLandscapeScreenInsetLeft;
-		bottom = fDeviceConfigPointer->safeLandscapeScreenInsetBottom;
-		right = fDeviceConfigPointer->safeLandscapeScreenInsetRight;
-	}
-	else
-	{
-		top = fDeviceConfigPointer->safeScreenInsetTop;
-		left = fDeviceConfigPointer->safeScreenInsetLeft;
-		bottom = fDeviceConfigPointer->safeScreenInsetBottom;
-		right = fDeviceConfigPointer->safeScreenInsetRight;
-	}
+	top = fDeviceConfigPointer->safeLandscapeScreenInsetTop;
+	left = fDeviceConfigPointer->safeLandscapeScreenInsetLeft;
+	bottom = fDeviceConfigPointer->safeLandscapeScreenInsetBottom;
+	right = fDeviceConfigPointer->safeLandscapeScreenInsetRight;
 }
 
 #pragma endregion

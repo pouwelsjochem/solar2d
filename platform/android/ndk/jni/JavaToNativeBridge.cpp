@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -15,16 +15,15 @@
 #define TEMPORARY_HACK 1
 // TODO: Remove need for this. See also "TEMPORARY_HACK" in code
 #if TEMPORARY_HACK
-	#include "librtt/Rtt_GPUStream.h"	
+	#include "librtt/Rtt_RenderingStream.h"
 #endif
 
 #include "Display/Rtt_Display.h"
 #include "librtt/Display/Rtt_Display.h"
 #include "librtt/Display/Rtt_Scene.h"
 #include "librtt/Display/Rtt_StageObject.h"
-#include "librtt/Rtt_Runtime.h"	
+#include "librtt/Rtt_Runtime.h"
 #include "librtt/Rtt_Event.h"
-#include "librtt/Rtt_DeviceOrientation.h"
 #include "librtt/Rtt_LuaContext.h"
 #include "librtt/Rtt_LuaResource.h"
 #include "librtt/Rtt_PlatformInAppStore.h"
@@ -47,8 +46,6 @@
 #include "Rtt_AndroidTextFieldObject.h"
 #include "Rtt_AndroidVideoObject.h"
 #include "Rtt_AndroidVideoProvider.h"
-#include "Rtt_AndroidWebPopup.h"
-#include "Rtt_AndroidWebViewObject.h"
 
 #include "JavaToNativeBridge.h"
 #include "AndroidImageData.h"
@@ -93,16 +90,14 @@ JavaToNativeBridge::~JavaToNativeBridge()
 	delete[] fMultitouchEventBuffer;
 }
 
-void 
+void
 JavaToNativeBridge::Init(
 	JNIEnv * env, jstring packageJ, jstring documentsDirJ, jstring applicationSupportDirJ, jstring temporaryDirJ, jstring cachesDirJ,
-	jstring systemCachesDirJ, jstring expansionFileDirJ, int width, int height, int orientation, bool isCoronaKit )
+	jstring systemCachesDirJ, jstring expansionFileDirJ, int width, int height, bool isCoronaKit )
 {
 	NativeTrace trace( "JavaToNativeBridge::Init" );
 	if ( fView != NULL )
 	{
-		Rtt::DeviceOrientation::Type lastOrientation = fView->GetOrientation();
-		fView->SetOrientation( (Rtt::DeviceOrientation::Type)orientation );
 		fView->Resize(width, height);
 
 		Rtt::Display& display = fRuntime->GetDisplay();
@@ -111,16 +106,9 @@ JavaToNativeBridge::Init(
 		// TODO: Remove need to access Renderer directly
 		Rtt::RenderingStream& stream = display.GetStream();
 		// TEMPORARY_HACK (end)
+		stream.SetOptimalContentSize(width, height);
 
-		if (!isCoronaKit &&
-			Rtt::DeviceOrientation::IsSideways(lastOrientation) !=
-		    Rtt::DeviceOrientation::IsSideways(fView->GetOrientation()))
-		{
-			stream.SwapContentSize();
-		}
-		stream.UpdateContentScale(width);
-
-		fRuntime->RestartRenderer((Rtt::DeviceOrientation::Type)orientation);
+		display.Restart();
 		display.GetScene().Invalidate();
 		display.GetStage()->Invalidate( Rtt::DisplayObject::kRenderDirty );
 		ReloadResources();
@@ -129,7 +117,7 @@ JavaToNativeBridge::Init(
 	{
 		fView = new AndroidGLView();
 
-		fView->CreateFramebuffer( width, height, (Rtt::DeviceOrientation::Type)orientation );
+		fView->CreateFramebuffer( width, height );
 
 		jstringResult packageName( env, packageJ );
 		jstringResult documentsDir( env, documentsDirJ );
@@ -138,7 +126,7 @@ JavaToNativeBridge::Init(
 		jstringResult cachesDir( env, cachesDirJ );
 		jstringResult systemCachesDir( env, systemCachesDirJ );
 		jstringResult expansionFileDir( env, expansionFileDirJ );
-		
+
 		packageName.setNotLocal();
 		documentsDir.setNotLocal();
 		applicationSupportDir.setNotLocal();
@@ -155,13 +143,12 @@ JavaToNativeBridge::Init(
 		fRuntime = Rtt_NEW( & fPlatform->GetAllocator(), Rtt::Runtime( * fPlatform ) );
 
 		fNativeToJavaBridge->SetRuntime( fRuntime );
-		
+
 		fView->SetNativeToJavaBridge( fNativeToJavaBridge );
 
 		fRuntimeDelegate = Rtt_NEW( & fPlatform->GetAllocator(), Rtt::AndroidRuntimeDelegate(fNativeToJavaBridge, isCoronaKit) );
 		fRuntime->SetDelegate(fRuntimeDelegate);
 
-		((Rtt::AndroidDevice&)fPlatform->GetDevice()).SetOrientation( (Rtt::DeviceOrientation::Type)orientation );
 		fNativeToJavaBridge->FetchAllInputDevices();
 #ifdef Rtt_ENTERPRISE
 		fRuntime->SetProperty( Rtt::Runtime::kIsEnterpriseFeature, true );
@@ -176,9 +163,7 @@ JavaToNativeBridge::Init(
 		}
 
 		// Load the Corona application, starting with the "config.lua" and "shell.lua".
-		Rtt::Runtime::LoadApplicationReturnCodes retCode = fRuntime->LoadApplication(	Rtt::Runtime::kLaunchDeviceShell, 
-																						(Rtt::DeviceOrientation::Type)orientation);		
-
+		Rtt::Runtime::LoadApplicationReturnCodes retCode = fRuntime->LoadApplication( Rtt::Runtime::kLaunchDeviceShell );
 		if (Rtt::Runtime::kSuccess == retCode)
 		{
 			// Load was successful. Start running the Corona application.
@@ -224,17 +209,6 @@ JavaToNativeBridge::GetCoronaRuntime()
 	return fCoronaRuntime;
 }
 
-void 
-JavaToNativeBridge::ReinitializeRenderer()
-{
-	NativeTrace trace( "JavaToNativeBridge::ReinitializeRenderer" );
-
-	if ( fView )
-	{
-		fView->ReinitializeRenderingStream();
-	}
-}
-
 void
 JavaToNativeBridge::UnloadResources()
 {
@@ -258,7 +232,7 @@ JavaToNativeBridge::ReloadResources()
 	}
 }
 
-void 
+void
 JavaToNativeBridge::Deinit()
 {
 	NativeTrace trace( "JavaToNativeBridge::Deinit" );
@@ -267,20 +241,20 @@ JavaToNativeBridge::Deinit()
 	{
 		return;
 	}
-	
+
 	// Notify the application that the runtime is being terminated.
 	fNativeToJavaBridge->OnRuntimeExiting();
-	
+
 	// Delete in opposite order of instantiation
 	// Per this thread: http://groups.google.com/group/android-ndk/browse_thread/thread/3e0661379875c7ca
 	// We need to be able to NULL-out variables during shutdown since NDK statics persist across app launches!
 	// So we NULL out the member variables of the persistent static instance.
 	Rtt_DELETE( fRuntime );
 	fRuntime = NULL;
-	
+
 	Rtt_DELETE( fRuntimeDelegate );
 	fRuntimeDelegate = NULL;
-	
+
 	Rtt_DELETE( fPlatform );
 	fPlatform = NULL;
 
@@ -308,7 +282,7 @@ JavaToNativeBridge::GetHorizontalMarginInPixels()
 	S32 y = 0;
 	S32 width = 0;
 	S32 height = 0;
-	
+
 	if (fRuntime)
 	{
 		fRuntime->GetDisplay().ContentToPixels(x, y, width, height);
@@ -323,7 +297,7 @@ JavaToNativeBridge::GetVerticalMarginInPixels()
 	S32 y = 0;
 	S32 width = 0;
 	S32 height = 0;
-	
+
 	if (fRuntime)
 	{
 		fRuntime->GetDisplay().ContentToPixels(x, y, width, height);
@@ -338,7 +312,7 @@ JavaToNativeBridge::GetContentWidthInPixels()
 	S32 y = 0;
 	S32 width = 0;
 	S32 height = 0;
-	
+
 	if (fRuntime)
 	{
 		width = fRuntime->GetDisplay().ContentWidth();
@@ -354,35 +328,13 @@ JavaToNativeBridge::GetContentHeightInPixels()
 	S32 y = 0;
 	S32 width = 0;
 	S32 height = 0;
-	
+
 	if (fRuntime)
 	{
 		height = fRuntime->GetDisplay().ContentHeight();
 		fRuntime->GetDisplay().ContentToPixels(x, y, width, height);
 	}
 	return height;
-}
-
-void
-JavaToNativeBridge::ConvertCoronaPointToAndroidPoint(int& x, int& y)
-{
-	using namespace Rtt;
-
-	const Display& display = fRuntime->GetDisplay();
-	int w = 0, h = 0;
-	display.ContentToPixels( x, y, w, h );
-
-Rtt_ASSERT_NOT_IMPLEMENTED();
-/*
-	if ( stream.IsProperty(RenderingStream::kFlipVerticalAxis) )
-	{
-		x = fRuntime->Surface().Width() - x;
-	}
-	if ( stream.IsProperty(RenderingStream::kFlipHorizontalAxis) )
-	{
-		y = fRuntime->Surface().Height() - y;
-	}
-*/
 }
 
 bool
@@ -694,9 +646,9 @@ JavaToNativeBridge::AddInputDeviceAxis(
 	{
 		return;
 	}
-	
+
 	// Add the given axis information to the input device.
-	Rtt::PlatformInputAxis *axisPointer = devicePointer->AddAxis();	
+	Rtt::PlatformInputAxis *axisPointer = devicePointer->AddAxis();
 	if (NULL == axisPointer)
 	{
 		return;
@@ -754,7 +706,7 @@ JavaToNativeBridge::UseJavaLuaErrorHandler()
 	Rtt::Lua::SetErrorHandler(JavaLuaErrorHandler);
 }
 
-void 
+void
 JavaToNativeBridge::Render()
 {
 	if ( fView == NULL )
@@ -783,13 +735,13 @@ JavaToNativeBridge::Pause()
 	UnloadResources();
 }
 
-void 
+void
 JavaToNativeBridge::Resume()
 {
 	NativeTrace trace( "JavaToNativeBridge::Resume" );
 	if ( fRuntime == NULL || fNativeToJavaBridge == NULL)
 		return;
-	
+
 	// Fetch all available input devices in case some have been connected/disconnected since the being suspended.
 	fNativeToJavaBridge->FetchAllInputDevices();
 
@@ -798,13 +750,13 @@ JavaToNativeBridge::Resume()
 	fNativeToJavaBridge->OnRuntimeResumed();
 }
 
-void 
+void
 JavaToNativeBridge::DispatchEventInLua()
 {
 	NativeTrace trace( "JavaToNativeBridge::DispatchEventInLua" );
 	if ( fRuntime == NULL )
 		return;
-	
+
 	Corona::Lua::RuntimeDispatchEvent(fRuntime->VMContext().L(), -1);
 }
 
@@ -814,7 +766,7 @@ JavaToNativeBridge::ApplicationOpenEvent()
 	NativeTrace trace( "JavaToNativeBridge::ApplicationOpenEvent" );
 	if ( fRuntime == NULL )
 		return;
-	
+
 	Rtt::AndroidSystemOpenEvent e(fNativeToJavaBridge);
 	fRuntime->DispatchEvent(e);
 }
@@ -825,9 +777,9 @@ JavaToNativeBridge::TapEvent(int x, int y, int count)
 	NativeTrace trace( "JavaToNativeBridge::TapEvent" );
 	if ( fRuntime == NULL )
 		return;
-	
+
 	Rtt::TapEvent e( Rtt_FloatToReal( x ), Rtt_FloatToReal( y ), count );
-	
+
 	fRuntime->DispatchEvent( e );
 }
 
@@ -836,7 +788,7 @@ static Rtt::TouchEvent::Phase
 phaseForType( int touchType )
 {
 	Rtt::TouchEvent::Phase result;
-	
+
 	switch( touchType )
 	{
 	case 0:
@@ -856,7 +808,7 @@ phaseForType( int touchType )
 		result = Rtt::TouchEvent::kCancelled;
 		break;
 	}
-	
+
 	return result;
 }
 
@@ -883,7 +835,7 @@ absoluteTimeFromSystemClockUptime(Rtt::Runtime *runtimePointer, long time, Nativ
 }
 
 // TODO: call Rtt::TouchEvent::phaseForType when above function is removed
-void 
+void
 JavaToNativeBridge::TouchEvent(int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure)
 {
 // 	NativeTrace trace( "JavaToNativeBridge::TouchEvent" );
@@ -894,7 +846,7 @@ JavaToNativeBridge::TouchEvent(int x, int y, int xStart, int yStart, int touchTy
 	Rtt::TouchEvent e( Rtt_FloatToReal( x ), Rtt_FloatToReal( y ), xStart, yStart, phaseForType(touchType), Rtt_FloatToReal( pressure ) );
 	e.SetId( (void*)touchId );
 	e.SetTime( absoluteTimeFromSystemClockUptime(fRuntime, timestamp, fNativeToJavaBridge) );
-	
+
 	fRuntime->DispatchEvent( e );
 }
 
@@ -921,11 +873,11 @@ JavaToNativeBridge::MouseEvent(
 			isPrimaryButtonDown, isSecondaryButtonDown, isMiddleButtonDown,
 			false, false, false, false); // TODO: get modifier keys
 	event.SetTime(absoluteTimeFromSystemClockUptime(fRuntime, timestamp, fNativeToJavaBridge));
-	
+
 	fRuntime->DispatchEvent(event);
 }
 
-bool 
+bool
 JavaToNativeBridge::KeyEvent(
 	int coronaDeviceId, int phase, const char *keyName, int keyCode,
 	bool isShiftDown, bool isAltDown, bool isCtrlDown, bool isCommandDown)
@@ -989,25 +941,25 @@ JavaToNativeBridge::AxisEvent(int coronaDeviceId, int axisIndex, float rawValue)
 	fRuntime->DispatchEvent(event);
 }
 
-void 
+void
 JavaToNativeBridge::AccelerometerEvent(double rawX, double rawY, double rawZ, double deltaTime)
 {
 	if ( NULL == fRuntime )
 	{
 		return;
 	}
-	
+
 	const double kFilteringFactor = 0.1;
-	
+
 	double rawAccel[3];
 	rawAccel[0] = rawX;
 	rawAccel[1] = rawY;
 	rawAccel[2] = rawZ;
-	
+
 	double x = fGravityAccel[0];
 	double y = fGravityAccel[1];
 	double z = fGravityAccel[2];
-	
+
 	// Use a basic low-pass filter to keep only the gravity component of each axis.
 	x = (rawX * kFilteringFactor) + (x * (1.0 - kFilteringFactor));
 	y = (rawY * kFilteringFactor) + (y * (1.0 - kFilteringFactor));
@@ -1015,7 +967,7 @@ JavaToNativeBridge::AccelerometerEvent(double rawX, double rawY, double rawZ, do
 	fGravityAccel[0] = x;
 	fGravityAccel[1] = y;
 	fGravityAccel[2] = z;
-	
+
 	// Subtract the low-pass value from the current value to get a simplified high-pass filter
 	x = rawX - x;
 	y = rawY - y;
@@ -1023,9 +975,9 @@ JavaToNativeBridge::AccelerometerEvent(double rawX, double rawY, double rawZ, do
 	fInstantAccel[0] = x;
 	fInstantAccel[1] = y;
 	fInstantAccel[2] = z;
-	
-	
-	// Compute the magnitude of the current acceleration 
+
+
+	// Compute the magnitude of the current acceleration
 	// and if above a given threshold, it's a shake
 	bool isShake = false;
 	const float kShakeAccelSq = 4.0;
@@ -1033,7 +985,7 @@ JavaToNativeBridge::AccelerometerEvent(double rawX, double rawY, double rawZ, do
 	if ( accelSq >= kShakeAccelSq )
 	{
 		const Rtt_AbsoluteTime kMinShakeInterval = 0.5;
-		
+
 		Rtt_AbsoluteTime t = Rtt_GetAbsoluteTime();
 		isShake = ( t > fPreviousShakeTime + kMinShakeInterval );
 		if ( isShake )
@@ -1041,7 +993,7 @@ JavaToNativeBridge::AccelerometerEvent(double rawX, double rawY, double rawZ, do
 			fPreviousShakeTime = t;
 		}
 	}
-	
+
 	Rtt::AccelerometerEvent event( fGravityAccel, fInstantAccel, rawAccel, isShake, deltaTime );
 	fRuntime->DispatchEvent( event );
 }
@@ -1053,36 +1005,21 @@ JavaToNativeBridge::GyroscopeEvent(double x, double y, double z, double deltaTim
 	{
 		return;
 	}
-	
+
 	Rtt::GyroscopeEvent event(x, y, z, deltaTime);
 	fRuntime->DispatchEvent(event);
 }
 
-void 
-JavaToNativeBridge::OrientationChanged( int newOrientation, int oldOrientation )
-{
-	NativeTrace trace( "JavaToNativeBridge::OrientationChanged" );
-	
-	if (( NULL == fRuntime ) || ( NULL == fPlatform ))
-	{
-		return;
-	}
-	
-	((Rtt::AndroidDevice&)fPlatform->GetDevice()).SetOrientation( (Rtt::DeviceOrientation::Type)newOrientation );
-	Rtt::OrientationEvent e( (Rtt::DeviceOrientation::Type)newOrientation, (Rtt::DeviceOrientation::Type)oldOrientation );
-	fRuntime->DispatchEvent( e );
-}
-
-void 
+void
 JavaToNativeBridge::ResizeEvent()
 {
 	NativeTrace trace( "JavaToNativeBridge::ResizeEvent" );
-	
+
 	if ( NULL == fRuntime )
 	{
 		return;
 	}
-	
+
 	Rtt::ResizeEvent event;
 	fRuntime->DispatchEvent( event );
 }
@@ -1114,7 +1051,7 @@ JavaToNativeBridge::VideoEndCallback( long id )
 	}
 }
 
-void 
+void
 JavaToNativeBridge::RecordCallback( long id, int status )
 {
 	if (fNativeToJavaBridge != NULL)
@@ -1144,14 +1081,14 @@ JavaToNativeBridge::TextEvent( int id, bool hasFocus, bool isDone )
 	{
 		return;
 	}
-	
+
 	// Fetch the display object by ID.
 	Rtt::AndroidTextFieldObject *textField = (Rtt::AndroidTextFieldObject *)fPlatform->GetNativeDisplayObjectById(id);
 	if (!textField)
 	{
 		return;
 	}
-	
+
 	// Send the event.
 	Rtt::UserInputEvent::Phase phase = Rtt::UserInputEvent::kEnded;
 	if ( hasFocus )
@@ -1174,14 +1111,14 @@ JavaToNativeBridge::TextEditingEvent( JNIEnv *env, int id, int startPos, int num
 	{
 		return;
 	}
-	
+
 	// Fetch the display object by ID.
 	Rtt::AndroidTextFieldObject *textField = (Rtt::AndroidTextFieldObject *)fPlatform->GetNativeDisplayObjectById(id);
 	if (!textField)
 	{
 		return;
 	}
-	
+
 	// Send the event.
 	// Add 1 to the start position to convert the zero-based index to a one-based index that is compatible with Lua.
 	jstringResult newchars( env, newCharacters );
@@ -1227,159 +1164,6 @@ JavaToNativeBridge::MultitouchEventEnd()
 	{
 		Rtt::MultitouchEvent event(fMultitouchEventBuffer, fMultitouchEventCount);
 		fRuntime->DispatchEvent(event);
-	}
-}
-
-void 
-JavaToNativeBridge::WebViewShouldLoadUrl( JNIEnv * env, int id, jstring urlJ, int sourceType )
-{
-	// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-	
-	// Fetch the display object by ID.
-	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-	
-	// Raise the event.
-	jstringResult url(env, urlJ);
-	url.setNotLocal();
-	if (view->IsPopup())
-	{
-		// This web view belongs to a web popup.
-		// Make sure that the popup is still referencing the web view in case it just closed it.
-		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
-		if (popup && (popup->GetWebViewId() == view->GetId()))
-		{
-			// If the Lua listener returns false, then close the popup.
-			// Also, the "event.type" property is not supported by web popup.
-			bool wasCloseRequested = !(popup->ShouldLoadUrl(url.getUTF8()));
-			if (wasCloseRequested)
-			{
-				popup->Close();
-			}
-		}
-	}
-	else
-	{
-		// This web view is a display object.
-		Rtt::UrlRequestEvent e(url.getUTF8(), (Rtt::UrlRequestEvent::Type)sourceType);
-		view->DispatchEventWithTarget(e);
-	}
-}
-
-void 
-JavaToNativeBridge::WebViewFinishedLoadUrl( JNIEnv * env, int id, jstring urlJ )
-{
-	// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-	
-	// Fetch the display object by ID.
-	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-	
-	//TODO: Raise an event to notify Lua that the page has finished loading.
-	jstringResult url(env, urlJ);
-	url.setNotLocal();
-	Rtt::UrlRequestEvent e( url.getUTF8(), Rtt::UrlRequestEvent::kLoaded );
-	view->DispatchEventWithTarget( e );
-}
-
-void 
-JavaToNativeBridge::WebViewDidFailLoadUrl( JNIEnv * env, int id, jstring urlJ, jstring msgJ, int code )
-{
-	// Fetch the display object by ID.
-	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-	
-	// Raise the event.
-	jstringResult url(env, urlJ);
-	url.setNotLocal();
-	jstringResult message(env, msgJ);
-	message.setNotLocal();
-	if (view->IsPopup())
-	{
-		// This web view belongs to a web popup.
-		// Make sure that the popup is still referencing the web view in case it just closed it.
-		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
-		if (popup && (popup->GetWebViewId() == view->GetId()))
-		{
-			// If the Lua listener returns false, then close the popup.
-			bool wasCloseRequested = !(popup->DidFailLoadUrl(url.getUTF8(), message.getUTF8(), code));
-			if (wasCloseRequested)
-			{
-				popup->Close();
-			}
-		}
-	}
-	else
-	{
-		// The web view is a display object.
-		Rtt::UrlRequestEvent e(url.getUTF8(), message.getUTF8(), code);
-		view->DispatchEventWithTarget(e);
-	}
-}
-
-void 
-JavaToNativeBridge::WebViewHistoryUpdated( JNIEnv * env, int id, jboolean canGoBack, jboolean canGoForward )
-{
-	// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-	
-	// Fetch the display object by ID.
-	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-	
-	// Update the web view's navigation history.
-	view->SetCanGoBack(canGoBack);
-	view->SetCanGoForward(canGoForward);
-}
-
-void
-JavaToNativeBridge::WebViewClosed( JNIEnv * env, int id )
-{
-	// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-	
-	// Fetch the display object by ID.
-	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
-	if (!view)
-	{
-		return;
-	}
-	
-	// If the web view belongs to a web popup object, then close it.
-	if (view->IsPopup())
-	{
-		// Make sure that the popup is still referencing the given web view.
-		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
-		if (popup && (popup->GetWebViewId() == view->GetId()))
-		{
-			popup->Close();
-		}
 	}
 }
 
@@ -1474,7 +1258,7 @@ JavaToNativeBridge::StoreTransactionEvent(
 	{
 		return;
 	}
-	
+
 	// Fetch the store interface.
 	Rtt::PlatformStoreProvider *storeProviderPointer = fPlatform->GetStoreProvider(fRuntime->VMContext().LuaState());
 	if (!storeProviderPointer)
@@ -1486,13 +1270,13 @@ JavaToNativeBridge::StoreTransactionEvent(
 	{
 		return;
 	}
-	
+
 	// Ignore the event if a Lua listener has not been set up.
 	if (storePointer->GetTransactionNotifier().HasListener() == false)
 	{
 		return;
 	}
-	
+
 	// Get the Java string objects for the given Java references.
 	jstringResult errorMessageJavaString(env, errorMessage);
 	jstringResult productIdJavaString(env, productId);
@@ -1503,7 +1287,7 @@ JavaToNativeBridge::StoreTransactionEvent(
 	jstringResult originalReceiptJavaString(env, originalReceipt);
 	jstringResult originalTransactionIdJavaString(env, originalTransactionId);
 	jstringResult originalTransactionTimeJavaString(env, originalTransactionTime);
-	
+
 	// Create a store transaction object. Will be deleted by the Lua garbage collector.
 	Rtt_Allocator &allocator = fPlatform->GetAllocator();
 	Rtt::AndroidStoreTransaction *transactionPointer = Rtt_NEW(&allocator, Rtt::AndroidStoreTransaction(&allocator));
@@ -1518,7 +1302,7 @@ JavaToNativeBridge::StoreTransactionEvent(
 	transactionPointer->SetOriginalReceipt(originalReceiptJavaString.getUTF8());
 	transactionPointer->SetOriginalIdentifier(originalTransactionIdJavaString.getUTF8());
 	transactionPointer->SetOriginalDate(originalTransactionTimeJavaString.getUTF8());
-	
+
 	// Raise the store transaction event.
 	// The event object will be automatically deleted by the dispatcher.
 	Rtt::StoreTransactionEvent *eventPointer = Rtt_NEW(&allocator, Rtt::StoreTransactionEvent(transactionPointer));
@@ -1533,14 +1317,14 @@ JavaToNativeBridge::VideoViewPreparedEvent(jint id)
 	{
 		return;
 	}
-	
+
 	// Fetch the display object by ID.
 	Rtt::AndroidVideoObject *view = (Rtt::AndroidVideoObject*)(fPlatform->GetNativeDisplayObjectById(id));
 	if (!view)
 	{
 		return;
 	}
-	
+
 	Rtt::VideoEvent e( Rtt::VideoEvent::kReady );
 	view->DispatchEventWithTarget( e );
 }
@@ -1553,14 +1337,14 @@ JavaToNativeBridge::VideoViewEndedEvent(jint id)
 	{
 		return;
 	}
-	
+
 	// Fetch the display object by ID.
 	Rtt::AndroidVideoObject *view = (Rtt::AndroidVideoObject*)(fPlatform->GetNativeDisplayObjectById(id));
 	if (!view)
 	{
 		return;
 	}
-	
+
 	Rtt::VideoEvent e( Rtt::VideoEvent::kEnded );
 	view->DispatchEventWithTarget( e );
 }

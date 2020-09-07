@@ -137,45 +137,6 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 		fHasBuildSettings = true;
 		wasBuildSettingsFound = true;
 
-		// Fetch the project's orientation settings.
-		lua_getfield(luaStatePointer, -1, "orientation");
-		if (lua_istable(luaStatePointer, -1))
-		{
-			// Fetch the default orientation.
-			lua_getfield(luaStatePointer, -1, "default");
-			if (lua_type(luaStatePointer, -1) == LUA_TSTRING)
-			{
-				fDefaultOrientation = Rtt::DeviceOrientation::TypeForString(lua_tostring(luaStatePointer, -1));
-			}
-			lua_pop(luaStatePointer, 1);
-
-			// Fetch the supported orientations.
-			lua_getfield(luaStatePointer, -1, "supported");
-			if (lua_istable(luaStatePointer, -1))
-			{
-				auto tableItemCount = lua_objlen(luaStatePointer, -1);
-				if (tableItemCount > 0)
-				{
-					int luaArrayIndex = lua_gettop(luaStatePointer);
-					for (lua_pushnil(luaStatePointer);
-					     lua_next(luaStatePointer, luaArrayIndex) != 0;
-					     lua_pop(luaStatePointer, 1))
-					{
-						if (lua_type(luaStatePointer, -1) == LUA_TSTRING)
-						{
-							auto orientation = Rtt::DeviceOrientation::TypeForString(lua_tostring(luaStatePointer, -1));
-							if (orientation != Rtt::DeviceOrientation::kUnknown)
-							{
-								fOrientationsSupportedSet.insert(orientation);
-							}
-						}
-					}
-				}
-			}
-			lua_pop(luaStatePointer, 1);
-		}
-		lua_pop(luaStatePointer, 1);
-
 		// Fetch the project's window settings.
 		lua_getfield(luaStatePointer, -1, "window");
 		if (lua_istable(luaStatePointer, -1))
@@ -267,13 +228,6 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 				fIsWindowMaximizeButtonEnabled = lua_toboolean(luaStatePointer, -1) ? true : false;
 			}
 			lua_pop(luaStatePointer, 1);
-			// Fetch the window title shown setting.
-			lua_getfield(luaStatePointer, -1, "showWindowTitle");
-			if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)
-			{
-				fIsWindowTitleShown = lua_toboolean(luaStatePointer, -1) ? true : false;
-			}
-			lua_pop(luaStatePointer, 1);
 
 			// Fetch the window's title bar text.
 			lua_getfield(luaStatePointer, -1, "titleText");
@@ -322,12 +276,6 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 			lua_pop(luaStatePointer, 1);
 		}
 		lua_pop(luaStatePointer, 1);
-
-		// If a valid default orientation was assigned, then make sure it is in the "supported" collection.
-		if (Rtt::DeviceOrientation::IsInterfaceOrientation(fDefaultOrientation))
-		{
-			fOrientationsSupportedSet.insert(fDefaultOrientation);
-		}
 	}
 	lua_pop(luaStatePointer, 1);
 
@@ -344,55 +292,34 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 		lua_getfield(luaStatePointer, -1, "content");
 		if (lua_istable(luaStatePointer, -1))
 		{
-			// Fetch the scale mode.
-			Rtt::Display::ScaleMode scaleMode = Rtt::Display::kNone;
-			lua_getfield(luaStatePointer, -1, "scale");
-			if (lua_type(luaStatePointer, -1) == LUA_TSTRING)
+			// Fetch the content width and height restrictions.
+			lua_getfield(luaStatePointer, -1, "minContentWidth");
+			if (lua_isnumber(luaStatePointer, -1))
 			{
-				scaleMode = Rtt::Display::ScaleModeFromString(lua_tostring(luaStatePointer, -1));
+				fMinContentWidth = (int)lua_tointeger(luaStatePointer, -1);
 			}
 			lua_pop(luaStatePointer, 1);
 
-			// Fetch the content width and height if content scaling is enabled.
-			if ((scaleMode != Rtt::Display::kNone) && (scaleMode != Rtt::Display::kAdaptive))
+			lua_getfield(luaStatePointer, -1, "maxContentWidth");
+			if (lua_isnumber(luaStatePointer, -1))
 			{
-				lua_getfield(luaStatePointer, -1, "width");
-				if (lua_isnumber(luaStatePointer, -1))
-				{
-					fContentWidth = (int)lua_tointeger(luaStatePointer, -1);
-				}
-				lua_pop(luaStatePointer, 1);
-				lua_getfield(luaStatePointer, -1, "height");
-				if (lua_isnumber(luaStatePointer, -1))
-				{
-					fContentHeight = (int)lua_tointeger(luaStatePointer, -1);
-				}
-				lua_pop(luaStatePointer, 1);
+				fMaxContentWidth = (int)lua_tointeger(luaStatePointer, -1);
 			}
+			lua_pop(luaStatePointer, 1);
 
-			// Fetch image suffix scales if content scaling is enabled.
-			if (scaleMode != Rtt::Display::kNone)
+			lua_getfield(luaStatePointer, -1, "minContentHeight");
+			if (lua_isnumber(luaStatePointer, -1))
 			{
-				lua_getfield(luaStatePointer, -1, "imageSuffix");
-				if (lua_istable(luaStatePointer, -1))
-				{
-					int luaTableIndex = lua_gettop(luaStatePointer);
-					for (lua_pushnil(luaStatePointer);
-					     lua_next(luaStatePointer, luaTableIndex) != 0;
-					     lua_pop(luaStatePointer, 1))
-					{
-						if (lua_isnumber(luaStatePointer, -1))
-						{
-							double scale = lua_tonumber(luaStatePointer, -1);
-							if (scale > 0)
-							{
-								fImageSuffixScaleSet.insert(scale);
-							}
-						}
-					}
-				}
-				lua_pop(luaStatePointer, 1);
+				fMinContentHeight = (int)lua_tointeger(luaStatePointer, -1);
 			}
+			lua_pop(luaStatePointer, 1);
+
+			lua_getfield(luaStatePointer, -1, "maxContentHeight");
+			if (lua_isnumber(luaStatePointer, -1))
+			{
+				fMaxContentHeight = (int)lua_tointeger(luaStatePointer, -1);
+			}
+			lua_pop(luaStatePointer, 1);
 		}
 		lua_pop(luaStatePointer, 1);
 	}
@@ -420,8 +347,6 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 void ProjectSettings::ResetBuildSettings()
 {
 	fHasBuildSettings = false;
-	fDefaultOrientation = Rtt::DeviceOrientation::kUnknown;
-	fOrientationsSupportedSet.clear();
 	fDefaultWindowModePointer = NULL;
     fIsWindowResizable = false;
     fSuspendWhenMinimized = false;
@@ -433,15 +358,15 @@ void ProjectSettings::ResetBuildSettings()
 	fIsWindowMinimizeButtonEnabled = true;
 	fIsWindowMaximizeButtonEnabled = false;
 	fLocalizedWindowTitleTextMap.clear();
-	fIsWindowTitleShown = true;
 }
 
 void ProjectSettings::ResetConfigLuaSettings()
 {
 	fHasConfigLua = false;
-	fContentWidth = 0;
-	fContentHeight = 0;
-	fImageSuffixScaleSet.clear();
+	fMinContentWidth = 0;
+	fMaxContentWidth = 0;
+	fMinContentHeight = 0;
+	fMaxContentHeight = 0;
 }
 
 bool ProjectSettings::HasBuildSettings() const
@@ -452,76 +377,6 @@ bool ProjectSettings::HasBuildSettings() const
 bool ProjectSettings::HasConfigLua() const
 {
 	return fHasConfigLua;
-}
-
-Rtt::DeviceOrientation::Type ProjectSettings::GetDefaultOrientation() const
-{
-	return fDefaultOrientation;
-}
-
-void ProjectSettings::SetDefaultOrientation(Rtt::DeviceOrientation::Type value)
-{
-	if (Rtt::DeviceOrientation::IsInterfaceOrientation(value) || (Rtt::DeviceOrientation::kUnknown == value))
-	{
-		fDefaultOrientation = value;
-		if (value != Rtt::DeviceOrientation::kUnknown)
-		{
-			fOrientationsSupportedSet.insert(value);
-		}
-	}
-}
-
-bool ProjectSettings::IsSupported(Rtt::DeviceOrientation::Type value) const
-{
-	auto iter = fOrientationsSupportedSet.find(value);
-	return (iter != fOrientationsSupportedSet.end());
-}
-
-bool ProjectSettings::IsPortraitSupported() const
-{
-	for (auto iter = fOrientationsSupportedSet.begin(); iter != fOrientationsSupportedSet.end(); iter++)
-	{
-		if (Rtt::DeviceOrientation::IsUpright(*iter))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-bool ProjectSettings::IsLandscapeSupported() const
-{
-	for (auto iter = fOrientationsSupportedSet.begin(); iter != fOrientationsSupportedSet.end(); iter++)
-	{
-		if (Rtt::DeviceOrientation::IsSideways(*iter))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-int ProjectSettings::GetSupportedOrientationsCount() const
-{
-	return (int)fOrientationsSupportedSet.size();
-}
-
-Rtt::DeviceOrientation::Type ProjectSettings::GetSupportedOrientationByIndex(int index) const
-{
-	auto orientation = Rtt::DeviceOrientation::kUnknown;
-	if ((index >= 0) && (index < GetSupportedOrientationsCount()))
-	{
-		for (auto iter = fOrientationsSupportedSet.begin(); iter != fOrientationsSupportedSet.end(); iter++)
-		{
-			if (0 == index)
-			{
-				orientation = *iter;
-				break;
-			}
-			index--;
-		}
-	}
-	return orientation;
 }
 
 const Rtt::NativeWindowMode* ProjectSettings::GetDefaultWindowMode() const
@@ -633,42 +488,22 @@ const char* ProjectSettings::GetWindowTitleTextForLocaleWithoutFallback(
 	return titleText;
 }
 
-int ProjectSettings::GetContentWidth() const
+int ProjectSettings::GetMinContentWidth() const
 {
-	return fContentWidth;
+	return fMinContentWidth;
+}
+int ProjectSettings::GetMaxContentWidth() const
+{
+	return fMaxContentWidth;
 }
 
-int ProjectSettings::GetContentHeight() const
+int ProjectSettings::GetMinContentHeight() const
 {
-	return fContentHeight;
+	return fMinContentHeight;
 }
-
-int ProjectSettings::GetImageSuffixScaleCount() const
+int ProjectSettings::GetMaxContentHeight() const
 {
-	return (int)fImageSuffixScaleSet.size();
-}
-
-double ProjectSettings::GetImageSuffixScaleByIndex(int index) const
-{
-	double scale = 0.0;
-	if ((index >= 0) && (index < GetImageSuffixScaleCount()))
-	{
-		for (auto iter = fImageSuffixScaleSet.begin(); iter != fImageSuffixScaleSet.end(); iter++)
-		{
-			if (0 == index)
-			{
-				scale = *iter;
-				break;
-			}
-			index--;
-		}
-	}
-	return scale;
-}
-
-bool ProjectSettings::IsWindowTitleShown() const
-{
-	return fIsWindowTitleShown;
+	return fMaxContentHeight;
 }
 
 void ProjectSettings::OnLoadedFrom(lua_State* luaStatePointer)

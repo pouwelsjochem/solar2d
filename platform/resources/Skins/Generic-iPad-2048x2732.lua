@@ -10,10 +10,10 @@
 simulator =
 {
 	device = "borderless-ios-tablet",
-	screenWidth = 2048,
-	screenHeight = 2732,
-	iosPointWidth = 768,
-	iosPointHeight = 1024,
+	deviceWidth = 2732,
+	deviceHeight = 2048,
+	iosPointWidth = 1024,
+	iosPointHeight = 768,
 	displayManufacturer = "Corona Labs Inc.",
 	displayName = "iPad",
 	windowTitleBarName = "iPad @3x",

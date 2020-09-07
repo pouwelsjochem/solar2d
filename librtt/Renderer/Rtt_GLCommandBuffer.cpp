@@ -321,13 +321,15 @@ GLCommandBuffer::Initialize()
 	glDisable( GL_STENCIL_TEST );
 	glDisable( GL_SCISSOR_TEST );
 	glDisable( GL_CULL_FACE );
-	glDisable( GL_MULTISAMPLE );
 	glEnable( GL_BLEND );
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glEnableVertexAttribArray( Geometry::kVertexPositionAttribute );
 	glEnableVertexAttribArray( Geometry::kVertexTexCoordAttribute );
 	glEnableVertexAttribArray( Geometry::kVertexColorScaleAttribute );
 	glEnableVertexAttribArray( Geometry::kVertexUserDataAttribute );
+#if !defined( Rtt_OPENGLES )
+	glDisable( GL_MULTISAMPLE );
+#endif
 
 	InitializeFBO();
 	InitializeCachedParams();

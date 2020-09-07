@@ -35,7 +35,6 @@
 
 #import <CoreMotion/CoreMotion.h>
 #import "Rtt_AppleCallback.h"
-#include "Rtt_IPhoneOrientation.h"
 
 #include "CoronaIOSLoader.h"
 
@@ -113,44 +112,9 @@ IsEnterprise()
 	fNextResponder = [responder retain];
 }
 
-// Because willRotateToInterfaceOrientation is not called in iOS 6, we need to do what it used to do here.
-- (void) viewWillLayoutSubviews
-{
-	CoronaView *coronaView = (CoronaView *)self.view;
-	[coronaView notifyRuntimeAboutOrientationChange:[self interfaceOrientation]];
-	
-	// When returning from other views (like SafariView) we have to check if size (orientation) was changed
-	[coronaView didOrientationChange:nil];
-}
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toOrientation duration:(NSTimeInterval)duration
-{
-	CoronaView *coronaView = (CoronaView *)self.view;
-	[coronaView notifyRuntimeAboutOrientationChange:toOrientation];
-}
-
-//This specifies the orientation support at the View Controller level
 - (NSUInteger) supportedInterfaceOrientations
 {
-	UIInterfaceOrientationMask result = UIInterfaceOrientationMaskAll;
-	NSBundle *bundle = [NSBundle mainBundle];
-	id value = [bundle objectForInfoDictionaryKey:@"CoronaViewSupportedInterfaceOrientations"];
-	if ( value && [value isKindOfClass:[NSArray class]])
-	{
-		if ([value count] > 0)
-		{
-			NSString* curOrientation = [value objectAtIndex:0];
-			UIInterfaceOrientationMask supportedOrientations = Rtt::IPhoneOrientation::OrientationMaskForString( curOrientation );
-			for(int i = 0; i < (int)[value count]; i++)
-			{
-				curOrientation = [value objectAtIndex:i];
-				supportedOrientations |= Rtt::IPhoneOrientation::OrientationMaskForString( curOrientation );
-				
-			}
-			result = supportedOrientations;
-		}
-	}
-	return result;
+	return UIInterfaceOrientationMaskLandscape;
 }
 
 @end
@@ -198,22 +162,9 @@ IsEnterprise()
 	return view.runtime;
 }
 
-//This specifies the orientation support at the App level
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)windowArg
 {
-	NSUInteger result = UIInterfaceOrientationMaskAll;
-	// This function is called before the IPhoneRuntimeDelegate is created which is why
-	// it is safe to return the value directly
-	id<CoronaDelegate> delegate = [self getCoronaAppDelegate];
-	if ( delegate )
-	{
-		if ( [delegate respondsToSelector:_cmd] )
-		{
-			result = [delegate application:application supportedInterfaceOrientationsForWindow:windowArg];
-	}
-	}
-
-	return result;
+	return UIInterfaceOrientationMaskLandscape;
 }
 
 static void
@@ -258,67 +209,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	bool isEnterprise = IsEnterprise();
 	runtime->SetProperty( Runtime::kIsEnterpriseFeature, isEnterprise );
 
-	UIInterfaceOrientation interfaceOrientation = viewController.interfaceOrientation;
-    
-	// On iPad (iOS 3.2), viewController's interface orientation defaults to portrait 
-	// even if the iPad is landscape, so query the UIDevice
-	if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
-	{
-		UIDevice *device = [UIDevice currentDevice];
-		[device beginGeneratingDeviceOrientationNotifications];
-		UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-		[device endGeneratingDeviceOrientationNotifications];
-
-		if ( UIDeviceOrientationIsValidInterfaceOrientation( orientation ) )
-		{
-			interfaceOrientation = (UIInterfaceOrientation)orientation;
-		}
-
-		// Check whether it's a supported orientation. If not, choose first in supported array
-		id value = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CoronaViewSupportedInterfaceOrientations"];
-		if ( value && [value isKindOfClass:[NSArray class]])
-		{
-			NSString *str = IPhoneOrientation::StringForOrientation( interfaceOrientation );
-			NSArray *supported = (NSArray*)value;
-			if ( [supported count] > 0 && str && ! [supported containsObject:str] )
-			{
-				id value = [supported objectAtIndex:0];
-				if ( value && [value isKindOfClass:[NSString class]] )
-				{
-					interfaceOrientation = IPhoneOrientation::OrientationForString( value );
-				}
-			}
-		}
-		else
-		{
-			// No supported orientations are specified so make sure we default
-			// to portrait or portrait upside down.
-			if ( UIInterfaceOrientationIsLandscape( interfaceOrientation ) )
-			{
-				// If the device is currently in landscape and no supported orientations 
-				// are specified, default to portrait.
-				interfaceOrientation = UIInterfaceOrientationPortrait;
-			}
-		}
-	}
-
-	// This can be overriden by a special "ContentOrientation" parameter in Info.plist
-	// which means that the Corona view will have a single orientation.
-	NSBundle *bundle = [NSBundle mainBundle];
-	id value = [bundle objectForInfoDictionaryKey:@"ContentOrientation"];
-	if ( value && [value isKindOfClass:[NSString class]] )
-	{
-		DeviceOrientation::Type contentOrientation = IPhoneOrientation::ConvertOrientation( (NSString*)value );
-
-		if ( DeviceOrientation::kUnknown != contentOrientation )
-		{
-			runtime->SetProperty( Runtime::kIsOrientationLocked, true );
-			
-			// By default, set the Corona orientation to the interface orientation
-			interfaceOrientation = IPhoneOrientation::OrientationForString( value );
-		}
-	}
-
 #ifdef Rtt_CUSTOM_CODE
 	runtime->SetProperty( Runtime::kIsUsingCustomCode, true );
 #endif
@@ -328,8 +218,7 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	// The AppDelegate will observe suspend/resume notification, so don't use default observers
 	view.observeSuspendResume = NO;
 
-	DeviceOrientation::Type orientation = IPhoneOrientation::ConvertOrientation( interfaceOrientation );
-	return [view runWithPath:path parameters:params orientation:orientation];
+	return [view runWithPath:path parameters:params];
 }
 
 - (void) setLaunchArgs:(id<CoronaRuntime>)runtime with:(NSDictionary*)launchOptions {
@@ -421,7 +310,7 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 
 	const Display& display = view.runtime->GetDisplay();
 
-	Rtt_Real contentToScreenScale = display.CalculateContentToScreenScale();
+	Rtt_Real contentToScreenScale = display.GetContentToScreenScale();
 	if ( !Rtt_RealIsOne(contentToScreenScale) )
 	{
 		PlatformDisplayObject::CalculateScreenBounds( display, contentToScreenScale, bounds );

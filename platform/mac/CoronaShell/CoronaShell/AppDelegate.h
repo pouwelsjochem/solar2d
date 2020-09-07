@@ -13,7 +13,6 @@
 {
 	id fGLView;
 }
-@property int titleBarHeight;
 @property NSRect nonFullscreenWindowFrame;
 
 - (IBAction) performPause:(id) sender;

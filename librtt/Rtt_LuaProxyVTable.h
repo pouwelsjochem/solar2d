@@ -320,19 +320,6 @@ class LuaPlatformTextBoxObjectProxyVTable : public LuaPlatformDisplayObjectProxy
 		virtual const LuaProxyVTable& Parent() const;
 };
 
-class LuaPlatformWebViewObjectProxyVTable : public LuaPlatformDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaPlatformWebViewObjectProxyVTable Self;
-
-	public:
-		LuaPlatformWebViewObjectProxyVTable();
-		static const Self& Constant();
-
-	public:
-		virtual const LuaProxyVTable& Parent() const;
-};
-
 class LuaPlatformVideoObjectProxyVTable : public LuaPlatformDisplayObjectProxyVTable
 {
 	public:

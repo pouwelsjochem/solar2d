@@ -221,12 +221,6 @@ WinConsoleDevice::SetGyroscopeInterval( U32 frequency ) const
 {
 }
 
-DeviceOrientation::Type
-WinConsoleDevice::GetOrientation() const
-{
-	return DeviceOrientation::kUnknown;
-}
-
 #pragma region Private Methods
 // Fetches the local machine's SID (Security Identifier) and copies it to the given argument.
 // Argument "sidString" is the character buffer to be copied to. Will receive a SID string if function returns true.

@@ -1181,15 +1181,6 @@ POINT WinInputDeviceManager::GetMousePointFrom(LPARAM LParam)
 	POINT point;
 	point.x = GET_X_LPARAM(LParam);
 	point.y = GET_Y_LPARAM(LParam);
-
-	// If simulating a device, then adjust the point for the simulator window's current rotation and zoom level.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		point = deviceSimulatorServicesPointer->GetSimulatedPointFromClient(point);
-	}
-
-	// Return the mouse coordinate.
 	return point;
 }
 

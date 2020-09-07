@@ -64,13 +64,6 @@ local Constants =
 local minSdkVersion = tostring( Constants.MIN_SDK_VERSION )
 
 local packageName = "com.corona.app"
-local defaultOrientation = nil
-local supportsOrientationChange = false
-local supportsOrientationPortrait = false
-local supportsOrientationPortraitUpsideDown = false
-local supportsOrientationLandscapeRight = false
-local supportsOrientationLandscapeLeft = false
-local hasOrientationTable = false
 local permissions = {}
 local usesPermissions = {}
 local supportsScreens = {}
@@ -401,54 +394,6 @@ if "table" == type(buildSettings) then
 	-- Permissions set within the "android" table will be read later.
 	fetchUsesPermissionsFrom(buildSettings.androidPermissions)
 
-	-- Fetch orientation settings.
-	if "table" == type(buildSettings.orientation) then
-		hasOrientationTable = true
-
-		-- Fetch the default orientation.
-		local stringValue = buildSettings.orientation.default
-		if ("string" == type(stringValue)) then
-			if ("portrait" == stringValue) then
-				supportsOrientationPortrait = true
-				defaultOrientation = "portrait"
-			elseif ("portraitUpsideDown" == stringValue) then
-				supportsOrientationPortraitUpsideDown = true
-				defaultOrientation = "reversePortrait"
-			elseif ("landscapeRight" == stringValue) or ("landscape" == stringValue) then
-				supportsOrientationLandscapeRight = true
-				defaultOrientation = "landscape"
-			elseif ("landscapeLeft" == stringValue) then
-				supportsOrientationLandscapeLeft = true
-				defaultOrientation = "reverseLandscape"
-			end
-		end
-
-		-- Fetch all supported orientations.
-		local supported = buildSettings.orientation.supported
-		if "table" == type(supported) then
-			for i = 1 , #supported do
-				stringValue = supported[i]
-				if ("string" == type(stringValue)) then
-					if ("portrait" == stringValue) then
-						supportsOrientationPortrait = true
-					elseif ("portraitUpsideDown" == stringValue) then
-						supportsOrientationPortraitUpsideDown = true
-					elseif ("landscapeRight" == stringValue) or ("landscape" == stringValue) then
-						supportsOrientationLandscapeRight = true
-					elseif ("landscapeLeft" == stringValue) then
-						supportsOrientationLandscapeLeft = true
-					end
-				end
-			end
-		end
-
-		-- Determine if this app supports orientation changes.
-		if (supportsOrientationPortrait or supportsOrientationPortraitUpsideDown) and
-		   (supportsOrientationLandscapeRight or supportsOrientationLandscapeLeft) then
-			supportsOrientationChange = true
-		end
-	end
-
 	-- Fetch settings within the Android table.
 	if "table" == type(buildSettings.android) then
 		-- Fetch the version code.
@@ -574,62 +519,6 @@ if "table" == type(buildSettings) then
 	end
 end
 
--- Refine the default orientation assignment using info from the supported orientations.
-if (supportsOrientationPortrait or supportsOrientationPortraitUpsideDown
-	or supportsOrientationLandscapeRight or supportsOrientationLandscapeLeft) then
-
-	if (supportsOrientationPortrait and
-		not supportsOrientationPortraitUpsideDown and
-		not supportsOrientationLandscapeRight and
-		not supportsOrientationLandscapeLeft) then
-
-		defaultOrientation = "portrait"
-
-	elseif (not supportsOrientationPortrait and
-		not supportsOrientationPortraitUpsideDown and
-		supportsOrientationLandscapeRight and
-		not supportsOrientationLandscapeLeft) then
-
-		defaultOrientation = "landscape"
-
-	elseif (supportsOrientationPortrait and
-		supportsOrientationPortraitUpsideDown and
-		not supportsOrientationLandscapeRight and
-		not supportsOrientationLandscapeLeft) then
-
-		defaultOrientation = "sensorPortrait"
-
-	elseif (not supportsOrientationPortrait and
-		not supportsOrientationPortraitUpsideDown and
-		supportsOrientationLandscapeRight and
-		supportsOrientationLandscapeLeft) then
-
-		defaultOrientation = "sensorLandscape"
-
-	elseif (not supportsOrientationPortrait and
-		supportsOrientationPortraitUpsideDown and
-		not supportsOrientationLandscapeRight and
-		not supportsOrientationLandscapeLeft) then
-
-		defaultOrientation = "reversePortrait"
-
-	elseif (not supportsOrientationPortrait and
-		not supportsOrientationPortraitUpsideDown and
-		not supportsOrientationLandscapeRight and
-		supportsOrientationLandscapeLeft) then
-
-		defaultOrientation = "reverseLandscape"
-
-	end
-
-elseif (not defaultOrientation) then
-	-- No default orientation has been set and no supported
-	-- orientations are provided. So make something!
-	defaultOrientation = "portrait"
-	supportsOrientationPortrait = true
-end -- The case of defaultOrientation being assigned, but no supported orientations is a programmer error!
-
-
 ----------------------------------------------------------------------------------------------------
 -- Fetch plugin settings information.
 ----------------------------------------------------------------------------------------------------
@@ -728,21 +617,8 @@ if isGame == true then
 end
 manifestKeys.USER_IS_GAME = stringBuffer
 
--- Only create a "screenOrientation" attribute if the app does NOT support orientation changes.
--- This allows the OS to handle the orientation and respects system preferences lke auto-rotate.
-stringBuffer = ""
-if (not supportsOrientationChange) then
-	stringBuffer = 'android:screenOrientation="' .. defaultOrientation .. '"'
-else
-	-- Our default orientation is unspecified, so the OS can do as it pleases.
-	defaultOrientation = "unspecified"
-end
-
--- Set the default orientation and create a meta-data tag for it as well.
+-- Set the default orientation and create a meta-data tag for it as well. (unspecified so OS can resolve it)
 manifestKeys.USER_DEFAULT_ORIENTATION = stringBuffer
-manifestKeys.USER_REQUESTED_DEFAULT_ORIENTATION =
-		'<meta-data android:name="requestedDefaultOrientation" android:value="' ..
-		defaultOrientation .. '" />'
 
 -- Create "permission" tags.
 stringBuffer = ""
@@ -797,36 +673,9 @@ manifestKeys.USER_CORONA_ACTIVITY_ATTRIBUTES = stringBuffer
 
 -- Create "uses-feature" tags.
 
--- If the application is landscape only then we don't want the uses portrait feature since it will remove the landscape only devices
+-- We don't want the uses portrait feature since it will remove the landscape only devices
 -- which is caused by the CameraActivity's screenOrientation property in the manifest
-
--- Check for a user setting so it won't be overridden
-local hasUseLandScapeFeature = false
-local hasUsePortraitFeature = false
-for index = 1, #usesFeatures do
-	if usesFeatures[index].name == "android.hardware.screen.portrait" then
-		hasUsePortraitFeature = true
-	end
-	if usesFeatures[index].name == "android.hardware.screen.landscape" then
-		hasUseLandScapeFeature = true
-	end
-end
-
-if not hasUsePortraitFeature then
-	-- If the app only supports portrait then its required or theres no settings and everything defaults to portrait
-	local required = not supportsOrientationLandscapeRight and
-					 not supportsOrientationLandscapeLeft
-	table.insert(usesFeatures, {name = "android.hardware.screen.portrait", required = required})
-end
-
-if not hasUseLandScapeFeature then
-	-- If the app only supports landscape then its required
-	local required = (supportsOrientationLandscapeRight or supportsOrientationLandscapeLeft) and
-					 hasOrientationTable and
-					 not supportsOrientationPortrait and
-					 not supportsOrientationPortraitUpsideDown
-	table.insert(usesFeatures, {name = "android.hardware.screen.landscape", required = required})
-end
+table.insert(usesFeatures, {name = "android.hardware.screen.landscape", required = required})
 
 stringBuffer = ""
 for index = 1, #usesFeatures do

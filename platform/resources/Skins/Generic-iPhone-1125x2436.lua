@@ -10,10 +10,8 @@
 simulator =
 {
 	device = "borderless-ios-phone",
-	screenOriginX = 0,
-	screenOriginY = 0,
-	screenWidth = 1125,
-	screenHeight = 2436,
+	deviceWidth = 2436,
+	deviceHeight = 1125,
 	safeScreenInsetTop = 44 * 3,
 	safeScreenInsetLeft = 0 * 3,
 	safeScreenInsetBottom = 34 * 3,
@@ -22,8 +20,8 @@ simulator =
 	safeLandscapeScreenInsetLeft = 44 * 3,
 	safeLandscapeScreenInsetBottom = 21 * 3,
 	safeLandscapeScreenInsetRight = 44 * 3,
-	iosPointWidth = 375,
-	iosPointHeight = 812,
+	iosPointWidth = 812,
+	iosPointHeight = 375,
 	displayManufacturer = "Corona Labs Inc.",
 	displayName = "iPhone",
 	windowTitleBarName = "iPhone @3x",

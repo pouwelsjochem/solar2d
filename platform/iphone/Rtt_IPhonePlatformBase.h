@@ -87,12 +87,8 @@ class IPhonePlatformBase : public ApplePlatform
 
 		virtual void SetActivityIndicator( bool visible ) const;
 
-		virtual PlatformWebPopup* GetWebPopup() const;
-
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 		
-		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
-
 		virtual void SetTapDelay( Rtt_Real delay ) const;
 		virtual Rtt_Real GetTapDelay() const;
 

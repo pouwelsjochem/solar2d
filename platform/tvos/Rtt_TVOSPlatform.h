@@ -23,7 +23,6 @@ class IPhoneImageProvider;
 class IPhoneVideoProvider;
 class AppleStoreProvider;
 class IPhoneVideoPlayer;
-class IPhoneWebPopup;
 
 // ----------------------------------------------------------------------------
 

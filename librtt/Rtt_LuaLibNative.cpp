@@ -22,7 +22,6 @@
 #include "Rtt_MCallback.h"
 #include "Rtt_MPlatform.h"
 #include "Rtt_PlatformDisplayObject.h"
-#include "Rtt_PlatformWebPopup.h"
 #include "Rtt_Runtime.h"
 
 //#include <string.h>
@@ -156,138 +155,6 @@ setActivityIndicator( lua_State *L )
 	return 0;
 }
 
-// native.showWebPopup( url [, options] )
-// options is a table: { listener=,  }
-// TODO: add following: { title=, postParams=, width=, height= }
-static int
-showWebPopup( lua_State *L )
-{
-	int curArg = 1;
-
-	Rect rect;
-	if ( lua_isnumber( L, curArg )
-		 && lua_isnumber( L, curArg+1 )
-		 && lua_isnumber( L, curArg+2 )
-		 && lua_isnumber( L, curArg+3 ) )
-	{
-		rect.xMin = luaL_toreal( L, curArg++ );
-		rect.yMin = luaL_toreal( L, curArg++ );
-		Rtt_Real w = luaL_toreal( L, curArg++ );
-		Rtt_Real h = luaL_toreal( L, curArg++ );
-		if ( w > 0 && h > 0 )
-		{
-			rect.xMax = rect.xMin + w;
-			rect.yMax = rect.yMin + h;
-		}
-		else
-		{
-			CoronaLuaError(L, "Bad parameters to native.showWebPopup() width (%g) and height (%g) must be positive", w, h);
-		}
-	}
-	else
-	{
-		// rect is invalid. Set it to the contentWidth and contentHeight.
-		Runtime *runtime = LuaContext::GetRuntime( L );
-		rect.xMin = Rtt_REAL_0;
-		rect.yMin = Rtt_REAL_0;
-		rect.xMax = runtime->GetDisplay().ContentWidth();
-		rect.yMax = runtime->GetDisplay().ContentHeight();
-	}
-
-	const char *url = lua_isstring( L, curArg ) ? lua_tostring( L, curArg++ ) : NULL;
-
-	if ( url )
-	{
-		Runtime *runtime = LuaContext::GetRuntime( L );
-		const MPlatform& platform = runtime->Platform();
-		PlatformWebPopup *popup = platform.GetWebPopup();
-
-		if (popup != NULL && popup->GetInCallback())
-		{
-			CORONA_LUA_LOG_ERROR(L, "Cannot call native.showWebPopup() from another native.showWebPopup()");
-
-			return 0;
-		}
-
-//		popup->Reset();
-
-		if ( popup == NULL )
-		{
-			return 0;
-		}
-
-		if ( lua_istable( L, curArg ) )
-		{
-			lua_getfield( L, curArg, UrlRequestEvent::kName );
-			if ( Lua::IsListener( L, -1, UrlRequestEvent::kName ) )
-			{
-				LuaResource *resource = Rtt_NEW(
-					& platform.GetAllocator(), 
-					LuaResource( runtime->VMContext().LuaState(), -1 ) );
-				popup->SetCallback( resource );
-			}
-			else
-			{
-				popup->SetCallback( NULL );
-			}
-			lua_pop( L, 1 );
-
-			const char kHasBackgroundKey[] = "hasBackground";
-			lua_getfield( L, curArg, kHasBackgroundKey );
-			if ( lua_isboolean( L, -1 ) )
-			{
-				popup->SetValueForKey( L, kHasBackgroundKey, lua_gettop( L ) );
-			}
-			lua_pop( L, 1 );
-
-			const char kBaseUrlKey[] = "baseUrl";
-			lua_getfield( L, curArg, kBaseUrlKey );
-//			if ( lua_isstring( L, -1 ) ) // apparently we need to call SetValueForKey anyway.
-			{
-				popup->SetValueForKey( L, kBaseUrlKey, lua_gettop( L ) );
-			}
-			lua_pop( L, 1 );
-			
-			const char kAutoCancelKey[] = "autoCancel";
-			lua_getfield( L, curArg, kAutoCancelKey );
-			if ( lua_isboolean( L, -1 ) )
-			{
-				popup->SetValueForKey( L, kAutoCancelKey, lua_gettop( L ) );
-			}
-			lua_pop( L, 1 );
-		}
-
-		popup->Preinitialize( runtime->GetDisplay() );
-		popup->SetStageBounds( rect, runtime );
-		popup->Show( platform, url );
-	}
-	else
-	{
-		CoronaLuaError(L, "Bad parameter to native.showWebPopup() string expected for url parameter");
-	}
-
-	return 0;
-}
-
-// native.cancelWebPopup()
-static int
-cancelWebPopup( lua_State *L )
-{
-	const MPlatform& platform = LuaContext::GetRuntime( L )->Platform();
-	PlatformWebPopup *popup = platform.GetWebPopup();
-
-	if (popup != NULL && popup->GetInCallback())
-	{
-		CORONA_LUA_LOG_ERROR(L, "Cannot call native.cancelWebPopup() from native.showWebPopup() listener");
-
-		return 0;
-	}
-
-	lua_pushboolean( L, popup->Close() );
-
-	return 1;
-}
-
 // local t = native.newTextField( x, y, w, h )
 // 
 // t.text
@@ -395,50 +262,6 @@ newTextBox( lua_State *L )
 		// The inverted comparisons avoid testing a float for equality with zero
 		luaL_error( L, "native.newTextBox() requires %s greater than zero",
 				   (w > 0.f ? "height" : (h > 0.f ? "width" : "width and height")) );
-	}
-
-	return result;
-}
-
-// native.newWebView( left, top, width, height [,listener] )
-static int
-newWebView( lua_State *L )
-{
-	int luaArgumentCount = lua_gettop( L );
-	int result = 0;
-
-	Runtime& runtime = * LuaContext::GetRuntime( L );
-	const MPlatform& platform = runtime.Platform();
-
-	Real x = luaL_toreal( L, 1 );
-	Real y = luaL_toreal( L, 2 );
-	Real w = luaL_toreal( L, 3 );
-	Real h = luaL_toreal( L, 4 );
-
-	if ( w > 0 && h > 0 )
-	{
-		Rect bounds;
-		Display& display = runtime.GetDisplay();
-		bounds.Initialize( x, y, w, h );
-
-		PlatformDisplayObject *t = platform.CreateNativeWebView( bounds );
-
-		if ( t )
-		{
-			t->Preinitialize( display );
-			t->SetHandle( & platform.GetAllocator(), runtime.VMContext().LuaState() );
-
-			result = LuaLibDisplay::AssignParentAndPushResult( L, display, t, NULL );
-
-			if ( ( luaArgumentCount >= 5 ) && Lua::IsListener( L, 5, UrlRequestEvent::kName ) )
-			{
-				CoronaLuaWarning( L, "The 'listener' argument to native.newWebView( left, top, width, height [, listener] ) is deprecated. Call the object method o:addEventListener( '%s', listener ) instead",
-					UrlRequestEvent::kName );
-				t->AddEventListener( L, 5, UrlRequestEvent::kName );
-			}
-
-			t->Initialize();
-		}
 	}
 
 	return result;
@@ -782,11 +605,8 @@ LuaLibNative::Initialize( lua_State *L )
 		{ "showAlert", showAlert },
 		{ "cancelAlert", cancelAlert },
 		{ "setActivityIndicator", setActivityIndicator },
-		{ "showWebPopup", showWebPopup },
-		{ "cancelWebPopup", cancelWebPopup },
 		{ "newTextBox", newTextBox },
 		{ "newTextField", newTextField },
-		{ "newWebView", newWebView },
 		{ "newVideo", newVideo },
 		{ "requestExit", requestExitApplication },
 		{ "newFont", newFont },

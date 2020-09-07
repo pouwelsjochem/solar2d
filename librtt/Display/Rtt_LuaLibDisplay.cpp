@@ -268,27 +268,16 @@ DisplayLibrary::ValueForKey( lua_State *L )
 	{
 		"contentWidth",			// 0
 		"contentHeight",		// 1
-		"viewableContentWidth",	// 2
-		"viewableContentHeight",// 3
-		"fps",					// 4
-		"currentStage",			// 5
-		"screenOriginX",		// 6
-		"screenOriginY",		// 7
-		"contentScale",			// 8
-		"contentCenterX",		// 9
-		"contentCenterY",		// 10
-		"imageSuffix",			// 11
-        "pixelWidth",			// 12
-        "pixelHeight",			// 13
-		"actualContentWidth", // 14
-		"actualContentHeight", // 15
-		"safeScreenOriginX", //16
-		"safeScreenOriginY", //17
-		"safeActualContentWidth", //18
-		"safeActualContentHeight", //19
+		"fps",					// 2
+		"currentStage",			// 3
+		"contentScale",			// 4
+		"contentCenterX",		// 5
+		"contentCenterY",		// 6
+        "deviceWidth",			// 7
+        "deviceHeight",			// 8
 	};
 	
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 20, 28, 17, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 9, 26, 7, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -296,128 +285,47 @@ DisplayLibrary::ValueForKey( lua_State *L )
 	{
 	case 0:	//"contentWidth"
 		{
-			lua_pushinteger( L, display.ContentWidthUpright() );
+			lua_pushinteger( L, display.ContentWidth() );
 		}
 		break;
 	case 1:	// "contentHeight"
 		{
-			lua_pushinteger( L, display.ContentHeightUpright() );
+			lua_pushinteger( L, display.ContentHeight() );
 		}
 		break;
-	case 2:	// "viewableContentWidth"
-		{
-			lua_pushinteger( L, display.ViewableContentWidthUpright() );
-		}
-		break;
-	case 3:	// "viewableContentHeight"
-		{
-			lua_pushinteger( L, display.ViewableContentHeightUpright() );
-		}
-		break;
-	case 4:	// "fps"
+	case 2:	// "fps"
 		{
 			lua_pushinteger( L, display.GetRuntime().GetFPS() );
 		}
 		break;
-	case 5:	// "currentStage"
+	case 3:	// "currentStage"
 		{
 			display.GetStage()->GetProxy()->PushTable( L );
 		}
 		break;
-	case 6:	// "screenOriginX"
-		{
-			lua_pushnumber( L, Rtt_RealToFloat( - display.GetXOriginOffset() ) );
-		}
-		break;
-	case 7:	// "screenOriginY"
-		{
-			lua_pushnumber( L, Rtt_RealToFloat( - display.GetYOriginOffset() ) );
-		}
-		break;
-	case 8:	// "contentScale"
+	case 4:	// "contentScale"
 		{
 			lua_pushnumber( L, Rtt_RealToFloat( display.GetScreenToContentScale() ) );
 		}
 		break;
-	case 9:	// "contentCenterX"
+	case 5:	// "contentCenterX"
 		{
-			lua_pushnumber( L, 0.5*display.ContentWidthUpright() );
+			lua_pushnumber( L, 0.5*display.ContentWidth() );
 		}
 		break;
-	case 10:	// "contentCenterY"
+	case 6:	// "contentCenterY"
 		{
-			lua_pushnumber( L, 0.5*display.ContentHeightUpright() );
+			lua_pushnumber( L, 0.5*display.ContentHeight() );
 		}
 		break;
-	case 11:	// "imageSuffix"
-		{
-			String suffix( LuaContext::GetAllocator( L ) );
-			display.GetImageSuffix( suffix );
-			const char *str = suffix.GetString();
-			if ( str )
-			{
-				lua_pushstring( L, str );
-			}
-			else
-			{
-				lua_pushnil( L );
-			}
-		}
-		break;
-	case 12:	// "pixelWidth"
+	case 7:	// "deviceWidth"
 		{
 			lua_pushnumber( L, display.DeviceWidth() );
 		}
 		break;
-	case 13:	// "pixelHeight"
+	case 8:	// "deviceHeight"
 		{
 			lua_pushnumber( L, display.DeviceHeight() );
-		}
-		break;
-	case 14:	// "actualContentWidth"
-		{
-			lua_pushnumber( L, display.ActualContentWidth() );
-		}
-		break;
-	case 15:	// "actualContentHeight"
-		{
-			lua_pushnumber( L, display.ActualContentHeight() );
-		}
-		break;
-	case 16: // safeScreenOriginX
-		{
-			Runtime& runtime = * LuaContext::GetRuntime( L );
-
-			Rtt_Real top, left, bottom, right;
-			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, (left*display.GetScreenToContentScale()) - display.GetXOriginOffset() );
-		}
-		break;
-	case 17: // safeScreenOriginY
-		{
-			Runtime& runtime = * LuaContext::GetRuntime( L );
-
-			Rtt_Real top, left, bottom, right;
-			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, (top*display.GetScreenToContentScale()) - display.GetYOriginOffset() );
-		}
-		break;
-	case 18: // safeActualContentWidth
-		{
-			Runtime& runtime = * LuaContext::GetRuntime( L );
-
-			Rtt_Real top, left, bottom, right;
-			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, display.ActualContentWidth() - ((left + right)*display.GetScreenToContentScale()) );
-		}
-		break;
-	case 19: // safeActualContentHeight
-		{
-			Runtime& runtime = * LuaContext::GetRuntime( L );
-
-			Rtt_Real top, left, bottom, right;
-			runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
-			lua_pushnumber( L, display.ActualContentHeight() - ((top + bottom)*display.GetScreenToContentScale()) );
 		}
 		break;
 	default:
@@ -947,10 +855,8 @@ DisplayLibrary::newImageRect( lua_State *L )
 			Real w = luaL_toreal( L, nextArg++ );
 			Real h = luaL_toreal( L, nextArg++ );
 
-			U32 flags = PlatformBitmap::kIsNearestAvailablePixelDensity | PlatformBitmap::kIsBitsFullResolution;
-
 			Runtime& runtime = library->GetDisplay().GetRuntime();
-			BitmapPaint *paint = BitmapPaint::NewBitmap( runtime, imageName, baseDir, flags );
+			BitmapPaint *paint = BitmapPaint::NewBitmap( runtime, imageName, baseDir, PlatformBitmap::kIsBitsFullResolution );
 
 			if ( paint && paint->GetBitmap() && paint->GetBitmap()->NumBytes() == 0 )
 			{
@@ -1803,7 +1709,7 @@ DisplayLibrary::captureScreen( lua_State *L )
 	const Rtt_Real bitmapWidth = Rtt_IntToReal(paint->GetTexture()->GetWidth());
 	const Rtt_Real bitmapHeight = Rtt_IntToReal(paint->GetTexture()->GetHeight());
 
-	Rtt_Real targetScreenshotScale = Rtt_RealDiv(Rtt_RealMul(Rtt_IntToReal(display.ScreenWidth()), display.GetScreenToContentScale()), bitmapWidth);
+	Rtt_Real targetScreenshotScale = display.GetScreenToContentScale(); // TODO: is this correct?
 	v->Scale(targetScreenshotScale, targetScreenshotScale, true);
 
 	return 1;
@@ -2250,8 +2156,7 @@ NewBitmapPaintFromFile( lua_State *L, int paramsIndex )
 		lua_pop( L, 1 );
 
 		Runtime *runtime = LuaContext::GetRuntime( L );
-		U32 flags = PlatformBitmap::kIsNearestAvailablePixelDensity;
-		paint = BitmapPaint::NewBitmap( *runtime, imageName, baseDir, flags );
+		paint = BitmapPaint::NewBitmap( *runtime, imageName, baseDir, 0x0 );
 		if ( paint && paint->GetBitmap() && paint->GetBitmap()->NumBytes() == 0 )
 		{
 			CoronaLuaWarning(L, "file '%s' does not contain a valid image", imageName);

@@ -37,8 +37,7 @@ MacDisplayObject::MacDisplayObject( const Rect& bounds )
 :	fSelfBounds( bounds),
 	fView( nil ),
 	fLayerHostSuperView( nil ),
-	fIsHidden ( false ),
-	fCachedSimulatorScale( Rtt_REAL_1 )
+	fIsHidden ( false )
 {
 	// Note: Setting the reference point to center is not done in any of the other implementations because
 	// fSelfBounds is already centered/converted unlike this implementation.
@@ -57,9 +56,6 @@ MacDisplayObject::MacDisplayObject( const Rect& bounds )
 	// so we must record these separately instead of relying on the values of [fView center]
 	fViewCenter.x = bounds.xMin + halfW;
 	fViewCenter.y = bounds.yMin + halfH;
-
-	// If running in the Corona simulator, then fetch its current zoom level scale.
-	CacheSimulatorScale();
 	
 	// Update DisplayObject so that it corresponds to the actual position of the UIView
 	// where DisplayObject's self bounds will be centered around its local origin.
@@ -196,10 +192,6 @@ MacDisplayObject::Prepare( const Display& display )
 			[fView setFrameOrigin:r.origin];
 			[fView setFrameSize:r.size];
 		}
-		
-		// If running in the Corona simulator, then fetch its current zoom level scale.
-		// This function will call the DidRescaleSimulator() if the zoom level has just changed.
-		CacheSimulatorScale();
 	}
 	
 	// We have a problem because this Build matrix is computed some time after the object was created.
@@ -307,51 +299,6 @@ MacDisplayObject::IsInSimulator() const
 	}
 #endif // Rtt_AUTHORING_SIMULATOR
 	return false;
-}
-
-float
-MacDisplayObject::GetSimulatorScale() const
-{
-#if Rtt_AUTHORING_SIMULATOR
-	return fCachedSimulatorScale;
-#else
-	return 1.0;
-#endif
-}
-
-void
-MacDisplayObject::CacheSimulatorScale()
-{
-#if Rtt_AUTHORING_SIMULATOR
-	// If this object is running in Corona's simulator window, then fetch the window's current zoom level scale.
-	float currentScale = Rtt_REAL_1;
-	MacSimulator *simulator = [(AppDelegate*)[NSApp delegate] simulator];
-	const StageObject *stageObject = GetStage();
-	if ( simulator && stageObject )
-	{
-		const MacPlatform &platform = (const MacPlatform&)(stageObject->GetDisplay().GetRuntime().Platform());
-		SimulatorDeviceWindow *simulatorWindow = (SimulatorDeviceWindow*)(simulator->GetWindow());
-		if ( [platform.GetView() window] == simulatorWindow )
-		{
-			currentScale = [simulatorWindow scale];
-		}
-	}
-	
-	// Raise a notification if zoom level scale has changed.
-	float delta = fabsf( fCachedSimulatorScale - currentScale );
-	if ( delta > FLT_EPSILON )
-	{
-		float previousScale = fCachedSimulatorScale;
-		fCachedSimulatorScale = currentScale;
-		DidRescaleSimulator( previousScale, currentScale );
-	}
-#endif // Rtt_AUTHORING_SIMULATOR
-}
-
-void
-MacDisplayObject::DidRescaleSimulator( float previousScale, float currentScale )
-{
-	// No-op by default. This event is intended for subclasses.
 }
 
 int

@@ -282,7 +282,7 @@ handleCheckingForExpansionFiles = function()
 
 		-- Rotate the text fields and progress bar on rotation
 		local function onBackgroundOrientation (event)
-			local textSize = display.viewableContentWidth/20
+			local textSize = display.contentWidth/20
 
 			local progress = 0
 			local progressText = "0.00/"..totalFileSizeConverted.."MB"
@@ -300,21 +300,21 @@ handleCheckingForExpansionFiles = function()
 			--Its bad to remove the widget everytime but I ran into a bug where setting the widget's width to display.contentWidth kept shrinking it
 			removeAllUi()
 
-			-- This is to account for letterbox scaling.  When its letterbox the viewableContentHeight/viewableContentWidth is only the size of the letterbox
+			-- This is to account for letterbox scaling.  When its letterbox the contentHeight/contentWidth is only the size of the letterbox
 			local letterBoxHeight = 0
-			local letterBoxWidth = display.viewableContentWidth
+			local letterBoxWidth = display.contentWidth
 			if application and application.content and application.content.scale == "letterbox" then
 				letterBoxWidth = letterBoxWidth - (2 * display.screenOriginX)
 				letterBoxHeight = 2 * display.screenOriginY
 			end
 
-			gradientBackground = display.newRect(display.contentCenterX, display.contentCenterY, letterBoxWidth, display.viewableContentHeight - letterBoxHeight)
+			gradientBackground = display.newRect(display.contentCenterX, display.contentCenterY, letterBoxWidth, display.contentHeight - letterBoxHeight)
 			gradientBackground:setFillColor( .1, .2, .3 )
 
-			titleBackground = display.newRect(display.contentCenterX, display.screenOriginY + display.viewableContentHeight/20, letterBoxWidth, display.viewableContentHeight/10)
+			titleBackground = display.newRect(display.contentCenterX, display.screenOriginY + display.contentHeight/20, letterBoxWidth, display.contentHeight/10)
 			titleBackground:setFillColor( .4, .5, .6 )
 
-			appIcon = display.newImageRect("android.app.icon://", display.viewableContentHeight/10, display.viewableContentHeight/10)
+			appIcon = display.newImageRect("android.app.icon://", display.contentHeight/10, display.contentHeight/10)
 			if appIcon then
 				appIcon.x = display.screenOriginX + appIcon.width/2
 				appIcon.y = display.screenOriginY + appIcon.height/2
@@ -342,7 +342,7 @@ handleCheckingForExpansionFiles = function()
 
 			screenText = display.newText(text1, display.contentCenterX, downloadProgressView.y + downloadProgressView.height, native.systemFont, textSize)
 			statusText= display.newText(progressText, display.contentCenterX, screenText.y + screenText.height, native.systemFont, textSize)
-			
+
 			--checks the width of the button text so that we can size the button appropriatly
 			local textSizeCalculation = display.newText(buttonText, 0, 0, native.systemFont, textSize)
 			local sizeOfButtonTextWidth = textSizeCalculation.width
@@ -352,8 +352,8 @@ handleCheckingForExpansionFiles = function()
 			startButton = widget.newButton{
 				left = display.screenOriginX,
 				top = statusText.y + statusText.height/2,
-				width = sizeOfButtonTextWidth + display.viewableContentWidth/20,
-				height = sizeOfButtonTextHeight + display.viewableContentHeight/40,
+				width = sizeOfButtonTextWidth + display.contentWidth/20,
+				height = sizeOfButtonTextHeight + display.contentHeight/40,
 				label = buttonText,
 				fontSize = textSize,
 				onEvent = startStopDownload,
@@ -399,7 +399,7 @@ handleCheckingForExpansionFiles = function()
 				    "[[ExpansionFileDirectory]]"..expansionFiles[tostring(currentFile)].fileName,
 				    system.TemporaryDirectory
 				)
-			end 
+			end
 		end
 
 		-- Goes to the external storage directory and checks to see if the file is there
@@ -407,7 +407,7 @@ handleCheckingForExpansionFiles = function()
 		checkForDownloaded = function()
 			local absPath = system.pathForFile("[[ExpansionFileDirectory]]"..expansionFiles[tostring(currentFile)].fileName, system.TemporaryDirectory)
 			local fileHandler = io.open(absPath)
-			while fileHandler and currentFile<=totalFiles do 
+			while fileHandler and currentFile<=totalFiles do
 				io.close(fileHandler)
 				totalFileSize = totalFileSize - lfs.attributes(absPath, "size")
 				totalFileSizeConverted = string.format("%4.2f", totalFileSize/1048576)
@@ -428,7 +428,7 @@ handleCheckingForExpansionFiles = function()
 		end
 
 		checkForSpace = function()
-			if totalFileSize > licensing.getAvailableExternalSpace() then 
+			if totalFileSize > licensing.getAvailableExternalSpace() then
 				native.showAlert("Problem downloading expansion file", "Not enough room in your external storage device.", {"Ok"})
 				return false
 			end
@@ -452,7 +452,7 @@ handleCheckingForExpansionFiles = function()
 					downloadNext()
 					onBackgroundOrientation(nil)
 				end
-			end		
+			end
 		end
 
 		-- deletes all files in the expansion file directory that isn't a needed expansion file
@@ -481,17 +481,15 @@ handleCheckingForExpansionFiles = function()
 			licensing.loadExpansionFiles()
 			removeAllUi()
 			Runtime:removeEventListener( "key", onKeyDown)
-			Runtime:removeEventListener( "orientation", onBackgroundOrientation )
 			callOnShellComplete(nil)
 			return
 		end
 
-		Runtime:addEventListener( "orientation", onBackgroundOrientation )
 		Runtime:addEventListener( "key", onKeyDown)
 
 		onBackgroundOrientation(nil)
 
-		if event.isError or (nil == hasSomething) then 
+		if event.isError or (nil == hasSomething) then
 			native.showAlert("Error", event.response, {"Ok"})
 			return
 		end
@@ -513,7 +511,7 @@ handleCheckingForExpansionFiles = function()
 		deleteOldExpansionFiles()
 		checkForDownloaded()
 		onBackgroundOrientation(nil)
-		
+
 		--automatically starts the expansion file download
 		local autoStart = {}
 	    autoStart.phase = "ended"

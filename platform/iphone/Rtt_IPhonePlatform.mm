@@ -22,8 +22,6 @@
 #include "Rtt_IPhoneScreenSurface.h"
 #include "Rtt_IPhoneVideoObject.h"
 #include "Rtt_IPhoneVideoPlayer.h"
-#include "Rtt_IPhoneWebPopup.h"
-#include "Rtt_IPhoneWebViewObject.h"
 
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaLibSystem.h"
@@ -126,7 +124,6 @@ IPhonePlatform::IPhonePlatform( CoronaView *view )
 	fImageProvider( NULL ),
 	fVideoProvider( NULL ),
 //	fDelegate( [[AlertViewDelegate alloc] init] ),
-	fWebPopup( NULL ),
 	fPopupControllerDelegate( [[PopupControllerDelegate alloc] init] )
 {
 //	[pView retain];
@@ -162,7 +159,6 @@ IPhonePlatform::IPhonePlatform( CoronaView *view )
 IPhonePlatform::~IPhonePlatform()
 {
 	[fPopupControllerDelegate release];
-	Rtt_DELETE( fWebPopup );
 	[fActivityView release];
 //	[fDelegate release];
 //	[fPeoplePickerDelegate release];
@@ -300,17 +296,6 @@ IPhonePlatform::SetActivityIndicator( bool visible ) const
 	}
 
 	fActivityView.hidden = ! visible;
-}
-
-PlatformWebPopup*
-IPhonePlatform::GetWebPopup() const
-{
-	if ( ! fWebPopup )
-	{
-		fWebPopup = Rtt_NEW( fAllocator, IPhoneWebPopup );
-	}
-
-	return fWebPopup;
 }
 
 // Returns an array of NSStrings. The object at index t is either a string
@@ -587,12 +572,6 @@ IPhonePlatform::HidePopup( const char *name ) const
 	Rtt_ASSERT_NOT_IMPLEMENTED();
 
 	return result;
-}
-
-PlatformDisplayObject*
-IPhonePlatform::CreateNativeWebView( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), IPhoneWebViewObject( bounds ) );
 }
 
 PlatformDisplayObject*

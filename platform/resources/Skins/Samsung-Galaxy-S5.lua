@@ -10,15 +10,11 @@
 simulator =
 {
 	device = "android-phone",
-	screenOriginX = 75,
-	screenOriginY = 223,
-	screenWidth = 1080,
-	screenHeight = 1920,
+	deviceWidth = 1920,
+	deviceHeight = 1080,
 	androidDisplayApproximateDpi = 480, -- xxhdpi
-	deviceImage = "Samsung-Galaxy-S5.png",
 	displayManufacturer = "samsung",
 	displayName = "SM-G900S",
-	supportsScreenRotation = true,
 	hasAccelerometer = true,
 	windowTitleBarName = "Samsung Galaxy S5",
 }

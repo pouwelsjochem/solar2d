@@ -47,8 +47,6 @@
 #define REGISTRY_CONSOLE_TOP _T("ConsoleTop")
 #define REGISTRY_CONSOLE_RIGHT _T("ConsoleRight")
 #define REGISTRY_CONSOLE_BOTTOM _T("ConsoleBottom")
-#define REGISTRY_ZOOM _T("Zoom")
-#define REGISTRY_ROTATION _T("Rotation")
 #define REGISTRY_NOWELCOME _T("NoWelcome")
 #define REGISTRY_SHOWERRORS _T("ShowRuntimeErrors")
 #define REGISTRY_AUTOOPEN _T("AutoOpenLastProject")
@@ -68,8 +66,6 @@
 #define REGISTRY_DEVICE_DEFAULT ""
 #define REGISTRY_XPOS_DEFAULT 0
 #define REGISTRY_YPOS_DEFAULT 0
-#define REGISTRY_ZOOM_DEFAULT 0
-#define REGISTRY_ROTATION_DEFAULT 0
 #define REGISTRY_NOWELCOME_DEFAULT 0
 #define REGISTRY_SHOWERRORS_DEFAULT 1
 #define REGISTRY_AUTOOPEN_DEFAULT 0
@@ -103,12 +99,6 @@ public:
 	CString GetDisplayName() { return m_sDisplayName; }
 	void PutDisplayName( CString sDevice )  { m_sDisplayName = sDevice; }
 	CRecentFileList* GetRecentFileList() { return m_pRecentFileList; }
-	int GetZoom() { return m_zoom; }
-	void PutZoom( int zoom )  { m_zoom = zoom; }
-	void LoadZoomFromRegistry();
-	void SaveZoomToRegistry( int zoom );
-	int GetRotation() { return m_rotation; }
-	void PutRotation( int rotation ) { m_rotation = rotation; }
 	void PutWP(const WINDOWPLACEMENT& newval);
 	void ShowProgressWnd( bool bShow, CWnd *pParent = NULL );
 	bool IsHomeScreenEnabled();
@@ -143,8 +133,6 @@ protected:
 
 	ULONG_PTR m_gdiplusToken;
     CString m_sDisplayName;
-    int m_zoom;      // 0 is normal, -1 is zoomed out once, 2 is zoomed in twice
-	int m_rotation;  // 0, 90, 180, 270
 	WINDOWPLACEMENT m_WP;
 	bool m_isDebugModeEnabled;
 	bool m_isLuaExitAllowed;

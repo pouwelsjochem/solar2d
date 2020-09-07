@@ -281,44 +281,6 @@ SystemOpenEvent::Push( lua_State *L ) const
 
 // ----------------------------------------------------------------------------
 
-OrientationEvent::OrientationEvent(
-	DeviceOrientation::Type type,
-	DeviceOrientation::Type previous )
-:	fType( type ),
-	fPreviousType( previous )
-{
-}
-
-const char*
-OrientationEvent::Name() const
-{
-	static const char kName[] = "orientation";
-	return kName;
-}
-
-int
-OrientationEvent::Push( lua_State *L ) const
-{
-	if ( Rtt_VERIFY( Super::Push( L ) ) )
-	{
-		const char* value = DeviceOrientation::StringForType( (DeviceOrientation::Type)fType );
-		if ( value )
-		{
-			lua_pushstring( L, value );
-			lua_setfield( L, -2, kTypeKey );
-		}
-
-		// Minus sign, b/c DeviceOrientation::CalculateRotation assumes positive angles
-		// are in the CCW direction whereas in our drawing model, positive angles are CW.
-		lua_pushinteger( L, - DeviceOrientation::CalculateRotation( (DeviceOrientation::Type)fPreviousType, (DeviceOrientation::Type)fType ) );
-		lua_setfield( L, -2, "delta" );
-	}
-
-	return 1;
-}
-
-// ----------------------------------------------------------------------------
-
 /// Creates a new event indicating that the main app window has been resized.
 ResizeEvent::ResizeEvent()
 {
@@ -1103,10 +1065,8 @@ void
 HitEvent::ScreenToContent( const Display& display, Real xScreen, Real yScreen, Real& outXContent, Real& outYContent )
 {
 	// Scale point: map screen coord to content coord
-	outXContent = Rtt_RealMul( xScreen, display.GetScreenToContentScale() );
-	outXContent -= display.GetXOriginOffset();
-	outYContent = Rtt_RealMul( yScreen, display.GetScreenToContentScale() );
-	outYContent -= display.GetYOriginOffset();
+	outXContent = Rtt_RealMul( xScreen - display.GetXScreenOffset(), display.GetScreenToContentScale() );
+	outYContent = Rtt_RealMul( yScreen - display.GetYScreenOffset(), display.GetScreenToContentScale() );
 }
 
 void

@@ -38,7 +38,6 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		// Derived class should return these when implementing the ProxyVTable() method
 		static const LuaProxyVTable& GetTextFieldObjectProxyVTable();
 		static const LuaProxyVTable& GetTextBoxObjectProxyVTable();
-		static const LuaProxyVTable& GetWebViewObjectProxyVTable();
 		static const LuaProxyVTable& GetVideoObjectProxyVTable();
 
 	public:
@@ -81,7 +80,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 
 	public:
 		void SetContentToScreenScale( Real newValue ) { fContentToScreenScale = newValue; }
-		Real GetContentToScreenScale() const { return fContentToScreenScale; }
+		S32 GetContentToScreenScale() const { return fContentToScreenScale; }
 
 		void GetContentOffsets( Real& outX, Real& outY ) const;
 

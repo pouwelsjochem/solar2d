@@ -16,7 +16,6 @@
 #define _Rtt_MacDevice_H__
 
 #include "Rtt_MPlatformDevice.h"
-#include "Rtt_DeviceOrientation.h"
 
 #include "Input/Rtt_PlatformInputDeviceManager.h"
 
@@ -63,9 +62,6 @@ class WinConsoleDevice : public MPlatformDevice
 		virtual bool HasEventSource( EventType type ) const;
 		virtual void SetAccelerometerInterval( U32 frequency ) const;
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
-
-	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
 
 	protected:
 

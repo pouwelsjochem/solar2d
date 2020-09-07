@@ -120,11 +120,6 @@ class CoronaSensorManager {
 					// Multitouch actually isn't handled in the sensor manager, but in the activity onTouch.
 					// But we'll use the sensor manager to determine if it's on or off.
 					break;
-					
-				case JavaToNativeShim.EventTypeOrientation:
-					// TODO: unimplemented
-					break;
-					
 				case JavaToNativeShim.EventTypeAccelerometer:
 					myAccelerometerMonitor.start();
 					break;
@@ -672,34 +667,27 @@ class CoronaSensorManager {
 	 * @param eventType		Event type
 	 */
 	private void stopType( final int eventType ) {
-		
-		// Safely grab handler.
-		android.os.Handler handler = getHandlerSafely();
-		
+		android.os.Handler handler = getHandlerSafely(); // Safely grab handler.
 		if (handler == null) {
 			return;
 		}
-		
-		// Run this on the main thread.
+
 		handler.post(new Runnable() {
 			@Override
 			public void run() {
 				switch ( eventType ) {
-				case JavaToNativeShim.EventTypeMultitouch:
-					// Multitouch actually isn't handled in the sensor manager, but in the activity onTouch.
-					break;
-					
-				case JavaToNativeShim.EventTypeOrientation:
-					// TODO:
-					break;
-				case JavaToNativeShim.EventTypeAccelerometer:
-					myAccelerometerMonitor.stop();
-					break;
-				case JavaToNativeShim.EventTypeGyroscope:
-					myGyroscopeMonitor.stop();
-					break;
+					case JavaToNativeShim.EventTypeMultitouch:
+						// Multitouch actually isn't handled in the sensor manager, but in the activity onTouch.
+						break;
+					case JavaToNativeShim.EventTypeAccelerometer:
+						myAccelerometerMonitor.stop();
+						break;
+					case JavaToNativeShim.EventTypeGyroscope:
+						myGyroscopeMonitor.stop();
+						break;
+				}
 			}
-		} );
+		});
 	}
 
 	/**

@@ -36,7 +36,6 @@ namespace Rtt
 	class WinImageProvider;
 	class WinVideoPlayer;
 	class WinVideoProvider;
-	class WinWebPopup;
 }
 class WinGLView;
 
@@ -95,14 +94,12 @@ class WinPlatform : public MPlatform
 					U32 buttonCount, LuaResource *resourcePointer) const;
 		virtual void CancelNativeAlert(NativeAlertRef alertReference, S32 buttonIndex) const;
 		virtual void SetActivityIndicator(bool visible) const;
-		virtual PlatformWebPopup* GetWebPopup() const;
 		virtual bool CanShowPopup(const char *name) const;
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
 		virtual PlatformDisplayObject* CreateNativeTextBox(const Rect& bounds) const;
 		virtual PlatformDisplayObject* CreateNativeTextField(const Rect& bounds) const;
 		virtual void SetKeyboardFocus(PlatformDisplayObject *textObject) const;
-		virtual PlatformDisplayObject* CreateNativeWebView(const Rect& bounds) const;
 		virtual PlatformDisplayObject* CreateNativeVideo(const Rect& bounds) const;
 		virtual Rtt_Real GetStandardFontSize() const;
 		virtual S32 GetFontNames(lua_State *L, int index) const;
@@ -153,7 +150,6 @@ class WinPlatform : public MPlatform
 		mutable WinImageProvider* fImageProvider;
 		mutable WinVideoProvider* fVideoProvider;
 		WinCrypto fCrypto;
-		mutable WinWebPopup *fWebPopup;
 		mutable PlatformFBConnect *fFBConnect;
 		WinExitCallback fExitCallback;
 		mutable bool fIsIdleTimerEnabled;

@@ -18,7 +18,7 @@
 #include "Core/Rtt_FileSystem.h"
 
 #if !defined( Rtt_NO_GUI )
-	#include "Rtt_GPUStream.h"
+	#include "Rtt_RenderingStream.h"
 	#include "Rtt_LuaContext.h"
 	#include "Rtt_LuaLibSystem.h"
 	#include "Rtt_LuaResource.h"

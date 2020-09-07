@@ -23,7 +23,6 @@ class IPhoneImageProvider;
 class IPhoneVideoProvider;
 class AppleStoreProvider;
 class IPhoneVideoPlayer;
-class IPhoneWebPopup;
 
 // ----------------------------------------------------------------------------
 
@@ -48,13 +47,10 @@ class IPhonePlatform : public IPhonePlatformCore
 
 		virtual void SetActivityIndicator( bool visible ) const;
 
-		virtual PlatformWebPopup* GetWebPopup() const;
-
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
 
-		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		virtual void SetTapDelay( Rtt_Real delay ) const;
@@ -78,7 +74,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		mutable AppleStoreProvider *fInAppStoreProvider;
 		UIView *fActivityView;
 		id fPopupControllerDelegate;
-		mutable IPhoneWebPopup *fWebPopup;
 };
 
 // ----------------------------------------------------------------------------

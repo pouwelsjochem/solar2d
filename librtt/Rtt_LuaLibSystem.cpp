@@ -21,7 +21,7 @@
 
 #include "Rtt_Runtime.h"
 #include "Rtt_GPU.h"
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 #include "Rtt_PlatformInAppStore.h"
 #include "Rtt_PreferenceCollection.h"
 #include "Core/Rtt_String.h"
@@ -1176,7 +1176,6 @@ FileExists( lua_State *L )
 }
 */
 
-static const char kOrientationName[] = "orientation";
 static const char kAccelerometerName[] = "accelerometer";
 static const char kGyroscopeName[] = "gyroscope";
 static const char kMultitouchName[] = "multitouch";
@@ -1189,11 +1188,7 @@ EventTypeForName( const char *eventName )
 {
 	MPlatformDevice::EventType result = MPlatformDevice::kUnknownEvent;
 
-	if ( strcmp( kOrientationName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kOrientationEvent;
-	}
-	else if ( strcmp( kAccelerometerName, eventName ) == 0 )
+	if ( strcmp( kAccelerometerName, eventName ) == 0 )
 	{
 		result = MPlatformDevice::kAccelerometerEvent;
 	}
@@ -1450,23 +1445,7 @@ LuaLibSystem::Initialize( lua_State *L )
 int
 LuaLibSystem::ValueForKey( lua_State *L, const MLuaProxyable&, const char key[] ) const
 {
-	if ( strcmp( "orientation", key ) == 0 )
-	{
-		DeviceOrientation::Type t = LuaContext::GetPlatform( L ).GetDevice().GetOrientation();
-		const char *str = DeviceOrientation::StringForType( t ); Rtt_ASSERT( str );
-		lua_pushstring( L, str );
-	}
-	else if ( strcmp( "launchOrientation", key ) == 0 )
-	{
-		DeviceOrientation::Type t = LuaContext::GetRuntime( L )->GetDisplay().GetLaunchOrientation();
-		const char *str = DeviceOrientation::StringForType( t ); Rtt_ASSERT( str );
-		lua_pushstring( L, str );
-	}
-	else
-	{
-		lua_pushnil( L );
-	}
-
+	lua_pushnil( L );
 	return 1;
 }
 

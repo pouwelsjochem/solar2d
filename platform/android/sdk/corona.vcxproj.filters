@@ -287,9 +287,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaActivityInfo.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaActivity.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -312,9 +309,6 @@
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\ActivityIndicatorDialog.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\WindowOrientation.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\ViewManager.java">
@@ -360,9 +354,6 @@
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\Crypto.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaWebView.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaView.java">

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-          package="@USER_ACTIVITY_PACKAGE@"
+		  tools:ignore="LockedOrientationActivity"
+		  package="@USER_ACTIVITY_PACKAGE@"
           android:installLocation="@USER_INSTALL_LOCATION@">
 
     @USER_PERMISSIONS@
@@ -36,10 +37,10 @@
 				  @USER_CORONA_ACTIVITY_ATTRIBUTES@
 				  android:configChanges="keyboard|keyboardHidden|navigation|screenSize|orientation"
 				  android:launchMode="singleTask"
+				  android:screenOrientation="sensorLandscape"
 		          android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 			@USER_CORONA_WINDOW_MOVES_WHEN_KEYBOARD_APPEARS@
 			@USER_INITIAL_SYSTEM_UI_VISIBILITY@
-			@USER_REQUESTED_DEFAULT_ORIENTATION@
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				@USER_MAIN_INTENT_FILTER_CATEGORIES@

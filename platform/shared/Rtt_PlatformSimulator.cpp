@@ -16,7 +16,6 @@
 #include "Rtt_PlatformSimulator.h"
 
 #include "Rtt_Archive.h"
-#include "Display/Rtt_Display.h"   // for AdjustPoint()
 #include "Rtt_Event.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaFile.h"
@@ -59,15 +58,11 @@ SimulatorOptions::~SimulatorOptions()
 
 // ----------------------------------------------------------------------------
 
-const S32 kDefaultConfigIntValue = -1;
-
 PlatformSimulator::Config::Config( Rtt_Allocator & allocator )
 :	configLoaded( false ),
 	platform( TargetDevice::kUnknownPlatform ),
-	deviceImageFile( & allocator ),
 	displayManufacturer( & allocator ),
 	displayName( & allocator ),
-	supportsScreenRotation( true ),
 	supportsExitRequests( true ),
 	supportsInputDevices( true ),
 	supportsKeyEvents( true ),
@@ -76,10 +71,8 @@ PlatformSimulator::Config::Config( Rtt_Allocator & allocator )
 	supportsMouse( true ),
 	supportsMultipleAlerts( false ),
 	isAlertButtonOrderRightToLeft( true ),
-	screenOriginX(0.0f),
-	screenOriginY(0.0f),
-	screenWidth(0.0f),
-	screenHeight(0.0f),
+	deviceWidth(0.0f),
+	deviceHeight(0.0f),
 	safeScreenInsetTop(0.0f),
 	safeScreenInsetLeft(0.0f),
 	safeScreenInsetBottom(0.0f),
@@ -91,49 +84,12 @@ PlatformSimulator::Config::Config( Rtt_Allocator & allocator )
 	hasAccelerometer( false ),
 	hasGyroscope( false ),
 	windowTitleBarName( & allocator ),
-	defaultFontSize(0.0f),
-	iosPointWidth(kDefaultConfigIntValue),
-	iosPointHeight(kDefaultConfigIntValue),
-	androidDisplayApproximateDpi(kDefaultConfigIntValue)
+	defaultFontSize(0.0f)
 {
 }
 
 PlatformSimulator::Config::~Config()
 {
-}
-
-S32
-PlatformSimulator::Config::GetAdaptiveWidth() const
-{
-	S32 result = PlatformSurface::kUninitializedVirtualLength;
-	
-	if ( iosPointWidth > 0 )
-	{
-		result = iosPointWidth;
-	}
-	else if ( androidDisplayApproximateDpi > 0 )
-	{
-		result = PlatformSurface::CalculateVirtualLength( PlatformSurface::kDefaultVirtualDPI, androidDisplayApproximateDpi, screenWidth );
-	}
-	
-	return result;
-}
-
-S32
-PlatformSimulator::Config::GetAdaptiveHeight() const
-{
-	S32 result = PlatformSurface::kUninitializedVirtualLength;
-
-	if ( iosPointHeight > 0 )
-	{
-		result = iosPointHeight;
-	}
-	else if ( androidDisplayApproximateDpi > 0 )
-	{
-		result = PlatformSurface::CalculateVirtualLength( PlatformSurface::kDefaultVirtualDPI, androidDisplayApproximateDpi, screenHeight );
-	}
-	
-	return result;
 }
 
 // ----------------------------------------------------------------------------
@@ -142,12 +98,7 @@ PlatformSimulator::PlatformSimulator( PlatformFinalizer finalizer )
 :	fPlatform( NULL ),
 	fPlayer( NULL ),
 	fPlatformFinalizer( finalizer ),
-	fProperties( 0 ),
-	fOrientation( DeviceOrientation::kUpright ),
-	fSupportedOrientations( 0 ),
-	fLastSupportedOrientation( DeviceOrientation::kUpright ),
-	fLastDeviceWidth( -1 ),
-	fLastDeviceHeight( -1 )
+	fProperties( 0 )
 {
 }
 
@@ -383,10 +334,8 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 				break;
 		}
 
-		rConfig.screenOriginX = (float) NumberForKey( L, "screenOriginX", 0 );
-		rConfig.screenOriginY = (float) NumberForKey( L, "screenOriginY", 0 );
-		rConfig.screenWidth = (float) NumberForKey( L, "screenWidth", 400 );
-		rConfig.screenHeight = (float) NumberForKey( L, "screenHeight", 400 );
+		rConfig.deviceWidth = (float) NumberForKey( L, "deviceWidth", 400 );
+		rConfig.deviceHeight = (float) NumberForKey( L, "deviceHeight", 400 );
 
 		rConfig.safeScreenInsetTop = (float) NumberForKey( L, "safeScreenInsetTop", 0 );
 		rConfig.safeScreenInsetLeft = (float) NumberForKey( L, "safeScreenInsetLeft", 0 );
@@ -397,21 +346,11 @@ PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 		rConfig.safeLandscapeScreenInsetBottom = (float) NumberForKey( L, "safeLandscapeScreenInsetBottom", 0 );
 		rConfig.safeLandscapeScreenInsetRight = (float) NumberForKey( L, "safeLandscapeScreenInsetRight", 0 );
 
-		rConfig.deviceImageFile.Set( StringForKey( L, "deviceImage", NULL ) );
 		rConfig.displayManufacturer.Set( StringForKey( L, "displayManufacturer", "unknown" ) );
 		rConfig.displayName.Set( StringForKey( L, "displayName", "Custom Device" ) );
-		rConfig.supportsScreenRotation = BoolForKey( L, "supportsScreenRotation", true );
 		rConfig.hasAccelerometer = BoolForKey( L, "hasAccelerometer", true );
-		rConfig.isUprightOrientationPortrait = BoolForKey( L, "isUprightOrientationPortrait", (rConfig.screenHeight > rConfig.screenWidth) );
 		rConfig.windowTitleBarName.Set( StringForKey( L, "windowTitleBarName", "Custom Device" ) );
 		rConfig.defaultFontSize = (float) NumberForKey( L, "defaultFontSize", 0 );
-
-		// iOS skin-specific
-		rConfig.iosPointWidth = (S32) IntForKey( L, "iosPointWidth", kDefaultConfigIntValue );
-		rConfig.iosPointHeight = (S32) IntForKey( L, "iosPointHeight", kDefaultConfigIntValue );
-
-		// Android skin-specific
-		rConfig.androidDisplayApproximateDpi = (S32) IntForKey( L, "androidDisplayApproximateDpi", kDefaultConfigIntValue );
 
 		lua_pop( L, 1 );
         
@@ -489,102 +428,6 @@ PlatformSimulator::LoadBuildSettings( const MPlatform& platform )
 	// Warn about logical errors in build.settings and config.lua
 	ValidateSettings(platform);
 
-	const char kBuildSettings[] = "build.settings";
-	
-	String filePath( & platform.GetAllocator() );
-	platform.PathForFile( kBuildSettings, MPlatform::kResourceDir, MPlatform::kTestFileExists, filePath );
-
-	const char *p = filePath.GetString();
-	if ( p != NULL ) // build.settings is optional
-	{
-		if ( 0 == luaL_loadfile( L, p )
-		  && 0 == lua_pcall( L, 0, 0, 0 ) )
-		{
-			lua_getglobal( L, "settings" );
-			if ( lua_istable( L, -1 ) )
-			{
-				lua_getfield( L, -1, "orientation" );
-				if ( lua_istable( L, -1 ) )
-				{
-					const char *orientation = StringForKey( L, "default", NULL );
-					DeviceOrientation::Type defaultOrientation = DeviceOrientation::TypeForString( orientation );
-
-					if ( DeviceOrientation::kUnknown == defaultOrientation
-					 || DeviceOrientation::kUpsideDown == defaultOrientation )
-					{
-						Rtt_WARN_SIM(
-									 DeviceOrientation::kUpsideDown != defaultOrientation,
-									 ( "WARNING: Applications cannot launch upside down. Launching in portrait.\n" ) );
-
-						defaultOrientation = DeviceOrientation::kUpright;
-					}
-					else
-					{
-						if ( 0 == Rtt_StringCompare( orientation, "landscape" ) )
-						{
-							defaultOrientation = DeviceOrientation::kSidewaysRight;
-						}
-					}
-
-					orientation = StringForKey( L, "content", NULL );
-					if ( orientation )
-					{
-						DeviceOrientation::Type content = DeviceOrientation::TypeForString( orientation );
-						if ( DeviceOrientation::kUnknown != content
-						 && DeviceOrientation::kUpsideDown != content ) // forbid simulator from launching upside down
-						{
-							if ( 0 == Rtt_StringCompare( orientation, "landscape" ) )
-							{
-								content = DeviceOrientation::kSidewaysRight;
-							}
-
-							Rtt_WARN_SIM( defaultOrientation == content,
-									  ( "WARNING: build.settings has different values for the default and content orientation. "
-									   "Using the content orientation for the launch orientation.\n" ) );
-
-							SetProperty( kIsOrientationLocked, true );
-
-							// content orientation overrides default
-							defaultOrientation = content;
-						}
-					}
-
-					if ( DeviceOrientation::IsInterfaceOrientation( defaultOrientation ) )
-					{
-						fOrientation = defaultOrientation;
-						SetOrientationSupported( defaultOrientation );
-					}
-
-					lua_getfield( L, -1, "supported" );
-					{
-						for ( int i = 1, iMax = (int) lua_objlen( L, -1 );
-						  i <= iMax;
-						  i++ )
-						{
-							lua_rawgeti( L, -1, i );
-							const char *value = lua_tostring( L, -1 );
-							DeviceOrientation::Type t = DeviceOrientation::TypeForString( value );
-							if ( DeviceOrientation::IsInterfaceOrientation( t ) )
-							{
-								SetOrientationSupported( t );
-							}
-							lua_pop( L, 1 );
-						}
-					}
-
-					lua_pop( L, 1 ); // pop supported
-				}
-				lua_pop( L, 1 ); // pop orientation
-			}
-			lua_pop( L, 1 ); // pop settings
-		}
-		else
-		{
-			Rtt_TRACE(("WARNING: Could not load 'build.settings': %s\n", lua_tostring( L, -1 )));
-			platform.RuntimeErrorNotification( "build.settings error", lua_tostring( L, -1 ), NULL );
-		}
-	}
-
 	lua_close( L );
 }
 
@@ -607,11 +450,7 @@ PlatformSimulator::Start( const SimulatorOptions& options )
 			? PlatformPlayer::InteractiveFilePath()
 			: PlatformPlayer::DefaultAppFilePath() );
 
-	fPlayer->Start( appFilePath, options.connectToDebugger, GetOrientation() );
-
-	fLastSupportedOrientation = GetOrientation();
-	fLastDeviceWidth = runtime.GetDisplay().DeviceWidth();
-	fLastDeviceHeight = runtime.GetDisplay().DeviceHeight();
+	fPlayer->Start( appFilePath, options.connectToDebugger );
 	
 	DidStart();
 }
@@ -633,9 +472,6 @@ PropertyMaskForEventType( MPlatformDevice::EventType type )
 
 	switch( type )
 	{
-		case MPlatformDevice::kOrientationEvent:
-			mask = PlatformSimulator::kOrientationEventMask;
-			break;
 		case MPlatformDevice::kAccelerometerEvent:
 			mask = PlatformSimulator::kAccelerometerEventMask;
 			break;
@@ -683,98 +519,6 @@ void
 PlatformSimulator::EndNotifications( MPlatformDevice::EventType type ) const
 {
 	const_cast< Self* >( this )->SetProperty( PropertyMaskForEventType( type ), false );
-}
-
-void
-PlatformSimulator::Rotate( bool clockwise )
-{
-	DeviceOrientation::Type oldOrientation = (DeviceOrientation::Type)fOrientation;
-	DeviceOrientation::Type orientation = oldOrientation;
-	orientation = (DeviceOrientation::Type)(orientation + ( clockwise ? -1 : 1 ));
-	if ( DeviceOrientation::kUnknown == orientation )
-	{
-		orientation = DeviceOrientation::kSidewaysLeft;
-	}
-	else if ( DeviceOrientation::kFaceUp == orientation )
-	{
-		orientation = DeviceOrientation::kUpright;
-	}
-
-	fOrientation = orientation;
-
-	DidRotate( clockwise, oldOrientation, orientation );
-
-	Rtt::Runtime& runtime = GetPlayer()->GetRuntime();
-
-	// Raise an orientation event, if enabled.
-	if ( IsProperty( kOrientationEventMask ) )
-	{
-		OrientationEvent event( orientation, oldOrientation );
-		runtime.DispatchEvent( event );
-	}
-
-	// Determine if the content width and height has changed.
-	// This is determined if the orientation has changed from portrait to landscape or vice-versa.
-	// Note: We have to ignore the render stream's content width and height because it wrongly swaps
-	//       these values when rotating to an orientation the app does not support.
-	bool hasContentWidthHeightChanged = false;
-	if (IsOrientationSupported(orientation))
-	{
-		if (DeviceOrientation::IsSideways(orientation) != DeviceOrientation::IsSideways(fLastSupportedOrientation))
-		{
-			hasContentWidthHeightChanged = true;
-		}
-		fLastSupportedOrientation = orientation;
-	}
-
-	// Raise a resize event if the simulated app's view has changed size.
-	// This is expected to be raised after the orientation event.
-	S32 currentDeviceWidth = runtime.GetDisplay().DeviceWidth();
-	S32 currentDeviceHeight = runtime.GetDisplay().DeviceHeight();
-	if (hasContentWidthHeightChanged ||
-	    (fLastDeviceWidth != currentDeviceWidth) ||
-	    (fLastDeviceHeight != currentDeviceHeight))
-	{
-		runtime.DispatchEvent( ResizeEvent() );
-	}
-	fLastDeviceWidth = currentDeviceWidth;
-	fLastDeviceHeight = currentDeviceHeight;
-
-	// On a real device, any orientation change would be accompanied by at least one accelerometer event
-	PlatformSimulator::Shake();
-}
-
-void
-PlatformSimulator::Shake()
-{
-	double gravity[] = { 0., 0., 0. };
-	switch ( fOrientation )
-	{
-		case DeviceOrientation::kUpright:		gravity[1] = -1.; break;
-		case DeviceOrientation::kUpsideDown:	gravity[1] = 1.; break;
-		case DeviceOrientation::kSidewaysLeft:	gravity[0] = 1.; break;
-		case DeviceOrientation::kSidewaysRight:	gravity[0] = -1.; break;
-	}
-
-	double instant[] = { 1.5, 1.5, 1.5 };
-	double deltaTime = 0.1;
-
-	AccelerometerEvent event( gravity, instant, instant, true, deltaTime );
-	GetPlayer()->GetRuntime().DispatchEvent( event );	
-}
-
-bool
-PlatformSimulator::IsOrientationSupported( DeviceOrientation::Type orientation )
-{
-	Rtt_ASSERT( DeviceOrientation::IsInterfaceOrientation( orientation ) );
-	return 0 != ( fSupportedOrientations & ( 1 << orientation ) );
-}
-
-void
-PlatformSimulator::SetOrientationSupported( DeviceOrientation::Type orientation )
-{
-	Rtt_ASSERT( DeviceOrientation::IsInterfaceOrientation( orientation ) );
-	fSupportedOrientations |= ( 1 << orientation );
 }
 
 void
@@ -846,50 +590,6 @@ PlatformSimulator::WillExit()
 {
 }
 
-void
-PlatformSimulator::DidChangeScale(float scalefactor)
-{
-}
-
-// TODO: This function should be called from adjustPoint() in GLview.mm as well as Windows code
-// Until then, the two functions need to be kept in sync.
-void
-PlatformSimulator::AdjustPoint( float& ptX, float& ptY, float viewWidth, float viewHeight, float zoomFactor )
-{
-	Rtt::Runtime *pRuntime = & (GetPlayer()->GetRuntime());
-	Rtt::Display& display = pRuntime->GetDisplay();
-
-    // Change point origin based on view orientation relative to screen orientation
-	const Rtt::DeviceOrientation::Type orientation = display.GetRelativeOrientation();
-	float x = ptX;
-	if ( Rtt::DeviceOrientation::kUpright == orientation )
-	{
-         // point origin unchanged
-	}
-	else if ( Rtt::DeviceOrientation::kSidewaysRight == orientation )
-	{
-		ptX = ptY;
-		ptY = viewWidth - x;
-	}
-	else if ( Rtt::DeviceOrientation::kUpsideDown == orientation )
-	{
-		ptX = viewWidth - ptX;
-		ptY = viewHeight - ptY;
-	}
-	else if ( Rtt::DeviceOrientation::kSidewaysLeft == orientation )
-	{
-		ptX = viewHeight - ptY;
-		ptY = x;
-	}
-	else 
-	{
-		Rtt_ASSERT_NOT_REACHED();
-	}
-
-    // Restore point's scale relative to current zoom factor
-    ptX = ptX / zoomFactor;
-    ptY = ptY / zoomFactor;
-}
 
 // ----------------------------------------------------------------------------
 

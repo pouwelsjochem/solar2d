@@ -131,16 +131,15 @@
 @property (nonatomic, readonly) int width;
 @property (nonatomic, readonly) int height;
 @property (nonatomic, readonly) bool resizable;
-@property (nonatomic, readonly) bool showWindowTitle;
 @property (nonatomic, readwrite, retain) CoronaWindowController *view;
 
-- (id) initParams:(NSString *)title path:(NSString *)path width:(int)w height:(int)h resizable:(bool) resizable showWindowTitle:(bool) showWindowTitle;
+- (id) initParams:(NSString *)title path:(NSString *)path width:(int)w height:(int)h resizable:(bool) resizable;
 
 @end
 
 @implementation ExtensionParams
 
-- (id) initParams:(NSString *)title path:(NSString *)path width:(int)w height:(int)h resizable:(bool) resizable showWindowTitle:(bool) showWindowTitle
+- (id) initParams:(NSString *)title path:(NSString *)path width:(int)w height:(int)h resizable:(bool) resizable
 {
 	self = [super init];
     
@@ -151,7 +150,6 @@
         _width = w;
         _height = h;
         _resizable = resizable;
-		_showWindowTitle = showWindowTitle;
         _view = nil;
 	}
     
@@ -240,10 +238,6 @@ static const NSInteger kCustomDeviceDefaultWidth = 1280;
 static const NSInteger kCustomDeviceDefaultHeight = 720;
 static const NSString* kCustomDeviceDefaultName = @"My Custom Device";
 static const NSInteger kCustomDeviceDefaultPlatformTag = kCustomDevicePlatformiOSTag;
-#if 0 // Add support for these later
-static const BOOL      kCustomDeviceDefaultIsRotatable = YES;
-static const BOOL      kCustomDeviceDefaultPortraitOrientation = NO;
-#endif
 
 static const int       kClearProjectSandboxMenuTag = 1001;
 
@@ -1119,7 +1113,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
             int width = 640;
             int height = 480;
 			bool resizable = false;
-			bool showWindowTitle = true;
             NSString *windowTitle = [NSString stringWithString:[extPath lastPathComponent]]; // default
             
             // Sanity check
@@ -1160,20 +1153,13 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 						lua_getfield( L, -1, "resizable" );
 						resizable = (int) lua_toboolean( L, -1 );
 						lua_pop( L, 1 );
-
-						lua_getfield( L, -1, "showWindowTitle" );
-						if (lua_type(L, -1) == LUA_TBOOLEAN)
-						{
-							showWindowTitle = (int) lua_toboolean( L, -1 );
-						}
-						lua_pop( L, 1 );
                     }
                 }
             }
 
             CoronaLuaDelete( L );
 
-            ExtensionParams *extParams = [[ExtensionParams alloc] initParams:windowTitle path:extPath width:width height:height resizable:resizable showWindowTitle:showWindowTitle];
+            ExtensionParams *extParams = [[ExtensionParams alloc] initParams:windowTitle path:extPath width:width height:height resizable:resizable];
             
             // If this is the builtin "Welcome" extension put it on the existing menuitem
             if ([extPath hasSuffix:[builtinExtDirectory stringByAppendingPathComponent:@"welcome"]])
@@ -1227,7 +1213,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 {
     Rtt_TRACE(("Starting extension: %s", [extParams.path UTF8String]));
         
-    __block CoronaWindowController *extView = [[[CoronaWindowController alloc] initWithPath:extParams.path width:extParams.width height:extParams.height title:extParams.title resizable:extParams.resizable showWindowTitle:extParams.showWindowTitle] autorelease];
+    __block CoronaWindowController *extView = [[[CoronaWindowController alloc] initWithPath:extParams.path width:extParams.width height:extParams.height title:extParams.title resizable:extParams.resizable] autorelease];
     Rtt::RuntimeDelegate *delegate = new Rtt::HomeScreenRuntimeDelegate( extView, extParams.path );
     [extView setRuntimeDelegate:delegate];
 
@@ -1343,17 +1329,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 {
 	NSArray *recentDocuments = [[NSDocumentController sharedDocumentController] recentDocumentURLs];
     return recentDocuments;
-	
-//    if ( [recentDocuments count] > 0 )
-//    {
-//		NSURL *appURL = [[recentDocuments objectAtIndex:0] URLByDeletingLastPathComponent];
-//		BOOL isDirectory = YES;
-//		
-//		if( [[NSFileManager defaultManager] fileExistsAtPath:[appURL path] isDirectory:&isDirectory] && isDirectory)
-//		{
-//			self.fAppPath = [appURL path];
-//		}
-//	}
 }
 
 // Note: Formerly, we had most of this code (particularly coronaInit in applicationDidFinishLaunching.
@@ -1599,7 +1574,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     return self.fAppPath != nil;
 }
 
-// This is used by the Main Menu to control enabling of things like the zoom in/out menu items
+// This is used by the Main Menu to control enabling of things
 -(BOOL) isRunning
 {
     NSWindow *mainWindow = [NSApp mainWindow];
@@ -1608,13 +1583,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     {
         if (mainWindow == [fHomeScreen window])
         {
-            // Welcome window is not zoomable
             return NO;
         }
         else
         {
-            // All others are
-            // TODO: allow extension windows to specify zoomibility
             return YES;
         }
     }
@@ -1753,12 +1725,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         [[NSUserDefaults standardUserDefaults] setObject:customDeviceName forKey:@"customDeviceName"];
         [[NSUserDefaults standardUserDefaults] setInteger:customDeviceWidth forKey:@"customDeviceWidth"];
         [[NSUserDefaults standardUserDefaults] setInteger:customDeviceHeight forKey:@"customDeviceHeight"];
-#if 0 // Add support for these later
-        // TODO: it doesn't look like anyone actually uses "Screen is Rotatable" (probably needs to be implemented in Skin*Window.mm and AppDelegate.mm)
-        [[NSUserDefaults standardUserDefaults] setBool:customDeviceIsRotatable forKey:@"customDeviceIsRotatable"];
-        // TODO: it doesn't look like anyone actually uses "Default Orientation is Portrait" (probably needs to be implemented in Skin*Window.mm)
-        [[NSUserDefaults standardUserDefaults] setBool:customDevicePortraitOrientation forKey:@"customDevicePortraitOrientation"];
-#endif
 		[[NSUserDefaults standardUserDefaults] setInteger:customDevicePlatformTag forKey:@"customDevicePlatformTag"];
 
         Rtt::TargetDevice::Skin skin = Rtt::TargetDevice::kCustomSkin;
@@ -2414,24 +2380,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	{
 		customDevicePlatformTag = kCustomDeviceDefaultPlatformTag;
 	}
-#if 0 // Add support for these later
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"customDeviceIsRotatable"] == nil)
-    {
-        customDeviceIsRotatable = kCustomDeviceDefaultIsRotatable;
-    }
-    else
-    {
-        customDeviceIsRotatable = [[NSUserDefaults standardUserDefaults] boolForKey:@"customDeviceIsRotatable"];
-    }
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"customDevicePortraitOrientation"] == nil)
-    {
-        customDevicePortraitOrientation = kCustomDeviceDefaultPortraitOrientation;
-    }
-    else
-    {
-        customDevicePortraitOrientation = [[NSUserDefaults standardUserDefaults] boolForKey:@"customDevicePortraitOrientation"];
-    }
-#endif
 
 	NSString* skinname = [[NSUserDefaults standardUserDefaults] stringForKey:kUserPreferenceUsersCurrentSelectedSkin];
 	if ( nil != skinname )
@@ -2581,10 +2529,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			}
 
 			customDeviceTemplate = [customDeviceTemplate stringByReplacingOccurrencesOfString:@"{customDevicePlatform}" withString:customDevicePlatform];
-#if 0 // Add support for these later
-            customDeviceTemplate = [customDeviceTemplate stringByReplacingOccurrencesOfString:@"{customDeviceIsRotatable}" withString:[NSString stringWithFormat:@"%s", (customDeviceIsRotatable ? "true" : "false")]];
-            customDeviceTemplate = [customDeviceTemplate stringByReplacingOccurrencesOfString:@"{customDevicePortraitOrientation}" withString:[NSString stringWithFormat:@"%s", (customDevicePortraitOrientation ? "true" : "false")]];
-#endif
             
             if (customDeviceTemplate != nil)
             {
@@ -2669,30 +2613,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (IBAction)showLiveServer:(id)sender
 {
 	[[NSWorkspace sharedWorkspace] launchApplication:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"]];
-}
-	
--(IBAction)rotateLeft:(id)sender
-{
-    if (fSimulator != NULL)
-    {
-        fSimulator->Rotate( false );
-    }
-}
-
--(IBAction)rotateRight:(id)sender
-{
-    if (fSimulator != NULL)
-    {
-        fSimulator->Rotate( true );
-    }
-}
-
--(IBAction)shake:(id)sender
-{
-	if (fSimulator != NULL)
-	{
-		fSimulator->Shake();
-	}
 }
 
 -(IBAction)back:(id)sender

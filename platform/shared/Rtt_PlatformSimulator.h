@@ -10,7 +10,6 @@
 #ifndef _Rtt_PlatformSimulator_H__
 #define _Rtt_PlatformSimulator_H__
 
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_MPlatform.h"
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_String.h"
@@ -65,11 +64,10 @@ class PlatformSimulator
 			kIsOrientationLocked = 0x0002,
 
 			// Event Masks
-			kOrientationEventMask	= 0x0100,
-			kAccelerometerEventMask = 0x0200,
-			kMultitouchEventMask		= 0x0400,
-			kGyroscopeEventMask		= 0x0800,
-			kMouseEventMask	= 0x1000,
+			kAccelerometerEventMask = 0x0100,
+			kMultitouchEventMask		= 0x0200,
+			kGyroscopeEventMask		= 0x0400,
+			kMouseEventMask	= 0x0800,
 		}
 		PropertyMask;
 
@@ -81,10 +79,8 @@ class PlatformSimulator
 
             bool configLoaded;
 			TargetDevice::Platform platform;
-			float screenOriginX;
-			float screenOriginY;
-			float screenWidth;
-			float screenHeight;
+			float deviceWidth;
+			float deviceHeight;
 			float safeScreenInsetTop;
 			float safeScreenInsetLeft;
 			float safeScreenInsetBottom;
@@ -94,10 +90,8 @@ class PlatformSimulator
 			float safeLandscapeScreenInsetBottom;
 			float safeLandscapeScreenInsetRight;
 			String osName;
-			String deviceImageFile;
 			String displayManufacturer;
 			String displayName;
-			bool supportsScreenRotation;
 			bool supportsExitRequests;
 			bool supportsInputDevices;
 			bool supportsKeyEvents;
@@ -106,21 +100,10 @@ class PlatformSimulator
 			bool supportsMouse;
 			bool supportsMultipleAlerts;
 			bool isAlertButtonOrderRightToLeft;
-			bool isUprightOrientationPortrait;
 			bool hasAccelerometer;
 			bool hasGyroscope;
 			String windowTitleBarName;
 			float defaultFontSize;
-
-			// iOS skin-specific
-			S32 iosPointWidth;
-			S32 iosPointHeight;
-
-			// Android skin-specific
-			S32 androidDisplayApproximateDpi;
-
-			S32 GetAdaptiveWidth() const;
-			S32 GetAdaptiveHeight() const;
 		};
 
 	public:
@@ -164,25 +147,7 @@ class PlatformSimulator
 		void BeginNotifications( MPlatformDevice::EventType type ) const;
 		void EndNotifications( MPlatformDevice::EventType type ) const;
 
-		void Rotate( bool clockwise );
-		virtual void Shake();
-		DeviceOrientation::Type GetOrientation() const { return (DeviceOrientation::Type)fOrientation; }
 		virtual const char *GetOSName() const { return "simulator"; }
-
-		virtual void DidRotate( bool clockwise, DeviceOrientation::Type start, DeviceOrientation::Type end ) = 0;
-
-		// Optional callback for systems when the zoom/scale change finishes.
-		// On Mac, it is used to save the scale factor to user preferences so the next launch can be reopened at the same level.
-		virtual void DidChangeScale( float scalefactor );
-
-        // call before passing point to TouchEvent, etc.
-		void AdjustPoint( float& ptX, float& ptY, float viewWidth, float viewHeight, float zoomFactor );
-
-	public:
-		bool IsOrientationSupported( DeviceOrientation::Type orientation );
-
-	protected:
-		void SetOrientationSupported( DeviceOrientation::Type orientation );
 
 	public:
 		const PlatformPlayer* GetPlayer() const { return fPlayer; }
@@ -204,11 +169,6 @@ class PlatformSimulator
 		PlatformPlayer* fPlayer;
 		PlatformFinalizer fPlatformFinalizer;
 		mutable U32 fProperties;
-		S8 fOrientation;
-		U8 fSupportedOrientations;
-		DeviceOrientation::Type fLastSupportedOrientation;
-		S32 fLastDeviceWidth;
-		S32 fLastDeviceHeight;
 };
 
 // ----------------------------------------------------------------------------

@@ -14,7 +14,7 @@
 #include "Interop\Graphics\FontServices.h"
 #include "Interop\Graphics\HorizontalAlignment.h"
 #include "Interop\RuntimeEnvironment.h"
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 #include "Rtt_WinFont.h"
 #include "WinString.h"
 #include <windows.h>

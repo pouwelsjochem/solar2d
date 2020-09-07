@@ -71,14 +71,8 @@ DEFINE_ENUM_FLAG_OPERATORS(Rtt::Runtime::LaunchOptions)
 
 #pragma region Timer IDs
 static const UINT TIMER_ID_CHECK_APP = 1;
-static const UINT TIMER_ID_SHAKE_WINDOW = 2;
 
 #pragma endregion
-
-
-// Utility function
-Gdiplus::RotateFlipType DegreesToRFType( int rotation );
-
 
 #pragma region Message Mappings
 IMPLEMENT_DYNCREATE(CSimulatorView, CView)
@@ -94,10 +88,7 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_COMMAND(ID_HELP, &CSimulatorView::OnHelp)
 	ON_COMMAND(ID_VIEW_HOME_SCREEN, &CSimulatorView::OnViewHomeScreen)
 	ON_COMMAND(ID_VIEW_CONSOLE, &CSimulatorView::OnViewConsole)
-	ON_COMMAND(ID_VIEW_SHAKE, &CSimulatorView::OnViewShake)
 	ON_COMMAND(ID_VIEW_SUSPEND, &CSimulatorView::OnViewSuspend)
-	ON_COMMAND(ID_VIEW_ROTATELEFT, &CSimulatorView::OnViewRotateLeft)
-	ON_COMMAND(ID_VIEW_ROTATERIGHT, &CSimulatorView::OnViewRotateRight)
 	ON_COMMAND(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnViewNavigateBack)
 	ON_COMMAND(ID_FILE_MRU_FILE1, &CSimulatorView::OnFileMRU1)
 	ON_COMMAND(ID_FILE_NEW, &CSimulatorView::OnFileNew)
@@ -154,15 +145,10 @@ CSimulatorView::CSimulatorView()
 
 	CoInitialize(nullptr);
 
-    mRotation = 0;  // current rotation
-    mpSkinBitmap = nullptr;
 	mRuntimeEnvironmentPointer = nullptr;
 	mIsShowingInternalScreen = false;
 	mDisplayName = applicationPointer->GetDisplayName();
 	mAppChangeHandle = nullptr;
-	mShakeAmount = SIM_SHAKE_AMOUNT;
-	mShakeReps = SIM_SHAKE_REPS;
-	mShakeNum = 0;
 	m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
 	mRelaunchCount = 0;
 }
@@ -226,13 +212,6 @@ void CSimulatorView::OnUpdate(CView* pSender, LPARAM lHint, CObject *pHint)
 void CSimulatorView::OnDestroy()
 {
 	StopSimulation();
-
-	if (mpSkinBitmap)
-	{
-		delete mpSkinBitmap;
-		mpSkinBitmap = nullptr;
-	}
-
 	CView::OnDestroy();
 }
 
@@ -400,22 +379,6 @@ void CSimulatorView::OnTimer(UINT nIDEvent)
 		}
 
 		break;
-
-	case TIMER_ID_SHAKE_WINDOW:
-
-		if (mShakeNum < mShakeReps)
-		{
-			int offset = ((mShakeNum % 2) == 0) ? mShakeAmount : -(mShakeAmount * 2);
-			AfxGetMainWnd()->MoveWindow(mShakeOriginRect.left + offset, mShakeOriginRect.top, mShakeOriginRect.Width(), mShakeOriginRect.Height(), true);
-			++mShakeNum;
-		}
-		else
-		{
-			// We're done, make sure the window is back where it should be
-			AfxGetMainWnd()->MoveWindow(mShakeOriginRect, true);
-			KillTimer(TIMER_ID_SHAKE_WINDOW);   
-		}
-		break;
 	}
 }
 
@@ -433,48 +396,21 @@ void CSimulatorView::OnDraw(CDC* pDC)
 	CRect rect;
 	GetClientRect(&rect);
 
-	// Fetch the device bitmap to draw if a device was selected.
-	// Ignore the device bitmap if the view is currently showing the home screen.
-	Gdiplus::Bitmap *pBitmap = NULL;
 	COLORREF backgroundColor = RGB(255, 255, 255);
-
 	if (false == mIsShowingInternalScreen)
 	{
-		pBitmap = GetSkinBitmap();
-		// TODO: implement background color in skin Lua
-		if (!pBitmap || (GetDisplayName() == "iPad Retina"))
-		{
-			// Use a black background for skinless devices or white devices.
-			backgroundColor = RGB(0, 0, 0);
-		}
+		backgroundColor = RGB(0, 0, 0);
 	}
 
-	// Draw the background.
-	if (pBitmap)
-	{
-		// Draw the device image in the background.
-		CDC dcMemory;
-		CBitmap mfcbitmap;
-		HBITMAP hBmp;
-		dcMemory.CreateCompatibleDC(pDC);
-		pBitmap->GetHBITMAP(backgroundColor, &hBmp);
-		mfcbitmap.Attach(hBmp);
-		dcMemory.SelectObject(&mfcbitmap);
-		pDC->SetStretchBltMode(COLORONCOLOR);  // improves skin rendering dramatically
-		pDC->StretchBlt(0, 0, rect.Width(), rect.Height(), &dcMemory, 0, 0, pBitmap->GetWidth(), pBitmap->GetHeight(), SRCCOPY);
-	}
-	else
-	{
-		// Draw a solid background.
-		CBrush brush(backgroundColor);
-		CBrush* pOldBrush = pDC->SelectObject(&brush);
-		CPen pen;
-		pen.CreatePen(PS_SOLID, 3, backgroundColor);
-		CPen* pOldPen = pDC->SelectObject(&pen);
-		pDC->Rectangle(rect);
-		pDC->SelectObject(pOldBrush);
-		pDC->SelectObject(pOldPen);
-	}
+	// Draw a solid background.
+	CBrush brush(backgroundColor);
+	CBrush* pOldBrush = pDC->SelectObject(&brush);
+	CPen pen;
+	pen.CreatePen(PS_SOLID, 3, backgroundColor);
+	CPen* pOldPen = pDC->SelectObject(&pen);
+	pDC->Rectangle(rect);
+	pDC->SelectObject(pOldBrush);
+	pDC->SelectObject(pOldPen);
 }
 
 // OnEraseBkgnd - do nothing, to minimize flickering
@@ -517,7 +453,6 @@ void CSimulatorView::OnViewHomeScreen()
 	// Display the home screen.
 	StopSimulation();
 	GetParentFrame()->OnUpdateFrameTitle(FALSE);
-	SetRotation(0);
 	RunCoronaProject(((CSimulatorApp*)AfxGetApp())->GetResourceDir() + _T("\\homescreen"));
 
 }
@@ -526,18 +461,6 @@ void CSimulatorView::OnViewHomeScreen()
 void CSimulatorView::OnViewConsole()
 {
 	((CSimulatorApp*)AfxGetApp())->GetOutputViewerProcessPointer()->RequestShowMainWindow();
-}
-
-// OnViewShake - handle Shake menu item
-void CSimulatorView::OnViewShake()
-{
-	if (mRuntimeEnvironmentPointer && mRuntimeEnvironmentPointer->GetDeviceSimulatorServices())
-	{
-		mRuntimeEnvironmentPointer->GetDeviceSimulatorServices()->Shake();
-		mShakeNum = 0;
-		AfxGetMainWnd()->GetWindowRect(&mShakeOriginRect);
-		SetTimer(TIMER_ID_SHAKE_WINDOW, SIM_SHAKE_PERIOD, NULL);
-	}
 }
 
 // OnViewSuspend - handle Suspend/Resume menu item
@@ -557,62 +480,6 @@ void CSimulatorView::OnUpdateViewSuspend(CCmdUI *pCmdUI)
 	CString sCaption;
 	sCaption.LoadString(id);
 	pCmdUI->SetText( sCaption );
-}
-
-// OnViewRotateLeft - change rotation value, tell corona core, update skin
-void CSimulatorView::OnViewRotateLeft()
-{
-	// Do not rotate the welcome screen.
-	if (mIsShowingInternalScreen)
-	{
-		return;
-	}
-
-	// Do not continue if the simulated device's screen does not support rotation.
-	if (false == mDeviceConfig.supportsScreenRotation)
-	{
-		return;
-	}
-
-	// Rotate the simulated device.
-    SetRotation( GetRotation() + 270 );
-	if (GetSkinBitmap() != NULL)
-	{
-		GetSkinBitmap()->RotateFlip( Gdiplus::Rotate270FlipNone );
-	}
-	if (mRuntimeEnvironmentPointer && mRuntimeEnvironmentPointer->GetDeviceSimulatorServices())
-	{
-		mRuntimeEnvironmentPointer->GetDeviceSimulatorServices()->RotateCounterClockwise();
-	}
-    UpdateSimulatorSkin();
-}
-
-// OnViewRotateRight - change rotation value, tell corona core, update skin
-void CSimulatorView::OnViewRotateRight()
-{
-	// Do not rotate the welcome screen.
-	if (mIsShowingInternalScreen)
-	{
-		return;
-	}
-
-	// Do not continue if the simulated device's screen does not support rotation.
-	if (false == mDeviceConfig.supportsScreenRotation)
-	{
-		return;
-	}
-
-	// Rotate the simulated device.
-    SetRotation( GetRotation() + 90 );
-	if (GetSkinBitmap() != NULL)
-	{
-		GetSkinBitmap()->RotateFlip( Gdiplus::Rotate90FlipNone );
-	}
-	if (mRuntimeEnvironmentPointer && mRuntimeEnvironmentPointer->GetDeviceSimulatorServices())
-	{
-		mRuntimeEnvironmentPointer->GetDeviceSimulatorServices()->RotateClockwise();
-	}
-	UpdateSimulatorSkin();
 }
 
 void CSimulatorView::OnViewNavigateBack()
@@ -1542,43 +1409,7 @@ void CSimulatorView::OnRuntimeLoaded(Interop::RuntimeEnvironment& sender, const 
 				mRuntimeEnvironmentPointer->GetUtf8PathFor(Rtt::MPlatform::kDocumentsDir)));
 	}
 
-	// Fetch the loaded app's default rotation/orientation.
-	int launchRotation = 0;
-	if (mRuntimeEnvironmentPointer->GetDeviceSimulatorServices())
-	{
-		auto orientation = mRuntimeEnvironmentPointer->GetDeviceSimulatorServices()->GetOrientation();
-		switch (orientation)
-		{
-			case Rtt::DeviceOrientation::kUpright:
-				launchRotation = 0;
-				break;
-			case Rtt::DeviceOrientation::kSidewaysRight:	// bottom of device is to the right
-				launchRotation = 270;
-				break;
-			case Rtt::DeviceOrientation::kUpsideDown:		// bottom of device is at the top
-				launchRotation = 180;
-				break;
-			case Rtt::DeviceOrientation::kSidewaysLeft:		// bottom of device is to the left
-				launchRotation = 90;
-				break;
-		}
-	}
-
-	// Rotate the device skin's bitmap to match the app's rotation.
-	int diffRotation = launchRotation - GetRotation();
-	if( diffRotation < 0 )
-	{
-        diffRotation += 360;
-	}
-	if (NULL != GetSkinBitmap())
-	{
-		GetSkinBitmap()->RotateFlip( DegreesToRFType( diffRotation ) );
-	}
-	
-	// Store the rotation value.
-	SetRotation( launchRotation );
-
-	// Update the window for the current skin and rotation.
+	// Update the window for the current skin.
 	UpdateSimulatorSkin();
 }
 
@@ -1810,16 +1641,6 @@ bool CSimulatorView::IsSimulationSuspended() const
 // InitializeSimulation - select new skin and update
 bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId)
 {
-	int zoom = (int) AfxGetApp()->GetProfileInt(REGISTRY_SECTION, REGISTRY_ZOOM, REGISTRY_ZOOM_DEFAULT);
-	int rotation = AfxGetApp()->GetProfileInt(REGISTRY_SECTION, REGISTRY_ROTATION, REGISTRY_ROTATION_DEFAULT);
-
-	// Restore the remembered zoom level and rotation
-	CMainFrame *pMainWnd = (CMainFrame *)GetParentFrame();
-	ASSERT(pMainWnd);
-
-	pMainWnd->SetZoom(zoom);
-	SetRotation(rotation);
-
 	if (skinId == Rtt::TargetDevice::kCustomSkin)
 	{
 		mDisplayName = _T("CustomDevice");
@@ -1842,9 +1663,7 @@ bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId)
 	return skinLoaded;
 }
 
-// UpdateSimulatorSkin - Update main window size & skin based on display type, 
-// zoom state, rotation state.
-// CMainFrame handles resizing the window for zoom & rotate
+// UpdateSimulatorSkin - Update main window size & skin based on display type
 void CSimulatorView::UpdateSimulatorSkin()
 {
 	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
@@ -1852,14 +1671,7 @@ void CSimulatorView::UpdateSimulatorSkin()
 	// Determine what the size of the client area of the window needs to be.
     UINT clientWidth = 0;
     UINT clientHeight = 0;
-	Gdiplus::Bitmap *pBitmap = mIsShowingInternalScreen ? nullptr : GetSkinBitmap();
-    if (pBitmap)
-	{
-		// A simulator skin was loaded by InitSkin(). Use the already rotated bitmap's dimensions.
-		clientWidth = pBitmap->GetWidth();
-		clientHeight = pBitmap->GetHeight();
-	}
-	else if (mIsShowingInternalScreen)
+	if (mIsShowingInternalScreen)
 	{
 		// We are not simulating a device. Use the runtime's width and height.
 		if (mRuntimeEnvironmentPointer && mRuntimeEnvironmentPointer->GetRuntime())
@@ -1891,19 +1703,8 @@ void CSimulatorView::UpdateSimulatorSkin()
 	}
 	else
 	{
-		// We're simulating a skinless device such as an Ouya or GameStick.
-		if (mDeviceConfig.supportsScreenRotation)
-		{
-			bool isUpright = ((GetRotation() == 0) || (GetRotation() == 180));
-			clientWidth = (UINT)(isUpright ? mDeviceConfig.screenWidth : mDeviceConfig.screenHeight);
-			clientHeight = (UINT)(isUpright ? mDeviceConfig.screenHeight : mDeviceConfig.screenWidth);
-		}
-		else
-		{
-			bool isPortrait = mDeviceConfig.isUprightOrientationPortrait;
-			clientWidth = (UINT)(isPortrait ? mDeviceConfig.screenWidth : mDeviceConfig.screenHeight);
-			clientHeight = (UINT)(isPortrait ? mDeviceConfig.screenHeight : mDeviceConfig.screenWidth);
-		}
+		clientWidth = mDeviceConfig.deviceWidth;
+		clientHeight = mDeviceConfig.deviceHeight;
 	}
 	
 	// Validate width and height.
@@ -1927,84 +1728,16 @@ void CSimulatorView::UpdateSimulatorSkin()
 		return;
 	}
 	
-	// Calculate a good zoom factor for the window to size itself to.
-	if (mIsShowingInternalScreen)
-	{
-		// We are displaying the Home or Demo screens.
-		// Set the zoom factor to 0, which means do not zoom.
-		pMainWnd->SetZoom(0);
-	}
-	else
-	{
-		// Zoom in/out to fit the device skin.
-		pMainWnd->AdjustZoom(clientWidth, clientHeight);
-	}
-	float zoomFactor = pMainWnd->CalcZoomFactor();
-	
 	// Set the client window size that will render the device skin and the Corona contents.
 	clientBounds.top = 0;
 	clientBounds.left = 0;
-	clientBounds.right = (int)floor(zoomFactor * clientWidth);
-	clientBounds.bottom = (int)floor(zoomFactor * clientHeight);
+	clientBounds.right = clientWidth;
+	clientBounds.bottom = clientHeight;
 	pMainWnd->SizeToClient(clientBounds);
 	
 	// Calculate the bounds of the Corona control.
 	CRect coronaBounds;
-	if (pBitmap)
-	{
-		// We're displaying a skin. So, set the bounds of the Corona control in the skin's screen region.
-		// Note: The skin's origin is in the bottom-left corner. We need to flip it to the top-left corner for Windows.
-		bool isUpright = ((GetRotation() == 0) || (GetRotation() == 180));
-		LONG unrotatedBitmapWidth = isUpright ? pBitmap->GetWidth() : pBitmap->GetHeight();
-		LONG unrotatedBitmapHeight = isUpright ? pBitmap->GetHeight() : pBitmap->GetWidth();
-		coronaBounds.top = unrotatedBitmapHeight - (LONG)(mDeviceConfig.screenOriginY + mDeviceConfig.screenHeight + 0.5f);
-		coronaBounds.left = (LONG)(mDeviceConfig.screenOriginX + 0.5f);
-		coronaBounds.bottom = unrotatedBitmapHeight - (LONG)(mDeviceConfig.screenOriginY + 0.5f);
-		coronaBounds.right = (LONG)(mDeviceConfig.screenOriginX + mDeviceConfig.screenWidth + 0.5f);
-
-		// Rotate the Corona control bounds if the skin is rotated.
-		switch (GetRotation())
-		{
-			case 90:
-			{
-				CRect rotatedBounds;
-				rotatedBounds.left = unrotatedBitmapHeight - coronaBounds.bottom;
-				rotatedBounds.top = coronaBounds.left;
-				rotatedBounds.right = unrotatedBitmapHeight - coronaBounds.top;
-				rotatedBounds.bottom = coronaBounds.right;
-				coronaBounds = rotatedBounds;
-				break;
-			}
-			case 180:
-			{
-				CRect rotatedBounds;
-				rotatedBounds.left = unrotatedBitmapWidth - coronaBounds.right;
-				rotatedBounds.top = unrotatedBitmapHeight - coronaBounds.bottom;
-				rotatedBounds.right = unrotatedBitmapWidth - coronaBounds.left;
-				rotatedBounds.bottom = unrotatedBitmapHeight - coronaBounds.top;
-				coronaBounds = rotatedBounds;
-				break;
-			}
-			case 270:
-			{
-				CRect rotatedBounds;
-				rotatedBounds.left = coronaBounds.top;
-				rotatedBounds.top = unrotatedBitmapWidth - coronaBounds.right;
-				rotatedBounds.right = coronaBounds.bottom;
-				rotatedBounds.bottom = unrotatedBitmapWidth - coronaBounds.left;
-				coronaBounds = rotatedBounds;
-				break;
-			}
-		}
-
-		// Apple the zoom level scale.
-		ScaleRect(coronaBounds, zoomFactor);
-	}
-	else
-	{
-		// Not showing a skin. Use the same bounds as the window's client area.
-		coronaBounds.CopyRect(&clientBounds);
-	}
+	coronaBounds.CopyRect(&clientBounds);
 	mCoronaContainerControl.MoveWindow(coronaBounds, FALSE);
 
     // Set size, position, and visibility of view window
@@ -2114,10 +1847,6 @@ void CSimulatorView::RunCoronaProject()
         {
             filePath = applicationPointer->GetHomeScreenFilePath();
         }
-        else
-        {
-            applicationPointer->LoadZoomFromRegistry();
-        }
     }
 
     // Run the Corona project.
@@ -2153,7 +1882,6 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 		sParentDir = sParentDir.Left( sParentDir.ReverseFind(_T('\\')) );
 		CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
 		applicationPointer->SetWorkingDir( sParentDir );
-		applicationPointer->LoadZoomFromRegistry();
 	}
 	
 	// If we're opening the "home screen" project, then show the home menu.
@@ -2266,7 +1994,7 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 		}
 	}
 	
-	// Update the size of the window to match the project's default orientation and configured skin, if specified.
+	// Update the size of the window to match the project's configured skin, if specified.
 	EnableWindow(TRUE);	// in case we were suspended
 	if (!mRuntimeEnvironmentPointer)
 	{
@@ -2289,38 +2017,6 @@ Rtt::TargetDevice::Skin CSimulatorView::SkinIDFromMenuID( UINT nMenuID )
 	Rtt::TargetDevice::Skin skinID = (Rtt::TargetDevice::Skin) ( nMenuID - ID_VIEWAS_BEGIN );
 
 	return skinID;
-}
-
-// SetRotation - validate rotation value and set member variable
-void CSimulatorView::SetRotation( int rotation )
-{
-    // only 0, 90, 180, 270 are valid
-	rotation = rotation % 360;
-	if (rotation < 90)  // neg. numbers are set to 0
-        rotation = 0;
-	else if( rotation < 180)
-        rotation = 90;
-	else if( rotation < 270)
-        rotation = 180;
-	else if( rotation < 360 )
-        rotation = 270;
-
-	// Store the given rotation value.
-	CSimulatorApp *applicationPointer = ((CSimulatorApp*)AfxGetApp());
-	if (applicationPointer)
-	{
-		applicationPointer->PutRotation(rotation);
-	}
-	mRotation = rotation;
-}
-
-// ScaleRect - Multiply all members of a rect by a scale factor.  Modifies rect.
-void CSimulatorView::ScaleRect( CRect& rect, float scale )
-{
-    rect.left = (LONG) floor( rect.left * scale );
-    rect.top = (LONG) floor( rect.top * scale );
-    rect.right = (LONG) floor( rect.right * scale );
-    rect.bottom = (LONG) floor( rect.bottom * scale );
 }
 
 // InitSkin - Load device bitmap and rotate as needed
@@ -2349,39 +2045,9 @@ bool CSimulatorView::InitSkin( Rtt::TargetDevice::Skin skinId )
 
 	PathRemoveFileSpec(skinPathBuf);
 
-	// Delete the last loaded bitmap.
-    if (mpSkinBitmap != NULL)
-	{
-        delete mpSkinBitmap;
-		mpSkinBitmap = NULL;
-	}
-	
+
 	// Load the skin's configuration in Lua.
 	Rtt::PlatformSimulator::LoadConfig(skinFile.GetUTF8(), mDeviceConfig);
-	CString sPath( mDeviceConfig.deviceImageFile.GetString() );
-
-	// Load skin image file as a bitmap.
-	if (sPath.GetLength() > 0)
-	{
-		PathAppend(skinPathBuf, sPath);
-
-		mpSkinBitmap = Gdiplus::Bitmap::FromFile(CStringW(skinPathBuf));
-		if (mpSkinBitmap && (mpSkinBitmap->GetLastStatus() == Gdiplus::Ok))
-		{
-			// Match bitmap orientation to current window rotation.
-			mpSkinBitmap->RotateFlip( DegreesToRFType( GetRotation() ) );
-		}
-		else
-		{
-			// Image file not found or failed to load it.
-			// Assume the simulated device is skinless and continue.
-			if (mpSkinBitmap)
-			{
-				delete mpSkinBitmap;
-				mpSkinBitmap = NULL;
-			}
-		}
-	}
 	
 	// Device skin was loaded successfully. It will be drawn within UpdateSimulatorSkin().
     return true;
@@ -2584,23 +2250,6 @@ void CSimulatorView::RemoveUnauthorizedMenuItemsFrom(CMenu* menuPointer)
 			}
 		}
 	}
-}
-
-// DegressToRFType - Convert rotation in degress to RotateFlipType
-Gdiplus::RotateFlipType DegreesToRFType( int rotation )
-{
-    switch (rotation)
-	{
-	    case 0:
-			return Gdiplus::RotateNoneFlipNone;
-	    case 90:
-			return Gdiplus::Rotate90FlipNone;
-	    case 180:
-			return Gdiplus::Rotate180FlipNone;
-	    case 270:
-			return Gdiplus::Rotate270FlipNone;
-	}
-	return Gdiplus::RotateNoneFlipNone;
 }
 
 #pragma endregion

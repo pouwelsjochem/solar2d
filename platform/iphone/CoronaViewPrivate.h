@@ -12,13 +12,11 @@
 #import <UIKit/UIKit.h>
 
 #import "CoronaRuntime.h"
-#include "Rtt_DeviceOrientation.h"
 
 
 // ----------------------------------------------------------------------------
 
 @class CoronaViewController;
-@protocol CoronaOrientationObserver;
 @protocol CoronaGyroscopeObserver;
 
 // C++ Forward Declarations
@@ -57,28 +55,15 @@ class IPhonePlatformBase;
 @property (nonatomic, assign) id< CoronaRuntime > pluginContext; // Weak reference. CoronaViewController has the strong reference.
 @property (nonatomic, assign) id< CoronaViewLaunchDelegate > launchDelegate;
 
-@property (nonatomic, assign) id< CoronaOrientationObserver > orientationObserver;
 @property (nonatomic, assign) id< CoronaGyroscopeObserver > gyroscopeObserver;
-
-+ (Rtt::DeviceOrientation::Type)deviceOrientationForString:(NSString *)value;
-+ (Rtt::DeviceOrientation::Type)defaultOrientation;
 
 - (void)initializeRuntimeWithPlatform:(Rtt::IPhonePlatformBase *)platform runtimeDelegate:(Rtt::CoronaViewRuntimeDelegate *)runtimeDelegate;
 
 - (NSInteger)runWithPath:(NSString*)path parameters:(NSDictionary *)params;
 
-- (NSInteger)runWithPath:(NSString*)path parameters:(NSDictionary *)params orientation:(Rtt::DeviceOrientation::Type)orientation;
-
 - (NSInteger)beginRunLoop;
 
-- (BOOL)simulateCommand:(NSDictionary *)options;
-
 - (void)terminate;
-
-#ifdef Rtt_ORIENTATION
-- (void)didOrientationChange:(id)sender;
-- (void)notifyRuntimeAboutOrientationChange:(UIInterfaceOrientation)toInterfaceOrientation;
-#endif
 
 - (void)dismissKeyboard;
 

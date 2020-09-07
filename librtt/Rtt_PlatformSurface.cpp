@@ -29,23 +29,6 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-const S32 PlatformSurface::kDefaultVirtualDPI = 160;
-const S32 PlatformSurface::kUninitializedVirtualLength = -1;
-
-S32
-PlatformSurface::CalculateVirtualLength( S32 virtualDPI, S32 screenDPI, S32 screenLength )
-{
-	float virtualLength = ((float)virtualDPI) * screenLength / screenDPI;
-
-	S32 result = (S32)virtualLength;
-
-	// TODO: Should we round to nearest multiple of 2?
-
-	return result;
-}
-
-// ----------------------------------------------------------------------------
-
 PlatformSurface::PlatformSurface()
 {
 }
@@ -54,24 +37,14 @@ PlatformSurface::~PlatformSurface()
 {
 }
 
-DeviceOrientation::Type
-PlatformSurface::GetOrientation() const
-{
-	// By default, assume that the screen physically rotates, but that the 
-	// surface/receiver is fixed in orientation relative to the screen.
-	// This means that Width()/Height() always return the same values as
-	// DeviceWidth()/DeviceHeight()
-	return DeviceOrientation::kUpright;
-}
-
 S32
-PlatformSurface::ScaledWidth() const
+PlatformSurface::PointsWidth() const
 {
 	return Width();
 }
 
 S32
-PlatformSurface::ScaledHeight() const
+PlatformSurface::PointsHeight() const
 {
 	return Height();
 }
@@ -86,29 +59,6 @@ S32
 PlatformSurface::DeviceHeight() const
 {
 	return Height();
-}
-
-S32
-PlatformSurface::AdaptiveWidth() const
-{
-	return DeviceWidth();
-}
-
-S32
-PlatformSurface::AdaptiveHeight() const
-{
-	return DeviceHeight();
-}
-
-void*
-PlatformSurface::NativeWindow() const
-{
-	return NULL;
-}
-
-void
-PlatformSurface::SetDelegate( PlatformSurfaceDelegate* delegate )
-{
 }
 
 // ----------------------------------------------------------------------------

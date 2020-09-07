@@ -184,17 +184,9 @@
 }
 
 #if ! defined( Rtt_TVOS_ENV )
-// It doesn't make sense to ask all the plugins if this orientation is supported since the enterprise delegate should be the master
 - (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)windowArg
 {
-	NSUInteger result = UIInterfaceOrientationMaskAll;
-	
-	if ( [_fEnterpriseDelegate respondsToSelector:_cmd] )
-	{
-		result = [_fEnterpriseDelegate application:application supportedInterfaceOrientationsForWindow:windowArg];
-	}
-	
-	return result;
+	return UIInterfaceOrientationMaskLandscape;
 }
 #endif
 

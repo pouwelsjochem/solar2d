@@ -154,11 +154,6 @@ settings =
             MinimumOSVersion = "",
 			UIRequiredDeviceCapabilities = { },
             UIAppFonts = { "DEPRECATED", },
-            UIInterfaceOrientation = "",
-            UISupportedInterfaceOrientation = 
-            {
-            	"UIInterfaceOrientationLandscapeLeft", -- etc.
-            },
             CoronaUseIOS8LandscapeOnlyWorkaround = true,
 			UIBackgroundModes = {'remote-notification'},
 			CoronaWindowMovesWhenKeyboardAppears = false,
@@ -190,12 +185,6 @@ settings =
 			ITSAppUsesNonExemptEncryption = false,
 			GooglePlayGamesOAuth2ClientId = "",
 		},
-	},
-
-	orientation =
-	{
-		default = "",
-		supported = { "landscapeLeft", "landscapeRight" },
 	},
 
 	osx = 
@@ -316,7 +305,6 @@ settings =
 		suspendWhenMinimized = true,
 		defaultViewWidth = 1,
 		defaultViewHeight = 1,
-		showWindowTitle = false,
 		titleText =
 		{
 			default = "",

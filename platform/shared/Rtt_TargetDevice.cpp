@@ -151,11 +151,11 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
                 skinDevice = (char *) luaL_optstring( L, -1, "Untitled Skin" );
                 lua_pop( L, 1 );
 
-                lua_getfield( L, -1, "screenWidth" );
+                lua_getfield( L, -1, "deviceWidth" );
                 skinWidth = luaL_optint( L, -1, 0 );
                 lua_pop( L, 1 );
 
-                lua_getfield( L, -1, "screenHeight" );
+                lua_getfield( L, -1, "deviceHeight" );
                 skinHeight = luaL_optint( L, -1, 0 );
                 lua_pop( L, 1 );
             }

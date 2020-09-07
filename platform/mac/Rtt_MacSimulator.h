@@ -17,14 +17,12 @@
 
 // ----------------------------------------------------------------------------
 
-//@class NSAutoreleasePool;
 @class GLView;
 @class NSDictionary;
 @class NSMutableDictionary;
 @class NSWindow;
 @class NSWindowController;
 @class NSString;
-//@class SkinnableWindow;
 
 namespace Rtt
 {
@@ -40,7 +38,7 @@ class MacSimulator : public PlatformSimulator
 		typedef MacSimulator Self;
 
 	public:
-		MacSimulator( bool headless = false );
+		MacSimulator();
 		virtual ~MacSimulator();
 
 	public:
@@ -51,17 +49,9 @@ class MacSimulator : public PlatformSimulator
 		virtual const char *GetPlatform() const;
 
 	public:
-		virtual void DidRotate( bool clockwise, DeviceOrientation::Type start, DeviceOrientation::Type end );
-
-		// Optional callback for systems when the zoom/scale change finishes.
-		// On Mac, it is used to save the scale factor to user preferences so the next launch can be reopened at the same level.
-		virtual void DidChangeScale( float scalefactor );
-
-	public:
 		GLView* GetScreenView() const;
 		NSWindow* GetWindow() const { return (NSWindow*)fWindow; }
 
-		virtual void Shake();
 		bool Back();
 		bool SupportsBackKey();
 		virtual const char *GetOSName() const;
@@ -72,28 +62,20 @@ class MacSimulator : public PlatformSimulator
 
 	public:
 		// Physical pixel w,h of the device
-		float GetScreenWidth() const { return fScreenWidth; }
-		float GetScreenHeight() const { return fScreenHeight; }
+		float GetDeviceWidth() const { return fDeviceWidth; }
+		float GetDeviceHeight() const { return fDeviceHeight; }
 
 	public:
 		virtual void WillSuspend();
 		virtual void DidResume();
-	
-	protected:
-//		virtual PlatformStringRef CreatePlatformString( const char* src ) const;
-//		virtual void ReleasePlatformString( PlatformStringRef str ) const;
 
 	private:
-//		NSAutoreleasePool* fPool;
-//		SkinnableWindow* fWindow;
 		NSWindow* fWindow;
 		NSWindowController* fWindowController;
 		NSMutableDictionary* fProperties;
-		float fScreenWidth;
-		float fScreenHeight;
-		bool fSupportsScreenRotation;
+		float fDeviceWidth;
+		float fDeviceHeight;
 		bool fSupportsBackButton;
-		bool fHeadless;
 		NSString* fDeviceSkinIdentifier; // To save the scale factor for the current skin, we need to know which skin we are on.
         NSString* fDeviceName;
 		MacViewCallback *fViewCallback;

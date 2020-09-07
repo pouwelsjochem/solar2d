@@ -15,19 +15,18 @@ display.pixelHeight = 480
 display.pixelWidth = 320
 
 -- These are items we recognize but cannot validate the contents of (generally because they're arbitrary)
-stoplist = {"imageSuffix", "shaderPrecision"}
+stoplist = {"shaderPrecision"}
 
 application = {
 	showRuntimeErrors = true,
 
 	content = {
-		width = 1,
-		height = 1,
-		scale = "letterBox",
+		minContentWidth = 1,
+		minContentHeight = 1,
+		maxContentWidth = 1,
+		maxContentHeight = 1,
 		fps = 60,
 		audioPlayFrequency = 1,
-		imageSuffix = {
-		},
 		shaderPrecision = "",
 	},
 

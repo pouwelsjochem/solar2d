@@ -257,25 +257,6 @@
                 <menuItem title="Hardware" id="296">
                     <menu key="submenu" title="Hardware" id="297">
                         <items>
-                            <menuItem title="Rotate Left" keyEquivalent="" id="300">
-                                <connections>
-                                    <action selector="rotateLeft:" target="-1" id="680"/>
-                                    <binding destination="207" name="enabled" keyPath="self.isRunning" id="313"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Rotate Right" keyEquivalent="" id="308">
-                                <connections>
-                                    <action selector="rotateRight:" target="-1" id="681"/>
-                                    <binding destination="207" name="enabled" keyPath="self.isRunning" id="317"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Shake" keyEquivalent="" id="338">
-                                <connections>
-                                    <action selector="shake:" target="-1" id="682"/>
-                                    <binding destination="207" name="enabled" keyPath="self.isRunning" id="342"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="337"/>
                             <menuItem title="Back" keyEquivalent="" id="323">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
@@ -315,40 +296,6 @@
                             <menuItem title="Minimize" keyEquivalent="m" id="23">
                                 <connections>
                                     <action selector="performMiniaturize:" target="-1" id="37"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Zoom In" keyEquivalent="+" id="490">
-                                <connections>
-                                    <action selector="zoomIn:" target="-1" id="506"/>
-                                    <binding destination="207" name="enabled2" keyPath="self.currentWindow.canZoomIn" previousBinding="496" id="508">
-                                        <dictionary key="options">
-                                            <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                            <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                            <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                            <integer key="NSNullPlaceholder" value="-1"/>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="207" name="enabled" keyPath="self.isRunning" id="496"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Zoom Out" keyEquivalent="-" id="492">
-                                <connections>
-                                    <action selector="zoomOut:" target="-1" id="507"/>
-                                    <binding destination="207" name="enabled2" keyPath="self.currentWindow.canZoomOut" previousBinding="d0A-bM-3IV" id="Aia-wl-ubE">
-                                        <dictionary key="options">
-                                            <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                            <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                            <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                            <integer key="NSNullPlaceholder" value="-1"/>
-                                        </dictionary>
-                                    </binding>
-                                    <binding destination="207" name="enabled" keyPath="self.isRunning" id="d0A-bM-3IV"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Center" keyEquivalent="" id="719">
-                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
-                                <connections>
-                                    <action selector="center:" target="-1" id="720"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="619"/>

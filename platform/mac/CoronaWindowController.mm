@@ -244,37 +244,26 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 - (id)initWithPath:(NSString*)path
 {
     // These are the default size of the Welcome window
-    return [self initWithPath:path width:960 height:540 title:nil resizable:false showWindowTitle:true];
+    return [self initWithPath:path width:960 height:540 title:nil resizable:false];
 }
 
-- (id)initWithPath:(NSString*)path width:(int)width height:(int)height title:(NSString *)windowTitle resizable:(bool) resizable showWindowTitle:(bool) showWindowTitle
+- (id)initWithPath:(NSString*)path width:(int)width height:(int)height title:(NSString *)windowTitle resizable:(bool) resizable
 {
 	using namespace Rtt;
 
-	// We use APIs that are available in 10.10 and above to hide the titlebar
-	if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
-	{
-		showWindowTitle = YES;
-	}
-
 	BOOL isDir = NO;
-    NSUInteger styleMask = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask;
-    
+	
+    NSUInteger styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
     if (resizable)
     {
-        styleMask |= NSResizableWindowMask;
+        styleMask |= NSWindowStyleMaskResizable;
     }
-
-	if (! showWindowTitle)
-	{
-		styleMask |= NSFullSizeContentViewWindowMask;
-	}
 
 	if ( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir]
 		 && isDir )
 	{			
-		NSRect frame = NSMakeRect( 0, 0, width, height );
-		NSWindow* fWindow = [[NSWindow alloc] initWithContentRect:frame
+		NSRect contentRect = NSMakeRect( 0, 0, width, height );
+		NSWindow* fWindow = [[NSWindow alloc] initWithContentRect:contentRect
 														styleMask:styleMask
 														  backing:NSBackingStoreBuffered
 															defer:NO];
@@ -288,15 +277,9 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
         if (resizable)
         {
             [fWindow setShowsResizeIndicator:YES];
-            [fWindow setMinSize:[fWindow frame].size];  // min window size is original size
+            [fWindow setMinSize:[fWindow contentRect].size];  // min window size is original size
             [fWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary]; // turn on full-screen button
         }
-
-		if (! showWindowTitle)
-		{
-			[fWindow setTitlebarAppearsTransparent:YES];
-			[fWindow setTitleVisibility:NSWindowTitleHidden];
-		}
         
 		// Now create the WindowController with the window
 		self = [super initWithWindow:fWindow];
@@ -309,7 +292,7 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 			[fWindow setReleasedWhenClosed:NO];
 			[fWindow setDelegate:(id<NSWindowDelegate>)self];
 
-            fView = [[CoronaView alloc] initWithPath:path frame:frame];
+            fView = [[CoronaView alloc] initWithPath:path frame:contentRect];
             
             [fView setViewDelegate:(id<CoronaViewDelegate>)self];  // DPC: ???
             [self.view.glView setIsResizable:resizable];
@@ -605,25 +588,10 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 {
     NSRect windowFrame = [self.window frame];
     NSRect contentFrame = [[self.window contentView] frame];
-    int titleBarHeight = 0;
-
-	// If we've hidden the titlebar pretend its height is zero
-	if (([self.window styleMask] & NSFullSizeContentViewWindowMask) != 0)
-	{
-		titleBarHeight = 0;
-	}
-	else
-	{
-		titleBarHeight = windowFrame.size.height - contentFrame.size.height;
-	}
 
     // NSLog(@"CoronaWindowController:windowWillResize: old %@ - new %@", NSStringFromSize(windowFrame.size), NSStringFromSize(frameSize));
     
-    // Corona wants to see the size of the content view
-    frameSize.height -= titleBarHeight;
-    
     BOOL doResize = YES;
-    
     if ( nil != windowWillResizeBlock )
 	{
         // the Lua listener can reject the resize attempt by returning false
@@ -634,10 +602,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
     if (doResize)
     {
         [fView setFrameSize:frameSize];
-
-		// Add titleBarHeight back so that the window ends up the correct size
-		frameSize.height += titleBarHeight;
-
         return frameSize;
     }
     else
@@ -668,59 +632,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
     // NSLog(@"CoronaWindowController:windowDidExitFullScreen: %@", notification);
     [fView.glView setInFullScreenTransition:NO];
     [self windowWillResize:self.window toSize:[self.window frame].size];
-}
-
-//
-// We want certain menu items (specifically "Zoom in" and "Zoom out") and their associated
-// accelerator keys to work correctly for CoronaView windows (specifically Composer) so we
-// define handlers that Cocoa will call via the Main Menu here and translate them into
-// key events the Lua app can understand.
-//
-- (void)dispatchEvent:(Rtt::MEvent*)e
-{
-	using namespace Rtt;
-    
-	Runtime* runtime = self.view.runtime;
-	Rtt_ASSERT( runtime );
-    
-	if ( Rtt_VERIFY( e ) )
-	{
-		runtime->DispatchEvent( * e );
-	}
-}
-
-- (void)zoomIn:(id)sender
-{
-    using namespace Rtt;
-    
-    // Fake a Cmd + keystroke
-	KeyEvent e(
-               NULL,
-               KeyEvent::kDown,
-               "+",
-               24,
-               false,  // (modifierFlags & NSShiftKeyMask) || (modifierFlags & NSAlphaShiftKeyMask),
-               false,  // (modifierFlags & NSAlternateKeyMask),
-               false,  // (modifierFlags & NSControlKeyMask),
-               true ); // (modifierFlags & NSCommandKeyMask) );
-	[self dispatchEvent: ( & e )];
-}
-
-- (void)zoomOut:(id)sender
-{
-    using namespace Rtt;
-    
-    // Fake a Cmd - keystroke
-	KeyEvent e(
-               NULL,
-               KeyEvent::kDown,
-               "-",
-               27,
-               false,  // (modifierFlags & NSShiftKeyMask) || (modifierFlags & NSAlphaShiftKeyMask),
-               false,  // (modifierFlags & NSAlternateKeyMask),
-               false,  // (modifierFlags & NSControlKeyMask),
-               true ); // (modifierFlags & NSCommandKeyMask) );
-	[self dispatchEvent: ( & e )];
 }
 
 // Handle Color Panel functionality of Simulator Extension windows
@@ -760,25 +671,24 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
     }
 }
 
-// Called when the window moves to a screen with different "backing properties" (i.e. retina to non-retina and vice versa)
-- (void)windowDidChangeBackingProperties:(NSNotification *)notification
-{
-	fView.glView.scaleFactor = [[self window] backingScaleFactor];
-	[fView.glView setNeedsDisplay:YES];
-}
+ // Called when the window moves to a screen with different "backing properties" (i.e. retina to non-retina and vice versa)
+ - (void)windowDidChangeBackingProperties:(NSNotification *)notification
+ {
+ 	fView.glView.backingScaleFactor = [[self window] backingScaleFactor];
+ 	[fView.glView setNeedsDisplay:YES];
+ }
 
-// This notification serves as a way to tell that the window is on a screen and
-// that we can reliably query the screen's backingScaleFactor (the system doesn't
-// send windowDidChangeBackingProperties: when the window is first displayed)
-- (void)windowDidChangeOcclusionState:(NSNotification *)notification
-{
-	if ([self window].occlusionState & NSWindowOcclusionStateVisible)
-	{
-		fView.glView.scaleFactor = [[self window] backingScaleFactor];
-
-		[fView.glView restoreWindowProperties];
-	}
-}
+ // This notification serves as a way to tell that the window is on a screen and
+ // that we can reliably query the screen's backingScaleFactor (the system doesn't
+ // send windowDidChangeBackingProperties: when the window is first displayed)
+ - (void)windowDidChangeOcclusionState:(NSNotification *)notification
+ {
+ 	if ([self window].occlusionState & NSWindowOcclusionStateVisible)
+ 	{
+ 		fView.glView.backingScaleFactor = [[self window] backingScaleFactor];
+ 		[fView.glView restoreWindowProperties];
+ 	}
+ }
 
 @end
 

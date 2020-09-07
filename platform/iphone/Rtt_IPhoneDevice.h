@@ -11,7 +11,6 @@
 #define _Rtt_IPhoneDevice_H__
 
 #include "Rtt_MPlatformDevice.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_AppleInputDeviceManager.h"
 
 #import <UIKit/UIApplication.h>
@@ -35,10 +34,6 @@ class IPhoneDevice : public MPlatformDevice
 {
 	public:
 		typedef MPlatformDevice Super;
-
-	public:
-		static DeviceOrientation::Type ToOrientationTypeFromUIDeviceOrientation( UIDeviceOrientation orientation );
-		static DeviceOrientation::Type ToOrientationTypeFromUIInterfaceOrientation( UIInterfaceOrientation orientation );
 
 	public:
 		IPhoneDevice( Rtt_Allocator &allocator, CoronaView *view );
@@ -67,17 +62,10 @@ class IPhoneDevice : public MPlatformDevice
 		virtual void SetAccelerometerInterval( U32 frequency ) const;
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
 
-	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
-
-	public:
-		DeviceOrientation::Type GetPreviousOrientationAndUpdate( UIDeviceOrientation newValue );
-
 	private:
 		Rtt_Allocator &fAllocator;
 		CoronaView *fView; // Weak ref
 		DeviceNotificationTracker fTracker;
-		mutable DeviceOrientation::Type fPreviousOrientation;
 		AppleInputDeviceManager fInputDeviceManager;
 };
 

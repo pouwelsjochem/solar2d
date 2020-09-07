@@ -21,18 +21,7 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 MacViewSurface::MacViewSurface( GLView* view )
-:	fView( view ),
-	fDelegate( NULL ),
-	fAdaptiveWidth( Super::kUninitializedVirtualLength ),
-	fAdaptiveHeight( Super::kUninitializedVirtualLength )
-{
-}
-
-MacViewSurface::MacViewSurface( GLView* view, S32 adaptiveWidth, S32 adaptiveHeight )
-:	fView( view ),
-	fDelegate( NULL ),
-	fAdaptiveWidth( adaptiveWidth ),
-	fAdaptiveHeight( adaptiveHeight )
+:	fView( view )
 {
 }
 
@@ -51,42 +40,16 @@ MacViewSurface::Flush() const
 {
 }
 
-void
-MacViewSurface::SetDelegate( Delegate* delegate )
-{
-	fDelegate = delegate;
-}
-
 S32
 MacViewSurface::Width() const
 {
-	S32 result = [fView viewportWidth];
-	return result;
+	return [fView viewportWidth];
 }
 
 S32
 MacViewSurface::Height() const
 {
-	S32 result = [fView viewportHeight];
-	return result;
-}
-
-DeviceOrientation::Type
-MacViewSurface::GetOrientation() const
-{
-	return [fView orientation];
-}
-
-S32
-MacViewSurface::AdaptiveWidth() const
-{
-	return ( fAdaptiveWidth > 0 ? fAdaptiveWidth : Super::AdaptiveWidth() );
-}
-
-S32
-MacViewSurface::AdaptiveHeight() const
-{
-	return ( fAdaptiveHeight > 0 ? fAdaptiveHeight : Super::AdaptiveHeight() );
+	return [fView viewportHeight];
 }
 
 S32

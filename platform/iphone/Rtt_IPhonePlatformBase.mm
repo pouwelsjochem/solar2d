@@ -539,13 +539,6 @@ IPhonePlatformBase::SetActivityIndicator( bool visible ) const
 	Rtt_ASSERT_NOT_REACHED();
 }
 
-PlatformWebPopup*
-IPhonePlatformBase::GetWebPopup() const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return NULL;
-}
-
 void
 IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
 {
@@ -565,13 +558,6 @@ IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
 		// Dismiss keyboard
 		[GetView() dismissKeyboard];
 	}
-}
-
-PlatformDisplayObject*
-IPhonePlatformBase::CreateNativeWebView( const Rect& bounds ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return NULL;
 }
 
 #endif // Rtt_IPHONE_PLATFORM_STUB
@@ -626,10 +612,10 @@ IPhonePlatformBase::RuntimeErrorNotification( const char *errorType, const char 
 
 // ============================================================================
 
-Rtt_EXPORT CGSize Rtt_GetScreenSize();
+Rtt_EXPORT CGSize Rtt_GetDeviceSize();
 	
 Rtt_EXPORT CGSize
-Rtt_GetScreenSize()
+Rtt_GetDeviceSize()
 {
 	UIScreen *mainScreen = [UIScreen mainScreen];
 	CGSize result = mainScreen.bounds.size;

@@ -60,12 +60,6 @@
     <ClInclude Include="Rtt\Rtt_WinVideoProvider.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinWebPopup.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinWebViewObject.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="WinSound.h" />
     <ClInclude Include="WinString.h" />
     <ClInclude Include="WinFile.h" />
@@ -378,12 +372,6 @@
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinVideoProvider.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinWebPopup.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinWebViewObject.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="WinSound.cpp" />

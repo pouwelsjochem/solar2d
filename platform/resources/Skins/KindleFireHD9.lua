@@ -10,12 +10,9 @@
 simulator =
 {
 	device = "android-tablet",
-	screenOriginX = 102,
-	screenOriginY = 100,
-	screenWidth = 1200,
-	screenHeight = 1920,
+	deviceWidth = 1920,
+	deviceHeight = 1200,
 	androidDisplayApproximateDpi = 240, -- hdpi
-	deviceImage = "KindleFireHD9.png",
 	displayManufacturer = "Amazon",
 	displayName = "KFJWI",
 	windowTitleBarName = 'Kindle Fire HD 8.9" (2012)',

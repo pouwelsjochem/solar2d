@@ -34,36 +34,6 @@ bool ReadOnlyProjectSettings::HasConfigLua() const
 	return fSettings.HasConfigLua();
 }
 
-Rtt::DeviceOrientation::Type ReadOnlyProjectSettings::GetDefaultOrientation() const
-{
-	return fSettings.GetDefaultOrientation();
-}
-
-bool ReadOnlyProjectSettings::IsSupported(Rtt::DeviceOrientation::Type value) const
-{
-	return fSettings.IsSupported(value);
-}
-
-bool ReadOnlyProjectSettings::IsPortraitSupported() const
-{
-	return fSettings.IsPortraitSupported();
-}
-
-bool ReadOnlyProjectSettings::IsLandscapeSupported() const
-{
-	return fSettings.IsLandscapeSupported();
-}
-
-int ReadOnlyProjectSettings::GetSupportedOrientationsCount() const
-{
-	return fSettings.GetSupportedOrientationsCount();
-}
-
-Rtt::DeviceOrientation::Type ReadOnlyProjectSettings::GetSupportedOrientationByIndex(int index) const
-{
-	return fSettings.GetSupportedOrientationByIndex(index);
-}
-
 const Rtt::NativeWindowMode* ReadOnlyProjectSettings::GetDefaultWindowMode() const
 {
 	return fSettings.GetDefaultWindowMode();
@@ -121,24 +91,22 @@ const char* ReadOnlyProjectSettings::GetWindowTitleTextForLocaleWithoutFallback(
 	return fSettings.GetWindowTitleTextForLocaleWithoutFallback(languageCode, countryCode);
 }
 
-int ReadOnlyProjectSettings::GetContentWidth() const
+int ReadOnlyProjectSettings::GetMinContentWidth() const
 {
-	return fSettings.GetContentWidth();
+	return fSettings.GetMinContentWidth();
+}
+int ReadOnlyProjectSettings::GetMaxContentWidth() const
+{
+	return fSettings.GetMaxContentWidth();
 }
 
-int ReadOnlyProjectSettings::GetContentHeight() const
+int ReadOnlyProjectSettings::GetMinContentHeight() const
 {
-	return fSettings.GetContentHeight();
+	return fSettings.GetMinContentHeight();
 }
-
-int ReadOnlyProjectSettings::GetImageSuffixScaleCount() const
+int ReadOnlyProjectSettings::GetMaxContentHeight() const
 {
-	return fSettings.GetImageSuffixScaleCount();
-}
-
-double ReadOnlyProjectSettings::GetImageSuffixScaleByIndex(int index) const
-{
-	return fSettings.GetImageSuffixScaleByIndex(index);
+	return fSettings.GetMaxContentHeight();
 }
 
 }	// namespace Rtt

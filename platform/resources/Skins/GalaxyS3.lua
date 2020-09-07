@@ -10,12 +10,9 @@
 simulator =
 {
 	device = "android-phone",
-	screenOriginX = 58,
-	screenOriginY = 190,
-	screenWidth = 720,
-	screenHeight = 1280,
+	deviceWidth = 1280,
+	deviceHeight = 720,
 	androidDisplayApproximateDpi = 320, -- xhdpi
-	deviceImage = "GalaxyS3.png",
 	displayManufacturer = "samsung",
 	displayName = "GT-I9300",
 	windowTitleBarName = "Samsung Galaxy S3",

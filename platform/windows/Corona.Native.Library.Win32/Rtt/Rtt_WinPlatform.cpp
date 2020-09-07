@@ -25,7 +25,7 @@
 #include "CoronaLua.h"
 #include "Rtt_Allocator.h"
 #include "Rtt_FileSystem.h"
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_NativeWindowMode.h"
@@ -46,8 +46,6 @@
 #include "Rtt_WinVideoObject.h"
 #include "Rtt_WinVideoPlayer.h"
 #include "Rtt_WinVideoProvider.h"
-#include "Rtt_WinWebPopup.h"
-#include "Rtt_WinWebViewObject.h"
 #include "WinString.h"
 #include <algorithm>
 #include <Gdiplus.h>
@@ -77,7 +75,6 @@ namespace Rtt
 		fVideoPlayer(nullptr),
 		fImageProvider(nullptr),
 		fVideoProvider(nullptr),
-		fWebPopup(nullptr),
 		fFBConnect(nullptr),
 		fExitCallback(environment),
 		fIsIdleTimerEnabled(true)
@@ -145,7 +142,6 @@ namespace Rtt
 		Rtt_DELETE(fFBConnect);
 		Rtt_DELETE(fVideoPlayer);
 		Rtt_DELETE(fAudioPlayer);
-		Rtt_DELETE(fWebPopup);
 	}
 
 	MPlatformDevice& WinPlatform::GetDevice() const
@@ -548,7 +544,7 @@ namespace Rtt
 	RenderingStream* WinPlatform::CreateRenderingStream(bool antialias) const
 	{
 		Rtt_Allocator& allocator = GetAllocator();
-		RenderingStream* streamPointer = Rtt_NEW(&allocator, GPUStream(&allocator));
+		RenderingStream* streamPointer = Rtt_NEW(&allocator, RenderingStream(&allocator));
 		streamPointer->SetProperty(RenderingStream::kFlipHorizontalAxis, true);
 		return streamPointer;
 	}
@@ -958,47 +954,6 @@ namespace Rtt
 		return true;
 	}
 
-	void WinPlatform::SetStatusBarMode(MPlatform::StatusBarMode newValue) const
-	{
-		#ifdef Rtt_AUTHORING_SIMULATOR
-		auto serviceSimulator = fEnvironment.GetDeviceSimulatorServices();
-		if (serviceSimulator)
-		{
-			serviceSimulator->SetStatusBar(newValue);
-		}
-		#endif
-	}
-
-	MPlatform::StatusBarMode WinPlatform::GetStatusBarMode() const
-	{
-		#ifdef Rtt_AUTHORING_SIMULATOR
-		auto serviceSimulator = fEnvironment.GetDeviceSimulatorServices();
-		if (serviceSimulator)
-		{
-			serviceSimulator->GetStatusBar();
-		}
-		#endif
-		return MPlatform::kHiddenStatusBar;
-	}
-
-	int WinPlatform::GetStatusBarHeight() const
-	{
-		if (fEnvironment.GetDeviceSimulatorServices())
-		{
-			return 20;
-		}
-		return 0;
-	}
-	int WinPlatform::GetTopStatusBarHeightPixels()  const
-	{
-		return GetStatusBarHeight();
-	}
-
-	int WinPlatform::GetBottomStatusBarHeightPixels() const
-	{
-		return 0;
-	}
-
 	int WinPlatform::SetSync(lua_State* L) const
 	{
 		return 0;
@@ -1246,48 +1201,6 @@ namespace Rtt
 				}
 				break;
 			}
-			case kDefaultStatusBarFile:
-				deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-				if (deviceSimulatorServicesPointer)
-				{
-					resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kDefaultStatusBar);
-				}
-				break;
-			case kDarkStatusBarFile:
-				deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-				if (deviceSimulatorServicesPointer)
-				{
-					resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kDarkStatusBar);
-				}
-				break;
-			case kTranslucentStatusBarFile:
-				deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-				if (deviceSimulatorServicesPointer)
-				{
-					resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kTranslucentStatusBar);
-				}
-				break;
-			case kLightTransparentStatusBarFile:
-				deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-				if (deviceSimulatorServicesPointer)
-				{
-					resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kLightTransparentStatusBar);
-				}
-				break;
-			case kDarkTransparentStatusBarFile:
-				deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-				if (deviceSimulatorServicesPointer)
-				{
-					resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor(MPlatform::kDarkTransparentStatusBar);
-				}
-				break;
-			case kScreenDressingFile:
-				deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-				if (deviceSimulatorServicesPointer)
-				{
-					resultPointer = deviceSimulatorServicesPointer->GetStatusBarImageFilePathFor((Rtt::MPlatform::StatusBarMode)kScreenDressingFile);
-				}
-				break;
 			default:
 				resultPointer = nullptr;
 				//			Rtt_ASSERT_NOT_REACHED();
@@ -1407,15 +1320,6 @@ namespace Rtt
 		inputDeviceManager.SetWaitCursorEnabled(visible);
 	}
 
-	PlatformWebPopup* WinPlatform::GetWebPopup() const
-	{
-		if (!fWebPopup)
-		{
-			fWebPopup = Rtt_NEW(&GetAllocator(), WinWebPopup(fEnvironment));
-		}
-		return fWebPopup;
-	}
-
 	bool WinPlatform::CanShowPopup(const char* name) const
 	{
 		return false;
@@ -1459,11 +1363,6 @@ namespace Rtt
 				renderSurfacePointer->SetFocus();
 			}
 		}
-	}
-
-	PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const
-	{
-		return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
 	}
 
 	PlatformDisplayObject* WinPlatform::CreateNativeVideo(const Rect& bounds) const

@@ -10,12 +10,9 @@
 simulator =
 {
 	device = "android-phone",
-	screenOriginX = 54,
-	screenOriginY = 170,
-	screenWidth = 540,
-	screenHeight = 960,
+	deviceWidth = 960,
+	deviceHeight = 540,
 	androidDisplayApproximateDpi = 240, -- hdpi
-	deviceImage = "HTCSensation.png",
 	displayManufacturer = "HTC",
 	displayName = "Sensation",
 	windowTitleBarName = "HTC Sensation",

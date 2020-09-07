@@ -68,9 +68,6 @@ IPhoneDisplayObject::~IPhoneDisplayObject()
 void
 IPhoneDisplayObject::Preinitialize( const Display& display )
 {
-	Rtt_ASSERT( display.PointsWidth() == [UIScreen mainScreen].bounds.size.width );
-	Rtt_ASSERT( display.PointsHeight() == [UIScreen mainScreen].bounds.size.height );
-
 	PlatformDisplayObject::Preinitialize( display );
 
     // We can access the GLView at this point via the display's runtime, so save it for later

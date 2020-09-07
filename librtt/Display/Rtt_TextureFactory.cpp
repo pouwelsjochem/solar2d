@@ -117,8 +117,7 @@ TextureFactory::CreateBitmap(
 		{
 			PlatformBitmap::kIsPremultiplied,
 			PlatformBitmap::kIsBitsFullResolution,
-			PlatformBitmap::kIsBitsAutoRotated,
-			PlatformBitmap::kIsNearestAvailablePixelDensity
+			PlatformBitmap::kIsBitsAutoRotated
 		};
 
 		for ( int i = 0, iMax = sizeof( kMasks ) / sizeof( * kMasks );
@@ -176,12 +175,9 @@ void TextureFactory::AddToPreloadQueueByKey(std::string cacheKey)
 
 	
 SharedPtr< TextureResource >
-TextureFactory::CreateAndAdd( const std::string& key,
-								PlatformBitmap *bitmap,
-								bool useCache,
-								bool isRetina )
+TextureFactory::CreateAndAdd( const std::string& key, PlatformBitmap *bitmap, bool useCache )
 {
-	TextureResource *resource = TextureResourceBitmap::Create( * this, bitmap, isRetina );
+	TextureResource *resource = TextureResourceBitmap::Create( * this, bitmap );
 	SharedPtr< TextureResource > result = SharedPtr< TextureResource >( resource );
 
 	bool shouldPreload = fDisplay.GetDefaults().ShouldPreloadTextures();
@@ -241,19 +237,6 @@ TextureFactory::FindOrCreate(
 		return Find(filename);
 	}
 
-	bool isRetina = false;
-
-	// Check for a higher resolution image file using Corona's special suffix notation.
-	String suffixedFilename( fDisplay.GetAllocator() );
-	if ( PlatformBitmap::kIsNearestAvailablePixelDensity & flags )
-	{
-		if ( fDisplay.GetImageFilename( filename, baseDir, suffixedFilename ) )
-		{
-			filename = suffixedFilename.GetString();
-			isRetina = true;
-		}
-	}
-
 	String filePath( fDisplay.GetAllocator() );
 	PathForFile( filePath, filename, baseDir );
 
@@ -274,7 +257,7 @@ TextureFactory::FindOrCreate(
 	if ( result.IsNull() )
 	{
 		PlatformBitmap *bitmap = CreateBitmap( filePath.GetString(), flags, isMask );
-		result = CreateAndAdd( key, bitmap, true, isRetina );
+		result = CreateAndAdd( key, bitmap, true );
 	}
 
 	return result;
@@ -313,7 +296,7 @@ TextureFactory::FindOrCreate(
 		// NOTE: Even if we found an entry, it could still be null.
 		if ( result.IsNull() )
 		{
-			result = CreateAndAdd( key, bitmap, useCache, false );
+			result = CreateAndAdd( key, bitmap, useCache );
 		}
 	}
 
@@ -445,7 +428,7 @@ TextureFactory::Create(
 	PlatformBitmap *pBitmap =
 		fDisplay.GetRuntime().Platform().CreateBitmapMask( str, font, w, h, alignment, baselineOffset );
 
-	return SharedPtr< TextureResource >( TextureResourceBitmap::Create( * this, pBitmap, false ) );
+	return SharedPtr< TextureResource >( TextureResourceBitmap::Create( * this, pBitmap ) );
 }
 
 void

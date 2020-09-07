@@ -27,8 +27,6 @@ extern "C" {
 #define com_ansca_corona_JavaToNativeShim_TouchEventPhaseCancelled 4L
 #undef com_ansca_corona_JavaToNativeShim_EventTypeUnknown
 #define com_ansca_corona_JavaToNativeShim_EventTypeUnknown -1L
-#undef com_ansca_corona_JavaToNativeShim_EventTypeOrientation
-#define com_ansca_corona_JavaToNativeShim_EventTypeOrientation 0L
 #undef com_ansca_corona_JavaToNativeShim_EventTypeAccelerometer
 #define com_ansca_corona_JavaToNativeShim_EventTypeAccelerometer 1L
 #undef com_ansca_corona_JavaToNativeShim_EventTypeGyroscope
@@ -135,19 +133,11 @@ JNIEXPORT jint JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeGetContentHe
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeGetContentHeightInPixels
- * Signature: (II)Ljava/lang/object;
- */
-JNIEXPORT jobject JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeConvertCoronaPointToAndroidPoint
-  (JNIEnv *, jclass, jlong, jint, jint);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeResize
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;III)V
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeResize
-  (JNIEnv *, jclass, jlong, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jboolean);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
@@ -155,14 +145,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeResize
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeRender
-  (JNIEnv *, jclass, jlong);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeReinitializeRenderer
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeReinitializeRenderer
   (JNIEnv *, jclass, jlong);
 
 /*
@@ -297,14 +279,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeGyroscopeEve
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeOrientationChanged
- * Signature: (II)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeOrientationChanged
-  (JNIEnv *, jclass, jlong, jint, jint);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeResizeEvent
  * Signature: ()V
  */
@@ -382,46 +356,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEv
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEventEnd
   (JNIEnv *, jclass, jlong);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeWebViewShouldLoadUrl
- * Signature: (ILjava/lang/String;I)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewShouldLoadUrl
-  (JNIEnv *, jclass, jlong, jint, jstring, jint);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeWebViewFinishedLoadUrl
- * Signature: (ILjava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewFinishedLoadUrl
-  (JNIEnv *, jclass, jlong, jint, jstring);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeWebViewDidFailLoadUrl
- * Signature: (ILjava/lang/String;Ljava/lang/String;I)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewDidFailLoadUrl
-  (JNIEnv *, jclass, jlong, jint, jstring, jstring, jint);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeWebViewHistoryUpdated
- * Signature: (IZZ)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewHistoryUpdated
-  (JNIEnv *, jclass, jlong, jint, jboolean, jboolean);
-
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeWebViewShouldLoadUrl
- * Signature: (I)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewClosed
-  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim

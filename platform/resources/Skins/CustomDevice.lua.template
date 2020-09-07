@@ -10,13 +10,9 @@
 simulator =
 {
 	device = "{customDevicePlatform}",
-	screenOriginX = 0,
-	screenOriginY = 0,
-	screenWidth = {customDeviceWidth},
-	screenHeight = {customDeviceHeight},
-	deviceImage = nil,
+	deviceWidth = {customDeviceWidth},
+	deviceHeight = {customDeviceHeight},
 	displayManufacturer = "{customDeviceManufacturer}",
 	displayName = "{customDeviceName}",
-	supportsScreenRotation = {customDeviceIsRotatable},
 	windowTitleBarName = "{customDeviceName}"
 }

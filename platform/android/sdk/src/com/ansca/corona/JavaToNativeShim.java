@@ -18,11 +18,10 @@ package com.ansca.corona;
 public class JavaToNativeShim {
 	// Corresponds to MPlatformDevice::EventType
 	public static final int EventTypeUnknown = -1;
-	public static final int EventTypeOrientation = 0;
-	public static final int EventTypeAccelerometer = 1;
-	public static final int EventTypeGyroscope = 2;
-	public static final int EventTypeMultitouch = 3;
-	public static final int EventTypeNumTypes = 4;
+	public static final int EventTypeAccelerometer = 0;
+	public static final int EventTypeGyroscope = 1;
+	public static final int EventTypeMultitouch = 2;
+	public static final int EventTypeNumTypes = 3;
 
 	private static native String nativeGetVersion();
     private static native String nativeGetBuildId(long bridgeAddress);
@@ -33,16 +32,14 @@ public class JavaToNativeShim {
     private static native long nativeInit(CoronaRuntime runtime);
     private static native void nativeResize(
     			long bridgeAddress, String signature, String documentsDir, String applicationSupportDir, String temporaryDir, String cachesDir,
-    			String systemCachesDir, String expansionFileDir, int w, int h, int orientation, boolean isCoronaKit);
+    			String systemCachesDir, String expansionFileDir, int w, int h, boolean isCoronaKit);
     private static native void nativeRender(long bridgeAddress);
-    private static native void nativeReinitializeRenderer(long bridgeAddress);
     private static native String nativeGetKeyNameFromKeyCode(int keyCode);
     private static native int nativeGetMaxTextureSize(long bridgeAddress);
 	private static native int nativeGetHorizontalMarginInPixels(long bridgeAddress);
 	private static native int nativeGetVerticalMarginInPixels(long bridgeAddress);
 	private static native int nativeGetContentWidthInPixels(long bridgeAddress);
 	private static native int nativeGetContentHeightInPixels(long bridgeAddress);
-	private static native Object nativeConvertCoronaPointToAndroidPoint(long bridgeAddress, int x, int y );
 	private static native void nativeUseDefaultLuaErrorHandler();
 	private static native void nativeUseJavaLuaErrorHandler();
     private static native void nativeUnloadResources(long bridgeAddress);
@@ -76,7 +73,6 @@ public class JavaToNativeShim {
     private static native void nativeAxisEvent( long bridgeAddress, int coronaDeviceId, int axisIndex, float rawValue );
     private static native void nativeAccelerometerEvent( long bridgeAddress, double x, double y, double z, double deltaTime );
     private static native void nativeGyroscopeEvent( long bridgeAddress, double x, double y, double z, double deltaTime );
-    private static native void nativeOrientationChanged( long bridgeAddress, int newOrientation, int oldOrientation );
     private static native void nativeResizeEvent( long bridgeAddress );
     private static native void nativeAlertCallback( long bridgeAddress, int buttonIndex, boolean cancelled );
     private static native void nativeSoundEndCallback( long bridgeAddress, long id );
@@ -88,11 +84,6 @@ public class JavaToNativeShim {
     private static native void nativeMultitouchEventBegin(long bridgeAddress);
     private static native void nativeMultitouchEventAdd( long bridgeAddress, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int id, float pressure );
     private static native void nativeMultitouchEventEnd( long bridgeAddress );
-    private static native void nativeWebViewShouldLoadUrl( long bridgeAddress, int id, String url, int sourceType );
-    private static native void nativeWebViewFinishedLoadUrl( long bridgeAddress, int id, String url );
-    private static native void nativeWebViewDidFailLoadUrl( long bridgeAddress, int id, String url, String msg, int code );
-    private static native void nativeWebViewHistoryUpdated( long bridgeAddress, int id, boolean canGoBack, boolean canGoForward );
-    private static native void nativeWebViewClosed( long bridgeAddress, int id );
     private static native void nativeImagePickerEvent( long bridgeAddress, String selectedImageFileName );
 	private static native void nativeAbortShowingImageProvider( long bridgeAddress );
 	private static native void nativeVideoPickerEvent( long bridgeAddress, String selectedVideoFileName, int duration, long size );
@@ -192,14 +183,6 @@ public class JavaToNativeShim {
 		nativeRender(runtime.getJavaToNativeBridgeAddress());
 	}
 
-	public static void reinitializeRenderer(CoronaRuntime runtime)
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeReinitializeRenderer(runtime.getJavaToNativeBridgeAddress());
-	}
-
 	public static String getKeyNameFromKeyCode(int keyCode)
 	{
 		return nativeGetKeyNameFromKeyCode(keyCode);
@@ -243,22 +226,6 @@ public class JavaToNativeShim {
 			return 0;
 		}
 		return nativeGetContentHeightInPixels(runtime.getJavaToNativeBridgeAddress());
-	}
-
-	public static android.graphics.Point convertCoronaPointToAndroidPoint(CoronaRuntime runtime, int x, int y )
-	{
-		if (runtime == null || runtime.wasDisposed()) {
-			return null;
-		}
-		android.graphics.Point result = null;
-
-		Object o = nativeConvertCoronaPointToAndroidPoint( runtime.getJavaToNativeBridgeAddress(), x, y );
-
-		if ( null != o && o instanceof android.graphics.Point ) {
-			result = (android.graphics.Point)o;
-		}
-
-		return result;
 	}
 
 	public static void useDefaultLuaErrorHandler()
@@ -381,7 +348,7 @@ public class JavaToNativeShim {
 	}
 	
 	public static void resize(
-		CoronaRuntime runtime, android.content.Context context, int width, int height, WindowOrientation orientation, boolean isCoronaKit)
+		CoronaRuntime runtime, android.content.Context context, int width, int height, boolean isCoronaKit)
 	{
 		com.ansca.corona.storage.FileServices fileServices = new com.ansca.corona.storage.FileServices(context);
 
@@ -396,7 +363,7 @@ public class JavaToNativeShim {
 				CoronaEnvironment.getCachesDirectory(context).getAbsolutePath(),
 				CoronaEnvironment.getInternalCachesDirectory(context).getAbsolutePath(),
 				fileServices.getExpansionFileDirectory().getAbsolutePath(),
-				width, height, orientation.toCoronaIntegerId(), isCoronaKit);
+				width, height, isCoronaKit);
 	}
 
 	public static void tapEvent( CoronaRuntime runtime, int x, int y, int count )
@@ -508,13 +475,6 @@ public class JavaToNativeShim {
 		}
 		nativeGyroscopeEvent( runtime.getJavaToNativeBridgeAddress(), x, y, z, deltaTime );
 	}
-	
-	public static void orientationChanged( CoronaRuntime runtime, int newOrientation, int oldOrientation ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeOrientationChanged( runtime.getJavaToNativeBridgeAddress(), newOrientation, oldOrientation );
-	}
 
 	public static void resizeEvent( CoronaRuntime runtime) {
 		if (runtime == null || runtime.wasDisposed()) {
@@ -570,41 +530,6 @@ public class JavaToNativeShim {
 			return;
 		}
 		nativeTextEditingEvent(runtime.getJavaToNativeBridgeAddress(), id, startPos, numDeleted, newCharacters, oldString, newString);
-	}
-	
-	public static void webViewShouldLoadUrl( CoronaRuntime runtime, int id, String url, int sourceType ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeWebViewShouldLoadUrl( runtime.getJavaToNativeBridgeAddress(), id, url, sourceType );
-	}
-	
-	public static void webViewFinishedLoadUrl( CoronaRuntime runtime, int id, String url ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeWebViewFinishedLoadUrl( runtime.getJavaToNativeBridgeAddress(), id, url );
-	}
-	
-	public static void webViewDidFailLoadUrl( CoronaRuntime runtime, int id, String url, String msg, int code ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-    	nativeWebViewDidFailLoadUrl( runtime.getJavaToNativeBridgeAddress(), id, url, msg, code );
-	}
-	
-	public static void webViewHistoryUpdated( CoronaRuntime runtime, int id, boolean canGoBack, boolean canGoForward ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeWebViewHistoryUpdated( runtime.getJavaToNativeBridgeAddress(), id, canGoBack, canGoForward );
-	}
-	
-	public static void webViewClosed( CoronaRuntime runtime, int id ) {
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		nativeWebViewClosed( runtime.getJavaToNativeBridgeAddress(), id );
 	}
 	
 	public static void imagePickerEvent( CoronaRuntime runtime, String selectedImageFileName )

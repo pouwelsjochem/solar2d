@@ -31,6 +31,7 @@ import java.net.URL;
 import java.net.MalformedURLException;
 
 import android.app.Activity;
+import android.app.UiModeManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -68,6 +69,8 @@ import org.json.JSONObject;
 
 import com.naef.jnlua.JavaFunction;
 import com.naef.jnlua.LuaState;
+
+import static android.content.Context.UI_MODE_SERVICE;
 
 
 public class NativeToJavaBridge {
@@ -1514,14 +1517,14 @@ public class NativeToJavaBridge {
 	{
 		float[] result = new float[4];
 		synchronized (runtime.getController()) {
-			UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+			UiModeManager uiModeManager = (UiModeManager) CoronaEnvironment.getCoronaActivity().getSystemService(UI_MODE_SERVICE);
 			int uiMode = uiModeManager.getCurrentModeType();
 			if (uiMode == 4) { // returns true only for TV
 				int contentHeight = JavaToNativeShim.getContentHeightInPixels(runtime);
 				int contentWidth = JavaToNativeShim.getContentWidthInPixels(runtime);
 				result[ 0 ] = result[ 3 ] = (float)Math.floor(contentHeight * 0.05f);
 				result[ 1 ] = result[ 2 ] = (float)Math.floor(contentWidth * 0.05f);
-			} else { 
+			} else {
 				for (int i = 0; i < 4; i++) {
 					result [ i ] = 0;
 				}
@@ -1817,9 +1820,7 @@ public class NativeToJavaBridge {
 			// Fetch the display's DPI along the x-axis.
 			android.util.DisplayMetrics metrics = getDisplayMetrics();
 			if (metrics != null) {
-				WindowOrientation orientation = WindowOrientation.fromCurrentWindowUsing(context);
-				double xDpi = (double)(orientation.isPortrait() ? metrics.xdpi : metrics.ydpi);
-				luaState.pushNumber(xDpi);
+				luaState.pushNumber(metrics.xdpi);
 				valuesPushed = 1;
 			}
 		}
@@ -1827,9 +1828,7 @@ public class NativeToJavaBridge {
 			// Fetch the display's DPI along the y-axis.
 			android.util.DisplayMetrics metrics = getDisplayMetrics();
 			if (metrics != null) {
-				WindowOrientation orientation = WindowOrientation.fromCurrentWindowUsing(context);
-				double yDpi = (double)(orientation.isPortrait() ? metrics.ydpi : metrics.xdpi);
-				luaState.pushNumber(yDpi);
+				luaState.pushNumber(metrics.ydpi);
 				valuesPushed = 1;
 			}
 		}
@@ -1837,8 +1836,7 @@ public class NativeToJavaBridge {
 			// Fetch the width of the window in inches.
 			android.util.DisplayMetrics metrics = getDisplayMetrics();
 			if (metrics != null) {
-				WindowOrientation orientation = WindowOrientation.fromCurrentWindowUsing(context);
-				double xDpi = (double)(orientation.isPortrait() ? metrics.xdpi : metrics.ydpi);
+				double xDpi = metrics.xdpi;
 				if (xDpi > 0) {
 					luaState.pushNumber((double)metrics.widthPixels / xDpi);
 					valuesPushed = 1;
@@ -1849,8 +1847,7 @@ public class NativeToJavaBridge {
 			// Fetch the height of the window in inches.
 			android.util.DisplayMetrics metrics = getDisplayMetrics();
 			if (metrics != null) {
-				WindowOrientation orientation = WindowOrientation.fromCurrentWindowUsing(context);
-				double yDpi = (double)(orientation.isPortrait() ? metrics.ydpi : metrics.xdpi);
+				double yDpi = metrics.ydpi;
 				if (yDpi > 0) {
 					luaState.pushNumber((double)metrics.heightPixels / yDpi);
 					valuesPushed = 1;
@@ -2393,36 +2390,6 @@ public class NativeToJavaBridge {
 	protected static void callRecordReleaseCurrentBuffer( long id, CoronaRuntime runtime )
 	{
 		runtime.getController().getMediaManager().getAudioRecorder( id ).releaseCurrentBuffer();
-	}
-
-	protected static void callWebViewCreate(
-		CoronaRuntime runtime, int id, int left, int top, int width, int height, boolean isPopup, boolean autoCloseEnabled)
-	{
-		runtime.getViewManager().addWebView(id, left, top, width, height, isPopup, autoCloseEnabled);
-	}
-
-	protected static void callWebViewRequestLoadUrl( CoronaRuntime runtime, int id, String url ) {
-		runtime.getViewManager().requestWebViewLoadUrl(id, url);
-	}
-
-	protected static void callWebViewRequestReload(int id, CoronaRuntime runtime) {
-		runtime.getViewManager().requestWebViewReload(id);
-	}
-	
-	protected static void callWebViewRequestStop(int id, CoronaRuntime runtime) {
-		runtime.getViewManager().requestWebViewStop(id);
-	}
-	
-	protected static void callWebViewRequestGoBack(int id, CoronaRuntime runtime) {
-		runtime.getViewManager().requestWebViewGoBack(id);
-	}
-	
-	protected static void callWebViewRequestGoForward(int id, CoronaRuntime runtime) {
-		runtime.getViewManager().requestWebViewGoForward(id);
-	}
-
-	protected static void callWebViewRequestDeleteCookies(int id, CoronaRuntime runtime) {
-		runtime.getViewManager().requestWebViewDeleteCookies(id);
 	}
 
 	protected static void callVideoViewCreate(CoronaRuntime runtime, int id, int left, int top, int width, int height)

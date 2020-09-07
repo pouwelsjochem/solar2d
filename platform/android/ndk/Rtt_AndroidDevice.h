@@ -12,7 +12,6 @@
 #define _Rtt_AndroidDevice_H__
 
 #include "Rtt_MPlatformDevice.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_AndroidInputDeviceManager.h"
 
 class NativeToJavaBridge;
@@ -60,12 +59,6 @@ class AndroidDevice : public MPlatformDevice
 		virtual void SetAccelerometerInterval( U32 frequency ) const;
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
 
-	public:
-		virtual void SetOrientation( DeviceOrientation::Type orientation );
-
-	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
-
 	private:
 		Rtt_Allocator& fAllocator;
 		DeviceNotificationTracker fTracker;
@@ -78,7 +71,6 @@ class AndroidDevice : public MPlatformDevice
 		mutable String *fOSIdentifier;
 		mutable String *fPlatformVersion;
 		mutable String *fProduct;
-		DeviceOrientation::Type fOrientation;
 		NativeToJavaBridge *fNativeToJavaBridge;
 };
 

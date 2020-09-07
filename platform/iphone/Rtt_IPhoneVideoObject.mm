@@ -318,12 +318,6 @@ IPhoneVideoObject::Initialize()
 {
 	Rtt_ASSERT( ! GetView() );
 
-	//AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-	//UIViewController *controller = delegate.viewController;
-
-	//Rtt_ASSERT( delegate.runtime->GetDisplay().PointsWidth() == [UIScreen mainScreen].bounds.size.width );
-	//Rtt_ASSERT( delegate.runtime->GetDisplay().PointsHeight() == [UIScreen mainScreen].bounds.size.height );
-
 	Rect screenBounds;
 	GetScreenBounds( screenBounds );
 	CGRect r = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );

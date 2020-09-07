@@ -10,14 +10,10 @@
 simulator =
 {
 	device = "winphone-phone",
-	screenOriginX = 48,
-	screenOriginY = 144,
-	screenWidth = 480,
-	screenHeight = 800,
-	deviceImage = "HTC-8S.png",
+	deviceWidth = 800,
+	deviceHeight = 480,
 	displayManufacturer = "Not Supported Yet", -- Unsupported on WP8, return the stub implementation
 	displayName = "WindowsPhone",
-	supportsScreenRotation = true,
 	hasAccelerometer = true,
 	windowTitleBarName = "HTC Windows Phone 8S",
 	defaultFontSize = 25.333,

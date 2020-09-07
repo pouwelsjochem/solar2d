@@ -22,12 +22,9 @@
 
 /* Begin PBXBuildFile section */
 		000CE76712B73EE300D9B6A4 /* Rtt_Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6BA12B73EE300D9B6A4 /* Rtt_Archive.cpp */; };
-		000CE77512B73EE300D9B6A4 /* Rtt_DeviceOrientation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6C812B73EE300D9B6A4 /* Rtt_DeviceOrientation.cpp */; };
 		000CE78212B73EE300D9B6A4 /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D512B73EE300D9B6A4 /* Rtt_Event.cpp */; };
 		000CE78412B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D712B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp */; };
 		000CE78712B73EE300D9B6A4 /* Rtt_GPU.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6DA12B73EE300D9B6A4 /* Rtt_GPU.h */; };
-		000CE78812B73EE300D9B6A4 /* Rtt_GPUStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6DB12B73EE300D9B6A4 /* Rtt_GPUStream.cpp */; };
-		000CE78912B73EE300D9B6A4 /* Rtt_GPUStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6DC12B73EE300D9B6A4 /* Rtt_GPUStream.h */; };
 		000CE79212B73EE300D9B6A4 /* Rtt_LuaContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6E512B73EE300D9B6A4 /* Rtt_LuaContext.cpp */; };
 		000CE79312B73EE300D9B6A4 /* Rtt_LuaContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6E612B73EE300D9B6A4 /* Rtt_LuaContext.h */; };
 		000CE79412B73EE300D9B6A4 /* Rtt_LuaFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6E712B73EE300D9B6A4 /* Rtt_LuaFile.h */; };
@@ -92,8 +89,6 @@
 		000CE7EB12B73EE300D9B6A4 /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */; };
 		000CE7EC12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */; };
 		000CE7ED12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */; };
-		000CE7EE12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */; };
-		000CE7EF12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */; };
 		000CE7F212B73EE300D9B6A4 /* Rtt_RenderingStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74612B73EE300D9B6A4 /* Rtt_RenderingStream.cpp */; };
 		000CE7F312B73EE300D9B6A4 /* Rtt_RenderingStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74712B73EE300D9B6A4 /* Rtt_RenderingStream.h */; };
 		000CE7F412B73EE300D9B6A4 /* Rtt_Resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74812B73EE300D9B6A4 /* Rtt_Resource.cpp */; };
@@ -102,14 +97,10 @@
 		000CE7F712B73EE300D9B6A4 /* Rtt_Runtime.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74B12B73EE300D9B6A4 /* Rtt_Runtime.h */; };
 		000CE7F812B73EE300D9B6A4 /* Rtt_Scheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74C12B73EE300D9B6A4 /* Rtt_Scheduler.cpp */; };
 		000CE7F912B73EE300D9B6A4 /* Rtt_Scheduler.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74D12B73EE300D9B6A4 /* Rtt_Scheduler.h */; };
-		000CE80212B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE75612B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.cpp */; };
-		000CE80312B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE75712B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.h */; };
-		000CE80412B73EE300D9B6A4 /* Rtt_TesselatorStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE75812B73EE300D9B6A4 /* Rtt_TesselatorStream.cpp */; };
 		000CE80812B73EE300D9B6A4 /* Rtt_Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE75C12B73EE300D9B6A4 /* Rtt_Transform.cpp */; };
 		000CE8B812B73F7500D9B6A4 /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8AA12B73F7500D9B6A4 /* lsqlite3.c */; settings = {COMPILER_FLAGS = "-Wdeprecated-declarations "; }; };
 		000CE8D312B7400900D9B6A4 /* init.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8CE12B7400900D9B6A4 /* init.lua */; };
 		000CE8D412B7400900D9B6A4 /* iPhonePackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8CF12B7400900D9B6A4 /* iPhonePackageApp.lua */; };
-		000CE8D512B7400900D9B6A4 /* runtime.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D012B7400900D9B6A4 /* runtime.lua */; };
 		000CE8D612B7400900D9B6A4 /* shell.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D112B7400900D9B6A4 /* shell.lua */; };
 		000CE8F912B7404400D9B6A4 /* ListKeyStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8DE12B7404400D9B6A4 /* ListKeyStore.cpp */; };
 		000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8EA12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp */; };
@@ -251,19 +242,15 @@
 		00B73D6A12B720CA0057F594 /* build.properties in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C9312B720C90057F594 /* build.properties */; };
 		00B73D6B12B720CA0057F594 /* build.xml in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C9412B720C90057F594 /* build.xml */; };
 		00B73D8B12B720CA0057F594 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CD912B720C90057F594 /* main.m */; };
-		00B73D8F12B720CA0057F594 /* SkinView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CE012B720C90057F594 /* SkinView.mm */; };
-		00B73D9012B720CA0057F594 /* SkinnableWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CE312B720C90057F594 /* SkinnableWindow.mm */; };
 		00B73D9712B720CA0057F594 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
 		00B73D9812B720CA0057F594 /* Rtt_MacFBConnect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */; };
 		00B73D9A12B720CA0057F594 /* Rtt_MacImageProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF612B720C90057F594 /* Rtt_MacImageProvider.mm */; };
 		00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */; };
 		00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */; };
 		00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */; };
-		00B73D9F12B720CA0057F594 /* Rtt_MacSurfaceVideoRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0012B720C90057F594 /* Rtt_MacSurfaceVideoRecorder.mm */; };
 		00B73DA012B720CA0057F594 /* Rtt_MacTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */; };
 		00B73DA112B720CA0057F594 /* Rtt_MacTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */; };
 		00B73DA312B720CA0057F594 /* Rtt_MacVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */; };
-		00B73DA412B720CA0057F594 /* Rtt_MacWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */; };
 		00B73DA612B720CA0057F594 /* ButtonTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0F12B720C90057F594 /* ButtonTextField.m */; };
 		00B73DA712B720CA0057F594 /* ResponderPassthroughTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1112B720C90057F594 /* ResponderPassthroughTextField.m */; };
 		00B73DA812B720CA0057F594 /* ButtonImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1312B720C90057F594 /* ButtonImageView.m */; };
@@ -536,7 +523,6 @@
 		A4B66B2517728D070077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B2317728CF10077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp */; };
 		A4B71B9413F4BDC7009428CF /* Rtt_LuaResourceOwner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */; };
 		A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		A4BED90D14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */; };
 		A4BEDC9B14BE81320028BE25 /* Rtt_MacVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */; };
 		A4C9CB2C17BAE2480071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */; };
 		A4C9CB3217BAE36E0071753E /* kernel_generator_checkerboard_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB3117BAE35A0071753E /* kernel_generator_checkerboard_gl.lua */; };
@@ -615,7 +601,6 @@
 		C229DFFA1B32221B00D87A7C /* Rtt_CompositePaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A492760B17B98BAE00DAD62A /* Rtt_CompositePaint.h */; };
 		C229DFFB1B32221B00D87A7C /* Rtt_Config.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BC512B71BF20057F594 /* Rtt_Config.h */; };
 		C229DFFC1B32221B00D87A7C /* Rtt_ContainerObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287ED176A621100ACB6FF /* Rtt_ContainerObject.h */; };
-		C229DFFD1B32221B00D87A7C /* Rtt_DeviceOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6C912B73EE300D9B6A4 /* Rtt_DeviceOrientation.h */; };
 		C229DFFE1B32221B00D87A7C /* Rtt_Display.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287EF176A621100ACB6FF /* Rtt_Display.h */; };
 		C229DFFF1B32221B00D87A7C /* Rtt_DisplayDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F1176A621100ACB6FF /* Rtt_DisplayDefaults.h */; };
 		C229E0001B32221B00D87A7C /* Rtt_DisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F3176A621100ACB6FF /* Rtt_DisplayObject.h */; };
@@ -627,7 +612,6 @@
 		C229E0091B32221B00D87A7C /* Rtt_Fixed.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BC812B71BF20057F594 /* Rtt_Fixed.h */; };
 		C229E00A1B32221B00D87A7C /* Rtt_FixedBlockAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BCB12B71BF20057F594 /* Rtt_FixedBlockAllocator.h */; };
 		C229E00B1B32221B00D87A7C /* Rtt_GPU.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6DA12B73EE300D9B6A4 /* Rtt_GPU.h */; };
-		C229E00C1B32221B00D87A7C /* Rtt_GPUStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6DC12B73EE300D9B6A4 /* Rtt_GPUStream.h */; };
 		C229E00D1B32221B00D87A7C /* Rtt_Geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BCD12B71BF20057F594 /* Rtt_Geometry.h */; };
 		C229E00E1B32221B00D87A7C /* Rtt_GradientPaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66AF3176FBA220077B2BF /* Rtt_GradientPaint.h */; };
 		C229E00F1B32221B00D87A7C /* Rtt_GradientPaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032617739BFE0064ABA0 /* Rtt_GradientPaintAdapter.h */; };
@@ -705,7 +689,6 @@
 		C229E0641B32221B00D87A7C /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */; };
 		C229E0651B32221B00D87A7C /* Rtt_PlatformVideoPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */; };
 		C229E0661B32221B00D87A7C /* Rtt_PlatformVideoProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 0797EB56181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.h */; };
-		C229E0671B32221B00D87A7C /* Rtt_PlatformWebPopup.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */; };
 		C229E0681B32221B00D87A7C /* Rtt_Real.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD712B71BF20057F594 /* Rtt_Real.h */; };
 		C229E0691B32221B00D87A7C /* Rtt_RectObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328818176A621100ACB6FF /* Rtt_RectObject.h */; };
 		C229E06A1B32221B00D87A7C /* Rtt_RectPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A432881A176A621100ACB6FF /* Rtt_RectPath.h */; };
@@ -741,7 +724,6 @@
 		C229E0881B32221B00D87A7C /* Rtt_StageObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328832176A621200ACB6FF /* Rtt_StageObject.h */; };
 		C229E0891B32221B00D87A7C /* Rtt_String.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BDD12B71BF20057F594 /* Rtt_String.h */; };
 		C229E08A1B32221B00D87A7C /* Rtt_StringHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BDF12B71BF20057F594 /* Rtt_StringHash.h */; };
-		C229E08B1B32221B00D87A7C /* Rtt_StrokeTesselatorStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE75712B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.h */; };
 		C229E08C1B32221B00D87A7C /* Rtt_Tesselator.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328834176A621200ACB6FF /* Rtt_Tesselator.h */; };
 		C229E08D1B32221B00D87A7C /* Rtt_TesselatorCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328836176A621200ACB6FF /* Rtt_TesselatorCircle.h */; };
 		C229E08E1B32221B00D87A7C /* Rtt_TesselatorLine.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328838176A621200ACB6FF /* Rtt_TesselatorLine.h */; };
@@ -749,7 +731,6 @@
 		C229E0901B32221B00D87A7C /* Rtt_TesselatorRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC87F17820BE000BE6805 /* Rtt_TesselatorRect.h */; };
 		C229E0911B32221B00D87A7C /* Rtt_TesselatorRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */; };
 		C229E0921B32221B00D87A7C /* Rtt_TesselatorShape.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */; };
-		C229E0931B32221B00D87A7C /* Rtt_TesselatorStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE75912B73EE300D9B6A4 /* Rtt_TesselatorStream.h */; };
 		C229E0941B32221B00D87A7C /* Rtt_TextObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883E176A621200ACB6FF /* Rtt_TextObject.h */; };
 		C229E0951B32221B00D87A7C /* Rtt_TextureFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8D5178A269F00BE6805 /* Rtt_TextureFactory.h */; };
 		C229E0961B32221B00D87A7C /* Rtt_TextureResource.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8D6178A26C200BE6805 /* Rtt_TextureResource.h */; };
@@ -795,7 +776,6 @@
 		C229E0CD1B32221B00D87A7C /* Rtt_CompositeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EA176A621100ACB6FF /* Rtt_CompositeObject.cpp */; };
 		C229E0CE1B32221B00D87A7C /* Rtt_CompositePaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A492760A17B98BAE00DAD62A /* Rtt_CompositePaint.cpp */; };
 		C229E0CF1B32221B00D87A7C /* Rtt_ContainerObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EC176A621100ACB6FF /* Rtt_ContainerObject.cpp */; };
-		C229E0D01B32221B00D87A7C /* Rtt_DeviceOrientation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6C812B73EE300D9B6A4 /* Rtt_DeviceOrientation.cpp */; };
 		C229E0D11B32221B00D87A7C /* Rtt_Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EE176A621100ACB6FF /* Rtt_Display.cpp */; };
 		C229E0D21B32221B00D87A7C /* Rtt_DisplayDefaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F0176A621100ACB6FF /* Rtt_DisplayDefaults.cpp */; };
 		C229E0D31B32221B00D87A7C /* Rtt_DisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F2176A621100ACB6FF /* Rtt_DisplayObject.cpp */; settings = {COMPILER_FLAGS = "-frtti"; }; };
@@ -807,7 +787,6 @@
 		C229E0DC1B32221B00D87A7C /* Rtt_Fixed.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BC712B71BF20057F594 /* Rtt_Fixed.c */; };
 		C229E0DD1B32221B00D87A7C /* Rtt_FixedBlockAllocator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BCA12B71BF20057F594 /* Rtt_FixedBlockAllocator.cpp */; };
 		C229E0DE1B32221B00D87A7C /* Rtt_FixedMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BC912B71BF20057F594 /* Rtt_FixedMath.c */; };
-		C229E0DF1B32221B00D87A7C /* Rtt_GPUStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6DB12B73EE300D9B6A4 /* Rtt_GPUStream.cpp */; };
 		C229E0E01B32221B00D87A7C /* Rtt_Geometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BCC12B71BF20057F594 /* Rtt_Geometry.cpp */; };
 		C229E0E11B32221B00D87A7C /* Rtt_GradientPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66AF2176FBA220077B2BF /* Rtt_GradientPaint.cpp */; };
 		C229E0E21B32221B00D87A7C /* Rtt_GradientPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A475032517739BFD0064ABA0 /* Rtt_GradientPaintAdapter.cpp */; };
@@ -879,7 +858,6 @@
 		C229E1321B32221B00D87A7C /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */; };
 		C229E1331B32221B00D87A7C /* Rtt_PlatformVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */; };
 		C229E1341B32221B00D87A7C /* Rtt_PlatformVideoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */; };
-		C229E1351B32221B00D87A7C /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */; };
 		C229E1361B32221B00D87A7C /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043F17A3774E00681DED /* Rtt_ReadOnlyInputAxisCollection.cpp */; };
 		C229E1371B32221B00D87A7C /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE70178E18B00047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp */; };
 		C229E1381B32221B00D87A7C /* Rtt_RectObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328817176A621100ACB6FF /* Rtt_RectObject.cpp */; };
@@ -920,7 +898,6 @@
 		C229E15B1B32221B00D87A7C /* Rtt_StageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328831176A621200ACB6FF /* Rtt_StageObject.cpp */; };
 		C229E15C1B32221B00D87A7C /* Rtt_String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BDC12B71BF20057F594 /* Rtt_String.cpp */; };
 		C229E15D1B32221B00D87A7C /* Rtt_StringHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BDE12B71BF20057F594 /* Rtt_StringHash.cpp */; };
-		C229E15E1B32221B00D87A7C /* Rtt_StrokeTesselatorStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE75612B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.cpp */; };
 		C229E15F1B32221B00D87A7C /* Rtt_Tesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328833176A621200ACB6FF /* Rtt_Tesselator.cpp */; };
 		C229E1601B32221B00D87A7C /* Rtt_TesselatorCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328835176A621200ACB6FF /* Rtt_TesselatorCircle.cpp */; };
 		C229E1611B32221B00D87A7C /* Rtt_TesselatorLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328837176A621200ACB6FF /* Rtt_TesselatorLine.cpp */; };
@@ -928,7 +905,6 @@
 		C229E1631B32221B00D87A7C /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */; };
 		C229E1641B32221B00D87A7C /* Rtt_TesselatorRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328839176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp */; };
 		C229E1651B32221B00D87A7C /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */; };
-		C229E1661B32221B00D87A7C /* Rtt_TesselatorStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE75812B73EE300D9B6A4 /* Rtt_TesselatorStream.cpp */; };
 		C229E1671B32221B00D87A7C /* Rtt_TextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883D176A621200ACB6FF /* Rtt_TextObject.cpp */; };
 		C229E1681B32221B00D87A7C /* Rtt_TextureFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8D4178A268B00BE6805 /* Rtt_TextureFactory.cpp */; };
 		C229E1691B32221B00D87A7C /* Rtt_TextureResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8D3178A267D00BE6805 /* Rtt_TextureResource.cpp */; };
@@ -1035,7 +1011,6 @@
 		C229E1D71B32221B00D87A7C /* luaal.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C2712B71C320057F594 /* luaal.c */; };
 		C229E1DA1B32221B00D87A7C /* re.lua in Sources */ = {isa = PBXBuildFile; fileRef = C26D8DA3195104D7008DE65C /* re.lua */; };
 		C229E1DB1B32221B00D87A7C /* remdebug_engine.lua in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C8612B720C90057F594 /* remdebug_engine.lua */; };
-		C229E1DD1B32221B00D87A7C /* runtime.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D012B7400900D9B6A4 /* runtime.lua */; };
 		C229E1DE1B32221B00D87A7C /* shell.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D112B7400900D9B6A4 /* shell.lua */; };
 		C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A43288A1176A626B00ACB6FF /* shell_default_gl.lua */; };
 		C229E1E71B32221B00D87A7C /* webPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A425457318E4FD1800EE06A8 /* webPackageApp.lua */; };
@@ -1075,14 +1050,11 @@
 		C2A377761B34CA6300BB5B88 /* Rtt_MacActivityIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B71145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm */; };
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
-		C2A377791B34D38400BB5B88 /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */; };
-		C2A3777A1B34D38400BB5B88 /* Rtt_MacWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */; };
 		C2A3777B1B34D3A000BB5B88 /* Rtt_PlatformVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */; };
 		C2A3777C1B34D3A000BB5B88 /* Rtt_PlatformVideoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */; };
 		C2A3777D1B34D3A000BB5B88 /* Rtt_MacVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */; };
 		C2A3777E1B34D3A000BB5B88 /* Rtt_MacVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */; };
 		C2A3777F1B34D3A000BB5B88 /* Rtt_MacVideoProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0797EB5C181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm */; };
-		C2A377801B34D3BE00BB5B88 /* Rtt_MacWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
 		C2ADB45A1B6C1C31008C9BF2 /* OSXAppPackageSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2ADB4591B6C1C31008C9BF2 /* OSXAppPackageSheet.xib */; };
 		C2AEAC1718E23E5D004F30FE /* _coronatest.jar in Resources */ = {isa = PBXBuildFile; fileRef = C2AEAC1418E23B34004F30FE /* _coronatest.jar */; };
@@ -1162,7 +1134,6 @@
 		C2DA96361B46460F00DAF684 /* Rtt_BitmapMask.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287E3176A621100ACB6FF /* Rtt_BitmapMask.h */; };
 		C2DA96371B46460F00DAF684 /* Rtt_LuaLibDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */; };
 		C2DA96381B46460F00DAF684 /* Rtt_LuaLibInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */; };
-		C2DA96391B46460F00DAF684 /* Rtt_TesselatorStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE75912B73EE300D9B6A4 /* Rtt_TesselatorStream.h */; };
 		C2DA963A1B46460F00DAF684 /* Rtt_LuaUserdataProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B1817726CB00077B2BF /* Rtt_LuaUserdataProxy.h */; };
 		C2DA963B1B46460F00DAF684 /* Rtt_PlatformAudioSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 006E5C4D13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.h */; };
 		C2DA963C1B46460F00DAF684 /* CoronaLuaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A491867D1641F27400A39286 /* CoronaLuaLibrary.h */; };
@@ -1213,7 +1184,6 @@
 		C2DA966E1B46460F00DAF684 /* Rtt_TesselatorPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8A5178389C000BE6805 /* Rtt_TesselatorPolygon.h */; };
 		C2DA96701B46460F00DAF684 /* CoronaMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = A491861A1641DD6100A39286 /* CoronaMacros.h */; };
 		C2DA96711B46460F00DAF684 /* CoronaVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = A40C523F16F847EA00AE2ECF /* CoronaVersion.h */; };
-		C2DA96721B46460F00DAF684 /* Rtt_DeviceOrientation.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6C912B73EE300D9B6A4 /* Rtt_DeviceOrientation.h */; };
 		C2DA96731B46460F00DAF684 /* Rtt_New.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD612B71BF20057F594 /* Rtt_New.h */; };
 		C2DA96741B46460F00DAF684 /* Rtt_Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = A432881C176A621100ACB6FF /* Rtt_Scene.h */; };
 		C2DA96751B46460F00DAF684 /* Rtt_ShapeAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B201772873A0077B2BF /* Rtt_ShapeAdapter.h */; };
@@ -1847,14 +1817,10 @@
 /* Begin PBXFileReference section */
 		000CE6BA12B73EE300D9B6A4 /* Rtt_Archive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Archive.cpp; sourceTree = "<group>"; };
 		000CE6BB12B73EE300D9B6A4 /* Rtt_Archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Archive.h; sourceTree = "<group>"; };
-		000CE6C812B73EE300D9B6A4 /* Rtt_DeviceOrientation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_DeviceOrientation.cpp; sourceTree = "<group>"; };
-		000CE6C912B73EE300D9B6A4 /* Rtt_DeviceOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_DeviceOrientation.h; sourceTree = "<group>"; };
 		000CE6D512B73EE300D9B6A4 /* Rtt_Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Event.cpp; sourceTree = "<group>"; };
 		000CE6D612B73EE300D9B6A4 /* Rtt_Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Event.h; sourceTree = "<group>"; };
 		000CE6D712B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_ExplicitTemplates.cpp; sourceTree = "<group>"; };
 		000CE6DA12B73EE300D9B6A4 /* Rtt_GPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_GPU.h; sourceTree = "<group>"; };
-		000CE6DB12B73EE300D9B6A4 /* Rtt_GPUStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_GPUStream.cpp; sourceTree = "<group>"; };
-		000CE6DC12B73EE300D9B6A4 /* Rtt_GPUStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_GPUStream.h; sourceTree = "<group>"; };
 		000CE6E512B73EE300D9B6A4 /* Rtt_LuaContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaContext.cpp; sourceTree = "<group>"; };
 		000CE6E612B73EE300D9B6A4 /* Rtt_LuaContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaContext.h; sourceTree = "<group>"; };
 		000CE6E712B73EE300D9B6A4 /* Rtt_LuaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaFile.h; sourceTree = "<group>"; };
@@ -1922,8 +1888,6 @@
 		000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformTimer.h; sourceTree = "<group>"; };
 		000CE74012B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformVideoPlayer.cpp; sourceTree = "<group>"; };
 		000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformVideoPlayer.h; sourceTree = "<group>"; };
-		000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformWebPopup.cpp; sourceTree = "<group>"; };
-		000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformWebPopup.h; sourceTree = "<group>"; };
 		000CE74612B73EE300D9B6A4 /* Rtt_RenderingStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RenderingStream.cpp; sourceTree = "<group>"; };
 		000CE74712B73EE300D9B6A4 /* Rtt_RenderingStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RenderingStream.h; sourceTree = "<group>"; };
 		000CE74812B73EE300D9B6A4 /* Rtt_Resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Resource.cpp; sourceTree = "<group>"; };
@@ -1932,16 +1896,11 @@
 		000CE74B12B73EE300D9B6A4 /* Rtt_Runtime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Runtime.h; sourceTree = "<group>"; };
 		000CE74C12B73EE300D9B6A4 /* Rtt_Scheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Scheduler.cpp; sourceTree = "<group>"; };
 		000CE74D12B73EE300D9B6A4 /* Rtt_Scheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Scheduler.h; sourceTree = "<group>"; };
-		000CE75612B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_StrokeTesselatorStream.cpp; sourceTree = "<group>"; };
-		000CE75712B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_StrokeTesselatorStream.h; sourceTree = "<group>"; };
-		000CE75812B73EE300D9B6A4 /* Rtt_TesselatorStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_TesselatorStream.cpp; sourceTree = "<group>"; };
-		000CE75912B73EE300D9B6A4 /* Rtt_TesselatorStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_TesselatorStream.h; sourceTree = "<group>"; };
 		000CE75C12B73EE300D9B6A4 /* Rtt_Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Transform.cpp; sourceTree = "<group>"; };
 		000CE75D12B73EE300D9B6A4 /* Rtt_Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Transform.h; sourceTree = "<group>"; };
 		000CE8AA12B73F7500D9B6A4 /* lsqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lsqlite3.c; sourceTree = "<group>"; };
 		000CE8CE12B7400900D9B6A4 /* init.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = init.lua; path = ../resources/init.lua; sourceTree = SOURCE_ROOT; };
 		000CE8CF12B7400900D9B6A4 /* iPhonePackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = iPhonePackageApp.lua; path = ../resources/iPhonePackageApp.lua; sourceTree = SOURCE_ROOT; };
-		000CE8D012B7400900D9B6A4 /* runtime.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.lua; path = ../resources/runtime.lua; sourceTree = SOURCE_ROOT; };
 		000CE8D112B7400900D9B6A4 /* shell.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shell.lua; path = ../resources/shell.lua; sourceTree = SOURCE_ROOT; };
 		000CE8DE12B7404400D9B6A4 /* ListKeyStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ListKeyStore.cpp; sourceTree = "<group>"; };
 		000CE8DF12B7404400D9B6A4 /* ListKeyStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListKeyStore.h; sourceTree = "<group>"; };
@@ -1958,8 +1917,6 @@
 		000CE90912B7409400D9B6A4 /* sha2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha2.h; sourceTree = "<group>"; };
 		000CE90D12B7410200D9B6A4 /* CoronaViewPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaViewPrivate.h; path = browser/CoronaViewPrivate.h; sourceTree = "<group>"; };
 		000CE90E12B7410200D9B6A4 /* CoronaViewPrivate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaViewPrivate.mm; path = browser/CoronaViewPrivate.mm; sourceTree = "<group>"; };
-		000CE90F12B7410200D9B6A4 /* PluginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginView.h; sourceTree = "<group>"; };
-		000CE91012B7410200D9B6A4 /* PluginView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PluginView.mm; sourceTree = "<group>"; };
 		000CE91212B7413200D9B6A4 /* Rtt_AppleAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AppleAudioPlayer.cpp; path = ../apple/Rtt_AppleAudioPlayer.cpp; sourceTree = "<group>"; };
 		000CE91312B7413200D9B6A4 /* Rtt_AppleAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleAudioPlayer.h; path = ../apple/Rtt_AppleAudioPlayer.h; sourceTree = "<group>"; };
 		000CE91412B7413200D9B6A4 /* Rtt_AppleAudioRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleAudioRecorder.mm; path = ../apple/Rtt_AppleAudioRecorder.mm; sourceTree = "<group>"; };
@@ -2202,17 +2159,12 @@
 		00B73C9212B720C90057F594 /* Rtt_AndroidAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AndroidAppPackager.h; path = ../android/Rtt_AndroidAppPackager.h; sourceTree = SOURCE_ROOT; };
 		00B73C9312B720C90057F594 /* build.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = build.properties; path = ../android/resources/build.properties; sourceTree = SOURCE_ROOT; };
 		00B73C9412B720C90057F594 /* build.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = build.xml; path = ../android/resources/build.xml; sourceTree = SOURCE_ROOT; };
-		00B73CB112B720C90057F594 /* CoronaPlugIn-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "CoronaPlugIn-Info.plist"; path = "../CoronaPlugIn-Info.plist"; sourceTree = "<group>"; };
 		00B73CD812B720C90057F594 /* Rtt_Player.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Player.pch; sourceTree = "<group>"; };
 		00B73CD912B720C90057F594 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		00B73CDC12B720C90057F594 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		00B73CDD12B720C90057F594 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		00B73CDE12B720C90057F594 /* GLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLView.mm; sourceTree = "<group>"; };
 		00B73CDF12B720C90057F594 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
-		00B73CE012B720C90057F594 /* SkinView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SkinView.mm; sourceTree = "<group>"; };
-		00B73CE112B720C90057F594 /* SkinView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinView.h; sourceTree = "<group>"; };
-		00B73CE212B720C90057F594 /* SkinnableWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinnableWindow.h; sourceTree = "<group>"; };
-		00B73CE312B720C90057F594 /* SkinnableWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SkinnableWindow.mm; sourceTree = "<group>"; };
 		00B73CE912B720C90057F594 /* Rtt_IOSAppPackager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_IOSAppPackager.mm; sourceTree = "<group>"; };
 		00B73CEA12B720C90057F594 /* Rtt_IOSAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_IOSAppPackager.h; sourceTree = "<group>"; };
 		00B73CED12B720C90057F594 /* Rtt_MacDevice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacDevice.mm; sourceTree = "<group>"; };
@@ -2234,8 +2186,6 @@
 		00B73CFD12B720C90057F594 /* Rtt_MacServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacServer.h; sourceTree = "<group>"; };
 		00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacSimulator.mm; sourceTree = "<group>"; };
 		00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacSimulator.h; sourceTree = "<group>"; };
-		00B73D0012B720C90057F594 /* Rtt_MacSurfaceVideoRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacSurfaceVideoRecorder.mm; sourceTree = "<group>"; };
-		00B73D0112B720C90057F594 /* Rtt_MacSurfaceVideoRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacSurfaceVideoRecorder.h; sourceTree = "<group>"; };
 		00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacTextBoxObject.mm; sourceTree = "<group>"; };
 		00B73D0312B720C90057F594 /* Rtt_MacTextBoxObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacTextBoxObject.h; sourceTree = "<group>"; };
 		00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacTextFieldObject.mm; sourceTree = "<group>"; };
@@ -2244,8 +2194,6 @@
 		00B73D0712B720C90057F594 /* Rtt_MacViewSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewSurface.h; sourceTree = "<group>"; };
 		00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacVideoPlayer.mm; sourceTree = "<group>"; };
 		00B73D0912B720C90057F594 /* Rtt_MacVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacVideoPlayer.h; sourceTree = "<group>"; };
-		00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacWebPopup.mm; sourceTree = "<group>"; };
-		00B73D0B12B720C90057F594 /* Rtt_MacWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacWebPopup.h; sourceTree = "<group>"; };
 		00B73D0E12B720C90057F594 /* ButtonTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonTextField.h; sourceTree = "<group>"; };
 		00B73D0F12B720C90057F594 /* ButtonTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonTextField.m; sourceTree = "<group>"; };
 		00B73D1012B720C90057F594 /* ResponderPassthroughTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResponderPassthroughTextField.h; sourceTree = "<group>"; };
@@ -2668,8 +2616,6 @@
 		A4B66B2417728CF90077B2BF /* Rtt_ShapeAdapterRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterRoundedRect.h; path = Display/Rtt_ShapeAdapterRoundedRect.h; sourceTree = "<group>"; };
 		A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaResourceOwner.cpp; sourceTree = "<group>"; };
 		A4B71B9213F4BDC2009428CF /* Rtt_LuaResourceOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaResourceOwner.h; sourceTree = "<group>"; };
-		A4BED90B14B65EAD0028BE25 /* Rtt_MacWebViewObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacWebViewObject.h; sourceTree = "<group>"; };
-		A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacWebViewObject.mm; sourceTree = "<group>"; };
 		A4BEDC9914BE81320028BE25 /* Rtt_MacVideoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacVideoObject.h; sourceTree = "<group>"; };
 		A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacVideoObject.mm; sourceTree = "<group>"; };
 		A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_marchingAnts_gl.lua; path = Display/Shader/kernel_generator_marchingAnts_gl.lua; sourceTree = "<group>"; };
@@ -2982,16 +2928,6 @@
 			name = hmac;
 			path = ../../external/hmac;
 			sourceTree = SOURCE_ROOT;
-		};
-		000CE90C12B7410100D9B6A4 /* browser */ = {
-			isa = PBXGroup;
-			children = (
-				00B73CB112B720C90057F594 /* CoronaPlugIn-Info.plist */,
-				000CE90F12B7410200D9B6A4 /* PluginView.h */,
-				000CE91012B7410200D9B6A4 /* PluginView.mm */,
-			);
-			path = browser;
-			sourceTree = "<group>";
 		};
 		000CE91112B7413200D9B6A4 /* apple */ = {
 			isa = PBXGroup;
@@ -3307,16 +3243,12 @@
 				00B73BAF12B71BDA0057F594 /* Resources */,
 				000CE6BA12B73EE300D9B6A4 /* Rtt_Archive.cpp */,
 				000CE6BB12B73EE300D9B6A4 /* Rtt_Archive.h */,
-				000CE6C812B73EE300D9B6A4 /* Rtt_DeviceOrientation.cpp */,
-				000CE6C912B73EE300D9B6A4 /* Rtt_DeviceOrientation.h */,
 				000CE6D512B73EE300D9B6A4 /* Rtt_Event.cpp */,
 				000CE6D612B73EE300D9B6A4 /* Rtt_Event.h */,
 				000CE6D712B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp */,
 				A4B66ABE176A7AB20077B2BF /* Rtt_FilePath.cpp */,
 				A4B66ABF176A7AB20077B2BF /* Rtt_FilePath.h */,
 				000CE6DA12B73EE300D9B6A4 /* Rtt_GPU.h */,
-				000CE6DB12B73EE300D9B6A4 /* Rtt_GPUStream.cpp */,
-				000CE6DC12B73EE300D9B6A4 /* Rtt_GPUStream.h */,
 				A43287FD176A621100ACB6FF /* Rtt_HitTestObject.cpp */,
 				A43287FE176A621100ACB6FF /* Rtt_HitTestObject.h */,
 				4C111FC91B2A41B200DF8BE8 /* Rtt_KeyName.cpp */,
@@ -3424,8 +3356,6 @@
 				000CE74112B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h */,
 				0797EB55181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp */,
 				0797EB56181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.h */,
-				000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */,
-				000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */,
 				03C89D521D6FE7B2004CD668 /* Rtt_Preference.cpp */,
 				03C89D531D6FE7B2004CD668 /* Rtt_Preference.h */,
 				03C89D541D6FE7B2004CD668 /* Rtt_PreferenceCollection.cpp */,
@@ -3444,11 +3374,7 @@
 				A48DA96B1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.h */,
 				000CE74C12B73EE300D9B6A4 /* Rtt_Scheduler.cpp */,
 				000CE74D12B73EE300D9B6A4 /* Rtt_Scheduler.h */,
-				000CE75612B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.cpp */,
-				000CE75712B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.h */,
 				07EB77BA178DD3200089B3C5 /* Rtt_SurfaceInfo.h */,
-				000CE75812B73EE300D9B6A4 /* Rtt_TesselatorStream.cpp */,
-				000CE75912B73EE300D9B6A4 /* Rtt_TesselatorStream.h */,
 				000CE75C12B73EE300D9B6A4 /* Rtt_Transform.cpp */,
 				000CE75D12B73EE300D9B6A4 /* Rtt_Transform.h */,
 			);
@@ -3469,7 +3395,6 @@
 				000CE8CE12B7400900D9B6A4 /* init.lua */,
 				000CE8CF12B7400900D9B6A4 /* iPhonePackageApp.lua */,
 				C263C53B1B2145AB001ABE94 /* OSXPackageApp.lua */,
-				000CE8D012B7400900D9B6A4 /* runtime.lua */,
 				000CE8D112B7400900D9B6A4 /* shell.lua */,
 				A40A90781BD9A5C1001D2038 /* tvosPackageApp.lua */,
 				C2AF1E4F1DA6D80B00907A65 /* ValidateSettings.lua */,
@@ -3569,7 +3494,6 @@
 				00B73C8A12B720C90057F594 /* android */,
 				A4B00F9E145655E0008FB6E6 /* App Builds */,
 				000CE91112B7413200D9B6A4 /* apple */,
-				000CE90C12B7410100D9B6A4 /* browser */,
 				A4DD240F14313269002A3C86 /* Corona Screens */,
 				000CE90512B7409400D9B6A4 /* hmac */,
 				A4663DE61436885B0091BD47 /* modules */,
@@ -3621,8 +3545,6 @@
 				00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */,
 				A41A18E7143AB08000F1BF0D /* Rtt_MacSimulatorServices.h */,
 				A42E68AA143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm */,
-				00B73D0112B720C90057F594 /* Rtt_MacSurfaceVideoRecorder.h */,
-				00B73D0012B720C90057F594 /* Rtt_MacSurfaceVideoRecorder.mm */,
 				00B73D0312B720C90057F594 /* Rtt_MacTextBoxObject.h */,
 				00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */,
 				00B73D0512B720C90057F594 /* Rtt_MacTextFieldObject.h */,
@@ -3633,10 +3555,6 @@
 				00B73D0812B720C90057F594 /* Rtt_MacVideoPlayer.mm */,
 				0797EB5B181F0CC400FA57B5 /* Rtt_MacVideoProvider.h */,
 				0797EB5C181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm */,
-				00B73D0B12B720C90057F594 /* Rtt_MacWebPopup.h */,
-				00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */,
-				A4BED90B14B65EAD0028BE25 /* Rtt_MacWebViewObject.h */,
-				A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */,
 				00B73CD812B720C90057F594 /* Rtt_Player.pch */,
 				A4AB446F143BE11100607F77 /* SampleCodeLocator.h */,
 				A4AB4470143BE11200607F77 /* SampleCodeLocator.mm */,
@@ -3646,10 +3564,6 @@
 				C2942C1B1A0169B600372D6B /* SimulatorDeviceWindow.mm */,
 				004ADB391468C54300D732FC /* SkinlessSimulatorWindow.h */,
 				004ADB3A1468C54300D732FC /* SkinlessSimulatorWindow.mm */,
-				00B73CE212B720C90057F594 /* SkinnableWindow.h */,
-				00B73CE312B720C90057F594 /* SkinnableWindow.mm */,
-				00B73CE112B720C90057F594 /* SkinView.h */,
-				00B73CE012B720C90057F594 /* SkinView.mm */,
 				00B73D2212B720CA0057F594 /* TextEditorSupport.h */,
 				00B73D2312B720CA0057F594 /* TextEditorSupport.m */,
 				00C8225C13452C80005D1EEB /* ValidationSupportMacUI.h */,
@@ -4548,7 +4462,6 @@
 				C2DA964C1B46460F00DAF684 /* Rtt_CompositePaint.h in Headers */,
 				00B73BF112B71BF20057F594 /* Rtt_Config.h in Headers */,
 				C2DA96161B46460F00DAF684 /* Rtt_ContainerObject.h in Headers */,
-				C2DA96721B46460F00DAF684 /* Rtt_DeviceOrientation.h in Headers */,
 				C2DA961C1B46460F00DAF684 /* Rtt_Display.h in Headers */,
 				C2DA96581B46460F00DAF684 /* Rtt_DisplayDefaults.h in Headers */,
 				C2DA96121B46460F00DAF684 /* Rtt_DisplayObject.h in Headers */,
@@ -4562,7 +4475,6 @@
 				03D1C5591D70CCA000DB02EE /* Rtt_PreferenceCollection.h in Headers */,
 				00B73BF712B71BF20057F594 /* Rtt_FixedBlockAllocator.h in Headers */,
 				000CE78712B73EE300D9B6A4 /* Rtt_GPU.h in Headers */,
-				000CE78912B73EE300D9B6A4 /* Rtt_GPUStream.h in Headers */,
 				C2DA96311B46460F00DAF684 /* Rtt_Geometry.h in Headers */,
 				C2DA96331B46460F00DAF684 /* Rtt_GradientPaint.h in Headers */,
 				C2DA96451B46460F00DAF684 /* Rtt_GradientPaintAdapter.h in Headers */,
@@ -4653,7 +4565,6 @@
 				000CE7ED12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.h in Headers */,
 				03D1C55E1D70CCB200DB02EE /* Rtt_PreferenceValue.h in Headers */,
 				C2DA96481B46460F00DAF684 /* Rtt_PlatformVideoProvider.h in Headers */,
-				000CE7EF12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h in Headers */,
 				C2DA96291B46460F00DAF684 /* Rtt_Real.h in Headers */,
 				C2DA965C1B46460F00DAF684 /* Rtt_RectObject.h in Headers */,
 				C2DA96531B46460F00DAF684 /* Rtt_RectPath.h in Headers */,
@@ -4690,7 +4601,6 @@
 				A4328891176A621200ACB6FF /* Rtt_StageObject.h in Headers */,
 				00B73C0912B71BF20057F594 /* Rtt_String.h in Headers */,
 				00B73C0B12B71BF20057F594 /* Rtt_StringHash.h in Headers */,
-				000CE80312B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.h in Headers */,
 				A4328893176A621200ACB6FF /* Rtt_Tesselator.h in Headers */,
 				A4328895176A621200ACB6FF /* Rtt_TesselatorCircle.h in Headers */,
 				A4328897176A621200ACB6FF /* Rtt_TesselatorLine.h in Headers */,
@@ -4698,7 +4608,6 @@
 				C2DA961F1B46460F00DAF684 /* Rtt_TesselatorRect.h in Headers */,
 				A4328899176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h in Headers */,
 				A432889B176A621200ACB6FF /* Rtt_TesselatorShape.h in Headers */,
-				C2DA96391B46460F00DAF684 /* Rtt_TesselatorStream.h in Headers */,
 				A432889D176A621200ACB6FF /* Rtt_TextObject.h in Headers */,
 				A46AC8DB178A26D900BE6805 /* Rtt_TextureFactory.h in Headers */,
 				A46AC8DD178A26D900BE6805 /* Rtt_TextureResource.h in Headers */,
@@ -4809,7 +4718,6 @@
 				C229DFFA1B32221B00D87A7C /* Rtt_CompositePaint.h in Headers */,
 				C229DFFB1B32221B00D87A7C /* Rtt_Config.h in Headers */,
 				C229DFFC1B32221B00D87A7C /* Rtt_ContainerObject.h in Headers */,
-				C229DFFD1B32221B00D87A7C /* Rtt_DeviceOrientation.h in Headers */,
 				C229DFFE1B32221B00D87A7C /* Rtt_Display.h in Headers */,
 				C229DFFF1B32221B00D87A7C /* Rtt_DisplayDefaults.h in Headers */,
 				C229E0001B32221B00D87A7C /* Rtt_DisplayObject.h in Headers */,
@@ -4823,7 +4731,6 @@
 				03D1C55A1D70CCA100DB02EE /* Rtt_PreferenceCollection.h in Headers */,
 				C229E00A1B32221B00D87A7C /* Rtt_FixedBlockAllocator.h in Headers */,
 				C229E00B1B32221B00D87A7C /* Rtt_GPU.h in Headers */,
-				C229E00C1B32221B00D87A7C /* Rtt_GPUStream.h in Headers */,
 				C229E00D1B32221B00D87A7C /* Rtt_Geometry.h in Headers */,
 				C229E00E1B32221B00D87A7C /* Rtt_GradientPaint.h in Headers */,
 				C229E00F1B32221B00D87A7C /* Rtt_GradientPaintAdapter.h in Headers */,
@@ -4913,7 +4820,6 @@
 				C229E0651B32221B00D87A7C /* Rtt_PlatformVideoPlayer.h in Headers */,
 				C229E0661B32221B00D87A7C /* Rtt_PlatformVideoProvider.h in Headers */,
 				03D1C55D1D70CCB100DB02EE /* Rtt_PreferenceValue.h in Headers */,
-				C229E0671B32221B00D87A7C /* Rtt_PlatformWebPopup.h in Headers */,
 				C229E0681B32221B00D87A7C /* Rtt_Real.h in Headers */,
 				C229E0691B32221B00D87A7C /* Rtt_RectObject.h in Headers */,
 				C229E06A1B32221B00D87A7C /* Rtt_RectPath.h in Headers */,
@@ -4952,7 +4858,6 @@
 				C229E0881B32221B00D87A7C /* Rtt_StageObject.h in Headers */,
 				C229E0891B32221B00D87A7C /* Rtt_String.h in Headers */,
 				C229E08A1B32221B00D87A7C /* Rtt_StringHash.h in Headers */,
-				C229E08B1B32221B00D87A7C /* Rtt_StrokeTesselatorStream.h in Headers */,
 				C229E08C1B32221B00D87A7C /* Rtt_Tesselator.h in Headers */,
 				C229E08D1B32221B00D87A7C /* Rtt_TesselatorCircle.h in Headers */,
 				C229E08E1B32221B00D87A7C /* Rtt_TesselatorLine.h in Headers */,
@@ -4960,7 +4865,6 @@
 				C229E0901B32221B00D87A7C /* Rtt_TesselatorRect.h in Headers */,
 				C229E0911B32221B00D87A7C /* Rtt_TesselatorRoundedRect.h in Headers */,
 				C229E0921B32221B00D87A7C /* Rtt_TesselatorShape.h in Headers */,
-				C229E0931B32221B00D87A7C /* Rtt_TesselatorStream.h in Headers */,
 				C229E0941B32221B00D87A7C /* Rtt_TextObject.h in Headers */,
 				C229E0951B32221B00D87A7C /* Rtt_TextureFactory.h in Headers */,
 				C229E0961B32221B00D87A7C /* Rtt_TextureResource.h in Headers */,
@@ -5691,7 +5595,6 @@
 				A4328849176A621200ACB6FF /* Rtt_CompositeObject.cpp in Sources */,
 				A492760C17B98BAF00DAD62A /* Rtt_CompositePaint.cpp in Sources */,
 				A432884B176A621200ACB6FF /* Rtt_ContainerObject.cpp in Sources */,
-				000CE77512B73EE300D9B6A4 /* Rtt_DeviceOrientation.cpp in Sources */,
 				A432884D176A621200ACB6FF /* Rtt_Display.cpp in Sources */,
 				A432884F176A621200ACB6FF /* Rtt_DisplayDefaults.cpp in Sources */,
 				A4328851176A621200ACB6FF /* Rtt_DisplayObject.cpp in Sources */,
@@ -5703,7 +5606,6 @@
 				00B73BF312B71BF20057F594 /* Rtt_Fixed.c in Sources */,
 				00B73BF612B71BF20057F594 /* Rtt_FixedBlockAllocator.cpp in Sources */,
 				00B73BF512B71BF20057F594 /* Rtt_FixedMath.c in Sources */,
-				000CE78812B73EE300D9B6A4 /* Rtt_GPUStream.cpp in Sources */,
 				00B73BF812B71BF20057F594 /* Rtt_Geometry.cpp in Sources */,
 				A4B66AF4176FBA230077B2BF /* Rtt_GradientPaint.cpp in Sources */,
 				F5FA0AF91C73D61700E926A7 /* Rtt_TextureResourceExternal.cpp in Sources */,
@@ -5780,7 +5682,6 @@
 				000CE7EA12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp in Sources */,
 				000CE7EC12B73EE300D9B6A4 /* Rtt_PlatformVideoPlayer.cpp in Sources */,
 				0797EB57181F0C0300FA57B5 /* Rtt_PlatformVideoProvider.cpp in Sources */,
-				000CE7EE12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp in Sources */,
 				C2E993461A6B2FEC00E99F46 /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				C2E993471A6B2FEC00E99F46 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				A4328876176A621200ACB6FF /* Rtt_RectObject.cpp in Sources */,
@@ -5825,7 +5726,6 @@
 				00B73C0812B71BF20057F594 /* Rtt_String.cpp in Sources */,
 				00B73C0A12B71BF20057F594 /* Rtt_StringHash.cpp in Sources */,
 				03D1C5601D70CCCA00DB02EE /* Rtt_OperationResult.cpp in Sources */,
-				000CE80212B73EE300D9B6A4 /* Rtt_StrokeTesselatorStream.cpp in Sources */,
 				A4328892176A621200ACB6FF /* Rtt_Tesselator.cpp in Sources */,
 				03D1C59D1D70E65B00DB02EE /* Rtt_Preference.cpp in Sources */,
 				A4328894176A621200ACB6FF /* Rtt_TesselatorCircle.cpp in Sources */,
@@ -5834,7 +5734,6 @@
 				A46AC88017820BEB00BE6805 /* Rtt_TesselatorRect.cpp in Sources */,
 				A4328898176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				A432889A176A621200ACB6FF /* Rtt_TesselatorShape.cpp in Sources */,
-				000CE80412B73EE300D9B6A4 /* Rtt_TesselatorStream.cpp in Sources */,
 				A432889C176A621200ACB6FF /* Rtt_TextObject.cpp in Sources */,
 				A46AC8D9178A26D900BE6805 /* Rtt_TextureFactory.cpp in Sources */,
 				A46AC8D7178A26D900BE6805 /* Rtt_TextureResource.cpp in Sources */,
@@ -5944,7 +5843,6 @@
 				00B73C2912B71C320057F594 /* luaal.c in Sources */,
 				C26D8DA51951053F008DE65C /* re.lua in Sources */,
 				C208322D1AA54ADD005D2680 /* remdebug_engine.lua in Sources */,
-				000CE8D512B7400900D9B6A4 /* runtime.lua in Sources */,
 				000CE8D612B7400900D9B6A4 /* shell.lua in Sources */,
 				A43288B9176A67E600ACB6FF /* shell_default_gl.lua in Sources */,
 				A425457418E4FD6400EE06A8 /* webPackageApp.lua in Sources */,
@@ -6058,15 +5956,12 @@
 				00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */,
 				00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */,
 				A42E68AB143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm in Sources */,
-				00B73D9F12B720CA0057F594 /* Rtt_MacSurfaceVideoRecorder.mm in Sources */,
 				1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */,
 				00B73DA012B720CA0057F594 /* Rtt_MacTextBoxObject.mm in Sources */,
 				00B73DA112B720CA0057F594 /* Rtt_MacTextFieldObject.mm in Sources */,
 				A4BEDC9B14BE81320028BE25 /* Rtt_MacVideoObject.mm in Sources */,
 				00B73DA312B720CA0057F594 /* Rtt_MacVideoPlayer.mm in Sources */,
 				0797EB5D181F0CC400FA57B5 /* Rtt_MacVideoProvider.mm in Sources */,
-				00B73DA412B720CA0057F594 /* Rtt_MacWebPopup.mm in Sources */,
-				A4BED90D14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm in Sources */,
 				C21733781B20F21A00F79CB8 /* Rtt_OSXAppPackager.mm in Sources */,
 				000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */,
 				000CEA1212B7467E00D9B6A4 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
@@ -6081,9 +5976,7 @@
 				F57D17711BE25E1200AABAC1 /* Rtt_AppleInputDevice.mm in Sources */,
 				A4AB4471143BE11200607F77 /* SampleCodeLocator.mm in Sources */,
 				C2942C1C1A0169B600372D6B /* SimulatorDeviceWindow.mm in Sources */,
-				00B73D8F12B720CA0057F594 /* SkinView.mm in Sources */,
 				004ADB3B1468C54400D732FC /* SkinlessSimulatorWindow.mm in Sources */,
-				00B73D9012B720CA0057F594 /* SkinnableWindow.mm in Sources */,
 				00B73DB012B720CA0057F594 /* TextEditorSupport.m in Sources */,
 				C2678C1F1B85753800864110 /* AppleAppBuildController.mm in Sources */,
 				00C8225E13452C80005D1EEB /* ValidationSupportMacUI.m in Sources */,
@@ -6177,7 +6070,6 @@
 				C229E0CD1B32221B00D87A7C /* Rtt_CompositeObject.cpp in Sources */,
 				C229E0CE1B32221B00D87A7C /* Rtt_CompositePaint.cpp in Sources */,
 				C229E0CF1B32221B00D87A7C /* Rtt_ContainerObject.cpp in Sources */,
-				C229E0D01B32221B00D87A7C /* Rtt_DeviceOrientation.cpp in Sources */,
 				C229E0D11B32221B00D87A7C /* Rtt_Display.cpp in Sources */,
 				C229E0D21B32221B00D87A7C /* Rtt_DisplayDefaults.cpp in Sources */,
 				C229E0D31B32221B00D87A7C /* Rtt_DisplayObject.cpp in Sources */,
@@ -6189,7 +6081,6 @@
 				C229E0DC1B32221B00D87A7C /* Rtt_Fixed.c in Sources */,
 				C229E0DD1B32221B00D87A7C /* Rtt_FixedBlockAllocator.cpp in Sources */,
 				C229E0DE1B32221B00D87A7C /* Rtt_FixedMath.c in Sources */,
-				C229E0DF1B32221B00D87A7C /* Rtt_GPUStream.cpp in Sources */,
 				C229E0E01B32221B00D87A7C /* Rtt_Geometry.cpp in Sources */,
 				C229E0E11B32221B00D87A7C /* Rtt_GradientPaint.cpp in Sources */,
 				F5FA0AFA1C73D61700E926A7 /* Rtt_TextureResourceExternal.cpp in Sources */,
@@ -6266,7 +6157,6 @@
 				C229E1321B32221B00D87A7C /* Rtt_PlatformTimer.cpp in Sources */,
 				C229E1331B32221B00D87A7C /* Rtt_PlatformVideoPlayer.cpp in Sources */,
 				C229E1341B32221B00D87A7C /* Rtt_PlatformVideoProvider.cpp in Sources */,
-				C229E1351B32221B00D87A7C /* Rtt_PlatformWebPopup.cpp in Sources */,
 				C229E1361B32221B00D87A7C /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				C229E1371B32221B00D87A7C /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				C229E1381B32221B00D87A7C /* Rtt_RectObject.cpp in Sources */,
@@ -6312,7 +6202,6 @@
 				C229E15C1B32221B00D87A7C /* Rtt_String.cpp in Sources */,
 				C229E15D1B32221B00D87A7C /* Rtt_StringHash.cpp in Sources */,
 				03D1C55F1D70CCC900DB02EE /* Rtt_OperationResult.cpp in Sources */,
-				C229E15E1B32221B00D87A7C /* Rtt_StrokeTesselatorStream.cpp in Sources */,
 				C229E15F1B32221B00D87A7C /* Rtt_Tesselator.cpp in Sources */,
 				03D1C59E1D70E65C00DB02EE /* Rtt_Preference.cpp in Sources */,
 				C229E1601B32221B00D87A7C /* Rtt_TesselatorCircle.cpp in Sources */,
@@ -6321,7 +6210,6 @@
 				C229E1631B32221B00D87A7C /* Rtt_TesselatorRect.cpp in Sources */,
 				C229E1641B32221B00D87A7C /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				C229E1651B32221B00D87A7C /* Rtt_TesselatorShape.cpp in Sources */,
-				C229E1661B32221B00D87A7C /* Rtt_TesselatorStream.cpp in Sources */,
 				C229E1671B32221B00D87A7C /* Rtt_TextObject.cpp in Sources */,
 				C229E1681B32221B00D87A7C /* Rtt_TextureFactory.cpp in Sources */,
 				C229E1691B32221B00D87A7C /* Rtt_TextureResource.cpp in Sources */,
@@ -6432,7 +6320,6 @@
 				C229E1D71B32221B00D87A7C /* luaal.c in Sources */,
 				C229E1DA1B32221B00D87A7C /* re.lua in Sources */,
 				C229E1DB1B32221B00D87A7C /* remdebug_engine.lua in Sources */,
-				C229E1DD1B32221B00D87A7C /* runtime.lua in Sources */,
 				C229E1DE1B32221B00D87A7C /* shell.lua in Sources */,
 				C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */,
 				C229E1E71B32221B00D87A7C /* webPackageApp.lua in Sources */,
@@ -6488,15 +6375,12 @@
 				C2E9930B1A6B1A3100E99F46 /* Rtt_MacViewCallback.mm in Sources */,
 				C2E9930C1A6B1A3100E99F46 /* Rtt_MacViewSurface.mm in Sources */,
 				F57AE2061F051610000A4245 /* Rtt_AppleInAppStoreApple.mm in Sources */,
-				C2A3777A1B34D38400BB5B88 /* Rtt_MacWebPopup.mm in Sources */,
-				C2A377801B34D3BE00BB5B88 /* Rtt_MacWebViewObject.mm in Sources */,
 				C2D3DA6B1B179DA000137331 /* Rtt_NativeWindowMode.cpp in Sources */,
 				C2E9934F1A6B335D00E99F46 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
 				C2E993531A6B3D3900E99F46 /* Rtt_PlatformExitCallback.cpp in Sources */,
 				C2E993501A6B338900E99F46 /* Rtt_PlatformObjectWrapper.cpp in Sources */,
 				C2A3777B1B34D3A000BB5B88 /* Rtt_PlatformVideoPlayer.cpp in Sources */,
 				C2A3777C1B34D3A000BB5B88 /* Rtt_PlatformVideoProvider.cpp in Sources */,
-				C2A377791B34D38400BB5B88 /* Rtt_PlatformWebPopup.cpp in Sources */,
 				C2D3DA5A1B179C2400137331 /* Rtt_ProjectSettings.cpp in Sources */,
 				C2D3DA5E1B179C2400137331 /* Rtt_ReadOnlyProjectSettings.cpp in Sources */,
 				C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */,

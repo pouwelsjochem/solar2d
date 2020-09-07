@@ -59,6 +59,8 @@ EOF
         mv "$CONFIG_DST" "$CONFIG_SRC"
     fi
 
+    "$LUAC" -s -o "$CONFIG_DST" "$CONFIG_SRC" "$CONFIG_META"
+
     rm "$CONFIG_SRC"
     rm "$CONFIG_META"
 

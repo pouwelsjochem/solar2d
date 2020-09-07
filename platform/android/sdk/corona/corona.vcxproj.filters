@@ -724,9 +724,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformVideoProvider.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Preference.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -751,9 +748,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Archive.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_DeviceOrientation.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -761,12 +755,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_FilePath.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_FillTesselatorStream.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_GPUStream.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_HitTestObject.cpp">
@@ -1013,12 +1001,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Scheduler.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_TesselatorStream.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_Transform.cpp">
@@ -1327,9 +1309,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidStoreTransaction.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidSurface.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.cpp">
       <Filter>Android</Filter>
     </ClCompile>
@@ -1346,12 +1325,6 @@
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidVideoProvider.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidWebPopup.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidWebViewObject.cpp">
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\external\lsqlite3-7\lsqlite3.c">
@@ -1915,9 +1888,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformVideoProvider.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_Preference.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -1942,22 +1912,13 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_Callback.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_DeviceOrientation.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_Event.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_FilePath.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_FillTesselatorStream.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_GPU.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_GPUStream.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_HitTestObject.h">
@@ -2215,13 +2176,7 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_Scheduler.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_StrokeTesselatorStream.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_SurfaceInfo.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_TesselatorStream.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_Transform.h">
@@ -2398,9 +2353,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidStoreTransaction.h">
       <Filter>Android</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidSurface.h">
-      <Filter>Android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.h">
       <Filter>Android</Filter>
     </ClInclude>
@@ -2417,12 +2369,6 @@
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidVideoProvider.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidWebPopup.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidWebViewObject.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_PlatformOpenSLESPlayer.h">

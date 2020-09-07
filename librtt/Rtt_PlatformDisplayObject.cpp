@@ -39,12 +39,6 @@ PlatformDisplayObject::GetTextBoxObjectProxyVTable()
 }
 
 const LuaProxyVTable&
-PlatformDisplayObject::GetWebViewObjectProxyVTable()
-{
-	return LuaPlatformWebViewObjectProxyVTable::Constant();
-}
-
-const LuaProxyVTable&
 PlatformDisplayObject::GetVideoObjectProxyVTable()
 {
 	return LuaPlatformVideoObjectProxyVTable::Constant();
@@ -66,7 +60,7 @@ PlatformDisplayObject::~PlatformDisplayObject()
 void
 PlatformDisplayObject::Preinitialize( const Display& display )
 {
-	SetContentToScreenScale( display.CalculateContentToScreenScale() );
+	SetContentToScreenScale( display.GetContentToScreenScale() );
 }
 
 int
@@ -107,10 +101,7 @@ PlatformDisplayObject::GetL() const
 void
 PlatformDisplayObject::CalculateScreenBounds(const Display& display, Real contentToScreenScale, Rect& inOutBounds)
 {
-	Real offsetX = display.GetXOriginOffset();
-	Real offsetY = display.GetYOriginOffset();
-
-	inOutBounds.Translate( offsetX, offsetY );
+	inOutBounds.Translate( display.GetXScreenOffset(), display.GetYScreenOffset() );
 	inOutBounds.Scale( contentToScreenScale, contentToScreenScale );
 }
 
@@ -135,8 +126,8 @@ PlatformDisplayObject::GetContentOffsets( Real& outX, Real& outY ) const
 		// Lazily grab the offsets so they match the orientation of the content
 		const Display& display = stage->GetDisplay();
 
-		outX = display.GetXOriginOffset();
-		outY = display.GetYOriginOffset();
+		outX = display.GetXScreenOffset();
+		outY = display.GetYScreenOffset();
 	}
 	else
 	{

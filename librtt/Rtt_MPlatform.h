@@ -45,7 +45,6 @@ class PlatformFont;
 class PlatformImageProvider;
 class PlatformOpenALPlayer;
 class PlatformStoreProvider;
-class PlatformWebPopup;
 class PlatformSurface;
 class PlatformTimer;
 class PlatformVideoPlayer;
@@ -187,8 +186,6 @@ class MPlatform
 
 		virtual void SetActivityIndicator( bool visible ) const = 0;
 
-		virtual PlatformWebPopup* GetWebPopup() const = 0;
-
 		// Show modal-like native interfaces that pop up above the Corona view
 		// E.g. mail composers, etc.
 		virtual bool CanShowPopup( const char *name ) const = 0;
@@ -199,7 +196,6 @@ class MPlatform
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const = 0;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const = 0;
 		
-		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const = 0;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const = 0;
         virtual PlatformFBConnect* GetFBConnect() const = 0;
 

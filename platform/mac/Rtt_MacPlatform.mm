@@ -23,8 +23,6 @@
 #include "Rtt_MacViewSurface.h"
 #include "Rtt_MacVideoObject.h"
 #include "Rtt_MacVideoProvider.h"
-#include "Rtt_MacWebPopup.h"
-#include "Rtt_MacWebViewObject.h"
 #include "Rtt_MacActivityIndicator.h"
 #include "Rtt_MacFont.h"
 #include "Rtt_PlatformInAppStore.h"
@@ -88,7 +86,6 @@ NSString* const kDidAgreeToLicense = @"didAgreeToLicense";
 NSString* const kUserPreferenceUsersCurrentSelectedSkin = @"skin";
 NSString* const kUserPreferenceCustomBuildID = @"userPreferenceCustomBuildID";
 NSString* const kUserPreferenceDoNotUseSkinnedWindows = @"doNotUseSkinnedWindows"; // deprecated
-NSString* const kUserPreferenceScaleFactorForSkin = @"scaleFactorForSkin";
 NSString* const kUserPreferenceLastIOSCertificate = @"lastIOSCertificate";
 NSString* const kUserPreferenceLastTVOSCertificate = @"lastTVOSCertificate";
 NSString* const kUserPreferenceLastOSXCertificate = @"lastOSXCertificate";
@@ -377,7 +374,6 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fDevice( GetAllocator(), view ),
 	fMutexCount( 0 ),
 	fDelegate( [[AlertDelegate alloc] init] ),
-	fWebPopup( NULL ),
 	fVideoPlayer( NULL ),
 	fActivityIndicator( NULL ),
 #if Rtt_AUTHORING_SIMULATOR
@@ -404,7 +400,6 @@ MacPlatform::~MacPlatform()
 #endif // Rtt_AUTHORING_SIMULATOR
 	Rtt_DELETE( fActivityIndicator );
 	Rtt_DELETE( fVideoPlayer ) ;
-	Rtt_DELETE( fWebPopup );
 	[fDelegate release];
 	pthread_mutex_destroy( & fMutex );
 
@@ -1004,7 +999,6 @@ MacPlatform::SetActivityIndicator( bool visible ) const
 void
 MacPlatform::Suspend() const
 {
-	// suspend MacWebPopup *fWebPopup;
 	// suspend  MacVideoPlayer *fVideoPlayer;
 	if (fVideoPlayer != NULL)
 	{
@@ -1017,8 +1011,6 @@ MacPlatform::Suspend() const
 void
 MacPlatform::Resume() const
 {
-	// resume MacWebPopup *fWebPopup;
-
 	// resume  MacVideoPlayer *fVideoPlayer;
 	if (fVideoPlayer != NULL)
 	{
@@ -1026,17 +1018,6 @@ MacPlatform::Resume() const
 	}
 
 	// resume  MacActivityIndicator* fActivityIndicator;
-}
-
-PlatformWebPopup*
-MacPlatform::GetWebPopup() const
-{
-	if ( ! fWebPopup )
-	{
-		fWebPopup = Rtt_NEW( & GetAllocator(), MacWebPopup );
-	}
-
-	return fWebPopup;
 }
 
 PlatformDisplayObject*
@@ -1071,12 +1052,6 @@ MacPlatform::SetKeyboardFocus( PlatformDisplayObject *object ) const
 		// set the first responder back to the GLView?
 		[[fView window] performSelector:@selector(makeFirstResponder:) withObject:fView afterDelay:0.0];
 	}
-}
-
-PlatformDisplayObject *
-MacPlatform::CreateNativeWebView( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), MacWebViewObject( bounds ) );
 }
 
 PlatformDisplayObject*
@@ -2018,26 +1993,12 @@ void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Rea
 #ifdef Rtt_AUTHORING_SIMULATOR
 	MacSimulator *simulator = ((AppDelegate*)[NSApp delegate]).simulator;
 	NSDictionary *properties = (simulator != nil ? simulator->GetProperties() : nil);
-
-	if (DeviceOrientation::IsSideways(GetDevice().GetOrientation()))
-	{
-		top = [[properties valueForKey:@"safeLandscapeScreenInsetTop"] floatValue];
-		left = [[properties valueForKey:@"safeLandscapeScreenInsetLeft"] floatValue];
-		bottom = [[properties valueForKey:@"safeLandscapeScreenInsetBottom"] floatValue];
-		right = [[properties valueForKey:@"safeLandscapeScreenInsetRight"] floatValue];
-	}
-	else
-	{
-		top = [[properties valueForKey:@"safeScreenInsetTop"] floatValue];
-		left = [[properties valueForKey:@"safeScreenInsetLeft"] floatValue];
-		bottom = [[properties valueForKey:@"safeScreenInsetBottom"] floatValue];
-		right = [[properties valueForKey:@"safeScreenInsetRight"] floatValue];
-	}
-
+	top = [[properties valueForKey:@"safeScreenInsetTop"] floatValue];
+	left = [[properties valueForKey:@"safeScreenInsetLeft"] floatValue];
+	bottom = [[properties valueForKey:@"safeScreenInsetBottom"] floatValue];
+	right = [[properties valueForKey:@"safeScreenInsetRight"] floatValue];
 #else
-
 	top = left = bottom = right = 0;
-
 #endif
 }
 
@@ -2048,9 +2009,7 @@ void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Rea
 
 MacGUIPlatform::MacGUIPlatform( PlatformSimulator& simulator )
 :	Super(NULL),
-	fMacDevice(  GetAllocator(), simulator ),
-	fAdaptiveWidth( PlatformSurface::kUninitializedVirtualLength ),
-	fAdaptiveHeight( PlatformSurface::kUninitializedVirtualLength )
+	fMacDevice(  GetAllocator(), simulator )
 {
 }
 
@@ -2107,17 +2066,10 @@ MacGUIPlatform::RequestSystem( lua_State *L, const char *actionName, int options
 PlatformSurface*
 MacGUIPlatform::CreateScreenSurface() const
 {
-	return Rtt_NEW( Allocator(), MacViewSurface( GetView(), fAdaptiveWidth, fAdaptiveHeight ) );
+	return Rtt_NEW( Allocator(), MacViewSurface( GetView() ) );
 }
 
 // ----------------------------------------------------------------------------
-
-
-MacAppPlatform::MacAppPlatform( DeviceOrientation::Type orientation )
-:	Super(NULL),
-	fMacAppDevice(  GetAllocator(), orientation )
-{
-}
 
 MPlatformDevice&
 MacAppPlatform::GetDevice() const
@@ -2387,7 +2339,7 @@ MacPlatformServices::Sleep( int milliseconds ) const
 // ----------------------------------------------------------------------------
 
 Rtt_EXPORT CGSize
-Rtt_GetScreenSize()
+Rtt_GetDeviceSize()
 {
 	CGSize result;
 	result.width = NSZeroSize.width;
@@ -2399,8 +2351,8 @@ Rtt_GetScreenSize()
 	if ( simulator )
 	{
 		// Fetch the bounds from the screen size of the actual device (not the view size)
-		result.width = simulator->GetScreenWidth();
-		result.height = simulator->GetScreenHeight();
+		result.width = simulator->GetDeviceWidth();
+		result.height = simulator->GetDeviceHeight();
 	}
 #endif // Rtt_AUTHORING_SIMULATOR
 

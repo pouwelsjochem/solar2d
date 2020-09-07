@@ -672,7 +672,6 @@ void CCoronaLiveServerDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
 	lpMMI->ptMinTrackSize.x = m_rcProj.right;
 	lpMMI->ptMinTrackSize.y = m_rcProj.bottom;
-
 	CDialog::OnGetMinMaxInfo(lpMMI);
 }
 

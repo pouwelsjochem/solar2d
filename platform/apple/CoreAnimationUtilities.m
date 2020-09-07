@@ -24,47 +24,6 @@
 #define COREANIMATIONUTILITIES_ANIMATION_DURATION_OF_SHAKE 0.5f
 #define COREANIMATIONUTILITIES_ANIMATION_VIGOUR_OF_SHAKE 0.08f
 
-void CoreAnimationUtilities_ShakeViewWithAnimation(id view, NSRect view_frame, CAAnimation* shake_animation)
-{
-	static bool animating = false;
-	
-	if (animating)
-		return;
-	
-	animating = true;
-	
-	NSRect original_frame = view_frame;
-	NSRect frame_copy = original_frame;
-	
-	// modify the copy to force Core Animation to recognize a position change so it doesn't short circuit.
-	frame_copy.origin.x = frame_copy.origin.x+1.0;
-			
-	// People are reporting that frameOrigin doesn't work in 64-bit but frame does. But so far, I can't get frame to work in 32-bit.
-#if 0
-	[view setAnimations:[NSDictionary dictionaryWithObject:shake_animation forKey:@"frame"]];
-
-	[[view animator] setFrame:frame_copy display:NO];
-	[[view animator] setFrame:original_frame display:NO];
-#else
-	[view setAnimations:[NSDictionary dictionaryWithObject:shake_animation forKey:@"frameOrigin"]];
-	
-	// If we're already animating, just return (otherwise the window wanders; fixes casenum
-	[NSAnimationContext beginGrouping];
-	[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context){
-		// Start the animations.
-		[[view animator] setFrameOrigin:frame_copy.origin];
-		[[view animator] setFrameOrigin:original_frame.origin];
-	} completionHandler:^{
-		// This block will be invoked when all of the animations
-		// started above have completed or been cancelled.
-		animating = false;
-	}];
-	[NSAnimationContext endGrouping];
-
-#endif
-	
-}
-
 // Implementation inspired from:
 // http://www.cimgf.com/2008/02/27/core-animation-tutorial-window-shake-effect/
 CAKeyframeAnimation* CoreAnimationUtilities_RandomizedShakeAnimationWithRect(CGRect view_frame)

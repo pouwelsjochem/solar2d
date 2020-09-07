@@ -1751,6 +1751,10 @@ public class Controller {
 		return mySensorManager.hasGyroscope();
 	}
 
+	public void setEventNotification( int eventType, boolean enable ) {
+		mySensorManager.setEventNotification(eventType, enable);
+	}
+
 	public void vibrate() {
 		Context context = myContext;
 		if (context == null) {

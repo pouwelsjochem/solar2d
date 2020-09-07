@@ -81,8 +81,6 @@ AFX_STATIC_DATA const TCHAR _afxPreviewEntry[] = _T("PreviewPages");
 CSimulatorApp::CSimulatorApp()
 {
 	// Place all significant initialization in InitInstance
-	m_zoom = 0;  // 0 is normal, -1 is zoomed out once, 2 is zoomed in twice
-	m_rotation = 0;  // 0, 90, 180, 270
 	m_isDebugModeEnabled = false;
 	m_isLuaExitAllowed = false;
 	m_isConsoleEnabled = true;
@@ -348,9 +346,6 @@ BOOL CSimulatorApp::InitInstance()
     // Initialize member variables used to write out preferences
     SetWorkingDir( GetProfileString( REGISTRY_SECTION, REGISTRY_WORKINGDIR, GetSampleDir() ));
     m_sDisplayName = GetProfileString( REGISTRY_SECTION, REGISTRY_DEVICE, _T("") );
-    // need a cast because zoom is signed
-    m_zoom = (int) GetProfileInt( REGISTRY_SECTION, REGISTRY_ZOOM, REGISTRY_ZOOM_DEFAULT );
-    m_rotation = GetProfileInt( REGISTRY_SECTION, REGISTRY_ROTATION, REGISTRY_ROTATION_DEFAULT );
 
 	// Parse command line for standard shell commands, DDE, file open
 	CCommandLineInfo cmdInfo;
@@ -427,7 +422,7 @@ BOOL CSimulatorApp::InitInstance()
 	// can find it and tell us to do things
 	SimFirstInstanceHwnd = (LONG) (m_pMainWnd->GetSafeHwnd());
 
-	// Set main window size based on device and zoom
+	// Set main window size based on device
     CMainFrame *pMainFrm = (CMainFrame *)m_pMainWnd;
     CSimulatorView *pView = (CSimulatorView *)pMainFrm->GetActiveView();
 
@@ -853,7 +848,6 @@ int CSimulatorApp::ExitInstance()
 	}
 
     // Write window position (saved in CMainFrame::OnClose)
-	WriteProfileInt(REGISTRY_SECTION, REGISTRY_ROTATION, GetRotation());
 	WriteProfileInt(REGISTRY_SECTION, REGISTRY_XPOS, m_WP.rcNormalPosition.left);
     WriteProfileInt( REGISTRY_SECTION, REGISTRY_YPOS, m_WP.rcNormalPosition.top);
 
@@ -908,26 +902,6 @@ void CSimulatorApp::PutWP(const WINDOWPLACEMENT& newval)
 {	
 	m_WP = newval;
 	m_WP.length = sizeof(m_WP);
-}
-
-void CSimulatorApp::SaveZoomToRegistry(int zoom)
-{
-	CMainFrame *pMainFrm = (CMainFrame *)m_pMainWnd;
-	CSimulatorView *pView = (CSimulatorView *)pMainFrm->GetActiveView();
-	if (pView&& !pView->IsShowingInternalScreen())
-	{
-		WriteProfileInt( REGISTRY_SECTION, REGISTRY_ZOOM, zoom );
-	}
-}
-
-void CSimulatorApp::LoadZoomFromRegistry()
-{
-	m_zoom = (int) GetProfileInt( REGISTRY_SECTION, REGISTRY_ZOOM, REGISTRY_ZOOM_DEFAULT );
-	CMainFrame *pMainFrm = (CMainFrame *)m_pMainWnd;
-	if (pMainFrm)
-	{
-		pMainFrm->SetZoom(m_zoom);
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

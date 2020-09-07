@@ -213,16 +213,6 @@ class NativeToJavaBridge
 		bool RecordGetBytes( uintptr_t id, Rtt::Data<char> & result );
 		void RecordCallback( uintptr_t id, int status );
 		void RecordReleaseCurrentBuffer( uintptr_t id );
-		
-		void WebViewCreate( int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled );
-		void WebViewRequestLoadUrl( int id, const char * url );
-		void WebViewRequestReload( int id );
-		void WebViewRequestStop( int id );
-		void WebViewRequestGoBack( int id );
-		void WebViewRequestGoForward( int id );
-		void WebViewRequestDeleteCookies( int id );
-		bool WebPopupShouldLoadUrl( int id, const char * url );
-		bool WebPopupDidFailLoadUrl( int id, const char * url, const char * msg, int code );
 
 		void VideoViewCreate( int id, int left, int top, int width, int height );
 		void VideoViewLoad( int id, const char * source );

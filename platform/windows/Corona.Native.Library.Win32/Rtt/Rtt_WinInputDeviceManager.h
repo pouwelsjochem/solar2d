@@ -250,10 +250,6 @@ namespace Rtt
 
 		/// <summary>
 		///  <para>Extract the mouse x/y coordinate from the given Windows message LPARAM.</para>
-		///  <para>
-		///   Automatically applies the Corona Simulator current device's zoom level scale and rotation
-		///   to the returned coordinate, if applicable.
-		///  </para>
 		/// </summary>
 		/// <param name="LParam">The LPARAM part of the Windows message providing the mouse coordinates.</param>
 		/// <returns>

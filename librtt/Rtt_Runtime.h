@@ -12,7 +12,6 @@
 
 #include "Core/Rtt_Time.h"
 #include "Display/Rtt_MDisplayDelegate.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_MCallback.h"
 #include "Rtt_MCriticalSection.h"
 #include "Rtt_MPlatform.h"
@@ -127,8 +126,6 @@ class Runtime : public MCallback,
 			kBackgroundAudio = 0x1,
 			kBackgroundLocation = 0x2,
 			kBackgroundVoIP = 0x8,
-//			kBackgroundLowPriorityTimer = 0x10,
-//			kBackgroundHighPriorityTimer = 0x20,
 			kSuspendNone = 0xFFFFFFFF
 		}
 		SuspendOverrides;
@@ -165,13 +162,7 @@ class Runtime : public MCallback,
 	public:
 		void SetDelegate( const MRuntimeDelegate *newValue ) { fDelegate = newValue; }
 		const MRuntimeDelegate *GetDelegate() const { return fDelegate; }
-
-	public:
-		S32 ViewableContentWidth() const;
-		S32 ViewableContentHeight() const;
-		S32 WindowWidth() const;
-		S32 WindowHeight() const;
-
+		
 		//const AutoPtr< GPUBitmapTexture >& CreateOrFindTextureWithFilename( const char* filename );
 
 	protected:
@@ -199,35 +190,8 @@ class Runtime : public MCallback,
 		void ClearLaunchArgs();
 
 	public:
-		struct LoadParameters
-		{
-			LoadParameters();
-			void UpdateConfig( lua_State *L, int configIndex ) const;
-
-			U32 launchOptions;
-			DeviceOrientation::Type orientation;
-			S32 contentWidth;
-			S32 contentHeight;
-		};
-
 		// Inits VM and then loads script file.
-		LoadApplicationReturnCodes LoadApplication( const LoadParameters& parameters );
-
-		// TODO: Remove this in favor of the LoadParameters version
-		// Inits VM and then loads script file.
-		LoadApplicationReturnCodes LoadApplication( U32 launchOptions, DeviceOrientation::Type orientation );
-
-		void SetContentOrientation( DeviceOrientation::Type newOrientation );
-
-		void WindowDidRotate( DeviceOrientation::Type newOrientation, bool isNewOrientationSupported );
-
-		// Call when window size changes so viewport of GPUStream can be updated.
-		// Implicitly calls UpdateContentScale()
-		void WindowSizeChanged();
-
-		// Call when the gl context was destroyed and recreated, e.g. when device wakes from sleep
-		void RestartRenderer();
-		void RestartRenderer( DeviceOrientation::Type orientation );
+		LoadApplicationReturnCodes LoadApplication( U32 launchOptions );
 
 	public:
 		// Inits renderer and then begins timer
@@ -296,28 +260,14 @@ class Runtime : public MCallback,
 		virtual Rtt_Allocator* GetAllocator() const;
 		virtual void MarkRecentlyUsed( CachedResource& resource );
 
-	public:
-		void GetImageSuffix( String& outSuffix );
-		bool GetImageFilename( const char *filename, MPlatform::Directory baseDir, String& outFilename );
-
 	protected:
 		lua_State* PushResourceRegistry();
-
-//		void SetPrerollSplash( bool newValue ) { fPrerollSplash = newValue; }
-/*
-	public:
-		void BeginOrientationListener();
-		void EndOrientationListener();
-*/
 
 	public:
 		// MCallback
 		virtual void operator()();
 
 		void Render();
-
-	public:
-		void Blit();
 		
 	public:
 		// MCriticalSection

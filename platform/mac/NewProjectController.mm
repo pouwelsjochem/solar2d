@@ -25,10 +25,9 @@
 @synthesize fWindow;
 @synthesize fProjectName;
 @synthesize fTemplateIndex;
-@synthesize fScreenSizeIndex;
-@synthesize fScreenWidth;
-@synthesize fScreenHeight;
-@synthesize fOrientationIndex;
+@synthesize fDeviceSizeIndex;
+@synthesize fDeviceWidth;
+@synthesize fDeviceHeight;
 @synthesize fProjectPath;
 @synthesize fServices;
 
@@ -47,18 +46,18 @@ enum NewProjectControllerReturnCode
 		[fWindow setReleasedWhenClosed:NO];
 		[fWindow close];
 
-		[self addObserver:self forKeyPath:@"screenWidth" options:0 context:NULL];
-		[self addObserver:self forKeyPath:@"screenHeight" options:0 context:NULL];
-		[self addObserver:self forKeyPath:@"screenSizeIndex" options:0 context:NULL];
+		[self addObserver:self forKeyPath:@"deviceWidth" options:0 context:NULL];
+		[self addObserver:self forKeyPath:@"deviceHeight" options:0 context:NULL];
+		[self addObserver:self forKeyPath:@"deviceSizeIndex" options:0 context:NULL];
 		[self addObserver:self forKeyPath:@"templateIndex" options:0 context:NULL];
 
-		[self willChangeValueForKey:@"screenWidth"];
-		fScreenWidth = [NSNumber numberWithInt:320];
-		[self didChangeValueForKey:@"screenWidth"];
+		[self willChangeValueForKey:@"deviceWidth"];
+		fDeviceWidth = [NSNumber numberWithInt:320];
+		[self didChangeValueForKey:@"deviceWidth"];
 
-		[self willChangeValueForKey:@"screenHeight"];
-		fScreenHeight = [NSNumber numberWithInt:480];
-		[self didChangeValueForKey:@"screenHeight"];
+		[self willChangeValueForKey:@"deviceHeight"];
+		fDeviceHeight = [NSNumber numberWithInt:480];
+		[self didChangeValueForKey:@"deviceHeight"];
 
 		fResourcePath = [path retain];
 
@@ -201,14 +200,11 @@ Rtt_EXPORT int luaopen_lfs (lua_State *L);
 		lua_pushstring( L, [[self templateName] UTF8String] );
 		lua_setfield( L, -2, "template" );
 
-		lua_pushinteger( L, [fScreenWidth intValue] );
+		lua_pushinteger( L, [fDeviceWidth intValue] );
 		lua_setfield( L, -2, "width" );
 
-		lua_pushinteger( L, [fScreenHeight intValue] );
+		lua_pushinteger( L, [fDeviceHeight intValue] );
 		lua_setfield( L, -2, "height" );
-
-		lua_pushstring( L, 0 == fOrientationIndex ? "portrait" : "landscapeRight" );
-		lua_setfield( L, -2, "orientation" );
 
 		lua_pushstring( L, [fProjectPath UTF8String] );
 		lua_setfield( L, -2, "savePath" );
@@ -251,9 +247,9 @@ static const int kCustomPresetTag = 2;
 {
 	// TODO: Do not use this function as a model for your KV bindings.
 	// There's something strange going on...
-	if ( [keyPath isEqualToString:@"screenSizeIndex"] )
+	if ( [keyPath isEqualToString:@"deviceSizeIndex"] )
 	{
-		NSInteger tag = [[fScreenSize selectedItem] tag];
+		NSInteger tag = [[fDeviceSize selectedItem] tag];
 		int w = -1;
 		int h = -1;
 		switch ( tag )
@@ -273,21 +269,21 @@ static const int kCustomPresetTag = 2;
 		if ( w > 0 && h > 0 )
 		{
 			// Prevent recursive calls into this method...
-			[self removeObserver:self forKeyPath:@"screenWidth"];
-			[self removeObserver:self forKeyPath:@"screenHeight"];
+			[self removeObserver:self forKeyPath:@"deviceWidth"];
+			[self removeObserver:self forKeyPath:@"deviceHeight"];
 
 			// ... while NSTextFields are updated...
-			[self willChangeValueForKey:@"screenWidth"];
-			fScreenWidth = [NSNumber numberWithInt:w];
-			[self didChangeValueForKey:@"screenWidth"];
+			[self willChangeValueForKey:@"deviceWidth"];
+			fDeviceWidth = [NSNumber numberWithInt:w];
+			[self didChangeValueForKey:@"deviceWidth"];
 
-			[self willChangeValueForKey:@"screenHeight"];
-			fScreenHeight = [NSNumber numberWithInt:h];
-			[self didChangeValueForKey:@"screenHeight"];
+			[self willChangeValueForKey:@"deviceHeight"];
+			fDeviceHeight = [NSNumber numberWithInt:h];
+			[self didChangeValueForKey:@"deviceHeight"];
 
 			// ... and then re-register for KVO
-			[self addObserver:self forKeyPath:@"screenWidth" options:0 context:NULL];
-			[self addObserver:self forKeyPath:@"screenHeight" options:0 context:NULL];
+			[self addObserver:self forKeyPath:@"deviceWidth" options:0 context:NULL];
+			[self addObserver:self forKeyPath:@"deviceHeight" options:0 context:NULL];
 		}
 	}
 	else if ( [keyPath isEqualToString:@"templateIndex"] )
@@ -297,15 +293,15 @@ static const int kCustomPresetTag = 2;
 		if ( 3 == self.templateIndex )
 		{
 			// TODO: Investigate why we had to add the will/didChange calls
-			[self willChangeValueForKey:@"screenSizeIndex"];
-			self.screenSizeIndex = kTabletPresetTag;
-			[self didChangeValueForKey:@"screenSizeIndex"];
+			[self willChangeValueForKey:@"deviceSizeIndex"];
+			self.deviceSizeIndex = kTabletPresetTag;
+			[self didChangeValueForKey:@"deviceSizeIndex"];
 		}
 	}
 	else
 	{
-		int w = [fScreenWidth intValue];
-		int h = [fScreenHeight intValue];
+		int w = [fDeviceWidth intValue];
+		int h = [fDeviceHeight intValue];
 
 		int tag = kCustomPresetTag;
 		if ( kPhonePresetWidth == w && kPhonePresetHeight == h )
@@ -317,7 +313,7 @@ static const int kCustomPresetTag = 2;
 			tag = kTabletPresetTag;
 		}
 
-		[fScreenSize selectItemWithTag:tag];
+		[fDeviceSize selectItemWithTag:tag];
 	}
 }
 
@@ -348,13 +344,13 @@ static const int kCustomPresetTag = 2;
 	return result;
 }
 
-- (BOOL)validateScreenWidth:(id*)value error:(NSError**)outError
+- (BOOL)validateDeviceWidth:(id*)value error:(NSError**)outError
 {
 	NSString *description = NSLocalizedString( @"Width must be an integer greater than 0", nil );
 	return [self validateValue:value error:outError localizedDescription:description code:100];
 }
 
-- (BOOL)validateScreenHeight:(id*)value error:(NSError**)outError
+- (BOOL)validateDeviceHeight:(id*)value error:(NSError**)outError
 {
 	NSString *description = NSLocalizedString( @"Height must be an integer greater than 0", nil );
 	return [self validateValue:value error:outError localizedDescription:description code:100];

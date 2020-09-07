@@ -48,7 +48,7 @@ protected:
 
 public:
 	afx_msg void OnEnChangeCdDeviceName();
-	afx_msg void OnEnChangeCdScreenWidth();
-	afx_msg void OnEnChangeCdScreenHeight();
+	afx_msg void OnEnChangeCdDeviceWidth();
+	afx_msg void OnEnChangeCdDeviceHeight();
 	afx_msg void OnCbnSelchangeCdPlatform();
 };

@@ -92,7 +92,6 @@
 	#endif
 
 	#define Rtt_LUA_LFS
-	#define Rtt_ORIENTATION
 	#define Rtt_ACCELEROMETER
 	#define Rtt_CORE_MOTION
 	#define Rtt_MULTITOUCH

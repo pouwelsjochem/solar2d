@@ -99,8 +99,8 @@ void CustomDeviceDlg::OnOK()
 
 BEGIN_MESSAGE_MAP(CustomDeviceDlg, CDialog)
 	ON_EN_CHANGE(IDC_CD_DEVICE_NAME, &CustomDeviceDlg::OnEnChangeCdDeviceName)
-	ON_EN_CHANGE(IDC_CD_SCREEN_WIDTH, &CustomDeviceDlg::OnEnChangeCdScreenWidth)
-	ON_EN_CHANGE(IDC_CD_SCREEN_HEIGHT, &CustomDeviceDlg::OnEnChangeCdScreenHeight)
+	ON_EN_CHANGE(IDC_CD_SCREEN_WIDTH, &CustomDeviceDlg::OnEnChangeCdDeviceWidth)
+	ON_EN_CHANGE(IDC_CD_SCREEN_HEIGHT, &CustomDeviceDlg::OnEnChangeCdDeviceHeight)
 	ON_CBN_SELCHANGE(IDC_CD_PLATFORM, &CustomDeviceDlg::OnCbnSelchangeCdPlatform)
 END_MESSAGE_MAP()
 
@@ -112,12 +112,12 @@ void CustomDeviceDlg::OnEnChangeCdDeviceName()
 	 GetDlgItemText(IDC_CD_DEVICE_NAME, mCustomDeviceName);
 }
 
-void CustomDeviceDlg::OnEnChangeCdScreenWidth()
+void CustomDeviceDlg::OnEnChangeCdDeviceWidth()
 {
 	mCustomDeviceWidth = GetDlgItemInt(IDC_CD_SCREEN_WIDTH);
 }
 
-void CustomDeviceDlg::OnEnChangeCdScreenHeight()
+void CustomDeviceDlg::OnEnChangeCdDeviceHeight()
 {
 	mCustomDeviceHeight = GetDlgItemInt(IDC_CD_SCREEN_HEIGHT);
 }

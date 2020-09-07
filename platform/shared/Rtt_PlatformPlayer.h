@@ -10,7 +10,6 @@
 #ifndef _Rtt_PlatformPlayer_H__
 #define _Rtt_PlatformPlayer_H__
 
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_RuntimeDelegatePlayer.h"
 
@@ -48,8 +47,7 @@ class PlatformPlayer
 	public:
 		void Start(
 				const char* appFilePath,
-				bool connectToDebugger,
-				DeviceOrientation::Type launchOrientation );
+				bool connectToDebugger);
 
 	public:
 		const MPlatform& GetPlatform() const { return fPlatform; }

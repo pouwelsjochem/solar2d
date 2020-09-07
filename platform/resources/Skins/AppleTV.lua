@@ -10,16 +10,14 @@
 simulator =
 {
 	device = "tvos-tv",
-	screenWidth = 1080,
-	screenHeight = 1920,
-	-- iosPointWidth = 768,
-	-- iosPointHeight = 1024,
+	deviceWidth = 1920,
+	deviceHeight = 1080,
+	-- iosPointWidth = 1024,
+	-- iosPointHeight = 768,
 	displayManufacturer = "Apple",
 	displayName = "Apple TV",
 	windowTitleBarName = "Apple TV",
 	defaultFontSize = 17 * 2,
-	supportsScreenRotation = false,
-	isUprightOrientationPortrait = false,
 
 	safeScreenInsetTop = 90,
 	safeScreenInsetLeft = 60,

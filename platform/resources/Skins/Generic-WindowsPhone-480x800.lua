@@ -10,13 +10,10 @@
 simulator =
 {
 	device = "borderless-winphone",
-	screenOriginX = 0,
-	screenOriginY = 0,
-	screenWidth = 480,
-	screenHeight = 800,
+	deviceWidth = 800,
+	deviceHeight = 480,
 	displayManufacturer = "Corona Labs Inc.",
 	displayName = "GenericWindowsPhone",
-	supportsScreenRotation = true,
 	hasAccelerometer = true,
 	windowTitleBarName = "Windows Phone",
 	defaultFontSize = 25.333,

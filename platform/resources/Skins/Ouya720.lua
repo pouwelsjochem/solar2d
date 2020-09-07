@@ -10,15 +10,11 @@
 simulator =
 {
 	device = "android-tv",
-	screenOriginX = 0,
-	screenOriginY = 0,
-	screenWidth = 720,
-	screenHeight = 1280,
+	deviceWidth = 1280,
+	deviceHeight = 720,
 	androidDisplayApproximateDpi = 320, -- xhdpi
 	displayManufacturer = "OUYA",
 	displayName = "OUYA Console",
-	supportsScreenRotation = false,
-	isUprightOrientationPortrait = false,
 	windowTitleBarName = "Ouya",
 
 	safeScreenInsetTop = 64,

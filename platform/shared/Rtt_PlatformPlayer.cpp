@@ -48,8 +48,7 @@ PlatformPlayer::~PlatformPlayer()
 void
 PlatformPlayer::Start(
 	const char *appFilePath,
-	bool connectToDebugger,
-	DeviceOrientation::Type launchOrientation )
+	bool connectToDebugger )
 {
 	U32 launchOptions = Runtime::kSimulatorLaunchOption;
 
@@ -58,7 +57,7 @@ PlatformPlayer::Start(
 		launchOptions |= Runtime::kConnectToDebugger;
 	}
 
-	if ( Runtime::kSuccess == fRuntime.LoadApplication( launchOptions, launchOrientation ) )
+	if ( Runtime::kSuccess == fRuntime.LoadApplication( launchOptions ) )
 	{
 		fRuntime.BeginRunLoop();
 	}

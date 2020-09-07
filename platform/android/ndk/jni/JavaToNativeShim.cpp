@@ -164,24 +164,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeGetContentHeightInPixels( JNIEnv * 
 	return (jint)JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->GetContentHeightInPixels();
 }
 
-JNIEXPORT jobject JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeConvertCoronaPointToAndroidPoint
-  (JNIEnv *env, jclass, jlong bridgeAddress, jint x, jint y)
-{
-	jobject result = NULL;
-
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->ConvertCoronaPointToAndroidPoint( x, y );
-
-	jclass c = env->FindClass( "android/graphics/Point" );
-
-	if ( c )
-	{
-		jmethodID constructor = env->GetMethodID( c, "<init>", "(II)V" );
-		result = env->NewObject( c, constructor, x, y );
-	}
-
-	return result;
-}
-
 JNIEXPORT void JNICALL 
 Java_com_ansca_corona_JavaToNativeShim_nativeUseDefaultLuaErrorHandler( JNIEnv * env, jclass c, jlong bridgeAddress )
 {
@@ -308,17 +290,11 @@ JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeResize(
 	JNIEnv * env, jclass c, jlong bridgeAddress, jstring package, jstring documentsDir, jstring applicationSupportDir,
 	jstring temporaryDir, jstring cachesDir, jstring systemCachesDir, jstring expansionFileDir,
-	jint w, jint h, jint orientation, jboolean isCoronaKit)
+	jint w, jint h, jboolean isCoronaKit)
 {
 		JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->Init(
     		env, package, documentsDir, applicationSupportDir, temporaryDir, cachesDir, systemCachesDir,
-    		expansionFileDir, w, h, orientation, isCoronaKit);
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeReinitializeRenderer(JNIEnv * env, jclass c, jlong bridgeAddress )
-{
-    JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->ReinitializeRenderer();
+    		expansionFileDir, w, h, isCoronaKit);
 }
 
 /* Call to render the next GL frame */
@@ -381,16 +357,6 @@ JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeGyroscopeEvent(JNIEnv * env, jclass c, jlong bridgeAddress, jdouble x, jdouble y, jdouble z, jdouble deltaTime)
 {
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->GyroscopeEvent( x, y, z, deltaTime );
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeOrientationChanged(JNIEnv * env, jclass c, jlong bridgeAddress, jint newOrientation, jint oldOrientation)
-{
-#ifdef Rtt_DEBUG
-    __android_log_print(ANDROID_LOG_INFO, "Corona", "orientation changed %d %d", newOrientation, oldOrientation);
-#endif
-
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->OrientationChanged( newOrientation, oldOrientation );
 }
 
 JNIEXPORT void JNICALL
@@ -467,36 +433,6 @@ JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEventEnd(JNIEnv * env, jclass c, jlong bridgeAddress)
 {
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MultitouchEventEnd();
-}
-
-JNIEXPORT void JNICALL 
-Java_com_ansca_corona_JavaToNativeShim_nativeWebViewShouldLoadUrl(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jstring url, jint sourceType)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewShouldLoadUrl( env, id, url, sourceType );
-}
-
-JNIEXPORT void JNICALL 
-Java_com_ansca_corona_JavaToNativeShim_nativeWebViewFinishedLoadUrl(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jstring url)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewFinishedLoadUrl( env, id, url );
-}
-
-JNIEXPORT void JNICALL 
-Java_com_ansca_corona_JavaToNativeShim_nativeWebViewDidFailLoadUrl(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jstring url, jstring msg, jint code)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewDidFailLoadUrl( env, id, url, msg, code );
-}
-
-JNIEXPORT void JNICALL 
-Java_com_ansca_corona_JavaToNativeShim_nativeWebViewHistoryUpdated(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jboolean canGoBack, jboolean canGoForward)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewHistoryUpdated( env, id, canGoBack, canGoForward );
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeWebViewClosed(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewClosed( env, id );
 }
 
 JNIEXPORT void JNICALL

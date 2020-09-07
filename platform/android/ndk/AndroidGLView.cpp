@@ -38,29 +38,10 @@ AndroidGLView::Flush()
 }
 
 bool 
-AndroidGLView::CreateFramebuffer( int width, int height, Rtt::DeviceOrientation::Type orientation )
+AndroidGLView::CreateFramebuffer( int width, int height )
 {
-#ifdef Rtt_DEBUG
-	__android_log_print(ANDROID_LOG_INFO, "Corona", "AndroidGLView::CreateFramebuffer %d %d %d", width, height, orientation );
-#endif
-
 	fWidth = width;
 	fHeight = height;
-	fOrientation = orientation;
-
-	switch ( orientation )
-	{
-		case Rtt::DeviceOrientation::kSidewaysLeft:
-		case Rtt::DeviceOrientation::kSidewaysRight:
-			fUprightWidth = height;
-			fUprightHeight = width;
-			break;
-		default:
-			fUprightWidth = width;
-			fUprightHeight = height;
-			break;
-	}
-
 	return true;
 }
 
@@ -81,30 +62,8 @@ AndroidGLView::Render()
 void
 AndroidGLView::Resize( int width, int height )
 {
-	// NOTE: We assume caller also makes proper notification to Corona about
-	// changes to the surface size including possible orientation changes.
-	// This call is purely to resize the dimensions stored by the receiver.
 	fWidth = width;
 	fHeight = height;
-	switch ( fOrientation )
-	{
-		case Rtt::DeviceOrientation::kSidewaysLeft:
-		case Rtt::DeviceOrientation::kSidewaysRight:
-			fUprightWidth = height;
-			fUprightHeight = width;
-			break;
-		default:
-			fUprightWidth = width;
-			fUprightHeight = height;
-			break;
-	}
-}
-
-// TODO: Get rid of this. Used by old (broken) suspend/resume implementation
-void 
-AndroidGLView::ReinitializeRenderingStream()
-{
-	fReloadTextures = true;
 }
 
 /// Determines if this OpenGL view is set up with an alpha channel.

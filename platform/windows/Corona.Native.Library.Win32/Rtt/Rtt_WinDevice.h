@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_WinInputDeviceManager.h"
 #include <list>
@@ -56,7 +55,6 @@ class WinDevice : public MPlatformDevice
 		virtual bool HasEventSource(EventType type) const;
 		virtual void SetAccelerometerInterval(U32 frequency) const;
 		virtual void SetGyroscopeInterval(U32 frequency) const;
-		virtual DeviceOrientation::Type GetOrientation() const;
 
 	private:
 		bool CopyMachineSidStringTo(char *sidString, int sidStringSize) const;

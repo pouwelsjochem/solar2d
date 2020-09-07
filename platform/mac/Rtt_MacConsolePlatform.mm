@@ -167,12 +167,6 @@ MacConsolePlatform::SetActivityIndicator( bool visible ) const
 {
 }
 
-PlatformWebPopup*
-MacConsolePlatform::GetWebPopup() const
-{
-	return NULL;
-}
-
 PlatformDisplayObject*
 MacConsolePlatform::CreateNativeTextBox( const Rect& bounds ) const
 {
@@ -188,12 +182,6 @@ MacConsolePlatform::CreateNativeTextField( const Rect& bounds ) const
 void
 MacConsolePlatform::SetKeyboardFocus( PlatformDisplayObject *textObject ) const
 {
-}
-
-PlatformDisplayObject *
-MacConsolePlatform::CreateNativeWebView( const Rect& bounds ) const
-{
-	return NULL;
 }
 
 PlatformDisplayObject *

@@ -181,13 +181,13 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget )
 		renderer.BeginFrame( totalTime, deltaTime, fOwner.GetScreenToContentScale() );
 		
 		fOwner.GetTextureFactory().Preload( renderer );
-		fOwner.GetTextureFactory().UpdateTextures(renderer);
+		fOwner.GetTextureFactory().UpdateTextures( renderer );
 
-		renderer.SetViewport( 0, 0, fOwner.WindowWidth(), fOwner.WindowHeight() );
+		renderer.SetViewport( fOwner.GetXScreenOffset(), fOwner.GetYScreenOffset(), fOwner.ScaledContentWidth(), fOwner.ScaledContentHeight() );
 		
-		glm::mat4 viewMatrix;
-		glm::mat4 projMatrix;
-		fOwner.GetViewProjectionMatrix(viewMatrix, projMatrix);
+		// Invert top/bottom to make (0, 0) be the upper left corner of the window
+		glm::mat4 projMatrix = glm::ortho( 0.0f, static_cast<Rtt::Real>(fOwner.ContentWidth()), static_cast<Rtt::Real>(fOwner.ContentHeight()), 0.0f, 0.0f, 1.0f);
+		glm::mat4 viewMatrix = glm::lookAt( glm::vec3( 0.0, 0.0, 0.5 ), glm::vec3( 0.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ) );
 		renderer.SetFrustum( glm::value_ptr(viewMatrix), glm::value_ptr(projMatrix) );
 		
 		Clear( renderer );

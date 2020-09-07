@@ -10,10 +10,6 @@
 #import "CoronaCards/CoronaView.h"
 #import "AppDelegate.h"
 
-#ifdef USE_HOCKEYSDK
-#import <HockeySDK/HockeySDK.h>
-#endif
-
 // #define  Rtt_DEBUG  1
 
 #ifdef Rtt_DEBUG
@@ -41,11 +37,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-#ifdef USE_HOCKEYSDK
-	[[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"31a8df996399ab38dcb19bd48790b27f"];
-	[[BITHockeyManager sharedHockeyManager] startManager];
-#endif
-    
     // This option is used by the Simulator to make sure the apps it starts come to the foreground
     BOOL makeForeground = [[NSUserDefaults standardUserDefaults] boolForKey:@"makeForeground"];
 
@@ -168,8 +159,6 @@
 
 	NSString *windowTitle = [_coronaView settingsWindowTitle];
 
-	_titleBarHeight = 22;
-
 	if (windowTitle == nil)
 	{
         if ([_appPath hasSuffix:@"/Resources/Corona"])
@@ -183,16 +172,7 @@
             windowTitle = [[_appPath lastPathComponent] stringByDeletingPathExtension];
         }
 	}
-
 	[_window setTitle:windowTitle];
-
-	if (! [_coronaView settingsIsWindowTitleShown])
-	{
-		_titleBarHeight = 0;
-
-		[_window setTitlebarAppearsTransparent:YES];
-		[_window setTitleVisibility:NSWindowTitleHidden];
-	}
 
 	// If we don't find a saved size and position for the window, set those up
 	if (! [_window setFrameUsingName:_appPath force:YES])
@@ -210,32 +190,23 @@
 
 			NSRect coronaViewRect = [_coronaView frame];
 			NSRect windowRect = [_window frame];
-
-			// this will be the size in config.lua
-			if ([_coronaView settingsContentWidth] > 0 && [_coronaView settingsContentHeight] > 0)
-			{
-				coronaViewRect.size = NSMakeSize([_coronaView settingsContentWidth], [_coronaView settingsContentHeight]);
-			}
+			coronaViewRect.size = NSMakeSize([_coronaView settingsMinContentWidth], [_coronaView settingsMinContentHeight]);
 
 			// Fill the screen with the app (appropriate for games) using the aspect ratio from the width & height in config.lua
 			customFrame = windowRect;
 
-			if (coronaViewRect.size.height > coronaViewRect.size.width)
-			{
-				customFrame.size.height = screenRect.size.height - 100;
-				customFrame.size.width = ceil(customFrame.size.height * (coronaViewRect.size.width / coronaViewRect.size.height));
-			}
-			else
-			{
-				customFrame.size.width = screenRect.size.width - 100;
-				customFrame.size.height = ceil(customFrame.size.width * (coronaViewRect.size.height / coronaViewRect.size.width));
+			customFrame.size.width = screenRect.size.width - 100;
+			customFrame.size.height = ceil(customFrame.size.width * (coronaViewRect.size.height / coronaViewRect.size.width));
 
+			// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
 				// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
-				if (customFrame.size.height > (screenRect.size.height - 100))
-				{
-					customFrame.size.width *=  ((screenRect.size.height - 100) / customFrame.size.height);
-					customFrame.size.height = (screenRect.size.height - 100);
-				}
+			// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
+				// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
+			// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
+			if (customFrame.size.height > (screenRect.size.height - 100))
+			{
+				customFrame.size.width *=  ((screenRect.size.height - 100) / customFrame.size.height);
+				customFrame.size.height = (screenRect.size.height - 100);
 			}
 
 			customFrame.origin = NSZeroPoint;
@@ -251,9 +222,7 @@
 		// that forces a display of the window which can mess up things like fullscreen transitions)
 		customFrame.origin.x = (screenRect.size.width - customFrame.size.width) / 2;
 		customFrame.origin.y = (screenRect.size.height - customFrame.size.height) / 1.2;
-
-		// Make the content area of the window be the size specified by adding the window's titlebar height
-		customFrame.size.height += _titleBarHeight;
+		customFrame.size.height += 22;
 
 		[_window setFrame:customFrame display:NO];
 	}
@@ -305,24 +274,19 @@
 	if ([_coronaView settingsIsWindowResizable])
 	{
 		// Make the window resizable
-		windowStyleMask |= NSResizableWindowMask;
+		windowStyleMask |= NSWindowStyleMaskResizable;
 	}
 
 	if ([_coronaView settingsIsWindowCloseButtonEnabled])
 	{
 		// Make the window closeable
-		windowStyleMask |= NSClosableWindowMask;
+		windowStyleMask |= NSWindowStyleMaskClosable;
 	}
 
 	if ([_coronaView settingsIsWindowMinimizeButtonEnabled])
 	{
 		// Make the window minimizable
-		windowStyleMask |= NSMiniaturizableWindowMask;
-	}
-
-	if (! [_coronaView settingsIsWindowTitleShown])
-	{
-		windowStyleMask |= NSFullSizeContentViewWindowMask;
+		windowStyleMask |= NSWindowStyleMaskMiniaturizable;
 	}
 
 	// This triggers a window resize
@@ -362,14 +326,9 @@
 
 - (void)windowDidResize:(NSNotification *)notification
 {
-	NSRect coronaRect = [_window frame];
-	// NSDEBUG(@"windowDidResize: %@ (inLiveResize %s)", NSStringFromRect(coronaRect), ([_window inLiveResize] ? "YES" : "NO"));
-	// NSDEBUG(@"windowDidResize: fullscreen %s borderless %s", ((([_window styleMask] & NSFullScreenWindowMask) == NSFullScreenWindowMask) ? "YES" : "NO"), ((([_window styleMask] & NSTitledWindowMask) == NSTitledWindowMask) ? "YES" : "NO"));
-	BOOL isFullScreen = (([_window styleMask] & NSFullScreenWindowMask) == NSFullScreenWindowMask) || ! (([_window styleMask] & NSTitledWindowMask) == NSTitledWindowMask);
-
-	coronaRect.origin = NSZeroPoint;
-	coronaRect.size.height -= (isFullScreen ? 0 : _titleBarHeight); // account for window title bar if there is one
-	[_coronaView setFrame:coronaRect];
+	NSRect contentRect = [_window contentRectForFrameRect:[_window frame]];
+	contentRect.origin = NSZeroPoint;
+	[_coronaView setFrame:contentRect];
 }
 
 // Providing this method causes runtime errors to offer a "Quit" button
@@ -575,8 +534,7 @@
 - (void)windowDidChangeBackingProperties:(NSNotification *)notification
 {
 	NSDEBUG(@"+++ windowDidChangeBackingProperties: %@; screen %@: %g", NSStringFromRect([_window frame]), [[[_window screen] deviceDescription] objectForKey:@"NSDeviceSize"], [_window backingScaleFactor]);
-
-	[_coronaView setScaleFactor:[_window backingScaleFactor]];
+	[_coronaView setBackingScaleFactor:[_window backingScaleFactor]];
 }
 
 // This notification serves as a way to tell that the window is on a screen and
@@ -585,8 +543,7 @@
 {
 	if (_window.occlusionState & NSWindowOcclusionStateVisible)
 	{
-		[_coronaView setScaleFactor:[_window backingScaleFactor]];
-
+		[_coronaView setBackingScaleFactor:[_window backingScaleFactor]];
 		[_coronaView restoreWindowProperties];
 	}
 }

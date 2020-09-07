@@ -13,10 +13,8 @@
 simulator =
 {
 	device = "borderless-android-device",
-	screenOriginX = 0,
-	screenOriginY = 0,
-	screenWidth = 1600,
-	screenHeight = 2560,
+	deviceWidth = 2560,
+	deviceHeight = 1600,
 	androidDisplayApproximateDpi = 320, -- xhdpi
 	displayManufacturer = "Corona Labs Inc.",
 	displayName = "GenericAndroidDevice",

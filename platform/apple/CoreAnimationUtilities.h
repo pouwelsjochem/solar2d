@@ -17,9 +17,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-	
-// Shakes a view or window (or something that has an animator and responds to frame or frameOrigin properties.
-void CoreAnimationUtilities_ShakeViewWithAnimation(id view, NSRect view_frame, CAAnimation* shake_animation);
 
 // Returns autoreleased CAKeyframeAnimation
 	

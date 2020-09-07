@@ -33,9 +33,6 @@ class CoronaViewRuntimeDelegate : public RuntimeDelegatePlayer
 		virtual void InitializeConfig( const Runtime& sender, lua_State *L ) const;
 		virtual void DidLoadConfig( const Runtime& sender, lua_State *L ) const;
 
-	protected:
-		virtual id< CoronaRuntime > GetPluginContext() const;
-
 	private:
 		CoronaView *fOwner; // Weak ref
 };

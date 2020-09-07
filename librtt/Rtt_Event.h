@@ -34,7 +34,7 @@
 // an event and then passing on the event to parent objects.
 // ----------------------------------------------------------------------------
 
-#include "Rtt_DeviceOrientation.h"
+#include "Core/Rtt_Types.h"
 #include "Core/Rtt_Real.h"
 #include "Renderer/Rtt_RenderTypes.h"
 
@@ -215,28 +215,6 @@ class SystemOpenEvent : public SystemEvent
 		int fCommandLineArgumentCount;
 
 		friend class Runtime;
-};
-
-// ----------------------------------------------------------------------------
-
-// Immediately broadcast to "Runtime"
-class OrientationEvent : public VirtualEvent
-{
-	public:
-		typedef VirtualEvent Super;
-
-	public:
-		OrientationEvent(
-			DeviceOrientation::Type type,
-			DeviceOrientation::Type previous );
-
-	public:
-		virtual const char* Name() const;
-		virtual int Push( lua_State *L ) const;
-
-	private:
-		U8 fType;
-		U8 fPreviousType;
 };
 
 // ----------------------------------------------------------------------------

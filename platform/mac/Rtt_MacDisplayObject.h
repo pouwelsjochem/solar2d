@@ -65,9 +65,6 @@ class MacDisplayObject : public PlatformDisplayObject
 		void AddSubviewToLayerHostView();
 		void RecomputeNextKeyViews();
 		bool IsInSimulator() const;
-		float GetSimulatorScale() const;
-		void CacheSimulatorScale();
-		virtual void DidRescaleSimulator( float previousScale, float currentScale );
         static int setReturnKey( lua_State *L );
 
 #if 0 // See TODO in .mm regarding Rtt_NATIVE_PROPERTIES_MAC
@@ -86,7 +83,6 @@ class MacDisplayObject : public PlatformDisplayObject
 		NSView *fLayerHostSuperView;
 		NSRect fNSViewFrame;
 		bool fIsHidden; // I need a second flag because I need to hide objects when scaling/rotating
-		float fCachedSimulatorScale;
 };
 
 // Common functions between text objects

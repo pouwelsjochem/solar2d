@@ -30,25 +30,24 @@ typedef enum {
 - (void)resume;
 - (void)terminate;
 - (void) handleOpenURL:(NSString *)urlStr;
-- (void) setScaleFactor:(CGFloat)scaleFactor;
+- (void) setBackingScaleFactor:(CGFloat)backingScaleFactor;
 - (void) restoreWindowProperties;
 
 - (BOOL) settingsIsWindowResizable;
 - (BOOL) settingsIsWindowCloseButtonEnabled;
 - (BOOL) settingsIsWindowMinimizeButtonEnabled;
 - (BOOL) settingsIsWindowMaximizeButtonEnabled;
-- (int) settingsContentWidth;
-- (int) settingsContentHeight;
+- (int) settingsMinContentWidth;
+- (int) settingsMaxContentWidth;
+- (int) settingsMinContentHeight;
+- (int) settingsMaxContentHeight;
 - (NSString *) settingsWindowTitle;
 - (CoronaViewWindowMode) settingsDefaultWindowMode;
 - (int) settingsMinWindowViewWidth;
 - (int) settingsMinWindowViewHeight;
 - (int) settingsDefaultWindowViewWidth;
 - (int) settingsDefaultWindowViewHeight;
-- (int) settingsImageSuffixScaleCount;
-- (double) settingsImageSuffixScaleByIndex:(int) index;
 - (BOOL) settingsSuspendWhenMinimized;
-- (BOOL) settingsIsWindowTitleShown;
 
 - (id)sendEvent:(NSDictionary *)event;
 

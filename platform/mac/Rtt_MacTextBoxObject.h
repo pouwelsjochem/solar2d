@@ -46,7 +46,6 @@ class MacTextBoxObject : public MacDisplayObject
 		virtual bool SetValueForKey( lua_State *L, const char key[], int valueIndex );
 	
 	protected:
-		virtual void DidRescaleSimulator( float previousScale, float currentScale );
 		static int setTextColor( lua_State *L );
 		static int setSelection( lua_State *L );
 

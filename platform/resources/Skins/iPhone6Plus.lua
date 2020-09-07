@@ -10,13 +10,10 @@
 simulator =
 {
 	device = "ios-phone",
-	screenOriginX = 82,
-	screenOriginY = 298,
-	screenWidth = 1080,
-	screenHeight = 1920,
-	iosPointWidth = 414,
-	iosPointHeight = 736,
-	deviceImage = "iPhone6Plus.png",
+	deviceWidth = 1920,
+	deviceHeight = 1080,
+	iosPointWidth = 736,
+	iosPointHeight = 414,
 	displayManufacturer = "Apple",
 	displayName = "iPhone",
 	windowTitleBarName = "iPhone 6 Plus",

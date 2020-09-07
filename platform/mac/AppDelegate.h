@@ -105,8 +105,6 @@ namespace Rtt
     NSString *customDeviceName;
     int customDeviceWidth;
     int customDeviceHeight;
-    BOOL customDeviceIsRotatable;
-    BOOL customDevicePortraitOrientation;
 	int customDevicePlatformTag;
 
 	BOOL fIsRemote;
@@ -208,9 +206,6 @@ namespace Rtt
 -(BOOL)setSkinForTitle:(NSString*)title;
 
 -(IBAction)launchSimulator:(id)sender;
--(IBAction)rotateLeft:(id)sender;
--(IBAction)rotateRight:(id)sender;
--(IBAction)shake:(id)sender;
 -(IBAction)toggleSuspendResume:(id)sender;
 
 -(NSWindow*)currentWindow;

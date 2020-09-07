@@ -87,7 +87,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fIpcMessageOnlyWindowPointer(nullptr),
 	fMainWindowPointer(nullptr),
 	fRenderSurfacePointer(nullptr),
-	fLastOrientation(Rtt::DeviceOrientation::kUnknown),
 	fGdiPlusToken(0),
 	fFontServices(*this),
 	fDebuggerSemaphoreHandle(nullptr),
@@ -165,7 +164,7 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	}
 
 	// Load the project's "build.settings" and "config.lua" file.
-	// Used to fetch supported orientations, window size, content size, preference storage type, etc.
+	// Used to fetch supported window size, content size, preference storage type, etc.
 	if (settings.IsRuntimeCreationEnabled)
 	{
 		fProjectSettings.LoadFromDirectory(fDirectoryPaths[Rtt::MPlatform::kResourceDir].GetUTF8());
@@ -1120,104 +1119,6 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 	{
 		UpdateMainWindowUsing(fReadOnlyProjectSettings);
 	}
-	
-	// If not simulating a device, then choose a default orientation that best fits the given surface's bounds.
-	// Note: This respects the "build.settings" supported orientations. If this file was not found or if it
-	//       does not provide any supported orientations, then a default orientation will not be selected.
-	auto deviceSimulatorServicesPointer = GetDeviceSimulatorServices();
-	if (!deviceSimulatorServicesPointer && fRenderSurfacePointer)
-	{
-		auto surfaceBounds = fRenderSurfacePointer->GetClientBounds();
-		auto surfaceWidth = surfaceBounds.right - surfaceBounds.left;
-		auto surfaceHeight = surfaceBounds.bottom - surfaceBounds.top;
-		if ((surfaceWidth > surfaceHeight) && fProjectSettings.IsLandscapeSupported())
-		{
-			if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kSidewaysRight))
-			{
-				fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kSidewaysRight);
-			}
-			else
-			{
-				fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kSidewaysLeft);
-			}
-		}
-		else if ((surfaceWidth <= surfaceHeight) && fProjectSettings.IsPortraitSupported())
-		{
-			if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kUpright))
-			{
-				fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kUpright);
-			}
-			else
-			{
-				fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kUpsideDown);
-			}
-		}
-	}
-
-	// If the "build.settings" file does not have a default orientation set or if the file was not found,
-	// then assign a default orientation for this Corona project to use.
-	// Note: If a "build.settings" was supplied, then the content width/height are relative to a portrait orientation.
-	//       If a "build.settings" was not found, then the content width/height are considered upright and used as-is.
-	if (Rtt::DeviceOrientation::IsInterfaceOrientation(fProjectSettings.GetDefaultOrientation()) == false)
-	{
-		if (fProjectSettings.GetSupportedOrientationsCount() > 0)
-		{
-			// The "build.settings" file definitely exists and contains a "supported" orientations list.
-			// Use an orientation flagged as supported within the "build.settings" file.
-			if (GetDeviceSimulatorServices() == nullptr)
-			{
-				// Favor a landscape orientation for Windows desktop apps, if supported.
-				if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kSidewaysRight))
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kSidewaysRight);
-				}
-				else if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kSidewaysLeft))
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kSidewaysLeft);
-				}
-				else
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kUpright);
-				}
-			}
-			else
-			{
-				// Favor a portrait orientation for Corona Simulator device simulation, if supported.
-				if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kUpright))
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kUpright);
-				}
-				else if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kUpsideDown))
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kUpsideDown);
-				}
-				else if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kSidewaysRight))
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kSidewaysRight);
-				}
-				else if (fProjectSettings.IsSupported(Rtt::DeviceOrientation::kSidewaysLeft))
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kSidewaysLeft);
-				}
-				else
-				{
-					fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kUpright);
-				}
-			}
-		}
-		else
-		{
-			// No "build.settings" file was found or no supported orientations was configured.
-			// We have no choice but to hard code it to an upright orientation.
-			fProjectSettings.SetDefaultOrientation(Rtt::DeviceOrientation::kUpright);
-		}
-	}
-
-	// If running under the Corona Simulator, make sure its orientation matches the runtime's launch orientation.
-	if (deviceSimulatorServicesPointer)
-	{
-		deviceSimulatorServicesPointer->SetOrientation(fProjectSettings.GetDefaultOrientation());
-	}
 
 	// Do the following if the Corona runtime was requested to connect to a debugger.
 	// Note: We cannot debug a Corona project using a "resource.car" file. We can only debug via Lua files.
@@ -1357,8 +1258,7 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 
 	// Load and run the Corona project.
 	fRuntimeState = RuntimeState::kStarting;
-	fLastOrientation = fProjectSettings.GetDefaultOrientation();
-	auto result = fRuntimePointer->LoadApplication(updatedLaunchOptions, fLastOrientation);
+	auto result = fRuntimePointer->LoadApplication(updatedLaunchOptions);
 	if (Rtt::Runtime::kSuccess == result)
 	{
 		// Load was successful. Start running the Corona application.
@@ -1645,7 +1545,7 @@ void RuntimeEnvironment::Resume()
 	if (fRuntimePointer->IsSuspended())
 	{
 		fRuntimePointer->Resume();
-		UpdateOrientationAndSurfaceSize();
+		UpdateSurfaceSize();
 	}
 }
 
@@ -2052,8 +1952,8 @@ void RuntimeEnvironment::OnDestroyingSurface(UI::UIComponent &sender, const Even
 
 void RuntimeEnvironment::OnSurfaceResized(UI::Control &sender, const EventArgs &arguments)
 {
-	// Update the runtime's cached orientation and surface size.
-	UpdateOrientationAndSurfaceSize();
+	// Update the runtime's cached surface size.
+	UpdateSurfaceSize();
 
 	// Check if the Corona runtime's main timer is ready to elapse, and if so, then invoke it now.
 	// This will trigger an "enterFrame" in the runtime, which provides a smoother resize animation.
@@ -2069,7 +1969,7 @@ void RuntimeEnvironment::OnSurfaceResized(UI::Control &sender, const EventArgs &
 	}
 }
 
-void RuntimeEnvironment::UpdateOrientationAndSurfaceSize()
+void RuntimeEnvironment::UpdateSurfaceSize()
 {
 	// Do not continue unless the Corona runtime is currently running.
 	if (!fRuntimePointer)
@@ -2083,69 +1983,13 @@ void RuntimeEnvironment::UpdateOrientationAndSurfaceSize()
 		return;
 	}
 
-	// Fetch the current orientation. Only applies if simulating a device.
-	auto previousOrientation = fLastOrientation;
-	auto currentOrientation = Rtt::DeviceOrientation::kUpright;
-	auto deviceSimulatorServicesPointer = GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		currentOrientation = deviceSimulatorServicesPointer->GetOrientation();
-	}
-	else if (Rtt::DeviceOrientation::IsInterfaceOrientation(fProjectSettings.GetDefaultOrientation()))
-	{
-		currentOrientation = fProjectSettings.GetDefaultOrientation();
-	}
-
-	// Determine if there was an orientation change.
-	bool hasOrientationChanged = (currentOrientation != fLastOrientation);
-
 	// Determine if the content width/height was resized.
-	// Note: An orientation change from portrait->landscape or vice-versa counts as a resize.
 	bool hasSurfaceSizeChanged = false;
-	if ((Rtt::DeviceOrientation::IsUpright(currentOrientation) != Rtt::DeviceOrientation::IsUpright(fLastOrientation)) ||
-	    fRuntimePointer->GetDisplay().HasWindowSizeChanged())
+	if (fRuntimePointer->GetDisplay().HasWindowSizeChanged())
 	{
-		hasSurfaceSizeChanged = true;
-	}
-
-	// Store the current orientation.
-	fLastOrientation = currentOrientation;
-
-	// Update the renderer if a change was detected.
-	if (hasOrientationChanged || hasSurfaceSizeChanged)
-	{
-#ifdef Rtt_AUTHORING_SIMULATOR
-		if (deviceSimulatorServicesPointer)
-		{
-			fRuntimePointer->GetDisplay().WindowDidRotate(
-					currentOrientation, fProjectSettings.IsSupported(currentOrientation));
-		}
-		else
-#endif
-		{
-			if (hasOrientationChanged)
-			{
-				fRuntimePointer->GetDisplay().SetContentOrientation(currentOrientation);
-			}
-			if (fRuntimePointer->GetDisplay().HasWindowSizeChanged())
-			{
-				fRuntimePointer->GetDisplay().WindowSizeChanged();
-			}
-			fRuntimePointer->RestartRenderer(currentOrientation);
-		}
+		fRuntimePointer->GetDisplay().WindowSizeChanged();
+		fRuntimePointer->GetDisplay().Restart();
 		fRuntimePointer->GetDisplay().Invalidate();
-	}
-
-	// Dispatch an 'orientation" event to Lua if it has changed.
-	if (hasOrientationChanged)
-	{
-		Rtt::OrientationEvent event(currentOrientation, previousOrientation);
-		fRuntimePointer->DispatchEvent(event);
-	}
-
-	// Dispatch a "resize" event to Lua if it has changed.
-	if (hasSurfaceSizeChanged && fProjectSettings.IsSupported(currentOrientation))
-	{
 		fRuntimePointer->DispatchEvent(Rtt::ResizeEvent());
 	}
 }
@@ -2335,69 +2179,8 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 			clientSize.cy = projectSettings.GetMinWindowViewHeight();
 			if ((clientSize.cx <= 0) || (clientSize.cy <= 0))
 			{
-				clientSize.cx = projectSettings.GetContentWidth();
-				clientSize.cy = projectSettings.GetContentHeight();
-				if (Rtt::DeviceOrientation::IsSideways(projectSettings.GetDefaultOrientation()))
-				{
-					Rtt::Swap<LONG>(clientSize.cx, clientSize.cy);
-				}
-			}
-		}
-	}
-
-	// If we've failed to fetch a window content width/height above, then use a hardcoded default.
-	if ((clientSize.cx <= 0) || (clientSize.cy <= 0))
-	{
-		if (projectSettings.HasBuildSettings())
-		{
-			clientSize.cx = 320;
-			clientSize.cy = 480;
-			if (projectSettings.IsLandscapeSupported())
-			{
-				Rtt::Swap<LONG>(clientSize.cx, clientSize.cy);
-			}
-		}
-	}
-
-	// If the project supports image suffix scales (ie: @2x, @3x, etc.) then attempt to increase
-	// the size of the window using these scales to best-fit the desktop monitor it is in.
-	// Note: Never apply the image suffix scale if restoring the previous app instance's window width/height.
-	if (!isClientSizeFromPreferences &&
-	    (clientSize.cx > 0) && (clientSize.cy > 0) &&
-	    (projectSettings.GetImageSuffixScaleCount() > 0))
-	{
-		auto monitorHandle = ::MonitorFromWindow(windowHandle, MONITOR_DEFAULTTONEAREST);
-		if (monitorHandle)
-		{
-			// Fetch the workspace size of the monitor the app is currently positioned in.
-			// The workspace area excludes the Windows taskbar and sidebars.
-			MONITORINFOEXW monitorInfo{};
-			monitorInfo.cbSize = sizeof(monitorInfo);
-			::GetMonitorInfoW(monitorHandle, &monitorInfo);
-			auto workspaceWidth = std::abs(monitorInfo.rcWork.right - monitorInfo.rcWork.left);
-			auto workspaceHeight = std::abs(monitorInfo.rcWork.bottom - monitorInfo.rcWork.top);
-
-			// Fetch the size of the window's borders, excluding the client area.
-			auto currentWindowSize = fMainWindowPointer->GetNormalModeSize();
-			auto currentClientSize = fMainWindowPointer->GetNormalModeClientSize();
-			auto totalBorderWidth = currentWindowSize.cx - currentClientSize.cx;
-			auto totalBorderHeight = currentWindowSize.cy - currentClientSize.cy;
-
-			// Use an image suffix scale that'll best-fit the workspace/desktop area.
-			auto maxWidth = workspaceWidth - totalBorderWidth;
-			auto maxHeight = workspaceHeight - totalBorderHeight;
-			if ((maxWidth > 0) && (maxHeight > 0))
-			{
-				for (int index = projectSettings.GetImageSuffixScaleCount() - 1; index >= 0; index--)
-				{
-					double scale = projectSettings.GetImageSuffixScaleByIndex(index);
-					if (((clientSize.cx * scale) <= maxWidth) && ((clientSize.cy * scale) <= maxHeight))
-					{
-						clientSize.cx = (LONG)((double)clientSize.cx * scale);
-						clientSize.cy = (LONG)((double)clientSize.cy * scale);
-						break;
-					}
-				}
+				clientSize.cx = projectSettings.GetMinContentWidth();
+				clientSize.cy = projectSettings.GetMinContentHeight();
 			}
 		}
 	}

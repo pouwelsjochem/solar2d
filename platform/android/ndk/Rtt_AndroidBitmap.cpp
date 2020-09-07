@@ -9,7 +9,7 @@
 
 
 #include "Core/Rtt_Build.h"
-#include "librtt/Rtt_GPUStream.h"
+#include "librtt/Rtt_RenderingStream.h"
 #include "AndroidZipFileEntry.h"
 #include "NativeToJavaBridge.h"
 #include "Rtt_AndroidBitmap.h"

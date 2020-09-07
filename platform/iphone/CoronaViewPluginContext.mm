@@ -73,7 +73,7 @@
 	CoronaView *view = (CoronaView *)fOwner.view;
 	const Display& display = view.runtime->GetDisplay();
 
-	Rtt_Real contentToScreenScale = display.CalculateContentToScreenScale();
+	Rtt_Real contentToScreenScale = display.GetContentToScreenScale();
 	if ( !Rtt_RealIsOne(contentToScreenScale) )
 	{
 		PlatformDisplayObject::CalculateScreenBounds( display, contentToScreenScale, bounds );

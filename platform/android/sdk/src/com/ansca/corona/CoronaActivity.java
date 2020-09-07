@@ -44,11 +44,9 @@ public class CoronaActivity extends Activity {
 
 	private android.content.Intent myInitialIntent = null;
 	private boolean myIsActivityResumed = false;
-	private boolean myIsOrientationLocked = false;
 	private com.ansca.corona.graphics.opengl.CoronaGLSurfaceView myGLView;
 	private android.widget.ImageView fSplashScreenView = null;
 	private com.ansca.corona.purchasing.StoreProxy myStore = null;
-	private android.database.ContentObserver fAutoRotateObserver = null;
 	
 	private Controller fController;
 	private CoronaRuntime fCoronaRuntime;
@@ -71,15 +69,6 @@ public class CoronaActivity extends Activity {
 	
 	/** Sends CoronaRuntimeTask objects to the Corona runtime's EventManager in a thread safe manner. */
 	private CoronaRuntimeTaskDispatcher myRuntimeTaskDispatcher = null;
-
-	/** The "screen orientation" constant in class ActivityInfo defined in AndroidManifest.xml. */
-	private int myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-
-	/** 
-	 * Tracks the current orientation that may need to be restored later. 
-	 * Must be a "screen orientation" constant in class ActivityInfo.
-	 */
-	private int fLoggedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 
 	/** Dictionary of activity result handlers which uses request codes as the key. */
 	private java.util.HashMap<Integer, CoronaActivity.ResultHandler> fActivityResultHandlers =
@@ -230,10 +219,6 @@ public class CoronaActivity extends Activity {
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN |
 				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-		// Set the orientation of this activity according to the meta-data assigned in the AndroidManifest.xml file.
-		// Also ensures that the orientation is set to something that Corona supports.
-		initializeOrientation();
 
 		// If this is a new installation of this app, then delete its "externalized" assets to be replaced by the new ones.
 		// We determine if this is a new installation by storing the APK's timestamp to the preferences file since last the app ran.
@@ -437,486 +422,6 @@ public class CoronaActivity extends Activity {
 	/* End of Public APIs that connect to the Controller class */
 
 	/**
-	 * Sets the orientation of this activity according to the orientation settings assigned in the manifest file.
-	 * Ensures that this activity is being assigned an orientation that Corona supports.
-	 * <p>
-	 * This method must be called in this activity's onCreate() method.
-	 */
-	private void initializeOrientation() {
-		// Fetch the default orientation assigned to this activity. This typically comes from
-		// the "screenOrientation" attribute assigned to the activity tag in the "AndroidManifest.xml" file.
-		myInitialOrientationSetting = getRequestedOrientation();
-
-		// Attempt to fetch orienation meta-data from the Corona activity tag in the "AndroidManifest.xml" file.
-		// This meta-data indicates what supported orientations were assigned to the "build.settings" file.
-		// Note that this meta-data should only exist for Corona Simulator builds and not Enterprise builds.
-		try {
-			android.content.pm.ActivityInfo activityInfo;
-			activityInfo = getPackageManager().getActivityInfo(
-						getComponentName(), android.content.pm.PackageManager.GET_META_DATA);
-			if ((activityInfo != null) && (activityInfo.metaData != null)) {
-				String initialOrientationString = activityInfo.metaData.getString("requestedDefaultOrientation");
-
-				// Decode the desired orientation setting.
-				if (initialOrientationString.equals("portrait")) {
-					myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-				} else if (initialOrientationString.equals("landscape")) {
-					myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-				} else if (initialOrientationString.equals("reversePortrait")) {
-					myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-				} else if (initialOrientationString.equals("reverseLandscape")) {
-					myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-				} else if (initialOrientationString.equals("sensorPortrait")) {
-					myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
-				} else if (initialOrientationString.equals("sensorLandscape")) {
-					myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
-				} else if (initialOrientationString != null) {
-					myInitialOrientationSetting = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-				}
-			}
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		// Set the initial orientation based on what was explictly found in "AndroidManifest.xml" 
-		// and put through our filter of supported orientation settings.
-		myInitialOrientationSetting = screenOrientationFilter(myInitialOrientationSetting);
-		logOrientation(myInitialOrientationSetting);
-		setRequestedOrientation(myInitialOrientationSetting);
-
-		if (needManualOrientationHandling()) {
-			// Monitor the auto-rotate setting, locking the screen orientation 
-			// if it's turned on and unlocking it if it's turned off.
-			// This is to make sensorPortrait and sensorLandscape behave like their user 
-			// counter-parts on API Level 18+ and handle sending orientation events to Corona appropriately.
-			fAutoRotateObserver = new android.database.ContentObserver(null) {
-				@Override
-				public void onChange(boolean selfChange) {
-					super.onChange(selfChange);
-					if (android.provider.Settings.System.getInt(
-						getContentResolver(), 
-							android.provider.Settings.System.ACCELEROMETER_ROTATION, 0) != 0) {
-
-						// Auto-rotate has been turned on. Restore the old orientation setting.
-						restoreInitialOrientationSetting();
-
-					} else if (myIsActivityResumed) {
-						// Auto-rotate has been turned off.
-						if (fController.getSystemMonitor() != null && 
-							fController.getSystemMonitor().isScreenUnlocked()) {
-							// The CoronaActivity is in the foreground and the user can see it.
-							// Lock in our current orientation if the user can see our activity!
-							// This provides them a logical experience with the auto-rotate setting.
-							lockCurrentOrientation();
-						} else {
-							// We're on the screen lock screen, but the device has chosen to resume the activity.
-							// Check that the current orientation of the screen is supported by this app.
-							if ((isAtPortraitOrientation() && !supportsPortraitOrientation()) ||
-								(isAtLandscapeOrientation() && !supportsLandscapeOrientation())) {
-								// Lock in the last known orientation that's supported and lock it in.
-								lockOrientation(getLoggedOrientation());
-							} else {
-								// We're safe to lock the current orientation
-								lockCurrentOrientation();
-							}
-						}
-					}
-				}
-			};
-		}
-	}
-
-	/**
-	 * Determines if the Corona Activity needs to handle orientation settings manually.
-	 * This is an internal method that can only be called by Corona.
-	 * @return Returns a boolean indicating whether thie CoronaActivity should handle orientation settings itself.
-	 */
-	boolean needManualOrientationHandling() {
-		return myInitialOrientationSetting == android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE ||
-				myInitialOrientationSetting == android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
-	}
-
-	/**
-	 * Determines the current orientation of the screen.
-	 * @return Returns the "screen orientation" constant in class ActivityInfo that matches how the device is currently oriented.
-	 * This is an internal method that can only be called by Corona.
-	 */
-	int getCurrentOrientation() {
-		// Figure out how the device is currently orientated.
-		// Fetch screen's current orientation in degrees, clockwise.
-		android.view.Display display = 
-			((android.view.WindowManager)getSystemService(android.content.Context.WINDOW_SERVICE)).getDefaultDisplay();
-		int displayAngle = display.getRotation();
-
-		// Determine the screen's natural orientation from its current orientation and display properties.
-		boolean isNaturalOrientationPortrait = (
-				(display.getWidth() <= display.getHeight()) 
-				&& ((displayAngle == android.view.Surface.ROTATION_0) 
-					|| (displayAngle == android.view.Surface.ROTATION_180))
-			) || (
-				(display.getWidth() > display.getHeight())
-				&& ((displayAngle == android.view.Surface.ROTATION_90) 
-					|| (displayAngle == android.view.Surface.ROTATION_270))
-			);
-		
-		// Figure out what orientation setting matches the screen right now.
-		int currentOrientation = -1;
-		switch(displayAngle) {
-			case android.view.Surface.ROTATION_90:
-				if (isNaturalOrientationPortrait) {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-				} else {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-				}
-				break;
-
-			case android.view.Surface.ROTATION_180:
-				if (isNaturalOrientationPortrait) {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-				} else {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-				}
-				break;
-
-			case android.view.Surface.ROTATION_270:
-				if (isNaturalOrientationPortrait) {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-				} else {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-				}
-				break;
-
-			case android.view.Surface.ROTATION_0:
-			default:
-				if (isNaturalOrientationPortrait) {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-				} else {
-					currentOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-				}
-				break;
-		}
-		return currentOrientation;
-	}
-
-	/**
-	 * Retrieves the logged screen orientation.
-	 * @return Returns the "screen orientation" constant in class ActivityInfo that was last requested.
-	 * This is an internal method that can only be called by Corona.
-	 */
-	int getLoggedOrientation() {
-		return fLoggedOrientation;
-	}
-
-	/**
-	 * Logs the requested orientation.
-	 * This is an internal method that can only be called by Corona.
-	 * @param orintationToLog The "screen orientation" constant in class ActivityInfo we want to log.
-	 */
-	void logOrientation(int orientationToLog) {
-		fLoggedOrientation = orientationToLog;
-	}
-
-	/**
-	 * Logs the current orientation of the screen.
-	 * This is an internal method that can only be called by Corona.
-	 */
-	void logCurrentOrientation() {
-		logOrientation(getCurrentOrientation());
-	}
-
-	/**
-	 * Filters out unsupported "screen orientation" constant in class ActivityInfo.
-	 * <p>
-	 * This is an internal method that can only be called by Corona.
-	 * <p>
-	 * Intended to deny support for orientation settings that Corona does not support, such as settings that
-	 * prevent Corona from predicting the orientation of the display. For example, ActivityInfo.SCREEN_ORIENTATION_USER
-	 * and ActivityInfo.SCREEN_ORIENTATION_BEHIND might or might not support fixed orientations.
-	 * <p>
-	 * This activity will use ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED if given the following orientations:
-	 * <ul>
-	 *  <li>ActivityInfo.SCREEN_ORIENTATION_SENSOR
-	 *  <li>ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-	 *  <li>ActivityInfo.SCREEN_ORIENTATION_FULL_USER
-	 * <p>
-	 * ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED is used so that the OS will respect auto-rotate settings.
-	 * <p>
-	 * This activity will use ActivityInfo.SCREEN_ORIENTATION_PORTRAIT if given the following orientations:
-	 * <ul>
-	 *  <li>ActivityInfo.SCREEN_ORIENTATION_USER
-	 *  <li>ActivityInfo.SCREEN_ORIENTATION_BEHIND
-	 *  <li>ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
-	 *	<li>ActivityInfo.SCREEN_ORIENTATION_LOCKED
-	 * </ul>
-	 * <p>
-	 * This activity will use ActivityInfo.SCREEN_ORIENTATION_SENSOR_[PORTRAIT/LANDSCAPE] 
-	 * if given ActivityInfo.SCREEN_ORIENTATION_USER_[PORTRAIT/LANDSCAPE].
-	 * <p>
-	 * Filtering out these orientations ensures that Auto-Rotate system preference is handled elegantly in Corona.
-	 * @param requestedOrientation The orientation setting to be applied to this filter.
-	 *                             Must be a "screen orientation" constant in class ActivityInfo.
-	 * @return Returns the "screen orientation" constant in class ActivityInfo closest to what we support.
-	 */
-	int screenOrientationFilter(int requestedOrientation) {
-		// If given an orientation that is not supported by Corona, then force it to something Corona does support.
-		int orientationFilterResult = requestedOrientation;
-		switch (requestedOrientation) {
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR:
-			case 13: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_USER:
-				orientationFilterResult = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-				break;
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_BEHIND:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_NOSENSOR:
-			case 14: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LOCKED:
-				orientationFilterResult = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-				break;
-			case 11: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE:
-				orientationFilterResult = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
-				break;
-			case 12: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT:
-				orientationFilterResult = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
-				break;
-		}
-		return orientationFilterResult;
-	}
-
-	/**
-	 * Determines if this activity is currently in a portrait orientation.
-	 * @return Returns true if this activity is in a portrait orientation.
-	 *         <p>
-	 *         Returns false if this activity is in a landscape orientaton.
-	 */
-	boolean isAtPortraitOrientation() {
-		boolean isAtPortrait;
-
-		switch(getCurrentOrientation()) {
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-				isAtPortrait = true;
-				break;
-			default:
-				isAtPortrait = false;
-				break;
-		}
-		return isAtPortrait;
-	}
-
-	/**
-	 * <b>&emsp;This method was REMOVED in <a href="http://developer.coronalabs.com/release-ent/2013/2109/">daily build 2013.2109</a>.</b>
-	 * <p>
-	 * Determines if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 * supports multiple orientations.
-	 * @return Returns true if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> 
-	 * 		   view can change orientations. Returns false if it has a fixed orientation.
-	 */
-	public boolean supportsOrientationChanges() {
-		// NOTE: THIS IS A STUB FOR JAVADOC! DO NOT ACTUALLY IMPLEMENT ANYTHING HERE!
-		return false;
-	}
-
-	/**
-	 * Determines if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 * supports a portrait orientation.
-	 * @return Returns true if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 *		   supports a portrait orientation.
-	 *         <p>
-	 *         Returns false if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 *		   only support landscape.
-	 */
-	public boolean supportsPortraitOrientation() {
-		boolean isSupported;
-
-		switch (myInitialOrientationSetting) {
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR:
-			case 13: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_USER:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT:
-			case 12: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT:
-				isSupported = true;
-				break;
-			default:
-				isSupported = false;
-				break;
-		}
-		return isSupported;
-	}
-	
-	/**
-	 * Determines if this activity is currently in a landscape orientation.
-	 * @return Returns true if this activity is in a landscape orientation.
-	 *         <p>
-	 *         Returns false if this activity is in a portrait orientaton.
-	 */
-	boolean isAtLandscapeOrientation() {
-		boolean isAtLandscape;
-
-		switch(getCurrentOrientation()) {
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-				isAtLandscape = true;
-				break;
-			default:
-				isAtLandscape = false;
-				break;
-		}
-		return isAtLandscape;
-	}
-
-	/**
-	 * Determines if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 * supports a landscape orientation.
-	 * @return Returns true if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 *		   supports a landscape orientation.
-	 *         <p>
-	 *         Returns false if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 *		   only support portrait.
-	 */
-	public boolean supportsLandscapeOrientation() {
-		boolean isSupported;
-
-		switch (myInitialOrientationSetting) {
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR:
-			case 13: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_FULL_USER:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-			case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:
-			case 11: //android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE:
-				isSupported = true;
-				break;
-			default:
-				isSupported = false;
-				break;
-		}
-		return isSupported;
-	}
-	
-	/**
-	 * <b>&emsp;This method was REMOVED in <a href="http://developer.coronalabs.com/release-ent/2013/2109/">daily build 2013.2109</a>.</b>
-	 * <p>
-	 * Determines if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 * only supports one orientation and it will never change.
-	 * @return Returns true if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> 
-	 * 		   view will never change orientation. Returns false if it supports multiple orientations.
-	 */
-	public boolean hasFixedOrientation() {
-		// NOTE: THIS IS A STUB FOR JAVADOC! DO NOT ACTUALLY IMPLEMENT ANYTHING HERE!
-		return false;
-	}
-
-	/**
-	 * Returns the orientation requested for this 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> in the
-	 * <a href="http://developer.android.com/guide/topics/manifest/manifest-intro.html">AndroidManifest.xml</a>.
-	 * <p>
-	 * To get the last requested orientation given to 
-	 * {@link com.ansca.corona.CoronaActivity#setRequestedOrientation(int) setRequestedOrientation(int)}, use 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html#getRequestedOrientation()">getRequestedOrientation()</a>.
-	 * <p>
-	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2015/2750/">daily build 2015.2750</a></b>
-	 */
-	public int getOrientationFromManifest() {
-		return myInitialOrientationSetting;
-	}
-
-	/**
-	 * Sets the orientation configuration for this 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
-	 * <p>
-	 * Overridden to deny support for orientation settings that Corona does not support, such as settings that
-	 * prevent Corona from predicting the orientation of the display. For example, 
-	 * <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_USER">ActivityInfo.SCREEN_ORIENTATION_USER</a>
-	 * and <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_BEHIND">ActivityInfo.SCREEN_ORIENTATION_BEHIND</a> 
-	 * might or might not support fixed orientations.
-	 * <p>
-	 * This <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> will use 
-	 * <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_UNSPECIFIED">ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED</a> if given the following orientations:
-	 * <ul>
-	 *  <li><a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_SENSOR">ActivityInfo.SCREEN_ORIENTATION_SENSOR</a>
-	 *  <li><a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_FULL_SENSOR">ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR</a> as of <a href="http://developer.coronalabs.com/release-ent/2015/2750/">daily build 2015.2750</a>.
-	 *  <li><a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_FULL_USER">ActivityInfo.SCREEN_ORIENTATION_FULL_USER</a> as of <a href="http://developer.coronalabs.com/release-ent/2015/2750/">daily build 2015.2750</a>.
-	 * </ul>
-	 * <p>
-	 * <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_UNSPECIFIED">ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED</a> is used so that the OS will respect auto-rotate settings.
-	 * <p>
-	 * This activity will use <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_PORTRAIT">ActivityInfo.SCREEN_ORIENTATION_PORTRAIT</a> if given the following orientations:
-	 * <ul>
-	 *  <li><a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_USER">ActivityInfo.SCREEN_ORIENTATION_USER</a>
-	 *  <li><a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_BEHIND">ActivityInfo.SCREEN_ORIENTATION_BEHIND</a> 
-	 *  <li><a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_NOSENSOR">ActivityInfo.SCREEN_ORIENTATION_NOSENSOR</a> 
-	 *	<li><a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_LOCKED">ActivityInfo.SCREEN_ORIENTATION_LOCKED</a> as of <a href="http://developer.coronalabs.com/release-ent/2015/2750/">daily build 2015.2750</a>.
-	 * </ul>
-	 * <p>
-	 * This activity will use <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_SENSOR_LANDSCAPE">ActivityInfo.SCREEN_ORIENTATION_SENSOR_[PORTRAIT/LANDSCAPE]</a> 
-	 * if given <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html#SCREEN_ORIENTATION_USER_LANDSCAPE">ActivityInfo.SCREEN_ORIENTATION_USER_[PORTRAIT/LANDSCAPE]</a> as of <a href="http://developer.coronalabs.com/release-ent/2015/2750/">daily build 2015.2750</a>.
-	 *
-	 * @param requestedOrientation The orientation setting to be applied to this 
-	 *							   <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
-	 *                             Must be a "screen orientation" constant in class 
-	 *							   <a href="http://developer.android.com/reference/android/content/pm/ActivityInfo.html">ActivityInfo</a>.
-	 */
-	@Override
-	public void setRequestedOrientation(int requestedOrientation) {
-
-		// Set the activity's orientation.
-		super.setRequestedOrientation(screenOrientationFilter(requestedOrientation));
-	}
-	
-	/**
-	 * Locks the current screen orientation.
-	 * <p>
-	 * This is an internal method that can only be called by Corona.
-	 */
-	void lockCurrentOrientation() {
-
-		// No need to lock the orientation if it's already locked
-		if (myIsOrientationLocked) {
-			return;
-		}
-		logCurrentOrientation();
-		lockOrientation(getLoggedOrientation());
-	}
-
-	/**
-	 * Locks the screen orientation as designated by the user.
-	 * @param orientationToLock The orientation to lock the app to.
-	 *        Must be a "screen orientation" constant in class ActivityInfo.
-	 * <p>
-	 * This is an internal method that can only be called by Corona.
-	 */
-	void lockOrientation(int orientationToLock) {
-
-		// No need to lock the orientation if it's already locked
-		if (myIsOrientationLocked) {
-			return;
-		}
-
-		// Lock the current orientation down.
-		logOrientation(orientationToLock);
-		setRequestedOrientation(orientationToLock);
-		myIsOrientationLocked = true;
-	}
-
-	/**
-	 * Restores the initial screen orientation setting.
-	 * <p>
-	 * This is an internal method that can only be called by Corona.
-	 */
-	void restoreInitialOrientationSetting() {
-		if (myIsOrientationLocked) {
-			setRequestedOrientation(myInitialOrientationSetting);
-			myIsOrientationLocked = false;
-		}
-	}
-
-	/**
 	 * Syncs up all requested permissions in the same permission group to the same status.
 	 */
 	void syncPermissionStateForAllPermissions() {
@@ -1066,11 +571,6 @@ public class CoronaActivity extends Activity {
 	 */
 	public int getContentHeightInPixels() {
 		return JavaToNativeShim.getContentHeightInPixels(fCoronaRuntime);
-	}
-
-	// TODO: PUBLICLY DOCUMENT THIS IF THE IOS ONE IS EVER PUBLICLY DOCUMENTED!
-	public android.graphics.Point convertCoronaPointToAndroidPoint( int x, int y ) {
-		return JavaToNativeShim.convertCoronaPointToAndroidPoint( fCoronaRuntime, x, y );
 	}
 	
 	/**
@@ -1567,32 +1067,6 @@ public class CoronaActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 
-		if (needManualOrientationHandling()) {
-			// Register our content observer for the auto-rotate setting.
-			android.net.Uri autoRotateSetting = 
-				android.provider.Settings.System.getUriFor(android.provider.Settings.System.ACCELEROMETER_ROTATION);
-			getContentResolver().registerContentObserver(autoRotateSetting, false, fAutoRotateObserver);
-
-			// Lock our orientation if auto-rotate has been disabled.
-			if (android.provider.Settings.System.getInt(
-				getContentResolver(), android.provider.Settings.System.ACCELEROMETER_ROTATION, 0) == 0) {
-				// Check that the current orientation of the screen is supported by this app.
-				// It may not be if we're coming back to the activity from the screen lock screen.
-				if ((isAtPortraitOrientation() && !supportsPortraitOrientation()) ||
-					(isAtLandscapeOrientation() && !supportsLandscapeOrientation())) {
-					// Lock in the last known orientation that's supported and lock it in.
-					lockOrientation(getLoggedOrientation());
-
-				} else {
-					// We're safe to lock the current orientation
-					lockCurrentOrientation();
-				}
-			} else {
-				// Auto-rotate has been turned on. Restore the old orientation setting.
-				restoreInitialOrientationSetting();
-			}
-		}
-
 		// Start or resume the Corona runtime.
 		myIsActivityResumed = true;
 		requestResumeCoronaRuntime();
@@ -1617,15 +1091,6 @@ public class CoronaActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
-		if (needManualOrientationHandling()) {
-
-			// Store the current orientation of the app in case it needs
-			// to be recovered from the screen lock screen.
-			logCurrentOrientation();
-
-			getContentResolver().unregisterContentObserver(fAutoRotateObserver);
-		}
 
 		// Suspend the Corona runtime.
 		// (Note: We do not want to destroy the OpenGL surface here because the activity window is still visible.)
@@ -1744,22 +1209,6 @@ public class CoronaActivity extends Activity {
 
 		// Resume the Corona runtime if the screen lock is no longer shown on top of this activity.
 		requestResumeCoronaRuntime();
-	}
-	
-	/**
-	 * Called when the device <a href="http://developer.android.com/reference/android/content/res/Configuration.html">Configuration</a> 
-	 * changes, such as orientation changes.
-	 * @param newConfig The new device configuration.
-	 */
-	@Override
-	public void onConfigurationChanged(android.content.res.Configuration newConfig) {
-		// Let the base class handle this event first.
-		super.onConfigurationChanged(newConfig);
-
-		// Update the orientation of the splash screen if currently shown.
-		if (isSplashScreenShown()) {
-			showSplashScreen();
-		}
 	}
 
 	/** Starts/resumes the Corona runtime, but only if this activity's window is visible to the user. */
@@ -3275,17 +2724,6 @@ public class CoronaActivity extends Activity {
 				return true;
 			}
 			catch (Exception ex) { }
-		}
-		
-		// Pass the back key to any child views that may want to handle it, such as a web view.
-		if ((keyCode == android.view.KeyEvent.KEYCODE_BACK) ) {
-			ViewManager viewManager = fCoronaRuntime.getViewManager();
-			if (viewManager != null) {
-				boolean hasChildViewOverridenBackKey = viewManager.goBack();
-				if (hasChildViewOverridenBackKey) {
-					return true;
-				}
-			}
 		}
 		
 		// Perform the default handling for the key event.

@@ -12,7 +12,7 @@
 #include "Core/Rtt_String.h"
 #include "Corona/CoronaLua.h"
 #include "Display/Rtt_PlatformBitmap.h"
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_PlatformInAppStore.h"
@@ -35,8 +35,6 @@
 #include "Rtt_AndroidVideoObject.h"
 #include "Rtt_AndroidVideoPlayer.h"
 #include "Rtt_AndroidVideoProvider.h"
-#include "Rtt_AndroidWebPopup.h"
-#include "Rtt_AndroidWebViewObject.h"
 
 #include "AndroidDisplayObjectRegistry.h"
 #include "AndroidGLView.h"
@@ -73,7 +71,6 @@ AndroidPlatform::AndroidPlatform(
 	fVideoPlayer( NULL ),
 	fImageProvider( NULL ),
 	fVideoProvider( NULL ),
-	fWebPopup( NULL ),	
 	fPackage( fAllocator ),
 	fDocumentsDir( fAllocator ),
 	fApplicationSupportDir( fAllocator ),
@@ -108,7 +105,6 @@ AndroidPlatform::AndroidPlatform(
 AndroidPlatform::~AndroidPlatform()
 {
 	Rtt_DELETE( fStoreProvider );
-	Rtt_DELETE( fWebPopup );
 	Rtt_DELETE( fVideoPlayer );
 	Rtt_DELETE( fAudioPlayer );
 	Rtt_DELETE( fImageProvider );
@@ -243,7 +239,7 @@ Rtt_Allocator& AndroidPlatform::GetAllocator() const
 
 RenderingStream* AndroidPlatform::CreateRenderingStream() const
 {
-	RenderingStream* result = Rtt_NEW( fAllocator, GPUStream( fAllocator ) );
+	RenderingStream* result = Rtt_NEW( fAllocator, RenderingStream( fAllocator ) );
 	
 	result->SetProperty( RenderingStream::kFlipHorizontalAxis, true );
 
@@ -726,17 +722,6 @@ AndroidPlatform::SetActivityIndicator( bool visible ) const
 	}
 }
 
-PlatformWebPopup* 
-AndroidPlatform::GetWebPopup() const
-{
-	if ( ! fWebPopup )
-	{
-		fWebPopup = Rtt_NEW( & GetAllocator(), AndroidWebPopup(fDisplayObjectRegistry, fNativeToJavaBridge) );
-	}
-
-	return fWebPopup;
-}
-
 bool
 AndroidPlatform::CanShowPopup( const char *name ) const
 {
@@ -850,12 +835,6 @@ AndroidPlatform::SetKeyboardFocus( PlatformDisplayObject * textObject ) const
 	{
 		fNativeToJavaBridge->DisplayObjectSetFocus(AndroidDisplayObjectRegistry::INVALID_ID, false);
 	}
-}
-
-PlatformDisplayObject *
-AndroidPlatform::CreateNativeWebView( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), AndroidWebViewObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge ) );
 }
 
 PlatformDisplayObject *

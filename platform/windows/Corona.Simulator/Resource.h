@@ -274,12 +274,9 @@
 #define IDC_SCREEN_WIDTH_EDIT_BOX       1067
 #define IDC_SCREEN_HEIGHT_LABEL         1068
 #define IDC_SCREEN_HEIGHT_EDIT_BOX      1069
-#define IDC_ORIENTATION_GROUP_BOX       1070
 #define IDC_APP_LOCATION_LABEL          1071
 #define IDC_APP_LOCATION_EDIT_BOX       1072
 #define IDC_BROWSE_BUTTON               1073
-#define IDC_ORIENTATION_UPRIGHT         1074
-#define IDC_ORIENTATION_SIDEWAYS        1075
 #define IDC_TEMPLATE_BLANK_LABEL        1076
 #define IDC_DIVIDING_LINE               1077
 #define IDC_TEMPLATE_TAB_BAR_LABEL      1078
@@ -313,13 +310,8 @@
 #define ID_Menu                         32771
 #define ID_FILE_OPENFORBUILD            32772
 #define ID_FILE_RELAUNCH                32774
-#define ID_VIEW_ROTATELEFT              32775
-#define ID_VIEW_ROTATERIGHT             32776
-#define ID_VIEW_SHAKE                   32777
 #define ID_VIEW_SUSPEND                 32778
 #define ID_HELP_HELP                    32779
-#define ID_WINDOW_ZOOMIN                32780
-#define ID_WINDOW_ZOOMOUT               32781
 #define ID_WINDOW_VIEWAS                32782
 #define ID_WINDOW_VIEWING               32783
 #define ID_HELP_DEAUTHORIZE             32784

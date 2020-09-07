@@ -10,15 +10,11 @@
 simulator =
 {
 	device = "android-tv",
-	screenOriginX = 0,
-	screenOriginY = 0,
-	screenWidth = 1080,
-	screenHeight = 1920,
+	deviceWidth = 1920,
+	deviceHeight = 1080,
 	androidDisplayApproximateDpi = 320, -- xhdpi
 	displayManufacturer = "Amazon",
 	displayName = "AFTB",
-	isUprightOrientationPortrait = false,
-	supportsScreenRotation = false,
 	windowTitleBarName = "Amazon Fire TV (Gen. 1)",
 
 	safeScreenInsetTop = 96,

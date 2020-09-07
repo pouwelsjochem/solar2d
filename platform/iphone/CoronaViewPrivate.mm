@@ -15,10 +15,6 @@
 #import "CoronaViewPrivate.h"
 #import "CoronaViewRuntimeDelegate.h"
 #import "CoronaGyroscopeObserver.h"
-#ifdef Rtt_ORIENTATION
-	#import "CoronaOrientationObserver.h"
-#endif
-#import "CoronaOrientationProvider.h"
 #import "CoronaSystemResourceManager.h"
 #import "AppleWeakProxy.h"
 
@@ -35,13 +31,11 @@
 #include "Rtt_AppleInputDeviceManager.h"
 #include "Rtt_AppleInputMFiDeviceListener.h"
 #include "Rtt_IPhonePlatformBase.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_Runtime.h"
 
 #if defined( Rtt_IPHONE_ENV )
 	#include "Rtt_IPhonePlatformCore.h"
-	#include "Rtt_IPhoneOrientation.h"
 	#include "Rtt_IPhoneTemplate.h"
 #endif
 
@@ -199,12 +193,7 @@ CoronaViewListenerAdapter( lua_State *L )
 // ----------------------------------------------------------------------------
 #pragma mark # CoronaView()
 
-@interface CoronaView() <
-#ifdef Rtt_ORIENTATION
-							CoronaOrientationObserver,
-#endif
-							CoronaGyroscopeObserver,
-							CoronaOrientationProvider>
+@interface CoronaView() <CoronaGyroscopeObserver>
 {
 @private
 	NSString *fResourcePath;
@@ -221,9 +210,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	BOOL gyroscopeEnabled;
 	U64 gyroscopePreviousTimestampCorona;
 	NSTimeInterval gyroscopePreviousTimestamp;
-
-	// Orientation
-	Rtt::DeviceOrientation::Type fLoadOrientation; // orientation when loading Runtime
 
 	// Load Parameters
 	NSDictionary *fParams;
@@ -265,46 +251,6 @@ CoronaViewListenerAdapter( lua_State *L )
 
 // ----------------------------------------------------------------------------
 
-+ (Rtt::DeviceOrientation::Type)deviceOrientationForString:(NSString *)value
-{
-	using namespace Rtt;
-
-	DeviceOrientation::Type result = DeviceOrientation::kUpright;
-	
-	if ( [value isEqualToString:@"UIInterfaceOrientationPortraitUpsideDown"] )
-	{
-		result = DeviceOrientation::kUpsideDown;
-	}
-	else if ( [value isEqualToString:@"UIInterfaceOrientationLandscapeLeft"] )
-	{
-		result = DeviceOrientation::kSidewaysLeft;
-	}
-	else if ( [value isEqualToString:@"UIInterfaceOrientationLandscapeRight"] )
-	{
-		result = DeviceOrientation::kSidewaysRight;
-	}
-
-	return result;
-}
-
-+ (Rtt::DeviceOrientation::Type)defaultOrientation
-{
-	using namespace Rtt;
-	
-#ifdef Rtt_IPHONE_ENV
-	return IPhoneOrientation::ConvertOrientation( UIInterfaceOrientationPortrait );
-#elif defined( Rtt_TVOS_ENV )
-	// We are always in landscapeRight on tvOS.
-	// This has the side effect of not allowing CoronaCards portrait apps for tvOS.
-	return DeviceOrientation::kSidewaysRight;
-#else
-	#error Default orientation not defined for this target platform
-	return DeviceOrientation::kUnknown;
-#endif
-}
-
-// ----------------------------------------------------------------------------
-
 @synthesize fInhibitCount;
 @synthesize fTapDelay;
 
@@ -319,7 +265,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	_observeSuspendResume = YES;
 	fLastContentHeight = -1;
 	fShouldInvalidate = false;
-	fLoadOrientation = Rtt::DeviceOrientation::kUpright;
 	fParams = nil;
 	[self setForceTouchSupport:NO];
 
@@ -349,7 +294,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	}
 
 	_observerProxy = [[AppleWeakProxy alloc] initWithTarget:self];
-	_orientationObserver = (id< CoronaOrientationObserver >)_observerProxy;
 	_gyroscopeObserver = (id< CoronaGyroscopeObserver >)_observerProxy;
 }
 
@@ -508,20 +452,6 @@ CoronaViewListenerAdapter( lua_State *L )
 
 - (NSInteger)runWithPath:(NSString*)path parameters:(NSDictionary *)params
 {
-	Rtt::DeviceOrientation::Type orientation = [[self class] defaultOrientation];
-	NSString *orientationParam = [params valueForKey:@"orientation"];
-
-	// Allow params to override default orientation
-	if (orientationParam != nil)
-	{
-		orientation = Rtt::DeviceOrientation::TypeForString([orientationParam UTF8String]);
-	}
-
-	return [self runWithPath:path parameters:params orientation:orientation];
-}
-
-- (NSInteger)runWithPath:(NSString*)path parameters:(NSDictionary *)params orientation:(Rtt::DeviceOrientation::Type)orientation
-{
 	using namespace Rtt;
 
 	NSInteger result = (NSInteger)Runtime::kGeneralFail;
@@ -551,7 +481,6 @@ CoronaViewListenerAdapter( lua_State *L )
 		[EAGLContext setCurrentContext:self.context];
 		[self bindDrawable];
 
-		fLoadOrientation = orientation;
 		fParams = [params retain];
 
 
@@ -577,24 +506,7 @@ CoronaViewListenerAdapter( lua_State *L )
 
 	fBeganRunLoop = true;
 
-	Rtt::Runtime::LoadParameters loadParameters;
-	U32 launchOptions = Runtime::kDeviceLaunchOption;
-	loadParameters.orientation = fLoadOrientation;
-
-	loadParameters.launchOptions = launchOptions;
-
-	id width = [fParams objectForKey:@"contentWidth"];
-	S32 contentWidth = ( [width isKindOfClass:[NSNumber class]] ? [width intValue] : -1 );
-	id height = [fParams objectForKey:@"contentHeight"];
-	S32 contentHeight = ( [height isKindOfClass:[NSNumber class]] ? [height intValue] : -1 );
-	if ( contentWidth > 0 && contentHeight > 0 )
-	{
-		loadParameters.contentWidth = contentWidth;
-		loadParameters.contentHeight = contentHeight;
-	}
-
-
-	NSInteger result =_runtime->LoadApplication( loadParameters );
+	NSInteger result =_runtime->LoadApplication( Runtime::kDeviceLaunchOption );
 	if ( result == (NSInteger)Runtime::kSuccess )
 	{
 		[self willBeginRunLoop:fParams];
@@ -603,82 +515,6 @@ CoronaViewListenerAdapter( lua_State *L )
 		
 		//Forcing immediate blit (outside GlkViewController which normally drives the display update)
 		[self display];
-	}
-
-	return result;
-}
-
-#ifdef Rtt_ORIENTATION
-- (void)notifyRuntimeAboutOrientationChange:(UIInterfaceOrientation)toInterfaceOrientation
-{
-	Rtt::Runtime *runtime = self.runtime;
-	if ( runtime )
-	{
-		runtime->SetContentOrientation( Rtt::IPhoneOrientation::ConvertOrientation( toInterfaceOrientation ) );
-	}
-}
-#endif
-
-- (BOOL)simulateCommand:(NSDictionary *)args
-{
-	BOOL result = NO;
-
-	NSString *command = [args valueForKey:@"command"];
-	NSDictionary *commandOptions = [args valueForKey:@"options"];
-
-	if ( [command isEqualToString:@"launch"] )
-	{
-		NSString *resourcePath = [commandOptions valueForKey:@"resourcePath"];
-		NSString *mainPath = [resourcePath stringByAppendingPathComponent:@"main.lua"];
-		NSFileManager *fileMgr = [NSFileManager defaultManager];
-		if ( mainPath && [fileMgr fileExistsAtPath:mainPath isDirectory:nil] )
-		{
-			_platform->SetResourceDirectory( resourcePath );
-
-			lua_State *L = _runtime->VMContext().L();
-
-			// package.path = resourcePath .. "/?.lua"
-			lua_getglobal( L, "package" );
-			{
-				lua_pushfstring( L, "%s" LUA_DIRSEP LUA_PATH_MARK ".lua", [resourcePath UTF8String] );
-				lua_setfield( L, -2, "path" );
-			}
-			lua_pop( L, 1 );
-
-			result = ( 0 == CoronaLuaDoFile( L, [mainPath UTF8String], 0, true ) );
-		}
-	}
-	else if ( [command isEqualToString:@"relaunch"] )
-	{
-		// NOTE: Relaunch has to happen asynchronously, so we queue the relaunch.
-	
-		// The balancing release happens in the block. This guarantees it's valid
-		// by the time the block executes
-		NSString *path = [fResourcePath retain];
-		CoronaView *view = self;
-
-		// Define the op
-		NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
-			[view deallocCommon];
-
-			[view initCommon];
-
-			if ( view.launchDelegate )
-			{
-				[view.launchDelegate runView:view withPath:path parameters:nil];
-			}
-			else
-			{
-				[view runWithPath:path parameters:nil];
-			}
-
-			[path release];
-		}];
-
-		// Queue the op
-		NSOperationQueue *queue = [NSOperationQueue mainQueue];
-		[queue addOperation:op];
-		result = YES;
 	}
 
 	return result;
@@ -768,7 +604,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	[_observerProxy invalidate];
 	[_observerProxy release];
 	_observerProxy = nil;
-	_orientationObserver = nil;
 	_gyroscopeObserver = nil;
 	
 	//Restore the context
@@ -810,18 +645,12 @@ CoronaViewListenerAdapter( lua_State *L )
 {
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-#ifdef Rtt_ORIENTATION
-	[[NSNotificationCenter defaultCenter] addObserver:self.orientationObserver selector:@selector(didOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
-#endif
 }
 
 - (void)removeApplicationObserver
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-#ifdef Rtt_ORIENTATION
-	[[NSNotificationCenter defaultCenter] removeObserver:self.orientationObserver name:UIDeviceOrientationDidChangeNotification object:nil];
-#endif
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification
@@ -1286,44 +1115,6 @@ PrintTouches( NSSet *touches, const char *header )
 	fShouldInvalidate = true;
 }
 
-// CoronaOrientationObserver
-// ----------------------------------------------------------------------------
-#ifdef Rtt_ORIENTATION
-- (void)didOrientationChange:(id)sender
-{
-	using namespace Rtt;
-
-	const UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-
-	if ( orientation != UIDeviceOrientationUnknown )
-	{
-		Runtime *runtime = self.runtime;
-		const MPlatform& platform = runtime->Platform();
-
-		// Store the given orientation and retrieve the previous orientation.
-		DeviceOrientation::Type currentType = IPhoneDevice::ToOrientationTypeFromUIDeviceOrientation( orientation );
-		DeviceOrientation::Type previousType =
-			static_cast< IPhoneDevice& >( platform.GetDevice() ).GetPreviousOrientationAndUpdate( orientation );
-		
-		// Raise an orientation event if the orientation has changed.
-		if ((previousType != DeviceOrientation::kUnknown) && (currentType != previousType))
-		{
-			OrientationEvent e( currentType, previousType );
-			runtime->DispatchEvent( e );
-		}
-		
-		// Raise a resize event if the screen has been resized.
-		// We raise this event here because we assume resizes only occur when changing orientations.
-		int currentContentHeight = (int)runtime->GetDisplay().ContentHeight();
-		if ((fLastContentHeight >= 0) && (fLastContentHeight != currentContentHeight))
-		{
-			runtime->DispatchEvent( ResizeEvent() );
-		}
-		fLastContentHeight = currentContentHeight;
-	}
-}
-#endif
-
 #pragma mark # UITraitEnvironment
 
 // Called when a horizontal or vertical size class, display scale, or user interface idiom changes on an iOS 8.0+ device.
@@ -1361,29 +1152,6 @@ PrintTouches( NSSet *touches, const char *header )
 {
 	gyroscopeEnabled = NO;
 }
-
-
-// CoronaViewOrientation
-// ----------------------------------------------------------------------------
-#pragma mark # CoronaViewOrientation
-
-- (BOOL)isUpright
-{
-	BOOL result = NO;
-
-#ifdef Rtt_ORIENTATION
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown)
-	{
-		result = YES;
-	}
-#else
-	result = Rtt::DeviceOrientation::IsUpright( fLoadOrientation );
-#endif
-
-	return result;
-}
-
 
 // UITextFieldDelegate
 // ----------------------------------------------------------------------------

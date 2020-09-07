@@ -69,11 +69,7 @@ class PlatformBitmap
 			// pre-rotated buffer.  In this case, BitsWidth/Height() and Width/Height()
 			// should return the same number.
 			kIsBitsFullResolution = 0x2,
-			kIsBitsAutoRotated = 0x4,
-
-			// Chooses the image among a family of image files (sharing the same prefix)
-			// whose scale is <= the content scale
-			kIsNearestAvailablePixelDensity = 0x8
+			kIsBitsAutoRotated = 0x4
 		}
 		PropertyMask;
 
@@ -100,7 +96,7 @@ class PlatformBitmap
 		// there is EXIF metadata so the data may not be stored upright. Here,
 		// DegreesToUpright() gives a multiple of 90 (up to +/-180) so you'll
 		// know how much to rotate the image. During rendering (preview),
-		// GPUStream hardware-accelerates this rotation.
+		// RenderingStream hardware-accelerates this rotation.
 		// 
 		// When kIsBitsAutoRotated is set, the pixel data is automatically
 		// transformed. This is useful for saving images back to disk since

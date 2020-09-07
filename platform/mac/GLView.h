@@ -12,7 +12,7 @@
 
 //#import <AppKit/NSView.h>
 
-#include "Rtt_DeviceOrientation.h"
+#include "Core/Rtt_Types.h"
 
 namespace Rtt
 {
@@ -32,14 +32,10 @@ namespace Rtt
 
 	id< GLViewDelegate > fDelegate;
 	U8 fNumTaps;
-	Rtt::DeviceOrientation::Type fOrientation;
 
 	NSRect nativeFrameRect; // currently only settable via initWithFrame:
-	CGFloat zoomLevel; // only for bookkeeping purposes
 	SPILDTopLayerView* suspendedOverlay;
     BOOL isReady;
-    BOOL swapped;
-    BOOL isSimulatorView;
 	BOOL shouldInvalidate;
     NSMutableArray *fCursorRects;
 	NSTrackingRectTag trackingRectTag;
@@ -52,11 +48,8 @@ namespace Rtt
 
 @property (nonatomic, readwrite, getter=runtime, setter=setRuntime:) Rtt::Runtime *fRuntime;
 @property (nonatomic, readwrite, getter=tapDelay, setter=setTapDelay:) NSTimeInterval fTapDelay;
-@property (nonatomic, assign) CGFloat zoomLevel;
-@property (nonatomic, assign) CGFloat scaleFactor;
+@property (nonatomic, assign) CGFloat backingScaleFactor;
 @property (nonatomic, assign) BOOL isReady;
-@property (nonatomic, assign) BOOL swapped;
-@property (nonatomic, assign) BOOL isSimulatorView;
 @property (nonatomic, assign) BOOL sendAllMouseEvents;
 @property (nonatomic, assign) BOOL inFullScreenTransition;
 @property (nonatomic, assign) BOOL isResizable;
@@ -72,8 +65,6 @@ namespace Rtt
 - (void) invalidate;
 - (void) restoreWindowProperties;
 
-- (Rtt::DeviceOrientation::Type)orientation;
-- (void)setOrientation:(Rtt::DeviceOrientation::Type)newValue;
 - (void)adjustPoint:(NSPoint*)p;
 - (NSPoint)pointForEvent:(NSEvent*)event;
 
@@ -82,10 +73,6 @@ namespace Rtt
 
 - (CGFloat)deviceWidth;
 - (CGFloat)deviceHeight;
-
-
-//- (CGFloat)uprightWidth;
-//- (CGFloat)uprightHeight;
 
 - (void) suspendNativeDisplayObjects:(bool) showOverlay;
 - (void) resumeNativeDisplayObjects;

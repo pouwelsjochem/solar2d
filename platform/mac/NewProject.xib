@@ -7,7 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NewProjectController">
             <connections>
-                <outlet property="fScreenSize" destination="54" id="150"/>
+                <outlet property="fDeviceSize" destination="54" id="150"/>
                 <outlet property="fWindow" destination="1" id="122"/>
             </connections>
         </customObject>
@@ -78,7 +78,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
-                                        <binding destination="-2" name="value" keyPath="self.screenWidth" id="155">
+                                        <binding destination="-2" name="value" keyPath="self.deviceWidth" id="155">
                                             <dictionary key="options">
                                                 <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                                 <bool key="NSValidatesImmediately" value="YES"/>
@@ -101,7 +101,7 @@
                                         </menu>
                                     </popUpButtonCell>
                                     <connections>
-                                        <binding destination="-2" name="selectedIndex" keyPath="self.screenSizeIndex" id="159"/>
+                                        <binding destination="-2" name="selectedIndex" keyPath="self.deviceSizeIndex" id="159"/>
                                     </connections>
                                 </popUpButton>
                                 <textField verticalHuggingPriority="750" id="55">
@@ -128,7 +128,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
-                                        <binding destination="-2" name="value" keyPath="self.screenHeight" id="156">
+                                        <binding destination="-2" name="value" keyPath="self.deviceHeight" id="156">
                                             <dictionary key="options">
                                                 <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                                 <bool key="NSValidatesImmediately" value="YES"/>
@@ -145,44 +145,6 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                            </subviews>
-                        </view>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </box>
-                    <box autoresizesSubviews="NO" title="Default Orientation" borderType="line" id="80">
-                        <rect key="frame" x="289" y="56" width="264" height="78"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView">
-                            <rect key="frame" x="1" y="1" width="262" height="62"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" id="81">
-                                    <rect key="frame" x="18" y="14" width="226" height="38"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="cellSize" width="226" height="18"/>
-                                    <size key="intercellSpacing" width="4" height="2"/>
-                                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="82">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <cells>
-                                        <column>
-                                            <buttonCell type="radio" title="Upright" imagePosition="left" alignment="left" state="on" inset="2" id="83">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <buttonCell type="radio" title="Sideways" imagePosition="left" alignment="left" tag="1" inset="2" id="84">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                        </column>
-                                    </cells>
-                                    <connections>
-                                        <binding destination="-2" name="selectedIndex" keyPath="self.orientationIndex" id="158"/>
-                                    </connections>
-                                </matrix>
                             </subviews>
                         </view>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>

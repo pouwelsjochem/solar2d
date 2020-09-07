@@ -343,15 +343,6 @@ static NSString *kValueNone = @"None";
 
         return;
     }
-	
-	// Enforce that apps must support landscape. If it does not, throw an error informing the user.
-	ProjectSettings projectSettings; projectSettings.LoadFromDirectory( [self.projectPath UTF8String] );
-	if ( ! projectSettings.IsLandscapeSupported() )
-	{
-		[self showError:@"Unsupported Orientation" message:@"tvOS apps run exclusively in landscape orientation.\n\nEnsure that both your app and build.settings supports landscape." helpURL:nil parentWindow:buildWindow];
-		
-		return;
-	}
 
     const char * customBuildId = packager->GetCustomBuildId();
 

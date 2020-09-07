@@ -11,10 +11,6 @@
 
 #import "CoronaSystemResourceManager.h"
 
-#ifdef Rtt_ORIENTATION
-#import "CoronaOrientationObserver.h"
-#endif
-
 #ifdef Rtt_CORE_MOTION
 #import <CoreMotion/CoreMotion.h>
 #import "CoronaGyroscopeObserver.h"
@@ -28,11 +24,6 @@
 // Resource Keys
 // ----------------------------------------------------------------------------
 #pragma mark # Resource Keys
-
-NSString * const CoronaOrientationResourceKey()
-{
-	return @"Orientation";
-}
 
 NSString * const CoronaAccelerometerResourceKey()
 {
@@ -61,11 +52,6 @@ NSString * const CoronaGyroscopeResourceKey()
 //- (void)removeObserver:(id)observer;
 - (void)removeObservers;
 - (void)removeObserversForKey:(NSString *)key;
-
-#ifdef Rtt_ORIENTATION
-- (void)addObserverOrientation:(id <CoronaOrientationObserver>)observer;
-- (void)removeObserverOrientation:(id <CoronaOrientationObserver>)observer;
-#endif
 
 #ifdef Rtt_ACCELEROMETER
 - (void)addObserverAccelerometer:(id <UIAccelerometerDelegate>)observer;
@@ -106,9 +92,6 @@ NSString * const CoronaGyroscopeResourceKey()
 	{
 		NSArray *keys = [NSArray arrayWithObjects:
 			CoronaAccelerometerResourceKey(),
-#ifdef Rtt_ORIENTATION
-			CoronaOrientationResourceKey(),
-#endif
 #ifdef Rtt_CORE_MOTION
 			CoronaGyroscopeResourceKey(),
 #endif
@@ -253,28 +236,6 @@ NSString * const CoronaGyroscopeResourceKey()
 		}
 	}
 }
-
-// -----------------------------------------------------------------------------
-
-#ifdef Rtt_ORIENTATION
-
-- (void)addObserverOrientation:(id <CoronaOrientationObserver>)observer
-{
-	if ( ! [self hasObserversForKey:CoronaOrientationResourceKey()] )
-	{
-		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-	}
-}
-
-- (void)removeObserverOrientation:(id <CoronaOrientationObserver>)observer
-{
-	if ( ! [self hasObserversForKey:CoronaOrientationResourceKey()] )
-	{
-		[[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-	}
-}
-
-#endif // Rtt_ORIENTATION
 
 // -----------------------------------------------------------------------------
 

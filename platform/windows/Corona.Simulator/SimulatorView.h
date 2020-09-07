@@ -57,9 +57,7 @@ class CSimulatorView : public CView
 		CSimulatorDoc* GetDocument() const;
 		CString GetDisplayName()   { return mDisplayName; }
 		const Rtt::PlatformSimulator::Config& GetDeviceConfig() { return mDeviceConfig; }
-		int GetRotation() { return mRotation; }
-		Gdiplus::Bitmap *GetSkinBitmap() { return mpSkinBitmap; }
-		void UpdateSimulatorSkin();  // zoom functions in CMainFrame call this
+		void UpdateSimulatorSkin();
 		Interop::SimulatorRuntimeEnvironment* GetRuntimeEnvironment()  { return mRuntimeEnvironmentPointer; }
 		void GetRecentDocs(Rtt::LightPtrArray<Rtt::RecentProjectInfo> *list);
 		void PostOpenWithPath(CString fileName);
@@ -123,10 +121,7 @@ class CSimulatorView : public CView
 		afx_msg void OnPreferences();
 		afx_msg void OnViewHomeScreen();
 		afx_msg void OnViewConsole();
-		afx_msg void OnViewShake();
 		afx_msg void OnViewSuspend();
-		afx_msg void OnViewRotateLeft();
-		afx_msg void OnViewRotateRight();
 		afx_msg void OnViewNavigateBack();
 		afx_msg void OnFileMRU1();
 		afx_msg void OnFileNew();
@@ -159,11 +154,9 @@ class CSimulatorView : public CView
 	private:
 		void RunCoronaProject();
 		void RunCoronaProject(CString &projectPath);
-		void ScaleRect(CRect& rect, float scale);
 		Rtt::TargetDevice::Skin SkinIDFromMenuID(UINT nID);
 		bool InitSkin(Rtt::TargetDevice::Skin skinId);
 		bool InitializeSimulation(Rtt::TargetDevice::Skin skinId);
-		void SetRotation(int rotation);
 		bool ValidateOpenGL();
 		bool HasApplicationChanged();
 		bool LoadSkinResources();
@@ -179,8 +172,6 @@ class CSimulatorView : public CView
 		CMessageDlg* mMessageDlgPointer;
 		CProgressWnd* mProgressDlgPointer;
 		CString mDisplayName;
-		int mRotation;  // 0, 90, 180, 270
-		Gdiplus::Bitmap *mpSkinBitmap;
 		Rtt::PlatformSimulator::Config mDeviceConfig;
 		bool mIsShowingInternalScreen;	// Set true when showing the Home Screen or Demo Screen.
 		HANDLE mAppChangeHandle;		// Filesystem notifications handle

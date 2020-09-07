@@ -92,12 +92,6 @@ class WinTextBoxObject : public WinDisplayObject
 		/// </param>
 		void OnPressedEnterKey(Interop::UI::TextBox& sender, Interop::HandledEventArgs& arguments);
 
-		/// <summary>
-		///  <para>Applies the device simulator's current zoom level scale to the text box's font, if changed.</para>
-		///  <para>Will do nothing if not running in the simulator.</para>
-		/// </summary>
-		void ApplySimulatorZoomScale();
-
 		#pragma endregion
 
 
@@ -137,16 +131,6 @@ class WinTextBoxObject : public WinDisplayObject
 		///  <para>Set false if the font size is in pixels.</para>
 		/// </summary>
 		bool fIsFontSizeScaled;
-
-		/// <summary>
-		///  <para>The device simulator zoom scale being applied to the text box's font size.</para>
-		///  <para>
-		///   Needs to be cached since this cached scale and the simulator scale will differ briefly
-		///   while the user zooms in/out.
-		///  </para>
-		///  <para>Set to 1.0 if not simulating a device.</para>
-		/// </summary>
-		double fCachedSimulatorZoomScale;
 
 		/// <summary>
 		///  <para>Set true if the placeholder text was set to nil in Lua, the default value.</para>

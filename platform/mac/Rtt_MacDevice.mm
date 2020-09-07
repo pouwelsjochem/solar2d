@@ -294,7 +294,6 @@ MacConsoleDevice::HasEventSource( EventType type ) const
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 		case MPlatformDevice::kMultitouchEvent:
-		case MPlatformDevice::kOrientationEvent:
 			hasEventSource = false;
 			break;
 		case MPlatformDevice::kKeyEvent:
@@ -352,16 +351,6 @@ MacConsoleDevice::SetGyroscopeInterval( U32 frequency ) const
 {
 }
 
-DeviceOrientation::Type
-MacConsoleDevice::GetOrientation() const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	return DeviceOrientation::kUnknown;
-#else
-	return DeviceOrientation::kUpright;
-#endif // Rtt_AUTHORING_SIMULATOR
-}
-
 // ----------------------------------------------------------------------------
 
 // TODO: Move this to a separate file
@@ -369,8 +358,7 @@ MacConsoleDevice::GetOrientation() const
 
 MacDevice::MacDevice( Rtt_Allocator &allocator, PlatformSimulator& simulator )
 :	Super( allocator, NULL ),
-	fSimulator( simulator ),
-	fPreviousOrientation( DeviceOrientation::kUnknown )
+	fSimulator( simulator )
 {
 }
 
@@ -397,11 +385,8 @@ MacDevice::HasEventSource( EventType type ) const
 			break;
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
+		case MPlatformDevice::kAccelerometerEvent:	// The Simulator can simulate these events
 			hasEventSource = true;
-			break;
-		case MPlatformDevice::kAccelerometerEvent:
-		case MPlatformDevice::kOrientationEvent:
-			hasEventSource = true;	// The Simulator can simulate these events
 			break;
 		default:
 			// Rtt_ASSERT_NOT_REACHED();
@@ -455,41 +440,21 @@ MacDevice::SetGyroscopeInterval( U32 frequency ) const
 	Rtt_WARN_SIM( frequency >= 10 && frequency <= 100, ( "WARNING: Gyroscope frequency on iPhone must be in the range [10,100] Hz" ) );
 }
 
-DeviceOrientation::Type
-MacDevice::GetOrientation() const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	return fSimulator.GetOrientation();
-#else
-	return DeviceOrientation::kUpright;
-#endif // Rtt_AUTHORING_SIMULATOR
-}
-
 const char*
 MacDevice::GetPlatform() const
 {
-#ifdef Rtt_AUTHORING_SIMULATOR
-	return fSimulator.GetOSName();
-#else
 	return "macos";
-#endif // Rtt_AUTHORING_SIMULATOR
 }
 
 #endif // Rtt_WEB_PLUGIN
 
 // ----------------------------------------------------------------------------
 
-MacAppDevice::MacAppDevice( Rtt_Allocator &allocator, DeviceOrientation::Type orientation )
-:	Super( allocator, NULL ),
-	fDeviceOrientation( orientation )
+MacAppDevice::MacAppDevice( Rtt_Allocator &allocator )
+:	Super( allocator, NULL )
 {
 }
-	
-DeviceOrientation::Type
-MacAppDevice::GetOrientation() const
-{
-	return fDeviceOrientation;
-}
+
 // ----------------------------------------------------------------------------
 
 } // namespace Rtt

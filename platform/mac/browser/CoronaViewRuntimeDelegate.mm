@@ -92,36 +92,6 @@ CoronaViewRuntimeDelegate::InitializeConfig( const Runtime& sender, lua_State *L
 			}
 		}
 		lua_pop( L, 1 );
-
-		int w = -1, h = -1;
-
-		lua_getfield( L, index, "content" );
-
-		if ( lua_istable( L, -1 ) )
-		{
-			lua_getfield( L, -1, "width" );
-			w = (int) lua_tointeger( L, -1 );
-			lua_pop( L, 1 );
-
-			lua_getfield( L, -1, "height" );
-			h = (int) lua_tointeger( L, -1 );
-			lua_pop( L, 1 );
-
-		}
-		lua_pop( L, 1 );
-
-		// TODO: take default orientation into account
-		// Make sure we don't end up with a zero size view
-		if (w < 1)
-		{
-			w = 320;
-		}
-		if (h < 1 )
-		{
-			h = 480;
-		}
-
-		Rtt_TRACE(("====== CoronaViewPrivate: %d x %d ======", w, h));
 	}
 	lua_pop( L, 1 );
 }
@@ -130,12 +100,6 @@ void
 CoronaViewRuntimeDelegate::DidLoadConfig( const Runtime& sender, lua_State *L ) const
 {
 
-}
-
-id< CoronaRuntime >
-CoronaViewRuntimeDelegate::GetPluginContext() const
-{
-	return nil; // fOwner.pluginContext;
 }
 
 // ----------------------------------------------------------------------------

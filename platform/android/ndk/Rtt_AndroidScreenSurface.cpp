@@ -64,12 +64,6 @@ AndroidScreenSurface::Flush() const
 	fView->Flush();
 }
 
-void*
-AndroidScreenSurface::NativeWindow() const
-{
-	return NULL;
-}
-
 S32
 AndroidScreenSurface::Width() const
 {
@@ -82,30 +76,10 @@ AndroidScreenSurface::Height() const
 	return fView->Height();
 }
 
-S32
-AndroidScreenSurface::AdaptiveWidth() const
-{
-	S32 pixelWidth = fView->DeviceWidth();
-	return PlatformSurface::CalculateVirtualLength( PlatformSurface::kDefaultVirtualDPI, fApproximateScreenDPI, pixelWidth );
-}
-
-S32
-AndroidScreenSurface::AdaptiveHeight() const
-{
-	S32 pixelHeight = fView->DeviceHeight();
-	return PlatformSurface::CalculateVirtualLength( PlatformSurface::kDefaultVirtualDPI, fApproximateScreenDPI, pixelHeight );
-}
-
 AndroidGLContext*
 AndroidScreenSurface::GetContext() const
 {
 	return NULL;
-}
-
-DeviceOrientation::Type
-AndroidScreenSurface::GetOrientation() const
-{
-	return fView->GetOrientation();
 }
 
 S32

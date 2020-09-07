@@ -37,7 +37,6 @@ extern NSString* const kDidAgreeToLicense;
 extern NSString* const kUserPreferenceUsersCurrentSelectedSkin;
 extern NSString* const kUserPreferenceCustomBuildID;
 extern NSString* const kUserPreferenceDoNotUseSkinnedWindows;
-extern NSString* const kUserPreferenceScaleFactorForSkin;
 extern NSString* const kUserPreferenceLastIOSCertificate;
 extern NSString* const kUserPreferenceLastTVOSCertificate;
 extern NSString* const kUserPreferenceLastOSXCertificate;
@@ -50,7 +49,6 @@ namespace Rtt
 
 class MacConsoleDevice;
 class MacFBConnect;
-class MacWebPopup;
 class MacVideoPlayer;
 class MacViewSurface;
 class MacActivityIndicator;
@@ -119,13 +117,10 @@ class MacPlatform : public ApplePlatform
 
 		virtual void SetActivityIndicator( bool visible ) const;
 
-		virtual PlatformWebPopup* GetWebPopup() const;
-
 		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textField ) const;
 
-		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
         virtual PlatformFBConnect* GetFBConnect() const;
 
@@ -182,7 +177,6 @@ class MacPlatform : public ApplePlatform
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
-		mutable MacWebPopup *fWebPopup;
 		mutable MacVideoPlayer *fVideoPlayer;
 		mutable MacActivityIndicator* fActivityIndicator;
 #if Rtt_AUTHORING_SIMULATOR
@@ -212,14 +206,8 @@ class MacGUIPlatform : public MacPlatform
 		virtual Real GetStandardFontSize() const;
 		virtual bool RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const;
 
-	public:
-		void SetAdaptiveWidth( S32 newValue ) { fAdaptiveWidth = newValue; }
-		void SetAdaptiveHeight( S32 newValue ) { fAdaptiveHeight = newValue; }
-
 	private:
 		MacDevice fMacDevice;
-		S32 fAdaptiveWidth;
-		S32 fAdaptiveHeight;
 };
 
 // ----------------------------------------------------------------------------
@@ -230,7 +218,7 @@ class MacAppPlatform : public MacPlatform
 		typedef MacPlatform Super;
 
 	public:
-		MacAppPlatform( DeviceOrientation::Type orientation );
+		MacAppPlatform();
 
 	public:
 		virtual MPlatformDevice& GetDevice() const;

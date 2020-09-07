@@ -13,12 +13,6 @@
 				<string>id</string>
 				<key>open</key>
 				<string>id</string>
-				<key>rotateLeft</key>
-				<string>id</string>
-				<key>rotateRight</key>
-				<string>id</string>
-				<key>shake</key>
-				<string>id</string>
 				<key>toggleSuspendResume</key>
 				<string>id</string>
 			</dict>

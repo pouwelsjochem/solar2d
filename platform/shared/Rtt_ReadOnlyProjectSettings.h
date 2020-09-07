@@ -11,7 +11,6 @@
 #define _Rtt_ReadOnlyProjectSettings_H__
 
 #include "Core/Rtt_Macros.h"
-#include "Rtt_DeviceOrientation.h"
 
 
 namespace Rtt
@@ -56,63 +55,6 @@ class ReadOnlyProjectSettings
 		 * Returns false if a "config.lua" file was not found.
 		 */
 		bool HasConfigLua() const;
-
-		/**
-		 * Gets the Corona project's default orientation.
-		 * @return
-		 * Returns the Corona project's default orientation.
-		 *
-		 * Returns kUnknown if a default has not been assigned.
-		 */
-		Rtt::DeviceOrientation::Type GetDefaultOrientation() const;
-
-		/**
-		 * Determines if the given orientation type is supported by the Corona project.
-		 * @param value The orientation type such as kUpright, kSidewaysRight, etc.
-		 * @return Returns true if the Corona project supports the given orientation. Returns false if not.
-		 */
-		bool IsSupported(Rtt::DeviceOrientation::Type value) const;
-
-		/**
-		 * Determines if a portrait orientation is supported.
-		 * @return
-		 * Returns true if a portrait or portrait upside-down orientation is supported by the Corona project.
-		 *
-		 * Returns false if only landscape is supported or if no supported orientations were specified.
-		 */
-		bool IsPortraitSupported() const;
-
-		/**
-		 * Determines if a landscape orientation is supported.
-		 * @return
-		 * Returns true if a landscape-right or landscape-left orientation is supported by the Corona project.
-		 *
-		 * Returns false if only a portrait orientation is supported or if no supported orientations were specified.
-		 */
-		bool IsLandscapeSupported() const;
-
-		/**
-		 * Fetches the number of orientations supported by the Corona project.
-		 * Intended to be used in conjunction with the GetSupportedOrientationByIndex() method in a for loop.
-		 * @return
-		 * Returns the number of orientations supported by the Corona project.
-		 *
-		 * Returns zero if a "build.settings" file was not found or if it has not specified any supported orientations.
-		 */
-		int GetSupportedOrientationsCount() const;
-
-		/**
-		 * Fetches the Corona project's next supported orientation.
-		 * @param index
-		 * Zero based index to a supported orientation.
-		 *
-		 * Given index must be less than the count returned by the GetSupportedOrientationCount() method.
-		 * @return
-		 * Returns the indexed orientation supported by the Corona project.
-		 *
-		 * Returns kUnknown if given an invalid index.
-		 */
-		Rtt::DeviceOrientation::Type GetSupportedOrientationByIndex(int index) const;
 
 		/**
 		 * Gets the default mode the window should be launch as such as kNormal, kMaximized, kFullscreen, etc.
@@ -243,47 +185,10 @@ class ReadOnlyProjectSettings
 		 */
 		const char* GetWindowTitleTextForLocaleWithoutFallback(const char* languageCode, const char* countryCode) const;
 
-		/**
-		 * Gets the content width provided by the "config.lua" file.
-		 * @return
-		 * Returns the "config.lua" file's content width.
-		 *
-		 * Returns zero if the "config.lua" file was not found or if it is not set up for content scaling.
-		 */
-		int GetContentWidth() const;
-
-		/**
-		 * Gets the content height provided by the "config.lua" file.
-		 * @return
-		 * Returns the "config.lua" file's content height.
-		 *
-		 * Returns zero if the "config.lua" file was not found or if it is not set up for content scaling.
-		 */
-		int GetContentHeight() const;
-
-		/**
-		 * Fetches the number of image suffix scales provided by the project's "config.lua" file.
-		 *
-		 * Intended to be used in conjunction with the GetImageSuffixScaleByIndex() method in a for loop.
-		 * @return
-		 * Returns the number of image suffix scales provided by the "config.lua" file.
-		 *
-		 * Returns zero if the "config.lua" file was not found or if it did not provide any image suffix scales.
-		 */
-		int GetImageSuffixScaleCount() const;
-
-		/**
-		 * Fetches the Corona project's next image suffix scale.
-		 * @param index
-		 * Zero based index to an image suffix scale.
-		 *
-		 * Given index must be less than the count returned by the GetImageSuffixScaleCount() method.
-		 * @return
-		 * Returns the indexed image suffix scale.
-		 *
-		 * Returns zero if given an invalid index.
-		 */
-		double GetImageSuffixScaleByIndex(int index) const;
+		int GetMinContentWidth() const;
+		int GetMaxContentWidth() const;
+		int GetMinContentHeight() const;
+		int GetMaxContentHeight() const;
 
 	private:
 		/** Reference to the mutable project settings wrapped by this read-only container. */

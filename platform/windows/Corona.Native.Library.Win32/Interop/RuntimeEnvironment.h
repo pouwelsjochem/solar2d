@@ -810,10 +810,10 @@ class RuntimeEnvironment
 		void OnSurfaceResized(UI::Control &sender, const EventArgs &arguments);
 
 		/// <summary>
-		///  <para>Detects if a resize or orientation change has occurred</para>
+		///  <para>Detects if a resize change has occurred</para>
 		///  <para>If occurred, then this method updates the Corona display and raises events in Lua.</para>
 		/// </summary>
-		void UpdateOrientationAndSurfaceSize();
+		void UpdateSurfaceSize();
 
 		/// <summary>
 		///  <para>
@@ -970,9 +970,6 @@ class RuntimeEnvironment
 		///  <para>These strings are assigned via the RuntimeEnvironment::CreationSettings::LaunchArguments field.</para>
 		/// </summary>
 		std::list<WinString> fLaunchArguments;
-
-		/// <summary>The last orientation reported to the Corona runtime while running.</summary>
-		Rtt::DeviceOrientation::Type fLastOrientation;
 
 		/// <summary>
 		///  <para>Initializes Microsoft OLE/COM upon construction and unitializes OLE/COM upon destruction.</para>

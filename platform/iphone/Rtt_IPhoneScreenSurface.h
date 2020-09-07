@@ -41,21 +41,14 @@ class IPhoneScreenSurface : public PlatformSurface
 		virtual void Flush() const;
 
 	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
 		virtual S32 Width() const;
 		virtual S32 Height() const;
 
-		virtual S32 ScaledWidth() const;
-		virtual S32 ScaledHeight() const;
+		virtual S32 PointsWidth() const;
+		virtual S32 PointsHeight() const;
 
 		virtual S32 DeviceWidth() const;
 		virtual S32 DeviceHeight() const;
-
-		virtual S32 AdaptiveWidth() const;
-		virtual S32 AdaptiveHeight() const;
-
-	protected:
-		bool IsUpright() const;
 
 	public:
 		EAGLContext *GetContext() const;

@@ -293,7 +293,7 @@ FOUNDATION_EXPORT void CoronaSetDelegateClass( Class c )
 
 	const Display& display = [self coronaView].runtime->GetDisplay();
 
-	Rtt_Real contentToScreenScale = display.CalculateContentToScreenScale();
+	Rtt_Real contentToScreenScale = display.GetContentToScreenScale();
 	if ( !Rtt_RealIsOne(contentToScreenScale) )
 	{
 		PlatformDisplayObject::CalculateScreenBounds( display, contentToScreenScale, bounds );

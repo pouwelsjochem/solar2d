@@ -10,13 +10,10 @@
 simulator =
 {
 	device = "ios-tablet",
-	screenOriginX = 47,
-	screenOriginY = 131,
-	screenWidth = 768,
-	screenHeight = 1024,
-	iosPointWidth = 768,
-	iosPointHeight = 1024,
-	deviceImage = "iPadMini.png",
+	deviceWidth = 1024,
+	deviceHeight = 768,
+	iosPointWidth = 1024,
+	iosPointHeight = 768,
 	displayManufacturer = "Apple",
 	displayName = "iPad",
 	windowTitleBarName = "iPad mini",

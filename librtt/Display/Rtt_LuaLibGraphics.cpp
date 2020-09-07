@@ -265,9 +265,7 @@ GraphicsLibrary::listEffects( lua_State *L )
 SharedPtr<TextureResource> CreateResourceBitmapFromTable(Rtt::TextureFactory &factory, lua_State *L, int index)
 {
 	SharedPtr<TextureResource> ret;
-	
-	const U32 flags = PlatformBitmap::kIsNearestAvailablePixelDensity | PlatformBitmap::kIsBitsFullResolution;
-	
+		
 	lua_getfield( L, index, "baseDir" );
 	MPlatform::Directory baseDir = LuaLibSystem::ToDirectory( L, -1, MPlatform::kResourceDir );
 	lua_pop( L, 1 );
@@ -280,7 +278,7 @@ SharedPtr<TextureResource> CreateResourceBitmapFromTable(Rtt::TextureFactory &fa
 	const char *filename = luaL_checkstring( L, -1);
 	if( filename )
 	{
-		SharedPtr<TextureResource> texSource = factory.FindOrCreate(filename, baseDir, flags, isMask);
+		SharedPtr<TextureResource> texSource = factory.FindOrCreate(filename, baseDir, PlatformBitmap::kIsBitsFullResolution, isMask);
 		if( texSource.NotNull() )
 		{
 			factory.Retain(texSource);

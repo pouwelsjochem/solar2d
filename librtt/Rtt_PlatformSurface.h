@@ -10,8 +10,6 @@
 #ifndef _Rtt_PlatformSurface_H__
 #define _Rtt_PlatformSurface_H__
 
-#include "Rtt_DeviceOrientation.h"
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -21,26 +19,8 @@ class PlatformSurface;
 
 // ----------------------------------------------------------------------------
 
-class PlatformSurfaceDelegate
-{
-	public:
-		virtual void WillFlush( const PlatformSurface& surface ) const = 0;
-		virtual void DidFlush( const PlatformSurface& surface ) const = 0;
-};
-
 class PlatformSurface
 {
-	public:
-		// The density of virtual pixels (in units of virtual pixels per inch)
-		// for the virtual pixel lengths: AdaptiveWidth() and AdaptiveHeight()
-		//
-		// This is the density used in both iOS's point system (roughly)
-		// and Android's device-independent pixel (dp) system.
-		// http://developer.android.com/guide/topics/resources/more-resources.html#Dimension
-		static const S32 kDefaultVirtualDPI;
-		static const S32 kUninitializedVirtualLength;
-		static S32 CalculateVirtualLength( S32 virtualDPI, S32 screenDPI, S32 screenLength );
-
 	public:
 		PlatformSurface();
 		virtual ~PlatformSurface() = 0;
@@ -58,20 +38,8 @@ class PlatformSurface
 		// the result of Width() and Height(). However, on some platforms, the
 		// size of the screen is in scaled pixels, e.g. on iPhone, size is defined
 		// in terms of "points" not actual pixels.
-		virtual S32 ScaledWidth() const;
-		virtual S32 ScaledHeight() const;
-
-		// Return width and height of physical device in virtual pixels
-		// that preserves the constant pixel density, kAdaptivePixelDensity.
-		// The default just returns DeviceWidth() and DeviceHeight().
-		// NOTE: The width/height are returned wrt the "upright" orientation.
-		virtual S32 AdaptiveWidth() const;
-		virtual S32 AdaptiveHeight() const;
-
-	public:
-		// Default implementation returns kPortrait to be consistent with
-		// defaults for DeviceWidth/DeviceHeight()
-		virtual DeviceOrientation::Type GetOrientation() const;
+		virtual S32 PointsWidth() const;
+		virtual S32 PointsHeight() const;
 
 	public:
 		// Return width and height of physical device in pixels. The default 
@@ -79,10 +47,6 @@ class PlatformSurface
 		// NOTE: The width/height are returned wrt the "upright" orientation.
 		virtual S32 DeviceWidth() const;
 		virtual S32 DeviceHeight() const;
-
-	public:
-		virtual void* NativeWindow() const;
-		virtual void SetDelegate( PlatformSurfaceDelegate* delegate );
 };
 
 // ----------------------------------------------------------------------------

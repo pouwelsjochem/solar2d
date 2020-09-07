@@ -62,13 +62,10 @@ class MacConsolePlatform : public ApplePlatform
 
 		virtual void SetActivityIndicator( bool visible ) const;
 
-		virtual PlatformWebPopup* GetWebPopup() const;
-
 		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
-		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
         virtual PlatformFBConnect* GetFBConnect() const;
 

@@ -11,8 +11,6 @@
 #ifndef _AndroidGLView_H__
 #define _AndroidGLView_H__
 
-#include "librtt/Rtt_DeviceOrientation.h"
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -30,12 +28,7 @@ private:
 	Rtt::Runtime * fRuntime;
 	int fWidth;
 	int fHeight;
-	int fUprightWidth;
-	int fUprightHeight;
-	bool fReloadTextures;
 	NativeToJavaBridge *fNativeToJavaBridge;
-	
-	Rtt::DeviceOrientation::Type fOrientation;
 
 
 	
@@ -45,10 +38,6 @@ public:
 		fRuntime = NULL;
 		fWidth = 0; // TODO: this is not right
 		fHeight = 0;
-		fUprightWidth = 0;
-		fUprightHeight = 0;
-		fReloadTextures = false;
-		fOrientation = Rtt::DeviceOrientation::kUpright;
 		fNativeToJavaBridge = NULL;
 	}
 	
@@ -63,7 +52,7 @@ public:
 	}
 	
 	void Flush();
-	bool CreateFramebuffer( int width, int height, Rtt::DeviceOrientation::Type orientation );
+	bool CreateFramebuffer( int width, int height );
 	void DestroyFramebuffer();
 	void Render();
 	bool HasAlphaChannel();
@@ -79,24 +68,10 @@ public:
 	}
 
 	// Returns physical width and height of device screen when device
-	// is oriented in the upright position (NOTE: upright does not necessarily
-	// mean portrait, e.g. tablets)
-	int DeviceWidth() const { return fUprightWidth; }
-	int DeviceHeight() const { return fUprightHeight; }
+	int DeviceWidth() const { return fWidth; }
+	int DeviceHeight() const { return fHeight; }
 
 	void Resize( int width, int height );
-	
-	void ReinitializeRenderingStream();
-	
-	Rtt::DeviceOrientation::Type GetOrientation() const
-	{
-		return fOrientation;
-	}
-
-	void SetOrientation( Rtt::DeviceOrientation::Type orientation )
-	{
-		fOrientation = orientation;
-	}
 };
 
 // ----------------------------------------------------------------------------

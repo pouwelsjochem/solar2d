@@ -37,7 +37,7 @@ class JavaToNativeBridge
 	public:
 		void Init(
 				JNIEnv * env, jstring package, jstring documentsDir, jstring applicationSupportDir, jstring temporaryDir, jstring cachesDir,
-				jstring systemCachesDir, jstring expansionFileDir, int width, int height, int orientation, bool isCoronaKit );
+				jstring systemCachesDir, jstring expansionFileDir, int width, int height, bool isCoronaKit );
 		void UnloadResources();
 		void ReloadResources();
 		void Deinit();
@@ -46,7 +46,6 @@ class JavaToNativeBridge
 		int GetVerticalMarginInPixels();
 		int GetContentWidthInPixels();
 		int GetContentHeightInPixels();
-		void ConvertCoronaPointToAndroidPoint(int& x, int& y);
 		bool CopyBitmapInfo(
 					JNIEnv *env, jlong nativeImageMemoryAddress, int width, int height,
 					float downscaleFactor, int rotationInDegrees);
@@ -65,7 +64,6 @@ class JavaToNativeBridge
 		void UseDefaultLuaErrorHandler();
 		void UseJavaLuaErrorHandler();
 		void Render();
-		void ReinitializeRenderer();
 		void Pause();
 		void Resume();
 		void DispatchEventInLua();
@@ -81,7 +79,6 @@ class JavaToNativeBridge
 		void AxisEvent(int coronaDeviceId, int axisIndex, float rawValue);
 		void AccelerometerEvent(double x, double y, double z, double deltaTime);
 		void GyroscopeEvent(double x, double y, double z, double deltaTime);
-		void OrientationChanged(int newOrientation, int oldOrientation);
 		void ResizeEvent();
 		void AlertCallback(int which, bool cancelled);
 		void SoundEndCallback( long id );
@@ -93,11 +90,6 @@ class JavaToNativeBridge
 		void MultitouchEventBegin();
 		void MultitouchEventAdd( JNIEnv * env, int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure );
 		void MultitouchEventEnd();
-		void WebViewShouldLoadUrl( JNIEnv * env, int id, jstring url, int sourceType );
-		void WebViewFinishedLoadUrl( JNIEnv * env, int id, jstring url );
-		void WebViewDidFailLoadUrl( JNIEnv * env, int id, jstring url, jstring msg, int code );
-		void WebViewHistoryUpdated( JNIEnv * env, int id, jboolean canGoBack, jboolean canGoForward );
-		void WebViewClosed( JNIEnv * env, int id );
 		void AdsRequestEvent(bool isError);
 		void ImagePickerEvent(JNIEnv *env, jstring selectedImageFileName);
 		void AbortShowingImageProvider();

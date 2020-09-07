@@ -408,7 +408,6 @@ MacTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		{
 			fontSize *= GetStage()->GetDisplay().GetScreenToContentScale();
 		}
-		fontSize /= GetSimulatorScale();
 		lua_pushnumber( L, fontSize );
 	}
 	else if ( strcmp( "font", key ) == 0 )
@@ -419,7 +418,6 @@ MacTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		{
 			fontSize *= display.GetScreenToContentScale();
 		}
-		fontSize /= GetSimulatorScale();
 		MacFont *font = Rtt_NEW( LuaContext::GetAllocator( L ), MacFont( [textfield font] ) );
 		font->SetSize( fontSize );
 		result = LuaLibNative::PushFont( L, font );
@@ -518,7 +516,6 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 		{
 			fontSize = display.GetRuntime().Platform().GetStandardFontSize();
 		}
-		fontSize *= GetSimulatorScale();
 		if ( ( fontSize > 0 ) && ( fontSize != [textfield.font pointSize] ) )
 		{
 			MacFont *font = Rtt_NEW( LuaContext::GetAllocator( L ), MacFont( [textfield font] ) );
@@ -544,7 +541,6 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 			{
 				fontSize = GetStage()->GetDisplay().GetRuntime().Platform().GetStandardFontSize();
 			}
-			fontSize *= GetSimulatorScale();
 			MacFont *scaledFont = Rtt_NEW( LuaContext::GetAllocator( L ), MacFont( (NSFont*)font->NativeObject() ) );
 			scaledFont->SetSize( fontSize );
 			[textfield setFont:(NSFont*)scaledFont->NativeObject()];
@@ -662,25 +658,6 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 
 	return result;
 
-}
-
-void
-MacTextFieldObject::DidRescaleSimulator( float previousScale, float currentScale )
-{
-	// Fetch the native UI's font.
-	NSTextField* textfield = (NSTextField*)GetView();
-	NSFont* currentFont = [textfield font];
-	
-	// Scale the current font to the simulator window's new zoom level.
-	float fontSize = [currentFont pointSize];
-	fontSize /= previousScale;
-	fontSize *= currentScale;
-	
-	// Apply the scaled font to the native UI.
-	MacFont *newFont = Rtt_NEW( LuaContext::GetAllocator( L ), MacFont( (NSFont*)currentFont ) );
-	newFont->SetSize( fontSize );
-	[textfield setFont:(NSFont*)newFont->NativeObject()];
-	Rtt_DELETE(newFont);
 }
 
 bool

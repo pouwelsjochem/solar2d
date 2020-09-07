@@ -46,7 +46,6 @@
 #include "Rtt_MacPlatform.h"
 #include "Rtt_Display.h"
 #include "Rtt_MacDisplayObject.h"
-#include "Rtt_MacWebPopup.h"
 #include "Rtt_MacVideoObject.h"
 #include "Rtt_MacVideoPlayer.h"
 #import "SPILDTopLayerView.h"
@@ -149,11 +148,8 @@
 
 @synthesize fRuntime;
 @synthesize fTapDelay;
-@synthesize zoomLevel;
-@synthesize scaleFactor;
+@synthesize backingScaleFactor;
 @synthesize isReady;
-@synthesize swapped;
-@synthesize isSimulatorView;
 @synthesize sendAllMouseEvents;
 @synthesize inFullScreenTransition;
 @synthesize isResizable;
@@ -182,7 +178,6 @@
 }
 - (void)initCommon
 {
-	fOrientation = Rtt::DeviceOrientation::kUpright;
 	fFirstClickTime = 0.;
 	fTapDelay = 0.;
 }
@@ -209,8 +204,6 @@
                             // suspended state (e.g. when the Shift key is down)
 		
 		nativeFrameRect = frameRect;
-        swapped = NO;
-        isSimulatorView = NO;
 
 		// It seems we need to set wantsLayer on macOS 10.12 or native display objects don't appear
 		// (we avoid it on earlier versions because it has performance issues with OpenGL views)
@@ -219,12 +212,7 @@
 			[self setWantsLayer:YES];
 		}
 
-		// This needs to be true or else we need to swap the width and height in nativeFrameRect
-		// (see [self setOrientation:])
-		Rtt_ASSERT(fOrientation == Rtt::DeviceOrientation::kUpright);
-
-		zoomLevel = 1.0;
-		scaleFactor = 1.0;
+		backingScaleFactor = 1.0;
 
 		// We're looking for a 10.9 API call to determine if we need to invalidate
 		shouldInvalidate = [[NSApplication sharedApplication] respondsToSelector:@selector(occlusionState)];
@@ -290,7 +278,6 @@
 	{
 		if ( display )
 		{
-			fRuntime->SetContentOrientation( fOrientation );
 			display->GetRenderer().Initialize();
 			[self invalidate];
 		}
@@ -416,24 +403,6 @@
 	[self dispatchEvent:e.event];
 }
 
-- (Rtt::DeviceOrientation::Type)orientation
-{
-	return (Rtt::DeviceOrientation::Type)fOrientation;
-}
-
-- (void)setOrientation:(Rtt::DeviceOrientation::Type)newValue
-{
-#ifndef Rtt_AUTHORING_SIMULATOR
-    if ( !swapped && (Rtt::DeviceOrientation::IsSideways( newValue ) && Rtt::DeviceOrientation::IsUpright( fOrientation )) )
-	{
-        Rtt::Swap<CGFloat>(nativeFrameRect.size.width, nativeFrameRect.size.height);
-        swapped = YES;
-	}
-#endif
-    
-    fOrientation = newValue;
-}
-
 // TODO: This function needs to be kept in sync with PlatformSimulator::AdjustPoint(),
 // and should eventually call it directly.
 - (void)adjustPoint:(NSPoint*)p
@@ -442,50 +411,6 @@
 
 	p->x = roundf( p->x );
 	p->y = roundf( p->y );
-
-	//Rtt_TRACE( ( "before(%g,%g)", p->x, p->y ) );
-
-	Display& display = fRuntime->GetDisplay();
-	Rtt_ASSERT( display.GetSurfaceOrientation() == fOrientation );
-
-	const DeviceOrientation::Type orientation = display.GetRelativeOrientation(); // fOrientation;
-	if ( DeviceOrientation::kUpright != orientation )
-	{
-		NSRect viewRect = [self frame];
-		NSSize viewSize = viewRect.size;
-
-//Rtt_TRACE( ( "view w,h(%g,%g)\n", viewSize.width, viewSize.height ) );
-//		viewSize.width -= 1;
-
-		if ( DeviceOrientation::kUpsideDown == orientation )
-		{
-			p->x = viewSize.width - p->x;
-			p->y = viewSize.height - p->y;
-		}
-		else
-		{
-//			viewSize.height -= 1;
-			float x = p->x;
-			if ( DeviceOrientation::kSidewaysRight == orientation )
-			{
-				p->x = p->y;
-				p->y = viewSize.width - x;
-			}
-			else
-			{
-				Rtt_ASSERT( DeviceOrientation::kSidewaysLeft == orientation );
-				p->x = viewSize.height - p->y;
-				p->y = x;
-			}
-		}
-	}
-
-	// If there is a zoom applied, scale the point to the original unzoomed window
-	// coordinates b/c Corona expects the original coordinates
-    p->x = p->x / zoomLevel;
-    p->y = p->y / zoomLevel;
-
-	//Rtt_TRACE( ( " after(%g,%g)\n", p->x, p->y ) );
 }
 
 - (NSPoint)pointForEvent:(NSEvent*)event
@@ -550,13 +475,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 - (void)mouseDown:(NSEvent*)event
 {
     using namespace Rtt;
-    
-	// NSDEBUG( @"mouseDown: %@", event );
-
-	if ([self startWindowMovement])
-	{
-		return;
-	}
 
 	NSPoint p = [self pointForEvent:event];
     
@@ -607,11 +525,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 
 	// NSDEBUG( @"mouseDragged: %@", event );
 
-	if ([self handleWindowMovement])
-	{
-		return;
-	}
-
 	NSPoint p = [self pointForEvent:event];
 
 	// Send mouse event before the touch
@@ -643,11 +556,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 - (void)mouseUp:(NSEvent*)event
 {
 	using namespace Rtt;
-
-	if ([self endWindowMovement])
-	{
-		return;
-	}
 
 	// NSDEBUG( @"mouseUp: %@", event );
 
@@ -715,14 +623,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 	[[view animator] setFrameSize:[self frame].size];
 }
 
-- (void) setZoomLevel:(CGFloat) newZoomLevel
-{
-    isSimulatorView = YES;
-	zoomLevel = newZoomLevel;
-
-	[self resizeNativeDisplayObjects];
-}
-
 - (void) resizeNativeDisplayObjects
 {
     // All the native display objects (which are NSView subviews) need to be resized to fit.
@@ -730,12 +630,7 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 
 	for( NSView* displayview in subviews )
 	{
-		if ( [displayview isKindOfClass:[MacWebView class]] )
-		{
-			Rtt::MacWebPopup* displayobject = (Rtt::MacWebPopup*)[(MacWebView *)displayview owner];
-			displayobject->SetNeedsRecomputeFromRotationOrScale();				
-		}
-		else if ( [displayview isKindOfClass:[Rtt_VideoPlayerView class]] )
+		if ( [displayview isKindOfClass:[Rtt_VideoPlayerView class]] )
 		{
 			Rtt::MacVideoPlayer* displayobject = (Rtt::MacVideoPlayer*)[(Rtt_VideoPlayerView *)displayview owner];
 			displayobject->SetNeedsRecomputeFromRotationOrScale();
@@ -767,17 +662,7 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 		  (fRuntime != NULL ? "YES" : "NO") );
 	//NSDEBUG(@"GLView:setFrameSize: old %@, new %@", NSStringFromSize([self frame].size), NSStringFromSize(new_size));
 
-	if (! isSimulatorView ) // if (sizeChanged)
-	{
-		nativeFrameRect.size = new_size;
-        swapped = NO;
-
-		if ( ! swapped && Rtt::DeviceOrientation::IsSideways( fOrientation ) )
-		{
-            Rtt::Swap<CGFloat>(nativeFrameRect.size.width, nativeFrameRect.size.height);
-            swapped = YES;
-		}
-	}
+	nativeFrameRect.size = new_size;
 
 	[super setFrameSize:new_size];
 
@@ -787,27 +672,17 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 	[self removeTrackingRect:trackingRectTag];
 	trackingRectTag = [self addTrackingRect:[self bounds] owner:self userData:nil assumeInside:NO];
 
-	if (! isSimulatorView && sizeChanged && self.isReady && self.runtime != NULL )
+	if (sizeChanged && self.isReady && self.runtime != NULL )
 	{
 		Rtt::Display *display = NULL;
 		display = static_cast<Rtt::Display*>(&fRuntime->GetDisplay());
 
 		if ( display )
 		{
-//            if (display->GetScaleMode() == Rtt::Display::kAdaptive)
-//            {
-//                display->Restart(-1, -1);
-//            }
-//            else
-            {
-                //display->Restart(nativeFrameRect.size.width, nativeFrameRect.size.height);
-                display->WindowSizeChanged();
-                display->Restart(fOrientation);
-            }
+            display->WindowSizeChanged();
+            display->Restart();
 		}
 
-		// The Simulator sends its "resize" event in PlatformSimulator::Rotate() but that
-		// doesn't exist if this isn't a Simulator view so we need to do it here
 		self.runtime->DispatchEvent( Rtt::ResizeEvent() );
 	}
 
@@ -817,30 +692,14 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 
 - (CGFloat) viewportWidth
 {
-    if ( Rtt::DeviceOrientation::IsSideways( fOrientation ) )
-	{
-		// Rtt_TRACE(("viewportWidth: %g\n", nativeFrameRect.size.height * (zoomLevel * scaleFactor)));
-        return nativeFrameRect.size.height * (zoomLevel * scaleFactor);
-	}
-	else
-	{
-		// Rtt_TRACE(("viewportWidth: %g\n", nativeFrameRect.size.width * (zoomLevel * scaleFactor)));
-        return nativeFrameRect.size.width * (zoomLevel * scaleFactor);
-	}
+	// Rtt_TRACE(("viewportWidth: %g\n", nativeFrameRect.size.width * backingScaleFactor));
+    return nativeFrameRect.size.width * backingScaleFactor;
 }
 
 - (CGFloat) viewportHeight
 {
-    if ( Rtt::DeviceOrientation::IsSideways( fOrientation ) )
-	{
-		// Rtt_TRACE(("viewportHeight: %g\n", nativeFrameRect.size.width * (zoomLevel * scaleFactor)));
-		return nativeFrameRect.size.width * (zoomLevel * scaleFactor);
-	}
-	else
-	{
-		// Rtt_TRACE(("viewportHeight: %g\n", nativeFrameRect.size.height * (zoomLevel * scaleFactor)));
-		return nativeFrameRect.size.height * (zoomLevel * scaleFactor);
-	}
+	// Rtt_TRACE(("viewportHeight: %g\n", nativeFrameRect.size.height * backingScaleFactor));
+	return nativeFrameRect.size.height * backingScaleFactor;
 }
 
 - (CGFloat)deviceWidth
@@ -869,10 +728,7 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 
 	for( NSView* displayview in subviews )
 	{
-		if ( [displayview isKindOfClass:[MacWebView class]] )
-		{
-		}
-		else if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
+		if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
 		{
 			[(Rtt_VideoObjectView *)displayview setSuspended:YES];
 		}
@@ -926,10 +782,7 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 	
 	for( NSView* displayview in subviews )
 	{
-		if ( [displayview isKindOfClass:[MacWebView class]] )
-		{
-		}
-		else if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
+		if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
 		{
 			[(Rtt_VideoObjectView *)displayview setSuspended:NO];
 		}
@@ -1016,9 +869,8 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 	NSRect r = [self bounds];
 	trackingRectTag = [self addTrackingRect:r owner:self userData:nil assumeInside:NO];
 
-	// This is needed for systems that _only_ have Retina screens and may not get all the
-	// notifications multi-display systems do
-	scaleFactor = [[self window] backingScaleFactor];
+	// This is needed for systems that _only_ have Retina screens and may not get all the notifications multi-display systems do
+	backingScaleFactor = [[self window] backingScaleFactor];
 }
 
 - (void)mouseMoved:(NSEvent *)event
@@ -1265,62 +1117,6 @@ static U32 *sTouchId = (U32*)(& kTapTolerance); // any arbitrary pointer value w
 			[displayview setWantsLayer:YES];
 		}
 	}
-}
-
-//
-// These window movement methods handle dragging in the titlebar area of windows
-// that don't have a titlebar
-//
-- (BOOL) startWindowMovement
-{
-	NSRect  windowFrame = [[self window] frame];
-
-	initialLocation = [NSEvent mouseLocation];
-
-	if (initialLocation.y < ((windowFrame.origin.y + windowFrame.size.height) - 22))
-	{
-		initialLocation.x = -1;
-		initialLocation.y = -1;
-
-		return NO;
-	}
-
-	initialLocation.x -= windowFrame.origin.x;
-	initialLocation.y -= windowFrame.origin.y;
-
-	return YES;
-}
-
-- (BOOL) handleWindowMovement
-{
-	if (initialLocation.x == -1)
-	{
-		return NO;
-	}
-
-	NSPoint currentLocation;
-	NSPoint newOrigin;
-
-	currentLocation = [NSEvent mouseLocation];
-	newOrigin.x = currentLocation.x - initialLocation.x;
-	newOrigin.y = currentLocation.y - initialLocation.y;
-
-	[[self window] setFrameOrigin:newOrigin];
-
-	return YES;
-}
-
-- (BOOL) endWindowMovement
-{
-	if (initialLocation.x == -1)
-	{
-		return NO;
-	}
-
-	initialLocation.x = -1;
-	initialLocation.y = -1;
-
-	return YES;
 }
 
 @end

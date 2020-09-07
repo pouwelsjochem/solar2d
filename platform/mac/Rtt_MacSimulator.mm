@@ -13,14 +13,12 @@
 
 #include "Rtt_Lua.h"
 #include "Rtt_MacPlatform.h"
-#include "Rtt_MacSurfaceVideoRecorder.h"
 #include "Rtt_MacViewCallback.h"
 #include "Rtt_PlatformPlayer.h"
 
 
 #import "AppDelegate.h"
 #import "GLView.h"
-#import "SkinnableWindow.h"
 #import "SkinlessSimulatorWindow.h"
 
 #import "CoreAnimationUtilities.h" // for shake animation
@@ -49,16 +47,13 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-MacSimulator::MacSimulator( bool headless )
+MacSimulator::MacSimulator()
 :	Super( Super::Finalizer< MacGUIPlatform > ),
-//	fPool( [[NSAutoreleasePool alloc] init] ),
 	fWindow( nil ),
 	fWindowController( nil ),
 	fProperties( [[NSMutableDictionary alloc] init] ),
-	fScreenWidth( 0. ),
-	fScreenHeight( 0. ),
-    fSupportsScreenRotation( true ),
-	fHeadless( headless ),
+	fDeviceWidth( 0. ),
+	fDeviceHeight( 0. ),
 	fDeviceSkinIdentifier( nil ),
 	fViewCallback( NULL ),
 	fMacMFIListener(nil),
@@ -82,8 +77,7 @@ MacSimulator::~MacSimulator()
 	// The NSView and CALayer have a pointer to the runtime which it uses to draw/
 	// Since the drawing may be asynchonous and the view release may cause dealloc to happen
 	// at the end of the runloop, we need to clear the runtime variable now.
-	GLView* view = [(SkinnableWindow *)fWindow screenView];
-//	Rtt_ASSERT(YES == [view isKindOfClass:GLView]);
+	GLView* view = [(SkinlessSimulatorWindow *)fWindow screenView];
     if (view != nil && [view runtime] != NULL)
     {
         [view runtime]->GetDisplay().Invalidate();
@@ -106,8 +100,6 @@ MacSimulator::~MacSimulator()
 	// Fix case 20368: Setting focus on native keyboard crashes simulator (http://bugs.coronalabs.com/default.asp?20368)
 	fWindow = nil;
 	[fWindowController release];
-
-//	[fPool release];
 }
 
 static bool
@@ -136,9 +128,6 @@ MacSimulator::Initialize(
 	platform->SetResourcePath( resourcePath );
 	Super::Config config( platform->GetAllocator() );
 	Super::LoadConfig( deviceConfigFile, *platform, config );
-
-	platform->SetAdaptiveWidth( config.GetAdaptiveWidth() );
-	platform->SetAdaptiveHeight( config.GetAdaptiveHeight() );
     
     if (! config.configLoaded)
     {
@@ -147,9 +136,8 @@ MacSimulator::Initialize(
     
 	LoadBuildSettings( *platform );
 
-	fScreenWidth = config.screenWidth;
-	fScreenHeight = config.screenHeight;
-    fSupportsScreenRotation = config.supportsScreenRotation;
+	fDeviceWidth = config.deviceWidth;
+	fDeviceHeight = config.deviceHeight;
 
 	platform->GetMacDevice().SetManufacturer( [NSString stringWithExternalString:config.displayManufacturer.GetString()] );
 	platform->GetMacDevice().SetModel( [NSString stringWithExternalString:config.displayName.GetString()] );
@@ -176,66 +164,25 @@ MacSimulator::Initialize(
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetLeft] forKey:@"safeLandscapeScreenInsetLeft"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetBottom] forKey:@"safeLandscapeScreenInsetBottom"];
 	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetRight] forKey:@"safeLandscapeScreenInsetRight"];
-
-	// -------------
-
-	NSPoint screenOrigin =
-	{
-		config.screenOriginX,
-		config.screenOriginY
-	};
 	
-	NSSize screenSize =
-	{
-		config.screenWidth,
-		config.screenHeight
-	};
-	const char* device_image_file_cstr = config.deviceImageFile.GetString();
 	const char* display_name_cstr = config.displayName.GetString();
 	const char* window_titlebar_name_cstr = config.windowTitleBarName.GetString();
 	
-	NSString* deviceImageFile = nil;
 	NSString* displayName = nil;
 	NSString* windowTitleBarName = nil;
     
-	if ( NULL != device_image_file_cstr )
-	{
-	deviceImageFile = [skinDir stringByAppendingPathComponent:[NSString stringWithExternalString:device_image_file_cstr]];
-	}
 	if ( NULL != display_name_cstr )
 	{
 		displayName = [NSString stringWithExternalString:display_name_cstr];
 	}
 	if ( NULL != window_titlebar_name_cstr )
 	{
-		//windowTitleBarName = [NSString stringWithExternalString:window_titlebar_name_cstr];
-		windowTitleBarName = [NSString stringWithFormat:@"%s - %.0fx%.0f", window_titlebar_name_cstr, config.screenWidth, config.screenHeight];
+		windowTitleBarName = [NSString stringWithFormat:@"%s - %.0fx%.0f", window_titlebar_name_cstr, fDeviceWidth, fDeviceHeight];
 	}
-	
-	// This used to be a user preference for whether the user wanted skinned windows or not, we now offer borderless windows
-    // as a separate option in the Window/View As menu so we just default this to false (this allows us to continue to use
-    // some other behavior associated with the setting)
-	BOOL user_disabled_skins = NO;
 
-    if (! [[NSFileManager defaultManager] fileExistsAtPath:deviceImageFile] )
-    {
-        // If the skin image file isn't available, act as if skins are disabled (important
-        // because we allow user defined skins)
-        user_disabled_skins = YES;
-    }
-
-	// If the user doesn't want a skin, we need to reset the origin offset or the view won't be centered
-	// correctly in the window unless the description file already happens to have an offset of 0
-	if(YES == user_disabled_skins)
-	{
-		screenOrigin.x = 0;
-		screenOrigin.y = 0;
-	}
-	NSRect screenRect = { screenOrigin, screenSize };
-
+	NSRect screenRect = { {0, 0}, {fDeviceWidth, fDeviceHeight} };
 	GLView* screenView = [[GLView alloc] initWithFrame:screenRect];
 	[screenView autorelease];
-	[screenView setOrientation:GetOrientation()];
 	[screenView setDelegate:delegate];
 
 	SimulatorDeviceWindow* instanceWindow = nil;
@@ -252,13 +199,9 @@ MacSimulator::Initialize(
 	fViewCallback = new MacViewCallback( screenView ); // This is what is on the Timer loop
 	Super::Initialize( platform, fViewCallback ); // Inside here, Runtime is instantiated
 
-	// TODO: Set kDeferUpdate and kRenderSeparately properties here
-
 	//Mac simulator needs to defer the initial update and render in separate pass
 	GetPlayer()->GetRuntime().SetProperty(Runtime::kDeferUpdate, true);
 	GetPlayer()->GetRuntime().SetProperty(Runtime::kRenderAsync, true);
-	
-
 
 	// Chicken and egg issue between fViewCallback and this->fRuntime
 	// Runtime is not valid until Super::Initialize() but we need to pass fViewCallback to Super::Initialize.
@@ -266,67 +209,16 @@ MacSimulator::Initialize(
 
     // restore the user's last setting for this skin
 	// We need a placeholder name for autosave
-	if ( nil == deviceImageFile )
-	{
-		fDeviceName = [displayName copy];
-	}
-    else
-    {
-        fDeviceName = [[[deviceImageFile lastPathComponent] stringByDeletingPathExtension] copy];
-    }
+	fDeviceName = [displayName copy];
 	
 	// Use this string as our current selected skin identifier which will be used as a key to save the user's set scale factor to
 	fDeviceSkinIdentifier = [windowTitleBarName copy];
-	
-    BOOL restoredScale = NO;
-    NSNumber* scalefactor = [NSNumber numberWithFloat:0]; // Counterintuitively, 0 is full size
-    NSString* skinname = fDeviceSkinIdentifier;
-    if ( nil != skinname )
-    {
-        NSDictionary* savepref = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kUserPreferenceScaleFactorForSkin];
-        
-        if(nil != savepref)
-        {
-            scalefactor = [savepref objectForKey:skinname];
-            if(nil != scalefactor)
-            {
-                float scalefloat = [scalefactor floatValue];
-                if( scalefloat > 0.0f )
-                {
-                    restoredScale = YES;
-                }
-            }
-        }
-    }
-    
-	// ---
-    
-	if ( ((nil == deviceImageFile) || (0 == [deviceImageFile length])) || user_disabled_skins)
-	{
-        instanceWindow = [[SkinlessSimulatorWindow alloc] initWithScreenView:screenView
-                                                                    viewRect:screenRect
-                                                                       title:windowTitleBarName
-                                                                 orientation:GetOrientation()
-                                                                       scale:[scalefactor floatValue]];
-        
-		[(SkinlessSimulatorWindow*)instanceWindow setPerformCloseBlock:window_close_handler];
-	}
-	else
-	{
-        instanceWindow = [[SkinnableWindow alloc] initWithScreenView:screenView
-                                                            viewRect:screenRect
-                                                               title:windowTitleBarName
-                                                           skinImage:deviceImageFile
-                                                         orientation:GetOrientation()
-                                                               scale:[scalefactor floatValue]];
-        
-		[(SkinnableWindow*)instanceWindow setPerformCloseBlock:window_close_handler];
-	}
+	    
+    instanceWindow = [[SkinlessSimulatorWindow alloc] initWithScreenView:screenView viewRect:screenRect title:windowTitleBarName];
+	[(SkinlessSimulatorWindow*)instanceWindow setPerformCloseBlock:window_close_handler];
 
 	NSWindowController *windowController = [[NSWindowController alloc] initWithWindow:instanceWindow];
-	
 	[instanceWindow setDelegate:(id <NSWindowDelegate>)windowController];
-
     fWindow = instanceWindow;
 	fWindowController = windowController;
 
@@ -336,7 +228,6 @@ MacSimulator::Initialize(
 	
 	//Initialize Joystick support
 	AppleInputDeviceManager& macDeviceManager = (AppleInputDeviceManager&)runtime.Platform().GetDevice().GetInputDeviceManager();
-	
 	if (fMacMFIListener)
 	{
 		[fMacMFIListener stop];
@@ -355,45 +246,8 @@ MacSimulator::Initialize(
 	
 	// -------------
 
-    if (! restoredScale)
-    {
-        // Nothing remembered for this skin, scale it to fit screen if necessary and center the first time
-        NSScreen *windowsScreen = [instanceWindow screen];
-        
-        if (windowsScreen == nil)
-        {
-            windowsScreen = [NSScreen mainScreen];
-        }
-        
-        int screenHeight = [windowsScreen frame].size.height;
-        int windowHeight = [instanceWindow frame].size.height;
-        
-        if (windowHeight > screenHeight)
-        {
-            if ((windowHeight * 0.5) > screenHeight)
-            {
-                // Assumes no screen is so small 2 zoom outs wont fit it
-                [(SkinnableWindow *)instanceWindow setScale:0.25];
-            }
-            else
-            {
-                [(SkinnableWindow *)instanceWindow setScale:0.5];
-            }
-        }
-        else
-        {
-            // This makes the framework record that we've opened this skin before
-            [(SkinnableWindow *)instanceWindow setScale:1.0];
-        }
-        
-        [instanceWindow center];
-    }
-
-	if ( ! fHeadless )
-	{
-        [instanceWindow setFrameUsingName:fDeviceName];
-        [instanceWindow makeKeyAndOrderFront:nil];
-	}
+    [instanceWindow setFrameUsingName:fDeviceName];
+    [instanceWindow makeKeyAndOrderFront:nil];
 
 	Rtt_TRACE_SIM( ( "Loading project from:   %s\n", [[[NSString stringWithExternalString:resourcePath] stringByAbbreviatingWithTildeInPath] UTF8String] ) );
 	Rtt_TRACE_SIM( ( "Project sandbox folder: %s\n", [[platform->GetSandboxPath() stringByAbbreviatingWithTildeInPath] UTF8String] ) );
@@ -413,51 +267,10 @@ MacSimulator::GetPlatform() const
 	return kName;
 }
 
-void
-MacSimulator::DidRotate( bool clockwise, DeviceOrientation::Type start, DeviceOrientation::Type end )
-{
-//	S32 absoluteAngle = -DeviceOrientation::CalculateRotation( DeviceOrientation::kUpright, end );
-
-	[(SkinnableWindow *)fWindow rotate:clockwise];
-}
-
-
-
-void
-MacSimulator::DidChangeScale(float scalefactor)
-{
-	NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-	
-	// Watch out for ordering issues. Is it possible the current selected skin is saved to defaults after the scale change?
-	NSString* skinname = fDeviceSkinIdentifier;
-	if ( nil == skinname )
-	{
-		// Not expecting nil, but due to special behaviors for things like the Demo skin, this is a safe guard.
-		return;
-	}
-	
-	NSMutableDictionary* savepref = [[[defaults dictionaryForKey:kUserPreferenceScaleFactorForSkin] mutableCopy] autorelease];
-	if(nil == savepref)
-	{
-		savepref = [NSMutableDictionary dictionary];
-	}
-	
-	[savepref setObject:[NSNumber numberWithFloat:scalefactor] forKey:skinname];
-	[defaults setObject:savepref forKey:kUserPreferenceScaleFactorForSkin];
-}
-
 GLView*
 MacSimulator::GetScreenView() const
 {
-	return [(SkinnableWindow *)fWindow screenView];
-}
-
-void
-MacSimulator::Shake()
-{
-	PlatformSimulator::Shake();
-	CoreAnimationUtilities_ShakeViewWithAnimation( fWindow, [fWindow frame], CoreAnimationUtilities_PasswordShakeAnimationWithRect( NSRectToCGRect( [fWindow frame] ) ) );
-	
+	return [(SkinlessSimulatorWindow *)fWindow screenView];
 }
 
 bool

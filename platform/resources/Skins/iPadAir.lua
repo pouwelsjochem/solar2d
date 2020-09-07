@@ -10,13 +10,10 @@
 simulator =
 {
 	device = "ios-tablet",
-	screenOriginX = 117,
-	screenOriginY = 235,
-	screenWidth = 768*2,
-	screenHeight = 1024*2,
-	iosPointWidth = 768,
-	iosPointHeight = 1024,
-	deviceImage = "iPadAir.png",
+	deviceWidth = 1024*2,
+	deviceHeight = 768*2,
+	iosPointWidth = 1024,
+	iosPointHeight = 768,
 	displayManufacturer = "Apple",
 	displayName = "iPad",
 	windowTitleBarName = "iPad Air",

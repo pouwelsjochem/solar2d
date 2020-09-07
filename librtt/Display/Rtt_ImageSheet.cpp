@@ -39,11 +39,8 @@ int ImageSheet::CreateAndPush(lua_State *L, Rtt_Allocator *allocator) {
             Runtime *runtime = LuaContext::GetRuntime(L);
 
             // Image sheets should be loaded at full resolution
-            // and support dynamic image resolution
-            U32 flags = PlatformBitmap::kIsNearestAvailablePixelDensity | PlatformBitmap::kIsBitsFullResolution;
-
             TextureFactory &factory = runtime->GetDisplay().GetTextureFactory();
-            SharedPtr<TextureResource> texture = factory.FindOrCreate(imageName, baseDir, flags, false);
+            SharedPtr<TextureResource> texture = factory.FindOrCreate(imageName, baseDir, PlatformBitmap::kIsBitsFullResolution, false);
             if (Rtt_VERIFY(texture.NotNull())) {
                 ImageSheet *sheet = Rtt_NEW(allocator, ImageSheet(allocator, texture));
                 sheet->Initialize(L, nextArg);

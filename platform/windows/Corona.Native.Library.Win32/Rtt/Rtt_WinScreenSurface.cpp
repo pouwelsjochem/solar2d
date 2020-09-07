@@ -32,26 +32,6 @@ WinScreenSurface::~WinScreenSurface()
 {
 }
 
-DeviceOrientation::Type WinScreenSurface::GetOrientation() const
-{
-	// If we're simulating a device, then use the current simulated orientation.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		return deviceSimulatorServicesPointer->GetOrientation();
-	}
-
-	// Use the Corona project's default orientation, if provided.
-	auto orientation = fEnvironment.GetProjectSettings().GetDefaultOrientation();
-	if (Rtt::DeviceOrientation::IsInterfaceOrientation(orientation))
-	{
-		return orientation;
-	}
-
-	// If all else fails, default to an upright orientation.
-	return Rtt::DeviceOrientation::kUpright;
-}
-
 void WinScreenSurface::SetCurrent() const
 {
 	auto surfaceControlPointer = fEnvironment.GetRenderSurface();
@@ -142,68 +122,12 @@ S32 WinScreenSurface::Height() const
 
 S32 WinScreenSurface::DeviceWidth() const
 {
-	// Return the surface's pixel width relative to a portrait orientation.
-	S32 length;
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		length = deviceSimulatorServicesPointer->GetScreenWidthInPixels();
-	}
-	else if (Rtt::DeviceOrientation::IsSideways(GetOrientation()))
-	{
-		length = Height();
-	}
-	else
-	{
-		length = Width();
-	}
-	return length;
+	return Width();
 }
 
 S32 WinScreenSurface::DeviceHeight() const
 {
-	// Return the surface's pixel height relative to a portrait orientation.
-	S32 length;
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		length = deviceSimulatorServicesPointer->GetScreenHeightInPixels();
-	}
-	else if (Rtt::DeviceOrientation::IsSideways(GetOrientation()))
-	{
-		length = Width();
-	}
-	else
-	{
-		length = Height();
-	}
-	return length;
-}
-
-S32 WinScreenSurface::AdaptiveWidth() const
-{
-	// If we're simulating a device, then use its hard coded adaptive length.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		return deviceSimulatorServicesPointer->GetAdaptiveScreenWidthInPixels();
-	}
-
-	// Return an adaptive length for a windows desktop app.
-	return Super::AdaptiveWidth();
-}
-
-S32 WinScreenSurface::AdaptiveHeight() const
-{
-	// If we're simulating a device, then use its hard coded adaptive length.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer)
-	{
-		return deviceSimulatorServicesPointer->GetAdaptiveScreenHeightInPixels();
-	}
-
-	// Return an adaptive length for a windows desktop app.
-	return Super::AdaptiveHeight();
+	return Height();
 }
 
 }	// namespace Rtt

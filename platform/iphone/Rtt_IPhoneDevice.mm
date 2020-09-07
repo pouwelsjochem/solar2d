@@ -43,79 +43,10 @@ namespace Rtt
 {
 
 // ----------------------------------------------------------------------------
-
-DeviceOrientation::Type
-IPhoneDevice::ToOrientationTypeFromUIDeviceOrientation( UIDeviceOrientation orientation )
-{
-	DeviceOrientation::Type type = DeviceOrientation::kUnknown;
-
-	switch( orientation )
-	{
-		case UIDeviceOrientationPortrait:
-			type = DeviceOrientation::kUpright;
-			// NSLog( @"Portrait" );
-			break;
-		case UIDeviceOrientationLandscapeLeft:	// Corresponds to UIInterfaceOrientationLandscapeRight
-			type = DeviceOrientation::kSidewaysRight;
-			// NSLog( @"Landscape (Left)" );
-			break;
-		case UIDeviceOrientationPortraitUpsideDown:
-			type = DeviceOrientation::kUpsideDown;
-			// NSLog( @"Portrait (Upside down)" );
-			break;
-		case UIDeviceOrientationLandscapeRight:	// Corresponds to UIInterfaceOrientationLandscapeLeft
-			type = DeviceOrientation::kSidewaysLeft;
-			// NSLog( @"Landscape (Right)" );
-			break;
-		case UIDeviceOrientationFaceUp:
-			type = DeviceOrientation::kFaceUp;
-			// NSLog( @"Face Up" );
-			break;
-		case UIDeviceOrientationFaceDown:
-			type = DeviceOrientation::kFaceDown;
-			// NSLog( @"Face Down" );
-			break;
-		default:
-			break;
-	}
-
-	return type;
-}
-
-DeviceOrientation::Type
-IPhoneDevice::ToOrientationTypeFromUIInterfaceOrientation( UIInterfaceOrientation orientation )
-{
-	DeviceOrientation::Type type;
-
-	switch( orientation )
-	{
-		default:
-		case UIInterfaceOrientationPortrait:
-			type = DeviceOrientation::kUpright;
-			// NSLog( @"Portrait" );
-			break;
-		case UIInterfaceOrientationLandscapeRight:
-			type = DeviceOrientation::kSidewaysRight;
-			// NSLog( @"Landscape (Left)" );
-			break;
-		case UIInterfaceOrientationPortraitUpsideDown:
-			type = DeviceOrientation::kUpsideDown;
-			// NSLog( @"Portrait (Upside down)" );
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			type = DeviceOrientation::kSidewaysLeft;
-			// NSLog( @"Landscape (Right)" );
-			break;
-	}
-
-	return type;
-}
-
 IPhoneDevice::IPhoneDevice( Rtt_Allocator &allocator, CoronaView *view )
 :	fAllocator( allocator ),
 	fView( view ),
 	fTracker(),
-	fPreviousOrientation( DeviceOrientation::kUnknown ),
 	fInputDeviceManager( &allocator )
 {
 }
@@ -124,7 +55,6 @@ IPhoneDevice::~IPhoneDevice()
 {
 	const EventType kEvents[] =
 	{
-		kOrientationEvent,
 		kAccelerometerEvent,
 		kGyroscopeEvent,
 		kMultitouchEvent,
@@ -325,7 +255,6 @@ IPhoneDevice::HasEventSource( EventType type ) const
 			break;
 		}
 		case MPlatformDevice::kAccelerometerEvent:
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kMultitouchEvent:
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
@@ -347,15 +276,6 @@ IPhoneDevice::BeginNotifications( EventType type ) const
 
 	switch( type )
 	{
-		case MPlatformDevice::kOrientationEvent:
-		{
-			UIDevice* device = [UIDevice currentDevice];
-			[resourceManager addObserver:fView.orientationObserver forKey:CoronaOrientationResourceKey()];
-
-			fPreviousOrientation = ToOrientationTypeFromUIDeviceOrientation( device.orientation );
-			const_cast<IPhoneDevice*>(this)->GetPreviousOrientationAndUpdate( device.orientation );
-			break;
-		}
 		case MPlatformDevice::kAccelerometerEvent:
 		{
 			// TODO: Remove dependency on AppDelegate. Move to CoronaSystemResourceManager.
@@ -387,13 +307,6 @@ IPhoneDevice::EndNotifications( EventType type ) const
 
 	switch( type )
 	{
-		case MPlatformDevice::kOrientationEvent:
-		{
-			[resourceManager removeObserver:fView.orientationObserver forKey:CoronaOrientationResourceKey()];
-
-			fPreviousOrientation = DeviceOrientation::kUnknown;
-			break;
-		}
 		case MPlatformDevice::kAccelerometerEvent:
 		{
 			[UIAccelerometer sharedAccelerometer].delegate = nil;
@@ -423,42 +336,6 @@ bool
 IPhoneDevice::DoesNotify( EventType type ) const
 {
 	return fTracker.DoesNotify( type );
-}
-
-DeviceOrientation::Type
-IPhoneDevice::GetOrientation() const
-{
-	DeviceOrientation::Type result = DeviceOrientation::kUnknown;
-
-	UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-	if ( orientation != UIDeviceOrientationUnknown )
-	{
-		result = IPhoneDevice::ToOrientationTypeFromUIDeviceOrientation( orientation );
-	}
-	else
-	{
-		// At launch time, you cannot use UIDevice as it returns unknown. So we
-		// are forced to defer to the viewController. However, this will only
-		// return values in the CoronaViewSupportedInterfaceOrientations array of the Info.plist
-		// so we only use this at launch time.
-
-		UIInterfaceOrientation orientation = fView.viewController.interfaceOrientation;
-		result = IPhoneDevice::ToOrientationTypeFromUIInterfaceOrientation( orientation );
-	}
-
-	return result;
-}
-
-DeviceOrientation::Type
-IPhoneDevice::GetPreviousOrientationAndUpdate( UIDeviceOrientation newValue )
-{
-	DeviceOrientation::Type result = fPreviousOrientation;
-	DeviceOrientation::Type currentOrientation = ToOrientationTypeFromUIDeviceOrientation( newValue );
-	if ( currentOrientation != DeviceOrientation::kUnknown )
-	{
-		fPreviousOrientation = currentOrientation;
-	}
-	return result;
 }
 
 void

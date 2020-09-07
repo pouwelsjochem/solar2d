@@ -53,10 +53,7 @@ class TextureFactory
 			U32 flags = 0, bool convertToGrayscale = false );
 
 		SharedPtr< TextureResource > Find( const std::string& key );
-		SharedPtr< TextureResource > CreateAndAdd( const std::string& key,
-													PlatformBitmap *bitmap,
-													bool useCache,
-													bool isRetina );
+		SharedPtr< TextureResource > CreateAndAdd( const std::string& key, PlatformBitmap *bitmap, bool useCache );
 	// Cached texture resources
 	public:
 		SharedPtr< TextureResource > FindOrCreate(

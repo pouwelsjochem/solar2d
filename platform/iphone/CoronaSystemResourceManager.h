@@ -20,7 +20,6 @@
 // ----------------------------------------------------------------------------
 
 // Keys for different system resources
-FOUNDATION_EXPORT NSString * const CoronaOrientationResourceKey();
 FOUNDATION_EXPORT NSString * const CoronaAccelerometerResourceKey();
 FOUNDATION_EXPORT NSString * const CoronaGyroscopeResourceKey();
 

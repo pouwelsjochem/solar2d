@@ -304,7 +304,7 @@ AppleFileBitmap::Initialize()
 
 #if !defined( Rtt_WEB_PLUGIN )
 	// Implemented on a per-platform basis
-	Rtt_EXPORT CGSize Rtt_GetScreenSize();
+	Rtt_EXPORT CGSize Rtt_GetDeviceSize();
 #endif
 
 float
@@ -321,15 +321,15 @@ AppleFileBitmap::CalculateScale() const
 	size_t h = CGImageGetHeight( fImage );
 
 #if !defined( Rtt_WEB_PLUGIN )
-	// TODO: Rtt_GetScreenSize() returns (0,0) if no simulator instance is active.
+	// TODO: Rtt_GetDeviceSize() returns (0,0) if no simulator instance is active.
 	// However, we have CoronaViews that are created independent of simulator,
 	// so for now, we just do a cheap check against 0 to ignore. Later, we should
 	// determine a way to decouple.
-	CGSize screenSize = Rtt_GetScreenSize();
-	bool isScreenSizeValid = ( screenSize.width > 0 && screenSize.height > 0 ); 
+	CGSize deviceSize = Rtt_GetDeviceSize();
+	bool isDeviceSizeValid = ( deviceSize.width > 0 && deviceSize.height > 0 ); 
 
-	size_t wMax = isScreenSizeValid ? NextPowerOf2( screenSize.width ) : w;
-	size_t hMax = isScreenSizeValid ? NextPowerOf2( screenSize.height ) : h;
+	size_t wMax = isDeviceSizeValid ? NextPowerOf2( deviceSize.width ) : w;
+	size_t hMax = isDeviceSizeValid ? NextPowerOf2( deviceSize.height ) : h;
 #else
 	// TODO: Figure out how to get "screen" bounds, i.e. content bounds in html page
 	size_t wMax = w;

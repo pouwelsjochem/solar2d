@@ -11,7 +11,6 @@
 #define _Rtt_MacDevice_H__
 
 #include "Rtt_MPlatformDevice.h"
-#include "Rtt_DeviceOrientation.h"
 
 #if defined( Rtt_NO_GUI )
 	#include "Input/Rtt_PlatformInputDeviceManager.h"
@@ -71,9 +70,6 @@ class MacConsoleDevice : public MPlatformDevice
 		virtual void SetAccelerometerInterval( U32 frequency ) const;
 		virtual void SetGyroscopeInterval( U32 frequency ) const;
 
-	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
-
 	protected:
 		CoronaView *fView; // Weak ref
 
@@ -102,9 +98,6 @@ class MacDevice : public MacConsoleDevice
 		typedef MacConsoleDevice Super;
 
 	public:
-//		static DeviceOrientation::Type ToOrientationType( UIDeviceOrientation orientation );
-
-	public:
 		MacDevice( Rtt_Allocator &allocator, PlatformSimulator& simulator );
 
 	public:
@@ -119,17 +112,10 @@ class MacDevice : public MacConsoleDevice
 		virtual const char *GetPlatform() const;
 
 	public:
-		virtual DeviceOrientation::Type GetOrientation() const;
-
-	public:
 		PlatformSimulator& GetSimulator() const { return fSimulator; }
-
-	public:
-//		DeviceOrientation::Type GetPreviousOrientationAndUpdate( UIDeviceOrientation newValue );
 
 	private:
 		PlatformSimulator& fSimulator;
-		mutable DeviceOrientation::Type fPreviousOrientation;
 };
 
 #endif // Rtt_WEB_PLUGIN
@@ -140,11 +126,7 @@ class MacAppDevice : public MacConsoleDevice
 		typedef MacConsoleDevice Super;
 
 	public:
-		MacAppDevice( Rtt_Allocator &allocator, DeviceOrientation::Type orientation );
-		virtual DeviceOrientation::Type GetOrientation() const;
-
-	private:
-		DeviceOrientation::Type fDeviceOrientation;
+		MacAppDevice( Rtt_Allocator &allocator );
 };
 
 

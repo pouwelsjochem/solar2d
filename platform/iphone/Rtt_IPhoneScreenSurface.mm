@@ -17,11 +17,9 @@
 //#import <OpenGLES/EAGL.h>
 #include "Rtt_GPU.h"
 
-#ifdef Rtt_ORIENTATION
+#ifdef Rtt_IPHONE_ENV
 #include "Rtt_IPhoneDevice.h"
 #endif
-
-#import "CoronaOrientationProvider.h"
 
 // ----------------------------------------------------------------------------
 
@@ -57,22 +55,6 @@ IPhoneScreenSurface::Flush() const
 
 }
 
-DeviceOrientation::Type
-IPhoneScreenSurface::GetOrientation() const
-{
-#ifdef Rtt_ORIENTATION
-	UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-	return IPhoneDevice::ToOrientationTypeFromUIInterfaceOrientation( orientation );
-#else
-	// TODO: Pull this out to tvOS-specific code.
-	#ifdef Rtt_TVOS_ENV
-		return DeviceOrientation::kSidewaysRight;
-	#else
-		return DeviceOrientation::kUpright;
-	#endif
-#endif
-}
-
 S32
 IPhoneScreenSurface::Width() const
 {
@@ -88,14 +70,14 @@ IPhoneScreenSurface::Height() const
 }
 
 S32
-IPhoneScreenSurface::ScaledWidth() const
+IPhoneScreenSurface::PointsWidth() const
 {
 	// Return size in points
 	return fView.bounds.size.width;
 }
 
 S32
-IPhoneScreenSurface::ScaledHeight() const
+IPhoneScreenSurface::PointsHeight() const
 {
 	// Return size in points
 	return fView.bounds.size.height;
@@ -104,38 +86,13 @@ IPhoneScreenSurface::ScaledHeight() const
 S32
 IPhoneScreenSurface::DeviceWidth() const
 {
-	return IsUpright() ? Width() : Height();
+	return Width();
 }
 
 S32
 IPhoneScreenSurface::DeviceHeight() const
 {
-	return IsUpright() ? Height() : Width();
-}
-
-S32
-IPhoneScreenSurface::AdaptiveWidth() const
-{
-	return IsUpright() ? fView.bounds.size.width : fView.bounds.size.height;
-}
-
-S32
-IPhoneScreenSurface::AdaptiveHeight() const
-{
-	return IsUpright() ? fView.bounds.size.height : fView.bounds.size.width;
-}
-
-bool
-IPhoneScreenSurface::IsUpright() const
-{
-	bool result = true;
-
-	if ( [fView conformsToProtocol:@protocol(CoronaOrientationProvider)] )
-	{
-		id <CoronaOrientationProvider> orientationProvider = (id <CoronaOrientationProvider>)fView;
-		result = [orientationProvider isUpright];
-	}
-	return result;
+	return Height();
 }
 
 EAGLContext*

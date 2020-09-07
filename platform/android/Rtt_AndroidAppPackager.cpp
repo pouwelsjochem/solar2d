@@ -121,11 +121,6 @@ AndroidAppPackager::AndroidAppPackager( const MPlatformServices & services, cons
 :	PlatformAppPackager( services, TargetDevice::kAndroidPlatform ),
 	fResourcesDir( & services.Platform().GetAllocator(), resourcesDir ),
 	fIsUsingExpansionFile( false )
-//	,
-//	fPermissions( & services.Platform().GetAllocator() ),
-//	fVersionCode( & services.Platform().GetAllocator() ),
-//	fDefaultOrientation( DeviceOrientation::kUnknown ),
-//	fSupportsOrientationChange( false )
 {
     Lua::RegisterModuleLoader( fVM, "lfs", luaopen_lfs );
     Lua::RegisterModuleLoader( fVM, "lpeg", luaopen_lpeg ); // json depends on lpeg

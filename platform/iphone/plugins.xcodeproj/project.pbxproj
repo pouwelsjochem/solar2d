@@ -255,6 +255,25 @@
 			productReference = A481B86F15DDA6CC009FFE54 /* libads.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		A4FDBF2915DC232600E5001C /* plugins */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A4FDBF3715DC232600E5001C /* Build configuration list for PBXNativeTarget "plugins" */;
+			buildPhases = (
+				A4FDBF2615DC232600E5001C /* Sources */,
+				A4FDBF2715DC232600E5001C /* Frameworks */,
+				A4FDBF2815DC232600E5001C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A481B88B15DDC5F3009FFE54 /* PBXTargetDependency */,
+				A484DB9615EF5B3400BDE27A /* PBXTargetDependency */,
+			);
+			name = plugins;
+			productName = plugins;
+			productReference = A4FDBF2A15DC232600E5001C /* libplugins.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -360,10 +379,15 @@
 			};
 			name = "Release-template";
 		};
-		A44D4302164ACDCC00CFE7B3 /* Release-template */ = {
+		A44D4301164ACDCC00CFE7B3 /* Release-template */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/ads.dst;
+				DSTROOT = /tmp/plugins.dst;
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
@@ -467,6 +491,36 @@
 			};
 			name = Release;
 		};
+		A4FDBF3815DC232600E5001C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/plugins.dst;
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		A4FDBF3915DC232600E5001C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/plugins.dst;
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -486,6 +540,16 @@
 				A4FDBF3515DC232600E5001C /* Debug */,
 				A4FDBF3615DC232600E5001C /* Release */,
 				A44D4300164ACDCC00CFE7B3 /* Release-template */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A4FDBF3715DC232600E5001C /* Build configuration list for PBXNativeTarget "plugins" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A4FDBF3815DC232600E5001C /* Debug */,
+				A4FDBF3915DC232600E5001C /* Release */,
+				A44D4301164ACDCC00CFE7B3 /* Release-template */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

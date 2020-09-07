@@ -46,7 +46,6 @@ TVOSDevice::TVOSDevice( Rtt_Allocator &allocator, CoronaView *view )
 :	fAllocator( allocator ),
 	fView( view ),
 	fTracker(),
-	fPreviousOrientation( DeviceOrientation::kUnknown ),
 	fInputDeviceManager( &allocator )
 {
 }
@@ -55,7 +54,6 @@ TVOSDevice::~TVOSDevice()
 {
 	const EventType kEvents[] =
 	{
-		kOrientationEvent,
 		kAccelerometerEvent,
 		kMultitouchEvent,
 	};
@@ -254,7 +252,6 @@ TVOSDevice::HasEventSource( EventType type ) const
 		case MPlatformDevice::kInputDeviceStatusEvent:
 			hasEventSource = true;
 			break;
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kMultitouchEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 			break;
@@ -274,11 +271,6 @@ TVOSDevice::BeginNotifications( EventType type ) const
 
 	switch( type )
 	{
-		case MPlatformDevice::kOrientationEvent:
-		{
-			CORONA_LOG_WARNING( "Orientation events are not supported on this platform." );
-			break;
-		}
 		case MPlatformDevice::kAccelerometerEvent:
 		{
 			// Accelerometer events come from controllers, e.g. AppleTV remote
@@ -310,8 +302,6 @@ TVOSDevice::EndNotifications( EventType type ) const
 
 	switch( type )
 	{
-		case MPlatformDevice::kOrientationEvent:
-			break;
 		case MPlatformDevice::kAccelerometerEvent:
 		{
 			// Accelerometer events come from controllers, e.g. AppleTV remote
@@ -358,27 +348,6 @@ TVOSDevice::DoesNotify( EventType type ) const
 {
 	return fTracker.DoesNotify( type );
 }
-
-DeviceOrientation::Type
-TVOSDevice::GetOrientation() const
-{
-	// TVOS only supports landscape right, like Android TV.
-	return DeviceOrientation::kSidewaysRight;
-}
-
-/*
-DeviceOrientation::Type
-TVOSDevice::GetPreviousOrientationAndUpdate( UIDeviceOrientation newValue )
-{
-	DeviceOrientation::Type result = fPreviousOrientation;
-	DeviceOrientation::Type currentOrientation = ToOrientationTypeFromUIDeviceOrientation( newValue );
-	if ( currentOrientation != DeviceOrientation::kUnknown )
-	{
-		fPreviousOrientation = currentOrientation;
-	}
-	return result;
-}
-*/
 
 void
 TVOSDevice::SetAccelerometerInterval( U32 frequency ) const

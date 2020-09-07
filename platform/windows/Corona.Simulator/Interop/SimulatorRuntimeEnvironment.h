@@ -182,7 +182,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 				virtual const char* GetManufacturerName() const override;
 				virtual const char* GetModelName() const override;
 				virtual bool IsLuaExitAllowed() const override;
-				virtual bool IsScreenRotationSupported() const override;
 				virtual bool IsMouseSupported() const override;
 				virtual bool AreInputDevicesSupported() const override;
 				virtual bool AreKeyEventsSupported() const override;
@@ -191,17 +190,8 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 				virtual bool AreExitRequestsSupported() const override;
 				virtual bool AreMultipleAlertsSupported() const override;
 				virtual bool IsAlertButtonOrderRightToLeft() const override;
-				virtual double GetZoomScale() const override;
-				virtual Rtt::DeviceOrientation::Type GetOrientation() const override;
-				virtual void SetOrientation(Rtt::DeviceOrientation::Type value) override;
 				virtual POINT GetSimulatedPointFromClient(const POINT& value) override;
 				virtual double GetDefaultFontSize() const override;
-				virtual int GetScreenWidthInPixels() const override;
-				virtual int GetScreenHeightInPixels() const override;
-				virtual int GetAdaptiveScreenWidthInPixels() const override;
-				virtual int GetAdaptiveScreenHeightInPixels() const override;
-				virtual void RotateClockwise() override;
-				virtual void RotateCounterClockwise() override;
 				virtual void* ShowNativeAlert(
 								const char *title, const char *message, const char **buttonLabels,
 								int buttonCount, Rtt::LuaResource* resource) override;
@@ -209,14 +199,12 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 				virtual void SetActivityIndicatorVisible(bool value) override;
 				virtual void RequestRestart() override;
 				virtual void RequestTerminate() override;
-				virtual void Shake() override;
 				virtual const char* GetOSName() const override;
 				virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const override;
 
 			private:
 				SimulatorRuntimeEnvironment* fEnvironmentPointer;
 				const Rtt::PlatformSimulator::Config* fDeviceConfigPointer;
-				Rtt::DeviceOrientation::Type fCurrentOrientation;
 		};
 
 		#pragma endregion

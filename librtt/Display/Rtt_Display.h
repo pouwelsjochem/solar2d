@@ -24,7 +24,6 @@
 #include "Core/Rtt_Array.h"
 #include "Core/Rtt_Time.h"
 
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_MPlatform.h"
 
 // ----------------------------------------------------------------------------
@@ -58,18 +57,6 @@ class RenderingStream;
 class Display
 {
 	public:
-		typedef enum _ScaleMode
-		{
-			kNone = 0,
-			kZoomEven = 1, // scale both width and height evenly until screen is filled; this can cause portions of image to be clipped
-			kZoomStretch = 2, // scale width and height unevenly to fill screen
-			kLetterbox = 3, // scale larger dimension to fit, creating a letterbox (blank space on the screen)
-			kAdaptive = 4, // use heuristics to determine content width/height
-
-			kNumScaleMode
-		}
-		ScaleMode;
-
 		// List of all premium features (Pro and Enterprise)
 		typedef enum _Feature
 		{
@@ -77,8 +64,6 @@ class Display
 			kGraphicsDefineEffectGraph,
 			kGraphicsDefineEffectFragment,
 			kGraphicsDefineEffectVertex,
-//			kPaintEffect,
-//			kPaintBlendEquation,
 			kObjectPath,
 			kObjectFill,
 			kObjectStroke,
@@ -95,7 +80,6 @@ class Display
 		static bool IsProFeature( Feature value );
 		static bool IsEnterpriseFeature( Feature value );
 		static const char *GetTierString( Feature value );
-		static ScaleMode ScaleModeFromString( const char *scaleName );
 
 	public:
 		Display( Runtime& owner );
@@ -103,7 +87,7 @@ class Display
 
 	public:
 		//! \Return true for success. False for failure.
-		virtual bool Initialize( lua_State *L, int configIndex, DeviceOrientation::Type orientation );
+		virtual bool Initialize( lua_State *L, int configIndex );
 		virtual void Teardown();
 
 	protected:
@@ -112,8 +96,6 @@ class Display
 	public:
 		virtual void Start();
 		virtual void Restart();
-		virtual void Restart( DeviceOrientation::Type orientation );
-        virtual void Restart( int newWidth, int newHeight );
 
 	public:
 		// Call on a timer tick
@@ -125,7 +107,6 @@ class Display
 		// We need to consider removing "virtual" everywhere
 		// from this class.
 		virtual void Render();
-		virtual void Blit();
 		virtual void Invalidate();
 		virtual StageObject *GetStage();
 		virtual StageObject *GetStageOffscreen();
@@ -165,95 +146,41 @@ class Display
 		virtual void ReloadResources();
 
 	public:
-		virtual void GetImageSuffix( String& outSuffix ) const;
-		virtual bool GetImageFilename( const char *filename, MPlatform::Directory baseDir, String& outFilename ) const;
-		virtual bool PushImageSuffixTable() const;
-
-	public:
 		virtual GroupObject *Orphanage();
 		virtual GroupObject *HitTestOrphanage();
-
-	public:
-		virtual S32 RenderedContentWidth() const;
-		virtual S32 RenderedContentHeight() const;
-		virtual S32 ViewableContentWidth() const;
-		virtual S32 ViewableContentHeight() const;
-		virtual Real ActualContentWidth() const;
-		virtual Real ActualContentHeight() const;
-		virtual S32 WindowWidth() const;
-		virtual S32 WindowHeight() const;
 
 	public:
 		// Size in physical pixels
 		virtual S32 DeviceWidth() const;
 		virtual S32 DeviceHeight() const;
-
-		// Size in native (platform-specific) units. By default, this is simply
-		// the result of Width() and Height(). However, on some platforms, the
-		// size of the screen is in scaled pixels, e.g. on iPhone, size is defined
-		// in terms of "points" not actual pixels.
-		virtual S32 ScaledWidth() const;
-		virtual S32 ScaledHeight() const;
-		
-	public:
-		// TODO: Remove these once we fix Authoring Simulator bugs
-		bool IsUpright() const;
-		S32 ContentWidthUpright() const;
-		S32 ContentHeightUpright() const;
-		S32 ViewableContentWidthUpright() const;
-		S32 ViewableContentHeightUpright() const;
-		
 		
 	public:
 		// Dynamic Content Scaling
 		virtual S32 ContentWidth() const;
 		virtual S32 ContentHeight() const;
-		virtual S32 ScreenWidth() const;
-		virtual S32 ScreenHeight() const;
-
+		virtual S32 ScaledContentWidth() const;
+		virtual S32 ScaledContentHeight() const;
+	
 		virtual Real GetScreenToContentScale() const;
+		virtual S32 GetContentToScreenScale() const;
 
-		virtual Real GetXOriginOffset() const;
-		virtual Real GetYOriginOffset() const;
-
-		// Width and height in OS-defined points
-		virtual Real PointsWidth() const;
-		virtual Real PointsHeight() const;
-
-		// Sets the scaling mode and updates content scale factors based on window size
-		virtual void SetScaleMode( ScaleMode mode, Rtt_Real screenWidth, Rtt_Real screenHeight );
-		virtual ScaleMode GetScaleMode() const;
+		virtual S32 GetXScreenOffset() const;
+		virtual S32 GetYScreenOffset() const;
 
 		virtual void ContentToScreen( S32& x, S32& y ) const;
 		virtual void ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const;
 		virtual void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 
 	public:
-		// Generalized function for calculating proper content scaling factors
-		static Rtt_Real CalculateScreenToContentScaleFor(Rtt_Real screenWidth, S32 contentWidth);
-		virtual Rtt_Real CalculateScreenToContentScale() const;
-		virtual Rtt_Real CalculateContentToScreenScale() const;
-
 		virtual void GetContentRect( Rect& outRect ) const;
 		virtual const Rect& GetScreenContentBounds() const;
 
-		virtual void SetContentOrientation( DeviceOrientation::Type newOrientation );
-
-		virtual void WindowDidRotate( DeviceOrientation::Type newOrientation, bool isNewOrientationSupported );
-
-		// Call when window size changes so viewport of GPUStream can be updated.
-		// Implicitly calls UpdateContentScale()
+		// Call when window size changes so viewport of RenderingStream can be updated.
 		virtual void WindowSizeChanged();
 
 		// Detects if the device width/height of the surface has changed compared to the stream's device width/height.
 		// Returns true if they defer, meaning that the caller should then call WindowSizeChanged() to update content scales.
 		virtual bool HasWindowSizeChanged() const;
-
-	public:
-		virtual DeviceOrientation::Type GetRelativeOrientation() const;
-		virtual DeviceOrientation::Type GetLaunchOrientation() const;
-		virtual DeviceOrientation::Type GetContentOrientation() const;
-		virtual DeviceOrientation::Type GetSurfaceOrientation() const;
 
 	public:
 		Rtt_Allocator *GetAllocator() const;
@@ -279,8 +206,6 @@ class Display
 		SpritePlayer& GetSpritePlayer() const { return * fSpritePlayer; }
 
 		TextureFactory& GetTextureFactory() const { return * fTextureFactory; }
-
-		void GetViewProjectionMatrix( glm::mat4 &viewMatrix, glm::mat4 &projMatrix );
 				
 		static U32 GetMaxTextureSize();
 		static const char *GetGlString( const char *s );
@@ -312,10 +237,9 @@ class Display
 
 		// TODO: Refactor data structure portions out
 		// We temporarily use RenderingStream b/c it contains key data
-		// about window size/orientation
+		// about window size
 		RenderingStream *fStream;
-		PlatformSurface *fTarget;
-		int fImageSuffix;
+		PlatformSurface *fScreenSurface;
 
 		bool fIsCollecting; // guards against nested calls to Collect()
 };

@@ -39,10 +39,7 @@ class TextureResourceBitmap : public TextureResource
 			Texture::Wrap wrap,
 			bool save_to_file );
 
-		static Self *Create(
-			TextureFactory& factory,
-			PlatformBitmap *bitmap,
-			bool isRetina );
+		static Self *Create(TextureFactory& factory, PlatformBitmap *bitmap);
 			
 		static Self *CreateDefault(
 			TextureFactory& factory,

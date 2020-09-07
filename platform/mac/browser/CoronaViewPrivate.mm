@@ -13,7 +13,6 @@
 
 #import "CoronaViewPrivate.h"
 
-#include "Rtt_DeviceOrientation.h"
 #include "Rtt_MacPlatform.h"
 #include "Rtt_Lua.h"
 #include "Rtt_Runtime.h"
@@ -35,9 +34,9 @@ extern "C" {
 }
 
 #ifdef Rtt_DEBUG
-#define NSDEBUG(...) // NSLog(__VA_ARGS__)
+#define NSDEBUG(...) NSLog(__VA_ARGS__)
 #else
-#define NSDEBUG(...) // NSLog(__VA_ARGS__)
+#define NSDEBUG(...) NSLog(__VA_ARGS__)
 #endif
 
 // ----------------------------------------------------------------------------
@@ -101,7 +100,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     return [self runWithPath:_projectPath parameters:nil];
 }
 
-// Note: Should only be called in CoronaCards contexts
 - (NSInteger)runWithPath:(NSString*)path parameters:(NSDictionary *)params
 {
     NSDEBUG(@"CoronaView: runWithPath: %@ parameters: %@", path, params);
@@ -317,20 +315,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			_platform->SetProjectResourceDirectory([_projectPath UTF8String]);
 
 			// Load the project's "build.settings" and "config.lua" file first.
-			// Used to fetch supported orientations, supported image suffix scales, and content width/height.
+			// Used to fetch supported supported image suffix scales, and content width/height.
 			_projectSettings->LoadFromDirectory([_projectPath UTF8String]);
 
 			_GLView.isResizable = _projectSettings->IsWindowResizable();
 			
-			Rtt::DeviceOrientation::Type orientation = _projectSettings->GetDefaultOrientation();
-			if (Rtt::DeviceOrientation::IsSideways( orientation ))
-			{
-				[self setFrameSize:NSMakeSize(CoronaViewPrivateDefaultHeight, CoronaViewPrivateDefaultWidth)];
-			}
-			else
-			{
-				[self setFrameSize:NSMakeSize(CoronaViewPrivateDefaultWidth, CoronaViewPrivateDefaultHeight)];
-			}
+			[self setFrameSize:NSMakeSize(CoronaViewPrivateDefaultWidth, CoronaViewPrivateDefaultHeight)];
 		}
 	}
 }
@@ -351,44 +341,15 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 #else
 	U32 launchOptions = Rtt::Runtime::kCoronaCardsOption;
 #endif
-
-    Rtt::DeviceOrientation::Type orientation = _projectSettings->GetDefaultOrientation();
-    int width = _projectSettings->GetContentWidth();
-    int height = _projectSettings->GetContentHeight();
-	
-	if (width == 0 || height == 0)
-	{
-		width = CoronaViewPrivateDefaultWidth;
-		height = CoronaViewPrivateDefaultHeight;
-	}
-	
-    if (orientation == Rtt::DeviceOrientation::kUnknown)
-    {
-        if (width > height)
-        {
-            orientation = Rtt::DeviceOrientation::kSidewaysLeft;
-        }
-        else
-        {
-            orientation = Rtt::DeviceOrientation::kUpright;
-        }
-    }
     
     // FIXME: Bad things happen if the view gets too small, arbitrarily restrict it for now
     if ([[self window] minSize].width == 0 || [[self window] minSize].height == 0)
     {
         [[self window] setMinSize:NSMakeSize(50, 50)];
     }
-    
-    [_GLView setOrientation:orientation];
-	
-	if (  Rtt::Runtime::kSuccess == _runtime->LoadApplication( launchOptions, orientation ) )
+    	
+	if (  Rtt::Runtime::kSuccess == _runtime->LoadApplication( launchOptions ) )
 	{
-        // Now that we've loaded the application, width and height may have changed (this has to do
-        // with whether there are runtime dependent items, e.g. "display.pixelWidth", in the config.lua)
-        width = _projectSettings->GetContentWidth();
-        height = _projectSettings->GetContentHeight();
-
 		// This has to happen after Runtime::LoadApplication() because that can reset kShowRuntimeErrorsSet
 		if ([_coronaViewDelegate respondsToSelector:@selector(notifyRuntimeError:)])
 		{
@@ -408,21 +369,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			[delegate didLoadApplication:self];
 		}
         
-        if (width == 0 || height == 0)
-        {
-            // If width and height aren't specified, default to window size
-			width = CoronaViewPrivateDefaultWidth;
-			height = CoronaViewPrivateDefaultHeight;
-        }
-        
-        if (Rtt::DeviceOrientation::IsSideways( orientation ))
-        {
-            // Swap orientation for non-portrait layouts
-            Rtt::Swap<int>(width, height);
-        }
-        
 		_runtime->GetDisplay().WindowSizeChanged();
-		//_runtime->GetDisplay().Restart(width, height);
 	}
 }
 
@@ -524,9 +471,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
     [_GLView setDelegate:self];
 
-    [_GLView setOrientation:Rtt::DeviceOrientation::kUpright];  // default
-
-	[_GLView setWantsBestResolutionOpenGLSurface:YES];
+	[_GLView setWantsBestResolutionOpenGLSurface:NO];
 
     _platform = NULL;
     _runtime = NULL;
@@ -579,19 +524,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 {
 	NSDEBUG(@"CoronaViewPrivate: setFrameSize: frame %@", NSStringFromRect([self frame]));
 	NSDEBUG(@"CoronaViewPrivate: setFrameSize: old %@, new %@", NSStringFromSize([self frame].size), NSStringFromSize(newSize));
-
-	/*
-	if (_GLView.isResizable && _runtime)
-	{
-		if (_runtime->IsDisplayValid() && _runtime->GetDisplay().HasWindowSizeChanged())
-		{
-			//_runtime->WindowSizeChanged();
-
-			_runtime->RestartRenderer([_GLView orientation]);
-			_runtime->GetDisplay().Invalidate();
-		}
-	}
-	 */
 	
 	[_GLView setFrameSize:newSize];
 	[super setFrameSize:newSize];
@@ -633,9 +565,9 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 #pragma mark GLView Helpers
 
-- (void) setScaleFactor:(CGFloat)scaleFactor
+- (void) setBackingScaleFactor:(CGFloat)backingScaleFactor
 {
-	_GLView.scaleFactor = scaleFactor;
+	_GLView.backingScaleFactor = backingScaleFactor;
 }
 
 - (void) restoreWindowProperties
@@ -670,28 +602,22 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     return (BOOL) _projectSettings->SuspendWhenMinimized();
 }
 
-- (int) settingsContentWidth
+- (int) settingsMinContentWidth
 {
-	if (! Rtt::DeviceOrientation::IsSideways(_projectSettings->GetDefaultOrientation()))
-	{
-		return (int) _projectSettings->GetContentWidth();
-	}
-	else
-	{
-		return (int) _projectSettings->GetContentHeight();
-	}
+	return (int) _projectSettings->GetMinContentWidth();
+}
+- (int) settingsMaxContentWidth
+{
+	return (int) _projectSettings->GetMaxContentWidth();
 }
 
-- (int) settingsContentHeight
+- (int) settingsMinContentHeight
 {
-	if (! Rtt::DeviceOrientation::IsSideways(_projectSettings->GetDefaultOrientation()))
-	{
-		return (int) _projectSettings->GetContentHeight();
-	}
-	else
-	{
-		return (int) _projectSettings->GetContentWidth();
-	}
+	return (int) _projectSettings->GetMinContentHeight();
+}
+- (int) settingsMaxContentHeight
+{
+	return (int) _projectSettings->GetMaxContentHeight();
 }
 
 - (NSString *) settingsWindowTitle
@@ -753,30 +679,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (int) settingsDefaultWindowViewHeight
 {
 	return _projectSettings->GetDefaultWindowViewHeight();
-}
-
-- (int) settingsImageSuffixScaleCount
-{
-	return _projectSettings->GetImageSuffixScaleCount();
-}
-
-- (double) settingsImageSuffixScaleByIndex:(int) index
-{
-	return _projectSettings->GetImageSuffixScaleByIndex(index);
-}
-
-- (BOOL) settingsIsWindowTitleShown
-{
-	// We use APIs that are available in 10.10 and above to hide the titlebar
-	// so pretend it can't be hidden on lower OS X versions 
-	if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
-	{
-		return YES;
-	}
-	else
-	{
-		return (BOOL) _projectSettings->IsWindowTitleShown();
-	}
 }
 
 // ----------------------------------------------------------------------------

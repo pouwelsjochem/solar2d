@@ -557,43 +557,6 @@
 							<string key="NSTitle">Hardware</string>
 							<object class="NSMutableArray" key="NSMenuItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSMenuItem" id="183673459">
-									<reference key="NSMenu" ref="1014402785"/>
-									<string key="NSTitle">Rotate Left</string>
-									<string key="NSKeyEquiv"></string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="379255631"/>
-									<reference key="NSMixedImage" ref="64807434"/>
-								</object>
-								<object class="NSMenuItem" id="210750442">
-									<reference key="NSMenu" ref="1014402785"/>
-									<string key="NSTitle">Rotate Right</string>
-									<string key="NSKeyEquiv"></string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="379255631"/>
-									<reference key="NSMixedImage" ref="64807434"/>
-								</object>
-								<object class="NSMenuItem" id="524231885">
-									<reference key="NSMenu" ref="1014402785"/>
-									<string key="NSTitle">Shake</string>
-									<string key="NSKeyEquiv"></string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="379255631"/>
-									<reference key="NSMixedImage" ref="64807434"/>
-								</object>
-								<object class="NSMenuItem" id="199197032">
-									<reference key="NSMenu" ref="1014402785"/>
-									<bool key="NSIsDisabled">YES</bool>
-									<bool key="NSIsSeparator">YES</bool>
-									<string key="NSTitle"/>
-									<string key="NSKeyEquiv"/>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="379255631"/>
-									<reference key="NSMixedImage" ref="64807434"/>
-								</object>
 								<object class="NSMenuItem" id="704630479">
 									<reference key="NSMenu" ref="1014402785"/>
 									<string key="NSTitle">Suspend</string>
@@ -625,24 +588,6 @@
 									<reference key="NSMenu" ref="875742730"/>
 									<string key="NSTitle">Minimize</string>
 									<string key="NSKeyEquiv">m</string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="379255631"/>
-									<reference key="NSMixedImage" ref="64807434"/>
-								</object>
-								<object class="NSMenuItem" id="279821140">
-									<reference key="NSMenu" ref="875742730"/>
-									<string key="NSTitle">Zoom In</string>
-									<string key="NSKeyEquiv">=</string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="379255631"/>
-									<reference key="NSMixedImage" ref="64807434"/>
-								</object>
-								<object class="NSMenuItem" id="339364484">
-									<reference key="NSMenu" ref="875742730"/>
-									<string key="NSTitle">Zoom Out</string>
-									<string key="NSKeyEquiv">-</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="379255631"/>
@@ -915,22 +860,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">zoomIn:</string>
-						<reference key="source" ref="933819097"/>
-						<reference key="destination" ref="279821140"/>
-					</object>
-					<int key="connectionID">506</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">zoomOut:</string>
-						<reference key="source" ref="933819097"/>
-						<reference key="destination" ref="339364484"/>
-					</object>
-					<int key="connectionID">507</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">changeSkinToGalaxyTab:</string>
 						<reference key="source" ref="933819097"/>
 						<reference key="destination" ref="171432137"/>
@@ -1003,35 +932,11 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">rotateLeft:</string>
-						<reference key="source" ref="904125567"/>
-						<reference key="destination" ref="183673459"/>
-					</object>
-					<int key="connectionID">311</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">rotateRight:</string>
-						<reference key="source" ref="904125567"/>
-						<reference key="destination" ref="210750442"/>
-					</object>
-					<int key="connectionID">320</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">toggleSuspendResume:</string>
 						<reference key="source" ref="904125567"/>
 						<reference key="destination" ref="704630479"/>
 					</object>
 					<int key="connectionID">333</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">shake:</string>
-						<reference key="source" ref="904125567"/>
-						<reference key="destination" ref="524231885"/>
-					</object>
-					<int key="connectionID">343</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -1315,40 +1220,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled2: self.currentWindow.canZoomIn</string>
-						<reference key="source" ref="279821140"/>
-						<reference key="destination" ref="904125567"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="279821140"/>
-							<reference key="NSDestination" ref="904125567"/>
-							<string key="NSLabel">enabled2: self.currentWindow.canZoomIn</string>
-							<string key="NSBinding">enabled2</string>
-							<string key="NSKeyPath">self.currentWindow.canZoomIn</string>
-							<object class="NSDictionary" key="NSOptions">
-								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSArray" key="dict.sortedKeys">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>NSMultipleValuesPlaceholder</string>
-									<string>NSNoSelectionPlaceholder</string>
-									<string>NSNotApplicablePlaceholder</string>
-									<string>NSNullPlaceholder</string>
-								</object>
-								<object class="NSMutableArray" key="dict.values">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<integer value="-1"/>
-									<integer value="-1"/>
-									<integer value="-1"/>
-									<integer value="-1"/>
-								</object>
-							</object>
-							<reference key="NSPreviousConnector" ref="498228861"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">508</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">enabled: self.isRunning</string>
 						<reference key="source" ref="339364484"/>
 						<reference key="destination" ref="904125567"/>
@@ -1362,40 +1233,6 @@
 						</object>
 					</object>
 					<int key="connectionID">503</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled2: self.currentWindow.canZoomOut</string>
-						<reference key="source" ref="339364484"/>
-						<reference key="destination" ref="904125567"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="339364484"/>
-							<reference key="NSDestination" ref="904125567"/>
-							<string key="NSLabel">enabled2: self.currentWindow.canZoomOut</string>
-							<string key="NSBinding">enabled2</string>
-							<string key="NSKeyPath">self.currentWindow.canZoomOut</string>
-							<object class="NSDictionary" key="NSOptions">
-								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSArray" key="dict.sortedKeys">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>NSMultipleValuesPlaceholder</string>
-									<string>NSNoSelectionPlaceholder</string>
-									<string>NSNotApplicablePlaceholder</string>
-									<string>NSNullPlaceholder</string>
-								</object>
-								<object class="NSMutableArray" key="dict.values">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<integer value="-1"/>
-									<integer value="-1"/>
-									<integer value="-1"/>
-									<integer value="-1"/>
-								</object>
-							</object>
-							<reference key="NSPreviousConnector" ref="1060903478"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">505</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -2358,10 +2195,7 @@
 							<string>openForBuildiOS:</string>
 							<string>openMainLuaInEditor:</string>
 							<string>orderFrontStandardAboutPanel:</string>
-							<string>rotateLeft:</string>
-							<string>rotateRight:</string>
 							<string>setKeystore:</string>
-							<string>shake:</string>
 							<string>showHelp:</string>
 							<string>showPreferences:</string>
 							<string>showProjectSandbox:</string>
@@ -2371,9 +2205,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2431,10 +2262,7 @@
 							<string>openForBuildiOS:</string>
 							<string>openMainLuaInEditor:</string>
 							<string>orderFrontStandardAboutPanel:</string>
-							<string>rotateLeft:</string>
-							<string>rotateRight:</string>
 							<string>setKeystore:</string>
-							<string>shake:</string>
 							<string>showHelp:</string>
 							<string>showPreferences:</string>
 							<string>showProjectSandbox:</string>
@@ -2533,19 +2361,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">rotateLeft:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">rotateRight:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
 								<string key="name">setKeystore:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">shake:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

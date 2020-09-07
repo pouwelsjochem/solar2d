@@ -102,14 +102,14 @@ void Window::SetWindowMode(const Rtt::NativeWindowMode& windowMode)
 					MONITORINFOEXW monitorInfo{};
 					monitorInfo.cbSize = sizeof(monitorInfo);
 					::GetMonitorInfoW(monitorHandle, &monitorInfo);
-					LONG screenWidth = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
-					LONG screenHeight = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
-					if ((screenWidth > 0) && (screenHeight > 0))
+					LONG deviceWidth = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
+					LONG deviceHeight = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
+					if ((deviceWidth > 0) && (deviceHeight > 0))
 					{
 						DEVMODEW deviceMode{};
 						deviceMode.dmSize = sizeof(deviceMode);
-						deviceMode.dmPelsWidth = screenWidth;
-						deviceMode.dmPelsHeight = screenHeight;
+						deviceMode.dmPelsWidth = deviceWidth;
+						deviceMode.dmPelsHeight = deviceHeight;
 						deviceMode.dmBitsPerPel = 32;
 						deviceMode.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
 						auto changeResult = ::ChangeDisplaySettingsExW(

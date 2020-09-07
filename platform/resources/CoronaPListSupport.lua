@@ -208,6 +208,9 @@ function CoronaPListSupport.modifyPlist( options )
 	end
 
 	if options.targetPlatform == "iOS" then
+		infoPlist.UIInterfaceOrientation = "UIInterfaceOrientationLandscapeRight"
+		infoPlist.UISupportedInterfaceOrientations = {"UIInterfaceOrientationLandscapeRight", "UIInterfaceOrientationLandscapeLeft"}
+
 		if infoPlist.UIDeviceFamily == nil or options.targetDevice ~= nil then
 			-- iOS case
 			-- The behavior here needs to work for both Xcode Enterprise builds and server Simulator builds
@@ -236,86 +239,11 @@ function CoronaPListSupport.modifyPlist( options )
 		end
 
 		-- build.settings
-		local defaultSettings = {
-			orientation =
-			{
-				default = "portrait"
-			}
-		}
-		local settings = options.settings or defaultSettings
+		local settings = options.settings
 		if settings then
-			-- cross-platform settings
-			local orientation = settings.orientation or defaultSettings.orientation
-			if orientation then
-				local defaultOrientation = orientation.default
-				local supported = {}
-				if defaultOrientation then
-					local value = "UIInterfaceOrientationPortrait"
-					if "landscape" == defaultOrientation or "landscapeRight" == defaultOrientation then
-						value = "UIInterfaceOrientationLandscapeRight"
-					elseif "landscapeLeft" == defaultOrientation then
-						value = "UIInterfaceOrientationLandscapeLeft"
-					end
-
-					table.insert( supported, value )
-					infoPlist.UIInterfaceOrientation = value
-				end
-
-				infoPlist.ContentOrientation = nil
-				local contentOrientation = orientation.content
-				if contentOrientation then
-					local value
-					if "landscape" == contentOrientation or "landscapeRight" == contentOrientation then
-						value = "UIInterfaceOrientationLandscapeRight"
-					elseif "landscapeLeft" == contentOrientation then
-						value = "UIInterfaceOrientationLandscapeLeft"
-					elseif "portrait" == contentOrientation then
-						value = "UIInterfaceOrientationPortrait"
-					end
-
-					if value then
-						infoPlist.ContentOrientation = value
-					end
-				end
-
-				infoPlist.CoronaViewSupportedInterfaceOrientations = nil
-				local supportedOrientations = orientation.supported
-				if supportedOrientations then
-					local toUIInterfaceOrientations =
-					{
-						landscape = "UIInterfaceOrientationLandscapeRight",
-						landscapeRight = "UIInterfaceOrientationLandscapeRight",
-						landscapeLeft = "UIInterfaceOrientationLandscapeLeft",
-						portrait = "UIInterfaceOrientationPortrait",
-						portraitUpsideDown = "UIInterfaceOrientationPortraitUpsideDown",
-					}
-
-					for _,v in ipairs( supportedOrientations ) do
-						local value = toUIInterfaceOrientations[v]
-						if value then
-							-- Add only unique values
-							local found
-							for _,elem in ipairs( supported ) do
-								if elem == value then
-									found = true
-									break
-								end
-							end
-
-							if not found then
-								table.insert( supported, value )
-							end
-						end
-					end
-				end
-
-				infoPlist.CoronaViewSupportedInterfaceOrientations = supported
-				infoPlist.UISupportedInterfaceOrientations = supported
-			end
 
 			-- add'l custom plist settings specific to iPhone
 			local buildSettingsPlist = settings.iphone and settings.iphone.plist
-
 			if buildSettingsPlist then
 				--print("Adding custom plist settings: ".. json.encode(buildSettingsPlist))
 				--print("buildSettingsPlist: "..json.encode(buildSettingsPlist))
@@ -345,6 +273,9 @@ function CoronaPListSupport.modifyPlist( options )
 		end
 
 	elseif options.targetPlatform == "tvOS" then
+		infoPlist.UIInterfaceOrientation = "UIInterfaceOrientationLandscapeRight"
+		infoPlist.UISupportedInterfaceOrientations = {"UIInterfaceOrientationLandscapeRight"}
+
 		-- Only overwrite if doesn't already exist
 		if infoPlist.UIDeviceFamily == nil then
 			infoPlist.UIDeviceFamily = { 3 }
@@ -360,19 +291,6 @@ function CoronaPListSupport.modifyPlist( options )
 		local settings = options.settings or defaultSettings
 
 		if settings then
-			-- Force tvOS builds to landscapeRight
-			local orientation = defaultSettings.orientation.default
-			if orientation then
-				local defaultOrientation = "UIInterfaceOrientationLandscapeRight"
-				local supported = {
-					defaultOrientation
-				}
-
-				infoPlist.UIInterfaceOrientation = defaultOrientation
-				infoPlist.CoronaViewSupportedInterfaceOrientations = supported
-				infoPlist.UISupportedInterfaceOrientations = supported
-			end
-
 			-- add'l custom plist settings specific to tvOS
 			local buildSettingsPlist = settings.tvos and settings.tvos.plist
 

@@ -20,27 +20,6 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 
 	/** Timer used to make sure that the OpenGL surface is working. */
 	private com.ansca.corona.MessageBasedTimer fWatchdogTimer;
-	
-	/**
-	 * Receives the device's current display orientation/rotation in degrees.
-	 * Used by Corona to send orientation events when the application has a fixed orientation.
-	 */
-	private android.view.OrientationEventListener fOrientationListener;
-
-	/** The current orientation of the device. */
-	private com.ansca.corona.WindowOrientation fCurrentDeviceOrientation;
-
-	/** The previous device orientation. */
-	private com.ansca.corona.WindowOrientation fPreviousDeviceOrientation;
-
-	/** The current orientation the application's window is being displayed in. */
-	private com.ansca.corona.WindowOrientation fCurrentWindowOrientation;
-
-	/** The previous orientation the application's window was displayed in. */
-	private com.ansca.corona.WindowOrientation fPreviousWindowOrientation;
-
-	/** Stores the activity's information */
-	private com.ansca.corona.CoronaActivityInfo fActivityInfo;
 
 	private com.ansca.corona.CoronaRuntime fCoronaRuntime;
 
@@ -57,11 +36,6 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 		}
 
 		fCoronaRuntime = runtime;
-
-		// Fetch the current orientation of the activity's window.
-		// This will not match the device's orientation if the activity is configured with a fixed orientation.
-		fCurrentWindowOrientation = com.ansca.corona.WindowOrientation.fromCurrentWindowUsing(getContext());
-		fPreviousWindowOrientation = fCurrentWindowOrientation;
 		
 		// Set up a watchdog that monitors the OpenGL surface to make sure it has been created and working.
 		// This is needed when the window transitions from an orientation the app does not support
@@ -88,48 +62,6 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 			}
 		});
 
-		// Set up the orientation listener for detecting the device's current orientation.
-		// This listener provides current rotation even if the activity is set up with a fixed orientation,
-		// which is needed since the onConfigurationChanged() method does not get invoked for orientation
-		// changes on fixed orientation apps.
-		fCurrentDeviceOrientation = fCurrentWindowOrientation;
-		fPreviousDeviceOrientation = com.ansca.corona.WindowOrientation.UNKNOWN;
-		fOrientationListener = new android.view.OrientationEventListener(getContext()) {
-			@Override
-			public void onOrientationChanged(int orientationInDegrees) {
-				if (fActivityInfo == null) {
-					return;
-				}
-
-				// Do not continue if the device is incapable of determining its current orientation.
-				if (orientationInDegrees == android.view.OrientationEventListener.ORIENTATION_UNKNOWN) {
-					return;
-				}
-				
-				// Do not continue if application is not fully initialized or is currently exiting.
-				if ((fCoronaRuntime.isRunning() == false) || (canRender() == false)) {
-					return;
-				}
-				
-				// Given orientation angle is clockwise. Convert to counter-clockwise.
-				orientationInDegrees = (360 - orientationInDegrees) % 360;
-				
-				// Notify the system if the device's orientation has changed.
-				com.ansca.corona.WindowOrientation currentOrientation =
-						com.ansca.corona.WindowOrientation.fromDegrees(getContext(), orientationInDegrees);
-				if ((currentOrientation != fCurrentDeviceOrientation) ||
-				    (fPreviousDeviceOrientation == com.ansca.corona.WindowOrientation.UNKNOWN)) {
-					fPreviousDeviceOrientation = fCurrentDeviceOrientation;
-					fCurrentDeviceOrientation = currentOrientation;
-					if (fActivityInfo.hasFixedOrientation() && 
-						android.provider.Settings.System.getInt(fActivity.getContentResolver(), 
- 							android.provider.Settings.System.ACCELEROMETER_ROTATION, 0) != 0) {
-						sendOrientationChangedEvent();
-					}
-				}
-			}
-		};
-
 		// Set up rendering system to use OpenGL ES 2.0.
 		setEGLContextClientVersion(2);
 
@@ -153,56 +85,10 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 
 	public void setActivity(android.app.Activity activity) {
 		fActivity = activity;
-		fActivityInfo = new com.ansca.corona.CoronaActivityInfo(fActivity);
-	}
-
-	/**
-	 * Called when the device configuration changes, such as orientation changes.
-	 * @param newConfig The new device configuration.
-	 */
-	@Override
-	public void onConfigurationChanged(android.content.res.Configuration newConfig) {
-		// Let the base class handle this event first.
-		super.onConfigurationChanged(newConfig);
-		if (fActivityInfo == null) {
-			return;
-		}
-
-		// If device does not have the sensors to detect orientation changes, or the OS triggered this configuration 
-		// change when disabling the auto-rotate seting, then determine the new orientation here.
-		// Remember that orientation changes can be triggered by slide-out keyboards and possibly other events.
-		if (fOrientationListener.canDetectOrientation() == false) {
-			com.ansca.corona.WindowOrientation currentOrientation;
-			if (newConfig.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
-				currentOrientation = com.ansca.corona.WindowOrientation.LANDSCAPE_RIGHT;
-			}
-			else {
-				currentOrientation = com.ansca.corona.WindowOrientation.PORTRAIT_UPRIGHT;
-			}
-			if ((currentOrientation != fCurrentDeviceOrientation) ||
-			    (fPreviousDeviceOrientation == com.ansca.corona.WindowOrientation.UNKNOWN)) {
-				fPreviousDeviceOrientation = fCurrentDeviceOrientation;
-				fCurrentDeviceOrientation = currentOrientation;
-				if (fActivityInfo.hasFixedOrientation()	&& 
-					android.provider.Settings.System.getInt(fActivity.getContentResolver(), 
- 						android.provider.Settings.System.ACCELEROMETER_ROTATION, 0) != 0) {
-					sendOrientationChangedEvent();
-				}
-			}
-		}
 	}
 	
 	public void requestExitAndWait() {
 		mGLThread.requestExitAndWait();
-	}
-
-	private void sendOrientationChangedEvent() {
-		if (fCoronaRuntime != null && fCoronaRuntime.isRunning()) {
-			fCoronaRuntime.getTaskDispatcher().send(
-				new com.ansca.corona.events.OrientationTask(
-					fCurrentDeviceOrientation.toCoronaIntegerId(),
-					fPreviousDeviceOrientation.toCoronaIntegerId()));
-		}
 	}
 
 	/**
@@ -217,22 +103,6 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 		// Validate.
 		if ((holder == null) || (holder.getSurface() == null) || (holder.getSurface().isValid() == false)) {
 			return;
-		}
-
-		// Fetch the application's current orientation.
-		com.ansca.corona.WindowOrientation currentOrientation;
-		currentOrientation = com.ansca.corona.WindowOrientation.fromCurrentWindowUsing(getContext());
-
-		// Determine if the current orientation is supported by this application.
-		boolean isCurrentOrientationSupported = fActivity == null ? true : currentOrientation.isSupportedBy(fActivity);
-
-		// Determine if the window's orientation has changed.
-		// This won't match device orientation if the activity was assigned a fixed orientation.
-		// Note: Only store the current orientation if the application supports it.
-		//       This way it'll never be reported to Lua via an orientation event.
-		if (isCurrentOrientationSupported && (fCurrentWindowOrientation != currentOrientation)) {
-			fPreviousWindowOrientation = fCurrentWindowOrientation;
-			fCurrentWindowOrientation = currentOrientation;
 		}
 
 		// Resize the OpenGL viewport with the given surface's width and height.
@@ -256,22 +126,12 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 	public void onResumeCoronaRuntime() {
 		// Start the OpenGL watchdog.
 		fWatchdogTimer.start();
-
-		// Enable the orientation listener if the device has the sensor.
-		if (fOrientationListener.canDetectOrientation()) {
-			fOrientationListener.enable();
-		}
 	}
 
 	/** Called when the Corona runtime has been suspended or exited. */
 	public void onSuspendCoronaRuntime() {
 		// Stop the OpenGL watchdog.
 		fWatchdogTimer.stop();
-
-		// Disable the orientation listener.
-		if (fOrientationListener.canDetectOrientation()) {
-			fOrientationListener.disable();
-		}
 	}
 
 	/** Informs the OpenGL rendering system to clear the first rendered frame. */
@@ -296,9 +156,6 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 		/** Set true to indicate that this renderer is ready to draw to the OpenGL view. */
 		private boolean fCanRender;
 
-		/** The last orienation that was sent to Corona's orientation event listener. */
-		private com.ansca.corona.WindowOrientation fLastReceivedWindowOrientation;
-
 		/** Stores the last received view width in pixels. */
 		private int fLastViewWidth;
 
@@ -322,7 +179,6 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 			}
 			fView = view;
 			fCanRender = false;
-			fLastReceivedWindowOrientation = com.ansca.corona.WindowOrientation.UNKNOWN;
 			fLastViewWidth = -1;
 			fLastViewHeight = -1;
 			fIsCoronaKit = isCoronaKit;
@@ -362,52 +218,13 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 		 */
 		@Override
 		public void onSurfaceChanged(javax.microedition.khronos.opengles.GL10 gl, int width, int height) {
-			// Fetch the view's current orientation.
-			// Note: We need to keep a local coy of the view's orientation settings in case they suddenly
-			//       change on the main UI thread while executing the below resize() operation, which can
-			//       take a long time on the first call since it executes the "main.lua" on startup.
-			com.ansca.corona.WindowOrientation currentWindowOrientation = fView.fCurrentWindowOrientation;
-			com.ansca.corona.WindowOrientation previousWindowOrientation = fView.fPreviousWindowOrientation;
-
-			// Do not render anything if given a width/height for an orientation that the we do not support.
-			// This can happen while the activity is transitioning from one orientation to another.
-			// Note: This check assumes that this view is being displayed full screen.
-			// CoronaKit does not have this restriction because the activity can be in portrait but the view
-			// can just be a different wide and vice versa.
-			if (!fIsCoronaKit && 
-				((currentWindowOrientation.isPortrait() && (width > height)) ||
-				 (currentWindowOrientation.isLandscape() && (width < height)))) {
-				fCanRender = false;
-				return;
-			}
-			
-			if (fIsCoronaKit) {
-				currentWindowOrientation = com.ansca.corona.WindowOrientation.PORTRAIT_UPRIGHT;
-			}
-
 			// Update the OpenGL view port on the C++ side of Corona. This also happens to initialize Corona too.
 			// It is okay to call the C++ side directly since we're on the OpenGL thread here.
-			com.ansca.corona.JavaToNativeShim.resize(fCoronaRuntime, fView.getContext(), width, height, currentWindowOrientation, fIsCoronaKit);
+			com.ansca.corona.JavaToNativeShim.resize(fCoronaRuntime, fView.getContext(), width, height, fIsCoronaKit);
 			
 			// Flag that the OpenGL render has been set up and is ready to draw stuff.
 			// This flag also indicates that the C++ side of Corona has finished initializing at this point.
 			fCanRender = true;
-			
-			// Raise an orientation event if it has changed.
-			// This must be done after giving Corona the new width and height up above so that
-			// that Corona's orientation event listeners will can correctly relayout the screen.
-			if (fLastReceivedWindowOrientation == com.ansca.corona.WindowOrientation.UNKNOWN) {
-				fLastReceivedWindowOrientation = currentWindowOrientation;
-			}
-			else if (fLastReceivedWindowOrientation != currentWindowOrientation) {
-				fLastReceivedWindowOrientation = currentWindowOrientation;
-				if (fCoronaRuntime != null) {
-					fCoronaRuntime.getTaskDispatcher().send(
-						new com.ansca.corona.events.OrientationTask(
-							currentWindowOrientation.toCoronaIntegerId(),
-							previousWindowOrientation.toCoronaIntegerId()));
-				}
-			}
 
 			// Raise a resize event if the OpenGL view width and height has changed.
 			// This is expected to be raised after the orientation event.

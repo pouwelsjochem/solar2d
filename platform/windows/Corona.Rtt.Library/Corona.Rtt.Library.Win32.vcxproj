@@ -185,12 +185,9 @@
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_TextureVolatile.cpp" />
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_DeviceOrientation.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_FilePath.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_FillTesselatorStream.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_GPUStream.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_HitTestObject.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_ImageGroupObject.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_KeyName.cpp" />
@@ -234,7 +231,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformTimer.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoPlayer.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoProvider.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformWebPopup.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Preference.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceCollection.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceValue.cpp" />
@@ -249,8 +245,6 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">..\..\..\external\luasocket\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Scheduler.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_TesselatorStream.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Transform.cpp" />
     <ClCompile Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.cpp" />
     <ClCompile Include="..\..\..\plugins\gameNetwork\shared\CoronaGameNetworkLibrary.cpp" />
@@ -440,12 +434,9 @@
     <ClInclude Include="..\..\..\librtt\Renderer\Rtt_Uniform.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Archive.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Callback.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_DeviceOrientation.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Event.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_FilePath.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_FillTesselatorStream.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_GPU.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_GPUStream.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_HitTestObject.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_ImageGroupObject.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_KeyName.h" />
@@ -506,7 +497,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformTimer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoPlayer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoProvider.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformWebPopup.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Preference.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PreferenceCollection.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PreferenceValue.h" />
@@ -518,9 +508,7 @@
     <ClInclude Include="..\..\..\librtt\Rtt_RuntimeDelegate.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_RuntimeDelegatePlayer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Scheduler.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_StrokeTesselatorStream.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_SurfaceInfo.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_TesselatorStream.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Transform.h" />
     <ClInclude Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.h" />
     <ClInclude Include="..\..\..\plugins\gameNetwork\shared\CoronaGameNetworkLibrary.h" />
@@ -662,7 +650,6 @@
     <LuaToCpp Include="..\..\resources\json.lua" />
     <LuaToCpp Include="..\..\resources\loader_callback.lua" />
     <LuaToCpp Include="..\..\resources\loader_ccdata.lua" />
-    <LuaToCpp Include="..\..\resources\runtime.lua" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALmixer.Library\ALmixer.Library.Win32.vcxproj">

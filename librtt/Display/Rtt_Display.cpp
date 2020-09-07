@@ -36,7 +36,7 @@
 #include "Renderer/Rtt_Texture.h"
 
 // TODO: Remove when we replace TemporaryHackStream
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 
 // TODO: Remove dependency on Runtime's MCachedResourceLibrary interface
 #include "Rtt_Runtime.h"
@@ -81,12 +81,6 @@ Display::StringForFeature( Feature value )
 		case kGraphicsDefineEffectVertex:
 			result = kGraphicsDefineEffectVertexString;
 			break;
-//		case kPaintEffect:
-//			result = kPaintEffectString;
-//			break;
-//		case kPaintBlendEquation:
-//			result = kObjectBlendEquationString;
-//			break;
 		case kObjectPath:
 			result = kObjectPathString;
 			break;
@@ -117,12 +111,6 @@ Display::StringForFeature( Feature value )
 }
 
 bool
-Display::IsProFeature( Feature value )
-{
-	return ! IsEnterpriseFeature( value );
-}
-
-bool
 Display::IsEnterpriseFeature( Feature value )
 {
 	bool result = false;
@@ -149,32 +137,6 @@ Display::GetTierString( Feature value )
 	return ( IsEnterpriseFeature( value ) ? kEnterprise : kPro );
 }
 
-Display::ScaleMode
-Display::ScaleModeFromString( const char *scaleName )
-{
-	Display::ScaleMode scaleMode = Display::kNone;
-	if ( Rtt_StringIsEmpty( scaleName ) == false )
-	{
-		if ( 0 == Rtt_StringCompareNoCase( scaleName, "zoomEven" ) )
-		{
-			scaleMode = Display::kZoomEven;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( scaleName, "zoomStretch" ) )
-		{
-			scaleMode = Display::kZoomStretch;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( scaleName, "letterbox" ) )
-		{
-			scaleMode = Display::kLetterbox;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( scaleName, "adaptive" ) )
-		{
-			scaleMode = Display::kAdaptive;
-		}
-	}
-	return scaleMode;
-}
-
 // ----------------------------------------------------------------------------
 
 Display::Display( Runtime& owner )
@@ -188,9 +150,8 @@ Display::Display( Runtime& owner )
 	fSpritePlayer( Rtt_NEW( owner.Allocator(), SpritePlayer( owner.Allocator() ) ) ),
 	fTextureFactory( Rtt_NEW( owner.Allocator(), TextureFactory( * this ) ) ),
 	fScene( Rtt_NEW( & owner.GetAllocator(), Scene( owner.Allocator(), * this ) ) ),
-	fStream( Rtt_NEW( owner.GetAllocator(), GPUStream( owner.GetAllocator() ) ) ),
-	fTarget( owner.Platform().CreateScreenSurface() ),
-	fImageSuffix( LUA_REFNIL ),
+	fStream( Rtt_NEW( owner.GetAllocator(), RenderingStream( owner.GetAllocator() ) ) ),
+	fScreenSurface( owner.Platform().CreateScreenSurface() ),
 	fIsCollecting( false )
 {
 }
@@ -199,16 +160,10 @@ Display::~Display()
 {
 	Paint::Finalize();
 
-	lua_State *L = GetL();
-	if ( L )
-	{
-		luaL_unref( L, LUA_REGISTRYINDEX, fImageSuffix );
-	}
-
     //Needs to be done before deletes, because it uses scene etc
     fTextureFactory->ReleaseByType( TextureResource::kTextureResource_Any );
     
-	Rtt_DELETE( fTarget );
+	Rtt_DELETE( fScreenSurface );
 	Rtt_DELETE( fStream );
 	Rtt_DELETE( fScene );
 	Rtt_DELETE( fTextureFactory );
@@ -219,7 +174,7 @@ Display::~Display()
 }
 
 bool
-Display::Initialize( lua_State *L, int configIndex, DeviceOrientation::Type orientation )
+Display::Initialize( lua_State *L, int configIndex )
 {
 	bool result = false;
 
@@ -228,32 +183,22 @@ Display::Initialize( lua_State *L, int configIndex, DeviceOrientation::Type orie
 	{
 		Rtt_Allocator *allocator = GetRuntime().GetAllocator();
 		fRenderer = Rtt_NEW( allocator, GLRenderer( allocator ) );
-		
 		fRenderer->Initialize();
 		
 		CPUResourcePool *resourcePoolObserver = Rtt_NEW(allocator,CPUResourcePool());
-		
 		fRenderer->SetCPUResourceObserver(resourcePoolObserver);
 
 		ProgramHeader programHeader;
-
+		
 		if ( configIndex > 0 )
 		{
-			ReadRenderingConfig( L, configIndex, programHeader ); // assumes fStream is not NULL
+			ReadRenderingConfig( L, configIndex, programHeader );
 		}
-
-		// When dynamic content scaling is active, the code thinks the screen has
-		// dimensions (fContentWidth, fContentHeight). We tell the renderer the scale
-		// factor needed to obtain the rendered content bounds, which are simply the 
-		// dimensions of the window in scaled content units.  Even though they are
-		// in the same units as the content bounds, they may not be the same values.
-		// The viewable content bounds are the smaller of the content bounds and the
-		// rendered content bounds.
-		fStream->Initialize( * fTarget, orientation );
-
-		result = true;
+		fStream->SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
 
 		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader ) );
+
+		result = true;
 	}
 
 	return result;
@@ -265,32 +210,9 @@ Display::Teardown()
     GetTextureFactory().Teardown();
 }
 
-// runtime.lua is pre-compiled into bytecodes and then placed in a byte array
-// constant in shell.cpp. The following function defined in shell.cpp loads
-// the bytecodes via luaL_loadbuffer. The .cpp file is dynamically generated.
-int luaload_runtime(lua_State* L);
-
-static Display::ScaleMode
-ToScaleMode( lua_State *L, int index )
-{
-	Display::ScaleMode scaleMode = Display::kNone;
-
-	lua_getfield( L, index, "scale" );
-	const char *scaleName = lua_tostring( L, -1 );
-	if ( scaleName )
-	{
-		scaleMode = Display::ScaleModeFromString( scaleName );
-	}
-	lua_pop( L, 1 );
-	
-	return scaleMode;
-}
-
 void
 Display::ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHeader )
 {
-	Rtt_ASSERT( fStream );
-
 	Rtt_ASSERT( 1 == index );	
 	Rtt_ASSERT( lua_istable( L, index ) );
 
@@ -322,73 +244,23 @@ Display::ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHea
 	}
 	lua_pop( L, 1 );
 
-	lua_getfield( L, index, "width" );
-	int w = (int) lua_tointeger( L, -1 );
+	lua_getfield( L, index, "minContentWidth" );
+	int minContentWidth = (int) lua_tointeger( L, -1 );
 	lua_pop( L, 1 );
 
-	lua_getfield( L, index, "height" );
-	int h = (int) lua_tointeger( L, -1 );
+	lua_getfield( L, index, "maxContentWidth" );
+	int maxContentWidth = (int) lua_tointeger( L, -1 );
 	lua_pop( L, 1 );
 
-	ScaleMode scaleMode = ToScaleMode( L, index );
+	lua_getfield( L, index, "minContentHeight" );
+	int minContentHeight = (int) lua_tointeger( L, -1 );
+	lua_pop( L, 1 );
+	
+	lua_getfield( L, index, "maxContentHeight" );
+	int maxContentHeight = (int) lua_tointeger( L, -1 );
+	lua_pop( L, 1 );
 
-	if ( kAdaptive == scaleMode )
-	{
-		w = fTarget->AdaptiveWidth();
-		h = fTarget->AdaptiveHeight();
-	}
-
-	// Certain fields only matter if content w,h were provided:
-	if ( w > 0 && h > 0 )
-	{
-		Rtt_ASSERT( fStream );
-
-		// The old Corona behavior was to zoom-stretch if a content width and height was provided without a scale mode.
-		if ( kNone == scaleMode )
-		{
-			scaleMode = kZoomStretch;
-		}
-
-		fStream->Preinitialize( w, h );
-
-		fStream->SetScaleMode( scaleMode, Rtt_IntToReal( fTarget->DeviceWidth() ), Rtt_IntToReal( fTarget->DeviceHeight() ) );
-
-		// If we are scaling, then check for imageSuffix table
-		if ( scaleMode > kNone )
-		{
-			#ifdef Rtt_DEBUG
-				int top = lua_gettop( L );
-			#endif
-			if ( Rtt_VERIFY( 0 == GetRuntime().VMContext().DoBuffer( luaload_runtime, false ) ) )
-			{
-				const char kFunctionName[] = "_createImageSuffixTable";
-				lua_getglobal( L, kFunctionName );
-				lua_getfield( L, -2, "imageSuffix" );
-				if ( lua_istable( L, -1 ) )
-				{
-					LuaContext::DoCall( L, 1, 1 ); // _createImageSuffixTable( imageSuffix )
-					if ( lua_istable( L, -1 ) )
-					{
-						fImageSuffix = luaL_ref( L, LUA_REGISTRYINDEX ); // pops result
-					}
-					else
-					{
-						lua_pop( L, 1 ); // pop result
-					}
-				}
-				else
-				{
-					lua_pop( L, 2 ); // pop function and imageSuffix
-				}
-
-				lua_pushnil( L );
-				lua_setglobal( L, kFunctionName );
-			}
-			#ifdef Rtt_DEBUG
-				Rtt_ASSERT( lua_gettop( L ) == top );
-			#endif
-		}
-	}
+	fStream->SetContentSizeRestrictions( minContentWidth, maxContentWidth, minContentHeight, maxContentHeight );
 
 	Rtt_ASSERT( 1 == lua_gettop( L ) );	
 }
@@ -404,7 +276,7 @@ Display::GetL() const
 void
 Display::Start()
 {
-	// The call to PrepareToRenderer requires a current OpenGL context which we can't assume yet.
+	// The call to SetOptimalContentSize requires a current OpenGL context which we can't assume yet.
 	// RuntimeGuard will ensure that an OpenGL context is current and that locks are in place for multithreaded conditions.
 	// We must do this inside a scope because the RuntimeGuard destructor is relied on to do unlocking and restoring of OpenGL state as necessary.
 	// The overloaded operator()() below uses this same RuntimeGuard technique.
@@ -413,32 +285,13 @@ Display::Start()
 	RuntimeGuard guard( GetRuntime() );
 
 	RenderingStream& stream = * fStream;
-	stream.PrepareToRender();
+	stream.SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
 }
-
 void
 Display::Restart()
 {
-	// RenderingStream& stream = * fStream;
-	// stream.Reinitialize( * fTarget, stream.GetContentOrientation() );
-	// stream.PrepareToRender();
-	Restart( fStream->GetContentOrientation() );
-}
-
-void
-Display::Restart( DeviceOrientation::Type orientation )
-{
 	RenderingStream& stream = * fStream;
-	stream.Reinitialize( * fTarget, orientation );
-	stream.PrepareToRender();
-}
-
-void
-Display::Restart( int newWidth, int newHeight )
-{
-	RenderingStream& stream = * fStream;
-	stream.Preinitialize( newWidth, newHeight );
-	Restart( fStream->GetContentOrientation() );
+	stream.SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
 }
 	
 void
@@ -470,21 +323,7 @@ Display::Render()
 		//fDeltaTimeInSeconds = ( 1.0f / 30.0f );
 	}
 
-	GetScene().Render( * fRenderer, * fTarget );
-}
-
-void
-Display::Blit()
-{
-	// We don't use the RuntimeGuard here b/c no Lua is invoked so we don't need
-	// to collect unreachables since no new objects would be added to the orphanage
-	const Runtime& runtime = GetRuntime();
-	runtime.Begin();
-	{
-		GetScene().Invalidate();
-		GetScene().Render( * fRenderer, * fTarget );
-	}
-	runtime.End();
+	GetScene().Render( * fRenderer, * fScreenSurface );
 }
 
 void
@@ -809,7 +648,7 @@ Display::Capture( DisplayObject *object,
 			GetStage()->SetSnapshotBounds(&empty);
 		}
 		// Render only the given object and its children, if any, to be captured down below.
-		scene.Render( *fRenderer, *fTarget, *object );
+		scene.Render( *fRenderer, *fScreenSurface, *object );
 		if (!screenBounds && object && !crop_object_to_screen_bounds)
 		{
 			GetStage()->SetSnapshotBounds(snb);
@@ -822,7 +661,7 @@ Display::Capture( DisplayObject *object,
 	{
 		fRenderer->SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
 
-		scene.Render( *fRenderer, *fTarget, scene.CurrentStage() );
+		scene.Render( *fRenderer, *fScreenSurface, scene.CurrentStage() );
 	}
 
 	fRenderer->PopMaskCount();
@@ -927,153 +766,6 @@ Display::ReloadResources()
 ///	TextObject::Reload( GetScene().CurrentStage() );
 }
 
-void
-Display::GetImageSuffix( String& outSuffix ) const
-{
-	Rtt_Real screenToContentScale = fStream->GetScreenToContentScale();
-	if ( Rtt_RealIsOne( screenToContentScale ) )
-	{
-		// Use original file since content scale is 1:1
-	}
-	else if ( LUA_REFNIL != fImageSuffix )
-	{
-		lua_State *L = GetL();
-		if ( L )
-		{
-			#ifdef Rtt_DEBUG
-				int top = lua_gettop( L );
-			#endif
-
-			Real contentToScreenScale = Rtt_RealDivNonZeroAB( Rtt_REAL_1, screenToContentScale );
-
-			lua_rawgeti( L, LUA_REGISTRYINDEX, fImageSuffix ); // t
-
-			Rtt_ASSERT( NULL == outSuffix.GetString() );
-
-			for ( size_t i = lua_objlen( L, -1 );
-				  i > 0 && NULL == outSuffix.GetString();
-				  i-- )
-			{
-				lua_rawgeti( L, -1, (int) i ); // item = t[i]
-				lua_pushstring( L, "scale" );
-				lua_rawget( L, -2 ); // scale = item.scale (pops "scale")
-				Real scale = luaL_toreal( L, -1 );
-				lua_pop( L, 1 ); // pop scale
-				if ( contentToScreenScale >= scale )
-				{
-					lua_pushstring( L, "suffix" );
-					lua_rawget( L, -2 ); // suffix = item.suffix (pops "suffix")
-					outSuffix.Set( lua_tostring( L, -1 ) );
-
-					lua_pop( L, 1 ); // pop value
-				}
-
-				lua_pop( L, 1 ); // pop item
-			}
-
-			lua_pop( L, 1 ); // pop t
-
-			#ifdef Rtt_DEBUG
-				Rtt_ASSERT( lua_gettop( L ) == top );
-			#endif
-		}
-	}
-}
-
-bool
-Display::GetImageFilename( const char *filename, MPlatform::Directory baseDir, String& outFilename ) const
-{
-	bool result = false;
-
-	Rtt_Real screenToContentScale = fStream->GetScreenToContentScale();
-
-	if ( Rtt_RealIsOne( screenToContentScale ) )
-	{
-		// Use original file since content scale is 1:1
-	}
-	else if ( LUA_REFNIL != fImageSuffix && Rtt_VERIFY( filename ) )
-	{
-		// last occurence of '.'
-		const char *extension = strrchr( filename , '.' );
-		if ( extension )
-		{
-			lua_State *L = GetL();
-			if ( L )
-			{
-				#ifdef Rtt_DEBUG
-					int top = lua_gettop( L );
-				#endif
-
-				Real contentToScreenScale = Rtt_RealDivNonZeroAB( Rtt_REAL_1, screenToContentScale );
-
-				lua_rawgeti( L, LUA_REGISTRYINDEX, fImageSuffix ); // t
-
-				Rtt_ASSERT( NULL == outFilename.GetString() );
-
-				for ( size_t i = lua_objlen( L, -1 ); i > 0 && !result; i-- )
-				{
-					lua_rawgeti( L, -1, (int) i ); // item = t[i]
-					lua_pushstring( L, "scale" );
-					lua_rawget( L, -2 ); // scale = item.scale (pops "scale")
-					Real scale = luaL_toreal( L, -1 );
-					lua_pop( L, 1 ); // pop scale
-					if ( contentToScreenScale >= scale )
-					{
-						// Found a candidate suffix
-						lua_pushlstring( L, filename, extension - filename );
-
-						lua_pushstring( L, "suffix" );
-						lua_rawget( L, -3 ); // suffix = item.suffix (pops "suffix")
-
-						lua_pushstring( L, extension ); // extension
-
-						lua_concat( L, 3 ); // filenameSuffixed
-						const char *filenameSuffixed = lua_tostring( L, -1 );
-
-						// Verify file exists
-						const Runtime& runtime = GetRuntime();
-						String path( runtime.Allocator() );
-						runtime.Platform().PathForFile( filenameSuffixed, baseDir, MPlatform::kTestFileExists, path );
-						if ( path.GetString() )
-						{
-							outFilename.Set( filenameSuffixed );
-							result = true;
-						}
-
-						lua_pop( L, 1 ); // pop result
-					}
-
-					lua_pop( L, 1 ); // pop item
-				}
-
-				lua_pop( L, 1 ); // pop t
-
-				#ifdef Rtt_DEBUG
-					Rtt_ASSERT( lua_gettop( L ) == top );
-				#endif
-			}
-		}
-	}
-
-	return result;
-}
-
-bool
-Display::PushImageSuffixTable() const
-{
-	bool wasPushed = false;
-	if ( LUA_REFNIL != fImageSuffix )
-	{
-		lua_State *L = GetL();
-		if ( L )
-		{
-			lua_rawgeti( L, LUA_REGISTRYINDEX, fImageSuffix );
-			wasPushed = true;
-		}
-	}
-	return wasPushed;
-}
-
 GroupObject *
 Display::Orphanage()
 {
@@ -1087,149 +779,16 @@ Display::HitTestOrphanage()
 }
 
 S32
-Display::RenderedContentWidth() const
-{
-	return fStream->GetRenderedContentWidth();
-}
-
-S32
-Display::RenderedContentHeight() const
-{
-	return fStream->GetRenderedContentHeight();
-}
-
-
-S32
-Display::ViewableContentWidth() const
-{
-	// The viewable content width is the smaller of the rendered content width
-	// or the content width itself. The rendered width is the window width 
-	// 
-	// Depending on the relationship of aspect ratios between the window and
-	// the content, the rendered width might be larger (kLetterbox)
-	// the same (kFillStretch), or smaller (kFillEven).
-	S32 renderedContentWidth = RenderedContentWidth();
-	S32 contentWidth = ContentWidth();
-	return Min( contentWidth, renderedContentWidth );
-}
-
-S32
-Display::ViewableContentHeight() const
-{
-	// See comment in Runtime::ViewableContentWidth()
-	S32 renderedContentHeight = RenderedContentHeight();
-	S32 contentHeight = ContentHeight();
-	return Min( contentHeight, renderedContentHeight );
-}
-
-Real
-Display::ActualContentWidth() const
-{
-	return fStream->ActualContentWidth();
-}
-
-Real
-Display::ActualContentHeight() const
-{
-	return fStream->ActualContentHeight();
-}
-
-S32
-Display::WindowWidth() const
-{ 
-	return fTarget->Width(); 
-}
-S32
-Display::WindowHeight() const
-{ 
-	return fTarget->Height(); 
-}
-
-S32
 Display::DeviceWidth() const
 {
-	return fTarget->DeviceWidth();
+	return fScreenSurface->DeviceWidth();
 }
 
 S32
 Display::DeviceHeight() const
 {
-	return fTarget->DeviceHeight();
+	return fScreenSurface->DeviceHeight();
 }
-
-S32
-Display::ScaledWidth() const
-{
-	return fTarget->ScaledWidth();
-}
-
-S32
-Display::ScaledHeight() const
-{
-	return fTarget->ScaledHeight();
-}
-
-// ----------------------------------------------------------------------------
-/// Determines if the rendering system is displaying its content upright or upside down.
-/// <br>
-/// This function is used to work-around a bug where the rendering stream for the Corona Simulator
-/// incorrectly swaps the content width/height and other properties when rotating the simulator
-/// to an orientation that the Corona app does not support. So, if this function returns false,
-/// then this indicates that you need to read the opposite content property from the rendering
-/// system. For example, if you want to fetch content width and this function returns false,
-/// then you should call RenderingStream.ContentHeight(), which will provide content width.
-/// <br>
-/// Note: This function should be removed when the above Corona Simulator bug has been fixed.
-/// <br>
-/// Additonal Note: A function like this also exists in the LuaLibDisplay class.
-/// @param stream Pointer to Corona's rendering stream.
-/// @return Returns true if the rendering system is displaying content upright or upside down.
-///         <br>
-///         Returns false if the content is being displayed sideways, which can only happen in
-///         the Corona Simulator when the display is rotated to an orientation that the app
-///         does not support.
-bool
-Display::IsUpright() const
-{
-#if defined(Rtt_AUTHORING_SIMULATOR)
-	if (DeviceOrientation::IsSideways(GetRelativeOrientation()))
-	{
-		bool isPortrait = DeviceOrientation::IsUpright( GetContentOrientation() );
-		if ((isPortrait && (ContentWidth() < ContentHeight())) ||
-			(!isPortrait && (ContentWidth() > ContentHeight())))
-		{
-			return false;
-		}
-	}
-#endif
-	return true;
-}
-
-S32
-Display::ContentWidthUpright() const
-{
-	return ( IsUpright() ? ContentWidth() : ContentHeight() );
-}
-
-S32
-Display::ContentHeightUpright() const
-{
-	return ( IsUpright() ? ContentHeight() : ContentWidth() );
-}
-
-S32
-Display::ViewableContentWidthUpright() const
-{
-	return ( IsUpright() ? ViewableContentWidth() : ViewableContentHeight() );
-}
-
-S32
-Display::ViewableContentHeightUpright() const
-{
-	return ( IsUpright() ? ViewableContentHeight() : ViewableContentWidth() );
-}
-
-// ----------------------------------------------------------------------------
 
 S32
 Display::ContentWidth() const
@@ -1243,17 +802,19 @@ Display::ContentHeight() const
 	return fStream->ContentHeight();
 }
 
+
 S32
-Display::ScreenWidth() const
+Display::ScaledContentWidth() const
 {
-	return fStream->ScreenWidth();
+    return fStream->ScaledContentWidth();
 }
 
 S32
-Display::ScreenHeight() const
+Display::ScaledContentHeight() const
 {
-	return fStream->ScreenHeight();
+    return fStream->ScaledContentHeight();
 }
+
 
 Real
 Display::GetScreenToContentScale() const
@@ -1261,40 +822,22 @@ Display::GetScreenToContentScale() const
 	return fStream->GetScreenToContentScale();
 }
 
-Real
-Display::GetXOriginOffset() const
+S32
+Display::GetContentToScreenScale() const
 {
-	return fStream->GetXOriginOffset();
+	return fStream->GetContentToScreenScale();
 }
 
-Real
-Display::GetYOriginOffset() const
+S32
+Display::GetXScreenOffset() const
 {
-	return fStream->GetYOriginOffset();
+	return fStream->GetXScreenOffset();
 }
 
-Real
-Display::PointsWidth() const
+S32
+Display::GetYScreenOffset() const
 {
-	return fTarget->ScaledWidth();
-}
-
-Real
-Display::PointsHeight() const
-{
-	return fTarget->ScaledHeight();
-}
-
-void
-Display::SetScaleMode( ScaleMode mode, Rtt_Real screenWidth, Rtt_Real screenHeight )
-{
-	fStream->SetScaleMode( mode, screenWidth, screenHeight );
-}
-
-Display::ScaleMode
-Display::GetScaleMode() const
-{
-	return fStream->GetScaleMode();
+	return fStream->GetYScreenOffset();
 }
 
 void
@@ -1317,43 +860,6 @@ Display::ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const
 	fStream->ContentToPixels( x, y, w, h );
 }
 
-// Generalized function for calculating proper content scaling factors
-Rtt_Real
-Display::CalculateScreenToContentScaleFor(Rtt_Real screenWidth, S32 contentWidth)
-{
-	Rtt_ASSERT( contentWidth > 0 );
-	return Rtt_RealDiv( Rtt_IntToReal( contentWidth ), screenWidth );
-}
-
-Rtt_Real
-Display::CalculateScreenToContentScale() const
-{
-	S32 contentW = ContentWidth();
-
-	// We need to grab the OS width and height in points
-	S32 screenW = PointsWidth();
-	S32 screenH = PointsHeight();
-
-	// When content is sideways and surface is not, then the surface w,h
-	// need to be swapped to match the content w,h. 
-	DeviceOrientation::Type surfaceOrientation = fTarget->GetOrientation();
-	DeviceOrientation::Type contentOrientation = fStream->GetContentOrientation();
-	bool isSurfaceSideways = DeviceOrientation::IsSideways( surfaceOrientation );
-	bool isContentSideways = DeviceOrientation::IsSideways( contentOrientation );
-	if ( isContentSideways && ! isSurfaceSideways )
-	{
-		Swap( screenW, screenH );
-	}
-
-	return Display::CalculateScreenToContentScaleFor(screenW, contentW);
-}
-
-Rtt_Real
-Display::CalculateContentToScreenScale() const
-{
-	Rtt_RealToInt ( Rtt_RealDiv( Rtt_REAL_1, Display::CalculateScreenToContentScale() ) );
-}
-
 void
 Display::GetContentRect( Rect& outRect ) const
 {
@@ -1369,66 +875,6 @@ Display::GetScreenContentBounds() const
 	return ((const RenderingStream *)fStream)->GetScreenContentBounds();
 }
 
-// Used to support auto-rotation of Corona views on devices.
-// For simulator, use WindowDidRotate() instead.
-// 
-// On some devices (e.g. iPhone), the surface orientation is fixed relative to the
-// device. In this situation, we need to set the orientation of the content in Corona 
-// independently of the surface. This function, updates the content dimension data 
-// (which is split across Runtime and GPUStream) and tells GPUStream to update the 
-// content orientation, updating the projection/frustum.
-void
-Display::SetContentOrientation( DeviceOrientation::Type newOrientation )
-{
-	Rtt_ASSERT( fStream );
-
-	if ( ! GetRuntime().IsProperty( Runtime::kIsOrientationLocked ) )
-	{
-		RenderingStream& stream = * fStream;
-
-//		DeviceOrientation::Type oldOrientation = stream.GetContentOrientation();
-
-//Rtt_ASSERT_NOT_IMPLEMENTED();
-		stream.SetContentOrientation( newOrientation );
-
-		GetScene().Invalidate();
-		//GetScene().CurrentStage().Invalidate();
-	}
-}
-
-void
-Display::WindowDidRotate( DeviceOrientation::Type newOrientation, bool isNewOrientationSupported )
-{
-	Rtt_ASSERT( fStream );
-
-	// Auto-rotation follows the following truth table. This is why we only need
-	// to know if newOrientation is supported.
-	// 
-	//	isSrcSuppoted	isDstSupported		shouldAutoRotate
-	//	------------------------------------------------------------------------
-	//	0				1					1
-	//	1				1					1
-	//	0				0					0
-	//	1				0					0
-	const Runtime& runtime = GetRuntime();
-	runtime.Begin();
-	{
-		bool autoRotate = isNewOrientationSupported && ( ! runtime.IsProperty( Runtime::kIsOrientationLocked ) );
-
-		RenderingStream& stream = * fStream;
-
-
-		//TODO - check if the new orientation is supported
-		stream.SetOrientation(newOrientation, autoRotate);
-		
-		
-		GetScene().Invalidate();
-
-///		GetScene().CurrentStage().Invalidate();
-	}
-	runtime.End();
-}
-
 void
 Display::WindowSizeChanged()
 {
@@ -1436,48 +882,9 @@ Display::WindowSizeChanged()
 	runtime.Begin();
 	{
 		RenderingStream *stream = fStream;
-		if ( stream && stream->IsProperty( RenderingStream::kInitialized ) )
+		if ( stream ) // Is this check neccesary?
 		{
-			// When surface is sideways (simulator), then the surface w,h
-			// need to be swapped to match the content w,h. 
-			S32 screenW = fTarget->DeviceWidth();
-			S32 screenH = fTarget->DeviceHeight();
-#if defined(Rtt_WIN_ENV) || defined(Rtt_NINTENDO_ENV)
-			Rtt::DeviceOrientation::Type orientation = GetContentOrientation();
-#else
-			//TODO: Determine if we can do this the above Windows way on all platforms.
-			Rtt::DeviceOrientation::Type orientation = fTarget->GetOrientation();
-#endif
-			if ( DeviceOrientation::IsSideways( orientation ) )
-			{
-				Swap( screenW, screenH );
-			}
-
-			// For these scale modes, the content width and height change when the window size changes.
-			Rtt::Display::ScaleMode scaleMode = stream->GetScaleMode();
-			if ( ( Display::kNone == scaleMode ) || ( Display::kAdaptive == scaleMode ) )
-			{
-				S32 contentWidth;
-				S32 contentHeight;
-				if ( Display::kAdaptive == scaleMode )
-				{
-					contentWidth = fTarget->AdaptiveWidth();
-					contentHeight = fTarget->AdaptiveHeight();
-				}
-				else
-				{
-					contentWidth = fTarget->DeviceWidth();
-					contentHeight = fTarget->DeviceHeight();
-				}
-				if ( DeviceOrientation::IsSideways( orientation ) )
-				{
-					Swap( contentWidth, contentHeight );
-				}
-				stream->Preinitialize( contentWidth, contentHeight );
-			}
-
-			// Update the display's content scales using the new widths and heights up above.
-			stream->UpdateContentScale( screenW );
+			stream->SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
 		}
 	}
 	runtime.End();
@@ -1486,35 +893,11 @@ Display::WindowSizeChanged()
 bool
 Display::HasWindowSizeChanged() const
 {
-	if (!fStream || !fTarget)
+	if (!fStream || !fScreenSurface)
 	{
 		return false;
 	}
-	return ((fStream->DeviceWidth() != fTarget->DeviceWidth()) || (fStream->DeviceHeight() != fTarget->DeviceHeight()));
-}
-
-DeviceOrientation::Type
-Display::GetRelativeOrientation() const
-{
-	return fStream->GetRelativeOrientation();
-}
-
-DeviceOrientation::Type
-Display::GetLaunchOrientation() const
-{
-	return fStream->GetLaunchOrientation();
-}
-
-DeviceOrientation::Type
-Display::GetContentOrientation() const
-{
-	return fStream->GetContentOrientation();
-}
-
-DeviceOrientation::Type
-Display::GetSurfaceOrientation() const
-{
-	return fStream->GetSurfaceOrientation();
+	return ((fStream->DeviceWidth() != fScreenSurface->DeviceWidth()) || (fStream->DeviceHeight() != fScreenSurface->DeviceHeight()));
 }
 
 Rtt_Allocator *
@@ -1527,110 +910,6 @@ Rtt_AbsoluteTime
 Display::GetElapsedTime() const
 {
 	return fOwner.GetElapsedTime();
-}
-
-void
-Display::GetViewProjectionMatrix(glm::mat4 &viewMatrix, glm::mat4 &projMatrix)
-{
-#if defined(Rtt_WIN_ENV) || defined(EMSCRIPTEN) || defined( Rtt_NINTENDO_ENV )
-	viewMatrix = glm::lookAt( glm::vec3( 0.0, 0.0, 0.5 ),
-								glm::vec3( 0.0, 0.0, 0.0 ),
-								glm::vec3( 0.0, 1.0, 0.0 ) );
-
-	// Determine if the projection matrix needs to be rotated.
-	// Note: Relative rotation is used by the simulator to rotate content to orientations the project does not support.
-	//       We also might have to rotate content if the surface orientation is not upright relative to the app's orientation.
-	S32 contentRotationInDegrees = fStream->GetRelativeRotation();
-	S32 surfaceRotationInDegrees = DeviceOrientation::CalculateRotation(GetSurfaceOrientation(), GetContentOrientation());
-	S32 totalRotationInDegrees = contentRotationInDegrees + surfaceRotationInDegrees;
-	DeviceOrientation::Type relAngle = DeviceOrientation::OrientationForAngle(totalRotationInDegrees);
-	
-	// Fetch the scaled width and height of the surface, relative to the surface orientation.
-	S32 w = RenderedContentWidth();
-	S32 h = RenderedContentHeight();
-	if (DeviceOrientation::IsSideways(DeviceOrientation::OrientationForAngle(surfaceRotationInDegrees)))
-	{
-		Swap(w, h);
-	}
-
-	// Invert top/bottom to make (0, 0) be the upper left corner of the window
-	projMatrix = glm::ortho( 0.0f, static_cast<Rtt::Real>(w),
-								static_cast<Rtt::Real>(h), 0.0f,
-								0.0f, 1.0f);
-
-	// Rotate the projection matrix, if necessary.
-	if (DeviceOrientation::kUpright != relAngle)
-	{
-		Real halfW = Rtt_RealDiv2(Rtt_IntToReal(w));
-		Real halfH = Rtt_RealDiv2(Rtt_IntToReal(h));
-		projMatrix = glm::translate(projMatrix, glm::vec3(halfW, halfH, 0.0f));
-		projMatrix = glm::rotate(projMatrix, glm::radians( (float)totalRotationInDegrees ), glm::vec3(0, 0.0, 1.0));
-		if ( DeviceOrientation::IsSideways( relAngle ) )
-		{
-			Swap(halfW, halfH);
-		}
-		projMatrix = glm::translate(projMatrix,glm::vec3(-halfW, -halfH, 0.0f));
-	}
-
-	// Apply the letterbox or zoom event offsets.
-	Real xOffset = GetXOriginOffset();
-	Real yOffset = GetYOriginOffset();
-	projMatrix = glm::translate(projMatrix, glm::vec3(xOffset, yOffset, 0.0f));
-
-#else
-	//TODO: Verify that the above code works on Mac, iOS, and Android. It should.
-
-	viewMatrix = glm::lookAt( glm::vec3( 0.0, 0.0, 0.5 ),
-								glm::vec3( 0.0, 0.0, 0.0 ),
-								glm::vec3( 0.0, 1.0, 0.0 ) );
-
-	S32 w = RenderedContentWidth();
-	S32 h = RenderedContentHeight();
-
-	// Invert top/bottom to make (0, 0) be the upper left corner of the window
-	projMatrix = glm::ortho( 0.0f, static_cast<Rtt::Real>( w ),
-								static_cast<Rtt::Real>( h ), 0.0f,
-								0.0f, 1.0f );
-				
-	Real xOffset = GetXOriginOffset();
-	Real yOffset = GetYOriginOffset();
-	
-	float angle = fStream->GetRelativeRotation();
-	DeviceOrientation::Type relAngle = DeviceOrientation::OrientationForAngle( angle );
-	
-	if (DeviceOrientation::kUpright != relAngle)
-	{
-		if ( DeviceOrientation::IsSideways( relAngle ) )
-		{
-			Swap( xOffset, yOffset );
-		}
-		
-		Real halfW = Rtt_RealDiv2( Rtt_IntToReal( w ) );
-		Real halfH = Rtt_RealDiv2( Rtt_IntToReal( h ) );
-
-
-		//Collapse this to minimum function calls
-		projMatrix = glm::translate(projMatrix,glm::vec3(halfW, halfH, 0.0f));
-		projMatrix = glm::rotate(projMatrix, glm::radians( angle ), glm::vec3(0, 0.0, 1.0));
-		
-		// Addd in offset BEFORE swap
-		halfW -= xOffset;
-		halfH -= yOffset;
-		
-		// For landscape, swap w,h
-		if ( DeviceOrientation::IsSideways( relAngle ) )
-		{
-			Swap(halfW, halfH);
-		}
-
-		projMatrix = glm::translate(projMatrix,glm::vec3(-halfW, -halfH, 0.0f));
-	}
-	else
-	{
-		// Upright case
-		projMatrix = glm::translate(projMatrix,glm::vec3(xOffset, yOffset, 0.0f));
-	}
-#endif
 }
 
 U32

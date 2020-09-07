@@ -21,6 +21,7 @@
 
 #include "Rtt_LuaLibSystem.h"
 //#include "Rtt_LuaResource.h"
+#include "Rtt_AppleFont.h"
 
 #include "Rtt_TouchInhibitor.h"
 
@@ -85,18 +86,8 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, floa
 	}
 
 	size_t bytesPerPixel = PlatformBitmap::BytesPerPixel( bitmap->GetFormat() );
-//	size_t bitsPerPixel = (bytesPerPixel << 3);
 	size_t bytesPerRow = w*bytesPerPixel;
 	NSInteger numBytes = h*bytesPerRow;
-//	const size_t kBitsPerComponent = 8;
-
-#if 0
-	NSData* data = [NSData dataWithBytesNoCopy:& buffer length:numBytes freeWhenDone:NO];
-	UIImage* image = [UIImage imageWithData:data];
-	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-#else
-
-
 
 	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault);
 	CGBitmapInfo dstBitmapInfo = CGBitmapInfo(kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big);
@@ -187,8 +178,6 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, floa
 
 	CGImageRelease( imageRef );
 	CGDataProviderRelease( dataProvider );
-#endif
-
 	bitmap->FreeBits();
 
 	return true;
