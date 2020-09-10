@@ -1866,7 +1866,6 @@ DisplayLibrary::save( lua_State *L )
 	// Do a screenshot of the given display object.
 	BitmapPaint *paint = display.CaptureSave( displayObject,
 												cropObjectToScreenBounds,
-												Rtt_StringEndsWithNoCase( imageName, ".png" ),
 												( backgroundColorHasBeenProvided ? &backgroundColor : NULL ) );
 	if( ! paint )
 	{
@@ -1880,7 +1879,7 @@ DisplayLibrary::save( lua_State *L )
 	String bitmapPath( runtime->GetAllocator() );
 
 	platform.PathForFile( imageName, baseDir, MPlatform::kDefaultPathFlags, bitmapPath );
-	platform.SaveBitmap( paint->GetBitmap(), bitmapPath.GetString(), 1.0f );
+	platform.SaveBitmap( paint->GetBitmap(), bitmapPath.GetString() );
 
 	Rtt_DELETE( paint );
 

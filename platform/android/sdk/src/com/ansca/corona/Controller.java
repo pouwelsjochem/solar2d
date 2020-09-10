@@ -761,43 +761,8 @@ public class Controller {
 			}
 		}
 	}
-
-	// TODO: Remove this if it's not being used?
-	public boolean saveBitmap(Bitmap bitmap, Uri uri) {
-		boolean result = false;
-		
-		// Validate.
-		if ((myContext == null) || (bitmap == null) || (uri == null)) {
-			return false;
-		}
-		
-		// Determine the format to save as by the MIME type.
-		Bitmap.CompressFormat format;
-		int quality;
-		String mimeTypeName = myContext.getContentResolver().getType(uri);
-		if ((mimeTypeName != null) && mimeTypeName.toLowerCase().endsWith("png")) {
-			format = Bitmap.CompressFormat.PNG;
-			quality = 100;
-		}
-		else {
-			format = Bitmap.CompressFormat.JPEG;
-			quality = 90;
-		}
-		
-		// Save the given bitmap to file.
-		try {
-			OutputStream outStream = myContext.getContentResolver().openOutputStream( uri );
-			result = bitmap.compress( format, quality, outStream );
-			outStream.flush();
-			outStream.close();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return result;
-	}
 	
-	public boolean saveBitmap(Bitmap bitmap, int quality, String filePathName) {
+	public boolean saveBitmap(Bitmap bitmap, String filePathName) {
 		boolean result = false;
 		
 		// Validate.
@@ -805,19 +770,10 @@ public class Controller {
 			return false;
 		}
 		
-		// Determine the format to save as by the file name's extension.
-		Bitmap.CompressFormat format;
-		if (filePathName.toLowerCase().endsWith(".png")) {
-			format = Bitmap.CompressFormat.PNG;
-		}
-		else {
-			format = Bitmap.CompressFormat.JPEG;
-		}
-		
 		// Save the given image to file.
 		try {
 			java.io.FileOutputStream stream = new java.io.FileOutputStream(filePathName);
-			result = bitmap.compress(format, quality, stream);
+			result = bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 			stream.flush();
 			stream.close();
 		}
@@ -827,20 +783,6 @@ public class Controller {
 		
 		// Returns true if the save was successful.
 		return result;
-	}
-	
-	public void addImageFileToPhotoGallery(String imageFilePathName) {
-		// Validate.
-		if ((imageFilePathName == null) || (imageFilePathName.length() <= 0)) {
-			return;
-		}
-		
-		// Add given file name to the photo gallery app's list.
-        android.media.MediaScannerConnection.scanFile(myContext,
-													  new String[] { imageFilePathName }, null,
-													  new android.media.MediaScannerConnection.OnScanCompletedListener() {
-            public void onScanCompleted(String path, Uri uri) { }
-        });
 	}
 	
 	private void internalSetIdleTimer( boolean enabled )

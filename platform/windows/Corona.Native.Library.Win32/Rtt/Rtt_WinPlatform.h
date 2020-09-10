@@ -62,7 +62,7 @@ class WinPlatform : public MPlatform
 		virtual PlatformTimer* CreateTimerWithCallback(MCallback& callback) const;
 		virtual PlatformBitmap* CreateBitmap(const char* filename, bool convertToGrayscale) const;
 		virtual PlatformBitmap* CreateBitmapMask(const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset)  const;
-		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float jpegQuality) const;
+		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath ) const;
 		virtual const MCrypto& GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String * value) const;
 		virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const;

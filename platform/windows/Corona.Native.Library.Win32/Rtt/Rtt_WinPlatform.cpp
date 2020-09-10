@@ -646,7 +646,6 @@ namespace Rtt
 
 	// Protected function used to fetch the Windows class ID for the given image format.
 	// Note: This function was based on sample code from MSDN.
-	// Argument "format" must be set to "image/bmp", "image/jpeg", "image/gif", "image/tiff", or "image/png".
 	// Argument "pClsid" must be a pointer to an exist CLSID type. It will be assigned an ID if the encoder was found.
 	// Returns a value greater than zero if the specified encoder was found and argment "pClsid" was assigned an ID.
 	// Returns -1 if the specified encoder was not found.
@@ -687,7 +686,7 @@ namespace Rtt
 
 	// Saves the given bitmap to file.
 	// Returns true if bitmap was saved successfully. Returns false if not.
-	bool WinPlatform::SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float jpegQuality) const
+	bool WinPlatform::SaveBitmap(PlatformBitmap* bitmap, const char* filePath ) const
 	{
 		WinString stringBuffer;
 		CLSID encoderId;
@@ -769,32 +768,11 @@ namespace Rtt
 		}
 
 		// Determine which image format we should save to based on the file extension.
-		stringBuffer.SetUTF8(filePath);
-		stringBuffer.MakeLowerCase();
-		if (stringBuffer.EndsWith(".bmp"))
-		{
-			encoderName = L"image/bmp";
-		}
-		else if (stringBuffer.EndsWith(".gif"))
-		{
-			encoderName = L"image/gif";
-		}
-		else if (stringBuffer.EndsWith(".tiff") || stringBuffer.EndsWith(".tif"))
-		{
-			encoderName = L"image/tiff";
-		}
-		else if (stringBuffer.EndsWith(".png"))
-		{
-			encoderName = L"image/png";
-		}
-		else
-		{
-			encoderName = L"image/jpeg";
-		}
-		GetEncoderClsid(encoderName, &encoderId);
+		GetEncoderClsid(L"image/png", &encoderId);
 
 		// Save the image to file.
 		stringBuffer.SetUTF8(filePath);
+		stringBuffer.MakeLowerCase();
 		targetImage.Save(stringBuffer.GetTCHAR(), &encoderId, nullptr);
 		return true;
 	}

@@ -1043,6 +1043,66 @@ public class NativeToJavaBridge {
 		return wasCopied;
 	}
 
+	protected static boolean callSaveBitmap( CoronaRuntime runtime, int[] pixels, int width, int height, String filePathName )
+	{
+		// Validate.
+		if (runtime.getController() == null) {
+			Log.v( "Corona", "callSaveBitmap has invalid controller" );
+			return false;
+		}
+
+		CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
+		if (activity == null) {
+			Log.v( "Corona", "callSaveBitmap has null CoronaActivity" );
+			return false;
+		}
+		
+		// Copy the pixel array into a bitmap object.
+		android.graphics.Bitmap bitmap = null;
+		try {
+			bitmap = android.graphics.Bitmap.createBitmap(
+							pixels, width, height, android.graphics.Bitmap.Config.ARGB_8888);
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		if (bitmap == null) {
+			return false;
+		}
+		
+		SaveBitmapRequestPermissionsResultHandler resultHandler = new SaveBitmapRequestPermissionsResultHandler(
+			runtime, bitmap, filePathName);
+
+		return resultHandler.handleSaveMedia();
+	}
+
+		/** Default handling of the write external storage permission for saveBitmap() on Android 6+. */
+	private static class SaveBitmapRequestPermissionsResultHandler 
+		extends NativeToJavaBridge.SaveMediaRequestPermissionsResultHandler {
+
+		// Arguments for the saveBitmap() method that we can now call safely.
+		private Bitmap fBitmap;
+		private String fFilePathName;
+
+		public SaveBitmapRequestPermissionsResultHandler(
+			CoronaRuntime runtime, Bitmap bitmap, String filePathName) {
+			super(runtime);
+
+			fBitmap = bitmap;
+			fFilePathName = filePathName;
+		}
+
+		@Override
+		public boolean handleSaveMedia() {
+			return executeSaveMedia();
+		}
+
+		@Override
+		public boolean executeSaveMedia() {
+			return fCoronaRuntime.getController().saveBitmap(fBitmap, fFilePathName);
+		}
+	}
+
 	/** Default handling of the write external storage permission for saving media on Android 6+. */
 	private abstract static class SaveMediaRequestPermissionsResultHandler 
 		implements CoronaActivity.OnRequestPermissionsResultHandler {
@@ -1218,31 +1278,6 @@ public class NativeToJavaBridge {
 	protected static void callCancelTimer(CoronaRuntime runtime)
 	{
 		runtime.getController().cancelTimer();
-	}
-
-	protected static void callLoadSound( CoronaRuntime runtime, long id, String soundName )
-	{
-		runtime.getController().getEventManager().loadSound( id, soundName );
-	}
-
-	protected static void callPlaySound( CoronaRuntime runtime, long id, String soundName, boolean loop )
-	{
-		runtime.getController().getEventManager().playSound(id, soundName, loop);
-	}
-
-	protected static void callStopSound( long id, CoronaRuntime runtime )
-	{
-		runtime.getController().getEventManager().stopSound( id);
-	}
-
-	protected static void callPauseSound( long id, CoronaRuntime runtime )
-	{
-		runtime.getController().getEventManager().pauseSound( id);
-	}
-
-	protected static void callResumeSound( long id, CoronaRuntime runtime )
-	{
-		runtime.getController().getEventManager().resumeSound(id);
 	}
 
 	protected static boolean callCanOpenUrl( CoronaRuntime runtime, String url )

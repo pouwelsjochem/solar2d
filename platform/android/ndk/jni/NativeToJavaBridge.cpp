@@ -2740,7 +2740,7 @@ NativeToJavaBridge::RecordReleaseCurrentBuffer( uintptr_t id )
 }
 
 bool
-NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char * path, int quality )
+NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char * path )
 {
 	NativeTrace trace( "NativeToJavaBridge::SaveBitmap" );
 #ifdef Rtt_DEBUG
@@ -2784,7 +2784,7 @@ NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char *
 				}
 
 				result = bridge.getEnv()->CallStaticBooleanMethod(
-							bridge.getClass(), mid, fCoronaRuntime, array.getValue(), width, height, quality, pathJ.getValue());
+							bridge.getClass(), mid, fCoronaRuntime, array.getValue(), width, height, pathJ.getValue());
 				HandleJavaException();
 			}
 		}

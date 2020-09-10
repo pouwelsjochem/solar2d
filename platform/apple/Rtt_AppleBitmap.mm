@@ -70,26 +70,7 @@ GetMaxTextureSize()
 void
 AppleBitmap::Test( class Runtime& runtime )
 {
-/*
-	Rtt_Allocator* pAllocator = runtime.Allocator();	
-	StageObject& stage = runtime.GetScene().GetStage();
 
-	Paint* paint = Paint::NewBitmap( runtime, "fish.jpeg" );
-	Real w = Rtt_IntToReal( paint->GetBitmap().Width() );
-	Real h = Rtt_IntToReal( paint->GetBitmap().Height() );
-	ShapeObject* v = ShapeObject::NewRect( pAllocator, w, h );
-	v->SetShapeColor( paint );
-	v->Translate( w, Rtt_RealMul2( h ) + Rtt_RealDiv2( Rtt_RealDiv2( h ) ) );
-	stage->Insert( 0, v );
-
-	paint = Paint::NewBitmap( runtime, "aquariumbackground.jpeg" );
-	w = Rtt_IntToReal( paint->GetBitmap().Width() );
-	h = Rtt_IntToReal( paint->GetBitmap().Height() );
-	v = ShapeObject::NewRect( pAllocator, w, h );
-	v->SetShapeColor( paint );
-	v->Translate( Rtt_RealDiv2( w ), Rtt_RealDiv2( h ) );
-	stage->Insert( 0, v );
-*/
 }
 
 #endif // Rtt_TEST_BITMAP

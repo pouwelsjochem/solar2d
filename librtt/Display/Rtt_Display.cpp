@@ -265,7 +265,6 @@ Display::CaptureScreen()
 					NULL,
 					false,
 					false,
-					false,
 					NULL,
 					NULL );
 }
@@ -275,7 +274,6 @@ Display::CaptureBounds( Rect *screenBounds )
 {
 	return Capture( NULL,
 					screenBounds,
-					false,
 					false,
 					false,
 					NULL,
@@ -288,7 +286,6 @@ Display::CaptureDisplayObject( DisplayObject *object, bool crop_object_to_screen
 	return Capture( object,
 					NULL,
 					false,
-					false,
 					crop_object_to_screen_bounds,
 					NULL,
 					NULL );
@@ -297,13 +294,11 @@ Display::CaptureDisplayObject( DisplayObject *object, bool crop_object_to_screen
 BitmapPaint *
 Display::CaptureSave( DisplayObject *object,
 						bool crop_object_to_screen_bounds,
-						bool output_file_will_be_png_format,
 						const ColorUnion *optionalBackgroundColor )
 {
 	return Capture( object,
 					NULL,
 					true,
-					output_file_will_be_png_format,
 					crop_object_to_screen_bounds,
 					optionalBackgroundColor,
 					NULL );
@@ -321,7 +316,6 @@ Display::ColorSample( float pos_x,
 									&screenBounds,
 									true,
 									false,
-									false,
 									NULL,
 									&output_color );
 	if( ! paint )
@@ -337,7 +331,6 @@ BitmapPaint *
 Display::Capture( DisplayObject *object,
 					Rect *screenBounds,
 					bool will_be_saved_to_file,
-					bool output_file_will_be_png_format,
 					bool crop_object_to_screen_bounds,
 					const ColorUnion *optionalBackgroundColor,
 					RGBA *optional_output_color )
@@ -526,20 +519,9 @@ Display::Capture( DisplayObject *object,
 		}
 		else
 		{
-			if( output_file_will_be_png_format ||
-				( ! will_be_saved_to_file ) )
-			{
-				transparentClearColor.rgba.r = 0;
-				transparentClearColor.rgba.g = 0;
-				transparentClearColor.rgba.b = 0;
-			}
-			else
-			{
-				// JPG and others.
-				transparentClearColor.rgba.r = 0xff;
-				transparentClearColor.rgba.g = 0xff;
-				transparentClearColor.rgba.b = 0xff;
-			}
+			transparentClearColor.rgba.r = 0;
+			transparentClearColor.rgba.g = 0;
+			transparentClearColor.rgba.b = 0;
 			transparentClearColor.rgba.a = 0;
 		}
 
@@ -594,12 +576,7 @@ Display::Capture( DisplayObject *object,
 										y_in_pixels,
 										w_in_pixels,
 										h_in_pixels );
-
-		if( output_file_will_be_png_format )
-		{
-			// This should ONLY be done for PNGs.
-			bitmap->UndoPremultipliedAlpha();
-		}
+		bitmap->UndoPremultipliedAlpha();
 
 		if( optional_output_color )
 		{

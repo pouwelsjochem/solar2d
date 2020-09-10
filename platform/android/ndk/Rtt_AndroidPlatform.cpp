@@ -485,12 +485,12 @@ void AndroidPlatform::RaiseError( MPlatform::Error e, const char * reason ) cons
 }
 
 bool 
-AndroidPlatform::SaveBitmap( PlatformBitmap * bitmap, const char * filePath, float jpegQuality ) const
+AndroidPlatform::SaveBitmap( PlatformBitmap * bitmap, const char * filePath ) const
 {
 	// TODO: This is a horrible, horrible hack, and must die
 	bitmap->SwapRGB();
 
-	bool retflag = fNativeToJavaBridge->SaveBitmap( bitmap, filePath, floor((jpegQuality * 100) + 0.5) );
+	bool retflag = fNativeToJavaBridge->SaveBitmap( bitmap, filePath );
 
 	// Swap the bytes back
 	bitmap->SwapRGB();

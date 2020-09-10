@@ -18,8 +18,6 @@ class bitmapUtil
 public:
 
 	static uint8_t* loadPNG(FILE* infile, int& w, int& h);
-	static uint8_t* loadJPG(FILE* infile, int& w, int& h);
-	static uint8_t* loadBMP(const char* path, int& w, int& h, Rtt::PlatformBitmap::Format& format);
 	static bool savePNG(const char* filename, uint8_t* data, int width, int height, Rtt::PlatformBitmap::Format format);
 };
 

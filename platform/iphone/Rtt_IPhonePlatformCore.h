@@ -49,10 +49,10 @@ class IPhonePlatformCore : public IPhonePlatformBase
 		virtual MPlatformDevice& GetDevice() const;
 
 	protected:
-		bool SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, float jpegQuality ) const;
+		bool SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) const;
 
 	public:
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const;
+		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
 		/// virtual bool OpenURL( const char* url ) const;
 
 		/// virtual void SetIdleTimer( bool enabled ) const;

@@ -476,7 +476,7 @@ void IPhonePlatformBase::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, 
 #if Rtt_IPHONE_PLATFORM_STUB
 
 bool
-IPhonePlatformBase::SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const
+IPhonePlatformBase::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
 {
 	Rtt_ASSERT_NOT_REACHED();
 	return false;

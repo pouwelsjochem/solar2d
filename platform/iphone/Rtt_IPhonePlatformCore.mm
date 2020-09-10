@@ -55,7 +55,7 @@ double DegreesToRadians( double degrees )
 }
 
 bool
-IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, float jpegQuality ) const
+IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) const
 {
 	Rtt_ASSERT( bitmap );
 	PlatformBitmap::Orientation orientation = bitmap->GetOrientation();
@@ -75,17 +75,8 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, floa
 	size_t bytesPerRow = w*bytesPerPixel;
 	NSInteger numBytes = h*bytesPerRow;
 
-	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault);
-	CGBitmapInfo dstBitmapInfo = CGBitmapInfo(kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big);
-    bool enablePngAlphaSave = false;
-    NSString *lowercase = [filePath lowercaseString];
-    if ( [lowercase hasSuffix:@"png"] )
-    {
-        enablePngAlphaSave = true;
-		srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast);
-        dstBitmapInfo = kCGImageAlphaPremultipliedLast;
-
-    }
+	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast)
+	CGBitmapInfo dstBitmapInfo = kCGImageAlphaPremultipliedLast;
 
 	CGDataProviderRef dataProvider = CGDataProviderCreateWithData( NULL, buffer, numBytes, NULL );
 	CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
@@ -138,16 +129,7 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, floa
 	}
 	else
 	{
-		NSData *imageData = nil;
-        if (enablePngAlphaSave)
-		{
-            imageData = UIImagePNGRepresentation( image );
-		}
-        else
-		{
-            imageData = UIImageJPEGRepresentation( image, jpegQuality );
-		}
-        
+		NSData *imageData = UIImagePNGRepresentation( image );
         [imageData writeToFile:filePath atomically:YES];
 	}
 
@@ -170,9 +152,9 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath, floa
 }
 
 bool
-IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const
+IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
 {
-	return SaveBitmap( bitmap, [NSString stringWithUTF8String:filePath], jpegQuality );
+	return SaveBitmap( bitmap, [NSString stringWithUTF8String:filePath] );
 }
 
 Real

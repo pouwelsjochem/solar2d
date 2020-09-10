@@ -538,27 +538,8 @@ MacPlatform::SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const
 	Rtt_ASSERT( bitmap->GetFormat() == PlatformBitmap::kBGRA );
 	// Bug 4921: I don't understand this, but changing kCGImageAlphaPremultipliedFirst to kCGImageAlphaNoneSkipFirst fixes the white box issue.
 
-	//Preserve previous jpeg save functionality (black background)
-	//If we're saving to jpeg, set the src info and dest info to the same
-    CGBitmapInfo srcBitmapInfo = kCGImageAlphaNoneSkipFirst;
-    CGBitmapInfo destBitMapInfo = kCGImageAlphaNoneSkipFirst;
-    
-	
-	//If we're saving to png with alpha support then set the src info and dest
-	//info to handle alpha at the source and alpha destination
-    bool enablePngAlphaSave = false;
-    NSString *lowercase = [[url absoluteString] lowercaseString];
-    if ( [lowercase hasSuffix:@"png"] )
-    {
-        enablePngAlphaSave = true;
-		
-		//This is the correct order to save with alpha channel, but it looks like some display objects
-		//like polylines are working differently in the alpha channel in which case we don't want
-		//kCGImageAlphaNoneSkipFirst may be the correct choice
-		srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaFirst);
-		destBitMapInfo = kCGImageAlphaPremultipliedLast;
-    }
-	
+    CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaFirst);
+    CGBitmapInfo destBitMapInfo = kCGImageAlphaPremultipliedLast;
     
 	CGDataProviderRef dataProvider = CGDataProviderCreateWithData( NULL, buffer, numBytes, NULL );
 	CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
@@ -579,16 +560,7 @@ MacPlatform::SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const
 	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
 	CGImageRef bitmapImageRef = CGBitmapContextCreateImage(context);
     
-    CGImageDestinationRef imageDest = NULL;
-    if (enablePngAlphaSave)
-    {
-        imageDest = CGImageDestinationCreateWithURL( (CFURLRef)url, kUTTypePNG, 1, NULL );
-    }
-    else
-    {
-        imageDest = CGImageDestinationCreateWithURL( (CFURLRef)url, kUTTypeJPEG, 1, NULL );
-    }
-    
+    CGImageDestinationRef imageDest = CGImageDestinationCreateWithURL( (CFURLRef)url, kUTTypePNG, 1, NULL );    
 	if ( imageDest )
 	{
 		CGImageDestinationAddImage( imageDest, bitmapImageRef, nil );
@@ -608,7 +580,7 @@ MacPlatform::SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const
 }
 
 bool
-MacPlatform::SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const
+MacPlatform::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
 {
 	return SaveBitmap( bitmap, [NSURL fileURLWithPath:[NSString stringWithExternalString:filePath]] );
 }

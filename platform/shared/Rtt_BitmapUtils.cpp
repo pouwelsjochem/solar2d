@@ -10,19 +10,11 @@
 #include "Core/Rtt_Types.h"
 #include "Rtt_BitmapUtils.h"
 #include <png.h>
-#include <jpeglib.h>
 #include <cstring>		// for memcpy
 
 #ifndef Rtt_LINUX_ENV
 #include <SDL.h>
 #endif
-
-struct JpegErrorMgr
-{
-	struct jpeg_error_mgr pub;	// "public" fields
-	jmp_buf setjmp_buffer;	// for return to caller
-};
-typedef struct JpegErrorMgr* jpegErrorMgr;
 
 uint8_t* bitmapUtil::loadPNG(FILE* fp, int& w, int& h)
 {
@@ -163,66 +155,6 @@ bool	bitmapUtil::savePNG(const char* filename, uint8_t* data, int width, int hei
 	return true;
 }
 
-//
-// Decode a JPG buffer into an array
-//
-
-void jpgErrorHandler(j_common_ptr cinfo)
-{
-	// cinfo->err really points to a jpegErroMgr struct, so coerce pointer 
-	jpegErrorMgr myerr = (jpegErrorMgr)cinfo->err;
-
-	// Always display the message. 
-	(*cinfo->err->output_message) (cinfo);
-
-	// Return control to the setjmp point 
-	longjmp(myerr->setjmp_buffer, 1);
-}
-
-// todo: read from buffer
-uint8_t* bitmapUtil::loadJPG(FILE* infile, int& w, int& h)
-{
-#ifdef Rtt_LINUX_ENV
-	return NULL;
-#else
-	struct jpeg_decompress_struct cinfo;
-	struct JpegErrorMgr jerr;
-
-	cinfo.err = jpeg_std_error(&jerr.pub);
-	jerr.pub.error_exit = jpgErrorHandler;
-
-	if (setjmp(jerr.setjmp_buffer))
-	{
-		jpeg_destroy_decompress(&cinfo);
-		return NULL;
-	}
-
-	jpeg_create_decompress(&cinfo);
-	jpeg_stdio_src(&cinfo, infile);
-
-	jpeg_read_header(&cinfo, TRUE);
-	jpeg_start_decompress(&cinfo);
-
-	int row_stride = cinfo.output_width * cinfo.output_components;
-	JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)	((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
-	int i = 0;
-	uint8_t* im = (uint8_t*)malloc(row_stride * cinfo.output_height);
-	uint8_t* p = im;
-	w = cinfo.output_width;
-	h = cinfo.output_height;
-	while (cinfo.output_scanline < cinfo.output_height)
-	{
-		jpeg_read_scanlines(&cinfo, buffer, 1);
-		memcpy(p, buffer[0], row_stride);
-		p += row_stride;
-	}
-
-	jpeg_finish_decompress(&cinfo);
-	jpeg_destroy_decompress(&cinfo);
-	return im;
-#endif
-}
-
 // get pixel value from SDL surface
 #ifndef Rtt_LINUX_ENV
 Uint32 getSurfacePixel(SDL_Surface *surface, int x, int y)
@@ -249,45 +181,3 @@ Uint32 getSurfacePixel(SDL_Surface *surface, int x, int y)
 	}
 }
 #endif
-
-uint8_t* bitmapUtil::loadBMP(const char* path, int& w, int& h, Rtt::PlatformBitmap::Format& format)
-{
-#ifndef Rtt_LINUX_ENV
-	SDL_Surface* img = SDL_LoadBMP(path);
-	if (img)
-	{
-		w = img->w;
-		h = img->h;
-
-		int size = w * h * 4;
-		uint8_t* im = (uint8_t*) malloc(size);
-		memset(im, 0, size);
-
-		uint8_t* dst = im;
-		SDL_LockSurface(img);
-		for (int y = 0; y < img->h; y++)
-		{
-			for (int x = 0; x < img->w; x++)
-			{
-				Uint32 pixel = getSurfacePixel(img, x, y);
-				SDL_GetRGBA(pixel, img->format, dst, dst + 1, dst + 2, dst + 3);
-
-				// premultiple alpha
-				if (dst[3] < 255)
-				{
-					dst[0] = (dst[0] * dst[3]) >> 8;
-					dst[1] = (dst[1] * dst[3]) >> 8;
-					dst[2] = (dst[2] * dst[3]) >> 8;
-				}
-				dst += 4;
-			}
-		}
-		SDL_UnlockSurface(img);
-		SDL_FreeSurface(img);
-
-		format = Rtt::PlatformBitmap::Format::kRGBA;
-		return im;
-	}
-#endif
-	return NULL;
-}

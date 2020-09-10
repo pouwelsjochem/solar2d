@@ -533,7 +533,6 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 	/** All dangerous-level permissions groups our permissions framework supports */
 	private static String[] sDangerousPermissionGroups = new String[] {
 			PermissionGroup.CALENDAR,
-			PermissionGroup.CAMERA,
 			PermissionGroup.CONTACTS,
 			PermissionGroup.LOCATION,
 			PermissionGroup.MICROPHONE,
@@ -599,7 +598,6 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 				sPlatformAgnosticPermissionGroupMap.put("bodysensors", PermissionGroup.SENSORS);
 				sPlatformAgnosticPermissionGroupMap.put("calendar", PermissionGroup.CALENDAR);
 				sPlatformAgnosticPermissionGroupMap.put("calendars", PermissionGroup.CALENDAR);
-				sPlatformAgnosticPermissionGroupMap.put("camera", PermissionGroup.CAMERA);
 				sPlatformAgnosticPermissionGroupMap.put("contacts", PermissionGroup.CONTACTS);
 				sPlatformAgnosticPermissionGroupMap.put("location", PermissionGroup.LOCATION);
 				sPlatformAgnosticPermissionGroupMap.put("microphone", PermissionGroup.MICROPHONE);
@@ -614,7 +612,6 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 				// Populate the Permission-Group - App-Permission Map
 				sPermissionGroupPlatformAgnosticMap.put(PermissionGroup.SENSORS, "BodySensors");
 				sPermissionGroupPlatformAgnosticMap.put(PermissionGroup.CALENDAR, "Calendars");
-				sPermissionGroupPlatformAgnosticMap.put(PermissionGroup.CAMERA, "Camera");
 				sPermissionGroupPlatformAgnosticMap.put(PermissionGroup.CONTACTS, "Contacts");
 				sPermissionGroupPlatformAgnosticMap.put(PermissionGroup.LOCATION, "Location");
 				sPermissionGroupPlatformAgnosticMap.put(PermissionGroup.MICROPHONE, "Microphone");
@@ -629,9 +626,6 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 				// Calendar group
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_CALENDAR, PermissionGroup.CALENDAR);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.WRITE_CALENDAR, PermissionGroup.CALENDAR);
-
-				// Camera group
-				sMarshmallowPermissionToPermissionGroupMap.put(Permission.CAMERA, PermissionGroup.CAMERA);
 
 				// Contacts group
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_CONTACTS, PermissionGroup.CONTACTS);
@@ -689,12 +683,6 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 					sMarshmallowPermissionGroupToPermissionsMap.get(PermissionGroup.CALENDAR);
 				calendarGroupPermissions.add(Permission.READ_CALENDAR);
 				calendarGroupPermissions.add(Permission.WRITE_CALENDAR);
-
-				// Camera group
-				sMarshmallowPermissionGroupToPermissionsMap.put(PermissionGroup.CAMERA, new java.util.ArrayList<String>());
-				java.util.ArrayList<String> cameraGroupPermissions = 
-					sMarshmallowPermissionGroupToPermissionsMap.get(PermissionGroup.CAMERA);
-				cameraGroupPermissions.add(Permission.CAMERA);
 
 				// Contacts group
 				sMarshmallowPermissionGroupToPermissionsMap.put(PermissionGroup.CONTACTS, new java.util.ArrayList<String>());

@@ -354,9 +354,6 @@ LOCAL_CFLAGS := -DANDROID_NDK \
 				-DOPENAL_FIXED_POINT -DOPENAL_FIXED_POINT_SHIFT=16 \
 				$(MY_CFLAGS)
 
-# These flags are for libjpeg
-LOCAL_CFLAGS += -DAVOID_TABLES -O3 -fstrict-aliasing -fprefetch-loop-arrays
-
 # Flags to help reduce binary size.
 # fvisibility=hidden will hide the elf symbpls which default to public
 # Other ones work together so that each function is in its own output file then --gc-sections will remove unused code
@@ -369,7 +366,6 @@ endif
 #				-DRtt_REAL_FIXED 
 
 LIBALMIXER_DIR := $(CORONA_ROOT)/external/ALmixer
-LIBJPEG_DIR := $(CORONA_ROOT)/external/libjpeg
 LIBLUA_DIR := $(CORONA_ROOT)/external/lua-5.1.3
 LIBOPENAL_DIR := $(CORONA_ROOT)/external/openal-soft_apportable/jni/OpenAL
 LIBPNG_DIR := $(CORONA_ROOT)/external/lpng1256
@@ -397,7 +393,6 @@ LOCAL_C_INCLUDES := \
 	$(CORONA_ROOT)/platform/android/ndk \
 	$(CORONA_ROOT)/platform/shared \
 	$(CORONA_ROOT) \
-    $(LIBJPEG_DIR) \
 
 # files that are not compiled
 EXTERNAL_FILES_OLD  := \
@@ -809,54 +804,6 @@ LIBLUAFILESYSTEM_FILES := \
 LIBSQLITE_FILES := \
   $(LIBSQLITE_DIR)/sqlite3.c \
   $(CORONA_ROOT)/external/lsqlite3-7/lsqlite3.c
-
-LIBJPEG_FILES =  \
-	$(LIBJPEG_DIR)/jcapimin.c \
-	$(LIBJPEG_DIR)/jcapistd.c \
-	$(LIBJPEG_DIR)/jccoefct.c \
-	$(LIBJPEG_DIR)/jccolor.c \
-	$(LIBJPEG_DIR)/jcdctmgr.c \
-	$(LIBJPEG_DIR)/jchuff.c \
-	$(LIBJPEG_DIR)/jcinit.c \
-	$(LIBJPEG_DIR)/jcmainct.c \
-	$(LIBJPEG_DIR)/jcmarker.c \
-	$(LIBJPEG_DIR)/jcmaster.c \
-	$(LIBJPEG_DIR)/jcomapi.c \
-	$(LIBJPEG_DIR)/jcparam.c \
-	$(LIBJPEG_DIR)/jcphuff.c \
-	$(LIBJPEG_DIR)/jcprepct.c \
-	$(LIBJPEG_DIR)/jcsample.c \
-	$(LIBJPEG_DIR)/jctrans.c \
-	$(LIBJPEG_DIR)/jdapimin.c \
-	$(LIBJPEG_DIR)/jdapistd.c \
-	$(LIBJPEG_DIR)/jdatadst.c \
-	$(LIBJPEG_DIR)/jdatasrc.c \
-	$(LIBJPEG_DIR)/jdcoefct.c \
-	$(LIBJPEG_DIR)/jdcolor.c \
-	$(LIBJPEG_DIR)/jddctmgr.c \
-	$(LIBJPEG_DIR)/jdhuff.c \
-	$(LIBJPEG_DIR)/jdinput.c \
-	$(LIBJPEG_DIR)/jdmainct.c \
-	$(LIBJPEG_DIR)/jdmarker.c \
-	$(LIBJPEG_DIR)/jdmaster.c \
-	$(LIBJPEG_DIR)/jdmerge.c \
-	$(LIBJPEG_DIR)/jdphuff.c \
-	$(LIBJPEG_DIR)/jdpostct.c \
-	$(LIBJPEG_DIR)/jdsample.c \
-	$(LIBJPEG_DIR)/jdtrans.c \
-	$(LIBJPEG_DIR)/jerror.c \
-	$(LIBJPEG_DIR)/jfdctflt.c \
-	$(LIBJPEG_DIR)/jfdctfst.c \
-	$(LIBJPEG_DIR)/jfdctint.c \
-	$(LIBJPEG_DIR)/jidctflt.c \
-	$(LIBJPEG_DIR)/jidctred.c \
-	$(LIBJPEG_DIR)/jquant1.c \
-	$(LIBJPEG_DIR)/jquant2.c \
-	$(LIBJPEG_DIR)/jutils.c \
-	$(LIBJPEG_DIR)/jmemmgr.c \
-	$(LIBJPEG_DIR)/jmem-android.c \
-	$(LIBJPEG_DIR)/jidctint.c \
-	$(LIBJPEG_DIR)/jidctfst.S \
 
 LOCAL_SRC_FILES := \
     importgl.c \

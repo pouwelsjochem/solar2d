@@ -68,7 +68,7 @@ namespace Rtt
 			const char str[], const PlatformFont& font, Real w, Real h, const char alignmentStringId[]) const {
 			return NULL;
 		};
-		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float jpegQuality) const { return false; };
+		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath ) const { return false; };
 		virtual const MCrypto& GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String * value) const;
 		virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const;
@@ -138,7 +138,6 @@ namespace Rtt
 
 		/*
 		void CopyAppNameTo(WinString& destinationString) const;
-		int GetEncoderClsid(const WCHAR *format, CLSID *pClsid) const;
 		void OnSetActivityIndicator(bool visible);
 
 		Interop::RuntimeEnvironment& fEnvironment;

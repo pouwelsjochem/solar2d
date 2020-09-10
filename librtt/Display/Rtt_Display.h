@@ -94,7 +94,6 @@ class Display
 
 		BitmapPaint *CaptureSave( DisplayObject *object,
 									bool crop_object_to_screen_bounds,
-									bool output_file_will_be_png_format,
 									const ColorUnion *optionalBackgroundColor );
 
 		void ColorSample( float pos_x,
@@ -105,7 +104,6 @@ class Display
 		virtual BitmapPaint *Capture( DisplayObject *object,
 										Rect *screenBounds,
 										bool will_be_saved_to_file,
-										bool output_file_will_be_png_format,
 										bool crop_object_to_screen_bounds,
 										const ColorUnion *optionalBackgroundColor,
 										RGBA *optional_output_color );

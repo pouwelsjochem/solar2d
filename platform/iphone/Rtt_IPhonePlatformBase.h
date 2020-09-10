@@ -76,7 +76,7 @@ class IPhonePlatformBase : public ApplePlatform
 		virtual NSString *PathForPluginsFile( const char *filename ) const;
 
 #if Rtt_IPHONE_PLATFORM_STUB
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const;
+		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
 		virtual void SetActivityIndicator( bool visible ) const;

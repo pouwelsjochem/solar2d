@@ -90,7 +90,7 @@ class MacPlatform : public ApplePlatform
 		virtual Preference::ReadValueResult GetPreference( const char* categoryName, const char* keyName ) const;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const;
+		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
