@@ -417,8 +417,8 @@ DisplayLibrary::PushImage(
 	Texture *texture = paint->GetTexture(); Rtt_ASSERT( texture );
 
 	// bitmap may be NULL when FBO's are involved
-	Real width = Rtt_IntToReal( bitmap ? bitmap->UprightWidth() : texture->GetWidth() );
-	Real height = Rtt_IntToReal( bitmap ? bitmap->UprightHeight() : texture->GetHeight() );
+	Real width = Rtt_IntToReal( bitmap ? bitmap->Width() : texture->GetWidth() );
+	Real height = Rtt_IntToReal( bitmap ? bitmap->Height() : texture->GetHeight() );
 
 	// Create the image object with the above dimensions.
 	ShapeObject* v = PushImage( L, topLeft, paint, display, parent, width, height );

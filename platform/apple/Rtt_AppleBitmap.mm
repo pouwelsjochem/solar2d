@@ -98,61 +98,6 @@ AppleBitmap::FreeBits() const
 }
 
 // ----------------------------------------------------------------------------
-    
-    /* The intended display orientation of the image. If present, the value
-     * of this key is a CFNumberRef with the same value as defined by the
-     * TIFF and Exif specifications.  That is:
-     *   1  =  0th row is at the top, and 0th column is on the left.
-     *   2  =  0th row is at the top, and 0th column is on the right.
-     *   3  =  0th row is at the bottom, and 0th column is on the right.
-     *   4  =  0th row is at the bottom, and 0th column is on the left.
-     *   5  =  0th row is on the left, and 0th column is the top.
-     *   6  =  0th row is on the right, and 0th column is the top.
-     *   7  =  0th row is on the right, and 0th column is the bottom.
-     *   8  =  0th row is on the left, and 0th column is the bottom.
-     * If not present, a value of 1 is assumed. */
-    
-    //Effectively converts the "top" edge of the image
-    //to the PlatformBitmap orientation based on the EXIF orientation
-    //flag, cases 2,4,5,7 are special mirrored orientations
-    static S8
-    ConvertCGOrientation( int cgImageOrienation )
-    {
-        S8 result = PlatformBitmap::kUp;
-        
-        switch( cgImageOrienation )
-        {
-            case 0:
-            case 1:
-                result = PlatformBitmap::kUp;
-                break;
-            case 2:
-                result = PlatformBitmap::kUp;
-                break;
-            case 3:
-                result = PlatformBitmap::kDown;
-                break;
-            case 4:
-                result = PlatformBitmap::kDown;
-                break;
-            case 5:
-                result = PlatformBitmap::kRight;
-                break;
-            case 6:
-                result = PlatformBitmap::kRight;
-                break;
-            case 7:
-                result = PlatformBitmap::kLeft;
-                break;
-            case 8:
-                result = PlatformBitmap::kLeft;
-                break;
-            default:
-                break;
-        }
-        
-        return result;
-    }
 
 static U8
 GetInitialPropertiesValue()
@@ -165,7 +110,6 @@ GetInitialPropertiesValue()
 AppleFileBitmap::AppleFileBitmap( const char* inPath, bool isMask )
 :	Super(),
 	fImage( NULL ),
-	fOrientation( kUp ),
 	fProperties( GetInitialPropertiesValue() ),
 	fIsMask( isMask )
 {
@@ -182,24 +126,7 @@ AppleFileBitmap::AppleFileBitmap( const char* inPath, bool isMask )
 
 		if ( Rtt_VERIFY( imageSource ) )
 		{
-			// CFShow( imageSource );
-            
-            CGImageSourceStatus status = CGImageSourceGetStatus(imageSource);
-            if (status == kCGImageStatusComplete)
-            {
-                CFDictionaryRef imageSourceProperties = CGImageSourceCopyPropertiesAtIndex(imageSource,0,NULL);
-                if (imageSourceProperties)
-                {
-                    id orientation = (id)CFDictionaryGetValue(imageSourceProperties, kCGImagePropertyOrientation);
-                    if (orientation)
-                    {
-                        int cgOrientation = [(NSNumber*)orientation intValue];
-                        fOrientation = ConvertCGOrientation(cgOrientation);
-                    }
-                    CFRelease( imageSourceProperties );
-                }
-            }
-            
+			// CFShow( imageSource );            
 			fImage = CGImageSourceCreateImageAtIndex( imageSource, 0, NULL );
 
 			// if ( fImage ) { CFShow( fImage ); }
@@ -217,38 +144,9 @@ AppleFileBitmap::AppleFileBitmap( const char* inPath, bool isMask )
 
 #if defined( Rtt_IPHONE_ENV ) || defined( Rtt_TVOS_ENV )
 
-static S8
-ConvertOrientation( UIImageOrientation orientation )
-{
-	S8 result = PlatformBitmap::kUp;
-
-	switch( orientation )
-	{
-		case UIImageOrientationDown:
-		case UIImageOrientationDownMirrored:
-			result = PlatformBitmap::kDown;
-			break;
-		case UIImageOrientationLeft:
-		case UIImageOrientationLeftMirrored:
-			result = PlatformBitmap::kLeft;
-			break;
-		case UIImageOrientationRight:
-		case UIImageOrientationRightMirrored:
-			result = PlatformBitmap::kRight;
-			break;
-		//case UIImageOrientationUp:
-		//case UIImageOrientationUpMirrored:
-		default:
-			break;
-	}
-
-	return result;
-}
-
 AppleFileBitmap::AppleFileBitmap( UIImage* image, bool isMask )
 :	Super(),
 	fImage( (CGImageRef)CFRetain( image.CGImage ) ),
-	fOrientation( ConvertOrientation( image.imageOrientation ) ),
 	fProperties( GetInitialPropertiesValue() ),
 	fIsMask( isMask )
 {
@@ -260,7 +158,6 @@ AppleFileBitmap::AppleFileBitmap( UIImage* image, bool isMask )
 AppleFileBitmap::AppleFileBitmap( NSImage* image, bool isMask )
 :	Super(),
 	fImage( NULL ),
-	fOrientation( PlatformBitmap::kUp ), // not sure how to get orientation from NSImage
 	fProperties( GetInitialPropertiesValue() ),
 	fIsMask( isMask )
 {
@@ -343,9 +240,8 @@ AppleFileBitmap::CalculateScale() const
 	// Align longest image edge to the longest screen edge to calculate proper scale.
 	// If image is landscape and screen size is portrait (or vice versa), 
 	// then swap screen dimensions. 
-	bool isImageLandscape = w > h;
 	bool isScreenLandscape = wMax > hMax;
-	if ( isImageLandscape != isScreenLandscape )
+	if ( !isScreenLandscape )
 	{
 		size_t tmp = wMax;
 		wMax = hMax; hMax = tmp;
@@ -367,56 +263,6 @@ static Rtt_INLINE
 double DegreesToRadians( double degrees )
 {
 	return degrees * M_PI/180;
-}
-
-// Transform CGContext to account for different origin depending on orientation
-// Also return CGRect, appropriately rotated
-CGRect
-AppleFileBitmap::TransformCGContext( CGContextRef context, size_t width, size_t height ) const
-{
-	CGRect rect = { { 0.f, 0.f }, { (CGFloat)width, (CGFloat)height } };
-
-	if ( IsProperty( kIsBitsAutoRotated ) )
-	{
-		Orientation orientation = GetOrientation();
-		if ( kUp != orientation )
-		{
-			S32 angle = DegreesToUpright();
-
-			bool flipDimensions = true;
-
-			switch ( orientation )
-			{
-				case kRight:
-					CGContextTranslateCTM( context, 0, height );
-					CGContextRotateCTM( context, DegreesToRadians( -angle ) );
-					break;
-				case kLeft:
-					CGContextTranslateCTM( context, width, 0 );
-					CGContextRotateCTM( context, DegreesToRadians( -angle ) );
-					break;
-				case kDown:
-					CGContextTranslateCTM( context, width, height );
-					CGContextRotateCTM( context, DegreesToRadians( angle ) );
-					flipDimensions = false;
-					break;
-				default:
-					Rtt_ASSERT_NOT_REACHED();
-					break;
-			}
-
-			if ( flipDimensions )
-			{
-				// height and width correspond to the upright dimensions,
-				// but we need to draw the bounds of the source (i.e.
-				// the pre-auto-rotated) dimensions
-				rect.size.width = height;
-				rect.size.height = width;
-			}
-		}
-	}
-
-	return rect;
 }
 
 void*
@@ -450,7 +296,7 @@ AppleFileBitmap::GetBitsGrayscale( Rtt_Allocator* context ) const
 
 		if ( Rtt_VERIFY( bmpContext ) )
 		{
-			CGRect rect = TransformCGContext( bmpContext, width, height );
+			CGRect rect = { { 0.f, 0.f }, { (CGFloat)width, (CGFloat)height } };
 
 			CGContextDrawImage( bmpContext, rect, fImage );
 			CGContextRelease( bmpContext );
@@ -498,8 +344,7 @@ AppleFileBitmap::GetBitsColor( Rtt_Allocator* context ) const
 										bitmapInfo );
 		if ( Rtt_VERIFY( bmpContext ) )
 		{
-			CGRect rect = TransformCGContext( bmpContext, width, height );
-
+			CGRect rect = { { 0.f, 0.f }, { (CGFloat)width, (CGFloat)height } };
 			CGContextDrawImage( bmpContext, rect, fImage );
 			CGContextRelease( bmpContext );
 			result = data;
@@ -589,43 +434,17 @@ AppleFileBitmap::PrintChannel( const U8 *bytes, int channel, U32 bytesPerPixel )
 #endif
 
 U32
-AppleFileBitmap::SourceWidth() const
+AppleFileBitmap::Width() const
 {
 	U32 len = (U32) CGImageGetWidth( fImage );
 	return WasScaled() ? (fScale * len) : len;
 }
 
 U32
-AppleFileBitmap::SourceHeight() const
+AppleFileBitmap::Height() const
 {
 	U32 len = (U32) CGImageGetHeight( fImage );
 	return WasScaled() ? (fScale * len) : len;
-}
-
-U32
-AppleFileBitmap::Width() const
-{
-	return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceWidth() : UprightWidth() );
-}
-
-U32
-AppleFileBitmap::Height() const
-{
-	return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceHeight() : UprightHeight() );
-}
-
-U32
-AppleFileBitmap::UprightWidth() const
-{
-	S32 angle = DegreesToUpright();
-	return ( 0 == angle || 180 == Abs( angle ) ) ? SourceWidth() : SourceHeight();
-}
-
-U32
-AppleFileBitmap::UprightHeight() const
-{
-	S32 angle = DegreesToUpright();
-	return ( 0 == angle || 180 == Abs( angle ) ) ? SourceHeight() : SourceWidth();
 }
 
 bool
@@ -661,8 +480,6 @@ AppleFileBitmap::SetProperty( PropertyMask mask, bool newValue )
 		case kIsBitsFullResolution:
 			fScale = CalculateScale();
 			break;
-		case kIsBitsAutoRotated:
-			break;
 		default:
 			break;
 	}
@@ -681,12 +498,6 @@ AppleFileBitmap::GetFormat() const
 #else
 	return PlatformBitmap::kABGR;
 #endif
-}
-
-PlatformBitmap::Orientation
-AppleFileBitmap::GetOrientation() const
-{
-	return (PlatformBitmap::Orientation)fOrientation;
 }
 
 // ----------------------------------------------------------------------------

@@ -69,25 +69,9 @@ NewBufferBitmap(
 	GradientPaint::Direction direction )
 {
 	const PlatformBitmap::Format kFormat = PlatformBitmap::kRGBA;
-	PlatformBitmap::Orientation orientation = PlatformBitmap::kDown;
-
-	switch ( direction )
-	{
-		case GradientPaint::kUpDirection:
-			orientation = PlatformBitmap::kUp;
-			break;
-		case GradientPaint::kRightDirection:
-			orientation = PlatformBitmap::kRight;
-			break;
-		case GradientPaint::kLeftDirection:
-			orientation = PlatformBitmap::kLeft;
-			break;
-		default:
-			break;
-	}
 
 	BufferBitmap *result =
-		Rtt_NEW( pAllocator, BufferBitmap( pAllocator, kBufferWidth, kBufferHeight, kFormat, orientation ) );
+		Rtt_NEW( pAllocator, BufferBitmap( pAllocator, kBufferWidth, kBufferHeight, kFormat ) );
 	result->SetProperty( PlatformBitmap::kIsPremultiplied, true );
 
 	Color *pixels = (Color *)result->WriteAccess();

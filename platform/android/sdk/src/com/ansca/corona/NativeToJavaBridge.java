@@ -673,43 +673,6 @@ public class NativeToJavaBridge {
 		// Return the result. Will be null if failed to load the image.
 		return options;
 	}
-
-	private int getImageExifRotationInDegreesFrom(String imageFileName) {
-		// Validate argument.
-		if ((imageFileName == null) || (imageFileName.length() <= 0)) {
-			return 0;
-		}
-
-		// Do not continue if the given file is an asset.
-		// The ExifReader class cannot access an asset within a file.
-		com.ansca.corona.storage.FileServices fileServices;
-		fileServices = new com.ansca.corona.storage.FileServices(CoronaEnvironment.getApplicationContext());
-		if (fileServices.isAssetFile(imageFileName)) {
-			return 0;
-		}
-
-		// Attempt to fetch the EXIF orientation from the given image file.
-		int rotationInDegrees = 0;
-		try {
-			android.media.ExifInterface exifReader = new android.media.ExifInterface(imageFileName);
-			int exifOrientation = exifReader.getAttributeInt(
-							android.media.ExifInterface.TAG_ORIENTATION,
-							android.media.ExifInterface.ORIENTATION_NORMAL);
-			switch (exifOrientation) {
-				case android.media.ExifInterface.ORIENTATION_ROTATE_90:
-					rotationInDegrees = 90;
-					break;
-				case android.media.ExifInterface.ORIENTATION_ROTATE_180:
-					rotationInDegrees = 180;
-					break;
-				case android.media.ExifInterface.ORIENTATION_ROTATE_270:
-					rotationInDegrees = 270;
-					break;
-			}
-		}
-		catch (Exception ex) { }
-		return rotationInDegrees;
-	}
 	
 	/**
 	 * Instances of this class are returned from the loadBitmap() method to indicate if it successfully
@@ -720,22 +683,19 @@ public class NativeToJavaBridge {
 		private int fWidth;
 		private int fHeight;
 		private float fScaleFactor;
-		private int fRotationInDegrees;
 		
-		public LoadBitmapResult(Bitmap bitmap, float scaleFactor, int rotationInDegrees) {
+		public LoadBitmapResult(Bitmap bitmap, float scaleFactor) {
 			fBitmap = bitmap;
 			fWidth = 0;
 			fHeight = 0;
 			fScaleFactor = scaleFactor;
-			fRotationInDegrees = rotationInDegrees;
 		}
 		
-		public LoadBitmapResult(int width, int height, float scaleFactor, int rotationInDegrees) {
+		public LoadBitmapResult(int width, int height, float scaleFactor) {
 			fBitmap = null;
 			fWidth = width;
 			fHeight = height;
 			fScaleFactor = scaleFactor;
-			fRotationInDegrees = rotationInDegrees;
 		}
 		
 		public boolean wasSuccessful() {
@@ -763,10 +723,6 @@ public class NativeToJavaBridge {
 		public float getScaleFactor() {
 			return fScaleFactor;
 		}
-
-		public int getRotationInDegrees() {
-			return fRotationInDegrees;
-		}
 	}
 	
 	private LoadBitmapResult loadBitmap(String filePath, int maxWidth, int maxHeight, boolean loadImageInfoOnly) {
@@ -789,14 +745,6 @@ public class NativeToJavaBridge {
 		InputStream stream = fileServices.openFile(filePath);
 		if (stream == null) {
 			return null;
-		}
-
-		// Fetch the image file's EXIF orientation, if available.
-		// Skip asset files since the ExifInterface class can only open external files.
-		// Note: EXIF is optional metadata assigned to image files. It is commonly set by cameras.
-		int rotationInDegrees = 0;
-		if (!isAssetFile) {
-			rotationInDegrees = getImageExifRotationInDegreesFrom(filePath);
 		}
 		
 		// If a maximum pixel width and height has been provided (ie: a max value greater than zero),
@@ -862,7 +810,7 @@ public class NativeToJavaBridge {
 			}
 
 			// Return the image file's information.
-			return new LoadBitmapResult(expectedWidth, expectedHeight, expectedScale, rotationInDegrees);
+			return new LoadBitmapResult(expectedWidth, expectedHeight, expectedScale);
 		}
 		
 		// Load the image file to an uncompressed bitmap in memory.
@@ -908,7 +856,7 @@ public class NativeToJavaBridge {
 		}
 		
 		// Image file was loaded successfully. Return the bitmap in a result object.
-		return new LoadBitmapResult(bitmap, downsampleScale, rotationInDegrees);
+		return new LoadBitmapResult(bitmap, downsampleScale);
 	}
 
 	private static boolean callLoadBitmap(
@@ -998,10 +946,10 @@ public class NativeToJavaBridge {
 		// Copy the image's data to the native C/C++ image object.
 		boolean wasCopied = false;
 		if (loadImageInfoOnly) {
-			// Only copy the image's width, height, scale, and rotation.
+			// Only copy the image's width, height, scale.
 			wasCopied = JavaToNativeShim.copyBitmapInfo( runtime,
 								nativeImageMemoryAddress, result.getWidth(), result.getHeight(),
-								result.getScaleFactor(), result.getRotationInDegrees());
+								result.getScaleFactor());
 		}
 		else if (bitmap != null) {
 			// Copy all of the image's data to the native side, which includes its pixels.
@@ -1031,7 +979,7 @@ public class NativeToJavaBridge {
 			}
 			wasCopied = JavaToNativeShim.copyBitmap( runtime,
 								nativeImageMemoryAddress, bitmap, result.getScaleFactor(),
-								result.getRotationInDegrees(), convertToGrayscale);
+								convertToGrayscale);
 		}
 
 		// Free the memory used by the bitmap.

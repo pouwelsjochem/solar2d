@@ -58,18 +58,10 @@ bool
 IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) const
 {
 	Rtt_ASSERT( bitmap );
-	PlatformBitmap::Orientation orientation = bitmap->GetOrientation();
-	bool isSideways = PlatformBitmap::kLeft == orientation || PlatformBitmap::kRight == orientation;
 
 	const void* buffer = bitmap->GetBits( & GetAllocator() );
 	size_t w = bitmap->Width();
 	size_t h = bitmap->Height();
-	size_t wDst = w;
-	size_t hDst = h;
-	if ( isSideways )
-	{
-		Swap( wDst, hDst );
-	}
 
 	size_t bytesPerPixel = PlatformBitmap::BytesPerPixel( bitmap->GetFormat() );
 	size_t bytesPerRow = w*bytesPerPixel;
@@ -90,35 +82,7 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) con
     
     
 	//void* pixels = calloc( bytesPerRow, h );
-	CGContextRef context = CGBitmapContextCreate(NULL, wDst, hDst, 8, wDst*bytesPerPixel, colorspace, dstBitmapInfo);
-
-	// On iPhone, when the image is sideways, we have to rotate the bits b/c when 
-	// we read them in using glReadPixels, the window buffer is physically oriented 
-	// as upright, so glReadPixels returns them assuming the buffer is physically
-	// oriented upright, rather than sideways.
-	if ( isSideways )
-	{
-		S32 angle = - ( bitmap->DegreesToUprightBits() );
-		CGFloat dx = (CGFloat)wDst;
-		CGFloat dy = (CGFloat)hDst;
-		if ( 90 == angle )
-		{
-			dy = 0.f;
-		}
-		if ( -90 == angle )
-		{
-			dx = 0.f;
-		}
-
-		CGContextTranslateCTM( context, dx, dy );
-		CGContextRotateCTM( context, DegreesToRadians( angle ) );
-	}
-	else if ( PlatformBitmap::kDown == orientation )
-	{
-		CGContextTranslateCTM( context, wDst, hDst );
-		CGContextRotateCTM( context, DegreesToRadians( 180 ) );
-	}
-
+	CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, w*bytesPerPixel, colorspace, dstBitmapInfo);
 	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
 	CGImageRef flippedImageRef = CGBitmapContextCreateImage(context);
 	UIImage* image = [[UIImage alloc] initWithCGImage:flippedImageRef];

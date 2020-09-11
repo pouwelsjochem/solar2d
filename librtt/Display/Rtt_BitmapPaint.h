@@ -52,9 +52,6 @@ class BitmapPaint : public Paint
 		BitmapPaint( const SharedPtr< TextureResource >& resource );
 
 	public:
-		S32 DegreesToUpright() const;
-
-	public:
 		virtual const Paint* AsPaint( Super::Type type ) const;
 		virtual const MLuaUserdataAdapter& GetAdapter() const;
 		virtual void UpdateTransform( Transform& t ) const;

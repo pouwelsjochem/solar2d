@@ -995,48 +995,6 @@ DisplayObject::UpdateMaskUniform(
 {
 	Matrix dstToMask;
 	CalculateMaskMatrix( dstToMask, srcToDst, mask );
-/*
-	Matrix dstToBitmap;
-	Matrix::Invert( srcToDst, dstToBitmap );
-
-	Real w, h;
-	mask.GetSelfBounds( w, h );
-
-	Real invW = Rtt_RealDiv( Rtt_REAL_1, w );
-	Real invH = Rtt_RealDiv( Rtt_REAL_1, h );
-
-	// We need to calculate the transform that takes the object's
-	// dst (world) coord space to the mask's UV coord space.
-	//
-	// This allows us to calculate the object's vertices
-	// in the mask's UV coord system.
-	//
-	// texMatrix = [Scale] * [Translate] * [dstToBitmap]
-	Matrix texMatrix = dstToBitmap;
-	texMatrix.Translate( 0.5*w, 0.5*h );
-	texMatrix.Scale( invW, invH );
-*/
-
-/*
-	// The scale factor from dst space to texture coordinates is:
-	// ( w / w2 ) * ( 1 / w ) = ( 1 / w2 )
-	// The first term is the ratio of actual width to the next power of 2
-	// The second term is to normalize to texture coordinates [0,1]
-	// Similarly for height.
-	Rtt_glScale( fW2Inv, fH2Inv, Rtt_REAL_1 );
-
-	Rtt_glTranslate( Rtt_IntToReal( bitmap.Width() >> 1 ), Rtt_IntToReal( bitmap.Height() >> 1 ), Rtt_REAL_0 );
-
-	S32 angle = bitmap.DegreesToUprightBits();
-	if ( 0 != angle )
-	{
-		Rtt_glRotate( Rtt_IntToReal( -angle ), Rtt_REAL_0, Rtt_REAL_0, Rtt_REAL_1 );
-	}
-
-	Rtt_Real m[16];
-	fDstToBitmap.ToGLMatrix( m );
-	Rtt_glMultMatrix( m );
-*/
 
 	dstToMask.ToGLMatrix3x3( reinterpret_cast< Real * >( maskUniform.GetData() ) );
 	maskUniform.Invalidate();

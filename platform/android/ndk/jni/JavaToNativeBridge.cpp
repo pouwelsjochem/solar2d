@@ -333,7 +333,7 @@ JavaToNativeBridge::GetContentHeightInPixels()
 bool
 JavaToNativeBridge::CopyBitmapInfo(
 	JNIEnv *env, jlong nativeImageMemoryAddress, int width, int height,
-	float downscaleFactor, int rotationInDegrees)
+	float downscaleFactor)
 {
 	// Validate.
 	if (!nativeImageMemoryAddress)
@@ -346,14 +346,13 @@ JavaToNativeBridge::CopyBitmapInfo(
 	imagePointer->SetWidth((width >= 0) ? (U32)width : 0);
 	imagePointer->SetHeight((height >= 0) ? (U32)height : 0);
 	imagePointer->SetScale(Rtt_FloatToReal((float)downscaleFactor));
-	imagePointer->SetOrientationInDegrees(rotationInDegrees);
 	return true;
 }
 
 bool
 JavaToNativeBridge::CopyBitmap(
 	JNIEnv *env, jlong nativeImageMemoryAddress, jobject bitmap, float downscaleFactor,
-	int rotationInDegrees, bool convertToGrayscale)
+	bool convertToGrayscale)
 {
 	// Validate.
 	if (!nativeImageMemoryAddress)
@@ -400,7 +399,6 @@ JavaToNativeBridge::CopyBitmap(
 	imagePointer->SetWidth(bitmapInfo.width);
 	imagePointer->SetHeight(bitmapInfo.height);
 	imagePointer->SetScale(Rtt_FloatToReal((float)downscaleFactor));
-	imagePointer->SetOrientationInDegrees(rotationInDegrees);
 	if (convertToGrayscale)
 	{
 		imagePointer->SetPixelFormatToGrayscale();

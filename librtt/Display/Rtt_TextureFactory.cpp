@@ -116,8 +116,7 @@ TextureFactory::CreateBitmap(
 		const PlatformBitmap::PropertyMask kMasks[] =
 		{
 			PlatformBitmap::kIsPremultiplied,
-			PlatformBitmap::kIsBitsFullResolution,
-			PlatformBitmap::kIsBitsAutoRotated
+			PlatformBitmap::kIsBitsFullResolution
 		};
 
 		for ( int i = 0, iMax = sizeof( kMasks ) / sizeof( * kMasks );
@@ -334,10 +333,9 @@ NewContainerMaskBitmap( Rtt_Allocator *pAllocator )
 	const size_t kLength = 8;
 	const size_t kBorder = 2;
 	const PlatformBitmap::Format kFormat = PlatformBitmap::kRGBA;
-	const PlatformBitmap::Orientation kOrientation = PlatformBitmap::kUp;
 	const U32 kWhite = 0xFFFFFFFF;
 
-	BufferBitmap *result = Rtt_NEW(pAllocator, BufferBitmap(pAllocator, kLength, kLength, kFormat, kOrientation));
+	BufferBitmap *result = Rtt_NEW(pAllocator, BufferBitmap(pAllocator, kLength, kLength, kFormat));
 
 	// Initialize bytes to 0
 	U32 *bits = (U32 *)result->WriteAccess();
@@ -355,12 +353,11 @@ NewContainerMaskBitmap( Rtt_Allocator *pAllocator )
 	const size_t kLength = 8;
 	const size_t kBorder = 2;
 	const PlatformBitmap::Format kFormat = PlatformBitmap::kMask;
-	const PlatformBitmap::Orientation kOrientation = PlatformBitmap::kUp;
 	const size_t kBytesPerRow = kLength * PlatformBitmap::BytesPerPixel( kFormat );
 	const U8 kWhite = 0xFF;
 
 	BufferBitmap *result =
-		Rtt_NEW( pAllocator, BufferBitmap( pAllocator, kLength, kLength, kFormat, kOrientation ) );
+		Rtt_NEW( pAllocator, BufferBitmap( pAllocator, kLength, kLength, kFormat ) );
 
 	// Initialize bytes to 0
 	U8 *bits = (U8 *)result->WriteAccess();

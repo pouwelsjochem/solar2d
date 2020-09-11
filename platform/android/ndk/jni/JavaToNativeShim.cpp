@@ -205,22 +205,22 @@ Java_com_ansca_corona_JavaToNativeShim_nativeDone( JNIEnv * env, jclass c, jlong
 JNIEXPORT jboolean JNICALL 
 Java_com_ansca_corona_JavaToNativeShim_nativeCopyBitmapInfo(
 	JNIEnv * env, jclass c, jlong bridgeAddress, jlong nativeImageMemoryAddress, jint width, jint height,
-	jfloat downscaleFactor, jint rotationInDegrees)
+	jfloat downscaleFactor)
 {
 	bool wasCopied = JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->CopyBitmapInfo(
 							env, nativeImageMemoryAddress, (int)width, (int)height,
-							(float)downscaleFactor, (int)rotationInDegrees);
+							(float)downscaleFactor);
 	return wasCopied ? JNI_TRUE : JNI_FALSE;
 }
 
 JNIEXPORT jboolean JNICALL 
 Java_com_ansca_corona_JavaToNativeShim_nativeCopyBitmap(
 	JNIEnv * env, jclass c, jlong bridgeAddress, jlong nativeImageMemoryAddress, jobject bitmap,
-	jfloat downscaleFactor, jint rotationInDegrees, jboolean convertToGrayscale)
+	jfloat downscaleFactor, jboolean convertToGrayscale)
 {
 	bool wasCopied = JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->CopyBitmap(
 							env, nativeImageMemoryAddress, bitmap, (float)downscaleFactor,
-							(int)rotationInDegrees, convertToGrayscale ? true : false);
+							convertToGrayscale ? true : false);
 	return wasCopied ? JNI_TRUE : JNI_FALSE;
 }
 

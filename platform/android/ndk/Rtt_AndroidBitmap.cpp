@@ -62,12 +62,6 @@ AndroidBitmap::GetScale() const
 	return fImageData.GetScale();
 }
 
-PlatformBitmap::Orientation 
-AndroidBitmap::GetOrientation() const
-{
-	return fImageData.GetOrientation();
-}
-
 PlatformBitmap::Format 
 AndroidBitmap::GetFormat() const
 {
@@ -127,44 +121,6 @@ AndroidAssetBitmap::ImageDecoder()
 	return fImageDecoder;
 }
 
-U32
-AndroidAssetBitmap::SourceWidth() const
-{
-	return Super::Width();
-}
-
-U32
-AndroidAssetBitmap::SourceHeight() const
-{
-	return Super::Height();
-}
-
-U32
-AndroidAssetBitmap::Width() const
-{
-	return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceWidth() : UprightWidth() );
-}
-
-U32
-AndroidAssetBitmap::Height() const
-{
-	return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceHeight() : UprightHeight() );
-}
-
-U32
-AndroidAssetBitmap::UprightWidth() const
-{
-	S32 angle = DegreesToUpright();
-	return ( 0 == angle || 180 == Abs( angle ) ) ? SourceWidth() : SourceHeight();
-}
-
-U32
-AndroidAssetBitmap::UprightHeight() const
-{
-	S32 angle = DegreesToUpright();
-	return ( 0 == angle || 180 == Abs( angle ) ) ? SourceHeight() : SourceWidth();
-}
-
 bool
 AndroidAssetBitmap::IsProperty( PropertyMask mask ) const
 {
@@ -184,8 +140,6 @@ AndroidAssetBitmap::SetProperty( PropertyMask mask, bool newValue )
 	switch ( mask )
 	{
 		case kIsBitsFullResolution:
-			break;
-		case kIsBitsAutoRotated:
 			break;
 		default:
 			break;

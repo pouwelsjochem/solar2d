@@ -77,8 +77,6 @@ class AppleFileBitmap : public AppleBitmap
 	protected:
 		void Initialize();
 		float CalculateScale() const;
-		U32 SourceWidth() const;
-		U32 SourceHeight() const;
 	
 	protected:
 		Rtt_INLINE bool IsPropertyInternal( PropertyMask mask ) const { return (fProperties & mask) ? true : false; }
@@ -86,7 +84,6 @@ class AppleFileBitmap : public AppleBitmap
 #ifdef Rtt_DEBUG
 		void PrintChannel( const U8 *bytes, int channel, U32 bytesPerPixel ) const;
 #endif
-		CGRect TransformCGContext( CGContextRef context, size_t width, size_t height ) const;
 		void* GetBitsGrayscale( Rtt_Allocator* context ) const;
 		void* GetBitsColor( Rtt_Allocator* context ) const;
 
@@ -95,18 +92,14 @@ class AppleFileBitmap : public AppleBitmap
 		virtual U32 Width() const;
 		virtual U32 Height() const;
 		virtual PlatformBitmap::Format GetFormat() const;
-		virtual U32 UprightWidth() const;
-		virtual U32 UprightHeight() const;
 		virtual bool WasScaled() const;
 		virtual Real GetScale() const;
 		virtual bool IsProperty( PropertyMask mask ) const;
 		virtual void SetProperty( PropertyMask mask, bool newValue );
-		virtual PlatformBitmap::Orientation GetOrientation() const;
 
 	private:
 		struct CGImage* fImage;
 		float fScale;
-		S8 fOrientation;
 		U8 fProperties;
 		U8 fIsMask;
 //		S8 fAngle; // multiples of 90 degrees, range is [-1,2]

@@ -139,17 +139,6 @@ BitmapPaint::BitmapPaint( const SharedPtr< TextureResource >& resource )
 	Initialize( kBitmap );
 }
 
-S32
-BitmapPaint::DegreesToUpright() const
-{
-	PlatformBitmap *bitmap = GetBitmap();
-	
-	S32 angle = ( bitmap ? bitmap->DegreesToUprightBits() : 0 );
-	Rtt_ASSERT( Abs( angle ) <= 180 );
-
-	return angle;
-}
-
 const Paint*
 BitmapPaint::AsPaint( Super::Type type ) const
 {

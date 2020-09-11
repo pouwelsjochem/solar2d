@@ -170,7 +170,7 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeDone
  */
 JNIEXPORT jboolean JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeCopyBitmapInfo
   (JNIEnv *, jclass, jlong, jlong nativeImageMemoryAddress, jint width, jint height,
-   jfloat downscaleFactor, jint rotationInDegrees);
+   jfloat downscaleFactor);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
@@ -179,7 +179,7 @@ JNIEXPORT jboolean JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeCopyBitm
  */
 JNIEXPORT jboolean JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeCopyBitmap
   (JNIEnv *, jclass, jlong, jlong nativeImageMemoryAddress, jobject bitmap, jfloat downscaleFactor,
-   jint rotationInDegrees, jboolean convertToGrayscale);
+   jboolean convertToGrayscale);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim

@@ -44,7 +44,6 @@ class PlatformSurface
 	public:
 		// Return width and height of physical device in pixels. The default 
 		// implementation just returns result of Width() and Height()
-		// NOTE: The width/height are returned wrt the "upright" orientation.
 		virtual S32 DeviceWidth() const;
 		virtual S32 DeviceHeight() const;
 };

@@ -86,11 +86,6 @@ class WinFileBitmap : public WinBitmap
 
 	protected:
 		float CalculateScale() const;
-		virtual U32 SourceWidth() const;
-		virtual U32 SourceHeight() const;
-
-	public:
-		virtual PlatformBitmap::Orientation GetOrientation() const;
 
 	protected:
 		Rtt_INLINE bool IsPropertyInternal( PropertyMask mask ) const { return (fProperties & mask) ? true : false; }
@@ -100,13 +95,10 @@ class WinFileBitmap : public WinBitmap
 		virtual U32 Height() const;
 		virtual bool IsProperty( PropertyMask mask ) const;
 		virtual void SetProperty( PropertyMask mask, bool newValue );
-		virtual U32 UprightWidth() const;
-		virtual U32 UprightHeight() const;
 
 	private:
 		float fScale;
 		U8 fProperties;
-		S8 fOrientation;
 		S16 fAngle; // [0, +-90, +-180]
 
 	protected:
@@ -129,8 +121,6 @@ class WinFileGrayscaleBitmap : public WinFileBitmap
 	protected:
 		virtual void Lock();
 		virtual void Unlock();
-		virtual U32 SourceWidth() const;
-		virtual U32 SourceHeight() const;
 
 		U32 fWidth;
 		U32 fHeight;
@@ -149,8 +139,6 @@ class WinTextBitmap : public PlatformBitmap
 		virtual PlatformBitmap::Format GetFormat() const;
 		virtual const void* GetBits( Rtt_Allocator* context ) const;
 		virtual void FreeBits() const;
-		virtual U32 Width() const;
-		virtual U32 Height() const;
 
 	protected:
 		virtual void Lock();

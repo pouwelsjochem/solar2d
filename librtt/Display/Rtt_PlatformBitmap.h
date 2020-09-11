@@ -41,33 +41,12 @@ class PlatformBitmap
 		Format;
 
 	public:
-		typedef enum _Orientation
-		{
-			kMinValue = 0,
-			kRight = kMinValue,
-			kUp,
-			kLeft,
-			kDown,
-
-			kNumTypes,
-			kMaxValue = kNumTypes - 1
-		}
-		Orientation;
-
-	public:
 		// Note: the default for these properties is *always* false,
 		// since the default implementation of IsProperty() is to return false.
 		typedef enum _PropertyMask
 		{
 			kIsPremultiplied = 0x1,
-
-			// The properties kIsBitsFullResolution and kIsBitsAutoRotated
-			// 
-			// When kIsBitsAutoRotated is true, then Bits() will return an "upright",
-			// pre-rotated buffer.  In this case, BitsWidth/Height() and Width/Height()
-			// should return the same number.
 			kIsBitsFullResolution = 0x2,
-			kIsBitsAutoRotated = 0x4
 		}
 		PropertyMask;
 
@@ -86,19 +65,6 @@ class PlatformBitmap
 		// is useful for preview purposes. When kIsBitsFullResolution is set, the
 		// pixel data is the original resolution of the image; this is useful
 		// for saving images to disk. 
-		// 
-		// (2) Orientation
-		// By default, the pixel data is in the original orientation of the 
-		// source buffer. Normally, images are stored in their upright position,
-		// so this is exactly what you want. When the image comes from a camera,
-		// there is EXIF metadata so the data may not be stored upright. Here,
-		// DegreesToUpright() gives a multiple of 90 (up to +/-180) so you'll
-		// know how much to rotate the image. During rendering (preview),
-		// RenderingStream hardware-accelerates this rotation.
-		// 
-		// When kIsBitsAutoRotated is set, the pixel data is automatically
-		// transformed. This is useful for saving images back to disk since
-		// often times, you cannot save EXIF metadata along with the image copy.
 		virtual const void* GetBits( Rtt_Allocator* context ) const = 0;
 		virtual void FreeBits() const = 0;
 
@@ -111,12 +77,6 @@ class PlatformBitmap
 		// Returns height of buffer returned by Bits()
 		virtual U32 Height() const = 0;
 		virtual Format GetFormat() const = 0;
-
-		// Returns width of image when upright
-		virtual U32 UprightWidth() const;
-
-		// Returns height of image when upright
-		virtual U32 UprightHeight() const;
 
 		// Indicates if the image was downscaled compared to the original image file/source.
 		virtual bool WasScaled() const;
@@ -131,29 +91,16 @@ class PlatformBitmap
 		bool IsPremultiplied() const { return IsProperty( kIsPremultiplied ); }
 		bool HasAlphaChannel() const;
 
-		// The orientation of the source buffer relative to the upright position.
-		// Essentially, the direction you'd rotate an image *before* writing out
-		// the data to a buffer.
-		virtual Orientation GetOrientation() const;
-
 		virtual U8 GetByteAlignment() const;
 
 #ifdef Rtt_ANDROID_ENV
 		void SwapRGB();
 		static void SwapBitmapRGB( char * base, int w, int h );
 #endif
-		
-	protected:
-		Rtt_INLINE S32 DegreesToUpright() const { return CalculateRotation( GetOrientation(), kUp ); }
 
 	public:
 		size_t NumBytes() const;
 		size_t NumTextureBytes( bool roundToNextPow2 ) const;
-
-		// The angle to rotate the image buffer returned by Bits() to make it upright
-		S32 DegreesToUprightBits() const;
-
-		bool IsLandscape() const;
 
 		// TODO: Remove as this is subsumed by GetFormat();
 		Rtt_INLINE bool IsMask() const { return GetFormat() == kMask; }
@@ -181,7 +128,6 @@ class PlatformBitmap
 
 	public:
 		static size_t BytesPerPixel( Format format );
-		static S32 CalculateRotation( Orientation start, Orientation end );
 		static bool GetColorByteIndexesFor(Format format, int *alphaIndex, int *redIndex, int *greenIndex, int *blueIndex);
 
 	protected:

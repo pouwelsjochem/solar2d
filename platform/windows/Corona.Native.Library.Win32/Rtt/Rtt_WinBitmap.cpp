@@ -224,61 +224,16 @@ void
 WinFileBitmap::InitializeMembers()
 {
 	fScale = 1.0;
-	fOrientation = kUp;
 	fProperties = GetInitialPropertiesValue();
 	fBitmap = NULL;
 	fLockedBitmapData = NULL;
 	fData = NULL;
 }
 
-PlatformBitmap::Orientation 
-WinFileBitmap::GetOrientation() const
-{
-	return kUp;
-}
-
 float
 WinFileBitmap::CalculateScale() const
 {
 	return 1.0;
-}
-
-U32
-WinFileBitmap::SourceWidth() const
-{
-	return WinBitmap::Width();
-}
-
-U32
-WinFileBitmap::SourceHeight() const
-{
-	return WinBitmap::Height();
-}
-
-U32
-WinFileBitmap::Width() const
-{
-	return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceWidth() : UprightWidth() );
-}
-
-U32
-WinFileBitmap::Height() const
-{
-	return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceHeight() : UprightHeight() );
-}
-
-U32
-WinFileBitmap::UprightWidth() const
-{
-	S32 angle = DegreesToUpright();
-	return ( 0 == angle || 180 == Abs( angle ) ) ? SourceWidth() : SourceHeight();
-}
-
-U32
-WinFileBitmap::UprightHeight() const
-{
-	S32 angle = DegreesToUpright();
-	return ( 0 == angle || 180 == Abs( angle ) ) ? SourceHeight() : SourceWidth();
 }
 
 bool
@@ -301,8 +256,6 @@ WinFileBitmap::SetProperty( PropertyMask mask, bool newValue )
 	{
 		case kIsBitsFullResolution:
 			fScale = ( newValue ? -1.0f : CalculateScale() );
-			break;
-		case kIsBitsAutoRotated:
 			break;
 		default:
 			break;
@@ -428,18 +381,6 @@ WinFileGrayscaleBitmap::Lock()
 void
 WinFileGrayscaleBitmap::Unlock()
 {
-}
-
-U32
-WinFileGrayscaleBitmap::SourceWidth() const
-{
-	return fWidth;
-}
-
-U32
-WinFileGrayscaleBitmap::SourceHeight() const
-{
-	return fHeight;
 }
 
 PlatformBitmap::Format 

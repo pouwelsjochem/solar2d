@@ -29,7 +29,7 @@ class BufferBitmap : public PlatformBitmap
 		typedef PlatformBitmap Super;
 
 	public:
-		BufferBitmap( Rtt_Allocator* allocator, size_t w, size_t h, Super::Format format, Orientation orientation = kUp );
+		BufferBitmap( Rtt_Allocator* allocator, size_t w, size_t h, Super::Format format );
 		BufferBitmap( Rtt_Allocator* allocator, size_t w, size_t h, Super::Format format, Real angle );
 		virtual ~BufferBitmap();
 
@@ -42,16 +42,12 @@ class BufferBitmap : public PlatformBitmap
 		virtual U32 Width() const;
 		virtual U32 Height() const;
 		virtual Super::Format GetFormat() const;
-		virtual U32 UprightWidth() const;
-		virtual U32 UprightHeight() const;
 		virtual bool IsProperty( PropertyMask mask ) const;
 		virtual void SetProperty( PropertyMask mask, bool newValue );
-		virtual Orientation GetOrientation() const;
 
 	public:
 		const void *ReadAccess() { return fData; }
 		void* WriteAccess() { return fData; }
-		void Flip( bool flipHorizontally, bool flipVertically );
 		void UndoPremultipliedAlpha();
 
 	private:
@@ -60,7 +56,6 @@ class BufferBitmap : public PlatformBitmap
 		U32 fHeight;
 		U8 fProperties;
 		U8 fFormat;
-		S8 fOrientation;
 };
 
 // ----------------------------------------------------------------------------

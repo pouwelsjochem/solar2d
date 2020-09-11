@@ -48,10 +48,10 @@ class JavaToNativeBridge
 		int GetContentHeightInPixels();
 		bool CopyBitmapInfo(
 					JNIEnv *env, jlong nativeImageMemoryAddress, int width, int height,
-					float downscaleFactor, int rotationInDegrees);
+					float downscaleFactor);
 		bool CopyBitmap(
 					JNIEnv *env, jlong nativeImageMemoryAddress, jobject bitmap,
-					float downscaleFactor, int rotationInDegrees, bool convertToGrayscale);
+					float downscaleFactor, bool convertToGrayscale);
 		void UpdateInputDevice(
 					JNIEnv * env, jint coronaDeviceId, jint androidDeviceId, jint deviceTypeId,
 					jstring permanentStringId, jstring productName, jstring displayName,

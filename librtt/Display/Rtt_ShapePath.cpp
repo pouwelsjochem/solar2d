@@ -111,27 +111,13 @@ ShapePath::CalculateUV( ArrayVertex2& texVertices, Paint *paint, bool canTransfo
 			|| ! paint->IsValid( Paint::kTextureTransformFlag ) )
 	{
 		paint->SetValid( Paint::kTextureTransformFlag );
-
 		paint->UpdateTransform( t );
-//			BitmapPaint *bitmapPaint = (BitmapPaint*)paint->AsPaint( Paint::kBitmap );
-//			if ( bitmapPaint )
-//			{
-//				t = bitmapPaint->GetTransform();
-//			}
-
-		S32 angle = 0;
 
 		const PlatformBitmap *bitmap = paint->GetBitmap();
 		if ( bitmap )
 		{
-			angle = bitmap->DegreesToUprightBits();
 			fTesselator->SetNormalizationScaleX( bitmap->GetNormalizationScaleX() );
 			fTesselator->SetNormalizationScaleY( bitmap->GetNormalizationScaleY() );
-		}
-
-		if ( 0 != angle )
-		{
-			t.Rotate( Rtt_IntToReal( angle ) );
 		}
 	}
 

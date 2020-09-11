@@ -40,7 +40,6 @@ class AndroidBitmap : public PlatformBitmap
 		virtual U32 Height() const;
 		virtual Real GetScale() const;
 		virtual Format GetFormat() const;
-		virtual PlatformBitmap::Orientation GetOrientation() const;
 		
 	protected:
 		mutable AndroidImageData fImageData;
@@ -58,14 +57,10 @@ class AndroidAssetBitmap : public AndroidBitmap
 		virtual U32 Height() const;
 		virtual bool IsProperty( PropertyMask mask ) const;
 		virtual void SetProperty( PropertyMask mask, bool newValue );
-		virtual U32 UprightWidth() const;
-		virtual U32 UprightHeight() const;
 		virtual const void * GetBits( Rtt_Allocator * context ) const;
 
 	protected:
 		AndroidImageDecoder& ImageDecoder();
-		U32 SourceWidth() const;
-		U32 SourceHeight() const;
 		Rtt_INLINE bool IsPropertyInternal( PropertyMask mask ) const { return (fProperties & mask) ? true : false; }
 
 	private:

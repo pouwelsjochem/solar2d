@@ -75,20 +75,6 @@ PlatformBitmap::HitTest( Rtt_Allocator *context, int i, int j, U8 threshold ) co
 	return result;
 }
 
-U32
-PlatformBitmap::UprightWidth() const
-{
-	Rtt_ASSERT( 0 == DegreesToUpright() );
-	return Width();
-}
-
-U32
-PlatformBitmap::UprightHeight() const
-{
-	Rtt_ASSERT( 0 == DegreesToUpright() );
-	return Height();
-}
-
 bool
 PlatformBitmap::WasScaled() const
 {
@@ -113,12 +99,6 @@ void
 PlatformBitmap::SetProperty( PropertyMask mask, bool newValue )
 {
 	Rtt_ASSERT_NOT_REACHED();
-}
-
-PlatformBitmap::Orientation
-PlatformBitmap::GetOrientation() const
-{
-	return kUp;
 }
 
 U8
@@ -174,18 +154,6 @@ PlatformBitmap::NumTextureBytes( bool roundToNextPow2 ) const
 	return bytesPerPixel * numPixels;
 }
 
-S32
-PlatformBitmap::DegreesToUprightBits() const
-{
-	return ( ! IsProperty( kIsBitsAutoRotated ) ? DegreesToUpright() : 0 );
-}
-
-bool
-PlatformBitmap::IsLandscape() const
-{
-	return UprightWidth() > UprightHeight();
-}
-
 size_t
 PlatformBitmap::BytesPerPixel( Format format )
 {
@@ -208,33 +176,6 @@ PlatformBitmap::BytesPerPixel( Format format )
 	return 0;
 }
 
-S32
-PlatformBitmap::CalculateRotation( Orientation start, Orientation end )
-{
-	S32 result = 0;
-
-	if ( start != end )
-	{
-		S8 delta = (S8)end - (S8)start;
-		bool isNegative = delta < 0;
-		U8 magnitude = ( isNegative ? -delta : delta );
-		switch( magnitude )
-		{
-			case 1:
-			case 2:
-				result = magnitude * 90;
-				if ( isNegative ) { result = -result; }
-				break;
-			case 3:
-				result = ( isNegative ? 90 : -90 );
-				break;
-			default:
-				break;
-		}
-	}
-
-	return result;
-}
 
 // Retrieves the color byte indexes for a single pixel for the given image format.
 // This function takes endianness into account.

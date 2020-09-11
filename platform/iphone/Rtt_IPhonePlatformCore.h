@@ -53,13 +53,8 @@ class IPhonePlatformCore : public IPhonePlatformBase
 
 	public:
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
-		/// virtual bool OpenURL( const char* url ) const;
-
-		/// virtual void SetIdleTimer( bool enabled ) const;
-		/// virtual bool GetIdleTimer() const;
 
 		virtual Real GetStandardFontSize() const;
-		/// virtual S32 GetFontNames( lua_State *L, int index ) const;
 
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 

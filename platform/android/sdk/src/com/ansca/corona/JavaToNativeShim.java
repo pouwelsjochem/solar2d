@@ -46,10 +46,10 @@ public class JavaToNativeShim {
     private static native void nativeDone(long bridgeAddress);
     private static native boolean nativeCopyBitmapInfo(
     			long bridgeAddress, long nativeImageMemoryAddress, int width, int height,
-    			float downscaleFactor, int rotationInDegrees);
+    			float downscaleFactor);
     private static native boolean nativeCopyBitmap(
     			long bridgeAddress, long nativeImageMemoryAddress, android.graphics.Bitmap bitmap,
-    			float downscaleFactor, int rotationInDegrees, boolean convertToGrayscale);
+    			float downscaleFactor, boolean convertToGrayscale);
     private static native void nativeSetZipFileEntryInfo(
     			long zipFileEntryMemoryAddress, String packageFilePath, String entryName,
     			long byteOffsetInPackage, long byteCountInPackage, boolean isCompressed);
@@ -244,7 +244,7 @@ public class JavaToNativeShim {
 	}
 
 	public static boolean copyBitmapInfo(
-		CoronaRuntime runtime, long nativeImageMemoryAddress, int width, int height, float downscaleFactor, int rotationInDegrees)
+		CoronaRuntime runtime, long nativeImageMemoryAddress, int width, int height, float downscaleFactor)
 	{
 		if (nativeImageMemoryAddress == 0) {
 			return false;
@@ -252,12 +252,12 @@ public class JavaToNativeShim {
 		if (runtime == null || runtime.wasDisposed()) {
 			return false;
 		}
-		return nativeCopyBitmapInfo(runtime.getJavaToNativeBridgeAddress(), nativeImageMemoryAddress, width, height, downscaleFactor, rotationInDegrees);
+		return nativeCopyBitmapInfo(runtime.getJavaToNativeBridgeAddress(), nativeImageMemoryAddress, width, height, downscaleFactor);
 	}
 
 	public static boolean copyBitmap(
 		CoronaRuntime runtime, long nativeImageMemoryAddress, android.graphics.Bitmap bitmap,
-		float downscaleFactor, int rotationInDegrees, boolean convertToGrayscale)
+		float downscaleFactor, boolean convertToGrayscale)
 	{
 		// Validate.
 		if ((nativeImageMemoryAddress == 0) || (bitmap == null)) {
@@ -270,7 +270,7 @@ public class JavaToNativeShim {
 
 		// Have the native C/C++ side copy the Java bitmap's pixels.
 		return nativeCopyBitmap( runtime.getJavaToNativeBridgeAddress(),
-					nativeImageMemoryAddress, bitmap, downscaleFactor, rotationInDegrees, convertToGrayscale);
+					nativeImageMemoryAddress, bitmap, downscaleFactor, convertToGrayscale);
 	}
 
 	public static void setZipFileEntryInfo(

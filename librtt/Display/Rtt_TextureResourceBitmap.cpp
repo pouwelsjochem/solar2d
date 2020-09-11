@@ -49,8 +49,7 @@ TextureResourceBitmap::Create(
 							BufferBitmap( display.GetAllocator(),
 											w,
 											h,
-											ConvertFormat( format ),
-											PlatformBitmap::kUp ) );
+											ConvertFormat( format ) ) );
 	}
 
 	TextureResourceBitmap *result =

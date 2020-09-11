@@ -32,9 +32,6 @@ class AndroidImageData
 		void SetHeight(U32 value);
 		Rtt_Real GetScale() const;
 		void SetScale(Rtt_Real value);
-		Rtt::PlatformBitmap::Orientation GetOrientation() const;
-		void SetOrientation(Rtt::PlatformBitmap::Orientation value);
-		void SetOrientationInDegrees(int value);
 		void SetPixelFormatToRGBA();
 		void SetPixelFormatToGrayscale();
 		bool IsPixelFormatRGBA() const;
@@ -50,7 +47,6 @@ class AndroidImageData
 		U32 fWidth;
 		U32 fHeight;
 		Rtt_Real fScale;
-		Rtt::PlatformBitmap::Orientation fOrientation;
 		bool fIsPixelFormatGrayscale;
 };
 

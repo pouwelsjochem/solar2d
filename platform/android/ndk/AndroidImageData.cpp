@@ -26,7 +26,6 @@ AndroidImageData::AndroidImageData(Rtt_Allocator *allocatorPointer)
 	fWidth(0),
 	fHeight(0),
 	fScale(Rtt_REAL_1),
-	fOrientation(Rtt::PlatformBitmap::kUp),
 	fIsPixelFormatGrayscale(false)
 {
 }
@@ -124,59 +123,6 @@ Rtt_Real AndroidImageData::GetScale() const
 void AndroidImageData::SetScale(Rtt_Real value)
 {
 	fScale = value;
-}
-
-/// Determines if the loaded image is upright, rotated left, rotated right, or upside down.
-/// <br>
-/// This usually only applies to JPEGs if their EXIF orientation is set. JPEG images taken
-/// from a camera or photo library are usually not upright, but at the orientation that the
-/// camera was mounted in. This image will then have to be re-oriented to upright via
-/// the rendering system.
-/// @return Return the orientation of the image data.
-///         <br>
-///         If kUp is returned, then the loaded image is already upright.
-Rtt::PlatformBitmap::Orientation AndroidImageData::GetOrientation() const
-{
-	return fOrientation;
-}
-
-/// Sets the orientation of the loaded image.
-/// @param value The orientation of the image indicating if the loaded image is upright,
-///              rotated left, rotated right, or upside down.
-void AndroidImageData::SetOrientation(Rtt::PlatformBitmap::Orientation value)
-{
-	fOrientation = value;
-}
-/// Sets the orientation of the loaded image in degrees, relative to the upright position.
-/// @param value The rotation angle of the loaded image in degrees, relative to what would be the
-///              upright position of the bitmap.
-///              <br>
-///              Expected to be set in increments of 90 degrees such as 0, 90, 180, or 270.
-///              <br>
-///              Negative values are accepted.
-void AndroidImageData::SetOrientationInDegrees(int value)
-{
-	// Convert from negative degrees to positive degrees, if necessary.
-	for (; value < 0; value += 360);
-
-	// Set the orientation type.
-	value %= 360;
-	if ((value >= 45) && (value < 135))
-	{
-		fOrientation = Rtt::PlatformBitmap::kRight;
-	}
-	else if ((value >= 135) && (value < 225))
-	{
-		fOrientation = Rtt::PlatformBitmap::kDown;
-	}
-	else if ((value >= 225) && (value < 315))
-	{
-		fOrientation = Rtt::PlatformBitmap::kLeft;
-	}
-	else
-	{
-		fOrientation = Rtt::PlatformBitmap::kUp;
-	}
 }
 
 /// Sets the image pixel format to 32-bit RGBA.
