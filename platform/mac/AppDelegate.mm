@@ -109,10 +109,8 @@
 
 	#include "Rtt_MSimulatorServices.h"
 	#import "CoronaWindowController.h"
-	#import "HomeScreenRuntimeDelegate.h"
 
 	#import "TextEditorSupport.h"
-	#import "FileWatch.h"
 	#import "ValidationToolOutputViewController.h"
 	#import "ValidationSupportMacUI.h"
 	#import "SDKList.h"
@@ -121,50 +119,6 @@
 #include "Rtt_MacDialogController.h"
 
 // -------------------------
-
-// Container for Extension attributes (see loadExtensionMenu)
-@interface ExtensionParams : NSObject
-{
-}
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) NSString *path;
-@property (nonatomic, readonly) int width;
-@property (nonatomic, readonly) int height;
-@property (nonatomic, readonly) bool resizable;
-@property (nonatomic, readwrite, retain) CoronaWindowController *view;
-
-- (id) initParams:(NSString *)title path:(NSString *)path width:(int)w height:(int)h resizable:(bool) resizable;
-
-@end
-
-@implementation ExtensionParams
-
-- (id) initParams:(NSString *)title path:(NSString *)path width:(int)w height:(int)h resizable:(bool) resizable
-{
-	self = [super init];
-    
-	if ( self )
-	{
-		_title = [title retain];
-		_path = [path retain];
-        _width = w;
-        _height = h;
-        _resizable = resizable;
-        _view = nil;
-	}
-    
-	return self;
-}
-
-- (void) dealloc
-{
-	[_title release];
-	[_path release];
-    
-	[super dealloc];
-}
-
-@end
 
 static void SigTERMHandler(int signal)
 {
@@ -201,15 +155,6 @@ static void SigPIPEHandler(int signal)
 // Settings stored in user preferences.
 //
 // Some of these are set from the command line. For example:
-//
-//     defaults write com.coronalabs.Corona_Simulator enableExtensions -bool YES
-//
-static NSString* kDoNotAutoCloseWelcomeWindowOnSimulatorLaunch = @"doNotAutoCloseWelcomeWindowOnSimulatorLaunch";
-static NSString* kRelaunchSimulatorOptionForResourceChangeNotification = @"relaunchSimulatorOptionForResourceChangeNotification";
-static NSString* kOpenLastProjectOnSimulatorLaunch = @"openLastProjectOnSimulatorLaunch";
-static NSString* kShowRuntimeErrors = @"showRuntimeErrors";
-// static NSString* kEnableExtensions = @"enableExtensions";
-static NSString* kRunningExtensions = @"runningExtensions";
 static NSString* kDockIconBounceTime = @"dockIconBounceTime";
 static NSString* kSuppressUnsupportedOSWarning = @"suppressUnsupportedOSWarning";
 
@@ -219,25 +164,6 @@ static NSString* kViewAsMenuItemName = @"View As";
 
 // TODO: Remove once the Beta is over
 static NSString* kEnableLinuxBuild = @"enableLinuxBuild";
-
-static const NSInteger kAskToRelaunchSimulator = 0;
-static const NSInteger kAlwaysRelaunchSimulator = 1;
-static const NSInteger kNeverRelaunchSimulator = 2;
-
-static const int       kCustomDeviceMenuTag = 999;
-static const int       kCustomDevicePlatformAndroidTag = 3001;
-static const int       kCustomDevicePlatformiOSTag = 3002;
-static const int       kCustomDevicePlatformmacOSTag = 3003;
-static const int       kCustomDevicePlatformtvOSTag = 3004;
-static const int       kCustomDevicePlatformWindowsTag = 3005;
-static const NSInteger kCustomDeviceMinWidth = 150;
-static const NSInteger kCustomDeviceMinHeight = 150;
-static const NSInteger kCustomDeviceMaxWidth = 4096;
-static const NSInteger kCustomDeviceMaxHeight = 4096;
-static const NSInteger kCustomDeviceDefaultWidth = 1280;
-static const NSInteger kCustomDeviceDefaultHeight = 720;
-static const NSString* kCustomDeviceDefaultName = @"My Custom Device";
-static const NSInteger kCustomDeviceDefaultPlatformTag = kCustomDevicePlatformiOSTag;
 
 static const int       kClearProjectSandboxMenuTag = 1001;
 
@@ -571,7 +497,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @synthesize applicationHasBeenInitialized;
 @synthesize launchedWithFile;
 @synthesize allowLuaExit;
-@synthesize fHomeScreen;
 
 +(BOOL)offlineModeAllowed {
 	static BOOL allowed = [[NSUserDefaults standardUserDefaults] boolForKey:@"allowOfflineMode"];
@@ -606,19 +531,14 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		dstPath = nil;
 		projectPath = nil;
 		
-		fHomeScreen = nil;
-
 		fPasswordController = nil;
 
 		fPreferencesWindow = nil;
-        fCustomDeviceWindow = nil;
         
 		fIsRemote = NO;
 
 		[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
 		fBuildProblemNotified = FALSE;
-
-		luaResourceFolderMonitor = NULL;
 
         fAndroidAppBuildController = nil;
         fIOSAppBuildController = nil;
@@ -676,7 +596,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     
     // Find the application support directory and the user's Skins directory within it
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *userSkinsDir = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Corona/Simulator/Skins"];
     // The builtin Skins directory is in the Resource directory in the bundle
     NSString *builtinSkinsDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Skins"];
     NSFileManager *localFileManager = [NSFileManager defaultManager];
@@ -692,18 +611,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
             [skinPathStrs addObject:luaPath];
         }
     }
-    
-    // User skins are a Pro feature
-	dirEnum = [localFileManager enumeratorAtPath:userSkinsDir];
-	while ((file = [dirEnum nextObject]))
-	{
-		if ([[file pathExtension] isEqualToString: @"lua"])
-		{
-			NSString *luaPath = [userSkinsDir stringByAppendingPathComponent:file];
-			
-			[skinPathStrs addObject:luaPath];
-		}
-	}
     
     // Put the skins into a data structure we can share with core code
     char **skinPaths;
@@ -942,12 +849,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     
 	[viewAsMenu insertItem:[NSMenuItem separatorItem] atIndex:viewAsItemCount];
 	++viewAsItemCount;
-	
-	NSMenuItem *newItem = [viewAsMenu insertItemWithTitle:@"Custom Device..."
-												   action:@selector(showCustomDevice:)
-											keyEquivalent:@""
-												  atIndex:viewAsItemCount];
-	[newItem setTag:kCustomDeviceMenuTag];
     
     // Make sure the current skin is checked
     [self updateMenuForSkinChange];
@@ -1003,10 +904,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     
 	// Use Key-Value-Observing (KVO) to listen for changes to properties
 	[self addObserver:self forKeyPath:@"fSkin" options:NSKeyValueObservingOptionNew context:NULL];
-	
-
-	
-    [self loadExtensionMenu];
 
     NSMenu *appMenu = [[NSApplication sharedApplication] mainMenu];
     NSMenuItem *windowMenuItem = [appMenu itemWithTitle:kWindowMenuItemName];
@@ -1023,9 +920,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	// Initialize random number generator
 	srand((unsigned int) time(NULL));
 	
-	NSDictionary *userDefaultsDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-										  [NSNumber numberWithBool:YES], kShowRuntimeErrors,
-										  nil];
+	NSDictionary *userDefaultsDefaults = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithBool:YES], nil];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsDefaults];
 	
 	// Arrange for "Relaunch" (Cmd-R) to work on startup if we have any Recent documents (this matches the behavior on Windows)
@@ -1049,274 +944,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		}
 	}
     
-    // Calling this makes the Welcome window fail to appear (the subsequent call seems to work without it)
     //[[NSProcessInfo processInfo] setAutomaticTerminationSupportEnabled:YES];
     [[NSProcessInfo processInfo] disableSuddenTermination];
-}
-
-//
-// loadExtensionMenu
-//
-// Look in an Extensions folder in the .app bundle (a sibling of Resources) and
-// in "~/Library/Application Support/Corona/Simulator/Extensions" for extensions to load.
-// The window dimensions and title for each are loaded and saved so they can be used when
-// an extension is instantiated.  Any extensions that were running last time the Simulator
-// was exited are reloaded.
-//
-- (void) loadExtensionMenu
-{
-    // Find the application support directory
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *publicExtDirectory = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Corona/Simulator/Extensions"];
-    NSArray *publicSimExtensions = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:publicExtDirectory isDirectory:YES]
-                                                                 includingPropertiesForKeys:[NSArray arrayWithObject:NSURLNameKey]
-                                                                                    options: NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-    // The Extensions directory is next to the Resource directory in the bundle
-    NSString *builtinExtDirectory = [[[[NSBundle mainBundle] builtInPlugInsPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Extensions"];
-    NSArray *builtinSimExtensions = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:builtinExtDirectory isDirectory:YES]
-                                                                  includingPropertiesForKeys:[NSArray arrayWithObject:NSURLNameKey]
-                                                                                     options: NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-    
-    // Concatenate the arrays of extensions, builtin ones first
-    NSMutableArray *simExtensions = [[[NSMutableArray alloc] initWithArray:builtinSimExtensions] autorelease];
-    [simExtensions addObjectsFromArray:publicSimExtensions];
-    
-    NSMenu *appMenu = [[NSApplication sharedApplication] mainMenu];
-    NSMenuItem *windowMenuItem = [appMenu itemWithTitle:kWindowMenuItemName];
-    NSMenu *windowMenu = [windowMenuItem submenu];
-    long welcomeItemIdx = [windowMenu indexOfItemWithTitle:@"Welcome to Corona"];
-
-    if (welcomeItemIdx == -1)
-    {
-        // for some reason we can't find the Welcome menuitem, bail
-        // TODO: if we make the Welcome window an extension we'll need to address the chicken and egg problem here
-        return;
-    }
-    
-    if ([simExtensions count] > 0)
-    {
-        long menuIdx = welcomeItemIdx + 1;
-        NSArray *runningExt = [[NSUserDefaults standardUserDefaults] objectForKey:kRunningExtensions];
-        
-        for (NSURL *extURL in simExtensions)
-        {
-            NSMenuItem *extMenuItem = nil;
-            NSString *extPath = [extURL path];
-            int status = 0;
-            lua_State *L = CoronaLuaNew( kCoronaLuaFlagNone );
-            int width = 640;
-            int height = 480;
-			bool resizable = false;
-            NSString *windowTitle = [NSString stringWithString:[extPath lastPathComponent]]; // default
-            
-            // Sanity check
-            if (! [[NSFileManager defaultManager] isReadableFileAtPath:[extPath stringByAppendingPathComponent:@"main.lua"]])
-            {
-                printf("Simulator: '%s' is not a valid extension\n", [extPath UTF8String]);
-                
-                CoronaLuaDelete( L );
-
-                continue;
-            }
-            
-            // Load optional "extension.lua" file to get dimensions of window
-            NSString *extensionLuaPath = [extPath stringByAppendingPathComponent:@"extension.lua"];
-            
-            if ([[NSFileManager defaultManager] isReadableFileAtPath:extensionLuaPath])
-            {
-                status = CoronaLuaDoFile( L, [extensionLuaPath UTF8String], 0, false );
-                
-                if ( 0 == status )
-                {
-                    lua_getglobal( L, "extension" );
-                    
-                    if ( lua_istable( L, -1 ) )
-                    {
-                        lua_getfield( L, -1, "width" );
-                        width = (int) luaL_optinteger( L, -1, width );
-                        lua_pop( L, 1 );
-                        
-                        lua_getfield( L, -1, "height" );
-                        height = (int) luaL_optinteger( L, -1, height );
-                        lua_pop( L, 1 );
-                        
-                        lua_getfield( L, -1, "title" );
-                        windowTitle = [NSString stringWithExternalString:luaL_optstring( L, -1, "" )];
-                        lua_pop( L, 1 );
-
-						lua_getfield( L, -1, "resizable" );
-						resizable = (int) lua_toboolean( L, -1 );
-						lua_pop( L, 1 );
-                    }
-                }
-            }
-
-            CoronaLuaDelete( L );
-
-            ExtensionParams *extParams = [[ExtensionParams alloc] initParams:windowTitle path:extPath width:width height:height resizable:resizable];
-            
-            // If this is the builtin "Welcome" extension put it on the existing menuitem
-            if ([extPath hasSuffix:[builtinExtDirectory stringByAppendingPathComponent:@"welcome"]])
-            {
-                extMenuItem = [windowMenu itemAtIndex:welcomeItemIdx];
-                Rtt_ASSERT( extMenuItem ); // must exist
-                [extMenuItem setTitle:windowTitle];
-                [extMenuItem setAction:@selector(extensionAction:)];
-                // item already has a keyEquivalent
-            }
-            else
-            {
-                // If there are too many extensions, "keyEquivalent" will top out at Cmd+9
-                extMenuItem = [windowMenu insertItemWithTitle:windowTitle
-                                                       action:@selector(extensionAction:)
-                                                keyEquivalent:[NSString stringWithFormat:@"%ld",
-                                                               (menuIdx - welcomeItemIdx)+1]
-                                                      atIndex:menuIdx];
-                ++menuIdx;
-            }
-            
-            if (extMenuItem != nil)
-            {
-                // Point the menuitem at the extension's window size so we can pick it up when the window is instantiated
-                [extMenuItem setRepresentedObject:extParams];
-                
-                if (runningExt != nil)
-                {
-                    // If this extension was loaded last time we ran, load it again
-                    for (NSString *extPath in runningExt)
-                    {
-                        // If this is the composer, only open it if fOpenLastProject is set, otherwise open it in loadExtensions
-                        if (([extPath isEqualToString:extParams.path] && [extPath hasSuffix:[builtinExtDirectory stringByAppendingPathComponent:@"composer"]] && fOpenLastProject) ||
-                            [extPath isEqualToString:extParams.path])
-                        {
-                            [self loadExtension:extParams];
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-//
-// loadExtension
-//
-// Load an extension by creating a CoronaWindowController for it.  Remember running extensions in the preferences.
-//
-- (void) loadExtension:(ExtensionParams *) extParams
-{
-    Rtt_TRACE(("Starting extension: %s", [extParams.path UTF8String]));
-        
-    __block CoronaWindowController *extView = [[[CoronaWindowController alloc] initWithPath:extParams.path width:extParams.width height:extParams.height title:extParams.title resizable:extParams.resizable] autorelease];
-    Rtt::RuntimeDelegate *delegate = new Rtt::HomeScreenRuntimeDelegate( extView, extParams.path );
-    [extView setRuntimeDelegate:delegate];
-
-    void (^windowcontroller_clean_up)() = ^()
-    {
-        // Save the fact that this extension is no longer running in the user's defaults
-        if (! applicationIsTerminating)
-        {
-            NSMutableArray *runningExt = [[[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:kRunningExtensions]] autorelease];
-            [runningExt removeObject:extParams.path];
-            [[NSUserDefaults standardUserDefaults] setObject:runningExt forKey:kRunningExtensions];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-        
-        if (extView == fHomeScreen)
-        {
-            fHomeScreen = nil;
-        }
-        
-        extParams.view = nil;
-    };
-    
-    // When the window finishes closing (including fade out), this callback will be invoked.
-    // We want to destroy the object so no resources are wasted rendering in the background.
-    [extView setWindowDidCloseCompletionBlock:windowcontroller_clean_up];
-	[extView didPrepare]; // NOTE: Must call this AFTER setRuntimeDelegate: is set!
-    
-    extParams.view = extView;
-    
-    // The Extensions directory is next to the Resource directory in the bundle
-    NSString *builtinExtDirectory = [[[[NSBundle mainBundle] builtInPlugInsPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Extensions"];
-    // If this is the builtin "Welcome" extension note it's instance
-    if ([extParams.path hasSuffix:[builtinExtDirectory stringByAppendingPathComponent:@"welcome"]])
-    {
-        fHomeScreen = extView;
-    }
-    
-    // Save the fact that this extension is running in the user's defaults
-    NSMutableArray *runningExt = [[[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:kRunningExtensions]] autorelease];
-    if (! [runningExt containsObject:extParams.path])
-    {
-        // If we're restarting an extension, it will already be in the array
-        [runningExt addObject:extParams.path];
-    }
-    [[NSUserDefaults standardUserDefaults] setObject:runningExt forKey:kRunningExtensions];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-//
-// extensionAction
-//
-// Menuitem callback for extensions.  If the extension is not running, run it otherwise bring its window to the front.
-//
-- (void) extensionAction:(id)sender
-{
-    NSMenuItem *menuItem = (NSMenuItem *) sender;
-    ExtensionParams *extParams = [menuItem representedObject];
-    
-    if (extParams != nil && extParams.view != nil)
-    {
-        [[extParams.view window] makeKeyAndOrderFront:sender];
-    }
-    else
-    {
-        // Create the extension view
-        [self loadExtension:extParams];
-    }
-}
-
-//
-// runExtension
-//
-// Run the specified extension (use the last part of the path as the extension "name").
-//
-- (void) runExtension:(NSString *) extName
-{
-    NSMenu *appMenu = [[NSApplication sharedApplication] mainMenu];
-    NSMenuItem *windowMenuItem = [appMenu itemWithTitle:kWindowMenuItemName];
-    NSMenu *windowMenu = [windowMenuItem submenu];
-    long welcomeItemIdx = [windowMenu indexOfItemWithTitle:@"Welcome to Corona"];
-    
-    if (welcomeItemIdx == -1)
-    {
-        // for some reason we can't find the Welcome menuitem, bail
-        // TODO: if we make the Welcome window an extension we'll need to address the chicken and egg problem here
-        return;
-    }
-    
-    // Iterate through the extension items on the Window menu looking for the one with the specified name
-    NSArray *menuItems = [windowMenu itemArray];
-    
-    for (NSMenuItem* item in menuItems)
-    {
-        if ([[item representedObject] isKindOfClass:[ExtensionParams class]])
-        {
-            ExtensionParams *extParams = [item representedObject];
-
-            if ([extName isEqualToString:[extParams.path lastPathComponent]])
-            {
-                Rtt_TRACE(("Running extension %s", [extParams.path UTF8String]));
-                [self extensionAction:item];
-                
-                return;
-            }
-        }
-    }
-
-    // If we get this far, we've failed to find the extension
-    NSLog(@"runExtension: Could not find extension '%@'", extName);
 }
 
 -(NSArray*)GetRecentDocuments
@@ -1453,21 +1082,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		if ( ! appPath )
 		{
 			Rtt_ASSERT( ! fSimulator );
-            
-            fOpenLastProject = [[NSUserDefaults standardUserDefaults] boolForKey:kOpenLastProjectOnSimulatorLaunch];
-
-            if ( fOpenLastProject )
-            {
-				// Reset the preference in case the Simulator crashes, it gets set again on normal exit
-				[[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:kOpenLastProjectOnSimulatorLaunch];
-				[[NSUserDefaults standardUserDefaults] synchronize];
-				
-                [self openLastProject];
-            }
-            else
-            {
-                [self presentWelcomeWindow:nil];
-            }
+			// Reset the preference in case the Simulator crashes, it gets set again on normal exit
+			[[NSUserDefaults standardUserDefaults] synchronize];
+			
+            [self openLastProject];
 		}
 		else
 		{
@@ -1479,51 +1097,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 -(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-    NSApplicationTerminateReply response = NSTerminateNow;
-
-    if (applicationIsTerminating)
-    {
-        return NSTerminateNow;
-    }
-
-    NSArray *windows = [NSApp windows];
-    for (NSWindow *window in windows)
-    {
-#if 0
-        NSLog(@"title: %@ (%@): edited %s; visible %s; frame %@ ",
-              [window title],
-              [window class],
-              ([window isDocumentEdited] ? "YES" : "NO"),
-              ([window isVisible] ? "YES" : "NO"),
-              NSStringFromRect([window frame])
-              );
-#endif // 0
-
-        // This supports a feature of Simulator extensions which allows them to set the "edited" state
-        // on their windows and thus prompt the user and ask whether they really want to quit
-        if ([window isDocumentEdited])
-        {
-            response = NSTerminateCancel;
-            
-            [window makeKeyAndOrderFront:nil];
-            
-            OABeginAlertSheet( @"Unsaved changes",
-                              NSLocalizedString(@"OK", @"OK"), NSLocalizedString(@"Quit without saving", @"Quit without saving"), nil, window,
-                              ^(NSAlert* alert, NSInteger code)
-                              {
-                                  // NSLog(@"applicationShouldTerminate: got return code %ld",code);                                  
-                                  if (code == 1001)
-                                  {
-                                      applicationIsTerminating = YES;
-                                      [NSApp terminate:nil];
-                                  }
-                              },
-                              @"Please save any changes and quit again."
-                              );
-        }
-    }
-    
-	return response;
+	return NSTerminateNow;
 }
 
 -(void)applicationWillTerminate:(NSNotification*)aNotification
@@ -1535,12 +1109,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     NSLog(@"Corona Simulator: Goodbye");
 
     // Restore the preference since the Simulator didn't crash
-    [[NSUserDefaults standardUserDefaults] setBool:fOpenLastProject forKey:kOpenLastProjectOnSimulatorLaunch];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
 	delete fServices;
 	[fPreferencesWindow release];
-	[fCustomDeviceWindow release];
 	[fPasswordController release];
 
 	[fSdkRoot release];
@@ -1551,8 +1123,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	[appVersion release];
 	[appName release];
 	
-	FileWatch_StopMonitoringFolder(luaResourceFolderMonitor);
-
 	[fAppPath release];
 	delete fSimulator;
 	
@@ -1572,17 +1142,9 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 -(BOOL) isRunning
 {
     NSWindow *mainWindow = [NSApp mainWindow];
-    
     if (nil != mainWindow)
     {
-        if (mainWindow == [fHomeScreen window])
-        {
-            return NO;
-        }
-        else
-        {
-            return YES;
-        }
+        return YES;
     }
     else
     {
@@ -1661,89 +1223,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	[fPreferencesWindow makeKeyAndOrderFront:self];
 }
 
--(IBAction)showCustomDevice:(id)sender
-{
-	if ( ! fCustomDeviceWindow )
-	{
-		[NSBundle loadNibNamed:@"CustomDevice" owner:self];
-	}
-    
-	[fCustomDeviceWindow center];
-	[fCustomDeviceWindow makeKeyAndOrderFront:self];
-}
-
--(IBAction)customDeviceOK:(id)sender
-{
-    NSString *msg = nil;
-    
-    // Force first responder to resign and thus populate the field variables
-    [fCustomDeviceWindow endEditingFor:nil];
-    
-    NSLog(@"customDeviceOK: %@, %d, %d, %d", customDeviceName, customDeviceWidth, customDeviceHeight, customDevicePlatformTag);
-
-    if (customDeviceWidth < kCustomDeviceMinWidth)
-    {
-        msg = [NSString stringWithFormat:@"The minimum Device Width allowed is %ld", kCustomDeviceMinWidth];
-    }
-    else if (customDeviceWidth > kCustomDeviceMaxWidth)
-    {
-        msg = [NSString stringWithFormat:@"The maximum Device Width allowed is %ld", kCustomDeviceMaxWidth];
-    }
-    else if (customDeviceHeight < kCustomDeviceMinHeight)
-    {
-        msg = [NSString stringWithFormat:@"The minimum Device Height allowed is %ld", kCustomDeviceMinHeight];
-    }
-    else if (customDeviceHeight > kCustomDeviceMaxHeight)
-    {
-        msg = [NSString stringWithFormat:@"The maximum Device Height allowed is %ld", kCustomDeviceMaxHeight];
-    }
-    
-    if (msg != nil)
-    {
-        // Bad input: tell the user and don't dismiss the dialog
-        
-        NSAlert* alert = [[[NSAlert alloc] init] autorelease];
-        
-        [alert addButtonWithTitle:@"OK"];
-        [alert setMessageText:msg];
-        [alert setAlertStyle:NSWarningAlertStyle];
-        [alert beginSheetModalForWindow:fCustomDeviceWindow
-                          modalDelegate:self
-                         didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
-                            contextInfo:fCustomDeviceWindow];
-    }
-    else
-    {
-        [fCustomDeviceWindow close];
-        
-        [[NSUserDefaults standardUserDefaults] setObject:customDeviceName forKey:@"customDeviceName"];
-        [[NSUserDefaults standardUserDefaults] setInteger:customDeviceWidth forKey:@"customDeviceWidth"];
-        [[NSUserDefaults standardUserDefaults] setInteger:customDeviceHeight forKey:@"customDeviceHeight"];
-		[[NSUserDefaults standardUserDefaults] setInteger:customDevicePlatformTag forKey:@"customDevicePlatformTag"];
-
-        Rtt::TargetDevice::Skin skin = Rtt::TargetDevice::kCustomSkin;
-        
-        if ( [self isRelaunchable] )
-        {
-            // Skip doing anything if the skin is the same (and not custom) and is currently running
-            // Otherwise, we want to allow relaunching of the simulator if they are not currently running it when they select a skin.
-            if ( (skin != Rtt::TargetDevice::kCustomSkin && skin == fSkin) && [self isRunning] )
-            {
-                return;
-            }
-            
-            // Only launch simulator with new skin if we actually were allowed to change skins
-            [self setSkin:skin];
-            [self launchSimulator:sender];
-        }
-    }
-}
-
--(IBAction)customDeviceCancel:(id)sender
-{
-    [fCustomDeviceWindow close];
-}
-
 -(IBAction)deauthorizeConfirm:(id)sender
 {
 	NSAlert* alert = [[[NSAlert alloc] init] autorelease];
@@ -1820,15 +1299,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	};
 
-	if ([fHomeScreen window] != nil)
-	{
-		[panel beginSheetModalForWindow:[fHomeScreen window] completionHandler:handlePanelCompletion];
-	}
-	else
-	{
-		[panel beginWithCompletionHandler:handlePanelCompletion];
-	}
-
+	[panel beginWithCompletionHandler:handlePanelCompletion];
 }
 
 // -----------------------------------------------------------------------------
@@ -1877,8 +1348,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 		self.fAppPath = [appPath stringByStandardizingPath];
 				
-		[self closeWelcomeWindow];
-
 		// There is an inital state condition where we need to make sure the skin checkmarks have been checked.
 		// This is mostly hit the very first time Corona is run since there is no previous skin and
 		// the default skin was setup before KVO was setup (in init) so we need to force a menu update.
@@ -1887,14 +1356,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		[self launchSimulator:nil];
 		result = YES;
 	}
-	else
-	{
-		// make sure welcome window is presented?
-		[self presentWelcomeWindow:nil];
-	}
-	
-	
-	[fHomeScreen projectLoaded];
 
 	return result;
 }
@@ -1921,7 +1382,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 -(void)openLastProject
 {
     NSArray *recentDocuments = [[NSDocumentController sharedDocumentController] recentDocumentURLs];
-    
     if ( [recentDocuments count] > 0 )
     {
         NSURL *fileURL = [recentDocuments objectAtIndex:0];
@@ -1932,10 +1392,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
             [self application:nil openFile:path];            
         }
     }
-	else
-	{
-		[self presentWelcomeWindow:nil];
-	}
 }
 
 -(IBAction)open:(id)sender
@@ -1970,7 +1426,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	// or if a file is double clicked.
 	// This messes up initialization assumptions and the command line processing.
 	// The applicationHasBeenInitialized flag is used to know if this is an application launch or continuing an already open application.
-	// The launchedWithFile is used to prevent command line switches and the welcome window from interfering with the launch behavior.
+	// The launchedWithFile is used to prevent command line switches from interfering with the launch behavior.
 	if(NO == self.applicationHasBeenInitialized)
 	{
 		self.launchedWithFile = YES;
@@ -2196,7 +1652,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 -(IBAction)close:(id)sender
 {
 	[self closeSimulator:sender];
-	[self presentWelcomeWindow:sender];
 }
 
 -(IBAction)showProjectSandbox:(id)sender
@@ -2332,14 +1787,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	if ( nil != title )
 	{
-        if ([title isEqualToString:customDeviceName])
-        {
-            skin = Rtt::TargetDevice::kCustomSkin;
-        }
-        else
-        {
-            skin = Rtt::TargetDevice::SkinForLabel( [title UTF8String] );
-        }
+        skin = Rtt::TargetDevice::SkinForLabel( [title UTF8String] );
 	}
 	
 	if ( Rtt::TargetDevice::kUnknownSkin == skin )
@@ -2357,24 +1805,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 - (void) restoreUserSkinSetting
 {
-    // Take this opportunity to set up the custom device: Read previously used values from preferences or use defaults
-    if ((customDeviceName = [[[NSUserDefaults standardUserDefaults] stringForKey:@"customDeviceName"] retain]) == nil)
-    {
-        customDeviceName = [kCustomDeviceDefaultName copy];
-    }
-    if ((customDeviceWidth = (int) [[NSUserDefaults standardUserDefaults] integerForKey:@"customDeviceWidth"]) == 0)
-    {
-        customDeviceWidth = kCustomDeviceDefaultWidth;
-    }
-    if ((customDeviceHeight = (int) [[NSUserDefaults standardUserDefaults] integerForKey:@"customDeviceHeight"]) == 0)
-    {
-        customDeviceHeight = kCustomDeviceDefaultHeight;
-    }
-	if ((customDevicePlatformTag = (int) [[NSUserDefaults standardUserDefaults] integerForKey:@"customDevicePlatformTag"]) == 0)
-	{
-		customDevicePlatformTag = kCustomDeviceDefaultPlatformTag;
-	}
-
 	NSString* skinname = [[NSUserDefaults standardUserDefaults] stringForKey:kUserPreferenceUsersCurrentSelectedSkin];
 	if ( nil != skinname )
 	{
@@ -2387,17 +1817,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 - (void) saveUserSkinSetting
 {
-    if (self.fSkin == Rtt::TargetDevice::kCustomSkin)
+    const char* skinstring = Rtt::TargetDevice::LabelForSkin((Rtt::TargetDevice::Skin)self.fSkin);
+    if ( nil != skinstring )
     {
-        [[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:customDeviceName forKey:kUserPreferenceUsersCurrentSelectedSkin];
-    }
-    else
-    {
-        const char* skinstring = Rtt::TargetDevice::LabelForSkin((Rtt::TargetDevice::Skin)self.fSkin);
-        if ( nil != skinstring )
-        {
-            [[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:[NSString stringWithExternalString:skinstring] forKey:kUserPreferenceUsersCurrentSelectedSkin];
-        }
+        [[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:[NSString stringWithExternalString:skinstring] forKey:kUserPreferenceUsersCurrentSelectedSkin];
     }
 }
 
@@ -2423,7 +1846,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     
     for (NSMenuItem *item in skinMenuItems)
     {
-        if ([item tag] == self.fSkin || (self.fSkin == Rtt::TargetDevice::kCustomSkin && [item tag] == kCustomDeviceMenuTag))
+        if ([item tag] == self.fSkin)
         {
             [item setState:NSOnState];
         }
@@ -2462,12 +1885,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 		++fRelaunchCount;
 	}
-	else
-	{
-		// In the case where the simulator was closed, the welcome window was brought back, and the user hits relaunch,
-		// we need to close the welcome window.
-		[self closeWelcomeWindow];
-	}
 
 	const char *resourcePath = [self.fAppPath UTF8String];
 
@@ -2484,63 +1901,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	fBuildProblemNotified = false;
 	
-	const char *skinFile = NULL;
-    
-    if (fSkin == Rtt::TargetDevice::kCustomSkin)
-    {
-        NSError *error = nil;
-        NSString *skinsDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Skins"];
-        NSString *customDeviceTemplateName = [skinsDir stringByAppendingPathComponent:@"CustomDevice.lua.template"];
-        NSString *customDeviceTemplate = [NSString stringWithContentsOfFile:customDeviceTemplateName encoding:NSUTF8StringEncoding error:&error];
-        
-        if (customDeviceTemplate != nil)
-        {
-            customDeviceTemplate = [customDeviceTemplate stringByReplacingOccurrencesOfString:@"{customDeviceWidth}" withString:[NSString stringWithFormat:@"%d", customDeviceWidth]];
-            customDeviceTemplate = [customDeviceTemplate stringByReplacingOccurrencesOfString:@"{customDeviceHeight}" withString:[NSString stringWithFormat:@"%d", customDeviceHeight]];
-			customDeviceTemplate = [customDeviceTemplate stringByReplacingOccurrencesOfString:@"{customDeviceName}" withString:customDeviceName];
+	const char *skinFile = skinFile = Rtt::TargetDevice::LuaObjectFileFromSkin( (Rtt::TargetDevice::Skin)fSkin );
 
-			NSString *customDevicePlatform = nil;
-			switch (customDevicePlatformTag)
-			{
-				case kCustomDevicePlatformAndroidTag:
-					customDevicePlatform = @"android-custom";
-					break;
-				case kCustomDevicePlatformiOSTag:
-					customDevicePlatform = @"ios-custom";
-					break;
-				case kCustomDevicePlatformmacOSTag:
-					customDevicePlatform = @"macos-custom";
-					break;
-				case kCustomDevicePlatformtvOSTag:
-					customDevicePlatform = @"tvos-custom";
-					break;
-				case kCustomDevicePlatformWindowsTag:
-					customDevicePlatform = @"win32-custom";
-					break;
-				default:
-					customDevicePlatform = @"simulator-custom";  // shouldn't happen
-					break;
-			}
-
-			customDeviceTemplate = [customDeviceTemplate stringByReplacingOccurrencesOfString:@"{customDevicePlatform}" withString:customDevicePlatform];
-            
-            if (customDeviceTemplate != nil)
-            {
-                NSString *tmpPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"CustomDevice.lua"];
-                
-                [[NSFileManager defaultManager] removeItemAtPath:tmpPath error:&error];
-                
-                [customDeviceTemplate writeToFile:tmpPath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-                
-                skinFile = [tmpPath UTF8String];
-            }
-        }
-    }
-    else
-    {
-        skinFile = Rtt::TargetDevice::LuaObjectFileFromSkin( (Rtt::TargetDevice::Skin)fSkin );
-    }
-	
     // If all else fails, default to the default skin file
     if (skinFile == NULL)
     {
@@ -2551,27 +1913,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	fSimulator->Initialize( skinFile, resourcePath );
 
 	_respondsToBackKey = fSimulator->SupportsBackKey();
-
-	Runtime *runtime = [self runtime];
-	
-	if (runtime != NULL)
-	{
-		BOOL showRuntimeErrors = [[NSUserDefaults standardUserDefaults] boolForKey:kShowRuntimeErrors];
-
-        // Only set the runtime's "showRuntimeErrors" from the Simulator if the app being run doesn't
-        // explicitly set it itself (so the app's setting always wins)
-        if (! runtime->IsProperty(Runtime::kShowRuntimeErrorsSet))
-        {
-            runtime->SetProperty(Runtime::kShowRuntimeErrors, showRuntimeErrors);
-        }
-        else
-        {
-            if (runtime->IsProperty(Runtime::kShowRuntimeErrorsSet) && (showRuntimeErrors != runtime->IsProperty(Runtime::kShowRuntimeErrors)))
-            {
-                Rtt_TRACE_SIM(( "Note: config.lua setting for 'showRuntimeErrors' (%s) overrides Simulator preference (%s)", (runtime->IsProperty(Runtime::kShowRuntimeErrors) ? "true" : "false"), (showRuntimeErrors ? "yes" : "no") ));
-            }
-        }
-	}
 	
 	[self didChangeValueForKey:@"suspendResumeLabel"];
 }
@@ -2602,11 +1943,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		return &(fSimulator->GetPlayer()->GetRuntime());
 	}
 	return NULL;
-}
-
-- (IBAction)showLiveServer:(id)sender
-{
-	[[NSWorkspace sharedWorkspace] launchApplication:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"]];
 }
 
 -(IBAction)back:(id)sender
@@ -3110,39 +2446,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 
 // -----------------------------------------------------------------------------
 
-// This is a private internal implementation used by both presentWelcomeWindow and presentWelcomeWindow:
-- (void) showWelcomeWindow
-{
-    [self runExtension:@"welcome"];
-}
-
-- (IBAction) presentWelcomeWindow:(id)sender
-{
-	[self showWelcomeWindow];
-}
-
-// Show the new project dialog, the Welcome window needs to be shown to host it
-- (IBAction) presentNewProject:(id)sender
-{
-    [self showWelcomeWindow];
-    // Give the Welcome window time to fade into view
-    [fHomeScreen performSelector:@selector(newProject) withObject:nil afterDelay:0.250];
-}
-
-- (void) closeWelcomeWindow
-{
-	NSNumber* do_not_close_bool_value = [[[NSUserDefaultsController sharedUserDefaultsController] values] valueForKey:kDoNotAutoCloseWelcomeWindowOnSimulatorLaunch];
-	if( YES == [do_not_close_bool_value boolValue] )
-	{
-		return;
-	}
-
-    if (fHomeScreen && ! [fHomeScreen isWindowGoingAway])
-    {
-        [[fHomeScreen window] performClose:nil];
-    }
-}
-
 - (IBAction) openMainLuaInEditor:(id)sender
 {
 	TextEditorSupport_LaunchTextEditorWithFile([self.fAppPath stringByAppendingPathComponent:@"main.lua"], 0);
@@ -3152,96 +2455,10 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	BOOL foundApp = [[NSWorkspace sharedWorkspace] getInfoForFile:self.fAppPath application:&app_path type:&file_extension];
 }
 
-// returns YES if the user approves and the similator is relaunched
-// will do nothing if simulator is not relaunchable
-- (BOOL) promptAndRelaunchSimulatorIfUserApproves
-{
-	if([self isRelaunchable] && self.fSimulator != NULL)
-	{
-		NSInteger relaunchOption = [[NSUserDefaults standardUserDefaults] integerForKey:kRelaunchSimulatorOptionForResourceChangeNotification];
-		BOOL needsToRelaunch = NO;
-
-		// tags in IB:
-		// 0 Always ask, 1: Always relaunch, 2: Never relaunch
-		if(kAskToRelaunchSimulator == relaunchOption)
-		{
-			// Stop watching the folder while the alert dialog is up to prevent multiple alerts from being queued
-			// if the user continues to make modifications while the dialog is up.
-			FileWatch_StopMonitoringFolder(luaResourceFolderMonitor);
-
-			NSAlert* relaunchAlert = [[[NSAlert alloc] init] autorelease];
-			[relaunchAlert setMessageText:@"Corona project has been modified"];
-			[relaunchAlert setInformativeText:@"Would you like to relaunch the Simulator?"];
-			[relaunchAlert addButtonWithTitle:@"Relaunch Simulator"];
-			[relaunchAlert addButtonWithTitle:@"Ignore"];
-			[relaunchAlert setAlertStyle:NSWarningAlertStyle];
-//			[relaunchAlert setShowsSuppressionButton:YES]; // "Do not show this message again"
-			[NSBundle loadNibNamed:@"RememberPreferenceCheckbox" owner:self];
-			
-			[relaunchAlert setAccessoryView:rememberMyPreferenceAccessoryCheckboxView];  // @"Remember my preference"
-			NSInteger theChoice = [relaunchAlert runModal];
-			BOOL userSuppressionState = [rememberMyPreferenceAccessoryCheckboxView state];
-			[rememberMyPreferenceAccessoryCheckboxView release];
-			rememberMyPreferenceAccessoryCheckboxView = nil;
-			if(NSAlertFirstButtonReturn == theChoice)
-			{
-				needsToRelaunch = YES;
-			}
-			
-			// Resume folder monitoring.
-			FSEventStreamContext callback_info =
-			{
-				0,
-				self,
-				CFRetain,
-				CFRelease,
-				NULL
-			};
-			luaResourceFolderMonitor = FileWatch_StartMonitoringFolder(self.fAppPath, FolderChangeNotificationDelegate_LuaFolderChangedCallbackFunction, &callback_info);
-
-//			BOOL userSuppressionState = [[relaunchAlert suppressionButton] state];
-			if(YES == userSuppressionState)
-			{
-				if(YES == needsToRelaunch)
-				{
-					[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:[NSNumber numberWithInteger:kAlwaysRelaunchSimulator] forKey:kRelaunchSimulatorOptionForResourceChangeNotification];
-				}
-				else
-				{
-					[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:[NSNumber numberWithInteger:kNeverRelaunchSimulator] forKey:kRelaunchSimulatorOptionForResourceChangeNotification];			
-				}
-
-			}
-		}
-		else
-		{
-			if(kAlwaysRelaunchSimulator == relaunchOption)
-			{
-				needsToRelaunch = YES;
-			}
-		}
-
-		if(YES == needsToRelaunch)
-		{
-			[self launchSimulator:nil];
-            
-			return YES;
-		}
-		else
-		{
-			return NO;
-		}
-	}
-	return NO;
-}
-
 - (void) setFAppPath:(NSString*)appPath
 {
     if(fAppPath != appPath)
 	{
-		// Stop monitoring the old folder if we were watching one
-		FileWatch_StopMonitoringFolder(luaResourceFolderMonitor);
-		luaResourceFolderMonitor = NULL;
 		[fAppPath release];
 
 		// This might be bad, but due to a bug caught by Sean doing commandline runs,
@@ -3261,19 +2478,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 			fAppPath = [appPath stringByStandardizingPath];
 			[fAppPath retain];
 		}
-		
-		if(fAppPath)
-		{
-			FSEventStreamContext callback_info =
-			{
-				0,
-				self,
-				CFRetain,
-				CFRelease,
-				NULL
-			};
-			luaResourceFolderMonitor = FileWatch_StartMonitoringFolder(fAppPath, FolderChangeNotificationDelegate_LuaFolderChangedCallbackFunction, &callback_info);
-		}
 	}
 }
 
@@ -3282,21 +2486,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	using namespace Rtt;
 	
 	// NSLog(@"changedPreference: %@", [sender description]);
-
-	Runtime *runtime = [self runtime];
-
-	if (runtime != NULL)
-	{
-		BOOL showRuntimeErrors = [[NSUserDefaults standardUserDefaults] boolForKey:kShowRuntimeErrors];
-
-        // Only set the runtime's "showRuntimeErrors" from the Simulator if the app being run doesn't
-        // explicitly set it itself (so the app's setting always wins)
-        if (! runtime->IsProperty(Runtime::kShowRuntimeErrorsSet))
-        {
-            runtime->SetProperty(Runtime::kShowRuntimeErrors, showRuntimeErrors);
-        }
-	}
-	
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

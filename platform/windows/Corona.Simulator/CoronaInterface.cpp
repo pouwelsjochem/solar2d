@@ -62,7 +62,7 @@ CBuildResult appAndroidBuild(
 	const char *alias, const char *alias_pwd, const char *dstDir,
 	const Rtt::TargetDevice::Platform targetPlatform,
 	const char *targetAppStoreName,
-	bool isDistribution, int versionCode, bool createLiveBuild 
+	bool isDistribution, int versionCode
 	)
 {
 	Rtt::WinPlatformServices *pServices = GetWinProperties()->GetServices();
@@ -115,7 +115,6 @@ CBuildResult appAndroidBuild(
 	pSim->GetPlatform()->PathForFile(
 			kBuildSettings, Rtt::MPlatform::kResourceDir, Rtt::MPlatform::kTestFileExists, buildSettingsPath );
 	params.SetBuildSettingsPath( buildSettingsPath.GetString() );
-	params.SetLiveBuild(createLiveBuild);
 
 	TCHAR user[MAX_PATH];
 	DWORD ulen = MAX_PATH;

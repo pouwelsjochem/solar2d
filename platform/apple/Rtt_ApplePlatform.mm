@@ -480,8 +480,6 @@ ApplePlatform::Push( lua_State *L, id value )
 ApplePlatform::ApplePlatform()
 :	fAllocator( Rtt_AllocatorCreate() ),
 	fResourcePath( nil ),
-	fProjectResourcePath( nil ),
-	fSkinResourcePath( nil ),
 	fHttpPostDelegate( nil ),
 	fCustomConnectionDelegate( nil ),
 	fCrypto(),
@@ -493,8 +491,6 @@ ApplePlatform::~ApplePlatform()
 {
 	[fHttpPostDelegate release];
 	[fCustomConnectionDelegate release];
-    [fProjectResourcePath release];
-    [fSkinResourcePath release];
 	[fResourcePath release];
 	Rtt_AllocatorDestroy( fAllocator );
 }
@@ -507,26 +503,6 @@ ApplePlatform::SetResourceDirectory( NSString *resourcePath )
     if ( resourcePath )
     {
         fResourcePath = [resourcePath copy];
-    }
-}
-
-void
-ApplePlatform::SetProjectResourceDirectory( NSString *projectResourcePath )
-{
-    if ( projectResourcePath )
-    {
-        [fProjectResourcePath release];
-        fProjectResourcePath = [projectResourcePath copy];
-    }
-}
-
-void
-ApplePlatform::SetSkinResourceDirectory( NSString *skinResourcePath )
-{
-    if ( skinResourcePath )
-    {
-        [fSkinResourcePath release];
-        fSkinResourcePath = [skinResourcePath copy];
     }
 }
 
@@ -1422,14 +1398,6 @@ ApplePlatform::PathForFile( const char* filename, Directory baseDir, U32 flags, 
 			path = PathForSystemResourceFile( filename );
 			break;
             
-		case MPlatform::kProjectResourceDir:
-			path = PathForProjectResourceFile( filename );
-			break;
-            
-		case MPlatform::kSkinResourceDir:
-			path = PathForSkinResourceFile( filename );
-			break;
-            
 		case MPlatform::kTmpDir:
 			path = PathForTmpFile( filename );
 			break;
@@ -1538,68 +1506,6 @@ ApplePlatform::PathForSystemResourceFile( const char* filename ) const
         result = resourcePath;
     }
     return result;
-}
-
-NSString*
-ApplePlatform::PathForProjectResourceFile( const char* filename ) const
-{
-    NSString* result = NULL;
-    
-    if ( fProjectResourcePath == nil )
-    {
-        Rtt_TRACE_SIM( ( "WARNING: simulator.setProjectResourceDirectory() must be called before using system.ProjectResourceDirectory" ) );
-        
-        return nil;
-    }
-    
-    if ( filename )
-    {
-        result = [fProjectResourcePath stringByAppendingPathComponent:[NSString stringWithExternalString:filename]];
-    }
-    else
-    {
-        result = fProjectResourcePath;
-    }
-    
-    return result;
-}
-
-NSString*
-ApplePlatform::PathForSkinResourceFile( const char* filename ) const
-{
-    NSString* result = NULL;
-    
-    if ( fSkinResourcePath == nil )
-    {
-        Rtt_TRACE_SIM( ( "WARNING: simulator.setSkinResourceDirectory() must be called before using system.SkinResourceDirectory" ) );
-        
-        return nil;
-    }
-    
-    if ( filename )
-    {
-        result = [fSkinResourcePath stringByAppendingPathComponent:[NSString stringWithExternalString:filename]];
-    }
-    else
-    {
-        result = fSkinResourcePath;
-    }
-    
-    return result;
-}
-    
-void
-ApplePlatform::SetProjectResourceDirectory( const char* filename )
-{
-    [fProjectResourcePath release];
-    fProjectResourcePath = [[NSString stringWithExternalString:filename] copy];
-}
-
-void
-ApplePlatform::SetSkinResourceDirectory( const char* filename )
-{
-    [fSkinResourcePath release];
-    fSkinResourcePath = [[NSString stringWithExternalString:filename] copy];
 }
 
 NSString *

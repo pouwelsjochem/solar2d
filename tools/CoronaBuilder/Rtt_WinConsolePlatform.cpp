@@ -128,7 +128,6 @@ WinConsolePlatform::WinConsolePlatform()
 	CopySimulatorPluginDirectoryPathTo(pluginsDirectoryPath);
 
 	fDirectoryPaths[Rtt::MPlatform::kResourceDir].SetUTF16(resourceDirectoryPath.GetTCHAR());
-	fDirectoryPaths[Rtt::MPlatform::kProjectResourceDir].SetUTF16(resourceDirectoryPath.GetTCHAR());
 #ifdef Rtt_AUTHORING_SIMULATOR
 	fDirectoryPaths[Rtt::MPlatform::kSystemResourceDir].SetUTF16(settings.SystemResourceDirectoryPath);
 #else
@@ -139,8 +138,6 @@ WinConsolePlatform::WinConsolePlatform()
 	fDirectoryPaths[Rtt::MPlatform::kCachesDir].SetUTF16(temporaryDirectoryPath.GetTCHAR());
 	fDirectoryPaths[Rtt::MPlatform::kSystemCachesDir].SetUTF16(temporaryDirectoryPath.GetTCHAR());
 	fDirectoryPaths[Rtt::MPlatform::kPluginsDir].SetUTF16(pluginsDirectoryPath.c_str());
-	//fDirectoryPaths[Rtt::MPlatform::kSkinResourceDir].SetUTF16(settings.SkinResourceDirectoryPath);
-	//fDirectoryPaths[Rtt::MPlatform::kUserSkinsDir].SetUTF16(settings.UserSkinsDirectoryPath);
 
 	fDevice = new WinConsoleDevice(*Rtt_AllocatorCreate());
 }

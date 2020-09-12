@@ -308,8 +308,6 @@ ant -buildfile "$BUNDLE_DIR/build.xml" build \
 	-DDST_DIR="$PROJECT_PATH" \
 	-DBUNDLE_DIR="$BUNDLE_DIR" \
 	-DUSER_APP_NAME="$PROJECT_NAME" \
-	-DLIVE_BUILD='NO' \
-	-DLIVE_BUILD_ASSET_DIR='' \
 	-DKS="$BUNDLE_DIR/debug.keystore" \
 	-DKP="android" \
 	-DKA="androiddebugkey" \

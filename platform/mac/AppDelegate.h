@@ -99,32 +99,21 @@ namespace Rtt
 
 	id fPreferencesControllerDelegate;
 	IBOutlet NSWindow* fPreferencesWindow;
-	IBOutlet NSWindow* fCustomDeviceWindow;
-
-    
-    NSString *customDeviceName;
-    int customDeviceWidth;
-    int customDeviceHeight;
-	int customDevicePlatformTag;
 
 	BOOL fIsRemote;
 
 	NSString* cachedSampleDirectoryPath;
 	
-	__block CoronaWindowController *fHomeScreen;
 	BOOL applicationIsTerminating; // used to try to avoid occasional shutdown crash (home screen related?)
 	
 	// Android
 	BOOL fBuildProblemNotified;
 	
-	FSEventStreamRef luaResourceFolderMonitor;
 	IBOutlet NSButton* rememberMyPreferenceAccessoryCheckboxView;
-	BOOL relaunchPromptIsOpen;
 	BOOL applicationHasBeenInitialized;
 	BOOL launchedWithFile;
 	BOOL allowLuaExit;
 	BOOL fSimulatorWasSuspended;
-	BOOL fOpenLastProject;
 	time_t fNextUpsellTime;
 
 
@@ -159,7 +148,6 @@ namespace Rtt
 @property (nonatomic, readwrite, assign) BOOL applicationHasBeenInitialized;
 @property (nonatomic, readwrite, assign) BOOL launchedWithFile;
 @property (nonatomic, readwrite, assign) BOOL allowLuaExit;
-@property (nonatomic, readonly, getter=homeScreen) CoronaWindowController *fHomeScreen;
 @property (nonatomic, readonly, retain) GLView* layerHostView;
 @property (nonatomic, readwrite) BOOL stopRequested;
 @property (nonatomic, readwrite) float buildDownloadProgess;
@@ -228,9 +216,6 @@ namespace Rtt
 -(void)notifyRuntimeError:(NSString *)message;
 - (NSString *) getOSVersion;
 
-- (IBAction) presentWelcomeWindow:(id)sender;
-- (void) closeWelcomeWindow;
-
 //-(void)setRuntimeWithView:(GLView*)view;
 -(Rtt::Runtime*)runtime;
 //-(Rtt::MacPlatform*)platform;
@@ -241,7 +226,6 @@ namespace Rtt
 - (void) startDebugAndOpenPanel; // second half of applicationDidFinishLaunching
 
 - (IBAction) openMainLuaInEditor:(id)sender;
-- (BOOL) promptAndRelaunchSimulatorIfUserApproves;
 
 -(IBAction)changedPreference:(id)sender;
 
@@ -254,9 +238,6 @@ namespace Rtt
 
 -(NSString*)getAndReleaseResultFromPasswordSheet;
 - (void)didPresentError:(BOOL)didRecover contextInfo:(void*)contextInfo;
-
--(IBAction)customDeviceOK:(id)sender;
--(IBAction)customDeviceCancel:(id)sender;
 
 - (BOOL) alertShowHelp:(NSAlert *) alert;
 

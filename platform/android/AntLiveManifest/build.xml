@@ -23,17 +23,11 @@
 
     <sequential>
         <fileset dir="." id="asset.fileset">
-            <exclude name="**/*.lua" unless="live.build" />
+            <exclude name="**/*.lua"/>
         </fileset>
     </sequential>
 
     <target name="gen" description="" depends="jar">
-        <taskdef name="livegen" classname="com.coronalabs.LiveBuildManifest" classpath="${ant.project.name}.jar"/>
-        <livegen output="${gen.output}" root="${basedir}"> 
-            <path>
-                <fileset refid="asset.fileset" />
-            </path>
-        </livegen>
 
     </target>
 

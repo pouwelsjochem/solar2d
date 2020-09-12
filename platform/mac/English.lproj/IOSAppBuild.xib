@@ -9,7 +9,6 @@
         <customObject id="-2" userLabel="File's Owner" customClass="IOSAppBuildController">
             <connections>
                 <outlet property="availableSimulatorsPopup" destination="0je-MZ-JEm" id="8Lm-3C-BgM"/>
-                <outlet property="fEnableLiveBuild" destination="fXj-CC-RFa" id="IqW-5p-ibC"/>
                 <outlet property="fSigningIdentities" destination="26" id="90"/>
                 <outlet property="fSupportedDevices" destination="163" id="182"/>
                 <outlet property="fTargetIOSSDK" destination="192" id="198"/>
@@ -290,14 +289,6 @@ DQ
                             <menu key="menu" id="RYS-MT-qdY"/>
                         </popUpButtonCell>
                     </popUpButton>
-                    <button toolTip="Build with support for automatic syncing of project changes to test devices" misplaced="YES" id="fXj-CC-RFa">
-                        <rect key="frame" x="151" y="55" width="370" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Create Live Build" bezelStyle="regularSquare" imagePosition="left" inset="2" id="hmb-Vm-Qo7">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="510" y="396.5"/>

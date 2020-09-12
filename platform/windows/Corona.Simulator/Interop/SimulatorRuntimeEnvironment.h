@@ -209,7 +209,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 
 		#pragma endregion
 
-
 		#pragma region MouseCursorRegion Structure
 		/// <summary>
 		///  Private structure used to store a mouse cursor rollover region for the Corona Simulator's welcome window.

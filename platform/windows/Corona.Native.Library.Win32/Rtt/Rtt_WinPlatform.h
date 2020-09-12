@@ -97,8 +97,6 @@ class WinPlatform : public MPlatform
 		virtual int PushNativeProperty(lua_State *L, const char *key) const;
 		virtual int PushSystemInfo(lua_State *L, const char *key) const;
 		virtual void RuntimeErrorNotification(const char *errorType, const char *message, const char *stacktrace) const;
-		virtual void SetProjectResourceDirectory(const char* path);
-		virtual void SetSkinResourceDirectory(const char* path);
 		virtual void RaiseError(MPlatform::Error e, const char* reason) const;
 		virtual void PathForFile(const char* filename, MPlatform::Directory baseDir, U32 flags, String & result) const;
 		virtual bool FileExists(const char * filename) const;

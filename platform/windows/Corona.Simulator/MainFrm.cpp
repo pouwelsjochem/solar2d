@@ -122,10 +122,6 @@ void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
 	// Override the title bar text to only show the application name if we are currently
 	// showing an internal screen such as the home screen or demos screen.
 	CSimulatorView *viewPointer = (CSimulatorView*)GetActiveView();
-	if (viewPointer && viewPointer->IsShowingInternalScreen())
-	{
-		bAddToTitle = FALSE;
-	}
 	
 	// Do not display an document name in title bar if document does not have a title.
 	// This works-around issue where MFC shows "- Corona Simulator" in this case.

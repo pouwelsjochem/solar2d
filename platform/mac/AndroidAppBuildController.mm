@@ -173,7 +173,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
     MacPlatformServices *services = new MacPlatformServices( platform );
     BOOL shouldSendToDevice = ([postBuildRadioGroup selectedRow] == 0); // first item in radio group
     BOOL shouldShowApplication = ([postBuildRadioGroup selectedRow] == 1);
-	BOOL isLiveBuild = (fEnableLiveBuild.state == NSOnState);
 
 	if ( ! [self verifyBuildTools:sender] )
 	{
@@ -331,7 +330,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
                                           );
 
     params->SetStripDebug( isStripDebug );
-	params->SetLiveBuild(isLiveBuild);
 
 	NSString *kBuildSettings = @"build.settings";
 	params->SetBuildSettingsPath( [[self.projectPath stringByAppendingPathComponent:kBuildSettings] UTF8String]);
@@ -362,12 +360,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
         [appDelegate notifyWithTitle:@"Corona Simulator"
                          description:[NSString stringWithFormat:@"Android build of \"%@\" complete", self.appName]
                             iconData:nil];
-
-		if(isLiveBuild)
-		{
-			NSString *liveServerPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"];
-			[[NSWorkspace sharedWorkspace] openFile:self.projectPath withApplication:liveServerPath andDeactivate:NO];
-		}
 
         if (shouldSendToDevice)
         {
@@ -800,15 +792,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 			result = [validator runAndroidFileValidationTestsInProjectPath:[self projectPath]];
 		}
 		[validator release];
-	}
-
-	if (result)
-	{
-		if (fEnableLiveBuild.state == NSOnState && ![self isDebugKeystore])
-		{
-			[self showError:@"Cannot create Live Build" message:@"Live Build can be created only with the Debug keystore selected." helpURL:nil parentWindow:[self window]];
-			result = NO;
-		}
 	}
 
 	return result;

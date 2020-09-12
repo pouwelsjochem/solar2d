@@ -66,7 +66,6 @@ class MacConsolePlatform : public ApplePlatform
 		virtual S32 GetFontNames( lua_State *L, int index ) const;
 
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
-        virtual void SetProjectResourceDirectory( const char* filename );
 
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const;
 		

@@ -114,8 +114,6 @@ class AndroidPlatform : public MPlatform
 		virtual PlatformExitCallback* GetExitCallback();
 		virtual bool RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const;
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
-		virtual void SetProjectResourceDirectory( const char* filename );
-		virtual void SetSkinResourceDirectory( const char* filename );
 
     protected:
         char* CopyString( const char* src, bool useAllocator = true ) const;

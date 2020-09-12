@@ -24,7 +24,7 @@ Solar2D is a cross-platform framework ideal for rapidly creating apps and games 
 
 ## Feature highlights
 
-### Simulator and Live Builds
+### Simulator
 Solar2D speeds up the development process. Update your code, save the changes, and instantly see the results in our instant-update Simulator. When you're ready to test on real devices, build and deploy your app just once and then see code/assets update automatically, all over your local network. It's like magic.
 
 ### Lua-based

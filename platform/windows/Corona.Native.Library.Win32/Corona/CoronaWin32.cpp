@@ -74,8 +74,6 @@ namespace
 			settings.CachesDirectoryPath = this->DirectoryPaths[Rtt::MPlatform::kCachesDir].GetUTF16();
 			settings.SystemCachesDirectoryPath = this->DirectoryPaths[Rtt::MPlatform::kSystemCachesDir].GetUTF16();
 			settings.PluginsDirectoryPath = this->DirectoryPaths[Rtt::MPlatform::kPluginsDir].GetUTF16();
-			settings.SkinResourceDirectoryPath = this->DirectoryPaths[Rtt::MPlatform::kSkinResourceDir].GetUTF16();
-			settings.UserSkinsDirectoryPath = this->DirectoryPaths[Rtt::MPlatform::kUserSkinsDir].GetUTF16();
 			settings.LaunchArgumentsPointer = &(this->LaunchArguments);
 
 			int launchOptions = Rtt::Runtime::kDefaultLaunchOption;

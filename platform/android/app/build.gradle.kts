@@ -29,8 +29,7 @@ val coronaBuildData: String? by project
 val coronaExpansionFileName: String? by project
 val coronaCustomHome: String? by project
 val coronaTargetStore = project.findProperty("coronaTargetStore") as? String ?: "none"
-val isLiveBuild = project.findProperty("coronaLiveBuild") == "YES"
-val isExpansionFileRequired = !coronaExpansionFileName.isNullOrEmpty() && !isLiveBuild
+val isExpansionFileRequired = !coronaExpansionFileName.isNullOrEmpty()
 val coronaSrcDir = project.findProperty("coronaSrcDir") as? String
         ?: if (file("$rootDir/../test/assets2").exists()) {
             "$rootDir/../test/assets2"
@@ -324,11 +323,7 @@ fun coronaAssetsCopySpec(spec: CopySpec) {
         }
         exclude("**/Icon\r")
         exclude("AndroidResources/**")
-        if (isLiveBuild) {
-            into("corona_live_build_app_")
-        } else {
-            exclude("**/*.lua", "build.settings")
-        }
+        exclude("**/*.lua", "build.settings")
     }
 }
 

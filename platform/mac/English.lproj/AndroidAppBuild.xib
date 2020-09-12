@@ -9,7 +9,6 @@
         <customObject id="-2" userLabel="File's Owner" customClass="AndroidAppBuildController">
             <connections>
                 <outlet property="fAndroidKeystore" destination="271" id="323"/>
-                <outlet property="fEnableLiveBuild" destination="Gjp-0V-sW9" id="RCO-dW-Ccg"/>
                 <outlet property="fSigningIdentitiesAndroid" destination="273" id="324"/>
                 <outlet property="fTargetStore" destination="278" id="358"/>
                 <outlet property="postBuildRadioGroup" destination="365" id="374"/>
@@ -360,14 +359,6 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button toolTip="Build with support for automatic syncing of project changes to test devices" misplaced="YES" id="Gjp-0V-sW9">
-                        <rect key="frame" x="176" y="59" width="336" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Create Live Build" bezelStyle="regularSquare" imagePosition="left" inset="2" id="qYU-Dy-ybK">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                     <textField verticalHuggingPriority="750" id="287">
                         <rect key="frame" x="19" y="461" width="157" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

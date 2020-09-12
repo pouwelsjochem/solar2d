@@ -31,12 +31,6 @@ WinSimulatorServices::~WinSimulatorServices()
 {
 }
 
-bool WinSimulatorServices::NewProject() const
-{
-	fSimulatorView.PostMessage(WM_COMMAND, ID_FILE_NEW);
-	return true;
-}
-
 bool WinSimulatorServices::OpenProject( const char *name ) const
 {
 	if (name)
@@ -95,16 +89,6 @@ const char* WinSimulatorServices::GetCurrProjectPath( ) const
 void WinSimulatorServices::RunExtension(const char *extName) const
 {
 	Rtt_TRACE_SIM( ( "WARNING: RunExtension not available on Windows\n" ) );
-}
-
-// Set the current project resource path
-void WinSimulatorServices::SetProjectResourceDirectory(const char *projectResourceDirectory)
-{
-	auto runtimeEnvironmentPointer = fSimulatorView.GetRuntimeEnvironment();
-	if (runtimeEnvironmentPointer && runtimeEnvironmentPointer->GetPlatform())
-	{
-		runtimeEnvironmentPointer->GetPlatform()->SetProjectResourceDirectory(projectResourceDirectory);
-	}
 }
 
 // stub to match Mac implementation

@@ -13,7 +13,6 @@
 
 #import "AppDelegate.h"
 #import "CoronaWindowController.h"
-#import "NewProjectController.h"
 #import "SampleCodeLocator.h"
 #include "Rtt_TargetDevice.h"
 #include "Rtt_SimulatorRecents.h"
@@ -53,21 +52,6 @@ MacSimulatorServices::~MacSimulatorServices()
 }
 
 bool
-MacSimulatorServices::NewProject() const
-{
-	NSWindow *homeScreen = fOwner.homeScreen.window;
-    
-    NewProjectController *fNewProject;
-
-    fNewProject = [[[NewProjectController alloc] initWithWindowNibName:@"NewProject" resourcePath:fResourcePath] autorelease];
-    
-    fNewProject.services = this;
-	[fNewProject beginSheetModalForWindow:homeScreen];
-    
-	return true;
-}
-
-bool
 MacSimulatorServices::OpenProject( const char *name ) const
 {
     if ( name )
@@ -103,18 +87,6 @@ MacSimulatorServices::BuildProject( const char *platform ) const
 
 		// Make this call async
 		[fOwner performSelector:selector withObject:nil afterDelay:0.0];
-	}
-	else
-	{
-		// TODO: Add an alert saying you must open a project first...
-		NSAlert* alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedString( @"OK", nil )];
-		[alert setMessageText:NSLocalizedString( @"You must have a project open prior to building. Click Simulator to open a project. ",nil )];
-		[alert setAlertStyle:NSInformationalAlertStyle];
-		[alert beginSheetModalForWindow:fOwner.homeScreen.window
-						  modalDelegate:nil
-						 didEndSelector:nil
-							contextInfo:NULL];
 	}
 
 	return true;
@@ -275,18 +247,6 @@ MacSimulatorServices::RunExtension(const char *extName) const
     {
         // The delay makes this interface play nice with OpenProject()
         [fOwner performSelector:@selector(runExtension:) withObject:[NSString stringWithExternalString:extName] afterDelay:0.0];
-    }
-}
-
-// Set the current project resource path
-void
-MacSimulatorServices::SetProjectResourceDirectory(const char *projectResourceDirectory)
-{
-    if (fWindowController != nil && fWindowController.fView != nil && fWindowController.fView._platform != nil)
-    {
-        Rtt::MacPlatform *platform = fWindowController.fView._platform;
-        
-        platform->SetProjectResourceDirectory(projectResourceDirectory);
     }
 }
 

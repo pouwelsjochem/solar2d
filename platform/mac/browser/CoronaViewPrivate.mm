@@ -296,7 +296,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
                 _runtime->SetProperty( Runtime::kIsApplicationNotArchived, true );
             }
 			
-			_runtime->SetProperty(Runtime::kIsSimulatorExtension, true);
 			_runtime->SetProperty(Runtime::kIsLuaParserAvailable, true);
 			_runtime->SetProperty(Runtime::kRenderAsync, true);
             _runtime->SetProperty(Runtime::kIsCoronaKit, true);
@@ -311,8 +310,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			{
 				[delegate willLoadApplication:self];
 			}
-
-			_platform->SetProjectResourceDirectory([_projectPath UTF8String]);
 
 			// Load the project's "build.settings" and "config.lua" file first.
 			// Used to fetch supported supported image suffix scales, and content width/height.
@@ -350,14 +347,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     	
 	if (  Rtt::Runtime::kSuccess == _runtime->LoadApplication( launchOptions ) )
 	{
-		// This has to happen after Runtime::LoadApplication() because that can reset kShowRuntimeErrorsSet
-		if ([_coronaViewDelegate respondsToSelector:@selector(notifyRuntimeError:)])
-		{
-			// The delegate is setup to do something with errors, so send them
-			_runtime->SetProperty(Rtt::Runtime::kShowRuntimeErrors, true);
-			_runtime->SetProperty(Rtt::Runtime::kShowRuntimeErrorsSet, true);
-		}
-		
 		[self willBeginRunLoop:_launchParams];
 
 		_runtime->BeginRunLoop();

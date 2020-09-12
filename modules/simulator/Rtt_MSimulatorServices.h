@@ -25,7 +25,6 @@ struct RecentProjectInfo;
 class MSimulatorServices
 {
 	public:
-		virtual bool NewProject() const = 0;
 		virtual bool OpenProject( const char *name ) const = 0;
 		virtual bool BuildProject( const char *platform ) const = 0;
 		virtual void ShowSampleCode() const = 0;
@@ -33,7 +32,6 @@ class MSimulatorServices
         virtual void SelectSaveFilename(const char* newFilename, const char* currDirectory, const char* extn, LuaResource* resource) const = 0;
         virtual const char* GetCurrProjectPath( ) const = 0;
         virtual void RunExtension(const char *extName) const = 0;
-        virtual void SetProjectResourceDirectory(const char *projectResourceDirectory) = 0;
 		virtual void GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const = 0;
         virtual void SetWindowCloseListener(LuaResource* resource) const = 0;
         virtual void CloseWindow( ) const = 0;

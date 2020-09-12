@@ -68,7 +68,6 @@ BEGIN_MESSAGE_MAP(CBuildAndroidDlg, CDialog)
 	ON_CBN_SETFOCUS(IDC_BUILD_KEYALIAS, &CBuildAndroidDlg::OnSetFocusAliasList)
 	ON_WM_HELPINFO()
 	ON_WM_SYSCOMMAND()
-	ON_BN_CLICKED(IDC_CREATE_LIVE_BUILD, &CBuildAndroidDlg::OnBnClickedCreateLiveBuild)
 END_MESSAGE_MAP()
 
 // OnInitDialog - restore settings from m_pProject if available.
@@ -241,9 +240,6 @@ BOOL CBuildAndroidDlg::OnInitDialog()
 
 	// Initialize build destination directory.
 	SetDlgItemText(IDC_BUILD_SAVETO, m_pProject->GetSaveDir());
-
-	// Set up the "Live Build" checkbox.
-	CheckDlgButton(IDC_CREATE_LIVE_BUILD, m_pProject->GetCreateLiveBuild() ? BST_CHECKED : BST_UNCHECKED);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
@@ -562,7 +558,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	CString sKeyAlias;
 	int iVersionCode;
 	int iIndex;
-	bool isLiveBuild;
 
 	bool acceptedSDK = (AfxGetApp()->GetProfileString( REGISTRY_BUILD_ANDROID, _T("AcceptedSDKLicense"), _T("NO") ).Compare(_T("YES")) == 0);
 	if(!acceptedSDK)
@@ -679,7 +674,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 			return;
 		}
 	}
-	isLiveBuild = (IsDlgButtonChecked(IDC_CREATE_LIVE_BUILD) == BST_CHECKED);
 	
 	// Store field settings to project.
 	m_pProject->SetName(sAppName);
@@ -690,7 +684,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	m_pProject->SetAlias(sKeyAlias);
 	m_pProject->SetSaveDir(sBuildDir);
 	m_pProject->SetTargetOS(_T("Android 2.3.3"));		// <- This string is only used by logging.
-	m_pProject->SetCreateLiveBuild(isLiveBuild);
 
 	// Update global build settings in registry.
 	stringBuffer.SetUTF8(pTargetStore->GetStringId());
@@ -772,18 +765,6 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
     messageDlg.SetFolder( m_pProject->GetSaveDir() );
     messageDlg.SetIconStyle( MB_ICONINFORMATION );
     messageDlg.DoModal();
-
-	// Add the project to the Corona Live Server list, if enabled.
-	if (isLiveBuild)
-	{
-		CString sCoronaLiveServerExe = ((CSimulatorApp *)AfxGetApp())->GetApplicationDir() + _T("\\Corona.LiveServer.exe");
-		CString sAppPath = m_pProject->GetPath();
-		try
-		{
-			::ShellExecute(nullptr, nullptr, sCoronaLiveServerExe, sAppPath, nullptr, SW_SHOWNORMAL);
-		}
-		catch (...) {}
-	}
 
 	// Close this window.
 	CDialog::OnOK();
@@ -882,32 +863,4 @@ UINT CBuildAndroidDlg::DisplayWarningMessageWithHelp(UINT nTitleID, UINT nMessag
 	mbp.dwLanguageId = 0x0409;
 
 	return ::MessageBoxIndirect(&mbp);
-}
-
-void CBuildAndroidDlg::OnBnClickedCreateLiveBuild()
-{
-	// Check that they have the Debug keystore selected if they want a Live Build
-	if (IsDlgButtonChecked(IDC_CREATE_LIVE_BUILD) == BST_CHECKED)
-	{
-		CString sKeystorePath;
-		GetDlgItemText(IDC_BUILD_KEYSTORE, sKeystorePath);
-
-		if( sKeystorePath.CompareNoCase( CCoronaProject::GetTrialKeystorePath() ) != 0 )
-		{
-			CString title;
-			CString message;
-			DWORD answer = IDNO;
-
-			title.LoadString(IDS_CREATE_LIVE_BUILD);
-			message.LoadString(IDS_CREATE_LIVE_BUILD_WARNING);
-
-			answer = DisplayWarningMessageWithHelp(IDS_CREATE_LIVE_BUILD, IDS_CREATE_LIVE_BUILD_WARNING, _T("https://docs.coronalabs.com/guide/distribution/liveBuild/"));
-
-			if (answer == IDYES)
-			{
-				SetDlgItemText(IDC_BUILD_KEYSTORE, CCoronaProject::GetTrialKeystorePath());
-				UpdateAliasList();
-			}
-		}
-	}
 }

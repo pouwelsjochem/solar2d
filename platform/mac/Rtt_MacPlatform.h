@@ -129,8 +129,6 @@ class MacPlatform : public ApplePlatform
 		virtual NSString *CachesParentDir() const;
 		virtual NSString *PathForTmpFile( const char *filename ) const;
 		virtual NSString *PathForPluginsFile( const char *filename ) const;
-        virtual NSString *PathForProjectResourceFile( const char* filename ) const;
-        virtual NSString *PathForSkinResourceFile( const char* filename ) const;
 		virtual NSString *PathForApplicationSupportFile( const char* filename ) const;
 		virtual NSString *PathForFile( const char* filename, NSString* baseDir ) const;
 
@@ -143,8 +141,6 @@ class MacPlatform : public ApplePlatform
 		virtual PlatformExitCallback* GetExitCallback();
 		virtual bool RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const;
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
-        virtual void SetProjectResourceDirectory( const char* filename );
-        virtual void SetSkinResourceDirectory( const char* filename );
 #ifdef Rtt_AUTHORING_SIMULATOR
         virtual void SetCursorForRect(const char *cursorName, int x, int y, int width, int height) const;
 #endif

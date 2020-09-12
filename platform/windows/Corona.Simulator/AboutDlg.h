@@ -14,7 +14,6 @@
 
 class CAboutDlg : public CDialog
 {
-//	DECLARE_DYNAMIC(CPreferencesDlg)
 
 public:
 	CAboutDlg(CWnd* pParent = NULL);

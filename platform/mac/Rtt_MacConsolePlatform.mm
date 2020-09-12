@@ -170,11 +170,6 @@ void
 MacConsolePlatform::RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const
 {
 }
-    
-void
-MacConsolePlatform::SetProjectResourceDirectory( const char* filename )
-{
-}
 
 void MacConsolePlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {

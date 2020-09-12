@@ -73,8 +73,6 @@ class ApplePlatform : public MPlatform
 
 	public:
 		void SetResourceDirectory( NSString *resourcePath );
-        virtual void SetProjectResourceDirectory( NSString *projectResourcePath );
-        virtual void SetSkinResourceDirectory( NSString *skinResourcePath );
 
 	protected:
 		NSString *GetResourceDirectory() const { return fResourcePath; }
@@ -139,10 +137,6 @@ class ApplePlatform : public MPlatform
 	protected:
 		virtual NSString *PathForResourceFile( const char *filename ) const;
 		NSString *PathForSystemResourceFile( const char *filename ) const;
-        NSString *PathForProjectResourceFile( const char* filename ) const;
-        NSString *PathForSkinResourceFile( const char* filename ) const;
-        void SetProjectResourceDirectory( const char* filename );
-        void SetSkinResourceDirectory( const char* filename );
 		NSString *PathForCoronaResourceFile( const char* filename ) const;
 		virtual NSString *PathForDocumentsFile( const char *filename ) const;
 		virtual NSString *PathForApplicationSupportFile( const char* filename ) const;
@@ -180,8 +174,6 @@ class ApplePlatform : public MPlatform
 	protected:
 		Rtt_Allocator* fAllocator;
 		NSString *fResourcePath;
-        NSString *fProjectResourcePath;
-        NSString *fSkinResourcePath;
 		mutable id fHttpPostDelegate;
 		mutable id fCustomConnectionDelegate;
 		AppleCrypto fCrypto;

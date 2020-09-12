@@ -420,9 +420,6 @@ pushShellArgs( lua_State* L )
 			lua_pushstring( L, name );
 			lua_setfield( L, -2, "platform" );
 		}
-        
-        lua_pushboolean( L, runtime->IsProperty( Runtime::kIsSimulatorExtension ) );
-		lua_setfield( L, -2, "isSimulatorExtension" ); // params.isSimulatorExtension
 	}
 
 	return 1; // params
@@ -521,16 +518,6 @@ Runtime::PushConfig( lua_State *L )
 
 		if ( lua_istable( L, -1 ) )
 		{			
-			lua_getfield( L, -1, "showRuntimeErrors" );
-            bool runtimeErrorsExplicitlySet = ! lua_isnil( L, -1 );
-            SetProperty( kShowRuntimeErrorsSet, runtimeErrorsExplicitlySet );
-
-            if ( lua_toboolean( L, -1 ) )
-			{
-				SetProperty( kShowRuntimeErrors, true );
-			}
-			lua_pop( L, 1 );
-
 			lua_getfield( L, -1, "content" ); // application.content
 			result = lua_istable( L, -1 );
 
@@ -899,14 +886,7 @@ Runtime::LoadApplication( U32 launchOptions )
 		
 		// Now that the config.lua has been read, startup any libraries that depend on those values
 #if defined ( Rtt_USE_ALMIXER )
-		if ( launchOptions & kDisableAudio )
-		{
-			fOpenALPlayer = NULL;
-		}
-		else
-		{
-			fOpenALPlayer = PlatformOpenALPlayer::RetainInstance();
-		}
+		fOpenALPlayer = PlatformOpenALPlayer::RetainInstance();
 #endif
 		bool connectToDebugger = ( launchOptions & kConnectToDebugger );
 		SetProperty( kIsDebuggerConnected, connectToDebugger );

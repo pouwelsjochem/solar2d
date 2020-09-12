@@ -1397,12 +1397,6 @@ LuaLibSystem::Initialize( lua_State *L )
 #ifdef Rtt_AUTHORING_SIMULATOR
 		LuaLibSystem::PushDirectory( L, MPlatform::kSystemResourceDir );
 		lua_setfield( L, -2, "SystemResourceDirectory" );
-		LuaLibSystem::PushDirectory( L, MPlatform::kProjectResourceDir );
-		lua_setfield( L, -2, "ProjectResourceDirectory" );
-		LuaLibSystem::PushDirectory( L, MPlatform::kSkinResourceDir );
-		lua_setfield( L, -2, "SkinResourceDirectory" );
-		LuaLibSystem::PushDirectory( L, MPlatform::kUserSkinsDir );
-		lua_setfield(L, -2, "UserSkinsDirectory");
 #endif
 		LuaLibSystem::PushDirectory( L, MPlatform::kCachesDir );
 		lua_setfield( L, -2, "CachesDirectory" );

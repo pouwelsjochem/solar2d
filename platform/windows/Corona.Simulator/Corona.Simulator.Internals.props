@@ -24,23 +24,8 @@ if $(ConfigurationName) == Release (
 REM Build the Corona Shell and its app template to the "Bin\Corona" directory. The simulator depends on them.
 "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /build "$(ConfigurationName)|$(PlatformName)"
 
-REM Copy the welcome screen's files and its project templates to the "Bin\Corona" directory.
-echo Copying homescreen files. to $(OutDir)Resources\homescreen ...
-cd
-echo .hg &gt; "$(IntDir)WelcomeScreenExcludes.txt"
-echo .hgignore &gt;&gt; "$(IntDir)WelcomeScreenExcludes.txt"
-echo build.settings &gt;&gt; "$(IntDir)WelcomeScreenExcludes.txt"
-xcopy "..\..\..\simulator-extensions\welcomescreen" "$(OutDir)Resources\homescreen" /C /R /Y /I /E /EXCLUDE:$(IntDir)WelcomeScreenExcludes.txt
-
-REM Replace the welcome screen's plain text Lua files xcopied above with the compiled versions.
-del "$(OutDir)Resources\homescreen\*.lua" /Q
-dir ..\..\..\simulator-extensions\welcomescreen\*.lua
-for %%F in ("..\..\..\simulator-extensions\welcomescreen\*.lua") do (
-echo Compiling Lua %%F to $(OutDir)Resources\homescreen\%%~nxF ...
-"$(SolutionDir)Bin\Lua\luac" -o "$(OutDir)Resources\homescreen\%%~nxF" -s "%%F"
-)
-
 REM Copy all other Corona Simulator related files to the "Bin\Corona" directory.
+cd
 xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll" "$(OutDir)" /Y /I
 xcopy "..\..\resources\Skins" "$(OutDir)Resources\Skins" /Y /I /E
 copy "..\Build.Tools\7za.exe" "$(OutDir)" /Y

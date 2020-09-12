@@ -173,22 +173,6 @@ SimulatorRuntimeEnvironment::CreationResult SimulatorRuntimeEnvironment::CreateU
 		RuntimeEnvironment::CopySimulatorPluginDirectoryPathTo(pluginsDirectoryPath);
 	}
 
-	// Fetch a path to the Corona Simulator's installed skins directory.
-	std::wstring skinResourceDirectoryPath(ReturnEmptyWStringIfNull(settings.SkinResourceDirectoryPath));
-	if (skinResourceDirectoryPath.empty())
-	{
-		skinResourceDirectoryPath = systemResourceDirectoryPath;
-		skinResourceDirectoryPath.append(L"\\Skins");
-	}
-
-	// Fetch a path to Corona's user created skins directory.
-	std::wstring userSkinsDirectoryPath(ReturnEmptyWStringIfNull(settings.UserSkinsDirectoryPath));
-	if (userSkinsDirectoryPath.empty())
-	{
-		RuntimeEnvironment::CopySimulatorRootAppDataDirectoryPathTo(userSkinsDirectoryPath);
-		userSkinsDirectoryPath.append(L"\\Skins");
-	}
-
 	// Create a sandbox directory path for the given Corona project folder.
 	std::wstring sandboxDirectoryPath;
 	RuntimeEnvironment::GenerateSimulatorSandboxPath(resourceDirectoryPath.c_str(), sandboxDirectoryPath);
@@ -243,8 +227,6 @@ SimulatorRuntimeEnvironment::CreationResult SimulatorRuntimeEnvironment::CreateU
 	updatedSettings.SystemCachesDirectoryPath = systemCachesDirectoryPath.c_str();
 	updatedSettings.SystemResourceDirectoryPath = systemResourceDirectoryPath.c_str();
 	updatedSettings.PluginsDirectoryPath = pluginsDirectoryPath.c_str();
-	updatedSettings.SkinResourceDirectoryPath = skinResourceDirectoryPath.c_str();
-	updatedSettings.UserSkinsDirectoryPath = userSkinsDirectoryPath.c_str();
 
 	// Attempt to create the Corona runtime environment.
 	SimulatorRuntimeEnvironment* environmentPointer = nullptr;
@@ -296,16 +278,6 @@ void SimulatorRuntimeEnvironment::OnRuntimeLoaded(RuntimeEnvironment& sender, co
 
 	// Validate the Corona project's "build.settings" and "config.lua" files.
 	Rtt::PlatformSimulator::ValidateSettings(sender.GetRuntime()->Platform());
-
-	// Register the Corona Simulator's APIs into Lua, if provided.
-	// Note: This should only be the case when this runtime environment is running the welcome screen Corona project.
-	if (fCoronaSimulatorServicesPointer)
-	{
-		lua_State *luaStatePointer = sender.GetRuntime()->VMContext().L();
-		lua_pushlightuserdata(luaStatePointer, fCoronaSimulatorServicesPointer);
-		Rtt::LuaContext::RegisterModuleLoader(
-				luaStatePointer, Rtt::LuaLibSimulator::kName, Rtt::LuaLibSimulator::Open, 1);
-	}
 
 	// Add Lua event listeners.
 	fLuaMouseEventCallback.RegisterTo(sender.GetRuntime()->VMContext().L());

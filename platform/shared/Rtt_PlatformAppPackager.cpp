@@ -109,7 +109,6 @@ AppPackagerParams::AppPackagerParams( const char* appName,
 	fIsStripDebug( true ),
 	fDeviceBuildData( NULL ),
 	fIncludeBuildSettings( false )
-,   fLiveBuild( false )
 {
 	fAppName.Set(appName);
 	fVersion.Set(version);
@@ -184,7 +183,6 @@ AppPackagerParams::GetDeviceBuildData( const MPlatform& platform, const MPlatfor
 		fDeviceBuildData->Initialize(
 			appSettingsPath.GetString(),
 			buildSettingsPath,
-			fLiveBuild,
 			debugBuildProcess);
 	}
 
@@ -704,150 +702,6 @@ trimString(std::string& s)
 		s.erase(p+1);
 }
 
-
-static bool
-ReplaceMainLuaWithLiveDebug( lua_State *L, AppPackagerParams& params, const char *dstDir )
-{
-	if(!params.IsLiveBuild())
-		return true;
-
-	static const std::string sLuaNil = "nil";
-
-	static const std::string sProjectKey = "key";
-	static const std::string sAddress = "ip";
-	static const std::string sPort = "port";
-
-
-	bool res = true;
-
-	std::string key(sLuaNil);
-	std::string ip(sLuaNil);
-	std::string port(sLuaNil);
-
-	//read or create config
-	bool createConfig = true;
-	std::string configPath = std::string(params.GetSrcDir()) + LUA_DIRSEP + ".CoronaLiveBuild";
-#if defined(Rtt_WIN_ENV) && !defined(Rtt_LINUX_ENV)
-	WinString transcodedConfigPath(configPath.c_str());
-	std::ifstream fsconfig(transcodedConfigPath.GetUTF16(), std::ios_base::binary);
-#else
-	std::ifstream fsconfig(configPath);
-#endif
-	if(fsconfig.is_open())
-	{
-		for(std::string line; std::getline(fsconfig, line); )
-		{
-			std::istringstream iss(line);
-			std::string k, v;
-			iss>>std::ws;
-			bool readRes = true; // inner res
-			readRes = readRes && std::getline(iss, k, '=');
-			iss>>std::ws;
-			readRes = readRes && std::getline(iss, v);
-
-			trimString(k);
-			trimString(v);
-			readRes = readRes && k.length() && v.length();
-
-			if(!readRes)
-			{
-				continue;
-			}
-			else if(k == sPort)
-			{
-				long nPort = std::stol(v);
-				if(nPort>0)
-					port = v;
-			}
-			else if(k == sProjectKey)
-			{
-				key = "'" + v + "'";
-			}
-			else if(k == sAddress)
-			{
-				ip = "'" + v + "'";
-			}
-		}
-		if (key == sLuaNil || key.length()<=2)
-		{
-			Rtt_LogException("ERROR: Invalid Live Build configuration. Re-generating .CoronaLiveBuild file\n");
-		}
-		else
-		{
-			createConfig = false;
-		}
-	}
-
-	if(createConfig)
-	{
-#if defined(Rtt_WIN_ENV) && !defined(Rtt_LINUX_ENV)
-		std::ofstream out(transcodedConfigPath.GetUTF16(), std::ios_base::binary);
-#else
-		std::ofstream out(configPath);
-#endif
-		res = res && out.is_open();
-
-		std::string generatedKey = GenerateUUID();
-
-		res = res && (out<<sProjectKey<<" = "<<generatedKey<<std::endl);
-		res = res && (out<<"#"<<sPort<<" ="<<std::endl);
-		res = res && (out<<"#"<<sAddress<<" ="<<std::endl);
-		out.flush();
-		res = res && out.good();
-		out.close();
-
-		if(!res) {
-			Rtt_LogException("ERROR: Unable to write .CoronaLiveBuild configuration file. Please make sure you have write access to the project directory.\n");
-			return false;
-		}
-
-		key = "'" + generatedKey + "'";
-	}
-
-
-	static const char *kMainLua = "main.lua";
-	size_t sz = strlen(dstDir) + strlen(kMainLua) + 5;
-	char * mainLuaCounterfeit = new char[sz];
-	snprintf(mainLuaCounterfeit, sz, "%s" LUA_DIRSEP "%s", dstDir, "main.lua" );
-
-	FILE *f = fopen( mainLuaCounterfeit, "wb" );
-	if ( Rtt_VERIFY( f ) )
-	{
-		// hack to prevent loading with Archive::ResourceLoader except if starting with "plugin."
-		static const char * luaBody = "local a=package.loaders[1]; package.loaders[1]=function(p)return string.sub(p,1,7)=='plugin.'and a(p)or nil end;require('plugin.liveBuild').run{id=%s, key=%s, ip=%s, port=%s}";
-		char timestamp[20];
-		snprintf(timestamp, 20, "%li", (long)time(NULL));
-
-		size_t mainBodyLen = strlen(luaBody) + strlen(timestamp) + key.length() + ip.length() + port.length() + 5;
-		char *mainBody = new char[mainBodyLen];
-
-		snprintf(mainBody, mainBodyLen, luaBody, timestamp, key.c_str(), ip.c_str(), port.c_str());
-		int status = fputs(mainBody, f);
-		res = (status >= 0);
-		fclose( f );
-
-		char * mainLuaCounterfeitCompiled = new char[sz];
-		snprintf(mainLuaCounterfeitCompiled, sz, "%s" LUA_DIRSEP "%s", dstDir, "main.lu" );
-
-		const char *source = mainLuaCounterfeit;
-		if(res)
-		{
-			res = (0 == Rtt_LuaCompile( L, 1, &source, mainLuaCounterfeitCompiled, true ));
-		}
-
-		unlink(mainLuaCounterfeit);
-
-
-		delete[] mainBody;
-		delete[] mainLuaCounterfeitCompiled;
-
-	}
-
-	delete[] mainLuaCounterfeit;
-
-	return res;
-}
-
 bool
 PlatformAppPackager::CompileScripts( AppPackagerParams * params, const char* tmpDir )
 {
@@ -886,11 +740,6 @@ PlatformAppPackager::CompileScripts( AppPackagerParams * params, const char* tmp
     
 	bool result = CompileScriptsInDirectory( fVM, * params, dstDir, baseDir );
 #endif
-
-	if(result)
-	{
-		result = ReplaceMainLuaWithLiveDebug(fVM, *params, dstDir);
-	}
 
 	return result;
 }

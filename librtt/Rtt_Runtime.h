@@ -64,13 +64,10 @@ class Runtime : public MCallback,
 			kIsApplicationExecuting   = 0x4,
 			kIsUsingCustomCode        = 0x8,
 			kUseExitOnErrorHandler    = 0x10,
-			kShowRuntimeErrors        = 0x20,
-			kIsLuaParserAvailable     = 0x40,
-			kDeferUpdate              = 0x80,
-			kRenderAsync              = 0x100,
-			kIsApplicationNotArchived = 0x200,
-			kIsSimulatorExtension     = 0x400,
-			kShowRuntimeErrorsSet     = 0x800,
+			kIsLuaParserAvailable     = 0x20,
+			kDeferUpdate              = 0x40,
+			kRenderAsync              = 0x80,
+			kIsApplicationNotArchived = 0x100,
 		}
 		Properties;
 
@@ -91,13 +88,12 @@ class Runtime : public MCallback,
 			// Mask
 			kConnectToDebugger = 0x1,
 			kLaunchDeviceShell = 0x2,
-			kDisableAudio = 0x4, // Needed for new welcome window because OpenAL based system doesn't handle multiple instances
 			kCoronaCardsOption = 0x8,
 
 			// Convenience defaults
 			kDeviceLaunchOption = kLaunchDeviceShell,
 			kSimulatorLaunchOption = kLaunchDeviceShell,
-			kCoronaViewOption = (  kLaunchDeviceShell | kDisableAudio ),
+			kCoronaViewOption = (  kLaunchDeviceShell ),
 			kHTML5LaunchOption = ( kLaunchDeviceShell ),
 			kWebPluginLaunchOption = 0, // TODO: Remove???
 			kLinuxLaunchOption = ( kLaunchDeviceShell ),

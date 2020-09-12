@@ -286,22 +286,6 @@ using namespace Rtt;
 		[appDelegate notifyWithTitle:@"Corona Simulator"
 										 description:[NSString stringWithFormat:@"LINUX build of \"%@\" complete", self.appName]
 												iconData:nil];
-		
-		NSRunningApplication *app = [[NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.coronalabs.CoronaLiveServer"] firstObject];
-		if(!app) {
-			NSString *liveServerPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"];
-			app = [[NSWorkspace sharedWorkspace] launchApplicationAtURL:[NSURL fileURLWithPath:liveServerPath] options:(NSWorkspaceLaunchAndHide|NSWorkspaceLaunchWithoutActivation) configuration:@{} error:nil];
-		}
-		NSString *dstHtmlPath = [self.dstPath stringByAppendingPathComponent:self.appName];
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			if(!app.finishedLaunching) {
-				while (![[[NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.coronalabs.CoronaLiveServer"] firstObject] isFinishedLaunching]) {
-					[NSThread sleepForTimeInterval:0.01];
-				}
-			}
-
-			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"linuxProjectBuilt" object:nil userInfo:@{@"root":dstHtmlPath} deliverImmediately:YES];
-		});
 	}
 	else
 	{	

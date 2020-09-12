@@ -1093,30 +1093,6 @@ MacPlatform::PathForResourceFile( const char* filename ) const
 		return result;
 	}
 }
-    
-NSString*
-MacPlatform::PathForProjectResourceFile( const char* filename ) const
-{
-    return Super::PathForProjectResourceFile(filename);
-}
-
-void
-MacPlatform::SetProjectResourceDirectory( const char* filename )
-{
-    Super::SetProjectResourceDirectory(filename);
-}
-
-NSString*
-MacPlatform::PathForSkinResourceFile( const char* filename ) const
-{
-    return Super::PathForProjectResourceFile(filename);
-}
-
-void
-MacPlatform::SetSkinResourceDirectory( const char* filename )
-{
-    Super::SetSkinResourceDirectory(filename);
-}
 
 NSString*
 MacPlatform::PathForDocumentsFile( const char* filename ) const

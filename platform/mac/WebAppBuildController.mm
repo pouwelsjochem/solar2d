@@ -284,32 +284,6 @@ using namespace Rtt;
 		[appDelegate notifyWithTitle:@"Corona Simulator"
 										 description:[NSString stringWithFormat:@"HTML5 build of \"%@\" complete", self.appName]
 												iconData:nil];
-		
-	//	if (shouldShowApplication)
-	//	{
-			// Reveal built app in Finder		
-	//		NSString *message = [NSString stringWithFormat:@"Showing built HTML5 app *%@* in Finder", self.appName];
-			
-	//		[[NSWorkspace sharedWorkspace] selectFile:[self appBundleFile] inFileViewerRootedAtPath:@""];
-			
-	//		[self showMessage:@"Build Complete" message:message helpURL:nil parentWindow:[self window]];
-			
-	//		[self closeBuild:self];
-		NSRunningApplication *app = [[NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.coronalabs.CoronaLiveServer"] firstObject];
-		if(!app) {
-			NSString *liveServerPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"];
-			app = [[NSWorkspace sharedWorkspace] launchApplicationAtURL:[NSURL fileURLWithPath:liveServerPath] options:(NSWorkspaceLaunchAndHide|NSWorkspaceLaunchWithoutActivation) configuration:@{} error:nil];
-		}
-		NSString *dstHtmlPath = [self.dstPath stringByAppendingPathComponent:self.appName];
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			if(!app.finishedLaunching) {
-				while (![[[NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.coronalabs.CoronaLiveServer"] firstObject] isFinishedLaunching]) {
-					[NSThread sleepForTimeInterval:0.01];
-				}
-			}
-
-			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"html5ProjectBuilt" object:nil userInfo:@{@"root":dstHtmlPath} deliverImmediately:YES];
-		});
 	}
 	else
 	{		

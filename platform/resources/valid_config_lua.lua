@@ -18,8 +18,6 @@ display.pixelWidth = 320
 stoplist = {"shaderPrecision"}
 
 application = {
-	showRuntimeErrors = true,
-
 	content = {
 		minContentWidth = 1,
 		minContentHeight = 1,

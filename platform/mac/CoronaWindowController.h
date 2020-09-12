@@ -51,7 +51,6 @@ namespace Rtt
 @property (nonatomic, readonly, getter=view) CoronaView *fView;
 @property(nonatomic, assign, getter=isWindowGoingAway) BOOL windowGoingAway;
 
-- (id)initWithPath:(NSString*)path;
 - (id)initWithPath:(NSString*)path width:(int)width height:(int)height title:(NSString *)windowTitle resizable:(bool) resizable;
 
 // NOTE: Receiver takes ownership of delegate
@@ -63,8 +62,6 @@ namespace Rtt
 - (void)show;
 - (void)hide;
 
-- (void) newProject;
-
 
 // For when window is fading out and is about to close, call this to bring it back.
 - (void) resurrectWindow;
@@ -72,8 +69,6 @@ namespace Rtt
 - (void) setWindowDidCloseCompletionBlock:(void (^)(void))block;
 - (void) setWindowShouldCloseBlock:(BOOL (^)(void))block;
 - (void) setWindowWillResizeBlock:(BOOL (^)(int oldWidth, int oldHeight, int newWidth, int newHeight))block;
-
-- (void) projectLoaded;
 
 - (void) colorPanelAction:(id)sender;
 - (void) setColorPanelCallbackBlock:(void (^)(double r, double g, double b, double a))block;

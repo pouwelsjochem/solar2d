@@ -289,9 +289,6 @@ IOSAppPackager::Build( AppPackagerParams * params, const char* tmpDirBase )
 
                     lua_pushstring( L, TargetDevice::StringForPlatform( macParams->GetTargetPlatform() ) );
                     lua_setfield( L, -2, "targetPlatform" );
-                    
-					lua_pushboolean( L, macParams->IsLiveBuild() );
-					lua_setfield( L, -2, "liveBuild" );
 
 					// By default, assumes ARM architecture, so we need to override
 					// when building for Xcode simulator

@@ -284,11 +284,6 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 			
 			gradleGo.append(" -PconfigureCoronaPlugins=YES");
 			gradleGo.append(" -PcoronaBuild=" Rtt_STRING_BUILD);
-			
-			if (params->IsLiveBuild())
-			{
-				gradleGo.append(" -PcoronaLiveBuild=YES");
-			}
 
 			if (androidParams->IsWindowsNonAsciiUser()) {
 				gradleGo.append(" -PcoronaCustomHome=");
@@ -604,21 +599,6 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 			}
 		}
 
-		std::string liveBuildStr;
-		std::string liveBuildTMPManifestFileStr;
-
-		if (params->IsLiveBuild())
-		{
-			liveBuildStr = "YES";
-			liveBuildTMPManifestFileStr = tmpDir;
-			liveBuildTMPManifestFileStr.append("/output/assets/_corona_live_build_manifest.txt");
-			liveBuildTMPManifestFileStr = EscapeArgument(liveBuildTMPManifestFileStr);
-		}
-		else
-		{
-			liveBuildStr = "NO";
-		}
-
 		std::string javaCmd;
 #if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
 		javaCmd = "/usr/bin/java";
@@ -628,7 +608,7 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 		javaCmd = jdkPath + "\\bin\\java.exe";
 #endif
 
-		const char kCmdFormat[] = "\"%s\" -Djava.class.path=%s org.apache.tools.ant.launch.Launcher %s -DTEMP_DIR=%s -DSRC_DIR=%s -DBUNDLE_DIR=%s -DLIVE_BUILD=%s -DLIVE_BUILD_MANIFEST_FILE=%s -f %s/build.xml build-input-zip";
+		const char kCmdFormat[] = "\"%s\" -Djava.class.path=%s org.apache.tools.ant.launch.Launcher %s -DTEMP_DIR=%s -DSRC_DIR=%s -DBUNDLE_DIR=%s -f %s/build.xml build-input-zip";
 
 		char cmdBuf[20480];
 
@@ -677,8 +657,6 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 				 tmpDirStr.c_str(),
 				 srcDirStr.c_str(),
 				 resourcesDirStr.c_str(),
-				 liveBuildStr.c_str(),
-				 liveBuildTMPManifestFileStr.c_str(),
 				 resourcesDirStr.c_str() );
 		
 		if (debugBuildProcess > 0)
@@ -743,8 +721,6 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 		antTask.SetProperty( "TEMP_DIR", tmpDir );
 		antTask.SetProperty( "SRC_DIR", params->GetSrcDir() );
 		antTask.SetProperty( "BUNDLE_DIR", fResourcesDir.GetString() );
-		antTask.SetProperty( "LIVE_BUILD", liveBuildStr.c_str() );
-		antTask.SetProperty( "LIVE_BUILD_MANIFEST_FILE", liveBuildTMPManifestFileStr.c_str() );
 
 		String debugBuildProcessPref;
 		int debugBuildProcess = 0;

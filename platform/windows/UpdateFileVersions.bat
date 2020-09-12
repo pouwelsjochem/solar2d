@@ -32,8 +32,6 @@ cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.Simulator.N
 if ERRORLEVEL 1 goto OnError
 cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.Shell\Corona.Shell.rc %majorVersion% %minorVersion% %buildNumber%
 if ERRORLEVEL 1 goto OnError
-cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.LiveServer\Corona.LiveServer.rc %majorVersion% %minorVersion% %buildNumber%
-if ERRORLEVEL 1 goto OnError
 
 @echo on
 

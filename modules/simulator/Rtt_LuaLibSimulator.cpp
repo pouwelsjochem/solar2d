@@ -43,10 +43,6 @@ show( lua_State *L )
 		{
 			simulator->SetBuildMessage( lua_tostring( L, 2 ) );
 		}
-		else if ( strcmp( "new", arg ) == 0 )
-		{
-			simulator->NewProject();
-		}
 		else if ( strcmp( "open", arg ) == 0 )
 		{
 			//const char *open = lua_tostring( L, 2 );
@@ -171,17 +167,6 @@ runExtension( lua_State *L )
     const MSimulatorServices *simulator = (const MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
     
     simulator->RunExtension(lua_tostring( L, 1));
-    
-    return 0;
-}
-
-static int
-setProjectResourceDirectory( lua_State *L )
-{
-    Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
-    MSimulatorServices *simulator = (MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-    
-    simulator->SetProjectResourceDirectory(lua_tostring( L, 1));
     
     return 0;
 }
@@ -573,7 +558,6 @@ LuaLibSimulator::Open( lua_State *L )
 		{ "getRecentProjects", getRecentProjects },
 		{ "getCurrentProjectPath", getCurrProjectPath },
 		{ "runExtension", runExtension },
-		{ "setProjectResourceDirectory", setProjectResourceDirectory },
 		{ "setWindowCloseListener", setWindowCloseListener },
 		{ "closeWindow", closeWindow },
 		{ "getPreference", getPreference },

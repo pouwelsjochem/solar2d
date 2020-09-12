@@ -163,7 +163,6 @@ class TargetDevice
         {
             kUnknownSkin = -1,
             kDefaultSkin = -2,
-            kCustomSkin = -3,
             kOutOfRangeSkin = 100
         } Skin;
         

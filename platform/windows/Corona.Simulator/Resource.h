@@ -6,7 +6,6 @@
 #define IDR_MAINFRAME                   128
 #define IDR_SIMULATOR_MENU              128
 #define IDR_ACTIVEWND                   129
-#define IDR_HOME_MENU                   129
 #define IDS_BUILDWEBUPSELL              129
 #define IDS_INVALID_WEB_APP_VERSION_NUMBER 130
 #define IDS_INVALID_LINUX_APP_VERSION_NUMBER 131
@@ -57,7 +56,6 @@
 #define IDI_MAIL                        374
 #define IDD_RELAUNCH_PREF               375
 #define IDD_BUILD_WEB                   376
-#define IDD_CUSTOM_DEVICE               377
 #define IDD_BUILD_WIN32_APP             378
 #define IDD_HTML_MESSAGE                379
 #define IDS_OPENFORBUILD_s              500
@@ -220,8 +218,6 @@
 #define IDS_BUILD_WIN32_VERSION_STRING_INVALID 669
 #define IDS_BUILD_VERSION_STRING_NOT_PROVIDED 670
 #define IDS_CANNOT_BUILD_WITHOUT_PLUGINS 671
-#define IDS_CREATE_LIVE_BUILD           672
-#define IDS_CREATE_LIVE_BUILD_WARNING   673
 #define IDS_OPEN_URL_HTML               674
 #define IDS_ANDROID_BUILD               675
 #define IDS_ANDROID_SDK_LICENSE         676
@@ -251,12 +247,8 @@
 #define IDC_ANSCALOGO                   1041
 #define IDC_COMMAND1                    1042
 #define IDC_DEAUTHORIZE                 1043
-#define IDC_NOWELCOME                   1045
 #define IDC_PROGRESSWND_TEXT            1045
-#define IDC_SHOW_RUNTIME_ERRORS         1046
-#define IDC_AUTO_OPEN_LAST_PROJECT      1047
 #define ID_MSG_BUTTON2                  1049
-#define ID_MSG_BUTTON3                  1050
 #define IDC_COPYRIGHT                   1052
 #define IDC_PICTURE_BOX                 1054
 #define IDC_PICTURE_FRAME               1054
@@ -288,9 +280,6 @@
 #define IDC_BUILD_TARGET_APP_STORE      1085
 #define IDC_USER_ACCOUNT                1086
 #define IDC_SUBSCRIPTION                1087
-#define IDC_SIM_RELAUNCH_ALWAYS         1088
-#define IDC_SIM_RELAUNCH_NEVER          1089
-#define IDC_SIM_RELAUNCH_ASK            1090
 #define IDC_CHECK1                      1091
 #define IDC_REMEMBER_PREF               1092
 #define IDC_CD_DEVICE_NAME              1093
@@ -302,7 +291,6 @@
 #define IDC_EDIT4                       1099
 #define IDC_BUILD_APP_DESCRIPTION       1099
 #define IDC_WEB_BROWSER                 1100
-#define IDC_CREATE_LIVE_BUILD           1101
 #define IDC_CD_PLATFORM                 1102
 #define IDC_STOP_BUILD                  1103
 #define IDC_INCLUDE_STANDART_RESOURCES  1104
@@ -316,12 +304,8 @@
 #define ID_WINDOW_VIEWING               32783
 #define ID_HELP_DEAUTHORIZE             32784
 #define ID_FILE_SHOWPROJECTSANDBOX      32796
-#define ID_FILE_PREFERENCES             32797
 #define ID_FILE_OPENINEDITOR            32799
-#define ID_VIEW_WELCOMESCREEN           32800
 #define ID_VIEW_DEMO                    32801
-#define ID_FILE_NEWPROJECT              32802
-#define ID_VIEW_HOME_SCREEN             32803
 #define ID_VIEW_SAMPLEPROJECTS          32804
 #define ID_VIEW_SAMPLE_PROJECTS         32805
 #define ID_HELP_SAMPLEPROJECTS          32806
@@ -340,7 +324,6 @@
 #define ID_VIEW_CONSOLE                 32819
 #define ID_BUILD_FOR_LINUX              32820
 #define ID_VIEWAS_BEGIN                 32900
-#define ID_VIEWAS_CUSTOMDEVICE          32998
 #define ID_VIEWAS_END                   32999
 
 // Next default values for new objects

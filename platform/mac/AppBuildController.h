@@ -32,7 +32,6 @@ namespace Rtt
 	@protected
         IBOutlet NSMatrix *postBuildRadioGroup;
 		IBOutlet NSPopUpButton* fSigningIdentities;
-		IBOutlet NSButton *fEnableLiveBuild;
 
 		NSString *platformName;
 		NSString *platformTitle;

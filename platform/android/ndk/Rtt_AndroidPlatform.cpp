@@ -538,20 +538,6 @@ AndroidPlatform::RuntimeErrorNotification( const char *errorType, const char *me
 	// Not used on Android
 }
 
-void
-AndroidPlatform::SetProjectResourceDirectory( const char* filename )
-{
-	// Not used on Android
-	Rtt_ASSERT_NOT_IMPLEMENTED();
-}
-
-void
-AndroidPlatform::SetSkinResourceDirectory( const char* filename )
-{
-	// Not used on Android
-	Rtt_ASSERT_NOT_IMPLEMENTED();
-}
-
 const MCrypto& 
 AndroidPlatform::GetCrypto() const
 {

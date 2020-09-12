@@ -1797,20 +1797,7 @@ namespace Rtt
 			//TODO: We should probably terminate the Corona runtime for desktop apps.
 		}
 	}
-
-	void WinPlatform::SetProjectResourceDirectory(const char* path)
-	{
-		WinString stringTranscoder(path);
-		fEnvironment.SetPathForProjectResourceDirectory(stringTranscoder.GetUTF16());
-	}
-
-	void WinPlatform::SetSkinResourceDirectory(const char* path)
-	{
-		// This path should not be allowed to change dynamically.
-		// Should assign this directory path via the SimulatorRuntimeEnvironment::CreateUsing() function instead.
-		Rtt_ASSERT_NOT_IMPLEMENTED();
-	}
-
+	
 	void
 		WinPlatform::Suspend() const
 	{

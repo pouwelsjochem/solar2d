@@ -351,11 +351,11 @@ BOOL CSimulatorApp::InitInstance()
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
-	// Fake out command line if we want to automatically open the last open project.
+	// Fake out command line since we want to automatically open the last open project.
 	// This is necessary because ProcessShellCommand() initiates a "New File"
 	// operation if there is no filename on the command line and this is very
 	// hard to unravel and inject the remembered filename into.
-	if (!m_isDebugModeEnabled && (cmdInfo.m_nShellCommand == CCommandLineInfo::FileNew && ShouldAutoOpenLastProject()))
+	if (!m_isDebugModeEnabled && (cmdInfo.m_nShellCommand == CCommandLineInfo::FileNew))
 	{
 		CRecentFileList *recentFileListPointer = GetRecentFileList();
 		if (recentFileListPointer && (recentFileListPointer->GetSize() > 0))
@@ -721,61 +721,6 @@ CString CSimulatorApp::GetSampleDir()
 	return m_sSampleDir;
 }
 
-/// Gets the absolute path and file name of the Home Screen's "main.lua" file.
-/// @return Returns an absolute path and file name to the Home Screen's "main.lua" file.
-CString CSimulatorApp::GetHomeScreenFilePath()
-{
-	if (m_sHomeScreenFilePath.GetLength() <= 0)
-	{
-		m_sHomeScreenFilePath = GetResourceDir();
-		m_sHomeScreenFilePath += _T("\\homescreen\\main.lua");
-	}
-	return m_sHomeScreenFilePath;
-}
-
-/// Determines if the welcome/home screen is enabled and should be shown to the user.
-/// @return Returns true if the enabled and the screen should be shown to the user.
-///         Returns false if disabled and it should not be shown.
-bool CSimulatorApp::IsHomeScreenEnabled()
-{
-	bool isDisabled = GetProfileInt(REGISTRY_SECTION, REGISTRY_NOWELCOME, REGISTRY_NOWELCOME_DEFAULT) ? true : false;
-	return !isDisabled;
-}
-
-/// Updates the application settings to enable/disable the welcome/home screen.
-/// @param enabled Set true to show the welcome screen. Set false to keep it hidden.
-void CSimulatorApp::EnableHomeScreen(bool enabled)
-{
-	WriteProfileInt(REGISTRY_SECTION, REGISTRY_NOWELCOME, enabled ? 0 : 1);
-}
-void CSimulatorApp::ShowRuntimeErrors(bool showErrors)
-{
-	WriteProfileInt(REGISTRY_SECTION, REGISTRY_SHOWERRORS, showErrors ? 1 : 0);
-}
-bool CSimulatorApp::IsShowingRuntimeErrors()
-{
-	bool isEnabled = GetProfileInt(REGISTRY_SECTION, REGISTRY_SHOWERRORS, REGISTRY_SHOWERRORS_DEFAULT) ? true : false;
-	return isEnabled;
-}
-
-void CSimulatorApp::AutoOpenLastProject(bool autoOpen)
-{
-	WriteProfileInt(REGISTRY_SECTION, REGISTRY_AUTOOPEN, autoOpen ? 1 : 0);
-}
-bool CSimulatorApp::ShouldAutoOpenLastProject()
-{
-	bool autoOpen = GetProfileInt(REGISTRY_SECTION, REGISTRY_AUTOOPEN, REGISTRY_AUTOOPEN_DEFAULT) ? true : false;
-	return autoOpen;
-}
-void CSimulatorApp::SetRelaunchSimStyle(int relaunchSimStyle)
-{
-	WriteProfileInt(REGISTRY_SECTION, REGISTRY_RELAUNCHSIM, relaunchSimStyle);
-}
-int CSimulatorApp::GetRelaunchSimStyle()
-{
-	int style = GetProfileInt(REGISTRY_SECTION, REGISTRY_RELAUNCHSIM, REGISTRY_RELAUNCHSIM_DEFAULT);
-	return style;
-}
 bool CSimulatorApp::ShouldShowWebBuildDlg()
 {
 	return true;

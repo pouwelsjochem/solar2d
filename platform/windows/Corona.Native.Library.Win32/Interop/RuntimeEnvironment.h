@@ -189,20 +189,6 @@ class RuntimeEnvironment
 			const wchar_t* PluginsDirectoryPath;
 
 			/// <summary>
-			///  <para>The path that Corona's internal Lua "system.SkinResourceDirectory" property will map to.</para>
-			///  <para>Set to null to use the runtime environment's default path.</para>
-			///  <para>This path only applies to the Corona Simulator.</para>
-			/// </summary>
-			const wchar_t* SkinResourceDirectoryPath;
-
-			/// <summary>
-			///  <para>The path that Corona's internal Lua "system.UserSkinsDirectory" property will map to.</para>
-			///  <para>Set to null to use the runtime environment's default path.</para>
-			///  <para>This path only applies to the Corona Simulator.</para>
-			/// </summary>
-			const wchar_t* UserSkinsDirectoryPath;
-
-			/// <summary>
 			///  <para>Handle to the main window frame which contains the rendering surface.</para>
 			///  <para>This is optional. Providing this handle allows the runtime to control the main window.</para>
 			/// </summary>
@@ -245,8 +231,6 @@ class RuntimeEnvironment
 				CachesDirectoryPath(nullptr),
 				SystemCachesDirectoryPath(nullptr),
 				PluginsDirectoryPath(nullptr),
-				SkinResourceDirectoryPath(nullptr),
-				UserSkinsDirectoryPath(nullptr),
 				MainWindowHandle(nullptr),
 				RenderSurfaceHandle(nullptr),
 				LaunchOptions(Rtt::Runtime::kDefaultLaunchOption),
@@ -437,20 +421,6 @@ class RuntimeEnvironment
 		/// </summary>
 		/// <returns>Returns a UTF-16 registry path used by the Corona project.</returns>
 		const wchar_t* GetRegistryPathWithoutHive() const;
-
-		/// <summary>
-		///  <para>Sets the path to the "Project Resource" directory.</para>
-		///  <para>This is only used by the Corona Simulator's welcome screen and Corona Composer.</para>
-		///  <para>
-		///   This path can be fetched via the GetUtf*PathFor() method using the
-		///   "Rtt::MPlatform::kProjectResourceDir" constant.
-		///  </para>
-		/// </summary>
-		/// <param name="path">
-		///  <para>Directory path in UTF-16 form.</para>
-		///  <para>If set to null or empty string, then this directory will default to "kResourceDirectory".</para>
-		/// </para>
-		void SetPathForProjectResourceDirectory(const wchar_t* path);
 
 		/// <summary>
 		///  <para>Gets an object used to read, write, and delete application preferences to storage.</para>

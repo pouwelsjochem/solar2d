@@ -268,18 +268,6 @@ void CBuildWebDlg::OnOK()  // OnBuild()
     messageDlg.SetFolder( m_pProject->GetSaveDir() );
     messageDlg.SetIconStyle( MB_ICONINFORMATION );
 	messageDlg.SetButton3Text(IDS_OPEN_URL_HTML);
-	if (messageDlg.DoModal() == ID_MSG_BUTTON3)
-	{
-		// start live server with URL
-		CString sCoronaLiveServerExe = ((CSimulatorApp *)AfxGetApp())->GetApplicationDir() + _T("\\Corona.LiveServer.exe");
-		try
-		{
-			CString sAppPath = CString(_T("html5:")) + m_pProject->GetSaveDir() + _T("\\") + m_pProject->GetName();
-			::ShellExecute(nullptr, nullptr, sCoronaLiveServerExe, sAppPath, nullptr, SW_SHOWNORMAL);
-		}
-		catch (...) {}
-	}
-
 
 	// Close this window.
 	CDialog::OnOK();

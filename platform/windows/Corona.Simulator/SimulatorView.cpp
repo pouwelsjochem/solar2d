@@ -36,17 +36,13 @@
 #include "BuildWebDlg.h"
 #include "BuildLinuxDlg.h"
 #include "BuildWin32AppDlg.h"
-#include "NewProjectDlg.h"
 #include "SelectSampleProjectDlg.h"
-#include "RelaunchPrefDlg.h"
 #include "WinString.h"
 #include "WinGlobalProperties.h"  // WMU_ message IDs
-#include "PreferencesDlg.h"
 #include "ProgressWnd.h"  // ActivityIndicator
 #include "MessageDlg.h"   // Alert
 #include "CoronaInterface.h"
 #include "Rtt_SimulatorRecents.h"
-#include "CustomDeviceDlg.h"
 
 // ----------------------------------------------------------------------------
 
@@ -69,9 +65,6 @@ DEFINE_ENUM_FLAG_OPERATORS(Rtt::Runtime::LaunchOptions)
 #	define new DEBUG_NEW
 #endif
 
-#pragma region Timer IDs
-static const UINT TIMER_ID_CHECK_APP = 1;
-
 #pragma endregion
 
 #pragma region Message Mappings
@@ -83,18 +76,14 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_SETFOCUS()
-	ON_WM_TIMER()
 	ON_COMMAND(ID_APP_ABOUT, &CSimulatorView::OnAppAbout)
 	ON_COMMAND(ID_HELP, &CSimulatorView::OnHelp)
-	ON_COMMAND(ID_VIEW_HOME_SCREEN, &CSimulatorView::OnViewHomeScreen)
 	ON_COMMAND(ID_VIEW_CONSOLE, &CSimulatorView::OnViewConsole)
 	ON_COMMAND(ID_VIEW_SUSPEND, &CSimulatorView::OnViewSuspend)
 	ON_COMMAND(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnViewNavigateBack)
 	ON_COMMAND(ID_FILE_MRU_FILE1, &CSimulatorView::OnFileMRU1)
-	ON_COMMAND(ID_FILE_NEW, &CSimulatorView::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CSimulatorView::OnFileOpen)
 	ON_COMMAND(ID_FILE_OPEN_SAMPLE_PROJECT, &CSimulatorView::OnFileOpenSampleProject)
-	ON_COMMAND(ID_FILE_PREFERENCES, &CSimulatorView::OnPreferences)
 	ON_COMMAND(ID_BUILD_FOR_ANDROID, &CSimulatorView::OnBuildForAndroid)
 	ON_COMMAND(ID_BUILD_FOR_WEB, &CSimulatorView::OnBuildForWeb)
 	ON_COMMAND(ID_BUILD_FOR_LINUX, &CSimulatorView::OnBuildForLinux)
@@ -146,7 +135,6 @@ CSimulatorView::CSimulatorView()
 	CoInitialize(nullptr);
 
 	mRuntimeEnvironmentPointer = nullptr;
-	mIsShowingInternalScreen = false;
 	mDisplayName = applicationPointer->GetDisplayName();
 	mAppChangeHandle = nullptr;
 	m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
@@ -195,7 +183,7 @@ void CSimulatorView::OnInitialUpdate()
 }
 
 /// Called after the CSimulatorDoc has been updated with a different file or if the file was closed.
-/// Starts simulating the selected file or displays the home/welcome screen.
+/// Starts simulating the selected file
 /// @param pSender Pointer to the view that requested an update. NULL if update came from the document.
 /// @param lHint Contains information about the modification made to the document.
 /// @param pHint Pointer to an object storing information about the modification.
@@ -241,9 +229,6 @@ int CSimulatorView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	bounds.right = lpCreateStruct->cx;
 	mCoronaContainerControl.Create(nullptr, WS_CHILD | WS_VISIBLE, bounds, this);
 	mCoronaContainerControl.GetCoronaControl().ShowWindow(SW_HIDE);
-
-	// Start the timer that implements the file modification detection feature
-	SetTimer(TIMER_ID_CHECK_APP, 500, NULL);
 	
 	// Get system skin directory (we have to do this manually because the just-in-time
 	// way that the platform is loaded in tandem with the first application means that the information 
@@ -251,29 +236,12 @@ int CSimulatorView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	Rtt_ASSERT(AfxGetApp() != NULL);
 	mSystemSkinsDir = ((CSimulatorApp *)AfxGetApp())->GetResourceDir();
 	mSystemSkinsDir += _T("\\Skins\\");
-
-	// Get user's skins directory if there is one (we have to do this manually because the just-in-time
-	// way that the platform is loaded in tandem with the first application means that the information 
-	// is not available in the platform when we need it)
-	TCHAR myDocs[MAX_PATH];
-	myDocs[0] = 0;
-
-	HRESULT hr = ::SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, myDocs);
-	_tcscat_s(myDocs, MAX_PATH, _T("\\Corona Labs\\Corona Simulator\\Skins\\"));
-	mUserSkinsDir = myDocs;
-
-	mCustomSkinFileName = mUserSkinsDir + _T("CustomDevice.lua.tmp");
-
 	LoadSkinResources();
 
 	// Now that we've loaded the skins, get a valid skin id
 	if (mDisplayName.IsEmpty())
 	{
 		m_nSkinId = Rtt::TargetDevice::fDefaultSkinID;
-	}
-	else if (mDisplayName == _T("CustomDevice"))
-	{
-		m_nSkinId = Rtt::TargetDevice::kCustomSkin;
 	}
 	else
 	{
@@ -292,96 +260,6 @@ void CSimulatorView::OnSetFocus(CWnd* pOldWnd)
 	}
 }
 
-bool CSimulatorView::HasApplicationChanged()
-{
-	static bool dialogRunning = false;
-	bool result = false;
-
-	// If we've put up a runtime error or are doing a build, the app will be suspended and
-	// we don't want to restart here so behave as if we're already displaying the dialog.
-	bool isSuspended = IsSimulationSuspended();
-	if (!dialogRunning && !isSuspended && (GetDocument()->GetPath().GetLength() > 0))
-	{
-		if (mAppChangeHandle == NULL)
-		{
-			CString projectPath = GetDocument()->GetProject()->GetDir();
-
-			if (projectPath.GetLength() < 3 ||	// path is too short
-				(projectPath[0] == '\\' && projectPath[1] == '\\') ||	// path starts with "\\"
-				(projectPath[1] == ':' && GetDriveType(projectPath.Left(3)) == DRIVE_REMOTE))	// path's drive is remote
-			{
-				// This a UNC or remote path and filesystem notifications don't work so bail
-
-				return false;
-			}
-
-			WinString tstr;
-			tstr.SetTCHAR(projectPath);
-
-			// fprintf(stderr, "Project: %s\n", tstr.GetUTF8());
-			mAppChangeHandle = FindFirstChangeNotification(tstr.GetTCHAR(), true, FILE_NOTIFY_CHANGE_LAST_WRITE);
-		}
-
-		dialogRunning = true;
-
-		// See if there's been a change
-		DWORD waitResult = 0;
-		
-		waitResult = WaitForSingleObject(mAppChangeHandle, 1);
-
-		if (waitResult == WAIT_OBJECT_0)
-		{
-			result = true;
-
-			// Drain the queue (there may be other notifications related to same file system change)
-			while (WaitForSingleObject(mAppChangeHandle, 1) == WAIT_OBJECT_0)
-				FindNextChangeNotification(mAppChangeHandle);
-
-			// Sign up for future change notifications
-			FindNextChangeNotification(mAppChangeHandle);
-		}
-
-		CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
-		if (result && (applicationPointer!= NULL && applicationPointer->GetRelaunchSimStyle() == RELAUNCH_SIM_ASK))
-		{
-			CRelaunchPrefDlg relaunchPrefDlg;
-
-			int dlgResult = relaunchPrefDlg.DoModal();
-			if (dlgResult != IDOK)
-			{
-				result = false;
-			}
-		}
-
-		dialogRunning = false;
-	}
-
-	return result;
-}
-
-// OnTimer - redraw window
-void CSimulatorView::OnTimer(UINT nIDEvent)
-{
-	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
-
-	// Perform the scheduled operation.
-	switch (nIDEvent)
-	{
-	case TIMER_ID_CHECK_APP:
-		if (applicationPointer!= NULL && applicationPointer->GetRelaunchSimStyle() != RELAUNCH_SIM_NEVER)
-		{
-			if (HasApplicationChanged())
-			{
-				// fprintf(stderr, "Relaunching the app due to project modification ...\n");
-				// Restart the currently running project.
-				RestartSimulation();
-			}
-		}
-
-		break;
-	}
-}
-
 // OnClose- WinPlatformServices::Terminate() sends msg here, forward to Main window
 // Also used if skin .png files are missing
 void CSimulatorView::OnClose()
@@ -396,13 +274,8 @@ void CSimulatorView::OnDraw(CDC* pDC)
 	CRect rect;
 	GetClientRect(&rect);
 
-	COLORREF backgroundColor = RGB(255, 255, 255);
-	if (false == mIsShowingInternalScreen)
-	{
-		backgroundColor = RGB(0, 0, 0);
-	}
-
 	// Draw a solid background.
+	COLORREF backgroundColor = RGB(0, 0, 0);
 	CBrush brush(backgroundColor);
 	CBrush* pOldBrush = pDC->SelectObject(&brush);
 	CPen pen;
@@ -442,22 +315,6 @@ void CSimulatorView::OnHelp()
 }
 
 /// Closes the current project and displays the welcome/home screen.
-void CSimulatorView::OnViewHomeScreen()
-{
-	// Do not continue if the machine does not meet the simulator's minimum OpenGL requirements.
-	if (ValidateOpenGL() == false)
-	{
-		return;
-	}
-
-	// Display the home screen.
-	StopSimulation();
-	GetParentFrame()->OnUpdateFrameTitle(FALSE);
-	RunCoronaProject(((CSimulatorApp*)AfxGetApp())->GetResourceDir() + _T("\\homescreen"));
-
-}
-
-/// Closes the current project and displays the welcome/home screen.
 void CSimulatorView::OnViewConsole()
 {
 	((CSimulatorApp*)AfxGetApp())->GetOutputViewerProcessPointer()->RequestShowMainWindow();
@@ -484,11 +341,6 @@ void CSimulatorView::OnUpdateViewSuspend(CCmdUI *pCmdUI)
 
 void CSimulatorView::OnViewNavigateBack()
 {
-	// Do not continue if we're not simulating a device.
-	if (mIsShowingInternalScreen)
-	{
-		return;
-	}
 	if (!mRuntimeEnvironmentPointer || !mRuntimeEnvironmentPointer->GetDeviceSimulatorServices())
 	{
 		return;
@@ -528,17 +380,11 @@ void CSimulatorView::OnFileMRU1()
 	
 	// Compare the selected file name with what is currently opened.
 	const CString& fileName = (*recentFileListPointer)[0];
-	if (!mIsShowingInternalScreen && (GetDocument()->GetPath() == fileName))
+	if ((GetDocument()->GetPath() == fileName))
 	{
 		// The selected file is already open. Relaunch it in the simulator.
 		++mRelaunchCount;
-
 		RestartSimulation();
-	}
-	else
-	{
-		// Open the selected file for simulation.
-		GetDocument()->GetDocTemplate()->OpenDocumentFile(fileName);
 	}
 }
 
@@ -563,51 +409,6 @@ void CSimulatorView::PostOpenWithPath(CString fileName)
 	}
 }
 
-// OnPreferences - show Preferences dialog
-void CSimulatorView::OnPreferences()
-{
-	// Display the preferences dialog.
-	CPreferencesDlg dlgPreferences;
-	auto result = dlgPreferences.DoModal();
-	if (result != IDOK)
-	{
-		// No changes were made.
-		return;
-	}
-
-	// If we're currently running a project, then update its "Show runtime error" setting.
-	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
-	if (applicationPointer && mRuntimeEnvironmentPointer)
-	{
-		Rtt::Runtime *runtimePointer = mRuntimeEnvironmentPointer->GetRuntime();
-		bool bIsShowingRuntimeErrors = applicationPointer->IsShowingRuntimeErrors();
-		bool showRuntimeErrors = mIsShowingInternalScreen ? false : bIsShowingRuntimeErrors;
-		runtimePointer->SetProperty(Rtt::Runtime::kShowRuntimeErrors, showRuntimeErrors);
-	}
-}
-
-/// Displays a window for creating a new Corona project.
-void CSimulatorView::OnFileNew()
-{
-	// Display the "New Project" dialog.
-	CNewProjectDlg dialog;
-	int result = dialog.DoModal();
-	if ((result != IDOK) || dialog.GetNewProjectPath().IsEmpty())
-	{
-		return;
-	}
-
-	// Start simulating the new project.
-	CString projectFilePath = dialog.GetNewProjectPath() + _T("\\main.lua");
-	GetDocument()->GetDocTemplate()->OpenDocumentFile(projectFilePath);
-
-	// Show the new project's folder in Windows Explorer.
-	OnShowProjectFiles();
-
-	// Show the new project's folder in their editor
-	OnFileOpenInEditor();
-}
-
 // OnFileOpen - overloaded to check OpenGL and reopen file if already open
 void CSimulatorView::OnFileOpen()
 {
@@ -625,15 +426,10 @@ void CSimulatorView::OnFileOpen()
                                TRUE, NULL))
 	{
 		  // if the file is already open, relaunch
-		  if (!mIsShowingInternalScreen && (GetDocument()->GetPath() == filename))
+		  if ((GetDocument()->GetPath() == filename))
 		  {
 			  ++mRelaunchCount;
-
 			  RestartSimulation();
-		  }
-		  else 
-		  {
-			  GetDocument()->GetDocTemplate()->OpenDocumentFile(filename);
 		  }
 	}
 }
@@ -663,13 +459,9 @@ void CSimulatorView::OnFileOpenSampleProject()
 
 	// Start simulating the selected project.
 	CString filePath = dialog.GetSelectedProjectPath() + _T("\\main.lua");
-	if (!mIsShowingInternalScreen && (GetDocument()->GetPath() == filePath))
+	if ((GetDocument()->GetPath() == filePath))
 	{
 		RestartSimulation();
-	}
-	else 
-	{
-		GetDocument()->GetDocTemplate()->OpenDocumentFile(filePath);
 	}
 
 	WinString projectName;
@@ -1088,29 +880,10 @@ void CSimulatorView::OnUpdateShowProjectSandbox(CCmdUI *pCmdUI)
 	pCmdUI->Enable(isSimulatingProject ? TRUE : FALSE);
 }
 
-// OnFileClose - close project, show Welcome window again if enabled
+// OnFileClose - close project
 void CSimulatorView::OnFileClose()
 {
-	// Stop the currently simulated project, if running.
 	StopSimulation();
-
-	// Next part depends if we're running in debug mode or not.
-	CSimulatorApp* pApp = (CSimulatorApp*)::AfxGetApp();
-	if (pApp)
-	{
-		if (pApp->IsDebugModeEnabled())
-		{
-			// This application is running in debug mode. Exit out of the application.
-			// This is because the debugger exits when simulation has stopped.
-//			AfxGetMainWnd()->SendMessage(WM_CLOSE);
-
-		}
-		else
-		{
-			// Display the welcome window, if enabled.
-			GetDocument()->GetDocTemplate()->OpenDocumentFile(NULL);
-		}
-	}
 }
 
 // OnUpdateFileClose - enable menu item if project is open
@@ -1126,71 +899,8 @@ void CSimulatorView::OnUpdateFileClose(CCmdUI *pCmdUI)
 void CSimulatorView::OnWindowViewAs( UINT nID )
 {
 	Rtt::TargetDevice::Skin skinId = Rtt::TargetDevice::kUnknownSkin;
-
-	if (nID == ID_VIEWAS_CUSTOMDEVICE)
-	{
-		// Display the custom device skin dialog.
-		CustomDeviceDlg cdDlg;
-		int dlgResult = cdDlg.DoModal();
-
-		// Do not continue if the user canceled out of the dialog.
-		if (dlgResult != IDOK)
-		{
-			return;
-		}
-
-		// Fetch the device settings entered into the above dialog.
-		WinString customDeviceTemplateName;
-		WinString customDeviceTemplate;
-		WinString customDeviceWidthStr, customDeviceHeightStr;
-		customDeviceTemplateName.SetTCHAR( mSystemSkinsDir );
-		customDeviceTemplateName.Append( "CustomDevice.lua.template" );
-		customDeviceWidthStr.Format( "%d", cdDlg.GetCustomDeviceWidth() );
-		customDeviceHeightStr.Format( "%d", cdDlg.GetCustomDeviceHeight() );
-
-		// Read the custom device skin template.
-		if ( ! customDeviceTemplate.GetFileContents( customDeviceTemplateName ) )
-		{
-			Rtt_TRACE(("Error reading template from '%s'\n", customDeviceTemplateName));
-
-			return;
-		}
-
-		// Replace the template's parameters with the values entered into the dialog.
-		customDeviceTemplate.Replace( "{customDeviceWidth}", customDeviceWidthStr );
-        customDeviceTemplate.Replace( "{customDeviceHeight}", customDeviceHeightStr );
-		customDeviceTemplate.Replace( "{customDeviceIsRotatable}", "true" );
-		{
-			WinString stringTranscoder(cdDlg.GetCustomDeviceName());
-			customDeviceTemplate.Replace("{customDeviceName}", stringTranscoder.GetUTF8());
-		}
-		{
-			WinString stringTranscoder(cdDlg.GetCustomDevicePlatform());
-			customDeviceTemplate.Replace("{customDevicePlatform}", stringTranscoder.GetUTF8());
-		}
-
-		// Save the custom skin's settings to file.
-		WinString customSkinFileNamePath( mCustomSkinFileName );
-		customDeviceTemplateName.SetTCHAR( mCustomSkinFileName.GetString() );
-		if ( ! customDeviceTemplate.WriteFileContents( customSkinFileNamePath.GetUTF8() ) )
-		{
-			Rtt_TRACE(("Error writing custom device template to '%s'\n", customSkinFileNamePath.GetUTF8()));
-			return;
-		}
-
-		// Select the custom skin to be used by the simulator.
-		skinId = Rtt::TargetDevice::kCustomSkin;
-	}
-	else
-	{
-		// Fetch the selected device skin's unique ID.
-		skinId = SkinIDFromMenuID(nID);
-	}
-
-	if (skinId != Rtt::TargetDevice::kCustomSkin)
-	{
-		CString skinName(Rtt::TargetDevice::LabelForSkin(skinId));
-	}
+	skinId = SkinIDFromMenuID(nID);
+	CString skinName(Rtt::TargetDevice::LabelForSkin(skinId));
 
 	// Display the selected device skin
 	InitializeSimulation(skinId);
@@ -1283,14 +993,10 @@ void CSimulatorView::OnUpdateWindowViewAs( CCmdUI *pCmdUI )
 			// Separator
 			pViewAsMenu->InsertMenu(viewAsItemCount, MF_BYPOSITION|MFT_SEPARATOR, 0, _T("-"));
 			++viewAsItemCount;
-			pViewAsMenu->InsertMenu(viewAsItemCount, MF_BYPOSITION, ID_VIEWAS_CUSTOMDEVICE, _T("Custom Device..."));
 		}
 	}
 
-	if (pCmdUI->m_nID == ID_VIEWAS_CUSTOMDEVICE)
-		pCmdUI->SetCheck( Rtt::TargetDevice::kCustomSkin == m_nSkinId );
-	else
-		pCmdUI->SetCheck( SkinIDFromMenuID( pCmdUI->m_nID ) == m_nSkinId );
+	pCmdUI->SetCheck( SkinIDFromMenuID( pCmdUI->m_nID ) == m_nSkinId );
 }
 
 void CSimulatorView::OnUpdateViewNavigateBack(CCmdUI *pCmdUI)
@@ -1351,12 +1057,6 @@ bool CSimulatorView::LoadSkinResources()
 	
 	GetFilePaths(systemSkinFilesGlob, filePaths);
 
-	CString userSkinsGlob;
-
-	userSkinsGlob = mUserSkinsDir + _T("*.lua");
-
-	GetFilePaths(CString(userSkinsGlob), filePaths);
-
 	// Put the skins into a data structure we can share with core code
 	char **skinPaths;
 
@@ -1391,12 +1091,6 @@ void CSimulatorView::OnRuntimeLoaded(Interop::RuntimeEnvironment& sender, const 
 {
 	// Store a pointer to the newly created/loaded Corona runtime.
 	mRuntimeEnvironmentPointer = (Interop::SimulatorRuntimeEnvironment*)&sender;
-
-	// Finish configuring the runtime now that it is loaded.
-	Rtt::Runtime *runtimePointer = mRuntimeEnvironmentPointer->GetRuntime();
-	bool bIsShowingRuntimeErrors = ((CSimulatorApp*)AfxGetApp())->IsShowingRuntimeErrors();
-	bool showRuntimeErrors = mIsShowingInternalScreen ? false : bIsShowingRuntimeErrors;
-	runtimePointer->SetProperty(Rtt::Runtime::kShowRuntimeErrors, showRuntimeErrors);
 
 	// If simulating a project, then log its paths.
 	if (mRuntimeEnvironmentPointer->GetDeviceSimulatorServices())
@@ -1557,12 +1251,6 @@ void CSimulatorView::RestartSimulation()
 
 void CSimulatorView::SuspendResumeSimulationWithOverlay(bool showOverlay, bool sendSystemEvents)
 {
-	// Do not continue if we're showing an internal screen, such as the Welcome window.
-	if (mIsShowingInternalScreen)
-	{
-		return;
-	}
-
 	// Do not continue if we're not currently running a project.
 	if (!mRuntimeEnvironmentPointer)
 	{
@@ -1641,14 +1329,7 @@ bool CSimulatorView::IsSimulationSuspended() const
 // InitializeSimulation - select new skin and update
 bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId)
 {
-	if (skinId == Rtt::TargetDevice::kCustomSkin)
-	{
-		mDisplayName = _T("CustomDevice");
-	}
-	else
-	{
-		mDisplayName = Rtt::TargetDevice::LabelForSkin(skinId);
-	}
+	mDisplayName = Rtt::TargetDevice::LabelForSkin(skinId);
 	((CSimulatorApp*)AfxGetApp())->PutDisplayName(mDisplayName);
 
 	bool skinLoaded = InitSkin(skinId);
@@ -1669,43 +1350,8 @@ void CSimulatorView::UpdateSimulatorSkin()
 	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
 	
 	// Determine what the size of the client area of the window needs to be.
-    UINT clientWidth = 0;
-    UINT clientHeight = 0;
-	if (mIsShowingInternalScreen)
-	{
-		// We are not simulating a device. Use the runtime's width and height.
-		if (mRuntimeEnvironmentPointer && mRuntimeEnvironmentPointer->GetRuntime())
-		{
-			Rtt::Display& display = mRuntimeEnvironmentPointer->GetRuntime()->GetDisplay();
-			clientWidth = display.ContentWidth();
-			clientHeight = display.ContentHeight();
-		}
-
-		// Apply the system's DPI scale factor to the width and height.
-		// Note: In the future, we should resize the window when the DPI scale factor changes dynamically.
-		auto deviceContextPointer = this->GetDC();
-		if (deviceContextPointer)
-		{
-			const int kBaseDpi = 96;
-			int dpiValue = deviceContextPointer->GetDeviceCaps(LOGPIXELSX);
-			if ((dpiValue > 0) && (dpiValue != kBaseDpi))
-			{
-				double dpiScale = (double)dpiValue / (double)kBaseDpi;
-				clientWidth = (int)std::round((double)clientWidth * dpiScale);
-			}
-			dpiValue = deviceContextPointer->GetDeviceCaps(LOGPIXELSY);
-			if ((dpiValue > 0) && (dpiValue != kBaseDpi))
-			{
-				double dpiScale = (double)dpiValue / (double)kBaseDpi;
-				clientHeight = (int)std::round((double)clientHeight * dpiScale);
-			}
-		}
-	}
-	else
-	{
-		clientWidth = mDeviceConfig.deviceWidth;
-		clientHeight = mDeviceConfig.deviceHeight;
-	}
+    UINT clientWidth = mDeviceConfig.deviceWidth;
+    UINT clientHeight = mDeviceConfig.deviceHeight;
 	
 	// Validate width and height.
 	if ((clientWidth <= 0) || (clientHeight <= 0))
@@ -1837,19 +1483,6 @@ void CSimulatorView::RunCoronaProject()
 
     // Fetch the document's currently selected "main.lua" file.
     CString filePath = GetDocument()->GetPath();
-    if (filePath.IsEmpty())
-    {
-        // A file was not selected. Show the home screen if enabled.
-        // Do not show the home screen if we're running the Corona Debugger.
-        CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
-        if (applicationPointer->IsHomeScreenEnabled() &&
-            (applicationPointer->IsDebugModeEnabled() == false))
-        {
-            filePath = applicationPointer->GetHomeScreenFilePath();
-        }
-    }
-
-    // Run the Corona project.
     RunCoronaProject(CCoronaProject::RemoveMainLua(filePath));
 }
 
@@ -1864,25 +1497,11 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 	{
 		return;
 	}
-	
-	// Identify if we are loading the home screen Corona project.
-	{
-		CString lowercaseProjectPath = projectPath;
-		lowercaseProjectPath.MakeLower();
-		CString lowercaseResourceDir = ((CSimulatorApp*)AfxGetApp())->GetResourceDir();
-		lowercaseResourceDir.MakeLower();
-		mIsShowingInternalScreen = (lowercaseProjectPath.Find(lowercaseResourceDir) >= 0);
-	}
 
-	// Set the working directory that the Open File dialog will use to the
-	// parent directory of the currently active project.
-	if (!mIsShowingInternalScreen)
-	{
-		CString sParentDir = projectPath;
-		sParentDir = sParentDir.Left( sParentDir.ReverseFind(_T('\\')) );
-		CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
-		applicationPointer->SetWorkingDir( sParentDir );
-	}
+	CString sParentDir = projectPath;
+	sParentDir = sParentDir.Left( sParentDir.ReverseFind(_T('\\')) );
+	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
+	applicationPointer->SetWorkingDir( sParentDir );
 	
 	// If we're opening the "home screen" project, then show the home menu.
 	// Otherwise, show the device simulator menu.
@@ -1890,7 +1509,7 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 	if (frameWindowPointer)
 	{
 		// Only replace the menu if it needs changing. If we're already showing the right menu, do nothing.
-		UINT nextMenuId = mIsShowingInternalScreen ? IDR_HOME_MENU : IDR_SIMULATOR_MENU;
+		UINT nextMenuId = IDR_SIMULATOR_MENU;
 		auto lastMenuPointer = frameWindowPointer->GetMenu();
 		MENUINFO menuInfo{};
 		menuInfo.cbSize = sizeof(menuInfo);
@@ -1900,7 +1519,7 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 		{
 			// Load a new menu from our resource table.
 			CMenu newMenu;
-			newMenu.LoadMenu(mIsShowingInternalScreen ? IDR_HOME_MENU : IDR_SIMULATOR_MENU);
+			newMenu.LoadMenu(IDR_SIMULATOR_MENU);
 
 			// Assign the loaded menu's resource ID to its info struct.
 			// This is an optimization. We don't want to reload the menu everytime we start/stop a Corona project.
@@ -1929,18 +1548,7 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 	{
 		projectPath.Empty();
 	}
-
-	// Disable logging if showing the Welcome screen, unless our undocumented debug flag is set in the registry.
-	// We do this because the simulator user will only be interested in debugging their own simulated apps.
-	// Note: Debug logging cannot be disabled when running the debug version of the Corona Simulator.
-	if (mIsShowingInternalScreen && !applicationPointer->GetProfileInt(REGISTRY_SECTION, _T("debugWelcomeProcess"), 0))
-	{
-		Rtt_LogDisable();
-	}
-	else
-	{
-		Rtt_LogEnable();
-	}
+	Rtt_LogEnable();
 	
 	// Terminate the last Corona runtime.
 	Interop::SimulatorRuntimeEnvironment::Destroy(mRuntimeEnvironmentPointer);
@@ -1959,21 +1567,13 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 		settings.MainWindowHandle = nullptr;			// <- Do not let the runtime take control of the main window.
 		settings.RenderSurfaceHandle = mCoronaContainerControl.GetCoronaControl().GetSafeHwnd();
 		settings.LoadedEventHandlerPointer = &mRuntimeLoadedEventHandler;
-		if (mIsShowingInternalScreen)
-		{
-			// Give the Welcome Window access to our "WinSimulatorServices" object's features.
-			settings.CoronaSimulatorServicesPointer = &mSimulatorServices;
-		}
-		else
-		{
-			// Provide the configuration of the device we will be simulating.
-			settings.DeviceConfigPointer = &mDeviceConfig;
+		// Provide the configuration of the device we will be simulating.
+		settings.DeviceConfigPointer = &mDeviceConfig;
 
-			// Set up the runtime for debug mode, if enabled.
-			if (((CSimulatorApp*)::AfxGetApp())->IsDebugModeEnabled())
-			{
-				settings.LaunchOptions |= Rtt::Runtime::kConnectToDebugger;
-			}
+		// Set up the runtime for debug mode, if enabled.
+		if (((CSimulatorApp*)::AfxGetApp())->IsDebugModeEnabled())
+		{
+			settings.LaunchOptions |= Rtt::Runtime::kConnectToDebugger;
 		}
 
 		// Create and startup the Corona runtime.
@@ -2024,15 +1624,7 @@ Rtt::TargetDevice::Skin CSimulatorView::SkinIDFromMenuID( UINT nMenuID )
 bool CSimulatorView::InitSkin( Rtt::TargetDevice::Skin skinId )
 {
 	WinString skinFile;
-
-	if (skinId == Rtt::TargetDevice::kCustomSkin)
-	{
-		skinFile.SetTCHAR(mCustomSkinFileName);
-	}
-	else
-	{
-		skinFile.SetUTF8( Rtt::TargetDevice::LuaObjectFileFromSkin( skinId ) );
-	}
+	skinFile.SetUTF8( Rtt::TargetDevice::LuaObjectFileFromSkin( skinId ) );
 
 	m_nSkinId = skinId;
 

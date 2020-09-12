@@ -83,9 +83,6 @@ class MPlatform
 		 * On the simulator, load a resource.car file that lives in the app bundle (system resource dir).  
 		 * It contains the compiled lua for each device skin and the remdebug.engine.
          *
-         * On the simulator, kProjectResourceDir is a settable directory that is used by simulator extensions
-         * such as Composer to access the resources of a project (i.e. an arbitrary directory)
-		 *
 		 * On the device, there's no distinction.
 		 */
 
@@ -95,9 +92,6 @@ class MPlatform
 			kDocumentsDir,
 			kTmpDir,
 			kSystemResourceDir,
-			kProjectResourceDir,
-			kSkinResourceDir,
-			kUserSkinsDir,
 			kCachesDir,
 			kSystemCachesDir,
 			kPluginsDir,
@@ -217,8 +211,6 @@ class MPlatform
 			kTestFileExists = 0x2
 		};
         virtual void PathForFile( const char* filename, Directory baseDir, U32 flags, String & result ) const = 0;
-        virtual void SetProjectResourceDirectory( const char* filename ) = 0;
-        virtual void SetSkinResourceDirectory( const char* filename ) = 0;
 
 		virtual bool FileExists( const char * filename ) const = 0;
 	

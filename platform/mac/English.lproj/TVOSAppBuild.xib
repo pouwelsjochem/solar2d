@@ -9,7 +9,6 @@
         <customObject id="-2" userLabel="File's Owner" customClass="TVOSAppBuildController">
             <connections>
                 <outlet property="availableSimulatorsPopup" destination="fQV-dm-ZH6" id="ls5-Hh-KQ8"/>
-                <outlet property="fEnableLiveBuild" destination="psr-ec-yGW" id="Zln-d5-Jya"/>
                 <outlet property="fSigningIdentities" destination="26" id="90"/>
                 <outlet property="fTargetSDK" destination="192" id="UxQ-7O-MPM"/>
                 <outlet property="postBuildRadioGroup" destination="184" id="199"/>
@@ -283,14 +282,6 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button toolTip="Build with support for automatic syncing of project changes to test devices" id="psr-ec-yGW">
-                        <rect key="frame" x="151" y="55" width="370" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Create Live Build" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Bl0-Mg-D0M">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="510" y="396.5"/>

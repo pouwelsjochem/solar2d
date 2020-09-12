@@ -4,9 +4,6 @@
 [submodule "external/freetype-2.9"]
 	path = external/freetype-2.9
 	url = https://github.com/coronalabs/submodule-freetype.git
-[submodule "external/live-libs"]
-	path = external/live-libs
-	url = https://github.com/coronalabs/submodule-live-libs.git
 [submodule "external/luafilesystem"]
 	path = external/luafilesystem
 	url = https://github.com/coronalabs/submodule-lfs.git
@@ -34,9 +31,6 @@
 [submodule "plugins/network"]
 	path = plugins/network
 	url = https://github.com/pouwelsjochem/submodule-plugins-network
-[submodule "simulator-extensions/welcomescreen"]
-	path = simulator-extensions/welcomescreen
-	url = https://github.com/pouwelsjochem/submodule-welcomescreen.git
 [submodule "subrepos/easing"]
 	path = subrepos/easing
 	url = https://github.com/coronalabs/framework-easing.git

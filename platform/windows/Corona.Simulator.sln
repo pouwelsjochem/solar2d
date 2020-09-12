@@ -67,8 +67,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glew.Library.Win32", "Glew.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Corona.Console", "Corona.OutputViewer\Corona.OutputViewer.vcxproj", "{6FED91A6-2850-4354-BA44-3282D222A25D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Corona.LiveServer", "Corona.LiveServer\Corona.LiveServer.vcxproj", "{5C23484C-6D13-49CB-81FF-51D6149CC151}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

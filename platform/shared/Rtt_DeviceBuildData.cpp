@@ -227,7 +227,6 @@ bool
 DeviceBuildData::Initialize(
 	const char *appSettingsPath,
 	const char *buildSettingsPath,
-	bool liveBuild,
 	int debugBuildProcess)
 {
 	bool result = true;
@@ -243,21 +242,6 @@ DeviceBuildData::Initialize(
 
 	fDebugBuildProcess = debugBuildProcess;
 
-	if (liveBuild)
-	{
-		PushCoronaPluginMetadata( L );
-		{
-			int index = lua_gettop( L );
-			lua_pushstring( L, "plugin.liveBuild" );
-			{
-				const char *name = lua_tostring( L, -1 );
-				AddPlugin( L, name, index );
-			}
-			lua_pop( L, 1 );
-		}
-		lua_pop( L, 1 );
-	}
-
 	return result;
 }
 
@@ -271,17 +255,6 @@ DeviceBuildData::SetBuild( int buildYear, int buildRevision )
 
 		Rtt_TRACE( ( "NOTE: This project's build.settings overrides the default target build. Instead it targets a specific daily build (%d.%d)\n", fBuildYear, fBuildRevision ) );
 	}
-}
-
-// Pushes metadata table needed by AddPlugin() to top of stack.
-//
-// { publisherId = "com.coronalabs" }
-void
-DeviceBuildData::PushCoronaPluginMetadata( lua_State *L )
-{
-	lua_newtable( L );
-	lua_pushstring( L, "com.coronalabs" );
-	lua_setfield( L, -2, "publisherId" );
 }
 
 void

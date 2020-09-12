@@ -24,7 +24,6 @@ local params = ...
 
 local onShellComplete = params.onShellComplete
 local exitCallback = params.exitCallback
-local isSimulatorExtension = params.isSimulatorExtension
 
 --------------------------------------------------------------------------------
 

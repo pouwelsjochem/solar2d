@@ -38,12 +38,6 @@
                             <menuItem isSeparatorItem="YES" id="143">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Corona Live Server" id="naQ-B2-NgQ">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="showLiveServer:" target="207" id="G3K-np-3aK"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Services" id="131">
                                 <menu key="submenu" title="Services" systemMenu="services" id="130"/>
                             </menuItem>
@@ -80,11 +74,6 @@
                 <menuItem title="File" id="83">
                     <menu key="submenu" title="File" id="81">
                         <items>
-                            <menuItem title="New Project…" keyEquivalent="n" id="667">
-                                <connections>
-                                    <action selector="presentNewProject:" target="-1" id="684"/>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="669"/>
                             <menuItem title="Open…" keyEquivalent="o" id="72">
                                 <connections>
@@ -298,13 +287,6 @@
                                     <action selector="performMiniaturize:" target="-1" id="37"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="619"/>
-                            <menuItem title="Welcome to Corona" keyEquivalent="1" id="618">
-                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
-                                <connections>
-                                    <action selector="presentWelcomeWindow:" target="207" id="vQb-ER-CGk"/>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="477">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
@@ -351,16 +333,5 @@
         </menu>
         <customObject id="207" userLabel="AppDelegate" customClass="AppDelegate"/>
         <userDefaultsController representsSharedInstance="YES" id="215" userLabel="Shared User Defaults Controller"/>
-        <menu id="uzw-Ab-Ntb" userLabel="Dock">
-            <items>
-                <menuItem title="Corona Live Server" id="k1t-eG-pot">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="showLiveServer:" target="207" id="jSu-ai-EVV"/>
-                    </connections>
-                </menuItem>
-            </items>
-            <point key="canvasLocation" x="-12" y="292"/>
-        </menu>
     </objects>
 </document>

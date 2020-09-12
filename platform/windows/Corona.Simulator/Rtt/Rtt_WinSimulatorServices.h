@@ -41,9 +41,6 @@ class WinSimulatorServices : public MSimulatorServices
 		/// <summary>Destroys this object and its owned objects.</summary>
 		virtual ~WinSimulatorServices();
 
-		/// <summary>Displays a "New Project" window for creating a new Corona project.</summary>
-		virtual bool NewProject() const;
-
 		/// <summary>Opens a Corona project for simulation.</summary>
 		/// <param name="name">
 		///  <para>Set to the absolute path to the Corona project directory to open and simulate.</para>
@@ -62,7 +59,6 @@ class WinSimulatorServices : public MSimulatorServices
 		virtual void SelectSaveFilename(const char* newFilename, const char* currDirectory, const char* extn, LuaResource* resource) const;
 		virtual const char* GetCurrProjectPath( ) const;
 		virtual void RunExtension(const char *extName) const;
-		virtual void SetProjectResourceDirectory(const char *projectResourceDirectory);
 		virtual void SetWindowCloseListener(LuaResource* resource) const;
 		virtual void CloseWindow( ) const;
 		virtual void GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const;

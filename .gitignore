@@ -197,10 +197,6 @@ sdk/Corona**
 *.user
 platform/android/resources/FastFileCreate
 
-platform/mac/CoronaLiveServer/libs/bin
-platform/mac/CoronaLiveServer/libs/ssl
-platform/mac/CoronaLiveServer/libevent
-platform/mac/CoronaLiveServer/openssl
 platform/linux/lua
 platform/linux/linux_rtt.txt
 platform/linux/linuxtemplate.tar.gz

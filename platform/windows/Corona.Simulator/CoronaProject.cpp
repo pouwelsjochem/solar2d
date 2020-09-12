@@ -212,8 +212,6 @@ CCoronaProject::RegistryGet( CString sSection )
 	// Third argument is what this is a password for, not value of password
     m_KeystorePassword.RegistryGet( sSection, REGISTRY_KEYSTOREPWD, GetKeystorePath() );
     m_AliasPassword.RegistryGet( sSection, REGISTRY_ALIASPWD, GetAlias() );    
-	stringBuffer = pApp->GetProfileString(sSection, REGISTRY_CREATE_LIVE_BUILD, REGISTRY_CREATE_LIVE_BUILD_DEFAULT);
-	m_CreateLiveBuild = _ttoi(stringBuffer) ? true : false;
 }
 
 // RegistryPut - save each value to the given section
@@ -243,8 +241,6 @@ CCoronaProject::RegistryPut( CString sSection )
 	// Third argument is what this is a password for, not value of password
     m_KeystorePassword.RegistryPut( sSection, REGISTRY_KEYSTOREPWD, GetKeystorePath() );
 	m_AliasPassword.RegistryPut(sSection, REGISTRY_ALIASPWD, GetAlias());
-	stringBuffer.Format(_T("%d"), m_CreateLiveBuild);
-	pApp->WriteProfileString(sSection, REGISTRY_CREATE_LIVE_BUILD, stringBuffer);
 }
 
 bool
@@ -534,15 +530,6 @@ Rtt::TargetDevice::Platform CCoronaProject::GetTargetPlatform()
 void CCoronaProject::SetTargetPlatform(Rtt::TargetDevice::Platform targetDevice)
 {
 	m_TargetPlatform = targetDevice;
-}
-
-bool CCoronaProject::GetCreateLiveBuild()
-{
-	return m_CreateLiveBuild;
-}
-void CCoronaProject::SetCreateLiveBuild(bool createLiveBuild)
-{
-	m_CreateLiveBuild = createLiveBuild;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

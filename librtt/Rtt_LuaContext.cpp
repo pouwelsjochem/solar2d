@@ -364,19 +364,11 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
         lua_Debug ar;
         bool luaDebugAvailable = lua_getstack(L, 1, &ar) == 1 && lua_getinfo(L, "l", &ar) && ar.currentline != 0;
 #else
-        bool luaDebugAvailable = runtime->IsProperty(Runtime::kShowRuntimeErrors); // debug is always available in the Simulator so we decide on the basis of a user default
+        bool luaDebugAvailable = true; // debug is always available in the Simulator
 #endif
-
-        // Rtt_LogException("\nisJavaError %d, bail %d, kShowRuntimeErrors %d\n", isJavaError, bail, runtime->IsProperty(Runtime::kShowRuntimeErrors));
         
          // If the app set an explicit value for "showRuntimeErrors" then use it, otherwise show errors if code is built with debug symbols (always show syntax errors)
-		bool showRuntimeError = runtime->IsProperty(Runtime::kShowRuntimeErrorsSet) ? runtime->IsProperty(Runtime::kShowRuntimeErrors) : (luaDebugAvailable || (strcmp(errorType, "Syntax error") == 0));
-
-        Rtt_TRACE(( "kShowRuntimeErrorsSet %s, kShowRuntimeErrors %s, isJavaError %s",
-                         (runtime->IsProperty(Runtime::kShowRuntimeErrorsSet)?"YES":"NO"),(runtime->IsProperty(Runtime::kShowRuntimeErrors)?"YES":"NO"),(isJavaError?"YES":"NO")));
-        Rtt_TRACE(( "bail %s, luaDebugAvailable %s, showRuntimeError %s",
-                         (bail?"YES":"NO"),(luaDebugAvailable?"YES":"NO"),(showRuntimeError?"YES":"NO")));
-
+		bool showRuntimeError = luaDebugAvailable || (strcmp(errorType, "Syntax error") == 0);
         if (isJavaError || (bail && showRuntimeError))
         {
             lua_CFunction errfunc = Lua::GetErrorHandler( NULL );

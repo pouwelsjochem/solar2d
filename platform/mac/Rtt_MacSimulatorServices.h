@@ -17,7 +17,6 @@
 // ----------------------------------------------------------------------------
 
 @class AppDelegate;
-@class NewProjectController;
 @class CoronaWindowController;
 @class NSString;
 
@@ -37,7 +36,6 @@ class MacSimulatorServices : public MSimulatorServices
 
 	// MSimulatorServices
 	public:
-		virtual bool NewProject() const;
 		virtual bool OpenProject( const char *name ) const;
 		virtual bool BuildProject( const char *platform ) const;
         virtual void ShowSampleCode() const;
@@ -45,7 +43,6 @@ class MacSimulatorServices : public MSimulatorServices
         virtual void SelectSaveFilename(const char* newFilename, const char* currDirectory, const char* extn, LuaResource* resource) const;
         virtual const char* GetCurrProjectPath( ) const;
         virtual void RunExtension(const char *extName) const;
-        virtual void SetProjectResourceDirectory(const char *projectResourceDirectory);
         virtual void SetWindowCloseListener(LuaResource* resource) const;
         virtual void CloseWindow( ) const;
         virtual const char* GetPreference(const char *prefName) const;

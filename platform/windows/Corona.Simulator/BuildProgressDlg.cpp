@@ -248,7 +248,6 @@ void CBuildProgressDlg::BuildForAndroid()
 							fTargetedAppStorePointer->GetStringId(),
 							fProjectSettingsPointer->IsDistribution(),
 							fProjectSettingsPointer->GetAndroidVersionCode(),
-							fProjectSettingsPointer->GetCreateLiveBuild()
 							);
 
 	PostMessage(WMU_BUILD_COMPLETE, 0, 0);

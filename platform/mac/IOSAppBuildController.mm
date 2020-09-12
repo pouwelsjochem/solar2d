@@ -237,7 +237,6 @@ static NSString *kValueNone = @"None";
 {
     Rtt_ASSERT(appDelegate);
 
-	BOOL isLiveBuild = (fEnableLiveBuild.state == NSOnState);
     BOOL shouldSendToDevice = ([postBuildRadioGroup selectedRow] == 0); // first item in radio group
     BOOL shouldOpenInXcodeSimulator = ([postBuildRadioGroup selectedRow] == 1);
     BOOL shouldSendToAppStore = ([postBuildRadioGroup selectedRow] == 2);
@@ -408,7 +407,6 @@ static NSString *kValueNone = @"None";
                                       isDistributionBuild );
 
     params->SetStripDebug( isStripDebug );
-	params->SetLiveBuild(isLiveBuild);
 	if(currentSDK.customTemplate)
 	{
 		params->SetCustomTemplate([currentSDK.customTemplate UTF8String]);
@@ -444,12 +442,6 @@ static NSString *kValueNone = @"None";
                          description:[NSString stringWithFormat:@"iOS build of \"%@\" complete", self.appName]
                             iconData:nil];
         
-		if(isLiveBuild)
-		{
-			NSString *liveServerPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Corona Live Server.app"];
-			[[NSWorkspace sharedWorkspace] openFile:self.projectPath withApplication:liveServerPath andDeactivate:NO];
-		}
-
         if (shouldSendToDevice)
         {
             // Send to device
@@ -675,16 +667,6 @@ static NSString *kValueNone = @"None";
             result = NO;
         }
     }
-    
-	if (result)
-	{
-		if (fEnableLiveBuild.state == NSOnState && [self isStoreBuild])
-		{
-			[self showError:@"Cannot create Live Build" message:@"Live Build cannot be created with distribution profile selected."
-			                 "\n\nChoose a provisioning profile signed with an \"iPhone Developer\" certificate." helpURL:@"https://docs.coronalabs.com/guide/distribution/iOSBuild/index.html#build-process" parentWindow:[self window]];
-			result = NO;
-		}
-	}
 
 	return result;
 }

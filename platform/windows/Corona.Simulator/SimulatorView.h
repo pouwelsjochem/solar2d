@@ -52,7 +52,6 @@ class CSimulatorView : public CView
 		void RestartSimulation();
 		void SuspendResumeSimulationWithOverlay(bool showOverlay, bool sendSystemEvents);
 		void StopSimulation();
-		bool IsShowingInternalScreen() { return mIsShowingInternalScreen; }
 		bool IsSimulationSuspended() const;
 		CSimulatorDoc* GetDocument() const;
 		CString GetDisplayName()   { return mDisplayName; }
@@ -118,13 +117,10 @@ class CSimulatorView : public CView
 		afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 		afx_msg void OnAppAbout();
 		afx_msg void OnHelp();
-		afx_msg void OnPreferences();
-		afx_msg void OnViewHomeScreen();
 		afx_msg void OnViewConsole();
 		afx_msg void OnViewSuspend();
 		afx_msg void OnViewNavigateBack();
 		afx_msg void OnFileMRU1();
-		afx_msg void OnFileNew();
 		afx_msg void OnFileOpen();
 		afx_msg void OnFileOpenSampleProject();
 		afx_msg void OnBuildForAndroid();
@@ -158,7 +154,6 @@ class CSimulatorView : public CView
 		bool InitSkin(Rtt::TargetDevice::Skin skinId);
 		bool InitializeSimulation(Rtt::TargetDevice::Skin skinId);
 		bool ValidateOpenGL();
-		bool HasApplicationChanged();
 		bool LoadSkinResources();
 		void GetFilePaths(LPCTSTR pattern, CStringArray& filepaths);
 		void OnRuntimeLoaded(Interop::RuntimeEnvironment& sender, const Interop::EventArgs& arguments);
@@ -173,16 +168,13 @@ class CSimulatorView : public CView
 		CProgressWnd* mProgressDlgPointer;
 		CString mDisplayName;
 		Rtt::PlatformSimulator::Config mDeviceConfig;
-		bool mIsShowingInternalScreen;	// Set true when showing the Home Screen or Demo Screen.
 		HANDLE mAppChangeHandle;		// Filesystem notifications handle
 		int mShakeAmount;
 		int mShakeReps;
 		int mShakeNum;
 		CRect mShakeOriginRect;
 		Rtt::TargetDevice::Skin m_nSkinId;
-		CString mCustomSkinFileName;
 		CString mSystemSkinsDir;
-		CString mUserSkinsDir;
 		int mRelaunchCount;
 };
 

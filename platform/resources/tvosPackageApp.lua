@@ -20,10 +20,6 @@ local simAvail, simulator = pcall(require, "simulator")
 local CoronaPListSupport = require("CoronaPListSupport")
 local captureCommandOutput = CoronaPListSupport.captureCommandOutput
 
-local coronaLiveBuildAppDir = "_corona_live_build_app" -- "PackageApp" -- 
-local coronaLiveBuildManifest = "_corona_live_build_manifest.txt"
-local coronaLiveBuildExclude = "_corona_live_build_exclude.txt"
-
 if not simAvail then
 	simulator = nil
 end
@@ -174,7 +170,7 @@ end
 
 
 --------------------------------------------------------------------------------
-local function getCopyResourcesScript( src, dst, should_preserve, live_build, options )
+local function getCopyResourcesScript( src, dst, should_preserve, options )
 
 	-- Generate a script to copy the project's assets to the built app
 	-- rsync is used to speed up building apps with very large numbers of assets
@@ -242,11 +238,6 @@ local function getCopyResourcesScript( src, dst, should_preserve, live_build, op
 	end
 
 	args = args.."SRC_DIR="..src.."\n"
-
-	if live_build then
-		dst = makepath(dst, coronaLiveBuildAppDir)
-	end
-
 	args = args.."DST_DIR="..dst.."\n"
 
 	if not should_preserve then
@@ -255,9 +246,8 @@ local function getCopyResourcesScript( src, dst, should_preserve, live_build, op
 
 	-- Replace the placeholders in the script with the generated code (or an empty string if there was none)
 	local debugFlags = (debugBuildProcess > 0) and "-v --itemize-changes" or ""
-	local excludeLuaAndBuildSettings = (live_build) and "" or "--exclude='**/*.lua' --exclude='build.settings'" -- don't exclude Lua files and build.settings for live builds
 	script = script:gsub("{{EXCLUDED_FILES}}", excludedFilesSh)
-	script = script:gsub("{{EXCLUDE_LUA_AND_BUILD_SETTINGS}}", excludeLuaAndBuildSettings)
+	script = script:gsub("{{EXCLUDE_LUA_AND_BUILD_SETTINGS}}", "--exclude='**/*.lua' --exclude='build.settings'")
 	script = script:gsub("{{DEBUG_FLAGS}}", debugFlags)
 
 	script = args .. script
@@ -267,56 +257,6 @@ local function getCopyResourcesScript( src, dst, should_preserve, live_build, op
 	end
 
 	return script
-end
-
---
--- Generate the Live Build manifest file generation script
---
--- Format:
---
--- 0 / 1476221154 / /main.lua //
--- 0 / 1476232425 / /subdir/ //
--- 0 / 1476232425 / /subdir/file.lua //
--- 0 / 1476212136 / /world.jpg //
---
-local function getLiveBuildManifestScript(appDir, manifestFile)
-	-- local genManifestSh = "cd ".. appDir .." && find . -print0 | xargs -0 stat -f '%m %N' > " .. manifestFile
-
-	local genManifestSh = "cd ".. appDir .." &&  find . -print0 | xargs -0 stat -f '0 / %m / %N%T //' | sed -e 's![*@] //$! //!' -e 's!/ \./!/ /!' > "..manifestFile
-
-	return genManifestSh
-end
-
---
--- Create a script to copy the original apps icons to the correct locations in the live build app
---
-local function getLiveBuildCopyIconScript(src, dest, options)
-	local script = ""
-	local iconFiles = (options.settings and options.settings.iphone and options.settings.iphone.plist and options.settings.iphone.plist.CFBundleIconFiles) or nil;
-
-	local iconsToCopy = 0
-	if iconFiles and type(iconFiles) == "table" then
-		-- copy all the icon files to the destination folder preserving any subdirectories
-		for k, iconFile in pairs(iconFiles) do
-			iconsToCopy = iconsToCopy + 1
-			script = script .." ".. quoteString(iconFile)
-		end
-
-		local debugFlags = (debugBuildProcess > 0) and "-v --itemize-changes " or ""
-
-		script = "cd ".. src .." && rsync --relative --times --links --safe-links --hard-links --perms --chmod='Da+rx,Fa+r' ".. debugFlags .. script .." ".. dest
-
-		if debugBuildProcess > 0 then
-			print("getLiveBuildCopyIconScript: ".. script)
-		end
-
-	end
-
-	if iconsToCopy > 0 then
-		return script
-	else
-		return nil
-	end
 end
 
 --------------------------------------------------------------------------------
@@ -1209,46 +1149,10 @@ local function prePackageApp( bundleDir, options )
 	end
 
 	setStatus("Copying app resources")
-	local result, errMsg = runScript( getCopyResourcesScript( quoteString( options.srcAssets ), quoteString(bundleDir), should_preserve, options.liveBuild, options ))
+	local result, errMsg = runScript( getCopyResourcesScript( quoteString( options.srcAssets ), quoteString(bundleDir), should_preserve, options ))
 
 	if result ~= 0 then
 		return "ERROR: copying resources failed: "..tostring(errMsg)
-	end
-
-	-- icon.png should be capitalized Icon.png (capital I) so if "icon.png"
-	-- exists and "Icon.png" doesn't, rename "icon.png"
-	if options.liveBuild then
-		setStatus("Generating Live Build manifest")
-		local result, errMsg = runScript( getLiveBuildManifestScript( quoteString(makepath(bundleDir, coronaLiveBuildAppDir)), quoteString(makepath(bundleDir, coronaLiveBuildManifest))) )
-
-		if result ~= 0 then
-			return "ERROR: generating Live Build manifest failed: "..tostring(errMsg)
-		end
-
-		-- Fixup the icon files so that the live build gets the right icon on the device
-		-- local copyIconsScript = getLiveBuildCopyIconScript(quoteString(options.srcAssets), quoteString(bundleDir), options)
-		-- 	if copyIconsScript then
-		-- 	local result, errMsg = runScript( copyIconsScript )
-
-		-- 	if result ~= 0 then
-		-- 		print("ERROR: copying Live Build icons failed: "..tostring(errMsg))
-		-- 	end
-		-- end
-
-		-- Copy exclude patterns to file visible to live build client
-		local excludePatterns = ""
-		if options and options.settings and options.settings.excludeFiles then
-			for platform, excludes in pairs(options.settings.excludeFiles) do
-				if platform == "all" or platform == "tvos" then
-					for index,pattern in ipairs(excludes) do
-						excludePatterns = excludePatterns .. pattern .. "\n"
-					end
-				end
-			end
-		end
-		local f = assert(io.open(makepath(bundleDir, coronaLiveBuildExclude), "wb"))
-		f:write( excludePatterns )
-		f:close()
 	end
 	
 	return nil
@@ -1712,7 +1616,6 @@ function tvosPostPackage( params )
 	local sdkRoot = params.xcodetoolhelper.sdkRoot
 	local targetDevice = params.targetDevice
 	local targetPlatform = params.targetPlatform
-	local liveBuild = params.liveBuild	
 	local verbose = ( debugBuildProcess and debugBuildProcess > 1 )
 	local osPlatform = params.osPlatform
 	local err = nil
@@ -1732,8 +1635,7 @@ function tvosPostPackage( params )
 		targetPlatform=targetPlatform,
 		verbose=verbose,
 		osPlatform=osPlatform,
-		sdkType=params.sdkType,
-		liveBuild=liveBuild,
+		sdkType=params.sdkType
 	}
 
 	local customSettingsFile = srcAssets .. "/build.settings"
@@ -1771,12 +1673,6 @@ function tvosPostPackage( params )
 		options.appBundleFile = quoteString(makepath(dstDir, options.dstFile) .. ".app" )
 
 		runScript( "rm -rf ".. options.appBundleFile .. ".dSYM" )
-
-		-- if we've changed build styles from regular to live or vice-versa, start with a clean slate
-		if (not options.liveBuild and fileExists(makepath(options.appBundleFile, coronaLiveBuildAppDir))) or
-		   (options.liveBuild and not fileExists(makepath(options.appBundleFile, coronaLiveBuildAppDir))) then
-			runScript( "rm -rf "..  options.appBundleFile )
-		end
 
 		-- The server may have removed spaces and/or Unicode characters from the app name, fix it up
 		--
@@ -1940,16 +1836,6 @@ function tvosPostPackage( params )
 			else
 				print("Code signing identity: ".. options.signingIdentityName .." (".. options.signingIdentity ..")")
 			end
-		end
-
-		-- inject live build settings
-		if options.liveBuild then
-			-- 1. set options.settings.iph one.plist.NSAppTransportSecurity.NSAllowsArbitraryLoads
-			if not options.settings then options.settings = {} end
-			if not options.settings.tvos then options.settings.tvos = {} end
-			if not options.settings.tvos.plist then options.settings.tvos.plist = {} end
-			if not options.settings.tvos.plist.NSAppTransportSecurity then options.settings.tvos.plist.NSAppTransportSecurity = {} end
-			options.settings.tvos.plist.NSAppTransportSecurity.NSAllowsArbitraryLoads = true;
 		end
 
 		populateUIAppFonts( options )

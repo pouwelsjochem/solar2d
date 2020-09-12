@@ -46,13 +46,11 @@ class DeviceBuildData
 		bool Initialize(
 				const char *appSettingsPath,
 				const char *buildSettingsPath,
-				bool liveBuild,
 				int debugBuildProcess);
 
 		void SetBuild( int buildYear, int buildRevision );
 
 	private:
-		void PushCoronaPluginMetadata( lua_State *L );
 		void AddPlugin( lua_State *L, const char *moduleName, int index );
 
 	protected:

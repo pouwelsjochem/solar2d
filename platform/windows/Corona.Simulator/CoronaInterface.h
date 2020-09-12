@@ -32,7 +32,7 @@ CBuildResult appAndroidBuild(Interop::SimulatorRuntimeEnvironment *pSim,
                             const char *alias, const char *alias_pwd, const char *dstDir,
 							const Rtt::TargetDevice::Platform targetPlatform,
 							const char *targetAppStoreName,
-							bool isDistribution, int versionCode, bool createLiveBuild
+							bool isDistribution, int versionCode
 							);
 
 CBuildResult appWebBuild(Interop::SimulatorRuntimeEnvironment *pSim,

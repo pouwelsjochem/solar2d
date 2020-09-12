@@ -51,9 +51,6 @@ c:\cygwin\bin\find ./SampleCode \( -iname '*.lua' -or -iname '*.txt' -or -iname 
 cd "%WORKSPACE%\platform"
 c:\cygwin\bin\find ./resources \( -iname '*.lua' -or -iname '*.txt' -or -iname '*.settings' -or -iname '*.properties' -or -iname '*.xml' -or -iname '*.ccscene' -or -iname '*.json' \) -print0 | xargs -0 -n1 -P4 unix2dos
 
-cd "%WORKSPACE%\simulator-extensions"
-c:\cygwin\bin\find . \( -iname '*.lua' -or -iname '*.txt' -or -iname '*.settings' -or -iname '*.properties' -or -iname '*.xml' -or -iname '*.ccscene' -or -iname '*.json' \) -print0 | xargs -0 -n1 -P4 unix2dos
-
 cd %WORKSPACE%
 echo Adjust rtt_version to have the build number in the about box, this should be pulled into something like updateFileVersions.bat in the future
 c:\cygwin\bin\sed.exe -i.bak -r -e "s/^#define[[:space:]]*Rtt_BUILD_REVISION.*$/#define Rtt_BUILD_REVISION %BUILD_NUMBER%/" "%WORKSPACE%\librtt\Core\Rtt_Version.h"

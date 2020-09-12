@@ -103,8 +103,6 @@ namespace Rtt
 		virtual int PushNativeProperty(lua_State *L, const char *key) const { return 0; };
 		virtual int PushSystemInfo(lua_State *L, const char *key) const { return 0; };
 		virtual void RuntimeErrorNotification(const char *errorType, const char *message, const char *stacktrace) const;
-		virtual void SetProjectResourceDirectory(const char* path) { return; };
-		virtual void SetSkinResourceDirectory(const char* path) { return; };
 		virtual void RaiseError(MPlatform::Error e, const char* reason) const { return; };
 		virtual void PathForFile(const char* filename, MPlatform::Directory baseDir, U32 flags, String & result) const;
 		virtual bool FileExists(const char * filename) const;

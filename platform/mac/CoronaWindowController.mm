@@ -26,13 +26,8 @@
 #include "Rtt_LuaContext.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_RuntimeDelegate.h"
-#include "HomeScreenRuntimeDelegate.h"
 
 // ----------------------------------------------------------------------------
-
-#define ENABLE_WINDOW_FADE_ANIMATIONS 1
-#define WELCOME_FADE_OUT_DURATION 0.20
-#define WELCOME_FADE_IN_DURATION 0.20
 
 @class CoronaWindowController;
 
@@ -215,8 +210,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 
 @property (nonatomic, retain) NSString *fWindowTitle;
 
-- (void) startWindowFadeInAnimation:(id)user_data;
-- (void) startWindowFadeOutAnimation:(id)user_data;
 @end
 
 @implementation CoronaWindowController
@@ -239,12 +232,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 	}
 	
     return enable;
-}
-
-- (id)initWithPath:(NSString*)path
-{
-    // These are the default size of the Welcome window
-    return [self initWithPath:path width:960 height:540 title:nil resizable:false];
 }
 
 - (id)initWithPath:(NSString*)path width:(int)width height:(int)height title:(NSString *)windowTitle resizable:(bool) resizable
@@ -319,33 +306,14 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 
     [self.view run];
     
-    if (fWindowTitle == nil || [fWindowTitle length] == 0)
-    {
-        [self setWindowFrameAutosaveName:@"CoronaWelcomeWindow"];
-
-        window_title = [NSString stringWithFormat:@"%@ (Build %@)",
-                        NSLocalizedString(@"Welcome to Corona", @"Welcome Window Title Bar Text Base"),
-                        [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
-                        ];
-    }
-    else
-    {
-        [self setWindowFrameAutosaveName:[NSString stringWithFormat:@"%@-Window", fWindowTitle]];
-
-        window_title = fWindowTitle;
-    }
-
+    [self setWindowFrameAutosaveName:[NSString stringWithFormat:@"%@-Window", fWindowTitle]];
+    window_title = fWindowTitle;
     [[self window] setTitle:window_title];
 
     // This ensures any Lua window resize callback gets called with
     // the current window size as recovered from the user's preferences
     [self.view.glView setFrameSize:[self.view frame].size];
     [self windowWillResize:self.window toSize:[self.window frame].size];
-
-#if ENABLE_WINDOW_FADE_ANIMATIONS
-    [[self window] setAlphaValue:0.0];
-    [self performSelector:@selector(startWindowFadeInAnimation:) withObject:nil afterDelay:0.0];
-#endif
 }
 
 - (void)dealloc
@@ -397,133 +365,7 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 	}
 }
 
-- (void) newProject
-{
-	if ( NULL != fRuntimeDelegateWrapper )
-	{
-		 ((Rtt::HomeScreenRuntimeDelegate*)fRuntimeDelegateWrapper->GetDelegate())->NewProject();
-	}
-}
-- (void) projectLoaded
-{
-	if ( NULL != fRuntimeDelegateWrapper )
-	{
-		Rtt::Runtime *runtime = self.view.runtime;
-        
-        if ( fIsInitialized && NULL != runtime && NULL != fRuntimeDelegateWrapper->GetDelegate() )
-        {
-            ((Rtt::HomeScreenRuntimeDelegate*)fRuntimeDelegateWrapper->GetDelegate())->ProjectLoaded(*runtime);
-        }
-	}
-}
-
-- (void) startWindowFadeInAnimation:(id)user_data
-{
-	CABasicAnimation* fade_animation = [CABasicAnimation animation];
-	[fade_animation setValue:@"windowFadeIn" forKey:@"name"];
-	if([user_data isKindOfClass:[NSNumber class]])
-	{
-		// Assuming elapsed time was from fade out that got interrupted part way through.
-		// We want to start at the alpha value that we think is currently on screen
-		NSNumber* elapsed_number = (NSNumber*)user_data;
-		CFTimeInterval elapsed_time = [elapsed_number doubleValue];
-		CFTimeInterval delta_time = elapsed_time / WELCOME_FADE_OUT_DURATION;
-		// Linear interpolation formula
-		// X = x0 + (x1-x0)t 
-		CFTimeInterval current_alpha = 1.0 + (0.0 - 1.0) * delta_time;
-		if(current_alpha < 0.0)
-		{
-			current_alpha = 0;
-		}
-		else if(current_alpha > 1.0)
-		{
-			current_alpha = 1.0;
-		}
-		//		NSLog(@"current alpha=%f", current_alpha);
-		fade_animation.fromValue = [NSNumber numberWithDouble:current_alpha];	
-	}
-	else
-	{
-		fade_animation.fromValue = [NSNumber numberWithFloat:0.0f];
-	}
-	
-	fade_animation.toValue = [NSNumber numberWithFloat:1.0f];		
-	fade_animation.delegate = self;
-	fade_animation.duration = WELCOME_FADE_IN_DURATION;
-	fade_animation.removedOnCompletion = YES;
-	[[self window] setAnimations:[NSDictionary dictionaryWithObject:fade_animation forKey:@"alphaValue"]];
-	[[[self window] animator] setAlphaValue:1.0];
-	windowFadeAnimationStartTime = CACurrentMediaTime();
-	
-}
-
-- (void)animationDidStop:(CAAnimation*)the_animation finished:(BOOL)finished_naturally
-{
-	NSString* animation_name = [the_animation valueForKey:@"name"];
-	if([animation_name isEqualToString:@"windowFadeOut"])
-	{
-		// Animation might be interrupted by resurrection so check if finished naturally
-		if(YES == finished_naturally)
-		{
-			// There seems to be a retain cycle here. 
-			// Clear the animations list to break the cycle so the WindowController can be released.
-			[[self window] setAnimations:[NSDictionary dictionary]];
-			// expect that windowWillClose: will get called, but windowShouldClose will be bypassed
-			[self close];
-		}
-	}
-	else if([animation_name isEqualToString:@"windowFadeIn"])
-	{
-		// There seems to be a retain cycle here. 
-		// Clear the animations list to break the cycle so the WindowController can be released.
-		[[self window] setAnimations:[NSDictionary dictionary]];
-	}
-}
-
-- (void) startWindowFadeOutAnimation:(id)user_data
-{
-	CABasicAnimation* fade_animation = [CABasicAnimation animation];
-	[fade_animation setValue:@"windowFadeOut" forKey:@"name"];
-	fade_animation.toValue = [NSNumber numberWithFloat:0.0f];
-	fade_animation.delegate = self;
-	fade_animation.duration = WELCOME_FADE_OUT_DURATION;
-	fade_animation.removedOnCompletion = YES;
-	[[self window] setAnimations:[NSDictionary dictionaryWithObject:fade_animation forKey:@"alphaValue"]];
-	[[[self window] animator] setAlphaValue:0.0];
-	windowFadeAnimationStartTime = CACurrentMediaTime();
-}
-
-
 #pragma mark Window delegate methods
-
-#if ENABLE_WINDOW_FADE_ANIMATIONS
-// Override to prevent window from immediately closing so we can animate its departure.
-- (BOOL) windowShouldClose:(id)the_sender
-{
-    BOOL shouldClose = YES;
-    
-	if ( nil != windowShouldCloseBlock )
-	{
-		shouldClose = windowShouldCloseBlock();
-	}
-    
-    if (shouldClose)
-    {
-        // Suspend the Lua runtime because we sometimes have a timing issue where the owning view wont get
-        // fully autoreleased but the window is gone which has caused crashes when timers fire.  This only
-        // ever happens if an app is dragged to the Simulator's Dock icon.  When the window truly closes,
-        // self.view is released and the runtime is deleted.
-        Rtt::Runtime *runtime = self.view.runtime;
-        runtime->Suspend();
-
-        self.windowGoingAway = YES;
-        [self startWindowFadeOutAnimation:nil];
-    }
-    
-    // startWindowFadeOutAnimation closes the window when it's done fading so we always return NO
-	return NO;
-}
-#endif
 
 // Warning: Watch out for the control flow due to overriding windowShouldClose for fadeout
 // NSWindow performClose will invoke windowShouldClose which will avoid calling this method if it returns NO.
@@ -546,23 +388,7 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 	{
 		return;
 	}
-	/*
-	 if(windowNeedsResurrection == needs_resurrection)
-	 {
-	 return;
-	 }
-	 windowNeedsResurrection = needs_resurrection;
-	 */	
-	
-	NSNumber* elapsed_time = [NSNumber numberWithDouble:CACurrentMediaTime() - windowFadeAnimationStartTime];
-	[[self window] setAnimations:[NSDictionary dictionary]];
-	// NSLog(@"elapsed_time: %@", elapsed_time);
-	
-	[self startWindowFadeInAnimation:elapsed_time];
-	
-	//		windowNeedsResurrection = NO;
 	self.windowGoingAway = NO;
-    
 }
 
 

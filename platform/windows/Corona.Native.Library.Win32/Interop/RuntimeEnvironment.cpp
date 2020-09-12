@@ -114,7 +114,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	// Note: The kSystemResourceDirectory and kResourceDirectory must both point to the same directory for desktop apps.
 	//       This is because the Rtt::Runtime loads the "resource.car" from kSystemResourceDirectory.
 	fDirectoryPaths[Rtt::MPlatform::kResourceDir].SetUTF16(settings.ResourceDirectoryPath);
-	fDirectoryPaths[Rtt::MPlatform::kProjectResourceDir].SetUTF16(settings.ResourceDirectoryPath);
 #ifdef Rtt_AUTHORING_SIMULATOR
 	fDirectoryPaths[Rtt::MPlatform::kSystemResourceDir].SetUTF16(settings.SystemResourceDirectoryPath);
 #else
@@ -126,8 +125,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fDirectoryPaths[Rtt::MPlatform::kCachesDir].SetUTF16(settings.CachesDirectoryPath);
 	fDirectoryPaths[Rtt::MPlatform::kSystemCachesDir].SetUTF16(settings.SystemCachesDirectoryPath);
 	fDirectoryPaths[Rtt::MPlatform::kPluginsDir].SetUTF16(settings.PluginsDirectoryPath);
-	fDirectoryPaths[Rtt::MPlatform::kSkinResourceDir].SetUTF16(settings.SkinResourceDirectoryPath);
-	fDirectoryPaths[Rtt::MPlatform::kUserSkinsDir].SetUTF16(settings.UserSkinsDirectoryPath);
 	fDirectoryPaths[Rtt::MPlatform::kApplicationSupportDir].SetUTF16(settings.DocumentsDirectoryPath);
 	for (int index = 0; index < Rtt::MPlatform::kNumDirs; index++)
 	{
@@ -441,26 +438,6 @@ const wchar_t* RuntimeEnvironment::GetRegistryPathWithoutHive() const
 	return fRegistryPathWithoutHive.c_str();
 }
 
-void RuntimeEnvironment::SetPathForProjectResourceDirectory(const wchar_t* path)
-{
-	// Copy the given path and remove any trailing slashes or spaces from the end of the path.
-	WinString newPath(path);
-	newPath.TrimEnd(L"\\/ ");
-
-	// Update the Corona runtime's project resource directory path.
-	WinString& destinationString = fDirectoryPaths[Rtt::MPlatform::kProjectResourceDir];
-	if (newPath.IsEmpty())
-	{
-		// We were given a null/empty string. Reset the path to the resource directory.
-		destinationString.SetUTF16(fDirectoryPaths[Rtt::MPlatform::kResourceDir].GetUTF16());
-	}
-	else
-	{
-		// Use the given directory path.
-		destinationString.SetUTF16(path);
-	}
-}
-
 std::shared_ptr<Interop::Storage::MStoredPreferences> RuntimeEnvironment::GetStoredPreferences() const
 {
 	return fStoredPreferencesPointer;
@@ -660,19 +637,6 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 		}
 	}
 
-	// Fetch a path to theskins directory.
-	// Note: These are really only relevant to the Corona Simulator, but we must default them to something for now.
-	std::wstring skinResourceDirectoryPath(ReturnEmptyWStringIfNull(settings.SkinResourceDirectoryPath));
-	if (skinResourceDirectoryPath.empty())
-	{
-		skinResourceDirectoryPath = resourceDirectoryPath;
-	}
-	std::wstring userSkinsDirectoryPath(ReturnEmptyWStringIfNull(settings.UserSkinsDirectoryPath));
-	if (userSkinsDirectoryPath.empty())
-	{
-		userSkinsDirectoryPath = resourceDirectoryPath;
-	}
-
 	// Generate the root sandboxed directory paths.
 	std::wstring rootSandboxDocumentsDirectoryPath;
 	std::wstring rootSandboxTempDirectoryPath;
@@ -785,8 +749,6 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 	updatedSettings.SystemResourceDirectoryPath = systemResourceDirectoryPath.c_str();
 #endif
 	updatedSettings.PluginsDirectoryPath = pluginsDirectoryPath.c_str();
-	updatedSettings.SkinResourceDirectoryPath = skinResourceDirectoryPath.c_str();
-	updatedSettings.UserSkinsDirectoryPath = userSkinsDirectoryPath.c_str();
 
 	// Attempt to create the Corona runtime environment.
 	RuntimeEnvironment* environmentPointer = nullptr;

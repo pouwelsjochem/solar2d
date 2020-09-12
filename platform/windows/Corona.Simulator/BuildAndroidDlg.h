@@ -87,6 +87,4 @@ protected:
 	void DisplayWarningMessage(UINT nMessageID, CString filename); // override with additional info
 	UINT DisplayWarningMessageWithHelp(UINT nTitleID, UINT nMessageID, CString helpURL);
 	static void CALLBACK CBuildAndroidDlg::HelpCallback(LPHELPINFO lpHelpInfo);
-	afx_msg void OnBnClickedCreateLiveBuild();
-
 };

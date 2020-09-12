@@ -81,7 +81,6 @@
 				<CreateFolder Directory="ApplicationProgramMenuFolder"/>
 				<RemoveFolder Id="RemoveApplicationProgramMenuFolder" Directory="ApplicationProgramMenuFolder" On="uninstall"/>
 				<Shortcut Id="CoronaSimulatorProgramMenuShortcut" Name="Corona Simulator" Description="Simulates Corona projects on the Windows desktop." Target="[APP_INSTALL_FOLDER]Corona Simulator.exe" WorkingDirectory="APP_INSTALL_FOLDER"/>
-				<Shortcut Id="CoronaLiveServerProgramMenuShortcut" Name="Corona Live Server" Description="Allows for Live Builds to perform automatic syncinc of project changes to test devices." Target="[APP_INSTALL_FOLDER]Corona.LiveServer.exe" WorkingDirectory="APP_INSTALL_FOLDER"/>
 				<Shortcut Id="CoronaDebuggerProgramMenuShortcut" Name="Corona Debugger" Description="Debugs a Corona project via the Corona Simulator." Target="[APP_INSTALL_FOLDER]Corona.Debugger.exe" WorkingDirectory="APP_INSTALL_FOLDER"/>
 				<Shortcut Id="CoronaConsoleProgramMenuShortcut" Name="Corona Console" Description="Runs a Corona made app and monitors its output." Target="[APP_INSTALL_FOLDER]Corona.Console.exe" WorkingDirectory="APP_INSTALL_FOLDER"/>
 				<Shortcut Id="CoronaSampleCodeProgramMenuShortcut" Name="Corona Sample Code" Target="[SampleProjectsInstallFolder]" WorkingDirectory="SampleProjectsInstallFolder"/>
@@ -116,7 +115,6 @@
       
 			<!-- Adds to the firewall exception list. (Does not support automatic GUID generation for some reason.) -->
 			<Component Id="FirewallExceptions" Directory="TARGETDIR" Guid="899d0c8b-870c-43b7-acc1-85a0f065580f">
-				<fire:FirewallException Id="LiveServerException" Program="[APP_INSTALL_FOLDER]Corona.LiveServer.exe" Name="Corona Live Server" Scope="any" IgnoreFailure="yes"/>
 				<fire:FirewallException Id="CoronaDebuggerException" Program="[APP_INSTALL_FOLDER]Corona.Debugger.exe" Name="Corona Debugger" Scope="any" IgnoreFailure="yes"/>
 			</Component>
 		</ComponentGroup>
@@ -138,7 +136,6 @@
 		</Directory>
 
 		<!-- Stop running programs when installing/uninstalling -->
-		<util:CloseApplication Target="Corona.LiveServer.exe" TerminateProcess="3" RebootPrompt="no" />
 		<util:CloseApplication Target="Corona Simulator.exe" TerminateProcess="3" RebootPrompt="no" />
 		<util:CloseApplication Target="Corona.Debugger.exe" TerminateProcess="3" RebootPrompt="no" />
 		<util:CloseApplication Target="Corona.Console.exe" TerminateProcess="3" RebootPrompt="no" />
