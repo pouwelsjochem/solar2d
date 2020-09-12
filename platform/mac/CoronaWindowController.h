@@ -53,9 +53,6 @@ namespace Rtt
 
 - (id)initWithPath:(NSString*)path width:(int)width height:(int)height title:(NSString *)windowTitle resizable:(bool) resizable;
 
-// NOTE: Receiver takes ownership of delegate
-- (void)setRuntimeDelegate:(Rtt::RuntimeDelegate *)delegate;
-
 - (void)didPrepare;
 
 

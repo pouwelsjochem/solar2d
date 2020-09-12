@@ -15,7 +15,6 @@
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="PasswordDlg.h" />
     <ClInclude Include="ProgressWnd.h" />
-    <ClInclude Include="RelaunchPrefDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SelectSampleProjectDlg.h" />
     <ClInclude Include="Simulator.h" />
@@ -154,7 +153,6 @@
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="PasswordDlg.cpp" />
     <ClCompile Include="ProgressWnd.cpp" />
-    <ClCompile Include="RelaunchPrefDlg.cpp" />
     <ClCompile Include="SelectSampleProjectDlg.cpp" />
     <ClCompile Include="Simulator.cpp" />
     <ClCompile Include="SimulatorDoc.cpp" />

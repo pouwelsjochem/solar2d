@@ -330,11 +330,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 	[super dealloc];
 }
 
-- (void)setRuntimeDelegate:(Rtt::RuntimeDelegate *)delegate
-{
-	fRuntimeDelegateWrapper->SetDelegate( delegate );
-}
-
 - (void)willLoadApplication:(CoronaView*)sender
 {
 	using namespace Rtt;

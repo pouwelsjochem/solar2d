@@ -27,7 +27,7 @@ class RuntimeDelegate : public MRuntimeDelegate
 	public:
 		// TODO: These stubs should be REMOVED. Instead, add to the concrete
 		// derived class.
-		// On the Mac, these are: HomeScreenRuntimeDelegate and RuntimeDelegateWrapper
+		// On the Mac, these are: RuntimeDelegateWrapper
 		virtual void DidInitLuaLibraries( const Runtime& sender ) const;
         virtual void WillLoadMain( const Runtime& sender ) const;
 		virtual void DidLoadMain( const Runtime& sender ) const;
