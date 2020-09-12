@@ -137,7 +137,6 @@ class DisplayLibrary
 		static int newEmbossedText( lua_State *L );
 		static int newGroup( lua_State *L );
 		static int newContainer( lua_State *L );
-		static int _newContainer( lua_State *L );
 		static int newSnapshot( lua_State *L );
 		static int newSprite( lua_State *L );
 		static int newMesh( lua_State *L );
@@ -197,7 +196,6 @@ DisplayLibrary::Open( lua_State *L )
 		{ "newEmbossedText", newEmbossedText },
 		{ "newGroup", newGroup },
 		{ "newContainer", newContainer },
-		{ "_newContainer", _newContainer },
 		{ "newSnapshot", newSnapshot },
 		{ "newSprite", newSprite },
 		{ "newMesh", newMesh },
@@ -1107,9 +1105,6 @@ static int CreateTextObject( lua_State *L, bool isEmbossed )
 	}
 	result = LuaLibDisplay::AssignParentAndPushResult( L, display, textObject, parent );
 	
-	Real width = textObject->GetGeometricProperty( kWidth );
-	Real height = textObject->GetGeometricProperty( kHeight );
-	
 	textObject->Translate( x, y );
 	AssignDefaultFillColor( display, * textObject );
 	
@@ -1199,17 +1194,8 @@ DisplayLibrary::newGroup( lua_State *L )
 	return result;
 }
 
-// display.newContainer( [parent, ] w, h )
 int
 DisplayLibrary::newContainer( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-	return _newContainer( L );
-}
-
-int
-DisplayLibrary::_newContainer( lua_State *L )
 {
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
@@ -1596,7 +1582,6 @@ DisplayLibrary::capture( lua_State *L )
 
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
-	Runtime *runtime = & display.GetRuntime();
 
 	// Do a screenshot of the given display object.
 	BitmapPaint *paint = display.CaptureDisplayObject( displayObject, cropObjectToScreenBounds );
@@ -1642,7 +1627,6 @@ DisplayLibrary::captureScreen( lua_State *L )
 {
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
-	Runtime *runtime = & display.GetRuntime();
 
 	// Do a screenshot.
 	BitmapPaint *paint = display.CaptureScreen();
@@ -1665,9 +1649,6 @@ DisplayLibrary::captureScreen( lua_State *L )
 	// Resize the screenshot display object to fit the screen's bounds in content coordinates.
 	// We have to do this because the screenshot's size is in pixels matching the resolution of the device's display,
 	// and will likely not match the size of the content region.
-	const Rtt_Real bitmapWidth = Rtt_IntToReal(paint->GetTexture()->GetWidth());
-	const Rtt_Real bitmapHeight = Rtt_IntToReal(paint->GetTexture()->GetHeight());
-
 	Rtt_Real targetScreenshotScale = display.GetScreenToContentScale(); // TODO: is this correct?
 	v->Scale(targetScreenshotScale, targetScreenshotScale, true);
 

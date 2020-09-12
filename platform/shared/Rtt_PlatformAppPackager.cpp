@@ -662,46 +662,6 @@ CompileScriptsInDirectory( lua_State *L, AppPackagerParams& params, const char *
 	return result;
 }
 
-static std::string GenerateUUID()
-{
-#ifdef Rtt_MAC_ENV
-	uuid_t id;
-	uuid_generate(id);
-	char outc[100];
-	uuid_unparse(id, outc);
-	return std::string(outc);
-#elif Rtt_WIN_ENV
-	UUID uuid;
-	UuidCreate(&uuid);
-	char *str;
-	UuidToStringA(&uuid, (RPC_CSTR*)&str);
-	std::string ret(str);
-	RpcStringFreeA((RPC_CSTR*)&str);
-	return ret;
-#elif Rtt_LINUX_ENV
-// FIXME
-//	uuid_t id;
-//	uuid_generate(id);
-//	char outc[100];
-//	uuid_unparse(id, outc);
-//	return std::string(outc);
-	return "";
-#else
-	static_assert(0, "Fix me");
-#endif
-}
-
-static void
-trimString(std::string& s)
-{
-	size_t p = s.find_first_not_of(" \t");
-	s.erase(0, p);
-
-	p = s.find_last_not_of(" \t");
-	if (std::string::npos != p)
-		s.erase(p+1);
-}
-
 bool
 PlatformAppPackager::CompileScripts( AppPackagerParams * params, const char* tmpDir )
 {

@@ -387,7 +387,6 @@ static int
 pushShellArgs( lua_State* L )
 {
 	Runtime* runtime = LuaContext::GetRuntime( L );
-	const MPlatform& platform = runtime->Platform();
 	Rtt::String value( runtime->GetAllocator() );
 
 	lua_createtable( L, 0, 8 ); // params

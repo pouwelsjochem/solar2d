@@ -225,16 +225,12 @@ namespace Rtt
 //-(void)applicationDidBecomeActive:(NSNotification*)aNotification;
 - (void) startDebugAndOpenPanel; // second half of applicationDidFinishLaunching
 
-- (IBAction) openMainLuaInEditor:(id)sender;
-
 -(IBAction)changedPreference:(id)sender;
 
 -(void) saveAppSpecificPreference:(NSString *)prefName value:(NSString *)prefValue;
 -(NSString *) restoreAppSpecificPreference:(NSString *)prefName defaultValue:(NSString *)defaultValue;
 -(NSString *) getAppSpecificPreferenceKeyName:(NSString *)prefName;
 -(NSString *) getAppSpecificPreferenceKeyName:(NSString *)prefName withProjectPath:(NSString *)projectDirectoryPath;
-
-- (void) runExtension:(NSString *) extName;
 
 -(NSString*)getAndReleaseResultFromPasswordSheet;
 - (void)didPresentError:(BOOL)didRecover contextInfo:(void*)contextInfo;

@@ -1036,14 +1036,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">openMainLuaInEditor:</string>
-						<reference key="source" ref="904125567"/>
-						<reference key="destination" ref="998535964"/>
-					</object>
-					<int key="connectionID">523</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">openForBuildiOS:</string>
 						<reference key="source" ref="904125567"/>
 						<reference key="destination" ref="256094141"/>
@@ -2193,7 +2185,6 @@
 							<string>openForBuild:</string>
 							<string>openForBuildAndroid:</string>
 							<string>openForBuildiOS:</string>
-							<string>openMainLuaInEditor:</string>
 							<string>orderFrontStandardAboutPanel:</string>
 							<string>setKeystore:</string>
 							<string>showHelp:</string>
@@ -2260,7 +2251,6 @@
 							<string>openForBuild:</string>
 							<string>openForBuildAndroid:</string>
 							<string>openForBuildiOS:</string>
-							<string>openMainLuaInEditor:</string>
 							<string>orderFrontStandardAboutPanel:</string>
 							<string>setKeystore:</string>
 							<string>showHelp:</string>
@@ -2350,10 +2340,6 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">openForBuildiOS:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">openMainLuaInEditor:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

@@ -140,8 +140,6 @@ int LinuxAppPackager::Build(AppPackagerParams* _params, const char* tmpDirBase)
 	LinuxAppPackagerParams *params = (LinuxAppPackagerParams*) _params;
 	Rtt_ASSERT(params);
 
-	time_t startTime = time(NULL);
-
 	bool useStandartResources = params->fUseStandartResources;
 
 	const char tmpTemplate[] = "CLtmpXXXXXX";
@@ -188,7 +186,6 @@ int LinuxAppPackager::Build(AppPackagerParams* _params, const char* tmpDirBase)
 	{
 		String resourceDir;
 		const MPlatform& platform = GetServices().Platform();
-		const char *platformName = fServices.Platform().GetDevice().GetPlatformName();
 
 		platform.PathForFile(NULL, MPlatform::kSystemResourceDir, 0, resourceDir);
 

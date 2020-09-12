@@ -161,17 +161,6 @@ getCurrProjectPath( lua_State *L )
 }
 
 static int
-runExtension( lua_State *L )
-{
-    Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
-    const MSimulatorServices *simulator = (const MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-    
-    simulator->RunExtension(lua_tostring( L, 1));
-    
-    return 0;
-}
-
-static int
 setWindowCloseListener( lua_State *L )
 {
     Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
@@ -557,7 +546,6 @@ LuaLibSimulator::Open( lua_State *L )
 		{ "show", show },
 		{ "getRecentProjects", getRecentProjects },
 		{ "getCurrentProjectPath", getCurrProjectPath },
-		{ "runExtension", runExtension },
 		{ "setWindowCloseListener", setWindowCloseListener },
 		{ "closeWindow", closeWindow },
 		{ "getPreference", getPreference },

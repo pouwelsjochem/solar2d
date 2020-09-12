@@ -259,12 +259,6 @@ AppleFileBitmap::CalculateScale() const
 	return result;
 }
 
-static Rtt_INLINE
-double DegreesToRadians( double degrees )
-{
-	return degrees * M_PI/180;
-}
-
 void*
 AppleFileBitmap::GetBitsGrayscale( Rtt_Allocator* context ) const
 {

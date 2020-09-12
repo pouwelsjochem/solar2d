@@ -48,12 +48,6 @@ IPhonePlatformCore::GetDevice() const
 	return const_cast< IPhoneDevice& >( fDevice );
 }
 
-static Rtt_INLINE
-double DegreesToRadians( double degrees )
-{
-	return degrees * M_PI/180;
-}
-
 bool
 IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) const
 {

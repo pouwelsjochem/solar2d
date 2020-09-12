@@ -88,16 +88,6 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Open Project in Editor" keyEquivalent="O" id="520">
-                                <connections>
-                                    <action selector="openMainLuaInEditor:" target="-1" id="686"/>
-                                    <binding destination="207" name="enabled" keyPath="fAppPath" id="srM-z3-Ur8">
-                                        <dictionary key="options">
-                                            <string key="NSValueTransformerName">NSIsNotNil</string>
-                                        </dictionary>
-                                    </binding>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="79">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>

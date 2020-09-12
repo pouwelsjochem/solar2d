@@ -134,30 +134,6 @@ AndroidAppPackager::~AndroidAppPackager()
 {
 }
 
-static const char *
-versionToString( int version )
-{
-	switch ( version )
-	{
-		case TargetDevice::kAndroidOS1_5:
-			return "1.5";
-		case TargetDevice::kAndroidOS1_6:
-			return "1.6";
-		case TargetDevice::kAndroidOS2_0_1:
-			return "2.0";
-		case TargetDevice::kAndroidOS2_1:
-			return "2.1";
-		case TargetDevice::kAndroidOS2_2:
-			return "2.2";
-		case TargetDevice::kAndroidOS2_3_3:
-			return "2.3.3";
-		case TargetDevice::kAndroidOS4_0_3:
-			return "4.0.3";
-		default:
-			return "unknown";
-	}
-}
-
 std::string
 AndroidAppPackager::EscapeArgument(std::string arg)
 {

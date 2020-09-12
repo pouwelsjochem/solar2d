@@ -86,12 +86,6 @@ const char* WinSimulatorServices::GetCurrProjectPath( ) const
 }
 
 // stub to match Mac implementation
-void WinSimulatorServices::RunExtension(const char *extName) const
-{
-	Rtt_TRACE_SIM( ( "WARNING: RunExtension not available on Windows\n" ) );
-}
-
-// stub to match Mac implementation
 void WinSimulatorServices::SetWindowCloseListener(LuaResource* resource) const
 {
 	Rtt_TRACE_SIM( ( "WARNING: SetWindowCloseListener not available on Windows\n" ) );

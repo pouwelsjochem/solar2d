@@ -594,8 +594,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		NSRunAlertPanel( @"Corona Simulator - Deprecated Preference", @"The \"Display device border\" preference is no longer used.  Borderless devices can be chosen in the Window/View As menu instead.", nil, nil, nil );
     }
     
-    // Find the application support directory and the user's Skins directory within it
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     // The builtin Skins directory is in the Resource directory in the bundle
     NSString *builtinSkinsDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Skins"];
     NSFileManager *localFileManager = [NSFileManager defaultManager];
@@ -2445,16 +2443,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 #if !defined( Rtt_PROJECTOR )
 
 // -----------------------------------------------------------------------------
-
-- (IBAction) openMainLuaInEditor:(id)sender
-{
-	TextEditorSupport_LaunchTextEditorWithFile([self.fAppPath stringByAppendingPathComponent:@"main.lua"], 0);
-    
-	NSString* app_path = nil;
-	NSString* file_extension = nil;
-	BOOL foundApp = [[NSWorkspace sharedWorkspace] getInfoForFile:self.fAppPath application:&app_path type:&file_extension];
-}
-
 - (void) setFAppPath:(NSString*)appPath
 {
     if(fAppPath != appPath)

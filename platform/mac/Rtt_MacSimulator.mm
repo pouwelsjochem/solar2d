@@ -102,20 +102,6 @@ MacSimulator::~MacSimulator()
 	[fWindowController release];
 }
 
-static bool
-AddValueForKey( NSMutableDictionary *d, const char *value, NSString *key )
-{
-	bool didAdd = ( value && ( '\0' != *value ) );
-
-	if ( didAdd )
-	{
-		NSString* s = [NSString stringWithExternalString:value];
-		[d setValue:s forKey:key];
-	}
-
-	return didAdd;
-}
-
 void
 MacSimulator::Initialize(
 	const char deviceConfigFile[],
@@ -124,7 +110,6 @@ MacSimulator::Initialize(
 	using namespace Rtt;
 
 	MacGUIPlatform* platform = new MacGUIPlatform( * this );
-    NSString *skinDir = [[NSString stringWithExternalString:deviceConfigFile] stringByDeletingLastPathComponent];
 	platform->SetResourcePath( resourcePath );
 	Super::Config config( platform->GetAllocator() );
 	Super::LoadConfig( deviceConfigFile, *platform, config );

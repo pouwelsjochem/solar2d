@@ -22,7 +22,6 @@
 
 - (id)initWithScreenView:(GLView*)screenView
 				viewRect:(NSRect)screenRect
-				   title:(NSString*)title
-                   scale:(float)scale;
+				   title:(NSString*)title;
 
 @end

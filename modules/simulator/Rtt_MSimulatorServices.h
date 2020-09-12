@@ -31,7 +31,6 @@ class MSimulatorServices
         virtual void SelectOpenFilename(const char* currDirectory, const char* extn, LuaResource* resource) const = 0;
         virtual void SelectSaveFilename(const char* newFilename, const char* currDirectory, const char* extn, LuaResource* resource) const = 0;
         virtual const char* GetCurrProjectPath( ) const = 0;
-        virtual void RunExtension(const char *extName) const = 0;
 		virtual void GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const = 0;
         virtual void SetWindowCloseListener(LuaResource* resource) const = 0;
         virtual void CloseWindow( ) const = 0;

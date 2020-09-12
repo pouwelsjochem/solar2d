@@ -239,17 +239,6 @@ MacSimulatorServices::GetCurrProjectPath( ) const
     return currProjPath;
 }
 
-// Run the specified Simulator extension
-void
-MacSimulatorServices::RunExtension(const char *extName) const
-{
-    if (extName != NULL)
-    {
-        // The delay makes this interface play nice with OpenProject()
-        [fOwner performSelector:@selector(runExtension:) withObject:[NSString stringWithExternalString:extName] afterDelay:0.0];
-    }
-}
-
 void
 MacSimulatorServices::GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const
 {
@@ -532,8 +521,6 @@ MacSimulatorServices::EditProject( const char *name ) const
 		// Project isn't open, open it before proceeding
 		[fOwner openWithPath:projectDir];
 	}
-
-	[fOwner performSelector:@selector(openMainLuaInEditor:) withObject:nil afterDelay:0.0];
 
 	return true;
 }

@@ -20,9 +20,6 @@
 #import <AppKit/NSNibLoading.h>
 #import <AppKit/NSPanel.h>
 
-static NSUInteger kMaxUsernameLength = 255;
-static NSUInteger kMaxPasswordLength = 255;
-
 // ----------------------------------------------------------------------------
 
 static const char kDoNotStopModal[] = "";
@@ -116,7 +113,6 @@ static const char kDoNotStopModal[] = "";
 
 -(void)sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-	DialogController *controller = (DialogController*)contextInfo;
 	if ( returnCode == kActionDefault )
 	{
 		[sheet close];

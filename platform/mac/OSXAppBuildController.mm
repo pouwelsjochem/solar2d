@@ -464,8 +464,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 	}
     else
     {
-        NSDictionary* details = nil;
-        NSError* error = nil;
         NSString *msg = nil;
 
 		[appDelegate notifyWithTitle:@"Corona Simulator"

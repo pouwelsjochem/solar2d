@@ -42,7 +42,6 @@ class MacSimulatorServices : public MSimulatorServices
         virtual void SelectOpenFilename(const char* currDirectory, const char* extn, LuaResource* resource) const;
         virtual void SelectSaveFilename(const char* newFilename, const char* currDirectory, const char* extn, LuaResource* resource) const;
         virtual const char* GetCurrProjectPath( ) const;
-        virtual void RunExtension(const char *extName) const;
         virtual void SetWindowCloseListener(LuaResource* resource) const;
         virtual void CloseWindow( ) const;
         virtual const char* GetPreference(const char *prefName) const;

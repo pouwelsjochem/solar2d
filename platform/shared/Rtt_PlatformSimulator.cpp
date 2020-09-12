@@ -165,22 +165,6 @@ NumberForKey( lua_State *L, const char key[], lua_Number defaultValue )
 	return result;
 }
 
-static lua_Integer
-IntForKey( lua_State *L, const char key[], lua_Integer defaultValue )
-{
-	lua_Integer result = defaultValue;
-
-	lua_getfield( L, -1, key );
-	if (lua_isnumber( L, -1 ) )
-	{
-		result = lua_tointeger( L, -1 );
-	}
-	lua_pop( L, 1 );
-
-	return result;
-}
-
-
 static const char*
 StringForKey( lua_State *L, const char key[], const char *defaultValue)
 {

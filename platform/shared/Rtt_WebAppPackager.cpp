@@ -91,7 +91,6 @@ namespace Rtt
 	int processExecute(lua_State *L)
 	{
 		int ret = 0;
-		const char* cmdBuf = luaL_checkstring(L, 1);
 
 #if defined(Rtt_WIN_ENV) && !defined(Rtt_LINUX_ENV)
 		Interop::Ipc::CommandLine::SetOutputCaptureEnabled(false);
@@ -118,8 +117,6 @@ namespace Rtt
 		const char* srcDir = lua_tostring( L, 2);
 		Rtt_ASSERT(lua_isstring(L, 3)); 
 		const char* dstDir = lua_tostring( L, 3);
-		Rtt_ASSERT(lua_isstring(L, 4)); 
-		const char* tmpDir = lua_tostring( L, 4);
 
 		// Package build settings parameters.
 		Rtt::AppPackagerParams params(p->GetAppName(), p->GetVersion(), p->GetIdentity(), NULL, srcDir, dstDir, NULL, p->GetTargetPlatform(), NULL,	0, 0, NULL, NULL, NULL, true);
@@ -237,7 +234,6 @@ int WebAppPackager::Build(AppPackagerParams* params, const char* tmpDirBase)
 
 	bool useStandartResources = webParams->useStandartResources;
 	bool createFBInstantArchive = webParams->createFBInstantArchive;
-	time_t startTime = time(NULL);
 
 	const char tmpTemplate[] = "CLtmpXXXXXX";
 	char tmpDir[kDefaultNumBytes]; Rtt_ASSERT(kDefaultNumBytes > (strlen(tmpDirBase) + strlen(tmpTemplate)));
@@ -284,7 +280,6 @@ int WebAppPackager::Build(AppPackagerParams* params, const char* tmpDirBase)
 	{
 		String resourceDir;
 		const MPlatform& platform = GetServices().Platform();
-		const char *platformName = fServices.Platform().GetDevice().GetPlatformName();
 
 		platform.PathForFile(NULL, MPlatform::kSystemResourceDir, 0, resourceDir);
 

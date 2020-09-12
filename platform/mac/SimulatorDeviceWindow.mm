@@ -171,7 +171,6 @@
 // Pin the window's top-left corner during resizing (scaling)
 - (void) setFrame:(NSRect)frameRect display:(BOOL)flag
 {
-	NSRect oldRect = [self frame];
     NSRect screenRect = [[self screen] frame];
 
     // Happens if they somehow move the window offscreen and on first display
