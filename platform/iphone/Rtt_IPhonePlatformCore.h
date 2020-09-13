@@ -54,8 +54,6 @@ class IPhonePlatformCore : public IPhonePlatformBase
 	public:
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
 
-		virtual Real GetStandardFontSize() const;
-
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
 	public:

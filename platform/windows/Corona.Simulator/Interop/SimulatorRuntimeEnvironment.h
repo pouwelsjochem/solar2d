@@ -191,7 +191,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 				virtual bool AreMultipleAlertsSupported() const override;
 				virtual bool IsAlertButtonOrderRightToLeft() const override;
 				virtual POINT GetSimulatedPointFromClient(const POINT& value) override;
-				virtual double GetDefaultFontSize() const override;
 				virtual void* ShowNativeAlert(
 								const char *title, const char *message, const char **buttonLabels,
 								int buttonCount, Rtt::LuaResource* resource) override;

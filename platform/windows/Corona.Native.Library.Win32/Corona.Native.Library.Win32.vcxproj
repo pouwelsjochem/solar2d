@@ -154,12 +154,10 @@
     <ClInclude Include="Interop\DateTime.h" />
     <ClInclude Include="Interop\Event.h" />
     <ClInclude Include="Interop\EventArgs.h" />
-    <ClInclude Include="Interop\Graphics\CoronaFontServices.h" />
     <ClInclude Include="Interop\Graphics\Font.h" />
     <ClInclude Include="Interop\Graphics\FontServices.h" />
     <ClInclude Include="Interop\Graphics\FontSettings.h" />
     <ClInclude Include="Interop\Graphics\FontSizeConverter.h" />
-    <ClInclude Include="Interop\Graphics\HorizontalAlignment.h" />
     <ClInclude Include="Interop\Graphics\MFontLoader.h" />
     <ClInclude Include="Interop\HandledEventArgs.h" />
     <ClInclude Include="Interop\Input\DirectInputDeviceHandler.h" />
@@ -214,7 +212,6 @@
     <ClInclude Include="Interop\UI\ReadOnlyUIComponentCollection.h" />
     <ClInclude Include="Interop\UI\RenderSurfaceControl.h" />
     <ClInclude Include="Interop\UI\TaskDialogSettings.h" />
-    <ClInclude Include="Interop\UI\TextBox.h" />
     <ClInclude Include="Interop\UI\UIComponent.h" />
     <ClInclude Include="Interop\UI\UIComponentCollection.h" />
     <ClInclude Include="Interop\UI\UITextChangedEventArgs.h" />
@@ -233,14 +230,12 @@
     <ClInclude Include="Rtt\Rtt_WinDisplayObject.h" />
     <ClInclude Include="Rtt\Rtt_WinExitCallback.h" />
     <ClInclude Include="Rtt\Rtt_WinFBConnect.h" />
-    <ClInclude Include="Rtt\Rtt_WinFont.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDevice.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDeviceManager.h" />
     <ClInclude Include="Rtt\Rtt_WinModalInteraction.h" />
     <ClInclude Include="Rtt\Rtt_WinPlatform.h" />
     <ClInclude Include="Rtt\Rtt_WinProjectSettings.h" />
     <ClInclude Include="Rtt\Rtt_WinScreenSurface.h" />
-    <ClInclude Include="Rtt\Rtt_WinTextBoxObject.h" />
     <ClInclude Include="Rtt\Rtt_WinTimer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -270,12 +265,10 @@
     <ClCompile Include="Interop\BaseEvent.cpp" />
     <ClCompile Include="Interop\DateTime.cpp" />
     <ClCompile Include="Interop\EventArgs.cpp" />
-    <ClCompile Include="Interop\Graphics\CoronaFontServices.cpp" />
     <ClCompile Include="Interop\Graphics\Font.cpp" />
     <ClCompile Include="Interop\Graphics\FontServices.cpp" />
     <ClCompile Include="Interop\Graphics\FontSettings.cpp" />
     <ClCompile Include="Interop\Graphics\FontSizeConverter.cpp" />
-    <ClCompile Include="Interop\Graphics\HorizontalAlignment.cpp" />
     <ClCompile Include="Interop\HandledEventArgs.cpp" />
     <ClCompile Include="Interop\Input\DirectInputDeviceHandler.cpp" />
     <ClCompile Include="Interop\Input\DirectInputDeviceStateData.cpp" />
@@ -320,7 +313,6 @@
     <ClCompile Include="Interop\UI\ReadOnlyUIComponentCollection.cpp" />
     <ClCompile Include="Interop\UI\RenderSurfaceControl.cpp" />
     <ClCompile Include="Interop\UI\TaskDialogSettings.cpp" />
-    <ClCompile Include="Interop\UI\TextBox.cpp" />
     <ClCompile Include="Interop\UI\UIComponent.cpp" />
     <ClCompile Include="Interop\UI\UIComponentCollection.cpp" />
     <ClCompile Include="Interop\UI\UITextChangedEventArgs.cpp" />
@@ -336,14 +328,12 @@
     <ClCompile Include="Rtt\Rtt_WinDisplayObject.cpp" />
     <ClCompile Include="Rtt\Rtt_WinExitCallback.cpp" />
     <ClCompile Include="Rtt\Rtt_WinFBConnect.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinFont.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDevice.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDeviceManager.cpp" />
     <ClCompile Include="Rtt\Rtt_WinModalInteraction.cpp" />
     <ClCompile Include="Rtt\Rtt_WinPlatform.cpp" />
     <ClCompile Include="Rtt\Rtt_WinProjectSettings.cpp" />
     <ClCompile Include="Rtt\Rtt_WinScreenSurface.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinTextBoxObject.cpp" />
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">Create</PrecompiledHeader>

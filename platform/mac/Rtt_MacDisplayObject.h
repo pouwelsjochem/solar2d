@@ -85,13 +85,6 @@ class MacDisplayObject : public PlatformDisplayObject
 		bool fIsHidden; // I need a second flag because I need to hide objects when scaling/rotating
 };
 
-// Common functions between text objects
-class MacTextObject
-{
-	public:
-		static NSColor* GetTextColor( lua_State *L, int index );
-};
-
 // ----------------------------------------------------------------------------
 
 } // namespace Rtt

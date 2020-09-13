@@ -414,20 +414,6 @@ TextureFactory::Create(
 		* this, w, h, format, filter, wrap, save_to_file ) );
 }
 
-SharedPtr< TextureResource >
-TextureFactory::Create(
-	const char *str,
-	const PlatformFont& font,
-	Real w, Real h,
-	const char alignment[],
-	Real& baselineOffset)
-{
-	PlatformBitmap *pBitmap =
-		fDisplay.GetRuntime().Platform().CreateBitmapMask( str, font, w, h, alignment, baselineOffset );
-
-	return SharedPtr< TextureResource >( TextureResourceBitmap::Create( * this, pBitmap ) );
-}
-
 void
 TextureFactory::QueueRelease( Texture *texture )
 {

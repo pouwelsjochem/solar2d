@@ -16,10 +16,7 @@
 #include "Rtt_LuaResource.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacFBConnect.h"
-#include "Rtt_MacTextFieldObject.h"
-#include "Rtt_MacTextBoxObject.h"
 #include "Rtt_MacViewSurface.h"
-#include "Rtt_MacFont.h"
 #include "Rtt_PlatformInAppStore.h"
 #include "Rtt_AppleInAppStore.h"
 #include "Rtt_PlatformPlayer.h"
@@ -394,9 +391,6 @@ MacPlatform::~MacPlatform()
 
 	[fSandboxPath release];
 
-	// Deactivate any fonts that were activated earlier
-	MacFont::ActivateFontsForApplication(fResourcePath, false);
-
 	[fView release];
 
 	if (fAssertionID != kIOPMNullAssertionID)
@@ -455,8 +449,6 @@ MacPlatform::SetResourcePath( const char resourcePath[] )
 		[fSandboxPath release];
 		NSString *folderName = GetUniqueName( path, [path lastPathComponent] );
 		fSandboxPath = [GetLibraryPath( folderName ) retain];
-
-		MacFont::ActivateFontsForApplication(path);
 
 		// We want to create folders as soon as we know the sandbox path.
 		// Previously, we created them on-the-fly. We'll continue to do that in 
@@ -883,55 +875,6 @@ void
 MacPlatform::Resume() const
 {
 
-}
-
-PlatformDisplayObject*
-MacPlatform::CreateNativeTextBox( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), MacTextBoxObject( bounds ) );
-}
-
-PlatformDisplayObject*
-MacPlatform::CreateNativeTextField( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), MacTextFieldObject( bounds ) );
-}
-
-void
-MacPlatform::SetKeyboardFocus( PlatformDisplayObject *object ) const
-{
-	if ( object )
-	{
-		// Verify that this is actually a text field or text box
-		const LuaProxyVTable *vtable = & object->ProxyVTable();
-		
-		if ( & PlatformDisplayObject::GetTextFieldObjectProxyVTable() == vtable
-			|| & PlatformDisplayObject::GetTextBoxObjectProxyVTable() == vtable )
-		{
-			((MacDisplayObject*)object)->SetFocus();
-		}
-	}
-	else
-	{
-		// There is no object specified. What do we do? There isn't actually a keyboard on the screen, possibly just a focus ring around some object.
-		// set the first responder back to the GLView?
-		[[fView window] performSelector:@selector(makeFirstResponder:) withObject:fView afterDelay:0.0];
-	}
-}
-
-S32
-MacPlatform::GetFontNames( lua_State *L, int index ) const
-{
-	S32 numFonts = 0;
-
-	NSArray *names = [[NSFontManager sharedFontManager] availableFonts];
-	for ( NSString *fontName in names )
-	{
-		lua_pushstring( L, [fontName UTF8String] );
-		lua_rawseti( L, index, ++numFonts );
-	}
-
-	return numFonts;
 }
 
 int
@@ -1828,18 +1771,6 @@ MPlatformDevice&
 MacGUIPlatform::GetDevice() const
 {
 	return const_cast< MacDevice& >( fMacDevice );
-}
-
-Real
-MacGUIPlatform::GetStandardFontSize() const
-{
-	const MacSimulator &simulator = (const MacSimulator&)fMacDevice.GetSimulator();
-	Real fontSize = Rtt_FloatToReal( [[simulator.GetProperties() valueForKey:@"defaultFontSize"] floatValue] );
-	if (fontSize < Rtt_REAL_1 )
-	{
-		fontSize = Super::GetStandardFontSize();
-	}
-	return fontSize;
 }
 
 bool

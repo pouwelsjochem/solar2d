@@ -445,9 +445,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorShape.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextObject.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureFactory.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
@@ -515,9 +512,6 @@
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayPath.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.cpp">
@@ -838,9 +832,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFont.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -1063,9 +1054,6 @@
     <ClCompile Include="..\..\ndk\AndroidFileReader.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\AndroidFontSettings.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\AndroidGLView.cpp">
       <Filter>Android</Filter>
     </ClCompile>
@@ -1108,9 +1096,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidDisplayObject.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidFont.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDevice.cpp">
       <Filter>Android</Filter>
     </ClCompile>
@@ -1139,9 +1124,6 @@
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidTextFieldObject.cpp">
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidTimer.cpp">
@@ -1417,9 +1399,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorShape.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextObject.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureFactory.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
@@ -1493,9 +1472,6 @@
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayTypes.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.h">
@@ -1867,9 +1843,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFont.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2059,9 +2032,6 @@
     <ClInclude Include="..\..\ndk\AndroidFileReader.h">
       <Filter>Android</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ndk\AndroidFontSettings.h">
-      <Filter>Android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ndk\AndroidGLView.h">
       <Filter>Android</Filter>
     </ClInclude>
@@ -2104,9 +2074,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidDisplayObject.h">
       <Filter>Android</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidFont.h">
-      <Filter>Android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDevice.h">
       <Filter>Android</Filter>
     </ClInclude>
@@ -2135,9 +2102,6 @@
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidTextFieldObject.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidTimer.h">

@@ -40,7 +40,6 @@ class MDeviceSimulatorServices
 		virtual bool AreMultipleAlertsSupported() const = 0;
 		virtual bool IsAlertButtonOrderRightToLeft() const = 0;
 		virtual POINT GetSimulatedPointFromClient(const POINT& value) = 0;
-		virtual double GetDefaultFontSize() const = 0;
 		virtual void* ShowNativeAlert(
 						const char *title, const char *message, const char **buttonLabels,
 						int buttonCount, Rtt::LuaResource* resource) = 0;

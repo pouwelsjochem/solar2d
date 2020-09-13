@@ -22,7 +22,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.ansca.corona.input.ViewInputHandler;
 
@@ -83,15 +82,6 @@ public class CoronaView extends FrameLayout {
 
 	public CoronaView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// This is so that a IDE GUI editor will show something for the Corona View instead of just a white area
-		// which can't be differentiated from a background with nothing.
-		if (isInEditMode()) {
-			TextView textView = new TextView(context, attrs);
-			textView.setBackgroundColor(Color.GRAY);
-			textView.setText("CoronaView");
-			addView(textView);
-			return;
-		}
 		internalInit();
 	}
 

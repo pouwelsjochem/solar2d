@@ -80,8 +80,6 @@ class JavaToNativeBridge
 		void GyroscopeEvent(double x, double y, double z, double deltaTime);
 		void ResizeEvent();
 		void AlertCallback(int which, bool cancelled);
-		void TextEvent( int id, bool hasFocus, bool isDone );
-		void TextEditingEvent( JNIEnv *env, int id, int startPos, int numDeleted, jstring newCharacters, jstring oldString, jstring newString );
 		void MultitouchEventBegin();
 		void MultitouchEventAdd( JNIEnv * env, int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure );
 		void MultitouchEventEnd();

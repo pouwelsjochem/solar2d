@@ -12,7 +12,6 @@
 #define IDD_BUILD_DROID                 311
 #define IDD_LOGIN                       313
 #define IDD_LICENSE                     314
-#define IDD_PROGRESSMSG                 315
 #define IDD_PASSWORD                    316
 #define IDD_MESSAGE                     317
 #define IDI_ANIMATION                   329

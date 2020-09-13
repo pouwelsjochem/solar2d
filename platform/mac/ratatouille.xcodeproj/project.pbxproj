@@ -65,8 +65,6 @@
 		000CE7D512B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */; };
 		000CE7D812B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */; };
 		000CE7D912B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */; };
-		000CE7DA12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */; };
-		000CE7DB12B73EE300D9B6A4 /* Rtt_PlatformFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */; };
 		000CE7E212B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73612B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.cpp */; };
 		000CE7E312B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73712B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h */; };
 		000CE7E412B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73812B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp */; };
@@ -234,13 +232,7 @@
 		00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */; };
 		00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */; };
 		00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */; };
-		00B73DA012B720CA0057F594 /* Rtt_MacTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */; };
-		00B73DA112B720CA0057F594 /* Rtt_MacTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */; };
-		00B73DA612B720CA0057F594 /* ButtonTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0F12B720C90057F594 /* ButtonTextField.m */; };
-		00B73DA712B720CA0057F594 /* ResponderPassthroughTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1112B720C90057F594 /* ResponderPassthroughTextField.m */; };
-		00B73DA812B720CA0057F594 /* ButtonImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1312B720C90057F594 /* ButtonImageView.m */; };
 		00B73DAA12B720CA0057F594 /* VersionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1712B720C90057F594 /* VersionLabel.m */; };
-		00B73DAB12B720CA0057F594 /* FontHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1912B720C90057F594 /* FontHelper.m */; };
 		00B73DAC12B720CA0057F594 /* DimView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1B12B720C90057F594 /* DimView.m */; };
 		00B73DB012B720CA0057F594 /* TextEditorSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D2312B720CA0057F594 /* TextEditorSupport.m */; };
 		00B73DF512B726350057F594 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73DF312B726350057F594 /* MainMenu.nib */; };
@@ -407,8 +399,6 @@
 		A4328899176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */; };
 		A432889A176A621200ACB6FF /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */; };
 		A432889B176A621200ACB6FF /* Rtt_TesselatorShape.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */; };
-		A432889C176A621200ACB6FF /* Rtt_TextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883D176A621200ACB6FF /* Rtt_TextObject.cpp */; };
-		A432889D176A621200ACB6FF /* Rtt_TextObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883E176A621200ACB6FF /* Rtt_TextObject.h */; };
 		A432889E176A621200ACB6FF /* Rtt_VertexCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883F176A621200ACB6FF /* Rtt_VertexCache.cpp */; };
 		A43288B9176A67E600ACB6FF /* shell_default_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A43288A1176A626B00ACB6FF /* shell_default_gl.lua */; };
 		A43288BA176A67E600ACB6FF /* kernel_default_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A43288A2176A626B00ACB6FF /* kernel_default_gl.lua */; };
@@ -521,8 +511,6 @@
 		A4FBC5531A2D5734004D9A01 /* Rtt_AppleDictionaryWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */; };
 		A4FBC5551A2D5734004D9A01 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */; };
 		A4FBC5561A2D5734004D9A01 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DB13678536008DDB3D /* Rtt_AppleReachability.mm */; };
-		A4FBC5571A2D5734004D9A01 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 078DA94A176FBE4900A5193E /* Rtt_AppleTextAlignment.mm */; };
-		A4FBC5581A2D5734004D9A01 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 005C8DEC142D506F00F12B30 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
 		A4FBC5591A2D5734004D9A01 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92812B7413200D9B6A4 /* Rtt_AppleTimer.mm */; };
 		A4FBC55B1A2D5746004D9A01 /* CoronaWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AB4479143E385700607F77 /* CoronaWindowController.mm */; };
 		A4FBC55C1A2D574D004D9A01 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE90E12B7410200D9B6A4 /* CoronaViewPrivate.mm */; };
@@ -530,7 +518,6 @@
 		A4FBC5601A2D5867004D9A01 /* Rtt_MacPlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF812B720C90057F594 /* Rtt_MacPlatform.mm */; };
 		A4FBC5651A2D58CE004D9A01 /* Rtt_MacViewSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0612B720C90057F594 /* Rtt_MacViewSurface.mm */; };
 		A4FBC5661A2D58EB004D9A01 /* Rtt_MacViewCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0799601417EBC78000A632B9 /* Rtt_MacViewCallback.mm */; };
-		A4FBC5671A2D58FF004D9A01 /* Rtt_MacFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF512B720C90057F594 /* Rtt_MacFont.mm */; };
 		A4FBC5681A2D5915004D9A01 /* Rtt_MacDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CED12B720C90057F594 /* Rtt_MacDevice.mm */; };
 		A4FBC5691A2D5919004D9A01 /* Rtt_MacDeviceIdentifier.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CEF12B720C90057F594 /* Rtt_MacDeviceIdentifier.c */; };
 		A4FBC56A1A2D59F4004D9A01 /* Rtt_PlatformObjectWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CEA1512B7469B00D9B6A4 /* Rtt_PlatformObjectWrapper.cpp */; };
@@ -647,7 +634,6 @@
 		C229E0571B32221B00D87A7C /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */; };
 		C229E0591B32221B00D87A7C /* Rtt_PlatformExitCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */; };
 		C229E05A1B32221B00D87A7C /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */; };
-		C229E05B1B32221B00D87A7C /* Rtt_PlatformFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */; };
 		C229E05D1B32221B00D87A7C /* Rtt_PlatformInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8A12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h */; };
 		C229E05F1B32221B00D87A7C /* Rtt_PlatformModalInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73712B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h */; };
 		C229E0601B32221B00D87A7C /* Rtt_PlatformNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73912B73EE300D9B6A4 /* Rtt_PlatformNotifier.h */; };
@@ -697,7 +683,6 @@
 		C229E0901B32221B00D87A7C /* Rtt_TesselatorRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC87F17820BE000BE6805 /* Rtt_TesselatorRect.h */; };
 		C229E0911B32221B00D87A7C /* Rtt_TesselatorRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */; };
 		C229E0921B32221B00D87A7C /* Rtt_TesselatorShape.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */; };
-		C229E0941B32221B00D87A7C /* Rtt_TextObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883E176A621200ACB6FF /* Rtt_TextObject.h */; };
 		C229E0951B32221B00D87A7C /* Rtt_TextureFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8D5178A269F00BE6805 /* Rtt_TextureFactory.h */; };
 		C229E0961B32221B00D87A7C /* Rtt_TextureResource.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8D6178A26C200BE6805 /* Rtt_TextureResource.h */; };
 		C229E0971B32221B00D87A7C /* Rtt_Time.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BE112B71BF20057F594 /* Rtt_Time.h */; };
@@ -746,7 +731,6 @@
 		C229E0D21B32221B00D87A7C /* Rtt_DisplayDefaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F0176A621100ACB6FF /* Rtt_DisplayDefaults.cpp */; };
 		C229E0D31B32221B00D87A7C /* Rtt_DisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F2176A621100ACB6FF /* Rtt_DisplayObject.cpp */; settings = {COMPILER_FLAGS = "-frtti"; }; };
 		C229E0D51B32221B00D87A7C /* Rtt_DisplayPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F4176A621100ACB6FF /* Rtt_DisplayPath.cpp */; };
-		C229E0D71B32221B00D87A7C /* Rtt_EmbossedTextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078BDB8E1811B0B600C17D9A /* Rtt_EmbossedTextObject.cpp */; };
 		C229E0D91B32221B00D87A7C /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D512B73EE300D9B6A4 /* Rtt_Event.cpp */; };
 		C229E0DA1B32221B00D87A7C /* Rtt_ExplicitTemplates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D712B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp */; };
 		C229E0DB1B32221B00D87A7C /* Rtt_FilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F9176A621100ACB6FF /* Rtt_FilePath.cpp */; };
@@ -806,7 +790,6 @@
 		C229E1221B32221B00D87A7C /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */; };
 		C229E1241B32221B00D87A7C /* Rtt_PlatformExitCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002D74A912FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp */; };
 		C229E1251B32221B00D87A7C /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */; };
-		C229E1261B32221B00D87A7C /* Rtt_PlatformFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */; };
 		C229E1281B32221B00D87A7C /* Rtt_PlatformInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00572B8912D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp */; };
 		C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043D17A3774E00681DED /* Rtt_PlatformInputAxis.cpp */; };
 		C229E12A1B32221B00D87A7C /* Rtt_PlatformInputDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE6C178E18B00047CC04 /* Rtt_PlatformInputDevice.cpp */; };
@@ -864,7 +847,6 @@
 		C229E1631B32221B00D87A7C /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */; };
 		C229E1641B32221B00D87A7C /* Rtt_TesselatorRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328839176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp */; };
 		C229E1651B32221B00D87A7C /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */; };
-		C229E1671B32221B00D87A7C /* Rtt_TextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883D176A621200ACB6FF /* Rtt_TextObject.cpp */; };
 		C229E1681B32221B00D87A7C /* Rtt_TextureFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8D4178A268B00BE6805 /* Rtt_TextureFactory.cpp */; };
 		C229E1691B32221B00D87A7C /* Rtt_TextureResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8D3178A267D00BE6805 /* Rtt_TextureResource.cpp */; };
 		C229E16A1B32221B00D87A7C /* Rtt_Time.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BE012B71BF20057F594 /* Rtt_Time.c */; };
@@ -1002,9 +984,7 @@
 		C287481B19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = C287481A19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm */; };
 		C287481D19F6EED0002D5B27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C287481C19F6EED0002D5B27 /* Cocoa.framework */; };
 		C2942C1C1A0169B600372D6B /* SimulatorDeviceWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2942C1B1A0169B600372D6B /* SimulatorDeviceWindow.mm */; };
-		C2A377701B34BA3D00BB5B88 /* Rtt_MacTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */; };
 		C2A377711B34BAB000BB5B88 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
-		C2A377751B34C8D800BB5B88 /* Rtt_MacTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */; };
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
@@ -1155,12 +1135,9 @@
 		C2E993001A6B1A3100E99F46 /* Rtt_AppleDictionaryWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */; };
 		C2E993021A6B1A3100E99F46 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */; };
 		C2E993031A6B1A3100E99F46 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DB13678536008DDB3D /* Rtt_AppleReachability.mm */; };
-		C2E993041A6B1A3100E99F46 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 078DA94A176FBE4900A5193E /* Rtt_AppleTextAlignment.mm */; };
-		C2E993051A6B1A3100E99F46 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 005C8DEC142D506F00F12B30 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
 		C2E993061A6B1A3100E99F46 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92812B7413200D9B6A4 /* Rtt_AppleTimer.mm */; };
 		C2E993071A6B1A3100E99F46 /* Rtt_MacDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CED12B720C90057F594 /* Rtt_MacDevice.mm */; };
 		C2E993081A6B1A3100E99F46 /* Rtt_MacDeviceIdentifier.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CEF12B720C90057F594 /* Rtt_MacDeviceIdentifier.c */; };
-		C2E993091A6B1A3100E99F46 /* Rtt_MacFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF512B720C90057F594 /* Rtt_MacFont.mm */; };
 		C2E9930A1A6B1A3100E99F46 /* Rtt_MacPlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF812B720C90057F594 /* Rtt_MacPlatform.mm */; };
 		C2E9930B1A6B1A3100E99F46 /* Rtt_MacViewCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0799601417EBC78000A632B9 /* Rtt_MacViewCallback.mm */; };
 		C2E9930C1A6B1A3100E99F46 /* Rtt_MacViewSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0612B720C90057F594 /* Rtt_MacViewSurface.mm */; };
@@ -1172,7 +1149,6 @@
 		C2E993141A6B211800E99F46 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375C12B706E00057F594 /* SystemConfiguration.framework */; };
 		C2E993161A6B217400E99F46 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375812B706E00057F594 /* QuartzCore.framework */; };
 		C2E993341A6B2FEC00E99F46 /* Rtt_CPUResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0724699117D99D41000A1641 /* Rtt_CPUResourcePool.cpp */; };
-		C2E993351A6B2FEC00E99F46 /* Rtt_EmbossedTextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078BDB8E1811B0B600C17D9A /* Rtt_EmbossedTextObject.cpp */; };
 		C2E993361A6B2FEC00E99F46 /* Rtt_ShaderComposite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 072020D317C58D5100B6D424 /* Rtt_ShaderComposite.cpp */; };
 		C2E993371A6B2FEC00E99F46 /* Rtt_ShaderCompositeAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 072020D517C58D5100B6D424 /* Rtt_ShaderCompositeAdapter.cpp */; };
 		C2E993381A6B2FEC00E99F46 /* Rtt_ShaderInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 072020D717C58D5100B6D424 /* Rtt_ShaderInput.cpp */; };
@@ -1231,8 +1207,6 @@
 		F53C328C2404E2A300BC2BED /* CoronaBuilderPluginCollector.lua in Sources */ = {isa = PBXBuildFile; fileRef = F53C32832404E25600BC2BED /* CoronaBuilderPluginCollector.lua */; };
 		F53C328D2404E2AB00BC2BED /* CoronaBuilderPluginCollector.lua in Sources */ = {isa = PBXBuildFile; fileRef = F53C32832404E25600BC2BED /* CoronaBuilderPluginCollector.lua */; };
 		F545475321178F7400D5EDB7 /* linuxtemplate.tar.gz in Resources */ = {isa = PBXBuildFile; fileRef = F545474A21178F7400D5EDB7 /* linuxtemplate.tar.gz */; };
-		F54D1E121CA35968000B280E /* Rtt_AppleFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = F54D1E111CA35968000B280E /* Rtt_AppleFont.mm */; };
-		F54D1E131CA35968000B280E /* Rtt_AppleFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = F54D1E111CA35968000B280E /* Rtt_AppleFont.mm */; };
 		F54D8E2A1B4B29120063F98B /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54D8E291B4B29120063F98B /* ForceFeedback.framework */; };
 		F54D8E321B4B29BD0063F98B /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F54D8E291B4B29120063F98B /* ForceFeedback.framework */; };
 		F55407F51C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F55407F31C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.cpp */; };
@@ -1793,8 +1767,6 @@
 		000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
 		000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFBConnect.cpp; sourceTree = "<group>"; };
 		000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
-		000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFont.cpp; sourceTree = "<group>"; };
-		000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFont.h; sourceTree = "<group>"; };
 		000CE73212B73EE300D9B6A4 /* Rtt_PlatformListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformListener.cpp; sourceTree = "<group>"; };
 		000CE73312B73EE300D9B6A4 /* Rtt_PlatformListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformListener.h; sourceTree = "<group>"; };
 		000CE73612B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformModalInteraction.cpp; sourceTree = "<group>"; };
@@ -1846,7 +1818,6 @@
 		000CE91F12B7413200D9B6A4 /* Rtt_AppleData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleData.mm; path = ../apple/Rtt_AppleData.mm; sourceTree = "<group>"; };
 		000CE92012B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleDictionaryWrapper.h; path = ../apple/Rtt_AppleDictionaryWrapper.h; sourceTree = "<group>"; };
 		000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleDictionaryWrapper.mm; path = ../apple/Rtt_AppleDictionaryWrapper.mm; sourceTree = "<group>"; };
-		000CE92412B7413200D9B6A4 /* Rtt_AppleFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleFont.h; path = ../apple/Rtt_AppleFont.h; sourceTree = "<group>"; };
 		000CE92512B7413200D9B6A4 /* Rtt_ApplePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ApplePlatform.h; path = ../apple/Rtt_ApplePlatform.h; sourceTree = "<group>"; };
 		000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_ApplePlatform.mm; path = ../apple/Rtt_ApplePlatform.mm; sourceTree = "<group>"; };
 		000CE92712B7413200D9B6A4 /* Rtt_AppleTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTimer.h; path = ../apple/Rtt_AppleTimer.h; sourceTree = "<group>"; };
@@ -1908,8 +1879,6 @@
 		00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibInAppStore.h; sourceTree = "<group>"; };
 		00572B8912D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformInAppStore.cpp; sourceTree = "<group>"; };
 		00572B8A12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformInAppStore.h; sourceTree = "<group>"; };
-		005C8DEB142D506F00F12B30 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTextDelegateWrapperObjectHelper.h; path = ../apple/Rtt_AppleTextDelegateWrapperObjectHelper.h; sourceTree = "<group>"; };
-		005C8DEC142D506F00F12B30 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Rtt_AppleTextDelegateWrapperObjectHelper.m; path = ../apple/Rtt_AppleTextDelegateWrapperObjectHelper.m; sourceTree = "<group>"; };
 		005DB22C1410606400B1B0DD /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		00602C3A153F9EA400A82C43 /* NSAlert-OAExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAlert-OAExtensions.h"; sourceTree = "<group>"; };
 		00602C3B153F9EA400A82C43 /* NSAlert-OAExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAlert-OAExtensions.m"; sourceTree = "<group>"; };
@@ -2086,7 +2055,6 @@
 		00B73CF212B720C90057F594 /* Rtt_MacDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacDisplayObject.h; sourceTree = "<group>"; };
 		00B73CF312B720C90057F594 /* Rtt_MacFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacFBConnect.h; sourceTree = "<group>"; };
 		00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacFBConnect.mm; sourceTree = "<group>"; };
-		00B73CF512B720C90057F594 /* Rtt_MacFont.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacFont.mm; sourceTree = "<group>"; };
 		00B73CF812B720C90057F594 /* Rtt_MacPlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacPlatform.mm; sourceTree = "<group>"; };
 		00B73CF912B720C90057F594 /* Rtt_MacPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacPlatform.h; sourceTree = "<group>"; };
 		00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacRemotePlayerHost.mm; sourceTree = "<group>"; };
@@ -2095,24 +2063,12 @@
 		00B73CFD12B720C90057F594 /* Rtt_MacServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacServer.h; sourceTree = "<group>"; };
 		00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacSimulator.mm; sourceTree = "<group>"; };
 		00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacSimulator.h; sourceTree = "<group>"; };
-		00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacTextBoxObject.mm; sourceTree = "<group>"; };
-		00B73D0312B720C90057F594 /* Rtt_MacTextBoxObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacTextBoxObject.h; sourceTree = "<group>"; };
-		00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacTextFieldObject.mm; sourceTree = "<group>"; };
-		00B73D0512B720C90057F594 /* Rtt_MacTextFieldObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacTextFieldObject.h; sourceTree = "<group>"; };
 		00B73D0612B720C90057F594 /* Rtt_MacViewSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewSurface.mm; sourceTree = "<group>"; };
 		00B73D0712B720C90057F594 /* Rtt_MacViewSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewSurface.h; sourceTree = "<group>"; };
-		00B73D0E12B720C90057F594 /* ButtonTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonTextField.h; sourceTree = "<group>"; };
-		00B73D0F12B720C90057F594 /* ButtonTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonTextField.m; sourceTree = "<group>"; };
-		00B73D1012B720C90057F594 /* ResponderPassthroughTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResponderPassthroughTextField.h; sourceTree = "<group>"; };
-		00B73D1112B720C90057F594 /* ResponderPassthroughTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResponderPassthroughTextField.m; sourceTree = "<group>"; };
-		00B73D1212B720C90057F594 /* ButtonImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ButtonImageView.h; sourceTree = "<group>"; };
-		00B73D1312B720C90057F594 /* ButtonImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ButtonImageView.m; sourceTree = "<group>"; };
 		00B73D1412B720C90057F594 /* PassiveHitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassiveHitView.h; sourceTree = "<group>"; };
 		00B73D1512B720C90057F594 /* PassiveHitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassiveHitView.m; sourceTree = "<group>"; };
 		00B73D1612B720C90057F594 /* VersionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionLabel.h; sourceTree = "<group>"; };
 		00B73D1712B720C90057F594 /* VersionLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VersionLabel.m; sourceTree = "<group>"; };
-		00B73D1812B720C90057F594 /* FontHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontHelper.h; sourceTree = "<group>"; };
-		00B73D1912B720C90057F594 /* FontHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontHelper.m; sourceTree = "<group>"; };
 		00B73D1A12B720C90057F594 /* DimView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DimView.h; sourceTree = "<group>"; };
 		00B73D1B12B720C90057F594 /* DimView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DimView.m; sourceTree = "<group>"; };
 		00B73D2212B720CA0057F594 /* TextEditorSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextEditorSupport.h; sourceTree = "<group>"; };
@@ -2194,10 +2150,6 @@
 		0724699117D99D41000A1641 /* Rtt_CPUResourcePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CPUResourcePool.cpp; path = Display/Rtt_CPUResourcePool.cpp; sourceTree = "<group>"; };
 		0724699217D99D42000A1641 /* Rtt_CPUResourcePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CPUResourcePool.h; path = Display/Rtt_CPUResourcePool.h; sourceTree = "<group>"; };
 		0727BA8616E68FE800981C4B /* network.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = network.dylib; path = "../../plugins/build-core/network/mac/network.dylib"; sourceTree = "<group>"; };
-		078BDB8E1811B0B600C17D9A /* Rtt_EmbossedTextObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_EmbossedTextObject.cpp; path = Display/Rtt_EmbossedTextObject.cpp; sourceTree = "<group>"; };
-		078BDB8F1811B0B600C17D9A /* Rtt_EmbossedTextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_EmbossedTextObject.h; path = Display/Rtt_EmbossedTextObject.h; sourceTree = "<group>"; };
-		078DA949176FBE4900A5193E /* Rtt_AppleTextAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTextAlignment.h; path = ../apple/Rtt_AppleTextAlignment.h; sourceTree = "<group>"; };
-		078DA94A176FBE4900A5193E /* Rtt_AppleTextAlignment.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleTextAlignment.mm; path = ../apple/Rtt_AppleTextAlignment.mm; sourceTree = "<group>"; };
 		0799601317EBC78000A632B9 /* Rtt_MacViewCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewCallback.h; sourceTree = "<group>"; };
 		0799601417EBC78000A632B9 /* Rtt_MacViewCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewCallback.mm; sourceTree = "<group>"; };
 		0799601D17F0FFF100A632B9 /* Rtt_SimulatorRecents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SimulatorRecents.h; path = ../../modules/simulator/Rtt_SimulatorRecents.h; sourceTree = "<group>"; };
@@ -2370,8 +2322,6 @@
 		A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRoundedRect.h; path = Display/Rtt_TesselatorRoundedRect.h; sourceTree = "<group>"; };
 		A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorShape.cpp; path = Display/Rtt_TesselatorShape.cpp; sourceTree = "<group>"; };
 		A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorShape.h; path = Display/Rtt_TesselatorShape.h; sourceTree = "<group>"; };
-		A432883D176A621200ACB6FF /* Rtt_TextObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextObject.cpp; path = Display/Rtt_TextObject.cpp; sourceTree = "<group>"; };
-		A432883E176A621200ACB6FF /* Rtt_TextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextObject.h; path = Display/Rtt_TextObject.h; sourceTree = "<group>"; };
 		A432883F176A621200ACB6FF /* Rtt_VertexCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_VertexCache.cpp; path = Display/Rtt_VertexCache.cpp; sourceTree = "<group>"; };
 		A4328840176A621200ACB6FF /* Rtt_VertexCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_VertexCache.h; path = Display/Rtt_VertexCache.h; sourceTree = "<group>"; };
 		A43288A1176A626B00ACB6FF /* shell_default_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shell_default_gl.lua; path = Display/Shader/shell_default_gl.lua; sourceTree = "<group>"; };
@@ -2608,7 +2558,6 @@
 		F53594B61B6185EA00C8CAAD /* Rtt_TextureResourceCanvasAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceCanvasAdapter.h; path = Display/Rtt_TextureResourceCanvasAdapter.h; sourceTree = "<group>"; };
 		F53C32832404E25600BC2BED /* CoronaBuilderPluginCollector.lua */ = {isa = PBXFileReference; lastKnownFileType = text; name = CoronaBuilderPluginCollector.lua; path = ../platform/resources/CoronaBuilderPluginCollector.lua; sourceTree = "<group>"; };
 		F545474A21178F7400D5EDB7 /* linuxtemplate.tar.gz */ = {isa = PBXFileReference; lastKnownFileType = archive.gzip; name = linuxtemplate.tar.gz; path = ../resources/linuxtemplate.tar.gz; sourceTree = "<group>"; };
-		F54D1E111CA35968000B280E /* Rtt_AppleFont.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleFont.mm; path = ../apple/Rtt_AppleFont.mm; sourceTree = "<group>"; };
 		F54D8E291B4B29120063F98B /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
 		F55407F31C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceExternalAdapter.cpp; path = Display/Rtt_TextureResourceExternalAdapter.cpp; sourceTree = "<group>"; };
 		F55407F41C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceExternalAdapter.h; path = Display/Rtt_TextureResourceExternalAdapter.h; sourceTree = "<group>"; };
@@ -2643,7 +2592,6 @@
 		F5C40DC71CB68830004F7789 /* Rtt_ShapeAdapterMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterMesh.h; path = Display/Rtt_ShapeAdapterMesh.h; sourceTree = "<group>"; };
 		F5C757B01C7538A4004A3604 /* CoronaGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaGraphics.cpp; path = Corona/CoronaGraphics.cpp; sourceTree = "<group>"; };
 		F5C757B11C7538A4004A3604 /* CoronaGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGraphics.h; path = Corona/CoronaGraphics.h; sourceTree = "<group>"; };
-		F5D3840B1CA31A3E007C8A02 /* Rtt_MacFont.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rtt_MacFont.h; sourceTree = "<group>"; };
 		F5F053F620374B99007E92B0 /* SimpleMutex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SimpleMutex.c; sourceTree = "<group>"; };
 		F5F053F720374B99007E92B0 /* SimpleMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMutex.h; sourceTree = "<group>"; };
 		F5F053F820374B99007E92B0 /* ALmixer_RWops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALmixer_RWops.h; sourceTree = "<group>"; };
@@ -3213,8 +3161,6 @@
 				002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */,
 				000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */,
 				000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */,
-				000CE72E12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp */,
-				000CE72F12B73EE300D9B6A4 /* Rtt_PlatformFont.h */,
 				00572B8912D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp */,
 				00572B8A12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h */,
 				000CE73212B73EE300D9B6A4 /* Rtt_PlatformListener.cpp */,
@@ -3379,22 +3325,14 @@
 				F5B4D0E9246979CC00D32035 /* Rtt_MacDialogController.mm */,
 				E23CD30B147C725200BC9038 /* BuildSessionState.h */,
 				E23CD30C147C725200BC9038 /* BuildSessionState.mm */,
-				00B73D1212B720C90057F594 /* ButtonImageView.h */,
-				00B73D1312B720C90057F594 /* ButtonImageView.m */,
-				00B73D0E12B720C90057F594 /* ButtonTextField.h */,
-				00B73D0F12B720C90057F594 /* ButtonTextField.m */,
 				00B73D1A12B720C90057F594 /* DimView.h */,
 				00B73D1B12B720C90057F594 /* DimView.m */,
-				00B73D1812B720C90057F594 /* FontHelper.h */,
-				00B73D1912B720C90057F594 /* FontHelper.m */,
 				00F730581300CDD70089B661 /* IntegerValidationFormatter.h */,
 				00F730591300CDD70089B661 /* IntegerValidationFormatter.m */,
 				00B73CD912B720C90057F594 /* main.m */,
 				0090CFB915E2F451000A0144 /* NSWindow+ForFirstResponderMenu.m */,
 				00B73D1412B720C90057F594 /* PassiveHitView.h */,
 				00B73D1512B720C90057F594 /* PassiveHitView.m */,
-				00B73D1012B720C90057F594 /* ResponderPassthroughTextField.h */,
-				00B73D1112B720C90057F594 /* ResponderPassthroughTextField.m */,
 				C287481919F6E01F002D5B27 /* Rtt_MacConsolePlatform.h */,
 				C287481A19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm */,
 				00B73CF212B720C90057F594 /* Rtt_MacDisplayObject.h */,
@@ -3413,10 +3351,6 @@
 				00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */,
 				A41A18E7143AB08000F1BF0D /* Rtt_MacSimulatorServices.h */,
 				A42E68AA143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm */,
-				00B73D0312B720C90057F594 /* Rtt_MacTextBoxObject.h */,
-				00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */,
-				00B73D0512B720C90057F594 /* Rtt_MacTextFieldObject.h */,
-				00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */,
 				00B73CD812B720C90057F594 /* Rtt_Player.pch */,
 				A4AB446F143BE11100607F77 /* SampleCodeLocator.h */,
 				A4AB4470143BE11200607F77 /* SampleCodeLocator.mm */,
@@ -3701,8 +3635,6 @@
 				A43287F4176A621100ACB6FF /* Rtt_DisplayPath.cpp */,
 				A43287F5176A621100ACB6FF /* Rtt_DisplayPath.h */,
 				A43287F6176A621100ACB6FF /* Rtt_DisplayTypes.h */,
-				078BDB8E1811B0B600C17D9A /* Rtt_EmbossedTextObject.cpp */,
-				078BDB8F1811B0B600C17D9A /* Rtt_EmbossedTextObject.h */,
 				A43287F9176A621100ACB6FF /* Rtt_FilePath.cpp */,
 				A43287FA176A621100ACB6FF /* Rtt_FilePath.h */,
 				A4B66AF2176FBA220077B2BF /* Rtt_GradientPaint.cpp */,
@@ -3809,8 +3741,6 @@
 				A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */,
 				A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */,
 				A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */,
-				A432883D176A621200ACB6FF /* Rtt_TextObject.cpp */,
-				A432883E176A621200ACB6FF /* Rtt_TextObject.h */,
 				A46AC8D4178A268B00BE6805 /* Rtt_TextureFactory.cpp */,
 				A46AC8D5178A269F00BE6805 /* Rtt_TextureFactory.h */,
 				A46AC8D3178A267D00BE6805 /* Rtt_TextureResource.cpp */,
@@ -4094,16 +4024,10 @@
 				000CE91F12B7413200D9B6A4 /* Rtt_AppleData.mm */,
 				000CE92012B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.h */,
 				000CE92112B7413200D9B6A4 /* Rtt_AppleDictionaryWrapper.mm */,
-				000CE92412B7413200D9B6A4 /* Rtt_AppleFont.h */,
-				F54D1E111CA35968000B280E /* Rtt_AppleFont.mm */,
 				000CE92512B7413200D9B6A4 /* Rtt_ApplePlatform.h */,
 				000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */,
 				006DC6DA13678536008DDB3D /* Rtt_AppleReachability.h */,
 				006DC6DB13678536008DDB3D /* Rtt_AppleReachability.mm */,
-				078DA949176FBE4900A5193E /* Rtt_AppleTextAlignment.h */,
-				078DA94A176FBE4900A5193E /* Rtt_AppleTextAlignment.mm */,
-				005C8DEB142D506F00F12B30 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */,
-				005C8DEC142D506F00F12B30 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */,
 				000CE92712B7413200D9B6A4 /* Rtt_AppleTimer.h */,
 				000CE92812B7413200D9B6A4 /* Rtt_AppleTimer.mm */,
 				F57D176E1BE25E1200AABAC1 /* Rtt_AppleInputDevice.h */,
@@ -4125,8 +4049,6 @@
 				00B73CED12B720C90057F594 /* Rtt_MacDevice.mm */,
 				00B73CF012B720C90057F594 /* Rtt_MacDeviceIdentifier.h */,
 				00B73CEF12B720C90057F594 /* Rtt_MacDeviceIdentifier.c */,
-				F5D3840B1CA31A3E007C8A02 /* Rtt_MacFont.h */,
-				00B73CF512B720C90057F594 /* Rtt_MacFont.mm */,
 				00B73CF912B720C90057F594 /* Rtt_MacPlatform.h */,
 				00B73CF812B720C90057F594 /* Rtt_MacPlatform.mm */,
 				0799601317EBC78000A632B9 /* Rtt_MacViewCallback.h */,
@@ -4372,7 +4294,6 @@
 				03D1C5661D70CCDA00DB02EE /* Rtt_ValueResult.h in Headers */,
 				002D74AA12FB438A006C7E9B /* Rtt_PlatformExitCallback.h in Headers */,
 				000CE7D912B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h in Headers */,
-				000CE7DB12B73EE300D9B6A4 /* Rtt_PlatformFont.h in Headers */,
 				00572B8E12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h in Headers */,
 				000CE7E312B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h in Headers */,
 				F5B5A7521B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */,
@@ -4425,7 +4346,6 @@
 				C2DA961F1B46460F00DAF684 /* Rtt_TesselatorRect.h in Headers */,
 				A4328899176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h in Headers */,
 				A432889B176A621200ACB6FF /* Rtt_TesselatorShape.h in Headers */,
-				A432889D176A621200ACB6FF /* Rtt_TextObject.h in Headers */,
 				A46AC8DB178A26D900BE6805 /* Rtt_TextureFactory.h in Headers */,
 				A46AC8DD178A26D900BE6805 /* Rtt_TextureResource.h in Headers */,
 				C2DA96601B46460F00DAF684 /* Rtt_Time.h in Headers */,
@@ -4619,7 +4539,6 @@
 				03D1C5651D70CCD900DB02EE /* Rtt_ValueResult.h in Headers */,
 				C229E0591B32221B00D87A7C /* Rtt_PlatformExitCallback.h in Headers */,
 				C229E05A1B32221B00D87A7C /* Rtt_PlatformFBConnect.h in Headers */,
-				C229E05B1B32221B00D87A7C /* Rtt_PlatformFont.h in Headers */,
 				C229E05D1B32221B00D87A7C /* Rtt_PlatformInAppStore.h in Headers */,
 				C229E05F1B32221B00D87A7C /* Rtt_PlatformModalInteraction.h in Headers */,
 				C229E0601B32221B00D87A7C /* Rtt_PlatformNotifier.h in Headers */,
@@ -4674,7 +4593,6 @@
 				C229E0901B32221B00D87A7C /* Rtt_TesselatorRect.h in Headers */,
 				C229E0911B32221B00D87A7C /* Rtt_TesselatorRoundedRect.h in Headers */,
 				C229E0921B32221B00D87A7C /* Rtt_TesselatorShape.h in Headers */,
-				C229E0941B32221B00D87A7C /* Rtt_TextObject.h in Headers */,
 				C229E0951B32221B00D87A7C /* Rtt_TextureFactory.h in Headers */,
 				C229E0961B32221B00D87A7C /* Rtt_TextureResource.h in Headers */,
 				C229E0971B32221B00D87A7C /* Rtt_Time.h in Headers */,
@@ -4791,7 +4709,6 @@
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				00B73EDF12B731020057F594 /* Run Script (build resource.car) */,
-				A4F7A7A91444D6FE0010CDE1 /* Run script (copy Simulator extensions) */,
 				00B737B312B707970057F594 /* Copy Frameworks */,
 				A491868C1641FE1600A39286 /* CopyFiles */,
 				00A76D3412C04C9200850EA0 /* Run script (write AppSettings: customBuildID, buildBucket, etc if defined) */,
@@ -4804,7 +4721,6 @@
 				001F574112B6018500F52101 /* PBXBuildRule */,
 			);
 			dependencies = (
-				F533258E1D9DD3CC003613F7 /* PBXTargetDependency */,
 				C21995B01C18A2C000E88FD0 /* PBXTargetDependency */,
 				C2B5FEEE1B336C3D00DD49E6 /* PBXTargetDependency */,
 				C26DD1131BD9514100EC4F44 /* PBXTargetDependency */,
@@ -5378,7 +5294,6 @@
 				A432884F176A621200ACB6FF /* Rtt_DisplayDefaults.cpp in Sources */,
 				A4328851176A621200ACB6FF /* Rtt_DisplayObject.cpp in Sources */,
 				A4328853176A621200ACB6FF /* Rtt_DisplayPath.cpp in Sources */,
-				C2E993351A6B2FEC00E99F46 /* Rtt_EmbossedTextObject.cpp in Sources */,
 				000CE78212B73EE300D9B6A4 /* Rtt_Event.cpp in Sources */,
 				000CE78412B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp in Sources */,
 				A4328858176A621200ACB6FF /* Rtt_FilePath.cpp in Sources */,
@@ -5441,7 +5356,6 @@
 				000CE7D412B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp in Sources */,
 				002D74AB12FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp in Sources */,
 				000CE7D812B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp in Sources */,
-				000CE7DA12B73EE300D9B6A4 /* Rtt_PlatformFont.cpp in Sources */,
 				00572B8D12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp in Sources */,
 				03D1C5571D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C2E993431A6B2FEC00E99F46 /* Rtt_PlatformInputAxis.cpp in Sources */,
@@ -5506,7 +5420,6 @@
 				A46AC88017820BEB00BE6805 /* Rtt_TesselatorRect.cpp in Sources */,
 				A4328898176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				A432889A176A621200ACB6FF /* Rtt_TesselatorShape.cpp in Sources */,
-				A432889C176A621200ACB6FF /* Rtt_TextObject.cpp in Sources */,
 				A46AC8D9178A26D900BE6805 /* Rtt_TextureFactory.cpp in Sources */,
 				A46AC8D7178A26D900BE6805 /* Rtt_TextureResource.cpp in Sources */,
 				00B73C0C12B71BF20057F594 /* Rtt_Time.c in Sources */,
@@ -5690,13 +5603,10 @@
 				A4B00FAA14576402008FB6E6 /* AppleSigningIdentityController.mm in Sources */,
 				E23CD30D147C725200BC9038 /* BuildSessionState.mm in Sources */,
 				1F34F53D21115FB2006EE117 /* Rtt_LinuxAppPackager.cpp in Sources */,
-				00B73DA812B720CA0057F594 /* ButtonImageView.m in Sources */,
-				00B73DA612B720CA0057F594 /* ButtonTextField.m in Sources */,
 				00F641C2146C72950021E5D4 /* CoreAnimationUtilities.m in Sources */,
 				C2F8376D1AC205FA00D33D6E /* CoronaViewRuntimeDelegate.mm in Sources */,
 				F57D176C1BE25C7C00AABAC1 /* Rtt_AppleInputHIDDeviceListener.mm in Sources */,
 				00B73DAC12B720CA0057F594 /* DimView.m in Sources */,
-				00B73DAB12B720CA0057F594 /* FontHelper.m in Sources */,
 				0054E59C147750990051B2CE /* FoundationUtilities.m in Sources */,
 				00F7305A1300CDD70089B661 /* IntegerValidationFormatter.m in Sources */,
 				F57D17671BE25B1C00AABAC1 /* Rtt_AppleInputDeviceManager.mm in Sources */,
@@ -5705,7 +5615,6 @@
 				00602C3D153F9EA400A82C43 /* NSAlert-OAExtensions.m in Sources */,
 				0090CFBA15E2F452000A0144 /* NSWindow+ForFirstResponderMenu.m in Sources */,
 				C24ACF741B38D1250049599D /* OSXAppBuildController.mm in Sources */,
-				00B73DA712B720CA0057F594 /* ResponderPassthroughTextField.m in Sources */,
 				C2F7D7B11C57281D0083EC74 /* NSString+Extensions.m in Sources */,
 				00B73D6912B720CA0057F594 /* Rtt_AndroidAppPackager.cpp in Sources */,
 				0089561113404E9700699C04 /* Rtt_AndroidSupportTools.c in Sources */,
@@ -5724,8 +5633,6 @@
 				00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */,
 				A42E68AB143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm in Sources */,
 				1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */,
-				00B73DA012B720CA0057F594 /* Rtt_MacTextBoxObject.mm in Sources */,
-				00B73DA112B720CA0057F594 /* Rtt_MacTextFieldObject.mm in Sources */,
 				C21733781B20F21A00F79CB8 /* Rtt_OSXAppPackager.mm in Sources */,
 				000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */,
 				000CEA1212B7467E00D9B6A4 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
@@ -5771,17 +5678,13 @@
 				A4FBC5531A2D5734004D9A01 /* Rtt_AppleDictionaryWrapper.mm in Sources */,
 				A4FBC5551A2D5734004D9A01 /* Rtt_ApplePlatform.mm in Sources */,
 				A4FBC5561A2D5734004D9A01 /* Rtt_AppleReachability.mm in Sources */,
-				A4FBC5571A2D5734004D9A01 /* Rtt_AppleTextAlignment.mm in Sources */,
-				A4FBC5581A2D5734004D9A01 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */,
 				A4FBC5591A2D5734004D9A01 /* Rtt_AppleTimer.mm in Sources */,
 				C2D3DA641B179D4F00137331 /* Rtt_FileSystem.cpp in Sources */,
 				A4FBC5681A2D5915004D9A01 /* Rtt_MacDevice.mm in Sources */,
 				A4FBC5691A2D5919004D9A01 /* Rtt_MacDeviceIdentifier.c in Sources */,
-				A4FBC5671A2D58FF004D9A01 /* Rtt_MacFont.mm in Sources */,
 				A4FBC5601A2D5867004D9A01 /* Rtt_MacPlatform.mm in Sources */,
 				A4FBC5661A2D58EB004D9A01 /* Rtt_MacViewCallback.mm in Sources */,
 				A4FBC5651A2D58CE004D9A01 /* Rtt_MacViewSurface.mm in Sources */,
-				F54D1E121CA35968000B280E /* Rtt_AppleFont.mm in Sources */,
 				C2D3DA6A1B179DA000137331 /* Rtt_NativeWindowMode.cpp in Sources */,
 				C2D3DA591B179C2400137331 /* Rtt_ProjectSettings.cpp in Sources */,
 				C2D3DA5D1B179C2400137331 /* Rtt_ReadOnlyProjectSettings.cpp in Sources */,
@@ -5835,7 +5738,6 @@
 				C229E0D21B32221B00D87A7C /* Rtt_DisplayDefaults.cpp in Sources */,
 				C229E0D31B32221B00D87A7C /* Rtt_DisplayObject.cpp in Sources */,
 				C229E0D51B32221B00D87A7C /* Rtt_DisplayPath.cpp in Sources */,
-				C229E0D71B32221B00D87A7C /* Rtt_EmbossedTextObject.cpp in Sources */,
 				C229E0D91B32221B00D87A7C /* Rtt_Event.cpp in Sources */,
 				C229E0DA1B32221B00D87A7C /* Rtt_ExplicitTemplates.cpp in Sources */,
 				C229E0DB1B32221B00D87A7C /* Rtt_FilePath.cpp in Sources */,
@@ -5898,7 +5800,6 @@
 				C229E1221B32221B00D87A7C /* Rtt_PlatformDisplayObject.cpp in Sources */,
 				C229E1241B32221B00D87A7C /* Rtt_PlatformExitCallback.cpp in Sources */,
 				C229E1251B32221B00D87A7C /* Rtt_PlatformFBConnect.cpp in Sources */,
-				C229E1261B32221B00D87A7C /* Rtt_PlatformFont.cpp in Sources */,
 				C229E1281B32221B00D87A7C /* Rtt_PlatformInAppStore.cpp in Sources */,
 				03D1C5581D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */,
@@ -5964,7 +5865,6 @@
 				C229E1631B32221B00D87A7C /* Rtt_TesselatorRect.cpp in Sources */,
 				C229E1641B32221B00D87A7C /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				C229E1651B32221B00D87A7C /* Rtt_TesselatorShape.cpp in Sources */,
-				C229E1671B32221B00D87A7C /* Rtt_TextObject.cpp in Sources */,
 				C229E1681B32221B00D87A7C /* Rtt_TextureFactory.cpp in Sources */,
 				C229E1691B32221B00D87A7C /* Rtt_TextureResource.cpp in Sources */,
 				C229E16A1B32221B00D87A7C /* Rtt_Time.c in Sources */,
@@ -6099,23 +5999,17 @@
 				C2E993001A6B1A3100E99F46 /* Rtt_AppleDictionaryWrapper.mm in Sources */,
 				C2E993021A6B1A3100E99F46 /* Rtt_ApplePlatform.mm in Sources */,
 				C2E993031A6B1A3100E99F46 /* Rtt_AppleReachability.mm in Sources */,
-				C2E993041A6B1A3100E99F46 /* Rtt_AppleTextAlignment.mm in Sources */,
-				C2E993051A6B1A3100E99F46 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */,
 				C2E993061A6B1A3100E99F46 /* Rtt_AppleTimer.mm in Sources */,
 				C2D3DA651B179D4F00137331 /* Rtt_FileSystem.cpp in Sources */,
 				C2FCD3D81B377CDB00EF7B02 /* Rtt_KeyName.cpp in Sources */,
 				F57D176D1BE25C7C00AABAC1 /* Rtt_AppleInputHIDDeviceListener.mm in Sources */,
 				C2E993071A6B1A3100E99F46 /* Rtt_MacDevice.mm in Sources */,
-				F54D1E131CA35968000B280E /* Rtt_AppleFont.mm in Sources */,
 				C2E993081A6B1A3100E99F46 /* Rtt_MacDeviceIdentifier.c in Sources */,
 				C2A377711B34BAB000BB5B88 /* Rtt_MacDisplayObject.mm in Sources */,
 				C2E993541A6B3D3900E99F46 /* Rtt_MacExitCallback.mm in Sources */,
-				C2E993091A6B1A3100E99F46 /* Rtt_MacFont.mm in Sources */,
 				C2FCD3CD1B377A8400EF7B02 /* Rtt_MacKeyServices.mm in Sources */,
 				C2E9930A1A6B1A3100E99F46 /* Rtt_MacPlatform.mm in Sources */,
-				C2A377751B34C8D800BB5B88 /* Rtt_MacTextBoxObject.mm in Sources */,
 				F57AE2051F051610000A4245 /* Rtt_AppleInAppStore.mm in Sources */,
-				C2A377701B34BA3D00BB5B88 /* Rtt_MacTextFieldObject.mm in Sources */,
 				F57D17771BE2713B00AABAC1 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				F57D17721BE25E1200AABAC1 /* Rtt_AppleInputDevice.mm in Sources */,
 				C2E9930B1A6B1A3100E99F46 /* Rtt_MacViewCallback.mm in Sources */,

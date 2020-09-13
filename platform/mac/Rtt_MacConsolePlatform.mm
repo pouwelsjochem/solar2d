@@ -132,29 +132,6 @@ MacConsolePlatform::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 {
 }
 
-PlatformDisplayObject*
-MacConsolePlatform::CreateNativeTextBox( const Rect& bounds ) const
-{
-	return NULL;
-}
-
-PlatformDisplayObject*
-MacConsolePlatform::CreateNativeTextField( const Rect& bounds ) const
-{
-	return NULL;
-}
-
-void
-MacConsolePlatform::SetKeyboardFocus( PlatformDisplayObject *textObject ) const
-{
-}
-
-S32
-MacConsolePlatform::GetFontNames( lua_State *L, int index ) const
-{
-	return 0;
-}
-
 PlatformFBConnect*
 MacConsolePlatform::GetFBConnect() const
 {

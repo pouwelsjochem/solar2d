@@ -308,9 +308,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaEnvironment.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaEditText.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaData.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -437,15 +434,6 @@
     <JCompile Include="src\com\ansca\corona\events\RunnableEvent.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\events\SoundEndedTask.java">
-      <Filter>src\com\ansca\corona\events</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\events\TextEditingTask.java">
-      <Filter>src\com\ansca\corona\events</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\events\TextTask.java">
-      <Filter>src\com\ansca\corona\events</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\events\AccelerometerTask.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
@@ -454,24 +442,6 @@
     </JCompile>
     <JCompile Include="src\com\ansca\corona\events\Event.java">
       <Filter>src\com\ansca\corona\events</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\graphics\FontServices.java">
-      <Filter>src\com\ansca\corona\graphics</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\graphics\FontSettings.java">
-      <Filter>src\com\ansca\corona\graphics</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\graphics\HorizontalAlignment.java">
-      <Filter>src\com\ansca\corona\graphics</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\graphics\TextRenderer.java">
-      <Filter>src\com\ansca\corona\graphics</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\graphics\TypefaceInfo.java">
-      <Filter>src\com\ansca\corona\graphics</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\graphics\TypefaceSettings.java">
-      <Filter>src\com\ansca\corona\graphics</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\graphics\opengl\GLSurfaceView.java">
       <Filter>src\com\ansca\corona\graphics</Filter>

@@ -74,8 +74,6 @@ public class JavaToNativeShim {
     private static native void nativeGyroscopeEvent( long bridgeAddress, double x, double y, double z, double deltaTime );
     private static native void nativeResizeEvent( long bridgeAddress );
     private static native void nativeAlertCallback( long bridgeAddress, int buttonIndex, boolean cancelled );
-    private static native void nativeTextEvent( long bridgeAddress, int id, boolean focusLost, boolean isDone );
-	private static native void nativeTextEditingEvent( long bridgeAddress, int id, int startPos, int numDeleted, String newCharacters, String oldString, String newString );
     private static native void nativeMultitouchEventBegin(long bridgeAddress);
     private static native void nativeMultitouchEventAdd( long bridgeAddress, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int id, float pressure );
     private static native void nativeMultitouchEventEnd( long bridgeAddress );
@@ -469,20 +467,6 @@ public class JavaToNativeShim {
 			return;
 		}
 		nativeAlertCallback( runtime.getJavaToNativeBridgeAddress(), buttonIndex, cancelled );
-	}
-	
-	public static void textEvent( CoronaRuntime runtime, int id, boolean hasFocus, boolean isDone ) {
-		if (runtime == null || runtime.wasDisposed() || !runtime.getViewManager().hasDisplayObjectWithId(id)) {
-			return;
-		}
-		nativeTextEvent(runtime.getJavaToNativeBridgeAddress(), id, hasFocus, isDone);
-	}
-	
-	public static void textEditingEvent( CoronaRuntime runtime, int id, int startPos, int numDeleted, String newCharacters, String oldString, String newString ) {
-		if (runtime == null || runtime.wasDisposed() || !runtime.getViewManager().hasDisplayObjectWithId(id)) {
-			return;
-		}
-		nativeTextEditingEvent(runtime.getJavaToNativeBridgeAddress(), id, startPos, numDeleted, newCharacters, oldString, newString);
 	}
 	
 	public static void memoryWarningEvent( CoronaRuntime runtime )

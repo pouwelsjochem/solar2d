@@ -116,20 +116,6 @@ BitmapPaint::NewBitmap( TextureFactory& factory, PlatformBitmap* pBitmap, bool s
 	return result;
 }
 
-BitmapPaint*
-BitmapPaint::NewBitmap( Runtime& runtime, const char text[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset )
-{
-	BitmapPaint* result = NULL;
-
-	TextureFactory& factory = runtime.GetDisplay().GetTextureFactory();
-	SharedPtr< TextureResource > pTexture = factory.Create( text, font, w, h, alignment, baselineOffset );
-
-	Rtt_ASSERT( pTexture.NotNull() );
-	result = Rtt_NEW( runtime.Allocator(), BitmapPaint( pTexture ) ); Rtt_ASSERT( result );
-
-	return result;
-}
-
 // ----------------------------------------------------------------------------
 
 BitmapPaint::BitmapPaint( const SharedPtr< TextureResource >& resource )

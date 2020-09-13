@@ -32,23 +32,6 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		typedef DisplayObject Super;
 
 	public:
-		static const char kUserInputEvent[];
-
-	public:
-		// Derived class should return these when implementing the ProxyVTable() method
-		static const LuaProxyVTable& GetTextFieldObjectProxyVTable();
-		static const LuaProxyVTable& GetTextBoxObjectProxyVTable();
-
-	public:
-		typedef enum _TextAlignment
-		{
-			kTextAlignmentLeft = 0,
-			kTextAlignmentCenter = 0,
-			kTextAlignmentRight = 0,
-		}
-		TextAlignment;
-
-	public:
 		PlatformDisplayObject();
 		virtual ~PlatformDisplayObject();
 

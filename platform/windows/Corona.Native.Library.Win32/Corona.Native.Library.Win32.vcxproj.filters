@@ -21,9 +21,6 @@
     <ClInclude Include="Rtt\Rtt_WinFBConnect.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinFont.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinModalInteraction.h">
       <Filter>Rtt</Filter>
     </ClInclude>
@@ -31,9 +28,6 @@
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinScreenSurface.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinTextBoxObject.h">
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinTimer.h">
@@ -132,13 +126,7 @@
     <ClInclude Include="Interop\StaticInitializer.h">
       <Filter>Interop</Filter>
     </ClInclude>
-    <ClInclude Include="Interop\UI\TextBox.h">
-      <Filter>Interop\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Interop\Graphics\FontSettings.h">
-      <Filter>Interop\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\Graphics\HorizontalAlignment.h">
       <Filter>Interop\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Interop\Graphics\Font.h">
@@ -310,9 +298,6 @@
     <ClCompile Include="Rtt\Rtt_WinFBConnect.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinFont.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinModalInteraction.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
@@ -320,9 +305,6 @@
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinScreenSurface.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinTextBoxObject.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp">
@@ -399,19 +381,10 @@
     <ClCompile Include="..\..\..\external\winutil\XMessageBox.cpp">
       <Filter>%28root%29\external\winutil</Filter>
     </ClCompile>
-    <ClCompile Include="Interop\UI\TextBox.cpp">
-      <Filter>Interop\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Interop\Graphics\FontSettings.cpp">
       <Filter>Interop\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Interop\Graphics\HorizontalAlignment.cpp">
-      <Filter>Interop\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Interop\Graphics\Font.cpp">
-      <Filter>Interop\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Interop\Graphics\CoronaFontServices.cpp">
       <Filter>Interop\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Interop\Graphics\FontSizeConverter.cpp">

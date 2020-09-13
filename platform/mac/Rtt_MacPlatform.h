@@ -106,13 +106,7 @@ class MacPlatform : public ApplePlatform
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
-		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
-		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
-		virtual void SetKeyboardFocus( PlatformDisplayObject *textField ) const;
-
         virtual PlatformFBConnect* GetFBConnect() const;
-
-		virtual S32 GetFontNames( lua_State *L, int index ) const;
 
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
@@ -182,7 +176,6 @@ class MacGUIPlatform : public MacPlatform
 		virtual PlatformSurface* CreateScreenSurface() const;
 
 	public:
-		virtual Real GetStandardFontSize() const;
 		virtual bool RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const;
 
 	private:

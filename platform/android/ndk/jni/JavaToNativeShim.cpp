@@ -370,18 +370,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativeAlertCallback(JNIEnv * env, jclass 
 }
 
 JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeTextEvent(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jboolean hasFocus, jboolean isDone )
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->TextEvent( id, hasFocus, isDone );
-}
-
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeTextEditingEvent( JNIEnv *env, jclass cd, jlong bridgeAddress, jint id, jint startPos, jint numDeleted, jstring newCharacters, jstring oldString, jstring newString )
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->TextEditingEvent( env, (int)id, (int)startPos, numDeleted, newCharacters, oldString, newString );
-}
-
-JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEventBegin(JNIEnv * env, jclass c, jlong bridgeAddress)
 {
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MultitouchEventBegin();

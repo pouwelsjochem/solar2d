@@ -25,7 +25,6 @@
 	#include "Rtt_Runtime.h"
 
 	#include "Rtt_AppleBitmap.h"
-	#include "Rtt_AppleFont.h"
 	#include "Rtt_AppleReachability.h"
 #endif
 
@@ -553,16 +552,6 @@ ApplePlatform::CreateBitmap( const char *path, bool convertToGrayscale ) const
 #endif
 }
 
-PlatformBitmap*
-ApplePlatform::CreateBitmapMask( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset ) const
-{
-#ifdef Rtt_NO_GUI
-	return NULL;
-#else
-	return Rtt_NEW( & GetAllocator(), AppleTextBitmap( str, font, w, h, alignment, baselineOffset ) );
-#endif
-}
-
 const MCrypto&
 ApplePlatform::GetCrypto() const
 {
@@ -988,57 +977,6 @@ ApplePlatform::DeletePreferences( const char* categoryName, const char** keyName
 	
 	// We've successfully deleted the given preferences.
 	return OperationResult::kSucceeded;
-}
-
-// ----------------------------------------------------------------------------
-
-Real
-ApplePlatform::GetStandardFontSize() const
-{
-#ifdef Rtt_NO_GUI
-	return Rtt_REAL_0;
-#else
-	static Real sSize = -1;
-
-	if ( sSize < 0.f )
-	{
-		#if defined( Rtt_IPHONE_ENV ) || defined( Rtt_MAC_ENV )
-			sSize = [AppleFont systemFontSize];
-		#else
-			AppleFont *font = [AppleFont preferredFontForTextStyle:UIFontTextStyleBody];
-			sSize = [font pointSize];
-		#endif
-	}
-	
-	return sSize;
-#endif
-}
-
-PlatformFont*
-ApplePlatform::CreateFont( PlatformFont::SystemFont fontType, Rtt_Real size ) const
-{
-#ifdef Rtt_NO_GUI
-	return NULL;
-#else
-	return Rtt_NEW( fAllocator, AppleFontWrapper( fontType, size ) );
-#endif
-}
-
-PlatformFont*
-ApplePlatform::CreateFont( const char *fontName, Rtt_Real size ) const
-{
-#ifdef Rtt_NO_GUI
-	return NULL;
-#else
-	PlatformFont* result = NULL;
-
-	if ( fontName )
-	{
-		result = Rtt_NEW( fAllocator, AppleFontWrapper( fontName, size, GetResourceDirectory() ) );
-	}
-
-	return result;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1959,23 +1897,6 @@ ApplePlatform::Suspend( ) const
 void
 ApplePlatform::Resume( ) const
 {
-}
-	
-FontMetricsMap
-ApplePlatform::GetFontMetrics( const PlatformFont & font ) const
-{
-#if !defined( Rtt_NO_GUI )
-	AppleFont *f = (AppleFont*)font.NativeObject();
-	return {
-		{ "ascent" ,    f.ascender},
-		{ "descent" ,   f.descender},
-		{ "leading",    f.leading },
-		{ "height" ,    f.ascender - f.descender }
-	};
-#else
-	return FontMetricsMap();
-#endif
-	
 }
 
 // ----------------------------------------------------------------------------

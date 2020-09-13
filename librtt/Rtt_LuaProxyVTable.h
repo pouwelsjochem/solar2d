@@ -236,47 +236,6 @@ class LuaStageObjectProxyVTable : public LuaGroupObjectProxyVTable
 		virtual const LuaProxyVTable& Parent() const;
 };
 
-class LuaTextObjectProxyVTable : public LuaShapeObjectProxyVTable
-{
-	public:
-		typedef LuaTextObjectProxyVTable Self;
-		typedef LuaShapeObjectProxyVTable Super;
-
-	public:
-		static const Self& Constant();
-
-	protected:
-		LuaTextObjectProxyVTable() {}
-
-	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
-		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
-		virtual const LuaProxyVTable& Parent() const;
-};
-
-class LuaEmbossedTextObjectProxyVTable : public LuaTextObjectProxyVTable
-{
-	public:
-		typedef LuaEmbossedTextObjectProxyVTable Self;
-		typedef LuaTextObjectProxyVTable Super;
-
-	public:
-		static const Self& Constant();
-
-	protected:
-		LuaEmbossedTextObjectProxyVTable() {}
-
-	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
-		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
-		virtual const LuaProxyVTable& Parent() const;
-
-	private:
-		static int OnSetText( lua_State *L );
-		static int OnSetSize( lua_State *L );
-		static int OnSetEmbossColor( lua_State *L );
-};
-
 // ----------------------------------------------------------------------------
 
 // Derived classes should only implement Constant() and Parent()
@@ -292,32 +251,6 @@ class LuaPlatformDisplayObjectProxyVTable : public LuaDisplayObjectProxyVTable
 	public:
 		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
-};
-
-class LuaPlatformTextFieldObjectProxyVTable : public LuaPlatformDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaPlatformTextFieldObjectProxyVTable Self;
-
-	public:
-		LuaPlatformTextFieldObjectProxyVTable();
-		static const Self& Constant();
-
-	public:
-		virtual const LuaProxyVTable& Parent() const;
-};
-
-class LuaPlatformTextBoxObjectProxyVTable : public LuaPlatformDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaPlatformTextBoxObjectProxyVTable Self;
-
-	public:
-		LuaPlatformTextBoxObjectProxyVTable();
-		static const Self& Constant();
-
-	public:
-		virtual const LuaProxyVTable& Parent() const;
 };
 
 class LuaSpriteObjectProxyVTable : public LuaShapeObjectProxyVTable

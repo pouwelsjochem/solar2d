@@ -27,7 +27,6 @@ namespace Rtt
 	class PlatformBitmap;
 	class PreferenceCollection;
 	class Runtime;
-	typedef std::map<std::string, Real> FontMetricsMap;
 };
 struct lua_State;
 class AndroidImageData;
@@ -81,8 +80,6 @@ class NativeToJavaBridge
 		void OnRuntimeSuspended();
 		void OnRuntimeResumed();
 		void OnRuntimeExiting();
-		
-		static void OnAudioEnabled();
 
 		static int InvokeLuaErrorHandler(lua_State *L);
 
@@ -98,20 +95,9 @@ class NativeToJavaBridge
 				int maxWidth, int maxHeight, bool loadImageInfoOnly);
 		bool SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char * path );
 	
-		bool RenderText(
-				const char *text, const char *fontName, float fontSize, bool isBold,
-				int wrapWidth, int clipWidth, int clipHeight, const char *alignment, AndroidImageData &result, Rtt::Real &baselineOffset);
-		bool GetFonts( Rtt::StringArray & outFonts );
-
-		Rtt::FontMetricsMap GetFontMetrics( const char *fontName, float fontSize, bool isBold );
 		void SetTimer( int milliseconds );
 		void CancelTimer();
 	
-		void LoadSound( uintptr_t id, const char * name );
-		void PlaySound( uintptr_t id, const char * name, bool loop );
-		void StopSound( uintptr_t id );
-		void PauseSound( uintptr_t id );
-		void ResumeSound( uintptr_t id );
 		void SetVolume( uintptr_t id, float volume );
 		float GetVolume( uintptr_t id ) const;
 	
@@ -144,8 +130,6 @@ class NativeToJavaBridge
 		void GetUniqueIdentifier( int t, Rtt::String *outValue );
 		void GetPlatformVersion( Rtt::String *outValue );
 		void GetProductName( Rtt::String *outValue );
-		float GetDefaultFontSize();
-		int GetDefaultTextFieldPaddingInPixels();
 		int GetApproximateScreenDpi();
 		int PushSystemInfoToLua( lua_State *L, const char *key );
 		void GetPreference( int category, Rtt::String *outValue );
@@ -172,29 +156,6 @@ class NativeToJavaBridge
 		bool DisplayObjectGetBackground( int id );
 		void DisplayObjectSetFocus( int id, bool focus );
 		void DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height );
-			
-		int TextFieldCreate( int id, int left, int top, int width, int height, int isSingleLine );
-		void TextFieldSetReturnKey( int id, const char * imeType );
-		void TextFieldSetSelection( int id, int startPosition, int endPosition );
-		void TextFieldSetPlaceholder( int id, const char * placeholder );
-		void TextFieldSetColor( int id, int r, int g, int b, int a );
-		void TextFieldSetText( int id, const char * text );
-		void TextFieldSetSize( int id, float fontSize );
-		void TextFieldSetFont( int id, const char * fontName, float fontSize, bool isBold );
-		void TextFieldSetAlign( int id, const char * align );
-		void TextFieldSetSecure( int id, bool isSecure );
-		void TextFieldSetInputType( int id, const char * inputType );
-		void TextFieldSetEditable( int id, bool isEditable );
-		void TextFieldGetColor( int id, int * r, int * g, int * b, int * a );
-		void TextFieldGetText( int id, Rtt::String * text );
-		void TextFieldGetPlaceholder( int id, Rtt::String * placeholder );
-		float TextFieldGetSize( int id );
-		void TextFieldGetFont( int id, Rtt::String * font, float * fontSize );
-		void TextFieldGetAlign( int id, Rtt::String * align );
-		bool TextFieldGetSecure( int id );
-		void TextFieldGetInputType( int id, Rtt::String * inputType );
-		bool TextFieldIsSingleLine( int id );
-		bool TextFieldIsEditable( int id );
 	
 	public:
 		bool RecordStart( uintptr_t id, const char * file );

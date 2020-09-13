@@ -9,8 +9,6 @@
 
 #include "Core/Rtt_Build.h"
 
-#include "Rtt_AppleTextAlignment.h"
-
 #include "Rtt_MacDisplayObject.h"
 #include "Rtt_MacPlatform.h"
 #include "Rtt_MacSimulator.h"
@@ -90,23 +88,6 @@ MacDisplayObject::InitializeView( NSView *view )
 void
 MacDisplayObject::SetFocus()
 {
-	// Ugh. Why is this so hard? It seems we need a delay in our NativeKeyboard2 example or the responder won't change.
-	// Probably due to being in the middle of manipulation of a different responder when hitting return which highlights all the text of the current textfield.
-	// But then we need to avoid infinite recursion. So add a check to not call this if already the first responder.
-	// This is very dangerous and unreliable. First, in AppKit, there isn't an easy/good way to figure out the current first responder. (You can find out the first responder for say a window, but you don't know if that is actually the current responder.)
-	// Second, for NSTextField, the responder isn't the actual responder but it is a NSTextView. You need code like this:
-/*
-	if ( [[[self window] firstResponder] isKindOfClass:[NSTextView class]] &&
-		[[self window] fieldEditor:NO forObject:nil] != nil ) {
-        NSTextField *field = [[[self window] firstResponder] delegate];
-        if (field != self) {
-            // do something based upon first-responder status
-			//			[[self window] performSelector:@selector(makeFirstResponder:) withObject:self afterDelay:0.1];
-	
-			
-        }
-	}
-*/	
 	[[fView window] performSelector:@selector(makeFirstResponder:) withObject:fView afterDelay:0.0];
 }
 void
@@ -419,22 +400,6 @@ MacDisplayObject::SetNativeProperty( lua_State *L, const char key[], int valueIn
 	return result;
 }
 #endif // Rtt_NATIVE_PROPERTIES_MAC
-
-// ----------------------------------------------------------------------------
-
-NSColor*
-MacTextObject::GetTextColor( lua_State *L, int index )
-{
-	Color c = LuaLibDisplay::toColor(L,index);
-	RGBA rgba = ( (ColorUnion*)(& c) )->rgba;
-	
-	CGFloat r = (CGFloat)rgba.r / 255.0f;
-	CGFloat g = (CGFloat)rgba.g / 255.0f;
-	CGFloat b = (CGFloat)rgba.b / 255.0f;
-	CGFloat a = (CGFloat)rgba.a / 255.0f;
-
-	return [NSColor colorWithDeviceRed:r green:g blue:b alpha:a];
-}
 
 // ----------------------------------------------------------------------------
 

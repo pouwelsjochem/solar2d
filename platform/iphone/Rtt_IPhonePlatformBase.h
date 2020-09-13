@@ -65,12 +65,6 @@ class IPhonePlatformBase : public ApplePlatform
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
-		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
-		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
-
-		virtual Real GetStandardFontSize() const;
-		virtual S32 GetFontNames( lua_State *L, int index ) const;
-
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
 		virtual NSString *PathForPluginsFile( const char *filename ) const;
@@ -78,8 +72,6 @@ class IPhonePlatformBase : public ApplePlatform
 #if Rtt_IPHONE_PLATFORM_STUB
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
-		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
 		virtual PlatformFBConnect* GetFBConnect() const;
 

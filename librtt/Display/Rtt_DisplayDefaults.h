@@ -63,11 +63,6 @@ class DisplayDefaults
 	public:	
 		bool ShouldPreloadTextures() const { return fPreloadTextures; }
 		void SetPreloadTextures( bool newValue ) { fPreloadTextures = newValue; }
-	
-		bool IsNativeTextFieldFontSizeScaled() const { return fIsNativeTextFieldFontSizeScaled; }
-		void SetIsNativeTextFieldFontSizeScaled( bool value ) { fIsNativeTextFieldFontSizeScaled = value; }
-		bool IsNativeTextBoxFontSizeScaled() const { return fIsNativeTextBoxFontSizeScaled; }
-		void SetIsNativeTextBoxFontSizeScaled( bool value ) { fIsNativeTextBoxFontSizeScaled = value; }
 
 		bool IsShaderCompilerVerbose() const { return fShaderCompilerVerbose; }
 		void SetShaderCompilerVerbose( bool newValue ) { fShaderCompilerVerbose = newValue; }
@@ -85,8 +80,6 @@ class DisplayDefaults
 		U8 fWrapX;
 		U8 fWrapY;
 		bool fPreloadTextures;
-		bool fIsNativeTextFieldFontSizeScaled;
-		bool fIsNativeTextBoxFontSizeScaled;
 		bool fShaderCompilerVerbose;
 		bool fIsAnchorClamped;
 		bool fIsImageSheetSampledInsideFrame;

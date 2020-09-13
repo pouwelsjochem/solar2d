@@ -15,12 +15,9 @@
 #include "Rtt_IPhoneTimer.h"
 
 #include "Rtt_IPhoneAudioSessionManager.h"
-#include "Rtt_IPhoneFont.h"
 
 #include "Rtt_AppleInAppStore.h"
 #include "Rtt_IPhoneScreenSurface.h"
-#include "Rtt_IPhoneTextBoxObject.h"
-#include "Rtt_IPhoneTextFieldObject.h"
 
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaLibSystem.h"

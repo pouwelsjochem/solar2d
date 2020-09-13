@@ -174,7 +174,6 @@ add_library( corona SHARED
 		Rtt_AndroidCrypto.cpp
 		Rtt_AndroidData.cpp
 		Rtt_AndroidDisplayObject.cpp
-		Rtt_AndroidFont.cpp
 		Rtt_AndroidInputDevice.cpp
 		Rtt_AndroidInputDeviceManager.cpp
 		Rtt_AndroidModalInteraction.cpp
@@ -187,12 +186,10 @@ add_library( corona SHARED
 		Rtt_AndroidStoreTransaction.cpp
 		Rtt_AndroidSystemOpenEvent.cpp
 		Rtt_AndroidTimer.cpp
-		Rtt_AndroidTextFieldObject.cpp
 		AndroidBinaryReader.cpp
 		AndroidBinaryReadResult.cpp
 		AndroidDisplayObjectRegistry.cpp
 		AndroidFileReader.cpp
-		AndroidFontSettings.cpp
 		AndroidGLView.cpp
 		AndroidBaseImageDecoder.cpp
 		AndroidBaseNativeImageDecoder.cpp
@@ -284,7 +281,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayDefaults.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayPath.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_EmbossedTextObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GradientPaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GradientPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GroupObject.cpp
@@ -336,7 +332,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorRect.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorRoundedRect.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorShape.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_TextObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TextureFactory.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TextureResource.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TextureResourceAdapter.cpp
@@ -391,7 +386,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_PlatformDisplayObject.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformExitCallback.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformFBConnect.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformFont.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformModalInteraction.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformNotifier.cpp

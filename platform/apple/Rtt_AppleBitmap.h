@@ -12,23 +12,13 @@
 
 #include "Display/Rtt_PlatformBitmap.h"
 
-#include "Rtt_AppleFont.h"
-
 // ----------------------------------------------------------------------------
 
 struct CGImage;
 @class NSString;
-#ifdef Rtt_IPHONE_ENV
-	@class UIImage;
-
-	// NSTextAlignment
-	#import <UIKit/NSText.h>
-#endif
 
 namespace Rtt
 {
-
-class PlatformFont;
 
 // ----------------------------------------------------------------------------
 
@@ -102,7 +92,6 @@ class AppleFileBitmap : public AppleBitmap
 		float fScale;
 		U8 fProperties;
 		U8 fIsMask;
-//		S8 fAngle; // multiples of 90 degrees, range is [-1,2]
 };
 
 #if defined( Rtt_IPHONE_ENV ) || defined( Rtt_TVOS_ENV )
@@ -134,35 +123,6 @@ class MacFileBitmap : public AppleFileBitmap
 //		NSImage *fNSImage;
 	};
 #endif
-	
-class AppleTextBitmap : public AppleBitmap
-{
-
-	public:
-		typedef AppleBitmap Super;
-
-	public:
-        AppleTextBitmap( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset );
-		virtual ~AppleTextBitmap();
-
-	public:
-		virtual const void* GetBits( Rtt_Allocator* context ) const;
-		virtual U32 Width() const;
-		virtual U32 Height() const;
-		virtual PlatformBitmap::Format GetFormat() const;
-
-	protected:
-#ifdef Rtt_DEBUG
-		void PrintChannel( const U8 *bytes ) const;
-#endif
-
-	private:
-		NSString* fText;
-		AppleFont* fFont;
-		AppleSize fDimensions;
-		bool fIsMultiline;
-		NSTextAlignment fTextAlignment;
-};
 
 
 // ----------------------------------------------------------------------------

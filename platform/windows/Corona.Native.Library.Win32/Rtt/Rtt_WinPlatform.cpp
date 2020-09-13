@@ -10,8 +10,6 @@
 #include "stdafx.h"
 #include "Rtt_WinPlatform.h"
 #include "Core\Rtt_Build.h"
-#include "Interop\Graphics\FontSizeConverter.h"
-#include "Interop\Graphics\HorizontalAlignment.h"
 #include "Interop\Ipc\CommandLineRunner.h"
 #include "Interop\Storage\MStoredPreferences.h"
 #include "Interop\Storage\RegistryStoredPreferences.h"
@@ -35,9 +33,7 @@
 #include "Rtt_WinBitmap.h"
 #include "Rtt_WinCrypto.h"
 #include "Rtt_WinFBConnect.h"
-#include "Rtt_WinFont.h"
 #include "Rtt_WinScreenSurface.h"
-#include "Rtt_WinTextBoxObject.h"
 #include "Rtt_WinTimer.h"
 #include "WinString.h"
 #include <algorithm>
@@ -293,40 +289,6 @@ namespace Rtt
 		return wasOpened;
 	}
 
-	FontMetricsMap
-		WinPlatform::GetFontMetrics(const PlatformFont& font) const
-	{
-		auto winFont = (const WinFont&)font;
-		Interop::Graphics::FontSettings fontSettings;
-		fontSettings.CopyFrom(winFont, Gdiplus::UnitPixel);
-		auto gdiFontPointer = fEnvironment.GetFontServices().LoadUsing(fontSettings);
-		if (!gdiFontPointer)
-		{
-			Rtt_ASSERT(0);
-			return FontMetricsMap();
-		}
-		auto metrics = FontMetricsMap();
-		auto fontFamilyPointer = fEnvironment.GetFontServices().GetFamilyFrom(*gdiFontPointer.get());
-		if (fontFamilyPointer)
-		{
-			auto fontStyle = gdiFontPointer->GetStyle();
-			auto emHeight = fontFamilyPointer->GetEmHeight(fontStyle);
-			if (emHeight > 0)
-			{
-				auto emScale = gdiFontPointer->GetSize() / (Gdiplus::REAL)emHeight;
-				auto ascentHeight = (Gdiplus::REAL)fontFamilyPointer->GetCellAscent(fontStyle) * emScale;
-				auto descentHeight = (Gdiplus::REAL)fontFamilyPointer->GetCellDescent(fontStyle) * emScale;
-				auto lineSpaceing = (Gdiplus::REAL)fontFamilyPointer->GetLineSpacing(fontStyle) * emScale;
-				auto fontHeight = ascentHeight + descentHeight;
-				metrics["ascent"] = ascentHeight;
-				metrics["descent"] = -descentHeight;
-				metrics["leading"] = lineSpaceing - ascentHeight - descentHeight;
-				metrics["height"] = fontHeight;
-			}
-		}
-		return metrics;
-	}
-
 	PlatformStoreProvider* WinPlatform::GetStoreProvider(const ResourceHandle<lua_State>& handle) const
 	{
 		return nullptr;
@@ -475,20 +437,6 @@ namespace Rtt
 			}
 		}
 		return bitmapPointer;
-	}
-
-	PlatformBitmap* WinPlatform::CreateBitmapMask(
-		const char str[], const PlatformFont& font, Real w, Real h, const char alignmentStringId[], Real& baselineOffset) const
-	{
-		int integerWidth = (int)(Rtt_RealToFloat(w) + 0.5f);
-		int integerHeight = (int)(Rtt_RealToFloat(h) + 0.5f);
-		auto alignmentPointer = Interop::Graphics::HorizontalAlignment::FromCoronaStringId(alignmentStringId);
-		if (!alignmentPointer)
-		{
-			alignmentPointer = &Interop::Graphics::HorizontalAlignment::kLeft;
-		}
-		return Rtt_NEW(&GetAllocator(), WinTextBitmap(
-			fEnvironment, str, (const WinFont&)font, integerWidth, integerHeight, *alignmentPointer, baselineOffset));
 	}
 
 	void WinPlatform::RaiseError(MPlatform::Error e, const char* reason) const
@@ -1132,194 +1080,6 @@ namespace Rtt
 	bool WinPlatform::HidePopup(const char* name) const
 	{
 		return false;
-	}
-
-	PlatformDisplayObject* WinPlatform::CreateNativeTextBox(const Rect& bounds) const
-	{
-		bool isSingleLine = false;
-		return Rtt_NEW(&GetAllocator(), WinTextBoxObject(fEnvironment, bounds, isSingleLine));
-	}
-
-	PlatformDisplayObject* WinPlatform::CreateNativeTextField(const Rect& bounds) const
-	{
-		bool isSingleLine = true;
-		return Rtt_NEW(&GetAllocator(), WinTextBoxObject(fEnvironment, bounds, isSingleLine));
-	}
-
-	void WinPlatform::SetKeyboardFocus(PlatformDisplayObject* displayObjectPointer) const
-	{
-		if (displayObjectPointer)
-		{
-			// Set the focus to the given native display object.
-			((WinDisplayObject*)displayObjectPointer)->SetFocus();
-		}
-		else
-		{
-			// Set the focus to the render surface control.
-			auto renderSurfacePointer = fEnvironment.GetRenderSurface();
-			if (renderSurfacePointer)
-			{
-				renderSurfacePointer->SetFocus();
-			}
-		}
-	}
-
-	Rtt_Real WinPlatform::GetStandardFontSize() const
-	{
-		// Acquire the system's default font size.
-		double fontSize = 0;
-		auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-		if (deviceSimulatorServicesPointer)
-		{
-			// *** Fetch the simulated device's default font size. ***
-			fontSize = deviceSimulatorServicesPointer->GetDefaultFontSize();
-		}
-		else
-		{
-			// *** Fetch the default font size from the Windows desktop. ***
-
-			// Fetch the system's default font metrics.
-			NONCLIENTMETRICSW metrics{};
-			metrics.cbSize = sizeof(metrics);
-			OSVERSIONINFOW versionInfo{};
-			versionInfo.dwOSVersionInfoSize = sizeof(versionInfo);
-			::GetVersionExW(&versionInfo);
-			if (versionInfo.dwMajorVersion < 6)
-			{
-				// According to Microsoft's documentation, we must subtract off this field
-				// from the total struct size for OS versions older than Windows Vista.
-				metrics.cbSize -= sizeof(metrics.iPaddedBorderWidth);
-			}
-			::SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, metrics.cbSize, &metrics, 0);
-
-			// Convert the default font size to pixels.
-			if (metrics.lfMessageFont.lfHeight != 0)
-			{
-				HWND windowHandle = nullptr;
-				auto renderSurfacePointer = fEnvironment.GetRenderSurface();
-				if (renderSurfacePointer)
-				{
-					windowHandle = renderSurfacePointer->GetWindowHandle();
-				}
-				if (!windowHandle)
-				{
-					auto windowPointer = fEnvironment.GetMainWindow();
-					if (windowPointer)
-					{
-						windowHandle = windowPointer->GetWindowHandle();
-					}
-				}
-				if (windowHandle)
-				{
-					HDC deviceContextHandle = ::GetDC(windowHandle);
-					if (deviceContextHandle)
-					{
-						Interop::Graphics::FontSizeConverter fontSizeConverter;
-						fontSizeConverter.SetSizeUsing(deviceContextHandle, metrics.lfMessageFont);
-						fontSizeConverter.ConvertTo(Gdiplus::UnitPixel);
-						fontSize = (double)fontSizeConverter.GetSize();
-						::ReleaseDC(windowHandle, deviceContextHandle);
-					}
-				}
-			}
-		}
-
-		// If we've failed to acquire a default font size, then use a hard coded one.
-		if (fontSize < 1.0)
-		{
-			fontSize = 16.0;
-		}
-
-		// Return a default font size as an Rtt_Real type.
-		return Rtt_FloatToReal((float)fontSize);
-	}
-
-	struct fontInfo
-	{
-		lua_State* L;
-		int index;
-		S32 fontCount;
-	};
-
-	static int CALLBACK EnumFontFamExProc(
-		const LOGFONT* lpelfe, const TEXTMETRIC* lpntme, DWORD FontType, LPARAM lParam)
-	{
-		fontInfo* f = (fontInfo*)lParam;
-		lua_State* L = f->L;
-		WinString stringConverter;
-		stringConverter.SetUTF16(lpelfe->lfFaceName);
-		lua_pushstring(L, stringConverter.GetUTF8());
-		lua_rawseti(L, f->index, ++f->fontCount);
-		return 1;
-	}
-
-	S32 WinPlatform::GetFontNames(lua_State* L, int index) const
-	{
-		// Attempt to fetch a device context to the runtime's window.
-		// If Corona is not rendering to a window, then we'll use the screen's device context instead via a null HWND.
-		HWND windowHandle = nullptr;
-		auto renderSurfacePointer = fEnvironment.GetRenderSurface();
-		if (renderSurfacePointer)
-		{
-			windowHandle = renderSurfacePointer->GetWindowHandle();
-		}
-		if (!windowHandle)
-		{
-			auto windowPointer = fEnvironment.GetMainWindow();
-			if (windowPointer)
-			{
-				windowHandle = windowPointer->GetWindowHandle();
-			}
-		}
-		HDC deviceContextHandle = ::GetDC(windowHandle);
-		if (!deviceContextHandle)
-		{
-			return 0;
-		}
-
-		// Push the family name of all installed system fonts into Lua.
-		S32 fontCount = 0;
-		{
-			LOGFONT logFont;
-			logFont.lfCharSet = ANSI_CHARSET;
-			logFont.lfFaceName[0] = 0;
-			logFont.lfPitchAndFamily = 0;
-
-			fontInfo info;
-			info.L = L;
-			info.fontCount = 0;
-			info.index = index;
-
-			::EnumFontFamiliesExW(deviceContextHandle, &logFont, EnumFontFamExProc, (LPARAM)&info, 0);
-			fontCount = (S32)info.fontCount;
-		}
-
-		// Release the device context.
-		::ReleaseDC(nullptr, deviceContextHandle);
-
-		// Return the number of font family names pushed into Lua.
-		return fontCount;
-	}
-
-	PlatformFont* WinPlatform::CreateFont(PlatformFont::SystemFont fontType, Rtt_Real size) const
-	{
-		auto fontPointer = Rtt_NEW(&GetAllocator(), WinFont(fEnvironment));
-		fontPointer->SetSize(size);
-		switch (fontType)
-		{
-			case PlatformFont::kSystemFontBold:
-				fontPointer->SetBold(true);
-				break;
-		}
-		return fontPointer;
-	}
-
-	PlatformFont* WinPlatform::CreateFont(const char* fontName, Rtt_Real size) const
-	{
-		auto fontPointer = Rtt_NEW(&GetAllocator(), WinFont(fEnvironment));
-		fontPointer->SetName(fontName);
-		fontPointer->SetSize(size);
-		return fontPointer;
 	}
 
 	PlatformFBConnect* WinPlatform::GetFBConnect() const

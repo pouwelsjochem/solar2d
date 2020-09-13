@@ -23,11 +23,9 @@
 #include "Rtt_AndroidPlatform.h"
 #include "Rtt_AndroidBitmap.h"
 #include "Rtt_PlatformExitCallback.h"
-#include "Rtt_AndroidFont.h"
 #include "Rtt_AndroidScreenSurface.h"
 #include "Rtt_AndroidStoreProvider.h"
 #include "Rtt_AndroidTimer.h"
-#include "Rtt_AndroidTextFieldObject.h"
 
 #include "AndroidDisplayObjectRegistry.h"
 #include "AndroidGLView.h"
@@ -219,11 +217,6 @@ PlatformBitmap* AndroidPlatform::CreateBitmap( const char* path, bool convertToG
 	}
 
 	return result;
-}
-
-PlatformBitmap* AndroidPlatform::CreateBitmapMask( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real & baselineOffset ) const
-{	
-	return Rtt_NEW( & GetAllocator(), AndroidTextBitmap( GetAllocator(), fNativeToJavaBridge, str, font, (int)(w + 0.5f), (int)(h + 0.5f), alignment, baselineOffset ) );
 }
 
 bool 
@@ -465,17 +458,6 @@ AndroidPlatform::PathForFile( const char * filename, const char * baseDir, Strin
 	}
 }
 
-FontMetricsMap 
-AndroidPlatform::GetFontMetrics( const PlatformFont& font ) const
-{
-	FontMetricsMap result;
-	if ( fNativeToJavaBridge ) 
-	{
-		result = fNativeToJavaBridge->GetFontMetrics( font.Name(), font.Size(), ((Rtt::AndroidFont&)font).IsBold() );
-	}
-	return result;
-}
-
 void AndroidPlatform::RaiseError( MPlatform::Error e, const char * reason ) const
 {
     const char kNull[] = "(null)";
@@ -686,84 +668,6 @@ bool
 AndroidPlatform::HidePopup( const char *name ) const
 {
 	return false;
-}
-
-PlatformDisplayObject* 
-AndroidPlatform::CreateNativeTextBox( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), AndroidTextFieldObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge, false ) );
-}
-
-PlatformDisplayObject * 
-AndroidPlatform::CreateNativeTextField( const Rect & bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), AndroidTextFieldObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge, true ) );
-}
-
-void 
-AndroidPlatform::SetKeyboardFocus( PlatformDisplayObject * textObject ) const
-{
-	if (textObject)
-	{
-		((AndroidDisplayObject*)textObject)->SetFocus();
-	}
-	else
-	{
-		fNativeToJavaBridge->DisplayObjectSetFocus(AndroidDisplayObjectRegistry::INVALID_ID, false);
-	}
-}
-
-PlatformDisplayObject *
-AndroidPlatform::GetNativeDisplayObjectById( const int objectId ) const
-{
-	if (fDisplayObjectRegistry)
-	{
-		return fDisplayObjectRegistry->GetById(objectId);
-	}
-	return NULL;
-}
-
-Rtt_Real 
-AndroidPlatform::GetStandardFontSize() const
-{
-	return fNativeToJavaBridge->GetDefaultFontSize();
-}
-
-S32 
-AndroidPlatform::GetFontNames( lua_State *L, int index ) const
-{
-	S32 numFonts = 0;
-
-	Rtt::StringArray fonts( fAllocator );
-
-	if ( fNativeToJavaBridge->GetFonts( fonts ) ) {
-		numFonts = fonts.GetLength();
-		
-		for ( int i = 0; i < numFonts; i++ )
-		{
-			lua_pushstring( L, fonts.GetElement( i ) );
-			lua_rawseti( L, index, i + 1 );
-		}
-	}
-
-	return numFonts;
-}
-
-PlatformFont * 
-AndroidPlatform::CreateFont( PlatformFont::SystemFont fontType, Rtt_Real size ) const
-{
-	PlatformFont * result;
-
-	result = Rtt_NEW( fAllocator, AndroidFont( *fAllocator, fontType, size ) );
-	
-	return result;
-}
-
-PlatformFont * 
-AndroidPlatform::CreateFont( const char *fontName, Rtt_Real size ) const
-{
-	bool isBold = false;
-	return Rtt_NEW( fAllocator, AndroidFont( *fAllocator, fontName, size, isBold ) );
 }
 
 PlatformFBConnect*

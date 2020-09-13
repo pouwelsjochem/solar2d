@@ -88,7 +88,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fMainWindowPointer(nullptr),
 	fRenderSurfacePointer(nullptr),
 	fGdiPlusToken(0),
-	fFontServices(*this),
 	fDebuggerSemaphoreHandle(nullptr),
 	fSingleWindowInstanceSemaphoreHandle(nullptr)
 {
@@ -446,11 +445,6 @@ std::shared_ptr<Interop::Storage::MStoredPreferences> RuntimeEnvironment::GetSto
 MDeviceSimulatorServices* RuntimeEnvironment::GetDeviceSimulatorServices() const
 {
 	return nullptr;
-}
-
-Graphics::CoronaFontServices& RuntimeEnvironment::GetFontServices()
-{
-	return fFontServices;
 }
 
 const Rtt::ReadOnlyProjectSettings& RuntimeEnvironment::GetProjectSettings() const

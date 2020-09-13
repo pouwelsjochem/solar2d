@@ -41,7 +41,6 @@
 #include "Rtt_AndroidStoreProvider.h"
 #include "Rtt_AndroidStoreTransaction.h"
 #include "Rtt_AndroidSystemOpenEvent.h"
-#include "Rtt_AndroidTextFieldObject.h"
 
 #include "JavaToNativeBridge.h"
 #include "AndroidImageData.h"
@@ -1010,61 +1009,6 @@ JavaToNativeBridge::AlertCallback( int which, bool cancelled )
 	{
 		fNativeToJavaBridge->AlertCallback(which, cancelled);
 	}
-}
-
-void
-JavaToNativeBridge::TextEvent( int id, bool hasFocus, bool isDone )
-{
-	// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-
-	// Fetch the display object by ID.
-	Rtt::AndroidTextFieldObject *textField = (Rtt::AndroidTextFieldObject *)fPlatform->GetNativeDisplayObjectById(id);
-	if (!textField)
-	{
-		return;
-	}
-
-	// Send the event.
-	Rtt::UserInputEvent::Phase phase = Rtt::UserInputEvent::kEnded;
-	if ( hasFocus )
-	{
-		phase = Rtt::UserInputEvent::kBegan;
-	}
-	else if ( isDone )
-	{
-		phase = Rtt::UserInputEvent::kSubmitted;
-	}
-	Rtt::UserInputEvent e( phase );
-	textField->DispatchEventWithTarget( e );
-}
-
-void
-JavaToNativeBridge::TextEditingEvent( JNIEnv *env, int id, int startPos, int numDeleted, jstring newCharacters, jstring oldString, jstring newString )
-{
-	// Validate.
-	if (!fPlatform)
-	{
-		return;
-	}
-
-	// Fetch the display object by ID.
-	Rtt::AndroidTextFieldObject *textField = (Rtt::AndroidTextFieldObject *)fPlatform->GetNativeDisplayObjectById(id);
-	if (!textField)
-	{
-		return;
-	}
-
-	// Send the event.
-	// Add 1 to the start position to convert the zero-based index to a one-based index that is compatible with Lua.
-	jstringResult newchars( env, newCharacters );
-	jstringResult oldstr( env, oldString );
-	jstringResult newstr( env, newString );
-	Rtt::UserInputEvent e( startPos+1, numDeleted, newchars.getUTF8(), oldstr.getUTF8(), newstr.getUTF8() );
-	textField->DispatchEventWithTarget( e );
 }
 
 void

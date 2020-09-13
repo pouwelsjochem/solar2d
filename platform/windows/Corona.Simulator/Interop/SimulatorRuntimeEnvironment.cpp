@@ -447,11 +447,6 @@ POINT SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSimulatedPointFro
 	return coronaContentCoordinate;
 }
 
-double SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetDefaultFontSize() const
-{
-	return fDeviceConfigPointer->defaultFontSize;
-}
-
 void* SimulatorRuntimeEnvironment::DeviceSimulatorServices::ShowNativeAlert(
 	const char *title, const char *message, const char **buttonLabels, int buttonCount, Rtt::LuaResource *resource)
 {

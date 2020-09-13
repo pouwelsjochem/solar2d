@@ -532,17 +532,9 @@ void WinInputDeviceManager::OnReceivedMessage(
 			auto runtimePointer = fEnvironment.GetRuntime();
 			if (runtimePointer && (WHEEL_DELTA > 0))
 			{
-				float fontSize = Rtt_RealToFloat(runtimePointer->Platform().GetStandardFontSize());
 				if (scrollWheelDeltaX != 0)
 				{
-					// Scroll horizontally in characters based on the app's default font size.
-					UINT charactersToScroll = 3;
-					::SystemParametersInfoW(SPI_GETWHEELSCROLLCHARS, 0, &charactersToScroll, 0);
-					if (charactersToScroll < 1)
-					{
-						charactersToScroll = 1;
-					}
-					scrollWheelDeltaX *= (fontSize * (float)charactersToScroll) / (float)WHEEL_DELTA;
+					scrollWheelDeltaX *= (float)WHEEL_DELTA;
 					scrollWheelDeltaX *= runtimePointer->GetDisplay().GetScreenToContentScale();
 				}
 				if (scrollWheelDeltaY != 0)
@@ -555,9 +547,7 @@ void WinInputDeviceManager::OnReceivedMessage(
 					}
 					if (linesToScroll != UINT_MAX)
 					{
-						// Scroll vertically in lines of text based on the app's default font size.
-						// Also, invert the scroll so that down heads towards the positive direction.
-						scrollWheelDeltaY *= (fontSize * (float)linesToScroll) / (float)WHEEL_DELTA;
+						scrollWheelDeltaY *= (float)WHEEL_DELTA;
 						scrollWheelDeltaY *= -1.0f;
 						scrollWheelDeltaY *= runtimePointer->GetDisplay().GetScreenToContentScale();
 					}

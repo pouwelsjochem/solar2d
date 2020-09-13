@@ -30,7 +30,6 @@
 #include "Rtt_PlatformExitCallback.h"
 #include "Rtt_PlatformTimer.h"
 #include "Rtt_Scheduler.h"
-#include "Display/Rtt_TextObject.h"
 #include "Rtt_LuaFrameworks.h"
 #include "Rtt_HTTPClient.h"
 

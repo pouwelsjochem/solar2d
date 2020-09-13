@@ -21,23 +21,7 @@
 
 namespace Rtt
 {
-
-// ----------------------------------------------------------------------------
-
-const char PlatformDisplayObject::kUserInputEvent[] = "userInput";
-
-const LuaProxyVTable&
-PlatformDisplayObject::GetTextFieldObjectProxyVTable()
-{
-	return LuaPlatformTextFieldObjectProxyVTable::Constant();
-}
-
-const LuaProxyVTable&
-PlatformDisplayObject::GetTextBoxObjectProxyVTable()
-{
-	return LuaPlatformTextBoxObjectProxyVTable::Constant();
-}
-
+	
 // ----------------------------------------------------------------------------
 
 PlatformDisplayObject::PlatformDisplayObject()

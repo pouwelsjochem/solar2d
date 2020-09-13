@@ -15,7 +15,6 @@
 #include "Rtt_IPhoneTimer.h"
 
 #include "Rtt_IPhoneAudioSessionManager.h"
-#include "Rtt_IPhoneFont.h"
 #include "Rtt_AppleInAppStore.h"
 #include "Rtt_IPhoneScreenSurface.h"
 

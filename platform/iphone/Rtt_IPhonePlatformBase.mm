@@ -20,12 +20,8 @@
 #import <GameController/GameController.h>
 
 #include "Rtt_IPhonePlatformBase.h"
-#include "Rtt_IPhoneTextBoxObject.h"
-#include "Rtt_IPhoneTextFieldObject.h"
 #include "Rtt_IPhoneTimer.h"
 
-#include "Rtt_AppleFont.h"
-#include "Rtt_IPhoneFont.h"
 #include "Rtt_IPhoneScreenSurface.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaLibNative.h"
@@ -325,52 +321,6 @@ IPhonePlatformBase::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 	}
 }
 
-PlatformDisplayObject*
-IPhonePlatformBase::CreateNativeTextBox( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), IPhoneTextBoxObject( bounds ) );
-}
-
-PlatformDisplayObject*
-IPhonePlatformBase::CreateNativeTextField( const Rect& bounds ) const
-{
-	return Rtt_NEW( & GetAllocator(), IPhoneTextFieldObject( bounds ) );
-}
-
-// ----------------------------------------------------------------------------
-
-Real
-IPhonePlatformBase::GetStandardFontSize() const
-{
-	Real pointSize = 17.f;
-
-	if ( [UIFont respondsToSelector:@selector(preferredFontForTextStyle:)] )
-	{
-		pointSize = [UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize;
-	}
-	
-	return pointSize * fView.contentScaleFactor;
-}
-
-S32
-IPhonePlatformBase::GetFontNames( lua_State *L, int index ) const
-{
-	S32 numFonts = 0;
-
-	NSArray *fontFamilyNames = [UIFont familyNames];
-	for ( NSString *familyName in fontFamilyNames )
-	{
-		NSArray *names = [UIFont fontNamesForFamilyName:familyName];
-		for ( NSString *fontName in names )
-		{
-			lua_pushstring( L, [fontName UTF8String] );
-			lua_rawseti( L, index, ++numFonts );
-		}
-	}
-
-	return numFonts;
-}
-
 // ----------------------------------------------------------------------------
 
 // NOTE: If you have iOS-specific (i.e. not available on tvOS) code,
@@ -487,27 +437,6 @@ IPhonePlatformBase::GetStoreProvider( const ResourceHandle<lua_State>& handle ) 
 {
 	Rtt_ASSERT_NOT_REACHED();
 	return NULL;
-}
-
-void
-IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
-{
-	if ( object )
-	{
-		// Verify that this is actually a text field or text box
-		const LuaProxyVTable *vtable = & object->ProxyVTable();
-		
-		if ( & PlatformDisplayObject::GetTextFieldObjectProxyVTable() == vtable
-			 || & PlatformDisplayObject::GetTextBoxObjectProxyVTable() == vtable )
-		{
-			((IPhoneDisplayObject*)object)->SetFocus();
-		}
-	}
-	else
-	{
-		// Dismiss keyboard
-		[GetView() dismissKeyboard];
-	}
 }
 
 #endif // Rtt_IPHONE_PLATFORM_STUB

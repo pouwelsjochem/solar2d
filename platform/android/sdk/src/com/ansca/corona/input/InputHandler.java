@@ -227,10 +227,9 @@ public class InputHandler {
 			scrollX = ApiLevel12.getAxisValueFrom(event, AXIS_HSCROLL);
 			scrollY = ApiLevel12.getAxisValueFrom(event, AXIS_VSCROLL);
 
-			// Scroll in pixels based on the system's default font size.
-			// Note: This is a slightly smaller distance used by Google's internal View.getVerticalScrollFactor().
-			scrollX *= fController.getDefaultFontSize();
-			scrollY *= fController.getDefaultFontSize();
+			// Note: Perhaps use Google's internal View.getVerticalScrollFactor().
+			scrollX *= 1;
+			scrollY *= 1;
 
 			// Invert the y scroll value so that scrolling down heads towards the positive direction.
 			if (scrollY != 0) {

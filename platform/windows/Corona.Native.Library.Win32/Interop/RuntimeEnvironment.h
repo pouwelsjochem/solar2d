@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Core\Rtt_Macros.h"
-#include "Graphics\CoronaFontServices.h"
 #include "Storage\MStoredPreferences.h"
 #include "UI\Control.h"
 #include "UI\MessageOnlyWindow.h"
@@ -440,10 +439,6 @@ class RuntimeEnvironment
 		///  <para>Returns null if the Corona runtime is not simulating a device.</para>
 		/// </returns>
 		virtual MDeviceSimulatorServices* GetDeviceSimulatorServices() const;
-
-		/// <summary>Gets an object used to load font files and access font features.</summary>
-		/// <returns>Returns an object which provides font features.</returns>
-		Graphics::CoronaFontServices& GetFontServices();
 
 		/// <summary>Gets the Corona project's loaded "build.settings" and "config.lua" information.</summary>
 		/// <returns>Returns a read-only reference to the runtime's current project information.</returns>
@@ -955,9 +950,6 @@ class RuntimeEnvironment
 		///  <para>Note: GDI+ is needed by Corona to load images and render text to bitmaps.</para>
 		/// </summary>
 		ULONG_PTR fGdiPlusToken;
-
-		/// <summary>Provides font loading and accessing features.</summary>
-		Graphics::CoronaFontServices fFontServices;
 
 		/// <summary>
 		///  <para>

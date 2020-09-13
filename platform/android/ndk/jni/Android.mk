@@ -421,7 +421,6 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidCrypto.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidData.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidDisplayObject.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidFont.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDevice.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDeviceManager.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidLocation.cpp \
@@ -436,12 +435,10 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidStoreTransaction.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidSystemOpenEvent.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTimer.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTextFieldObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReader.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReadResult.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidDisplayObjectRegistry.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidFileReader.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/AndroidFontSettings.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidGLView.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBaseImageDecoder.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBaseNativeImageDecoder.cpp \
@@ -525,7 +522,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayDefaults.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayPath.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_EmbossedTextObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GradientPaint.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GradientPaintAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GroupObject.cpp \
@@ -577,7 +573,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorRect.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorRoundedRect.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorShape.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_TextObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureFactory.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResource.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResourceAdapter.cpp \
@@ -632,7 +627,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformDisplayObject.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformExitCallback.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformFBConnect.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformFont.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformInAppStore.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformLocation.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformModalInteraction.cpp \

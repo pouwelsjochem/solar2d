@@ -74,7 +74,6 @@ class GraphicsLibrary
 		static int listEffects( lua_State *L );
 		static int newTexture( lua_State *L );
 		static int releaseTextures( lua_State *L );
-        static int getFontMetrics( lua_State *L );
 
 	private:
 		Display& fDisplay;
@@ -114,7 +113,6 @@ GraphicsLibrary::Open( lua_State *L )
 		{ "listEffects", listEffects },
 		{ "newTexture", newTexture },
 		{ "releaseTextures", releaseTextures },
-        { "getFontMetrics", getFontMetrics },
 
 		{ NULL, NULL }
 	};
@@ -482,79 +480,6 @@ GraphicsLibrary::releaseTextures( lua_State *L )
 	return result;
 }
 	
-// ----------------------------------------------------------------------------
-
-int
-GraphicsLibrary::getFontMetrics( lua_State *L )
-{
-	int result = 0;
-	const MPlatform& platform = LuaContext::GetPlatform( L );
-	Real fontSize = Rtt_REAL_0;     // A font size of zero means use the system default font.
-	PlatformFont * font = NULL;
-	
-	int nextArg = 1;
-	int fontArg = nextArg++;
-	
-	// Fetch the font size. Will use the default font size if not provided.
-	if ( lua_isnumber( L, nextArg ) )
-	{
-		fontSize = luaL_toreal( L, nextArg );
-	}
-	
-	// Create a font with the given settings.
-	font = LuaLibNative::CreateFont( L, platform, fontArg, fontSize );
-	if ( !font )
-	{
-		font = platform.CreateFont( PlatformFont::kSystemFont, fontSize );
-		CoronaLuaLog(L, "WARNING: Using default system font for metrics!");
-	}
-	if ( font )
-	{
-		// Return platform-dependent font metrics
-		Self *library = ToLibrary( L );
-		Display& display = library->GetDisplay();
-		Real screenToContentScale = display.GetScreenToContentScale();
-
-		// Scale the font's point size.
-		Real fontSizeEpsilon = Rtt_FloatToReal( 0.1f );
-		Real scaledFontSize = Rtt_RealDiv( font->Size(), screenToContentScale );
-		// Create a scaled font, if necessary.
-		if ((scaledFontSize >= (font->Size() + fontSizeEpsilon)) ||
-			(scaledFontSize <= (font->Size() - fontSizeEpsilon)))
-		{
-			font->SetSize(scaledFontSize);
-		}
-
-		Rtt::FontMetricsMap metrics = platform.GetFontMetrics( *font );
-
-		// Pushing into the 'metrics' Lua table and fetching results
-		if ( metrics.size() > 0 )
-		{
-			lua_newtable( L );
-			{
-				// Iterate over the KV pair in metrics map adding KV pairs to Lua table
-				for ( Rtt::FontMetricsMap::iterator it = metrics.begin(); it!= metrics.end(); ++it )
-				{
-					lua_pushnumber( L, Rtt_RealMul(screenToContentScale, it->second) );
-					lua_setfield( L, -2, it->first.c_str() );
-				}
-				result = 1;
-			}
-		}
-		else
-		{
-			CoronaLuaLog(L, "WARNING: Unable to retrieve font metrics!");
-		}
-		// Disposing font pointer
-		Rtt_DELETE( font );
-	}
-	else
-	{
-		CoronaLuaLog(L, "ERROR: Unable to retrieve font for metrics!");
-	}
-	return result;
-}
-
 // ----------------------------------------------------------------------------
 
 void

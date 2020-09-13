@@ -13,7 +13,6 @@
 #include "AndroidZipFileEntry.h"
 #include "NativeToJavaBridge.h"
 #include "Rtt_AndroidBitmap.h"
-#include "Rtt_PlatformFont.h"
 #include "Display/Rtt_Display.h"
 
 // ----------------------------------------------------------------------------
@@ -121,6 +120,18 @@ AndroidAssetBitmap::ImageDecoder()
 	return fImageDecoder;
 }
 
+U32
+AndroidAssetBitmap::Width() const
+{
+	return Super::Width();
+}
+
+U32
+AndroidAssetBitmap::Height() const
+{
+	return Super::Height();
+}
+
 bool
 AndroidAssetBitmap::IsProperty( PropertyMask mask ) const
 {
@@ -156,53 +167,6 @@ AndroidMaskAssetBitmap::AndroidMaskAssetBitmap( Rtt_Allocator& context, const ch
 
 PlatformBitmap::Format 
 AndroidMaskAssetBitmap::GetFormat() const
-{
-	return PlatformBitmap::kMask;
-}
-
-// ----------------------------------------------------------------------------
-
-AndroidTextBitmap::AndroidTextBitmap( Rtt_Allocator & context, NativeToJavaBridge *ntjb, const char str[], const Rtt::PlatformFont& inFont, int width, int height, const char alignment[], Real &baselineOffset )
-:	Super( context ),
-	fText( & context, str ),
-	fFont( context, inFont.Name(), inFont.Size(), ((Rtt::AndroidFont&)inFont).IsBold() ),
-	fWrapWidth( width ),
-	fClipWidth( width ),
-	fClipHeight( height ),
-	fAlignment(& context, alignment), 
-	fNativeToJavaBridge(ntjb)
-{
-	// Calculate a clipping width and height so that the bitmap will not exceed OpenGL's max texture size.
-	int maxTextureSize = (int)Rtt::Display::GetMaxTextureSize();
-	fClipWidth = maxTextureSize;
-	if (fClipHeight > maxTextureSize) {
-		fClipHeight = maxTextureSize;
-	}
-	// Render the given text to this object's bitmap.
-	GetBits(&context);
-	baselineOffset = fBaselineOffset;
-}
-
-AndroidTextBitmap::~AndroidTextBitmap()
-{
-}
-
-const void * 
-AndroidTextBitmap::GetBits( Rtt_Allocator * context ) const
-{
-	const void * bits = Super::GetBits( context );
-	if (NULL == bits)
-	{
-		fNativeToJavaBridge->RenderText(
-				fText.GetString(), fFont.Name(), fFont.Size(), fFont.IsBold(),
-				fWrapWidth, fClipWidth, fClipHeight, fAlignment.GetString(), fImageData, fBaselineOffset );
-		bits = Super::GetBits( context );
-	}
-	return bits;
-}
-
-PlatformBitmap::Format 
-AndroidTextBitmap::GetFormat() const
 {
 	return PlatformBitmap::kMask;
 }

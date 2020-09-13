@@ -216,9 +216,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformFBConnect.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformFont.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
@@ -350,9 +347,6 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorShape.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_TextObject.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TextureFactory.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
@@ -423,9 +417,6 @@
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayPath.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_EmbossedTextObject.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GradientPaint.cpp">
@@ -919,11 +910,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformFBConnect.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformFont.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -1101,9 +1087,6 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorShape.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_TextObject.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TextureFactory.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
@@ -1177,9 +1160,6 @@
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayTypes.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_EmbossedTextObject.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_GradientPaint.h">

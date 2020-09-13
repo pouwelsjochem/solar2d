@@ -205,7 +205,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayDefaults.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_DisplayPath.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GradientPaintAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_GroupObject.cpp" />
@@ -259,7 +258,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorRect.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorRoundedRect.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorShape.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureFactory.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResource.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceAdapter.cpp" />
@@ -336,7 +334,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFont.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformNotifier.cpp" />
@@ -357,7 +354,6 @@
     <ClCompile Include="..\..\ndk\AndroidBinaryReadResult.cpp" />
     <ClCompile Include="..\..\ndk\AndroidDisplayObjectRegistry.cpp" />
     <ClCompile Include="..\..\ndk\AndroidFileReader.cpp" />
-    <ClCompile Include="..\..\ndk\AndroidFontSettings.cpp" />
     <ClCompile Include="..\..\ndk\AndroidGLView.cpp" />
     <ClCompile Include="..\..\ndk\AndroidImageData.cpp" />
     <ClCompile Include="..\..\ndk\AndroidImageDecoder.cpp" />
@@ -489,7 +485,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidData.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidDevice.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidDisplayObject.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidFont.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDevice.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDeviceManager.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidModalInteraction.cpp" />
@@ -500,7 +495,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidStoreProvider.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidStoreTransaction.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidTextFieldObject.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidTimer.cpp" />
     <ClCompile Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.c" />
   </ItemGroup>
@@ -596,7 +590,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayPath.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_DisplayTypes.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_EmbossedTextObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GradientPaint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GradientPaintAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_GroupObject.h" />
@@ -652,7 +645,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorRect.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorRoundedRect.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorShape.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureFactory.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResource.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceAdapter.h" />
@@ -754,7 +746,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFont.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformNotifier.h" />
@@ -787,7 +778,6 @@
     <ClInclude Include="..\..\ndk\AndroidBinaryReadResult.h" />
     <ClInclude Include="..\..\ndk\AndroidDisplayObjectRegistry.h" />
     <ClInclude Include="..\..\ndk\AndroidFileReader.h" />
-    <ClInclude Include="..\..\ndk\AndroidFontSettings.h" />
     <ClInclude Include="..\..\ndk\AndroidGLView.h" />
     <ClInclude Include="..\..\ndk\AndroidImageData.h" />
     <ClInclude Include="..\..\ndk\AndroidImageDecoder.h" />
@@ -806,7 +796,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidData.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidDevice.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidDisplayObject.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidFont.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDevice.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDeviceManager.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidModalInteraction.h" />
@@ -817,7 +806,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidStoreProvider.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidStoreTransaction.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidTextFieldObject.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidTimer.h" />
     <ClInclude Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.h" />
   </ItemGroup>

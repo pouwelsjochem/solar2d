@@ -22,15 +22,7 @@ namespace Gdiplus
 }
 namespace Interop
 {
-	namespace Graphics
-	{
-		class HorizontalAlignment;
-	}
 	class RuntimeEnvironment;
-}
-namespace Rtt
-{
-	class WinFont;
 }
 
 #pragma endregion
@@ -122,30 +114,6 @@ class WinFileGrayscaleBitmap : public WinFileBitmap
 		virtual void Lock();
 		virtual void Unlock();
 
-		U32 fWidth;
-		U32 fHeight;
-};
-
-class WinTextBitmap : public PlatformBitmap
-{
-	public:
-		typedef WinBitmap Super;
-
-		WinTextBitmap(
-				Interop::RuntimeEnvironment& environment, const char str[], const WinFont& font,
-				int width, int height, const Interop::Graphics::HorizontalAlignment& alignment, Real& baselineOffset);
-		virtual ~WinTextBitmap();
-
-		virtual PlatformBitmap::Format GetFormat() const;
-		virtual const void* GetBits( Rtt_Allocator* context ) const;
-		virtual void FreeBits() const;
-
-	protected:
-		virtual void Lock();
-		virtual void Unlock();
-
-	private:
-		mutable void *fData;
 		U32 fWidth;
 		U32 fHeight;
 };

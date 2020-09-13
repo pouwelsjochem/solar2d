@@ -19,7 +19,6 @@ namespace Rtt
 
 class LuaResource;
 class MPlatform;
-class PlatformFont;
 
 // ----------------------------------------------------------------------------
 
@@ -30,12 +29,6 @@ class LuaLibNative
 
 	public:
 		static void Initialize( lua_State *L );
-
-	public:
-		static PlatformFont* CreateFont( lua_State *L, const MPlatform& platform, int index, Real fontSize );
-		static int PushFont( lua_State *L, PlatformFont *font );
-		static PlatformFont* ToFont( lua_State *L, int index );
-		static bool IsFont( lua_State *L, int index );
 
 	public:
 		// buttonIndex is 0-based

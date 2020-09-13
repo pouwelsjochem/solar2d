@@ -42,8 +42,6 @@ DisplayDefaults::DisplayDefaults()
 	fWrapX( RenderTypes::kClampToEdgeWrap ),
 	fWrapY( RenderTypes::kClampToEdgeWrap ),
 	fPreloadTextures( true ),
-	fIsNativeTextFieldFontSizeScaled( true ),
-	fIsNativeTextBoxFontSizeScaled( true ),
 	fShaderCompilerVerbose( kShaderCompilerVerboseDefault ),
 	fIsAnchorClamped( true ),
 	fIsImageSheetSampledInsideFrame( false )

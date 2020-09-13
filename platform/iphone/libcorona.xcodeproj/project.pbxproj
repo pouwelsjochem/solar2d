@@ -148,8 +148,6 @@
 		000DCC0E12B05F3E00042A5E /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */; };
 		000DCC1112B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */; };
 		000DCC1212B05F3E00042A5E /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */; };
-		000DCC1312B05F3E00042A5E /* Rtt_PlatformFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3A12B05F3E00042A5E /* Rtt_PlatformFont.cpp */; };
-		000DCC1412B05F3E00042A5E /* Rtt_PlatformFont.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3B12B05F3E00042A5E /* Rtt_PlatformFont.h */; };
 		000DCC1B12B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4212B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp */; };
 		000DCC1C12B05F3E00042A5E /* Rtt_PlatformModalInteraction.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4312B05F3E00042A5E /* Rtt_PlatformModalInteraction.h */; };
 		000DCC1D12B05F3E00042A5E /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4412B05F3E00042A5E /* Rtt_PlatformNotifier.cpp */; };
@@ -274,8 +272,6 @@
 		0724699B17DA43BA000A1641 /* Rtt_MCPUResourceObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0724699817DA43BA000A1641 /* Rtt_MCPUResourceObserver.h */; };
 		0724699C17DA43BA000A1641 /* Rtt_CPUResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0724699917DA43BA000A1641 /* Rtt_CPUResourcePool.cpp */; };
 		0724699D17DA43BA000A1641 /* Rtt_CPUResourcePool.h in Headers */ = {isa = PBXBuildFile; fileRef = 0724699A17DA43BA000A1641 /* Rtt_CPUResourcePool.h */; };
-		078BDB9D1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 078BDB9B1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp */; };
-		078BDB9E1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 078BDB9C1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h */; };
 		0790F87418B6DFE800D0E6B1 /* loader_ccdata.lua in Sources */ = {isa = PBXBuildFile; fileRef = 0790F87318B6DFA100D0E6B1 /* loader_ccdata.lua */; };
 		07912E3A17A1C86A001ABDE0 /* kernel_filter_hue_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3617A1C856001ABDE0 /* kernel_filter_hue_gl.lua */; };
 		07912E3B17A1C86A001ABDE0 /* kernel_filter_iris_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3717A1C856001ABDE0 /* kernel_filter_iris_gl.lua */; };
@@ -425,8 +421,6 @@
 		A47428F017694EB000C63853 /* Rtt_TesselatorRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A474289317694EB000C63853 /* Rtt_TesselatorRoundedRect.h */; };
 		A47428F117694EB000C63853 /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474289417694EB000C63853 /* Rtt_TesselatorShape.cpp */; };
 		A47428F217694EB000C63853 /* Rtt_TesselatorShape.h in Headers */ = {isa = PBXBuildFile; fileRef = A474289517694EB000C63853 /* Rtt_TesselatorShape.h */; };
-		A47428F317694EB000C63853 /* Rtt_TextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474289617694EB000C63853 /* Rtt_TextObject.cpp */; };
-		A47428F417694EB000C63853 /* Rtt_TextObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A474289717694EB000C63853 /* Rtt_TextObject.h */; };
 		A47428F517694EB000C63853 /* Rtt_VertexCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474289817694EB000C63853 /* Rtt_VertexCache.cpp */; };
 		A47428F617694EB000C63853 /* Rtt_VertexCache.h in Headers */ = {isa = PBXBuildFile; fileRef = A474289917694EB000C63853 /* Rtt_VertexCache.h */; };
 		A474291017694F1900C63853 /* shell_default_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A474290F17694EE700C63853 /* shell_default_gl.lua */; };
@@ -819,8 +813,6 @@
 		000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
 		000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFBConnect.cpp; sourceTree = "<group>"; };
 		000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
-		000DCB3A12B05F3E00042A5E /* Rtt_PlatformFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFont.cpp; sourceTree = "<group>"; };
-		000DCB3B12B05F3E00042A5E /* Rtt_PlatformFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFont.h; sourceTree = "<group>"; };
 		000DCB3E12B05F3E00042A5E /* Rtt_PlatformListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformListener.cpp; sourceTree = "<group>"; };
 		000DCB3F12B05F3E00042A5E /* Rtt_PlatformListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformListener.h; sourceTree = "<group>"; };
 		000DCB4212B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformModalInteraction.cpp; sourceTree = "<group>"; };
@@ -981,8 +973,6 @@
 		0724699917DA43BA000A1641 /* Rtt_CPUResourcePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CPUResourcePool.cpp; path = Display/Rtt_CPUResourcePool.cpp; sourceTree = "<group>"; };
 		0724699A17DA43BA000A1641 /* Rtt_CPUResourcePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CPUResourcePool.h; path = Display/Rtt_CPUResourcePool.h; sourceTree = "<group>"; };
 		077EEE2D16CD9F7B009024CA /* Rtt_MRuntimeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rtt_MRuntimeDelegate.h; sourceTree = "<group>"; };
-		078BDB9B1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_EmbossedTextObject.cpp; path = Display/Rtt_EmbossedTextObject.cpp; sourceTree = "<group>"; };
-		078BDB9C1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_EmbossedTextObject.h; path = Display/Rtt_EmbossedTextObject.h; sourceTree = "<group>"; };
 		0790F87318B6DFA100D0E6B1 /* loader_ccdata.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = loader_ccdata.lua; path = ../platform/resources/loader_ccdata.lua; sourceTree = "<group>"; };
 		07912E3617A1C856001ABDE0 /* kernel_filter_hue_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_hue_gl.lua; path = Display/Shader/kernel_filter_hue_gl.lua; sourceTree = "<group>"; };
 		07912E3717A1C856001ABDE0 /* kernel_filter_iris_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_iris_gl.lua; path = Display/Shader/kernel_filter_iris_gl.lua; sourceTree = "<group>"; };
@@ -1132,8 +1122,6 @@
 		A474289317694EB000C63853 /* Rtt_TesselatorRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRoundedRect.h; path = Display/Rtt_TesselatorRoundedRect.h; sourceTree = "<group>"; };
 		A474289417694EB000C63853 /* Rtt_TesselatorShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorShape.cpp; path = Display/Rtt_TesselatorShape.cpp; sourceTree = "<group>"; };
 		A474289517694EB000C63853 /* Rtt_TesselatorShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorShape.h; path = Display/Rtt_TesselatorShape.h; sourceTree = "<group>"; };
-		A474289617694EB000C63853 /* Rtt_TextObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextObject.cpp; path = Display/Rtt_TextObject.cpp; sourceTree = "<group>"; };
-		A474289717694EB000C63853 /* Rtt_TextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextObject.h; path = Display/Rtt_TextObject.h; sourceTree = "<group>"; };
 		A474289817694EB000C63853 /* Rtt_VertexCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_VertexCache.cpp; path = Display/Rtt_VertexCache.cpp; sourceTree = "<group>"; };
 		A474289917694EB000C63853 /* Rtt_VertexCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_VertexCache.h; path = Display/Rtt_VertexCache.h; sourceTree = "<group>"; };
 		A47428F817694EE700C63853 /* kernel_default_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_default_gl.lua; path = Display/Shader/kernel_default_gl.lua; sourceTree = "<group>"; };
@@ -1550,8 +1538,6 @@
 				000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */,
 				000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */,
 				000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */,
-				000DCB3A12B05F3E00042A5E /* Rtt_PlatformFont.cpp */,
-				000DCB3B12B05F3E00042A5E /* Rtt_PlatformFont.h */,
 				0044F0DF12CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp */,
 				0044F0DE12CA9D74006EB396 /* Rtt_PlatformInAppStore.h */,
 				000DCB3E12B05F3E00042A5E /* Rtt_PlatformListener.cpp */,
@@ -1984,8 +1970,6 @@
 				A474285117694EB000C63853 /* Rtt_DisplayPath.cpp */,
 				A474285217694EB000C63853 /* Rtt_DisplayPath.h */,
 				A474285317694EB000C63853 /* Rtt_DisplayTypes.h */,
-				078BDB9B1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp */,
-				078BDB9C1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h */,
 				A4B66ADA176E65520077B2BF /* Rtt_GradientPaint.cpp */,
 				A4B66ADB176E65530077B2BF /* Rtt_GradientPaint.h */,
 				A47503461774DB830064ABA0 /* Rtt_GradientPaintAdapter.cpp */,
@@ -2093,8 +2077,6 @@
 				A474289517694EB000C63853 /* Rtt_TesselatorShape.h */,
 				F5FFCA101CB9EA03006EBD43 /* Rtt_TesselatorMesh.cpp */,
 				F5FFCA111CB9EA03006EBD43 /* Rtt_TesselatorMesh.h */,
-				A474289617694EB000C63853 /* Rtt_TextObject.cpp */,
-				A474289717694EB000C63853 /* Rtt_TextObject.h */,
 				A48B91B8178A9C7A0072EAF7 /* Rtt_TextureFactory.cpp */,
 				A48B91B9178A9C7A0072EAF7 /* Rtt_TextureFactory.h */,
 				A48B91BA178A9C7A0072EAF7 /* Rtt_TextureResource.cpp */,
@@ -2355,7 +2337,6 @@
 				000DCC0C12B05F3E00042A5E /* Rtt_PlatformData.h in Headers */,
 				000DCC0E12B05F3E00042A5E /* Rtt_PlatformDisplayObject.h in Headers */,
 				000DCC1212B05F3E00042A5E /* Rtt_PlatformFBConnect.h in Headers */,
-				000DCC1412B05F3E00042A5E /* Rtt_PlatformFont.h in Headers */,
 				000DCC1C12B05F3E00042A5E /* Rtt_PlatformModalInteraction.h in Headers */,
 				000DCC1E12B05F3E00042A5E /* Rtt_PlatformNotifier.h in Headers */,
 				000DCC2012B05F3E00042A5E /* Rtt_PlatformOpenALPlayer.h in Headers */,
@@ -2445,7 +2426,6 @@
 				03D1C52B1D70C15E00DB02EE /* Rtt_Preference.h in Headers */,
 				A47428F017694EB000C63853 /* Rtt_TesselatorRoundedRect.h in Headers */,
 				A47428F217694EB000C63853 /* Rtt_TesselatorShape.h in Headers */,
-				A47428F417694EB000C63853 /* Rtt_TextObject.h in Headers */,
 				A47428F617694EB000C63853 /* Rtt_VertexCache.h in Headers */,
 				A474292F176959FE00C63853 /* Rtt_FilePath.h in Headers */,
 				A474293317695A0700C63853 /* Rtt_HitTestObject.h in Headers */,
@@ -2499,7 +2479,6 @@
 				0397047517A3780900681DED /* Rtt_ReadOnlyInputAxisCollection.h in Headers */,
 				F5A0C2281ADF3ECE00CA5FF8 /* Rtt_ImageSheetPaintAdapter.h in Headers */,
 				0707FA6517FCEECA00303473 /* Rtt_ShaderProxy.h in Headers */,
-				078BDB9E1811B0FE00C17D9A /* Rtt_EmbossedTextObject.h in Headers */,
 				F5EEB6DD1B74027F00D34C41 /* Rtt_TextureResourceAdapter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2879,7 +2858,6 @@
 				000DCC0B12B05F3E00042A5E /* Rtt_PlatformData.cpp in Sources */,
 				000DCC0D12B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp in Sources */,
 				000DCC1112B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp in Sources */,
-				000DCC1312B05F3E00042A5E /* Rtt_PlatformFont.cpp in Sources */,
 				000DCC1B12B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp in Sources */,
 				000DCC1D12B05F3E00042A5E /* Rtt_PlatformNotifier.cpp in Sources */,
 				000DCC1F12B05F3E00042A5E /* Rtt_PlatformOpenALPlayer.cpp in Sources */,
@@ -2966,7 +2944,6 @@
 				A47428ED17694EB000C63853 /* Rtt_TesselatorLine.cpp in Sources */,
 				A47428EF17694EB000C63853 /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				A47428F117694EB000C63853 /* Rtt_TesselatorShape.cpp in Sources */,
-				A47428F317694EB000C63853 /* Rtt_TextObject.cpp in Sources */,
 				F5EEB6E21B74027F00D34C41 /* Rtt_TextureResourceCanvas.cpp in Sources */,
 				A47428F517694EB000C63853 /* Rtt_VertexCache.cpp in Sources */,
 				C2756C271C57220300BE3194 /* NSString+Extensions.m in Sources */,
@@ -3013,7 +2990,6 @@
 				0397047217A3780900681DED /* Rtt_PlatformInputAxis.cpp in Sources */,
 				0397047417A3780900681DED /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				0707FA6417FCEECA00303473 /* Rtt_ShaderProxy.cpp in Sources */,
-				078BDB9D1811B0FE00C17D9A /* Rtt_EmbossedTextObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

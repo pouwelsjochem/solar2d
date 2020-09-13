@@ -1536,68 +1536,6 @@ function buildLuaPlugins( options )
 end
 
 --
--- populateUIAppFonts
---
--- Populate UIAppFonts with font files found in the project
--- The table may already have entries because in the past we required the developer to populate the
--- list themselves so we just merge all the font files we find at the top level of the project into
--- the table.  Or there may be no build.settings at all and everything needs to be created.
-function populateUIAppFonts( options )
-
-	-- Everything in options.settings is optional
-	if options.settings == nil then
-		options.settings = {}
-	end
-	if options.settings.tvos == nil then
-		options.settings.tvos = {}
-	end
-	if options.settings.tvos.plist == nil then
-		options.settings.tvos.plist = {}
-	end
-
-	local tmpUIAppFonts = options.settings.tvos.plist.UIAppFonts
-
-	if tmpUIAppFonts ~= nil then
-		if debugBuildProcess and debugBuildProcess > 1 then
-			print("populateUIAppFonts: BEFORE: tmpUIAppFonts: "..json.prettify(tmpUIAppFonts))
-		end
-
-		-- Check that each font already in UIAppFonts exists in the project
-		for i, fontfile in ipairs(tmpUIAppFonts) do
-			if lfs.attributes( options.srcAssets .."/".. fontfile ) == nil then
-				print("Warning: font '"..tostring(fontfile).."' is in build.settings UIAppFonts but not in the project")
-			end
-		end
-	end
-
-	-- Find any fonts that are in the project but not in UIAppFonts and add them
-	for filename in lfs.dir( options.srcAssets ) do
-		if string.match(filename, "%.ttf$") or string.match(filename, "%.otf$") or string.match(filename, "%.ttc$") then
-			if debugBuildProcess and debugBuildProcess > 0 then
-				print( "populateUIAppFonts: Found font file: " .. filename )
-			end
-
-			-- If the font file is not already in UIAppFonts, add it
-			if table.indexOf( tmpUIAppFonts, filename ) == nil then
-				if tmpUIAppFonts == nil then
-					tmpUIAppFonts = {}
-				end
-
-				table.insert( tmpUIAppFonts, filename )
-			end
-		end
-	end
-
-	if tmpUIAppFonts ~= nil and #tmpUIAppFonts > 0 then
-		if debugBuildProcess and debugBuildProcess > 1 then
-			print("populateUIAppFonts:  AFTER: #"..#tmpUIAppFonts..": tmpUIAppFonts: "..json.prettify(tmpUIAppFonts))
-		end
-
-		options.settings.tvos.plist.UIAppFonts = tmpUIAppFonts
-	end
-end
-
---
 -- tvosPostPackage
 --
 -- Process the app bundle return by the build server (including code signing, Info.plist processing, etc)
@@ -1837,8 +1775,6 @@ function tvosPostPackage( params )
 				print("Code signing identity: ".. options.signingIdentityName .." (".. options.signingIdentity ..")")
 			end
 		end
-
-		populateUIAppFonts( options )
 
 		if options and debugBuildProcess and debugBuildProcess ~= 0 then
 			print("====================================")

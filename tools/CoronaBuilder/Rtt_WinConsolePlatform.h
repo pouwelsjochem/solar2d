@@ -40,10 +40,6 @@ class WinGLView;
 
 #pragma endregion
 
-
-#undef CreateFont    // <windows.h> defines it
-
-
 namespace Rtt
 {
 
@@ -64,10 +60,6 @@ namespace Rtt
 		virtual PlatformSurface* CreateOffscreenSurface(const PlatformSurface& parent) const { return NULL; };
 		virtual PlatformTimer* CreateTimerWithCallback(MCallback& callback) const { return NULL; };
 		virtual PlatformBitmap* CreateBitmap(const char* filename, bool convertToGrayscale) const { return NULL; };
-		virtual PlatformBitmap* CreateBitmapMask(
-			const char str[], const PlatformFont& font, Real w, Real h, const char alignmentStringId[]) const {
-			return NULL;
-		};
 		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath ) const { return false; };
 		virtual const MCrypto& GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String * value) const;
@@ -87,13 +79,6 @@ namespace Rtt
 		virtual bool CanShowPopup(const char *name) const { return false; };
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const { return false; };
 		virtual bool HidePopup(const char *name) const { return false; };
-		virtual PlatformDisplayObject* CreateNativeTextBox(const Rect& bounds) const { return nullptr; };
-		virtual PlatformDisplayObject* CreateNativeTextField(const Rect& bounds) const { return nullptr; };
-		virtual void SetKeyboardFocus(PlatformDisplayObject *textObject) const { return; };
-		virtual Rtt_Real GetStandardFontSize() const { return 0.0; };
-		virtual S32 GetFontNames(lua_State *L, int index) const { return 0; };
-		virtual PlatformFont* CreateFont(PlatformFont::SystemFont fontType, Rtt_Real size) const { return nullptr; };
-		virtual PlatformFont* CreateFont(const char *fontName, Rtt_Real size) const { return nullptr; };
 		virtual PlatformFBConnect* GetFBConnect() const { return nullptr; };
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const { return nullptr; };
 		virtual void ReleaseNotification(void *notificationId) const { return; };
@@ -111,9 +96,6 @@ namespace Rtt
 		virtual void EndRuntime(const Runtime& runtime) const { return; };
 		virtual PlatformExitCallback* GetExitCallback() { return nullptr; };
 		virtual bool RequestSystem(lua_State *L, const char *actionName, int optionsIndex) const { return false; };
-		virtual PlatformBitmap* CreateBitmapMask(const char str[], const PlatformFont& font, Real w, Real h, 
-			const char alignment[], Real& baselineOffset) const override  { Rtt_ASSERT_MSG( 0, "Code should NOT be reached" ); return NULL; }
-		virtual FontMetricsMap GetFontMetrics(const PlatformFont& font) const override;
 		virtual void Suspend() const override { Rtt_ASSERT_MSG( 0, "Code should NOT be reached" ); }
 		virtual void Resume() const override { Rtt_ASSERT_MSG( 0, "Code should NOT be reached" ); }
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const override;

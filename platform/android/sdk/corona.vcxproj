@@ -151,7 +151,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaApiListener.java" />
     <JCompile Include="src\com\ansca\corona\CoronaBeacon.java" />
     <JCompile Include="src\com\ansca\corona\CoronaData.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaEditText.java" />
     <JCompile Include="src\com\ansca\corona\CoronaEnvironment.java" />
     <JCompile Include="src\com\ansca\corona\CoronaLua.java" />
     <JCompile Include="src\com\ansca\corona\CoronaLuaErrorHandler.java" />

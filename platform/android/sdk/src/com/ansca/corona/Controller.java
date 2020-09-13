@@ -81,8 +81,6 @@ public class Controller {
 	private CoronaSensorManager		mySensorManager;
 
 	private IAndroidVersionSpecific	myAndroidVersion;
-	private float myDefaultFontSize;
-	private int myDefaultTextFieldPaddingInPixels;
 
 	private RuntimeState myRuntimeState;
 
@@ -148,13 +146,6 @@ public class Controller {
 				myIsNaturalOrientationPortrait = true;
 				break;
 		}
-
-		// Fetch a text field's default font size and padding in pixels.
-		CoronaEditText editText = new CoronaEditText(context, runtime);
-		myDefaultFontSize = editText.getTextSize();
-		int verticalPadding = editText.getPaddingTop() + editText.getPaddingBottom();
-		verticalPadding -= editText.getBorderPaddingTop() + editText.getBorderPaddingBottom();
-		myDefaultTextFieldPaddingInPixels = (int)(((double)verticalPadding / 2.0) + 0.5);
 	}
 	
 	synchronized void init() {
@@ -1591,14 +1582,6 @@ public class Controller {
         return android.os.Build.PRODUCT;
     }
 
-    public float getDefaultFontSize() {
-    	return myDefaultFontSize;
-    }
-
-    public int getDefaultTextFieldPaddingInPixels() {
-    	return myDefaultTextFieldPaddingInPixels;
-    }
-	
 	void setSystemUiVisibility(final String visibility) {
 		final com.ansca.corona.graphics.opengl.CoronaGLSurfaceView glView = myGLView;
 		if (glView == null || android.os.Build.MANUFACTURER.equals("BN LLC")) {

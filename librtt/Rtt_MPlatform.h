@@ -13,7 +13,6 @@
 #include "Core/Rtt_Types.h"
 
 #include "Display/Rtt_PlatformBitmap.h"
-#include "Rtt_PlatformFont.h"
 #include "Core/Rtt_ResourceHandle.h"
 #include "Rtt_PlatformReachability.h" // needed because of enum type
 #include "Rtt_Preference.h"
@@ -38,7 +37,6 @@ class PlatformBitmap;
 class PlatformDisplayObject;
 class PlatformExitCallback;
 class PlatformFBConnect;
-class PlatformFont;
 class PlatformOpenALPlayer;
 class PlatformStoreProvider;
 class PlatformSurface;
@@ -51,11 +49,6 @@ class String;
 // ----------------------------------------------------------------------------
 
 typedef void *NativeAlertRef;
-typedef std::map<std::string, Real> FontMetricsMap;
-
-#if defined( Rtt_WIN_ENV ) || defined(Rtt_NINTENDO_ENV )
-#undef CreateFont  // <windows.h> defines this
-#endif
 
 // TODO: Separate this into 2 interfaces:
 // (1) MPlatform: All non-UI api's
@@ -129,12 +122,10 @@ class MPlatform
 		virtual PlatformSurface* CreateOffscreenSurface( const PlatformSurface& parent ) const = 0;
 		virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const = 0;
 		virtual PlatformBitmap* CreateBitmap( const char *filePath, bool convertToGrayscale ) const = 0;
-		virtual PlatformBitmap* CreateBitmapMask( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset ) const = 0;
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const = 0;
         virtual bool OpenURL( const char* url ) const = 0;
 		// Return values of CanOpenURL: -1 Unknown; 0 No; 1 Yes
 		virtual int CanOpenURL( const char* url ) const = 0;
-		virtual FontMetricsMap GetFontMetrics( const PlatformFont& font ) const = 0;
 		virtual const MCrypto& GetCrypto() const = 0;
 
 		virtual void GetPreference( Category category, Rtt::String * value ) const = 0;
@@ -164,20 +155,9 @@ class MPlatform
 		virtual bool CanShowPopup( const char *name ) const = 0;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const = 0;
 		virtual bool HidePopup( const char *name ) const = 0;
-
-		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const = 0;
-		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const = 0;
-		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const = 0;
 		
         virtual PlatformFBConnect* GetFBConnect() const = 0;
-
-		virtual Rtt_Real GetStandardFontSize() const = 0;
-		virtual S32 GetFontNames( lua_State *L, int index ) const = 0;
-		virtual PlatformFont* CreateFont( PlatformFont::SystemFont fontType, Rtt_Real size ) const = 0;
-
-		// Returns NULL if fontName is NULL;
-		virtual PlatformFont* CreateFont( const char *fontName, Rtt_Real size ) const = 0;
-
+		
 	public:
 		// Creates notification based on table at 'index'. Returns notificationId
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const = 0;

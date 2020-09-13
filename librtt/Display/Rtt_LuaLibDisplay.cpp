@@ -43,7 +43,6 @@
 #include "Display/Rtt_PlatformBitmap.h"
 #include "Rtt_ContainerObject.h"
 #include "Rtt_ClosedPath.h"
-#include "Display/Rtt_EmbossedTextObject.h"
 #include "Display/Rtt_ImageFrame.h"
 #include "Display/Rtt_ImageSheet.h"
 #include "Display/Rtt_ImageSheetUserdata.h"
@@ -57,7 +56,6 @@
 #include "Display/Rtt_OpenPath.h"
 #include "Rtt_Runtime.h"
 #include "Display/Rtt_SpriteObject.h"
-#include "Display/Rtt_TextObject.h"
 #include "Renderer/Rtt_Texture.h"
 
 #include "Rtt_Event.h"
@@ -69,10 +67,6 @@
 #include <string.h>
 
 #include "Rtt_LuaAux.h"
-
-#ifdef Rtt_WIN_ENV
-#undef CreateFont
-#endif
 
 // ----------------------------------------------------------------------------
 
@@ -133,8 +127,6 @@ class DisplayLibrary
 		static int newLine( lua_State *L );
 		static int newImage( lua_State *L );
 		static int newImageRect( lua_State *L );
-		static int newText( lua_State *L );
-		static int newEmbossedText( lua_State *L );
 		static int newGroup( lua_State *L );
 		static int newContainer( lua_State *L );
 		static int newSnapshot( lua_State *L );
@@ -192,8 +184,6 @@ DisplayLibrary::Open( lua_State *L )
 		{ "newLine", newLine },
 		{ "newImage", newImage },
 		{ "newImageRect", newImageRect },
-		{ "newText", newText },
-		{ "newEmbossedText", newEmbossedText },
 		{ "newGroup", newGroup },
 		{ "newContainer", newContainer },
 		{ "newSnapshot", newSnapshot },
@@ -920,213 +910,6 @@ DisplayLibrary::newImageRect( lua_State *L )
 	return result;
 }
 
-static int CreateTextObject( lua_State *L, bool isEmbossed )
-{
-	int result = 0;
-	
-	// [parentGroup,]
-	int nextArg = 1;
-	
-	Real x = Rtt_REAL_0;
-	Real y = Rtt_REAL_0;
-	
-	// Default to single line
-	Real w = Rtt_REAL_0;
-	Real h = Rtt_REAL_0;
-	
-	DisplayLibrary::Self *library = DisplayLibrary::ToLibrary( L );
-	Display& display = library->GetDisplay();
-	Runtime& runtime = display.GetRuntime();
-	
-	Real fontSize = Rtt_REAL_0;		// A font size of zero means use the system default font.
-	PlatformFont *font = NULL;
-	
-	const char *alignment = "left";
-	const char* str = NULL;
-	
-	// NOTE: GetParent() increments nextArg if parent found
-	GroupObject *parent = NULL;
-	
-	if ( lua_istable( L, nextArg ) &&
-		LuaProxy::IsProxy(L, nextArg) == false)
-	{
-		if ( LUA_TTABLE == lua_type( L, -1 ) )
-		{
-			lua_getfield( L, -1, "parent" );
-			if ( lua_istable( L, -1) )
-			{
-				int parentArg = Lua::Normalize( L, -1 );
-				parent = GetParent( L, parentArg );
-			}
-			else if (lua_type( L, -1 ) != LUA_TNIL)
-			{
-				CoronaLuaWarning( L, "display.newText() ignoring invalid 'parent' parameter (expected table but got %s)",
-								 lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-			
-			lua_getfield( L, -1, "text" );
-			if ( (str = lua_tostring( L, -1 )) == NULL )
-			{
-				luaL_error( L, "ERROR: display.newText() %s 'text' parameter (expected string but got %s)",
-						    (lua_type( L, nextArg + 1 ) == LUA_TNIL ? "missing" : "invalid"),
-						    lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-
-			lua_getfield( L, -1, "x" );
-			if (lua_type( L, -1 ) == LUA_TNUMBER)
-			{
-				x = luaL_checkreal( L, -1 );
-			}
-			else if (lua_type( L, -1 ) != LUA_TNIL)
-			{
-				CoronaLuaWarning( L, "display.newText() ignoring invalid 'x' parameter (expected number but got %s)",
-								  lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-			
-			lua_getfield( L, -1, "y" );
-			if (lua_type( L, -1 ) == LUA_TNUMBER)
-			{
-				y = luaL_checkreal( L, -1 );
-			}
-			else if (lua_type( L, -1 ) != LUA_TNIL)
-			{
-				CoronaLuaWarning( L, "display.newText() ignoring invalid 'y' parameter (expected number but got %s)",
-								 lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-			
-			lua_getfield( L, -1, "width" );
-			if (lua_type( L, -1 ) == LUA_TNUMBER)
-			{
-				w = luaL_checkreal( L, -1 );
-			}
-			else if (lua_type( L, -1 ) != LUA_TNIL)
-			{
-				CoronaLuaWarning( L, "display.newText() ignoring invalid 'width' parameter (expected number but got %s)",
-								 lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-			
-			lua_getfield( L, -1, "height" );
-			if (lua_type( L, -1 ) == LUA_TNUMBER)
-			{
-				h = luaL_checkreal( L, -1 );
-			}
-			else if (lua_type( L, -1 ) != LUA_TNIL)
-			{
-				CoronaLuaWarning( L, "display.newText() ignoring invalid 'height' parameter (expected number but got %s)",
-								 lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-			
-			lua_getfield( L, -1, "align" );
-			if (lua_type( L, -1 ) == LUA_TSTRING)
-			{
-				alignment = luaL_checkstring( L, -1 );
-			}
-			else if (lua_type( L, -1 ) != LUA_TNIL)
-			{
-				CoronaLuaWarning( L, "display.newText() ignoring invalid 'align' parameter (expected string but got %s)",
-								 lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-			
-			lua_getfield( L, -1, "fontSize" );
-			if ( lua_isnumber( L, -1 ) )
-			{
-				fontSize = luaL_toreal( L, -1 );
-			}
-			else if (lua_type( L, -1 ) != LUA_TNIL)
-			{
-				CoronaLuaWarning( L, "display.newText() ignoring invalid 'fontSize' parameter (expected number but got %s)",
-								 lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-			}
-			lua_pop( L, 1 );
-			
-			lua_getfield( L, -1, "font" );
-			font = LuaLibNative::CreateFont( L, runtime.Platform(), -1, fontSize);
-			lua_pop( L, 1 );
-		}
-	}
-	else
-	{
-		//Legacy support
-		
-		// NOTE: GetParent() increments nextArg if parent found
-		parent = GetParent( L, nextArg );
-		
-		str = luaL_checkstring( L, nextArg++ );
-		if ( Rtt_VERIFY( str ) )
-		{
-			x = luaL_checkreal( L, nextArg++ );
-			y = luaL_checkreal( L, nextArg++ );
-			
-			if ( lua_type( L, nextArg ) == LUA_TNUMBER )
-			{
-				// If width is provided, height must be provided
-				// Multiline
-				if ( lua_type( L, nextArg + 1 ) == LUA_TNUMBER )
-				{
-					w = luaL_toreal( L, nextArg++ );
-					h = luaL_toreal( L, nextArg++ );
-				}
-				else
-				{
-					luaL_error( L, "ERROR: display.newText() bad argument #%d (expected height to be number but got %s instead)",
-                               nextArg + 1, lua_typename( L, lua_type( L, nextArg + 1 ) ) );
-				}
-			}
-			
-			// Fetch the font name/type Lua stack index.
-			int fontArg = nextArg++;
-			
-			// Fetch the font size. Will use the default font size if not provided.
-			if ( lua_isnumber( L, nextArg ) )
-			{
-				fontSize = luaL_toreal( L, nextArg );
-			}
-			
-			// Create a font with the given settings.
-			font = LuaLibNative::CreateFont( L, runtime.Platform(), fontArg, fontSize );
-		}
-	}
-	
-	TextObject* textObject;
-	if (isEmbossed)
-	{
-		textObject = Rtt_NEW( runtime.Allocator(), EmbossedTextObject( display, str, font, w, h, alignment ) );
-	}
-	else
-	{
-		textObject = Rtt_NEW( runtime.Allocator(), TextObject( display, str, font, w, h, alignment ) );
-	}
-	result = LuaLibDisplay::AssignParentAndPushResult( L, display, textObject, parent );
-	
-	textObject->Translate( x, y );
-	AssignDefaultFillColor( display, * textObject );
-	
-	return result;
-}
-
-// display.newText( [parentGroup,] string, x, y, [w, h,] font, size )
-int
-DisplayLibrary::newText( lua_State *L )
-{
-	bool isEmbossed = false;
-	return CreateTextObject( L, isEmbossed );
-}
-
-// display.newEmbossedText( [parentGroup,] string, x, y, [w, h,] font, size )
-int
-DisplayLibrary::newEmbossedText( lua_State *L )
-{
-	bool isEmbossed = true;
-	return CreateTextObject( L, isEmbossed );
-}
-
 // display.newGroup( [child1 [, child2 [, child3 ... ]]] )
 // With no args, create an empty group and set parent to root
 // 
@@ -1388,16 +1171,6 @@ DisplayLibrary::getDefault( lua_State *L )
 		RenderTypes::TextureWrap wrap = defaults.GetTextureWrapY();
 		lua_pushstring( L, RenderTypes::StringForTextureWrap( wrap ) );
 	}
-	else if ( Rtt_StringCompare( key, "isNativeTextFieldFontSizeScaled" ) == 0 )
-	{
-		bool value = defaults.IsNativeTextFieldFontSizeScaled();
-		lua_pushboolean( L, value ? 1 : 0 );
-	}
-	else if ( Rtt_StringCompare( key, "isNativeTextBoxFontSizeScaled" ) == 0 )
-	{
-		bool value = defaults.IsNativeTextBoxFontSizeScaled();
-		lua_pushboolean( L, value ? 1 : 0 );
-	}
 	else if ( Rtt_StringCompare( key, "isShaderCompilerVerbose" ) == 0 )
 	{
 		bool value = defaults.IsShaderCompilerVerbose();
@@ -1498,16 +1271,6 @@ DisplayLibrary::setDefault( lua_State *L )
 		bool preloadTextures = lua_toboolean( L, index );
 	
 		defaults.SetPreloadTextures( preloadTextures );
-	}
-	else if ( Rtt_StringCompare( key, "isNativeTextFieldFontSizeScaled" ) == 0 )
-	{
-		bool value = lua_toboolean( L, index ) ? true : false;
-		defaults.SetIsNativeTextFieldFontSizeScaled( value );
-	}
-	else if ( Rtt_StringCompare( key, "isNativeTextBoxFontSizeScaled" ) == 0 )
-	{
-		bool value = lua_toboolean( L, index ) ? true : false;
-		defaults.SetIsNativeTextBoxFontSizeScaled( value );
 	}
 	else if ( Rtt_StringCompare( key, "isShaderCompilerVerbose" ) == 0 )
 	{

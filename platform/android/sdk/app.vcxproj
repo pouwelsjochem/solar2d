@@ -197,7 +197,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaApiListener.java" />
     <JCompile Include="src\com\ansca\corona\CoronaBeacon.java" />
     <JCompile Include="src\com\ansca\corona\CoronaData.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaEditText.java" />
     <JCompile Include="src\com\ansca\corona\CoronaEnvironment.java" />
     <JCompile Include="src\com\ansca\corona\CoronaLua.java" />
     <JCompile Include="src\com\ansca\corona\CoronaLuaErrorHandler.java" />
@@ -225,18 +224,9 @@
     <JCompile Include="src\com\ansca\corona\events\NotificationRegistrationTask.java" />
     <JCompile Include="src\com\ansca\corona\events\ResizeTask.java" />
     <JCompile Include="src\com\ansca\corona\events\RunnableEvent.java" />
-    <JCompile Include="src\com\ansca\corona\events\SoundEndedTask.java" />
-    <JCompile Include="src\com\ansca\corona\events\TextEditingTask.java" />
-    <JCompile Include="src\com\ansca\corona\events\TextTask.java" />
     <JCompile Include="src\com\ansca\corona\FileContentProvider.java" />
-    <JCompile Include="src\com\ansca\corona\graphics\FontServices.java" />
-    <JCompile Include="src\com\ansca\corona\graphics\FontSettings.java" />
-    <JCompile Include="src\com\ansca\corona\graphics\HorizontalAlignment.java" />
     <JCompile Include="src\com\ansca\corona\graphics\opengl\CoronaGLSurfaceView.java" />
     <JCompile Include="src\com\ansca\corona\graphics\opengl\GLSurfaceView.java" />
-    <JCompile Include="src\com\ansca\corona\graphics\TextRenderer.java" />
-    <JCompile Include="src\com\ansca\corona\graphics\TypefaceInfo.java" />
-    <JCompile Include="src\com\ansca\corona\graphics\TypefaceSettings.java" />
     <JCompile Include="src\com\ansca\corona\input\AxisDataEventInfo.java" />
     <JCompile Include="src\com\ansca\corona\input\AxisDataPoint.java" />
     <JCompile Include="src\com\ansca\corona\input\AxisInfo.java" />

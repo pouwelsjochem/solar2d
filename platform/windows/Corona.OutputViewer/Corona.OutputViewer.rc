@@ -159,7 +159,7 @@ BEGIN
             VALUE "FileDescription", "Corona Console"
             VALUE "FileVersion", "1.0.0.2"
             VALUE "InternalName", "Corona Console"
-            VALUE "LegalCopyright", "Copyright © 2010-2018 Corona Labs Inc."
+            VALUE "LegalCopyright", "Copyright ï¿½ 2010-2018 Corona Labs Inc."
             VALUE "OriginalFilename", "Corona.Console.exe"
             VALUE "ProductName", "Corona Console"
             VALUE "ProductVersion", "1.0.0.1"

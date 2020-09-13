@@ -87,7 +87,6 @@ local manifestChildXmlElements = {}
 local applicationChildXmlElements = {}
 local googlePlayGamesAppId = false
 local facebookAppId = false
-local coronaWindowMovesWhenKeyboardAppears = false
 local initialSystemUiVisibility = nil
 local allowAppsReadOnlyAccessToFiles = true
 local strings = {}
@@ -460,14 +459,6 @@ if "table" == type(buildSettings) then
 			facebookAppId = tostring(stringValue)
 		end
 
-		-- Fetch the "coronaWindowMovesWhenKeyboardAppears" flag used to pan app when keyboard is shown.
-		-- Note: We also support this field with a capitol 'C' in case it was copied from iOS plist field.
-		if type(buildSettings.android.coronaWindowMovesWhenKeyboardAppears) == "boolean" then
-			coronaWindowMovesWhenKeyboardAppears = buildSettings.android.coronaWindowMovesWhenKeyboardAppears
-		elseif type(buildSettings.android.CoronaWindowMovesWhenKeyboardAppears) == "boolean" then
-			coronaWindowMovesWhenKeyboardAppears = buildSettings.android.CoronaWindowMovesWhenKeyboardAppears
-		end
-
 		-- Fetch the "initialSystemUiVisibility" flag used to set the systemUiVisibility before the splashScreen is shown.
 		if type(buildSettings.android.initialSystemUiVisibility) == "string" then
 			initialSystemUiVisibility = buildSettings.android.initialSystemUiVisibility
@@ -588,13 +579,6 @@ if facebookAppId then
 	strings["corona_app_facebook_id"] = facebookAppId
 end
 manifestKeys.USER_USES_FACEBOOK = stringBuffer
-
--- Create a meta-data tag for the "coronaWindowMovesWhenKeyboardAppears" setting, if provided.
-stringBuffer = ""
-if coronaWindowMovesWhenKeyboardAppears then
-	stringBuffer = '<meta-data android:name="coronaWindowMovesWhenKeyboardAppears" android:value="true" />'
-end
-manifestKeys.USER_CORONA_WINDOW_MOVES_WHEN_KEYBOARD_APPEARS = stringBuffer
 
 -- Create a meta-data tag for the "initialSystemUiVisibility" setting, if provided.
 stringBuffer = ""

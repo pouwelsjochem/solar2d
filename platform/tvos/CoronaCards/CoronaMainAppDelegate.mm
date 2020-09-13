@@ -87,62 +87,10 @@ FOUNDATION_EXPORT void CoronaSetDelegateClass( Class c )
 
 - (void)initSelf
 {
-/*
-	window = nil;
-	view = nil;
-	viewController = nil;
-	fCoronaDelegate = nil;
-	fSuspendCount = 0;
-	for ( size_t i = 0; i < sizeof( fGravityAccel ) / sizeof( fGravityAccel[0] ); i++ )
-	{
-		Rtt_STATIC_ASSERT( sizeof( fGravityAccel ) == sizeof( fInstantAccel ) );
-		Rtt_STATIC_ASSERT( sizeof( fGravityAccel[0] ) == sizeof( fInstantAccel[0] ) );
-		fGravityAccel[i] = 0.;
-		fInstantAccel[i] = 0.;
-	}
-	fPreviousShakeTime = 0.;
-	fActiveText = nil;
-	fIsAppStarted = NO;
-	fKeyboardShown = NO;
-	fKeyboardOffset = 0.f;
-	fWindowOffset = CGPointZero;
-	fWindowCenterStart = CGPointZero;
-
-	NSNumber *shouldWindowMove = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CoronaWindowMovesWhenKeyboardAppears"];
-	fCoronaWindowMovesWhenKeyboardAppears = [shouldWindowMove boolValue];
-
-	// Register for keyboard notifications
-	NSNotificationCenter *notifier = [NSNotificationCenter defaultCenter];
-
-	[notifier addObserver:self
-		selector:@selector(keyboardWillShow:)
-		name:UIKeyboardWillShowNotification object:nil];
-
-	[notifier addObserver:self
-		selector:@selector(keyboardWillHide:)
-		name:UIKeyboardWillHideNotification object:nil];
-*/
 }
 
 - (void)deallocSelf
 {
-/*
-	// Unregister for keyboard notifications
-	NSNotificationCenter *notifier = [NSNotificationCenter defaultCenter];
-
-	[notifier removeObserver:self
-		name:UIKeyboardWillShowNotification object:nil];
-
-	[notifier removeObserver:self
-		name:UIKeyboardWillHideNotification object:nil];
-
-	[view terminate];
-	Rtt_ASSERT( NULL == [view runtime] );
-
-	[viewController release];
-	[view release];
-	[window release];
-*/
 }
 
 - (CoronaView *)coronaView

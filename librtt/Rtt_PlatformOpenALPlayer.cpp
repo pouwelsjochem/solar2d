@@ -224,9 +224,6 @@ PlatformOpenALPlayer::InitializeOpenALPlayer()
 	((IPhoneAudioSessionManager*)(audioSessionMananger))->SetProperty(kAudioSessionProperty_PreferredHardwareSampleRate, (Float64)s_playerFrequency);
 
 #endif
-#ifdef Rtt_ANDROID_ENV
-	NativeToJavaBridge::OnAudioEnabled();
-#endif
 	audioSessionMananger->SetAudioSessionActive(true);
 	
 	ALboolean did_init = ALmixer_Init(s_playerFrequency, kOpenALPlayerMaxNumberOfSources, 0);

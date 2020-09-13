@@ -636,9 +636,6 @@ void
 Display::UnloadResources()
 {
 	GetRenderer().ReleaseGPUResources();
-
-	// Special case: Text objects use textures that are not backed by a file
-///	TextObject::Unload( GetScene().CurrentStage() );
 }
 
 void
@@ -646,9 +643,6 @@ Display::ReloadResources()
 {
 	GetRenderer().ReleaseGPUResources();
 	GetRenderer().Initialize();
-
-	// Special case: Text objects use textures that are not backed by a file
-///	TextObject::Reload( GetScene().CurrentStage() );
 }
 
 GroupObject *

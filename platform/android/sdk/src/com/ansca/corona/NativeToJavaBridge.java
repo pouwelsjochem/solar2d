@@ -295,6 +295,8 @@ public class NativeToJavaBridge {
 			runtime.onResumed();
 		}
 	}
+
+
 	
 	protected static int callInvokeLuaErrorHandler(long luaStateMemoryAddress)
 	{
@@ -906,10 +908,10 @@ public class NativeToJavaBridge {
 							result = new LoadBitmapResult(
 											bitmapDrawable.getBitmap().getWidth(),
 											bitmapDrawable.getBitmap().getHeight(),
-											1.0f, 0);
+											1.0f);
 						}
 						else {
-							result = new LoadBitmapResult(bitmapDrawable.getBitmap(), 1.0f, 0);
+							result = new LoadBitmapResult(bitmapDrawable.getBitmap(), 1.0f);
 						}
 					}
 					// canRecycleBitmap = false;
@@ -918,13 +920,13 @@ public class NativeToJavaBridge {
 					int w = Math.max(drawable.getIntrinsicWidth(), 1);
 					int h = Math.max(drawable.getIntrinsicHeight(), 1);
 					if (loadImageInfoOnly) {
-						result = new LoadBitmapResult(w, h, 1.0f, 0);
+						result = new LoadBitmapResult(w, h, 1.0f);
 					} else {
 						final Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 						final Canvas canvas = new Canvas(bmp);
 						drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
 						drawable.draw(canvas);
-						result = new LoadBitmapResult(bmp, 1.0f, 0);
+						result = new LoadBitmapResult(bmp, 1.0f);
 					}
 				}
 			}
@@ -1111,105 +1113,6 @@ public class NativeToJavaBridge {
 		abstract public boolean executeSaveMedia();
 	}
 	
-	protected static boolean callRenderText(
-		CoronaRuntime runtime, long nativeImageMemoryAddress, String text, String fontName, float fontSize,
-		boolean isBold, int wrapWidth, int clipWidth, int clipHeight, String alignment)
-	{
-		return callRenderText(runtime, nativeImageMemoryAddress, text, fontName, fontSize, 
-							  isBold, wrapWidth, clipWidth, clipHeight, alignment, null);
-	}
-
-	protected static boolean callRenderText(
-		CoronaRuntime runtime, long nativeImageMemoryAddress, String text, String fontName, float fontSize,
-		boolean isBold, int wrapWidth, int clipWidth, int clipHeight, String alignment, float[] outBaseOffset)
-	{
-		// Validate.
-		if (nativeImageMemoryAddress == 0) {
-			return false;
-		}
-
-		// Fetch the application context.
-		android.content.Context context = CoronaEnvironment.getApplicationContext();
-		if (context == null) {
-			return false;
-		}
-
-		// Get the horizontal alignment type.
-		com.ansca.corona.graphics.HorizontalAlignment horizontalAlignment;
-		horizontalAlignment = com.ansca.corona.graphics.HorizontalAlignment.fromCoronaStringId(alignment);
-		if (horizontalAlignment == null) {
-			horizontalAlignment = com.ansca.corona.graphics.HorizontalAlignment.LEFT;
-		}
-
-		// Set up a text renderer with the given settings.
-		com.ansca.corona.graphics.TextRenderer textRenderer;
-		textRenderer = new com.ansca.corona.graphics.TextRenderer(context);
-		textRenderer.getFontSettings().setName(fontName);
-		textRenderer.getFontSettings().setPointSize(fontSize);
-		textRenderer.getFontSettings().setIsBold(isBold);
-		textRenderer.setText(text);
-		textRenderer.setHorizontalAlignment(horizontalAlignment);
-		textRenderer.setWrapWidth(wrapWidth);
-		textRenderer.setClipWidth(clipWidth);
-		textRenderer.setClipHeight(clipHeight);
-
-		// Render the text to a bitmap.
-		android.graphics.Bitmap bitmap = textRenderer.createBitmap();
-		if (bitmap == null) {
-			return false;
-		}
-
-		if ( outBaseOffset != null && outBaseOffset.length == 1 ) {
-			outBaseOffset[0] = textRenderer.getBaselineOffset();
-		}
-		// Copy the Java bitmap's pixels to the native C/C++ bitmap object.
-		boolean convertToGrayscale = true;
-		boolean wasCopied = JavaToNativeShim.copyBitmap(
-								runtime, nativeImageMemoryAddress, bitmap, 1.0f, 0, convertToGrayscale);
-
-		// Free the memory used by the bitmap.
-		// bitmap.recycle();
-
-		// Returns true if the bitmap's pixels were successfully loaded to the native bitmap object.
-		return wasCopied;
-	}
-	
-	/**
-	 * Return a list of available fonts
-	 * 
-	 * @return 			List of fonts
-	 */
-	protected static String[] callGetFonts()
-	{
-		com.ansca.corona.graphics.FontServices fontServices;
-		fontServices = new com.ansca.corona.graphics.FontServices(CoronaEnvironment.getApplicationContext());
-		return fontServices.fetchAllSystemFontNames();
-	}
-
-	/**
-	 * Returns font metrics map
-	 * @param fontName	Given font name
-	 * @param fontSize	Given font size
-	 * @return
-	 */
-	protected static float[] callGetFontMetrics( CoronaRuntime runtime, String fontName, float fontSize, boolean isBold )
-	{
-		com.ansca.corona.graphics.FontServices fontServices = new com.ansca.corona.graphics.FontServices(CoronaEnvironment.getApplicationContext());
-		Map<String, Float> result = new HashMap<String, Float>();
-		java.util.ArrayList<Float> metricsArray = new java.util.ArrayList<Float>();
-		float[] array = new float[ 4 ];
-		if ( fontServices != null ) {
-			result = fontServices.getFontMetrics( fontName, fontSize, isBold );
-			if ( result != null && result.size() == 4 ) {
-				array [ 0 ] = result.get( "ascent" ) ;
-				array [ 1 ] = result.get( "descent" ) ;
-				array [ 2 ] = result.get( "leading" ) ;
-				array [ 3 ] = result.get( "height" ) ;
-			}
-		}
-		return array;
-	}
-	
 	/**
 	 * Set the Corona callback timer.
 	 * 
@@ -1361,16 +1264,6 @@ public class NativeToJavaBridge {
 	protected static String callGetProductName(CoronaRuntime runtime)
 	{
 		return runtime.getController().getProductName();
-	}
-	
-	protected static float callGetDefaultFontSize(CoronaRuntime runtime)
-	{
-		return runtime.getController().getDefaultFontSize();
-	}
-
-	protected static int callGetDefaultTextFieldPaddingInPixels(CoronaRuntime runtime)
-	{
-		return runtime.getController().getDefaultTextFieldPaddingInPixels();
 	}
 
 	private static android.util.DisplayMetrics getDisplayMetrics()
@@ -1884,129 +1777,6 @@ public class NativeToJavaBridge {
 	{
 		runtime.getController().vibrate();
 	}
-
-	protected static int callTextFieldCreate( CoronaRuntime runtime, int id, int left, int top, int width, int height, boolean isSingleLine )
-	{
-		runtime.getViewManager().addTextView(id, left, top, width, height, isSingleLine);
-
-		return 1;
-	}
-
-	protected static void callTextFieldSetSelection( CoronaRuntime runtime, int id, int startPosition, int endPosition)
-	{
-		runtime.getViewManager().setTextSelection( id, startPosition, endPosition );
-	}
-
-	protected static void callTextFieldSetReturnKey( CoronaRuntime runtime, int id, String imeType ) 
-	{
-		runtime.getViewManager().setTextReturnKey( id, imeType );
-	}
-
-	protected static void callTextFieldSetPlaceholder( CoronaRuntime runtime, int id, String placeholder)
-	{
-		runtime.getViewManager().setTextPlaceholder( id, placeholder );
-	}
-
-	protected static void callTextFieldSetColor( CoronaRuntime runtime, int id, int r, int g, int b, int a )
-	{
-		int color = Color.argb( a, r, g, b );
-		
-		runtime.getViewManager().setTextViewColor(id, color);
-	}
-	
-	protected static void callTextFieldSetText( CoronaRuntime runtime, int id, String text )
-	{
-		runtime.getViewManager().setTextViewText(id, text);
-	}
-	
-	protected static void callTextFieldSetSize( CoronaRuntime runtime, int id, float fontSize )
-	{
-		runtime.getViewManager().setTextViewSize(id, fontSize);
-	}
-	
-	protected static void callTextFieldSetFont( CoronaRuntime runtime, int id, String fontName, float fontSize, boolean isBold )
-	{
-		runtime.getViewManager().setTextViewFont(id, fontName, fontSize, isBold);
-	}
-	
-	protected static void callTextFieldSetAlign( CoronaRuntime runtime, int id, String align )
-	{
-		runtime.getViewManager().setTextViewAlign(id, align);
-	}
-	
-	protected static void callTextFieldSetSecure( CoronaRuntime runtime, int id, boolean isSecure )
-	{
-		runtime.getViewManager().setTextViewPassword(id, isSecure);	
-	}
-	
-	protected static void callTextFieldSetInputType( CoronaRuntime runtime, int id, String inputType )
-	{
-		runtime.getViewManager().setTextViewInputType(id, inputType);	
-	}
-
-	protected static void callTextFieldSetEditable( CoronaRuntime runtime, int id, boolean isEditable )
-	{
-		runtime.getViewManager().setTextViewEditable(id, isEditable);	
-	}
-	
-	protected static int[]  callTextFieldGetColor( CoronaRuntime runtime, int id )
-	{
-		int argb = runtime.getViewManager().getTextViewColor(id);
-
-		int[] result = new int[4];
-
-		result[0] = Color.red( argb );
-		result[1] = Color.green( argb );
-		result[2] = Color.blue( argb );
-		result[3] = Color.alpha( argb );
-		    
-	    return result;
-	}
-	
-	protected static String callTextFieldGetText( int id, CoronaRuntime runtime )
-	{
-		return runtime.getViewManager().getTextViewText(id);
-	}
-	
-	protected static String callTextFieldGetPlaceholder( int id, CoronaRuntime runtime )
-	{
-		return runtime.getViewManager().getTextViewPlaceholder(id);
-	}
-
-	protected static float callTextFieldGetSize( CoronaRuntime runtime, int id )
-	{
-		return runtime.getViewManager().getTextViewSize(id);
-	}
-
-	protected static String callTextFieldGetFont( int id )
-	{
-		return "";
-	}
-	
-	protected static String callTextFieldGetAlign( int id, CoronaRuntime runtime )
-	{
-		return runtime.getViewManager().getTextViewAlign(id);
-	}
-	
-	protected static boolean callTextFieldGetSecure( CoronaRuntime runtime, int id )
-	{
-		return runtime.getViewManager().getTextViewPassword(id);
-	}
-
-	protected static String callTextFieldGetInputType( int id, CoronaRuntime runtime )
-	{
-		return runtime.getViewManager().getTextViewInputType(id);
-	}
-
-	protected static boolean callTextFieldIsSingleLine( CoronaRuntime runtime, int id )
-	{
-		return runtime.getViewManager().isTextViewSingleLine(id);
-	}
-	
-	protected static boolean callTextFieldIsEditable( CoronaRuntime runtime, int id )
-	{
-		return runtime.getViewManager().isTextViewEditable(id);
-	}
 	
 	protected static void callDisplayObjectDestroy( CoronaRuntime runtime, int id )
 	{
@@ -2050,7 +1820,7 @@ public class NativeToJavaBridge {
 
 	protected static void callDisplayObjectSetFocus( CoronaRuntime runtime, int id, boolean focus )
 	{
-		runtime.getViewManager().setTextViewFocus(id, focus);
+		// runtime.getViewManager().setTextViewFocus(id, focus);
 	}
 
 	protected static int callCryptoGetDigestLength( String algorithm ) {

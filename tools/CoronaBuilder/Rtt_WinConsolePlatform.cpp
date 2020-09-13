@@ -147,12 +147,6 @@ WinConsolePlatform::~WinConsolePlatform()
 	delete fDevice;
 }
 
-FontMetricsMap WinConsolePlatform::GetFontMetrics(const PlatformFont& font) const 
-{
-	Rtt_ASSERT_MSG( 0, "Code should NOT be reached" );
-	return FontMetricsMap();
-}
-
 void WinConsolePlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {
 }

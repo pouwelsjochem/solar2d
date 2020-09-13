@@ -14,7 +14,6 @@
 #include "librtt/Display/Rtt_PlatformBitmap.h"
 #include "Core/Rtt_Array.h"
 #include "Core/Rtt_String.h"
-#include "Rtt_AndroidFont.h"
 #include "AndroidImageData.h"
 #include "AndroidImageDecoder.h"
 
@@ -24,7 +23,6 @@ class NativeToJavaBridge;
 
 namespace Rtt
 {
-class PlatformFont;
 
 // ----------------------------------------------------------------------------
 
@@ -77,28 +75,6 @@ class AndroidMaskAssetBitmap : public AndroidAssetBitmap
 		AndroidMaskAssetBitmap( Rtt_Allocator& context, const char *filePath, NativeToJavaBridge *ntjb );
 
 		virtual Format GetFormat() const;
-};
-
-class AndroidTextBitmap : public AndroidBitmap
-{
-	public:
-		typedef AndroidBitmap Super;
-
-		AndroidTextBitmap( Rtt_Allocator & context, NativeToJavaBridge *ntjb, const char str[], const PlatformFont& font, int width, int height, const char alignment[], Real & baselineOffset );
-		virtual ~AndroidTextBitmap();
-
-		virtual const void * GetBits( Rtt_Allocator * context ) const;
-		virtual PlatformBitmap::Format GetFormat() const;
-		
-	private:
-		AndroidFont fFont;
-		String fText;
-		int fWrapWidth;
-		int fClipWidth;
-		int fClipHeight;
-		mutable Real fBaselineOffset;
-		String fAlignment;
-		NativeToJavaBridge *fNativeToJavaBridge;
 };
 
 // ----------------------------------------------------------------------------

@@ -14,12 +14,10 @@
 #include "Rtt_IPhonePlatformCore.h"
 #include "Rtt_IPhoneTimer.h"
 
-#include "Rtt_IPhoneFont.h"
 #include "Rtt_IPhoneScreenSurface.h"
 
 #include "Rtt_LuaLibSystem.h"
 //#include "Rtt_LuaResource.h"
-#include "Rtt_AppleFont.h"
 
 #include "Rtt_TouchInhibitor.h"
 
@@ -113,13 +111,6 @@ bool
 IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
 {
 	return SaveBitmap( bitmap, [NSString stringWithUTF8String:filePath] );
-}
-
-Real
-IPhonePlatformCore::GetStandardFontSize() const
-{
-	// The system's default label font size matches UITextField's font size, which is a point size of 17.
-	return [AppleFont labelFontSize] * GetView().contentScaleFactor;
 }
 
 // This is a place where we can add system.getInfo() categories that return arbitrary types

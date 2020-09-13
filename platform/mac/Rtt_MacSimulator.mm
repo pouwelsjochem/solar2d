@@ -130,9 +130,6 @@ MacSimulator::Initialize(
 	// -------------
 	AppDelegate *delegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
 	
-	// Store the simulated device's default font size.
-	[fProperties setValue:[NSNumber numberWithFloat:config.defaultFontSize] forKey:@"defaultFontSize"];
-	
 	// Store whether or not the simulated device supports the following features.
 	[fProperties setValue:[NSNumber numberWithBool:config.supportsExitRequests] forKey:@"supportsExitRequests"];
 	[fProperties setValue:[NSNumber numberWithBool:config.supportsBackKey] forKey:@"supportsBackKey"];

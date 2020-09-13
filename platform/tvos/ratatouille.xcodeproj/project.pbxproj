@@ -70,7 +70,6 @@
 		A4551DE91BAA17CF00FB3BDF /* Rtt_DisplayDefaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D581BAA17CF00FB3BDF /* Rtt_DisplayDefaults.cpp */; };
 		A4551DEA1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D5A1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp */; };
 		A4551DEB1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D5C1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp */; };
-		A4551DED1BAA17CF00FB3BDF /* Rtt_EmbossedTextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D611BAA17CF00FB3BDF /* Rtt_EmbossedTextObject.cpp */; };
 		A4551DEF1BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D651BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp */; };
 		A4551DF01BAA17CF00FB3BDF /* Rtt_GradientPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D671BAA17CF00FB3BDF /* Rtt_GradientPaintAdapter.cpp */; };
 		A4551DF11BAA17CF00FB3BDF /* Rtt_GroupObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D691BAA17CF00FB3BDF /* Rtt_GroupObject.cpp */; };
@@ -121,7 +120,6 @@
 		A4551E1E1BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC61BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp */; };
 		A4551E1F1BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC81BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp */; };
 		A4551E201BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DCA1BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp */; };
-		A4551E211BAA17CF00FB3BDF /* Rtt_TextObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DCC1BAA17CF00FB3BDF /* Rtt_TextObject.cpp */; };
 		A4551E221BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DCE1BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp */; };
 		A4551E231BAA17CF00FB3BDF /* Rtt_TextureResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DD01BAA17CF00FB3BDF /* Rtt_TextureResource.cpp */; };
 		A4551E241BAA17CF00FB3BDF /* Rtt_TextureResourceAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DD21BAA17CF00FB3BDF /* Rtt_TextureResourceAdapter.cpp */; };
@@ -165,7 +163,6 @@
 		A4551F651BAA182D00FB3BDF /* Rtt_PlatformData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EFF1BAA182D00FB3BDF /* Rtt_PlatformData.cpp */; };
 		A4551F661BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F011BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp */; };
 		A4551F681BAA182D00FB3BDF /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F051BAA182D00FB3BDF /* Rtt_PlatformFBConnect.cpp */; };
-		A4551F691BAA182D00FB3BDF /* Rtt_PlatformFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F071BAA182D00FB3BDF /* Rtt_PlatformFont.cpp */; };
 		A4551F6B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */; };
 		A4551F6E1BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F121BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp */; };
 		A4551F6F1BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F141BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp */; };
@@ -222,7 +219,6 @@
 		A4AD307D1BAA2B80006A0C97 /* AppleWeakProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30531BAA2B80006A0C97 /* AppleWeakProxy.mm */; };
 		A4AD307E1BAA2B80006A0C97 /* CoronaLuaObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30551BAA2B80006A0C97 /* CoronaLuaObjC.mm */; };
 		A4AD307F1BAA2B80006A0C97 /* CoronaLuaObjC+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30571BAA2B80006A0C97 /* CoronaLuaObjC+NSObject.m */; };
-		A4AD30821BAA2B80006A0C97 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD305D1BAA2B80006A0C97 /* Rtt_AppleTextAlignment.mm */; };
 		A4AD30851BAA2B80006A0C97 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30631BAA2B80006A0C97 /* Rtt_AppleBitmap.mm */; };
 		A4AD30861BAA2B80006A0C97 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30651BAA2B80006A0C97 /* Rtt_AppleCallback.mm */; };
 		A4AD30871BAA2B80006A0C97 /* Rtt_AppleCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30661BAA2B80006A0C97 /* Rtt_AppleCrypto.cpp */; };
@@ -232,7 +228,6 @@
 		A4AD308C1BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30721BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm */; };
 		A4AD308D1BAA2B80006A0C97 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */; };
 		A4AD308E1BAA2B80006A0C97 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */; };
-		A4AD308F1BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30781BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
 		A4AD309A1BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30981BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		A4AD30E11BAA377C006A0C97 /* CoronaAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A41BAA377C006A0C97 /* CoronaAppDelegate.mm */; };
 		A4AD30E21BAA377C006A0C97 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A61BAA377C006A0C97 /* CoronaViewPrivate.mm */; };
@@ -241,13 +236,10 @@
 		A4AD30E61BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30AF1BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManager.mm */; };
 		A4AD30E71BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B11BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */; };
 		A4AD30E91BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B61BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.mm */; };
-		A4AD30EA1BAA377C006A0C97 /* Rtt_IPhoneFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B81BAA377C006A0C97 /* Rtt_IPhoneFont.mm */; };
 		A4AD30EF1BAA377C006A0C97 /* Rtt_IPhoneNativeObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C21BAA377C006A0C97 /* Rtt_IPhoneNativeObject.mm */; };
 		A4AD30F21BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */; };
 		A4AD30F31BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */; };
 		A4AD30F41BAA377C006A0C97 /* Rtt_IPhoneText.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CC1BAA377C006A0C97 /* Rtt_IPhoneText.mm */; };
-		A4AD30F51BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CE1BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.mm */; };
-		A4AD30F61BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D01BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.mm */; };
 		A4AD30F71BAA377C006A0C97 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */; };
 		A4AD30FD1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30DE1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm */; };
 		A4AD31051BAA38B0006A0C97 /* Rtt_TVOSDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31001BAA38B0006A0C97 /* Rtt_TVOSDevice.mm */; };
@@ -496,7 +488,6 @@
 		F517B79F1C6CEC520042F592 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C281C5722A500BE3194 /* NSString+Extensions.h */; };
 		F517B7A01C6CEC580042F592 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C291C5722A500BE3194 /* NSString+Extensions.m */; };
 		F51D55BA1C814021000CE085 /* CoronaGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F54D1E2E1CA36191000B280E /* Rtt_AppleFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = F54D1E2D1CA36191000B280E /* Rtt_AppleFont.mm */; };
 		F574F5FB1CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F574F5F71CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp */; };
 		F574F5FC1CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F574F5F91CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp */; };
 		F58011C01BE295070061E021 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD307A1BAA2B80006A0C97 /* Rtt_AppleTimer.mm */; };
@@ -871,8 +862,6 @@
 		A4551D5C1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DisplayPath.cpp; path = ../../librtt/Display/Rtt_DisplayPath.cpp; sourceTree = "<group>"; };
 		A4551D5D1BAA17CF00FB3BDF /* Rtt_DisplayPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayPath.h; path = ../../librtt/Display/Rtt_DisplayPath.h; sourceTree = "<group>"; };
 		A4551D5E1BAA17CF00FB3BDF /* Rtt_DisplayTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayTypes.h; path = ../../librtt/Display/Rtt_DisplayTypes.h; sourceTree = "<group>"; };
-		A4551D611BAA17CF00FB3BDF /* Rtt_EmbossedTextObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_EmbossedTextObject.cpp; path = ../../librtt/Display/Rtt_EmbossedTextObject.cpp; sourceTree = "<group>"; };
-		A4551D621BAA17CF00FB3BDF /* Rtt_EmbossedTextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_EmbossedTextObject.h; path = ../../librtt/Display/Rtt_EmbossedTextObject.h; sourceTree = "<group>"; };
 		A4551D651BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GradientPaint.cpp; path = ../../librtt/Display/Rtt_GradientPaint.cpp; sourceTree = "<group>"; };
 		A4551D661BAA17CF00FB3BDF /* Rtt_GradientPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GradientPaint.h; path = ../../librtt/Display/Rtt_GradientPaint.h; sourceTree = "<group>"; };
 		A4551D671BAA17CF00FB3BDF /* Rtt_GradientPaintAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GradientPaintAdapter.cpp; path = ../../librtt/Display/Rtt_GradientPaintAdapter.cpp; sourceTree = "<group>"; };
@@ -976,8 +965,6 @@
 		A4551DC91BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRoundedRect.h; path = ../../librtt/Display/Rtt_TesselatorRoundedRect.h; sourceTree = "<group>"; };
 		A4551DCA1BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorShape.cpp; path = ../../librtt/Display/Rtt_TesselatorShape.cpp; sourceTree = "<group>"; };
 		A4551DCB1BAA17CF00FB3BDF /* Rtt_TesselatorShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorShape.h; path = ../../librtt/Display/Rtt_TesselatorShape.h; sourceTree = "<group>"; };
-		A4551DCC1BAA17CF00FB3BDF /* Rtt_TextObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextObject.cpp; path = ../../librtt/Display/Rtt_TextObject.cpp; sourceTree = "<group>"; };
-		A4551DCD1BAA17CF00FB3BDF /* Rtt_TextObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextObject.h; path = ../../librtt/Display/Rtt_TextObject.h; sourceTree = "<group>"; };
 		A4551DCE1BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureFactory.cpp; path = ../../librtt/Display/Rtt_TextureFactory.cpp; sourceTree = "<group>"; };
 		A4551DCF1BAA17CF00FB3BDF /* Rtt_TextureFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureFactory.h; path = ../../librtt/Display/Rtt_TextureFactory.h; sourceTree = "<group>"; };
 		A4551DD01BAA17CF00FB3BDF /* Rtt_TextureResource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResource.cpp; path = ../../librtt/Display/Rtt_TextureResource.cpp; sourceTree = "<group>"; };
@@ -1170,8 +1157,6 @@
 		A4551F021BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformDisplayObject.h; path = ../../librtt/Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
 		A4551F051BAA182D00FB3BDF /* Rtt_PlatformFBConnect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformFBConnect.cpp; path = ../../librtt/Rtt_PlatformFBConnect.cpp; sourceTree = "<group>"; };
 		A4551F061BAA182D00FB3BDF /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformFBConnect.h; path = ../../librtt/Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
-		A4551F071BAA182D00FB3BDF /* Rtt_PlatformFont.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformFont.cpp; path = ../../librtt/Rtt_PlatformFont.cpp; sourceTree = "<group>"; };
-		A4551F081BAA182D00FB3BDF /* Rtt_PlatformFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformFont.h; path = ../../librtt/Rtt_PlatformFont.h; sourceTree = "<group>"; };
 		A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformInAppStore.cpp; path = ../../librtt/Rtt_PlatformInAppStore.cpp; sourceTree = "<group>"; };
 		A4551F0C1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformInAppStore.h; path = ../../librtt/Rtt_PlatformInAppStore.h; sourceTree = "<group>"; };
 		A4551F121BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformModalInteraction.cpp; path = ../../librtt/Rtt_PlatformModalInteraction.cpp; sourceTree = "<group>"; };
@@ -1273,8 +1258,6 @@
 		A4AD30551BAA2B80006A0C97 /* CoronaLuaObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaLuaObjC.mm; path = ../apple/CoronaLuaObjC.mm; sourceTree = "<group>"; };
 		A4AD30561BAA2B80006A0C97 /* CoronaLuaObjC+NSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CoronaLuaObjC+NSObject.h"; path = "../apple/CoronaLuaObjC+NSObject.h"; sourceTree = "<group>"; };
 		A4AD30571BAA2B80006A0C97 /* CoronaLuaObjC+NSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CoronaLuaObjC+NSObject.m"; path = "../apple/CoronaLuaObjC+NSObject.m"; sourceTree = "<group>"; };
-		A4AD305C1BAA2B80006A0C97 /* Rtt_AppleTextAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTextAlignment.h; path = ../apple/Rtt_AppleTextAlignment.h; sourceTree = "<group>"; };
-		A4AD305D1BAA2B80006A0C97 /* Rtt_AppleTextAlignment.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleTextAlignment.mm; path = ../apple/Rtt_AppleTextAlignment.mm; sourceTree = "<group>"; };
 		A4AD30621BAA2B80006A0C97 /* Rtt_AppleBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleBitmap.h; path = ../apple/Rtt_AppleBitmap.h; sourceTree = "<group>"; };
 		A4AD30631BAA2B80006A0C97 /* Rtt_AppleBitmap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleBitmap.mm; path = ../apple/Rtt_AppleBitmap.mm; sourceTree = "<group>"; };
 		A4AD30641BAA2B80006A0C97 /* Rtt_AppleCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleCallback.h; path = ../apple/Rtt_AppleCallback.h; sourceTree = "<group>"; };
@@ -1283,7 +1266,6 @@
 		A4AD30671BAA2B80006A0C97 /* Rtt_AppleCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleCrypto.h; path = ../apple/Rtt_AppleCrypto.h; sourceTree = "<group>"; };
 		A4AD30681BAA2B80006A0C97 /* Rtt_AppleData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleData.h; path = ../apple/Rtt_AppleData.h; sourceTree = "<group>"; };
 		A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleData.mm; path = ../apple/Rtt_AppleData.mm; sourceTree = "<group>"; };
-		A4AD306C1BAA2B80006A0C97 /* Rtt_AppleFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleFont.h; path = ../apple/Rtt_AppleFont.h; sourceTree = "<group>"; };
 		A4AD306D1BAA2B80006A0C97 /* Rtt_AppleInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInAppStore.h; path = ../apple/Rtt_AppleInAppStore.h; sourceTree = "<group>"; };
 		A4AD306E1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleInAppStore.mm; path = ../apple/Rtt_AppleInAppStore.mm; sourceTree = "<group>"; };
 		A4AD306F1BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInAppStoreApple.h; path = ../apple/Rtt_AppleInAppStoreApple.h; sourceTree = "<group>"; };
@@ -1294,8 +1276,6 @@
 		A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_ApplePlatform.mm; path = ../apple/Rtt_ApplePlatform.mm; sourceTree = "<group>"; };
 		A4AD30751BAA2B80006A0C97 /* Rtt_AppleReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleReachability.h; path = ../apple/Rtt_AppleReachability.h; sourceTree = "<group>"; };
 		A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleReachability.mm; path = ../apple/Rtt_AppleReachability.mm; sourceTree = "<group>"; };
-		A4AD30771BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTextDelegateWrapperObjectHelper.h; path = ../apple/Rtt_AppleTextDelegateWrapperObjectHelper.h; sourceTree = "<group>"; };
-		A4AD30781BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Rtt_AppleTextDelegateWrapperObjectHelper.m; path = ../apple/Rtt_AppleTextDelegateWrapperObjectHelper.m; sourceTree = "<group>"; };
 		A4AD30791BAA2B80006A0C97 /* Rtt_AppleTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTimer.h; path = ../apple/Rtt_AppleTimer.h; sourceTree = "<group>"; };
 		A4AD307A1BAA2B80006A0C97 /* Rtt_AppleTimer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleTimer.mm; path = ../apple/Rtt_AppleTimer.mm; sourceTree = "<group>"; };
 		A4AD30981BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_RuntimeDelegatePlayer.cpp; path = ../../librtt/Rtt_RuntimeDelegatePlayer.cpp; sourceTree = "<group>"; };
@@ -1317,8 +1297,6 @@
 		A4AD30B11BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneAudioSessionManagerImplementation.mm; path = ../iphone/Rtt_IPhoneAudioSessionManagerImplementation.mm; sourceTree = "<group>"; };
 		A4AD30B51BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneDisplayObject.h; path = ../iphone/Rtt_IPhoneDisplayObject.h; sourceTree = "<group>"; };
 		A4AD30B61BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneDisplayObject.mm; path = ../iphone/Rtt_IPhoneDisplayObject.mm; sourceTree = "<group>"; };
-		A4AD30B71BAA377C006A0C97 /* Rtt_IPhoneFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneFont.h; path = ../iphone/Rtt_IPhoneFont.h; sourceTree = "<group>"; };
-		A4AD30B81BAA377C006A0C97 /* Rtt_IPhoneFont.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneFont.mm; path = ../iphone/Rtt_IPhoneFont.mm; sourceTree = "<group>"; };
 		A4AD30C11BAA377C006A0C97 /* Rtt_IPhoneNativeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneNativeObject.h; path = ../iphone/Rtt_IPhoneNativeObject.h; sourceTree = "<group>"; };
 		A4AD30C21BAA377C006A0C97 /* Rtt_IPhoneNativeObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneNativeObject.mm; path = ../iphone/Rtt_IPhoneNativeObject.mm; sourceTree = "<group>"; };
 		A4AD30C71BAA377C006A0C97 /* Rtt_IPhonePlatformBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhonePlatformBase.h; path = ../iphone/Rtt_IPhonePlatformBase.h; sourceTree = "<group>"; };
@@ -1327,10 +1305,6 @@
 		A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneScreenSurface.mm; path = ../iphone/Rtt_IPhoneScreenSurface.mm; sourceTree = "<group>"; };
 		A4AD30CB1BAA377C006A0C97 /* Rtt_IPhoneText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneText.h; path = ../iphone/Rtt_IPhoneText.h; sourceTree = "<group>"; };
 		A4AD30CC1BAA377C006A0C97 /* Rtt_IPhoneText.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneText.mm; path = ../iphone/Rtt_IPhoneText.mm; sourceTree = "<group>"; };
-		A4AD30CD1BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTextBoxObject.h; path = ../iphone/Rtt_IPhoneTextBoxObject.h; sourceTree = "<group>"; };
-		A4AD30CE1BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneTextBoxObject.mm; path = ../iphone/Rtt_IPhoneTextBoxObject.mm; sourceTree = "<group>"; };
-		A4AD30CF1BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTextFieldObject.h; path = ../iphone/Rtt_IPhoneTextFieldObject.h; sourceTree = "<group>"; };
-		A4AD30D01BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneTextFieldObject.mm; path = ../iphone/Rtt_IPhoneTextFieldObject.mm; sourceTree = "<group>"; };
 		A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTimer.h; path = ../iphone/Rtt_IPhoneTimer.h; sourceTree = "<group>"; };
 		A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneTimer.mm; path = ../iphone/Rtt_IPhoneTimer.mm; sourceTree = "<group>"; };
 		A4AD30DD1BAA377C006A0C97 /* Rtt_TouchInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TouchInhibitor.h; path = ../iphone/Rtt_TouchInhibitor.h; sourceTree = "<group>"; };
@@ -1554,7 +1528,6 @@
 		F50CA3C61C81114800746C98 /* Rtt_TextureResourceExternalAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceExternalAdapter.h; path = ../../librtt/Display/Rtt_TextureResourceExternalAdapter.h; sourceTree = "<group>"; };
 		F50CA3CB1C8111A300746C98 /* CoronaGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaGraphics.cpp; path = ../../librtt/Corona/CoronaGraphics.cpp; sourceTree = "<group>"; };
 		F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGraphics.h; path = ../../librtt/Corona/CoronaGraphics.h; sourceTree = "<group>"; };
-		F54D1E2D1CA36191000B280E /* Rtt_AppleFont.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleFont.mm; path = ../apple/Rtt_AppleFont.mm; sourceTree = "<group>"; };
 		F574F5F71CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterMesh.cpp; path = ../../librtt/Display/Rtt_ShapeAdapterMesh.cpp; sourceTree = "<group>"; };
 		F574F5F81CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterMesh.h; path = ../../librtt/Display/Rtt_ShapeAdapterMesh.h; sourceTree = "<group>"; };
 		F574F5F91CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorMesh.cpp; path = ../../librtt/Display/Rtt_TesselatorMesh.cpp; sourceTree = "<group>"; };
@@ -1846,8 +1819,6 @@
 				A4551D5C1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp */,
 				A4551D5D1BAA17CF00FB3BDF /* Rtt_DisplayPath.h */,
 				A4551D5E1BAA17CF00FB3BDF /* Rtt_DisplayTypes.h */,
-				A4551D611BAA17CF00FB3BDF /* Rtt_EmbossedTextObject.cpp */,
-				A4551D621BAA17CF00FB3BDF /* Rtt_EmbossedTextObject.h */,
 				A4551D651BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp */,
 				A4551D661BAA17CF00FB3BDF /* Rtt_GradientPaint.h */,
 				A4551D671BAA17CF00FB3BDF /* Rtt_GradientPaintAdapter.cpp */,
@@ -1955,8 +1926,6 @@
 				A4551DC91BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.h */,
 				A4551DCA1BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp */,
 				A4551DCB1BAA17CF00FB3BDF /* Rtt_TesselatorShape.h */,
-				A4551DCC1BAA17CF00FB3BDF /* Rtt_TextObject.cpp */,
-				A4551DCD1BAA17CF00FB3BDF /* Rtt_TextObject.h */,
 				A4551DCE1BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp */,
 				A4551DCF1BAA17CF00FB3BDF /* Rtt_TextureFactory.h */,
 				A4551DD01BAA17CF00FB3BDF /* Rtt_TextureResource.cpp */,
@@ -2332,8 +2301,6 @@
 				A4551F021BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.h */,
 				A4551F051BAA182D00FB3BDF /* Rtt_PlatformFBConnect.cpp */,
 				A4551F061BAA182D00FB3BDF /* Rtt_PlatformFBConnect.h */,
-				A4551F071BAA182D00FB3BDF /* Rtt_PlatformFont.cpp */,
-				A4551F081BAA182D00FB3BDF /* Rtt_PlatformFont.h */,
 				A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */,
 				A4551F0C1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.h */,
 				A4551F121BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp */,
@@ -2382,8 +2349,6 @@
 				A4AD30571BAA2B80006A0C97 /* CoronaLuaObjC+NSObject.m */,
 				C2756C281C5722A500BE3194 /* NSString+Extensions.h */,
 				C2756C291C5722A500BE3194 /* NSString+Extensions.m */,
-				A4AD305C1BAA2B80006A0C97 /* Rtt_AppleTextAlignment.h */,
-				A4AD305D1BAA2B80006A0C97 /* Rtt_AppleTextAlignment.mm */,
 				A4AD30621BAA2B80006A0C97 /* Rtt_AppleBitmap.h */,
 				A4AD30631BAA2B80006A0C97 /* Rtt_AppleBitmap.mm */,
 				A4AD30641BAA2B80006A0C97 /* Rtt_AppleCallback.h */,
@@ -2392,8 +2357,6 @@
 				A4AD30671BAA2B80006A0C97 /* Rtt_AppleCrypto.h */,
 				A4AD30681BAA2B80006A0C97 /* Rtt_AppleData.h */,
 				A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */,
-				A4AD306C1BAA2B80006A0C97 /* Rtt_AppleFont.h */,
-				F54D1E2D1CA36191000B280E /* Rtt_AppleFont.mm */,
 				A4AD306D1BAA2B80006A0C97 /* Rtt_AppleInAppStore.h */,
 				A4AD306E1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm */,
 				A4AD306F1BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.h */,
@@ -2404,8 +2367,6 @@
 				A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */,
 				A4AD30751BAA2B80006A0C97 /* Rtt_AppleReachability.h */,
 				A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */,
-				A4AD30771BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */,
-				A4AD30781BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */,
 				A4AD30791BAA2B80006A0C97 /* Rtt_AppleTimer.h */,
 				A4AD307A1BAA2B80006A0C97 /* Rtt_AppleTimer.mm */,
 				F58011B31BE294F40061E021 /* Rtt_AppleInputDevice.h */,
@@ -2455,8 +2416,6 @@
 				A4AD30B11BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */,
 				A4AD30B51BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.h */,
 				A4AD30B61BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.mm */,
-				A4AD30B71BAA377C006A0C97 /* Rtt_IPhoneFont.h */,
-				A4AD30B81BAA377C006A0C97 /* Rtt_IPhoneFont.mm */,
 				A4AD30C11BAA377C006A0C97 /* Rtt_IPhoneNativeObject.h */,
 				A4AD30C21BAA377C006A0C97 /* Rtt_IPhoneNativeObject.mm */,
 				A4AD30C71BAA377C006A0C97 /* Rtt_IPhonePlatformBase.h */,
@@ -2467,10 +2426,6 @@
 				A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */,
 				A4AD30CB1BAA377C006A0C97 /* Rtt_IPhoneText.h */,
 				A4AD30CC1BAA377C006A0C97 /* Rtt_IPhoneText.mm */,
-				A4AD30CD1BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.h */,
-				A4AD30CE1BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.mm */,
-				A4AD30CF1BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.h */,
-				A4AD30D01BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.mm */,
 				A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */,
 				A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */,
 				A4AD30DD1BAA377C006A0C97 /* Rtt_TouchInhibitor.h */,
@@ -3613,7 +3568,6 @@
 				A4551E131BAA17CF00FB3BDF /* Rtt_ShapeObject.cpp in Sources */,
 				A4551DEA1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp in Sources */,
 				A4551F781BAA182D00FB3BDF /* Rtt_Resource.cpp in Sources */,
-				A4551F691BAA182D00FB3BDF /* Rtt_PlatformFont.cpp in Sources */,
 				A4551DE41BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp in Sources */,
 				A4AD315C1BAB8C64006A0C97 /* CoronaLuaLibrary.cpp in Sources */,
 				A4551E111BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.cpp in Sources */,
@@ -3630,7 +3584,6 @@
 				A4551F581BAA182D00FB3BDF /* Rtt_LuaResourceOwner.cpp in Sources */,
 				A4551DDF1BAA17CF00FB3BDF /* Rtt_BitmapPaint.cpp in Sources */,
 				A4551F481BAA182D00FB3BDF /* Rtt_LuaCoronaBaseLib.c in Sources */,
-				A4551E211BAA17CF00FB3BDF /* Rtt_TextObject.cpp in Sources */,
 				A4551F771BAA182D00FB3BDF /* Rtt_RenderingStream.cpp in Sources */,
 				A4551F4B1BAA182D00FB3BDF /* Rtt_LuaLibCrypto.cpp in Sources */,
 				A4551F651BAA182D00FB3BDF /* Rtt_PlatformData.cpp in Sources */,
@@ -3731,7 +3684,6 @@
 				A4DD48051BB260B200FD988E /* Rtt_InputDeviceType.cpp in Sources */,
 				A4551DE51BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp in Sources */,
 				A4551D2D1BAA17BE00FB3BDF /* Rtt_ArrayTuple.cpp in Sources */,
-				A4551DED1BAA17CF00FB3BDF /* Rtt_EmbossedTextObject.cpp in Sources */,
 				A4551E0E1BAA17CF00FB3BDF /* Rtt_ShapeAdapter.cpp in Sources */,
 				A4551E1F1BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				A4551DFE1BAA17CF00FB3BDF /* Rtt_PlatformBitmapTexture.cpp in Sources */,
@@ -3773,7 +3725,6 @@
 				F58011C21BE295070061E021 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				A4AD30F71BAA377C006A0C97 /* Rtt_IPhoneTimer.mm in Sources */,
 				A4AD30F41BAA377C006A0C97 /* Rtt_IPhoneText.mm in Sources */,
-				A4AD30EA1BAA377C006A0C97 /* Rtt_IPhoneFont.mm in Sources */,
 				A4AD308C1BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
 				A4AD308A1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm in Sources */,
 				A4AD30F31BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm in Sources */,
@@ -3787,20 +3738,15 @@
 				A4AD308D1BAA2B80006A0C97 /* Rtt_ApplePlatform.mm in Sources */,
 				A4AD308B1BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm in Sources */,
 				A4AD30E21BAA377C006A0C97 /* CoronaViewPrivate.mm in Sources */,
-				A4AD30F51BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.mm in Sources */,
 				A4AD30EF1BAA377C006A0C97 /* Rtt_IPhoneNativeObject.mm in Sources */,
 				A4AD30F21BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				A4AD30861BAA2B80006A0C97 /* Rtt_AppleCallback.mm in Sources */,
 				A4AD30FD1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm in Sources */,
-				A4AD30821BAA2B80006A0C97 /* Rtt_AppleTextAlignment.mm in Sources */,
-				A4AD308F1BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */,
 				A4AD308E1BAA2B80006A0C97 /* Rtt_AppleReachability.mm in Sources */,
 				F58011C31BE295070061E021 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				A4AD30851BAA2B80006A0C97 /* Rtt_AppleBitmap.mm in Sources */,
 				A4AD30E71BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */,
-				A4AD30F61BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.mm in Sources */,
 				A4AD316B1BAB9E19006A0C97 /* CoronaLuaIOS.mm in Sources */,
-				F54D1E2E1CA36191000B280E /* Rtt_AppleFont.mm in Sources */,
 				A4AD31061BAA38B0006A0C97 /* Rtt_TVOSPlatform.mm in Sources */,
 				F58011C01BE295070061E021 /* Rtt_AppleTimer.mm in Sources */,
 				A4DD484B1BB2963200FD988E /* CoronaViewControllerPrivate.mm in Sources */,

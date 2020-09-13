@@ -90,13 +90,6 @@ class TextureFactory
 			Texture::Filter filter,
 			Texture::Wrap wrap,
 			bool save_to_file );
-
-		SharedPtr< TextureResource > Create(
-			const char *str,
-			const PlatformFont& font,
-			Real w, Real h,
-			const char alignment[],
-			Real& baselineOffset);
 			
 		SharedPtr< TextureResource > GetDefault();
 		SharedPtr< TextureResource > GetContainerMask();

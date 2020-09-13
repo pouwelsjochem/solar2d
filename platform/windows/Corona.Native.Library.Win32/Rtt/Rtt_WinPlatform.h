@@ -37,10 +37,6 @@ class WinGLView;
 
 #pragma endregion
 
-
-#undef CreateFont    // <windows.h> defines it
-
-
 namespace Rtt
 {
 
@@ -61,7 +57,6 @@ class WinPlatform : public MPlatform
 		virtual PlatformSurface* CreateOffscreenSurface(const PlatformSurface& parent) const;
 		virtual PlatformTimer* CreateTimerWithCallback(MCallback& callback) const;
 		virtual PlatformBitmap* CreateBitmap(const char* filename, bool convertToGrayscale) const;
-		virtual PlatformBitmap* CreateBitmapMask(const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset)  const;
 		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath ) const;
 		virtual const MCrypto& GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String * value) const;
@@ -70,7 +65,6 @@ class WinPlatform : public MPlatform
 		virtual OperationResult DeletePreferences(const char* categoryName, const char** keyNameArray, U32 keyNameCount) const;
 		virtual bool OpenURL(const char* url) const;
 		virtual int CanOpenURL(const char* url) const;
-		virtual FontMetricsMap GetFontMetrics(const PlatformFont& font ) const;
 		virtual PlatformStoreProvider* GetStoreProvider(const ResourceHandle<lua_State> & handle) const;
 		virtual void SetIdleTimer(bool enabled) const;
 		virtual bool GetIdleTimer() const;
@@ -81,13 +75,6 @@ class WinPlatform : public MPlatform
 		virtual bool CanShowPopup(const char *name) const;
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
-		virtual PlatformDisplayObject* CreateNativeTextBox(const Rect& bounds) const;
-		virtual PlatformDisplayObject* CreateNativeTextField(const Rect& bounds) const;
-		virtual void SetKeyboardFocus(PlatformDisplayObject *textObject) const;
-		virtual Rtt_Real GetStandardFontSize() const;
-		virtual S32 GetFontNames(lua_State *L, int index) const;
-		virtual PlatformFont* CreateFont(PlatformFont::SystemFont fontType, Rtt_Real size) const;
-		virtual PlatformFont* CreateFont(const char *fontName, Rtt_Real size) const;
 		virtual PlatformFBConnect* GetFBConnect() const;
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const;
 		virtual void ReleaseNotification(void *notificationId) const;

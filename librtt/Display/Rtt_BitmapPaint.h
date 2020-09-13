@@ -45,9 +45,6 @@ class BitmapPaint : public Paint
 		// Wrap platform bitmap in Paint-compatible interface.
 		static BitmapPaint* NewBitmap( TextureFactory& factory, PlatformBitmap* bitmap, bool sharedTexture );
 
-		// Device text: create bitmap from string
-		static BitmapPaint* NewBitmap( Runtime& runtime, const char text[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset );
-
 	public:
 		BitmapPaint( const SharedPtr< TextureResource >& resource );
 

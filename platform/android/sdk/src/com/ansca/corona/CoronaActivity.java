@@ -58,9 +58,6 @@ public class CoronaActivity extends Activity {
 		return fCoronaRuntime;
 	}
 
-	/** This Corona activity's private event handler for various events. */
-	private CoronaActivity.EventHandler fEventHandler;
-
 	/** Handler used to post messages and Runnable objects to main UI thread's message queue. */
     private Handler myHandler = null;
 
@@ -188,37 +185,11 @@ public class CoronaActivity extends Activity {
 		//       externally such as by a notification or the Facebook app.
 		myInitialIntent = getIntent();
 
-		// Fetch this activity's meta-data from the manifest.
-		boolean isKeyboardAppPanningEnabled = false;
-		try {
-			android.content.pm.ActivityInfo activityInfo;
-			activityInfo = getPackageManager().getActivityInfo(
-						getComponentName(), android.content.pm.PackageManager.GET_META_DATA);
-			if ((activityInfo != null) && (activityInfo.metaData != null)) {
-				isKeyboardAppPanningEnabled =
-						activityInfo.metaData.getBoolean("coronaWindowMovesWhenKeyboardAppears");
-			}
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
 		// Show the window fullscreen, if possible.
-		// Note: Do not show the window in fullscreen mode if we want the keyboard to pan the app.
-		//       We do this because the Android OS does not support ADJUST_PAN when in fullscreen mode.
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		if (isKeyboardAppPanningEnabled == false) {
-			getWindow().setFlags(
-					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-					WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-		}
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-		// When soft keyboard is shown, don't slide as that messes up text fields
-		getWindow().setSoftInputMode(
-				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN |
-				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
 		// If this is a new installation of this app, then delete its "externalized" assets to be replaced by the new ones.
 		// We determine if this is a new installation by storing the APK's timestamp to the preferences file since last the app ran.
@@ -320,9 +291,6 @@ public class CoronaActivity extends Activity {
 		// Start up the input device monitoring system, if not done already.
 		// Note: Creating the InputDeviceServices object is all it takes.
 		new com.ansca.corona.input.InputDeviceServices(this);
-
-		// Set up a private event handler.
-		fEventHandler = new CoronaActivity.EventHandler(this);
 
 		// Sync up status of dangerous-level permissions.
 		// This is to work around the possibility of a partially granted permission group which 
@@ -1021,9 +989,6 @@ public class CoronaActivity extends Activity {
 	 */
     @Override
 	protected void onDestroy() {
-		// Unsubscribe from events.
-		fEventHandler.dispose();
-
 		// wait renderer thread completing
 		myGLView.requestExitAndWait();
 
@@ -1734,124 +1699,6 @@ public class CoronaActivity extends Activity {
 		// Corona's Lua listeners have not overriden the key event.
 		// Perform the default handling for the received event.
 		return super.onKeyUp(keyCode, event);
-	}
-
-
-	/** Handles events for this Corona activity. */
-	private static class EventHandler implements android.view.ViewTreeObserver.OnGlobalLayoutListener {
-		/** Reference to the activity that owns this event handler. */
-		private CoronaActivity fActivity;
-
-		/** Set true if this handler is in the middle of updating the screen's layout. */
-		private boolean fIsUpdatingLayout;
-
-		/**
-		 * If "fIsUpdatingLayout" is set to true, then this schedule when this event handler should
-		 * stop updating the layout.
-		 */
-		private Ticks fUpdateLayoutEndTicks;
-
-
-		/**
-		 * Creates a new private event handler for the CoronaActivity.
-		 * @param activity Reference to the CoronaActivity that owns this event handler.
-		 *                 Cannot be null or else an exception will be thrown.
-		 */
-		public EventHandler(CoronaActivity activity) {
-			// Validate.
-			if (activity == null) {
-				throw new NullPointerException();
-			}
-
-			// Initialize member variables.
-			fActivity = activity;
-			fIsUpdatingLayout = false;
-			fUpdateLayoutEndTicks = Ticks.fromCurrentTime();
-
-			// Subscribe to the GlobalLayout event, but only if the activity is not fullscreen.
-			// We do this to work-around an Android rendering bug when the keyboard pans the app.
-			int flags = fActivity.getWindow().getAttributes().flags;
-			if ((flags & android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS) == 0) {
-				android.view.View rootView = getContentView();
-				if (rootView != null) {
-					rootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
-				}
-			}
-		}
-
-		/**
-		 * Unsubscribes from events and disposes of this object's resources.
-		 * Expected to be called by the activity's onDestroy() method.
-		 */
-		public void dispose() {
-			// Unsubscribe from all events.
-			android.view.View rootView = getContentView();
-			if (rootView != null) {
-				if (android.os.Build.VERSION.SDK_INT >= 16) {
-					ApiLevel16.removeOnGlobalLayoutListener(rootView.getViewTreeObserver(), this);
-				}
-				else {
-					rootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-				}
-			}
-		}
-
-		/**
-		 * Called when the activity window layou has changed.
-		 * This can happen when it is resized or panned by the virtual keyboard, if enabled.
-		 */
-		@Override
-		public void onGlobalLayout() {
-			// Determine if the virtual keyboard is currently shown.
-			String serviceName = android.content.Context.INPUT_METHOD_SERVICE;
-			android.view.inputmethod.InputMethodManager inputMethodManager =
-						(android.view.inputmethod.InputMethodManager)fActivity.getSystemService(serviceName);
-			boolean isVirtualKeyboardVisible = inputMethodManager.isAcceptingText();
-
-			// If the virtual keyboard is currently shown, then schedule this handler to redraw the UI
-			// to work-around an Android rendering bug where native UI displays glitchy when the app has been
-			// panned by the keyboard.
-			Ticks currentTicks = Ticks.fromCurrentTime();
-			if (isVirtualKeyboardVisible) {
-				fIsUpdatingLayout = true;
-				fUpdateLayoutEndTicks = currentTicks.addSeconds(2);
-			}
-
-			// Do not continue if we do not need to redraw the native UI.
-			if (fIsUpdatingLayout && (fUpdateLayoutEndTicks.compareTo(currentTicks) < 0)) {
-				fIsUpdatingLayout = false;
-			}
-			if (fIsUpdatingLayout == false) {
-				return;
-			}
-
-			// Re-draw and re-layout all views.
-			android.view.View rootView = getContentView();
-			if (rootView != null) {
-				rootView.requestLayout();
-			}
-		}
-
-		/**
-		 * Fetches the activity's root content view.
-		 * @return Returns a reference to the activity's root content view.
-		 *         <p>
-		 *         Returns null if the root view is no longer available, which can happen if
-		 *         the activity has been destroyed.
-		 */
-		private android.view.View getContentView() {
-			CoronaRuntime runtime = fActivity.fCoronaRuntime;
-			if (runtime != null) {
-				ViewManager viewManager = runtime.getViewManager();
-				if (viewManager != null) {
-					android.view.View rootView = viewManager.getContentView();
-					if (rootView != null) {
-						return rootView;
-					}
-				}
-			}
-			return null;
-		}
 	}
 
 	/** Default handling of permissions on Android 6+. 

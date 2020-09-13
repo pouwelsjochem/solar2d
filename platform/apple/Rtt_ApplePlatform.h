@@ -84,18 +84,12 @@ class ApplePlatform : public MPlatform
 		virtual PlatformSurface* CreateOffscreenSurface( const PlatformSurface& parentDevice ) const;
 		virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const;
 		virtual PlatformBitmap* CreateBitmap( const char *filePath, bool convertToGrayscale ) const;
-		virtual PlatformBitmap* CreateBitmapMask( const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset ) const;
-		virtual FontMetricsMap GetFontMetrics( const PlatformFont& font ) const;
 		virtual const MCrypto& GetCrypto() const;
 
 		virtual void GetPreference( Category category, Rtt::String * value ) const;
 		virtual Preference::ReadValueResult GetPreference( const char* categoryName, const char* keyName ) const;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
-
-		virtual Real GetStandardFontSize() const;
-		virtual PlatformFont* CreateFont( PlatformFont::SystemFont fontType, Rtt_Real size ) const;
-		virtual PlatformFont* CreateFont( const char *fontName, Rtt_Real size ) const;
 
 	public:
 		virtual bool CanShowPopup( const char *name ) const;

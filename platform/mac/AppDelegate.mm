@@ -64,7 +64,6 @@
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_Runtime.h"
-#include "Rtt_MacFont.h"
 
 #include "Rtt_Lua.h"
 #include "Rtt_LuaFile.h"
