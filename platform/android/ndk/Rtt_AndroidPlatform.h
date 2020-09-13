@@ -72,8 +72,6 @@ class AndroidPlatform : public MPlatform
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
 
-		virtual void SetActivityIndicator( bool visible ) const;
-
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;

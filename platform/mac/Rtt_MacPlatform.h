@@ -48,7 +48,6 @@ namespace Rtt
 class MacConsoleDevice;
 class MacFBConnect;
 class MacViewSurface;
-class MacActivityIndicator;
 class PlatformSimulator;
 class PlatformSurface;
 
@@ -107,8 +106,6 @@ class MacPlatform : public ApplePlatform
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
-		virtual void SetActivityIndicator( bool visible ) const;
-
 		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textField ) const;
@@ -161,7 +158,6 @@ class MacPlatform : public ApplePlatform
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
-		mutable MacActivityIndicator* fActivityIndicator;
 #if Rtt_AUTHORING_SIMULATOR
 		mutable MacFBConnect *fFBConnect;
 #endif // Rtr_AUTHORING_SIMULATOR	

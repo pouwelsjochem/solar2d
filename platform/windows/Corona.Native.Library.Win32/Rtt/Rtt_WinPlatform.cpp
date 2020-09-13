@@ -124,9 +124,6 @@ namespace Rtt
 			SetIdleTimer(true);
 		}
 
-		// Clear the activity indicator, if shown.
-		SetActivityIndicator(false);
-
 		// Delete platform's owned objects.
 		Rtt_DELETE(fFBConnect);
 	}
@@ -1120,27 +1117,6 @@ namespace Rtt
 
 		// Delete the given preferences from storage and return the result.
 		return storedPreferencesResult.GetValue()->Delete(keyNameArray, (int)keyNameCount);
-	}
-
-	void WinPlatform::SetActivityIndicator(bool visible) const
-	{
-		const_cast<WinPlatform*>(this)->OnSetActivityIndicator(visible);
-	}
-
-	void WinPlatform::OnSetActivityIndicator(bool visible)
-	{
-		// Show/hide the simulated device's activity indicator, if applicable.
-		auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-		if (deviceSimulatorServicesPointer)
-		{
-			deviceSimulatorServicesPointer->SetActivityIndicatorVisible(visible);
-		}
-
-		// Show/hide the Windows mouse wait cursor.
-		// Note: Corona's native UI objects, such as text boxes, will block user input only if the wait cursor is enabled.
-		//       So, it's important to set this for both the Corona Simulator and Win32 desktop apps.
-		WinInputDeviceManager& inputDeviceManager = (WinInputDeviceManager&)(fDevice.GetInputDeviceManager());
-		inputDeviceManager.SetWaitCursorEnabled(visible);
 	}
 
 	bool WinPlatform::CanShowPopup(const char* name) const

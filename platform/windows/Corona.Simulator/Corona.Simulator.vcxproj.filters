@@ -14,7 +14,6 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="PasswordDlg.h" />
-    <ClInclude Include="ProgressWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SelectSampleProjectDlg.h" />
     <ClInclude Include="Simulator.h" />
@@ -152,7 +151,6 @@
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="PasswordDlg.cpp" />
-    <ClCompile Include="ProgressWnd.cpp" />
     <ClCompile Include="SelectSampleProjectDlg.cpp" />
     <ClCompile Include="Simulator.cpp" />
     <ClCompile Include="SimulatorDoc.cpp" />
@@ -340,9 +338,6 @@
     </LuaToCpp>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\exampleActivityIndicator.ico">
-      <Filter>res</Filter>
-    </Image>
     <Image Include="res\exampleAlert.ico">
       <Filter>res</Filter>
     </Image>

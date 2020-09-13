@@ -123,8 +123,6 @@ IDI_SPOTLIGHT           ICON                    "res\\exampleSpotlight.ico"
 
 IDI_GLOBE               ICON                    "res\\exampleGlobe.ico"
 
-IDI_ACTIVITY_INDICATOR  ICON                    "res\\exampleActivityIndicator.ico"
-
 IDI_MICROPHONE          ICON                    "res\\exampleMicrophone.ico"
 
 IDI_TWITTER             ICON                    "res\\exampleTwitter.ico"
@@ -305,15 +303,6 @@ BEGIN
     LTEXT           "Solar2D License Agreement",IDC_STATIC,95,13,107,10
     LTEXT           "To use this software you must agree to the terms of the Solar2D license agreement.  Click Agree to continue or click Disagree to quit.",IDC_STATIC,7,30,288,18
     CONTROL         "",IDC_LICENSE,"RichEdit20W",WS_BORDER | WS_VSCROLL | 0x804,7,51,288,107
-END
-
-IDD_PROGRESSMSG DIALOGEX 0, 0, 132, 49
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP
-EXSTYLE WS_EX_WINDOWEDGE
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    CONTROL         "",IDC_PROGRESS,"msctls_progress32",WS_BORDER,7,32,118,10
-    LTEXT           "Connecting to server...",IDC_PROGRESSWND_TEXT,24,15,84,11
 END
 
 IDD_MESSAGE DIALOGEX 0, 0, 253, 71
@@ -558,14 +547,6 @@ BEGIN
         RIGHTMARGIN, 295
         TOPMARGIN, 7
         BOTTOMMARGIN, 176
-    END
-
-    IDD_PROGRESSMSG, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 125
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 42
     END
 
     IDD_MESSAGE, DIALOG

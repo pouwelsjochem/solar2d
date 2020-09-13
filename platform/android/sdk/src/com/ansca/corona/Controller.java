@@ -75,7 +75,6 @@ public class Controller {
 	private CoronaRuntime           myRuntime;
 	private NativeToJavaBridge      myBridge;
 	private AlertDialog             myAlertDialog;
-	private ActivityIndicatorDialog myActivityIndicatorDialog = null;
 
 	private boolean 				myIdleEnabled;
 
@@ -262,7 +261,6 @@ public class Controller {
 	
 	public synchronized void destroy() {
 		cancelNativeAlert(-1);
-		closeNativeActivityIndicator();
 		stopTimer();
 		mySensorManager.stop();
 		mySystemMonitor.stop();
@@ -1305,63 +1303,6 @@ public class Controller {
 		});
 	}
 	
-	/**
-	 * Displays an activity indicator dialog onscreen. It is displayed modally, meaning you cannot tap behind it.
-	 */
-	public void showNativeActivityIndicator() {
-		// Display the dialog via the UI thread.
-		myHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				synchronized (Controller.this) {
-					Context context = myContext;
-					if (context == null) {
-						return;
-					}
-
-					// Create the dialog if not done already.
-					if (myActivityIndicatorDialog == null) {
-						int themeId;
-						if (android.os.Build.VERSION.SDK_INT >= 21) {
-							themeId = 16974393;		// android.R.style.Theme_Material_Light_Dialog
-						}
-						else {
-							themeId = 16973935;		// android.R.style.Theme_Holo_Dialog
-						}
-						android.view.ContextThemeWrapper contextWrapper;
-						contextWrapper = new android.view.ContextThemeWrapper(context, themeId);
-						myActivityIndicatorDialog = new ActivityIndicatorDialog(contextWrapper);
-						myActivityIndicatorDialog.setCancelable(false);
-					}
-					
-					// Display the dialog.
-					if (myActivityIndicatorDialog.isShowing() == false) {
-						myActivityIndicatorDialog.show();
-					}
-				}
-			}
-		});
-	}
-	
-	/**
-	 * Closes the activity indicator window if currently shown.
-	 */
-	public void closeNativeActivityIndicator() {
-		// Close the dialog and dereference it.
-		// Note: You do not have to call the dismiss method on the UI thread, 
-		// but we do so that order is maintained between set and close calls.
-		myHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				synchronized (Controller.this) {
-					if (myActivityIndicatorDialog != null) {
-						myActivityIndicatorDialog.dismiss();
-						myActivityIndicatorDialog = null;
-					}
-				}
-			}
-		});
-	}
 
 	/**
 	 * Determines if the given intent will launch an activity.

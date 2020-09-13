@@ -196,7 +196,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 								const char *title, const char *message, const char **buttonLabels,
 								int buttonCount, Rtt::LuaResource* resource) override;
 				virtual void CancelNativeAlert(void* alertReference) override;
-				virtual void SetActivityIndicatorVisible(bool value) override;
 				virtual void RequestRestart() override;
 				virtual void RequestTerminate() override;
 				virtual const char* GetOSName() const override;

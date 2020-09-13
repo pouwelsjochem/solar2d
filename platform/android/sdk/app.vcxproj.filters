@@ -332,9 +332,6 @@
     <JCompile Include="src\com\ansca\corona\ApplicationContextProvider.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\ActivityIndicatorDialog.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\ViewManager.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>

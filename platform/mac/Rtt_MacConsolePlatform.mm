@@ -132,11 +132,6 @@ MacConsolePlatform::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 {
 }
 
-void
-MacConsolePlatform::SetActivityIndicator( bool visible ) const
-{
-}
-
 PlatformDisplayObject*
 MacConsolePlatform::CreateNativeTextBox( const Rect& bounds ) const
 {

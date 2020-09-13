@@ -26,8 +26,6 @@ CSelectSampleProjectDlg::CSelectSampleProjectDlg(CWnd* pParent /*=NULL*/)
 	HINSTANCE instanceHandle = AfxGetInstanceHandle();
 	fImageList.Create(32, 32, ILC_COLOR32, 0, 1);
 	index = fImageList.Add(LoadIcon(instanceHandle, MAKEINTRESOURCE(IDR_MAINFRAME)));
-	index = fImageList.Add(LoadIcon(instanceHandle, MAKEINTRESOURCE(IDI_ACTIVITY_INDICATOR)));
-	fImageListIndexMapping[CString(_T("ActivityIndicator"))] = index;
 	index = fImageList.Add(LoadIcon(instanceHandle, MAKEINTRESOURCE(IDI_ALERT)));
 	fImageListIndexMapping[CString(_T("Alert"))] = index;
 	index = fImageList.Add(LoadIcon(instanceHandle, MAKEINTRESOURCE(IDI_ANIMATION)));

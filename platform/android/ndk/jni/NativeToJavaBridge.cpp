@@ -1149,24 +1149,6 @@ NativeToJavaBridge::AlertCallback( int which , bool cancelled)
 	}
 }
 
-void
-NativeToJavaBridge::ShowNativeActivityIndicator()
-{
-	NativeTrace trace( "NativeToJavaBridge::ShowNativeActivityIndicator" );
-	
-	CallVoidMethod( "callShowNativeActivityIndicator" );
-	HandleJavaException();
-}
-
-void
-NativeToJavaBridge::CloseNativeActivityIndicator()
-{
-	NativeTrace trace( "NativeToJavaBridge::CloseNativeActivityIndicator" );
-	
-	CallVoidMethod( "callCloseNativeActivityIndicator" );
-	HandleJavaException();
-}
-
 bool
 NativeToJavaBridge::CanShowPopup( const char *name )
 {

@@ -247,7 +247,6 @@
 #define IDC_ANSCALOGO                   1041
 #define IDC_COMMAND1                    1042
 #define IDC_DEAUTHORIZE                 1043
-#define IDC_PROGRESSWND_TEXT            1045
 #define ID_MSG_BUTTON2                  1049
 #define IDC_COPYRIGHT                   1052
 #define IDC_PICTURE_BOX                 1054

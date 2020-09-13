@@ -212,16 +212,6 @@ void WinDisplayObject::OnReceivedMessage(
 	{
 		case WM_CHAR:
 		{
-			// Block keyboard and mouse input while a "wait" cursor is enabled.
-			WinInputDeviceManager& inputDeviceManager =
-					(WinInputDeviceManager&)fEnvironment.GetPlatform()->GetDevice().GetInputDeviceManager();
-			if (inputDeviceManager.IsWaitCursorEnabled())
-			{
-				arguments.SetReturnResult(0);
-				arguments.SetHandled();
-				break;
-			}
-
 			// Handle tabbing to other native UI controls ourselves in case the main window didn't.
 			// Note: If the main window handled the tab key, then we wouldn't have received it here.
 			if (VK_TAB == arguments.GetWParam())
@@ -237,45 +227,6 @@ void WinDisplayObject::OnReceivedMessage(
 					{
 						::SetFocus(nextFocusWindowHandle);
 					}
-					arguments.SetReturnResult(0);
-					arguments.SetHandled();
-				}
-			}
-			break;
-		}
-		case WM_LBUTTONDOWN:
-		case WM_MBUTTONDOWN:
-		case WM_RBUTTONDOWN:
-		case WM_LBUTTONUP:
-		case WM_MBUTTONUP:
-		case WM_RBUTTONUP:
-		case WM_LBUTTONDBLCLK:
-		case WM_MOUSEWHEEL:
-		case WM_MOUSEHWHEEL:
-		case WM_KEYDOWN:
-		case WM_KEYUP:
-		{
-			// Block keyboard and mouse input while a "wait" cursor is enabled.
-			WinInputDeviceManager& inputDeviceManager =
-					(WinInputDeviceManager&)fEnvironment.GetPlatform()->GetDevice().GetInputDeviceManager();
-			if (inputDeviceManager.IsWaitCursorEnabled())
-			{
-				arguments.SetReturnResult(0);
-				arguments.SetHandled();
-			}
-			break;
-		}
-		case WM_SETCURSOR:
-		{
-			// Display a "wait" mouse cursor if enabled.
-			WinInputDeviceManager& inputDeviceManager =
-					(WinInputDeviceManager&)fEnvironment.GetPlatform()->GetDevice().GetInputDeviceManager();
-			if (inputDeviceManager.IsWaitCursorEnabled())
-			{
-				auto cursorHandle = ::LoadCursor(nullptr, IDC_WAIT);
-				if (cursorHandle)
-				{
-					::SetCursor(cursorHandle);
 					arguments.SetReturnResult(0);
 					arguments.SetHandled();
 				}

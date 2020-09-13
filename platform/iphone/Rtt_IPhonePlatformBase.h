@@ -79,8 +79,6 @@ class IPhonePlatformBase : public ApplePlatform
 		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
-		virtual void SetActivityIndicator( bool visible ) const;
-
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
 		virtual PlatformFBConnect* GetFBConnect() const;

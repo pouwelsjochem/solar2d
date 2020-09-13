@@ -59,8 +59,6 @@
 #define REGISTRY_SHOWLINUXBUILD_DEFAULT 0
 #define REGISTRY_DM_FIRST_RUN_COMPLETE_DEFAULT 0
 
-class CProgressWnd;
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CSimulatorApp
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +78,6 @@ public:
 	void PutDisplayName( CString sDevice )  { m_sDisplayName = sDevice; }
 	CRecentFileList* GetRecentFileList() { return m_pRecentFileList; }
 	void PutWP(const WINDOWPLACEMENT& newval);
-	void ShowProgressWnd( bool bShow, CWnd *pParent = NULL );
 	bool ShouldShowWebBuildDlg();
 	bool ShouldShowLinuxBuildDlg();
 	int IsStopBuildRequested() { return m_isStopBuildRequested; }
@@ -108,7 +105,6 @@ protected:
 	bool m_isDebugModeEnabled;
 	bool m_isLuaExitAllowed;
 	bool m_isConsoleEnabled;
-	CProgressWnd *m_pProgressWnd;  // pointer to modeless window
 	CString m_sApplicationDir;
     CString m_sResourceDir;
     CString m_sSampleDir;

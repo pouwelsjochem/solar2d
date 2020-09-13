@@ -190,7 +190,6 @@
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-xxxhdpi\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <JCompile Include="src\com\ansca\corona\ActivityIndicatorDialog.java" />
     <JCompile Include="src\com\ansca\corona\ApplicationContextProvider.java" />
     <JCompile Include="src\com\ansca\corona\Controller.java" />
     <JCompile Include="src\com\ansca\corona\CoronaActivity.java" />

@@ -173,8 +173,6 @@ function PluginSync:downloadQueuedPlugins( onComplete )
 		return
 	end
 
-	native.setActivityIndicator( true )
-
 	self.onComplete = onComplete
 
 	collectPlugins(self.queue, system.pathForFile("", system.PluginsDirectory), self.platform, true, function(result)
@@ -190,7 +188,6 @@ function PluginSync:downloadQueuedPlugins( onComplete )
 		end
 		self:UpdateClientCatalog()
 
-		native.setActivityIndicator( false )
 		self.onComplete()
 	end)
 end

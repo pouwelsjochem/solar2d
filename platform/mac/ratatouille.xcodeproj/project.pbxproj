@@ -101,7 +101,6 @@
 		0028FC4014FEC5E400B40EC3 /* XcodeToolHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0028FC3F14FEC5E400B40EC3 /* XcodeToolHelper.m */; };
 		002D1B48145BB621002B69B6 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		002D1B4B145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
-		002D1B72145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B71145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm */; };
 		002D72E212FB2C30006C7E9B /* Rtt_MacExitCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 002D72E112FB2C30006C7E9B /* Rtt_MacExitCallback.mm */; };
 		002D74AA12FB438A006C7E9B /* Rtt_PlatformExitCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */; };
 		002D74AB12FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002D74A912FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp */; };
@@ -1006,7 +1005,6 @@
 		C2A377701B34BA3D00BB5B88 /* Rtt_MacTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0412B720C90057F594 /* Rtt_MacTextFieldObject.mm */; };
 		C2A377711B34BAB000BB5B88 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
 		C2A377751B34C8D800BB5B88 /* Rtt_MacTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0212B720C90057F594 /* Rtt_MacTextBoxObject.mm */; };
-		C2A377761B34CA6300BB5B88 /* Rtt_MacActivityIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B71145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm */; };
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
@@ -1865,8 +1863,6 @@
 		002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPILDTopLayerView.m; sourceTree = "<group>"; };
 		002D1B29145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YRKSpinningProgressIndicatorLayer.h; sourceTree = "<group>"; };
 		002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YRKSpinningProgressIndicatorLayer.m; sourceTree = "<group>"; };
-		002D1B71145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacActivityIndicator.mm; sourceTree = "<group>"; };
-		002D1B75145BB84B002B69B6 /* Rtt_MacActivityIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacActivityIndicator.h; sourceTree = "<group>"; };
 		002D72E012FB2C30006C7E9B /* Rtt_MacExitCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacExitCallback.h; sourceTree = "<group>"; };
 		002D72E112FB2C30006C7E9B /* Rtt_MacExitCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacExitCallback.mm; sourceTree = "<group>"; };
 		002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformExitCallback.h; sourceTree = "<group>"; };
@@ -3399,8 +3395,6 @@
 				00B73D1512B720C90057F594 /* PassiveHitView.m */,
 				00B73D1012B720C90057F594 /* ResponderPassthroughTextField.h */,
 				00B73D1112B720C90057F594 /* ResponderPassthroughTextField.m */,
-				002D1B75145BB84B002B69B6 /* Rtt_MacActivityIndicator.h */,
-				002D1B71145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm */,
 				C287481919F6E01F002D5B27 /* Rtt_MacConsolePlatform.h */,
 				C287481A19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm */,
 				00B73CF212B720C90057F594 /* Rtt_MacDisplayObject.h */,
@@ -5720,7 +5714,6 @@
 				A40A906F1BD99B23001D2038 /* TVOSAppBuildController.mm in Sources */,
 				4C111FCB1B2A41B200DF8BE8 /* Rtt_KeyName.cpp in Sources */,
 				A41A186E143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.cpp in Sources */,
-				002D1B72145BB81B002B69B6 /* Rtt_MacActivityIndicator.mm in Sources */,
 				C287481B19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm in Sources */,
 				00B73D9712B720CA0057F594 /* Rtt_MacDisplayObject.mm in Sources */,
 				002D72E212FB2C30006C7E9B /* Rtt_MacExitCallback.mm in Sources */,
@@ -6111,7 +6104,6 @@
 				C2E993061A6B1A3100E99F46 /* Rtt_AppleTimer.mm in Sources */,
 				C2D3DA651B179D4F00137331 /* Rtt_FileSystem.cpp in Sources */,
 				C2FCD3D81B377CDB00EF7B02 /* Rtt_KeyName.cpp in Sources */,
-				C2A377761B34CA6300BB5B88 /* Rtt_MacActivityIndicator.mm in Sources */,
 				F57D176D1BE25C7C00AABAC1 /* Rtt_AppleInputHIDDeviceListener.mm in Sources */,
 				C2E993071A6B1A3100E99F46 /* Rtt_MacDevice.mm in Sources */,
 				F54D1E131CA35968000B280E /* Rtt_AppleFont.mm in Sources */,

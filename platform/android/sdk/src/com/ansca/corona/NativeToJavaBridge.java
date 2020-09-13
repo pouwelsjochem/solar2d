@@ -1278,16 +1278,6 @@ public class NativeToJavaBridge {
 		runtime.getController().cancelNativeAlert( which );
 	}
 	
-	protected static void callShowNativeActivityIndicator(CoronaRuntime runtime)
-	{
-		runtime.getController().showNativeActivityIndicator();
-	}
-	
-	protected static void callCloseNativeActivityIndicator(CoronaRuntime runtime)
-	{
-		runtime.getController().closeNativeActivityIndicator();
-	}
-	
 	protected static boolean callCanShowPopup(CoronaRuntime runtime, String name)
 	{
 		return runtime.getController().canShowPopup(name);

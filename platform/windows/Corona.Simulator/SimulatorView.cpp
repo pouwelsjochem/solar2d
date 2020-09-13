@@ -39,7 +39,6 @@
 #include "SelectSampleProjectDlg.h"
 #include "WinString.h"
 #include "WinGlobalProperties.h"  // WMU_ message IDs
-#include "ProgressWnd.h"  // ActivityIndicator
 #include "MessageDlg.h"   // Alert
 #include "CoronaInterface.h"
 #include "Rtt_SimulatorRecents.h"
@@ -108,7 +107,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPENINEDITOR, &CSimulatorView::OnUpdateFileOpenInEditor)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOW_PROJECT_FILES, &CSimulatorView::OnUpdateShowProjectFiles)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOWPROJECTSANDBOX, &CSimulatorView::OnUpdateShowProjectSandbox)
-	ON_MESSAGE(WMU_ACTIVITYINDICATOR, &CSimulatorView::OnActivityIndicator)
 	ON_MESSAGE(WMU_NATIVEALERT, &CSimulatorView::OnNativeAlert)
 END_MESSAGE_MAP()
 
@@ -126,7 +124,6 @@ END_MESSAGE_MAP()
 CSimulatorView::CSimulatorView()
 :	mSimulatorServices(*this),
 	mMessageDlgPointer(nullptr),
-	mProgressDlgPointer(nullptr),
 	mDeviceConfig(*Rtt_AllocatorCreate()),
 	mRuntimeLoadedEventHandler(this, &CSimulatorView::OnRuntimeLoaded)
 {
@@ -165,11 +162,6 @@ CSimulatorView::~CSimulatorView()
 		}
 		delete mMessageDlgPointer;
 		mMessageDlgPointer = nullptr;
-	}
-	if (mProgressDlgPointer)
-	{
-		delete mProgressDlgPointer;
-		mProgressDlgPointer = nullptr;
 	}
 }
 
@@ -1105,33 +1097,6 @@ void CSimulatorView::OnRuntimeLoaded(Interop::RuntimeEnvironment& sender, const 
 
 	// Update the window for the current skin.
 	UpdateSimulatorSkin();
-}
-
-// OnActivityIndicator - ActivityIndicator message from lua code
-// Use CProgressWnd for now, but doesn't look great.  TODO: improve appearance
-// wParam = 0 for hide, 1 for show.  Only one window can be active at a time.
-// lParam = NULL or pointer to string of text shown on window
-LRESULT CSimulatorView::OnActivityIndicator(WPARAM wParam, LPARAM lParam)
-{
-	if (wParam)
-	{
-		// Show the progress dialog.
-		if (!mProgressDlgPointer)
-		{
-			mProgressDlgPointer = new CProgressWnd(this);
-			mProgressDlgPointer->Create(CProgressWnd::IDD);
-		}
-		mProgressDlgPointer->ShowWindow(SW_SHOW);
-	}
-	else
-	{
-		// Hide the progress dialog.
-		if (mProgressDlgPointer)
-		{
-			mProgressDlgPointer->ShowWindow(SW_HIDE);
-		}
-	}
-	return 0;
 }
 
 // OnNativeAlert - message from lua code

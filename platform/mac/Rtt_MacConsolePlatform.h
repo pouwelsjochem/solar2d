@@ -55,8 +55,6 @@ class MacConsolePlatform : public ApplePlatform
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
-		virtual void SetActivityIndicator( bool visible ) const;
-
 		virtual PlatformDisplayObject* CreateNativeTextBox( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
 		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;

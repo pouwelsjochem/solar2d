@@ -159,8 +159,6 @@ class MPlatform
 		// index is the (0-based) index of the button pressed
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const = 0;
 
-		virtual void SetActivityIndicator( bool visible ) const = 0;
-
 		// Show modal-like native interfaces that pop up above the Corona view
 		// E.g. mail composers, etc.
 		virtual bool CanShowPopup( const char *name ) const = 0;

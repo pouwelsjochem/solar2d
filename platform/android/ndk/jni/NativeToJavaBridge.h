@@ -129,8 +129,6 @@ class NativeToJavaBridge
 			const char ** labels, int numLabels, Rtt::LuaResource * resource );
 		void CancelNativeAlert( int which );
 		void AlertCallback( int which, bool cancelled );
-		void ShowNativeActivityIndicator();
-		void CloseNativeActivityIndicator();
 		bool CanShowPopup( const char *name );
 		void ShowSendMailPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );
 		void ShowSendSmsPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );

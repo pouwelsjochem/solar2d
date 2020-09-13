@@ -598,19 +598,6 @@ AndroidPlatform::DeletePreferences( const char* categoryName, const char** keyNa
 	return fNativeToJavaBridge->DeletePreferences(keyNameArray, (size_t)keyNameCount);
 }
 
-void 
-AndroidPlatform::SetActivityIndicator( bool visible ) const
-{
-	if (visible)
-	{
-		fNativeToJavaBridge->ShowNativeActivityIndicator();
-	}
-	else
-	{
-		fNativeToJavaBridge->CloseNativeActivityIndicator();
-	}
-}
-
 bool
 AndroidPlatform::CanShowPopup( const char *name ) const
 {

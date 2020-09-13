@@ -148,7 +148,6 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="PasswordDlg.h" />
-    <ClInclude Include="ProgressWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Rtt\Rtt_Win32AppPackager.h" />
     <ClInclude Include="Rtt\Rtt_Win32AppPackagerParams.h" />
@@ -209,7 +208,6 @@
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="PasswordDlg.cpp" />
-    <ClCompile Include="ProgressWnd.cpp" />
     <ClCompile Include="Rtt\Rtt_Win32AppPackager.cpp" />
     <ClCompile Include="Rtt\Rtt_Win32AppPackagerParams.cpp" />
     <ClCompile Include="Rtt\Rtt_WinPlatformServices.cpp" />
@@ -249,7 +247,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\exampleActivityIndicator.ico" />
     <Image Include="res\exampleAlert.ico" />
     <Image Include="res\exampleAnimationTime.ico" />
     <Image Include="res\exampleAudio.ico" />

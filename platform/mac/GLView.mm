@@ -509,34 +509,6 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 //	NSDEBUG( @"mouseUp(%g,%g)", p.x, p.y );
 }
 
-// Another kludge. Because the activity indicator is not a display object and because it is a single, modal instance,
-// and because it is in a C++ wrapper that has no built-in notion of redisplay or callbacks,
-// it is easier to use a performWithDelay here to force an update.
-- (void) recomputeSizeFromRotationOrScaleForActivityIndicator:(NSView*)view
-{
-	// Animate because the glview is also animating. 
-	// Unfortunately, the animations may not be in sync, but there is at least a chance they will be in sync,
-	// whereas they will not be in sync at all if we don't animate.
-	[[view animator] setFrameSize:[self frame].size];
-}
-
-- (void) resizeNativeDisplayObjects
-{
-    // All the native display objects (which are NSView subviews) need to be resized to fit.
-	NSArray* subviews = [self subviews];
-
-	for( NSView* displayview in subviews )
-	{
-		if ( [displayview isKindOfClass:[SPILDTopLayerView class]] )
-		{
-			// Another kludge. Because the activity indicator is not a display object and because it is a single, modal instance,
-			// and because it is in a C++ wrapper that has no built-in notion of redisplay or callbacks,
-			// it is easier to use a performWithDelay here to force an update.
-			[self performSelector:@selector(recomputeSizeFromRotationOrScaleForActivityIndicator:) withObject:displayview afterDelay:0.0];
-		}
-	}
-}
-
 - (NSRect) frame
 {
     return [super frame];
@@ -557,8 +529,6 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	nativeFrameRect.size = new_size;
 
 	[super setFrameSize:new_size];
-
-	[self resizeNativeDisplayObjects];
 
 	// Update rectangle used for mouseMoved: events
 	[self removeTrackingRect:trackingRectTag];

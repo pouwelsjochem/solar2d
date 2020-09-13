@@ -12,7 +12,6 @@
 
 #include "CoronaInterface.h"
 #include "WinString.h"
-#include "ProgressWnd.h"
 #include "LoginDlg.h"
 
 

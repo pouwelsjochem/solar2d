@@ -94,32 +94,6 @@ TVOSPlatform::TVOSPlatform( CoronaView *view )
 	fDevice( GetAllocator(), view ),
 	fInAppStoreProvider( NULL )
 {
-	UIScreen *screen = [UIScreen mainScreen];
-	CGRect frame = [screen bounds]; // want fullscreen dimensions
-	fActivityView = [[UIView alloc] initWithFrame:frame];
-	fActivityView.backgroundColor = [UIColor blackColor];
-	fActivityView.alpha = 0.7;
-	[fActivityView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
-
-	UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-	[fActivityView addSubview:indicator];
-	CGPoint center = { (CGFloat)(frame.origin.x + 0.5f*CGRectGetWidth( frame )), (CGFloat)(frame.origin.y + 0.5f*CGRectGetHeight( frame )) };
-	indicator.center = center;
-	[indicator setAutoresizingMask:
-		UIViewAutoresizingFlexibleLeftMargin
-		| UIViewAutoresizingFlexibleRightMargin
-		| UIViewAutoresizingFlexibleTopMargin
-		| UIViewAutoresizingFlexibleBottomMargin];
-	[indicator release];
-
-	// Always force activity view to be the top-most child of CoronaView
-	fActivityView.layer.zPosition = MAXFLOAT;
-	[view addSubview:fActivityView];
-
-	// Prevent touches from bleeding through the activity view
-	[fActivityView addGestureRecognizer:[[CoronaNullGestureRecognizer alloc] init]];
-
-	fActivityView.hidden = YES;
 }
 
 TVOSPlatform::~TVOSPlatform()
@@ -147,27 +121,6 @@ TVOSPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
 		fInAppStoreProvider = Rtt_NEW( fAllocator, AppleStoreProvider( handle ) );
 	}
 	return fInAppStoreProvider;
-}
-
-void
-TVOSPlatform::SetActivityIndicator( bool visible ) const
-{
-	UIActivityIndicatorView *indicator = [[fActivityView subviews] objectAtIndex:0];
-
-	Rtt_ASSERT( fActivityView.hidden == visible );
-
-	if ( visible )
-	{
-		// Always bring activity indicator to the front since we want to give user feedback
-		[[fActivityView superview] bringSubviewToFront:fActivityView];
-		[indicator startAnimating];
-	}
-	else
-	{
-		[indicator stopAnimating];
-	}
-
-	fActivityView.hidden = ! visible;
 }
 
 bool

@@ -88,7 +88,6 @@ namespace Rtt
 		///  <para>Shows/hides the mouse cursor while it is hovering over the Corona rendering surface control.</para>
 		///  <para>Intended to be called by the Lua native.setProperty("mouseCursorVisible") function.</para>
 		///  <para>
-		///   Note: This will not hide the cursor while IsWaitCursorEnabled() is true. But it will hide all other cursors.
 		///  </para>
 		/// </summary>
 		/// <param name="value">Set true to show the mouse cursor. Set false to hide it.</param>
@@ -112,20 +111,6 @@ namespace Rtt
 		/// </summary>
 		/// <returns>Returns the mouse cursor style such as kDefaultArrow, kPointingHand, etc.</returns>
 		WinInputDeviceManager::CursorStyle GetCursor() const;
-
-		/// <summary>
-		///  <para>Enables or disables the mouse wait cursor.</para>
-		///  <para>Intended to be called by the Lua native.setActivityIndicator() for Win32 desktop apps.</para>
-		/// </summary>
-		/// <param name="value">Set true to show a "wait" mouse cursor. Set false to show the default mouse cursor.</param>
-		void SetWaitCursorEnabled(bool value);
-
-		/// <summary>Determines if the mouse "wait" cursor is enabled or not.</summary>
-		/// <returns>
-		///  <para>Returns true if set up to display a "wait" mouse cursor.</para>
-		///  <para>Returns false if set up to display the default mouse cursor.</para>
-		/// </returns>
-		bool IsWaitCursorEnabled() const;
 
 		#pragma endregion
 
@@ -330,9 +315,6 @@ namespace Rtt
 
 		/// <summary>Set true to show a mouse cursor. Set false to hide the cursor.</summary>
 		bool fIsCursorVisible;
-
-		/// <summary>Set true to show a "wait" mouse cursor. Set false to show the default cursor.</summary>
-		bool fIsWaitCursorEnabled;
 
 		/// <summary>Cursor type to be shown when the mouse is hovering over the control Corona renders to.</summary>
 		CursorStyle fCursorStyle;

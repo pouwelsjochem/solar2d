@@ -61,7 +61,6 @@ WinInputDeviceManager::WinInputDeviceManager(Interop::RuntimeEnvironment& enviro
 	fReceivedMessageEventHandler(this, &WinInputDeviceManager::OnReceivedMessage),
 	fIsMultitouchSupported(false),
 	fIsCursorVisible(true),
-	fIsWaitCursorEnabled(false),
 	fCursorStyle(WinInputDeviceManager::CursorStyle::kDefaultArrow)
 {
 	// Initialize member variables.
@@ -137,7 +136,7 @@ void WinInputDeviceManager::SetCursorVisible(bool value)
 	if (fIsCursorVisible)
 	{
 		// Show the currently assigned mouse cursor or "wait" mouse cursor.
-		auto cursorName = fIsWaitCursorEnabled ? IDC_WAIT : MAKEINTRESOURCE(fCursorStyle);
+		auto cursorName = MAKEINTRESOURCE(fCursorStyle);
 		auto cursorHandle = ::LoadCursor(nullptr, cursorName);
 		if (cursorHandle)
 		{
@@ -168,7 +167,7 @@ void WinInputDeviceManager::SetCursor(WinInputDeviceManager::CursorStyle value)
 	fCursorStyle = value;
 
 	// Update the mouse cursor to the given style.
-	if (fIsCursorVisible && !fIsWaitCursorEnabled)
+	if (fIsCursorVisible)
 	{
 		auto cursorHandle = ::LoadCursor(nullptr, MAKEINTRESOURCE(fCursorStyle));
 		if (cursorHandle)
@@ -181,78 +180,6 @@ void WinInputDeviceManager::SetCursor(WinInputDeviceManager::CursorStyle value)
 WinInputDeviceManager::CursorStyle WinInputDeviceManager::GetCursor() const
 {
 	return fCursorStyle;
-}
-
-void WinInputDeviceManager::SetWaitCursorEnabled(bool value)
-{
-	// Do not continue if this setting isn't changing.
-	if (value == fIsWaitCursorEnabled)
-	{
-		return;
-	}
-
-	// Store the given setting.
-	fIsWaitCursorEnabled = value;
-
-	// Update the mouse cursor now.
-	// Note: We also have to update the mouse cursor to use a "wait" icon everytime it moves when the
-	//       WM_SETCURSOR windows message has been received. We'll do this in the OnReceivedMessage() method.
-	auto cursorName = fIsWaitCursorEnabled ? IDC_WAIT : MAKEINTRESOURCE(fCursorStyle);
-	auto cursorHandle = ::LoadCursor(nullptr, cursorName);
-	if (cursorHandle)
-	{
-		::SetCursor(cursorHandle);
-	}
-
-	// Make sure that a child control does not have the focus when enabling the wait cursor.
-	if (fIsWaitCursorEnabled)
-	{
-		auto renderSurfacePointer = fEnvironment.GetRenderSurface();
-		if (renderSurfacePointer && ::IsChild(renderSurfacePointer->GetWindowHandle(), ::GetFocus()))
-		{
-			renderSurfacePointer->SetFocus();
-		}
-	}
-
-	// If we're in the middle of handling a touch event, then cancel it.
-	// We do this because mouse/touch events are supposed to be blocked while showing a wait cursor.
-	if (fIsWaitCursorEnabled)
-	{
-		// Determine if we're in the middle of tracking at least 1 touch event.
-		bool isTouching = false;
-		for (uint32_t index = 0; index < kMaxTouchPoints; index++)
-		{
-			if (fTouchPointStates[index].HasStarted)
-			{
-				isTouching = true;
-				break;
-			}
-		}
-
-		// Dispatch a "touch" event set to canceled for each active touch point.
-		if (isTouching)
-		{
-			TouchPointState touchPointStates[kMaxTouchPoints];
-			memcpy(&touchPointStates, fTouchPointStates, sizeof(touchPointStates));
-			memset(&fTouchPointStates, 0, sizeof(fTouchPointStates));
-			for (uint32_t index = 0; index < kMaxTouchPoints; index++)
-			{
-				if (touchPointStates[index].HasStarted)
-				{
-					OnReceivedTouchEvent(
-							index,
-							touchPointStates[index].LastPoint,
-							touchPointStates[index].StartPoint,
-							Rtt::TouchEvent::kCancelled);
-				}
-			}
-		}
-	}
-}
-
-bool WinInputDeviceManager::IsWaitCursorEnabled() const
-{
-	return fIsWaitCursorEnabled;
 }
 
 #pragma endregion
@@ -457,12 +384,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONDBLCLK:
 		{
-			// Ignore mouse events while the wait cursor is displayed.
-			if (fIsWaitCursorEnabled)
-			{
-				break;
-			}
-
 			// Dispatch a "mouse" event to Corona.
 			POINT point = GetMousePointFrom(arguments.GetLParam());
 			OnReceivedMouseEvent(Rtt::MouseEvent::kDown, point, 0, 0, arguments.GetWParam());
@@ -493,12 +414,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONDBLCLK:
 		{
-			// Ignore mouse events while the wait cursor is displayed.
-			if (fIsWaitCursorEnabled)
-			{
-				break;
-			}
-
 			// Dispatch a "mouse" event to Corona.
 			// Note: We do not treat middle and right mouse button drags as touch events.
 			POINT point = GetMousePointFrom(arguments.GetLParam());
@@ -511,12 +426,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		}
 		case WM_MOUSEMOVE:
 		{
-			// Ignore mouse events while the wait cursor is displayed.
-			if (fIsWaitCursorEnabled)
-			{
-				break;
-			}
-
 			// Fetch current mouse position.
 			POINT point = GetMousePointFrom(arguments.GetLParam());
 
@@ -556,13 +465,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 			// Must be called after calling SetCapture() in OnLButtonDown().
 			::ReleaseCapture();
 
-			// Ignore mouse events while the wait cursor is displayed.
-			// Note: This must be done after a call to ReleaseCapture() to stop monitoring mouse drags.
-			if (fIsWaitCursorEnabled)
-			{
-				break;
-			}
-
 			// Dispatch a "mouse" event to Corona.
 			OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
@@ -588,12 +490,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_MBUTTONUP:
 		case WM_RBUTTONUP:
 		{
-			// Ignore mouse events while the wait cursor is displayed.
-			if (fIsWaitCursorEnabled)
-			{
-				break;
-			}
-
 			// Dispatch a "mouse" event to Corona.
 			// Note: We do not treat middle and right mouse button drags as touch events.
 			POINT point = GetMousePointFrom(arguments.GetLParam());
@@ -607,12 +503,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_MOUSEWHEEL:
 		case WM_MOUSEHWHEEL:
 		{
-			// Ignore mouse events while the wait cursor is displayed.
-			if (fIsWaitCursorEnabled)
-			{
-				break;
-			}
-
 			// Fetch current mouse position.
 			POINT point;
 			point.x = GET_X_LPARAM(arguments.GetLParam());
@@ -699,7 +589,7 @@ void WinInputDeviceManager::OnReceivedMessage(
 			// We've received new touchscreen input information.
 			auto touchInputCount = LOWORD(arguments.GetWParam());
 			auto touchInputHandle = (HTOUCHINPUT)arguments.GetLParam();
-			if (sGetTouchInputInfoCallback && touchInputHandle && (touchInputCount > 0) && !fIsWaitCursorEnabled)
+			if (sGetTouchInputInfoCallback && touchInputHandle && (touchInputCount > 0))
 			{
 				// Fetch all of the touch input information received, up to "kMaxTouchPoints".
 				// Note: Our "kMaxTouchPoints" maximum is a Win32 Corona limitation, not a Microsoft limitation.
@@ -857,20 +747,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 				break;
 			}
 
-			// Display a "wait" mouse cursor if enabled.
-			// This setting overrides the assigned cursor style and is not allowed to be hidden.
-			if (fIsWaitCursorEnabled)
-			{
-				auto cursorHandle = ::LoadCursor(nullptr, IDC_WAIT);
-				if (cursorHandle)
-				{
-					::SetCursor(cursorHandle);
-					arguments.SetReturnResult(0);
-					arguments.SetHandled();
-					break;
-				}
-			}
-
 			// Do not change the mouse cursor style while it's hovering over a child control.
 			if (arguments.GetWindowHandle() != (HWND)arguments.GetWParam())
 			{
@@ -905,12 +781,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_KEYDOWN:
 		case WM_KEYUP:
 		{
-			// Ignore key events while the wait cursor is displayed.
-			if (fIsWaitCursorEnabled)
-			{
-				break;
-			}
-
 			// Do not continue if simulating a device that does not support key events.
 			auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
 			if (deviceSimulatorServicesPointer && (deviceSimulatorServicesPointer->AreKeyEventsSupported() == false))

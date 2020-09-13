@@ -10,7 +10,6 @@
 #include "stdafx.h"
 #include "Simulator.h"
 #include "SimulatorView.h"
-#include "ProgressWnd.h"
 
 #include <ctype.h>  // _istalpha()
 #include <wincrypt.h>  // CryptProtectData(), CryptUnprotectData()

@@ -144,17 +144,6 @@ cancelAlert( lua_State *L )
 	return 0;
 }
 
-// native.setActivityIndicator( visible )
-static int
-setActivityIndicator( lua_State *L )
-{
-	const MPlatform& platform = LuaContext::GetPlatform( L );
-
-	platform.SetActivityIndicator( lua_toboolean( L, 1 ) );
-
-	return 0;
-}
-
 // local t = native.newTextField( x, y, w, h )
 // 
 // t.text
@@ -567,7 +556,6 @@ LuaLibNative::Initialize( lua_State *L )
 	{
 		{ "showAlert", showAlert },
 		{ "cancelAlert", cancelAlert },
-		{ "setActivityIndicator", setActivityIndicator },
 		{ "newTextBox", newTextBox },
 		{ "newTextField", newTextField },
 		{ "requestExit", requestExitApplication },

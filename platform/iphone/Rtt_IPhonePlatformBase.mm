@@ -490,12 +490,6 @@ IPhonePlatformBase::GetStoreProvider( const ResourceHandle<lua_State>& handle ) 
 }
 
 void
-IPhonePlatformBase::SetActivityIndicator( bool visible ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-}
-
-void
 IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
 {
 	if ( object )

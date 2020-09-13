@@ -489,24 +489,6 @@ void SimulatorRuntimeEnvironment::DeviceSimulatorServices::CancelNativeAlert(voi
 	}
 }
 
-void SimulatorRuntimeEnvironment::DeviceSimulatorServices::SetActivityIndicatorVisible(bool value)
-{
-	// Fetch the Corona Simulator view.
-	CSimulatorView *viewPointer = nullptr;
-	CFrameWnd *mainWindowPointer = dynamic_cast<CFrameWnd*>(::AfxGetMainWnd());
-	if (mainWindowPointer)
-	{
-		viewPointer = dynamic_cast<CSimulatorView*>(mainWindowPointer->GetActiveView());
-	}
-	if (nullptr == viewPointer)
-	{
-		return;
-	}
-
-	// Send a message to the CSimulatorView to display its custom activity indicator window.
-	::SendMessage(viewPointer->GetSafeHwnd(), WMU_ACTIVITYINDICATOR, value ? 1 : 0, 0);
-}
-
 void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RequestRestart()
 {
 	// Fetch the Corona Simulator view.

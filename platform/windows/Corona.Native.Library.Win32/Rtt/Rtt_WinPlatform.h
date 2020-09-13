@@ -78,7 +78,6 @@ class WinPlatform : public MPlatform
 					const char *title, const char *message, const char **buttonLabels,
 					U32 buttonCount, LuaResource *resourcePointer) const;
 		virtual void CancelNativeAlert(NativeAlertRef alertReference, S32 buttonIndex) const;
-		virtual void SetActivityIndicator(bool visible) const;
 		virtual bool CanShowPopup(const char *name) const;
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
@@ -121,7 +120,6 @@ class WinPlatform : public MPlatform
 		void CopyAppNameTo(WinString& destinationString) const;
 		int GetEncoderClsid(const WCHAR *format, CLSID *pClsid) const;
 		Rtt::ValueResult<SharedMStoredPreferencesPointer> GetStoredPreferencesByCategoryName(const char* categoryName) const;
-		void OnSetActivityIndicator(bool visible);
 
 		Interop::RuntimeEnvironment& fEnvironment;
 		WinDevice fDevice;

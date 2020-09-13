@@ -14,7 +14,6 @@
 
 // Corona defined messages for activity indicator and alert windows
 // Processed by CSimulatorView
-#define WMU_ACTIVITYINDICATOR (WM_APP + 100)
 #define WMU_NATIVEALERT (WM_APP + 101)
 
 // Processed by CBuildProgressDlg

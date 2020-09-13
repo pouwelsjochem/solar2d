@@ -19,7 +19,6 @@
 #include "Rtt_MacTextFieldObject.h"
 #include "Rtt_MacTextBoxObject.h"
 #include "Rtt_MacViewSurface.h"
-#include "Rtt_MacActivityIndicator.h"
 #include "Rtt_MacFont.h"
 #include "Rtt_PlatformInAppStore.h"
 #include "Rtt_AppleInAppStore.h"
@@ -368,7 +367,6 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fDevice( GetAllocator(), view ),
 	fMutexCount( 0 ),
 	fDelegate( [[AlertDelegate alloc] init] ),
-	fActivityIndicator( NULL ),
 #if Rtt_AUTHORING_SIMULATOR
 	fFBConnect( NULL ),
 #endif // Rtt_AUTHORING_SIMULATOR
@@ -391,7 +389,6 @@ MacPlatform::~MacPlatform()
 #if Rtt_AUTHORING_SIMULATOR
 	Rtt_DELETE( fFBConnect );
 #endif // Rtt_AUTHORING_SIMULATOR
-	Rtt_DELETE( fActivityIndicator );
 	[fDelegate release];
 	pthread_mutex_destroy( & fMutex );
 
@@ -873,24 +870,6 @@ MacPlatform::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 		NSInteger returnCode = NSAlertFirstButtonReturn + index;
 		[fDelegate alertDidEnd:alertView returnCode:returnCode cancelled:YES];
 		[alertView endSheetAndClose];
-	}
-}
-
-void
-MacPlatform::SetActivityIndicator( bool visible ) const
-{
-	if ( ! fActivityIndicator )
-	{
-		fActivityIndicator = Rtt_NEW( & GetAllocator(), MacActivityIndicator );
-	}
-
-	if ( visible )
-	{
-		fActivityIndicator->ShowActivityIndicator();
-	}
-	else
-	{
-		fActivityIndicator->HideActivityIndicator();
 	}
 }
 

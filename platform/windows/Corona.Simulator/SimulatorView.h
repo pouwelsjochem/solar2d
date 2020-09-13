@@ -27,7 +27,6 @@ namespace Gdiplus
 	class Bitmap;
 }
 class CMessageDlg;
-class CProgressWnd;
 class CSimulatorDoc;
 
 #pragma endregion
@@ -144,7 +143,6 @@ class CSimulatorView : public CView
 		afx_msg void OnUpdateShowProjectSandbox(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateBuildMenuItem(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateFileOpenInEditor(CCmdUI *pCmdUI);
-		afx_msg LRESULT OnActivityIndicator(WPARAM wParam, LPARAM lParam);
 		afx_msg LRESULT OnNativeAlert(WPARAM wParam, LPARAM lParam);
 
 	private:
@@ -165,7 +163,6 @@ class CSimulatorView : public CView
 		Interop::SimulatorRuntimeEnvironment::LoadedEvent::MethodHandler<CSimulatorView> mRuntimeLoadedEventHandler;
 		Rtt::WinSimulatorServices mSimulatorServices;
 		CMessageDlg* mMessageDlgPointer;
-		CProgressWnd* mProgressDlgPointer;
 		CString mDisplayName;
 		Rtt::PlatformSimulator::Config mDeviceConfig;
 		HANDLE mAppChangeHandle;		// Filesystem notifications handle

@@ -22,7 +22,6 @@
 
 #include "resource.h"
 #include "WinString.h"
-#include "ProgressWnd.h"
 #include "CoronaInterface.h"
 #include "WinGlobalProperties.h"  // set the properties
 #include "CoronaInterface.h"  // player interface, appDeinit()
@@ -400,11 +399,6 @@ BOOL CSimulatorApp::InitInstance()
         return FALSE;
 	}
 
-    // Create modeless "Connecting to Server" window for later use
-	m_pProgressWnd = new CProgressWnd();
-    m_pProgressWnd->SetText( IDS_CONNECTINGTOSERVER );
-    m_pProgressWnd->Create(CProgressWnd::IDD);
-
 	// Get the current window size (it's been calculated from the current app)
 	CRect cwr;
 	m_pMainWnd->GetWindowRect(&cwr);
@@ -619,47 +613,6 @@ BOOL CSimulatorApp::AuthorizeInstance()
 	return TRUE;
 }
 
-// ShowProgressWnd - show or hide the modeless progress window.
-// Center it over parent window if showing.
-void CSimulatorApp::ShowProgressWnd( bool bShow, CWnd *pParent /* = NULL */ )
-{
-    // Place message relative to parent dialog
-    if (nullptr == pParent)
-	{
-		pParent = CWnd::GetActiveWindow();
-		if (nullptr == pParent)
-		{
-			pParent = AfxGetMainWnd()->GetLastActivePopup();
-			if (nullptr == pParent)
-			{
-				pParent = AfxGetMainWnd();
-			}
-		}
-	}
-
-    if (pParent && bShow)
-	{
-        CRect rectProgress, rectParent;
-        m_pProgressWnd->GetWindowRect( rectProgress );
-        pParent->GetWindowRect( rectParent );
-        // center progress msg over parent window
-        rectProgress.left = rectParent.left + rectParent.Width() / 2 - rectProgress.Width() / 2;
-        rectProgress.top = rectParent.top + rectParent.Height() / 2 - rectProgress.Height() / 2;
-
-        m_pProgressWnd->SetWindowPos( NULL, rectProgress.left, rectProgress.top, 0, 0,  SWP_NOOWNERZORDER | SWP_NOSIZE );
-
-		// TODO: set progress bar to 50%
-	}
-
-	m_pProgressWnd->ShowWindow( bShow ? SW_SHOW : SW_HIDE );
-    m_pProgressWnd->UpdateWindow();
-	if (bShow)
-	{
-		m_pProgressWnd->SetFocus();
-		m_pProgressWnd->SetActiveWindow();
-	}
-}
-
 /// Gets this application's absolute path without the file name.
 CString CSimulatorApp::GetApplicationDir()
 {
@@ -822,13 +775,6 @@ int CSimulatorApp::ExitInstance()
 		FILE* notused;
 		freopen_s(&notused, "CONOUT$", "w", stdout);
 		freopen_s(&notused, "CONOUT$", "w", stderr);
-	}
-
-	// Destroy the progress dialog, if allocated.
-	if (m_pProgressWnd)
-	{
-		m_pProgressWnd->DestroyWindow();
-		delete m_pProgressWnd;
 	}
 
     // Uninitialize GDIplus

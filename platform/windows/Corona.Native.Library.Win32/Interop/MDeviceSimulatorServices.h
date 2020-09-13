@@ -45,7 +45,6 @@ class MDeviceSimulatorServices
 						const char *title, const char *message, const char **buttonLabels,
 						int buttonCount, Rtt::LuaResource* resource) = 0;
 		virtual void CancelNativeAlert(void* alertReference) = 0;
-		virtual void SetActivityIndicatorVisible(bool value) = 0;
 		virtual void RequestRestart() = 0;
 		virtual void RequestTerminate() = 0;
 		virtual const char* GetOSName() const = 0;

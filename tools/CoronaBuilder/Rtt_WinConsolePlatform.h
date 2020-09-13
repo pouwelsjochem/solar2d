@@ -84,7 +84,6 @@ namespace Rtt
 			const char *title, const char *message, const char **buttonLabels,
 			U32 buttonCount, LuaResource *resourcePointer) const { return nullptr; };
 		virtual void CancelNativeAlert(NativeAlertRef alertReference, S32 buttonIndex) const { return; };
-		virtual void SetActivityIndicator(bool visible) const { return; };
 		virtual bool CanShowPopup(const char *name) const { return false; };
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const { return false; };
 		virtual bool HidePopup(const char *name) const { return false; };
@@ -133,17 +132,6 @@ namespace Rtt
 		WinCrypto fCrypto;
 		WinString fDirectoryPaths[MPlatform::kNumDirs];
 		WinConsoleDevice *fDevice;
-
-		/*
-		void CopyAppNameTo(WinString& destinationString) const;
-		void OnSetActivityIndicator(bool visible);
-
-		Interop::RuntimeEnvironment& fEnvironment;
-		WinDevice fDevice;
-		mutable PlatformFBConnect *fFBConnect;
-		WinExitCallback fExitCallback;
-		mutable bool fIsIdleTimerEnabled;
-		*/
 };
 
 }	// namespace Rtt
