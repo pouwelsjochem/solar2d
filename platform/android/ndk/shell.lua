@@ -225,7 +225,6 @@ handleCheckingForExpansionFiles = function()
 	local statusText
 	local startButton
 	local gradientBackground
-	local appIcon
 
 	----------------------------------
 
@@ -277,7 +276,6 @@ handleCheckingForExpansionFiles = function()
 			display.remove(gradientBackground)
 			display.remove(titleBackground)
 			display.remove(title)
-			display.remove(appIcon)
 		end
 
 		-- Rotate the text fields and progress bar on rotation
@@ -313,12 +311,6 @@ handleCheckingForExpansionFiles = function()
 
 			titleBackground = display.newRect(display.contentCenterX, display.screenOriginY + display.contentHeight/20, letterBoxWidth, display.contentHeight/10)
 			titleBackground:setFillColor( .4, .5, .6 )
-
-			appIcon = display.newImageRect("android.app.icon://", display.contentHeight/10, display.contentHeight/10)
-			if appIcon then
-				appIcon.x = display.screenOriginX + appIcon.width/2
-				appIcon.y = display.screenOriginY + appIcon.height/2
-			end
 
 			title = display.newText(system.getInfo("appName"), display.contentCenterX, display.screenOriginY, native.systemFontBold, textSize)
 			title.x = titleBackground.x

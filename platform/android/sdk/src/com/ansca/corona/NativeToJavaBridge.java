@@ -521,37 +521,21 @@ public class NativeToJavaBridge {
 
 		// Determine if the given asset name exists.
 		boolean wasAssetFound = false;
-		if (scheme.equals("android.app.icon")) {
-			// The asset is an application icon.
-			try {
-				String packageName = uri.getHost();
-				if ((packageName == null) || (packageName.length() <= 0)) {
-					wasAssetFound = true;
-				}
-				else {
-					android.content.pm.PackageInfo packageInfo =
-							CoronaEnvironment.getApplicationContext().getPackageManager().getPackageInfo(packageName, 0);
-					wasAssetFound = (packageInfo != null);
-				}
-			}
-			catch (Exception ex) { }
-		}
-		else {
-			// The asset is likely a file within the APK or Google Play expansion file.
-			android.content.Context context = CoronaEnvironment.getApplicationContext();
-			if (context != null) {
-				com.ansca.corona.storage.FileServices fileServices;
-				fileServices = new com.ansca.corona.storage.FileServices(context);
-				wasAssetFound =  fileServices.doesAssetFileExist(assetName);
-			}
 
-			// It doesn't make sense to issue a log message when testing for existence (not existing
-			// may be ok in the context of the caller)
-			// Log a warning if the asset was not found.
-			// if (wasAssetFound == false) {
-			// 	Log.i("Corona", "WARNING: Asset file \"" + assetName + "\" does not exist.");
-			// }
+		// The asset is likely a file within the APK or Google Play expansion file.
+		android.content.Context context = CoronaEnvironment.getApplicationContext();
+		if (context != null) {
+			com.ansca.corona.storage.FileServices fileServices;
+			fileServices = new com.ansca.corona.storage.FileServices(context);
+			wasAssetFound =  fileServices.doesAssetFileExist(assetName);
 		}
+
+		// It doesn't make sense to issue a log message when testing for existence (not existing
+		// may be ok in the context of the caller)
+		// Log a warning if the asset was not found.
+		// if (wasAssetFound == false) {
+		// 	Log.i("Corona", "WARNING: Asset file \"" + assetName + "\" does not exist.");
+		// }
 
 		// Return the result.
 		return wasAssetFound;
@@ -886,59 +870,7 @@ public class NativeToJavaBridge {
 		scheme = scheme.toLowerCase();
 
 		// Load the specified image file.
-		LoadBitmapResult result = null;
-		// boolean canRecycleBitmap = false;
-		if (scheme.equals("android.app.icon")) {
-			// Fetch the application icon's bitmap.
-			try {
-				android.content.Context context = CoronaEnvironment.getApplicationContext();
-				android.content.pm.ApplicationInfo applicationInfo = context.getApplicationInfo();
-				android.content.pm.PackageManager packageManager = context.getPackageManager();
-				String packageName = uri.getHost();
-				if ((packageName == null) || (packageName.length() <= 0)) {
-					packageName = applicationInfo.packageName;
-				}
-				android.graphics.drawable.Drawable drawable = packageManager.getApplicationIcon(packageName);
-				if (drawable instanceof android.graphics.drawable.BitmapDrawable) {
-					android.graphics.drawable.BitmapDrawable bitmapDrawable;
-					bitmapDrawable = (android.graphics.drawable.BitmapDrawable)drawable;
-					if (bitmapDrawable.getBitmap() != null) {
-						if (loadImageInfoOnly) {
-							result = new LoadBitmapResult(
-											bitmapDrawable.getBitmap().getWidth(),
-											bitmapDrawable.getBitmap().getHeight(),
-											1.0f);
-						}
-						else {
-							result = new LoadBitmapResult(bitmapDrawable.getBitmap(), 1.0f);
-						}
-					}
-					// canRecycleBitmap = false;
-				}
-				if (result == null) {
-					int w = Math.max(drawable.getIntrinsicWidth(), 1);
-					int h = Math.max(drawable.getIntrinsicHeight(), 1);
-					if (loadImageInfoOnly) {
-						result = new LoadBitmapResult(w, h, 1.0f);
-					} else {
-						final Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-						final Canvas canvas = new Canvas(bmp);
-						drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-						drawable.draw(canvas);
-						result = new LoadBitmapResult(bmp, 1.0f);
-					}
-				}
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		else {
-			// Fetch the bitmap from file.
-			result = runtime.getController().getBridge().loadBitmap(filePath, maxWidth, maxHeight, loadImageInfoOnly);
-			// canRecycleBitmap = true;
-		}
-
+		LoadBitmapResult result = runtime.getController().getBridge().loadBitmap(filePath, maxWidth, maxHeight, loadImageInfoOnly);
 		if (result == null) {
 			return false;
 		}
