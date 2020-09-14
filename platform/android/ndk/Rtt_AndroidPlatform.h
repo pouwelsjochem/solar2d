@@ -18,7 +18,6 @@
 
 // ----------------------------------------------------------------------------
 
-class AndroidDisplayObjectRegistry;
 class AndroidGLView;
 class NativeToJavaBridge;
 
@@ -152,7 +151,6 @@ class AndroidPlatform : public MPlatform
 		String fExpansionFileDir;
 		AndroidCrypto fCrypto;
 		mutable PlatformStoreProvider *fStoreProvider;
-		AndroidDisplayObjectRegistry *fDisplayObjectRegistry;
 		NativeToJavaBridge *fNativeToJavaBridge;
 };
 

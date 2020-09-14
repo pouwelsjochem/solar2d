@@ -23,7 +23,6 @@ typedef struct lua_State lua_State;
 @property (nonatomic, readonly, assign) UIViewController *appViewController;
 @property (nonatomic, readonly, assign) lua_State *L;
 
-- (CGPoint)coronaPointToUIKitPoint:(CGPoint)coronaPoint;
 - (void)suspend;
 - (void)resume;
 

@@ -42,16 +42,6 @@ HitTestObject::~HitTestObject()
 	fTarget.SetUsedByHitTest( false );
 }
 
-/*
-void
-HitTestObject::Append( DisplayObject& child )
-{
-	Rtt_Allocator* pAllocator = fHitChildren.Allocator();
-	HitTestObject* newChild = Rtt_NEW( pAllocator, HitTestObject( child, this, pAllocator ) );
-	fHitChildren.Append( newChild );
-}
-*/
-
 void
 HitTestObject::Prepend( HitTestObject* child )
 {

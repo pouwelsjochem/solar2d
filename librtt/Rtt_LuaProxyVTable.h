@@ -238,21 +238,6 @@ class LuaStageObjectProxyVTable : public LuaGroupObjectProxyVTable
 
 // ----------------------------------------------------------------------------
 
-// Derived classes should only implement Constant() and Parent()
-class LuaPlatformDisplayObjectProxyVTable : public LuaDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaPlatformDisplayObjectProxyVTable Self;
-		typedef LuaDisplayObjectProxyVTable Super;
-
-	protected:
-		LuaPlatformDisplayObjectProxyVTable() {}
-
-	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
-		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
-};
-
 class LuaSpriteObjectProxyVTable : public LuaShapeObjectProxyVTable
 {
 	public:

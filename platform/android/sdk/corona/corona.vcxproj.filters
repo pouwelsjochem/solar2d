@@ -739,9 +739,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_ExplicitTemplates.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_FilePath.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -821,9 +818,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformData.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.cpp">
@@ -1048,9 +1042,6 @@
     <ClCompile Include="..\..\ndk\AndroidBinaryReadResult.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\AndroidDisplayObjectRegistry.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\AndroidFileReader.cpp">
       <Filter>Android</Filter>
     </ClCompile>
@@ -1091,9 +1082,6 @@
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidDevice.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidDisplayObject.cpp">
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDevice.cpp">
@@ -1834,9 +1822,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformData.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -2026,9 +2011,6 @@
     <ClInclude Include="..\..\ndk\AndroidBinaryReadResult.h">
       <Filter>Android</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ndk\AndroidDisplayObjectRegistry.h">
-      <Filter>Android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ndk\AndroidFileReader.h">
       <Filter>Android</Filter>
     </ClInclude>
@@ -2069,9 +2051,6 @@
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidDevice.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidDisplayObject.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDevice.h">

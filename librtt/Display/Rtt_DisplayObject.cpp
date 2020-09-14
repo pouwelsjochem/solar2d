@@ -354,10 +354,6 @@ DisplayObject::UpdateTransform( const Matrix& parentToDstSpace )
 			fSrcToDst = parentToDstSpace;
 			fSrcToDst.Concat( GetMatrix() );
 
-			// After applying transform, allow subclasses to further customize,
-			// e.g. trimmed frames from imagesheets
-			DidUpdateTransform( fSrcToDst );
-
 			SetValid( kTransformFlag );
 
 			// If the child's matrix is changed,
@@ -402,12 +398,6 @@ DisplayObject::HitTest( Real contentX, Real contentY )
 {
 	//Rtt_ASSERT_NOT_IMPLEMENTED();
 	return false;
-}
-
-void
-DisplayObject::DidUpdateTransform( Matrix& srcToDst )
-{
-	// No-op
 }
 
 void
@@ -764,60 +754,6 @@ DisplayObject::Intersects( const DisplayObject& rhs ) const
 	return StageBounds().Intersects( rhs.StageBounds() );
 }
 
-static bool
-IsFirstEncounteredBeforeSecond( GroupObject& root, const DisplayObject& first, const DisplayObject& second )
-{
-	S8 result = -1;
-
-	for ( S32 i = 0, iMax = root.NumChildren(); i < iMax && result < 0; i++ )
-	{
-		DisplayObject& child = root.ChildAt( i );
-		if ( & first == & child )
-		{
-			result = true;
-		}
-		else if ( & second == & child )
-		{
-			result = false;
-		}
-		else
-		{
-			GroupObject* group = child.AsGroupObject();
-			if ( group )
-			{
-				result = IsFirstEncounteredBeforeSecond( * group, first, second );
-			}
-		}
-	}
-
-	return ( Rtt_VERIFY( result >= 0 ) ? ( !! result ) : false );
-}
-
-bool
-DisplayObject::IsAbove( const DisplayObject& object ) const
-{
-	bool result = false;
-
-	if ( this == & object )
-	{
-		result = true;
-	}
-	else if ( GetStage() == object.GetStage() )
-	{
-		if ( fParent == object.GetParent() )
-		{	
-			// Higher indices are rendered above lower indices
-			result = fParent->Find( * this ) > fParent->Find( object );
-		}
-		else
-		{
-			result = IsFirstEncounteredBeforeSecond( * const_cast< StageObject* >( GetStage() ), object, * this );
-		}
-	}
-
-	return result;
-}
-
 const StageObject*
 DisplayObject::GetStage() const
 {
@@ -877,20 +813,6 @@ DisplayObject::Invalidate( DirtyFlags flags )
 	}
 
 	InvalidateDisplay();
-
-
-#if 0
-	if ( rebuild )
-	{
-		InvalidateBuild();
-		InvalidateMask();
-		Invalidate( kTransformMask );
-	}
-
-	InvalidateDisplay();
-	InvalidateStageBounds();
-	// FreeSubmitQuad();
-#endif
 }
 
 void

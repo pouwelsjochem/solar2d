@@ -184,7 +184,6 @@
     <ClCompile Include="..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_FilePath.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_HitTestObject.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_ImageGroupObject.cpp" />
@@ -211,7 +210,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_Matrix.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformAudioSessionManager.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformData.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformDisplayObject.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformExitCallback.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformFBConnect.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
@@ -466,7 +464,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_MUpdatable.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioSessionManager.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformData.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformDisplayObject.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformExitCallback.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformFBConnect.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h" />

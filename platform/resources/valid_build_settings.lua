@@ -153,7 +153,6 @@ settings =
 			UIRequiredDeviceCapabilities = { },
             CoronaUseIOS8LandscapeOnlyWorkaround = true,
 			UIBackgroundModes = {'remote-notification'},
-			CoronaWindowMovesWhenKeyboardAppears = false,
 			CFBundleLocalizations = {
 				"en",
 			},

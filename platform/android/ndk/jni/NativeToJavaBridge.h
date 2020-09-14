@@ -147,16 +147,6 @@ class NativeToJavaBridge
 		bool HasGyroscope();
 		void Vibrate();
 		
-		void DisplayObjectDestroy( int id );
-		void DisplayObjectSetVisible( int id, bool visible );
-		bool DisplayObjectGetVisible( int id );
-		void DisplayObjectSetAlpha( int id, float alpha );
-		float DisplayObjectGetAlpha( int id );
-		void DisplayObjectSetBackground( int id, bool bg );
-		bool DisplayObjectGetBackground( int id );
-		void DisplayObjectSetFocus( int id, bool focus );
-		void DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height );
-	
 	public:
 		bool RecordStart( uintptr_t id, const char * file );
 		void RecordStop( uintptr_t id );

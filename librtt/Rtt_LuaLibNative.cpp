@@ -21,7 +21,6 @@
 #include "Rtt_LuaResource.h"
 #include "Rtt_MCallback.h"
 #include "Rtt_MPlatform.h"
-#include "Rtt_PlatformDisplayObject.h"
 #include "Rtt_Runtime.h"
 
 //#include <string.h>

@@ -32,7 +32,6 @@
 #include "librtt/Input/Rtt_InputDeviceType.h"
 #include "librtt/Input/Rtt_PlatformInputAxis.h"
 #include "librtt/Input/Rtt_ReadOnlyInputDeviceCollection.h"
-#include "Rtt_AndroidDisplayObject.h"
 #include "Rtt_AndroidInputDeviceManager.h"
 #include "Rtt_AndroidInputDevice.h"
 #include "Rtt_AndroidPlatform.h"

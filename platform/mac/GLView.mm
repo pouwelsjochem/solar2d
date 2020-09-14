@@ -45,7 +45,6 @@
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_MacPlatform.h"
 #include "Rtt_Display.h"
-#include "Rtt_MacDisplayObject.h"
 #import "SPILDTopLayerView.h"
 
 #include "Display/Rtt_Display.h"
@@ -581,10 +580,10 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	return YES;
 }
 
-- (void) suspendNativeDisplayObjects:(bool) showOverlay
+- (void) suspendNativeDisplayObjects
 {
 #if Rtt_AUTHORING_SIMULATOR
-    if (showOverlay && self.allowOverlay)
+    if (self.allowOverlay)
     {
         if ( nil == suspendedOverlay )
         {

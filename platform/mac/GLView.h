@@ -70,7 +70,7 @@ namespace Rtt
 - (CGFloat)deviceWidth;
 - (CGFloat)deviceHeight;
 
-- (void) suspendNativeDisplayObjects:(bool) showOverlay;
+- (void) suspendNativeDisplayObjects;
 - (void) resumeNativeDisplayObjects;
 
 - (void) setCursor:(const char *) cursorName forRect:(NSRect) bounds;

@@ -451,29 +451,6 @@ public class CoronaActivity extends Activity {
 	com.ansca.corona.graphics.opengl.CoronaGLSurfaceView getGLView() {
 		return myGLView;
 	}
-	
-	/**
-	 * Gets the view that is overlaid on top of this 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> main OpenGL view.
-	 * <p>
-	 * This view is intended to be used as a container for other views such as text fields, web views,
-	 * ads and other UI objects. All view objects added to this view group will be overlaid
-	 * on top of the main Corona content.
-	 * @return Returns a <a href="http://developer.android.com/reference/android/widget/FrameLayout.html">FrameLayout</a> 
-	 *		   view group object that is owned by this 
-	 *		   <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
-	 *         <p>
-	 *         Returns null if this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> has not
-	 *		   been created yet or if the <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> has
-	 *		   been destroyed.
-	 */
-	public android.widget.FrameLayout getOverlayView() {
-		ViewManager viewManager = fCoronaRuntime.getViewManager();
-		if (viewManager == null) {
-			return null;
-		}
-		return viewManager.getOverlayView();
-	}
 
 	/**
 	 * Gets the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that created and launched this 
@@ -1198,18 +1175,6 @@ public class CoronaActivity extends Activity {
 		if (myGLView != null) {
 			myGLView.onResumeCoronaRuntime();
 		}
-
-		// Resume all views belonging to the Corona runtime.
-		ViewManager viewManager = null;
-		if (fCoronaRuntime != null) {
-			viewManager = fCoronaRuntime.getViewManager();
-		}
-		if (viewManager != null) {
-			viewManager.resume();
-		}
-		else {
-			Log.i("Corona", "ERROR: CoronaActivity.onResume(): Can't resume the CoronaActivity's views since there's no ViewManager!");
-		}
 	}
 	
 	/** Suspends the Corona runtime. To be called when this activity's window is no longer visible. */
@@ -1226,18 +1191,6 @@ public class CoronaActivity extends Activity {
 		// Suspend the runtime's GLSurfaceView.
 		if (myGLView != null) {
 			myGLView.onSuspendCoronaRuntime();
-		}
-
-		// Suspend all views belonging to the Corona runtime.
-		ViewManager viewManager = null;
-		if (fCoronaRuntime != null) {
-			viewManager = fCoronaRuntime.getViewManager();
-		}
-		if (viewManager != null) {
-			viewManager.suspend();
-		}
-		else {
-			Log.i("Corona", "ERROR: CoronaActivity.onPause(): Can't suspend the CoronaActivity's views since there's no ViewManager!");
 		}
 	}
 	

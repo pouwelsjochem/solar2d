@@ -15,9 +15,6 @@
     <ClInclude Include="Rtt\Rtt_WinDevice.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinDisplayObject.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinFBConnect.h">
       <Filter>Rtt</Filter>
     </ClInclude>
@@ -290,9 +287,6 @@
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinDevice.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinDisplayObject.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinFBConnect.cpp">
