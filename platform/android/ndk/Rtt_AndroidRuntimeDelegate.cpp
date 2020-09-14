@@ -159,9 +159,6 @@ void AndroidRuntimeDelegate::WillLoadMain(const Runtime& sender) const
 
 	fNativeToJavaBridge->OnRuntimeWillLoadMain();
 
-	// Show this right before main.lua is loaded and is shown until main.lua ends
-	fNativeToJavaBridge->ShowSplashScreen();
-
 	// Push the Corona activity's intent as launch arguments to Lua.
 	// Note: This must be done after the OnRuntimeLoaded() call so that it can
 	//       create the LuaState Java object wrapper needed by this function call.

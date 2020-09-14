@@ -181,7 +181,6 @@
     <None Include="Z:\corona\main\platform\android\sdk\res\drawable-xxxhdpi-v11\corona_statusbar_icon_default.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\drawable\banner.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\drawable\icon.png" />
-    <None Include="Z:\corona\main\platform\android\sdk\res\drawable\_corona_splash_screen.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-hdpi\icon.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-ldpi\icon.png" />
     <None Include="Z:\corona\main\platform\android\sdk\res\mipmap-mdpi\icon.png" />
@@ -210,7 +209,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaSensorManager.java" />
     <JCompile Include="src\com\ansca\corona\CoronaService.java" />
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaSplashScreenApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaView.java" />
@@ -264,7 +262,6 @@
     <JCompile Include="src\com\ansca\corona\input\ViewInputHandler.java" />
     <JCompile Include="src\com\ansca\corona\JavaToNativeShim.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaShowApiListener.java" />
-    <JCompile Include="src\com\ansca\corona\listeners\CoronaSplashScreenApiListener.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaStoreApiListener.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaSystemApiListener.java" />
     <JCompile Include="src\com\ansca\corona\MailSettings.java" />

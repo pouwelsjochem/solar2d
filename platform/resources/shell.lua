@@ -248,53 +248,7 @@ local function loadMain( onComplete )
 	end
 end
 
---
--- Show a custom splash screen if one is configured (we don't show the default splash every time as
--- that would be annoying)
---
-local _coronaSplashControl = false
-local _splashShown = false
-
-if params.plugins then
-	for i=1, #params.plugins do
-		if params.plugins[i].pluginName == "plugin.CoronaSplashControl" and
-           params.plugins[i].publisherId == "com.coronalabs" then
-			_coronaSplashControl = true
-		end
-	end
-end
-
-if _coronaSplashControl then
-	-- load build.settings so we can see if a custom splash screen is configured
-	local _coronaBuildSettings
-	local path = system.pathForFile("build.settings", system.ResourceDirectory)
-	if path then
-		local fp = io.open(path, 'r')
-
-		if fp then
-			-- CoronaSDK doesn't expose loadfile() so we need to do it the hard way
-			local lua = fp:read( '*a' )
-			fp:close()
-
-			local buildSettings = loadstring(lua)
-			buildSettings() -- creates "settings" table
-			-- luacheck: push
-			-- luacheck: ignore 111
-			-- luacheck: ignore 113
-			_coronaBuildSettings = settings
-			settings = nil
-			-- luacheck: pop
-		end
-	end
-
-	if _coronaBuildSettings == nil then
-		_coronaBuildSettings = {}
-	end
-end
-
-if not _splashShown then
-	loadMain( onShellComplete )
-end
+loadMain( onShellComplete )
 
 -- Only override os.exit if a function is provided
 if exitCallback then

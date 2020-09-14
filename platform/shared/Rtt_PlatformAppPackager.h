@@ -245,8 +245,6 @@ class PlatformAppPackager
         void ReadGlobalCustomBuildId();
         // TODO: possibly move this to another class
         void ReadAppSetting( const char *setting, String *result );
-		void SetSplashImageFile( const char * newValue ) { fSplashImageFile.Set( newValue ); }
-		const char * GetSplashImageFile( ) { return fSplashImageFile.GetString(); }
 
 	public:
 		static bool IsAppSettingsEmpty( const MPlatform& platform );
@@ -259,7 +257,6 @@ class PlatformAppPackager
         String fGlobalCustomBuildId;
         String fAppSettingsCustomBuildId;
 		String fErrorMesg;
-		String fSplashImageFile;
         bool fNeverStripDebugInfo;
 		TargetDevice::Platform fTargetPlatform;
 };

@@ -160,8 +160,6 @@ class NativeToJavaBridge
 	
 		void ExternalizeResource( const char * assetName, Rtt::String * result );
 
-		void ShowSplashScreen();
-
 	public:
 		void StoreInit( const char *storeName );
 		void StorePurchase( const char *productName );

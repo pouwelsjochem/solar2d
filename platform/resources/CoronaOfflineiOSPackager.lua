@@ -74,39 +74,6 @@ function findLuac(params)
     end
 end
 
-local function getSplashScreen(params)
-    if params.isAppleTV then
-        return '_NO_'
-    end
-    
-    local splashScreen = json.decode(params.buildData).splashScreen
-    if type(splashScreen) ~= 'table' then
-        return '_YES_'
-    end
-
-    local enable = true
-    local image = '_YES_'
-    if type(splashScreen.enable) == 'boolean' then
-        enable = splashScreen.enable
-    end
-    if type(splashScreen.image) == 'string' then
-        image = splashScreen.image
-    end
-    if type(splashScreen.ios) == 'table' then
-        if type(splashScreen.ios.enable) == 'boolean' then
-            enable = splashScreen.ios.enable
-        end
-        if type(splashScreen.ios.image) == 'string' then
-            image = splashScreen.ios.image
-        end
-    end
-    if enable then
-        return image
-    else
-        return '_NO_'
-    end
-end
-
 function CreateOfflinePackage(params)
     log("Building offline package with params", json.prettify(params))
     local template = findTemplate(params)
@@ -121,8 +88,6 @@ function CreateOfflinePackage(params)
     if not luac then
         return 'Unable to find luac (lua compiler).'
     end
-
-    local splashScreen = getSplashScreen(params)
 
     local pluginsDir = params.tmpDir  .. '/plugins'
     params.destinationDirectory = pluginsDir
@@ -146,8 +111,7 @@ function CreateOfflinePackage(params)
         .. ' ' .. quoteString(params.appPackage) -- 8
         .. ' ' .. quoteString(params.build)      -- 9
         .. ' ' .. quoteString(pluginsDir)        -- 10
-        .. ' ' .. quoteString(splashScreen)      -- 11
-        .. ' ' .. quoteString(tvOS)              -- 12
+        .. ' ' .. quoteString(tvOS)              -- 11
     )
     if not success then
         return 'Build script failed'

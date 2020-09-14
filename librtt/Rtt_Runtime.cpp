@@ -282,27 +282,18 @@ LoadMainGuard::~LoadMainGuard()
 }
 
 // ----------------------------------------------------------------------------
-
-
-// DEPRECATED: the current splash screen does not use this mechanism at all
-// (see AppDelegate.mm on iOS or CoronaActivity.java on Android)
-
 // LoadMainTask is used by the authoring simulator only. Its main purpose is to
-// wrap up code in shell.lua for displaying splash screen.
+// wrap up code in shell.lua.
 class LoadMainTask : public Task
 {
 	public:
-		LoadMainTask( DisplayObject *splashScreen );
+		LoadMainTask();
 
 	public:
 		virtual void operator()( Scheduler& sender );
-
-	private:
-		DisplayObject *fSplashScreen;
 };
 
-LoadMainTask::LoadMainTask( DisplayObject *splashScreen )
-:	fSplashScreen( splashScreen )
+LoadMainTask::LoadMainTask()
 {
 }
 
@@ -310,19 +301,6 @@ void
 LoadMainTask::operator()( Scheduler& sender )
 {
 	Runtime& runtime = sender.GetOwner();
-
-	if ( fSplashScreen )
-	{
-		DisplayObject& child = *fSplashScreen;
-
-		// No need to add to Orphanage b/c this object is not visible to main.lua
-		GroupObject *parent = child.GetParent();
-		S32 index = parent->Find( child );
-		if ( Rtt_VERIFY( index >= 0 ) )
-		{
-			parent->Remove( index );
-		}
-	}
 
 	// Rtt_ASSERT( ! runtime.IsProperty( Runtime::kIsApplicationExecuting ) );
 	runtime.SetProperty( Runtime::kIsApplicationExecuting, true );
@@ -360,9 +338,7 @@ onShellComplete( lua_State* L )
 	Runtime* runtime = LuaContext::GetRuntime( L );
 	Scheduler& scheduler = runtime->GetScheduler();
 
-	DisplayObject* splashScreen = ( lua_isnoneornil( L, 1 ) ? NULL : (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 ) );
-	LoadMainTask* e = Rtt_NEW( runtime->Allocator(), LoadMainTask( splashScreen ) );
-
+	LoadMainTask* e = Rtt_NEW( runtime->Allocator(), LoadMainTask() );
 	scheduler.Append( e );
 
 	return 0;
@@ -899,7 +875,7 @@ Runtime::LoadApplication( U32 launchOptions )
 		else
 		{
 			// If kLaunchDeviceShell is not set, just schedule main.lua
-			LoadMainTask* e = Rtt_NEW( Allocator(), LoadMainTask( NULL ) );
+			LoadMainTask* e = Rtt_NEW( Allocator(), LoadMainTask( ) );
 			GetScheduler().Append( e );
 			
 			result = Runtime::kSuccess;
@@ -1429,7 +1405,7 @@ Runtime::operator()()
 	if( wasSuspended != isSuspended && isSuspended )
 	{
 		// This condition is writtein inverse for better undrerstanding
-		// Sometimes (Splash Screen is shown) scheduled tasks can suspend Runtime
+		// Sometimes scheduled tasks can suspend Runtime
 		// In that case (suspension state is changed and it is suspended), skip Display update
 	}
 	else

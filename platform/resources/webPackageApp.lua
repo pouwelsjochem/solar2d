@@ -490,7 +490,6 @@ function webPackageApp( args )
 --	local template = 'z:/webtemplate.zip'
 --	local template = '/Users/mymac/corona/main-vitaly/platform/emscripten/webtemplate.zip'
 
-	-- check if user purchased splash screen
 	if not template then
 		local coronaRoot
 		if windows then

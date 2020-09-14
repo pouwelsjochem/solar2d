@@ -23,7 +23,6 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 static const char kPluginsMetadataKey[] = __FILE__ "-plugins";
-static const char kSplashScreenMetadataKey[] = __FILE__ "-splashscreen";
 
 static const char kBuildQueueKey[] = "buildQueue";
 static const char kBuildBucketKey[] = "buildBucket";
@@ -31,7 +30,6 @@ static const char kBuildBucketKey[] = "buildBucket";
 static const char kBuildYearKey[] = "buildYear";
 static const char kBuildRevisionKey[] = "buildRevision";
 
-static const char kSplashScreenKey[] = "splashScreen";
 static const char kDebugBuildProcessKey[] = "debugBuildProcess";
 
 // ----------------------------------------------------------------------------
@@ -207,15 +205,6 @@ DeviceBuildData::ReadBuildSettings( lua_State *L, const char *buildSettingsPath 
 				Rtt_LogException("WARNING: Setting '%s = %s' in build.settings", kBuildBucketKey, buildBucket);
 			}
 			lua_pop( L, 1 ); // pop buildBucket
-
-			// settings.splashScreen
-			lua_getfield( L, -1, kSplashScreenKey );
-			if ( lua_istable( L, -1 ) )
-			{
-				lua_pushvalue(L, -1);
-				lua_setfield( L, LUA_REGISTRYINDEX, kSplashScreenMetadataKey );
-			}
-			lua_pop( L, 1 ); // pop splashScreen
 		}
 		lua_pop( L, 1 ); // pop settings
 	}
@@ -394,10 +383,6 @@ DeviceBuildData::PushTable( lua_State *L ) const
 	// Plugins
 	lua_getfield( L, LUA_REGISTRYINDEX, kPluginsMetadataKey );
 	lua_setfield( L, -2, "plugins" );
-
-	// Splash screen
-	lua_getfield( L, LUA_REGISTRYINDEX, kSplashScreenMetadataKey );
-	lua_setfield( L, -2, "splashScreen" );
 }
 
 void

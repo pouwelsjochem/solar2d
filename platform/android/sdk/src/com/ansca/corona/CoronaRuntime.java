@@ -377,7 +377,7 @@ public class CoronaRuntime {
 	}
 
 	/**
-	 * To be called right before "main.lua" is executed and before the splash screen shows.
+	 * To be called right before "main.lua" is executed
 	 * Notifies all assigned listeners by calling their onWillLoadMain method.
 	 * <p>
 	 * This is an internal method that can only be called by Corona.

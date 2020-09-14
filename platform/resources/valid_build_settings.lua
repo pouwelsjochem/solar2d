@@ -232,21 +232,6 @@ settings =
 
 	buildQueue = "",
 
-	splashScreen =
-	{
-		enable = true,
-		image = "",
-
-		ios = {
-			enable = true,
-			image = "",
-		},
-		android = {
-			enable = true,
-			image = "",
-		},
-	},
-
 	plugins = 
 	{
 	},

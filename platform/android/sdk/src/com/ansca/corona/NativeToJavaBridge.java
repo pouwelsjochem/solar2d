@@ -51,7 +51,6 @@ import android.util.Log;
 
 import dalvik.system.DexClassLoader;
 
-import com.ansca.corona.listeners.CoronaSplashScreenApiListener;
 import com.ansca.corona.listeners.CoronaStoreApiListener;
 import com.ansca.corona.listeners.CoronaSystemApiListener;
 import com.ansca.corona.permissions.PermissionsSettings;
@@ -2012,13 +2011,6 @@ public class NativeToJavaBridge {
 		inputDeviceInterface = inputDeviceServices.fetchByCoronaDeviceId(coronaDeviceId);
 		if (inputDeviceInterface != null) {
 			inputDeviceInterface.vibrate();
-		}
-	}
-
-	protected static void callShowSplashScreen(CoronaRuntime runtime) {
-		CoronaSplashScreenApiListener listener = runtime.getController().getCoronaSplashScreenApiListener();
-		if (listener != null) {
-			listener.showSplashScreen();
 		}
 	}
 

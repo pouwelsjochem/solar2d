@@ -197,9 +197,7 @@
 		A4F5C3C618456F1800E5ED54 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3B918456DBC00E5ED54 /* Main_iPhone.storyboard */; };
 		A4F5C3D2184574E200E5ED54 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3D0184574E200E5ED54 /* InfoPlist.strings */; };
 		C2074EBA1E160FCF009FC33C /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */; };
-		C26005721D62A63400C542D0 /* _CoronaSplashScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = C26005711D62A63400C542D0 /* _CoronaSplashScreen.png */; };
 		C2F911791CDC15F4004A5564 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4359164B1D5200CFE7B3 /* libluasocket.a */; };
-		F50E7EB224FA923B009F165B /* _CoronaSplashScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = C26005711D62A63400C542D0 /* _CoronaSplashScreen.png */; };
 		F50E7EB324FA923B009F165B /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
 		F50E7EB424FA923B009F165B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		F50E7EB524FA923B009F165B /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000DCD9612B0759700042A5E /* MainWindow-iPad.xib */; };
@@ -1297,7 +1295,6 @@
 		A4F5C3D1184574E200E5ED54 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		C2074EB81E160FC1009FC33C /* CoronaBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaBeacon.h; path = platform/iphone/CoronaBeacon.h; sourceTree = "<group>"; };
 		C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaBeacon.mm; path = platform/iphone/CoronaBeacon.mm; sourceTree = "<group>"; };
-		C26005711D62A63400C542D0 /* _CoronaSplashScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = _CoronaSplashScreen.png; sourceTree = "<group>"; };
 		F50E7EC424FA923B009F165B /* template-angle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "template-angle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F564C3681BE430F900C241E6 /* Rtt_AppleInputDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_AppleInputDevice.h; sourceTree = "<group>"; };
 		F564C3691BE430F900C241E6 /* Rtt_AppleInputDevice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_AppleInputDevice.mm; sourceTree = "<group>"; };
@@ -1578,7 +1575,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C26005711D62A63400C542D0 /* _CoronaSplashScreen.png */,
 				000DCD9C12B075CC00042A5E /* main.lua */,
 				A4693764169DF23D00723568 /* Info.plist */,
 				000DCD9612B0759700042A5E /* MainWindow-iPad.xib */,
@@ -3007,7 +3003,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C26005721D62A63400C542D0 /* _CoronaSplashScreen.png in Resources */,
 				A48B827316D595B600CA01A1 /* CoronaResources.bundle in Resources */,
 				A4693568169D62DA00723568 /* MainWindow.xib in Resources */,
 				A4693569169D62DA00723568 /* MainWindow-iPad.xib in Resources */,
@@ -3058,7 +3053,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F50E7EB224FA923B009F165B /* _CoronaSplashScreen.png in Resources */,
 				F50E7EB324FA923B009F165B /* CoronaResources.bundle in Resources */,
 				F50E7EB424FA923B009F165B /* MainWindow.xib in Resources */,
 				F50E7EB524FA923B009F165B /* MainWindow-iPad.xib in Resources */,

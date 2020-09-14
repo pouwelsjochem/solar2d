@@ -2333,14 +2333,6 @@ NativeToJavaBridge::VibrateInputDevice(int coronaDeviceId)
 	CallIntMethod( "callVibrateInputDevice", coronaDeviceId );
 }
 
-void
-NativeToJavaBridge::ShowSplashScreen()
-{
-	NativeTrace trace( "NativeToJavaBridge::ShowSplashScreen" );
-	CallVoidMethod( "callShowSplashScreen" );
-	HandleJavaException();
-}
-
 void NativeToJavaBridge::SetRuntime(Rtt::Runtime *runtime)
 {
 	fRuntime = runtime;

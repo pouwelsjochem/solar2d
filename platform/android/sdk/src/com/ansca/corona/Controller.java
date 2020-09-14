@@ -42,7 +42,6 @@ import android.content.pm.ResolveInfo;
 
 import com.ansca.corona.events.EventManager;
 import com.ansca.corona.listeners.CoronaShowApiListener;
-import com.ansca.corona.listeners.CoronaSplashScreenApiListener;
 import com.ansca.corona.listeners.CoronaStoreApiListener;
 import com.ansca.corona.listeners.CoronaSystemApiListener;
 
@@ -64,7 +63,6 @@ import com.ansca.corona.version.IAndroidVersionSpecific;
 public class Controller {
 
 	private boolean					myInitialResume;
-	private boolean					myHasRenderedFirstFrame;
 	private boolean					myIsNaturalOrientationPortrait = true;
 
 	private Handler					myTimerHandler;
@@ -88,8 +86,6 @@ public class Controller {
 	private CoronaApiListener myCoronaApiListener;
 	// All the show* functions eg. showSmsWindow or showEmailWindow
 	private CoronaShowApiListener myCoronaShowApiListener;
-	// WHen to hide/show the splash screen
-	private CoronaSplashScreenApiListener myCoronaSplashScreenApiListener;
 	// store.init() store.purchase() etc.
 	private CoronaStoreApiListener myCoronaStoreApiListener;
 	// native.requestExit(), pushing in the launch intents
@@ -118,7 +114,6 @@ public class Controller {
 
 		// Initialize sub-systems.
 		myRuntime = runtime;
-		myHasRenderedFirstFrame = false;
 		myBridge = new NativeToJavaBridge( myContext );
         mySensorManager = new CoronaSensorManager( myRuntime );
         mySystemMonitor = new SystemMonitor( myRuntime, myContext );
@@ -153,7 +148,6 @@ public class Controller {
 		mySystemMonitor.start();
 		myTimerMilliseconds = 0;
 		myInitialResume = true;
-		myHasRenderedFirstFrame = false;
 		myRuntimeState = RuntimeState.Stopped;
 		myAndroidVersion = AndroidVersionSpecificFactory.create();
 
@@ -180,14 +174,6 @@ public class Controller {
 
 	CoronaShowApiListener getCoronaShowApiListener() {
 		return myCoronaShowApiListener;
-	}
-
-	void setCoronaSplashScreenApiListener(CoronaSplashScreenApiListener listener) {
-		myCoronaSplashScreenApiListener = listener;
-	}
-
-	CoronaSplashScreenApiListener getCoronaSplashScreenApiListener() {
-		return myCoronaSplashScreenApiListener;
 	}
 
 	void setCoronaStoreApiListener(CoronaStoreApiListener listener) {
@@ -307,15 +293,6 @@ public class Controller {
 				// We must check the running state "after" sending the above events because a suspend/resume event
 				// will change the running state after the event has been dispatched.
 				if (RuntimeState.Running == controller.myRuntimeState && render) {
-					// If this is the 1st rendered frame, then remove the splash screen if shown.
-					if (controller.myHasRenderedFirstFrame == false) {
-						controller.myHasRenderedFirstFrame = true;
-						CoronaSplashScreenApiListener listener = controller.getCoronaSplashScreenApiListener();
-						if (listener != null) {
-							listener.hideSplashScreen();
-						}
-					}
-
 					// Render the frame.
 					JavaToNativeShim.render(runtime);
 				} 

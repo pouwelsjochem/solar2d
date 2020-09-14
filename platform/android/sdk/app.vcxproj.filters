@@ -135,9 +135,6 @@
     </AndroidBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Z:\corona\main\platform\android\sdk\res\drawable\_corona_splash_screen.png">
-      <Filter>res\drawable</Filter>
-    </None>
     <None Include="Z:\corona\main\platform\android\sdk\res\drawable-hdpi\ic_maps_indicator_current_position_anim1.png">
       <Filter>res\drawable-hdpi</Filter>
     </None>
@@ -377,9 +374,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaSplashScreenApiHandler.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -553,9 +547,6 @@
     </JCompile>
     <JCompile Include="src\com\ansca\corona\input\CoronaKeyEvent.java">
       <Filter>src\com\ansca\corona\input</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\listeners\CoronaSplashScreenApiListener.java">
-      <Filter>src\com\ansca\corona\listener</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\listeners\CoronaStoreApiListener.java">
       <Filter>src\com\ansca\corona\listener</Filter>

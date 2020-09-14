@@ -997,40 +997,6 @@ tasks.create<Copy>("copyDefaultNotificationIcons") {
     }
 }
 
-tasks.create<Copy>("copySplashScreen") {
-    copyCoronaIconFiles.dependsOn(this)
-    dependsOn(cleanupIconsDir)
-
-    val enableSplash: Boolean = parsedBuildProperties.lookup<Boolean?>("buildSettings.splashScreen.android.enable").firstOrNull()
-            ?: parsedBuildProperties.lookup<Boolean?>("buildSettings.splashScreen.enable").firstOrNull()
-            ?: true
-    val image: String? = parsedBuildProperties.lookup<String?>("buildSettings.splashScreen.android.image").firstOrNull()
-            ?: parsedBuildProperties.lookup<String?>("buildSettings.splashScreen.image").firstOrNull()
-
-    logger.info("Configured Splash Screen enable: $enableSplash, image: $image.")
-    if (enableSplash) {
-        if (image != null) {
-            from(coronaSrcDir) {
-                include(image)
-            }
-            if (inputs.sourceFiles.isEmpty) throw InvalidUserDataException("Custom Splash Screen file '$image' not found!")
-        } else {
-            from(projectDir) {
-                include("_corona_splash_screen.png")
-            }
-            if (inputs.sourceFiles.isEmpty) throw InvalidUserDataException("Splash screen was not disabled in build.settings but '$projectDir/_corona_splash_screen.png' was not found!")
-        }
-    }
-
-    into("$generatedMainIconsAndBannersDir/drawable")
-    rename {
-        "_corona_splash_screen.${file(it).extension}"
-    }
-    doFirst {
-        delete("$generatedMainIconsAndBannersDir/**/_corona_splash_screen.png")
-    }
-}
-
 tasks.register<Zip>("createExpansionFile") {
     enabled = isExpansionFileRequired
     destinationDirectory.set(file("$buildDir/outputs"))

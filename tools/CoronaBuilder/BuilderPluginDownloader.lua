@@ -417,31 +417,6 @@ function DownloadPluginsMain(args, user, buildYear, buildRevision)
 		table.insert( pluginsToDownload, {pluginName, publisherId, pluginTable.supportedPlatforms} )
 	end
 
-	local splashScreenEnabled = true
-	local splashScreenImage = nil
-	if buildData and buildData.splashScreen then
-		local splash = buildData.splashScreen
-		if splash ~= nil then
-			if splash.enable ~= nil then
-				splashScreenEnabled = splash.enable
-			end
-			if type(splash.image) == "string" then
-				splashScreenImage = splash.image
-			end
-		end
-		local splash = buildData.splashScreen[platform]
-		if splash ~= nil then
-			if splash.enable ~= nil then
-				splashScreenEnabled = splash.enable
-			end
-			if type(splash.image) == "string" then
-				splashScreenImage = splash.image
-			end
-		end
-	end
-	if splashScreenImage ~= nil or not splashScreenEnabled then
-		print("SPLASH\t" .. tostring(splashScreenImage))
-	end
 	local addedPluginsToDownload = {}
 	if #pluginsToDownload > 0 or alwaysQuery then
 		local authorisedPlugins = {}

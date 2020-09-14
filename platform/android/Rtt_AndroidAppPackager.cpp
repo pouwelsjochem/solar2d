@@ -551,30 +551,6 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 	
 	if ( CompileScripts( params, tmpDir ) && CreateBuildProperties( * params, tmpDir ) )
 	{
-		if (! Rtt_StringIsEmpty(GetSplashImageFile()))
-		{
-			// Note: this logic (copying the splash screen image to the root of the tmp directory) needs
-			// to match the logic in buildsys-worker/tools/build3_output_android.sh on the build server
-			String splashImageFilename, tmpSplashPath, tmpFilename, tmpDstFilename;
-			splashImageFilename.Set(params->GetSrcDir());
-			splashImageFilename.AppendPathComponent(GetSplashImageFile());
-			tmpSplashPath.Set(GetSplashImageFile());
-			tmpFilename.Set(tmpSplashPath.GetLastPathComponent());
-			tmpDstFilename.Set(tmpDir);
-			tmpDstFilename.AppendPathComponent(tmpFilename);
-
-			if (! Rtt_CopyFile( splashImageFilename, tmpDstFilename ))
-			{
-				String tmpString;
-				tmpString.Set("ERROR: failed to copy splashScreen.image file: ");
-				tmpString.Append(GetSplashImageFile());
-				//Rtt_Log("%s", tmpString.GetString());
-				params->SetBuildMessage( tmpString );
-
-				return NULL;
-			}
-		}
-
 		std::string javaCmd;
 #if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
 		javaCmd = "/usr/bin/java";

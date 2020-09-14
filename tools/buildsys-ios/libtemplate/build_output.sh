@@ -23,8 +23,7 @@ luac=${7}
 appPackage=${8}
 build=${9}
 plugins=${10}
-splashScreen=${11}
-appleTV=${12}
+appleTV=${11}
 
 if [ -d "$plugins" ]; then
 	prioritizedPlugins="$(find "$plugins" -mindepth 1 -maxdepth 1 -type d \( ! -name ".*" -a ! -name "shared-*" \))
@@ -136,22 +135,6 @@ then
 			rm -f template.app/template
 		fi
 	done
-fi
-
-
-# Splash screen: param is either "_NO_", "_YES_" or name of image file
-if [ "$splashScreen" == "_NO_" ]
-then
-	# No splash screen so remove the file
-	rm -v -f template.app/_CoronaSplashScreen.png
-elif [ "$splashScreen" != "_YES_" ]
-then
-	rm -v -f template.app/_CoronaSplashScreen.png
-	# Custom splash screen, put it in the right place
-	if [ -n "$splashScreen" ]
-	then
-		mv -v -f "template.app/$splashScreen" template.app/_CoronaSplashScreen.png
-	fi
 fi
 
 appNameWithoutSpaces=$(echo -n "$appName" | sed "s/ //g")

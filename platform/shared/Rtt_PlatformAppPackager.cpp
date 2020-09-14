@@ -344,30 +344,6 @@ PlatformAppPackager::Prepackage( AppPackagerParams * params, const char* tmpDir 
 {
 	char* result = NULL;
 
-	if (! Rtt_StringIsEmpty(GetSplashImageFile()))
-	{
-		// Note: this logic (copying the splash screen image to the root of the tmp directory) needs
-		// to match the logic in buildsys-worker/tools/build3_output_ios.sh on the build server
-		String splashImageFilename, tmpSplashPath, tmpFilename, tmpDstFilename;
-		splashImageFilename.Set(params->GetSrcDir());
-		splashImageFilename.AppendPathComponent(GetSplashImageFile());
-		tmpSplashPath.Set(GetSplashImageFile());
-		tmpFilename.Set(tmpSplashPath.GetLastPathComponent());
-		tmpDstFilename.Set(tmpDir);
-		tmpDstFilename.AppendPathComponent(tmpFilename);
-
-		if (! Rtt_CopyFile( splashImageFilename, tmpDstFilename ))
-		{
-			String tmpString;
-			tmpString.Set("ERROR: failed to copy splashScreen.image file: ");
-			tmpString.Append(GetSplashImageFile());
-			Rtt_LogException("%s", tmpString.GetString());
-			params->SetBuildMessage( tmpString );
-
-			return NULL;
-		}
-	}
-
 	// Build *.lu into tmpDir
 	if ( CompileScripts( params, tmpDir ) )
 	{
@@ -1240,63 +1216,6 @@ PlatformAppPackager::ReadBuildSettings( const char * srcDir )
 				lua_pop( L, 1 );
 			}
 			lua_pop( L, 1 ); // pop settings.build
-
-			lua_getfield( L, -1, "splashScreen" ); // settings.splashScreen
-			if ( lua_istable( L, -1 ) )
-			{
-				int splashEnabled = false;
-
-				lua_getfield( L, -1, "enable" ); // push settings.splashScreen.enable
-				if ( lua_isboolean( L, -1 ) )
-				{
-					splashEnabled = lua_toboolean( L, -1 );
-				}
-				lua_pop( L, 1 ); // pop settings.splashScreen.enable
-
-				lua_getfield( L, -1, "image" ); // push settings.splashScreen.image
-				if ( lua_isstring( L, -1 ) )
-				{
-					const char *splashImageFile = lua_tostring( L, -1 );
-					SetSplashImageFile(splashImageFile);
-					Rtt_TRACE(("Custom splashScreen.image: %s", splashImageFile));
-				}
-				lua_pop( L, 1 ); // pop settings.splashScreen.image
-
-				// Now check for platform specific splash screen settings which
-				// will override the non-specific ones handled above
-				const char *platformTag = TargetDevice::TagForPlatform( fTargetPlatform );
-
-				lua_getfield( L, -1, platformTag ); // push settings.splashScreen.{platform}
-				if ( lua_istable( L, -1 ) )
-				{
-					lua_getfield( L, -1, "enable" ); // push settings.splashScreen.enable
-					if ( lua_isboolean( L, -1 ) )
-					{
-						splashEnabled = lua_toboolean( L, -1 );
-
-						if (! splashEnabled )
-						{
-							// They've explicitly disabled for this platform
-							SetSplashImageFile(NULL);
-						}
-					}
-					lua_pop( L, 1 ); // pop settings.splashScreen.enable
-
-					if (splashEnabled)
-					{
-						lua_getfield( L, -1, "image" ); // push settings.splashScreen.image
-						if ( lua_isstring( L, -1 ) )
-						{
-							const char *splashImageFile = lua_tostring( L, -1 );
-							SetSplashImageFile(splashImageFile);
-							Rtt_TRACE(("Custom splashScreen.image: %s", splashImageFile));
-						}
-						lua_pop( L, 1 ); // pop settings.splashScreen.image
-					}
-				}
-				lua_pop( L, 1 ); // pop settings.splashScreen.{platform}
-			}
-			lua_pop( L, 1 ); // pop settings.splashScreen
 		}
 		lua_pop( L, 1 ); // pop settings
 		

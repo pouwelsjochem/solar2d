@@ -48,7 +48,6 @@ class CoronaBuilder
 			kBuildPermission,
 			kAppSignPermission,
 			kCarPermission,
-			kSplashScreenPermission,
 
 			kNumPermissions
 		}
@@ -68,7 +67,6 @@ class CoronaBuilder
 
 	protected:
 		int Build( const BuildParams& params ) const;
-		bool CanCustomizeSplashScreen(const char *platformName, const char *bundleID);
 
 	protected:
 		

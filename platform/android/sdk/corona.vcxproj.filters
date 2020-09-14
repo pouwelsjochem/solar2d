@@ -97,9 +97,6 @@
     <AndroidBuild Include="Z:\corona\main\platform\android\sdk\project.properties" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Z:\corona\main\platform\android\sdk\res\drawable\_corona_splash_screen.png">
-      <Filter>res\drawable</Filter>
-    </None>
     <None Include="Z:\corona\main\platform\android\sdk\res\drawable-hdpi\ic_maps_indicator_current_position_anim1.png">
       <Filter>res\drawable-hdpi</Filter>
     </None>
@@ -339,9 +336,6 @@
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaSplashScreenApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java">

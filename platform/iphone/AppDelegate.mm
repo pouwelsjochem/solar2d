@@ -252,8 +252,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	[window setRootViewController:viewController];
 	[window makeKeyAndVisible];
 
-	[self showSplashScreen];
-
 	Rtt::IPhoneTemplate::WillLoadMain();
 
 	// NOTE: Only init runtime *after* all views are set up!
@@ -340,82 +338,9 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	return result;
 }
 
-- (void) showSplashScreen
-{
-	UIImage *splashImage = [UIImage imageNamed:@"_CoronaSplashScreen.png"];
-
-	if (splashImage != nil)
-	{
-		// Construct a view heirarchy with a black background and the image view inset on top of that
-		// (the background view is necessary because without it the areas not covered by the UIImageView
-		// flash magenta in the Xcode iOS Simulator and this worries devs)
-
-		splashView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-		splashView.backgroundColor = [UIColor blackColor];
-
-		UIImageView *splashImageView = [[[UIImageView alloc] initWithImage:splashImage] autorelease];
-		splashImageView.contentMode = UIViewContentModeScaleAspectFit;
-		splashImageView.backgroundColor = [UIColor blackColor];
-
-		CGRect splashImageFrame;
-		CGRect screenBounds = [[UIScreen mainScreen] bounds];
-
-		// Make sure we never scale up the image
-		if (screenBounds.size.height > splashImage.size.height && screenBounds.size.width > splashImage.size.width)
-		{
-			splashImageFrame.size = splashImage.size;
-		}
-		else
-		{
-			splashImageFrame.size = screenBounds.size;
-		}
-
-		splashImageView.frame = splashImageFrame;
-		splashImageView.center = CGPointMake(CGRectGetMidX(screenBounds), CGRectGetMidY(screenBounds));
-		[splashView addSubview:splashImageView];
-
-		// NOTE: we need to have to have set self.window.rootViewController before we get here
-		[self.window.rootViewController.view addSubview:splashView];
-		[self.window.rootViewController.view bringSubviewToFront:splashView];
-		splashView.layer.zPosition = MAXFLOAT;
-	}
-}
-
-
 - (void)didLoadMain:(id<CoronaRuntime>)runtime
 {
-	if (splashView != nil)
-	{
-		CoronaView *coronaView = (CoronaView *)[self view];
 
-		[coronaView suspend];
-
-		NSTimeInterval timeSoFar = [NSDate timeIntervalSinceReferenceDate] - fAppLaunchTime;
-		double SPLASH_TIME = 2.5;
-		double pauseTime = (SPLASH_TIME - timeSoFar);
-		double duration = 0.4; // to fade the splash image
-		// NSLog(@"Time since app start: %g (pauseTime %g)", [NSDate timeIntervalSinceReferenceDate] - fAppLaunchTime, pauseTime);
-
-		[UIView animateWithDuration:duration
-							  delay:(pauseTime - duration)
-							options:UIViewAnimationOptionCurveEaseIn
-						 animations:^{
-							 [splashView subviews][0].alpha = .0f;
-						 } completion:^(BOOL finished){
-							 [self hideSplashScreen];
-						 }];
-	}
-}
-
-- (void) hideSplashScreen
-{
-	[splashView removeFromSuperview];
-	[splashView release];
-	splashView = nil;
-
-	CoronaView *coronaView = (CoronaView *)[self view];
-	[coronaView resume];
-	[coronaView display];  // necessary to avoid magenta flashes in the iOS Simulator
 }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary*)launchOptions

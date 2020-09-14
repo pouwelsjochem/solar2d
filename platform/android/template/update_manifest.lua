@@ -459,7 +459,7 @@ if "table" == type(buildSettings) then
 			facebookAppId = tostring(stringValue)
 		end
 
-		-- Fetch the "initialSystemUiVisibility" flag used to set the systemUiVisibility before the splashScreen is shown.
+		-- Fetch the "initialSystemUiVisibility" flag used to set the systemUiVisibility
 		if type(buildSettings.android.initialSystemUiVisibility) == "string" then
 			initialSystemUiVisibility = buildSettings.android.initialSystemUiVisibility
 		end

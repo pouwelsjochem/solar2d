@@ -45,14 +45,11 @@ public class CoronaActivity extends Activity {
 	private android.content.Intent myInitialIntent = null;
 	private boolean myIsActivityResumed = false;
 	private com.ansca.corona.graphics.opengl.CoronaGLSurfaceView myGLView;
-	private android.widget.ImageView fSplashScreenView = null;
 	private com.ansca.corona.purchasing.StoreProxy myStore = null;
 	
 	private Controller fController;
 	private CoronaRuntime fCoronaRuntime;
-	private LinearLayout fSplashView;
 	private long fStartTime;
-	private int SPLASH_SCREEN_DURATION = 1500;
 
 	CoronaRuntime getRuntime() {
 		return fCoronaRuntime;
@@ -204,7 +201,7 @@ public class CoronaActivity extends Activity {
 		// Create our CoronaRuntime, which also initializes the native side of the CoronaRuntime.
 		fCoronaRuntime = new CoronaRuntime(this, false);
 
-		// Set initialSystemUiVisibility before splashScreen comes up
+		// Set initialSystemUiVisibility
 		try {
 			android.content.pm.ActivityInfo activityInfo;
 			activityInfo = getPackageManager().getActivityInfo(getComponentName(), android.content.pm.PackageManager.GET_META_DATA);
@@ -225,8 +222,6 @@ public class CoronaActivity extends Activity {
 
 		// fCoronaRuntime = new CoronaRuntime(this, false);		// for Tegra debugging
 
-		showCoronaSplashScreen();
-
 		// Create the Controller instance used to manage general Corona data on the Java side.
 		// This also creates the CoronaRuntime object which will manage the LuaState in Java.
 		fController = fCoronaRuntime.getController();
@@ -238,9 +233,6 @@ public class CoronaActivity extends Activity {
 
 		CoronaShowApiHandler showApiHandler = new CoronaShowApiHandler(this, fCoronaRuntime);
 		fController.setCoronaShowApiListener(showApiHandler);
-
-		CoronaSplashScreenApiHandler splashScreenHandler = new CoronaSplashScreenApiHandler(this);
-		fController.setCoronaSplashScreenApiListener(splashScreenHandler);
 
 		CoronaStoreApiHandler storeHandler = new CoronaStoreApiHandler(this);
 		fController.setCoronaStoreApiListener(storeHandler);
@@ -973,8 +965,6 @@ public class CoronaActivity extends Activity {
 		myGLView = null;
 		myStore.disable();
 
-		fSplashView = null;
-
 		fCoronaRuntime.dispose();
 		fCoronaRuntime = null;
 
@@ -1192,166 +1182,6 @@ public class CoronaActivity extends Activity {
 		if (myGLView != null) {
 			myGLView.onSuspendCoronaRuntime();
 		}
-	}
-	
-	/* No longer used but needs to exist to satisfy external requirements */
-	void showSplashScreen() {
-	}
-
-	void showCoronaSplashScreen() {
-
-		// Skip splash screens on low memory devices
-        if (Runtime.getRuntime().maxMemory() <= (32 * 1024 * 1024))
-		{
-            Log.v("Corona", "Not enough memory to show splash screen");
-
-			return;
-        }
-
-		// After trying many ResourceManager-based methods, the only reliable way to determine
-		// whether the splash screen is in the app bundle appears to be to query the APK contents
-		android.content.Context context = CoronaEnvironment.getApplicationContext();
-		android.content.res.Resources resources = context.getResources();
-		com.ansca.corona.storage.FileServices fileServices;
-		fileServices = new com.ansca.corona.storage.FileServices(context);
-		boolean splashExists = fileServices.doesResourceFileExist("drawable/_corona_splash_screen.png")
-				            || fileServices.doesResourceFileExist("drawable/_corona_splash_screen.jpg");
-
-		// Log.v("Corona", "showCoronaSplashScreen: splashExists: " + splashExists);
-		if ( splashExists )
-		{
-			final ViewManager viewManager = fCoronaRuntime.getViewManager();
-			int splash_drawable_id = 0;
-
-			try {
-				// Fetch the specified resource's unique integer ID by its name.
-				splash_drawable_id = resources.getIdentifier("_corona_splash_screen" , "drawable", context.getPackageName());
-			}
-			catch (Exception ex) {
-				Log.v("Corona", "showCoronaSplashScreen load EXCEPTION: " + ex);
-			}
-
-			// Log.v("Corona", "showCoronaSplashScreen: splash_drawable_id: " + splash_drawable_id);
-			if ( splash_drawable_id != 0 )
-			{
-				try {
-					// LinearLayout
-					fSplashView = new LinearLayout(this);
-					fSplashView.setOrientation(LinearLayout.VERTICAL);
-					fSplashView.setBackgroundColor(0xFF000000);
-
-					// ImageView
-					ImageView imageView = new ImageView(this);
-					imageView.setScaleType(ImageView.ScaleType.CENTER);
-
-					// Resize the bitmap
-					android.view.Display display =
-						((android.view.WindowManager)getSystemService(android.content.Context.WINDOW_SERVICE)).getDefaultDisplay();
-					Bitmap d = BitmapFactory.decodeResource(resources, splash_drawable_id);
-
-					if (display.getWidth() >= d.getWidth() && display.getHeight() >= d.getHeight())
-					{
-						// Screen is bigger that the splash screen, we don't scale up so just display it
-						// Log.v("Corona", "showCoronaSplashScreen: not scaling: screen: "+ display.getWidth() +"x"+ display.getHeight() + "; original: "+ d.getWidth() +"x"+ d.getHeight());
-
-						imageView.setImageBitmap(d);
-					}
-					else
-					{
-						// Scaling the image ourselves avoids issues with "Bitmap too large to be uploaded into a texture" errors
-
-						double widthRatio = ((double)display.getWidth() / d.getWidth());
-						double heightRatio = ((double)display.getHeight() / d.getHeight());
-						int nw = 0;
-						int nh = 0;
-
-						// Scale by height or width, whichever is greater
-						if (heightRatio > widthRatio)
-						{
-							nw = (int) ((double)d.getWidth() * widthRatio);
-							nh = (int) ((double)d.getHeight() * widthRatio);
-						}
-						else
-						{
-							nw = (int) ((double)d.getWidth() * heightRatio);
-							nh = (int) ((double)d.getHeight() * heightRatio);
-						}
-
-						Bitmap scaled = Bitmap.createScaledBitmap(d, nw, nh, true);
-
-						// Log.v("Corona", "showCoronaSplashScreen: scaling: screen: "+ display.getWidth() +"x"+ display.getHeight() + "; original: "+ d.getWidth() +"x"+ d.getHeight()+ "; scaled: "+ scaled.getWidth() +"x"+ scaled.getHeight());
-						// Log.v("Corona", "showCoronaSplashScreen: new: "+ nw +"x"+ nh +"; ratio: "+ widthRatio + "x" + heightRatio);
-
-						imageView.setImageBitmap(scaled);
-					}
-
-					FrameLayout.LayoutParams layoutParams;
-					layoutParams = new FrameLayout.LayoutParams(
-							FrameLayout.LayoutParams.FILL_PARENT,
-							FrameLayout.LayoutParams.FILL_PARENT,
-							android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.CENTER_VERTICAL);
-
-					imageView.setLayoutParams(layoutParams);
-
-					fSplashView.addView(imageView);
-					// Make visible
-					viewManager.getContentView().addView(fSplashView, layoutParams);
-				}
-				catch (Exception ex) {
-					Log.v("Corona", "showCoronaSplashScreen display EXCEPTION: " + ex);
-				}
-			}
-		}
-	}
-
-	/** Hides the splash screen if currently displayed. */
-	/* Called once Corona is ready to render its first frame */
-	void hideSplashScreen() {
-		if (fSplashView != null)
-		{
-			long timeToWait = this.SPLASH_SCREEN_DURATION - (System.currentTimeMillis() - fStartTime);
-
-			if (timeToWait > 0)
-			{
-				// Log.v("Corona", "===============> Showing Splash for a further " + timeToWait + "ms");
-				try {
-					synchronized(this){
-						// Ugly but the Corona runtime continues when this function returns so we
-						// have to delay that until the splash has been shown for long enough
-						wait(timeToWait);
-					}
-				}
-				catch(InterruptedException ex) {}
-			}
-
-			// Animate fade of splash view
-			AlphaAnimation opacityAnim = new AlphaAnimation(1.0f, 0.0f);
-			opacityAnim.setDuration(500);
-			fSplashView.startAnimation(opacityAnim);
-
-			// Remove the splash view at the end of fade animation.
-			// Also, null out our splash reference so that the view and its image can be garbage collected.
-			final LinearLayout splashView = fSplashView;
-			fSplashView = null;
-			splashView.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					android.view.ViewGroup parent = (android.view.ViewGroup)splashView.getParent();
-					if (parent != null) {
-						parent.removeView(splashView);
-					}
-				}
-			}, 500);
-
-		}
-	}
-
-	/**
-	 * Determines if the splash screen is currently shown onscreen.
-	 * @return Returns true if the splash screen is currently
-	 */
-	boolean isSplashScreenShown() {
-		return (fSplashView != null);
 	}
 
 	private boolean canWriteToExternalStorage() {

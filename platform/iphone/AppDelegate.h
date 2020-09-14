@@ -67,7 +67,6 @@ namespace Rtt
 	BOOL fIsAppStarted;
 	BOOL appEnteredBackground;
 	NSTimeInterval lastAccelerometerTimeStamp;
-	UIView *splashView;
 	NSTimeInterval fAppLaunchTime;
 }
 
