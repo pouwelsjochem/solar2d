@@ -723,14 +723,6 @@ AndroidPlatform::SetNativeProperty( lua_State *L, const char *key, int valueInde
 			}
 		}
 	}
-	else if (Rtt_StringCompare(key, "androidSystemUiVisibility") == 0)
-	{
-		if (lua_type(L, valueIndex) == LUA_TSTRING)
-		{
-			const char *visibility = lua_tostring(L, valueIndex);
-			fNativeToJavaBridge->SetSystemUiVisibility(visibility);
-		}
-	}
 	else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
 	{
 		CoronaLuaWarning(L, "native.setProperty(\"%s\") is not supported on Android.", key);
@@ -748,17 +740,7 @@ AndroidPlatform::PushNativeProperty( lua_State *L, const char *key ) const
 
 	// Push the requested native property information to Lua.
 	int pushedValues = 0;
-	if (Rtt_StringCompare(key, "androidSystemUiVisibility") == 0)
-	{
-		Rtt_Allocator * allocator = LuaContext::GetAllocator( L );
-		String systemUiVisibility( allocator );
-		
-		fNativeToJavaBridge->GetSystemUiVisibility( &systemUiVisibility );
-		lua_pushstring( L, systemUiVisibility.GetString() );
-
-		pushedValues = 1;
-	}
-	else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
+	if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
 	{
 		lua_pushboolean(L, 1);
 		pushedValues = 1;

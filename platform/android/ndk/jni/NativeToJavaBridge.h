@@ -173,10 +173,6 @@ class NativeToJavaBridge
 		void VibrateInputDevice(int coronaDeviceId);
 
 	public:
-		void SetSystemUiVisibility( const char *visibility );
-		void GetSystemUiVisibility( Rtt::String * align );
-
-	public:
 		static bool DecodeBase64( const Rtt::Data<const char> & payload, Rtt::Data<char> & data );
 		static bool Check(const Rtt::Data<const char> & publicKey, const Rtt::Data<const char> & signature, const Rtt::Data<const char> & payloadData);
 		static void getAudioOutputSettings(std::vector<int>& settings);

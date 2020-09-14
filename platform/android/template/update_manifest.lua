@@ -87,7 +87,6 @@ local manifestChildXmlElements = {}
 local applicationChildXmlElements = {}
 local googlePlayGamesAppId = false
 local facebookAppId = false
-local initialSystemUiVisibility = nil
 local allowAppsReadOnlyAccessToFiles = true
 local strings = {}
 local apkFiles = { "...NONE..." } -- necessary due to the way ant treats empty filelists
@@ -459,11 +458,6 @@ if "table" == type(buildSettings) then
 			facebookAppId = tostring(stringValue)
 		end
 
-		-- Fetch the "initialSystemUiVisibility" flag used to set the systemUiVisibility
-		if type(buildSettings.android.initialSystemUiVisibility) == "string" then
-			initialSystemUiVisibility = buildSettings.android.initialSystemUiVisibility
-		end
-
 		-- Fetch a flag indicating if Corona's FileContentProvider should provide public read-only access to files.
 		if type(buildSettings.android.allowAppsReadOnlyAccessToFiles) == "boolean" then
 			allowAppsReadOnlyAccessToFiles = buildSettings.android.allowAppsReadOnlyAccessToFiles
@@ -579,13 +573,6 @@ if facebookAppId then
 	strings["corona_app_facebook_id"] = facebookAppId
 end
 manifestKeys.USER_USES_FACEBOOK = stringBuffer
-
--- Create a meta-data tag for the "initialSystemUiVisibility" setting, if provided.
-stringBuffer = ""
-if initialSystemUiVisibility then
-	stringBuffer = '<meta-data android:name="initialSystemUiVisibility" android:value="' .. initialSystemUiVisibility .. '" />'
-end
-manifestKeys.USER_INITIAL_SYSTEM_UI_VISIBILITY = stringBuffer
 
 -- Create a "largeHeap" application tag attribute if set.
 stringBuffer = ""

@@ -35,6 +35,7 @@ import android.provider.MediaStore.Images;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.view.WindowManager;
 import android.content.pm.PackageManager;
@@ -1559,109 +1560,11 @@ public class Controller {
         return android.os.Build.PRODUCT;
     }
 
-	void setSystemUiVisibility(final String visibility) {
-		final com.ansca.corona.graphics.opengl.CoronaGLSurfaceView glView = myGLView;
-		if (glView == null || android.os.Build.MANUFACTURER.equals("BN LLC")) {
-			return;
-		}
-
-		myHandler.post(new Runnable() {
-			public void run() {
-				int vis = -1;
-				if (visibility.equals("immersiveSticky") && (
-					(android.os.Build.VERSION.SDK_INT >= 19) ||
-					(android.os.Build.MANUFACTURER.equals("Amazon")))) {
-						// For Amazon devices, we can't do all of immersiveSticky mode, but we can at least go into super fullscreen mode.
-						// See: https://developer.amazon.com/public/solutions/devices/fire-tablets/app-development/01--screen-layout-and-resolution#Understand How Fullscreen Modes Affect Layout
-						// 0x00001000 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY lets touch events pass to the corona app
-						// 0x00000002 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION hides any on screen navigation buttons
-						// 0x00000004 View.SYSTEM_UI_FLAG_FULLSCREEN hides the status bar
-						// 0x00000200 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION avoids resize event
-						vis = 0x00001000 | 0x00000002 | 0x00000004 | 0x00000200;
-				} else if (visibility.equals("immersive") && (
-					(android.os.Build.VERSION.SDK_INT >= 19) ||
-					(android.os.Build.MANUFACTURER.equals("Amazon")))) {
-						// For Amazon devices, we can't do all of immersive mode, but we can at least go into super fullscreen mode.
-						// See: https://developer.amazon.com/public/solutions/devices/fire-tablets/app-development/01--screen-layout-and-resolution#Understand How Fullscreen Modes Affect Layout
-						// 0x00000800 View.SYSTEM_UI_FLAG_IMMERSIVE lets touch events pass to the corona app
-						// 0x00000002 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION hides any on screen navigation buttons
-						// 0x00000004 View.SYSTEM_UI_FLAG_FULLSCREEN hides the status bar
-						// 0x00000200 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION avoids resize event
-						vis = 0x00000800 | 0x00000002 | 0x00000004 | 0x00000200;
-				} else if (visibility.equals("lowProfile")) {
-					// On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
-					// For API Level 11 - 13: View.STATUS_BAR_HIDDEN has the same effect
-					// Will have no visibile effect on Amazon devices running Fire OS 4 or lower.
-					vis = 0x00000001;
-				} else if (visibility.equals("default")) {
-					// Clear all flags
-					vis = 0x00000000;
-				}
-
-				if (vis  > -1) {
-					if(android.os.Build.VERSION.SDK_INT >= 23) {
-						vis |= ApiLevel11.getSystemUiVisibility(glView) & android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-					}
-					ApiLevel11.setSystemUiVisibility(glView, vis);
-
-					final int finalVis = vis;
-					glView.setOnSystemUiVisibilityChangeListener(new android.view.View.OnSystemUiVisibilityChangeListener() {
-
-						@Override
-						public void onSystemUiVisibilityChange(int visibilityInt)
-						{
-							if((finalVis & android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) != 0)
-							{
-								ApiLevel11.setSystemUiVisibility(glView, finalVis);
-							}
-						}
-					});
-				}
-			}
-		});
-	}
-	
-	String getSystemUiVisibility() { 
-		final com.ansca.corona.graphics.opengl.CoronaGLSurfaceView glView = myGLView;
-
-		if (glView == null) {
-			return "unknown";
-		} else if (android.os.Build.MANUFACTURER.equals("BN LLC")) {
-			return "default";
-		}
-
-		int visibility = ApiLevel11.getSystemUiVisibility(glView);
-
-		if ((visibility & 0x00001006) == 0x00001006) {
-			return "immersiveSticky";
-		} else if ((visibility & 0x00000806) == 0x00000806) {
-			return "immersive";
-		} else if ((visibility & 0x1) == 0x1) {
-			return "lowProfile";
-		} else if (visibility == 0 || 
-			(visibility & 0x00001000) == 0x00001000 ||
-			(visibility & 0x00000800) == 0x00000800) {
-			// When the user swipes from immerisve mode or brings the Soft Key Bar on Amazon devices back up,
-			// the immersive flag stays but its not immersive.
-			return "default";
-		}
-
-		return "unknown";
-	}
-
 	/** Provides easy access to Android 3.x APIs. */
 	// TODO: Less duplication of all the AlertDialig.Builder code.
 	private static class ApiLevel11 {
 		/** Constructor made private to prevent instances from being made. */
 		private ApiLevel11() { }
-
-		public static void setSystemUiVisibility(android.view.View v, int visibility) {
-			v.setSystemUiVisibility(visibility);
-		}
-
-		public static int getSystemUiVisibility(android.view.View v) {
-			return v.getSystemUiVisibility();
-		}
 
 		/**
 		 * Creates an "AlertDialog.Builder" object using the Holo theme by default.

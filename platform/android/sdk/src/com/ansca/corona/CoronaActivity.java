@@ -19,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.Window;
 import android.view.WindowManager;
@@ -49,7 +50,6 @@ public class CoronaActivity extends Activity {
 	
 	private Controller fController;
 	private CoronaRuntime fCoronaRuntime;
-	private long fStartTime;
 
 	CoronaRuntime getRuntime() {
 		return fCoronaRuntime;
@@ -153,7 +153,20 @@ public class CoronaActivity extends Activity {
 		public void onHandleRequestPermissionsResult(
 				CoronaActivity activity, int requestCode, String[] permissions, int[] grantResults);
 	}
-	
+
+	private void setSystemUiVisibility() {
+		if (android.os.Build.VERSION.SDK_INT < 19) {
+			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE); // On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
+		} else {
+			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+		}
+	}
+
 	/**
 	 * Called when this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 * has been created, just before it starts. Initializes this 
@@ -164,8 +177,6 @@ public class CoronaActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		fStartTime = System.currentTimeMillis();
 
 		// Work around FileProvider issue in level 25:
 		// http://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
@@ -200,31 +211,17 @@ public class CoronaActivity extends Activity {
 
 		// Create our CoronaRuntime, which also initializes the native side of the CoronaRuntime.
 		fCoronaRuntime = new CoronaRuntime(this, false);
-
-		// Set initialSystemUiVisibility
-		try {
-			android.content.pm.ActivityInfo activityInfo;
-			activityInfo = getPackageManager().getActivityInfo(getComponentName(), android.content.pm.PackageManager.GET_META_DATA);
-			if ((activityInfo != null) && (activityInfo.metaData != null)) {
-				String initialSystemUiVisibility = activityInfo.metaData.getString("initialSystemUiVisibility");
-				if (initialSystemUiVisibility != null) {
-					if (initialSystemUiVisibility.equals("immersiveSticky") && Build.VERSION.SDK_INT < 19) {
-						fCoronaRuntime.getController().setSystemUiVisibility("lowProfile");
-					} else {
-						fCoronaRuntime.getController().setSystemUiVisibility(initialSystemUiVisibility);
-					}
-				}
-			}
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		// fCoronaRuntime = new CoronaRuntime(this, false);		// for Tegra debugging
-
-		// Create the Controller instance used to manage general Corona data on the Java side.
-		// This also creates the CoronaRuntime object which will manage the LuaState in Java.
 		fController = fCoronaRuntime.getController();
+		myGLView = fCoronaRuntime.getGLView();
+
+		setSystemUiVisibility(); // Set systemUiVisibility again (was recommended do to this @ onResume, onWindowFocusChanged and onSystemUiVisibilityChange)
+		myGLView.setOnSystemUiVisibilityChangeListener(new android.view.View.OnSystemUiVisibilityChangeListener() {
+			@Override
+			public void onSystemUiVisibilityChange(int visibilityInt)
+			{
+				setSystemUiVisibility(); // Set systemUiVisibility again (was recommended do to this @ onResume, onWindowFocusChanged and onSystemUiVisibilityChange)
+			}
+		});
 
 		CoronaEnvironment.setController(fController);
 
@@ -265,7 +262,6 @@ public class CoronaActivity extends Activity {
 		
 		// Create the views for this activity.
 		// Create the OpenGL view and initialize the Corona runtime.
-		myGLView = fCoronaRuntime.getGLView();
 		myGLView.setActivity(this);
 		ViewManager viewManager = fCoronaRuntime.getViewManager();
 
@@ -993,6 +989,7 @@ public class CoronaActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		setSystemUiVisibility(); // Set systemUiVisibility again (was recommended do to this @ onResume, onWindowFocusChanged and onSystemUiVisibilityChange)
 
 		// Start or resume the Corona runtime.
 		myIsActivityResumed = true;
@@ -1114,12 +1111,8 @@ public class CoronaActivity extends Activity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		
 		if (hasFocus) {
-			// *** The activity window now has the focus and is visible to the user. ***
-		}
-		else {
-			// *** The activity window has lost the focus. ***
+			setSystemUiVisibility(); // Set systemUiVisibility again (was recommended do to this @ onResume, onWindowFocusChanged and onSystemUiVisibilityChange)
 		}
 	}
 	

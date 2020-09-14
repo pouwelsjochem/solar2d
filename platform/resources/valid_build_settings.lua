@@ -75,7 +75,6 @@ settings =
 			compatibleWidthLimitDp = 1,
 			largestWidthLimitDp = 1,
 		},
-		initialSystemUiVisibility = "",
 		facebookAppId = "",  -- Both camel case and pascal case are accepted.
 		FacebookAppID = "",
 

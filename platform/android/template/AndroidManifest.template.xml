@@ -39,7 +39,6 @@
 				  android:launchMode="singleTask"
 				  android:screenOrientation="sensorLandscape"
 		          android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-			@USER_INITIAL_SYSTEM_UI_VISIBILITY@
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				@USER_MAIN_INTENT_FILTER_CATEGORIES@

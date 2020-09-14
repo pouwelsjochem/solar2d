@@ -2139,48 +2139,6 @@ NativeToJavaBridge::GooglePushNotificationsRegister( const char *projectNumber )
 }
 
 void
-NativeToJavaBridge::SetSystemUiVisibility( const char *visibility )
-{
-	NativeTrace trace( "NativeToJavaBridge::SetSystemUiVisibility" );
-
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	if (bridge.isValid())
-	{
-		jmethodID mid = bridge.getEnv()->GetStaticMethodID(
-								bridge.getClass(), "callSetSystemUiVisibility", "(Lcom/ansca/corona/CoronaRuntime;Ljava/lang/String;)V");
-		jstringParam visibilityJ(bridge.getEnv(), visibility);
-		bridge.getEnv()->CallStaticVoidMethod(bridge.getClass(), mid, fCoronaRuntime, visibilityJ.getValue());
-		HandleJavaException();
-	}
-}
-
-void
-NativeToJavaBridge::GetSystemUiVisibility( Rtt::String * visibility )
-{
-	NativeTrace trace( "NativeToJavaBridge::GetSystemUiVisibility" );
-
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	if (bridge.isValid())
-	{
-		jmethodID mid = bridge.getEnv()->GetStaticMethodID(
-								bridge.getClass(), "callGetSystemUiVisibility", "(Lcom/ansca/corona/CoronaRuntime;)Ljava/lang/String;");
-		jobject jo = bridge.getEnv()->CallStaticObjectMethod(bridge.getClass(), mid, fCoronaRuntime);
-		HandleJavaException();
-
-		if ( jo )
-		{
-			jstringResult jstr( bridge.getEnv() );
-			jstr.setString( (jstring) jo );
-			if ( jstr.isValidString() )
-			{
-				visibility->Set( jstr.getUTF8() );
-			}
-		}
-
-	}
-}
-
-void
 NativeToJavaBridge::GooglePushNotificationsUnregister()
 {
 	NativeTrace trace( "NativeToJavaBridge::GooglePushNotificationsUnregister" );

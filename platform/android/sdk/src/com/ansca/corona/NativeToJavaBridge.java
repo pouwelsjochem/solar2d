@@ -1946,23 +1946,6 @@ public class NativeToJavaBridge {
 		}
 	}
 
-	protected static void callSetSystemUiVisibility(CoronaRuntime runtime, String visibility) {
-		if (runtime != null) {
-			runtime.getController().setSystemUiVisibility(visibility);
-		}
-	}
-
-	protected static String callGetSystemUiVisibility(CoronaRuntime runtime) {
-		String systemUIVisibility = null;
-		if (runtime != null) {
-			systemUIVisibility = runtime.getController().getSystemUiVisibility();
-		}
-		if (systemUIVisibility == null) {
-			systemUIVisibility = "unknown";
-		}
-		return systemUIVisibility;
-	}
-
 	/**
 	 * Provides access to API Level 21 (Android 5.0 Lollipop) features.
 	 * Should only be accessed if running on an operating system matching this API Level.
