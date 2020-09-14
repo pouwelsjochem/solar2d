@@ -45,7 +45,6 @@ import android.media.MediaScannerConnection;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.location.Location;
 import android.util.Base64;
 import android.util.Log;
 

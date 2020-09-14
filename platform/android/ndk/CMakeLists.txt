@@ -40,8 +40,6 @@ SET( LUA_SOURCES
 	"${CORONA_ROOT}/platform/resources/init.lua"
 	"${CORONA_ROOT}/platform/resources/json.lua"
 	"${CORONA_ROOT}/platform/resources/dkjson.lua"
-	"${CORONA_ROOT}/platform/resources/loader_ccdata.lua"
-	"${CORONA_ROOT}/platform/resources/loader_callback.lua"
 	"${CORONA_ROOT}/subrepos/easing/easing.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaLibrary.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaPrototype.lua"
@@ -204,8 +202,6 @@ add_library( corona SHARED
 		${Lua2CppOutputDir}/easing.cpp
 		${Lua2CppOutputDir}/json.cpp
 		${Lua2CppOutputDir}/dkjson.cpp
-		${Lua2CppOutputDir}/loader_ccdata.cpp
-		${Lua2CppOutputDir}/loader_callback.cpp
 		${Lua2CppOutputDir}/shell.cpp
 
 		${CORONA_ROOT}/external/luasocket/src/auxiliar.c

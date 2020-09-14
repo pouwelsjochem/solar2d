@@ -295,12 +295,6 @@
     <ClCompile Include="..\..\ndk\generated\kernel_generator_sunbeams_gl.cpp">
       <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\loader_callback.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\loader_ccdata.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\generated\ltn12.cpp">
       <Filter>generated</Filter>
     </ClCompile>

@@ -50,8 +50,6 @@ do
 
 		mkdir -p "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/libtemplate/"
 		cp -X ../../tools/buildsys-ios/libtemplate/build_output.sh "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/libtemplate/"
-		touch license.ccdata
-		cp -X license.ccdata "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/template.app/"
 
 		(
 		cd "$TEMPLATE_DIR/${PLATFORM}/${TVOS_VER}/" || exit

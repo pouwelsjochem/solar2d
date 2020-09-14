@@ -624,8 +624,6 @@
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\init.lua" />
     <LuaToCpp Include="..\..\resources\json.lua" />
-    <LuaToCpp Include="..\..\resources\loader_callback.lua" />
-    <LuaToCpp Include="..\..\resources\loader_ccdata.lua" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ALmixer.Library\ALmixer.Library.Win32.vcxproj">

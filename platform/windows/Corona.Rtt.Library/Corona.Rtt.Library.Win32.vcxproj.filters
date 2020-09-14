@@ -1506,13 +1506,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <LuaToCpp Include="..\..\resources\loader_callback.lua">
-      <Filter>platform\resources</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\resources\CoronaBuilderPluginCollector.lua">
-      <Filter>platform\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\loader_ccdata.lua">
       <Filter>platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\dkjson.lua">

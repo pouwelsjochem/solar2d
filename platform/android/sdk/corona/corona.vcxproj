@@ -458,8 +458,6 @@
     <ClCompile Include="..\..\ndk\generated\kernel_generator_random_gl.cpp" />
     <ClCompile Include="..\..\ndk\generated\kernel_generator_stripes_gl.cpp" />
     <ClCompile Include="..\..\ndk\generated\kernel_generator_sunbeams_gl.cpp" />
-    <ClCompile Include="..\..\ndk\generated\loader_callback.cpp" />
-    <ClCompile Include="..\..\ndk\generated\loader_ccdata.cpp" />
     <ClCompile Include="..\..\ndk\generated\ltn12.cpp" />
     <ClCompile Include="..\..\ndk\generated\mbox.cpp" />
     <ClCompile Include="..\..\ndk\generated\mime_generated.cpp" />

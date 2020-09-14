@@ -247,7 +247,6 @@
 		03D1C52F1D70C15E00DB02EE /* Rtt_PreferenceValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D1C5291D70C15E00DB02EE /* Rtt_PreferenceValue.h */; };
 		0707FA6417FCEECA00303473 /* Rtt_ShaderProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0707FA6217FCEECA00303473 /* Rtt_ShaderProxy.cpp */; };
 		0707FA6517FCEECA00303473 /* Rtt_ShaderProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 0707FA6317FCEECA00303473 /* Rtt_ShaderProxy.h */; };
-		070F398E18CFF06200BC2BEE /* loader_callback.lua in Sources */ = {isa = PBXBuildFile; fileRef = 070F398D18CFEAD700BC2BEE /* loader_callback.lua */; };
 		0720210F17C816DB00B6D424 /* kernel_filter_blurHorizontal_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 0720210D17C8167E00B6D424 /* kernel_filter_blurHorizontal_gl.lua */; };
 		0720211017C816DD00B6D424 /* kernel_filter_blurVertical_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 0720210E17C8167E00B6D424 /* kernel_filter_blurVertical_gl.lua */; };
 		0720211117C816DE00B6D424 /* kernel_filter_bloom_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 0720210B17C8165400B6D424 /* kernel_filter_bloom_gl.lua */; };
@@ -269,7 +268,6 @@
 		0724699B17DA43BA000A1641 /* Rtt_MCPUResourceObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0724699817DA43BA000A1641 /* Rtt_MCPUResourceObserver.h */; };
 		0724699C17DA43BA000A1641 /* Rtt_CPUResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0724699917DA43BA000A1641 /* Rtt_CPUResourcePool.cpp */; };
 		0724699D17DA43BA000A1641 /* Rtt_CPUResourcePool.h in Headers */ = {isa = PBXBuildFile; fileRef = 0724699A17DA43BA000A1641 /* Rtt_CPUResourcePool.h */; };
-		0790F87418B6DFE800D0E6B1 /* loader_ccdata.lua in Sources */ = {isa = PBXBuildFile; fileRef = 0790F87318B6DFA100D0E6B1 /* loader_ccdata.lua */; };
 		07912E3A17A1C86A001ABDE0 /* kernel_filter_hue_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3617A1C856001ABDE0 /* kernel_filter_hue_gl.lua */; };
 		07912E3B17A1C86A001ABDE0 /* kernel_filter_iris_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3717A1C856001ABDE0 /* kernel_filter_iris_gl.lua */; };
 		07912E3C17A1C86A001ABDE0 /* kernel_generator_linearGradient_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3817A1C856001ABDE0 /* kernel_generator_linearGradient_gl.lua */; };
@@ -944,7 +942,6 @@
 		03D1C5291D70C15E00DB02EE /* Rtt_PreferenceValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PreferenceValue.h; sourceTree = "<group>"; };
 		0707FA6217FCEECA00303473 /* Rtt_ShaderProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShaderProxy.cpp; path = Display/Rtt_ShaderProxy.cpp; sourceTree = "<group>"; };
 		0707FA6317FCEECA00303473 /* Rtt_ShaderProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShaderProxy.h; path = Display/Rtt_ShaderProxy.h; sourceTree = "<group>"; };
-		070F398D18CFEAD700BC2BEE /* loader_callback.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = loader_callback.lua; path = ../platform/resources/loader_callback.lua; sourceTree = "<group>"; };
 		0720210B17C8165400B6D424 /* kernel_filter_bloom_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_bloom_gl.lua; path = Display/Shader/kernel_filter_bloom_gl.lua; sourceTree = "<group>"; };
 		0720210C17C8165400B6D424 /* kernel_filter_levels_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_levels_gl.lua; path = Display/Shader/kernel_filter_levels_gl.lua; sourceTree = "<group>"; };
 		0720210D17C8167E00B6D424 /* kernel_filter_blurHorizontal_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_blurHorizontal_gl.lua; path = Display/Shader/kernel_filter_blurHorizontal_gl.lua; sourceTree = "<group>"; };
@@ -967,7 +964,6 @@
 		0724699917DA43BA000A1641 /* Rtt_CPUResourcePool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CPUResourcePool.cpp; path = Display/Rtt_CPUResourcePool.cpp; sourceTree = "<group>"; };
 		0724699A17DA43BA000A1641 /* Rtt_CPUResourcePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CPUResourcePool.h; path = Display/Rtt_CPUResourcePool.h; sourceTree = "<group>"; };
 		077EEE2D16CD9F7B009024CA /* Rtt_MRuntimeDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rtt_MRuntimeDelegate.h; sourceTree = "<group>"; };
-		0790F87318B6DFA100D0E6B1 /* loader_ccdata.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = loader_ccdata.lua; path = ../platform/resources/loader_ccdata.lua; sourceTree = "<group>"; };
 		07912E3617A1C856001ABDE0 /* kernel_filter_hue_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_hue_gl.lua; path = Display/Shader/kernel_filter_hue_gl.lua; sourceTree = "<group>"; };
 		07912E3717A1C856001ABDE0 /* kernel_filter_iris_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_iris_gl.lua; path = Display/Shader/kernel_filter_iris_gl.lua; sourceTree = "<group>"; };
 		07912E3817A1C856001ABDE0 /* kernel_generator_linearGradient_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_linearGradient_gl.lua; path = Display/Shader/kernel_generator_linearGradient_gl.lua; sourceTree = "<group>"; };
@@ -1675,8 +1671,6 @@
 		000DCCFC12B06E6800042A5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				0790F87318B6DFA100D0E6B1 /* loader_ccdata.lua */,
-				070F398D18CFEAD700BC2BEE /* loader_callback.lua */,
 				000DCCFD12B06E9400042A5E /* init.lua */,
 			);
 			name = Resources;
@@ -2715,13 +2709,11 @@
 				C2C55AA8194F6DEB0050B6CA /* dkjson.lua in Sources */,
 				508D56B4195B8AA500556891 /* kernel_filter_step_gl.lua in Sources */,
 				508D56B5195B8AA500556891 /* kernel_filter_water_gl.lua in Sources */,
-				0790F87418B6DFE800D0E6B1 /* loader_ccdata.lua in Sources */,
 				506FEE1B1857DA0800500F8C /* kernel_filter_vignetteMask_gl.lua in Sources */,
 				50C55CD8183AD7A100441317 /* kernel_filter_colorMatrix_gl.lua in Sources */,
 				50C55CD9183AD7A100441317 /* kernel_filter_colorPolynomial_gl.lua in Sources */,
 				A413942D17D41CC50060CB7A /* kernel_composite_yuv420f_gl.lua in Sources */,
 				508A06FD17D15F7600E2FFB4 /* kernel_filter_straighten_gl.lua in Sources */,
-				070F398E18CFF06200BC2BEE /* loader_callback.lua in Sources */,
 				50B9673F17CF27BA00BB1178 /* kernel_generator_lenticularHalo_gl.lua in Sources */,
 				50B9673E17CF27B100BB1178 /* kernel_filter_blurGaussian_gl.lua in Sources */,
 				50AEADC717CBE6B100CB9604 /* kernel_filter_frostedGlass_gl.lua in Sources */,

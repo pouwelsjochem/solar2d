@@ -74,8 +74,6 @@ $path/lua_to_native.sh $path/../../resources/init.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../../external/lpeg/re.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../resources/json.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../resources/dkjson.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../resources/loader_ccdata.lua $generated_files_path/
-$path/lua_to_native.sh $path/../../resources/loader_callback.lua $generated_files_path/
 $path/lua_to_native.sh $path/../../../subrepos/easing/easing.lua $generated_files_path/
 $path/lua_to_native.sh $path/../ndk/shell.lua $generated_files_path/
 

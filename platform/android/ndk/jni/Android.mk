@@ -409,8 +409,6 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/generated/easing.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/json.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/dkjson.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/loader_ccdata.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/loader_callback.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/timer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/transition_v1.cpp \
