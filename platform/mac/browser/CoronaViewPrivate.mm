@@ -554,11 +554,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 #pragma mark GLView Helpers
 
-- (void) setBackingScaleFactor:(CGFloat)backingScaleFactor
-{
-	_GLView.backingScaleFactor = backingScaleFactor;
-}
-
 - (void) restoreWindowProperties
 {
 	[_GLView restoreWindowProperties];

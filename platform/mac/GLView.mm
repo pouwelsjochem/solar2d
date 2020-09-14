@@ -94,7 +94,6 @@
 @implementation GLView
 
 @synthesize fRuntime;
-@synthesize backingScaleFactor;
 @synthesize isReady;
 @synthesize sendAllMouseEvents;
 @synthesize inFullScreenTransition;
@@ -151,8 +150,6 @@
 		{
 			[self setWantsLayer:YES];
 		}
-
-		backingScaleFactor = 1.0;
 
 		// We're looking for a 10.9 API call to determine if we need to invalidate
 		shouldInvalidate = [[NSApplication sharedApplication] respondsToSelector:@selector(occlusionState)];
@@ -551,18 +548,6 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	[self invalidate];
 }
 
-- (CGFloat) viewportWidth
-{
-	// Rtt_TRACE(("viewportWidth: %g\n", nativeFrameRect.size.width * backingScaleFactor));
-    return nativeFrameRect.size.width * backingScaleFactor;
-}
-
-- (CGFloat) viewportHeight
-{
-	// Rtt_TRACE(("viewportHeight: %g\n", nativeFrameRect.size.height * backingScaleFactor));
-	return nativeFrameRect.size.height * backingScaleFactor;
-}
-
 - (CGFloat)deviceWidth
 {
 	// Rtt_TRACE(("deviceWidth: %g\n", nativeFrameRect.size.width ));
@@ -675,9 +660,6 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	// Limit mouse events to the view's bounds
 	NSRect r = [self bounds];
 	trackingRectTag = [self addTrackingRect:r owner:self userData:nil assumeInside:NO];
-
-	// This is needed for systems that _only_ have Retina screens and may not get all the notifications multi-display systems do
-	backingScaleFactor = [[self window] backingScaleFactor];
 }
 
 - (void)mouseMoved:(NSEvent *)event

@@ -30,7 +30,6 @@ typedef enum {
 - (void)resume;
 - (void)terminate;
 - (void) handleOpenURL:(NSString *)urlStr;
-- (void) setBackingScaleFactor:(CGFloat)backingScaleFactor;
 - (void) restoreWindowProperties;
 
 - (BOOL) settingsIsWindowResizable;

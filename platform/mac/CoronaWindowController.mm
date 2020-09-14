@@ -492,25 +492,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
     }
 }
 
- // Called when the window moves to a screen with different "backing properties" (i.e. retina to non-retina and vice versa)
- - (void)windowDidChangeBackingProperties:(NSNotification *)notification
- {
- 	fView.glView.backingScaleFactor = [[self window] backingScaleFactor];
- 	[fView.glView setNeedsDisplay:YES];
- }
-
- // This notification serves as a way to tell that the window is on a screen and
- // that we can reliably query the screen's backingScaleFactor (the system doesn't
- // send windowDidChangeBackingProperties: when the window is first displayed)
- - (void)windowDidChangeOcclusionState:(NSNotification *)notification
- {
- 	if ([self window].occlusionState & NSWindowOcclusionStateVisible)
- 	{
- 		fView.glView.backingScaleFactor = [[self window] backingScaleFactor];
- 		[fView.glView restoreWindowProperties];
- 	}
- }
-
 @end
 
 // ----------------------------------------------------------------------------

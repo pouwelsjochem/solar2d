@@ -214,31 +214,8 @@
 	performCloseBlock = [block copy];
 }
 
-// Called when the window moves to a screen with different "backing properties" (i.e. retina to non-retina and vice versa)
-- (void)windowDidChangeBackingProperties:(NSNotification *)notification
-{
-	NSDEBUG(@"===  windowDidChangeBackingProperties: %@; screen %@: %g", NSStringFromRect([self frame]), [[[self screen] deviceDescription] objectForKey:@"NSDeviceSize"], [self backingScaleFactor]);
-	fScreenView.backingScaleFactor = [self backingScaleFactor];
-}
-
-// This notification serves as a way to tell that the window is on a screen and
-// that we can reliably query the screen's backingScaleFactor (the system doesn't
-// send windowDidChangeBackingProperties: when the window is first displayed)
-- (void)windowDidChangeOcclusionState:(NSNotification *)notification
-{
-	if (self.occlusionState & NSWindowOcclusionStateVisible)
-	{
-		NSDEBUG(@"windowDidChangeOcclusionState: %@", notification);
-
-		fScreenView.backingScaleFactor = [self backingScaleFactor];
-		[fScreenView restoreWindowProperties];
-	}
-}
-
 - (void)windowDidMove:(NSNotification *)notification
 {
-	//NSDEBUG(@"windowDidMove: frameRect %@: %g", NSStringFromPoint([self frame].origin), [self backingScaleFactor]);
-
     // We moved the window, save the new position so that it's remembered if we are suddenly terminated
     // (this is necessary because we override the default window position restoration process to get the
     // behavior we want, see saveFrameUsingName:)
