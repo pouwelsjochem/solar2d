@@ -52,7 +52,6 @@ static UINT GetStatusMessageResourceIdFor(int resultCode)
 	return resourceId;
 }
 
-// appAndroidBuild - login to server, showing password dialog if necessary,
 // put parameters in AppAndroidPackager, set up temp directory, and BUILD APP
 CBuildResult appAndroidBuild(
 	Interop::SimulatorRuntimeEnvironment *pSim,

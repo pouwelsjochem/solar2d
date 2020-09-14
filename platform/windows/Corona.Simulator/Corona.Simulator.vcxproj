@@ -140,11 +140,9 @@
     <ClInclude Include="BuildWin32AppDlg.h" />
     <ClInclude Include="CoronaInterface.h" />
     <ClInclude Include="CoronaProject.h" />
-    <ClInclude Include="DevPasswordDlg.h" />
     <ClInclude Include="HtmlMessageDlg.h" />
     <ClInclude Include="Interop\SimulatorRuntimeEnvironment.h" />
     <ClInclude Include="LicenseDlg.h" />
-    <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="PasswordDlg.h" />
@@ -200,11 +198,9 @@
     <ClCompile Include="BuildWin32AppDlg.cpp" />
     <ClCompile Include="CoronaInterface.cpp" />
     <ClCompile Include="CoronaProject.cpp" />
-    <ClCompile Include="DevPasswordDlg.cpp" />
     <ClCompile Include="HtmlMessageDlg.cpp" />
     <ClCompile Include="Interop\SimulatorRuntimeEnvironment.cpp" />
     <ClCompile Include="LicenseDlg.cpp" />
-    <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="PasswordDlg.cpp" />

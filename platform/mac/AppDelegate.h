@@ -95,8 +95,6 @@ namespace Rtt
 	// This ulimately should go away, but the object wrapper can be reused for Blocks.
 	BuildSessionState* temporaryBuildSessionState;
 
-	DialogController *fPasswordController;
-
 	id fPreferencesControllerDelegate;
 	IBOutlet NSWindow* fPreferencesWindow;
 
@@ -172,8 +170,6 @@ namespace Rtt
 -(BOOL)isTVOSBuildHidden;
 
 -(IBAction)showPreferences:(id)sender;
--(IBAction)deauthorizeConfirm:(id)sender;
--(IBAction)deauthorizeHelp:(id)sender;
 
 -(void) showOpenPanel:(NSString*)title withAccessoryView:(NSView*)accessoryView startDirectory:(NSString*)start_directory completionHandler:(void(^)(NSString* path))completionhandler;
 
@@ -201,12 +197,6 @@ namespace Rtt
 -(void)beginProgressSheet:(NSWindow*)parent;
 -(void)endProgressSheet;
 
--(void)beginPasswordSheetWithUser:(NSString*)usr
-				   modalForWindow:(NSWindow*)parent
-					modalDelegate:(id)delegate
-						  message:(NSString*)msg
-					  contextInfo:(void*)contextInfo;
-
 -(IBAction)openForBuildiOS:(id)sender;
 -(IBAction)openForBuildAndroid:(id)sender;
 -(IBAction)openForBuildHTML5:(id)sender;
@@ -232,7 +222,6 @@ namespace Rtt
 -(NSString *) getAppSpecificPreferenceKeyName:(NSString *)prefName;
 -(NSString *) getAppSpecificPreferenceKeyName:(NSString *)prefName withProjectPath:(NSString *)projectDirectoryPath;
 
--(NSString*)getAndReleaseResultFromPasswordSheet;
 - (void)didPresentError:(BOOL)didRecover contextInfo:(void*)contextInfo;
 
 - (BOOL) alertShowHelp:(NSAlert *) alert;

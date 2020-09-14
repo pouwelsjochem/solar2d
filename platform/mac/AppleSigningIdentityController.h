@@ -13,13 +13,6 @@
 
 // ----------------------------------------------------------------------------
 
-namespace Rtt
-{
-	class AuthorizationTicket;
-}
-
-// ----------------------------------------------------------------------------
-
 @interface IdentityMenuItem : NSMenuItem
 {
 	NSString* identity;

@@ -71,11 +71,7 @@ class CoronaBuilderParams
 		typedef enum _Command
 		{
 			kUnknownCommand = 0, // Default command
-			kAuthorizeCommand,
-			kDeauthorizeCommand,
-			kCheckAuthorizeCommand,
 			kBuildCommand,
-			kAppSignCommand,
 			kCarCommand,
 			kPluginsCommand,
 			kVersionCommand,
@@ -107,25 +103,9 @@ CoronaBuilderParams::CoronaBuilderParams( int argc, const char *argv[] )
 {
 	if ( argc > 1 )
 	{
-		if ( 0 == Rtt_StringCompareNoCase( argv[1], "authorize" ) )
-		{
-			fCommand = kAuthorizeCommand;
-		}
-		else if (0 == Rtt_StringCompareNoCase(argv[1], "deauthorize"))
-		{
-			fCommand = kDeauthorizeCommand;
-		}
-		if ( 0 == Rtt_StringCompareNoCase( argv[1], "checkauth" ) )
-		{
-			fCommand = kCheckAuthorizeCommand;
-		}
-		else if (0 == Rtt_StringCompareNoCase(argv[1], "build"))
+		if (0 == Rtt_StringCompareNoCase(argv[1], "build"))
 		{
 			fCommand = kBuildCommand;
-		}
-		else if (0 == Rtt_StringCompareNoCase(argv[1], "app_sign"))
-		{
-			fCommand = kAppSignCommand;
 		}
 		else if (0 == Rtt_StringCompareNoCase(argv[1], "car"))
 		{
@@ -239,9 +219,6 @@ CoronaBuilder::CoronaBuilder(
 CoronaBuilder::~CoronaBuilder()
 {
 	lua_close( fL );
-
-//	delete fAuthorizer;
-//	delete fAuthorizerDelegate;
 }
 
 void
@@ -255,22 +232,10 @@ CoronaBuilder::Usage( const char *arg0 )
 
 	fprintf( stderr,
 		"'command' can be one of:\n"
-		"\tauthorize\n"
-		"\tdeauthorize\n"
         "\tbuild\n"
 		"\tplugins\n"
         "\tversion\n"
 		"\n" );
-		
-	fprintf( stderr,
-		"'authorize' has 2 required arguments:\n"
-		"\t%s authorize user password\n"
-		"\n", progname.GetString());
-
-	fprintf( stderr,
-		"'deauthorize' does not require arguments. If you provide arguments, you must supply both.\n"
-		"\t%s deauthorize [user password]\n"
-		"\n", progname.GetString());
 
 	fprintf( stderr,
 		"'build' takes the following arguments:\n"
@@ -333,12 +298,6 @@ CoronaBuilder::Main( int argc, const char *argv[] )
 
 	switch ( cmd )
 	{
-		case CoronaBuilderParams::kAuthorizeCommand:
-		case CoronaBuilderParams::kCheckAuthorizeCommand:
-		case CoronaBuilderParams::kDeauthorizeCommand:
-		case CoronaBuilderParams::kAppSignCommand:
-			fprintf( stderr, "Command %s is no longer supported. Execution skipped.\n", argv[1]);
-			break;
 		case CoronaBuilderParams::kBuildCommand:
 			{
 				BuildParams::Format format = BuildParams::kJsonFormat;

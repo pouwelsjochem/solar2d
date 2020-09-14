@@ -236,8 +236,6 @@
 		00B73E1A12B727240057F594 /* AndroidKeyStorePassword.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73DFC12B727240057F594 /* AndroidKeyStorePassword.xib */; };
 		00B73E1C12B727240057F594 /* BuildProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73E0012B727240057F594 /* BuildProgress.xib */; };
 		00B73E1F12B727240057F594 /* License.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73E0612B727240057F594 /* License.xib */; };
-		00B73E2112B727240057F594 /* Login.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73E0A12B727240057F594 /* Login.xib */; };
-		00B73E2412B727240057F594 /* Password.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73E1012B727240057F594 /* Password.xib */; };
 		00B73E6A12B72DA50057F594 /* ALmixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; };
 		00B73E9D12B72FD80057F594 /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7343B12B6F7530057F594 /* print.c */; };
 		00B73ECE12B730AA0057F594 /* ant-launcher.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8B12B720C90057F594 /* ant-launcher.jar */; };
@@ -248,7 +246,6 @@
 		00D3F20B1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c in Sources */ = {isa = PBXBuildFile; fileRef = 00D3F20A1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c */; };
 		00D3F20F1613C4490095C5D6 /* Rtt_LuaCoronaBaseLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D3F20E1613C4490095C5D6 /* Rtt_LuaCoronaBaseLib.m */; };
 		00E14F6513428CBF0089C390 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00E14F6313428CBF0089C390 /* Localizable.strings */; };
-		00F641C2146C72950021E5D4 /* CoreAnimationUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F641BE146C65DD0021E5D4 /* CoreAnimationUtilities.m */; };
 		00F7305A1300CDD70089B661 /* IntegerValidationFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F730591300CDD70089B661 /* IntegerValidationFormatter.m */; };
 		03D1C5571D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03C89D541D6FE7B2004CD668 /* Rtt_PreferenceCollection.cpp */; };
 		03D1C5581D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03C89D541D6FE7B2004CD668 /* Rtt_PreferenceCollection.cpp */; };
@@ -2065,16 +2062,12 @@
 		00B73DFD12B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AndroidKeyStorePassword.xib; sourceTree = "<group>"; };
 		00B73E0112B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/BuildProgress.xib; sourceTree = "<group>"; };
 		00B73E0712B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/License.xib; sourceTree = "<group>"; };
-		00B73E0B12B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Login.xib; sourceTree = "<group>"; };
-		00B73E1112B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Password.xib; sourceTree = "<group>"; };
 		00C8225C13452C80005D1EEB /* ValidationSupportMacUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValidationSupportMacUI.h; sourceTree = "<group>"; };
 		00C8225D13452C80005D1EEB /* ValidationSupportMacUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValidationSupportMacUI.m; sourceTree = "<group>"; };
 		00D3F20A1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Rtt_LuaCoronaBaseLib.c; sourceTree = "<group>"; };
 		00D3F20C1613C1A20095C5D6 /* Rtt_LuaCoronaBaseLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaCoronaBaseLib.h; sourceTree = "<group>"; };
 		00D3F20E1613C4490095C5D6 /* Rtt_LuaCoronaBaseLib.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rtt_LuaCoronaBaseLib.m; sourceTree = "<group>"; };
 		00E14F6413428CBF0089C390 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
-		00F641BD146C65DC0021E5D4 /* CoreAnimationUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAnimationUtilities.h; sourceTree = "<group>"; };
-		00F641BE146C65DD0021E5D4 /* CoreAnimationUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAnimationUtilities.m; sourceTree = "<group>"; };
 		00F730581300CDD70089B661 /* IntegerValidationFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegerValidationFormatter.h; sourceTree = "<group>"; };
 		00F730591300CDD70089B661 /* IntegerValidationFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegerValidationFormatter.m; sourceTree = "<group>"; };
 		00FD0C011330445800716D46 /* car.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = car.xcodeproj; sourceTree = "<group>"; };
@@ -2757,8 +2750,6 @@
 		000CE91112B7413200D9B6A4 /* apple */ = {
 			isa = PBXGroup;
 			children = (
-				00F641BD146C65DC0021E5D4 /* CoreAnimationUtilities.h */,
-				00F641BE146C65DD0021E5D4 /* CoreAnimationUtilities.m */,
 				0054E59A147750490051B2CE /* FoundationUtilities.h */,
 				0054E59B147750990051B2CE /* FoundationUtilities.m */,
 				0077B6561463359A00EEDF75 /* Rtt_AppleInAppStore.h */,
@@ -3385,9 +3376,7 @@
 				C2DC53BE1ADF15540077A44A /* iOS-SDKs.json */,
 				00B73E0612B727240057F594 /* License.xib */,
 				00E14F6313428CBF0089C390 /* Localizable.strings */,
-				00B73E0A12B727240057F594 /* Login.xib */,
 				00B73DF312B726350057F594 /* MainMenu.nib */,
-				00B73E1012B727240057F594 /* Password.xib */,
 				00B73C8612B720C90057F594 /* remdebug_engine.lua */,
 				00B73C8812B720C90057F594 /* RememberPreferenceCheckbox.xib */,
 				A40A90711BD9A06C001D2038 /* tvOS-SDKs.json */,
@@ -5058,8 +5047,6 @@
 				00B73E1C12B727240057F594 /* BuildProgress.xib in Resources */,
 				F57469D7240291FA00CA5949 /* iostemplate in Resources */,
 				00B73E1F12B727240057F594 /* License.xib in Resources */,
-				00B73E2112B727240057F594 /* Login.xib in Resources */,
-				00B73E2412B727240057F594 /* Password.xib in Resources */,
 				00E14F6513428CBF0089C390 /* Localizable.strings in Resources */,
 				F545475321178F7400D5EDB7 /* linuxtemplate.tar.gz in Resources */,
 				C21D9DBD1BF67C300042C5A9 /* android_syslog.sh in Resources */,
@@ -5581,7 +5568,6 @@
 				A4B00FAA14576402008FB6E6 /* AppleSigningIdentityController.mm in Sources */,
 				E23CD30D147C725200BC9038 /* BuildSessionState.mm in Sources */,
 				1F34F53D21115FB2006EE117 /* Rtt_LinuxAppPackager.cpp in Sources */,
-				00F641C2146C72950021E5D4 /* CoreAnimationUtilities.m in Sources */,
 				C2F8376D1AC205FA00D33D6E /* CoronaViewRuntimeDelegate.mm in Sources */,
 				F57D176C1BE25C7C00AABAC1 /* Rtt_AppleInputHIDDeviceListener.mm in Sources */,
 				00B73DAC12B720CA0057F594 /* DimView.m in Sources */,
@@ -6207,22 +6193,6 @@
 				00B73E0712B727240057F594 /* English */,
 			);
 			name = License.xib;
-			sourceTree = "<group>";
-		};
-		00B73E0A12B727240057F594 /* Login.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				00B73E0B12B727240057F594 /* English */,
-			);
-			name = Login.xib;
-			sourceTree = "<group>";
-		};
-		00B73E1012B727240057F594 /* Password.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				00B73E1112B727240057F594 /* English */,
-			);
-			name = Password.xib;
 			sourceTree = "<group>";
 		};
 		00E14F6313428CBF0089C390 /* Localizable.strings */ = {

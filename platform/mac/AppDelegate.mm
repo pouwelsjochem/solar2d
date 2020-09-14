@@ -530,8 +530,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		dstPath = nil;
 		projectPath = nil;
 		
-		fPasswordController = nil;
-
 		fPreferencesWindow = nil;
         
 		fIsRemote = NO;
@@ -1110,7 +1108,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	delete fServices;
 	[fPreferencesWindow release];
-	[fPasswordController release];
 
 	[fSdkRoot release];
 	delete fConsolePlatform;
@@ -1218,25 +1215,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     
 	[fPreferencesWindow center];
 	[fPreferencesWindow makeKeyAndOrderFront:self];
-}
-
--(IBAction)deauthorizeConfirm:(id)sender
-{
-	NSAlert* alert = [[[NSAlert alloc] init] autorelease];
-	[alert addButtonWithTitle:@"Deauthorize and Quit"];
-	[alert addButtonWithTitle:@"Cancel"];
-	[alert setMessageText:@"Are you sure you want to continue?"];
-	[alert setInformativeText:@"This will close the Corona Simulator and you will have to log in again next time you use it."];
-	[alert setAlertStyle:NSWarningAlertStyle];
-	[alert beginSheetModalForWindow:fPreferencesWindow
-			modalDelegate:self
-			didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
-			contextInfo:fPreferencesWindow];
-}
-
--(IBAction)deauthorizeHelp:(id)sender
-{
-	fConsolePlatform->OpenURL( "https://coronalabs.com/links/simulator/deauthorize-help" );
 }
 
 -(void) showOpenPanel:(NSString*)title withAccessoryView:(NSView*)accessoryView startDirectory:(NSString*)start_directory completionHandler:(void(^)(NSString* path))completionhandler
@@ -2287,35 +2265,7 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 
 -(void)sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-	if ( fPasswordController.fWindow == sheet )
-	{
-		if ( returnCode == kActionDefault )
-		{
-			[sheet close];
-		}
-	}
-}
 
--(void)beginPasswordSheetWithUser:(NSString*)usr modalForWindow:(NSWindow*)parent modalDelegate:(id)delegate message:(NSString*)msg contextInfo:(void*)contextInfo
-{
-	if ( ! fPasswordController )
-	{
-		fPasswordController = [[DialogController alloc] initWithNibNamed:@"Password"];
-	}
-	else
-	{
-		Rtt_ASSERT( nil == [fPasswordController.inputs valueForKey:@"password"] );
-
-		// Clear pwd just in case, but it should be nil
-		[fPasswordController.inputs removeObjectForKey:@"password"];
-	}
-
-	[fPasswordController.inputs setValue:usr forKey:@"username"];
-	if ( msg )
-	{
-		[fPasswordController.inputs setValue:msg forKey:@"message"];
-	}
-	[fPasswordController beginSheet:parent modalDelegate:delegate contextInfo:contextInfo];
 }
 
 //This mimics growl send notification selector.
@@ -2382,15 +2332,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	char keyId[CC_MD5_DIGEST_LENGTH*2 + 1];
 	MD5Hash( keyId, [projectDirectoryPath UTF8String] );
 	return [NSString stringWithFormat:@"%@/%s", prefName, keyId];
-}
-
-// Used by Rtt_MacAuthorizationDelegate.mm
--(NSString*)getAndReleaseResultFromPasswordSheet
-{
-    NSString *result = [fPasswordController.inputs valueForKey:@"password"];
-    [fPasswordController.inputs removeObjectForKey:@"password"];
-
-    return result;
 }
 
 // Used by Rtt_MacAuthorizationDelegate.mm

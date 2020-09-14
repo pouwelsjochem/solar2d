@@ -90,12 +90,6 @@ enum DialogControllerState
 
 -(IBAction)close:(id)sender;
 
-// Sheet interaction
-// delegate should respond to the selector with signature:
-//		-(void)sheetDidEnd:(NSWindow*)sheet
-//				returnCode:(NSInteger)returnCode
-//				contextInfo:(void *)contextInfo
-//
 -(void)beginSheet:(NSWindow*)parent modalDelegate:(id)delegate contextInfo:(void*)contextInfo;
 
 -(BOOL)enabledDefault;

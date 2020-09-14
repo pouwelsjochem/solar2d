@@ -260,38 +260,6 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,258,197,48,14
 END
 
-IDD_PASSWORD DIALOGEX 0, 0, 169, 106
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Enter Password"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    LTEXT           "Please enter the password for",IDC_STATIC,7,10,102,8
-    LTEXT           "key",IDC_KEY,7,21,155,16
-    EDITTEXT        IDC_PASSWORD,7,41,135,14,ES_PASSWORD | ES_AUTOHSCROLL
-    CONTROL         "Save Password",IDC_SAVEPASSWORD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,65,66,10
-    DEFPUSHBUTTON   "OK",IDOK,54,85,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,112,85,50,14
-END
-
-IDD_LOGIN DIALOGEX 0, 0, 307, 87
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-EXSTYLE WS_EX_CONTEXTHELP
-CAPTION "Solar2D Developer Login"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    RTEXT           "Email:",IDC_STATIC,6,24,42,10
-    EDITTEXT        IDC_LOGIN_EMAIL,54,24,132,15,ES_AUTOHSCROLL
-    RTEXT           "Password:",IDC_STATIC,6,42,42,10
-    EDITTEXT        IDC_LOGIN_PASSWORD,54,42,132,15,ES_PASSWORD | ES_AUTOHSCROLL
-    CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT | SS_SUNKEN,196,6,4,74
-    LTEXT           "Not Registered?",IDC_STATIC,210,6,66,12
-    LTEXT           "Sign up now to:\n- Build for devices\n- Receive tips and tutorials\n- Post to our forums",IDC_STATIC,210,22,96,37
-    DEFPUSHBUTTON   "Login",IDOK,72,66,54,14
-    PUSHBUTTON      "Cancel",IDCANCEL,132,66,54,14
-    PUSHBUTTON      "Register",IDC_LOGIN_REGISTER,210,66,54,14
-    RTEXT           "Sign In",IDC_STATIC,124,6,60,12
-END
-
 IDD_LICENSE DIALOGEX 0, 0, 302, 183
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Solar2D License Agreement"
@@ -314,22 +282,6 @@ BEGIN
     ICON            "",IDC_MSG_ICON,7,7,20,20
     LTEXT           "Static",IDC_MSG_TEXT,53,5,193,40
     PUSHBUTTON      "Alt",ID_MSG_BUTTON2,75,50,80,14
-END
-
-IDD_DEVPASSWORD DIALOGEX 0, 0, 200, 109
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Solar2D Developer Password"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    EDITTEXT        IDC_LOGIN_PASSWORD,55,67,138,15,ES_PASSWORD | ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "Login",IDOK,85,88,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,143,88,50,14
-    ICON            IDR_MAINFRAME,IDC_STATIC,7,7,20,20,SS_REALSIZEIMAGE
-    LTEXT           "Solar2D Developer Password",IDC_STATIC,42,12,98,10
-    LTEXT           "Please enter your password to continue.",IDC_STATIC,43,25,150,10
-    RTEXT           "Email:",IDC_STATIC,12,51,39,10
-    LTEXT           "Email.",IDC_LOGIN_EMAIL,55,51,138,10
-    RTEXT           "Password:",IDC_STATIC,11,70,39,10
 END
 
 IDD_BUILD_PROGRESS DIALOGEX 0, 0, 335, 27
@@ -533,14 +485,6 @@ BEGIN
         BOTTOMMARGIN, 99
     END
 
-    IDD_LOGIN, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 300
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 80
-    END
-
     IDD_LICENSE, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -555,14 +499,6 @@ BEGIN
         RIGHTMARGIN, 246
         TOPMARGIN, 7
         BOTTOMMARGIN, 64
-    END
-
-    IDD_DEVPASSWORD, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 193
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 102
     END
 
     IDD_BUILD_PROGRESS, DIALOG
@@ -645,10 +581,6 @@ END
 STRINGTABLE
 BEGIN
     IDS_BUILD_PATH_INVALID  "You must provide a destination path which is different from the project path."
-    IDS_LOGIN               "Login"
-    IDS_NOT_LOGGED_IN       "You are not currently logged in."
-    IDS_LOGGED_IN_AS        "You are currently logged in as: "
-    IDS_SUSPENDED           "Suspended"
     IDS_OPENGL21_VERSION_WARNING 
                             "WARNING: This machine does not meet the Solar2D Simulator's minimum supported video hardware requirements for premium Graphics 2.0 features.\n\nMinimum OpenGL version required:  %s\nYour machine's OpenGL version:  %s"
     IDS_BUILD_EXE_FILE_NAME_NOT_PROVIDED 
@@ -680,8 +612,6 @@ BEGIN
     IDS_VALID_PACKAGE       "Valid package names can have one or more letters, numbers or underscores separated by a dot, for example 'com.acme_co.games3'.  There must be at least two strings separated by dots, and each string can't start with a number.  Java language reserved words (for, interface, etc.) are not permitted.  See http://download.oracle.com/javase/tutorial/java/package/namingpkgs.html."
     IDS_INVALID_KEYSTORE_s  "The password for the Key Store located at %s was not valid, or the Key Store was not valid."
     IDS_CHOOSEFOLLOWING     "(Choose from the following)"
-    IDS_LOGINSUCCESSFUL     "Congratulations!  The Solar2D is now ready for use on this computer."
-    IDS_LOGINFAILED         "Incorrect email and/or password."
 END
 
 STRINGTABLE
@@ -801,8 +731,6 @@ BEGIN
     IDS_OK                  "OK"
     IDS_DOWNLOAD            "Download"
     IDS_CANCEL              "Cancel"
-    IDS_STORED_PASSWORD_INVALID 
-                            "Stored password is invalid.  Please reenter your login information."
 END
 
 STRINGTABLE
@@ -856,8 +784,6 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_APP_NEEDS_REAUTHORIZATION 
-                            "This application needs to be reauthorized. Please make sure that you have an active Internet connection and then click ""OK"" to continue."
     IDS_BUILD_VERSION_MISMATCH_ERROR 
                             "Failed to build because the installed Solar2D version is too old. Please download the newest Solar2D build at https://github.com/coronalabs/corona/releases and try again."
     IDS_BUILD_ERROR_FORMAT_MESSAGE "[Build Error #%d]\r\n%s"

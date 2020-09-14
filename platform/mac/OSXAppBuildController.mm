@@ -297,7 +297,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 		return;
 	}
 
-	// We don't login to build macOS apps so we output this here
 	Rtt_Log("Building %s app with %s", [self.platformTitle UTF8String], Rtt_STRING_BUILD);
 	
 	MacConsolePlatform platform; // TODO: Use fConsolePlatform

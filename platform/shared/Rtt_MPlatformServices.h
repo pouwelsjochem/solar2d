@@ -33,7 +33,6 @@ class MPlatformServices
 
 		// Pass NULL for value to remove pref
 		virtual void SetPreference( const char *key, const char *value ) const = 0;
-//		virtual bool SetGlobalPreference( const char *key, const char *value ) const = 0;
 
 		virtual void GetSecurePreference( const char *key, String * value ) const = 0;
 		virtual bool SetSecurePreference( const char *key, const char *value ) const = 0;

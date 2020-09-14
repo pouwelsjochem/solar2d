@@ -64,10 +64,6 @@ class RuntimeEnvironment
 		/// <summary>
 		///  <para>Defines the "Loaded" event type.</para>
 		///  <para>Raised after loading the "config.lua" file and just but before executing the "shell.lua" file.</para>
-		///  <para>
-		///   This event is not to be exposed publicly to prevent Corona developers from overriding the
-		///   CoronaCards authorization handling in the "shell.lua" file.
-		///  </para>
 		/// </summary>
 		typedef Event<RuntimeEnvironment&, const EventArgs&> LoadedEvent;
 

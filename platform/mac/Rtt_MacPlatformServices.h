@@ -29,15 +29,11 @@ class MacPlatformServices : public MPlatformServices
 	public:
 		MacPlatformServices( const MPlatform& platform );
 
-	protected:
-		bool RequestAdminAuthorization( const char *name ) const;
-
 	public:
 		// MPlatformServices
 		virtual const MPlatform& Platform() const;
 		virtual void GetPreference( const char *key, Rtt::String * value ) const;
 		virtual void SetPreference( const char *key, const char *value ) const;
-//		virtual bool SetGlobalPreference( const char *key, const char *value ) const;
 		virtual void GetSecurePreference( const char *key, Rtt::String * value ) const;
 		virtual bool SetSecurePreference( const char *key, const char *value ) const;
 		virtual bool IsInternetAvailable() const;
@@ -51,7 +47,6 @@ class MacPlatformServices : public MPlatformServices
 
 	private:
 		const MPlatform& fPlatform;
-//		mutable AuthorizationRef fAdminAuthorization;
 };
 
 // ----------------------------------------------------------------------------

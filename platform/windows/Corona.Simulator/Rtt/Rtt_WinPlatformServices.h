@@ -29,9 +29,6 @@ class WinPlatformServices : public MPlatformServices
 		WinPlatformServices( const MPlatform& platform );
 //		~WinPlatformServices();
 
-	protected:
-		bool RequestAdminAuthorization(const char *name) const;
-
 	public:
 		// MPlatformServices
 		virtual const MPlatform& Platform() const;

@@ -338,7 +338,7 @@ BOOL CSimulatorApp::InitInstance()
 	}
 	AddDocTemplate(pDocTemplate);
 
-    // Do this before any of the ways app can exit (including not authorized)
+    // Do this before any of the ways app can exit
 	printf("\nCorona Simulator %d.%d (%s %s)\n\n", Rtt_BUILD_YEAR, Rtt_BUILD_REVISION, __DATE__, __TIME__);
 
 	// Load user preferences from registry
@@ -427,14 +427,6 @@ BOOL CSimulatorApp::InitInstance()
 	//  In an SDI app, this should occur after ProcessShellCommand
 	// Enable drag/drop open
 	m_pMainWnd->DragAcceptFiles();
-
-	// Check if the current user is authorized to run this application.
-	// If not, then this function will display a login window and connect to Corona Labs' server.
-	BOOL isAuthorized = AuthorizeInstance();
-	if (!isAuthorized)
-	{
-		return FALSE;
-	}
 
 	// This application has been initialized and is authorized to continue.
 	// Returning TRUE allows this application to continue running.
@@ -603,14 +595,6 @@ CSimulatorApp::InitJavaPaths()
 #endif // USE_JNI
 
 	return bInitialized;
-}
-
-// AuthorizeInstance - Call into shared code to check if the current instance is
-// authorized, and show License & Login dialog if not.
-BOOL CSimulatorApp::AuthorizeInstance()
-{
-    // Check for saved ticket and log in if necessary
-	return TRUE;
 }
 
 /// Gets this application's absolute path without the file name.

@@ -21,7 +21,6 @@
 #import "GLView.h"
 #import "SkinlessSimulatorWindow.h"
 
-#import "CoreAnimationUtilities.h" // for shake animation
 #include "Display/Rtt_Display.h"
 #include "Display/Rtt_Scene.h"
 #include "Rtt_Runtime.h"

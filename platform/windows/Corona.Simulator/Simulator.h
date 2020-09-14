@@ -97,8 +97,6 @@ public:
 	std::shared_ptr<Interop::Ipc::Process> GetOutputViewerProcessPointer() { return m_outputViewerProcessPointer; }
 
 protected:
-	BOOL AuthorizeInstance();
-
 	ULONG_PTR m_gdiplusToken;
     CString m_sDisplayName;
 	WINDOWPLACEMENT m_WP;

@@ -39,9 +39,6 @@ class Win32AppPackager : public PlatformAppPackager
 		///  <para>Must be of type Win32AppPackageParams or else the build will fail.</para>
 		///  <para>Cannot be null or else the build will fail.</para>
 		/// </param>
-		/// <param name="webSession">
-		///  Session object needed to authorize and perform the build via the Corona Labs' web servers.
-		/// </param>
 		/// <param name="tempDirectoryPath">
 		///  <para>Absolute path to a directory for the build system to use to keep temporary/intermediate build files.</para>
 		///  <para>This directory will be created and deleted by this Build() method.</para>
@@ -85,7 +82,6 @@ class Win32AppPackager : public PlatformAppPackager
 		///  </para>
 		/// </summary>
 		/// <param name="buildSettings">Settings required to perform the build.</param>
-		/// <param name="webSession">Web session needed to perform the remote build.</param>
 		/// <returns>
 		///  <para>Returns 0 if the build succeeded.</para>
 		///  <para>

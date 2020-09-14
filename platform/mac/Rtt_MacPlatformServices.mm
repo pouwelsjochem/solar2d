@@ -25,64 +25,8 @@ namespace Rtt
 
 MacPlatformServices::MacPlatformServices( const MPlatform& platform )
 :	fPlatform( platform )
-#ifdef GLOBAL_PREF
-	, fAdminAuthorization( NULL )
-#endif
 {
 }
-
-#ifdef GLOBAL_PREF
-MacPlatformServices::~MacPlatformServices()
-{
-	if ( fAdminAuthorization )
-	{
-		AuthorizationFree( fAdminAuthorization, kAuthorizationFlagDestroyRights );
-	}
-}
-
-bool
-MacPlatformServices::RequestAdminAuthorization( const char *name ) const
-{
-	bool result = NULL != fAdminAuthorization;
-
-	if ( ! result )
-	{
-		AuthorizationItem items[] =
-		{
-			{ name, 0, NULL, 0 }
-//			{ kAuthorizationRightExecute, strlen( name ), const_cast< char* >( name ), 0 }
-//			{ "com.anscamobile.ratatouille.Resource", 0, NULL, 0 },
-//			{ "com.anscamobile.ratatouille.Username", 0, NULL, 0 },
-//			{ "com.anscamobile.ratatouille.Version", 0, NULL, 0 },
-		};
-
-		AuthorizationRights rights = { sizeof(items)/sizeof(items[0]), items };
-
-		AuthorizationFlags flags =
-			kAuthorizationFlagDefaults
-			| kAuthorizationFlagInteractionAllowed
-			| kAuthorizationFlagExtendRights;
-
-		OSStatus status = AuthorizationCreate( NULL, kAuthorizationEmptyEnvironment, kAuthorizationFlagDefaults, & fAdminAuthorization );
-
-		if ( Rtt_VERIFY( errAuthorizationSuccess == status ) )
-		{
-			status = AuthorizationCopyRights( fAdminAuthorization, & rights, kAuthorizationEmptyEnvironment, flags, NULL );
-		}
-
-		if ( Rtt_VERIFY( errAuthorizationSuccess == status ) )
-		{
-			result = true;
-		}
-		else
-		{
-			AuthorizationFree( fAdminAuthorization, kAuthorizationFlagDestroyRights );
-		}
-	}
-
-	return result;
-}
-#endif
 
 const MPlatform&
 MacPlatformServices::Platform() const
@@ -216,84 +160,6 @@ MacPlatformServices::SetLibraryPreference( const char *key, const char *value ) 
 		[k release];
 	}
 }
-
-
-#ifdef GLOBAL_PREF
-
-bool
-MacPlatformServices::SetGlobalPreference( const char *key, const char *value ) const
-{
-	bool result = false;
-
-	if ( Rtt_VERIFY( key ) )
-	{
-		NSString *k = [[NSString alloc] initWithUTF8String:key];
-		NSString *v = ( value ? [[NSString alloc] initWithUTF8String:value] : nil );
-
-		// Try the easy way first
-		CFPreferencesSetValue( (CFStringRef)k, (CFPropertyListRef)v, kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost );
-		result = CFPreferencesSynchronize( kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost );
-
-		// Otherwise, authenticate and use helper function
-		if ( ! result )
-		{
-			const char kLibraryPreferencesRight[] = "system.preferences";
-			if ( RequestAdminAuthorization( kLibraryPreferencesRight ) )
-			{
-				CFPreferencesSetValue( (CFStringRef)k, (CFPropertyListRef)v, kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost );
-				result = CFPreferencesSynchronize( kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost );
-				if ( ! result )
-				{
-					NSLog( @"CFPreferencesSynchronize returned false" );
-				}
-			}
-#if 0
-
-			NSString *path = [[NSBundle mainBundle] pathForResource:@"globalize" ofType:nil];
-			const char *toolPath = [path UTF8String];
-
-			// Request Admin authorization and then call helper function which will execute with admin rights
-			if ( RequestAdminAuthorization( toolPath ) )
-			{
-				if ( path )
-				{
-					char *argv[] =
-					{
-						const_cast< char* >( key ),
-						const_cast< char* >( value ),
-						NULL
-					};
-					FILE *f = NULL;
-					result = Rtt_VERIFY( errAuthorizationSuccess == 
-												AuthorizationExecuteWithPrivileges(
-													fAdminAuthorization,
-													toolPath,
-													kAuthorizationFlagDefaults,
-													argv,
-													& f ) );
-
-					result &= Rtt_VERIFY( f );
-
-					if ( f )
-					{
-						int code = fgetc( f );
-						result &= Rtt_VERIFY( 0 == code );
-						fclose( f );
-					}
-				}
-				// result = Rtt_VERIFY( CFPreferencesSynchronize( kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost ) );
-			}
-#endif
-		}
-
-		[v release];
-		[k release];
-
-	}
-
-	return result;
-}
-#endif
 
 void
 MacPlatformServices::GetSecurePreference( const char *key, Rtt::String * value ) const

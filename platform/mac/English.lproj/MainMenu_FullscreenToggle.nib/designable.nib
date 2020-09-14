@@ -2178,8 +2178,6 @@
 							<string>changeSkinToMyTouch:</string>
 							<string>changeSkinToNexusOne:</string>
 							<string>close:</string>
-							<string>deauthorizeConfirm:</string>
-							<string>deauthorizeHelp:</string>
 							<string>launchSimulator:</string>
 							<string>open:</string>
 							<string>openForBuild:</string>
@@ -2196,8 +2194,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2244,8 +2240,6 @@
 							<string>changeSkinToMyTouch:</string>
 							<string>changeSkinToNexusOne:</string>
 							<string>close:</string>
-							<string>deauthorizeConfirm:</string>
-							<string>deauthorizeHelp:</string>
 							<string>launchSimulator:</string>
 							<string>open:</string>
 							<string>openForBuild:</string>
@@ -2312,14 +2306,6 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">close:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">deauthorizeConfirm:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">deauthorizeHelp:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

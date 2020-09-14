@@ -9,7 +9,6 @@
 #define IDS_INVALID_WEB_APP_VERSION_NUMBER 130
 #define IDS_INVALID_LINUX_APP_VERSION_NUMBER 131
 #define IDD_BUILD_DROID                 311
-#define IDD_LOGIN                       313
 #define IDD_LICENSE                     314
 #define IDD_PASSWORD                    316
 #define IDD_MESSAGE                     317
@@ -25,7 +24,6 @@
 #define IDI_JUNGLESCENE                 338
 #define IDI_ICON5                       339
 #define IDI_SIMPLEPOOL                  340
-#define IDD_DEVPASSWORD                 341
 #define IDD_BUILD_PROGRESS              346
 #define IDD_NEW_PROJECT                 349
 #define IDD_SELECT_SAMPLE_PROJECT       350
@@ -66,8 +64,6 @@
 #define IDS_VALID_PACKAGE               507
 #define IDS_INVALID_KEYSTORE_s          508
 #define IDS_CHOOSEFOLLOWING             509
-#define IDS_LOGINSUCCESSFUL             510
-#define IDS_LOGINFAILED                 511
 #define IDS_BUILD_SUCCEEDED             526
 #define IDS_BUILD_FAILED                529
 #define IDS_CONSOLE_FAILED              530
@@ -81,7 +77,6 @@
 #define IDS_DOWNLOAD                    540
 #define IDS_CANCEL                      541
 #define IDS_REMOVE_s_APPDIR             542
-#define IDS_STORED_PASSWORD_INVALID     543
 #define IDS_DONE                        544
 #define IDS_VIEW_EXPLORER               545
 #define IDS_JDKNOTFOUND                 546
@@ -116,7 +111,6 @@
 #define IDS_OPENGL_VERSION_WARNING      605
 #define IDS_WARNING                     606
 #define IDS_UNKNOWN                     607
-#define IDS_APP_NEEDS_REAUTHORIZATION   608
 #define IDS_BUILD_VERSION_MISMATCH_ERROR 610
 #define IDS_BUILD_ERROR_FORMAT_MESSAGE  611
 #define IDS_BUILD_APP_NAME_NOT_PROVIDED 612
@@ -155,10 +149,6 @@
 #define IDS_BUILD_TARGET_APP_STORE_NOT_SELECTED 652
 #define IDS_REMIND_ME_LATER             655
 #define IDS_BUILD_PATH_INVALID          659
-#define IDS_LOGIN                       660
-#define IDS_NOT_LOGGED_IN               661
-#define IDS_LOGGED_IN_AS                662
-#define IDS_SUSPENDED                   663
 #define IDS_OPENGL21_VERSION_WARNING    664
 #define IDS_BUILD_EXE_FILE_NAME_NOT_PROVIDED 667
 #define IDS_BUILD_EXE_FILE_NAME_CHARS_INVALID 668
@@ -181,11 +171,8 @@
 #define IDC_KEY                         1015
 #define IDC_PASSWORD                    1016
 #define IDC_SAVEPASSWORD                1017
-#define IDC_LOGIN_EMAIL                 1019
-#define IDC_LOGIN_PASSWORD              1020
 #define IDC_LICENSE                     1022
 #define IDC_PROGRESS                    1023
-#define IDC_LOGIN_REGISTER              1024
 #define IDC_MSG_ICON                    1025
 #define IDC_MSG_TEXT                    1026
 #define IDC_ABOUT_VERSION               1027
@@ -193,7 +180,6 @@
 #define IDC_WELCOME_OPEN4               1039
 #define IDC_ANSCALOGO                   1041
 #define IDC_COMMAND1                    1042
-#define IDC_DEAUTHORIZE                 1043
 #define ID_MSG_BUTTON2                  1049
 #define IDC_COPYRIGHT                   1052
 #define IDC_PICTURE_BOX                 1054
@@ -247,7 +233,6 @@
 #define ID_HELP_HELP                    32779
 #define ID_WINDOW_VIEWAS                32782
 #define ID_WINDOW_VIEWING               32783
-#define ID_HELP_DEAUTHORIZE             32784
 #define ID_FILE_SHOWPROJECTSANDBOX      32796
 #define ID_FILE_OPENINEDITOR            32799
 #define ID_VIEW_DEMO                    32801

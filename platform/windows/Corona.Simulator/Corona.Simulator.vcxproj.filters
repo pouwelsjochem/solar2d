@@ -8,9 +8,7 @@
     <ClInclude Include="BuildWebDlg.h" />
     <ClInclude Include="CoronaInterface.h" />
     <ClInclude Include="CoronaProject.h" />
-    <ClInclude Include="DevPasswordDlg.h" />
     <ClInclude Include="LicenseDlg.h" />
-    <ClInclude Include="LoginDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="PasswordDlg.h" />
@@ -145,9 +143,7 @@
     <ClCompile Include="BuildWebDlg.cpp" />
     <ClCompile Include="CoronaInterface.cpp" />
     <ClCompile Include="CoronaProject.cpp" />
-    <ClCompile Include="DevPasswordDlg.cpp" />
     <ClCompile Include="LicenseDlg.cpp" />
-    <ClCompile Include="LoginDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="PasswordDlg.cpp" />
