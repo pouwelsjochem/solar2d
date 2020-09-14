@@ -97,10 +97,7 @@ class NativeToJavaBridge
 	
 		void SetTimer( int milliseconds );
 		void CancelTimer();
-	
-		void SetVolume( uintptr_t id, float volume );
-		float GetVolume( uintptr_t id ) const;
-	
+
 		void HttpPost( const char* url, const char* key, const char* value );
 	
 		bool CanOpenUrl( const char* url );
@@ -148,11 +145,6 @@ class NativeToJavaBridge
 		void Vibrate();
 		
 	public:
-		bool RecordStart( uintptr_t id, const char * file );
-		void RecordStop( uintptr_t id );
-		bool RecordGetBytes( uintptr_t id, Rtt::Data<char> & result );
-		void RecordReleaseCurrentBuffer( uintptr_t id );
-
 		int CryptoGetDigestLength( const char * algorithm );
 		void CryptoCalculateDigest( const char * algorithm, const Rtt::Data<const char> & data, U8 * digest );
 		void CryptoCalculateHMAC( const char * algorithm, const Rtt::Data<const char> & key, const Rtt::Data<const char> & data, 
