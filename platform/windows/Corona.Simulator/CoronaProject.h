@@ -91,7 +91,7 @@ public:
 
 	static CString RemoveMainLua( CString sPath );  // for RecentlyUsed menu items
 	static bool ValidatePackage( CString sPackage );
-	static CString GetTrialKeystorePath();
+	static CString GetDebugKeystorePath();
 
 protected:
 	static bool allalphanum( CString string, int start, int end );

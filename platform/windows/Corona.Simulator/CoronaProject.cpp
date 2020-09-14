@@ -343,9 +343,9 @@ CCoronaProject::ValidatePackage( CString sPackage )
    return bCorrect;
 }
 
-// GetTrialKeystorePath - we install AppPath\Resources\debug.keystore
+// GetDebugKeystorePath - we install AppPath\Resources\debug.keystore
 CString
-CCoronaProject::GetTrialKeystorePath()
+CCoronaProject::GetDebugKeystorePath()
 {
 	CSimulatorApp *pApp = (CSimulatorApp *)AfxGetApp();
 
@@ -520,7 +520,7 @@ bool CCoronaProject::ValidateKeystoreAliasPassword()
 bool
 CCoronaProject::IsDistribution()
 {
-	return 0 != CCoronaProject::GetTrialKeystorePath().CompareNoCase( GetKeystorePath() );
+	return 0 != CCoronaProject::GetDebugKeystorePath().CompareNoCase( GetKeystorePath() );
 }
 Rtt::TargetDevice::Platform CCoronaProject::GetTargetPlatform()
 {

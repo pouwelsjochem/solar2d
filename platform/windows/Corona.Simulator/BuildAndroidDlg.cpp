@@ -186,8 +186,8 @@ BOOL CBuildAndroidDlg::OnInitDialog()
 		{
 			if (sLastKeystore.IsEmpty())
 			{
-				SetDlgItemText( IDC_BUILD_KEYSTORE, CCoronaProject::GetTrialKeystorePath() );
-				m_pProject->SetKeystorePassword( GetTrialKeystorePassword() );
+				SetDlgItemText( IDC_BUILD_KEYSTORE, CCoronaProject::GetDebugKeystorePath() );
+				m_pProject->SetKeystorePassword( GetDebugKeystorePassword() );
 			}
 			else
 			{
@@ -220,10 +220,9 @@ BOOL CBuildAndroidDlg::OnInitDialog()
 	CString sKeystore, sKeystorePassword;
 	GetDlgItemText( IDC_BUILD_KEYSTORE, sKeystore );
 
-	// Non-trial user with our installed keystore
-	if( sKeystore.CompareNoCase( CCoronaProject::GetTrialKeystorePath() ) == 0 )
+	if( sKeystore.CompareNoCase( CCoronaProject::GetDebugKeystorePath() ) == 0 )
 	{
-		m_pProject->SetKeystorePassword( GetTrialKeystorePassword() );
+		m_pProject->SetKeystorePassword( GetDebugKeystorePassword() );
 	}
 	// For all cases, set variable to pass in to ReadKeystore
 	sKeystorePassword = m_pProject->GetKeystorePassword( sKeystore ); // argument has to match what pwd is for
@@ -360,9 +359,9 @@ void CBuildAndroidDlg::UpdateAliasList()
 		m_pProject->ClearKeystorePassword();  // new keystore, new password needed
 
 		// Known password for the keystore we install, don't prompt user
-		if( ! sKeystorePath.CompareNoCase( CCoronaProject::GetTrialKeystorePath() ) )
+		if( ! sKeystorePath.CompareNoCase( CCoronaProject::GetDebugKeystorePath() ) )
 		{
-			sPassword = GetTrialKeystorePassword();
+			sPassword = GetDebugKeystorePassword();
 		}
 
 		// Loop until we get valid password, or until user clicks Cancel
@@ -694,11 +693,11 @@ void CBuildAndroidDlg::OnOK()  // OnBuild()
 	// Third argument is what this is a password for, not value of password
 	m_pProject->RegistryPutKeystorePassword(REGISTRY_BUILD_ANDROID, REGISTRY_LASTKEYSTOREPWD, sKeystore);
 
-	// We know the Key Alias password for the trial keystore
-	if (!sKeystore.CompareNoCase(CCoronaProject::GetTrialKeystorePath()))
+	// We know the Key Alias password for the debug keystore
+	if (!sKeystore.CompareNoCase(CCoronaProject::GetDebugKeystorePath()))
 	{
-		m_pProject->SetKeystorePassword(GetTrialKeystorePassword());
-		m_pProject->SetAliasPassword(GetTrialKeyAliasPassword());
+		m_pProject->SetKeystorePassword(GetDebugKeystorePassword());
+		m_pProject->SetAliasPassword(GetDebugKeyAliasPassword());
 	}
 
 	// Loop until a valid password has been received or until the user cancels out.
@@ -783,15 +782,15 @@ void CBuildAndroidDlg::OnCancel()
 	CDialog::OnCancel();
 }
 
-// GetTrialKeystorePassword
-CString CBuildAndroidDlg::GetTrialKeystorePassword()
+// GetDebugKeystorePassword
+CString CBuildAndroidDlg::GetDebugKeystorePassword()
 {
 	return _T("android");
 }
 
-// GetTrialKeyAliasPassword - sole key alias is androiddebugkey
-// I noticed that signing seems to succeed with any password for the trial key alias
-CString CBuildAndroidDlg::GetTrialKeyAliasPassword()
+// GetDebugKeyAliasPassword - sole key alias is androiddebugkey
+// I noticed that signing seems to succeed with any password for the debug key alias
+CString CBuildAndroidDlg::GetDebugKeyAliasPassword()
 {
 	return _T("android");
 }

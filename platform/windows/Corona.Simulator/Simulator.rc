@@ -638,18 +638,12 @@ END
 STRINGTABLE
 BEGIN
     IDR_MAINFRAME           "Solar2D Simulator"
-    IDS_BUILDWEBUPSELL      "Your subscription restricts %s builds to Trial mode.  Upgrade your subscription to remove restrictions."
     IDS_INVALID_WEB_APP_VERSION_NUMBER 
                             "Your version code is invalid.\r\n\r\n It must be a single number and may not contain dots. This version number cannot be less than 1."
 END
 
 STRINGTABLE
 BEGIN
-    IDS_SUBSCRIPTION_EXPIRING_SOON 
-                            "Your ""%s"" subscription is about to expire."
-    IDS_SUBSCRIPTION_EXPIRING_DAYS 
-                            "Your ""%s"" subscription will expire in %d days."
-    IDS_SUBSCRIPTION_EXPIRED_MODE "Your ""%s"" subscription has expired."
     IDS_BUILD_PATH_INVALID  "You must provide a destination path which is different from the project path."
     IDS_LOGIN               "Login"
     IDS_NOT_LOGGED_IN       "You are not currently logged in."
@@ -790,27 +784,11 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_LOGINBLACKLISTED    "This computer was already used for a trial. Support our efforts to make great products by clicking Purchase."
-    IDS_LOGINUNVERIFIED     "Your account has not been verified yet. A verification e-mail has been sent to you with further instructions on how to validate your account."
-    IDS_TRIALEXPIRED        "Your starter subscription has expired. To continue using, click Purchase and support our efforts to make great products."
-    IDS_BASICEXPIRED        "To use the latest updates, you must have an active subscription. Click Renew now to continue making great Droid applications."
-    IDS_QUOTALIMIT          "You are already using this software on two other computers. Please deauthorize one of your other computers before logging in on this computer.\r\nOn the other computer, go to File / Preferences... / Deauthorize and Quit"
-    IDS_PLATFORMMISMATCH    "You purchased a product for a different platform. You can click Purchase for an additional license for this computer."
-    IDS_APIKEYINVALID       "This version is no longer supported. Please click Download to obtain a supported version of this product."
-    IDS_TOKENEXPIRED        "Your computer's clock has the incorrect date and/or time. Please update with the correct time and try again."
-    IDS_PWDNOTSAVED         "Login succeeded, but we were unable to store your Solar2D password. You may have to login again in the future."
-    IDS_AGREEMENTCHANGED    "The Solar2D Connect terms and conditions have changed. Click OK to read and agree to the new terms."
-    IDS_LOGINERROR          "Could not verify account information."
-    IDS_DEAUTHORIZED        "Application successfully deauthorized."
-    IDS_DEAUTHERROR         "Could not deauthorize application.  Please try again."
-    IDS_DEAUTH_CONFIRM      "Are you sure you want to deauthorize this application and exit?"
     IDS_BUILD_SUCCEEDED     "Your application was built successfully."
-    IDS_BUILD_NOT_AUTH      "Not authorized to build."
 END
 
 STRINGTABLE
 BEGIN
-    IDS_LOGIN_INVALID       "Invalid registration.  Please check your login name and password."
     IDS_BUILD_FAILED        "Build failed.  Check the console window for errors."
     IDS_CONSOLE_FREE        "Could not free console."
     IDS_DIR_s_NOTFOUND_INSTALL 
@@ -820,9 +798,7 @@ BEGIN
     IDS_INVALID_ALIAS       "The password for the alias was not valid, or the Java JDK was not found."
     IDS_QUIT                "Quit"
     IDS_CONTINUE            "Continue"
-    IDS_PURCHASE            "Purchase"
     IDS_OK                  "OK"
-    IDS_RENEW               "Renew"
     IDS_DOWNLOAD            "Download"
     IDS_CANCEL              "Cancel"
     IDS_STORED_PASSWORD_INVALID 
@@ -840,18 +816,13 @@ BEGIN
     IDS_CONSOLE_CREATE      "Failed to create console."
     IDS_NO_INTERNET         "Could not connect to server. Please check your Internet connection."
     IDS_UNKNOWNERROR        "An unexpected account configuration error occurred.  Please visit Solar2D forums to find a solution at https://forums.solar2d.com"
-    IDS_STILLTRIAL          "Our records show you have not purchased the product yet. The account status is currently set to a starter account."
-    IDS_THANKSPURCHASE      "Thank you for your purchase! The purchased version of Solar2D is now ready for use on this computer."
     IDS_SET_JAVAHOME_s      "Jarsigner.exe not found.  To enable Builds:\n(1) Set the JAVA_HOME environment variable to '%s' (without the quotes)\n(2) Add ';%%JAVA_HOME%%\\bin' (without the quotes) to the end of your PATH environment variable.\n(3) Exit and relaunch Solar2D Simulator\n\nClick Yes to open the System Properties dialog to edit your environment variables.  (This message will close.)"
     IDS_ASSOCLUA            "Please associate .lua files with an editor in Control Panel File Associations, then try again.  Click Yes to open the Control Panel File Associations applet."
     IDS_OPENPROJECTINEDITOR "Open Project in Editor"
-    IDS_TRIALBUILDSONLY     "Trial Builds Only"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_BUILDUPSELL         "Your subscription restricts device builds on %s to Trial mode.  Upgrade your subscription to get access to priority device builds."
-    IDS_TRIALBUILD          "Do you want to build more powerful apps? Upgrade to Pro and get access to Daily Builds, in-app purchases and more."
     IDS_ANDROIDBUILD        "Build for Android"
     IDS_KEYSTORE_ATLEASTONE "Please choose a keystore with at least one valid key alias."
     IDS_OPENGL_VERSION_WARNING 
@@ -869,13 +840,6 @@ BEGIN
     IDS_COULDNOTLOAD_s_ERR_d "Could not load %s, error %ld"
     IDS_FUNCTION_s_IN_s     "Could not find %s in %s."
     IDS_APPCORRUPTED        "This application has been corrupted.  Please download and reinstall."
-    IDS_CLICKBUYNOW         "Your trial evaluation has expired. To continue using, please click Buy Now to purchase the Solar2D."
-    IDS_BUYNOW              "Upgrade Now"
-    IDS_VERIFY_PURCHASE     "Verify Purchase"
-    IDS_SUBSCRIPTION_EXPIRED "Solar2D Subscription Expired"
-    IDS_NEEDTORENEW         "You cannot use the latest updates without an active subscription.  To qualify for the latest updates, you need to renew your subscription."
-    IDS_ALREADYRENEWED      "Already Renewed"
-    IDS_TRIAL_EXPIRED       "Solar2D Trial Expired"
     IDS_OPEN_NOTE           "Choose a project to run in the simulator and build for devices."
 END
 
@@ -883,15 +847,6 @@ STRINGTABLE
 BEGIN
     IDS_STARTED_NOTE        "A tutorial to quickly get started with Solar2D."
     IDS_PROGRAMMING_NOTE    "Create a project, build a project, and more."
-    IDS_CORONAGETRIAL       "Solar2D Game Edition Trial"
-    IDS_UPGRADE             "Upgrade"
-    IDS_ALREADYUPGRADED     "Already Upgraded"
-    IDS_SUBSCRIBERGETRIAL   "As a Solar2D subscriber, we'd like to invite you to take Solar2D Game Edition for a limited test drive.  Please click Upgrade or Already Upgraded."
-    IDS_SUBSCRIBERGERENEW   "Your Solar2D subscription is about to expire. Please click Upgrade to extend your trial to Solar2D Game Edition, or Already Upgraded if you already did."
-    IDS_CONTINUETRIAL       "Continue"
-    IDS_CORONATRIAL         "Corona Trial"
-    IDS_TRIALTHANKS_d       "Thanks for downloading Corona.  You have been using the trial for %d day(s).  Click Buy Now to share your app with the world.  If you already bought, click Already Purchased."
-    IDS_TRIALFUN_d          "We hope you�re having a blast with Corona! Upgrade to Pro and build apps with features like analytics and in-app purchases. Take your apps to the next level."
     IDS_BRIDGE_NOTE         "Joints and damping"
     IDS_CHAINS_NOTE         "Joints chained together"
     IDS_EGGBREAKER_NOTE     "Collisions"
@@ -903,8 +858,6 @@ STRINGTABLE
 BEGIN
     IDS_APP_NEEDS_REAUTHORIZATION 
                             "This application needs to be reauthorized. Please make sure that you have an active Internet connection and then click ""OK"" to continue."
-    IDS_SUBSCRIPTION_EXPIRED_FOR_BUILD 
-                            "Your subscription to the Solar2D Developer Program has expired. You must renew to continue building for devices."
     IDS_BUILD_VERSION_MISMATCH_ERROR 
                             "Failed to build because the installed Solar2D version is too old. Please download the newest Solar2D build at https://github.com/coronalabs/corona/releases and try again."
     IDS_BUILD_ERROR_FORMAT_MESSAGE "[Build Error #%d]\r\n%s"
@@ -934,16 +887,6 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_DAILY_BUILD_AVAILABLE_TO_SUBSCRIBERS_ONLY 
-                            "All builds are available at https://github.com/coronalabs/corona/releases"
-    IDS_TITLE_UPGRADE_CORONA "Upgrade Today!"
-    IDS_DEVICE_NOT_AVAILABLE_TO_TRIAL_USERS 
-                            "The %s device is not available for Trial developers. Buy a subscription to get access to full functionality."
-    IDS_DEVICE_NOT_AVAILABLE_TO_X_SUBSCRIBERS 
-                            "The %s device is not available for %s subscribers. Upgrade your subscription to get access to full functionality."
-    IDS_TITLE_BUY_CORONA    "Solar2D"
-    IDS_TRIAL_BUILD_COUNTDOWN 
-                            "Upgrade to skip the queue. Your build begins in %d seconds..."
     IDS_TITLE_SIMULATOR_OUTPUT "Solar2D Simulator Console"
     IDS_ANDROID             "Android"
     IDS_AMAZON_SLASH_KINDLE "Amazon/Kindle"
@@ -984,8 +927,6 @@ BEGIN
                             "There is an error in your ""build.settings"" file. Please see the console output for more details."
     IDS_BUILD_TARGET_APP_STORE_NOT_SELECTED 
                             "You must select an app store to build for."
-    IDS_SUBSCRIPTION_EXPIRING "Solar2D Subscription Expiring Soon"
-    IDS_RENEW_NOW           "Renew Now"
     IDS_REMIND_ME_LATER     "Remind me Later"
 END
 

@@ -81,8 +81,8 @@ public:
 protected:
 	bool ReadKeystore( CString sKeystorePath, CString sPassword, bool bShowErrors = true );
     void UpdateAliasList();
-	CString GetTrialKeystorePassword();
-	CString GetTrialKeyAliasPassword();
+	CString GetDebugKeystorePassword();
+	CString GetDebugKeyAliasPassword();
 	void DisplayWarningMessage(UINT nMessageID);
 	void DisplayWarningMessage(UINT nMessageID, CString filename); // override with additional info
 	UINT DisplayWarningMessageWithHelp(UINT nTitleID, UINT nMessageID, CString helpURL);
