@@ -47,15 +47,6 @@ class AppleTimer : public PlatformTimer
 		virtual void SetInterval( U32 milliseconds );
 		virtual bool IsRunning() const;
 
-		// Problem: On iOS, when the screen locks and the display turns off,
-		// CADisplayLink timers stop firing.
-		// In my experiments, backgrounding allows the CADisplayLink to continue firing, though if the display sleeps/locks, the timer stops firing.
-		// To avoid this problem, we need to switch off of CADisplayLink to NSTimer.
-		// Since we can't easily distinguish between a screen lock and backgrounding, we treat both events as the same and switch to the background timer.
-		// Note that CVDisplayLink may have similar issues on Mac when there is no display, offscreen rendering, and possibly VNC remote desktop.
-		virtual void SwitchToForegroundTimer();
-		virtual void SwitchToBackgroundTimer();
-
 	public:
 		AppleCallback* GetTarget() { return fTarget; }
 	
@@ -65,7 +56,6 @@ class AppleTimer : public PlatformTimer
 		AppleCallback* fTarget;
 		U32 fInterval;
 		bool fDisplayLinkSupported;
-		U32 fSavedInterval; 
 };
 
 // ----------------------------------------------------------------------------

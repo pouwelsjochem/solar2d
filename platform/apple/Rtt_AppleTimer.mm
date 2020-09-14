@@ -47,8 +47,7 @@ AppleTimer::AppleTimer( MCallback& callback )
 	fTimer( nil ),
 	fTarget( [[AppleCallback alloc] init] ),
 	fInterval( 0x8000000 ),
-	fDisplayLinkSupported( false ),
-	fSavedInterval( fInterval )
+	fDisplayLinkSupported( false )
 {
 #if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 	fTarget.callback = & callback;
@@ -66,50 +65,6 @@ AppleTimer::~AppleTimer()
 	Stop();
 	[fTarget release];
 	[fDisplayLink release];
-}
-
-void
-AppleTimer::SwitchToForegroundTimer()
-{
-#ifdef Rtt_IPHONE_ENV
-	if ( nil != fDisplayLink )
-	{
-		// already using displayLink timer
-		return;
-	}
-	bool wasRunning = IsRunning();
-	Stop();
-	fInterval = fSavedInterval;
-	fDisplayLinkSupported = ( NSClassFromString(@"CADisplayLink") != nil );
-	if ( wasRunning )
-	{
-		Start();
-	}
-#endif
-}
-
-void
-AppleTimer::SwitchToBackgroundTimer()
-{
-#ifdef Rtt_IPHONE_ENV
-	/* skip check because interval may need to change */
-	 /*
-	if ( nil != fTimer )
-	{
-		// already using NSTimer timer
-		return;
-	}
-	 */
-	bool wasRunning = IsRunning();
-	Stop();
-	fDisplayLinkSupported = NO;
-	fSavedInterval = fInterval;
-	fInterval = RTT_NICE_BACKGROUND_TIMER_INTERVAL;
-	if ( wasRunning )
-	{
-		Start();
-	}
-#endif
 }
 	
 void

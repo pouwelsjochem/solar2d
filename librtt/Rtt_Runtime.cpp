@@ -1029,16 +1029,7 @@ Runtime::Suspend(bool sendApplicationEvents /* = true */)
 		bool coronaCoreShouldSuspend = true;
 
 #ifdef Rtt_USE_ALMIXER
-		if ( IsSuspendOverrideProperty( kBackgroundAudio ) )
-		{
-			// TODO: We need a better story about what to do about Corona event callbacks during background.
-			// For initial testing, switch to a background timer if available which currently has lower CPU utilization.
-#ifdef Rtt_USE_BACKGROUND_TIMER_EXPERIMENT
-			fTimer->SwitchToBackgroundTimer();
-			coronaCoreShouldSuspend = false;
-#endif
-		}
-		else
+		if ( !IsSuspendOverrideProperty( kBackgroundAudio ) )
 		{
 			PlatformOpenALPlayer::SharedInstance()->SuspendPlayer();
 		}
@@ -1087,19 +1078,9 @@ Runtime::CoronaCoreResume()
 		}
 		fSuspendTime = 0;
 
-#ifdef Rtt_USE_BACKGROUND_TIMER_EXPERIMENT
-		fTimer->SwitchToForegroundTimer();
-#endif
-
 		fTimer->Start();
 
 		fIsSuspended = 0;
-	}
-	else
-	{
-#ifdef Rtt_USE_BACKGROUND_TIMER_EXPERIMENT
-		fTimer->SwitchToForegroundTimer();
-#endif
 	}
 }
 

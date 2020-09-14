@@ -27,16 +27,6 @@ PlatformTimer::~PlatformTimer()
 {
 }
 
-void
-PlatformTimer::SwitchToForegroundTimer()
-{
-}
-
-void
-PlatformTimer::SwitchToBackgroundTimer()
-{
-}
-
 // ----------------------------------------------------------------------------
 
 } // namespace Rtt
