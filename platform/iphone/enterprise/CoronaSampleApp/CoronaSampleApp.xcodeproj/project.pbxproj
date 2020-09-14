@@ -18,8 +18,6 @@
 		A484115A151161C00074BD57 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4841158151161C00074BD57 /* MainWindow.xib */; };
 		A484115F151162820074BD57 /* FBDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A484115E151162820074BD57 /* FBDialog.bundle */; };
 		A4841161151267970074BD57 /* Corona3rdPartyLicenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = A4841160151267970074BD57 /* Corona3rdPartyLicenses.txt */; };
-		A484117715128D5D0074BD57 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116315128D5C0074BD57 /* AddressBook.framework */; };
-		A484117815128D5D0074BD57 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116415128D5C0074BD57 /* AddressBookUI.framework */; };
 		A484117915128D5D0074BD57 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116515128D5C0074BD57 /* AudioToolbox.framework */; };
 		A484117A15128D5D0074BD57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116615128D5C0074BD57 /* AVFoundation.framework */; };
 		A484117B15128D5D0074BD57 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116715128D5C0074BD57 /* CFNetwork.framework */; };
@@ -28,7 +26,6 @@
 		A484117F15128D5D0074BD57 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116B15128D5D0074BD57 /* GameKit.framework */; };
 		A484118015128D5D0074BD57 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116C15128D5D0074BD57 /* ImageIO.framework */; };
 		A484118115128D5D0074BD57 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116D15128D5D0074BD57 /* libobjc.dylib */; };
-		A484118215128D5D0074BD57 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116E15128D5D0074BD57 /* MapKit.framework */; };
 		A484118315128D5D0074BD57 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484116F15128D5D0074BD57 /* MediaPlayer.framework */; };
 		A484118415128D5D0074BD57 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484117015128D5D0074BD57 /* MessageUI.framework */; };
 		A484118515128D5D0074BD57 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A484117115128D5D0074BD57 /* MobileCoreServices.framework */; };
@@ -60,8 +57,6 @@
 		A4841158151161C00074BD57 /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainWindow.xib; path = Libraries/Corona/MainWindow.xib; sourceTree = SOURCE_ROOT; };
 		A484115E151162820074BD57 /* FBDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = FBDialog.bundle; path = Libraries/Facebook/FBDialog.bundle; sourceTree = SOURCE_ROOT; };
 		A4841160151267970074BD57 /* Corona3rdPartyLicenses.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Corona3rdPartyLicenses.txt; path = Libraries/Corona/Corona3rdPartyLicenses.txt; sourceTree = SOURCE_ROOT; };
-		A484116315128D5C0074BD57 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		A484116415128D5C0074BD57 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		A484116515128D5C0074BD57 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		A484116615128D5C0074BD57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A484116715128D5C0074BD57 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -70,7 +65,6 @@
 		A484116B15128D5D0074BD57 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		A484116C15128D5D0074BD57 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		A484116D15128D5D0074BD57 /* libobjc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libobjc.dylib; path = usr/lib/libobjc.dylib; sourceTree = SDKROOT; };
-		A484116E15128D5D0074BD57 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A484116F15128D5D0074BD57 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		A484117015128D5D0074BD57 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		A484117115128D5D0074BD57 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -99,8 +93,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A49BEF2F15195596004F2BBE /* Twitter.framework in Frameworks */,
-				A484117715128D5D0074BD57 /* AddressBook.framework in Frameworks */,
-				A484117815128D5D0074BD57 /* AddressBookUI.framework in Frameworks */,
 				A484117915128D5D0074BD57 /* AudioToolbox.framework in Frameworks */,
 				A484117A15128D5D0074BD57 /* AVFoundation.framework in Frameworks */,
 				A484117B15128D5D0074BD57 /* CFNetwork.framework in Frameworks */,
@@ -112,7 +104,6 @@
 				A484118015128D5D0074BD57 /* ImageIO.framework in Frameworks */,
 				A484118115128D5D0074BD57 /* libobjc.dylib in Frameworks */,
 				A48411CA15129F610074BD57 /* libsqlite3.dylib in Frameworks */,
-				A484118215128D5D0074BD57 /* MapKit.framework in Frameworks */,
 				A484118315128D5D0074BD57 /* MediaPlayer.framework in Frameworks */,
 				A484118415128D5D0074BD57 /* MessageUI.framework in Frameworks */,
 				A484118515128D5D0074BD57 /* MobileCoreServices.framework in Frameworks */,
@@ -151,8 +142,6 @@
 		A484111C15114F700074BD57 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A484116315128D5C0074BD57 /* AddressBook.framework */,
-				A484116415128D5C0074BD57 /* AddressBookUI.framework */,
 				A484116515128D5C0074BD57 /* AudioToolbox.framework */,
 				A484116615128D5C0074BD57 /* AVFoundation.framework */,
 				A484116715128D5C0074BD57 /* CFNetwork.framework */,
@@ -165,7 +154,6 @@
 				A484116C15128D5D0074BD57 /* ImageIO.framework */,
 				A484116D15128D5D0074BD57 /* libobjc.dylib */,
 				A48411C915129F610074BD57 /* libsqlite3.dylib */,
-				A484116E15128D5D0074BD57 /* MapKit.framework */,
 				A484116F15128D5D0074BD57 /* MediaPlayer.framework */,
 				A484117015128D5D0074BD57 /* MessageUI.framework */,
 				A484117115128D5D0074BD57 /* MobileCoreServices.framework */,

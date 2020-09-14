@@ -240,16 +240,6 @@ end
 legacySlices()
 options.sdkType = "iphoneos" -- default (see keys in options.archSlices for other values)
 
--- TODO: We are removing these frameworks from the core list
--- so we should check that respective plugins have these as required
--- in the metadata: 
--- 
--- Accounts.framework
--- AddressBook.framework
--- AddressBookUI.framework
--- Accounts.framework
--- Social.framework
--- 
 options.frameworks = {
 	'AudioToolbox',
 	'AVFoundation',
@@ -257,7 +247,6 @@ options.frameworks = {
 	'CoreGraphics',
 	'CoreMedia',
 	'CoreMotion',
-	'CoreVideo',
 	'CoreText',
 	'GameKit',
 	'GLKit',
