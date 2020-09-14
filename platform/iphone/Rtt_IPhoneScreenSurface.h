@@ -39,12 +39,6 @@ class IPhoneScreenSurface : public PlatformSurface
 		virtual S32 Width() const;
 		virtual S32 Height() const;
 
-		virtual S32 PointsWidth() const;
-		virtual S32 PointsHeight() const;
-
-		virtual S32 DeviceWidth() const;
-		virtual S32 DeviceHeight() const;
-
 	public:
 		Rtt_EAGLContext *GetContext() const;
 

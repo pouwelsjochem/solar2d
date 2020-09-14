@@ -120,14 +120,4 @@ S32 WinScreenSurface::Height() const
 	return length;
 }
 
-S32 WinScreenSurface::DeviceWidth() const
-{
-	return Width();
-}
-
-S32 WinScreenSurface::DeviceHeight() const
-{
-	return Height();
-}
-
 }	// namespace Rtt

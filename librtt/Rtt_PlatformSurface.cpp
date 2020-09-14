@@ -37,30 +37,6 @@ PlatformSurface::~PlatformSurface()
 {
 }
 
-S32
-PlatformSurface::PointsWidth() const
-{
-	return Width();
-}
-
-S32
-PlatformSurface::PointsHeight() const
-{
-	return Height();
-}
-
-S32
-PlatformSurface::DeviceWidth() const
-{
-	return Width();
-}
-
-S32
-PlatformSurface::DeviceHeight() const
-{
-	return Height();
-}
-
 // ----------------------------------------------------------------------------
 
 // TODO: Replace platform ifdef's with a feature ifdef: Rtt_OFFSCREEN_SURFACE in Rtt_Config.h

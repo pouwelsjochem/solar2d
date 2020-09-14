@@ -42,10 +42,6 @@ class MacViewSurface : public PlatformSurface
 		virtual S32 Width() const;
 		virtual S32 Height() const;
 
-	public:
-		virtual S32 DeviceWidth() const;
-		virtual S32 DeviceHeight() const;
-
 	private:
 		GLView* fView;
 };

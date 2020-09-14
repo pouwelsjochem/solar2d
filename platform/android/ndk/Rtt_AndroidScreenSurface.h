@@ -46,9 +46,6 @@ class AndroidScreenSurface : public PlatformSurface
 
 		AndroidGLContext* GetContext() const;
 
-		virtual S32 DeviceWidth() const;
-		virtual S32 DeviceHeight() const;
-
 	private:
 		AndroidGLView* fView;
 		GLuint fFramebuffer; // FBO id

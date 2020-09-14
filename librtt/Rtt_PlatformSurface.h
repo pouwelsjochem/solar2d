@@ -33,19 +33,6 @@ class PlatformSurface
 		// Size in pixels of underlying surface
 		virtual S32 Width() const = 0;
 		virtual S32 Height() const = 0;
-
-		// Size in native (platform-specific) units. By default, this is simply
-		// the result of Width() and Height(). However, on some platforms, the
-		// size of the screen is in scaled pixels, e.g. on iPhone, size is defined
-		// in terms of "points" not actual pixels.
-		virtual S32 PointsWidth() const;
-		virtual S32 PointsHeight() const;
-
-	public:
-		// Return width and height of physical device in pixels. The default 
-		// implementation just returns result of Width() and Height()
-		virtual S32 DeviceWidth() const;
-		virtual S32 DeviceHeight() const;
 };
 
 // ----------------------------------------------------------------------------

@@ -41,8 +41,6 @@ class WinScreenSurface : public PlatformSurface
 		virtual void Flush() const;
 		virtual S32 Width() const;
 		virtual S32 Height() const;
-		virtual S32 DeviceWidth() const;
-		virtual S32 DeviceHeight() const;
 
 	private:
 		Interop::RuntimeEnvironment& fEnvironment;

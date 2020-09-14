@@ -82,18 +82,6 @@ AndroidScreenSurface::GetContext() const
 	return NULL;
 }
 
-S32
-AndroidScreenSurface::DeviceWidth() const
-{
-	return fView->DeviceWidth();
-}
-
-S32
-AndroidScreenSurface::DeviceHeight() const
-{
-	return fView->DeviceHeight();
-}
-
 
 // ----------------------------------------------------------------------------
 

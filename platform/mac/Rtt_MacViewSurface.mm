@@ -52,18 +52,6 @@ MacViewSurface::Height() const
 	return [fView deviceHeight];
 }
 
-S32
-MacViewSurface::DeviceWidth() const
-{
-	return [fView deviceWidth];
-}
-
-S32
-MacViewSurface::DeviceHeight() const
-{
-	return [fView deviceHeight];
-}
-
 // ----------------------------------------------------------------------------
 
 } // namespace Rtt

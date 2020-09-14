@@ -105,7 +105,7 @@ Display::Initialize( lua_State *L, int configIndex )
 		{
 			ReadRenderingConfig( L, configIndex, programHeader );
 		}
-		fStream->SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
+		fStream->SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 
 		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader ) );
 
@@ -196,13 +196,13 @@ Display::Start()
 	RuntimeGuard guard( GetRuntime() );
 
 	RenderingStream& stream = * fStream;
-	stream.SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
+	stream.SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 }
 void
 Display::Restart()
 {
 	RenderingStream& stream = * fStream;
-	stream.SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
+	stream.SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 }
 	
 void
@@ -660,13 +660,13 @@ Display::HitTestOrphanage()
 S32
 Display::DeviceWidth() const
 {
-	return fScreenSurface->DeviceWidth();
+	return fScreenSurface->Width();
 }
 
 S32
 Display::DeviceHeight() const
 {
-	return fScreenSurface->DeviceHeight();
+	return fScreenSurface->Height();
 }
 
 S32
@@ -763,7 +763,7 @@ Display::WindowSizeChanged()
 		RenderingStream *stream = fStream;
 		if ( stream ) // Is this check neccesary?
 		{
-			stream->SetOptimalContentSize( fScreenSurface->DeviceWidth(), fScreenSurface->DeviceHeight() );
+			stream->SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 		}
 	}
 	runtime.End();
@@ -776,7 +776,7 @@ Display::HasWindowSizeChanged() const
 	{
 		return false;
 	}
-	return ((fStream->DeviceWidth() != fScreenSurface->DeviceWidth()) || (fStream->DeviceHeight() != fScreenSurface->DeviceHeight()));
+	return ((fStream->DeviceWidth() != fScreenSurface->Width()) || (fStream->DeviceHeight() != fScreenSurface->Height()));
 }
 
 Rtt_Allocator *
