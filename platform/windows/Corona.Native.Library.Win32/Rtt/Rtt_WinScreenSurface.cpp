@@ -60,29 +60,28 @@ S32 WinScreenSurface::Width() const
 	}
 
 	// Fetch the surface's client width in pixels.
-	int length = 0;
+	int width = 0;
 	auto windowPointer = fEnvironment.GetMainWindow();
 	if (windowPointer && windowPointer->GetWindowMode().Equals(Rtt::NativeWindowMode::kMinimized))
 	{
 		// The window hosting the surface has been minimized, causing the client area to have a zero width/height.
 		// Use the client length before it was minimized to avoid triggering an unnecessary "resize" event in Corona.
-		length = fPreviousClientWidth;
+		width = fPreviousClientWidth;
 	}
 	else
 	{
 		// Fetch the requested length and store it in case the window gets minimized later.
-		length = renderSurfacePointer->GetClientWidth();
-		fPreviousClientWidth = length;
+		width = renderSurfacePointer->GetClientWidth();
+		fPreviousClientWidth = width;
 	}
 
 	// Corona's rendering system will assert if given a zero length. So, floor it to 1.
-	if (length <= 0)
+	if (width <= 0)
 	{
-		length = 1;
+		width = 1;
 	}
 
-	// Return a pixel width relative to the surface's current orientation.
-	return length;
+	return width;
 }
 
 S32 WinScreenSurface::Height() const
@@ -95,29 +94,28 @@ S32 WinScreenSurface::Height() const
 	}
 
 	// Fetch the surface's client height in pixels.
-	int length = 0;
+	int height = 0;
 	auto windowPointer = fEnvironment.GetMainWindow();
 	if (windowPointer && windowPointer->GetWindowMode().Equals(Rtt::NativeWindowMode::kMinimized))
 	{
 		// The window hosting the surface has been minimized, causing the client area to have a zero width/height.
 		// Use the client length before it was minimized to avoid triggering an unnecessary "resize" event in Corona.
-		length = fPreviousClientHeight;
+		height = fPreviousClientHeight;
 	}
 	else
 	{
 		// Fetch the requested length and store it in case the window gets minimized later.
-		length = renderSurfacePointer->GetClientHeight();
-		fPreviousClientHeight = length;
+		height = renderSurfacePointer->GetClientHeight();
+		fPreviousClientHeight = height;
 	}
 
 	// Corona's rendering system will assert if given a zero length. So, floor it to 1.
-	if (length <= 0)
+	if (height <= 0)
 	{
-		length = 1;
+		height = 1;
 	}
 
-	// Return a pixel height relative to the surface's current orientation.
-	return length;
+	return height;
 }
 
 }	// namespace Rtt
