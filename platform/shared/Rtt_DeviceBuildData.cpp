@@ -255,41 +255,12 @@ DeviceBuildData::AddPlugin( lua_State *L, const char *moduleName, int index )
 
 	if ( lua_istable( L, index ) )
 	{
-#if 0
-		// Filter out unsupported platforms
-		bool isPlatformSupported = false;
-		TargetDevice::Platform platform = (TargetDevice::Platform)fTargetPlatform;
-
-		lua_getfield( L, index, "platforms" );
-		if ( lua_istable( L, -1 ) )
+		lua_getfield( L, LUA_REGISTRYINDEX, kPluginsMetadataKey ); // push registry[kPluginsMetadataKey]
 		{
-			for ( int i = 1, iMax = lua_objlen( L, -1 );
-				  i <= iMax && ! isPlatformSupported;
-				  i++ )
-			{
-				lua_rawgeti( L, -1, i ); // push platforms[i]
-				{
-					const char *value = lua_tostring( L, -1 );
-					TargetDevice::Platform p = PlatformForString( value );
-					isPlatformSupported = ( platform == p );
-				}
-				lua_pop( L, 1 ); // push platforms[i]
-			}
+			lua_pushvalue( L, index );
+			lua_setfield( L, -2, moduleName );
 		}
-		lua_pop( L, 1 );
-
-		// Store reference to plugin metadata
-		if ( isPlatformSupported )
-#endif // 0
-
-		{
-			lua_getfield( L, LUA_REGISTRYINDEX, kPluginsMetadataKey ); // push registry[kPluginsMetadataKey]
-			{
-				lua_pushvalue( L, index );
-				lua_setfield( L, -2, moduleName );
-			}
-			lua_pop( L, 1 ); // pop registry[kPluginsMetadataKey]
-		}
+		lua_pop( L, 1 ); // pop registry[kPluginsMetadataKey]
 	}
 	else
 	{

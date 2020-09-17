@@ -12,10 +12,5 @@ simulator =
 	device = "borderless-ios-phone",
 	deviceWidth = 1920,
 	deviceHeight = 1080,
-	iosPointWidth = 736,
-	iosPointHeight = 414,
-	displayManufacturer = "Corona Labs Inc.",
-	displayName = "iPhone",
-	windowTitleBarName = "iPhone @3x",
-	defaultFontSize = 17 * 3,		-- Converts default font point size to pixels.
+	deviceName = "iPhone @3x",
 }

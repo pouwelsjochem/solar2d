@@ -12,9 +12,5 @@ simulator =
 	device = "winphone-phone",
 	deviceWidth = 800,
 	deviceHeight = 480,
-	displayManufacturer = "Not Supported Yet", -- Unsupported on WP8, return the stub implementation
-	displayName = "WindowsPhone",
-	hasAccelerometer = true,
-	windowTitleBarName = "HTC Windows Phone 8S",
-	defaultFontSize = 25.333,
+	deviceName = "HTC Windows Phone 8S",
 }

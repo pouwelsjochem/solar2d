@@ -12,10 +12,5 @@ simulator =
 	device = "borderless-ios-tablet",
 	deviceWidth = 1024,
 	deviceHeight = 768,
-	iosPointWidth = 1024,
-	iosPointHeight = 768,
-	displayManufacturer = "Corona Labs Inc.",
-	displayName = "iPad",
-	windowTitleBarName = "iPad @1x",
-	defaultFontSize = 17,
+	deviceName = "iPad @1x",
 }

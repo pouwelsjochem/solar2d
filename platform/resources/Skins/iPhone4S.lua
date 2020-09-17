@@ -12,10 +12,5 @@ simulator =
 	device = "ios-phone",
 	deviceWidth = 960,
 	deviceHeight = 640,
-	iosPointWidth = 480,
-	iosPointHeight = 320,
-	displayManufacturer = "Apple",
-	displayName = "iPhone",
-	windowTitleBarName = "iPhone 4S",
-	defaultFontSize = 17 * 2,		-- Converts default font point size to pixels.
+	deviceName = "iPhone 4S",
 }

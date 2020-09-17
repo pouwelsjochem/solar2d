@@ -12,9 +12,5 @@ simulator =
 	device = "android-tablet",
 	deviceWidth = 1920,
 	deviceHeight = 1200,
-	androidDisplayApproximateDpi = 240, -- hdpi
-	displayManufacturer = "Amazon",
-	displayName = "KFJWI",
-	windowTitleBarName = 'Kindle Fire HD 8.9" (2012)',
+	deviceName = 'Kindle Fire HD 8.9" (2012)',
 }
-simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

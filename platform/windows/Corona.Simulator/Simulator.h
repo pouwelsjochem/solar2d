@@ -74,8 +74,8 @@ public:
 
 public:
     // Hold values to be written to/from Registry.  CSimulatorView has the real versions.
-	CString GetDisplayName() { return m_sDisplayName; }
-	void PutDisplayName( CString sDevice )  { m_sDisplayName = sDevice; }
+	CString GetDevicename() { return m_sDevicename; }
+	void PutDevicename( CString sDevice )  { m_sDevicename = sDevice; }
 	CRecentFileList* GetRecentFileList() { return m_pRecentFileList; }
 	void PutWP(const WINDOWPLACEMENT& newval);
 	bool ShouldShowWebBuildDlg();
@@ -98,7 +98,7 @@ public:
 
 protected:
 	ULONG_PTR m_gdiplusToken;
-    CString m_sDisplayName;
+    CString m_sDevicename;
 	WINDOWPLACEMENT m_WP;
 	bool m_isDebugModeEnabled;
 	bool m_isLuaExitAllowed;
@@ -125,7 +125,7 @@ public:
                 int nMaxDispLen = AFX_ABBREV_FILENAME_LEN)
                 : CRecentFileList(nStart, lpszSection,lpszEntryFormat, nSize,
                 nMaxDispLen) {}
-        BOOL GetDisplayName( CString &strName, int nIndex, LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName) const;
+        BOOL GetDevicename( CString &strName, int nIndex, LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName) const;
 };  // class CRecentDirList
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

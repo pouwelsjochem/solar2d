@@ -202,36 +202,29 @@ void WinInputDeviceManager::Destroy(PlatformInputDevice* devicePointer)
 #pragma region Private Methods
 void WinInputDeviceManager::OnRuntimeLoaded(Interop::RuntimeEnvironment& sender, const Interop::EventArgs& arguments)
 {
-	// Enable input device (ie: game controller) support if:
-	// - Running in Win32 desktop app mode.
-	// - We're simulating a device that supports it, such as Android.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (!deviceSimulatorServicesPointer || deviceSimulatorServicesPointer->AreInputDevicesSupported())
+	// First, fetch all input devices currently connected to the system before starting the input device monitor.
+	// This makes each devices' info and input events available to Lua.
+	// This also prevents us from dispatching Lua "inputDeviceStatus" events upon starting the device monitor.
+	// Note: This collection is typically empty unless multiple Corona runtimes have existed for the lifetime
+	//       of the application, such as with the Corona Simulator.
+	auto deviceCollection = fDeviceMonitor.GetDeviceCollection();
+	const int kDeviceCount = deviceCollection.GetCount();
+	for (int index = 0; index < kDeviceCount; index++)
 	{
-		// First, fetch all input devices currently connected to the system before starting the input device monitor.
-		// This makes each devices' info and input events available to Lua.
-		// This also prevents us from dispatching Lua "inputDeviceStatus" events upon starting the device monitor.
-		// Note: This collection is typically empty unless multiple Corona runtimes have existed for the lifetime
-		//       of the application, such as with the Corona Simulator.
-		auto deviceCollection = fDeviceMonitor.GetDeviceCollection();
-		const int kDeviceCount = deviceCollection.GetCount();
-		for (int index = 0; index < kDeviceCount; index++)
+		auto deviceInterfacePointer = deviceCollection.GetByIndex(index);
+		if (deviceInterfacePointer)
 		{
-			auto deviceInterfacePointer = deviceCollection.GetByIndex(index);
-			if (deviceInterfacePointer)
+			auto deviceType = deviceInterfacePointer->GetDeviceInfo()->GetType();
+			auto coronaDevicePointer = dynamic_cast<WinInputDevice*>(this->Add(deviceType));
+			if (coronaDevicePointer)
 			{
-				auto deviceType = deviceInterfacePointer->GetDeviceInfo()->GetType();
-				auto coronaDevicePointer = dynamic_cast<WinInputDevice*>(this->Add(deviceType));
-				if (coronaDevicePointer)
-				{
-					coronaDevicePointer->BindTo(deviceInterfacePointer);
-				}
+				coronaDevicePointer->BindTo(deviceInterfacePointer);
 			}
 		}
-
-		// Start monitoring input devices and their key/axis input events.
-		fDeviceMonitor.Start();
 	}
+
+	// Start monitoring input devices and their key/axis input events.
+	fDeviceMonitor.Start();
 
 	// Register the window for touchscreen input, if available.
 	if (sender.GetRenderSurface())
@@ -304,22 +297,12 @@ void WinInputDeviceManager::OnRuntimeLoaded(Interop::RuntimeEnvironment& sender,
 
 void WinInputDeviceManager::OnRuntimeResumed(Interop::RuntimeEnvironment& sender, const Interop::EventArgs& arguments)
 {
-	// Start monitoring input devices and their key/axis input events.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (!deviceSimulatorServicesPointer || deviceSimulatorServicesPointer->AreInputDevicesSupported())
-	{
-		fDeviceMonitor.Start();
-	}
+	fDeviceMonitor.Start();
 }
 
 void WinInputDeviceManager::OnRuntimeSuspended(Interop::RuntimeEnvironment& sender, const Interop::EventArgs& arguments)
 {
-	// Stop monitoring input devices while the Corona runtime is suspended.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (!deviceSimulatorServicesPointer || deviceSimulatorServicesPointer->AreInputDevicesSupported())
-	{
-		fDeviceMonitor.Stop();
-	}
+	fDeviceMonitor.Stop();
 }
 
 void WinInputDeviceManager::OnDiscoveredDevice(
@@ -624,11 +607,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 					point.y = TOUCH_COORD_TO_PIXEL(touchInputPointer->y);
 					auto windowHandle = arguments.GetWindowHandle();
 					::ScreenToClient(windowHandle, &point);
-					auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-					if (deviceSimulatorServicesPointer)
-					{
-						point = deviceSimulatorServicesPointer->GetSimulatedPointFromClient(point);
-					}
 
 					// Fetch a touch state element in our "fTouchPointStates" array matching the received touch point.
 					// We use this to track the finger's start touch, last touch, and other stateful information.
@@ -771,13 +749,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_KEYDOWN:
 		case WM_KEYUP:
 		{
-			// Do not continue if simulating a device that does not support key events.
-			auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer && (deviceSimulatorServicesPointer->AreKeyEventsSupported() == false))
-			{
-				break;
-			}
-
 			// Determine if the key state is down or up.
 			bool isKeyDown = (arguments.GetMessageId() == WM_KEYDOWN);
 
@@ -791,21 +762,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 
 			// Fetch the key code that was pressed/released.
 			S32 keyCode = (S32)arguments.GetWParam();
-
-			// Do not continue if simulating a device that does not support key events from the keyboard.
-			// Special Case: If the device supports a back button (like Android and WP8), then let it through.
-			if (deviceSimulatorServicesPointer &&
-			    (deviceSimulatorServicesPointer->AreKeyEventsFromKeyboardSupported() == false))
-			{
-				if (keyCode != VK_BROWSER_BACK)
-				{
-					break;
-				}
-				else if (deviceSimulatorServicesPointer->IsBackKeySupported() == false)
-				{
-					break;
-				}
-			}
 
 			// If the key code for "shift", "alt", or "ctrl" has been received, then determine if
 			// the left/right version of that key was pressed/released by its scan code.
@@ -835,20 +791,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 				// The Lua key listener returned true. Flag the Windows message as handled.
 				arguments.SetReturnResult(0);
 				arguments.SetHandled();
-			}
-			else
-			{
-				// The Lua key listener returned false or nothing, which means Lua did not handle it.
-
-				// If we're simulating a device that supports a "back" key, then terminate the runtime when
-				// the back key has been released. This mimics the behavior on Android and WP8.
-				if (deviceSimulatorServicesPointer && deviceSimulatorServicesPointer->IsBackKeySupported() &&
-				    (VK_BROWSER_BACK == keyCode) && (false == isKeyDown))
-				{
-					deviceSimulatorServicesPointer->RequestTerminate();
-					arguments.SetReturnResult(0);
-					arguments.SetHandled();
-				}
 			}
 			break;
 		}
@@ -925,13 +867,6 @@ void WinInputDeviceManager::OnReceivedMouseEvent(
 	Rtt::MouseEvent::MouseEventType eventType, POINT& point,
 	float scrollWheelDeltaX, float scrollWheelDeltaY, WPARAM mouseButtonFlags)
 {
-	// Do not continue if simulating a device that does not support mouse events.
-	auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer && (deviceSimulatorServicesPointer->IsMouseSupported() == false))
-	{
-		return;
-	}
-
 	// Fetch the Corona runtime.
 	auto runtimePointer = fEnvironment.GetRuntime();
 	if (!runtimePointer)

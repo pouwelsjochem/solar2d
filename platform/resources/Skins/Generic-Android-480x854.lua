@@ -12,9 +12,5 @@ simulator =
 	device = "borderless-android-device",
 	deviceWidth = 854,
 	deviceHeight = 400,
-	androidDisplayApproximateDpi = 240, -- hdpi
-	displayManufacturer = "Corona Labs Inc.",
-	displayName = "GenericAndroidDevice",
-	windowTitleBarName = "Android (hdpi)",
+	deviceName = "Android (hdpi)",
 }
-simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

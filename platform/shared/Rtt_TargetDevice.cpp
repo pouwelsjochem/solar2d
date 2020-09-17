@@ -143,12 +143,12 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
             
             if ( lua_istable( L, -1 ) )
             {
-                lua_getfield( L, -1, "windowTitleBarName" );
-                skinName = (char *) luaL_optstring( L, -1, "Untitled Skin" );
-                lua_pop( L, 1 );
-
                 lua_getfield( L, -1, "device" );
                 skinDevice = (char *) luaL_optstring( L, -1, "Untitled Skin" );
+                lua_pop( L, 1 );
+
+                lua_getfield( L, -1, "deviceName" );
+                skinName = (char *) luaL_optstring( L, -1, "Untitled Skin" );
                 lua_pop( L, 1 );
 
                 lua_getfield( L, -1, "deviceWidth" );
@@ -487,7 +487,7 @@ TargetDevice::SkinSpec::GenerateLabel( const char *path )
 const char *
 TargetDevice::NameForSkin( int skinID )
 {
-    // Value of "windowTitleBarName"
+    // Value of "deviceName"
     // This is used to iterate through all the skins
     if (skinID >= fSkinCount)
     {
@@ -583,75 +583,6 @@ static char* strcasestrForLinux(const char* s1, const char* s2)
 	return strcasecmp(s1, s2) == 0 ? (char*) s1 : NULL;
 }
 #endif
-
-TargetDevice::Platform
-TargetDevice::PlatformForDeviceType( const char *typeName )
-{
-	Platform platformType = kUnknownPlatform;
-
-	if (Rtt_StringIsEmpty(typeName) == false)
-	{
-#	ifdef Rtt_WIN_ENV
-		// Convert the given string to lower case.
-		char stringBuffer[64];
-		const size_t stringBufferSize = sizeof(stringBuffer);
-		size_t typeNameLength = strlen(typeName);
-		if (typeNameLength < stringBufferSize)
-		{
-			strncpy_s(stringBuffer, stringBufferSize, typeName, _TRUNCATE);
-			_strlwr_s(stringBuffer, stringBufferSize);
-			typeName = stringBuffer;
-		}
-
-		// Fetch a callback to a substring search function.
-		// Note: Windows does not have a case insensitive version of this function,
-		//       which is why we convert the given string to lower-case up above first.
-		const char*(*substringSearchCallback)(const char*, const char*) = &strstr;
-#elif defined(Rtt_LINUX_ENV) && !defined(_WIN32)
-		char*(*substringSearchCallback)(const char*, const char*) = &strcasestrForLinux;
-#else
-		// Fetch a callback to a case insensitive substring search function.
-		char*(*substringSearchCallback)(const char*, const char*) = &strcasestr;
-#endif
-		if (substringSearchCallback(typeName, "android"))
-		{
-			platformType = kAndroidPlatform;
-		}
-		else if (substringSearchCallback(typeName, "ios"))
-		{
-			platformType = kIPhonePlatform;
-		}
-		else if (substringSearchCallback(typeName, "tvos"))
-		{
-			platformType = kTVOSPlatform;
-		}
-		else if (substringSearchCallback(typeName, "kindle"))
-		{
-			platformType = kKindlePlatform;
-		}
-		else if (substringSearchCallback(typeName, "macos"))
-		{
-			platformType = kOSXPlatform;
-		}
-		else if (substringSearchCallback(typeName, "win32"))
-		{
-			platformType = kWin32Platform;
-		}
-	}
-
-	return platformType;
-}
-
-// Given skin, returns true if the skin's device runs using platform's OS; false otherwise.
-bool
-TargetDevice::IsSkinForPlatform( int skinID, Platform platform )
-{
-    if (skinID < 0 || skinID >= fSkinCount)
-    {
-        skinID = fDefaultSkinID;
-    }
-	return (PlatformForDeviceType(fSkins[skinID]->GetDeviceType()) == platform);
-}
 
 // ----------------------------------------------------------------------------
 

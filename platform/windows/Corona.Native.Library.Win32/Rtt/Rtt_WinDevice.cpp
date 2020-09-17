@@ -87,84 +87,73 @@ const char* WinDevice::GetManufacturer() const
 	// Fetch the device/machine's manufacturer name, if not done already.
 	if (fManufacturerName.empty())
 	{
-		auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-		if (deviceSimulatorServicesPointer)
-		{
-			// Fetch the simulated device's manufacturer name.
-			fModelName = deviceSimulatorServicesPointer->GetManufacturerName();
-		}
-		else
-		{
-			// *** Fetch the PC's manufacturer name, if available. ***
+		// Default to an unknown name if we can't fetch it below.
+		WinString manufacturerName("Unknown");
 
-			// Default to an unknown name if we can't fetch it below.
-			WinString manufacturerName("Unknown");
-
-			// Fetch the PC's manufacturer name via WMI and COM.
-			auto comApartmentType = Interop::ScopedComInitializer::ApartmentType::kSingleThreaded;
-			Interop::ScopedComInitializer scopedComInitializer(comApartmentType);
-			IWbemLocator* locatorPointer = nullptr;
-			IWbemServices* servicesPointer = nullptr;
-			IEnumWbemClassObject* enumeratorPointer = nullptr;
-			IWbemClassObject* objectPointer = nullptr;
-			auto result = ::CoCreateInstance(
-					__uuidof(WbemLocator), nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&locatorPointer));
-			if (SUCCEEDED(result) && locatorPointer)
+		// Fetch the PC's manufacturer name via WMI and COM.
+		auto comApartmentType = Interop::ScopedComInitializer::ApartmentType::kSingleThreaded;
+		Interop::ScopedComInitializer scopedComInitializer(comApartmentType);
+		IWbemLocator* locatorPointer = nullptr;
+		IWbemServices* servicesPointer = nullptr;
+		IEnumWbemClassObject* enumeratorPointer = nullptr;
+		IWbemClassObject* objectPointer = nullptr;
+		auto result = ::CoCreateInstance(
+				__uuidof(WbemLocator), nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&locatorPointer));
+		if (SUCCEEDED(result) && locatorPointer)
+		{
+			result = locatorPointer->ConnectServer(
+					L"root\\CIMV2", nullptr, nullptr, nullptr, WBEM_FLAG_CONNECT_USE_MAX_WAIT,
+					nullptr, nullptr, &servicesPointer);
+			if (SUCCEEDED(result) && servicesPointer)
 			{
-				result = locatorPointer->ConnectServer(
-						L"root\\CIMV2", nullptr, nullptr, nullptr, WBEM_FLAG_CONNECT_USE_MAX_WAIT,
-						nullptr, nullptr, &servicesPointer);
-				if (SUCCEEDED(result) && servicesPointer)
+				result = ::CoSetProxyBlanket(
+						servicesPointer, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL,
+						RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, 0, EOAC_NONE);
+				result = servicesPointer->ExecQuery(
+						L"WQL", L"SELECT Manufacturer FROM Win32_ComputerSystem",
+						WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &enumeratorPointer);
+				if (SUCCEEDED(result) && enumeratorPointer)
 				{
-					result = ::CoSetProxyBlanket(
-							servicesPointer, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL,
-							RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, 0, EOAC_NONE);
-					result = servicesPointer->ExecQuery(
-							L"WQL", L"SELECT Manufacturer FROM Win32_ComputerSystem",
-							WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &enumeratorPointer);
-					if (SUCCEEDED(result) && enumeratorPointer)
+					ULONG count = 0;
+					result = enumeratorPointer->Next(WBEM_INFINITE, 1, &objectPointer, &count);
+					if ((WBEM_S_NO_ERROR == result) && objectPointer)
 					{
-						ULONG count = 0;
-						result = enumeratorPointer->Next(WBEM_INFINITE, 1, &objectPointer, &count);
-						if ((WBEM_S_NO_ERROR == result) && objectPointer)
+						VARIANT variantValue;
+						::VariantInit(&variantValue);
+						result = objectPointer->Get(L"Manufacturer", 0, &variantValue, nullptr, nullptr);
+						if (SUCCEEDED(result))
 						{
-							VARIANT variantValue;
-							::VariantInit(&variantValue);
-							result = objectPointer->Get(L"Manufacturer", 0, &variantValue, nullptr, nullptr);
-							if (SUCCEEDED(result))
+							if ((VT_BSTR == variantValue.vt) && (variantValue.bstrVal[0] != L'\0'))
 							{
-								if ((VT_BSTR == variantValue.vt) && (variantValue.bstrVal[0] != L'\0'))
-								{
-									manufacturerName.SetUTF16(variantValue.bstrVal);
-								}
-								::VariantClear(&variantValue);
+								manufacturerName.SetUTF16(variantValue.bstrVal);
 							}
+							::VariantClear(&variantValue);
 						}
 					}
 				}
 			}
-
-			// Release the COM object references acquired above.
-			if (objectPointer)
-			{
-				objectPointer->Release();
-			}
-			if (enumeratorPointer)
-			{
-				enumeratorPointer->Release();
-			}
-			if (servicesPointer)
-			{
-				servicesPointer->Release();
-			}
-			if (locatorPointer)
-			{
-				locatorPointer->Release();
-			}
-
-			// Store the manufacturer name in UTF-8 form.
-			fManufacturerName = manufacturerName.GetUTF8();
 		}
+
+		// Release the COM object references acquired above.
+		if (objectPointer)
+		{
+			objectPointer->Release();
+		}
+		if (enumeratorPointer)
+		{
+			enumeratorPointer->Release();
+		}
+		if (servicesPointer)
+		{
+			servicesPointer->Release();
+		}
+		if (locatorPointer)
+		{
+			locatorPointer->Release();
+		}
+
+		// Store the manufacturer name in UTF-8 form.
+		fManufacturerName = manufacturerName.GetUTF8();
 	}
 
 	// Return the device/machine's manufacturer name.
@@ -176,84 +165,75 @@ const char* WinDevice::GetModel() const
 	// Fetch the device/machine's model name, if not done already.
 	if (fModelName.empty())
 	{
-		auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-		if (deviceSimulatorServicesPointer)
-		{
-			// Fetch the simulated device's model name.
-			fModelName = deviceSimulatorServicesPointer->GetModelName();
-		}
-		else
-		{
-			// *** Fetch the PC's model name, if available. ***
+		// *** Fetch the PC's model name, if available. ***
 
-			// Default to an unknown name if we can't fetch it below.
-			WinString modelName("Unknown");
+		// Default to an unknown name if we can't fetch it below.
+		WinString modelName("Unknown");
 
-			// Fetch the PC's model name via WMI and COM.
-			auto comApartmentType = Interop::ScopedComInitializer::ApartmentType::kSingleThreaded;
-			Interop::ScopedComInitializer scopedComInitializer(comApartmentType);
-			IWbemLocator* locatorPointer = nullptr;
-			IWbemServices* servicesPointer = nullptr;
-			IEnumWbemClassObject* enumeratorPointer = nullptr;
-			IWbemClassObject* objectPointer = nullptr;
-			auto result = ::CoCreateInstance(
-					__uuidof(WbemLocator), nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&locatorPointer));
-			if (SUCCEEDED(result) && locatorPointer)
+		// Fetch the PC's model name via WMI and COM.
+		auto comApartmentType = Interop::ScopedComInitializer::ApartmentType::kSingleThreaded;
+		Interop::ScopedComInitializer scopedComInitializer(comApartmentType);
+		IWbemLocator* locatorPointer = nullptr;
+		IWbemServices* servicesPointer = nullptr;
+		IEnumWbemClassObject* enumeratorPointer = nullptr;
+		IWbemClassObject* objectPointer = nullptr;
+		auto result = ::CoCreateInstance(
+				__uuidof(WbemLocator), nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&locatorPointer));
+		if (SUCCEEDED(result) && locatorPointer)
+		{
+			result = locatorPointer->ConnectServer(
+					L"root\\CIMV2", nullptr, nullptr, nullptr, WBEM_FLAG_CONNECT_USE_MAX_WAIT,
+					nullptr, nullptr, &servicesPointer);
+			if (SUCCEEDED(result) && servicesPointer)
 			{
-				result = locatorPointer->ConnectServer(
-						L"root\\CIMV2", nullptr, nullptr, nullptr, WBEM_FLAG_CONNECT_USE_MAX_WAIT,
-						nullptr, nullptr, &servicesPointer);
-				if (SUCCEEDED(result) && servicesPointer)
+				result = ::CoSetProxyBlanket(
+						servicesPointer, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL,
+						RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, 0, EOAC_NONE);
+				result = servicesPointer->ExecQuery(
+						L"WQL", L"SELECT Model FROM Win32_ComputerSystem",
+						WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &enumeratorPointer);
+				if (SUCCEEDED(result) && enumeratorPointer)
 				{
-					result = ::CoSetProxyBlanket(
-							servicesPointer, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_DEFAULT, COLE_DEFAULT_PRINCIPAL,
-							RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, 0, EOAC_NONE);
-					result = servicesPointer->ExecQuery(
-							L"WQL", L"SELECT Model FROM Win32_ComputerSystem",
-							WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &enumeratorPointer);
-					if (SUCCEEDED(result) && enumeratorPointer)
+					ULONG count = 0;
+					result = enumeratorPointer->Next(WBEM_INFINITE, 1, &objectPointer, &count);
+					if ((WBEM_S_NO_ERROR == result) && objectPointer)
 					{
-						ULONG count = 0;
-						result = enumeratorPointer->Next(WBEM_INFINITE, 1, &objectPointer, &count);
-						if ((WBEM_S_NO_ERROR == result) && objectPointer)
+						VARIANT variantValue;
+						::VariantInit(&variantValue);
+						result = objectPointer->Get(L"Model", 0, &variantValue, nullptr, nullptr);
+						if (SUCCEEDED(result))
 						{
-							VARIANT variantValue;
-							::VariantInit(&variantValue);
-							result = objectPointer->Get(L"Model", 0, &variantValue, nullptr, nullptr);
-							if (SUCCEEDED(result))
+							if ((VT_BSTR == variantValue.vt) && (variantValue.bstrVal[0] != L'\0'))
 							{
-								if ((VT_BSTR == variantValue.vt) && (variantValue.bstrVal[0] != L'\0'))
-								{
-									modelName.SetUTF16(variantValue.bstrVal);
-								}
-								::VariantClear(&variantValue);
+								modelName.SetUTF16(variantValue.bstrVal);
 							}
+							::VariantClear(&variantValue);
 						}
 					}
 				}
 			}
-
-			// Release the COM object references acquired above.
-			if (objectPointer)
-			{
-				objectPointer->Release();
-			}
-			if (enumeratorPointer)
-			{
-				enumeratorPointer->Release();
-			}
-			if (servicesPointer)
-			{
-				servicesPointer->Release();
-			}
-			if (locatorPointer)
-			{
-				locatorPointer->Release();
-			}
-
-			// Store the model name in UTF-8 form.
-			fModelName = modelName.GetUTF8();
 		}
+
+		// Release the COM object references acquired above.
+		if (objectPointer)
+		{
+			objectPointer->Release();
+		}
+		if (enumeratorPointer)
+		{
+			enumeratorPointer->Release();
+		}
+		if (servicesPointer)
+		{
+			servicesPointer->Release();
+		}
+		if (locatorPointer)
+		{
+			locatorPointer->Release();
+		}
+
+		// Store the model name in UTF-8 form.
+		fModelName = modelName.GetUTF8();
 	}
 
 	// Return the device/machine's model name.
@@ -433,7 +413,6 @@ void WinDevice::Vibrate() const
 
 bool WinDevice::HasEventSource(EventType type) const
 {
-	auto deviceSimulatorPointer = fEnvironment.GetDeviceSimulatorServices();
 	bool hasEventSource = false;
 	switch (type)
 	{
@@ -443,34 +422,9 @@ bool WinDevice::HasEventSource(EventType type) const
 			break;
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kInputDeviceStatusEvent:
-			if (deviceSimulatorPointer)
-			{
-				hasEventSource = deviceSimulatorPointer->AreInputDevicesSupported();
-			}
-			else
-			{
-				hasEventSource = true;
-			}
-			break;
 		case MPlatformDevice::kKeyEvent:
-			if (deviceSimulatorPointer)
-			{
-				hasEventSource = deviceSimulatorPointer->AreKeyEventsSupported();
-			}
-			else
-			{
-				hasEventSource = true;
-			}
-			break;
 		case MPlatformDevice::kMouseEvent:
-			if (deviceSimulatorPointer)
-			{
-				hasEventSource = deviceSimulatorPointer->IsMouseSupported();
-			}
-			else
-			{
-				hasEventSource = true;
-			}
+			hasEventSource = true;
 			break;
 		default:
 			Rtt_ASSERT_NOT_REACHED();
@@ -511,6 +465,7 @@ Rtt::MPlatformDevice::EnvironmentType WinDevice::GetEnvironment() const
 #else
 	if (fEnvironment.GetDeviceSimulatorServices())
 	{
+		Rtt_ASSERT_NOT_REACHED();
 		return kSimulatorEnvironment;
 	}
 	return kDeviceEnvironment;

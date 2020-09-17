@@ -12,10 +12,5 @@ simulator =
 	device = "ios-tablet",
 	deviceWidth = 1024,
 	deviceHeight = 768,
-	iosPointWidth = 1024,
-	iosPointHeight = 768,
-	displayManufacturer = "Apple",
-	displayName = "iPad",
-	windowTitleBarName = "iPad mini",
-	defaultFontSize = 17 * 2,
+	deviceName = "iPad mini",
 }

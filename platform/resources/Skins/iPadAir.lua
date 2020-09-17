@@ -12,10 +12,5 @@ simulator =
 	device = "ios-tablet",
 	deviceWidth = 1024*2,
 	deviceHeight = 768*2,
-	iosPointWidth = 1024,
-	iosPointHeight = 768,
-	displayManufacturer = "Apple",
-	displayName = "iPad",
-	windowTitleBarName = "iPad Air",
-	defaultFontSize = 17 * 2,
+	deviceName = "iPad Air",
 }

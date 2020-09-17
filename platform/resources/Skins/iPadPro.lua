@@ -12,10 +12,5 @@ simulator =
 	device = "ios-tablet",
 	deviceWidth = 2732,
 	deviceHeight = 2048,
-	iosPointWidth = 1024,
-	iosPointHeight = 768,
-	displayManufacturer = "Apple",
-	displayName = "iPad",
-	windowTitleBarName = "iPad Pro",
-	defaultFontSize = 17 * 2,
+	deviceName = "iPad Pro",
 }

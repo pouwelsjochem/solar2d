@@ -53,8 +53,6 @@ class MacSimulator : public PlatformSimulator
 		NSWindow* GetWindow() const { return (NSWindow*)fWindow; }
 
 		bool Back();
-		bool SupportsBackKey();
-		virtual const char *GetOSName() const;
 
 
 	public:
@@ -75,8 +73,6 @@ class MacSimulator : public PlatformSimulator
 		NSMutableDictionary* fProperties;
 		float fDeviceWidth;
 		float fDeviceHeight;
-		bool fSupportsBackButton;
-		NSString* fDeviceSkinIdentifier; // To save the scale factor for the current skin, we need to know which skin we are on.
         NSString* fDeviceName;
 		MacViewCallback *fViewCallback;
 		AppleInputHIDDeviceListener *fMacHidDeviceListener;

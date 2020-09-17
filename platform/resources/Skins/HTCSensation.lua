@@ -12,9 +12,5 @@ simulator =
 	device = "android-phone",
 	deviceWidth = 960,
 	deviceHeight = 540,
-	androidDisplayApproximateDpi = 240, -- hdpi
-	displayManufacturer = "HTC",
-	displayName = "Sensation",
-	windowTitleBarName = "HTC Sensation",
+	deviceName = "HTC Sensation",
 }
-simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

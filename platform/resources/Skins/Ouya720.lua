@@ -12,18 +12,5 @@ simulator =
 	device = "android-tv",
 	deviceWidth = 1280,
 	deviceHeight = 720,
-	androidDisplayApproximateDpi = 320, -- xhdpi
-	displayManufacturer = "OUYA",
-	displayName = "OUYA Console",
-	windowTitleBarName = "Ouya",
-
-	safeScreenInsetTop = 64,
-	safeScreenInsetLeft = 36,
-	safeScreenInsetBottom = 64,
-	safeScreenInsetRight = 36,
-	safeLandscapeScreenInsetTop = 36,
-	safeLandscapeScreenInsetLeft = 64,
-	safeLandscapeScreenInsetBottom = 36,
-	safeLandscapeScreenInsetRight = 64,
+	deviceName = "Ouya",
 }
-simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

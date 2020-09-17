@@ -1743,16 +1743,7 @@ MacPlatform::NetworkRequest( lua_State *L, const char *url, const char *method, 
 
 void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {
-#ifdef Rtt_AUTHORING_SIMULATOR
-	MacSimulator *simulator = ((AppDelegate*)[NSApp delegate]).simulator;
-	NSDictionary *properties = (simulator != nil ? simulator->GetProperties() : nil);
-	top = [[properties valueForKey:@"safeScreenInsetTop"] floatValue];
-	left = [[properties valueForKey:@"safeScreenInsetLeft"] floatValue];
-	bottom = [[properties valueForKey:@"safeScreenInsetBottom"] floatValue];
-	right = [[properties valueForKey:@"safeScreenInsetRight"] floatValue];
-#else
 	top = left = bottom = right = 0;
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1784,19 +1775,10 @@ MacGUIPlatform::RequestSystem( lua_State *L, const char *actionName, int options
 	// Execute the requested operation.
 	if ( Rtt_StringCompare( actionName, "exitApplication" ) == 0 )
 	{
-		// We're simulating a device via the Corona Simulator.
-		// Request the simulator to terminate the Corona runtime, if supported by the simulated platform.
-		const MacSimulator &simulator = (const MacSimulator&)fMacDevice.GetSimulator();
-		if ( [[simulator.GetProperties() valueForKey:@"supportsExitRequests"] boolValue] )
-		{
-			AppDelegate* appdelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-			CoronaLog("native.requestExit() called - application will close");
-			[appdelegate performSelectorOnMainThread:@selector(close:) withObject:nil waitUntilDone:NO];
-		}
-		else
-		{
-			CoronaLuaError(L, "native.requestExit() is not supported on device \"%s\".", GetDevice().GetModel());
-		}
+		AppDelegate* appdelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+		CoronaLog("native.requestExit() called - application will close");
+		[appdelegate performSelectorOnMainThread:@selector(close:) withObject:nil waitUntilDone:NO];
+
 		return true;
 	}
 	

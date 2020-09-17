@@ -105,7 +105,7 @@ void CMainFrame::OnClose()
     // Store windows position
 	this->GetWindowPlacement(&wp);
 	app->PutWP(wp);
-    app->PutDisplayName( pView->GetDisplayName() );
+    app->PutDevicename( pView->GetDevicename() );
 
 	// Stop simulation. This also posts user feedback to the server if enabled.
 	pView->StopSimulation();

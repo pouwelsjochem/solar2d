@@ -132,7 +132,7 @@ CSimulatorView::CSimulatorView()
 	CoInitialize(nullptr);
 
 	mRuntimeEnvironmentPointer = nullptr;
-	mDisplayName = applicationPointer->GetDisplayName();
+	mDeviceName = applicationPointer->GetDeviceName();
 	mAppChangeHandle = nullptr;
 	m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
 	mRelaunchCount = 0;
@@ -231,13 +231,13 @@ int CSimulatorView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	LoadSkinResources();
 
 	// Now that we've loaded the skins, get a valid skin id
-	if (mDisplayName.IsEmpty())
+	if (mDeviceName.IsEmpty())
 	{
 		m_nSkinId = Rtt::TargetDevice::fDefaultSkinID;
 	}
 	else
 	{
-		m_nSkinId = Rtt::TargetDevice::SkinForLabel(CStringA(mDisplayName));
+		m_nSkinId = Rtt::TargetDevice::SkinForLabel(CStringA(mDeviceName));
 	}
 
 	return 0;
@@ -340,12 +340,6 @@ void CSimulatorView::OnViewNavigateBack()
 
 	// Do not continue if we're currently suspended.
 	if (IsSimulationSuspended())
-	{
-		return;
-	}
-
-	// Do not continue if the simulated device does not support back key navigation.
-	if (!mDeviceConfig.supportsKeyEvents || !mDeviceConfig.supportsBackKey)
 	{
 		return;
 	}
@@ -993,15 +987,7 @@ void CSimulatorView::OnUpdateWindowViewAs( CCmdUI *pCmdUI )
 
 void CSimulatorView::OnUpdateViewNavigateBack(CCmdUI *pCmdUI)
 {
-	bool isEnabled = false;
-	if (mRuntimeEnvironmentPointer && mRuntimeEnvironmentPointer->GetDeviceSimulatorServices() && !IsSimulationSuspended())
-	{
-		if (mDeviceConfig.supportsKeyEvents && mDeviceConfig.supportsBackKey)
-		{
-			isEnabled = true;
-		}
-	}
-	pCmdUI->Enable(isEnabled ? TRUE : FALSE);
+	pCmdUI->Enable(!IsSimulationSuspended() ? TRUE : FALSE);
 }
 
 #pragma endregion
@@ -1294,8 +1280,8 @@ bool CSimulatorView::IsSimulationSuspended() const
 // InitializeSimulation - select new skin and update
 bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId)
 {
-	mDisplayName = Rtt::TargetDevice::LabelForSkin(skinId);
-	((CSimulatorApp*)AfxGetApp())->PutDisplayName(mDisplayName);
+	mDeviceName = Rtt::TargetDevice::LabelForSkin(skinId);
+	((CSimulatorApp*)AfxGetApp())->PutDeviceName(mDeviceName);
 
 	bool skinLoaded = InitSkin(skinId);
 	UpdateSimulatorSkin();
@@ -1576,7 +1562,7 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 	}
 }
 
-// SkinDisplayNameFromID - translate skin type from resource id
+// SkinDeviceNameFromID - translate skin type from resource id
 Rtt::TargetDevice::Skin CSimulatorView::SkinIDFromMenuID( UINT nMenuID )
 {
 	Rtt::TargetDevice::Skin skinID = (Rtt::TargetDevice::Skin) ( nMenuID - ID_VIEWAS_BEGIN );
@@ -1601,7 +1587,6 @@ bool CSimulatorView::InitSkin( Rtt::TargetDevice::Skin skinId )
 	_tcsncpy_s(skinPathBuf, skinFile.GetTCHAR(), MAX_PATH);
 
 	PathRemoveFileSpec(skinPathBuf);
-
 
 	// Load the skin's configuration in Lua.
 	Rtt::PlatformSimulator::LoadConfig(skinFile.GetUTF8(), mDeviceConfig);

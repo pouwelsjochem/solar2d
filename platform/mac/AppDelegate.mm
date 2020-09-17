@@ -1886,8 +1886,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	// [1] Somewhere in Initialize (or its sub-calls), GLView's prepareOpenGL is invoked, and Runtime is instantiated
 	fSimulator->Initialize( skinFile, resourcePath );
-
-	_respondsToBackKey = fSimulator->SupportsBackKey();
 	
 	[self didChangeValueForKey:@"suspendResumeLabel"];
 }

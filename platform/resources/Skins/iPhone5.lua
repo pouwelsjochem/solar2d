@@ -12,10 +12,5 @@ simulator =
 	device = "ios-phone",
 	deviceWidth = 1136,
 	deviceHeight = 640,
-	iosPointWidth = 568,
-	iosPointHeight = 320,
-	displayManufacturer = "Apple",
-	displayName = "iPhone",
-	windowTitleBarName = "iPhone 5",
-	defaultFontSize = 17 * 2,		-- Converts default font point size to pixels.
+	deviceName = "iPhone 5",
 }

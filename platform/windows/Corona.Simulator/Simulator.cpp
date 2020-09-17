@@ -344,7 +344,7 @@ BOOL CSimulatorApp::InitInstance()
 	// Load user preferences from registry
     // Initialize member variables used to write out preferences
     SetWorkingDir( GetProfileString( REGISTRY_SECTION, REGISTRY_WORKINGDIR, GetSampleDir() ));
-    m_sDisplayName = GetProfileString( REGISTRY_SECTION, REGISTRY_DEVICE, _T("") );
+    m_sDevicename = GetProfileString( REGISTRY_SECTION, REGISTRY_DEVICE, _T("") );
 
 	// Parse command line for standard shell commands, DDE, file open
 	CCommandLineInfo cmdInfo;
@@ -720,9 +720,9 @@ int CSimulatorApp::ExitInstance()
 	}
 
     // Save user preferences to registry
-    if (!GetDisplayName().IsEmpty())
+    if (!GetDevicename().IsEmpty())
 	{
-		WriteProfileString( REGISTRY_SECTION, REGISTRY_DEVICE, GetDisplayName());
+		WriteProfileString( REGISTRY_SECTION, REGISTRY_DEVICE, GetDevicename());
 	}
     if (!GetWorkingDir().IsEmpty())
 	{
@@ -783,17 +783,17 @@ void CSimulatorApp::PutWP(const WINDOWPLACEMENT& newval)
 // CRecentDirList
 /////////////////////////////////////////////////////////////////////////////////////////
 /* This class is a subclass of CRecentFileList which overrides the
-* GetDisplayName() member function to display the directory name instead of 
+* GetDevicename() member function to display the directory name instead of 
 * the filename, which is always main.lua.
 */
-BOOL CRecentDirList::GetDisplayName( CString &strName, int nIndex, LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName = 1) const
+BOOL CRecentDirList::GetDevicename( CString &strName, int nIndex, LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName = 1) const
 {
     // Change entry at nIndex to remove "main.lua"
     CString sOrigPath = m_arrNames[nIndex];
 	CString sDirPath = CCoronaProject::RemoveMainLua( sOrigPath );
     m_arrNames[nIndex] = sDirPath;
 
-    BOOL bRetval = CRecentFileList::GetDisplayName( strName, nIndex, lpszCurDir, nCurDir, bAtLeastName );
+    BOOL bRetval = CRecentFileList::GetDevicename( strName, nIndex, lpszCurDir, nCurDir, bAtLeastName );
 
     // Restore entry
     m_arrNames[nIndex] = sOrigPath;

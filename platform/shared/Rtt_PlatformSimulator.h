@@ -78,31 +78,9 @@ class PlatformSimulator
 
             bool configLoaded;
 			TargetDevice::Platform platform;
+			String deviceName;
 			float deviceWidth;
 			float deviceHeight;
-			float safeScreenInsetTop;
-			float safeScreenInsetLeft;
-			float safeScreenInsetBottom;
-			float safeScreenInsetRight;
-			float safeLandscapeScreenInsetTop;
-			float safeLandscapeScreenInsetLeft;
-			float safeLandscapeScreenInsetBottom;
-			float safeLandscapeScreenInsetRight;
-			String osName;
-			String displayManufacturer;
-			String displayName;
-			bool supportsExitRequests;
-			bool supportsInputDevices;
-			bool supportsKeyEvents;
-			bool supportsKeyEventsFromKeyboard;
-			bool supportsBackKey;
-			bool supportsMouse;
-			bool supportsMultipleAlerts;
-			bool isAlertButtonOrderRightToLeft;
-			bool hasAccelerometer;
-			bool hasGyroscope;
-			String windowTitleBarName;
-			float defaultFontSize;
 		};
 
 	public:
@@ -126,13 +104,7 @@ class PlatformSimulator
 	
 		// Device configuration --- not to be confused with config.lua
 		static void LoadConfig(const char deviceConfigFile[], Config& rConfig);
-//TODO: Deprecate this function. MPlatform object is never used here and it is expensive to create one when not needed.
-		static void LoadConfig(const char deviceConfigFile[], const MPlatform& platform, Config& rConfig);
 		static void ValidateSettings( const MPlatform& platform );
-
-//		virtual PlatformStringRef CreatePlatformString( const char* src ) const = 0;
-//		virtual void ReleasePlatformString( PlatformStringRef str ) const = 0;
-
 
 	public:
 		Rtt_INLINE bool IsProperty( U32 mask ) const { return (fProperties & mask) != 0; }
@@ -145,8 +117,6 @@ class PlatformSimulator
 	public:
 		void BeginNotifications( MPlatformDevice::EventType type ) const;
 		void EndNotifications( MPlatformDevice::EventType type ) const;
-
-		virtual const char *GetOSName() const { return "simulator"; }
 
 	public:
 		const PlatformPlayer* GetPlayer() const { return fPlayer; }

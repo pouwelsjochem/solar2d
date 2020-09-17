@@ -12,18 +12,5 @@ simulator =
 	device = "android-tv",
 	deviceWidth = 1920,
 	deviceHeight = 1080,
-	androidDisplayApproximateDpi = 320, -- xhdpi
-	displayManufacturer = "Amazon",
-	displayName = "AFTB",
-	windowTitleBarName = "Amazon Fire TV (Gen. 1)",
-
-	safeScreenInsetTop = 96,
-	safeScreenInsetLeft = 54,
-	safeScreenInsetBottom = 96,
-	safeScreenInsetRight = 54,
-	safeLandscapeScreenInsetTop = 54,
-	safeLandscapeScreenInsetLeft = 96,
-	safeLandscapeScreenInsetBottom = 54,
-	safeLandscapeScreenInsetRight = 96,
+	deviceName = "Amazon Fire TV (Gen. 1)",
 }
-simulator.defaultFontSize = 18.0 * (simulator.androidDisplayApproximateDpi / 160)

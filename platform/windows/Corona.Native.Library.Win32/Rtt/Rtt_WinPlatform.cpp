@@ -315,20 +315,6 @@ namespace Rtt
 		const char* title, const char* message,
 		const char** buttonLabels, U32 buttonCount, LuaResource* resourcePointer) const
 	{
-		// Make sure we do not display multiple alerts at the same time for simulated devices that don't support it.
-		auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-		if (deviceSimulatorServicesPointer && !deviceSimulatorServicesPointer->AreMultipleAlertsSupported())
-		{
-			if (Interop::UI::CoronaTaskDialogHandler::HasPendingHandlersFor(fEnvironment))
-			{
-				lua_State* luaStatePointer = resourcePointer ? resourcePointer->L() : nullptr;
-				::CoronaLuaWarning(
-					luaStatePointer, "Device \"%s\" cannot display multiple alerts at the same time.",
-					deviceSimulatorServicesPointer->GetModelName());
-				return nullptr;
-			}
-		}
-
 		// Display a native Win32 dialog.
 		Interop::UI::CoronaTaskDialogHandler::ShowSettings settings{};
 		settings.RuntimeEnvironmentPointer = &fEnvironment;
@@ -337,12 +323,7 @@ namespace Rtt
 		settings.ButtonLabels = buttonLabels;
 		settings.ButtonLabelCount = buttonCount;
 		settings.LuaResourcePointer = resourcePointer;
-		if (deviceSimulatorServicesPointer && deviceSimulatorServicesPointer->IsBackKeySupported())
-		{
-			// Always show a [x] close/cancel button when simulating a device that supports a back key.
-			// This is because these device always have the ability to back out of an alert dialog.
-			settings.IsCancelButtonEnabled = true;
-		}
+		settings.IsCancelButtonEnabled = true;
 		auto showResult = Interop::UI::CoronaTaskDialogHandler::ShowUsing(settings);
 
 		// Do not continue if failed to display the dialog.
@@ -757,52 +738,28 @@ namespace Rtt
 		bool wasExecuted = false;
 		if (Rtt_StringCompare("exitApplication", actionName) == 0)
 		{
-			// Exit/close the app gracefully.
-			auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (deviceSimulatorServicesPointer)
+			// Attempt to close the window that is hosting its rendering surface, if provided.
+			auto windowPointer = fEnvironment.GetMainWindow();
+			if (windowPointer && windowPointer->GetWindowHandle())
 			{
-				// We're simulating a device via the Corona Simulator.
-				// Request the simulator to terminate the Corona runtime, if supported by the simulated platform.
-				if (deviceSimulatorServicesPointer->AreExitRequestsSupported())
+				// If the window's close [x] button is currently disabled, then re-enable it.
+				HMENU menuHandle = ::GetSystemMenu(windowPointer->GetWindowHandle(), FALSE);
+				if (menuHandle)
 				{
-					::CoronaLog("native.requestExit() called - application will close\r\n");
+					auto menuItemState = ::GetMenuState(menuHandle, SC_CLOSE, MF_BYCOMMAND);
+					if (menuItemState & MF_DISABLED)
+					{
+						::EnableMenuItem(menuHandle, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
+					}
+				}
 
-					deviceSimulatorServicesPointer->RequestTerminate();
-					wasExecuted = true;
-				}
-				else
-				{
-					::CoronaLuaError(
-						L, "native.requestExit() is not supported on device \"%s\".\r\n",
-						deviceSimulatorServicesPointer->GetModelName());
-				}
+				// Post a close message to the window.
+				::PostMessageW(windowPointer->GetWindowHandle(), WM_CLOSE, 0, 0);
+				wasExecuted = true;
 			}
 			else
 			{
-				// The runtime is running in Win32 desktop app mode.
-				// Attempt to close the window that is hosting its rendering surface, if provided.
-				auto windowPointer = fEnvironment.GetMainWindow();
-				if (windowPointer && windowPointer->GetWindowHandle())
-				{
-					// If the window's close [x] button is currently disabled, then re-enable it.
-					HMENU menuHandle = ::GetSystemMenu(windowPointer->GetWindowHandle(), FALSE);
-					if (menuHandle)
-					{
-						auto menuItemState = ::GetMenuState(menuHandle, SC_CLOSE, MF_BYCOMMAND);
-						if (menuItemState & MF_DISABLED)
-						{
-							::EnableMenuItem(menuHandle, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
-						}
-					}
-
-					// Post a close message to the window.
-					::PostMessageW(windowPointer->GetWindowHandle(), WM_CLOSE, 0, 0);
-					wasExecuted = true;
-				}
-				else
-				{
-					::CoronaLuaError(L, "native.requestExit() is unable to close the window because its HWND handle was not provided.\r\n");
-				}
+				::CoronaLuaError(L, "native.requestExit() is unable to close the window because its HWND handle was not provided.\r\n");
 			}
 		}
 		else if (Rtt_StringCompare("executeUntilExit", actionName) == 0)
@@ -1180,26 +1137,15 @@ namespace Rtt
 		}
 		else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
 		{
-			// Show/hide the mouse cursor. (Only supported when running in desktop app mode.)
-			auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (!deviceSimulatorServicesPointer)
+			if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
 			{
-				if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
-				{
-					WinInputDeviceManager& inputDeviceManager =
-						(WinInputDeviceManager&)const_cast<Rtt::WinDevice&>(fDevice).GetInputDeviceManager();
-					inputDeviceManager.SetCursorVisible(lua_toboolean(L, valueIndex) ? true : false);
-				}
-				else
-				{
-					CoronaLuaWarning(L, "native.setProperty(\"%s\") was given an invalid value type.", key);
-				}
+				WinInputDeviceManager& inputDeviceManager =
+					(WinInputDeviceManager&)const_cast<Rtt::WinDevice&>(fDevice).GetInputDeviceManager();
+				inputDeviceManager.SetCursorVisible(lua_toboolean(L, valueIndex) ? true : false);
 			}
 			else
 			{
-				CoronaLuaWarning(
-					L, "native.setProperty(\"%s\") is not supported on device: \"%s\"",
-					key, deviceSimulatorServicesPointer->GetModelName());
+				CoronaLuaWarning(L, "native.setProperty(\"%s\") was given an invalid value type.", key);
 			}
 		}
 		else if (Rtt_StringCompare(key, "mouseCursor") == 0)
@@ -1333,29 +1279,10 @@ namespace Rtt
 		}
 		else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
 		{
-			// Fetch the mouse cursor's current visibility state.
-			auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-			if (!deviceSimulatorServicesPointer)
-			{
-				// We're in Win32 desktop app mode.
-				WinInputDeviceManager& inputDeviceManager =
-					(WinInputDeviceManager&)const_cast<Rtt::WinDevice&>(fDevice).GetInputDeviceManager();
-				lua_pushboolean(L, inputDeviceManager.IsCursorVisible() ? 1 : 0);
-				pushedValues = 1;
-			}
-			else if (deviceSimulatorServicesPointer->IsMouseSupported())
-			{
-				// Only Android supports a mouse and that OS does not allow the cursor to be hidden.
-				lua_pushboolean(L, 1);
-				pushedValues = 1;
-			}
-			else
-			{
-				// No other device supports this API.
-				CoronaLuaWarning(
-					L, "native.getProperty(\"%s\") is not supported on device: \"%s\"",
-					key, deviceSimulatorServicesPointer->GetModelName());
-			}
+			WinInputDeviceManager& inputDeviceManager =
+				(WinInputDeviceManager&)const_cast<Rtt::WinDevice&>(fDevice).GetInputDeviceManager();
+			lua_pushboolean(L, inputDeviceManager.IsCursorVisible() ? 1 : 0);
+			pushedValues = 1;
 		}
 		else
 		{
@@ -1547,11 +1474,6 @@ namespace Rtt
 	void WinPlatform::GetSafeAreaInsetsPixels(Rtt_Real& top, Rtt_Real& left, Rtt_Real& bottom, Rtt_Real& right) const
 	{
 		top = left = bottom = right = 0;
-		auto deviceSimulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
-		if (deviceSimulatorServicesPointer)
-		{
-			deviceSimulatorServicesPointer->GetSafeAreaInsetsPixels(top, left, bottom, right);
-		}
 	}
 
 }	// namespace Rtt

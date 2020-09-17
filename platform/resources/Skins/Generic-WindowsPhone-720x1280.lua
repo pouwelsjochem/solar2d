@@ -12,9 +12,5 @@ simulator =
 	device = "borderless-winphone",
 	deviceWidth = 1280,
 	deviceHeight = 720,
-	displayManufacturer = "Corona Labs Inc.",
-	displayName = "GenericWindowsPhone",
-	hasAccelerometer = true,
-	windowTitleBarName = "Windows Phone",
-	defaultFontSize = 25.333 * 1.5,			-- Apply a 720p scale factor.
+	deviceName = "Windows Phone",
 }

@@ -1166,11 +1166,6 @@ public class NativeToJavaBridge {
 		runtime.getController().setEventNotification( eventType, enable );
 	}
 	
-	protected static String callGetManufacturerName(CoronaRuntime runtime)
-	{
-		return runtime.getController().getManufacturerName();
-	}
-	
 	protected static String callGetModel(CoronaRuntime runtime)
 	{
 		return runtime.getController().getModel();

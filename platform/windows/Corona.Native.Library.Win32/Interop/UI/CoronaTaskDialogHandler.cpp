@@ -151,11 +151,6 @@ CoronaTaskDialogHandler::ShowResult CoronaTaskDialogHandler::ShowUsing(
 			dialogSettings.GetButtonLabels().push_back(stringTranscoder.GetUTF16());
 		}
 	}
-	auto deviceSimulatorServicesPointer = settings.RuntimeEnvironmentPointer->GetDeviceSimulatorServices();
-	if (deviceSimulatorServicesPointer && deviceSimulatorServicesPointer->IsAlertButtonOrderRightToLeft())
-	{
-		dialogSettings.SetReverseHorizontalButtonsEnabled(true);
-	}
 
 	// Store the given Lua resource, which reference a Lua listener to be invoked when the message box has been closed.
 	// Note: This is optional. Will be null if a Lua listener was not provided by the caller.

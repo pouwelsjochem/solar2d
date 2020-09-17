@@ -53,7 +53,6 @@ MacSimulator::MacSimulator()
 	fProperties( [[NSMutableDictionary alloc] init] ),
 	fDeviceWidth( 0. ),
 	fDeviceHeight( 0. ),
-	fDeviceSkinIdentifier( nil ),
 	fViewCallback( NULL ),
 	fMacMFIListener(nil),
 	fMacHidDeviceListener(NULL)
@@ -92,7 +91,6 @@ MacSimulator::~MacSimulator()
 	[fWindowController close];
 	delete fViewCallback;
 
-	[fDeviceSkinIdentifier release];
 	[fDeviceName release];
 	[fProperties release];
 	[fWindow release];
@@ -111,56 +109,16 @@ MacSimulator::Initialize(
 	MacGUIPlatform* platform = new MacGUIPlatform( * this );
 	platform->SetResourcePath( resourcePath );
 	Super::Config config( platform->GetAllocator() );
-	Super::LoadConfig( deviceConfigFile, *platform, config );
-    
-    if (! config.configLoaded)
-    {
-        return;
-    }
+	Super::LoadConfig( deviceConfigFile, config );
     
 	LoadBuildSettings( *platform );
 
 	fDeviceWidth = config.deviceWidth;
 	fDeviceHeight = config.deviceHeight;
 
-	platform->GetMacDevice().SetManufacturer( [NSString stringWithExternalString:config.displayManufacturer.GetString()] );
-	platform->GetMacDevice().SetModel( [NSString stringWithExternalString:config.displayName.GetString()] );
-
 	// -------------
 	AppDelegate *delegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
 	
-	// Store whether or not the simulated device supports the following features.
-	[fProperties setValue:[NSNumber numberWithBool:config.supportsExitRequests] forKey:@"supportsExitRequests"];
-	[fProperties setValue:[NSNumber numberWithBool:config.supportsBackKey] forKey:@"supportsBackKey"];
-	[fProperties setValue:[NSNumber numberWithBool:config.supportsKeyEvents] forKey:@"supportsKeyEvents"];
-	[fProperties setValue:[NSNumber numberWithBool:config.supportsMouse] forKey:@"supportsMouse"];
-	[fProperties setValue:[NSString stringWithExternalString:config.osName] forKey:@"osName"];
-
-	// Store the simulated device's safe screen area
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetTop] forKey:@"safeScreenInsetTop"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetLeft] forKey:@"safeScreenInsetLeft"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetBottom] forKey:@"safeScreenInsetBottom"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeScreenInsetRight] forKey:@"safeScreenInsetRight"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetTop] forKey:@"safeLandscapeScreenInsetTop"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetLeft] forKey:@"safeLandscapeScreenInsetLeft"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetBottom] forKey:@"safeLandscapeScreenInsetBottom"];
-	[fProperties setValue:[NSNumber numberWithFloat:config.safeLandscapeScreenInsetRight] forKey:@"safeLandscapeScreenInsetRight"];
-	
-	const char* display_name_cstr = config.displayName.GetString();
-	const char* window_titlebar_name_cstr = config.windowTitleBarName.GetString();
-	
-	NSString* displayName = nil;
-	NSString* windowTitleBarName = nil;
-    
-	if ( NULL != display_name_cstr )
-	{
-		displayName = [NSString stringWithExternalString:display_name_cstr];
-	}
-	if ( NULL != window_titlebar_name_cstr )
-	{
-		windowTitleBarName = [NSString stringWithFormat:@"%s - %.0fx%.0f", window_titlebar_name_cstr, fDeviceWidth, fDeviceHeight];
-	}
-
 	NSRect screenRect = { {0, 0}, {fDeviceWidth, fDeviceHeight} };
 	GLView* screenView = [[GLView alloc] initWithFrame:screenRect];
 	[screenView autorelease];
@@ -189,12 +147,10 @@ MacSimulator::Initialize(
 
     // restore the user's last setting for this skin
 	// We need a placeholder name for autosave
-	fDeviceName = [displayName copy];
-	
-	// Use this string as our current selected skin identifier which will be used as a key to save the user's set scale factor to
-	fDeviceSkinIdentifier = [windowTitleBarName copy];
-	    
-    instanceWindow = [[SkinlessSimulatorWindow alloc] initWithScreenView:screenView viewRect:screenRect title:windowTitleBarName];
+	fDeviceName = [NSString stringWithExternalString:config.deviceName];
+	NSString* deviceNameWithResolution = [NSString stringWithFormat:@"%s - %.0fx%.0f", config.deviceName.GetString(), fDeviceWidth, fDeviceHeight];
+
+    instanceWindow = [[SkinlessSimulatorWindow alloc] initWithScreenView:screenView viewRect:screenRect title:deviceNameWithResolution];
 	[(SkinlessSimulatorWindow*)instanceWindow setPerformCloseBlock:window_close_handler];
 
 	NSWindowController *windowController = [[NSWindowController alloc] initWithWindow:instanceWindow];
@@ -253,25 +209,10 @@ MacSimulator::GetScreenView() const
 }
 
 bool
-MacSimulator::SupportsBackKey()
-{
-	return [(NSNumber*)[fProperties valueForKey:@"supportsBackKey"] boolValue];
-}
-
-const char *
-MacSimulator::GetOSName() const
-{
-	// return the name of the OS this simulator is simulating
-	return [[fProperties valueForKey:@"osName"] UTF8String];
-}
-
-bool
 MacSimulator::Back()
 {
 	Runtime& runtime = GetPlayer()->GetRuntime();
-	BOOL skinSupportsBackKey = SupportsBackKey();
-
-	if ( skinSupportsBackKey && ! runtime.IsSuspended() )
+	if ( ! runtime.IsSuspended() )
 	{
 		// Simulate the pressing of a virtual "back" button
 		short keyCode = kVK_Back;

@@ -367,16 +367,6 @@ const Rtt::PlatformSimulator::Config* SimulatorRuntimeEnvironment::DeviceSimulat
 	return fDeviceConfigPointer;
 }
 
-const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetManufacturerName() const
-{
-	return fDeviceConfigPointer->displayManufacturer.GetString();
-}
-
-const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetModelName() const
-{
-	return fDeviceConfigPointer->displayName.GetString();
-}
-
 bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsLuaExitAllowed() const
 {
 	auto applicationPointer = ((CSimulatorApp*)::AfxGetApp());
@@ -385,66 +375,6 @@ bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsLuaExitAllowed() co
 		return applicationPointer->IsLuaExitAllowed();
 	}
 	return false;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsMouseSupported() const
-{
-	return fDeviceConfigPointer->supportsMouse;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::AreInputDevicesSupported() const
-{
-	return fDeviceConfigPointer->supportsInputDevices;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::AreKeyEventsSupported() const
-{
-	return fDeviceConfigPointer->supportsKeyEvents;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::AreKeyEventsFromKeyboardSupported() const
-{
-	return fDeviceConfigPointer->supportsKeyEventsFromKeyboard;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsBackKeySupported() const
-{
-	return fDeviceConfigPointer->supportsBackKey;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::AreExitRequestsSupported() const
-{
-	return fDeviceConfigPointer->supportsExitRequests;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::AreMultipleAlertsSupported() const
-{
-	return fDeviceConfigPointer->supportsMultipleAlerts;
-}
-
-bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsAlertButtonOrderRightToLeft() const
-{
-	return fDeviceConfigPointer->isAlertButtonOrderRightToLeft;
-}
-
-POINT SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSimulatedPointFromClient(const POINT& value)
-{
-	// Fetch the Corona runtime, if available.
-	auto runtimePointer = fEnvironmentPointer->GetRuntime();
-	if (!runtimePointer)
-	{
-		return value;
-	}
-
-	// Fetch the render surface's control/window.
-	auto surfacePointer = fEnvironmentPointer->GetRenderSurface();
-	if (!surfacePointer)
-	{
-		return value;
-	}
-
-	// Return the simulated coordinate.
-	return coronaContentCoordinate;
 }
 
 void* SimulatorRuntimeEnvironment::DeviceSimulatorServices::ShowNativeAlert(
@@ -520,19 +450,6 @@ void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RequestTerminate()
 	// Terminate the runtime by invoking the "File\Close Project" menu item in the Corona Simulator window.
 	// Note: This assumes that only one Corona project can be simulated at a time.
 	::PostMessage(viewPointer->GetSafeHwnd(), WM_COMMAND, ID_FILE_CLOSE, 0);
-}
-
-const char* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetOSName() const
-{
-	return fDeviceConfigPointer->osName.GetString();
-}
-
-void SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
-{
-	top = fDeviceConfigPointer->safeLandscapeScreenInsetTop;
-	left = fDeviceConfigPointer->safeLandscapeScreenInsetLeft;
-	bottom = fDeviceConfigPointer->safeLandscapeScreenInsetBottom;
-	right = fDeviceConfigPointer->safeLandscapeScreenInsetRight;
 }
 
 #pragma endregion

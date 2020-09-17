@@ -180,7 +180,6 @@ class TargetDevice
         static const char *LabelForSkin( int skinID );
         static const char *DeviceTypeForSkin( int skinID );
         static Platform PlatformForDeviceType( const char *typeName );
-        static bool IsSkinForPlatform( int skinID, Platform platform );
 };
 
 // ----------------------------------------------------------------------------

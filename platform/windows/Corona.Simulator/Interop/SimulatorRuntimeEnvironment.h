@@ -179,26 +179,13 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 						const Rtt::PlatformSimulator::Config* deviceConfigPointer);
 
 				const Rtt::PlatformSimulator::Config* GetDeviceConfig() const;
-				virtual const char* GetManufacturerName() const override;
-				virtual const char* GetModelName() const override;
 				virtual bool IsLuaExitAllowed() const override;
-				virtual bool IsMouseSupported() const override;
-				virtual bool AreInputDevicesSupported() const override;
-				virtual bool AreKeyEventsSupported() const override;
-				virtual bool AreKeyEventsFromKeyboardSupported() const override;
-				virtual bool IsBackKeySupported() const override;
-				virtual bool AreExitRequestsSupported() const override;
-				virtual bool AreMultipleAlertsSupported() const override;
-				virtual bool IsAlertButtonOrderRightToLeft() const override;
-				virtual POINT GetSimulatedPointFromClient(const POINT& value) override;
 				virtual void* ShowNativeAlert(
 								const char *title, const char *message, const char **buttonLabels,
 								int buttonCount, Rtt::LuaResource* resource) override;
 				virtual void CancelNativeAlert(void* alertReference) override;
 				virtual void RequestRestart() override;
 				virtual void RequestTerminate() override;
-				virtual const char* GetOSName() const override;
-				virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const override;
 
 			private:
 				SimulatorRuntimeEnvironment* fEnvironmentPointer;
