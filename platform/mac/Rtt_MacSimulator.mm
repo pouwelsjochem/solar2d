@@ -147,7 +147,7 @@ MacSimulator::Initialize(
 
     // restore the user's last setting for this skin
 	// We need a placeholder name for autosave
-	fDeviceName = [NSString stringWithExternalString:config.deviceName];
+	fDeviceName = [[NSString stringWithExternalString:config.deviceName] copy];
 	NSString* deviceNameWithResolution = [NSString stringWithFormat:@"%s - %.0fx%.0f", config.deviceName.GetString(), fDeviceWidth, fDeviceHeight];
 
     instanceWindow = [[SkinlessSimulatorWindow alloc] initWithScreenView:screenView viewRect:screenRect title:deviceNameWithResolution];
