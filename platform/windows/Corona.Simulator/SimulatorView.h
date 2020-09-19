@@ -53,6 +53,7 @@ class CSimulatorView : public CView
 		void StopSimulation();
 		bool IsSimulationSuspended() const;
 		CSimulatorDoc* GetDocument() const;
+		CString GetDeviceName() const;
 		const Rtt::PlatformSimulator::Config& GetDeviceConfig() { return mDeviceConfig; }
 		void UpdateSimulatorSkin();
 		Interop::SimulatorRuntimeEnvironment* GetRuntimeEnvironment()  { return mRuntimeEnvironmentPointer; }
@@ -162,6 +163,7 @@ class CSimulatorView : public CView
 		Interop::SimulatorRuntimeEnvironment::LoadedEvent::MethodHandler<CSimulatorView> mRuntimeLoadedEventHandler;
 		Rtt::WinSimulatorServices mSimulatorServices;
 		CMessageDlg* mMessageDlgPointer;
+		CString mDeviceName;
 		Rtt::PlatformSimulator::Config mDeviceConfig;
 		HANDLE mAppChangeHandle;		// Filesystem notifications handle
 		int mShakeAmount;

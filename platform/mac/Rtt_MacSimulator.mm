@@ -110,7 +110,7 @@ MacSimulator::Initialize(
 	platform->SetResourcePath( resourcePath );
 	Super::Config config( platform->GetAllocator() );
 	Super::LoadConfig( deviceConfigFile, config );
-    
+
 	LoadBuildSettings( *platform );
 
 	fDeviceWidth = config.deviceWidth;

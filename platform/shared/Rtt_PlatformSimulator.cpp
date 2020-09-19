@@ -63,7 +63,7 @@ PlatformSimulator::Config::Config( Rtt_Allocator & allocator )
 	platform( TargetDevice::kUnknownPlatform ),
 	deviceName( & allocator ),
 	deviceWidth(0.0f),
-	deviceHeight(0.0f),
+	deviceHeight(0.0f)
 {
 }
 
@@ -151,14 +151,22 @@ void
 PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 {
 	lua_State *L = luaL_newstate();
-    
-	lua_getglobal( L, "simulator" );
+    String errorMesg;
 
-	rConfig.deviceName.Set( StringForKey( L, "deviceName", "Unknown" ) );
-	rConfig.deviceWidth = (float) NumberForKey( L, "deviceWidth", 400 );
-	rConfig.deviceHeight = (float) NumberForKey( L, "deviceHeight", 400 );
+	if ( 0 == Lua::DoFile( L, deviceConfigFile, 0, false, &errorMesg ))
+	{
+		lua_getglobal( L, "simulator" );
 
-	lua_pop( L, 1 );
+		rConfig.deviceName.Set( StringForKey( L, "deviceName", "Unknown" ) );
+		rConfig.deviceWidth = (float) NumberForKey( L, "deviceWidth", 400 );
+		rConfig.deviceHeight = (float) NumberForKey( L, "deviceHeight", 400 );
+
+		lua_pop( L, 1 );
+	}
+	else
+	{
+		Rtt_TRACE(("WARNING: Could not load device config file '%s': %s\n", deviceConfigFile, errorMesg.GetString()));
+	}
 
 	lua_close( L );
 }

@@ -179,7 +179,6 @@ class TargetDevice
         static Skin SkinForLabel( const char* skinname );
         static const char *LabelForSkin( int skinID );
         static const char *DeviceTypeForSkin( int skinID );
-        static Platform PlatformForDeviceType( const char *typeName );
 };
 
 // ----------------------------------------------------------------------------
