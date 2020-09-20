@@ -273,45 +273,6 @@ function Runtime:setCheckGlobals( onOff )
 end
 -- luacheck: pop
 
-local function verifyListener( listener, name )
-	local listenerType = type( listener )
-	if "function" == listenerType then
-		return listener
-	elseif "table" == listenerType then
-		local method = listener[name]
-		if type( method ) == "function" then
-			return listener
-		end
-	end
-	return nil
-end
-
-local function callListener( listener, name, ... )
-	local listenerType = type(listener)
-	if listenerType == "function" then
-		return listener( ... )
-	elseif listenerType == "table" then
-		return listener[name]( listener, ... )
-	end
-end
-
-Runtime.verifyListener = verifyListener
-Runtime.callListener = callListener
-
--- Create a publicly available prototype-based base object to create inheritance
--- Don't use Object as the prototype b/c that would expose Object to public manipulation
-local PublicObject = {}
-function PublicObject:new( o )
-	o = o or {}
-
-	setmetatable( o, self )
-	self.__index = self
-
-	return o
-end
-
-Runtime.Object = PublicObject
-
 -------------------------------------------------------------------------------
 -- Per-frame logic
 -------------------------------------------------------------------------------
@@ -359,85 +320,9 @@ function DisplayObject:removeEventListener( eventName, listener )
 	return wasRemoved or nil
 end
 
-
--------------------------------------------------------------------------------
--- DisplayObject derived "classes"
--------------------------------------------------------------------------------
-
--- luacheck: push
--- luacheck: ignore 211 -- Unused local variable.
-local Group = DisplayObject:newClass()
-local ImageGroup = DisplayObject:newClass()
-local Sprite = DisplayObject:newClass()
-local Container = DisplayObject:newClass()
-local Stage = Group:newClass()
-local Line = DisplayObject:newClass()
-local Shape = DisplayObject:newClass()
-local Text = DisplayObject:newClass()
---luacheck: pop
-
 -------------------------------------------------------------------------------
 -- display
 -------------------------------------------------------------------------------
-
-local function remoteImageListener( self, event )
-	local listener = self.listener
-
-	local target
---	if ( not event.isError and event.status == 200 ) then
---print( "remoteImageListener", event.phase )
-	if ( not event.isError and event.phase == "ended" ) then
-		target = display.newImage( self.filename, self.baseDir, self.x, self.y )
-		event.target = target
-	end
-
-	callListener( listener, event.name, event )
-end
-
--- display.loadRemoteImage( url, method, listener [, params], destFilename [, baseDir] [, x, y] )
-display.loadRemoteImage = function( url, method, listener, ... )
-	local arg = { ... }
-
-	local params, destFilename, baseDir, x, y
-	local nextArg = 1
-	if "table" == type( arg[nextArg] ) then
-		params = arg[nextArg]
-		nextArg = nextArg + 1
-	end
-
-	if "string" == type( arg[nextArg] ) then
-		destFilename = arg[nextArg]
-		nextArg = nextArg + 1
-	end
-
-	if "userdata" == type( arg[nextArg] ) then
-		baseDir = arg[nextArg]
-		nextArg = nextArg + 1
-	else
-		baseDir = system.DocumentsDirectory
-	end
-
-	if "number" == type( arg[nextArg] ) and "number" == type( arg[nextArg + 1] ) then
-		x = arg[nextArg]
-		y = arg[nextArg + 1]
-	end
-
-	if ( destFilename ) then
-		local o = {
-			x=x, y=y,
-			filename=destFilename, baseDir=baseDir,
-			networkRequest=remoteImageListener, listener=listener }
-
-		if ( params ) then
-			network.download( url, method, o, params, destFilename, baseDir )
-		else
-			network.download( url, method, o, destFilename, baseDir )
-		end
-	else
-		print( "ERROR: no destination filename supplied to display.loadRemoteImage()" )
-	end
-end
-
 -- convenience wrapper for object:removeSelf() that eliminates check for a receiver that's nil
 display.remove = function( object )
 	if object then
@@ -507,7 +392,6 @@ network.setStatusListener = function( address, listener )
 		-- The Lua GC will implicitly finalize the userdata
 		statusListeners[address] = nil
 	elseif ( type(address) == "string" ) then
-		listener = verifyListener( listener, "networkStatus" )
 		if ( listener ) then
 			local reachability = network._setStatusListener( address )
 			if ( reachability ) then
@@ -551,11 +435,7 @@ print = coronabaselib.print
 
 _coronaPreservedLuaFunctions.require = require
 require = function (modname)
-	if string.find(modname, "/") then
-		-- Bug:13760
-		-- Override require so we trap users using '/' as separators instead of '.'
-		error("Error calling 'require(\"" .. modname .. "\")'. Lua requires package names to use '.' as path separators, not '/'. Replace the '/' characters with '.' and try again.")
-	elseif ( "simulator" == system.getInfo( "environment" ) ) or ( "win32" == system.getInfo( "platform" ) ) or ( "macos" == system.getInfo( "platform" ) ) then
+	if ( "simulator" == system.getInfo( "environment" ) ) or ( "win32" == system.getInfo( "platform" ) ) or ( "macos" == system.getInfo( "platform" ) ) then
 		-- Replace '.' with '_' for the following cases:
 		-- (1) For plugins
 		-- (2) For subclasses CoronaProvider's, e.g. CoronaProvider.gameNetwork.corona.
