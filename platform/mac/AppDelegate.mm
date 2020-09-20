@@ -105,8 +105,6 @@
 
 #include "ListKeyStore.h"
 
-#import "CoronaWindowController.h"
-
 #import "TextEditorSupport.h"
 #import "ValidationToolOutputViewController.h"
 #import "ValidationSupportMacUI.h"
@@ -484,11 +482,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @synthesize applicationHasBeenInitialized;
 @synthesize launchedWithFile;
 @synthesize allowLuaExit;
-
-+(BOOL)offlineModeAllowed {
-	static BOOL allowed = [[NSUserDefaults standardUserDefaults] boolForKey:@"allowOfflineMode"];
-	return allowed;
-}
 
 -(id)init
 {

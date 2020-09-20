@@ -197,7 +197,6 @@ CoronaBuilder::CoronaBuilder(
 	fServices( services ),
 	fL( Lua::New( true ) )
 {
-	Rtt::String offlineModeStr;
 	lua_pushlightuserdata( fL, this );
 	Lua::RegisterModuleLoader( fL, "builder", LuaLibBuilder::Open, 1 );
 

@@ -502,7 +502,6 @@
 		A4FBC5551A2D5734004D9A01 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92612B7413200D9B6A4 /* Rtt_ApplePlatform.mm */; };
 		A4FBC5561A2D5734004D9A01 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DB13678536008DDB3D /* Rtt_AppleReachability.mm */; };
 		A4FBC5591A2D5734004D9A01 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE92812B7413200D9B6A4 /* Rtt_AppleTimer.mm */; };
-		A4FBC55B1A2D5746004D9A01 /* CoronaWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AB4479143E385700607F77 /* CoronaWindowController.mm */; };
 		A4FBC55C1A2D574D004D9A01 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE90E12B7410200D9B6A4 /* CoronaViewPrivate.mm */; };
 		A4FBC55E1A2D57D2004D9A01 /* GLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CDE12B720C90057F594 /* GLView.mm */; };
 		A4FBC5601A2D5867004D9A01 /* Rtt_MacPlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF812B720C90057F594 /* Rtt_MacPlatform.mm */; };
@@ -1111,7 +1110,6 @@
 		C2E992821A69816600E99F46 /* CoronaViewPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE90D12B7410200D9B6A4 /* CoronaViewPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		C2E992D51A6B135500E99F46 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2E992991A6B135500E99F46 /* Info.plist */; };
 		C2E992F61A6B1A3100E99F46 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE90E12B7410200D9B6A4 /* CoronaViewPrivate.mm */; };
-		C2E992F71A6B1A3100E99F46 /* CoronaWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AB4479143E385700607F77 /* CoronaWindowController.mm */; };
 		C2E992F81A6B1A3100E99F46 /* GLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CDE12B720C90057F594 /* GLView.mm */; };
 		C2E992FB1A6B1A3100E99F46 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91712B7413200D9B6A4 /* Rtt_AppleBitmap.mm */; };
 		C2E992FC1A6B1A3100E99F46 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000CE91912B7413200D9B6A4 /* Rtt_AppleCallback.mm */; };
@@ -2403,8 +2401,6 @@
 		A4A5DE03177BA2A4001EE9E5 /* Rtt_ShaderData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShaderData.h; path = Display/Rtt_ShaderData.h; sourceTree = "<group>"; };
 		A4A5DE04177BA2A9001EE9E5 /* Rtt_ShaderDataAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShaderDataAdapter.cpp; path = Display/Rtt_ShaderDataAdapter.cpp; sourceTree = "<group>"; };
 		A4A5DE05177BA2AC001EE9E5 /* Rtt_ShaderDataAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShaderDataAdapter.h; path = Display/Rtt_ShaderDataAdapter.h; sourceTree = "<group>"; };
-		A4AB4478143E385700607F77 /* CoronaWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoronaWindowController.h; sourceTree = "<group>"; };
-		A4AB4479143E385700607F77 /* CoronaWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoronaWindowController.mm; sourceTree = "<group>"; };
 		A4AB447B143E575C00607F77 /* Rtt_RuntimeDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RuntimeDelegate.cpp; sourceTree = "<group>"; };
 		A4AB447C143E575D00607F77 /* Rtt_RuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RuntimeDelegate.h; sourceTree = "<group>"; };
 		A4B00F9F14565609008FB6E6 /* AppBuildController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppBuildController.h; sourceTree = "<group>"; };
@@ -3930,8 +3926,6 @@
 				C2F8376C1AC205FA00D33D6E /* CoronaViewRuntimeDelegate.mm */,
 				000CE90D12B7410200D9B6A4 /* CoronaViewPrivate.h */,
 				000CE90E12B7410200D9B6A4 /* CoronaViewPrivate.mm */,
-				A4AB4478143E385700607F77 /* CoronaWindowController.h */,
-				A4AB4479143E385700607F77 /* CoronaWindowController.mm */,
 				00B73CDF12B720C90057F594 /* GLView.h */,
 				00B73CDE12B720C90057F594 /* GLView.mm */,
 			);
@@ -5588,7 +5582,6 @@
 			files = (
 				A47290011AE827C400BC088D /* CoronaLuaObjC.mm in Sources */,
 				A4FBC55C1A2D574D004D9A01 /* CoronaViewPrivate.mm in Sources */,
-				A4FBC55B1A2D5746004D9A01 /* CoronaWindowController.mm in Sources */,
 				A4FBC55E1A2D57D2004D9A01 /* GLView.mm in Sources */,
 				A4FBC54E1A2D5734004D9A01 /* Rtt_AppleBitmap.mm in Sources */,
 				A4FBC54F1A2D5734004D9A01 /* Rtt_AppleCallback.mm in Sources */,
@@ -5906,7 +5899,6 @@
 				C2FBA8321B053642002BFE73 /* CoronaLuaObjC.mm in Sources */,
 				C2E992F61A6B1A3100E99F46 /* CoronaViewPrivate.mm in Sources */,
 				C2F8377C1AC2105A00D33D6E /* CoronaViewRuntimeDelegate.mm in Sources */,
-				C2E992F71A6B1A3100E99F46 /* CoronaWindowController.mm in Sources */,
 				C2E992F81A6B1A3100E99F46 /* GLView.mm in Sources */,
 				F57D17681BE25B2800AABAC1 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				C2E992FB1A6B1A3100E99F46 /* Rtt_AppleBitmap.mm in Sources */,

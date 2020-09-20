@@ -24,7 +24,6 @@
 
 @class DialogController;
 @class GLView;
-@class CoronaWindowController;
 @class AndroidAppBuildController;
 @class IOSAppBuildController;
 @class OSXAppBuildController;
@@ -146,8 +145,6 @@ namespace Rtt
 @property (nonatomic, readonly, retain) GLView* layerHostView;
 @property (nonatomic, readwrite) BOOL stopRequested;
 @property (nonatomic, readwrite) float buildDownloadProgess;
-
-+(BOOL)offlineModeAllowed;
 
 -(BOOL)isRunning;
 -(IBAction)showHelp:(id)sender;
