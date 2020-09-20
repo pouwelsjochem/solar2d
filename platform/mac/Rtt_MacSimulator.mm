@@ -19,7 +19,7 @@
 
 #import "AppDelegate.h"
 #import "GLView.h"
-#import "SkinlessSimulatorWindow.h"
+#import "SimulatorWindow.h"
 
 #include "Display/Rtt_Display.h"
 #include "Display/Rtt_Scene.h"
@@ -75,7 +75,7 @@ MacSimulator::~MacSimulator()
 	// The NSView and CALayer have a pointer to the runtime which it uses to draw/
 	// Since the drawing may be asynchonous and the view release may cause dealloc to happen
 	// at the end of the runloop, we need to clear the runtime variable now.
-	GLView* view = [(SkinlessSimulatorWindow *)fWindow screenView];
+	GLView* view = [(SimulatorWindow *)fWindow screenView];
     if (view != nil && [view runtime] != NULL)
     {
         [view runtime]->GetDisplay().Invalidate();
@@ -124,7 +124,7 @@ MacSimulator::Initialize(
 	[screenView autorelease];
 	[screenView setDelegate:delegate];
 
-	SimulatorDeviceWindow* instanceWindow = nil;
+	SimulatorWindow* instanceWindow = nil;
 	void (^window_close_handler)(id) = ^(id sender)
 	{
 		// pass the action to the app delegate which will handle the close for us
@@ -150,8 +150,8 @@ MacSimulator::Initialize(
 	fDeviceName = [[NSString stringWithExternalString:config.deviceName] copy];
 	NSString* deviceNameWithResolution = [NSString stringWithFormat:@"%s - %.0fx%.0f", config.deviceName.GetString(), fDeviceWidth, fDeviceHeight];
 
-    instanceWindow = [[SkinlessSimulatorWindow alloc] initWithScreenView:screenView viewRect:screenRect title:deviceNameWithResolution];
-	[(SkinlessSimulatorWindow*)instanceWindow setPerformCloseBlock:window_close_handler];
+    instanceWindow = [[SimulatorWindow alloc] initWithScreenView:screenView viewRect:screenRect title:deviceNameWithResolution];
+	[instanceWindow setPerformCloseBlock:window_close_handler];
 
 	NSWindowController *windowController = [[NSWindowController alloc] initWithWindow:instanceWindow];
 	[instanceWindow setDelegate:(id <NSWindowDelegate>)windowController];
@@ -205,7 +205,7 @@ MacSimulator::GetPlatform() const
 GLView*
 MacSimulator::GetScreenView() const
 {
-	return [(SkinlessSimulatorWindow *)fWindow screenView];
+	return [(SimulatorWindow *)fWindow screenView];
 }
 
 bool

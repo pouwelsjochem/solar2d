@@ -15,7 +15,7 @@
 
 // ----------------------------------------------------------------------------
 
-@interface SimulatorDeviceWindow : NSWindow<NSWindowDelegate>
+@interface SimulatorWindow : NSWindow<NSWindowDelegate>
 {
 	GLView* fScreenView;
 	void (^performCloseBlock)(id);
@@ -26,6 +26,12 @@
 
 @property(nonatomic,readonly,getter=screenView) GLView *fScreenView;
 
+@property(nonatomic, readwrite, copy) NSString *windowTitle;
+
+- (id)initWithScreenView:(GLView*)screenView
+				viewRect:(NSRect)screenRect
+				   title:(NSString*)title;
+				   
 - (void) setPerformCloseBlock:(void (^)(id sender))block;
 
 @end

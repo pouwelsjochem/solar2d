@@ -102,7 +102,7 @@
 		003E585D153CC3C700483125 /* lobjectivec_exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 003E585B153CC3C700483125 /* lobjectivec_exceptions.h */; };
 		003E585E153CC3C700483125 /* lobjectivec_exceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 003E585C153CC3C700483125 /* lobjectivec_exceptions.m */; };
 		004A5F371368DB24003BD9DA /* Corona3rdPartyLicenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = 004A5F361368DB08003BD9DA /* Corona3rdPartyLicenses.txt */; };
-		004ADB3B1468C54400D732FC /* SkinlessSimulatorWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 004ADB3A1468C54300D732FC /* SkinlessSimulatorWindow.mm */; };
+		004ADB3B1468C54400D732FC /* SimulatorWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 004ADB3A1468C54300D732FC /* SimulatorWindow.mm */; };
 		0052EBF412B73ADD006ED5BC /* ALmixer.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		00537D71154F6DE2008CEF00 /* lfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 00537D67154F6DE2008CEF00 /* lfs.c */; };
 		00537D72154F6DE2008CEF00 /* lfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 00537D69154F6DE2008CEF00 /* lfs.h */; };
@@ -973,7 +973,6 @@
 		C28165201B9AAC3500F16B5A /* OSXCreateDMGSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = C281651F1B9AAC3500F16B5A /* OSXCreateDMGSheet.xib */; };
 		C287481B19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = C287481A19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm */; };
 		C287481D19F6EED0002D5B27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C287481C19F6EED0002D5B27 /* Cocoa.framework */; };
-		C2942C1C1A0169B600372D6B /* SimulatorDeviceWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2942C1B1A0169B600372D6B /* SimulatorDeviceWindow.mm */; };
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
@@ -1829,8 +1828,8 @@
 		003E585B153CC3C700483125 /* lobjectivec_exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lobjectivec_exceptions.h; sourceTree = "<group>"; };
 		003E585C153CC3C700483125 /* lobjectivec_exceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = lobjectivec_exceptions.m; sourceTree = "<group>"; };
 		004A5F361368DB08003BD9DA /* Corona3rdPartyLicenses.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = Corona3rdPartyLicenses.txt; path = ../../sdk/dmg/Corona3rdPartyLicenses.txt; sourceTree = "<group>"; };
-		004ADB391468C54300D732FC /* SkinlessSimulatorWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinlessSimulatorWindow.h; sourceTree = "<group>"; };
-		004ADB3A1468C54300D732FC /* SkinlessSimulatorWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SkinlessSimulatorWindow.mm; sourceTree = "<group>"; };
+		004ADB391468C54300D732FC /* SimulatorWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorWindow.h; sourceTree = "<group>"; };
+		004ADB3A1468C54300D732FC /* SimulatorWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimulatorWindow.mm; sourceTree = "<group>"; };
 		00537D4F154F6DE2008CEF00 /* config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config; sourceTree = "<group>"; };
 		00537D50154F6DE2008CEF00 /* config.win */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.win; sourceTree = "<group>"; };
 		00537D53154F6DE2008CEF00 /* examples.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = examples.html; sourceTree = "<group>"; };
@@ -2488,8 +2487,6 @@
 		C287481919F6E01F002D5B27 /* Rtt_MacConsolePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacConsolePlatform.h; sourceTree = "<group>"; };
 		C287481A19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacConsolePlatform.mm; sourceTree = "<group>"; };
 		C287481C19F6EED0002D5B27 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		C2942C141A01608E00372D6B /* SimulatorDeviceWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorDeviceWindow.h; sourceTree = "<group>"; };
-		C2942C1B1A0169B600372D6B /* SimulatorDeviceWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimulatorDeviceWindow.mm; sourceTree = "<group>"; };
 		C2A08C221950DF2A002B7532 /* lpeg.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = lpeg.xcodeproj; path = ../../external/lpeg/lpeg.xcodeproj; sourceTree = "<group>"; };
 		C2ADB4591B6C1C31008C9BF2 /* OSXAppPackageSheet.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OSXAppPackageSheet.xib; sourceTree = "<group>"; };
 		C2AEAC1418E23B34004F30FE /* _coronatest.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = _coronatest.jar; path = ../android/resources/_coronatest.jar; sourceTree = "<group>"; };
@@ -3329,10 +3326,8 @@
 				A4AB4470143BE11200607F77 /* SampleCodeLocator.mm */,
 				C20F8AD61AD78CAB0034BD21 /* SDKList.h */,
 				C20F8AD71AD78CAB0034BD21 /* SDKList.m */,
-				C2942C141A01608E00372D6B /* SimulatorDeviceWindow.h */,
-				C2942C1B1A0169B600372D6B /* SimulatorDeviceWindow.mm */,
-				004ADB391468C54300D732FC /* SkinlessSimulatorWindow.h */,
-				004ADB3A1468C54300D732FC /* SkinlessSimulatorWindow.mm */,
+				004ADB391468C54300D732FC /* SimulatorWindow.h */,
+				004ADB3A1468C54300D732FC /* SimulatorWindow.mm */,
 				00B73D2212B720CA0057F594 /* TextEditorSupport.h */,
 				00B73D2312B720CA0057F594 /* TextEditorSupport.m */,
 				00C8225C13452C80005D1EEB /* ValidationSupportMacUI.h */,
@@ -5609,8 +5604,7 @@
 				002D1B48145BB621002B69B6 /* SPILDTopLayerView.m in Sources */,
 				F57D17711BE25E1200AABAC1 /* Rtt_AppleInputDevice.mm in Sources */,
 				A4AB4471143BE11200607F77 /* SampleCodeLocator.mm in Sources */,
-				C2942C1C1A0169B600372D6B /* SimulatorDeviceWindow.mm in Sources */,
-				004ADB3B1468C54400D732FC /* SkinlessSimulatorWindow.mm in Sources */,
+				004ADB3B1468C54400D732FC /* SimulatorWindow.mm in Sources */,
 				00B73DB012B720CA0057F594 /* TextEditorSupport.m in Sources */,
 				C2678C1F1B85753800864110 /* AppleAppBuildController.mm in Sources */,
 				00C8225E13452C80005D1EEB /* ValidationSupportMacUI.m in Sources */,
