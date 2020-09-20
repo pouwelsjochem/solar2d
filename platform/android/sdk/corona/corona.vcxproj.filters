@@ -715,9 +715,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PreferenceValue.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_Rendering.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_RenderingStream.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -1664,9 +1661,6 @@
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PreferenceValue.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_Rendering.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_RenderingStream.h">

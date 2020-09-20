@@ -27,16 +27,7 @@ AndroidScreenSurface::AndroidScreenSurface( AndroidGLView* view, S32 approximate
 	fFramebuffer( 0 ),
 	fApproximateScreenDPI( approximateScreenDpi )
 {
-// This gives error 0x502 invalid operation on Nexus One.
-// 	if ( supportsScreenCapture() )
-// 	{
-// 		glGetFramebufferAttachmentParameterivOES(
-// 			GL_FRAMEBUFFER_OES,
-// 			GL_COLOR_ATTACHMENT0_OES,
-// 			GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME_OES,
-// 			(GLint *) &fFramebuffer );
-// 		GPUError();
-// 	}
+
 }
 
 AndroidScreenSurface::~AndroidScreenSurface()

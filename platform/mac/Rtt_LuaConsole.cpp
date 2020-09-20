@@ -132,51 +132,6 @@ LuaConsole::CheckBuffer( size_t numBytes )
 	return fBuffer;
 }
 
-#if 0 // NOT USED
-static bool
-IsSpaceOrTab( char c )
-{
-	return ' ' == c || '\t' == c;
-}
-
-static char*
-StripLocalPrefix( char* str )
-{
-	const char kLocal[] = "local";
-
-	char* result = str; // Store original string in result
-
-	str = strstr( str, kLocal );
-	if ( str )
-	{
-		// Prefix must be all whitespace
-		for ( const char* iStr = result; iStr != str; iStr++ )
-		{
-			char c = *iStr;
-			if ( ! IsSpaceOrTab( c ) )
-			{
-				goto exit_gracefully;
-			}
-		}
-
-		// Trailing character after "local" must be whitespace
-		size_t len = strlen( result );
-		size_t i = ( str - result ) + strlen( kLocal );
-		if ( i < len )
-		{
-			char c = result[i];
-			if ( IsSpaceOrTab( c ) )
-			{
-				result = str;
-			}
-		}
-	}
-
-exit_gracefully:
-	return result;
-}
-#endif // 0
-
 bool
 LuaConsole::ReadLine( bool firstline )
 {

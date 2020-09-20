@@ -100,50 +100,6 @@ Matrix::SetSingular()
 #endif
 }
 
-#if 0
-void
-Matrix::Append( Matrix& lhs, const Matrix& rhs )
-{
-	// [  lhs  ] = [  lhs  ] * [  rhs  ]
-	// 
-	//             [ a b c ]   [ u v w ]
-	//           = [ d e f ] * [ x y z ]
-	//             [ 0 0 1 ]   [ 0 0 1 ]
-	if ( ! m.IsIdentity() )
-	{
-		Real* const Rtt_RESTRICT row0 = lhs.fRow0;
-		Real* const Rtt_RESTRICT row1 = lhs.fRow1;
-
-		if ( IsIdentity() )
-		{
-			Private::MatrixInitIdentityValues( row0, row1 );
-		}
-
-		const Real* Rtt_RESTRICT rhsRow0 = rhs.fRow0;
-		const Real* Rtt_RESTRICT rhsRow1 = rhs.fRow1;
-		/*
-		Real u = rhs.fRow0[0];
-		Real v = rhs.fRow0[1];
-		Real w = rhs.fRow0[2];
-		Real x = rhs.fRow1[0];
-		Real y = rhs.fRow1[1];
-		Real z = rhs.fRow1[2];
-		*/
-		Real a = row0[0];
-		Real b = row0[1];
-		row0[0] = Rtt_RealMul( a, rhsRow0[0] ) + Rtt_RealMul( b, rhsRow1[0] );
-		row0[1] = Rtt_RealMul( a, rhsRow0[1] ) + Rtt_RealMul( b, rhsRow1[1] );
-		row0[2] += Rtt_RealMul( a, rhsRow0[2] ) + Rtt_RealMul( b, rhsRow1[2] );
-
-		Real d = row1[0];
-		Real e = row1[1];
-		row1[0] = Rtt_RealMul( d, rhsRow0[0] ) + Rtt_RealMul( e, rhsRow1[0] );
-		row1[1] = Rtt_RealMul( d, rhsRow0[1] ) + Rtt_RealMul( e, rhsRow1[1] );
-		row1[2] += Rtt_RealMul( d, rhsRow0[2] ) + Rtt_RealMul( e, rhsRow1[2] );
-	}
-}
-#endif
-
 void
 Matrix::Apply( Rect& r ) const
 {

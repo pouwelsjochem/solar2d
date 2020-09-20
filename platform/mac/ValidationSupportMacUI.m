@@ -130,39 +130,6 @@ bool ValidationSupportMacUI_ValidateIOSAppName( const char* name, const char* fi
 	];
 }
 
-- (bool) runCommonFileValidationTestsInProjectPath:(NSString *)projectpath
-{
-	bool isvalid = true;
-	
-	// Validate Subdirectories for Lua files
-#if 0
-	lua_State* L = luaState;
-    
-	// Remember that this function leaves 2 elements on the Lua stack which will need to be cleared.
-	isvalid = Rtt_CommonSupportTools_ValidateLuaFilesForForbiddenSubdirectories( L, [projectpath fileSystemRepresentation] );
-	if ( ! isvalid )
-	{
-		// The file list array is on the top of the stack. Convert to an NSArray.
-		NSArray* filelist = (NSArray*)LuaCocoa_ToPropertyList( L, -1);
-		
-		[self displayAlertForFileValidationFailure:@"CannontBuildBecauseOfLuaFilesInSubdirectoriesRules" 
-			messageComment:@"The build failed because the project contains .lua files in subdirectories."
-			informativeText:@"CannontBuildBecauseOfLuaFilesInSubdirectoriesRulesInformative" 
-			informativeComment:@"Lua files must be in the project root directory. Please move your files and try again." 
-			fileList:filelist
-		 ];
-		
-	}
-	// Restore the Lua stack
-	lua_pop(L, 2);
-#endif
-	if( ! isvalid )
-	{
-		return false;
-	}
-	return true;
-}
-
 - (bool) runAndroidFileValidationTestsInProjectPath:(NSString *)projectpath
 {
 	// Currently, we don't have any more validation tests to run on the post-press-build-button step.

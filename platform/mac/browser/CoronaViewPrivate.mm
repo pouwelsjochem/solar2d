@@ -508,7 +508,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 // ----------------------------------------------------------------------------
 
-//#if 0
 - (void) setFrameSize:(NSSize)newSize
 {
 	NSDEBUG(@"CoronaViewPrivate: setFrameSize: frame %@", NSStringFromRect([self frame]));
@@ -539,7 +538,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	return frame;
 }
-//#endif // 0
 
 // Interface for hosts to send "open URL" AppleScript events
 - (void) handleOpenURL:(NSString *)urlStr

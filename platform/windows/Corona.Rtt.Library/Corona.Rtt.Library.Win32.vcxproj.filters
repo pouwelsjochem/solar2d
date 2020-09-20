@@ -230,9 +230,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformTimer.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_Rendering.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_RenderingStream.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -920,9 +917,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformTimer.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_Rendering.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Runtime.h">

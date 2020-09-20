@@ -173,7 +173,6 @@ bool WinConsolePlatform::FileExists(const char *filename) const
 
 void WinConsolePlatform::PathForFile(const char *filename, MPlatform::Directory baseDir, U32 flags, String &result) const
 {
-//#if 0
 	// Default to the "Documents" directory if given an invalid base directory type.
 	if ((baseDir < 0) || (baseDir >= MPlatform::kNumDirs))
 	{
@@ -240,7 +239,6 @@ void WinConsolePlatform::PathForFile(const char *filename, MPlatform::Directory 
 			result.Set(nullptr);
 		}
 	}
-//#endif
 }
 
 void WinConsolePlatform::GetPreference(Category category, Rtt::String * value) const

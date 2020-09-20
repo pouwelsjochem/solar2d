@@ -111,18 +111,6 @@ void luai_objcttry(lua_State* L, struct lua_longjmp* c_lua_longjmp, Pfunc a_func
 				c_lua_longjmp->status = LUA_ERR_EXCEPTION_OBJC;
 			}
 		}
- 
-#ifdef Rtt_DEBUG
-	#if 0
-		// FIXME: This breaks the Lua stack (presumably the lua_pop() is wrong)
-        // Exceptions from internal Lua calls go unreported unless we do so here (note, debug builds only)
-        NSLog(@"DEBUG: ----------------- shown in debug builds only -----------------");
-        NSLog(@"DEBUG: Runtime exception: %s", lua_tostring( L, -1 ) );
-        traceback(L);
-        NSLog(@"DEBUG: Traceback: %s", lua_tostring( L, -1 ) );
-        lua_pop( L, 2 );  // leave the stack as it was
-	#endif // 0
-#endif
 	}
 	// Expecting an NSException, but Apple's docs warn that it is possible to get something else.
 	@catch(NSException* exception)

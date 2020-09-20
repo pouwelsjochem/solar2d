@@ -160,22 +160,6 @@ IPhonePlatformCore::RegisterUserNotificationSettings() const
 	RegisterUserNotificationSettings(Rtt_UIUserNotificationTypeAlert|Rtt_UIUserNotificationTypeBadge|Rtt_UIUserNotificationTypeSound);
 }
 
-#if 0
-static bool
-IsNativeKeySupported( NSString *key )
-{
-	NSNumber *value = [NSNumber numberWithBool:YES];
-	NSDictionary *keys = [NSDictionary dictionaryWithObjectsAndKeys:
-		value, @"applicationIconBadgeNumber", 
-		value, @"applicationSupportsShakeToEdit",
-		value, @"networkActivityIndicatorVisible",
-		nil];
-
-	bool result = ( nil != [keys valueForKey:key] );
-	return result;
-}
-#endif
-
 void
 IPhonePlatformCore::SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const
 {

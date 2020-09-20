@@ -133,17 +133,6 @@ static BOOL WriteProfileString(
     Rtt_ASSERT(lpszEntry != NULL);
 
 	LONG lResult;
-#if 0 // I don't think we want the whole section deleted by accident...
-	if (lpszEntry == NULL) //delete whole section
-	{
-		HKEY hAppKey = GetAppRegistryKey();
-		if (hAppKey == NULL)
-			return FALSE;
-		lResult = ::RegDeleteKey(hAppKey, lpszSection);
-		RegCloseKey(hAppKey);
-	}
-	else 
-#endif
     if (lpszValue == NULL)
 	{
 		HKEY hSecKey = GetSectionKey(lpszSection, hkeyTopLevel);

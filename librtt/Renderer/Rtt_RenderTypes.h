@@ -26,17 +26,10 @@ struct BlendMode;
 
 struct RGBA
 {
-	#if 0 //def Rtt_BIG_ENDIAN
-		U8 a;
-		U8 b;
-		U8 g;
-		U8 r;
-	#else
-		U8 r;
-		U8 g;
-		U8 b;
-		U8 a;
-	#endif
+	U8 r;
+	U8 g;
+	U8 b;
+	U8 a;
 
 	void Clear()
 	{

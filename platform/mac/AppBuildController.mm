@@ -372,16 +372,6 @@ static NSString *kValueNotSet = @"not set";
 - (BOOL)validateProject
 {
     BOOL result = YES;
-
-#ifdef NOT_USED
-	// Run file validation tools so we can alert the users of any problems before we submit to the server.
-	NSWindow *buildWindow = [self window];
-
-	ValidationSupportMacUI *validator = [[ValidationSupportMacUI alloc] initWithParentWindow:buildWindow];
-	result = [validator runCommonFileValidationTestsInProjectPath:[self projectPath]];
-	[validator release];
-#endif // NOT_USED
-
 	return result;
 }
 
