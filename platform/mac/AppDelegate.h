@@ -149,7 +149,6 @@ namespace Rtt
 @property (nonatomic, readonly, retain) GLView* layerHostView;
 @property (nonatomic, readwrite) BOOL stopRequested;
 @property (nonatomic, readwrite) float buildDownloadProgess;
-@property (nonatomic, readwrite) BOOL respondsToBackKey;
 
 +(BOOL)offlineModeAllowed;
 

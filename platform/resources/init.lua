@@ -267,12 +267,6 @@ function Runtime:hasEventSource( eventName )
 	return system.hasEventSource( eventName )
 end
 
--- TODO: implement in a transparent way
-function Runtime:setCheckGlobals( onOff )
-	-- Runtime._coronaCheckGlobals = onOff
-end
--- luacheck: pop
-
 -------------------------------------------------------------------------------
 -- Per-frame logic
 -------------------------------------------------------------------------------
