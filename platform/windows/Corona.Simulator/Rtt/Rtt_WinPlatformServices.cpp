@@ -361,35 +361,6 @@ WinPlatformServices::SetSecurePreference( const char *key, const char *value ) c
 	return result;
 }
 
-void 
-WinPlatformServices::GetLibraryPreference( const char *key, String * value ) const
-{
-	// Get the value from HKLM
-	WinString strResult, strKey;
-    strKey.SetUTF8( key );
-    bool bFound = GetProfileString( &strResult, Rtt_REGISTRY_SECTION, strKey.GetTCHAR(),
-                                    HKEY_LOCAL_MACHINE );
-
-    if( bFound )
-	{
-		value->Set( strResult.GetUTF8() );
-	}
-}
-
-void 
-WinPlatformServices::SetLibraryPreference( const char *key, const char *value ) const
-{
-	// Set the value in HKLM
-	if ( Rtt_VERIFY( key ) )
-	{
-        WinString strKey, strValue;
-        strKey.SetUTF8( key );
-        strValue.SetUTF8( value );
-        WriteProfileString( Rtt_REGISTRY_SECTION, strKey.GetTCHAR(), strValue.GetTCHAR(),
-                            HKEY_LOCAL_MACHINE );
-	}
-}
-
 // Checks for Internet connectivity.
 // Returns true if the Internet is assumed available. Returns false if not.
 bool

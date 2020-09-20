@@ -25,9 +25,6 @@
 namespace Rtt
 {
 
-struct RecentProjectInfo;
-// ----------------------------------------------------------------------------
-
 class MacSimulatorServices : public MSimulatorServices
 {
 	public:
@@ -44,11 +41,8 @@ class MacSimulatorServices : public MSimulatorServices
         virtual const char* GetCurrProjectPath( ) const;
         virtual void SetWindowCloseListener(LuaResource* resource) const;
         virtual void CloseWindow( ) const;
-        virtual const char* GetPreference(const char *prefName) const;
-        virtual void SetPreference(const char *prefName, const char *prefValue) const;
         virtual void SetDocumentEdited(bool value) const;
         virtual bool GetDocumentEdited( ) const;
-		virtual void GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const;
         virtual void SetCursorRect(const char *cursorName, int x, int y, int w, int h) const;
         virtual void SetWindowResizeListener(LuaResource* resource) const;
         virtual void SetWindowTitle(const char *windowTitle) const;

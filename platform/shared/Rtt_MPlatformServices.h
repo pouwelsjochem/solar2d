@@ -37,9 +37,6 @@ class MPlatformServices
 		virtual void GetSecurePreference( const char *key, String * value ) const = 0;
 		virtual bool SetSecurePreference( const char *key, const char *value ) const = 0;
 
-		virtual void GetLibraryPreference( const char *key, String * value ) const = 0;
-		virtual void SetLibraryPreference( const char *key, const char *value ) const = 0;
-
 	public:
 		virtual bool IsInternetAvailable() const = 0;
 		virtual bool IsLocalWifiAvailable() const = 0;

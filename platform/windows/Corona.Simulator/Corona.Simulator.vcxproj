@@ -114,7 +114,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_JavaHost.h" />
     <ClInclude Include="..\..\..\modules\simulator\Rtt_LuaLibSimulator.h" />
     <ClInclude Include="..\..\..\modules\simulator\Rtt_MSimulatorServices.h" />
-    <ClInclude Include="..\..\..\modules\simulator\Rtt_SimulatorRecents.h" />
     <ClInclude Include="..\..\android\Rtt_AndroidAppPackager.h" />
     <ClInclude Include="..\..\shared\AntHost.h" />
     <ClInclude Include="..\..\shared\jniUtils.h" />

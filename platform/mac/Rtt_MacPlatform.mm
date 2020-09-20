@@ -1791,19 +1791,6 @@ MacPlatformServices::SetPreference( const char *key, const char *value ) const
 	}
 }
 
-// These "*LibraryPreference" APIs are deprecated and just call the normal preference APIs
-void
-MacPlatformServices::GetLibraryPreference( const char *key, Rtt::String * value ) const
-{
-	GetPreference(key, value);
-}
-
-void 
-MacPlatformServices::SetLibraryPreference( const char *key, const char *value ) const
-{
-	SetPreference(key, value);
-}
-
 void
 MacPlatformServices::GetSecurePreference( const char *key, Rtt::String * value ) const
 {

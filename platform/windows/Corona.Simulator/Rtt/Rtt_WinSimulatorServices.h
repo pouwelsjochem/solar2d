@@ -60,7 +60,6 @@ class WinSimulatorServices : public MSimulatorServices
 		virtual const char* GetCurrProjectPath( ) const;
 		virtual void SetWindowCloseListener(LuaResource* resource) const;
 		virtual void CloseWindow( ) const;
-		virtual void GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const;
 		virtual const char* GetPreference(const char *prefName) const;
 		virtual void SetPreference(const char *prefName, const char *prefValue) const;
         virtual void SetDocumentEdited(bool value) const;

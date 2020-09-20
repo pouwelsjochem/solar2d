@@ -20,8 +20,6 @@ namespace Rtt
 {
 // ----------------------------------------------------------------------------
 
-struct RecentProjectInfo;
-
 class MSimulatorServices
 {
 	public:
@@ -31,11 +29,8 @@ class MSimulatorServices
         virtual void SelectOpenFilename(const char* currDirectory, const char* extn, LuaResource* resource) const = 0;
         virtual void SelectSaveFilename(const char* newFilename, const char* currDirectory, const char* extn, LuaResource* resource) const = 0;
         virtual const char* GetCurrProjectPath( ) const = 0;
-		virtual void GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const = 0;
         virtual void SetWindowCloseListener(LuaResource* resource) const = 0;
         virtual void CloseWindow( ) const = 0;
-        virtual const char* GetPreference(const char *prefName) const = 0;
-        virtual void SetPreference(const char *prefName, const char *prefValue) const = 0;
         virtual void SetDocumentEdited(bool value) const = 0;
         virtual bool GetDocumentEdited( ) const = 0;
         virtual void SetCursorRect(const char *cursorName, int x, int y, int w, int h) const = 0;

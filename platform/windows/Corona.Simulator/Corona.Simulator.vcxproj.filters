@@ -70,9 +70,6 @@
     <ClInclude Include="..\..\..\modules\simulator\Rtt_MSimulatorServices.h">
       <Filter>%28root%29\modules\simulator</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\modules\simulator\Rtt_SimulatorRecents.h">
-      <Filter>%28root%29\modules\simulator</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\modules\simulator\Rtt_LuaLibSimulator.h">
       <Filter>%28root%29\modules\simulator</Filter>
     </ClInclude>

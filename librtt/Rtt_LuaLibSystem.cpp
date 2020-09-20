@@ -551,23 +551,6 @@ IsPreferenceCategoryReadOnly(const char* categoryName)
 	return false;
 }
 
-// system.setPreference()
-static int
-setPreference( lua_State *L )
-{
-	if ( !L )
-	{
-		return 0;
-	}
-
-	const char kMessage[] =
-			"system.setPreference() function is not supported. "
-			"Use the system.setPreferences() function instead.";
-	CoronaLuaError( L, kMessage );
-	lua_pushboolean( L, 0 );
-	return 1;
-}
-
 // system.setPreferences( categoryName, { key1=value1, key2=value2, ... } )
 static int
 setPreferences( lua_State *L )
@@ -1351,7 +1334,6 @@ LuaLibSystem::Initialize( lua_State *L )
 		{ "canOpenURL", canOpenURL },
 		{ "vibrate", vibrate },
 		{ "getPreference", getPreference },
-		{ "setPreference", setPreference },
 		{ "setPreferences", setPreferences },
 		{ "deletePreference", deletePreference },
 		{ "deletePreferences", deletePreferences },

@@ -15,7 +15,6 @@
 #import "CoronaWindowController.h"
 #import "SampleCodeLocator.h"
 #include "Rtt_TargetDevice.h"
-#include "Rtt_SimulatorRecents.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacPlatform.h"
@@ -230,46 +229,6 @@ MacSimulatorServices::GetCurrProjectPath( ) const
 }
 
 void
-MacSimulatorServices::GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const
-{
-	NSArray *recentDocs = [fOwner GetRecentDocuments];
-	
-	int recents = (int)[recentDocs count] > 10 ? 10 : (int)[recentDocs count];
-	for (int i = 0; i < recents; i++)
-	{
-		RecentProjectInfo *info = new RecentProjectInfo();	
-		NSString *str = [[recentDocs objectAtIndex:i] path];
-
-		// Previously, we stored the path to the main.lua file in the recent documents list,
-		// now we store just the path to the project, so adjust any old paths
-		if ([[str lastPathComponent] isEqualToString:@"main.lua"])
-		{
-			str = [str stringByDeletingLastPathComponent];
-		}
-
-        const char *fullPathString = [str UTF8String];
-        
-        if (fullPathString != NULL)
-        {
-            info->fullURLString = fullPathString;
-            
-            const char *formattedString = [[str lastPathComponent] UTF8String];
-            
-            if (formattedString != NULL)
-            {
-                info->formattedString = formattedString;
-            }
-            else
-            {
-                info->formattedString = fullPathString;
-            }
-
-            list->Append(info);
-        }
-	}
-}
-
-void
 MacSimulatorServices::SetWindowCloseListener(LuaResource* resource) const
 {
     if (resource == NULL)
@@ -381,25 +340,6 @@ void
 MacSimulatorServices::CloseWindow() const
 {
     [fWindowController close];
-}
-
-// Get the value of the given preference (user registry setting)
-const char*
-MacSimulatorServices::GetPreference(const char *prefName) const
-{
-    const char *prefValue = [[[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithExternalString:prefName]] UTF8String];
-    
-    return prefValue;
-}
-
-// Set the value of the given preference (user registry setting)
-void
-MacSimulatorServices::SetPreference(const char *prefName, const char *prefValue) const
-{
-    NSString *nsPrefName = [NSString stringWithExternalString:prefName];
-    NSString *nsPrefValue = [NSString stringWithExternalString:prefValue];
-
-    [[NSUserDefaults standardUserDefaults] setObject:nsPrefValue forKey:nsPrefName];
 }
 
 void

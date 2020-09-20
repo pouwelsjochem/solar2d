@@ -2131,7 +2131,6 @@
 		0727BA8616E68FE800981C4B /* network.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = network.dylib; path = "../../plugins/build-core/network/mac/network.dylib"; sourceTree = "<group>"; };
 		0799601317EBC78000A632B9 /* Rtt_MacViewCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewCallback.h; sourceTree = "<group>"; };
 		0799601417EBC78000A632B9 /* Rtt_MacViewCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewCallback.mm; sourceTree = "<group>"; };
-		0799601D17F0FFF100A632B9 /* Rtt_SimulatorRecents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SimulatorRecents.h; path = ../../modules/simulator/Rtt_SimulatorRecents.h; sourceTree = "<group>"; };
 		07EB77BA178DD3200089B3C5 /* Rtt_SurfaceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SurfaceInfo.h; sourceTree = "<group>"; };
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = ../../../System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -3838,7 +3837,6 @@
 		A4663DE7143688640091BD47 /* simulator */ = {
 			isa = PBXGroup;
 			children = (
-				0799601D17F0FFF100A632B9 /* Rtt_SimulatorRecents.h */,
 				A41A186B143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.cpp */,
 				A41A186C143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.h */,
 				A41A186D143A6F7E00F1BF0D /* Rtt_MSimulatorServices.h */,

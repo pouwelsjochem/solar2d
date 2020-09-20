@@ -120,48 +120,6 @@ MacPlatformServices::SetPreference( const char *key, const char *value ) const
 }
 
 void
-MacPlatformServices::GetLibraryPreference( const char *key, Rtt::String * value ) const
-{
-	NSString *k = [[NSString alloc] initWithUTF8String:key];
-
-	const char *result = NULL;
-
-	CFPropertyListRef v = CFPreferencesCopyValue( (CFStringRef)k, kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost);
-	if ( v )
-	{
-		if ( Rtt_VERIFY( CFStringGetTypeID() == CFGetTypeID( v ) ) )
-		{
-			result = [(NSString*)v UTF8String];
-		}
-
-		CFRelease( v );
-	}
-
-	[k release];
-
-	value->Set( result );
-}
-
-void 
-MacPlatformServices::SetLibraryPreference( const char *key, const char *value ) const
-{
-	if ( Rtt_VERIFY( key ) )
-	{
-		NSString *k = [[NSString alloc] initWithUTF8String:key];
-
-		// TODO: Figure out how to do this on a suite domain
-		NSString *v = ( value ? [[NSString alloc] initWithUTF8String:value] : nil );
-
-		CFPreferencesSetValue( (CFStringRef)k, (CFPropertyListRef)v, kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost);
-
-		(void)Rtt_VERIFY( CFPreferencesSynchronize( kCoronaDomain, kCFPreferencesAnyUser, kCFPreferencesCurrentHost ) );
-
-		[v release];
-		[k release];
-	}
-}
-
-void
 MacPlatformServices::GetSecurePreference( const char *key, Rtt::String * value ) const
 {
 	UInt32 pwdLen = 0;

@@ -18,7 +18,6 @@
 
 #include <string.h>
 #include "Rtt_Array.h"
-#include "Rtt_SimulatorRecents.h"
 #include "Rtt_FileSystem.h"
 
 // ----------------------------------------------------------------------------
@@ -199,108 +198,6 @@ closeWindow( lua_State *L )
 }
 
 static int
-getRecentProjects( lua_State *L )
-{
-	Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
-	const MSimulatorServices *simulator =
-		(const MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-	
-	//Runtime* runtime = LuaContext::GetRuntime( L );
-	Rtt::LightPtrArray<RecentProjectInfo> recentDocs(Rtt_AllocatorCreate());
-	
-	simulator->GetRecentDocs(&recentDocs);
-		
-	lua_createtable( L, 0, 0);
-	{
-		int luaHeaderTableStackIndex = lua_gettop( L );
-
-		for (int i = 0, count = 1; i < (int)recentDocs.Length(); i++)
-		{
-			const char *url		= recentDocs[i]->formattedString.c_str();
-			const char *fullUrl = recentDocs[i]->fullURLString.c_str();
-
-			// Only consider paths that still exist
-			if (Rtt_FileExists(fullUrl))
-			{
-				lua_newtable(L);
-				{
-					int index = lua_gettop( L );
-					lua_pushstring( L, url);
-					lua_setfield(L, index, "formattedString");
-
-					lua_pushstring( L, fullUrl);
-					lua_setfield(L,index, "fullURLString");
-
-				}
-				lua_rawseti( L, luaHeaderTableStackIndex, count );
-
-				++count;
-			}
-
-			delete recentDocs[i];
-		}
-	}
-	
-	return 1;
-}
-
-static int
-getPreference( lua_State *L )
-{
-    Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
-    const MSimulatorServices *simulator = (const MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-    
-    const char *prefName = NULL;
-
-    if ( lua_isstring( L, 1 ) )
-    {
-        prefName = lua_tostring( L, 1 );
-    }
-    else
-    {
-        luaL_error( L, "ERROR: simulator.getPreference(name) requires a string as the first argument" );
-    }
-
-    const char *prefValue = simulator->GetPreference(prefName);
-    
-    lua_pushstring( L, prefValue );
-    
-    return 1;
-}
-
-static int
-setPreference( lua_State *L )
-{
-    Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
-    const MSimulatorServices *simulator = (const MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-    
-    const char *prefName = lua_tostring( L, 1);
-    const char *prefValue = NULL;
-    
-    if ( lua_isstring( L, 1 ) )
-    {
-        prefName = lua_tostring( L, 1 );
-    }
-    else
-    {
-        luaL_error( L, "ERROR: simulator.setPreference(name, value) requires a string as the first argument" );
-    }
-    
-    if ( lua_isstring( L, 2 ) )
-    {
-        prefValue = lua_tostring( L, 2 );
-    }
-    else
-    {
-        luaL_error( L, "ERROR: simulator.setPreference(name, value) requires a string as the second argument" );
-    }
-    
-    simulator->SetPreference(prefName, prefValue);
-    
-    return 0;
-}
-
-static int
 setDocumentEdited( lua_State *L )
 {
     Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
@@ -474,12 +371,9 @@ LuaLibSimulator::Open( lua_State *L )
 	const luaL_Reg kVTable[] =
 	{
 		{ "show", show },
-		{ "getRecentProjects", getRecentProjects },
 		{ "getCurrentProjectPath", getCurrProjectPath },
 		{ "setWindowCloseListener", setWindowCloseListener },
 		{ "closeWindow", closeWindow },
-		{ "getPreference", getPreference },
-		{ "setPreference", setPreference },
 		{ "setDocumentEdited", setDocumentEdited },
 		{ "getDocumentEdited", getDocumentEdited },
 		{ "setCursorRect", setCursorRect },

@@ -40,9 +40,6 @@ class MacPlatformServices : public MPlatformServices
 		virtual bool IsLocalWifiAvailable() const;
 		virtual void Terminate() const;
 
-		virtual void GetLibraryPreference( const char *key, Rtt::String * value ) const;
-		virtual void SetLibraryPreference( const char *key, const char *value ) const;
-
 		virtual void Sleep( int milliseconds ) const;
 
 	private:

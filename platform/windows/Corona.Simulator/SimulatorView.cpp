@@ -41,7 +41,6 @@
 #include "WinGlobalProperties.h"  // WMU_ message IDs
 #include "MessageDlg.h"   // Alert
 #include "CoronaInterface.h"
-#include "Rtt_SimulatorRecents.h"
 
 // ----------------------------------------------------------------------------
 
@@ -1647,65 +1646,6 @@ bool CSimulatorView::ValidateOpenGL()
 		mCoronaContainerControl.ShowWindow(SW_SHOW);
 	}
 	return true;
-}
-
-/// Gets a list of recent projects.
-void CSimulatorView::GetRecentDocs(Rtt::LightPtrArray<Rtt::RecentProjectInfo> *listPointer)
-{
-	// Validate.
-	if (!listPointer)
-	{
-		return;
-	}
-
-	// Delete all entries in the given list.
-	listPointer->Clear();
-
-	// Fetch this application's recent file list.
-	CRecentFileList *recentListPointer = ((CSimulatorApp*)AfxGetApp())->GetRecentFileList();
-	if (!recentListPointer)
-	{
-		return;
-	}
-
-	// Copy information in this app's recents list to the given list.
-	WinString stringTranscoder;
-	int listCount = recentListPointer->GetSize();
-	if (listCount > 10)
-	{
-		listCount = 10;
-	}
-	for (int index = 0; index < listCount; index++)
-	{
-		// Fetch the next file path in the recents list.
-		// Note: Will be an empty string if there are no more recent files in the collection.
-		CString lastFilePathName = (*recentListPointer)[index];
-		if (lastFilePathName.IsEmpty())
-		{
-			continue;
-		}
-
-		// Create a recent project info object.
-		Rtt::RecentProjectInfo *infoPointer = new Rtt::RecentProjectInfo();
-		if (!infoPointer)
-		{
-			continue;
-		}
-
-		// Copy the project's folder name to the info object.
-		CString sTitle = lastFilePathName;
-		sTitle = CCoronaProject::RemoveMainLua(sTitle);
-		sTitle = sTitle.Right(sTitle.GetLength() - sTitle.ReverseFind(_T('\\')) - 1);
-		stringTranscoder.SetTCHAR(sTitle);
-		infoPointer->formattedString = stringTranscoder.GetUTF8();
-
-		// Copy the project's "main.lua" file path to the info object.
-		stringTranscoder.SetTCHAR(lastFilePathName);
-		infoPointer->fullURLString = stringTranscoder.GetUTF8();
-
-		// Add the info object to the given collection.
-		listPointer->Append(infoPointer);
-	}
 }
 
 /// <summary>

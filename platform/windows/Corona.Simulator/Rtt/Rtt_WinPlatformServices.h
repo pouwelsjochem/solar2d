@@ -41,9 +41,6 @@ class WinPlatformServices : public MPlatformServices
 		virtual void GetSecurePreference(const char *key, String * value) const;
 		virtual bool SetSecurePreference( const char *key, const char *value ) const;
 
-		virtual void GetLibraryPreference( const char *key, String * value ) const;
-		virtual void SetLibraryPreference( const char *key, const char *value ) const;
-
 		virtual bool IsInternetAvailable() const;
 		virtual bool IsLocalWifiAvailable() const;
 		virtual void Terminate() const;

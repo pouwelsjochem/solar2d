@@ -97,59 +97,6 @@ void WinSimulatorServices::CloseWindow( ) const
 	Rtt_TRACE_SIM( ( "WARNING: CloseWindow not available on Windows\n" ) );
 }
 
-// Get the value of the given preference (user registry setting)
-const char* WinSimulatorServices::GetPreference(const char *prefName) const
-{
-	static char sStringBuffer[1024];
-
-	// Fetch the Corona Simulator's registry preferences accessing object.
-	auto storedPreferencesPointer = Interop::Storage::RegistryStoredPreferences::ForSimulatorPreferences();
-	if (!storedPreferencesPointer)
-	{
-		return nullptr;
-	}
-
-	// Attempt to fetch the requested preference from the registry.
-	auto fetchResult = storedPreferencesPointer->Fetch(prefName);
-	if (fetchResult.HasFailed())
-	{
-		return nullptr;
-	}
-
-	// Attempt to convert the preference value to string, if not already a string.
-	auto conversionResult = fetchResult.GetValue().ToString();
-	if (conversionResult.HasFailed() || conversionResult.GetValue().IsNull())
-	{
-		return nullptr;
-	}
-
-	// Success! Copy the preference value string to a static buffer and return it.
-	sStringBuffer[0] = '\0';
-	strcpy_s(sStringBuffer, sizeof(sStringBuffer), conversionResult.GetValue()->c_str());
-	return sStringBuffer;
-}
-
-// Set the value of the given preference (user registry setting)
-void WinSimulatorServices::SetPreference(const char *prefName, const char *prefValue) const
-{
-	// Validate.
-	if (Rtt_StringIsEmpty(prefName))
-	{
-		return;
-	}
-
-	// Fetch the Corona Simulator's registry preferences accessing object.
-	auto storedPreferencesPointer = Interop::Storage::RegistryStoredPreferences::ForSimulatorPreferences();
-	if (!storedPreferencesPointer)
-	{
-		return;
-	}
-
-	// Write the given prefernce key/value pair to the registry.
-	Rtt::Preference preference(prefName, Rtt::PreferenceValue(prefValue));
-	storedPreferencesPointer->UpdateWith(preference);
-}
-
 // Get the value of the document edited flag
 bool WinSimulatorServices::GetDocumentEdited() const
 {
@@ -231,12 +178,6 @@ void WinSimulatorServices::SetCursorRect(const char *cursorName, int x, int y, i
 	{
 		runtimeEnvironmentPointer->RemoveMouseCursorRegion(region);
 	}
-}
-
-// Gets a list of recent projects
-void WinSimulatorServices::GetRecentDocs(LightPtrArray<RecentProjectInfo> *list) const
-{
-	fSimulatorView.GetRecentDocs(list);
 }
 
 // stub to match Mac implementation

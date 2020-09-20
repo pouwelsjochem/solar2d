@@ -18,10 +18,6 @@
 
 
 #pragma region Forward Declarations
-namespace Rtt
-{
-	struct RecentProjectInfo;
-}
 namespace Gdiplus
 {
 	class Bitmap;
@@ -57,7 +53,6 @@ class CSimulatorView : public CView
 		const Rtt::PlatformSimulator::Config& GetDeviceConfig() { return mDeviceConfig; }
 		void UpdateSimulatorSkin();
 		Interop::SimulatorRuntimeEnvironment* GetRuntimeEnvironment()  { return mRuntimeEnvironmentPointer; }
-		void GetRecentDocs(Rtt::LightPtrArray<Rtt::RecentProjectInfo> *list);
 		void PostOpenWithPath(CString fileName);
 
 		/// <summary>
