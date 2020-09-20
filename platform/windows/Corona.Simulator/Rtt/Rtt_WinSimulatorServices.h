@@ -69,7 +69,6 @@ class WinSimulatorServices : public MSimulatorServices
         virtual void SetWindowResizeListener(LuaResource* resource) const;
 		virtual void SetWindowTitle(const char *title) const;
 		virtual void OpenTextEditor(const char *filename) const;
-        virtual void OpenColorPanel(double r, double g, double b, double a, LuaResource* callback) const;
 		virtual void SetBuildMessage(const char *message) const;
 		virtual bool RelaunchProject() const;
 		virtual bool EditProject(const char *name) const;

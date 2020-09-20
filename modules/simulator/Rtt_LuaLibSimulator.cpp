@@ -464,76 +464,6 @@ openTextEditor( lua_State *L )
     return 0;
 }
 
-static int
-openColorPanel( lua_State *L )
-{
-    Rtt_ASSERT( lua_islightuserdata( L, lua_upvalueindex( 1 ) ) );
-    MSimulatorServices *simulator = (MSimulatorServices *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-    bool gotColorPart = false;
-    double r = 0, g = 0, b = 0, a = 1;
-
-    if( lua_istable( L, 1 ) )
-    {
-        // It's a color table
-
-        lua_getfield( L, 1, "r" );
-        if (lua_type( L, -1 ) == LUA_TNUMBER)
-        {
-            r = luaL_checkreal( L, -1 );
-            gotColorPart = true;
-        }
-        lua_pop( L, 1 );
-
-        lua_getfield( L, 1, "g" );
-        if (lua_type( L, -1 ) == LUA_TNUMBER)
-        {
-            g = luaL_checkreal( L, -1 );
-            gotColorPart = true;
-        }
-        lua_pop( L, 1 );
-
-        lua_getfield( L, 1, "b" );
-        if (lua_type( L, -1 ) == LUA_TNUMBER)
-        {
-            b = luaL_checkreal( L, -1 );
-            gotColorPart = true;
-        }
-        lua_pop( L, 1 );
-
-        lua_getfield( L, 1, "a" );
-        if (lua_type( L, -1 ) == LUA_TNUMBER)
-        {
-            a = luaL_checkreal( L, -1 );
-            gotColorPart = true;
-        }
-        lua_pop( L, 1 );
-    }
-
-    if ( Lua::IsListener( L, 2, CompletionEvent::kName ) )
-    {
-        LuaResource *resource = NULL;
-
-        if (! gotColorPart)
-        {
-            luaL_error( L, "ERROR: simulator.openColorPanel(color, listener) requires a color table as argument #1" );
-        }
-
-        resource = Rtt_NEW( & platform.GetAllocator(), LuaResource( LuaContext::GetContext( L )->LuaState(), 2 ) );
-
-        simulator->OpenColorPanel(r, g, b, a, resource);
-    }
-    else if (lua_isnil(L, 2))
-    {
-        simulator->OpenColorPanel(0, 0, 0, 0, NULL);
-    }
-    else
-    {
-        luaL_error( L, "ERROR: simulator.openColorPanel(color, listener) requires a listener as argument #2" );
-    }
-
-    return 0;
-}
-
 // ----------------------------------------------------------------------------
 
 const char LuaLibSimulator::kName[] = "simulator";
@@ -556,7 +486,6 @@ LuaLibSimulator::Open( lua_State *L )
 		{ "setWindowResizeListener", setWindowResizeListener },
 		{ "setWindowTitle", setWindowTitle },
 		{ "openTextEditor", openTextEditor },
-		{ "openColorPanel", openColorPanel },
 
 		{ NULL, NULL }
 	};

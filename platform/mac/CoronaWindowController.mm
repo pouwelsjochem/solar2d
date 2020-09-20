@@ -324,8 +324,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
     windowShouldCloseBlock = nil;
 	[windowCloseCompletionBlock release];
 	windowCloseCompletionBlock = nil;
-    [fColorPanelCallbackBlock release];
-    fColorPanelCallbackBlock = nil;
 
 	[super dealloc];
 }
@@ -367,10 +365,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 // But NSWindowController close or NSWindow close will bypass windowShouldClose and come here directly.
 - (void) windowWillClose:(NSNotification*)the_notification
 {
-    // If this window is showing the colorPanel, hide it
-    [self hideColorPanel];
-    [self setColorPanelCallbackBlock:nil];
-
 	if ( nil != windowCloseCompletionBlock )
 	{
 		windowCloseCompletionBlock();
@@ -453,43 +447,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
     // NSLog(@"CoronaWindowController:windowDidExitFullScreen: %@", notification);
     [fView.glView setInFullScreenTransition:NO];
     [self windowWillResize:self.window toSize:[self.window frame].size];
-}
-
-// Handle Color Panel functionality of Simulator Extension windows
-
-- (void) setColorPanelCallbackBlock:(void (^)(double r, double g, double b, double a))block
-{
-	[fColorPanelCallbackBlock release];
-	fColorPanelCallbackBlock = [block copy];
-}
-
-- (void) colorPanelAction:(id) sender
-{
-    NSColorPanel *colorPanel = (NSColorPanel *) sender;
-    NSColor *color = [[colorPanel color] colorUsingColorSpace:[NSColorSpace deviceRGBColorSpace]]; // Ensure color is RGB
-
-    // NSLog(@"colorPanelAction: %@", color);
-
-    if (fColorPanelCallbackBlock != nil)
-    {
-        fColorPanelCallbackBlock([color redComponent], [color greenComponent], [color blueComponent], [color alphaComponent]);
-    }
-}
-
-- (void) hideColorPanel
-{
-	// Cocoa doesn't provide an API to hide the color panel
-	// so we have to do it by hand
-    NSArray *windows = [NSApp windows];
-
-    for( NSWindow *w in windows)
-    {
-        if( [w isKindOfClass:[NSColorPanel class]] )
-        {
-            [w orderOut:nil];
-            break;
-        }
-    }
 }
 
 @end

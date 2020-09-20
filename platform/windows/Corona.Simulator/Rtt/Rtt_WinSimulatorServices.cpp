@@ -252,12 +252,6 @@ void WinSimulatorServices::OpenTextEditor(const char *filename) const
 }
 
 // stub to match Mac implementation
-void WinSimulatorServices::OpenColorPanel(double r, double g, double b, double a, LuaResource* callback) const
-{
-	Rtt_TRACE_SIM( ( "WARNING: OpenColorPanel not available on Windows\n" ) );
-}
-
-// stub to match Mac implementation
 void WinSimulatorServices::SetBuildMessage(const char *message) const
 {
 	Rtt_TRACE_SIM( ( "WARNING: SetBuildMessage not available on Windows\n" ) );

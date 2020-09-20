@@ -45,7 +45,6 @@ namespace Rtt
         BOOL (^windowShouldCloseBlock)(void);
         void (^windowCloseCompletionBlock)(void);
         BOOL (^windowWillResizeBlock)(int oldWidth, int oldHeight, int newWidth, int newHeight);
-        void (^fColorPanelCallbackBlock)(double r, double g, double b, double a);
 }
 
 @property (nonatomic, readonly, getter=view) CoronaView *fView;
@@ -66,10 +65,6 @@ namespace Rtt
 - (void) setWindowDidCloseCompletionBlock:(void (^)(void))block;
 - (void) setWindowShouldCloseBlock:(BOOL (^)(void))block;
 - (void) setWindowWillResizeBlock:(BOOL (^)(int oldWidth, int oldHeight, int newWidth, int newHeight))block;
-
-- (void) colorPanelAction:(id)sender;
-- (void) setColorPanelCallbackBlock:(void (^)(double r, double g, double b, double a))block;
-- (void) hideColorPanel;
 @end
 
 // ----------------------------------------------------------------------------

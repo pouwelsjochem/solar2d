@@ -53,7 +53,6 @@ class MacSimulatorServices : public MSimulatorServices
         virtual void SetWindowResizeListener(LuaResource* resource) const;
         virtual void SetWindowTitle(const char *windowTitle) const;
         virtual void OpenTextEditor(const char *filename) const;
-        virtual void OpenColorPanel(double r, double g, double b, double a, LuaResource* callback) const;
 		virtual void SetBuildMessage(const char *message) const;
 		virtual bool RelaunchProject( ) const;
 		virtual bool EditProject( const char *name ) const;
@@ -64,9 +63,6 @@ class MacSimulatorServices : public MSimulatorServices
 		AppDelegate *fOwner;
         CoronaWindowController *fWindowController;
         NSString *fResourcePath;
-#ifdef Rtt_INCLUDE_COLOR_PANEL // color panel is no longer used and is problematic on some macOS versions
-        NSColorPanel *fColorPanel;
-#endif
 };
 
 // ----------------------------------------------------------------------------

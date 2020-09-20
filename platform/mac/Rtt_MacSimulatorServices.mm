@@ -32,18 +32,8 @@ namespace Rtt
 MacSimulatorServices::MacSimulatorServices( AppDelegate *owner, CoronaWindowController *windowController, NSString *resourcePath )
 :	fOwner( owner ),
     fResourcePath( resourcePath )
-#ifdef Rtt_INCLUDE_COLOR_PANEL
-    , fColorPanel([NSColorPanel sharedColorPanel])
-#endif
 {
     fWindowController = windowController;
-
-#ifdef Rtt_INCLUDE_COLOR_PANEL
-   // Initialize the color picker
-    [fColorPanel setContinuous:NO];
-    [fColorPanel setShowsAlpha:YES];
-#endif
-
 	[SampleCodeLocator sharedInstance];
 }
 
@@ -438,58 +428,6 @@ MacSimulatorServices::OpenTextEditor(const char *filename) const
     }
     
     TextEditorSupport_LaunchTextEditorWithFile(filepath, 0);
-}
-
-void
-MacSimulatorServices::OpenColorPanel(double r, double g, double b, double a, LuaResource* callback) const
-{
-#ifdef Rtt_INCLUDE_COLOR_PANEL
-    if (callback == NULL)
-    {
-        [fWindowController setColorPanelCallbackBlock:nil];
-        [fWindowController hideColorPanel];
-    }
-    else
-    {
-        void (^colorPanelCallbackBlock)(double r, double g, double b, double a) = ^(double r, double g, double b, double a)
-        {
-            CompletionEvent e;
-            int nargs = callback->PushListenerAndEvent( e );
-            if ( nargs > 0 )
-            {
-                lua_State *L = callback->L(); Rtt_ASSERT( L );
-
-                RuntimeGuard guard( * LuaContext::GetRuntime( L ) );
-
-                lua_pushstring( L, "colorPicked" );
-                lua_setfield( L, -2, "action" );
-
-                lua_pushnumber( L, r );
-                lua_setfield( L, -2, "r" );
-
-                lua_pushnumber( L, g );
-                lua_setfield( L, -2, "g" );
-
-                lua_pushnumber( L, b );
-                lua_setfield( L, -2, "b" );
-
-                lua_pushnumber( L, a );
-                lua_setfield( L, -2, "a" );
-
-                LuaContext::DoCall( L, nargs, 0 );
-            }
-        };
-
-        [fColorPanel setTarget:fWindowController];
-        [fColorPanel setAction:@selector(colorPanelAction:)];
-
-        [fWindowController setColorPanelCallbackBlock:colorPanelCallbackBlock];
-
-        [fColorPanel setColor:[NSColor colorWithSRGBRed:(CGFloat)r green:(CGFloat)g blue:(CGFloat)b alpha:(CGFloat)a]];
-
-        [NSApp orderFrontColorPanel:nil];
-    }
-#endif // Rtt_INCLUDE_COLOR_PANEL
 }
 
 void
