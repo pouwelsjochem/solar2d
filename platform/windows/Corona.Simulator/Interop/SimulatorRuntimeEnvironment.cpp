@@ -16,11 +16,9 @@
 #include "Resource.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaContext.h"
-#include "Rtt_LuaLibSimulator.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_WinPlatform.h"
-#include "Rtt_WinSimulatorServices.h"
 #include "Simulator.h"
 #include "SimulatorView.h"
 #include "WinGlobalProperties.h"
@@ -34,9 +32,7 @@ SimulatorRuntimeEnvironment::SimulatorRuntimeEnvironment(const SimulatorRuntimeE
 :	RuntimeEnvironment(settings),
 	fLoadedEventHandler(this, &SimulatorRuntimeEnvironment::OnRuntimeLoaded),
 	fTerminatingEventHandler(this, &SimulatorRuntimeEnvironment::OnRuntimeTerminating),
-	fLuaMouseEventCallback(this, &SimulatorRuntimeEnvironment::OnLuaMouseEventReceived),
-	fDeviceSimulatorServicesPointer(nullptr),
-	fCoronaSimulatorServicesPointer(settings.CoronaSimulatorServicesPointer)
+	fDeviceSimulatorServicesPointer(nullptr)
 {
 	// Create a device services object if given a device configuration to simulate.
 	if (settings.DeviceConfigPointer)
@@ -70,41 +66,6 @@ SimulatorRuntimeEnvironment::~SimulatorRuntimeEnvironment()
 MDeviceSimulatorServices* SimulatorRuntimeEnvironment::GetDeviceSimulatorServices() const
 {
 	return fDeviceSimulatorServicesPointer;
-}
-
-void SimulatorRuntimeEnvironment::AddMouseCursorRegion(
-	Rtt::WinInputDeviceManager::CursorStyle style, const RECT& region)
-{
-	MouseCursorRegion cursorRegion{};
-	cursorRegion.CursorStyle = style;
-	cursorRegion.CoronaContentBounds = region;
-	fCursorRegionCollection.push_back(cursorRegion);
-}
-
-void SimulatorRuntimeEnvironment::RemoveMouseCursorRegion(const RECT& region)
-{
-	// Do not continue if there are no regions to remove. (This is an optimization.)
-	if (fCursorRegionCollection.empty())
-	{
-		return;
-	}
-
-	// Remove all mouse rollover regions from the collection that exactly match the given region.
-	for (int index = (int)fCursorRegionCollection.size() - 1; index >= 0; index--)
-	{
-		auto nextRegion = fCursorRegionCollection.at(index);
-		if (::EqualRect(&region, &nextRegion.CoronaContentBounds))
-		{
-			fCursorRegionCollection.erase(fCursorRegionCollection.begin() + index);
-		}
-	}
-
-	// If there are no more regions, then set up the stystem to default back to an arrow cursor.
-	if (fCursorRegionCollection.empty())
-	{
-		auto& inputDeviceManager = (Rtt::WinInputDeviceManager&)GetPlatform()->GetDevice().GetInputDeviceManager();
-		inputDeviceManager.SetCursor(Rtt::WinInputDeviceManager::CursorStyle::kDefaultArrow);
-	}
 }
 
 #pragma endregion
@@ -278,72 +239,6 @@ void SimulatorRuntimeEnvironment::OnRuntimeLoaded(RuntimeEnvironment& sender, co
 
 	// Validate the Corona project's "build.settings" and "config.lua" files.
 	Rtt::PlatformSimulator::ValidateSettings(sender.GetRuntime()->Platform());
-
-	// Add Lua event listeners.
-	fLuaMouseEventCallback.RegisterTo(sender.GetRuntime()->VMContext().L());
-	fLuaMouseEventCallback.AddToRuntimeEventListeners("mouse");
-}
-
-void SimulatorRuntimeEnvironment::OnRuntimeTerminating(RuntimeEnvironment& sender, const EventArgs& arguments)
-{
-	// Remove Lua event listeners.
-	fLuaMouseEventCallback.RemoveFromRuntimeEventListeners("mouse");
-	fLuaMouseEventCallback.Unregister();
-}
-
-int SimulatorRuntimeEnvironment::OnLuaMouseEventReceived(lua_State* luaStatePointer)
-{
-	// Validate.
-	if (!luaStatePointer)
-	{
-		return 0;
-	}
-
-	// Do not continue if there are no mouse cursor rollover region's configured.
-	if (fCursorRegionCollection.empty())
-	{
-		return 0;
-	}
-
-	// Fetch the mouse coordinates from the Lua event.
-	POINT point;
-	point.x = LONG_MIN;
-	point.y = LONG_MIN;
-	if (lua_type(luaStatePointer, 1) == LUA_TTABLE)
-	{
-		lua_getfield(luaStatePointer, 1, "x");
-		if (lua_type(luaStatePointer, -1) == LUA_TNUMBER)
-		{
-			point.x = (LONG)lua_tointeger(luaStatePointer, -1);
-		}
-		lua_pop(luaStatePointer, 1);
-		lua_getfield(luaStatePointer, 1, "y");
-		if (lua_type(luaStatePointer, -1) == LUA_TNUMBER)
-		{
-			point.y = (LONG)lua_tointeger(luaStatePointer, -1);
-		}
-		lua_pop(luaStatePointer, 1);
-	}
-	if ((LONG_MIN == point.x) || (LONG_MIN == point.y))
-	{
-		return 0;
-	}
-
-	// Determine if the mouse is hovering over a configured mouse cursor rollover region.
-	// Note: We search the collection from back-to-front via an STL reverse iterator because the
-	//       last region added to the collection is considered to be overlaid on top of the other regions.
-	auto cursorStyle = Rtt::WinInputDeviceManager::CursorStyle::kDefaultArrow;
-	for (auto iter = fCursorRegionCollection.rbegin(); iter != fCursorRegionCollection.rend(); iter++)
-	{
-		if (::PtInRect(&iter->CoronaContentBounds, point))
-		{
-			cursorStyle = iter->CursorStyle;
-			break;
-		}
-	}
-	auto& inputDeviceManager = (Rtt::WinInputDeviceManager&)GetPlatform()->GetDevice().GetInputDeviceManager();
-	inputDeviceManager.SetCursor(cursorStyle);
-	return 0;
 }
 
 #pragma endregion

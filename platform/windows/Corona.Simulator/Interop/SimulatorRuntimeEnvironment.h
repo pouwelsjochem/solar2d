@@ -18,16 +18,6 @@
 #include <vector>
 #include <Windows.h>
 
-
-#pragma region Forward Declarations
-namespace Rtt
-{
-	class WinSimulatorServices;
-}
-
-#pragma endregion
-
-
 namespace Interop {
 
 /// <summary>Provides information and services for one Corona runtime that is simulating a device.</summary>
@@ -46,18 +36,10 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 			/// </summary>
 			Rtt::PlatformSimulator::Config* DeviceConfigPointer;
 
-			/// <summary>
-			///  <para>Pointer to the Corona Simulator app's features, such as the ability to create and run project.</para>
-			///  <para>Expected to only be set when running the Corona Simulator welcom window project.</para>
-			///  <para>Set to null to not provide access to the Corona Smulator app's features.</para>
-			/// </summary>
-			Rtt::WinSimulatorServices* CoronaSimulatorServicesPointer;
-
 			/// <summary>Creates a new settings object initialized to its defaults.</summary>
 			CreationSettings()
 			:	RuntimeEnvironment::CreationSettings(),
-				DeviceConfigPointer(nullptr),
-				CoronaSimulatorServicesPointer(nullptr)
+				DeviceConfigPointer(nullptr)
 			{
 			}
 		};
@@ -85,22 +67,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 		///  <para>Returns null if the Corona runtime is not simulating a device.</para>
 		/// </returns>
 		virtual MDeviceSimulatorServices* GetDeviceSimulatorServices() const override;
-
-		/// <summary>
-		///  <para>Adds a mouse cursor rollover region effect to the top of the rendering surface.</para>
-		///  <para>If regions overlap, then the last one added wins.</para>
-		/// </summary>
-		/// <param name="style">
-		///  Mouse cursor style to be displayed while the mouse is hovering over the given region.
-		/// </param>
-		/// <param name="region">The region in Corona scaled content coordinates.</param>
-		void AddMouseCursorRegion(Rtt::WinInputDeviceManager::CursorStyle style, const RECT& region);
-
-		/// <summary>
-		///  Removes all regions that were given to the AddMouseCursorRegion() method that exactly match the given region.
-		/// </summary>
-		/// <param name="region">A region in Corona scaled content coordinates.</param>
-		void RemoveMouseCursorRegion(const RECT& region);
 
 		#pragma endregion
 
@@ -194,22 +160,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 
 		#pragma endregion
 
-		#pragma region MouseCursorRegion Structure
-		/// <summary>
-		///  Private structure used to store a mouse cursor rollover region for the Corona Simulator's welcome window.
-		/// </summary>
-		struct MouseCursorRegion
-		{
-			/// <summary>The mouse cursor icon to be used when rolling over this object's region.</summary>
-			Rtt::WinInputDeviceManager::CursorStyle CursorStyle;
-
-			/// <summary>The mouse rollover region in Corona scaled content coordinates.</summary>
-			RECT CoronaContentBounds;
-		};
-
-		#pragma endregion
-
-
 		#pragma region Private Methods
 		/// <summary>
 		///  <para>
@@ -227,14 +177,6 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 		/// <param name="arguments">Empty event arguments.</param>
 		void OnRuntimeTerminating(RuntimeEnvironment& sender, const EventArgs& arguments);
 
-		/// <summary>Called when a Lua "mouse" event has been received from the Corona runtime.</summary>
-		/// <param name="luaStatePointer">Pointer to the Lua state that invoked this method.</param>
-		/// <returns>
-		///  <para>Returns the number of values pushed to the Lua stack as Lua return values.</para>
-		///  <para>Returns zero if this function is not returning any values to Lua.</para>
-		/// </returns>
-		int OnLuaMouseEventReceived(lua_State* luaStatePointer);
-
 		#pragma endregion
 
 
@@ -245,23 +187,8 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 		/// <summary>Handler to be invoked when the "Terminating" event has been raised.</summary>
 		RuntimeEnvironment::LoadedEvent::MethodHandler<SimulatorRuntimeEnvironment> fTerminatingEventHandler;
 
-		/// <summary>Registers the OnLuaMouseEventReceived() method as a Lua "mouse" event listener.</summary>
-		LuaMethodCallback<SimulatorRuntimeEnvironment> fLuaMouseEventCallback;
-
 		/// <summary>Interface providing device simulation features for the Corona Simulator.</summary>
 		DeviceSimulatorServices* fDeviceSimulatorServicesPointer;
-
-		/// <summary>
-		///  <para>Pointer to the Corona Simulator's welcome screen and main application features and services.</para>
-		///  <para>Should only be set if running the welcom screen's Corona project.</para>
-		///  <para>Will be null if running a device simulation or a Win32 desktop app.</para>
-		/// </summary>
-		Rtt::WinSimulatorServices* fCoronaSimulatorServicesPointer;
-
-		/// <summary>
-		///  Stores a collection of mouse cursor rollover regions to be ued by the simulator's welcome window.
-		/// </summary>
-		std::vector<MouseCursorRegion> fCursorRegionCollection;
 
 		#pragma endregion
 };

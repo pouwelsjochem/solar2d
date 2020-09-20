@@ -181,7 +181,6 @@ BEGIN
     POPUP "&Help"
     BEGIN
         MENUITEM "Online &Documentation...",    ID_HELP
-        MENUITEM "&Sample Projects...",         ID_FILE_OPEN_SAMPLE_PROJECT
         MENUITEM SEPARATOR
         MENUITEM "&About Simulator...",         ID_APP_ABOUT
     END
@@ -322,18 +321,6 @@ BEGIN
     LTEXT           "",IDC_DIVIDING_LINE,6,216,324,2,0,WS_EX_STATICEDGE
     DEFPUSHBUTTON   "OK",IDOK,228,222,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,282,222,50,14
-END
-
-IDD_SELECT_SAMPLE_PROJECT DIALOGEX 0, 0, 465, 279
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Select Sample Project"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    CONTROL         "",IDC_SAMPLE_LIST,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_AUTOARRANGE | WS_BORDER | WS_TABSTOP,7,24,449,222
-    DEFPUSHBUTTON   "OK",IDOK,354,258,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,408,258,50,14
-    LTEXT           "Show :",IDC_STATIC,300,6,23,8
-    COMBOBOX        IDC_FILTER_COMBO_BOX,330,6,126,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_BUILD_WEB DIALOGEX 0, 0, 313, 150
@@ -515,14 +502,6 @@ BEGIN
         RIGHTMARGIN, 332
         TOPMARGIN, 7
         BOTTOMMARGIN, 236
-    END
-
-    IDD_SELECT_SAMPLE_PROJECT, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 458
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 272
     END
 
     IDD_BUILD_WEB, DIALOG
@@ -709,11 +688,6 @@ END
 
 STRINGTABLE
 BEGIN
-    ID_FILE_OPENFORBUILD    "Open an existing document for Device Build"
-END
-
-STRINGTABLE
-BEGIN
     IDS_BUILD_SUCCEEDED     "Your application was built successfully."
 END
 
@@ -843,10 +817,6 @@ BEGIN
     IDS_BUILD_VERSION_NAME_NOT_PROVIDED 
                             "You must provide a version name for your application."
     IDS_FILTER_ALL_PROJECTS "- All Projects -"
-    IDS_MUST_SELECT_SAMPLE_PROJECT 
-                            "Please select a sample project from the list."
-    IDS_UNABLE_TO_FIND_SAMPLE_PROJECTS_DIRECTORY 
-                            "Unable to find the Corona's sample projects directory."
     IDS_NOOK                "Nook"
     IDS_SIMULATOR_FILES     "Simulator Files"
     IDS_BUILD_SETTINGS_FILE_ERROR 

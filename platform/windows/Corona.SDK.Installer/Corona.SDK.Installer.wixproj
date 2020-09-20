@@ -14,12 +14,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>Bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;CoronaSdkDir=$(SolutionDir)Bin\Corona;SampleProjectsDir=$(SolutionDir)..\..\..\docs\SampleCode</DefineConstants>
+    <DefineConstants>Debug;CoronaSdkDir=$(SolutionDir)Bin\Corona;</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>Bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>CoronaSdkDir=$(SolutionDir)Bin\Corona;SampleProjectsDir=$(SolutionDir)..\..\..\docs\SampleCode</DefineConstants>
+    <DefineConstants>CoronaSdkDir=$(SolutionDir)Bin\Corona;</DefineConstants>
     <CompilerAdditionalOptions>-dRelease=$(Release)</CompilerAdditionalOptions>
   </PropertyGroup>
   <Import Project="$(WixTargetsPath)" />
@@ -32,9 +32,6 @@
       <Link>Generated Files\ApplicationFiles.wxs</Link>
     </Compile>
     <Compile Include="Generated Files\PDBFile.wxs" />
-    <Compile Include="Generated Files\SampleProjectFiles.wxs">
-      <Link>Generated Files\SampleProjectFiles.wxs</Link>
-    </Compile>
     <Compile Include="Main.wxs" />
     <Compile Include="UI.wxs" />
   </ItemGroup>
@@ -108,10 +105,10 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
    copy "%25TEMP%25\Corona Simulator.pdb" "$(SolutionDir)Bin\Corona\"
 )
 
-REM Generate wix files for the Corona, its PDB file and its sample projects.
+REM Generate wix files for the Corona and its PDB file
 "%25WIX%25\bin\heat" dir "$(SolutionDir)Bin\Corona" -t "$(ProjectDir)ExcludePDB.xsl" -dr APP_INSTALL_FOLDER -cg ApplicationFiles -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "$(ProjectDir)Generated Files\ApplicationFiles.wxs"
 "%25WIX%25\bin\heat" file "$(SolutionDir)Bin\Corona\Corona Simulator.pdb" -dr APP_INSTALL_FOLDER -cg PDBFile -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "$(ProjectDir)Generated Files\PDBFile.wxs"
-"%25WIX%25\bin\heat" dir "$(SolutionDir)..\..\..\docs\SampleCode" -t "$(ProjectDir)ExcludeHG.xsl" -dr SampleProjectsInstallFolder -cg SampleProjectFiles -ag -scom -sreg -sfrag -srd -var "var.SampleProjectsDir" -out "$(ProjectDir)Generated Files\SampleProjectFiles.wxs"</PreBuildEvent>
+</PreBuildEvent>
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

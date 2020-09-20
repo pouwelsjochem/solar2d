@@ -11,7 +11,6 @@
 #import "AppDelegate.h"
 
 #include "Rtt_TargetDevice.h"
-#include "Rtt_MacSimulatorServices.h"
 
 // ----------------------------------------------------------------------------
 
@@ -35,7 +34,6 @@ namespace Rtt
 
 		NSString *platformName;
 		NSString *platformTitle;
-        Rtt::MacSimulatorServices *simulatorServices;
 		NSTask *tailSyslogTask;
 		NSTask *launchedTask;
 		NSString *appName;

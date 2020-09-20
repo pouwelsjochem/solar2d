@@ -325,12 +325,10 @@
 		A40A907A1BD9A5EA001D2038 /* tvosPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A40A90781BD9A5C1001D2038 /* tvosPackageApp.lua */; };
 		A40A907B1BD9A5F2001D2038 /* tvosPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A40A90781BD9A5C1001D2038 /* tvosPackageApp.lua */; };
 		A40C524016F847EA00AE2ECF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A40C523E16F847EA00AE2ECF /* CoronaVersion.c */; };
-		A41A186E143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A41A186B143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.cpp */; };
 		A41AC0E716A5DB5C00AD331A /* easing.lua in Sources */ = {isa = PBXBuildFile; fileRef = A41AC0E516A5DAD300AD331A /* easing.lua */; };
 		A41AC1B916A75A9E00AD331A /* gameNetwork.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A41AC1B516A75A7600AD331A /* gameNetwork.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A425455B18DBA04800EE06A8 /* WebAppBuild.xib in Resources */ = {isa = PBXBuildFile; fileRef = A425455918DBA04700EE06A8 /* WebAppBuild.xib */; };
 		A425457418E4FD6400EE06A8 /* webPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A425457318E4FD1800EE06A8 /* webPackageApp.lua */; };
-		A42E68AB143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = A42E68AA143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm */; };
 		A4328841176A621200ACB6FF /* Rtt_BitmapMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E2176A621100ACB6FF /* Rtt_BitmapMask.cpp */; };
 		A4328843176A621200ACB6FF /* Rtt_BitmapPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E4176A621100ACB6FF /* Rtt_BitmapPaint.cpp */; };
 		A4328845176A621200ACB6FF /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E6176A621100ACB6FF /* Rtt_BufferBitmap.cpp */; };
@@ -472,7 +470,6 @@
 		A4A47E5B14D28B9800B5111C /* Rtt_LuaAux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A47E5914D28B9800B5111C /* Rtt_LuaAux.cpp */; };
 		A4A5DE06177BA2B0001EE9E5 /* Rtt_ShaderData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A5DE02177BA2A1001EE9E5 /* Rtt_ShaderData.cpp */; };
 		A4A5DE08177BA2B0001EE9E5 /* Rtt_ShaderDataAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A5DE04177BA2A9001EE9E5 /* Rtt_ShaderDataAdapter.cpp */; };
-		A4AB4471143BE11200607F77 /* SampleCodeLocator.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AB4470143BE11200607F77 /* SampleCodeLocator.mm */; };
 		A4AB447D143E575E00607F77 /* Rtt_RuntimeDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AB447B143E575C00607F77 /* Rtt_RuntimeDelegate.cpp */; };
 		A4B00FA7145656A9008FB6E6 /* OSXAppBuild.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4B00FA5145656A9008FB6E6 /* OSXAppBuild.xib */; };
 		A4B00FAA14576402008FB6E6 /* AppleSigningIdentityController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B00FA914576402008FB6E6 /* AppleSigningIdentityController.mm */; };
@@ -2196,10 +2193,6 @@
 		A40A90781BD9A5C1001D2038 /* tvosPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tvosPackageApp.lua; path = ../platform/resources/tvosPackageApp.lua; sourceTree = "<group>"; };
 		A40C523E16F847EA00AE2ECF /* CoronaVersion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CoronaVersion.c; path = Corona/CoronaVersion.c; sourceTree = "<group>"; };
 		A40C523F16F847EA00AE2ECF /* CoronaVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaVersion.h; path = Corona/CoronaVersion.h; sourceTree = "<group>"; };
-		A41A186B143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibSimulator.cpp; path = ../../modules/simulator/Rtt_LuaLibSimulator.cpp; sourceTree = "<group>"; };
-		A41A186C143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibSimulator.h; path = ../../modules/simulator/Rtt_LuaLibSimulator.h; sourceTree = "<group>"; };
-		A41A186D143A6F7E00F1BF0D /* Rtt_MSimulatorServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MSimulatorServices.h; path = ../../modules/simulator/Rtt_MSimulatorServices.h; sourceTree = "<group>"; };
-		A41A18E7143AB08000F1BF0D /* Rtt_MacSimulatorServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacSimulatorServices.h; sourceTree = "<group>"; };
 		A41AC0E516A5DAD300AD331A /* easing.lua */ = {isa = PBXFileReference; lastKnownFileType = text; name = easing.lua; path = ../../subrepos/easing/easing.lua; sourceTree = SOURCE_ROOT; };
 		A41AC0F316A5DC6D00AD331A /* Rtt_LuaFrameworks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaFrameworks.h; sourceTree = "<group>"; };
 		A41AC1B516A75A7600AD331A /* gameNetwork.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = gameNetwork.dylib; path = "../../plugins/build-core/gameNetwork/mac/gameNetwork.dylib"; sourceTree = "<group>"; };
@@ -2209,7 +2202,6 @@
 		A425457318E4FD1800EE06A8 /* webPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = webPackageApp.lua; path = ../platform/resources/webPackageApp.lua; sourceTree = "<group>"; };
 		A42C5BFB12D56EEE0046B8A6 /* Rtt_TargetDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_TargetDevice.h; sourceTree = "<group>"; };
 		A42C5BFC12D56EFE0046B8A6 /* Rtt_TargetDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_TargetDevice.cpp; sourceTree = "<group>"; };
-		A42E68AA143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacSimulatorServices.mm; sourceTree = "<group>"; };
 		A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MRuntimeDelegate.h; sourceTree = "<group>"; };
 		A43287E2176A621100ACB6FF /* Rtt_BitmapMask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_BitmapMask.cpp; path = Display/Rtt_BitmapMask.cpp; sourceTree = "<group>"; };
 		A43287E3176A621100ACB6FF /* Rtt_BitmapMask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_BitmapMask.h; path = Display/Rtt_BitmapMask.h; sourceTree = "<group>"; };
@@ -2411,8 +2403,6 @@
 		A4A5DE03177BA2A4001EE9E5 /* Rtt_ShaderData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShaderData.h; path = Display/Rtt_ShaderData.h; sourceTree = "<group>"; };
 		A4A5DE04177BA2A9001EE9E5 /* Rtt_ShaderDataAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShaderDataAdapter.cpp; path = Display/Rtt_ShaderDataAdapter.cpp; sourceTree = "<group>"; };
 		A4A5DE05177BA2AC001EE9E5 /* Rtt_ShaderDataAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShaderDataAdapter.h; path = Display/Rtt_ShaderDataAdapter.h; sourceTree = "<group>"; };
-		A4AB446F143BE11100607F77 /* SampleCodeLocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleCodeLocator.h; sourceTree = "<group>"; };
-		A4AB4470143BE11200607F77 /* SampleCodeLocator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SampleCodeLocator.mm; sourceTree = "<group>"; };
 		A4AB4478143E385700607F77 /* CoronaWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoronaWindowController.h; sourceTree = "<group>"; };
 		A4AB4479143E385700607F77 /* CoronaWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoronaWindowController.mm; sourceTree = "<group>"; };
 		A4AB447B143E575C00607F77 /* Rtt_RuntimeDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RuntimeDelegate.cpp; sourceTree = "<group>"; };
@@ -3287,7 +3277,6 @@
 				A4B00F9E145655E0008FB6E6 /* App Builds */,
 				000CE91112B7413200D9B6A4 /* apple */,
 				000CE90512B7409400D9B6A4 /* hmac */,
-				A4663DE61436885B0091BD47 /* modules */,
 				00B73C6D12B720C90057F594 /* Resources */,
 				000CE8DA12B7404400D9B6A4 /* shared */,
 				00B73CDD12B720C90057F594 /* AppDelegate.h */,
@@ -3318,11 +3307,7 @@
 				00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */,
 				00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */,
 				00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */,
-				A41A18E7143AB08000F1BF0D /* Rtt_MacSimulatorServices.h */,
-				A42E68AA143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm */,
 				00B73CD812B720C90057F594 /* Rtt_Player.pch */,
-				A4AB446F143BE11100607F77 /* SampleCodeLocator.h */,
-				A4AB4470143BE11200607F77 /* SampleCodeLocator.mm */,
 				C20F8AD61AD78CAB0034BD21 /* SDKList.h */,
 				C20F8AD71AD78CAB0034BD21 /* SDKList.m */,
 				004ADB391468C54300D732FC /* SimulatorWindow.h */,
@@ -3824,24 +3809,6 @@
 				A43288A1176A626B00ACB6FF /* shell_default_gl.lua */,
 			);
 			name = Shader;
-			sourceTree = "<group>";
-		};
-		A4663DE61436885B0091BD47 /* modules */ = {
-			isa = PBXGroup;
-			children = (
-				A4663DE7143688640091BD47 /* simulator */,
-			);
-			name = modules;
-			sourceTree = "<group>";
-		};
-		A4663DE7143688640091BD47 /* simulator */ = {
-			isa = PBXGroup;
-			children = (
-				A41A186B143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.cpp */,
-				A41A186C143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.h */,
-				A41A186D143A6F7E00F1BF0D /* Rtt_MSimulatorServices.h */,
-			);
-			name = simulator;
 			sourceTree = "<group>";
 		};
 		A49186031641DCFD00A39286 /* Products */ = {
@@ -5579,7 +5546,6 @@
 				C2FCD3E11B38CF4B00EF7B02 /* Rtt_IOSAppPackager.mm in Sources */,
 				A40A906F1BD99B23001D2038 /* TVOSAppBuildController.mm in Sources */,
 				4C111FCB1B2A41B200DF8BE8 /* Rtt_KeyName.cpp in Sources */,
-				A41A186E143A6F7E00F1BF0D /* Rtt_LuaLibSimulator.cpp in Sources */,
 				C287481B19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm in Sources */,
 				002D72E212FB2C30006C7E9B /* Rtt_MacExitCallback.mm in Sources */,
 				00B73D9812B720CA0057F594 /* Rtt_MacFBConnect.mm in Sources */,
@@ -5587,7 +5553,6 @@
 				00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */,
 				00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */,
 				00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */,
-				A42E68AB143AB0DE00693E3A /* Rtt_MacSimulatorServices.mm in Sources */,
 				1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */,
 				C21733781B20F21A00F79CB8 /* Rtt_OSXAppPackager.mm in Sources */,
 				000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */,
@@ -5601,7 +5566,6 @@
 				C20F8AD81AD78CAB0034BD21 /* SDKList.m in Sources */,
 				002D1B48145BB621002B69B6 /* SPILDTopLayerView.m in Sources */,
 				F57D17711BE25E1200AABAC1 /* Rtt_AppleInputDevice.mm in Sources */,
-				A4AB4471143BE11200607F77 /* SampleCodeLocator.mm in Sources */,
 				004ADB3B1468C54400D732FC /* SimulatorWindow.mm in Sources */,
 				00B73DB012B720CA0057F594 /* TextEditorSupport.m in Sources */,
 				C2678C1F1B85753800864110 /* AppleAppBuildController.mm in Sources */,

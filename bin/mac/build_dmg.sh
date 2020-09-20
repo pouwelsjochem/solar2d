@@ -25,7 +25,6 @@ DAILY_BUILD='false'
 ENTERPRISE=""
 
 RESOURCE_DIR="Resource Library"
-SAMPLECODE_DIR="SampleCode"
 NATIVE_DIR="Native"
 
 while getopts 'dfb:c:s:e:' flag; do
@@ -108,12 +107,6 @@ ditto -v -X "$TOOLSPATH/Corona Simulator.app" "$TMPPATH/${PRODUCT_DIR}/Corona Si
 mkdir "${TMPPATH}/${PRODUCT_DIR}/${RESOURCE_DIR}"
 cp -v "$TOOLSPATH"/{debugger,"Corona Terminal"} "${TMPPATH}/${PRODUCT_DIR}/${RESOURCE_DIR}"
 cp -v "$SRCROOT"/platform/resources/icons/Documentation.html "$TMPPATH"/${PRODUCT_DIR}/
-ditto -v -X "$2"/${SAMPLECODE_DIR}/ "$TMPPATH/${PRODUCT_DIR}/${SAMPLECODE_DIR}/"
-
-if [ -d "$TMPPATH/${PRODUCT_DIR}/${SAMPLECODE_DIR}/.hg" ] # helpful for test builds
-then
-	rm -r "$TMPPATH/${PRODUCT_DIR}/${SAMPLECODE_DIR}/.hg"
-fi
 
 if [ -d "$2/${RESOURCE_DIR}" ]
 then
@@ -136,7 +129,6 @@ fi
 
 # unfortunately, since macOS 10.12 resource forks can not be signed, so removing some icons
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/debugger" "$SRCROOT/platform/resources/icons/CoronaIcon-Debugger.png"
-# bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${SAMPLECODE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/Documentation.html" "$SRCROOT/platform/resources/icons/CoronaIcon-Docs.png"

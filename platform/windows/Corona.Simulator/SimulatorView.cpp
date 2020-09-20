@@ -26,7 +26,6 @@
 #include "Rtt_RenderingStream.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_WinPlatform.h"
-#include "Rtt_WinSimulatorServices.h"
 #include "Simulator.h"
 #include "MainFrm.h"
 #include "SimulatorDoc.h"
@@ -36,7 +35,6 @@
 #include "BuildWebDlg.h"
 #include "BuildLinuxDlg.h"
 #include "BuildWin32AppDlg.h"
-#include "SelectSampleProjectDlg.h"
 #include "WinString.h"
 #include "WinGlobalProperties.h"  // WMU_ message IDs
 #include "MessageDlg.h"   // Alert
@@ -81,7 +79,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_COMMAND(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnViewNavigateBack)
 	ON_COMMAND(ID_FILE_MRU_FILE1, &CSimulatorView::OnFileMRU1)
 	ON_COMMAND(ID_FILE_OPEN, &CSimulatorView::OnFileOpen)
-	ON_COMMAND(ID_FILE_OPEN_SAMPLE_PROJECT, &CSimulatorView::OnFileOpenSampleProject)
 	ON_COMMAND(ID_BUILD_FOR_ANDROID, &CSimulatorView::OnBuildForAndroid)
 	ON_COMMAND(ID_BUILD_FOR_WEB, &CSimulatorView::OnBuildForWeb)
 	ON_COMMAND(ID_BUILD_FOR_LINUX, &CSimulatorView::OnBuildForLinux)
@@ -121,8 +118,7 @@ END_MESSAGE_MAP()
 #pragma region Constructor/Destructor
 /// Creates a new Corona Simulator CView.
 CSimulatorView::CSimulatorView()
-:	mSimulatorServices(*this),
-	mMessageDlgPointer(nullptr),
+:	mMessageDlgPointer(nullptr),
 	mDeviceConfig(*Rtt_AllocatorCreate()),
 	mRuntimeLoadedEventHandler(this, &CSimulatorView::OnRuntimeLoaded)
 {
@@ -373,27 +369,6 @@ void CSimulatorView::OnFileMRU1()
 	}
 }
 
-//Called from the simulator services. This matches the selected recent project with the windows recent
-//project ID and posts a message to load it, this must be invoked through a message post
-void CSimulatorView::PostOpenWithPath(CString fileName)
-{
-	CRecentFileList *recentFileListPointer = ((CSimulatorApp*)AfxGetApp())->GetRecentFileList();
-	if (recentFileListPointer)
-	{
-		for (int i = 0; i < recentFileListPointer->GetSize(); i++)
-		{
-			const CString& fileName2 = (*recentFileListPointer)[i];
-			if (fileName == fileName2)
-			{
-				this->GetParent()->PostMessage(WM_COMMAND,ID_FILE_MRU_FIRST+i);
-				return;
-			}
-		}
-		recentFileListPointer->Add(fileName);
-		this->GetParent()->PostMessage(WM_COMMAND, ID_FILE_MRU_FIRST);
-	}
-}
-
 // OnFileOpen - overloaded to check OpenGL and reopen file if already open
 void CSimulatorView::OnFileOpen()
 {
@@ -417,40 +392,6 @@ void CSimulatorView::OnFileOpen()
 			  RestartSimulation();
 		  }
 	}
-}
-
-/// Displays an "Open File" dialog which default to the sample projects directory.
-void CSimulatorView::OnFileOpenSampleProject()
-{
-	// Do not continue if unable to find the Samples directory.
-	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
-	if (applicationPointer->CheckDirExists(applicationPointer->GetSampleDir()) == false)
-	{
-		CString title;
-		CString message;
-		title.LoadString(IDS_WARNING);
-		message.LoadString(IDS_UNABLE_TO_FIND_SAMPLE_PROJECTS_DIRECTORY);
-		MessageBox(message, title, MB_OK | MB_ICONWARNING);
-		return;
-	}
-
-	// Display the "Select Sample Project" dialog.
-	CSelectSampleProjectDlg dialog;
-	int result = dialog.DoModal();
-	if (result != IDOK)
-	{
-		return;
-	}
-
-	// Start simulating the selected project.
-	CString filePath = dialog.GetSelectedProjectPath() + _T("\\main.lua");
-	if ((GetDocument()->GetPath() == filePath))
-	{
-		RestartSimulation();
-	}
-
-	WinString projectName;
-	projectName.SetTCHAR(GetDocument()->GetTitle());
 }
 
 /// <summary>Opens a dialog to build the currently selected project for Android.</summary>

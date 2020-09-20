@@ -12,7 +12,6 @@
 #include "Rtt_MacConsolePlatform.h"
 #include "Rtt_Assert.h"
 #include "Rtt_MacPlatform.h"
-#include "Rtt_MacSimulatorServices.h"
 #include "Rtt_MacSimulator.h"
 
 #import "IOSAppBuildController.h"
@@ -329,7 +328,7 @@ static NSString *kValueNone = @"None";
 
     const char* apppackage = "NULL";
 
-    IOSAppPackager *iosPackager = new IOSAppPackager( *services, simulatorServices );
+    IOSAppPackager *iosPackager = new IOSAppPackager( *services );
 
     bool isvalidsettings = iosPackager->ReadBuildSettings( srcDir );
 

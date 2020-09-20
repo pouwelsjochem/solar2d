@@ -50,7 +50,6 @@
 #define REGISTRY_LAST_RUN_SUCCEEDED _T("lastRunSucceeded")
 
 // Define all registry item defaults here
-// default for WORKINGDIR is sample directory
 #define REGISTRY_DEVICE_DEFAULT ""
 #define REGISTRY_XPOS_DEFAULT 0
 #define REGISTRY_YPOS_DEFAULT 0
@@ -89,7 +88,6 @@ public:
     void SetWorkingDir( CString sDir );
 	CString GetApplicationDir();
 	CString GetResourceDir();
-    CString GetSampleDir();
 	static bool CheckPathExists(LPCTSTR path);
 	static bool CheckDirExists(LPCTSTR dirName);
 	static bool InitJavaPaths();
@@ -105,7 +103,6 @@ protected:
 	bool m_isConsoleEnabled;
 	CString m_sApplicationDir;
     CString m_sResourceDir;
-    CString m_sSampleDir;
 #if USE_JNI
 	Rtt::JavaHostTerminator m_javaHostTerminator;  // auto-terminate Java
 #endif

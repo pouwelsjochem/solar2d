@@ -26,8 +26,6 @@ namespace Rtt
 	class RuntimeDelegateWrapper;
 }
 
-//typedef void (^windowCloseCompletionBlock)(void);
-
 @interface CoronaWindowController : NSWindowController< CoronaViewControllerDelegate
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101200
 , CAAnimationDelegate
@@ -38,17 +36,9 @@ namespace Rtt
 		CoronaView *fView;
 		Rtt::RuntimeDelegateWrapper *fRuntimeDelegateWrapper;
 		BOOL fIsInitialized;
-	
-		BOOL windowGoingAway;
-		CFTimeInterval windowFadeAnimationStartTime;
-
-        BOOL (^windowShouldCloseBlock)(void);
-        void (^windowCloseCompletionBlock)(void);
-        BOOL (^windowWillResizeBlock)(int oldWidth, int oldHeight, int newWidth, int newHeight);
 }
 
 @property (nonatomic, readonly, getter=view) CoronaView *fView;
-@property(nonatomic, assign, getter=isWindowGoingAway) BOOL windowGoingAway;
 
 - (id)initWithPath:(NSString*)path width:(int)width height:(int)height title:(NSString *)windowTitle resizable:(bool) resizable;
 
@@ -61,10 +51,6 @@ namespace Rtt
 
 // For when window is fading out and is about to close, call this to bring it back.
 - (void) resurrectWindow;
-
-- (void) setWindowDidCloseCompletionBlock:(void (^)(void))block;
-- (void) setWindowShouldCloseBlock:(BOOL (^)(void))block;
-- (void) setWindowWillResizeBlock:(BOOL (^)(int oldWidth, int oldHeight, int newWidth, int newHeight))block;
 @end
 
 // ----------------------------------------------------------------------------

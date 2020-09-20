@@ -11,18 +11,6 @@
 
 #include "Rtt_OSXAppPackager.h"
 
-#if defined(Rtt_NO_GUI)
-// Stub out MacSimulatorServices so CoronaBuilder can use this class without a bunch of ifdeffing
-class Rtt::MacSimulatorServices
-{
-    public:
-        void SetBuildMessage(const char *dummy) { };
-};
-#else
-#include "Rtt_MacSimulatorServices.h"
-#include "Rtt_LuaLibSimulator.h"
-#endif
-
 #include "Rtt_Lua.h"
 #include "Rtt_LuaFrameworks.h"
 #include "Rtt_MPlatform.h"
@@ -73,19 +61,10 @@ OSXAppPackagerParams::Print()
 
 #define kDefaultNumBytes 1024
 
-OSXAppPackager::OSXAppPackager( const MPlatformServices& services, MacSimulatorServices *simulatorServices /* = NULL */ )
-	: PlatformAppPackager( services, TargetDevice::kOSXPlatform ),
-	fSimulatorServices(simulatorServices)
+OSXAppPackager::OSXAppPackager( const MPlatformServices& services )
+	: PlatformAppPackager( services, TargetDevice::kOSXPlatform )
 {
 	lua_State *L = fVM;
-
-#if ! defined(Rtt_NO_GUI)
-    if (fSimulatorServices != NULL)
-    {
-        lua_pushlightuserdata( L, fSimulatorServices );
-        Lua::RegisterModuleLoader( L, "simulator", LuaLibSimulator::Open, 1 );
-    }
-#endif
 	
 	Lua::RegisterModuleLoader( L, "CoronaPListSupport", Lua::Open< luaload_CoronaPListSupport > );
 	Lua::RegisterModuleLoader( L, "dkjson", Lua::Open< luaload_dkjson > );

@@ -44,10 +44,6 @@ if EXIST "%WORKSPACE%\..\raspbiantemplate.tar.gz" (
     echo WARNING! linuxtemplate is not found!
 )
 
-
-cd "%WORKSPACE%\..\docs"
-c:\cygwin\bin\find ./SampleCode \( -iname '*.lua' -or -iname '*.txt' -or -iname '*.settings' \) -print0 | xargs -0 -n1 -P4 unix2dos
-
 cd "%WORKSPACE%\platform"
 c:\cygwin\bin\find ./resources \( -iname '*.lua' -or -iname '*.txt' -or -iname '*.settings' -or -iname '*.properties' -or -iname '*.xml' -or -iname '*.ccscene' -or -iname '*.json' \) -print0 | xargs -0 -n1 -P4 unix2dos
 

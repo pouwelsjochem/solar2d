@@ -13,7 +13,6 @@
     <ClInclude Include="MessageDlg.h" />
     <ClInclude Include="PasswordDlg.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="SelectSampleProjectDlg.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="SimulatorDoc.h" />
     <ClInclude Include="SimulatorView.h" />
@@ -67,16 +66,7 @@
     <ClInclude Include="..\..\..\librtt\Rtt_JavaHost.h">
       <Filter>%28root%29\librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\modules\simulator\Rtt_MSimulatorServices.h">
-      <Filter>%28root%29\modules\simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\modules\simulator\Rtt_LuaLibSimulator.h">
-      <Filter>%28root%29\modules\simulator</Filter>
-    </ClInclude>
     <ClInclude Include="WinGlobalProperties.h" />
-    <ClInclude Include="Rtt\Rtt_WinSimulatorServices.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinPlatformServices.h">
       <Filter>Rtt</Filter>
     </ClInclude>
@@ -144,7 +134,6 @@
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
     <ClCompile Include="PasswordDlg.cpp" />
-    <ClCompile Include="SelectSampleProjectDlg.cpp" />
     <ClCompile Include="Simulator.cpp" />
     <ClCompile Include="SimulatorDoc.cpp" />
     <ClCompile Include="SimulatorView.cpp" />
@@ -192,13 +181,7 @@
     <ClCompile Include="..\..\..\librtt\Rtt_JavaHost.cpp">
       <Filter>%28root%29\librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\modules\simulator\Rtt_LuaLibSimulator.cpp">
-      <Filter>%28root%29\modules\simulator</Filter>
-    </ClCompile>
     <ClCompile Include="WinGlobalProperties.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinSimulatorServices.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinPlatformServices.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>

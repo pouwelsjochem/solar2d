@@ -17,10 +17,6 @@
 
 // Player
 #include "Rtt_MacPlatform.h"
-#include "Rtt_MacSimulatorServices.h"
-
-// Modules
-#include "Rtt_LuaLibSimulator.h"
 
 // Librtt
 #include "Rtt_LuaContext.h"
@@ -215,7 +211,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 @implementation CoronaWindowController
 
 @synthesize fView;
-@synthesize windowGoingAway;
 @synthesize fWindowTitle;
 
 - (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)menuitem
@@ -320,10 +315,6 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 {
 	delete fRuntimeDelegateWrapper;
 	[fView release];
-	[windowShouldCloseBlock release];
-    windowShouldCloseBlock = nil;
-	[windowCloseCompletionBlock release];
-	windowCloseCompletionBlock = nil;
 
 	[super dealloc];
 }
@@ -360,69 +351,12 @@ RuntimeDelegateWrapper::SetDelegate( RuntimeDelegate *delegate )
 
 #pragma mark Window delegate methods
 
-// Warning: Watch out for the control flow due to overriding windowShouldClose for fadeout
-// NSWindow performClose will invoke windowShouldClose which will avoid calling this method if it returns NO.
-// But NSWindowController close or NSWindow close will bypass windowShouldClose and come here directly.
-- (void) windowWillClose:(NSNotification*)the_notification
-{
-	if ( nil != windowCloseCompletionBlock )
-	{
-		windowCloseCompletionBlock();
-	}
-}
-
-- (void) resurrectWindow
-{
-	if(NO == self.windowGoingAway)
-	{
-		return;
-	}
-	self.windowGoingAway = NO;
-}
-
-
-- (void) setWindowShouldCloseBlock:(BOOL (^)(void))block
-{
-	[windowShouldCloseBlock release];
-	windowShouldCloseBlock = [block copy];
-}
-
-- (void) setWindowDidCloseCompletionBlock:(void (^)(void))block
-{
-	[windowCloseCompletionBlock release];
-	windowCloseCompletionBlock = [block copy];
-}
-
-- (void) setWindowWillResizeBlock:(BOOL (^)(int oldWidth, int oldHeight, int newWidth, int newHeight))block
-{
-	[windowWillResizeBlock release];
-	windowWillResizeBlock = [block copy];
-}
-
 - (NSSize)windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize
 {
     NSRect windowFrame = [self.window frame];
     NSRect contentFrame = [[self.window contentView] frame];
-
-    // NSLog(@"CoronaWindowController:windowWillResize: old %@ - new %@", NSStringFromSize(windowFrame.size), NSStringFromSize(frameSize));
-    
-    BOOL doResize = YES;
-    if ( nil != windowWillResizeBlock )
-	{
-        // the Lua listener can reject the resize attempt by returning false
-        doResize = windowWillResizeBlock(windowFrame.size.width, contentFrame.size.height,
-                                             frameSize.width, frameSize.height);
-    }
-    
-    if (doResize)
-    {
-        [fView setFrameSize:frameSize];
-        return frameSize;
-    }
-    else
-    {
-        return windowFrame.size;
-    }
+    [fView setFrameSize:frameSize];
+    return frameSize;
 }
 
 // Call the resize callback for fullscreen events

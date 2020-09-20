@@ -18,7 +18,6 @@ namespace Rtt
 
 class LuaContext;
 class MPlatformServices;
-class MacSimulatorServices;
 
 // ----------------------------------------------------------------------------
 
@@ -64,7 +63,7 @@ class TVOSAppPackager : public PlatformAppPackager
 		typedef PlatformAppPackager Super;
 
 	public:
-		TVOSAppPackager( const MPlatformServices& services, MacSimulatorServices *simulatorServices = NULL );
+		TVOSAppPackager( const MPlatformServices& services );
 		virtual ~TVOSAppPackager();
 
 	public:
@@ -80,9 +79,6 @@ class TVOSAppPackager : public PlatformAppPackager
 	protected:
 		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
 		bool CopyProvisionFile( const AppPackagerParams * params, const char* tmpDir );
-
-    private:
-        MacSimulatorServices *fSimulatorServices;
 };
 
 // ----------------------------------------------------------------------------

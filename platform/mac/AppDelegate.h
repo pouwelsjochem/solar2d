@@ -99,8 +99,6 @@ namespace Rtt
 	IBOutlet NSWindow* fPreferencesWindow;
 
 	BOOL fIsRemote;
-
-	NSString* cachedSampleDirectoryPath;
 	
 	BOOL applicationIsTerminating; // used to try to avoid occasional shutdown crash (home screen related?)
 	
@@ -141,7 +139,6 @@ namespace Rtt
 @property (nonatomic, readwrite, copy) NSString *androidKeyStore;
 @property (nonatomic, readwrite, assign) int fSkin;
 //@property (nonatomic, readwrite, assign) NSPopUpButton* signingIdentities;
-@property (nonatomic, readwrite, copy) NSString* cachedSampleDirectoryPath;
 @property (nonatomic, readonly, copy) NSString* fAppPath;
 @property (nonatomic, readwrite, assign) BOOL applicationHasBeenInitialized;
 @property (nonatomic, readwrite, assign) BOOL launchedWithFile;

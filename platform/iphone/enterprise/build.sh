@@ -62,9 +62,6 @@ PLATFORM_DIR=$ROOT_DIR/platform
 DST_CORONA_DIR=$OUTPUT_DIR/Corona
 checkDir "$DST_CORONA_DIR"
 
-#DST_SAMPLES_DIR=$OUTPUT_DIR/Samples
-#checkDir "$DST_SAMPLES_DIR"
-
 
 # iOS dirs
 DST_CORONA_IOS_DIR=$DST_CORONA_DIR/ios
@@ -90,14 +87,6 @@ elif [[ "$USER" ]]
 then
 	security unlock-keychain "/Users/$USER/Library/Keychains/login.keychain"
 fi
-
-#
-# iOS Template Project
-#
-
-#cp -rv "$path"/CoronaSampleApp "$DST_SAMPLES_DIR"/template/ios
-#checkError
-
 
 # 
 # Corona

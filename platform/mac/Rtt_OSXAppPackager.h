@@ -20,7 +20,6 @@ namespace Rtt
 class LuaContext;
 class MPlatformServices;
 class Runtime;
-class MacSimulatorServices;
 
 // ----------------------------------------------------------------------------
 
@@ -107,7 +106,7 @@ class OSXAppPackager : public PlatformAppPackager
 		typedef PlatformAppPackager Super;
 
 	public:
-		OSXAppPackager( const MPlatformServices& services, MacSimulatorServices *simulatorServices = NULL );
+		OSXAppPackager( const MPlatformServices& services );
 		virtual ~OSXAppPackager();
 
 	public:
@@ -123,9 +122,6 @@ class OSXAppPackager : public PlatformAppPackager
 	protected:
 		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
 		virtual int PrepackagePlugins(OSXAppPackagerParams * params, String& tmpPluginsDir, String& outputDir);
-
-	private:
-		MacSimulatorServices *fSimulatorServices;
 };
 
 // ----------------------------------------------------------------------------

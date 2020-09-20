@@ -12,7 +12,6 @@
 #include "Rtt_MacConsolePlatform.h"
 #include "Rtt_Assert.h"
 #include "Rtt_MacPlatform.h"
-#include "Rtt_MacSimulatorServices.h"
 #include "Rtt_MacSimulator.h"
 #include "Rtt_ProjectSettings.h"
 
@@ -318,7 +317,7 @@ static NSString *kValueNone = @"None";
 
     const char* apppackage = "NULL";
 
-    TVOSAppPackager *packager = new TVOSAppPackager( *services, simulatorServices );
+    TVOSAppPackager *packager = new TVOSAppPackager( *services );
 
     bool isvalidsettings = packager->ReadBuildSettings( srcDir );
 

@@ -297,13 +297,6 @@ jobs:
           cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
           cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
       - run: mkdir docs
-      - name: Get Sample Code
-        uses: actions/checkout@v2
-        with:
-          repository: coronalabs/samples-coronasdk
-          path: docs/SampleCode
-      - name: Clean-up docs
-        run: rm -rf docs/SampleCode/.git docs/SampleCode/.gitignore
       - name: Get Native
         uses: actions/download-artifact@v1
         with:
@@ -371,14 +364,6 @@ jobs:
       - run: ./tools/GHAction/daily_env.sh
         shell: bash
       - run: mkdir -f docs
-      - name: Get Sample Code
-        uses: actions/checkout@v2
-        with:
-          repository: coronalabs/samples-coronasdk
-          path: docs/SampleCode
-      - name: Clean-up docs
-        run: rm -rf docs/SampleCode/.git docs/SampleCode/.gitignore
-        shell: bash
       - name: Move docs outside the directory
         run: mv docs ../docs
       - name: Get Webtemplate

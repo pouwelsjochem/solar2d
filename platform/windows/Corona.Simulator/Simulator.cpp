@@ -343,7 +343,7 @@ BOOL CSimulatorApp::InitInstance()
 
 	// Load user preferences from registry
     // Initialize member variables used to write out preferences
-    SetWorkingDir( GetProfileString( REGISTRY_SECTION, REGISTRY_WORKINGDIR, GetSampleDir() ));
+    SetWorkingDir( GetProfileString( REGISTRY_SECTION, REGISTRY_WORKINGDIR, "" ));
     m_sDevicename = GetProfileString( REGISTRY_SECTION, REGISTRY_DEVICE, _T("") );
 
 	// Parse command line for standard shell commands, DDE, file open
@@ -634,28 +634,6 @@ CString CSimulatorApp::GetResourceDir()
 		m_sResourceDir += _T("\\Resources");
 	}
     return m_sResourceDir;
-}
-
-// GetSampleDir - Path is AppPath\Sample Code\ 
-CString CSimulatorApp::GetSampleDir()
-{
-	if (m_sSampleDir.IsEmpty())
-	{
-		m_sSampleDir = GetApplicationDir();
-		m_sSampleDir += _T("\\Sample Code");
-		if (CheckDirExists(m_sSampleDir) == false)
-		{
-			// Directory not found.
-			// If this is a developer version, then check for samples under the "docs" directory.
-			CString developerSampleDirectory = GetApplicationDir();
-			developerSampleDirectory += _T("\\..\\..\\..\\..\\..\\docs\\SampleCode");
-			if (CheckDirExists(developerSampleDirectory))
-			{
-				m_sSampleDir = developerSampleDirectory;
-			}
-		}
-	}
-	return m_sSampleDir;
 }
 
 bool CSimulatorApp::ShouldShowWebBuildDlg()

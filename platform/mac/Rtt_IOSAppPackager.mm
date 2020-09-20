@@ -11,18 +11,6 @@
 
 #include "Rtt_IOSAppPackager.h"
 
-#if defined(Rtt_NO_GUI)
-// Stub out MacSimulatorServices so CoronaBuilder can use this class without a bunch of ifdeffing
-class Rtt::MacSimulatorServices
-{
-    public:
-        void SetBuildMessage(const char *dummy) { };
-};
-#else
-#include "Rtt_MacSimulatorServices.h"
-#include "Rtt_LuaLibSimulator.h"
-#endif
-
 #include "Rtt_Lua.h"
 #include "Rtt_LuaFrameworks.h"
 #include "Rtt_MPlatform.h"
@@ -83,19 +71,10 @@ IOSAppPackagerParams::Print()
 
 #define kDefaultNumBytes 1024
 
-IOSAppPackager::IOSAppPackager( const MPlatformServices& services, MacSimulatorServices *simulatorServices /* = NULL */)
-	: PlatformAppPackager( services, TargetDevice::kIPhonePlatform ),
-    fSimulatorServices(simulatorServices)
+IOSAppPackager::IOSAppPackager( const MPlatformServices& services )
+	: PlatformAppPackager( services, TargetDevice::kIPhonePlatform )
 {
 	lua_State *L = fVM;
-
-#if ! defined(Rtt_NO_GUI)
-    if (fSimulatorServices != NULL)
-    {
-        lua_pushlightuserdata( L, fSimulatorServices );
-        Lua::RegisterModuleLoader( L, "simulator", LuaLibSimulator::Open, 1 );
-    }
-#endif
 
 	Lua::RegisterModuleLoader( L, "CoronaPListSupport", Lua::Open< luaload_CoronaPListSupport > );
 	HTTPClient::registerFetcherModuleLoaders(L);
@@ -136,11 +115,6 @@ IOSAppPackager::Build( AppPackagerParams * params, const char* tmpDirBase )
 
 			if(true)
 			{
-				if (fSimulatorServices != NULL)
-				{
-					fSimulatorServices->SetBuildMessage("Collecting plugins locally");
-				}
-
 				lua_State *L = fVM;
 				
 				Lua::DoBuffer( L, & luaload_CoronaOfflineiOSPackager, NULL);
@@ -325,11 +299,6 @@ IOSAppPackager::Build( AppPackagerParams * params, const char* tmpDirBase )
                     }
                     lua_setfield( L, -2, "xcodetoolhelper" );
 				}
-
-                if (fSimulatorServices != NULL)
-                {
-                    fSimulatorServices->SetBuildMessage("Packaging app");
-                }
 
 				// iPhonePostPackage( params )
 				if ( ! Rtt_VERIFY( 0 == Lua::DoCall( L, 1, 1 ) ) )

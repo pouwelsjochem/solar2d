@@ -18,7 +18,6 @@
 #include "Rtt_MacConsolePlatform.h"
 #include "Rtt_Assert.h"
 #include "Rtt_MacPlatform.h"
-#include "Rtt_MacSimulatorServices.h"
 
 #import "XcodeToolHelper.h"
 #import "NSAlert-OAExtensions.h"
@@ -47,7 +46,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 	{
 		appDelegate = (AppDelegate*)[NSApp delegate];
 		signingIdentitiesAdded = NO;
-		simulatorServices = new MacSimulatorServices(appDelegate, (CoronaWindowController *)self, nil);
 		platformName = @"osx";
 		platformTitle = @"macOS";
 	}
@@ -355,7 +353,7 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 
 	const char* apppackage = "NULL";
 
-	OSXAppPackager *osxPackager = new OSXAppPackager( services, simulatorServices );
+	OSXAppPackager *osxPackager = new OSXAppPackager( services );
 
 	bool isvalidsettings = osxPackager->ReadBuildSettings( srcDir );
 

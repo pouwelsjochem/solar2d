@@ -12,7 +12,6 @@
 #include "Rtt_MacConsolePlatform.h"
 #include "Rtt_Assert.h"
 #include "Rtt_MacPlatform.h"
-#include "Rtt_MacSimulatorServices.h"
 #include "Rtt_MacSimulator.h"
 
 #import "AppleAppBuildController.h"
@@ -43,7 +42,6 @@ NSString *kAppleDistributionIdentityTag = @"Apple Distribution";
 
 	if ( self )
 	{
-        simulatorServices = new MacSimulatorServices(appDelegate, (CoronaWindowController *)self, nil);
         useItunesConnect = NO;
 	}
 

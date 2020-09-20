@@ -9,15 +9,10 @@
 
 local json = require('json')
 local lfs = require('lfs')
-local simAvail, simulator = pcall(require, "simulator")
 
 -- defines modifyPlist()
 local CoronaPListSupport = require("CoronaPListSupport")
 local captureCommandOutput = CoronaPListSupport.captureCommandOutput
-
-if not simAvail then
-	simulator = nil
-end
 
 -- get the numeric value of the "debugBuildProcess" preference or 0 if it's not set (note due to a Lua bug
 -- the value is actually the exit code multiplied by 256)
@@ -52,9 +47,6 @@ end
 
 local function setStatus( msg )
 	print( "Building: " .. msg )
-	if simulator then
-		simulator.show('buildstatus', msg )
-	end
 end
 
 --------------------------------------------------------------------------------

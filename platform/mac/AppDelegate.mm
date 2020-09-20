@@ -106,7 +106,6 @@
 
 	#include "ListKeyStore.h"
 
-	#include "Rtt_MSimulatorServices.h"
 	#import "CoronaWindowController.h"
 
 	#import "TextEditorSupport.h"
@@ -490,7 +489,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @synthesize dstPath;
 @synthesize projectPath;
 @synthesize fSkin;
-@synthesize cachedSampleDirectoryPath;
 @synthesize fAppPath;
 @synthesize applicationHasBeenInitialized;
 @synthesize launchedWithFile;
@@ -1319,11 +1317,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 
 #if !defined( Rtt_PROJECTOR )
--(void)openWithPath:(NSString*)path
-{
-	[self closeSimulator:nil];
-	[self runApp:path];
-}
 
 -(void)openLastProject
 {
@@ -1437,7 +1430,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	BOOL isbadurl = NO; 
 	// URL Scheme/Syntax inspired by TextMate and MacVim
     // Example:
-	// corona://open?url=file:///Applications/CoronaSDK/SampleCode/GettingStarted/HelloWorld
+	// corona://open?url=file:///Applications/CoronaSDK/
 	NSString* urlstring = [[event paramDescriptorForKeyword:keyDirectObject] stringValue];
     NSURL* url = [NSURL URLWithString:urlstring];
 	

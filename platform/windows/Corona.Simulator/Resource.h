@@ -26,7 +26,6 @@
 #define IDI_SIMPLEPOOL                  340
 #define IDD_BUILD_PROGRESS              346
 #define IDD_NEW_PROJECT                 349
-#define IDD_SELECT_SAMPLE_PROJECT       350
 #define IDI_FACEBOOK                    351
 #define IDI_OPEN_FEINT                  352
 #define IDI_MULTITOUCH                  353
@@ -142,8 +141,6 @@
 #define IDS_SELECT_BUILD_OUTPUT_FOLDER_DESCRIPTION 644
 #define IDS_BUILD_VERSION_NAME_NOT_PROVIDED 645
 #define IDS_FILTER_ALL_PROJECTS         646
-#define IDS_MUST_SELECT_SAMPLE_PROJECT  647
-#define IDS_UNABLE_TO_FIND_SAMPLE_PROJECTS_DIRECTORY 648
 #define IDS_SIMULATOR_FILES             650
 #define IDS_BUILD_SETTINGS_FILE_ERROR   651
 #define IDS_BUILD_TARGET_APP_STORE_NOT_SELECTED 652
@@ -207,7 +204,6 @@
 #define IDC_TEMPLATE_GAME_LABEL         1079
 #define IDC_TEMPLATE_EBOOK_LABEL        1080
 #define IDC_BUILD_VERSION_NAME          1082
-#define IDC_SAMPLE_LIST                 1083
 #define IDC_FILTER_COMBO_BOX            1084
 #define IDC_BUILD_TARGET_APP_STORE      1085
 #define IDC_USER_ACCOUNT                1086
@@ -227,7 +223,6 @@
 #define IDC_INCLUDE_STANDART_RESOURCES  1104
 #define IDC_CREATE_FB_INSTANT_ARCHIVE   1105
 #define ID_Menu                         32771
-#define ID_FILE_OPENFORBUILD            32772
 #define ID_FILE_RELAUNCH                32774
 #define ID_VIEW_SUSPEND                 32778
 #define ID_HELP_HELP                    32779
@@ -236,11 +231,6 @@
 #define ID_FILE_SHOWPROJECTSANDBOX      32796
 #define ID_FILE_OPENINEDITOR            32799
 #define ID_VIEW_DEMO                    32801
-#define ID_VIEW_SAMPLEPROJECTS          32804
-#define ID_VIEW_SAMPLE_PROJECTS         32805
-#define ID_HELP_SAMPLEPROJECTS          32806
-#define ID_FILE_OPEN_SAMPLE             32807
-#define ID_FILE_OPEN_SAMPLE_PROJECT     32808
 #define ID_FILE_OPENINWINDOWSEXPLORER   32809
 #define ID_FILE_SHOW_PROJECT_FILES      32810
 #define ID_BUILD_FOR_ANDROID            32811

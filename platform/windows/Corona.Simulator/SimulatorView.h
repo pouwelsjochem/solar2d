@@ -14,7 +14,6 @@
 #include "Interop\SimulatorRuntimeEnvironment.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_TargetDevice.h"
-#include "Rtt_WinSimulatorServices.h"
 
 
 #pragma region Forward Declarations
@@ -53,7 +52,6 @@ class CSimulatorView : public CView
 		const Rtt::PlatformSimulator::Config& GetDeviceConfig() { return mDeviceConfig; }
 		void UpdateSimulatorSkin();
 		Interop::SimulatorRuntimeEnvironment* GetRuntimeEnvironment()  { return mRuntimeEnvironmentPointer; }
-		void PostOpenWithPath(CString fileName);
 
 		/// <summary>
 		///  <para>
@@ -116,7 +114,6 @@ class CSimulatorView : public CView
 		afx_msg void OnViewNavigateBack();
 		afx_msg void OnFileMRU1();
 		afx_msg void OnFileOpen();
-		afx_msg void OnFileOpenSampleProject();
 		afx_msg void OnBuildForAndroid();
 		afx_msg void OnBuildForWeb();
 		afx_msg void OnBuildForLinux();
@@ -156,7 +153,6 @@ class CSimulatorView : public CView
 		CCoronaControlContainer mCoronaContainerControl;
 		Interop::SimulatorRuntimeEnvironment* mRuntimeEnvironmentPointer;
 		Interop::SimulatorRuntimeEnvironment::LoadedEvent::MethodHandler<CSimulatorView> mRuntimeLoadedEventHandler;
-		Rtt::WinSimulatorServices mSimulatorServices;
 		CMessageDlg* mMessageDlgPointer;
 		CString mDeviceName;
 		Rtt::PlatformSimulator::Config mDeviceConfig;
