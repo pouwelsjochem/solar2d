@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "borderless-ios-phone",
-	deviceWidth = 1136,
-	deviceHeight = 640,
-	deviceName = "iPhone @2x",
+	category = "social",
+	deviceWidth = 280 * 4,
+	deviceHeight = 160 * 4,
+	deviceName = "Twitter (280x160 @4x)",
 }

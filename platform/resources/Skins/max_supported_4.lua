@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "borderless-winphone",
-	deviceWidth = 1280,
-	deviceHeight = 768,
-	deviceName = "Windows Phone",
+	category = "max-supported",
+	deviceWidth = 350 * 4,
+	deviceHeight = 180 * 4,
+	deviceName = "Maximum (350x180 @4x)",
 }

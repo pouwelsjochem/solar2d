@@ -45,11 +45,7 @@ class StaticTargetDeviceFinalizer
 static StaticTargetDeviceFinalizer sTargetDeviceFinalizer;
 
 
-#if defined( Rtt_WIN_ENV )
-const char *kDefaultSkinName = "Samsung Galaxy S5";
-#else
-const char *kDefaultSkinName = "iPhone 5";
-#endif
+const char *kDefaultSkinName = "Minimum supported (240x160)";
     
 TargetDevice::SkinSpec **TargetDevice::fSkins = NULL;
 int TargetDevice::fSkinCount = 0;
@@ -60,32 +56,15 @@ static int compar_SkinSpec(const void *item1, const void *item2)
 {
     TargetDevice::SkinSpec *skin1 = *(TargetDevice::SkinSpec **) item1;
     TargetDevice::SkinSpec *skin2 = *(TargetDevice::SkinSpec **) item2;
-    const char *borderless = "borderless-";
-    const size_t borderlessLen = strlen(borderless);
     
     // printf("Comparing %s and %s\n", skin1->GetName(), skin2->GetName());
     
     Rtt_ASSERT( skin1 != NULL );
     Rtt_ASSERT( skin2 != NULL );
+
+    int skinCategoryComp = strcmp(skin1->GetCategory(), skin2->GetCategory());
     
-    // Sort first by device type and then by name within that, then by device width, then by height
-    // with the exception that device types of "borderless-*" sort to the end
-
-    if (strncmp(skin1->GetDeviceType(), borderless, borderlessLen) != 0 &&
-        strncmp(skin2->GetDeviceType(), borderless, borderlessLen) == 0)
-    {
-        return -1;
-    }
-
-    if (strncmp(skin1->GetDeviceType(), borderless, borderlessLen) == 0 &&
-        strncmp(skin2->GetDeviceType(), borderless, borderlessLen) != 0)
-    {
-        return 1;
-    }
-
-    int devTypeComp = strcmp(skin1->GetDeviceType(), skin2->GetDeviceType());
-    
-    if (devTypeComp == 0)
+    if (skinCategoryComp == 0)
     {
         int skinNameComp = strcmp(skin1->GetName(), skin2->GetName());
 
@@ -109,7 +88,7 @@ static int compar_SkinSpec(const void *item1, const void *item2)
     }
     else
     {
-        return devTypeComp;
+        return skinCategoryComp;
     }
 }
 #endif // Rtt_AUTHORING_SIMULATOR
@@ -131,7 +110,7 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
     {
         int status = 0;
         char *skinName = NULL;
-        char *skinDevice = NULL;
+        char *skinCategory = NULL;
         int skinWidth = 0;
         int skinHeight = 0;
         lua_State *L = CoronaLuaNew( kCoronaLuaFlagNone );
@@ -143,8 +122,8 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
             
             if ( lua_istable( L, -1 ) )
             {
-                lua_getfield( L, -1, "device" );
-                skinDevice = (char *) luaL_optstring( L, -1, "Untitled Skin" );
+                lua_getfield( L, -1, "category" );
+                skinCategory = (char *) luaL_optstring( L, -1, "Untitled category" );
                 lua_pop( L, 1 );
 
                 lua_getfield( L, -1, "deviceName" );
@@ -160,7 +139,7 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
                 lua_pop( L, 1 );
             }
 
-            fSkins[fSkinCount] = new SkinSpec(skinName, skinFiles[i], skinDevice, skinWidth, skinHeight);
+            fSkins[fSkinCount] = new SkinSpec(skinName, skinFiles[i], skinCategory, skinWidth, skinHeight);
             ++fSkinCount;
         }
         else
@@ -175,7 +154,7 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
     
 	for (int i = 0; i < fSkinCount; i++)
     {
-		// Rtt_TRACE_SIM(("TargetDevice::Initialize: skin: %d: %s = %s\n", i, fSkins[i]->GetDeviceType(), fSkins[i]->GetName()));
+		// Rtt_TRACE_SIM(("TargetDevice::Initialize: skin: %d: %s = %s\n", i, fSkins[i]->GetCategory(), fSkins[i]->GetName()));
         
         // Remember the index of the platform's default skin in case we want a default later
         if (strcmp(fSkins[i]->GetName(), kDefaultSkinName) == 0)
@@ -437,7 +416,7 @@ TargetDevice::LuaObjectFileFromSkin( int skinID )
         return NULL;
     }
     
-    if (skinID < 0)
+    if (skinID < 0 || skinID >= fSkinCount)
     {
         skinID = fDefaultSkinID;
     }
@@ -494,7 +473,7 @@ TargetDevice::NameForSkin( int skinID )
         return NULL;
     }
 
-    if (skinID < 0)
+    if (skinID < 0 || skinID >= fSkinCount)
     {
         skinID = fDefaultSkinID;
     }
@@ -525,14 +504,14 @@ TargetDevice::HeightForSkin( int skinID )
 }
     
 const char *
-TargetDevice::DeviceTypeForSkin( int skinID )
+TargetDevice::CategoryForSkin( int skinID )
 {
     if (skinID < 0 || skinID >= fSkinCount)
     {
         skinID = fDefaultSkinID;
     }
 
-    return fSkins[skinID]->GetDeviceType();
+    return fSkins[skinID]->GetCategory();
 }
 
 TargetDevice::Skin

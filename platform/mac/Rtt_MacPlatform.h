@@ -33,7 +33,6 @@ extern NSString* const kDstFolderPath;
 extern NSString* const kDidAgreeToLicense;
 extern NSString* const kUserPreferenceUsersCurrentSelectedSkin;
 extern NSString* const kUserPreferenceCustomBuildID;
-extern NSString* const kUserPreferenceDoNotUseSkinnedWindows;
 extern NSString* const kUserPreferenceLastIOSCertificate;
 extern NSString* const kUserPreferenceLastTVOSCertificate;
 extern NSString* const kUserPreferenceLastOSXCertificate;

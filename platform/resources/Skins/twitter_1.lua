@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "android-phone",
-	deviceWidth = 1920,
-	deviceHeight = 1080,
-	deviceName = "Samsung Galaxy S5",
+	category = "social",
+	deviceWidth = 280,
+	deviceHeight = 160,
+	deviceName = "Twitter (280x160 @1x)",
 }

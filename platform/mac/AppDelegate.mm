@@ -158,7 +158,6 @@ static NSString* kDockIconBounceTime = @"dockIconBounceTime";
 static NSString* kSuppressUnsupportedOSWarning = @"suppressUnsupportedOSWarning";
 
 static NSString* kWindowMenuItemName = @"Window";
-static NSString* kBorderlessMenuItemName = @"Borderless";
 static NSString* kViewAsMenuItemName = @"View As";
 
 // TODO: Remove once the Beta is over
@@ -584,13 +583,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 -(void)coronaInit:(NSNotification*)aNotification
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserPreferenceDoNotUseSkinnedWindows])
-    {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserPreferenceDoNotUseSkinnedWindows];
-
-		NSRunAlertPanel( @"Corona Simulator - Deprecated Preference", @"The \"Display device border\" preference is no longer used.  Borderless devices can be chosen in the Window/View As menu instead.", nil, nil, nil );
-    }
-    
     // The builtin Skins directory is in the Resource directory in the bundle
     NSString *builtinSkinsDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Skins"];
     NSFileManager *localFileManager = [NSFileManager defaultManager];
@@ -773,7 +765,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     }
 
     const char *itemTitle = NULL;
-    NSString *lastDeviceType = nil;
+    NSString *lastSkinCategory = nil;
     int skinCount = 0;
     long itemCount = 0;
     long viewAsItemCount = 0;
@@ -784,33 +776,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     {
         int skinWidth = Rtt::TargetDevice::WidthForSkin(skinCount);
         int skinHeight = Rtt::TargetDevice::HeightForSkin(skinCount);
-        NSString *deviceType = [NSString stringWithExternalString:Rtt::TargetDevice::DeviceTypeForSkin(skinCount)];
-
-        // Note that this programmatic conceit depends on "borderless-*" being sorted to the end of the device types
-        // (see Rtt_TargetDevice.cpp)
-        if (parentMenu == viewAsMenu && lastDeviceType != nil && [deviceType hasPrefix:@"borderless-"])
-        {
-            [parentMenu insertItem:[NSMenuItem separatorItem] atIndex:itemCount];
-            ++itemCount;
-
-            NSMenuItem *newItem = [viewAsMenu insertItemWithTitle:kBorderlessMenuItemName
-                                                           action:nil
-                                                    keyEquivalent:@""
-                                                          atIndex:itemCount];
-
-            viewAsItemCount = itemCount + 1;
-            lastDeviceType = deviceType;
-            itemCount = 0;
-            parentMenu = [[NSMenu alloc] init];
-            [viewAsMenu setSubmenu:parentMenu forItem:newItem];
-        }
-
+        NSString *skinCategory = [NSString stringWithExternalString:Rtt::TargetDevice::CategoryForSkin(skinCount)];
         NSMenuItem *newItem = [parentMenu insertItemWithTitle:[NSString stringWithExternalString:itemTitle]
                                                        action:@selector(viewAsAction:)
                                                 keyEquivalent:@""
                                                       atIndex:itemCount];
         [newItem setTag:skinCount];
-
 
         NSMutableParagraphStyle* paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         NSMutableArray *tabs = [NSMutableArray array];
@@ -830,13 +801,13 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         [paragraphStyle release];
         [formattedTitle release];
        
-        if (lastDeviceType != nil && ! [deviceType isEqualToString:lastDeviceType])
+        if (lastSkinCategory != nil && ! [skinCategory isEqualToString:lastSkinCategory])
         {
             [parentMenu insertItem:[NSMenuItem separatorItem] atIndex:itemCount];
             ++itemCount;
         }
 
-        lastDeviceType = deviceType;
+        lastSkinCategory = skinCategory;
 
         ++skinCount;
         ++itemCount;
@@ -1806,19 +1777,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     NSMenu *windowMenu = [windowMenuItem submenu];
     NSMenuItem *viewAsItem = [windowMenu itemWithTitle:kViewAsMenuItemName];
     NSMenu *viewAsMenu = [viewAsItem submenu];
-    NSMenu *borderlessMenu = [[viewAsMenu itemWithTitle:kBorderlessMenuItemName] submenu];
 
     Rtt_ASSERT(viewAsItem != nil);
 
     NSMutableArray *skinMenuItems = [NSMutableArray arrayWithArray:[viewAsMenu itemArray]];
-
-    if (borderlessMenu != nil)
-    {
-        // We can get called before the View As menus is completely set up but we'll
-        // get called again before it's visible
-        [skinMenuItems addObjectsFromArray:[borderlessMenu itemArray]];
-    }
-    
     for (NSMenuItem *item in skinMenuItems)
     {
         if ([item tag] == self.fSkin)

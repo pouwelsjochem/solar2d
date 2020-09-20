@@ -75,7 +75,6 @@ NSString* const kDstFolderPath = @"dstFolderPath";
 NSString* const kDidAgreeToLicense = @"didAgreeToLicense";
 NSString* const kUserPreferenceUsersCurrentSelectedSkin = @"skin";
 NSString* const kUserPreferenceCustomBuildID = @"userPreferenceCustomBuildID";
-NSString* const kUserPreferenceDoNotUseSkinnedWindows = @"doNotUseSkinnedWindows"; // deprecated
 NSString* const kUserPreferenceLastIOSCertificate = @"lastIOSCertificate";
 NSString* const kUserPreferenceLastTVOSCertificate = @"lastTVOSCertificate";
 NSString* const kUserPreferenceLastOSXCertificate = @"lastOSXCertificate";

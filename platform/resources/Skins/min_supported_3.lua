@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "winphone-phone",
-	deviceWidth = 800,
-	deviceHeight = 480,
-	deviceName = "HTC Windows Phone 8S",
+	category = "min-supported",
+	deviceWidth = 240 * 3,
+	deviceHeight = 160 * 3,
+	deviceName = "Minimum (240x160 @3x)",
 }

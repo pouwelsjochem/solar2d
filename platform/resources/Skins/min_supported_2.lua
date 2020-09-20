@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "android-tv",
-	deviceWidth = 1920,
-	deviceHeight = 1080,
-	deviceName = "Ouya",
+	category = "min-supported",
+	deviceWidth = 240 * 2,
+	deviceHeight = 160 * 2,
+	deviceName = "Minimum (240x160 @2x)",
 }

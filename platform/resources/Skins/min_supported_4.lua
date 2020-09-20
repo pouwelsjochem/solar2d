@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "android-phone",
-	deviceWidth = 2960,
-	deviceHeight = 1440,
-	deviceName = "Samsung Galaxy S8+",
+	category = "min-supported",
+	deviceWidth = 240 * 4,
+	deviceHeight = 160 * 4,
+	deviceName = "Minimum (240x160 @4x)",
 }

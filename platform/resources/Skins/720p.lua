@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "borderless-ios-phone",
-	deviceWidth = 2436,
-	deviceHeight = 1125,
-	deviceName = "iPhone @3x",
+	category = "default-resolutions",
+	deviceWidth = 1280,
+	deviceHeight = 720,
+	deviceName = "720p",
 }

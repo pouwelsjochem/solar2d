@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "ios-phone",
-	deviceWidth = 2436,
-	deviceHeight = 1125,
-	deviceName = "iPhone X",
+	category = "max-supported",
+	deviceWidth = 350,
+	deviceHeight = 180,
+	deviceName = "Maximum (350x180 @1x)",
 }

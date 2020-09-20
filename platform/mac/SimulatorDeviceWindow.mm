@@ -196,8 +196,6 @@
 	[super setFrame:frameRect display:flag];
 }
 
-// Override b/c NSBorderlessWindowMask windows can't become key by default
-// and thus controls in such windows won't ever be enabled by default.
 - (BOOL) canBecomeKeyWindow
 {
 	return YES;

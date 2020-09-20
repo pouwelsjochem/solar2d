@@ -123,24 +123,24 @@ class TargetDevice
             Rtt::String fLabel;
             Rtt::String fName;
             Rtt::String fPath;
-            Rtt::String fDeviceType;
+            Rtt::String fCategory;
             int fWidth;
             int fHeight;
             
         public:
 #ifdef Rtt_AUTHORING_SIMULATOR
 	// This works around some ugly interdependencies with app_sign
-            SkinSpec(const char *name, const char *path, const char *type, int width, int height) {
+            SkinSpec(const char *name, const char *path, const char *category, int width, int height) {
                 fName.Set(name);
                 fPath.Set(path);
-                fDeviceType.Set(type);
+                fCategory.Set(category);
                 fWidth = width;
                 fHeight = height;
 
                 fLabel.Set(GenerateLabel(fPath.GetString()));
             }
 #else
-            SkinSpec() : fLabel(NULL, NULL), fName(NULL, NULL), fPath(NULL, NULL), fDeviceType(NULL, NULL), fWidth(0), fHeight(0) {}
+            SkinSpec() : fLabel(NULL, NULL), fName(NULL, NULL), fPath(NULL, NULL), fCategory(NULL, NULL), fWidth(0), fHeight(0) {}
 #endif // Rtt_AUTHORING_SIMULATOR
 
             const char *GenerateLabel(const char *path);
@@ -151,8 +151,8 @@ class TargetDevice
             const char *GetName() { return fName.GetString(); }
             void SetPath(const char *path) { fName.Set(path); }
             const char *GetPath() { return fPath.GetString(); }
-            void SetDeviceType(const char *type) { fDeviceType.Set(type); }
-            const char *GetDeviceType() { return fDeviceType.GetString(); }
+            void SetCategory(const char *type) { fCategory.Set(type); }
+            const char *GetCategory() { return fCategory.GetString(); }
             void SetWidth(int width) { fWidth = width; }
             int GetWidth() { return fWidth; }
             void SetHeight(int height) { fHeight = height; }
@@ -178,7 +178,7 @@ class TargetDevice
         static const int HeightForSkin( int skinID );
         static Skin SkinForLabel( const char* skinname );
         static const char *LabelForSkin( int skinID );
-        static const char *DeviceTypeForSkin( int skinID );
+        static const char *CategoryForSkin( int skinID );
 };
 
 // ----------------------------------------------------------------------------

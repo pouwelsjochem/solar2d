@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "ios-tablet",
-	deviceWidth = 2732,
-	deviceHeight = 2048,
-	deviceName = "iPad Pro",
+	category = "min-supported",
+	deviceWidth = 240,
+	deviceHeight = 160,
+	deviceName = "Minimum (240x160 @1x)",
 }

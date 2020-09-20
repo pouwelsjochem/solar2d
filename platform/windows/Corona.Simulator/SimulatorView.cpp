@@ -908,9 +908,6 @@ void CSimulatorView::OnUpdateWindowViewAs( CCmdUI *pCmdUI )
 		// Create the skins menu if we haven't already
 		if (pViewAsMenu == NULL || pViewAsMenu->GetMenuItemCount() == 1)
 		{
-			CMenu borderlessMenu;
-			borderlessMenu.CreateMenu();
-			CMenu *pBorderlessMenu = &borderlessMenu;
 			CMenu *pParentMenu = pViewAsMenu;
 
 #if _DEBUG
@@ -922,8 +919,8 @@ void CSimulatorView::OnUpdateWindowViewAs( CCmdUI *pCmdUI )
 			pViewAsMenu->RemoveMenu(0, MF_BYPOSITION);
 
 			const char *skinName = NULL;
-			const char *deviceType = NULL;
-			const char *lastDeviceType = NULL;
+			const char *skinCategory = NULL;
+			const char *lastSkinCategory = NULL;
 			long skinCount = 0;
 			long itemCount = 0;
 			long viewAsItemCount = 0;
@@ -932,48 +929,23 @@ void CSimulatorView::OnUpdateWindowViewAs( CCmdUI *pCmdUI )
 				CString itemTitle;
 				int skinWidth = Rtt::TargetDevice::WidthForSkin(skinCount);
 				int skinHeight = Rtt::TargetDevice::HeightForSkin(skinCount);
-				deviceType = Rtt::TargetDevice::DeviceTypeForSkin(skinCount);
-
-				// Note that this programmatic conceit depends on "borderless-*" device types being sorted to the end of the list
-				// (see Rtt_TargetDevice.cpp)
-				if (pParentMenu == pViewAsMenu && lastDeviceType != NULL && strncmp(deviceType, "borderless-", 11) == 0)
-				{
-					// Separator
-					pViewAsMenu->InsertMenu(itemCount, MF_BYPOSITION|MFT_SEPARATOR, 0, _T("-"));
-					++itemCount;
-
-					pViewAsMenu->InsertMenu(itemCount, MF_BYPOSITION | MF_POPUP, (UINT_PTR)pBorderlessMenu->GetSafeHmenu(), _T("Borderless"));
-					++itemCount;
-
-					viewAsItemCount = itemCount + 1;
-					lastDeviceType = deviceType;
-					itemCount = 0;
-					pParentMenu = pBorderlessMenu;
-				}
+				skinCategory = Rtt::TargetDevice::CategoryForSkin(skinCount);
 
 				itemTitle.Format(_T("%S\t%dx%d"), skinName, skinWidth, skinHeight);
 
 				pParentMenu->InsertMenu(itemCount, MF_BYPOSITION, ID_VIEWAS_BEGIN + skinCount, itemTitle);
 
 				// If the device type changes, insert a separator in the menu
-				if (lastDeviceType != NULL && strcmp(deviceType, lastDeviceType) != 0)
+				if (lastSkinCategory != NULL && strcmp(skinCategory, lastSkinCategory) != 0)
 				{
 					pParentMenu->InsertMenu(itemCount, MF_BYPOSITION|MFT_SEPARATOR, 0, _T("-"));
 					++itemCount;
 				}
 
-				lastDeviceType = deviceType;
+				lastSkinCategory = skinCategory;
 
 				++skinCount;
 				++itemCount;
-			}
-			if (pParentMenu == pBorderlessMenu)
-			{
-				borderlessMenu.Detach();
-			}
-			else
-			{
-				bool uhOh = true;
 			}
 
 			// Separator

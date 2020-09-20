@@ -7,12 +7,10 @@
 --
 ------------------------------------------------------------------------------
 
--- Based on the Nexus 9
--- https://material.io/devices/
 simulator =
 {
-	device = "borderless-android-device",
-	deviceWidth = 2048,
-	deviceHeight = 1536,
-	deviceName = "Android (xhdpi)",
+	category = "max-supported",
+	deviceWidth = 350 * 2,
+	deviceHeight = 180 * 2,
+	deviceName = "Maximum (350x180 @2x)",
 }

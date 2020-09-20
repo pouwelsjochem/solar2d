@@ -9,8 +9,8 @@
 
 simulator =
 {
-	device = "android-phone",
-	deviceWidth = 1280,
-	deviceHeight = 720,
-	deviceName = "Samsung Galaxy S3",
+	category = "default-resolutions",
+	deviceWidth = 1920,
+	deviceHeight = 1080,
+	deviceName = "1080p",
 }
