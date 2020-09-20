@@ -133,9 +133,6 @@ class MPlatform
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const = 0;
 
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const = 0;
-    
-		virtual void SetIdleTimer( bool enabled ) const = 0;
-		virtual bool GetIdleTimer() const = 0;
 
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const = 0;
 

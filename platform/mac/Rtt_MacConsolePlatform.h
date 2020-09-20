@@ -44,9 +44,6 @@ class MacConsolePlatform : public ApplePlatform
 
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
-		virtual void SetIdleTimer( bool enabled ) const;
-		virtual bool GetIdleTimer() const;
-
 		virtual NativeAlertRef ShowNativeAlert(
 			const char *title,
 			const char *msg,

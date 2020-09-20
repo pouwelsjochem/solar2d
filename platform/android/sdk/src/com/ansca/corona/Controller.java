@@ -75,8 +75,6 @@ public class Controller {
 	private NativeToJavaBridge      myBridge;
 	private AlertDialog             myAlertDialog;
 
-	private boolean 				myIdleEnabled;
-
 	private CoronaSensorManager		mySensorManager;
 
 	private IAndroidVersionSpecific	myAndroidVersion;
@@ -151,9 +149,6 @@ public class Controller {
 		myInitialResume = true;
 		myRuntimeState = RuntimeState.Stopped;
 		myAndroidVersion = AndroidVersionSpecificFactory.create();
-
-		// We disable the idle timer for Android 5.1.X to work-around several OS issues with OpenGL.
-		myIdleEnabled = android.os.Build.VERSION.SDK_INT != 22;
 	}
 
 	void setGLView(com.ansca.corona.graphics.opengl.CoronaGLSurfaceView glView) {
@@ -219,7 +214,6 @@ public class Controller {
 		requestEventRender();
 		mySensorManager.resume();
 		startTimer();
-		internalSetIdleTimer(myIdleEnabled);
 	}
 	
 	public synchronized void stop() {
@@ -233,8 +227,6 @@ public class Controller {
 
 		// If we don't do this then there won't be one last onDrawFrame call which means the runtime won't be stopped!
 		requestEventRender();
-
-		internalSetIdleTimer(true);
 	}
 	
 	public synchronized void destroy() {
@@ -750,40 +742,6 @@ public class Controller {
 		
 		// Returns true if the save was successful.
 		return result;
-	}
-	
-	private void internalSetIdleTimer( boolean enabled )
-	{
-		if (myCoronaApiListener == null) {
-			Log.i("Corona", "Controller.internalSetIdleTimer(): Can't set internal idle timer because our ApiListener is gone!");
-			return;
-		}
-
-		// We disable the idle timer for Android 5.1.X to work-around several OS issues with OpenGL.
-		if (enabled && android.os.Build.VERSION.SDK_INT != 22)
-		{
-			myCoronaApiListener.removeKeepScreenOnFlag();
-		}
-		else
-		{
-			myCoronaApiListener.addKeepScreenOnFlag();
-		}
-	}
-
-	public void setIdleTimer( boolean enabled )
-	{
-		internalSetIdleTimer(enabled);
-		if (android.os.Build.VERSION.SDK_INT == 22) {
-			// We disable the idle timer for Android 5.1.X to work-around several OS issues with OpenGL.
-			myIdleEnabled = false;
-		} else {
-			myIdleEnabled = enabled;
-		}
-	}
-
-	public boolean getIdleTimer()
-	{
-		return myIdleEnabled;
 	}
 
 	/**

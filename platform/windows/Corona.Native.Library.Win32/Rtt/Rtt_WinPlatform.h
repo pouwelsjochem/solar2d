@@ -66,8 +66,6 @@ class WinPlatform : public MPlatform
 		virtual bool OpenURL(const char* url) const;
 		virtual int CanOpenURL(const char* url) const;
 		virtual PlatformStoreProvider* GetStoreProvider(const ResourceHandle<lua_State> & handle) const;
-		virtual void SetIdleTimer(bool enabled) const;
-		virtual bool GetIdleTimer() const;
 		virtual NativeAlertRef ShowNativeAlert(
 					const char *title, const char *message, const char **buttonLabels,
 					U32 buttonCount, LuaResource *resourcePointer) const;
@@ -113,7 +111,6 @@ class WinPlatform : public MPlatform
 		WinCrypto fCrypto;
 		mutable PlatformFBConnect *fFBConnect;
 		WinExitCallback fExitCallback;
-		mutable bool fIsIdleTimerEnabled;
 };
 
 }	// namespace Rtt

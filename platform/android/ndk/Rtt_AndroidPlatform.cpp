@@ -146,19 +146,6 @@ AndroidPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) con
 	return fStoreProvider;
 }
 
-void
-AndroidPlatform::SetIdleTimer( bool enabled ) const
-{
-	fNativeToJavaBridge->SetIdleTimer( enabled );
-}
-
-bool
-AndroidPlatform::GetIdleTimer() const
-{
-	return fNativeToJavaBridge->GetIdleTimer();
-}
-
-
 NativeAlertRef
 AndroidPlatform::ShowNativeAlert(
 	const char *title,

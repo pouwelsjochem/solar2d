@@ -316,20 +316,6 @@ vibrate( lua_State *L )
 	return 0;
 }
 
-static int
-setIdleTimer( lua_State *L )
-{
-	LuaContext::GetPlatform( L ).SetIdleTimer( lua_toboolean( L, 1 ) );
-	return 0;
-}
-
-static int
-getIdleTimer( lua_State *L )
-{
-	lua_pushboolean( L, LuaContext::GetPlatform( L ).GetIdleTimer() );
-	return 1;
-}
-
 // system.getPreference( categoryName, keyName [,valueType] )
 int
 LuaLibSystem::getPreference( lua_State *L )
@@ -1364,8 +1350,6 @@ LuaLibSystem::Initialize( lua_State *L )
 		{ "openURL", openURL },
 		{ "canOpenURL", canOpenURL },
 		{ "vibrate", vibrate },
-		{ "setIdleTimer", setIdleTimer },
-		{ "getIdleTimer", getIdleTimer },
 		{ "getPreference", getPreference },
 		{ "setPreference", setPreference },
 		{ "setPreferences", setPreferences },

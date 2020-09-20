@@ -105,17 +105,6 @@ MacConsolePlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) 
 	return NULL;
 }
 
-void
-MacConsolePlatform::SetIdleTimer( bool enabled ) const
-{
-}
-	
-bool
-MacConsolePlatform::GetIdleTimer() const
-{
-	return true;
-}
-
 NativeAlertRef
 MacConsolePlatform::ShowNativeAlert(
 	const char *title,

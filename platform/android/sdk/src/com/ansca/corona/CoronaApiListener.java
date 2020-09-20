@@ -12,7 +12,4 @@ package com.ansca.corona;
 /** The interface has all the funcations that are activity specific and shouldn't be exposed in corona kit */
 public interface CoronaApiListener{
 	public void onScreenLockStateChanged(boolean isScreenLocked);
-
-	public void addKeepScreenOnFlag();
-	public void removeKeepScreenOnFlag();
 }

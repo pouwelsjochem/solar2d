@@ -18,7 +18,6 @@
 #import <AppKit/NSOpenGLView.h>
 
 #include <sys/types.h>
-#import <IOKit/pwr_mgt/IOPMLib.h>
 
 // ----------------------------------------------------------------------------
 
@@ -93,9 +92,6 @@ class MacPlatform : public ApplePlatform
 
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
-		virtual void SetIdleTimer( bool enabled ) const;
-		virtual bool GetIdleTimer() const;
-
 		virtual NativeAlertRef ShowNativeAlert(
 			const char *title,
 			const char *msg,
@@ -155,7 +151,6 @@ class MacPlatform : public ApplePlatform
 #endif // Rtr_AUTHORING_SIMULATOR	
 		mutable PlatformStoreProvider *fStoreProvider;
 		PlatformExitCallback* fExitCallback;
-		mutable IOPMAssertionID fAssertionID;
 };
 
 // TODO: Move this to a separate file

@@ -34,35 +34,5 @@ public class CoronaApiHandler implements CoronaApiListener {
 		}
 		fActivity.onScreenLockStateChanged(isScreenLocked);
 	}
-
-
-/************************************************************************************************************************/
-
-	@Override
-	public void removeKeepScreenOnFlag() {
-		fActivity.runOnUiThread( new Runnable() {
-			public void run()
-			{
-				Window window = fActivity.getWindow();
-				if( null != window )
-				{
-					window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);						
-				}
-			}
-		} );
-	}
-
-	@Override
-	public void addKeepScreenOnFlag() {
-		fActivity.runOnUiThread( new Runnable() {
-			public void run()
-			{
-				Window window = fActivity.getWindow();
-				if( null != window )
-				{
-					window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-				}
-			}
-		} );
-	}
+	
 }

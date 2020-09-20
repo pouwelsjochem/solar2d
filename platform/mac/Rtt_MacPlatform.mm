@@ -41,7 +41,6 @@
 #import <Foundation/NSString.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <netinet/in.h>
-#import <IOKit/pwr_mgt/IOPMLib.h>
 
 //#import <CoreFoundation/CoreFoundation.h>
 //#import <Security/Security.h>
@@ -367,8 +366,7 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fFBConnect( NULL ),
 #endif // Rtt_AUTHORING_SIMULATOR
 	fStoreProvider( NULL ),
-	fExitCallback( NULL ),
-	fAssertionID(kIOPMNullAssertionID)
+	fExitCallback( NULL )
 {
 	NSString *path = [[NSBundle mainBundle] resourcePath];
 	fSandboxPath = [GetLibraryPath( GetUniqueName( path, [path lastPathComponent] ) ) retain];
@@ -391,12 +389,6 @@ MacPlatform::~MacPlatform()
 	[fSandboxPath release];
 
 	[fView release];
-
-	if (fAssertionID != kIOPMNullAssertionID)
-	{
-		IOPMAssertionRelease(fAssertionID);
-		fAssertionID = kIOPMNullAssertionID;
-	}
 }
 
 void
@@ -755,56 +747,6 @@ MacPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
 	}
 	return fStoreProvider;
 #endif // Rtt_AUTHORING_SIMULATOR
-}
-
-void
-MacPlatform::SetIdleTimer( bool enabled ) const
-{
-	if (enabled)
-	{
-		// Release any previously made assertion
-		if (fAssertionID != kIOPMNullAssertionID)
-		{
-			IOPMAssertionRelease(fAssertionID);
-			fAssertionID = kIOPMNullAssertionID;
-		}
-	}
-	else
-	{
-#if Rtt_AUTHORING_SIMULATOR
-		Rtt_TRACE_SIM( ( "WARNING: disabling the idle timer can reduce battery life on the device\n" ) );
-#endif
-
-		//  NOTE: IOPMAssertionCreateWithName limits the string to 128 characters.
-		CFStringRef reasonForActivity= CFSTR("CoronaSDK app running");
-		IOPMAssertionID assertionID;
-
-		IOReturn result = IOPMAssertionCreateWithName(kIOPMAssertPreventUserIdleDisplaySleep,
-									kIOPMAssertionLevelOn, reasonForActivity, &assertionID);
-
-		if (result == kIOReturnSuccess)
-		{
-			// Release any previously made assertion
-			if (fAssertionID != kIOPMNullAssertionID)
-			{
-				IOPMAssertionRelease(fAssertionID);
-			}
-
-			fAssertionID = assertionID;
-		}
-		else
-		{
-#if Rtt_AUTHORING_SIMULATOR
-			Rtt_TRACE_SIM( ( "ERROR: unable to disable idle timer\n" ) );
-#endif
-		}
-	}
-}
-
-bool
-MacPlatform::GetIdleTimer() const
-{
-	return true;
 }
 
 NativeAlertRef
