@@ -156,7 +156,6 @@ namespace Rtt
 
 -(BOOL)isRelaunchable;
 
-#if !defined( Rtt_PROJECTOR )
 -(BOOL)isRunnable;
 -(BOOL)isBuildAvailable;
 -(BOOL)isAndroidBuildAvailable;
@@ -169,9 +168,7 @@ namespace Rtt
 
 -(void) showOpenPanel:(NSString*)title withAccessoryView:(NSView*)accessoryView startDirectory:(NSString*)start_directory completionHandler:(void(^)(NSString* path))completionhandler;
 
--(void)openWithPath:(NSString*)path;
 -(IBAction)open:(id)sender;
-#endif // Rtt_PROJECTOR
 
 -(BOOL)runApp:(NSString*)appPath;
 -(NSView*)openAccessoryView;

@@ -87,32 +87,30 @@
 #include <sys/sysctl.h>
 #include <string.h>
 
-#if !defined( Rtt_PROJECTOR )
-	#include "Rtt_IOSAppPackager.h"
-	#include "Rtt_AndroidAppPackager.h"
+#include "Rtt_IOSAppPackager.h"
+#include "Rtt_AndroidAppPackager.h"
 
-	#import "IOSAppBuildController.h"
-	#import "AndroidAppBuildController.h"
-	#import "WebAppBuildController.h"
-	#import "LinuxAppBuildController.h"
-	#import "OSXAppBuildController.h"
-	#import "TVOSAppBuildController.h"
+#import "IOSAppBuildController.h"
+#import "AndroidAppBuildController.h"
+#import "WebAppBuildController.h"
+#import "LinuxAppBuildController.h"
+#import "OSXAppBuildController.h"
+#import "TVOSAppBuildController.h"
 
-	#include "Rtt_PlatformDictionaryWrapper.h"
+#include "Rtt_PlatformDictionaryWrapper.h"
 
-	#import "AppleSigningIdentityController.h"
+#import "AppleSigningIdentityController.h"
 
-	#include "Rtt_TargetDevice.h"
+#include "Rtt_TargetDevice.h"
 
-	#include "ListKeyStore.h"
+#include "ListKeyStore.h"
 
-	#import "CoronaWindowController.h"
+#import "CoronaWindowController.h"
 
-	#import "TextEditorSupport.h"
-	#import "ValidationToolOutputViewController.h"
-	#import "ValidationSupportMacUI.h"
-	#import "SDKList.h"
-#endif // Rtt_PROJECTOR
+#import "TextEditorSupport.h"
+#import "ValidationToolOutputViewController.h"
+#import "ValidationSupportMacUI.h"
+#import "SDKList.h"
 
 #include "Rtt_MacDialogController.h"
 
@@ -325,10 +323,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 // BEGIN: Project Open
 // -----------------------------------------------------------------------------
 
-#if !defined( Rtt_PROJECTOR )
-
-// -----------------------------------------------------------------------------
-
 @interface OpenProjectDelegate : NSObject<NSOpenSavePanelDelegate>
 {
 	NSFileManager* fFileMgr;
@@ -460,9 +454,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @end
 
 // ----------------------------------------------------------------------------
-
-#endif // Rtt_PROJECTOR
-
 // -----------------------------------------------------------------------------
 // END: Project Open
 // -----------------------------------------------------------------------------
@@ -576,9 +567,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 // BEGIN: Simulator Startup
 // -----------------------------------------------------------------------------
 
-#if !defined( Rtt_PROJECTOR )
-
-
 -(void)coronaInit:(NSNotification*)aNotification
 {
     // The builtin Skins directory is in the Resource directory in the bundle
@@ -629,9 +617,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 }
 
 // -----------------------------------------------------------------------------
-
-#endif // Rtt_PROJECTOR
-
 // -----------------------------------------------------------------------------
 // END: Simulator Startup
 // -----------------------------------------------------------------------------
@@ -945,15 +930,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	NSString* mainObjectFile = [NSString stringWithExternalString:Rtt_LUA_OBJECT_FILE( "main" )];
 
-#if defined( Rtt_PROJECTOR )
-	if ( IsValidAppPath( fileMgr, appPath, mainObjectFile, nil ) )
-	{
-		if ( ! [self runApp:appPath] )
-		{
-			[[NSApplication sharedApplication] terminate:self];
-		}
-	}
-#else
 	NSString* mainScriptFile = [NSString stringWithExternalString:Rtt_LUA_SCRIPT_FILE( "main" )];
 
 	bool runScriptOnly = false;
@@ -1056,7 +1032,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			[self runApp:appPath];
 		}
 	}
-#endif // Rtt_PROJECTOR
 }
 
 -(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
@@ -1171,10 +1146,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 // BEGIN: Simulator UI (Preferences, Deauth, Open project)
 // -----------------------------------------------------------------------------
 
-#if !defined( Rtt_PROJECTOR )
-
-// -----------------------------------------------------------------------------
-
 -(IBAction)showPreferences:(id)sender
 {
 	if ( ! fPreferencesWindow )
@@ -1247,9 +1218,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 }
 
 // -----------------------------------------------------------------------------
-
-#endif // Rtt_PROJECTOR
-
 // -----------------------------------------------------------------------------
 // END: Simulator UI (Preferences, Deauth, Open project)
 // -----------------------------------------------------------------------------
@@ -1315,9 +1283,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	self.fSkin = skin;
 }
 
-
-#if !defined( Rtt_PROJECTOR )
-
 -(void)openLastProject
 {
     NSArray *recentDocuments = [[NSDocumentController sharedDocumentController] recentDocumentURLs];
@@ -1356,7 +1321,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	[self showOpenPanel:nil withAccessoryView:[self openAccessoryView] startDirectory:start_directory completionHandler:runProject];	
 }
-#endif // Rtt_PROJECTOR
 
 // Delegate callback that is triggered when the user selects an "Open Recent"
 - (BOOL) application:(NSApplication*)theApplication openFile:(NSString*)filepath
@@ -1930,9 +1894,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 // BEGIN: Device Build
 // -----------------------------------------------------------------------------
 
-#if !defined( Rtt_PROJECTOR )
-
-// -----------------------------------------------------------------------------
 -(BOOL)isRunnable
 {
 	return YES;
@@ -2314,9 +2275,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 }
 
 // -----------------------------------------------------------------------------
-
-#endif // Rtt_PROJECTOR
-
 // -----------------------------------------------------------------------------
 // END: Device Build
 // -----------------------------------------------------------------------------
@@ -2333,9 +2291,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 // BEGIN: Simulator UI
 // -----------------------------------------------------------------------------
 
-#if !defined( Rtt_PROJECTOR )
-
-// -----------------------------------------------------------------------------
 - (void) setFAppPath:(NSString*)appPath
 {
     if(fAppPath != appPath)
@@ -2536,8 +2491,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 }
 
 // -----------------------------------------------------------------------------
-
-#endif // Rtt_PROJECTOR
 
 - (NSString *) launchTaskAndReturnOutput:(NSString *)cmd arguments:(NSArray *)args
 {

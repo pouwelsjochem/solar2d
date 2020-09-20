@@ -55,10 +55,7 @@
 #endif
 
 #include "Rtt_Lua.h"
-
-#if !defined( Rtt_PROJECTOR )
-	#include "Rtt_JavaHost.h"
-#endif
+#include "Rtt_JavaHost.h"
 
 #include <pthread.h>
 #include <sstream>
