@@ -99,31 +99,6 @@ class LuaDisplayObjectProxyVTable : public LuaProxyVTable
 		static void PushAndRemove( lua_State *L, GroupObject* parent, S32 index );
 };
 
-class LuaLineObjectProxyVTable : public LuaDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaLineObjectProxyVTable Self;
-		typedef LuaDisplayObjectProxyVTable Super;
-
-	public:
-		static const Self& Constant();
-
-	public:
-		static int setStrokeColor( lua_State *L );
-		static int setStroke( lua_State *L );
-		static int setStroke( lua_State *L, int valueIndex );
-		static int append( lua_State *L );
-		static int setAnchorSegments( lua_State *L, int valueIndex );
-
-	protected:
-		LuaLineObjectProxyVTable() {}
-
-	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
-		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
-		virtual const LuaProxyVTable& Parent() const;
-};
-
 class LuaShapeObjectProxyVTable : public LuaDisplayObjectProxyVTable
 {
 	public:
@@ -168,23 +143,6 @@ class LuaSnapshotObjectProxyVTable : public LuaShapeObjectProxyVTable
 		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 
-		virtual const LuaProxyVTable& Parent() const;
-};
-
-class LuaCompositeObjectProxyVTable : public LuaDisplayObjectProxyVTable
-{
-	public:
-		typedef LuaCompositeObjectProxyVTable Self;
-		typedef LuaDisplayObjectProxyVTable Super;
-
-	public:
-		static const Self& Constant();
-
-	protected:
-		LuaCompositeObjectProxyVTable() {}
-
-	public:
-		virtual int ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const;
 		virtual const LuaProxyVTable& Parent() const;
 };
 

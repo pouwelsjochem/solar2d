@@ -267,7 +267,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_ImageSheetPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_BufferBitmap.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ClosedPath.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_CompositeObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_CompositePaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ContainerObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_CPUResourcePool.cpp
@@ -282,10 +281,8 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_ImageSheet.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ImageSheetPaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ImageSheetUserdata.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_LineObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_LuaLibDisplay.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_LuaLibGraphics.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_OpenPath.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_Paint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_PaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_PlatformBitmap.cpp
@@ -316,7 +313,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_SnapshotObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_SpriteObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_SpritePlayer.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_SpriteSourceFrame.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_StageObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_Tesselator.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorCircle.cpp

@@ -197,7 +197,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_BitmapPaintAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_BufferBitmap.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CompositeObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CompositePaint.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ContainerObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CPUResourcePool.cpp" />
@@ -213,10 +212,8 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ImageSheetPaint.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ImageSheetPaintAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ImageSheetUserdata.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_LineObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_LuaLibDisplay.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_LuaLibGraphics.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_OpenPath.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_Paint.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_PaintAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_PlatformBitmap.cpp" />
@@ -226,7 +223,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_Scene.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_Shader.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderBuiltin.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderCache.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderComposite.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderCompositeAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderData.cpp" />
@@ -248,7 +244,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SnapshotObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpriteObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpritePlayer.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpriteSourceFrame.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_StageObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_Tesselator.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorCircle.cpp" />
@@ -568,13 +563,11 @@
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaLua.h" />
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaMacros.h" />
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaVersion.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\LuaReader.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BitmapMask.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BitmapPaint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BitmapPaintAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BufferBitmap.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CompositeObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CompositePaint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ContainerObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CPUResourcePool.h" />
@@ -591,12 +584,9 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ImageSheetPaint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ImageSheetPaintAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ImageSheetUserdata.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LineObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LuaLibDisplay.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LuaLibGraphics.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_MDisplayDelegate.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_MDrawable.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_OpenPath.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_Paint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_PaintAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_PlatformBitmap.h" />
@@ -606,7 +596,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_Scene.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_Shader.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderBuiltin.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderCache.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderComposite.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderCompositeAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderData.h" />
@@ -628,7 +617,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_SnapshotObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_SpriteObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_SpritePlayer.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_SpriteSourceFrame.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_StageObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_Tesselator.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorCircle.h" />

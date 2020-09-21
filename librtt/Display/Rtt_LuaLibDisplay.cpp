@@ -46,14 +46,12 @@
 #include "Display/Rtt_ImageFrame.h"
 #include "Display/Rtt_ImageSheet.h"
 #include "Display/Rtt_ImageSheetUserdata.h"
-#include "Rtt_LineObject.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaLibSystem.h"
 #include "Rtt_LuaProxy.h"
 #include "Rtt_Matrix.h"
 #include "Rtt_MPlatform.h"
-#include "Display/Rtt_OpenPath.h"
 #include "Rtt_Runtime.h"
 #include "Display/Rtt_SpriteObject.h"
 #include "Renderer/Rtt_Texture.h"
@@ -124,7 +122,6 @@ class DisplayLibrary
 		static int newPolygon( lua_State *L );
 		static int newRect( lua_State *L );
 		static int newRoundedRect( lua_State *L );
-		static int newLine( lua_State *L );
 		static int newImage( lua_State *L );
 		static int newImageRect( lua_State *L );
 		static int newGroup( lua_State *L );
@@ -181,7 +178,6 @@ DisplayLibrary::Open( lua_State *L )
 		{ "newPolygon", newPolygon },
 		{ "newRect", newRect },
 		{ "newRoundedRect", newRoundedRect },
-		{ "newLine", newLine },
 		{ "newImage", newImage },
 		{ "newImageRect", newImageRect },
 		{ "newGroup", newGroup },
@@ -598,85 +594,6 @@ DisplayLibrary::newRoundedRect( lua_State *L )
 
 	v->Translate( x, y );
 	AssignDefaultFillColor( display, * v );
-
-	return result;
-}
-
-int
-DisplayLibrary::newLine( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display &display = library->GetDisplay();
-	Runtime &runtime = *LuaContext::GetRuntime( L );
-	Rtt_Allocator *pAllocator = runtime.Allocator();
-
-	int nextArg = 1;
-	GroupObject *parent = GetParent( L, nextArg );
-
-	// number of parameters (excluding self)
-	int numArgs = lua_gettop( L );
-
-	Vertex2 translate_to_origin = { 0.0f, 0.0f };
-
-	OpenPath *path = Rtt_NEW( pAllocator, OpenPath( pAllocator ) );
-	{
-		/*
-		printf( "***\n*** %s\n*** numArgs: %d\n***\n",
-				Rtt_FUNCTION,
-				numArgs );
-		*/
-		int end = ( numArgs - nextArg );
-
-		if( ! ( end & 1 ) )
-		{
-			luaL_error( L, "ERROR: display.newLine() requires an even number of vertices (got %d)", ( end + 1 ) );
-		}
-        else if (end < 3)
-        {
-			luaL_error( L, "ERROR: display.newLine() requires at least 4 vertices (got %d)", ( end + 1 ) );
-        }
-
-		for ( int i = 0; i < end; i += 2 )
-		{
-			Vertex2 v =
-			{
-				luaL_checkreal( L, nextArg + ( i + 0 ) ),
-				luaL_checkreal( L, nextArg + ( i + 1 ) )
-			};
-
-			//printf( "*** %3.1f %3.1f\n", v.x, v.y );
-
-			if( i == 0 )
-			{
-				// First point.
-				// The first point is at the origin, so it's always 0,0.
-				// Save the origin so we can translate the rest.
-				translate_to_origin = v;
-			}
-
-			v.x -= translate_to_origin.x;
-			v.y -= translate_to_origin.y;
-
-			path->Append( v );
-		}
-
-		//printf( "***\n***\n***\n" );
-	}
-
-	int result = 0;
-	{
-		LineObject* o = Rtt_NEW( pAllocator, LineObject( path ) );
-		result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
-		o->Translate( translate_to_origin.x, translate_to_origin.y );
-
-		// Assign default line width
-		o->SetStrokeWidth( Rtt_REAL_1 );
-
-		// Assign default color
-		SharedPtr< TextureResource > resource = display.GetTextureFactory().GetDefault();
-		Paint *p = Paint::NewColor( runtime.Allocator(), resource, display.GetDefaults().GetLineColor() );
-		o->SetStroke( p );
-	}
 
 	return result;
 }

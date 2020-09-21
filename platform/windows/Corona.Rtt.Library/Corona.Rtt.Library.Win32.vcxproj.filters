@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="external">
@@ -386,9 +386,6 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ClosedPath.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_CompositeObject.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_CompositePaint.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
@@ -431,16 +428,10 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ImageSheetUserdata.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_LineObject.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_LuaLibDisplay.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_LuaLibGraphics.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_OpenPath.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_Paint.cpp">
@@ -468,9 +459,6 @@
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ShaderBuiltin.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_ShaderCache.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ShaderComposite.cpp">
@@ -537,9 +525,6 @@
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_SpritePlayer.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_SpriteSourceFrame.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_StageObject.cpp">
@@ -1120,9 +1105,6 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ClosedPath.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_CompositeObject.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_CompositePaint.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
@@ -1168,22 +1150,13 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ImageSheetUserdata.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_LineObject.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_LuaLibDisplay.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_LuaLibGraphics.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_MDisplayDelegate.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_MDrawable.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_OpenPath.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_Paint.h">
@@ -1211,9 +1184,6 @@
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ShaderBuiltin.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_ShaderCache.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ShaderComposite.h">
@@ -1280,9 +1250,6 @@
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_SpritePlayer.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_SpriteSourceFrame.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_StageObject.h">

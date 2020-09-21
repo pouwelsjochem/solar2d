@@ -62,7 +62,6 @@
 		A4551DE01BAA17CF00FB3BDF /* Rtt_BitmapPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D461BAA17CF00FB3BDF /* Rtt_BitmapPaintAdapter.cpp */; };
 		A4551DE11BAA17CF00FB3BDF /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D481BAA17CF00FB3BDF /* Rtt_BufferBitmap.cpp */; };
 		A4551DE31BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D4C1BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp */; };
-		A4551DE41BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D4E1BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp */; };
 		A4551DE51BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D501BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp */; };
 		A4551DE61BAA17CF00FB3BDF /* Rtt_ContainerObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D521BAA17CF00FB3BDF /* Rtt_ContainerObject.cpp */; };
 		A4551DE71BAA17CF00FB3BDF /* Rtt_CPUResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D541BAA17CF00FB3BDF /* Rtt_CPUResourcePool.cpp */; };
@@ -78,10 +77,8 @@
 		A4551DF41BAA17CF00FB3BDF /* Rtt_ImageSheetPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D6F1BAA17CF00FB3BDF /* Rtt_ImageSheetPaint.cpp */; };
 		A4551DF51BAA17CF00FB3BDF /* Rtt_ImageSheetPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D711BAA17CF00FB3BDF /* Rtt_ImageSheetPaintAdapter.cpp */; };
 		A4551DF61BAA17CF00FB3BDF /* Rtt_ImageSheetUserdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D731BAA17CF00FB3BDF /* Rtt_ImageSheetUserdata.cpp */; };
-		A4551DF71BAA17CF00FB3BDF /* Rtt_LineObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D751BAA17CF00FB3BDF /* Rtt_LineObject.cpp */; };
 		A4551DF81BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D771BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.cpp */; };
 		A4551DF91BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D791BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.cpp */; };
-		A4551DFA1BAA17CF00FB3BDF /* Rtt_OpenPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D7E1BAA17CF00FB3BDF /* Rtt_OpenPath.cpp */; };
 		A4551DFB1BAA17CF00FB3BDF /* Rtt_Paint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D801BAA17CF00FB3BDF /* Rtt_Paint.cpp */; };
 		A4551DFC1BAA17CF00FB3BDF /* Rtt_PaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D821BAA17CF00FB3BDF /* Rtt_PaintAdapter.cpp */; };
 		A4551DFD1BAA17CF00FB3BDF /* Rtt_PlatformBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D841BAA17CF00FB3BDF /* Rtt_PlatformBitmap.cpp */; };
@@ -111,7 +108,6 @@
 		A4551E151BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB41BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp */; };
 		A4551E161BAA17CF00FB3BDF /* Rtt_SpriteObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB61BAA17CF00FB3BDF /* Rtt_SpriteObject.cpp */; };
 		A4551E171BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB81BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp */; };
-		A4551E181BAA17CF00FB3BDF /* Rtt_SpriteSourceFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBA1BAA17CF00FB3BDF /* Rtt_SpriteSourceFrame.cpp */; };
 		A4551E191BAA17CF00FB3BDF /* Rtt_StageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */; };
 		A4551E1A1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */; };
 		A4551E1B1BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */; };
@@ -838,8 +834,6 @@
 		A4551D491BAA17CF00FB3BDF /* Rtt_BufferBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_BufferBitmap.h; path = ../../librtt/Display/Rtt_BufferBitmap.h; sourceTree = "<group>"; };
 		A4551D4C1BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ClosedPath.cpp; path = ../../librtt/Display/Rtt_ClosedPath.cpp; sourceTree = "<group>"; };
 		A4551D4D1BAA17CF00FB3BDF /* Rtt_ClosedPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ClosedPath.h; path = ../../librtt/Display/Rtt_ClosedPath.h; sourceTree = "<group>"; };
-		A4551D4E1BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CompositeObject.cpp; path = ../../librtt/Display/Rtt_CompositeObject.cpp; sourceTree = "<group>"; };
-		A4551D4F1BAA17CF00FB3BDF /* Rtt_CompositeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CompositeObject.h; path = ../../librtt/Display/Rtt_CompositeObject.h; sourceTree = "<group>"; };
 		A4551D501BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CompositePaint.cpp; path = ../../librtt/Display/Rtt_CompositePaint.cpp; sourceTree = "<group>"; };
 		A4551D511BAA17CF00FB3BDF /* Rtt_CompositePaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CompositePaint.h; path = ../../librtt/Display/Rtt_CompositePaint.h; sourceTree = "<group>"; };
 		A4551D521BAA17CF00FB3BDF /* Rtt_ContainerObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ContainerObject.cpp; path = ../../librtt/Display/Rtt_ContainerObject.cpp; sourceTree = "<group>"; };
@@ -871,17 +865,12 @@
 		A4551D721BAA17CF00FB3BDF /* Rtt_ImageSheetPaintAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ImageSheetPaintAdapter.h; path = ../../librtt/Display/Rtt_ImageSheetPaintAdapter.h; sourceTree = "<group>"; };
 		A4551D731BAA17CF00FB3BDF /* Rtt_ImageSheetUserdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ImageSheetUserdata.cpp; path = ../../librtt/Display/Rtt_ImageSheetUserdata.cpp; sourceTree = "<group>"; };
 		A4551D741BAA17CF00FB3BDF /* Rtt_ImageSheetUserdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ImageSheetUserdata.h; path = ../../librtt/Display/Rtt_ImageSheetUserdata.h; sourceTree = "<group>"; };
-		A4551D751BAA17CF00FB3BDF /* Rtt_LineObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LineObject.cpp; path = ../../librtt/Display/Rtt_LineObject.cpp; sourceTree = "<group>"; };
-		A4551D761BAA17CF00FB3BDF /* Rtt_LineObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LineObject.h; path = ../../librtt/Display/Rtt_LineObject.h; sourceTree = "<group>"; };
 		A4551D771BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibDisplay.cpp; path = ../../librtt/Display/Rtt_LuaLibDisplay.cpp; sourceTree = "<group>"; };
 		A4551D781BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibDisplay.h; path = ../../librtt/Display/Rtt_LuaLibDisplay.h; sourceTree = "<group>"; };
 		A4551D791BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibGraphics.cpp; path = ../../librtt/Display/Rtt_LuaLibGraphics.cpp; sourceTree = "<group>"; };
 		A4551D7A1BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibGraphics.h; path = ../../librtt/Display/Rtt_LuaLibGraphics.h; sourceTree = "<group>"; };
 		A4551D7B1BAA17CF00FB3BDF /* Rtt_MCPUResourceObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MCPUResourceObserver.h; path = ../../librtt/Renderer/Rtt_MCPUResourceObserver.h; sourceTree = "<group>"; };
-		A4551D7C1BAA17CF00FB3BDF /* Rtt_MDisplayDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MDisplayDelegate.h; path = ../../librtt/Display/Rtt_MDisplayDelegate.h; sourceTree = "<group>"; };
 		A4551D7D1BAA17CF00FB3BDF /* Rtt_MDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MDrawable.h; path = ../../librtt/Display/Rtt_MDrawable.h; sourceTree = "<group>"; };
-		A4551D7E1BAA17CF00FB3BDF /* Rtt_OpenPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_OpenPath.cpp; path = ../../librtt/Display/Rtt_OpenPath.cpp; sourceTree = "<group>"; };
-		A4551D7F1BAA17CF00FB3BDF /* Rtt_OpenPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_OpenPath.h; path = ../../librtt/Display/Rtt_OpenPath.h; sourceTree = "<group>"; };
 		A4551D801BAA17CF00FB3BDF /* Rtt_Paint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Paint.cpp; path = ../../librtt/Display/Rtt_Paint.cpp; sourceTree = "<group>"; };
 		A4551D811BAA17CF00FB3BDF /* Rtt_Paint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Paint.h; path = ../../librtt/Display/Rtt_Paint.h; sourceTree = "<group>"; };
 		A4551D821BAA17CF00FB3BDF /* Rtt_PaintAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PaintAdapter.cpp; path = ../../librtt/Display/Rtt_PaintAdapter.cpp; sourceTree = "<group>"; };
@@ -940,8 +929,6 @@
 		A4551DB71BAA17CF00FB3BDF /* Rtt_SpriteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteObject.h; path = ../../librtt/Display/Rtt_SpriteObject.h; sourceTree = "<group>"; };
 		A4551DB81BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpritePlayer.cpp; path = ../../librtt/Display/Rtt_SpritePlayer.cpp; sourceTree = "<group>"; };
 		A4551DB91BAA17CF00FB3BDF /* Rtt_SpritePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpritePlayer.h; path = ../../librtt/Display/Rtt_SpritePlayer.h; sourceTree = "<group>"; };
-		A4551DBA1BAA17CF00FB3BDF /* Rtt_SpriteSourceFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSourceFrame.cpp; path = ../../librtt/Display/Rtt_SpriteSourceFrame.cpp; sourceTree = "<group>"; };
-		A4551DBB1BAA17CF00FB3BDF /* Rtt_SpriteSourceFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSourceFrame.h; path = ../../librtt/Display/Rtt_SpriteSourceFrame.h; sourceTree = "<group>"; };
 		A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_StageObject.cpp; path = ../../librtt/Display/Rtt_StageObject.cpp; sourceTree = "<group>"; };
 		A4551DBD1BAA17CF00FB3BDF /* Rtt_StageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_StageObject.h; path = ../../librtt/Display/Rtt_StageObject.h; sourceTree = "<group>"; };
 		A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Tesselator.cpp; path = ../../librtt/Display/Rtt_Tesselator.cpp; sourceTree = "<group>"; };
@@ -1784,8 +1771,6 @@
 				A4551D491BAA17CF00FB3BDF /* Rtt_BufferBitmap.h */,
 				A4551D4C1BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp */,
 				A4551D4D1BAA17CF00FB3BDF /* Rtt_ClosedPath.h */,
-				A4551D4E1BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp */,
-				A4551D4F1BAA17CF00FB3BDF /* Rtt_CompositeObject.h */,
 				A4551D501BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp */,
 				A4551D511BAA17CF00FB3BDF /* Rtt_CompositePaint.h */,
 				A4551D521BAA17CF00FB3BDF /* Rtt_ContainerObject.cpp */,
@@ -1817,17 +1802,12 @@
 				A4551D721BAA17CF00FB3BDF /* Rtt_ImageSheetPaintAdapter.h */,
 				A4551D731BAA17CF00FB3BDF /* Rtt_ImageSheetUserdata.cpp */,
 				A4551D741BAA17CF00FB3BDF /* Rtt_ImageSheetUserdata.h */,
-				A4551D751BAA17CF00FB3BDF /* Rtt_LineObject.cpp */,
-				A4551D761BAA17CF00FB3BDF /* Rtt_LineObject.h */,
 				A4551D771BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.cpp */,
 				A4551D781BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.h */,
 				A4551D791BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.cpp */,
 				A4551D7A1BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.h */,
 				A4551D7B1BAA17CF00FB3BDF /* Rtt_MCPUResourceObserver.h */,
-				A4551D7C1BAA17CF00FB3BDF /* Rtt_MDisplayDelegate.h */,
 				A4551D7D1BAA17CF00FB3BDF /* Rtt_MDrawable.h */,
-				A4551D7E1BAA17CF00FB3BDF /* Rtt_OpenPath.cpp */,
-				A4551D7F1BAA17CF00FB3BDF /* Rtt_OpenPath.h */,
 				A4551D801BAA17CF00FB3BDF /* Rtt_Paint.cpp */,
 				A4551D811BAA17CF00FB3BDF /* Rtt_Paint.h */,
 				A4551D821BAA17CF00FB3BDF /* Rtt_PaintAdapter.cpp */,
@@ -1888,8 +1868,6 @@
 				A4551DB71BAA17CF00FB3BDF /* Rtt_SpriteObject.h */,
 				A4551DB81BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp */,
 				A4551DB91BAA17CF00FB3BDF /* Rtt_SpritePlayer.h */,
-				A4551DBA1BAA17CF00FB3BDF /* Rtt_SpriteSourceFrame.cpp */,
-				A4551DBB1BAA17CF00FB3BDF /* Rtt_SpriteSourceFrame.h */,
 				A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */,
 				A4551DBD1BAA17CF00FB3BDF /* Rtt_StageObject.h */,
 				A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */,
@@ -3539,7 +3517,6 @@
 				A4551E131BAA17CF00FB3BDF /* Rtt_ShapeObject.cpp in Sources */,
 				A4551DEA1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp in Sources */,
 				A4551F781BAA182D00FB3BDF /* Rtt_Resource.cpp in Sources */,
-				A4551DE41BAA17CF00FB3BDF /* Rtt_CompositeObject.cpp in Sources */,
 				A4AD315C1BAB8C64006A0C97 /* CoronaLuaLibrary.cpp in Sources */,
 				A4551E111BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.cpp in Sources */,
 				A4551D3C1BAA17BE00FB3BDF /* Rtt_String.cpp in Sources */,
@@ -3583,7 +3560,6 @@
 				A4551F411BAA182D00FB3BDF /* Rtt_FilePath.cpp in Sources */,
 				A4551F571BAA182D00FB3BDF /* Rtt_LuaResource.cpp in Sources */,
 				A4551DE31BAA17CF00FB3BDF /* Rtt_ClosedPath.cpp in Sources */,
-				A4551DF71BAA17CF00FB3BDF /* Rtt_LineObject.cpp in Sources */,
 				A4551D3E1BAA17BE00FB3BDF /* Rtt_Time.c in Sources */,
 				A4551F491BAA182D00FB3BDF /* Rtt_LuaCoronaBaseLib.m in Sources */,
 				A4551E081BAA17CF00FB3BDF /* Rtt_ShaderFactory.cpp in Sources */,
@@ -3646,9 +3622,7 @@
 				A4551E141BAA17CF00FB3BDF /* Rtt_ShapePath.cpp in Sources */,
 				A4DD48081BB260B200FD988E /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				A4551F451BAA182D00FB3BDF /* Rtt_LuaAux.cpp in Sources */,
-				A4551E181BAA17CF00FB3BDF /* Rtt_SpriteSourceFrame.cpp in Sources */,
 				A4D937FE1BAA261A00DF2214 /* luaal.c in Sources */,
-				A4551DFA1BAA17CF00FB3BDF /* Rtt_OpenPath.cpp in Sources */,
 				A4551DF51BAA17CF00FB3BDF /* Rtt_ImageSheetPaintAdapter.cpp in Sources */,
 				A4551DE61BAA17CF00FB3BDF /* Rtt_ContainerObject.cpp in Sources */,
 				A4DD48051BB260B200FD988E /* Rtt_InputDeviceType.cpp in Sources */,

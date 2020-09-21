@@ -39,7 +39,6 @@ class BitmapPaint;
 class DisplayDefaults;
 class DisplayObject;
 class GroupObject;
-class MDisplayDelegate;
 class ProgramHeader;
 class Renderer;
 class Runtime;
@@ -155,9 +154,6 @@ class Display
 		Runtime& GetRuntime() { return fOwner; }
 		const Runtime& GetRuntime() const { return fOwner; }
 
-		MDisplayDelegate *GetDelegate() const { return fDelegate; }
-		void SetDelegate( MDisplayDelegate *delegate ) { fDelegate = delegate; }
-
 		DisplayDefaults& GetDefaults() { return * fDefaults; }
 		const DisplayDefaults& GetDefaults() const { return * fDefaults; }
 
@@ -192,7 +188,6 @@ class Display
 
 	private:
 		Runtime& fOwner;
-		MDisplayDelegate *fDelegate;
 		DisplayDefaults *fDefaults;
 		float fDeltaTimeInSeconds;
 		Rtt_AbsoluteTime fPreviousTime;

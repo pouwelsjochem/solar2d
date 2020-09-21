@@ -47,7 +47,6 @@ Texture *
 CompositePaint::GetTexture() const
 {
 	// Rtt_ASSERT_NOT_REACHED();
-
 	// Just in case...
 	return fPaint0->GetTexture();
 }
@@ -76,13 +75,6 @@ CompositePaint::ApplyPaintUVTransformations( ArrayVertex2& vertices ) const
 {
 	fPaint0->ApplyPaintUVTransformations( vertices );
 }
-
-/*
-const MLuaUserdataAdapter&
-CompositePaint::GetAdapter() const
-{
-}
-*/
 
 // ----------------------------------------------------------------------------
 

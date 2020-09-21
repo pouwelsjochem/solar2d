@@ -14,7 +14,6 @@
 #include "Core/Rtt_Geometry.h"
 #include "Display/Rtt_CPUResourcePool.h"
 #include "Display/Rtt_DisplayDefaults.h"
-#include "Display/Rtt_MDisplayDelegate.h"
 #include "Display/Rtt_BitmapPaint.h"
 #include "Display/Rtt_Paint.h"
 #include "Display/Rtt_Scene.h"
@@ -52,7 +51,6 @@ namespace Rtt
 
 Display::Display( Runtime& owner )
 :	fOwner( owner ),
-	fDelegate( NULL ),
 	fDefaults( Rtt_NEW( owner.Allocator(), DisplayDefaults ) ),
 	fDeltaTimeInSeconds( 0.0f ),
 	fPreviousTime( owner.GetElapsedTime() ),

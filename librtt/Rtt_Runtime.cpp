@@ -897,7 +897,6 @@ Runtime::BeginRunLoop()
 	const U32 kFps = fFPS;
 	const U32 kInterval = 1000 / kFps;
 
-	fDisplay->SetDelegate( this );
 	fDisplay->Start();
 
 	// PlatformTimer

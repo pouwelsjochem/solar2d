@@ -64,8 +64,6 @@ class IPhonePlatformBase;
 
 - (void)terminate;
 
-- (void)dismissKeyboard;
-
 @end
 
 // ----------------------------------------------------------------------------

@@ -484,9 +484,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CompositeObject.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_CompositePaint.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
@@ -532,16 +529,10 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ImageSheetUserdata.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_LineObject.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_LuaLibDisplay.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_LuaLibGraphics.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_OpenPath.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_Paint.cpp">
@@ -569,9 +560,6 @@
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderBuiltin.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderCache.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_ShaderComposite.cpp">
@@ -635,9 +623,6 @@
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpritePlayer.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpriteSourceFrame.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_StageObject.cpp">
@@ -1408,9 +1393,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_VertexCache.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\LuaReader.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_BitmapMask.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
@@ -1424,9 +1406,6 @@
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ClosedPath.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CompositeObject.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_CompositePaint.h">
@@ -1477,22 +1456,13 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ImageSheetUserdata.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LineObject.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LuaLibDisplay.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LuaLibGraphics.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_MDisplayDelegate.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_MDrawable.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_OpenPath.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_Paint.h">
@@ -1520,9 +1490,6 @@
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderBuiltin.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderCache.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ShaderComposite.h">
@@ -1586,9 +1553,6 @@
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_SpritePlayer.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_SpriteSourceFrame.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_StageObject.h">

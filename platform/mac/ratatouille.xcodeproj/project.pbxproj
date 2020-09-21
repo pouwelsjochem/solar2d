@@ -333,7 +333,6 @@
 		A4328843176A621200ACB6FF /* Rtt_BitmapPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E4176A621100ACB6FF /* Rtt_BitmapPaint.cpp */; };
 		A4328845176A621200ACB6FF /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E6176A621100ACB6FF /* Rtt_BufferBitmap.cpp */; };
 		A4328847176A621200ACB6FF /* Rtt_ClosedPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E8176A621100ACB6FF /* Rtt_ClosedPath.cpp */; };
-		A4328849176A621200ACB6FF /* Rtt_CompositeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EA176A621100ACB6FF /* Rtt_CompositeObject.cpp */; };
 		A432884B176A621200ACB6FF /* Rtt_ContainerObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EC176A621100ACB6FF /* Rtt_ContainerObject.cpp */; };
 		A432884D176A621200ACB6FF /* Rtt_Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EE176A621100ACB6FF /* Rtt_Display.cpp */; };
 		A432884F176A621200ACB6FF /* Rtt_DisplayDefaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F0176A621100ACB6FF /* Rtt_DisplayDefaults.cpp */; };
@@ -346,12 +345,9 @@
 		A4328860176A621200ACB6FF /* Rtt_ImageSheet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328801176A621100ACB6FF /* Rtt_ImageSheet.cpp */; };
 		A4328862176A621200ACB6FF /* Rtt_ImageSheetPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328803176A621100ACB6FF /* Rtt_ImageSheetPaint.cpp */; };
 		A4328864176A621200ACB6FF /* Rtt_ImageSheetUserdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328805176A621100ACB6FF /* Rtt_ImageSheetUserdata.cpp */; };
-		A4328866176A621200ACB6FF /* Rtt_LineObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328807176A621100ACB6FF /* Rtt_LineObject.cpp */; };
 		A4328868176A621200ACB6FF /* Rtt_LuaLibDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328809176A621100ACB6FF /* Rtt_LuaLibDisplay.cpp */; };
 		A432886A176A621200ACB6FF /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */; };
-		A432886C176A621200ACB6FF /* Rtt_MDisplayDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880D176A621100ACB6FF /* Rtt_MDisplayDelegate.h */; };
 		A432886D176A621200ACB6FF /* Rtt_MDrawable.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880E176A621100ACB6FF /* Rtt_MDrawable.h */; };
-		A432886E176A621200ACB6FF /* Rtt_OpenPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880F176A621100ACB6FF /* Rtt_OpenPath.cpp */; };
 		A4328870176A621200ACB6FF /* Rtt_Paint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328811176A621100ACB6FF /* Rtt_Paint.cpp */; };
 		A4328872176A621200ACB6FF /* Rtt_PlatformBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328813176A621100ACB6FF /* Rtt_PlatformBitmap.cpp */; };
 		A4328874176A621200ACB6FF /* Rtt_PlatformBitmapTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328815176A621100ACB6FF /* Rtt_PlatformBitmapTexture.cpp */; };
@@ -376,8 +372,6 @@
 		A432888B176A621200ACB6FF /* Rtt_SpriteObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A432882C176A621200ACB6FF /* Rtt_SpriteObject.h */; };
 		A432888C176A621200ACB6FF /* Rtt_SpritePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432882D176A621200ACB6FF /* Rtt_SpritePlayer.cpp */; };
 		A432888D176A621200ACB6FF /* Rtt_SpritePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A432882E176A621200ACB6FF /* Rtt_SpritePlayer.h */; };
-		A432888E176A621200ACB6FF /* Rtt_SpriteSourceFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432882F176A621200ACB6FF /* Rtt_SpriteSourceFrame.cpp */; };
-		A432888F176A621200ACB6FF /* Rtt_SpriteSourceFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328830176A621200ACB6FF /* Rtt_SpriteSourceFrame.h */; };
 		A4328890176A621200ACB6FF /* Rtt_StageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328831176A621200ACB6FF /* Rtt_StageObject.cpp */; };
 		A4328891176A621200ACB6FF /* Rtt_StageObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328832176A621200ACB6FF /* Rtt_StageObject.h */; };
 		A4328892176A621200ACB6FF /* Rtt_Tesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328833176A621200ACB6FF /* Rtt_Tesselator.cpp */; };
@@ -547,7 +541,6 @@
 		C229DFF41B32221B00D87A7C /* Rtt_BufferBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287E7176A621100ACB6FF /* Rtt_BufferBitmap.h */; };
 		C229DFF51B32221B00D87A7C /* Rtt_Build.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BC412B71BF20057F594 /* Rtt_Build.h */; };
 		C229DFF81B32221B00D87A7C /* Rtt_ClosedPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287E9176A621100ACB6FF /* Rtt_ClosedPath.h */; };
-		C229DFF91B32221B00D87A7C /* Rtt_CompositeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287EB176A621100ACB6FF /* Rtt_CompositeObject.h */; };
 		C229DFFA1B32221B00D87A7C /* Rtt_CompositePaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A492760B17B98BAE00DAD62A /* Rtt_CompositePaint.h */; };
 		C229DFFB1B32221B00D87A7C /* Rtt_Config.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BC512B71BF20057F594 /* Rtt_Config.h */; };
 		C229DFFC1B32221B00D87A7C /* Rtt_ContainerObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287ED176A621100ACB6FF /* Rtt_ContainerObject.h */; };
@@ -572,7 +565,6 @@
 		C229E0141B32221B00D87A7C /* Rtt_ImageSheetPaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328804176A621100ACB6FF /* Rtt_ImageSheetPaint.h */; };
 		C229E0151B32221B00D87A7C /* Rtt_ImageSheetPaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F5800DF71AE0320D00D11339 /* Rtt_ImageSheetPaintAdapter.h */; };
 		C229E0161B32221B00D87A7C /* Rtt_ImageSheetUserdata.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328806176A621100ACB6FF /* Rtt_ImageSheetUserdata.h */; };
-		C229E0181B32221B00D87A7C /* Rtt_LineObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328808176A621100ACB6FF /* Rtt_LineObject.h */; };
 		C229E0191B32221B00D87A7C /* Rtt_List.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BCE12B71BF20057F594 /* Rtt_List.h */; };
 		C229E01A1B32221B00D87A7C /* Rtt_Lua.h in Headers */ = {isa = PBXBuildFile; fileRef = A4ED10AD14D2930F00ECF49E /* Rtt_Lua.h */; };
 		C229E01B1B32221B00D87A7C /* Rtt_LuaAux.h in Headers */ = {isa = PBXBuildFile; fileRef = A4A47E5A14D28B9800B5111C /* Rtt_LuaAux.h */; };
@@ -598,7 +590,6 @@
 		C229E0341B32221B00D87A7C /* Rtt_LuaUserdataProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B1817726CB00077B2BF /* Rtt_LuaUserdataProxy.h */; };
 		C229E0351B32221B00D87A7C /* Rtt_MCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE70E12B73EE300D9B6A4 /* Rtt_MCallback.h */; };
 		C229E0361B32221B00D87A7C /* Rtt_MCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE70F12B73EE300D9B6A4 /* Rtt_MCrypto.h */; };
-		C229E0381B32221B00D87A7C /* Rtt_MDisplayDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880D176A621100ACB6FF /* Rtt_MDisplayDelegate.h */; };
 		C229E0391B32221B00D87A7C /* Rtt_MDrawable.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880E176A621100ACB6FF /* Rtt_MDrawable.h */; };
 		C229E03A1B32221B00D87A7C /* Rtt_MIterable.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71312B73EE300D9B6A4 /* Rtt_MIterable.h */; };
 		C229E03B1B32221B00D87A7C /* Rtt_MKeyValueIterable.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71412B73EE300D9B6A4 /* Rtt_MKeyValueIterable.h */; };
@@ -613,7 +604,6 @@
 		C229E0441B32221B00D87A7C /* Rtt_Math.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD112B71BF20057F594 /* Rtt_Math.h */; };
 		C229E0451B32221B00D87A7C /* Rtt_Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE70D12B73EE300D9B6A4 /* Rtt_Matrix.h */; };
 		C229E0481B32221B00D87A7C /* Rtt_New.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD612B71BF20057F594 /* Rtt_New.h */; };
-		C229E0491B32221B00D87A7C /* Rtt_OpenPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328810176A621100ACB6FF /* Rtt_OpenPath.h */; };
 		C229E04A1B32221B00D87A7C /* Rtt_Paint.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328812176A621100ACB6FF /* Rtt_Paint.h */; };
 		C229E04B1B32221B00D87A7C /* Rtt_PaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032217739AD80064ABA0 /* Rtt_PaintAdapter.h */; };
 		C229E0531B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 006E5C4D13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.h */; };
@@ -660,7 +650,6 @@
 		C229E0841B32221B00D87A7C /* Rtt_SnapshotObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A432882A176A621200ACB6FF /* Rtt_SnapshotObject.h */; };
 		C229E0851B32221B00D87A7C /* Rtt_SpriteObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A432882C176A621200ACB6FF /* Rtt_SpriteObject.h */; };
 		C229E0861B32221B00D87A7C /* Rtt_SpritePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A432882E176A621200ACB6FF /* Rtt_SpritePlayer.h */; };
-		C229E0871B32221B00D87A7C /* Rtt_SpriteSourceFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328830176A621200ACB6FF /* Rtt_SpriteSourceFrame.h */; };
 		C229E0881B32221B00D87A7C /* Rtt_StageObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328832176A621200ACB6FF /* Rtt_StageObject.h */; };
 		C229E0891B32221B00D87A7C /* Rtt_String.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BDD12B71BF20057F594 /* Rtt_String.h */; };
 		C229E08A1B32221B00D87A7C /* Rtt_StringHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BDF12B71BF20057F594 /* Rtt_StringHash.h */; };
@@ -712,7 +701,6 @@
 		C229E0C81B32221B00D87A7C /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E6176A621100ACB6FF /* Rtt_BufferBitmap.cpp */; };
 		C229E0C91B32221B00D87A7C /* Rtt_CPUResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0724699117D99D41000A1641 /* Rtt_CPUResourcePool.cpp */; };
 		C229E0CC1B32221B00D87A7C /* Rtt_ClosedPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E8176A621100ACB6FF /* Rtt_ClosedPath.cpp */; };
-		C229E0CD1B32221B00D87A7C /* Rtt_CompositeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EA176A621100ACB6FF /* Rtt_CompositeObject.cpp */; };
 		C229E0CE1B32221B00D87A7C /* Rtt_CompositePaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A492760A17B98BAE00DAD62A /* Rtt_CompositePaint.cpp */; };
 		C229E0CF1B32221B00D87A7C /* Rtt_ContainerObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EC176A621100ACB6FF /* Rtt_ContainerObject.cpp */; };
 		C229E0D11B32221B00D87A7C /* Rtt_Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EE176A621100ACB6FF /* Rtt_Display.cpp */; };
@@ -741,7 +729,6 @@
 		C229E0EE1B32221B00D87A7C /* Rtt_InputDeviceConnectionState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0358A360179A35A30011B8E7 /* Rtt_InputDeviceConnectionState.cpp */; };
 		C229E0EF1B32221B00D87A7C /* Rtt_InputDeviceDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE68178E18B00047CC04 /* Rtt_InputDeviceDescriptor.cpp */; };
 		C229E0F01B32221B00D87A7C /* Rtt_InputDeviceType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE6A178E18B00047CC04 /* Rtt_InputDeviceType.cpp */; };
-		C229E0F21B32221B00D87A7C /* Rtt_LineObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328807176A621100ACB6FF /* Rtt_LineObject.cpp */; };
 		C229E0F31B32221B00D87A7C /* Rtt_Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4ED10AC14D2930F00ECF49E /* Rtt_Lua.cpp */; };
 		C229E0F41B32221B00D87A7C /* Rtt_LuaAssert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BCA02317557539006489A5 /* Rtt_LuaAssert.cpp */; };
 		C229E0F51B32221B00D87A7C /* Rtt_LuaAux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4A47E5914D28B9800B5111C /* Rtt_LuaAux.cpp */; };
@@ -767,7 +754,6 @@
 		C229E10E1B32221B00D87A7C /* Rtt_LuaUserdataProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1717726CA90077B2BF /* Rtt_LuaUserdataProxy.cpp */; };
 		C229E1101B32221B00D87A7C /* Rtt_Math.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BD012B71BF20057F594 /* Rtt_Math.c */; };
 		C229E1111B32221B00D87A7C /* Rtt_Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE70C12B73EE300D9B6A4 /* Rtt_Matrix.cpp */; };
-		C229E1141B32221B00D87A7C /* Rtt_OpenPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880F176A621100ACB6FF /* Rtt_OpenPath.cpp */; };
 		C229E1151B32221B00D87A7C /* Rtt_Paint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328811176A621100ACB6FF /* Rtt_Paint.cpp */; };
 		C229E1161B32221B00D87A7C /* Rtt_PaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A475032D1773A6820064ABA0 /* Rtt_PaintAdapter.cpp */; };
 		C229E11E1B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006E5C4C13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.cpp */; };
@@ -822,7 +808,6 @@
 		C229E1571B32221B00D87A7C /* Rtt_SnapshotObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328829176A621200ACB6FF /* Rtt_SnapshotObject.cpp */; };
 		C229E1581B32221B00D87A7C /* Rtt_SpriteObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432882B176A621200ACB6FF /* Rtt_SpriteObject.cpp */; };
 		C229E1591B32221B00D87A7C /* Rtt_SpritePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432882D176A621200ACB6FF /* Rtt_SpritePlayer.cpp */; };
-		C229E15A1B32221B00D87A7C /* Rtt_SpriteSourceFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432882F176A621200ACB6FF /* Rtt_SpriteSourceFrame.cpp */; };
 		C229E15B1B32221B00D87A7C /* Rtt_StageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328831176A621200ACB6FF /* Rtt_StageObject.cpp */; };
 		C229E15C1B32221B00D87A7C /* Rtt_String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BDC12B71BF20057F594 /* Rtt_String.cpp */; };
 		C229E15D1B32221B00D87A7C /* Rtt_StringHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BDE12B71BF20057F594 /* Rtt_StringHash.cpp */; };
@@ -1021,7 +1006,6 @@
 		C2DA96151B46460F00DAF684 /* Rtt_PaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032217739AD80064ABA0 /* Rtt_PaintAdapter.h */; };
 		C2DA96161B46460F00DAF684 /* Rtt_ContainerObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287ED176A621100ACB6FF /* Rtt_ContainerObject.h */; };
 		C2DA96171B46460F00DAF684 /* Rtt_Paint.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328812176A621100ACB6FF /* Rtt_Paint.h */; };
-		C2DA96181B46460F00DAF684 /* Rtt_LineObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328808176A621100ACB6FF /* Rtt_LineObject.h */; };
 		C2DA96191B46460F00DAF684 /* Rtt_PlatformBitmapTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328816176A621100ACB6FF /* Rtt_PlatformBitmapTexture.h */; };
 		C2DA961A1B46460F00DAF684 /* Rtt_ClosedPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287E9176A621100ACB6FF /* Rtt_ClosedPath.h */; };
 		C2DA961B1B46460F00DAF684 /* Rtt_ArrayTuple.h in Headers */ = {isa = PBXBuildFile; fileRef = A43FE9C214F068400042FA41 /* Rtt_ArrayTuple.h */; };
@@ -1033,8 +1017,6 @@
 		C2DA96211B46460F00DAF684 /* Rtt_LuaFrameworks.h in Headers */ = {isa = PBXBuildFile; fileRef = A41AC0F316A5DC6D00AD331A /* Rtt_LuaFrameworks.h */; };
 		C2DA96231B46460F00DAF684 /* Rtt_Traits.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BE212B71BF20057F594 /* Rtt_Traits.h */; };
 		C2DA96251B46460F00DAF684 /* Rtt_HitTestObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287FE176A621100ACB6FF /* Rtt_HitTestObject.h */; };
-		C2DA96261B46460F00DAF684 /* Rtt_OpenPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328810176A621100ACB6FF /* Rtt_OpenPath.h */; };
-		C2DA96271B46460F00DAF684 /* Rtt_CompositeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287EB176A621100ACB6FF /* Rtt_CompositeObject.h */; };
 		C2DA96281B46460F00DAF684 /* Rtt_Event.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6D612B73EE300D9B6A4 /* Rtt_Event.h */; };
 		C2DA96291B46460F00DAF684 /* Rtt_Real.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD712B71BF20057F594 /* Rtt_Real.h */; };
 		C2DA962B1B46460F00DAF684 /* Rtt_Archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6BB12B73EE300D9B6A4 /* Rtt_Archive.h */; };
@@ -2209,8 +2191,6 @@
 		A43287E7176A621100ACB6FF /* Rtt_BufferBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_BufferBitmap.h; path = Display/Rtt_BufferBitmap.h; sourceTree = "<group>"; };
 		A43287E8176A621100ACB6FF /* Rtt_ClosedPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ClosedPath.cpp; path = Display/Rtt_ClosedPath.cpp; sourceTree = "<group>"; };
 		A43287E9176A621100ACB6FF /* Rtt_ClosedPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ClosedPath.h; path = Display/Rtt_ClosedPath.h; sourceTree = "<group>"; };
-		A43287EA176A621100ACB6FF /* Rtt_CompositeObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CompositeObject.cpp; path = Display/Rtt_CompositeObject.cpp; sourceTree = "<group>"; };
-		A43287EB176A621100ACB6FF /* Rtt_CompositeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CompositeObject.h; path = Display/Rtt_CompositeObject.h; sourceTree = "<group>"; };
 		A43287EC176A621100ACB6FF /* Rtt_ContainerObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ContainerObject.cpp; path = Display/Rtt_ContainerObject.cpp; sourceTree = "<group>"; };
 		A43287ED176A621100ACB6FF /* Rtt_ContainerObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ContainerObject.h; path = Display/Rtt_ContainerObject.h; sourceTree = "<group>"; };
 		A43287EE176A621100ACB6FF /* Rtt_Display.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Display.cpp; path = Display/Rtt_Display.cpp; sourceTree = "<group>"; usesTabs = 0; };
@@ -2236,16 +2216,11 @@
 		A4328804176A621100ACB6FF /* Rtt_ImageSheetPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ImageSheetPaint.h; path = Display/Rtt_ImageSheetPaint.h; sourceTree = "<group>"; };
 		A4328805176A621100ACB6FF /* Rtt_ImageSheetUserdata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ImageSheetUserdata.cpp; path = Display/Rtt_ImageSheetUserdata.cpp; sourceTree = "<group>"; };
 		A4328806176A621100ACB6FF /* Rtt_ImageSheetUserdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ImageSheetUserdata.h; path = Display/Rtt_ImageSheetUserdata.h; sourceTree = "<group>"; };
-		A4328807176A621100ACB6FF /* Rtt_LineObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LineObject.cpp; path = Display/Rtt_LineObject.cpp; sourceTree = "<group>"; };
-		A4328808176A621100ACB6FF /* Rtt_LineObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LineObject.h; path = Display/Rtt_LineObject.h; sourceTree = "<group>"; };
 		A4328809176A621100ACB6FF /* Rtt_LuaLibDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibDisplay.cpp; path = Display/Rtt_LuaLibDisplay.cpp; sourceTree = "<group>"; };
 		A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibDisplay.h; path = Display/Rtt_LuaLibDisplay.h; sourceTree = "<group>"; };
 		A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibGraphics.cpp; path = Display/Rtt_LuaLibGraphics.cpp; sourceTree = "<group>"; };
 		A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibGraphics.h; path = Display/Rtt_LuaLibGraphics.h; sourceTree = "<group>"; };
-		A432880D176A621100ACB6FF /* Rtt_MDisplayDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MDisplayDelegate.h; path = Display/Rtt_MDisplayDelegate.h; sourceTree = "<group>"; };
 		A432880E176A621100ACB6FF /* Rtt_MDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MDrawable.h; path = Display/Rtt_MDrawable.h; sourceTree = "<group>"; };
-		A432880F176A621100ACB6FF /* Rtt_OpenPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_OpenPath.cpp; path = Display/Rtt_OpenPath.cpp; sourceTree = "<group>"; };
-		A4328810176A621100ACB6FF /* Rtt_OpenPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_OpenPath.h; path = Display/Rtt_OpenPath.h; sourceTree = "<group>"; };
 		A4328811176A621100ACB6FF /* Rtt_Paint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Paint.cpp; path = Display/Rtt_Paint.cpp; sourceTree = "<group>"; };
 		A4328812176A621100ACB6FF /* Rtt_Paint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Paint.h; path = Display/Rtt_Paint.h; sourceTree = "<group>"; };
 		A4328813176A621100ACB6FF /* Rtt_PlatformBitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformBitmap.cpp; path = Display/Rtt_PlatformBitmap.cpp; sourceTree = "<group>"; };
@@ -2276,8 +2251,6 @@
 		A432882C176A621200ACB6FF /* Rtt_SpriteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteObject.h; path = Display/Rtt_SpriteObject.h; sourceTree = "<group>"; };
 		A432882D176A621200ACB6FF /* Rtt_SpritePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpritePlayer.cpp; path = Display/Rtt_SpritePlayer.cpp; sourceTree = "<group>"; };
 		A432882E176A621200ACB6FF /* Rtt_SpritePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpritePlayer.h; path = Display/Rtt_SpritePlayer.h; sourceTree = "<group>"; };
-		A432882F176A621200ACB6FF /* Rtt_SpriteSourceFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSourceFrame.cpp; path = Display/Rtt_SpriteSourceFrame.cpp; sourceTree = "<group>"; };
-		A4328830176A621200ACB6FF /* Rtt_SpriteSourceFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSourceFrame.h; path = Display/Rtt_SpriteSourceFrame.h; sourceTree = "<group>"; };
 		A4328831176A621200ACB6FF /* Rtt_StageObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_StageObject.cpp; path = Display/Rtt_StageObject.cpp; sourceTree = "<group>"; };
 		A4328832176A621200ACB6FF /* Rtt_StageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_StageObject.h; path = Display/Rtt_StageObject.h; sourceTree = "<group>"; };
 		A4328833176A621200ACB6FF /* Rtt_Tesselator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Tesselator.cpp; path = Display/Rtt_Tesselator.cpp; sourceTree = "<group>"; };
@@ -3564,8 +3537,6 @@
 				A43287E7176A621100ACB6FF /* Rtt_BufferBitmap.h */,
 				A43287E8176A621100ACB6FF /* Rtt_ClosedPath.cpp */,
 				A43287E9176A621100ACB6FF /* Rtt_ClosedPath.h */,
-				A43287EA176A621100ACB6FF /* Rtt_CompositeObject.cpp */,
-				A43287EB176A621100ACB6FF /* Rtt_CompositeObject.h */,
 				A492760A17B98BAE00DAD62A /* Rtt_CompositePaint.cpp */,
 				A492760B17B98BAE00DAD62A /* Rtt_CompositePaint.h */,
 				A43287EC176A621100ACB6FF /* Rtt_ContainerObject.cpp */,
@@ -3597,16 +3568,11 @@
 				A4328804176A621100ACB6FF /* Rtt_ImageSheetPaint.h */,
 				A4328805176A621100ACB6FF /* Rtt_ImageSheetUserdata.cpp */,
 				A4328806176A621100ACB6FF /* Rtt_ImageSheetUserdata.h */,
-				A4328807176A621100ACB6FF /* Rtt_LineObject.cpp */,
-				A4328808176A621100ACB6FF /* Rtt_LineObject.h */,
 				A4328809176A621100ACB6FF /* Rtt_LuaLibDisplay.cpp */,
 				A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */,
 				A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */,
 				A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */,
-				A432880D176A621100ACB6FF /* Rtt_MDisplayDelegate.h */,
 				A432880E176A621100ACB6FF /* Rtt_MDrawable.h */,
-				A432880F176A621100ACB6FF /* Rtt_OpenPath.cpp */,
-				A4328810176A621100ACB6FF /* Rtt_OpenPath.h */,
 				A4328811176A621100ACB6FF /* Rtt_Paint.cpp */,
 				A4328812176A621100ACB6FF /* Rtt_Paint.h */,
 				A475032D1773A6820064ABA0 /* Rtt_PaintAdapter.cpp */,
@@ -3667,8 +3633,6 @@
 				A432882C176A621200ACB6FF /* Rtt_SpriteObject.h */,
 				A432882D176A621200ACB6FF /* Rtt_SpritePlayer.cpp */,
 				A432882E176A621200ACB6FF /* Rtt_SpritePlayer.h */,
-				A432882F176A621200ACB6FF /* Rtt_SpriteSourceFrame.cpp */,
-				A4328830176A621200ACB6FF /* Rtt_SpriteSourceFrame.h */,
 				A4328831176A621200ACB6FF /* Rtt_StageObject.cpp */,
 				A4328832176A621200ACB6FF /* Rtt_StageObject.h */,
 				A4328833176A621200ACB6FF /* Rtt_Tesselator.cpp */,
@@ -4130,7 +4094,6 @@
 				C2DA96341B46460F00DAF684 /* Rtt_BufferBitmap.h in Headers */,
 				00B73BF012B71BF20057F594 /* Rtt_Build.h in Headers */,
 				C2DA961A1B46460F00DAF684 /* Rtt_ClosedPath.h in Headers */,
-				C2DA96271B46460F00DAF684 /* Rtt_CompositeObject.h in Headers */,
 				C2DA964C1B46460F00DAF684 /* Rtt_CompositePaint.h in Headers */,
 				00B73BF112B71BF20057F594 /* Rtt_Config.h in Headers */,
 				C2DA96161B46460F00DAF684 /* Rtt_ContainerObject.h in Headers */,
@@ -4159,7 +4122,6 @@
 				C2DA96441B46460F00DAF684 /* Rtt_ImageSheetPaintAdapter.h in Headers */,
 				F5C757B41C7538A4004A3604 /* CoronaGraphics.h in Headers */,
 				C2DA96111B46460F00DAF684 /* Rtt_ImageSheetUserdata.h in Headers */,
-				C2DA96181B46460F00DAF684 /* Rtt_LineObject.h in Headers */,
 				F55407F71C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h in Headers */,
 				C2DA965B1B46460F00DAF684 /* Rtt_List.h in Headers */,
 				C2DA96681B46460F00DAF684 /* Rtt_Lua.h in Headers */,
@@ -4191,7 +4153,6 @@
 				000CE7BA12B73EE300D9B6A4 /* Rtt_MCallback.h in Headers */,
 				000CE7BB12B73EE300D9B6A4 /* Rtt_MCrypto.h in Headers */,
 				F5B248541B57123B0087FFBC /* Rtt_TextureResourceAdapter.h in Headers */,
-				A432886C176A621200ACB6FF /* Rtt_MDisplayDelegate.h in Headers */,
 				A432886D176A621200ACB6FF /* Rtt_MDrawable.h in Headers */,
 				000CE7BF12B73EE300D9B6A4 /* Rtt_MIterable.h in Headers */,
 				000CE7C012B73EE300D9B6A4 /* Rtt_MKeyValueIterable.h in Headers */,
@@ -4207,7 +4168,6 @@
 				03D1C5641D70CCD400DB02EE /* Rtt_SharedStringPtr.h in Headers */,
 				000CE7B912B73EE300D9B6A4 /* Rtt_Matrix.h in Headers */,
 				C2DA96731B46460F00DAF684 /* Rtt_New.h in Headers */,
-				C2DA96261B46460F00DAF684 /* Rtt_OpenPath.h in Headers */,
 				C2DA96171B46460F00DAF684 /* Rtt_Paint.h in Headers */,
 				C2DA96151B46460F00DAF684 /* Rtt_PaintAdapter.h in Headers */,
 				C2DA96621B46460F00DAF684 /* Rtt_ResourceHandle.h in Headers */,
@@ -4259,7 +4219,6 @@
 				A4328889176A621200ACB6FF /* Rtt_SnapshotObject.h in Headers */,
 				A432888B176A621200ACB6FF /* Rtt_SpriteObject.h in Headers */,
 				A432888D176A621200ACB6FF /* Rtt_SpritePlayer.h in Headers */,
-				A432888F176A621200ACB6FF /* Rtt_SpriteSourceFrame.h in Headers */,
 				A4328891176A621200ACB6FF /* Rtt_StageObject.h in Headers */,
 				00B73C0912B71BF20057F594 /* Rtt_String.h in Headers */,
 				00B73C0B12B71BF20057F594 /* Rtt_StringHash.h in Headers */,
@@ -4375,7 +4334,6 @@
 				C229DFF41B32221B00D87A7C /* Rtt_BufferBitmap.h in Headers */,
 				C229DFF51B32221B00D87A7C /* Rtt_Build.h in Headers */,
 				C229DFF81B32221B00D87A7C /* Rtt_ClosedPath.h in Headers */,
-				C229DFF91B32221B00D87A7C /* Rtt_CompositeObject.h in Headers */,
 				C229DFFA1B32221B00D87A7C /* Rtt_CompositePaint.h in Headers */,
 				C229DFFB1B32221B00D87A7C /* Rtt_Config.h in Headers */,
 				C229DFFC1B32221B00D87A7C /* Rtt_ContainerObject.h in Headers */,
@@ -4404,7 +4362,6 @@
 				C229E0151B32221B00D87A7C /* Rtt_ImageSheetPaintAdapter.h in Headers */,
 				F5C757B51C7538A4004A3604 /* CoronaGraphics.h in Headers */,
 				C229E0161B32221B00D87A7C /* Rtt_ImageSheetUserdata.h in Headers */,
-				C229E0181B32221B00D87A7C /* Rtt_LineObject.h in Headers */,
 				F55407F81C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h in Headers */,
 				C229E0191B32221B00D87A7C /* Rtt_List.h in Headers */,
 				C229E01A1B32221B00D87A7C /* Rtt_Lua.h in Headers */,
@@ -4436,7 +4393,6 @@
 				C229E0351B32221B00D87A7C /* Rtt_MCallback.h in Headers */,
 				C229E0361B32221B00D87A7C /* Rtt_MCrypto.h in Headers */,
 				F5B248551B57123B0087FFBC /* Rtt_TextureResourceAdapter.h in Headers */,
-				C229E0381B32221B00D87A7C /* Rtt_MDisplayDelegate.h in Headers */,
 				C229E0391B32221B00D87A7C /* Rtt_MDrawable.h in Headers */,
 				C229E03A1B32221B00D87A7C /* Rtt_MIterable.h in Headers */,
 				C229E03B1B32221B00D87A7C /* Rtt_MKeyValueIterable.h in Headers */,
@@ -4452,7 +4408,6 @@
 				03D1C5631D70CCD300DB02EE /* Rtt_SharedStringPtr.h in Headers */,
 				C229E0451B32221B00D87A7C /* Rtt_Matrix.h in Headers */,
 				C229E0481B32221B00D87A7C /* Rtt_New.h in Headers */,
-				C229E0491B32221B00D87A7C /* Rtt_OpenPath.h in Headers */,
 				C229E04A1B32221B00D87A7C /* Rtt_Paint.h in Headers */,
 				C229E04B1B32221B00D87A7C /* Rtt_PaintAdapter.h in Headers */,
 				C229E0531B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.h in Headers */,
@@ -4505,7 +4460,6 @@
 				C229E0841B32221B00D87A7C /* Rtt_SnapshotObject.h in Headers */,
 				C229E0851B32221B00D87A7C /* Rtt_SpriteObject.h in Headers */,
 				C229E0861B32221B00D87A7C /* Rtt_SpritePlayer.h in Headers */,
-				C229E0871B32221B00D87A7C /* Rtt_SpriteSourceFrame.h in Headers */,
 				C229E0881B32221B00D87A7C /* Rtt_StageObject.h in Headers */,
 				C229E0891B32221B00D87A7C /* Rtt_String.h in Headers */,
 				C229E08A1B32221B00D87A7C /* Rtt_StringHash.h in Headers */,
@@ -5208,7 +5162,6 @@
 				A4328845176A621200ACB6FF /* Rtt_BufferBitmap.cpp in Sources */,
 				C2E993341A6B2FEC00E99F46 /* Rtt_CPUResourcePool.cpp in Sources */,
 				A4328847176A621200ACB6FF /* Rtt_ClosedPath.cpp in Sources */,
-				A4328849176A621200ACB6FF /* Rtt_CompositeObject.cpp in Sources */,
 				A492760C17B98BAF00DAD62A /* Rtt_CompositePaint.cpp in Sources */,
 				A432884B176A621200ACB6FF /* Rtt_ContainerObject.cpp in Sources */,
 				A432884D176A621200ACB6FF /* Rtt_Display.cpp in Sources */,
@@ -5240,7 +5193,6 @@
 				C2E993401A6B2FEC00E99F46 /* Rtt_InputDeviceConnectionState.cpp in Sources */,
 				C2E993411A6B2FEC00E99F46 /* Rtt_InputDeviceDescriptor.cpp in Sources */,
 				C2E993421A6B2FEC00E99F46 /* Rtt_InputDeviceType.cpp in Sources */,
-				A4328866176A621200ACB6FF /* Rtt_LineObject.cpp in Sources */,
 				A4ED10AE14D2931000ECF49E /* Rtt_Lua.cpp in Sources */,
 				C2E993491A6B2FEC00E99F46 /* Rtt_LuaAssert.cpp in Sources */,
 				A4A47E5B14D28B9800B5111C /* Rtt_LuaAux.cpp in Sources */,
@@ -5266,7 +5218,6 @@
 				A4B66B1917726CB80077B2BF /* Rtt_LuaUserdataProxy.cpp in Sources */,
 				00B73BFC12B71BF20057F594 /* Rtt_Math.c in Sources */,
 				000CE7B812B73EE300D9B6A4 /* Rtt_Matrix.cpp in Sources */,
-				A432886E176A621200ACB6FF /* Rtt_OpenPath.cpp in Sources */,
 				A4328870176A621200ACB6FF /* Rtt_Paint.cpp in Sources */,
 				A475032E1773A6840064ABA0 /* Rtt_PaintAdapter.cpp in Sources */,
 				006E5C4E13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.cpp in Sources */,
@@ -5326,7 +5277,6 @@
 				A4328888176A621200ACB6FF /* Rtt_SnapshotObject.cpp in Sources */,
 				A432888A176A621200ACB6FF /* Rtt_SpriteObject.cpp in Sources */,
 				A432888C176A621200ACB6FF /* Rtt_SpritePlayer.cpp in Sources */,
-				A432888E176A621200ACB6FF /* Rtt_SpriteSourceFrame.cpp in Sources */,
 				A4328890176A621200ACB6FF /* Rtt_StageObject.cpp in Sources */,
 				00B73C0812B71BF20057F594 /* Rtt_String.cpp in Sources */,
 				00B73C0A12B71BF20057F594 /* Rtt_StringHash.cpp in Sources */,
@@ -5643,7 +5593,6 @@
 				C229E0C81B32221B00D87A7C /* Rtt_BufferBitmap.cpp in Sources */,
 				C229E0C91B32221B00D87A7C /* Rtt_CPUResourcePool.cpp in Sources */,
 				C229E0CC1B32221B00D87A7C /* Rtt_ClosedPath.cpp in Sources */,
-				C229E0CD1B32221B00D87A7C /* Rtt_CompositeObject.cpp in Sources */,
 				C229E0CE1B32221B00D87A7C /* Rtt_CompositePaint.cpp in Sources */,
 				C229E0CF1B32221B00D87A7C /* Rtt_ContainerObject.cpp in Sources */,
 				C229E0D11B32221B00D87A7C /* Rtt_Display.cpp in Sources */,
@@ -5675,7 +5624,6 @@
 				C229E0EE1B32221B00D87A7C /* Rtt_InputDeviceConnectionState.cpp in Sources */,
 				C229E0EF1B32221B00D87A7C /* Rtt_InputDeviceDescriptor.cpp in Sources */,
 				C229E0F01B32221B00D87A7C /* Rtt_InputDeviceType.cpp in Sources */,
-				C229E0F21B32221B00D87A7C /* Rtt_LineObject.cpp in Sources */,
 				C229E0F31B32221B00D87A7C /* Rtt_Lua.cpp in Sources */,
 				C229E0F41B32221B00D87A7C /* Rtt_LuaAssert.cpp in Sources */,
 				C229E0F51B32221B00D87A7C /* Rtt_LuaAux.cpp in Sources */,
@@ -5701,7 +5649,6 @@
 				C229E10E1B32221B00D87A7C /* Rtt_LuaUserdataProxy.cpp in Sources */,
 				C229E1101B32221B00D87A7C /* Rtt_Math.c in Sources */,
 				C229E1111B32221B00D87A7C /* Rtt_Matrix.cpp in Sources */,
-				C229E1141B32221B00D87A7C /* Rtt_OpenPath.cpp in Sources */,
 				C229E1151B32221B00D87A7C /* Rtt_Paint.cpp in Sources */,
 				C229E1161B32221B00D87A7C /* Rtt_PaintAdapter.cpp in Sources */,
 				C229E11E1B32221B00D87A7C /* Rtt_PlatformAudioSessionManager.cpp in Sources */,
@@ -5762,7 +5709,6 @@
 				C229E1571B32221B00D87A7C /* Rtt_SnapshotObject.cpp in Sources */,
 				C229E1581B32221B00D87A7C /* Rtt_SpriteObject.cpp in Sources */,
 				C229E1591B32221B00D87A7C /* Rtt_SpritePlayer.cpp in Sources */,
-				C229E15A1B32221B00D87A7C /* Rtt_SpriteSourceFrame.cpp in Sources */,
 				C229E15B1B32221B00D87A7C /* Rtt_StageObject.cpp in Sources */,
 				C229E15C1B32221B00D87A7C /* Rtt_String.cpp in Sources */,
 				C229E15D1B32221B00D87A7C /* Rtt_StringHash.cpp in Sources */,

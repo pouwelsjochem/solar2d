@@ -59,7 +59,7 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) con
 	size_t bytesPerRow = w*bytesPerPixel;
 	NSInteger numBytes = h*bytesPerRow;
 
-	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast)
+	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast);
 	CGBitmapInfo dstBitmapInfo = kCGImageAlphaPremultipliedLast;
 
 	CGDataProviderRef dataProvider = CGDataProviderCreateWithData( NULL, buffer, numBytes, NULL );
