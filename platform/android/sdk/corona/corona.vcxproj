@@ -300,7 +300,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_FilePath.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_HitTestObject.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_ImageGroupObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_JavaHost.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_KeyName.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Lua.cpp" />
@@ -679,7 +678,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_FilePath.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_GPU.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_HitTestObject.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_ImageGroupObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_JavaHost.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_KeyName.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Lua.h" />

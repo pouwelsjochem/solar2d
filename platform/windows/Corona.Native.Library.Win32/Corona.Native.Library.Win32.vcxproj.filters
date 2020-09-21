@@ -81,9 +81,6 @@
       <Filter>Corona</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Interop\Graphics\FontServices.h">
-      <Filter>Interop\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Interop\UI\UIComponentCollection.h">
       <Filter>Interop\UI</Filter>
     </ClInclude>
@@ -122,21 +119,6 @@
     </ClInclude>
     <ClInclude Include="Interop\StaticInitializer.h">
       <Filter>Interop</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\Graphics\FontSettings.h">
-      <Filter>Interop\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\Graphics\Font.h">
-      <Filter>Interop\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\Graphics\CoronaFontServices.h">
-      <Filter>Interop\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\Graphics\MFontLoader.h">
-      <Filter>Interop\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\Graphics\FontSizeConverter.h">
-      <Filter>Interop\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Interop\ValueChangedEventArgs.h">
       <Filter>Interop</Filter>
@@ -342,9 +324,6 @@
     <ClCompile Include="Corona\CoronaWin32.cpp">
       <Filter>Corona</Filter>
     </ClCompile>
-    <ClCompile Include="Interop\Graphics\FontServices.cpp">
-      <Filter>Interop\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Interop\UI\UIComponentCollection.cpp">
       <Filter>Interop\UI</Filter>
     </ClCompile>
@@ -374,15 +353,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\external\winutil\XMessageBox.cpp">
       <Filter>%28root%29\external\winutil</Filter>
-    </ClCompile>
-    <ClCompile Include="Interop\Graphics\FontSettings.cpp">
-      <Filter>Interop\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Interop\Graphics\Font.cpp">
-      <Filter>Interop\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Interop\Graphics\FontSizeConverter.cpp">
-      <Filter>Interop\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Interop\UI\UITextChangedEventArgs.cpp">
       <Filter>Interop\UI</Filter>

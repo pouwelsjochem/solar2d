@@ -154,11 +154,6 @@
     <ClInclude Include="Interop\DateTime.h" />
     <ClInclude Include="Interop\Event.h" />
     <ClInclude Include="Interop\EventArgs.h" />
-    <ClInclude Include="Interop\Graphics\Font.h" />
-    <ClInclude Include="Interop\Graphics\FontServices.h" />
-    <ClInclude Include="Interop\Graphics\FontSettings.h" />
-    <ClInclude Include="Interop\Graphics\FontSizeConverter.h" />
-    <ClInclude Include="Interop\Graphics\MFontLoader.h" />
     <ClInclude Include="Interop\HandledEventArgs.h" />
     <ClInclude Include="Interop\Input\DirectInputDeviceHandler.h" />
     <ClInclude Include="Interop\Input\DirectInputDeviceStateData.h" />
@@ -264,10 +259,6 @@
     <ClCompile Include="Interop\BaseEvent.cpp" />
     <ClCompile Include="Interop\DateTime.cpp" />
     <ClCompile Include="Interop\EventArgs.cpp" />
-    <ClCompile Include="Interop\Graphics\Font.cpp" />
-    <ClCompile Include="Interop\Graphics\FontServices.cpp" />
-    <ClCompile Include="Interop\Graphics\FontSettings.cpp" />
-    <ClCompile Include="Interop\Graphics\FontSizeConverter.cpp" />
     <ClCompile Include="Interop\HandledEventArgs.cpp" />
     <ClCompile Include="Interop\Input\DirectInputDeviceHandler.cpp" />
     <ClCompile Include="Interop\Input\DirectInputDeviceStateData.cpp" />

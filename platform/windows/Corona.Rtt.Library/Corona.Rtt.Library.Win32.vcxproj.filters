@@ -132,9 +132,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_HitTestObject.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_ImageGroupObject.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_KeyName.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -755,9 +752,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_HitTestObject.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_ImageGroupObject.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_KeyName.h">

@@ -1037,14 +1037,6 @@ namespace Rtt
 	{
 	}
 
-	void WinPlatform::FlurryInit(const char* applicationKey) const
-	{
-	}
-
-	void WinPlatform::FlurryEvent(const char* eventId) const
-	{
-	}
-
 	void WinPlatform::SetNativeProperty(lua_State* L, const char* key, int valueIndex) const
 	{
 		// Validate.
