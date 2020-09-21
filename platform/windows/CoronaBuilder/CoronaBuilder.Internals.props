@@ -13,7 +13,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <PreprocessorDefinitions>Rtt_LUA_COMPILER;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Rtt;..\..\..\external\JDK7\include;..\..\..\external\JDK7\include\win32;..\..\..\external\rcedit\Project\src;..\..\..\external\sundown\Project;..\..\..\external\winutil;..\..\..\modules\simulator;..\..\..\platform\android;..\..\..\platform\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Rtt;..\..\..\external\rcedit\Project\src;..\..\..\external\sundown\Project;..\..\..\external\winutil;..\..\..\modules\simulator;..\..\..\platform\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
       <Command>REM Digitally sign the application.

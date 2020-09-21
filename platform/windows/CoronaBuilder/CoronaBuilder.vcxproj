@@ -62,7 +62,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CORONABUILDER_WIN32;CORONABUILDER_HTML5;CORONABUILDER_ANDROID;CORONABUILDER_LINUX;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CORONABUILDER_WIN32;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
@@ -90,7 +90,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CORONABUILDER_WIN32;CORONABUILDER_HTML5;CORONABUILDER_ANDROID;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CORONABUILDER_WIN32;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +134,6 @@
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\stack.c" />
     <ClCompile Include="..\..\..\external\winutil\BtnST.cpp" />
     <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp" />
-    <ClCompile Include="..\..\..\external\winutil\SimpleBrowser.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Allocator.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Array.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Assert.c" />
@@ -166,15 +165,11 @@
     <ClCompile Include="..\..\..\librtt\Input\Rtt_ReadOnlyInputAxisCollection.cpp" />
     <ClCompile Include="..\..\..\librtt\Input\Rtt_ReadOnlyInputDeviceCollection.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Archive.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_JavaHost.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Lua.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Preference.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceCollection.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceValue.cpp" />
     <ClCompile Include="..\..\..\tools\car\Rtt_Car.cpp" />
-    <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerAndroidFactory.cpp" />
-    <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerHTML5Factory.cpp" />
-    <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerLinuxFactory.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerWin32Factory.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_DownloadPluginsMain.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_LuaLibBuilder.cpp" />
@@ -182,17 +177,11 @@
     <ClCompile Include="..\..\..\librtt\Rtt_HTTPClientCommon.cpp" />
     <ClCompile Include="..\Corona.Rtt.Library\Rtt_HTTPClientWindows.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_WinConsolePlatform.cpp" />
-    <ClCompile Include="..\..\android\Rtt_AndroidAppPackager.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_LinuxAppPackager.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_WebAppPackager.cpp" />
     <ClCompile Include="..\..\shared\AntHost.cpp" />
-    <ClCompile Include="..\..\shared\ListKeyStore.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_AndroidSupportTools.c" />
     <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_TargetAndroidAppStore.cpp" />
     <ClCompile Include="..\..\shared\Rtt_TargetDevice.cpp" />
     <ClCompile Include="..\Corona.Native.Library.Win32\Interop\Ipc\CommandLine.cpp" />
     <ClCompile Include="..\Corona.Native.Library.Win32\Interop\Ipc\CommandLineRunner.cpp" />
@@ -231,7 +220,6 @@
     <ClInclude Include="..\..\..\external\winutil\BtnST.h" />
     <ClInclude Include="..\..\..\external\winutil\BrowseDirDialog.h" />
     <ClInclude Include="..\..\..\external\winutil\dirent.h" />
-    <ClInclude Include="..\..\..\external\winutil\SimpleBrowser.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Allocator.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Array.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Assert.h" />
@@ -268,7 +256,6 @@
     <ClInclude Include="..\..\..\librtt\Input\Rtt_ReadOnlyInputAxisCollection.h" />
     <ClInclude Include="..\..\..\librtt\Input\Rtt_ReadOnlyInputDeviceCollection.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Archive.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_JavaHost.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Lua.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_MPlatformDevice.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Preference.h" />
@@ -280,19 +267,11 @@
     <ClInclude Include="..\..\..\tools\CoronaBuilder\Rtt_WinConsoleDevice.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_HTTPClient.h" />
     <ClInclude Include="..\..\..\tools\CoronaBuilder\Rtt_WinConsolePlatform.h" />
-    <ClInclude Include="..\..\android\Rtt_AndroidAppPackager.h" />
-    <ClInclude Include="..\..\shared\Rtt_LinuxAppPackager.h" />
-    <ClInclude Include="..\..\shared\Rtt_WebAppPackager.h" />
-    <ClInclude Include="..\..\shared\AntHost.h" />
-    <ClInclude Include="..\..\shared\jniUtils.h" />
-    <ClInclude Include="..\..\shared\ListKeyStore.h" />
-    <ClInclude Include="..\..\shared\Rtt_AndroidSupportTools.h" />
     <ClInclude Include="..\..\shared\Rtt_DeviceBuildData.h" />
     <ClInclude Include="..\..\shared\Rtt_MPlatformServices.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformAppPackager.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformDictionaryWrapper.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h" />
-    <ClInclude Include="..\..\shared\Rtt_TargetAndroidAppStore.h" />
     <ClInclude Include="..\..\shared\Rtt_TargetDevice.h" />
     <ClInclude Include="..\Corona.Native.Library.Win32\Interop\Ipc\CommandLine.h" />
     <ClInclude Include="..\Corona.Native.Library.Win32\Interop\Ipc\CommandLineRunner.h" />
@@ -314,10 +293,7 @@
     <LuaToCpp Include="..\..\..\external\lpeg\re.lua" />
     <LuaToCpp Include="..\..\..\tools\CoronaBuilder\BuilderPluginDownloader.lua" />
     <LuaToCpp Include="..\..\..\tools\CoronaBuilder\CoronaBuilder.lua" />
-    <LuaToCpp Include="..\..\android\create_build_properties.lua" />
     <LuaToCpp Include="..\..\resources\CoronaBuilderPluginCollector.lua" />
-    <LuaToCpp Include="..\..\resources\linuxPackageApp.lua" />
-    <LuaToCpp Include="..\..\resources\webPackageApp.lua" />
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua" />
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\json.lua" />

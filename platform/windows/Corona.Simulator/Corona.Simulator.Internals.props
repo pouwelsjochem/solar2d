@@ -13,7 +13,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <PreprocessorDefinitions>Rtt_LUA_COMPILER;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Rtt;..\..\..\external\JDK7\include;..\..\..\external\JDK7\include\win32;..\..\..\external\rcedit\Project\src;..\..\..\external\sundown\Project;..\..\..\external\winutil;..\..\..\modules\simulator;..\..\..\platform\android;..\..\..\platform\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Rtt;..\..\..\external\rcedit\Project\src;..\..\..\external\sundown\Project;..\..\..\external\winutil;..\..\..\modules\simulator;..\..\..\platform\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <PostBuildEvent>
       <Command>REM Digitally sign the application.
@@ -30,22 +30,7 @@ xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVers
 xcopy "..\..\resources\Skins" "$(OutDir)Resources\Skins" /Y /I /E
 copy "..\Build.Tools\7za.exe" "$(OutDir)" /Y
 copy "..\Build.Tools\zipalign.exe" "$(OutDir)Resources" /Y
-copy "..\..\android\project\AntInvoke\AntInvoke.jar" "$(OutDir)Resources" /Y
-copy "..\..\android\project\ListKeyStore\ListKeyStore.jar" "$(OutDir)Resources" /Y
-copy "..\..\android\resources\_coronatest.jar" "$(OutDir)Resources" /Y
-copy "..\..\android\AntLiveManifest\AntLiveManifest.jar" "$(OutDir)Resources" /Y
-copy "..\..\android\resources\build.properties" "$(OutDir)Resources" /Y
-copy "..\..\android\resources\build.xml" "$(OutDir)Resources" /Y
-copy "..\..\android\resources\debug.keystore" "$(OutDir)Resources" /Y
-copy "..\..\resources\AndroidValidation.lua" "$(OutDir)Resources" /Y
 copy "..\..\resources\AppSettings.lua" "$(OutDir)Resources" /Y
-copy "..\..\resources\webtemplate.zip" "$(OutDir)Resources" /Y
-copy "..\..\resources\linuxtemplate.tar.gz" "$(OutDir)Resources" /Y
-copy "..\..\resources\raspbiantemplate.tar.gz" "$(OutDir)Resources" /Y
-copy "..\..\..\external\apache-ant-1.8.1\APACHE LICENSE" "$(OutDir)" /Y
-copy "..\..\..\external\apache-ant-1.8.1\APACHE NOTICE" "$(OutDir)" /Y
-copy "..\..\..\external\apache-ant-1.8.1\lib\ant.jar" "$(OutDir)Resources" /Y
-copy "..\..\..\external\apache-ant-1.8.1\lib\ant-launcher.jar" "$(OutDir)Resources" /Y
 copy "..\..\..\sdk\dmg\Corona_License.rtf" "$(OutDir)" /Y
 copy "..\..\..\sdk\dmg\Corona3rdPartyLicenses.txt" "$(OutDir)" /Y
 </Command>

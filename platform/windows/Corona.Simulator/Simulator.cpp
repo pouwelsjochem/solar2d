@@ -30,7 +30,6 @@
 #include "Interop\Ipc\AsyncPipeReader.h"
 #include "Interop\Storage\RegistryStoredPreferences.h"
 #include "Rtt_Version.h"    // Rtt_STRING_BUILD and Rtt_STRING_BUILD_DATE
-#include "Rtt_JavaHost.h"   // GetJavaHome()
 
 
 #ifdef _DEBUG
@@ -433,170 +432,6 @@ BOOL CSimulatorApp::InitInstance()
 	return TRUE;
 }
 
-// CheckJarPath - see if the given path exists and show user a message if it doesn't
-bool
-CSimulatorApp::CheckJarPath( CString path )
-{
-	if (!CheckPathExists(path))
-	{
-		CString msg;
-		msg.Format( IDS_FILE_s_NOTFOUND_INSTALL, path );
-		::AfxMessageBox( msg );
-        return false;
-	}
-	return true;
-}
-
-// InitJavaPaths - check if jarsigner.exe can be found, and warn the user if not.
-// If JAVA_HOME is set to the JDK and %JAVA_HOME%\bin is in the path, load the
-// required jars (ListKeyStore and ant).
-bool
-CSimulatorApp::InitJavaPaths()
-{
-    static bool bInitialized = false;
-
-    // Only do this successfully once (set to true when jarsigner.exe found)
-    if (bInitialized)
-	{
-        return true;
-	}
-
-	// Fetch the path to the JDK.
-    auto utf8JdkPath = Rtt::JavaHost::GetJdkPath();
-	if (nullptr == utf8JdkPath)
-	{
-        return false;
-	}
-
-    // Look for jarsigner.exe in PATH
-	WinString jarSignerFilePath;
-	jarSignerFilePath.SetUTF8(utf8JdkPath);
-	if ((jarSignerFilePath.GetLength() > 0) && !jarSignerFilePath.EndsWith("\\"))
-	{
-		jarSignerFilePath.Append("\\");
-	}
-	jarSignerFilePath.Append("bin\\jarsigner.exe");
-	int result = SearchPath( NULL, jarSignerFilePath.GetTCHAR(), NULL, 0, NULL, NULL );
-	if (!result)
-	{
-		if (::AfxMessageBox(IDS_JDKNOTFOUND, MB_ICONEXCLAMATION | MB_YESNO) == IDYES)
-		{
-			try
-			{
-				::ShellExecute(
-						NULL, _T("open"),
-						_T("http://www.oracle.com/technetwork/java/javase/downloads/index.html"),
-						NULL, NULL, SW_SHOWNORMAL);
-			}
-			catch (...) { }
-		}
-	}
-	else
-	{
-		bInitialized = true;
-	}
-
-	// Set JAVA_PATH and PATH environment variables for this process to reference JDK and JRE directories.
-	// These are needed by ANT to build apps for Android and to run JAR files used by this app.
-    if (bInitialized)
-	{
-		// Set the JAVA_HOME environment variable.
-		WinString stringConverter;
-		stringConverter.SetUTF8(utf8JdkPath);
-		::SetEnvironmentVariableW(L"JAVA_HOME", stringConverter.GetUTF16());
-
-		// Add to the PATH environment variable.
-		stringConverter.SetUTF8(utf8JdkPath);
-		if (stringConverter.GetLength() > 0)
-		{
-			std::wstring newUtf16PathString(L"");
-
-			// Add the JDK's bin directory to the PATH.
-			// This ensures that the expected JDK tools are used by ANT.
-			if (!stringConverter.EndsWith("\\"))
-			{
-				stringConverter.Append("\\");
-			}
-			stringConverter.Append("bin;");
-			newUtf16PathString += stringConverter.GetUTF16();
-
-			// Add the JRE's bin directory to the PATH.
-			// This is needed by the "jvm.dll" in case its dependencies could not be found
-			// in the Windows system directory, which sometimes happens after a Java update.
-			auto utf8JrePath = Rtt::JavaHost::GetJrePath();
-			if (utf8JrePath)
-			{
-				stringConverter.SetUTF8(utf8JrePath);
-				if (!stringConverter.EndsWith("\\"))
-				{
-					stringConverter.Append("\\");
-				}
-				stringConverter.Append("bin;");
-				newUtf16PathString += stringConverter.GetUTF16();
-			}
-
-			// Fetch the system's current PATH string and append it to the end of the new PATH string.
-			// Note: It's very important the above paths are at the beginning of the PATH in case the current system
-			//       PATH contains references to incompatible JDK/JRE directories, such as 64-bit versions.
-			auto pathCharacterCount = ::GetEnvironmentVariableW(L"PATH", nullptr, 0);
-			if (pathCharacterCount > 0)
-			{
-				pathCharacterCount++;
-				auto utf16Buffer = new wchar_t[pathCharacterCount];
-				utf16Buffer[0] = L'\0';
-				::GetEnvironmentVariableW(L"PATH", utf16Buffer, pathCharacterCount);
-				newUtf16PathString += utf16Buffer;
-				delete[] utf16Buffer;
-			}
-
-			// Apply the new PATH settings to this application process.
-			::SetEnvironmentVariableW(L"PATH", newUtf16PathString.c_str());
-		}
-	}
-
-#if USE_JNI
-	// Load JAR files needed to run ANT and read key stores.
-	if (bInitialized)
-	{
-		CString resourceDir = ((CSimulatorApp *)AfxGetApp())->GetResourceDir();
-		CString jarPath;
-		WinString strJarPath;
-
-		jarPath = resourceDir + _T("\\ListKeyStore.jar");
-		if ( !CheckJarPath( jarPath ) )
-			return false;
-		strJarPath.SetTCHAR( jarPath );
-		Rtt::JavaHost::AddJar( strJarPath.GetUTF8() );
-
-		jarPath = resourceDir + _T("\\ant.jar");
-		if ( !CheckJarPath( jarPath ) )
-			return false;
-		strJarPath.SetTCHAR( jarPath );
-		Rtt::JavaHost::AddJar( strJarPath.GetUTF8() );
-
-		jarPath = resourceDir + _T("\\ant-launcher.jar");
-		if ( !CheckJarPath( jarPath ) )
-			return false;
-		strJarPath.SetTCHAR( jarPath );
-		Rtt::JavaHost::AddJar( strJarPath.GetUTF8() );
-
-		jarPath = resourceDir + _T("\\AntInvoke.jar");
-		if ( !CheckJarPath( jarPath ) )
-			return false;
-		strJarPath.SetTCHAR( jarPath );
-		Rtt::JavaHost::AddJar( strJarPath.GetUTF8() );
-
-		jarPath = resourceDir + _T("\\AntLiveManifest.jar");
-		if (!CheckJarPath(jarPath))
-			return false;
-		strJarPath.SetTCHAR(jarPath);
-		Rtt::JavaHost::AddJar(strJarPath.GetUTF8());
-	}
-#endif // USE_JNI
-
-	return bInitialized;
-}
-
 /// Gets this application's absolute path without the file name.
 CString CSimulatorApp::GetApplicationDir()
 {
@@ -634,16 +469,6 @@ CString CSimulatorApp::GetResourceDir()
 		m_sResourceDir += _T("\\Resources");
 	}
     return m_sResourceDir;
-}
-
-bool CSimulatorApp::ShouldShowWebBuildDlg()
-{
-	return true;
-}
-bool CSimulatorApp::ShouldShowLinuxBuildDlg()
-{
-	bool show = GetProfileInt(REGISTRY_SECTION, REGISTRY_SHOWLINUXBUILD, REGISTRY_SHOWLINUXBUILD_DEFAULT) ? true : false;
-	return show;
 }
 
 // CheckPathExists - return true if the file/directory exists.

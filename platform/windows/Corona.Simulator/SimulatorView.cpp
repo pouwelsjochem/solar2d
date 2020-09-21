@@ -31,9 +31,6 @@
 #include "SimulatorDoc.h"
 #include "SimulatorView.h"
 #include "AboutDlg.h"
-#include "BuildAndroidDlg.h"
-#include "BuildWebDlg.h"
-#include "BuildLinuxDlg.h"
 #include "BuildWin32AppDlg.h"
 #include "WinString.h"
 #include "WinGlobalProperties.h"  // WMU_ message IDs
@@ -79,9 +76,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_COMMAND(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnViewNavigateBack)
 	ON_COMMAND(ID_FILE_MRU_FILE1, &CSimulatorView::OnFileMRU1)
 	ON_COMMAND(ID_FILE_OPEN, &CSimulatorView::OnFileOpen)
-	ON_COMMAND(ID_BUILD_FOR_ANDROID, &CSimulatorView::OnBuildForAndroid)
-	ON_COMMAND(ID_BUILD_FOR_WEB, &CSimulatorView::OnBuildForWeb)
-	ON_COMMAND(ID_BUILD_FOR_LINUX, &CSimulatorView::OnBuildForLinux)
 	ON_COMMAND(ID_BUILD_FOR_WIN32, &CSimulatorView::OnBuildForWin32)
 	ON_COMMAND(ID_FILE_OPENINEDITOR, &CSimulatorView::OnFileOpenInEditor)
 	ON_COMMAND(ID_FILE_RELAUNCH, &CSimulatorView::OnFileRelaunch)
@@ -96,9 +90,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnUpdateViewNavigateBack)
 	ON_UPDATE_COMMAND_UI(ID_FILE_RELAUNCH, &CSimulatorView::OnUpdateFileRelaunch)
 	ON_UPDATE_COMMAND_UI(ID_FILE_CLOSE, &CSimulatorView::OnUpdateFileClose)
-	ON_UPDATE_COMMAND_UI(ID_BUILD_FOR_ANDROID, &CSimulatorView::OnUpdateBuildMenuItem)
-	ON_UPDATE_COMMAND_UI(ID_BUILD_FOR_WEB, &CSimulatorView::OnUpdateBuildMenuItem)
-	ON_UPDATE_COMMAND_UI(ID_BUILD_FOR_LINUX, &CSimulatorView::OnUpdateBuildMenuItem)
 	ON_UPDATE_COMMAND_UI(ID_BUILD_FOR_WIN32, &CSimulatorView::OnUpdateBuildMenuItem)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPENINEDITOR, &CSimulatorView::OnUpdateFileOpenInEditor)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOW_PROJECT_FILES, &CSimulatorView::OnUpdateShowProjectFiles)
@@ -394,82 +385,6 @@ void CSimulatorView::OnFileOpen()
 	}
 }
 
-/// <summary>Opens a dialog to build the currently selected project for Android.</summary>
-void CSimulatorView::OnBuildForAndroid()
-{
-    // Check whether JDK and jarsigner.exe are available first
-	BOOL retval = CSimulatorApp::InitJavaPaths();
-    if ( ! retval)
-	{
-        return;
-	}
-
-	// If app is running, suspend it during the build
-	bool buildSuspendedSimulator = false;
-	bool isSuspended = IsSimulationSuspended();
-	if (false == isSuspended)
-	{
-		buildSuspendedSimulator = true;
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-
-	// Display the build window.
-	CBuildAndroidDlg dlg;
-	dlg.SetProject( GetDocument()->GetProject() );
-	dlg.DoModal();
-	if (buildSuspendedSimulator)
-	{
-		// Toggle suspend
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-}
-
-/// <summary>Opens a dialog to build the currently selected project as an HTML5 app.</summary>
-void CSimulatorView::OnBuildForWeb()
-{
-	// If app is running, suspend it during the build
-	bool buildSuspendedSimulator = false;
-	bool isSuspended = IsSimulationSuspended();
-	if (false == isSuspended)
-	{
-		buildSuspendedSimulator = true;
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-
-	// Display the build window.
-	CBuildWebDlg dlg;
-	dlg.SetProject( GetDocument()->GetProject() );
-	dlg.DoModal();
-	if (buildSuspendedSimulator)
-	{
-		// Toggle suspend
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-}
-
-/// <summary>Opens a dialog to build the currently selected project as an HTML5 app.</summary>
-void CSimulatorView::OnBuildForLinux()
-{
-	// If app is running, suspend it during the build
-	bool buildSuspendedSimulator = false;
-	bool isSuspended = IsSimulationSuspended();
-	if (false == isSuspended)
-	{
-		buildSuspendedSimulator = true;
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-
-	// Display the build window.
-	CBuildLinuxDlg dlg;
-	dlg.SetProject( GetDocument()->GetProject() );
-	dlg.DoModal();
-	if (buildSuspendedSimulator)
-	{
-		// Toggle suspend
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-}
-
 /// <summary>Opens a dialog to build the currently selected project as a Win32 desktop app.</summary>
 void CSimulatorView::OnBuildForWin32()
 {
@@ -510,12 +425,6 @@ void CSimulatorView::OnBuildForWin32()
 	{
 		SuspendResumeSimulationWithOverlay(true, false);
 	}
-}
-
-/// <summary>Enables/disables the "Build for Android/HTML5/Windows" item in the menu.</summary>
-void CSimulatorView::OnUpdateBuildMenuItem(CCmdUI *pCmdUI)
-{
-   pCmdUI->Enable( mRuntimeEnvironmentPointer && ! GetDocument()->GetPath().IsEmpty() );
 }
 
 // OnFileOpenInEditor - give project name to shell, if associated with an editor
@@ -1395,9 +1304,6 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 				newMenu.SetMenuInfo(&menuInfo);
 			}
 
-			// Remove items from the "Build" menu that the end-user is not authorized to use.
-			RemoveUnauthorizedMenuItemsFrom(&newMenu);
-
 			// Replace the window's menu.
 			frameWindowPointer->SetMenu(&newMenu);
 			frameWindowPointer->m_hMenuDefault = newMenu.GetSafeHmenu();
@@ -1587,64 +1493,6 @@ bool CSimulatorView::ValidateOpenGL()
 		mCoronaContainerControl.ShowWindow(SW_SHOW);
 	}
 	return true;
-}
-
-/// <summary>
-///  <para>Removes menu items that the end-user should not have access to from the given menu.</para>
-///  <para>For example, the "Build\HTML5" menu item will be removed unless the registry has "ShowWebBuild" set.</para>
-/// </summary>
-/// <param name="menuPointer">Pointer to the menu to be scanned for items to be removed. Can be null.</param>
-void CSimulatorView::RemoveUnauthorizedMenuItemsFrom(CMenu* menuPointer)
-{
-	// Validate.
-	if (!menuPointer)
-	{
-		return;
-	}
-
-	// Fetch a pointer to the main application object.
-	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
-	if (!applicationPointer)
-	{
-		return;
-	}
-
-	// Traverse the menu hierarchy for key menu items that should be removed, depending on the user's access level.
-	// Note: We must iterate backwards since the below deletes menu items by index.
-	for (int menuItemIndex = menuPointer->GetMenuItemCount() - 1; menuItemIndex >= 0; menuItemIndex--)
-	{
-		// If the next menu item is a submenu, then traverse its submenu items recursively.
-		auto subMenuPointer = menuPointer->GetSubMenu(menuItemIndex);
-		if (subMenuPointer)
-		{
-			// Traverse the submenu's items.
-			RemoveUnauthorizedMenuItemsFrom(subMenuPointer);
-
-			// If the submenu no longer contains any menu items, then remove the submenu.
-			if (subMenuPointer->GetMenuItemCount() <= 0)
-			{
-				menuPointer->DeleteMenu(menuItemIndex, MF_BYPOSITION);
-				continue;
-			}
-		}
-
-		// Remove this menu item if the user does not have access.
-		auto menuItemId = menuPointer->GetMenuItemID(menuItemIndex);
-		if (menuItemId >= 0)
-		{
-			bool shouldRemove = false;
-			switch (menuItemId)
-			{
-				case ID_BUILD_FOR_LINUX:
-					shouldRemove = (applicationPointer->ShouldShowLinuxBuildDlg() == false);
-					break;
-			}
-			if (shouldRemove)
-			{
-				menuPointer->DeleteMenu(menuItemIndex, MF_BYPOSITION);
-			}
-		}
-	}
 }
 
 #pragma endregion

@@ -1,34 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <LuaToCpp Include="..\..\android\create_build_properties.lua" />
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua" />
     <LuaToCpp Include="..\..\..\tools\CoronaBuilder\CoronaBuilder.lua" />
-    <ClInclude Include="..\..\shared\jniUtils.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\ListKeyStore.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_WebAppPackager.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\AntHost.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_WebAppPackager.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\android\Rtt_AndroidAppPackager.h">
-      <Filter>%28root%29\platform\android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_PlatformDictionaryWrapper.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_AndroidSupportTools.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_DeviceBuildData.h">
@@ -37,17 +15,8 @@
     <ClInclude Include="..\..\shared\Rtt_MPlatformServices.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_PlatformAppPackager.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_TargetAndroidAppStore.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_TargetDevice.h">
       <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_JavaHost.h">
-      <Filter>%28root%29\librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\external\winutil\BtnST.h">
       <Filter>%28root%29\external\winutil</Filter>
@@ -60,9 +29,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\external\rcedit\Project\src\rescle.h">
       <Filter>%28root%29\external\rcedit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\winutil\SimpleBrowser.h">
-      <Filter>%28root%29\external\winutil</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\markdown.h">
       <Filter>%28root%29\external\sundown</Filter>
@@ -87,10 +53,8 @@
     </ClInclude>
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\json.lua" />
-    <LuaToCpp Include="..\..\resources\webPackageApp.lua" />
     <LuaToCpp Include="..\..\..\external\lpeg\re.lua" />
     <LuaToCpp Include="..\..\..\tools\CoronaBuilder\BuilderPluginDownloader.lua" />
-    <LuaToCpp Include="..\..\resources\linuxPackageApp.lua" />
     <LuaToCpp Include="..\..\resources\CoronaBuilderPluginCollector.lua" />
   </ItemGroup>
   <ItemGroup>
@@ -99,17 +63,8 @@
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_BuildParams.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_CoronaBuilder.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="..\..\shared\ListKeyStore.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\AntHost.cpp">
       <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_WebAppPackager.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\android\Rtt_AndroidAppPackager.cpp">
-      <Filter>%28root%29\platform\android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp">
       <Filter>%28root%29\platform\shared</Filter>
@@ -117,23 +72,11 @@
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_AndroidSupportTools.c">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_TargetDevice.cpp">
       <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_TargetAndroidAppStore.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_JavaHost.cpp">
-      <Filter>%28root%29\librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\external\winutil\BtnST.cpp">
       <Filter>%28root%29\external\winutil</Filter>
@@ -143,9 +86,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\external\rcedit\Project\src\rescle.cc">
       <Filter>%28root%29\external\rcedit\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\winutil\SimpleBrowser.cpp">
-      <Filter>%28root%29\external\winutil</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\html_smartypants.c">
       <Filter>%28root%29\external\sundown</Filter>
@@ -191,8 +131,6 @@
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Math.c" />
     <ClCompile Include="..\Corona.Native.Library.Win32\WinString.cpp" />
     <ClCompile Include="..\Corona.Native.Library.Win32\WinFile.cpp" />
-    <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerAndroidFactory.cpp" />
-    <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerHTML5Factory.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_WinConsolePlatform.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_WinConsoleDevice.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_HTTPClientCommon.cpp" />
@@ -272,10 +210,6 @@
     <ClCompile Include="..\Corona.Native.Library.Win32\Interop\Ipc\CommandLine.cpp">
       <Filter>Interop</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerLinuxFactory.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_LinuxAppPackager.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerFactory.h" />
@@ -295,9 +229,6 @@
     </Filter>
     <Filter Include="%28root%29\platform\shared">
       <UniqueIdentifier>{bab6c157-27db-491b-827a-b3dc41580654}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\platform\android">
-      <UniqueIdentifier>{a39f2d63-9aba-4f90-8b65-72b82ce6f706}</UniqueIdentifier>
     </Filter>
     <Filter Include="%28root%29\librtt">
       <UniqueIdentifier>{0477e90a-ea8b-464f-8754-cc9a5305da5e}</UniqueIdentifier>
@@ -432,9 +363,6 @@
     </ClInclude>
     <ClInclude Include="..\Corona.Native.Library.Win32\Interop\Ipc\CommandLine.h">
       <Filter>Interop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_LinuxAppPackager.h">
-      <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

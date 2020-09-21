@@ -143,10 +143,7 @@ BEGIN
         MENUITEM SEPARATOR
         POPUP "&Build"
         BEGIN
-            MENUITEM "&Android...\tCtrl+B",         ID_BUILD_FOR_ANDROID
-            MENUITEM "&HTML5 (beta)...\tCtrl+Alt+B", ID_BUILD_FOR_WEB
             MENUITEM "&Windows...\tCtrl+Shift+B",   ID_BUILD_FOR_WIN32
-            MENUITEM "&Linux (beta)...\tCtrl+Shift+Alt+B", ID_BUILD_FOR_LINUX
         END
         MENUITEM "Open in &Editor\tCtrl+Shift+O", ID_FILE_OPENINEDITOR
         MENUITEM "Show Project &Files",         ID_FILE_SHOW_PROJECT_FILES
@@ -194,10 +191,7 @@ END
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
-    "B",            ID_BUILD_FOR_ANDROID,   VIRTKEY, CONTROL, NOINVERT
     "B",            ID_BUILD_FOR_WIN32,     VIRTKEY, SHIFT, CONTROL, NOINVERT
-    "B",            ID_BUILD_FOR_WEB,       VIRTKEY, CONTROL, ALT, NOINVERT
-    "B",            ID_BUILD_FOR_LINUX,     VIRTKEY, SHIFT, CONTROL, ALT, NOINVERT
     "W",            ID_FILE_CLOSE,          VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPENINEDITOR,   VIRTKEY, SHIFT, CONTROL, NOINVERT
@@ -226,37 +220,6 @@ BEGIN
     CONTROL         "<a href=""https://solar2d.com"">https://solar2d.com</a>",IDC_LINK_ANSCAMOBILE,
                     "SysLink",WS_TABSTOP,39,52,132,10
     LTEXT           "<Version>",IDC_ABOUT_VERSION,39,26,160,8
-END
-
-IDD_BUILD_DROID DIALOGEX 0, 0, 313, 218
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-EXSTYLE WS_EX_CONTEXTHELP
-CAPTION "Android Build Setup"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    LTEXT           "Application Name:",IDC_STATIC,6,6,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_APPNAME,90,6,216,14,ES_AUTOHSCROLL
-    LTEXT           "Version Code:",IDC_STATIC,6,24,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_VERSION_CODE,90,24,216,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "Version Name:",IDC_STATIC,6,42,78,8,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_VERSION_NAME,90,42,216,14,ES_AUTOHSCROLL
-    LTEXT           "Package:",IDC_STATIC,6,60,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_PACKAGE,90,60,216,14,ES_AUTOHSCROLL
-    LTEXT           "A unique Java-style package identifier for your app\n(e.g. com.acme.games.myfarmgame)",IDC_STATIC,90,78,216,19
-    LTEXT           "Project Path:",IDC_STATIC,6,102,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_PROJECTPATH,90,102,216,14,ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Target App Store:",IDC_STATIC,6,120,78,12,0,WS_EX_RIGHT
-    COMBOBOX        IDC_BUILD_TARGET_APP_STORE,90,120,216,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Keystore:",IDC_STATIC,6,136,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_KEYSTORE,90,136,156,15,ES_AUTOHSCROLL
-    PUSHBUTTON      "Browse...",IDC_BUILD_BROWSE_KEYSTORE,252,136,54,14
-    LTEXT           "Key Alias:",IDC_STATIC,6,154,78,10,0,WS_EX_RIGHT
-    COMBOBOX        IDC_BUILD_KEYALIAS,90,154,216,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Save to Folder:",IDC_STATIC,6,170,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_SAVETO,90,170,156,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "Browse...",IDC_BUILD_BROWSE_SAVETO,252,170,54,14
-    DEFPUSHBUTTON   "Build",IDOK,204,197,48,14
-    PUSHBUTTON      "Cancel",IDCANCEL,258,197,48,14
 END
 
 IDD_LICENSE DIALOGEX 0, 0, 302, 183
@@ -321,48 +284,6 @@ BEGIN
     LTEXT           "",IDC_DIVIDING_LINE,6,216,324,2,0,WS_EX_STATICEDGE
     DEFPUSHBUTTON   "OK",IDOK,228,222,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,282,222,50,14
-END
-
-IDD_BUILD_WEB DIALOGEX 0, 0, 313, 150
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "HTML5 Build Setup (beta)"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    LTEXT           "Application Name :",IDC_STATIC,6,11,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_APPNAME,90,11,216,14,ES_AUTOHSCROLL
-    LTEXT           "Version Code :",IDC_STATIC,6,29,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_VERSION_CODE,90,29,216,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "Project Path :",IDC_STATIC,6,47,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_PROJECTPATH,90,47,216,14,ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Save to Folder :",IDC_STATIC,6,69,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_SAVETO,90,65,156,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "Browse...",IDC_BUILD_BROWSE_SAVETO,252,65,54,14
-    CONTROL         "Include Standard Resources",IDC_INCLUDE_STANDART_RESOURCES,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,90,85,181,10
-    CONTROL         "Create FB Instant archive",IDC_CREATE_FB_INSTANT_ARCHIVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,90,100,181,10
-    DEFPUSHBUTTON   "OK",IDOK,205,125,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,256,125,50,14
-END
-
-IDD_BUILD_LINUX DIALOGEX 0, 0, 313, 150
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "LINUX Build Setup (beta)"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    LTEXT           "Application Name :",IDC_STATIC,6,11,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_APPNAME,90,11,216,14,ES_AUTOHSCROLL
-    LTEXT           "Version Code :",IDC_STATIC,6,29,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_VERSION_CODE,90,29,216,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "Project Path :",IDC_STATIC,6,47,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_PROJECTPATH,90,47,216,14,ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Save to Folder :",IDC_STATIC,6,69,78,10,0,WS_EX_RIGHT
-    EDITTEXT        IDC_BUILD_SAVETO,90,65,156,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "Browse...",IDC_BUILD_BROWSE_SAVETO,252,65,54,14
-    CONTROL         "Include Standard Resources",IDC_INCLUDE_STANDART_RESOURCES,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,90,85,181,10
-    DEFPUSHBUTTON   "OK",IDOK,205,125,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,256,125,50,14
 END
 
 IDD_BUILD_WIN32_APP DIALOGEX 0, 0, 315, 176
@@ -456,14 +377,6 @@ BEGIN
         BOTTOMMARGIN, 78
     END
 
-    IDD_BUILD_DROID, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 306
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 211
-    END
-
     IDD_PASSWORD, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -502,22 +415,6 @@ BEGIN
         RIGHTMARGIN, 332
         TOPMARGIN, 7
         BOTTOMMARGIN, 236
-    END
-
-    IDD_BUILD_WEB, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 306
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 109
-    END
-
-    IDD_BUILD_LINUX, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 306
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 109
     END
 
     IDD_BUILD_WIN32_APP, DIALOG
@@ -575,21 +472,11 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_OPEN_URL_HTML       "Open in Browser"
-    IDS_ANDROID_BUILD       "Building Android App"
-    IDS_ANDROID_SDK_LICENSE """You are about to build an Android app for the first time with this build system.\nIt uses the Android SDK and you must read and accept its license agreement in order to proceed.\nNote, the first time it will download about 250Mb which can take several minutes.\nPress 'Yes' to accept, 'No' to decline or 'Help' to read the license agreement."""
-END
-
-STRINGTABLE
-BEGIN
-    IDS_OPENFORBUILD_s      "Device Builds for %s are only available on Mac OS X.  Please choose a Droid device from the Window - View As... menu."
     IDS_OPENMAINLUA         "Select a main.lua"
     IDS_ONLYMAINLUA         "Only main.lua can be opened"
     IDS_EXPIRE              "This version of the Solar2D Simulator has expired. Please visit https://solar2d.com."
     IDS_HARDWARE_SUSPEND    "Suspend\tCtrl+down arrow"
     IDS_HARDWARE_RESUME     "Resume\tCtrl+down arrow"
-    IDS_VALID_PACKAGE       "Valid package names can have one or more letters, numbers or underscores separated by a dot, for example 'com.acme_co.games3'.  There must be at least two strings separated by dots, and each string can't start with a number.  Java language reserved words (for, interface, etc.) are not permitted.  See http://download.oracle.com/javase/tutorial/java/package/namingpkgs.html."
-    IDS_INVALID_KEYSTORE_s  "The password for the Key Store located at %s was not valid, or the Key Store was not valid."
     IDS_CHOOSEFOLLOWING     "(Choose from the following)"
 END
 
@@ -699,7 +586,6 @@ BEGIN
                             "Solar2D Simulator cannot find the directory %s.\nPlease re-run the installer."
     IDS_FILE_s_NOTFOUND_INSTALL 
                             "Solar2D Simulator cannot find the file %s.\nPlease re-run the installer."
-    IDS_INVALID_ALIAS       "The password for the alias was not valid, or the Java JDK was not found."
     IDS_QUIT                "Quit"
     IDS_CONTINUE            "Continue"
     IDS_OK                  "OK"
@@ -718,26 +604,14 @@ BEGIN
     IDS_CONSOLE_CREATE      "Failed to create console."
     IDS_NO_INTERNET         "Could not connect to server. Please check your Internet connection."
     IDS_UNKNOWNERROR        "An unexpected account configuration error occurred.  Please visit Solar2D forums to find a solution at https://forums.solar2d.com"
-    IDS_SET_JAVAHOME_s      "Jarsigner.exe not found.  To enable Builds:\n(1) Set the JAVA_HOME environment variable to '%s' (without the quotes)\n(2) Add ';%%JAVA_HOME%%\\bin' (without the quotes) to the end of your PATH environment variable.\n(3) Exit and relaunch Solar2D Simulator\n\nClick Yes to open the System Properties dialog to edit your environment variables.  (This message will close.)"
     IDS_ASSOCLUA            "Please associate .lua files with an editor in Control Panel File Associations, then try again.  Click Yes to open the Control Panel File Associations applet."
     IDS_OPENPROJECTINEDITOR "Open Project in Editor"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_ANDROIDBUILD        "Build for Android"
-    IDS_KEYSTORE_ATLEASTONE "Please choose a keystore with at least one valid key alias."
-    IDS_OPENGL_VERSION_WARNING 
-                            "This machine does not meet the Solar2D Simulator's minimum video hardware requirements.\n\nMinimum OpenGL version required:  %s\nYour machine's OpenGL version:  %s"
-    IDS_WARNING             "Warning"
-    IDS_UNKNOWN             "Unknown"
-END
-
-STRINGTABLE
-BEGIN
     IDS_DONE                "Done"
     IDS_VIEW_EXPLORER       "View in E&xplorer"
-    IDS_JDKNOTFOUND         "Could not find the Java Development Kit (JDK).  This is required in order to build for Android.\n\nWould you like to download it now?"
     IDS_INSTALLNOW          "Install now"
     IDS_COULDNOTLOAD_s_ERR_d "Could not load %s, error %ld"
     IDS_FUNCTION_s_IN_s     "Could not find %s in %s."
@@ -766,63 +640,22 @@ BEGIN
                             "You must provide a version code for your application."
     IDS_BUILD_PACKAGE_NAME_NOT_PROVIDED 
                             "You must provide a unique package name."
-    IDS_INVALID_ANDROID_APP_VERSION_NUMBER 
-                            "Your version code is invalid.\r\n\r\nThis number represents the ""android:versionCode"" for your application. It must be a single number and may not contain dots. This version number cannot be less than 1."
-    IDS_ANDROID_KEYSTORE_FILE_NOT_PROVIDED 
-                            "You must select a keystore file to be used to digitally sign your application."
     IDS_BUILD_TARGET_OS_NOT_SELECTED 
                             "You must select a minimum OS version to build for."
-    IDS_ANDROID_KEYALIAS_NOT_SELECTED 
-                            "You must select a key alias that you want to sign your application with."
     IDS_BUILD_PATH_NOT_PROVIDED 
                             "You must provide a destination path to where the built application will be saved to."
-    IDS_ANDROID_KEYSTORE_FILE_NOT_FOUND 
-                            "The keystore file was not found. Please verify that the path and file name are correct."
     IDS_BUILD_PATH_CREATION_FAILED 
                             "The ""Save to Folder"" directory could not be created. This can happen for the following reasons:\r\n1) The provided path contains invalid characters.\r\n2) You do not have permission to create a folder at that location."
-    IDS_INVALID_ANDROID_PROJECT_FILES 
-                            "Your project files did not pass Android validation.\nPlease see the console window for all errors detected."
     IDS_IGNORE              "Ignore"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_TITLE_SIMULATOR_OUTPUT "Solar2D Simulator Console"
-    IDS_ANDROID             "Android"
-    IDS_AMAZON_SLASH_KINDLE "Amazon/Kindle"
-    IDS_SCREEN_SIZE_PHONE   "Phone Preset"
-    IDS_SCREEN_SIZE_TABLET  "Tablet Preset"
-    IDS_SCREEN_SIZE_CUSTOM  "Custom"
-    IDS_PROJECT_PATH_NOT_PROVIDED 
-                            "You must provide a destination path that the new project will be saved to."
-    IDS_PROJECT_PATH_CREATION_FAILED 
-                            "The ""Project Folder"" directory could not be created. This can happen for the following reasons:\r\n1) The provided path contains invalid characters.\r\n2) You do not have permission to create a folder at that location."
-    IDS_PROJECT_SCREEN_WIDTH_IS_INVALID 
-                            "You must provide a valid screen width value."
-    IDS_PROJECT_SCREEN_HEIGHT_IS_INVALID 
-                            "You must provide a valid screen height value."
-END
-
-STRINGTABLE
-BEGIN
-    IDS_PROJECT_PATH_ALREADY_TAKEN 
-                            "The project path that you have selected already contains a Solar2D project. Please choose another location."
-    IDS_PROJECT_FILES_CREATION_FAILED "Failed to create project files."
-    IDS_PROJECT_APPLICATION_NAME_INVALID 
-                            "The application name is invalid. It cannot include the following characters:\n     %s"
-    IDS_SELECT_ROOT_PROJECT_FOLDER_DESCRIPTION 
-                            "Select the root folder that your Solar2D project folder will be created under."
     IDS_SELECT_BUILD_OUTPUT_FOLDER_DESCRIPTION 
                             "Select where you want to output the built application to."
-    IDS_BUILD_VERSION_NAME_NOT_PROVIDED 
-                            "You must provide a version name for your application."
-    IDS_FILTER_ALL_PROJECTS "- All Projects -"
-    IDS_NOOK                "Nook"
     IDS_SIMULATOR_FILES     "Simulator Files"
     IDS_BUILD_SETTINGS_FILE_ERROR 
                             "There is an error in your ""build.settings"" file. Please see the console output for more details."
-    IDS_BUILD_TARGET_APP_STORE_NOT_SELECTED 
-                            "You must select an app store to build for."
     IDS_REMIND_ME_LATER     "Remind me Later"
 END
 

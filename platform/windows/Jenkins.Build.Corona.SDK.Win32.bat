@@ -22,28 +22,6 @@ if EXIST "%WORKSPACE%\..\CoronaEnterprise-%YEAR%.%BUILD_NUMBER%.tgz" (
 	echo WARNING! Skipping Native copy, because "%WORKSPACE%\..\CoronaEnterprise-%YEAR%.%BUILD_NUMBER%.tgz" is not found!
 )
 
-if EXIST "%WORKSPACE%\..\webtemplate.zip" (
-    echo Copying webtamplate.zip
-    copy "%WORKSPACE%\..\webtemplate.zip" "%WORKSPACE%\platform\resources" /Y
-) else (
-    echo WARNING! webtemplate is not found!
-)
-
-
-if EXIST "%WORKSPACE%\..\linuxtemplate.tar.gz" (
-    echo Copying linuxtemplate.tar.gz
-    copy "%WORKSPACE%\..\linuxtemplate.tar.gz" "%WORKSPACE%\platform\resources" /Y
-) else (
-    echo WARNING! linuxtemplate is not found!
-)
-
-if EXIST "%WORKSPACE%\..\raspbiantemplate.tar.gz" (
-    echo Copying raspbiantemplate.tar.gz
-    copy "%WORKSPACE%\..\raspbiantemplate.tar.gz" "%WORKSPACE%\platform\resources" /Y
-) else (
-    echo WARNING! linuxtemplate is not found!
-)
-
 cd "%WORKSPACE%\platform"
 c:\cygwin\bin\find ./resources \( -iname '*.lua' -or -iname '*.txt' -or -iname '*.settings' -or -iname '*.properties' -or -iname '*.xml' -or -iname '*.ccscene' -or -iname '*.json' \) -print0 | xargs -0 -n1 -P4 unix2dos
 

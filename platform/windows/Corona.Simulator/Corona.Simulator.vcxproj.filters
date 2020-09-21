@@ -3,40 +3,20 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="BuildProgressDlg.h" />
-    <ClInclude Include="BuildResult.h" />
-    <ClInclude Include="BuildWebDlg.h" />
     <ClInclude Include="CoronaInterface.h" />
     <ClInclude Include="CoronaProject.h" />
     <ClInclude Include="LicenseDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MessageDlg.h" />
-    <ClInclude Include="PasswordDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="SimulatorDoc.h" />
     <ClInclude Include="SimulatorView.h" />
     <ClInclude Include="AboutDlg.h" />
-    <ClInclude Include="BuildAndroidDlg.h" />
-    <ClInclude Include="..\..\shared\jniUtils.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\ListKeyStore.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\AntHost.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\android\Rtt_AndroidAppPackager.h">
-      <Filter>%28root%29\platform\android</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_PlatformDictionaryWrapper.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_AndroidSupportTools.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_DeviceBuildData.h">
@@ -48,13 +28,7 @@
     <ClInclude Include="..\..\shared\Rtt_PlatformAppPackager.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_TargetAndroidAppStore.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_TargetDevice.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_WebAppPackager.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_PlatformPlayer.h">
@@ -62,9 +36,6 @@
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_PlatformSimulator.h">
       <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_JavaHost.h">
-      <Filter>%28root%29\librtt</Filter>
     </ClInclude>
     <ClInclude Include="WinGlobalProperties.h" />
     <ClInclude Include="Rtt\Rtt_WinPlatformServices.h">
@@ -93,10 +64,6 @@
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="SimulatorDocTemplate.h" />
-    <ClInclude Include="HtmlMessageDlg.h" />
-    <ClInclude Include="..\..\..\external\winutil\SimpleBrowser.h">
-      <Filter>%28root%29\external\winutil</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\markdown.h">
       <Filter>%28root%29\external\sundown</Filter>
     </ClInclude>
@@ -118,43 +85,25 @@
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\html_blocks.h">
       <Filter>%28root%29\external\sundown</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_LinuxAppPackager.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="BuildLinuxDlg.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="BuildProgressDlg.cpp" />
-    <ClCompile Include="BuildResult.cpp" />
-    <ClCompile Include="BuildWebDlg.cpp" />
     <ClCompile Include="CoronaInterface.cpp" />
     <ClCompile Include="CoronaProject.cpp" />
     <ClCompile Include="LicenseDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
-    <ClCompile Include="PasswordDlg.cpp" />
     <ClCompile Include="Simulator.cpp" />
     <ClCompile Include="SimulatorDoc.cpp" />
     <ClCompile Include="SimulatorView.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="BuildAndroidDlg.cpp" />
-    <ClCompile Include="..\..\shared\ListKeyStore.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\AntHost.cpp">
       <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\android\Rtt_AndroidAppPackager.cpp">
-      <Filter>%28root%29\platform\android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_AndroidSupportTools.c">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp">
@@ -166,20 +115,11 @@
     <ClCompile Include="..\..\shared\Rtt_TargetDevice.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_WebAppPackager.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformPlayer.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformSimulator.cpp">
       <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_TargetAndroidAppStore.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_JavaHost.cpp">
-      <Filter>%28root%29\librtt</Filter>
     </ClCompile>
     <ClCompile Include="WinGlobalProperties.cpp" />
     <ClCompile Include="Rtt\Rtt_WinPlatformServices.cpp">
@@ -205,10 +145,6 @@
       <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="SimulatorDocTemplate.cpp" />
-    <ClCompile Include="HtmlMessageDlg.cpp" />
-    <ClCompile Include="..\..\..\external\winutil\SimpleBrowser.cpp">
-      <Filter>%28root%29\external\winutil</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\html_smartypants.c">
       <Filter>%28root%29\external\sundown</Filter>
     </ClCompile>
@@ -233,10 +169,6 @@
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\html.c">
       <Filter>%28root%29\external\sundown</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_LinuxAppPackager.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="BuildLinuxDlg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="res">
@@ -256,9 +188,6 @@
     </Filter>
     <Filter Include="%28root%29\platform\shared">
       <UniqueIdentifier>{bab6c157-27db-491b-827a-b3dc41580654}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\platform\android">
-      <UniqueIdentifier>{a39f2d63-9aba-4f90-8b65-72b82ce6f706}</UniqueIdentifier>
     </Filter>
     <Filter Include="%28root%29\librtt">
       <UniqueIdentifier>{0477e90a-ea8b-464f-8754-cc9a5305da5e}</UniqueIdentifier>
@@ -297,19 +226,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <LuaToCpp Include="..\..\android\create_build_properties.lua">
-      <Filter>%28root%29\platform\android</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\resources\shell.lua">
       <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\webPackageApp.lua">
-      <Filter>%28root%29\platform\resources</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua">
-      <Filter>%28root%29\platform\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\linuxPackageApp.lua">
       <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>
   </ItemGroup>

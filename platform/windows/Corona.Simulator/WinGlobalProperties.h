@@ -16,10 +16,6 @@
 // Processed by CSimulatorView
 #define WMU_NATIVEALERT (WM_APP + 101)
 
-// Processed by CBuildProgressDlg
-#define WMU_DOWNLOAD_PROGRESS_UPDATE (WM_APP + 1000)
-#define WMU_BUILD_COMPLETE (WM_APP + 1001)
-
 // Struct passed as lParam to WMU_ALERT
 // Note: params are char *, expected in UTF8 format
 typedef struct wmu_alert_params

@@ -114,9 +114,6 @@ class CSimulatorView : public CView
 		afx_msg void OnViewNavigateBack();
 		afx_msg void OnFileMRU1();
 		afx_msg void OnFileOpen();
-		afx_msg void OnBuildForAndroid();
-		afx_msg void OnBuildForWeb();
-		afx_msg void OnBuildForLinux();
 		afx_msg void OnBuildForWin32();
 		afx_msg void OnFileOpenInEditor();
 		afx_msg void OnFileRelaunch();
@@ -133,7 +130,6 @@ class CSimulatorView : public CView
 		afx_msg void OnUpdateFileClose(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateShowProjectFiles(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateShowProjectSandbox(CCmdUI *pCmdUI);
-		afx_msg void OnUpdateBuildMenuItem(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateFileOpenInEditor(CCmdUI *pCmdUI);
 		afx_msg LRESULT OnNativeAlert(WPARAM wParam, LPARAM lParam);
 
@@ -147,7 +143,6 @@ class CSimulatorView : public CView
 		bool LoadSkinResources();
 		void GetFilePaths(LPCTSTR pattern, CStringArray& filepaths);
 		void OnRuntimeLoaded(Interop::RuntimeEnvironment& sender, const Interop::EventArgs& arguments);
-		void RemoveUnauthorizedMenuItemsFrom(CMenu* menuPointer);
 
 
 		CCoronaControlContainer mCoronaContainerControl;
