@@ -85,12 +85,6 @@
     <Filter Include="external\rsa">
       <UniqueIdentifier>{6e4c414b-0e01-4b29-8575-93e9534a6970}</UniqueIdentifier>
     </Filter>
-    <Filter Include="plugins\licensing">
-      <UniqueIdentifier>{54b420c2-60ac-4962-9665-e3e6cfe81e31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="plugins\licensing\shared">
-      <UniqueIdentifier>{7290fbd5-f2aa-4c4c-9988-bf7bc11d3e5f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="plugins\gameNetwork">
       <UniqueIdentifier>{1257547a-51e4-418e-86a9-d9554a1968d7}</UniqueIdentifier>
     </Filter>
@@ -694,9 +688,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\external\hmac\sha2.c">
       <Filter>external\hmac</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\plugins\licensing\shared\CoronaLicensingLibrary.cpp">
-      <Filter>plugins\licensing\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\plugins\gameNetwork\shared\CoronaGameNetworkLibrary.cpp">
       <Filter>plugins\gameNetwork\shared</Filter>
@@ -1426,9 +1417,6 @@
     <ClInclude Include="..\..\..\external\hmac\hmac_sha2.h">
       <Filter>external\hmac</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\plugins\licensing\shared\CoronaLicensingLibrary.h">
-      <Filter>plugins\licensing\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\plugins\gameNetwork\shared\CoronaGameNetworkLibrary.h">
       <Filter>plugins\gameNetwork\shared</Filter>
     </ClInclude>
@@ -1760,12 +1748,6 @@
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\subrepos\timer\timer.lua">
       <Filter>subrepos\timer</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\plugins\licensing\shared\licensing.lua">
-      <Filter>plugins\licensing\shared</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\plugins\licensing\shared\CoronaProvider.licensing.lua">
-      <Filter>plugins\licensing\shared</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\plugins\gameNetwork\shared\gameNetwork.lua">
       <Filter>plugins\gameNetwork\shared</Filter>

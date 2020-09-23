@@ -25,9 +25,6 @@
 [submodule "plugins/gameNetwork"]
 	path = plugins/gameNetwork
 	url = https://github.com/pouwelsjochem/submodule-plugins-gameNetwork.git
-[submodule "plugins/licensing"]
-	path = plugins/licensing
-	url = https://github.com/pouwelsjochem/submodule-plugins-licensing
 [submodule "plugins/network"]
 	path = plugins/network
 	url = https://github.com/pouwelsjochem/submodule-plugins-network
