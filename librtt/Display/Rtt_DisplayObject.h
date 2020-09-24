@@ -12,15 +12,17 @@
 
 // ----------------------------------------------------------------------------
 
-#include "Display/Rtt_MDrawable.h"
 #include "Rtt_MLuaProxyable.h"
 #include "Rtt_Transform.h"
+#include "Core/Rtt_Real.h"
 
 // ----------------------------------------------------------------------------
 
 namespace Rtt
 {
-
+class Display;
+class Renderer;
+class Matrix;
 class BitmapMask;
 class BitmapPaint;
 class GroupObject;
@@ -34,6 +36,7 @@ class Runtime;
 class StageObject;
 class Uniform;
 
+struct Rect;
 struct RenderData;
 
 // ----------------------------------------------------------------------------
@@ -58,7 +61,7 @@ struct RenderData;
 // 
 // Who owns the RenderData???
 // 
-class DisplayObject : public MDrawable, public MLuaProxyable
+class DisplayObject : public MLuaProxyable
 {
 	Rtt_CLASS_NO_COPIES( DisplayObject )
 
@@ -154,10 +157,11 @@ class DisplayObject : public MDrawable, public MLuaProxyable
 		void CullOffscreen( const Rect& screenBounds );
 
 	public:
-		// MDrawable
+		virtual void Draw( Renderer& renderer ) const = 0;
 		virtual bool UpdateTransform( const Matrix& parentToDstSpace );
 		virtual void Prepare( const Display& display );
 		virtual void Translate( Real deltaX, Real deltaY );
+		virtual void GetSelfBounds( Rect& rect ) const = 0;
 		virtual void GetSelfBoundsForAnchor( Rect& rect ) const;
 
 	public:

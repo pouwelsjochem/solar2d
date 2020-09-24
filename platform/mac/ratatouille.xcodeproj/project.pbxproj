@@ -347,7 +347,6 @@
 		A4328864176A621200ACB6FF /* Rtt_ImageSheetUserdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328805176A621100ACB6FF /* Rtt_ImageSheetUserdata.cpp */; };
 		A4328868176A621200ACB6FF /* Rtt_LuaLibDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328809176A621100ACB6FF /* Rtt_LuaLibDisplay.cpp */; };
 		A432886A176A621200ACB6FF /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */; };
-		A432886D176A621200ACB6FF /* Rtt_MDrawable.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880E176A621100ACB6FF /* Rtt_MDrawable.h */; };
 		A4328870176A621200ACB6FF /* Rtt_Paint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328811176A621100ACB6FF /* Rtt_Paint.cpp */; };
 		A4328872176A621200ACB6FF /* Rtt_PlatformBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328813176A621100ACB6FF /* Rtt_PlatformBitmap.cpp */; };
 		A4328874176A621200ACB6FF /* Rtt_PlatformBitmapTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328815176A621100ACB6FF /* Rtt_PlatformBitmapTexture.cpp */; };
@@ -590,7 +589,6 @@
 		C229E0341B32221B00D87A7C /* Rtt_LuaUserdataProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B1817726CB00077B2BF /* Rtt_LuaUserdataProxy.h */; };
 		C229E0351B32221B00D87A7C /* Rtt_MCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE70E12B73EE300D9B6A4 /* Rtt_MCallback.h */; };
 		C229E0361B32221B00D87A7C /* Rtt_MCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE70F12B73EE300D9B6A4 /* Rtt_MCrypto.h */; };
-		C229E0391B32221B00D87A7C /* Rtt_MDrawable.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880E176A621100ACB6FF /* Rtt_MDrawable.h */; };
 		C229E03A1B32221B00D87A7C /* Rtt_MIterable.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71312B73EE300D9B6A4 /* Rtt_MIterable.h */; };
 		C229E03B1B32221B00D87A7C /* Rtt_MKeyValueIterable.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71412B73EE300D9B6A4 /* Rtt_MKeyValueIterable.h */; };
 		C229E03C1B32221B00D87A7C /* Rtt_MLuaProxyable.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71512B73EE300D9B6A4 /* Rtt_MLuaProxyable.h */; };
@@ -2221,7 +2219,6 @@
 		A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibDisplay.h; path = Display/Rtt_LuaLibDisplay.h; sourceTree = "<group>"; };
 		A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibGraphics.cpp; path = Display/Rtt_LuaLibGraphics.cpp; sourceTree = "<group>"; };
 		A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibGraphics.h; path = Display/Rtt_LuaLibGraphics.h; sourceTree = "<group>"; };
-		A432880E176A621100ACB6FF /* Rtt_MDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MDrawable.h; path = Display/Rtt_MDrawable.h; sourceTree = "<group>"; };
 		A4328811176A621100ACB6FF /* Rtt_Paint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Paint.cpp; path = Display/Rtt_Paint.cpp; sourceTree = "<group>"; };
 		A4328812176A621100ACB6FF /* Rtt_Paint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Paint.h; path = Display/Rtt_Paint.h; sourceTree = "<group>"; };
 		A4328813176A621100ACB6FF /* Rtt_PlatformBitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformBitmap.cpp; path = Display/Rtt_PlatformBitmap.cpp; sourceTree = "<group>"; };
@@ -3573,7 +3570,6 @@
 				A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */,
 				A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */,
 				A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */,
-				A432880E176A621100ACB6FF /* Rtt_MDrawable.h */,
 				A4328811176A621100ACB6FF /* Rtt_Paint.cpp */,
 				A4328812176A621100ACB6FF /* Rtt_Paint.h */,
 				A475032D1773A6820064ABA0 /* Rtt_PaintAdapter.cpp */,
@@ -4154,7 +4150,6 @@
 				000CE7BA12B73EE300D9B6A4 /* Rtt_MCallback.h in Headers */,
 				000CE7BB12B73EE300D9B6A4 /* Rtt_MCrypto.h in Headers */,
 				F5B248541B57123B0087FFBC /* Rtt_TextureResourceAdapter.h in Headers */,
-				A432886D176A621200ACB6FF /* Rtt_MDrawable.h in Headers */,
 				000CE7BF12B73EE300D9B6A4 /* Rtt_MIterable.h in Headers */,
 				000CE7C012B73EE300D9B6A4 /* Rtt_MKeyValueIterable.h in Headers */,
 				000CE7C112B73EE300D9B6A4 /* Rtt_MLuaProxyable.h in Headers */,
@@ -4394,7 +4389,6 @@
 				C229E0351B32221B00D87A7C /* Rtt_MCallback.h in Headers */,
 				C229E0361B32221B00D87A7C /* Rtt_MCrypto.h in Headers */,
 				F5B248551B57123B0087FFBC /* Rtt_TextureResourceAdapter.h in Headers */,
-				C229E0391B32221B00D87A7C /* Rtt_MDrawable.h in Headers */,
 				C229E03A1B32221B00D87A7C /* Rtt_MIterable.h in Headers */,
 				C229E03B1B32221B00D87A7C /* Rtt_MKeyValueIterable.h in Headers */,
 				C229E03C1B32221B00D87A7C /* Rtt_MLuaProxyable.h in Headers */,
@@ -6419,7 +6413,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = NO;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6452,7 +6446,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../modules/platform/mac/build/Release\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.coronalabs.Corona_Simulator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.Corona_Simulator;
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6687,7 +6681,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = NO;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6720,7 +6714,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../modules/platform/mac/build/Release\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.coronalabs.Corona_Simulator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.Corona_Simulator;
 				PRODUCT_NAME = "Corona Simulator";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6746,7 +6740,7 @@
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = NO;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6779,7 +6773,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../modules/platform/mac/build/Release\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.coronalabs.Corona_Simulator";
+				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.Corona_Simulator;
 				PRODUCT_NAME = "Corona Simulator";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

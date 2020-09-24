@@ -1141,9 +1141,6 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_LuaLibGraphics.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_MDrawable.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_Paint.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>

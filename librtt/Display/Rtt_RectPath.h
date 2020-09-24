@@ -31,26 +31,7 @@ class RectPath : public ShapePath, public MShapePathDelegate
 		RectPath( Rtt_Allocator* pAllocator, TesselatorShape *tesselator );
 
 	public:
-		// MDrawable
 		virtual void Update( RenderData& data, const Matrix& srcToDstSpace );
-
-/*
-		virtual ~RectPath();
-
-	protected:
-		void Initialize();
-
-		void UpdateFill( RenderData& data, const Matrix& srcToDstSpace );
-		void UpdateStroke( const Matrix& srcToDstSpace );
-
-	public:
-		// MDrawable
-		virtual void Update( RenderData& data, const Matrix& srcToDstSpace );
-		virtual void Translate( Real dx, Real dy );
-		virtual void GetSelfBounds( Rect& rect ) const;
-*/
-//	public:
-//		virtual bool SetSelfBounds( Real width, Real height );
 
 	public:
 		virtual void UpdateGeometry(

@@ -52,7 +52,7 @@ class WinPlatform : public MPlatform
 
 		virtual Rtt_Allocator& GetAllocator() const;
 		virtual MPlatformDevice& GetDevice() const;
-		virtual RenderingStream* CreateRenderingStream(bool antialias) const;
+		virtual RenderingStream* CreateRenderingStream() const;
 		virtual PlatformSurface* CreateScreenSurface() const;
 		virtual PlatformSurface* CreateOffscreenSurface(const PlatformSurface& parent) const;
 		virtual PlatformTimer* CreateTimerWithCallback(MCallback& callback) const;

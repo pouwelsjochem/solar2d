@@ -870,7 +870,6 @@
 		A4551D791BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibGraphics.cpp; path = ../../librtt/Display/Rtt_LuaLibGraphics.cpp; sourceTree = "<group>"; };
 		A4551D7A1BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibGraphics.h; path = ../../librtt/Display/Rtt_LuaLibGraphics.h; sourceTree = "<group>"; };
 		A4551D7B1BAA17CF00FB3BDF /* Rtt_MCPUResourceObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MCPUResourceObserver.h; path = ../../librtt/Renderer/Rtt_MCPUResourceObserver.h; sourceTree = "<group>"; };
-		A4551D7D1BAA17CF00FB3BDF /* Rtt_MDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MDrawable.h; path = ../../librtt/Display/Rtt_MDrawable.h; sourceTree = "<group>"; };
 		A4551D801BAA17CF00FB3BDF /* Rtt_Paint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Paint.cpp; path = ../../librtt/Display/Rtt_Paint.cpp; sourceTree = "<group>"; };
 		A4551D811BAA17CF00FB3BDF /* Rtt_Paint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Paint.h; path = ../../librtt/Display/Rtt_Paint.h; sourceTree = "<group>"; };
 		A4551D821BAA17CF00FB3BDF /* Rtt_PaintAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PaintAdapter.cpp; path = ../../librtt/Display/Rtt_PaintAdapter.cpp; sourceTree = "<group>"; };
@@ -1807,7 +1806,6 @@
 				A4551D791BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.cpp */,
 				A4551D7A1BAA17CF00FB3BDF /* Rtt_LuaLibGraphics.h */,
 				A4551D7B1BAA17CF00FB3BDF /* Rtt_MCPUResourceObserver.h */,
-				A4551D7D1BAA17CF00FB3BDF /* Rtt_MDrawable.h */,
 				A4551D801BAA17CF00FB3BDF /* Rtt_Paint.cpp */,
 				A4551D811BAA17CF00FB3BDF /* Rtt_Paint.h */,
 				A4551D821BAA17CF00FB3BDF /* Rtt_PaintAdapter.cpp */,

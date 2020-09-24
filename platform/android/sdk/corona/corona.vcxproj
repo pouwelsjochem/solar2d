@@ -585,7 +585,6 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_ImageSheetUserdata.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LuaLibDisplay.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_LuaLibGraphics.h" />
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_MDrawable.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_Paint.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_PaintAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_PlatformBitmap.h" />

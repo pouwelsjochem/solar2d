@@ -41,7 +41,6 @@ class ContainerObject : public GroupObject
 		void Initialize( Display& display );
 
 	public:
-		// MDrawable
 		virtual bool UpdateTransform( const Matrix& parentToDstSpace );
 		virtual void Draw( Renderer& renderer ) const;
 		virtual void GetSelfBounds( Rect& rect ) const;

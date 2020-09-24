@@ -76,7 +76,6 @@ class SnapshotObject : public RectObject
 		void Initialize( lua_State *L, Display& display, Real contentW, Real contentH );
 
 	public:
-		// MDrawable
 		virtual bool UpdateTransform( const Matrix& parentToDstSpace );
 		virtual void Prepare( const Display& display );
 		virtual void Draw( Renderer& renderer ) const;

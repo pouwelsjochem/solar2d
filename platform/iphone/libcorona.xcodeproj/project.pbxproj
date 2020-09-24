@@ -364,7 +364,6 @@
 		A47428C017694EB000C63853 /* Rtt_LuaLibDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = A474286317694EB000C63853 /* Rtt_LuaLibDisplay.h */; };
 		A47428C117694EB000C63853 /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474286417694EB000C63853 /* Rtt_LuaLibGraphics.cpp */; };
 		A47428C217694EB000C63853 /* Rtt_LuaLibGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = A474286517694EB000C63853 /* Rtt_LuaLibGraphics.h */; };
-		A47428C417694EB000C63853 /* Rtt_MDrawable.h in Headers */ = {isa = PBXBuildFile; fileRef = A474286717694EB000C63853 /* Rtt_MDrawable.h */; };
 		A47428C717694EB000C63853 /* Rtt_Paint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474286A17694EB000C63853 /* Rtt_Paint.cpp */; };
 		A47428C817694EB000C63853 /* Rtt_Paint.h in Headers */ = {isa = PBXBuildFile; fileRef = A474286B17694EB000C63853 /* Rtt_Paint.h */; };
 		A47428C917694EB000C63853 /* Rtt_PlatformBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474286C17694EB000C63853 /* Rtt_PlatformBitmap.cpp */; };
@@ -1051,7 +1050,6 @@
 		A474286317694EB000C63853 /* Rtt_LuaLibDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibDisplay.h; path = Display/Rtt_LuaLibDisplay.h; sourceTree = "<group>"; };
 		A474286417694EB000C63853 /* Rtt_LuaLibGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibGraphics.cpp; path = Display/Rtt_LuaLibGraphics.cpp; sourceTree = "<group>"; };
 		A474286517694EB000C63853 /* Rtt_LuaLibGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibGraphics.h; path = Display/Rtt_LuaLibGraphics.h; sourceTree = "<group>"; };
-		A474286717694EB000C63853 /* Rtt_MDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MDrawable.h; path = Display/Rtt_MDrawable.h; sourceTree = "<group>"; };
 		A474286A17694EB000C63853 /* Rtt_Paint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Paint.cpp; path = Display/Rtt_Paint.cpp; sourceTree = "<group>"; };
 		A474286B17694EB000C63853 /* Rtt_Paint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Paint.h; path = Display/Rtt_Paint.h; sourceTree = "<group>"; };
 		A474286C17694EB000C63853 /* Rtt_PlatformBitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformBitmap.cpp; path = Display/Rtt_PlatformBitmap.cpp; sourceTree = "<group>"; };
@@ -1956,7 +1954,6 @@
 				A474286417694EB000C63853 /* Rtt_LuaLibGraphics.cpp */,
 				A474286517694EB000C63853 /* Rtt_LuaLibGraphics.h */,
 				0724699817DA43BA000A1641 /* Rtt_MCPUResourceObserver.h */,
-				A474286717694EB000C63853 /* Rtt_MDrawable.h */,
 				A474286A17694EB000C63853 /* Rtt_Paint.cpp */,
 				A474286B17694EB000C63853 /* Rtt_Paint.h */,
 				A47503421774DB770064ABA0 /* Rtt_PaintAdapter.cpp */,
@@ -2351,7 +2348,6 @@
 				A47428C017694EB000C63853 /* Rtt_LuaLibDisplay.h in Headers */,
 				A47428C217694EB000C63853 /* Rtt_LuaLibGraphics.h in Headers */,
 				03D1C5231D70C14500DB02EE /* Rtt_ValueResult.h in Headers */,
-				A47428C417694EB000C63853 /* Rtt_MDrawable.h in Headers */,
 				A47428C817694EB000C63853 /* Rtt_Paint.h in Headers */,
 				A47428CA17694EB000C63853 /* Rtt_PlatformBitmap.h in Headers */,
 				A47428CC17694EB000C63853 /* Rtt_PlatformBitmapTexture.h in Headers */,

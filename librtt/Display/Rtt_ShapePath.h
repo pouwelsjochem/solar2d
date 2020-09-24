@@ -57,7 +57,6 @@ class ShapePath : public ClosedPath
 
 		void CalculateUV( ArrayVertex2& texVertices, Paint *paint, bool canTransformTexture );
 	public:
-		// MDrawable
 		virtual void Update( RenderData& data, const Matrix& srcToDstSpace );
 		virtual void UpdateResources( Renderer& renderer ) const;
 		virtual void Translate( Real dx, Real dy );

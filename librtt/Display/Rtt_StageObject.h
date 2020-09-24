@@ -35,7 +35,6 @@ class StageObject : public GroupObject
 		virtual ~StageObject();
 
 	public:
-		// MDrawable
 		virtual void GetSelfBounds( Rect& rect ) const;
 
 	public:

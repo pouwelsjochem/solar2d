@@ -55,7 +55,7 @@ namespace Rtt
 
 		virtual Rtt_Allocator& GetAllocator() const;
 		virtual MPlatformDevice& GetDevice() const;
-		virtual RenderingStream* CreateRenderingStream(bool antialias) const { return NULL; };
+		virtual RenderingStream* CreateRenderingStream() const { return NULL; };
 		virtual PlatformSurface* CreateScreenSurface() const { return NULL; };
 		virtual PlatformSurface* CreateOffscreenSurface(const PlatformSurface& parent) const { return NULL; };
 		virtual PlatformTimer* CreateTimerWithCallback(MCallback& callback) const { return NULL; };

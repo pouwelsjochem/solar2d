@@ -351,7 +351,7 @@ namespace Rtt
 		return fEnvironment.GetAllocator();
 	}
 
-	RenderingStream* WinPlatform::CreateRenderingStream(bool antialias) const
+	RenderingStream* WinPlatform::CreateRenderingStream() const
 	{
 		Rtt_Allocator& allocator = GetAllocator();
 		RenderingStream* streamPointer = Rtt_NEW(&allocator, RenderingStream(&allocator));
