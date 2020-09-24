@@ -240,6 +240,10 @@ void SimulatorRuntimeEnvironment::OnRuntimeLoaded(RuntimeEnvironment& sender, co
 	// Validate the Corona project's "build.settings" and "config.lua" files.
 	Rtt::PlatformSimulator::ValidateSettings(sender.GetRuntime()->Platform());
 }
+void SimulatorRuntimeEnvironment::OnRuntimeTerminating(RuntimeEnvironment& sender, const EventArgs& arguments)
+{
+
+}
 
 #pragma endregion
 

@@ -48,7 +48,7 @@ class CSimulatorView : public CView
 		void StopSimulation();
 		bool IsSimulationSuspended() const;
 		CSimulatorDoc* GetDocument() const;
-		CString GetDeviceName() const;
+		CString GetDeviceName() { return mDeviceName; }
 		const Rtt::PlatformSimulator::Config& GetDeviceConfig() { return mDeviceConfig; }
 		void UpdateSimulatorSkin();
 		Interop::SimulatorRuntimeEnvironment* GetRuntimeEnvironment()  { return mRuntimeEnvironmentPointer; }
@@ -100,7 +100,6 @@ class CSimulatorView : public CView
 	protected:
 		virtual void OnDraw(CDC* pDC);
 		virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject *pHint);
-		virtual void OnTimer(UINT nIDEvent);
 
 		DECLARE_MESSAGE_MAP()
 		afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

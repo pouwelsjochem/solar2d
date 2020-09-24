@@ -39,7 +39,7 @@ class CCoronaProject :
 {
 public:
 	CCoronaProject();
-    CCoronaProject( CString sPath );
+	CCoronaProject( CString sPath );
   	virtual ~CCoronaProject();
 
 	static CString RemoveMainLua( CString sPath );  // for RecentlyUsed menu items

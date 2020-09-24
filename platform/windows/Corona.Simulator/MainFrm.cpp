@@ -45,7 +45,7 @@ END_MESSAGE_MAP()
 
 // CMainFrame construction/destruction
 
-CMainFrame::CMainFrame() :
+CMainFrame::CMainFrame()
 {
 	// http://software.intel.com/en-us/articles/fast-floating-point-to-integer-conversions/
 //	unsigned int control_word;
@@ -105,7 +105,7 @@ void CMainFrame::OnClose()
     // Store windows position
 	this->GetWindowPlacement(&wp);
 	app->PutWP(wp);
-    app->PutDevicename( pView->GetDevicename() );
+    app->PutDeviceName( pView->GetDeviceName() );
 
 	// Stop simulation. This also posts user feedback to the server if enabled.
 	pView->StopSimulation();

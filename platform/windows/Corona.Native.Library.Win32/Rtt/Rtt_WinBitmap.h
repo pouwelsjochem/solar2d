@@ -109,6 +109,8 @@ class WinFileGrayscaleBitmap : public WinFileBitmap
 
 		virtual void FreeBits() const;
 		virtual PlatformBitmap::Format GetFormat() const;
+		virtual U32 Width() const;
+		virtual U32 Height() const;
 
 	protected:
 		virtual void Lock();

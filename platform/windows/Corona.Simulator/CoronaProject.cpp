@@ -24,10 +24,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // CCoronaProject
 ///////////////////////////////////////////////////////////////////////////////
+CCoronaProject::CCoronaProject()
+{
+}
 
 // Constructor with a project path, call Init to read registry
 CCoronaProject::CCoronaProject( CString sPath )
-:	CCoronaProject()
 {
 	m_sPath = sPath;
     Init( sPath );
@@ -165,11 +167,9 @@ CCoronaProject::Save()
 void
 CCoronaProject::RegistryGet( CString sSection )
 {
-	CString stringBuffer;
     CWinApp *pApp = AfxGetApp();
 
     m_sName = pApp->GetProfileString( sSection, REGISTRY_NAME, REGISTRY_NAME_DEFAULT );
-    stringBuffer = pApp->GetProfileString( sSection, REGISTRY_ANDROID_VERSION_CODE, REGISTRY_ANDROID_VERSION_CODE_DEFAULT );
     m_sWin32VersionString = pApp->GetProfileString( sSection, REGISTRY_WIN32_VERSION_STRING, REGISTRY_VERSION_STRING_DEFAULT );
     m_sSaveDir = pApp->GetProfileString( sSection, REGISTRY_SAVEDIR, REGISTRY_SAVEDIR_DEFAULT );
 	m_sCopyright = pApp->GetProfileString( sSection, REGISTRY_COPYRIGHT );
@@ -182,7 +182,6 @@ CCoronaProject::RegistryGet( CString sSection )
 void
 CCoronaProject::RegistryPut( CString sSection )
 {
-	CString stringBuffer;
     CWinApp *pApp = AfxGetApp();
 
     pApp->WriteProfileString( sSection, REGISTRY_NAME, m_sName );

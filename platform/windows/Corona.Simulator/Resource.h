@@ -139,6 +139,7 @@
 #define IDC_ANSCALOGO                   1041
 #define IDC_COMMAND1                    1042
 #define ID_MSG_BUTTON2                  1049
+#define ID_MSG_BUTTON3                  1050
 #define IDC_COPYRIGHT                   1052
 #define IDC_PICTURE_BOX                 1054
 #define IDC_PICTURE_FRAME               1054

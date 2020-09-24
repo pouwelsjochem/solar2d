@@ -90,7 +90,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnUpdateViewNavigateBack)
 	ON_UPDATE_COMMAND_UI(ID_FILE_RELAUNCH, &CSimulatorView::OnUpdateFileRelaunch)
 	ON_UPDATE_COMMAND_UI(ID_FILE_CLOSE, &CSimulatorView::OnUpdateFileClose)
-	ON_UPDATE_COMMAND_UI(ID_BUILD_FOR_WIN32, &CSimulatorView::OnUpdateBuildMenuItem)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPENINEDITOR, &CSimulatorView::OnUpdateFileOpenInEditor)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOW_PROJECT_FILES, &CSimulatorView::OnUpdateShowProjectFiles)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOWPROJECTSANDBOX, &CSimulatorView::OnUpdateShowProjectSandbox)
@@ -1272,7 +1271,6 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 
 	CString sParentDir = projectPath;
 	sParentDir = sParentDir.Left( sParentDir.ReverseFind(_T('\\')) );
-	CSimulatorApp *applicationPointer = (CSimulatorApp*)AfxGetApp();
 	applicationPointer->SetWorkingDir( sParentDir );
 	
 	// If we're opening the "home screen" project, then show the home menu.

@@ -233,6 +233,18 @@ WinFileBitmap::CalculateScale() const
 	return 1.0;
 }
 
+U32
+WinFileBitmap::Width() const
+{
+	return WinBitmap::Width();
+}
+
+U32
+WinFileBitmap::Height() const
+{
+	return WinBitmap::Height();
+}
+
 bool
 WinFileBitmap::IsProperty( PropertyMask mask ) const
 {
@@ -378,6 +390,18 @@ WinFileGrayscaleBitmap::Lock()
 void
 WinFileGrayscaleBitmap::Unlock()
 {
+}
+
+U32
+WinFileGrayscaleBitmap::Width() const
+{
+	return WinBitmap::Width();
+}
+
+U32
+WinFileGrayscaleBitmap::Height() const
+{
+	return WinBitmap::Height();
 }
 
 PlatformBitmap::Format 
