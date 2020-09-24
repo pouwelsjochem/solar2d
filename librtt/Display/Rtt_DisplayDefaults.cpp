@@ -32,8 +32,6 @@ static const Color kWhite = 0xFFFFFFFF;
 DisplayDefaults::DisplayDefaults()
 :	fClearColor( kBlack ),
 	fFillColor( kWhite ),
-	fTextColor( kWhite ),
-	fLineColor( kWhite ),
 	fAnchorX( 0.5 ),
 	fAnchorY( 0.5 ),
 	fMagTextureFilter( RenderTypes::kLinearTextureFilter ),

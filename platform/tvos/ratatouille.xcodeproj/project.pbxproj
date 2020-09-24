@@ -229,7 +229,6 @@
 		A4AD30E71BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B11BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */; };
 		A4AD30F21BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */; };
 		A4AD30F31BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */; };
-		A4AD30F41BAA377C006A0C97 /* Rtt_IPhoneText.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CC1BAA377C006A0C97 /* Rtt_IPhoneText.mm */; };
 		A4AD30F71BAA377C006A0C97 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */; };
 		A4AD30FD1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30DE1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm */; };
 		A4AD31051BAA38B0006A0C97 /* Rtt_TVOSDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31001BAA38B0006A0C97 /* Rtt_TVOSDevice.mm */; };
@@ -1269,8 +1268,6 @@
 		A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhonePlatformBase.mm; path = ../iphone/Rtt_IPhonePlatformBase.mm; sourceTree = "<group>"; };
 		A4AD30C91BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneScreenSurface.h; path = ../iphone/Rtt_IPhoneScreenSurface.h; sourceTree = "<group>"; };
 		A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneScreenSurface.mm; path = ../iphone/Rtt_IPhoneScreenSurface.mm; sourceTree = "<group>"; };
-		A4AD30CB1BAA377C006A0C97 /* Rtt_IPhoneText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneText.h; path = ../iphone/Rtt_IPhoneText.h; sourceTree = "<group>"; };
-		A4AD30CC1BAA377C006A0C97 /* Rtt_IPhoneText.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneText.mm; path = ../iphone/Rtt_IPhoneText.mm; sourceTree = "<group>"; };
 		A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTimer.h; path = ../iphone/Rtt_IPhoneTimer.h; sourceTree = "<group>"; };
 		A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneTimer.mm; path = ../iphone/Rtt_IPhoneTimer.mm; sourceTree = "<group>"; };
 		A4AD30DD1BAA377C006A0C97 /* Rtt_TouchInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TouchInhibitor.h; path = ../iphone/Rtt_TouchInhibitor.h; sourceTree = "<group>"; };
@@ -2365,8 +2362,6 @@
 				A4DD48251BB2764900FD988E /* Rtt_IPhoneRuntimeDelegate.mm */,
 				A4AD30C91BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.h */,
 				A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */,
-				A4AD30CB1BAA377C006A0C97 /* Rtt_IPhoneText.h */,
-				A4AD30CC1BAA377C006A0C97 /* Rtt_IPhoneText.mm */,
 				A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */,
 				A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */,
 				A4AD30DD1BAA377C006A0C97 /* Rtt_TouchInhibitor.h */,
@@ -3653,7 +3648,6 @@
 				A465E1A51BCF02A200C8D51B /* Rtt_KeyName.cpp in Sources */,
 				F58011C21BE295070061E021 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				A4AD30F71BAA377C006A0C97 /* Rtt_IPhoneTimer.mm in Sources */,
-				A4AD30F41BAA377C006A0C97 /* Rtt_IPhoneText.mm in Sources */,
 				A4AD308C1BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
 				A4AD308A1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm in Sources */,
 				A4AD30F31BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm in Sources */,

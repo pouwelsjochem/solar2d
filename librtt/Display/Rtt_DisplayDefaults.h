@@ -29,16 +29,12 @@ class DisplayDefaults
 	public:
 		Color GetClearColor() const { return fClearColor; }
 		Color GetFillColor() const { return fFillColor; }
-		Color GetTextColor() const { return fTextColor; }
-		Color GetLineColor() const { return fLineColor; }
 		float GetAnchorX() const { return fAnchorX; }
 		float GetAnchorY() const { return fAnchorY; }
 		bool IsAnchorClamped() const { return fIsAnchorClamped; }
 		
 		void SetClearColor( Color newValue ) { fClearColor = newValue; }
 		void SetFillColor( Color newValue ) { fFillColor = newValue; }
-		void SetTextColor( Color newValue ) { fTextColor = newValue; }
-		void SetLineColor( Color newValue ) { fLineColor = newValue; }
 		void SetAnchorX( float newValue ) { fAnchorX = newValue; }
 		void SetAnchorY( float newValue ) { fAnchorY = newValue; }
 		void SetAnchorClamped( bool newValue ) { fIsAnchorClamped = newValue; }
@@ -68,8 +64,6 @@ class DisplayDefaults
 	private:
 		Color fClearColor;
 		Color fFillColor;
-		Color fTextColor;
-		Color fLineColor;
 		float fAnchorX;
 		float fAnchorY;
 		U8 fMagTextureFilter;
