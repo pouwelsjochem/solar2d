@@ -62,7 +62,7 @@ public class JavaToNativeShim {
     			float accuracy, boolean isAbsolute);
     private static native void nativeInputDeviceStatusEvent(
     			long bridgeAddress, int coronaDeviceId, boolean hasConnectionStateChanged, boolean wasReconfigured);
-    private static native void nativeTouchEvent( long bridgeAddress, int x, int y, int xStart, int yStart, int type, long timestamp, int id, float pressure );
+    private static native void nativeTouchEvent( long bridgeAddress, int x, int y, int xStart, int yStart, int type, long timestamp, int ide );
     private static native void nativeMouseEvent(
     			long bridgeAddress, int x, int y, int scrollX, int scrollY, long timestamp,
     			boolean isPrimaryButtonDown, boolean isSecondaryButtonDown, boolean isMiddleButtonDown);
@@ -75,7 +75,7 @@ public class JavaToNativeShim {
     private static native void nativeResizeEvent( long bridgeAddress );
     private static native void nativeAlertCallback( long bridgeAddress, int buttonIndex, boolean cancelled );
     private static native void nativeMultitouchEventBegin(long bridgeAddress);
-    private static native void nativeMultitouchEventAdd( long bridgeAddress, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int id, float pressure );
+    private static native void nativeMultitouchEventAdd( long bridgeAddress, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int id );
     private static native void nativeMultitouchEventEnd( long bridgeAddress );
 	private static native void nativeMemoryWarningEvent( long bridgeAddress );
 	private static native void nativePopupClosedEvent( long bridgeAddress, String popupName, boolean isError );
@@ -377,8 +377,7 @@ public class JavaToNativeShim {
 				(int)touchTracker.getStartPoint().getY(),
 				touchTracker.getPhase().toCoronaNumericId(),
 				touchTracker.getLastPoint().getTimestamp(),
-				touchTracker.getTouchId(),
-				touchTracker.getPressure());
+				touchTracker.getTouchId());
 	}
 	
 	public static void multitouchEventBegin(CoronaRuntime runtime) {
@@ -399,8 +398,7 @@ public class JavaToNativeShim {
 				(int)touchTracker.getStartPoint().getY(),
 				touchTracker.getPhase().toCoronaNumericId(),
 				touchTracker.getLastPoint().getTimestamp(),
-				touchTracker.getTouchId(),
-				touchTracker.getPressure());
+				touchTracker.getTouchId());
 	}
 
 	public static void multitouchEventEnd(CoronaRuntime runtime) {

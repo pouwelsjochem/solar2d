@@ -555,13 +555,6 @@ class TouchEvent : public HitEvent
 			kNumPhases
 		}
 		Phase;
-	
-		// Pressure validity for touch events. Touches that do not support pressure
-		// sensitivity should not pass one to the constructor, or provide kPressureInvalid.
-		// A touch must have a pressure value above kPressureThreshold to be passed to lua.
-		// kPressureInvalid must be less than kPressureThreshold.
-		static const Real kPressureInvalid;
-		static const Real kPressureThreshold;
 
 	public:
 		enum PropertyMask
@@ -575,7 +568,7 @@ class TouchEvent : public HitEvent
 
 	public:
 		TouchEvent();
-		TouchEvent( Real x, Real y, Real xStart, Real yStart, Phase phase, Real pressure = kPressureInvalid );
+		TouchEvent( Real x, Real y, Real xStart, Real yStart, Phase phase );
 
 	public:
 		Phase GetPhase() const { return (Phase)fPhase; }
@@ -605,7 +598,6 @@ class TouchEvent : public HitEvent
 		Real fYStartScreen;
 		mutable Real fXStartContent;
 		mutable Real fYStartContent;
-		Real fPressure;
 		Real fDeltaX;
 		Real fDeltaY;
 };

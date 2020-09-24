@@ -156,9 +156,6 @@
 
 		cursorHidden = NO;
 		numCursorHides = 0;
-#if Rtt_AUTHORING_SIMULATOR
-		lastTouchPressure = Rtt::TouchEvent::kPressureInvalid;
-#endif
 	}
 	
 	return self;
@@ -293,11 +290,7 @@
     const NSUInteger kRightMask = 1 << 1;
     const NSUInteger kMiddleMask = 1 << 2;
 
-	int clickCount = 1;
-	if(event.type != NSEventTypePressure)
-	{
-		clickCount = (int)event.clickCount;
-	}
+	int clickCount = (int)event.clickCount;
 
     // Create the Corona mouse event
     MouseEvent mouseEvent(eventType,
@@ -382,27 +375,6 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	[self dispatchMouseEvent:MouseEvent::kDrag event:event];
 }
 
-#if Rtt_AUTHORING_SIMULATOR
--(void)pressureChangeWithEvent:(NSEvent *)event
-{
-	const float maxPressure = 20.f/3.f; // iOS Seems to have pressure values between 0 and 6.66(6)
-	float oldPressure = lastTouchPressure;
-	lastTouchPressure = event.pressure*maxPressure;
-	if(event.stage >= 2)
-	{ // When "Force Touch" activates, just kick to highest gear, or else pressure meter resets
-		lastTouchPressure = maxPressure;
-	}
-
-	if(CGPointEqualToPoint([event locationInWindow], lastPressurePoint)
-	   && oldPressure != Rtt::TouchEvent::kPressureInvalid
-	   && oldPressure != lastTouchPressure
-	   && lastTouchPressure > 0)
-	{ // this is for when pressure applied without moving a cursor
-		[self mouseDragged:event];
-	}
-}
-#endif
-
 - (void)mouseDown:(NSEvent*)event
 {
     using namespace Rtt;
@@ -414,14 +386,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
     
 	fStartPosition = p;
 
-#if Rtt_AUTHORING_SIMULATOR
-	float pressure = lastTouchPressure;
-	lastPressurePoint = [event locationInWindow];
-#else
-	const float pressure = TouchEvent::kPressureInvalid;
-#endif
-
-	TouchEvent t( p.x, p.y, p.x, p.y, TouchEvent::kBegan, pressure );
+	TouchEvent t( p.x, p.y, p.x, p.y, TouchEvent::kBegan );
 	t.SetId( sTouchId );
 	if ( fRuntime->Platform().GetDevice().DoesNotify( MPlatformDevice::kMultitouchEvent ) )
 	{
@@ -445,14 +410,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	// Send mouse event before the touch
 	[self dispatchMouseEvent:MouseEvent::kDrag event:event];
 
-#if Rtt_AUTHORING_SIMULATOR
-	float pressure = lastTouchPressure;
-	lastPressurePoint = [event locationInWindow];
-#else
-	const float pressure = TouchEvent::kPressureInvalid;
-#endif
-
-	TouchEvent t( p.x, p.y, fStartPosition.x, fStartPosition.y, TouchEvent::kMoved, pressure );
+	TouchEvent t( p.x, p.y, fStartPosition.x, fStartPosition.y, TouchEvent::kMoved );
 	t.SetId( sTouchId );
 	if ( fRuntime->Platform().GetDevice().DoesNotify( MPlatformDevice::kMultitouchEvent ) )
 	{
@@ -479,18 +437,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
     
 	NSPoint p = [self pointForEvent:event];
 
-#if Rtt_AUTHORING_SIMULATOR
-	float pressure = lastTouchPressure;
-	if(lastTouchPressure != TouchEvent::kPressureInvalid)
-	{
-		lastTouchPressure = TouchEvent::kPressureInvalid;
-		pressure = 0.00001f; //some small value to mimic iOS
-	}
-#else
-	const float pressure = TouchEvent::kPressureInvalid;
-#endif
-
-	TouchEvent t( p.x, p.y, fStartPosition.x, fStartPosition.y, TouchEvent::kEnded, pressure );
+	TouchEvent t( p.x, p.y, fStartPosition.x, fStartPosition.y, TouchEvent::kEnded );
 	t.SetId( sTouchId++ );
 	if ( fRuntime->Platform().GetDevice().DoesNotify( MPlatformDevice::kMultitouchEvent ) )
 	{

@@ -308,9 +308,9 @@ Java_com_ansca_corona_JavaToNativeShim_nativeRender( JNIEnv * env, jclass c, jlo
 
 JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeTouchEvent(
-	JNIEnv * env, jclass c, jlong bridgeAddress, jint x, jint y, jint xStart, jint yStart, jint touchType, jlong timestamp, jint touchId, jfloat pressure)
+	JNIEnv * env, jclass c, jlong bridgeAddress, jint x, jint y, jint xStart, jint yStart, jint touchType, jlong timestamp, jint touchId )
 {
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->TouchEvent( x, y, xStart, yStart, touchType, timestamp, touchId, pressure );
+	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->TouchEvent( x, y, xStart, yStart, touchType, timestamp, touchId );
 }
 
 JNIEXPORT void JNICALL
@@ -378,10 +378,10 @@ Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEventBegin(JNIEnv * env, 
 JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEventAdd(
 	JNIEnv * env, jclass c, jlong bridgeAddress, jint xLast, jint yLast, jint xStart, jint yStart,
-	jint phaseType, jlong timestamp, jint touchId, jfloat pressure)
+	jint phaseType, jlong timestamp, jint touchId)
 {
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MultitouchEventAdd(
-			env, xLast, yLast, xStart, yStart, phaseType, timestamp, touchId, pressure);
+			env, xLast, yLast, xStart, yStart, phaseType, timestamp, touchId);
 }
 
 JNIEXPORT void JNICALL

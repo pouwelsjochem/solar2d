@@ -36,10 +36,6 @@ public class TouchTracker implements Cloneable {
 	/** The current touch phase such as BEGAN, MOVED, or ENDED. */
 	private TouchPhase fPhase;
 
-	/** The current pressure used. */
-	private boolean fSupportsPressure;
-	private float fPressure;
-
 
 	/**
 	 * Creates a new tracker for recording touch events from a single finger/pointer on a device.
@@ -53,7 +49,6 @@ public class TouchTracker implements Cloneable {
 		fTouchId = sNextTouchId;
 		fDeviceId = deviceId;
 		fPointerId = pointerId;
-		fSupportsPressure = false;
 		reset();
 	}
 
@@ -81,8 +76,6 @@ public class TouchTracker implements Cloneable {
 		fStartPoint = null;
 		fLastPoint = null;
 		fPhase = null;
-		fPressure = -1.0f;
-		fSupportsPressure = false;
 	}
 
 	/**
@@ -174,20 +167,6 @@ public class TouchTracker implements Cloneable {
 	}
 
 	/**
-	 * Gets the current touch pressure. This is normalized value such that 1.0 is the
-	 * standard user's normal "touch" pressure. Some devices provide higher values.
-	 * <p>
-	 * You should not call this method until the hasStarted() method has returned true.
-	 * @return Returns the current touch pressure.
-	 *         <p>
-	 *         Returns -1.0 (invalid pressure) if touch tracking has not been started yet,
-	 *         or if the device does not support pressure.
-	 */
-	public float getPressure() {
-		return fSupportsPressure ? fPressure : -1.0f;
-	}
-
-	/**
 	 * Updates this tracker with the given point.
 	 * <p>
 	 * The getStartPoint() method will return the given touch point if this is the first time
@@ -202,7 +181,7 @@ public class TouchTracker implements Cloneable {
 		updateWith(point, phase, -1.0f);
 	}
 
-	public void updateWith(TouchPoint point, TouchPhase phase, float pressure) {
+	public void updateWith(TouchPoint point, TouchPhase phase) {
 		// Validate arguments.
 		if ((point == null) || (phase == null)) {
 			throw new NullPointerException();
@@ -216,20 +195,5 @@ public class TouchTracker implements Cloneable {
 		// Store the current touch point and phase.
 		fLastPoint = point;
 		fPhase = phase;
-
-		// TODO: This disables pressure functionality until we can find a reliable means of 
-		// obtaining pressure values.
-		pressure = -1.0f;
-
-		// Store the current pressure applied to the touch.
-		// Negative values mean that pressure is not supported by the providing device, and are
-		// not fed to the user.
-		// Because some devices return an arbitrary, constant value for pressure, we must first
-		// check to see if the pressure value has changed before we enable sending back pressure
-		// data.
-		if ( !fSupportsPressure && fPressure >= 0.0f && fPressure != pressure ) {
-			fSupportsPressure = true;
-		}
-		fPressure = pressure;
 	}
 }

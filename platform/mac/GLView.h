@@ -37,10 +37,6 @@ namespace Rtt
     NSMutableArray *fCursorRects;
 	NSTrackingRectTag trackingRectTag;
 	int numCursorHides;
-#if Rtt_AUTHORING_SIMULATOR
-	float lastTouchPressure;
-	NSPoint lastPressurePoint;
-#endif
 }
 
 @property (nonatomic, readwrite, getter=runtime, setter=setRuntime:) Rtt::Runtime *fRuntime;

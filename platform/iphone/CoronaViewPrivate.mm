@@ -206,7 +206,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	fLastContentHeight = -1;
 	fShouldInvalidate = false;
 	fParams = nil;
-	[self setForceTouchSupport:NO];
 
 	_observerProxy = [[AppleWeakProxy alloc] initWithTarget:self];
 	_gyroscopeObserver = (id< CoronaGyroscopeObserver >)_observerProxy;
@@ -659,11 +658,9 @@ InitializeEvents( CoronaView *view, Rtt::TouchEvent *touchEvents, NSSet *touches
 			eventPhase = UITouchPhaseToTouchEventPhase( t.phase );
 		}
 		
-		Rtt::Real pressure = [view getForceTouchSupport] ? [touch force] : Rtt::TouchEvent::kPressureInvalid;
-
 		// Initialize TouchEvent (use placement new to call c-tor)
 		TouchEvent *event = & ( touchEvents[i] );
-		new( event ) TouchEvent( touchPoint.x, touchPoint.y, startPoint->x, startPoint->y, eventPhase, pressure );
+		new( event ) TouchEvent( touchPoint.x, touchPoint.y, startPoint->x, startPoint->y, eventPhase );
 		event->SetId( t );
 
 		i++;
@@ -750,8 +747,7 @@ PrintTouches( NSSet *touches, const char *header )
 		CGPoint currentTouchPosition = { [touch locationInView:nil].x - [self center].x, [touch locationInView:nil].y - [self center].y };
 		Rtt::RelativeTouchEvent t( currentTouchPosition.x, currentTouchPosition.y, Rtt::TouchEvent::kBegan );
 #else
-		Rtt::Real pressure = [self getForceTouchSupport] ? [touch force] : Rtt::TouchEvent::kPressureInvalid;
-		Rtt::TouchEvent t( fStartTouchPosition.x, fStartTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kBegan, pressure );
+		Rtt::TouchEvent t( fStartTouchPosition.x, fStartTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kBegan );
 #endif
 		t.SetId( touch );
 		[self dispatchEvent: (&t)];
@@ -782,8 +778,7 @@ PrintTouches( NSSet *touches, const char *header )
 		Rtt::RelativeTouchEvent t( currentTouchPosition.x, currentTouchPosition.y, Rtt::TouchEvent::kMoved );
 #else
 		currentTouchPosition = [touch locationInCoronaView:self];
-		Rtt::Real pressure = [self getForceTouchSupport] ? [touch force] : Rtt::TouchEvent::kPressureInvalid;
-		Rtt::TouchEvent t( currentTouchPosition.x, currentTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kMoved, pressure );
+		Rtt::TouchEvent t( currentTouchPosition.x, currentTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kMoved );
 #endif
 		t.SetId( touch );
 		[self dispatchEvent: (&t)];
@@ -818,8 +813,7 @@ PrintTouches( NSSet *touches, const char *header )
 		Rtt::RelativeTouchEvent t( currentTouchPosition.x, currentTouchPosition.y, Rtt::TouchEvent::kEnded );
 #else
 		CGPoint currentTouchPosition = [touch locationInCoronaView:self];
-		Rtt::Real pressure = [self getForceTouchSupport] ? [touch force] : Rtt::TouchEvent::kPressureInvalid;
-		Rtt::TouchEvent t( currentTouchPosition.x, currentTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kEnded, pressure );
+		Rtt::TouchEvent t( currentTouchPosition.x, currentTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kEnded );
 #endif
 		t.SetId( touch );
 		[self dispatchEvent: (&t)];
@@ -859,8 +853,7 @@ PrintTouches( NSSet *touches, const char *header )
 		Rtt::RelativeTouchEvent t( currentTouchPosition.x, currentTouchPosition.y, Rtt::TouchEvent::kCancelled );
 #else
 		CGPoint currentTouchPosition = [touch locationInCoronaView:self];
-		Rtt::Real pressure = [self getForceTouchSupport] ? [touch force] : Rtt::TouchEvent::kPressureInvalid;
-		Rtt::TouchEvent t( currentTouchPosition.x, currentTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kCancelled, pressure );
+		Rtt::TouchEvent t( currentTouchPosition.x, currentTouchPosition.y, fStartTouchPosition.x, fStartTouchPosition.y, Rtt::TouchEvent::kCancelled );
 #endif
 		t.SetId( touch );
 		[self dispatchEvent: (&t)];
@@ -980,25 +973,6 @@ PrintTouches( NSSet *touches, const char *header )
 {
 	[super setBounds:bounds];
 	fShouldInvalidate = true;
-}
-
-#pragma mark # UITraitEnvironment
-
-// Called when a horizontal or vertical size class, display scale, or user interface idiom changes on an iOS 8.0+ device.
-// This is where we should check for new accessibility settings as well, such as if the user disabled 3D Touch. Values
-// updated here should be considered unreliable prior to the first change (performed when the app has finished launching
-// but before any lua code is executed).
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-	[super traitCollectionDidChange:previousTraitCollection];
-	
-	UITraitCollection * currentTraits = [self traitCollection];
-	
-	// Certain selectors only available in iOS 9.0+.
-	if ( [[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0 )
-	{
-		// Update pressure touch support.
-		[self setForceTouchSupport:[currentTraits forceTouchCapability] == UIForceTouchCapabilityAvailable];
-	}
 }
 
 // CoronaGyroscopeObserver

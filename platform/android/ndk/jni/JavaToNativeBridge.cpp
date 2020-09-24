@@ -813,14 +813,14 @@ absoluteTimeFromSystemClockUptime(Rtt::Runtime *runtimePointer, long time, Nativ
 
 // TODO: call Rtt::TouchEvent::phaseForType when above function is removed
 void
-JavaToNativeBridge::TouchEvent(int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure)
+JavaToNativeBridge::TouchEvent(int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId)
 {
 // 	NativeTrace trace( "JavaToNativeBridge::TouchEvent" );
 
 	if ( fRuntime == NULL || fNativeToJavaBridge == NULL)
 		return;
 
-	Rtt::TouchEvent e( Rtt_FloatToReal( x ), Rtt_FloatToReal( y ), xStart, yStart, phaseForType(touchType), Rtt_FloatToReal( pressure ) );
+	Rtt::TouchEvent e( Rtt_FloatToReal( x ), Rtt_FloatToReal( y ), xStart, yStart, phaseForType(touchType) );
 	e.SetId( (void*)touchId );
 	e.SetTime( absoluteTimeFromSystemClockUptime(fRuntime, timestamp, fNativeToJavaBridge) );
 
@@ -1018,7 +1018,7 @@ JavaToNativeBridge::MultitouchEventBegin()
 
 void
 JavaToNativeBridge::MultitouchEventAdd(
-	JNIEnv * env, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int touchId, float pressure )
+	JNIEnv * env, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int touchId )
 {
 	// Do not add another touch event to the multitouch buffer if the maximum has been reached.
 	if (fMultitouchEventCount >= kMaxMultitouchPointerEvents)
@@ -1027,7 +1027,7 @@ JavaToNativeBridge::MultitouchEventAdd(
 	}
 
 	// Create the touch event.
-	Rtt::TouchEvent event(xLast, yLast, xStart, yStart, (Rtt::TouchEvent::Phase)phaseType, Rtt_FloatToReal( pressure ) );
+	Rtt::TouchEvent event(xLast, yLast, xStart, yStart, (Rtt::TouchEvent::Phase)phaseType );
 	if (touchId > 0)
 	{
 		event.SetId((void*)touchId);

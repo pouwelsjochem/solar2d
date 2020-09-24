@@ -35,7 +35,7 @@ struct RenderData;
 
 // ----------------------------------------------------------------------------
 
-// NOTE: DisplayPath instances have no notion of transform
+// NOTE: ClosedPath instances have no notion of transform
 // Only DisplayObjects have that concept!
 // 
 // Therefore the semantics of Translate in a Path are different than that of an

@@ -68,7 +68,7 @@ class JavaToNativeBridge
 		void Resume();
 		void DispatchEventInLua();
 		void ApplicationOpenEvent();
-		void TouchEvent(int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure );
+		void TouchEvent(int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId );
 		void MouseEvent(
 				int x, int y, int scrollX, int scrollY, long timestamp,
 				bool isPrimaryButtonDown, bool isSecondaryButtonDown, bool isMiddleButtonDown);
@@ -81,7 +81,7 @@ class JavaToNativeBridge
 		void ResizeEvent();
 		void AlertCallback(int which, bool cancelled);
 		void MultitouchEventBegin();
-		void MultitouchEventAdd( JNIEnv * env, int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId, float pressure );
+		void MultitouchEventAdd( JNIEnv * env, int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId );
 		void MultitouchEventEnd();
 		void AdsRequestEvent(bool isError);
 		void MemoryWarningEvent();

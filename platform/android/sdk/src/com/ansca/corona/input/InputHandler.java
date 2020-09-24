@@ -352,7 +352,7 @@ public class InputHandler {
 				// Start tracking the device's touch events.
 				touchTracker = new TouchTracker(event.getDeviceId(), event.getPointerId(0));
 				touchPoint = new TouchPoint(event.getX(), event.getY(), event.getEventTime());
-				touchTracker.updateWith(touchPoint, TouchPhase.BEGAN, event.getPressure());
+				touchTracker.updateWith(touchPoint, TouchPhase.BEGAN);
 				fTouchTrackers.add(touchTracker);
 
 				// Prepare to raise the received touch event.
@@ -393,7 +393,7 @@ public class InputHandler {
 
 					// Update the pointer's touch tracker.
 					touchPoint = new TouchPoint(xValue, yValue, event.getEventTime());
-					touchTracker.updateWith(touchPoint, touchPhase, event.getPressure(pointerIndex));
+					touchTracker.updateWith(touchPoint, touchPhase);
 
 					// Prepare to raise the received touch event.
 					if (multitouchTracker != null) {
@@ -425,7 +425,7 @@ public class InputHandler {
 					touchPoint = new TouchPoint(
 									event.getX(pointerIndex), event.getY(pointerIndex), event.getEventTime());
 					touchTracker = new TouchTracker(event.getDeviceId(), pointerId);
-					touchTracker.updateWith(touchPoint, touchPhase, event.getPressure(pointerIndex));
+					touchTracker.updateWith(touchPoint, touchPhase);
 					fTouchTrackers.add(touchTracker);
 
 					// Batch the received touch event as a single multitouch event, to be raised later.
@@ -443,7 +443,7 @@ public class InputHandler {
 					// Update the pointer's touch tracker.
 					touchPoint = new TouchPoint(
 									event.getX(pointerIndex), event.getY(pointerIndex), event.getEventTime());
-					touchTracker.updateWith(touchPoint, touchPhase, event.getPressure(pointerIndex));
+					touchTracker.updateWith(touchPoint, touchPhase);
 
 					// Handle the received touch event.
 					if (multitouchTracker != null) {

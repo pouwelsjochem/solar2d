@@ -1192,9 +1192,6 @@ HitEvent::DispatchEvent( lua_State *L, HitTestObject& parent ) const
 
 // ----------------------------------------------------------------------------
 
-const Real TouchEvent::kPressureInvalid = Rtt_REAL_NEG_1;
-const Real TouchEvent::kPressureThreshold = Rtt_REAL_0;
-
 const char*
 TouchEvent::StringForPhase( Phase phase )
 {
@@ -1268,13 +1265,12 @@ TouchEvent::TouchEvent()
 	fYStartScreen( Rtt_REAL_0 ),
 	fXStartContent( Rtt_REAL_0 ),
 	fYStartContent( Rtt_REAL_0 ),
-	fPressure( kPressureInvalid ),
 	fDeltaX( Rtt_REAL_0 ),
 	fDeltaY( Rtt_REAL_0 )
 {
 }
 
-TouchEvent::TouchEvent( Real x, Real y, Real xStartScreen, Real yStartScreen, Phase phase, Real pressure )
+TouchEvent::TouchEvent( Real x, Real y, Real xStartScreen, Real yStartScreen, Phase phase )
 :	Super( x, y ),
 	fPhase( phase ),
 	fProperties( 0 ),
@@ -1282,7 +1278,6 @@ TouchEvent::TouchEvent( Real x, Real y, Real xStartScreen, Real yStartScreen, Ph
 	fYStartScreen( yStartScreen ),
 	fXStartContent( xStartScreen ),
 	fYStartContent( yStartScreen ),
-	fPressure( pressure ),
 	fDeltaX( x - xStartScreen ),
 	fDeltaY( y - yStartScreen )
 {
@@ -1303,7 +1298,6 @@ TouchEvent::Push( lua_State *L ) const
 
 		const char kXStartKey[] = "xStart";
 		const char kYStartKey[] = "yStart";
-		const char kPressureKey[] = "pressure";
 		const char kXDeltaKey[] = "xDelta";
 		const char kYDeltaKey[] = "yDelta";
 
@@ -1318,12 +1312,6 @@ TouchEvent::Push( lua_State *L ) const
 		lua_setfield( L, -2, kXDeltaKey );
 		lua_pushinteger( L, Rtt_RealToInt( fDeltaY ));
 		lua_setfield( L, -2, kYDeltaKey );
-		
-		if ( fPressure >= kPressureThreshold )
-		{
-			lua_pushnumber( L, Rtt_RealToFloat( fPressure ) );
-			lua_setfield( L, -2, kPressureKey );
-		}
 
 		if ( GetId() )
 		{
@@ -1418,7 +1406,7 @@ MultitouchEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 const char RelativeTouchEvent::kName[] = "relativeTouch";
 
 RelativeTouchEvent::RelativeTouchEvent( Real x, Real y, Phase phase )
-:	TouchEvent( x, y, Rtt_REAL_0, Rtt_REAL_0, phase, kPressureInvalid )
+:	TouchEvent( x, y, Rtt_REAL_0, Rtt_REAL_0, phase )
 {
 }
 
