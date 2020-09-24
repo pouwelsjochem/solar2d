@@ -24,7 +24,6 @@ class Matrix;
 
 // ----------------------------------------------------------------------------
 
-// Subclass: TesselatorFill, TesselatorStroke
 class Tesselator
 {
 	protected:
@@ -39,10 +38,7 @@ class Tesselator
 		virtual ~Tesselator();
 
 	public:
-		virtual void GenerateStroke( ArrayVertex2& outVertices ) = 0;
-		virtual void GenerateStrokeTexture( ArrayVertex2& outTexCoords, int numVertices ) = 0;
 		virtual void GetSelfBounds( Rect& rect ) = 0;
-		virtual Geometry::PrimitiveType GetStrokePrimitive() const;
 
 	public:
 		enum eType
@@ -61,13 +57,8 @@ class Tesselator
 		virtual eType GetType(){ return kType_None; }
 
 	public:
-		Real GetInnerWidth() const { return fInnerWidth; }
-		Real GetOuterWidth() const { return fOuterWidth; }
-		Real GetWidth() const { return GetInnerWidth() + GetOuterWidth(); }
-		void SetInnerWidth( Real newValue );
-		void SetOuterWidth( Real newValue );
-		void SetWidth( Real newValue );
-		bool HasStroke() const;
+		Real GetWidth() const { return fWidth; }
+		void SetWidth( Real newValue ) { fWidth = newValue; };
 
 	protected:
 		// Adds degenerate triangles so two distinct tri strips can coexist in the same array
@@ -78,40 +69,26 @@ class Tesselator
 
 	private:
 		void SubdivideCircleSector( ArrayVertex2& vertices, const Vertex2& p1, const Vertex2& p2, int depth );
-		void SubdivideCircleArc( ArrayVertex2& vertices, const Vertex2& p1, const Vertex2& p2, int depth, bool appendDuplicate );
 
 	protected:
 		// Fill
 		enum _Constants
 		{
 			kNoScale = 0x1,
-			kAppendDuplicate = 0x2,
-			kAppendArcEndPoints = 0x4
 		};
 
 		void AppendCircle( ArrayVertex2& vertices, Real radius, U32 options );
 		void AppendCircleQuadrants( ArrayVertex2& vertices, Real radius, U32 options );
-		void AppendCircleArc( ArrayVertex2& vertices, Real radius, U32 options );
 
 		static void AppendRect( ArrayVertex2& vertices, Real halfW, Real halfH );
 
 		static void MoveCenterToOrigin( ArrayVertex2& vertices, Vertex2 currentCenter );
 
-	protected:
-		// Stroke
-		void AppendCircleStroke(
-				ArrayVertex2& vertices,
-				Real radius, Real innerWidth, Real outerWidth,
-				bool appendEndPoints );
-		void AppendStrokeTextureClosed( ArrayVertex2& vertices, int numVertices );
-		void AppendStrokeTextureEndCap( ArrayVertex2& vertices, int numVertices );
-
 	private:
 		int fMaxSubdivideDepth;
 
 	protected:
-		Real fInnerWidth;
-		Real fOuterWidth;
+		Real fWidth;
 };
 
 // ----------------------------------------------------------------------------

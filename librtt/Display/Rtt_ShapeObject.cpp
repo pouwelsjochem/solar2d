@@ -38,10 +38,8 @@ namespace Rtt
 ShapeObject::ShapeObject( ClosedPath* path )
 :	Super(),
 	fFillData(),
-	fStrokeData(),
 	fPath( path ),
-	fFillShader( NULL ),
-	fStrokeShader( NULL )
+	fFillShader( NULL )
 {
 	Rtt_ASSERT( fPath );
 
@@ -62,7 +60,7 @@ ShapeObject::UpdateTransform( const Matrix& parentToDstSpace )
 
 	if ( shouldUpdate )
 	{
-		fPath->Invalidate( ClosedPath::kFill | ClosedPath::kStroke );
+		fPath->Invalidate( ClosedPath::kFill );
 	}
 
 	return shouldUpdate;
@@ -78,36 +76,32 @@ ShapeObject::Prepare( const Display& display )
 		// Vertices
 		Rtt_ASSERT( fPath );
 
-		fPath->SetStrokeData( & fStrokeData );
+		// NOTE: We need to update paint *prior* to geometry
+		// b/c in the case of image sheets, the paint needs to be updated
+		// in order for the texture coordinates to be updated.
+		if ( ! IsValid( kPaintFlag ) )
 		{
-			// NOTE: We need to update paint *prior* to geometry
-			// b/c in the case of image sheets, the paint needs to be updated
-			// in order for the texture coordinates to be updated.
-			if ( ! IsValid( kPaintFlag ) )
-			{
-				fPath->UpdatePaint( fFillData );
-				SetValid( kPaintFlag );
-			}
-
-			if ( ! IsValid( kGeometryFlag ) )
-			{
-				const Matrix& xform = GetSrcToDstMatrix();
-				fPath->Update( fFillData, xform );
-				SetValid( kGeometryFlag );
-			}
-
-			if ( ! IsValid( kColorFlag ) )
-			{
-				fPath->UpdateColor( fFillData, AlphaCumulative() );
-				SetValid( kColorFlag );
-			}
-
-			if ( ! IsValid( kProgramDataFlag ) )
-			{
-				SetValid( kProgramDataFlag );
-			}
+			fPath->UpdatePaint( fFillData );
+			SetValid( kPaintFlag );
 		}
-		fPath->SetStrokeData( NULL );
+
+		if ( ! IsValid( kGeometryFlag ) )
+		{
+			const Matrix& xform = GetSrcToDstMatrix();
+			fPath->Update( fFillData, xform );
+			SetValid( kGeometryFlag );
+		}
+
+		if ( ! IsValid( kColorFlag ) )
+		{
+			fPath->UpdateColor( fFillData, AlphaCumulative() );
+			SetValid( kColorFlag );
+		}
+
+		if ( ! IsValid( kProgramDataFlag ) )
+		{
+			SetValid( kProgramDataFlag );
+		}
 
 		// Program
 		if ( ! IsValid( kProgramFlag ) )
@@ -133,18 +127,6 @@ ShapeObject::Prepare( const Display& display )
 //				fFillData.fProgram = program;
 			}
 
-			Paint *stroke = fPath->GetStroke();
-			if ( stroke )
-			{
-				Shader *shader = stroke->GetShader(factory);
-				ShaderResource::ProgramMod mod = GetProgramMod();
-				shader->Prepare( fStrokeData, w, h, mod );
-				fStrokeShader = shader;
-//				const Shader *shader = factory.FindOrLoad( stroke->GetShaderName() );
-//				Program *program = const_cast< Program * >( shader->GetProgram() );
-//				fStrokeData.fProgram = program;
-			}
-
 			SetValid( kProgramFlag );
 		}
 	}
@@ -162,11 +144,6 @@ ShapeObject::Draw( Renderer& renderer ) const
 		if ( fPath->IsFillVisible() )
 		{
 			fFillShader->Draw( renderer, fFillData );
-		}
-
-		if ( fPath->IsStrokeVisible() )
-		{
-			fStrokeShader->Draw( renderer, fStrokeData );
 		}
 	}
 	
@@ -191,14 +168,6 @@ ShapeObject::HitTest( Real contentX, Real contentY )
 	{
 		Rtt_ASSERT( fFillData.fGeometry );
 		result = fFillData.fGeometry->HitTest( contentX, contentY );
-	}
-
-	if ( ! result
-		 && fPath->HasStroke()
-		 && ( fPath->IsStrokeVisible() || IsHitTestable() ) )
-	{
-		Rtt_ASSERT( fStrokeData.fGeometry );
-		result = fStrokeData.fGeometry->HitTest( contentX, contentY );
 	}
 
 	return result;
@@ -237,8 +206,6 @@ ShapeObject::DidSetMask( BitmapMask *mask, Uniform *uniform )
 
 	fFillData.fMaskTexture = maskTexture;
 	fFillData.fMaskUniform = uniform;
-	fStrokeData.fMaskTexture = maskTexture;
-	fStrokeData.fMaskUniform = uniform;
 }
 
 void
@@ -292,81 +259,9 @@ ShapeObject::SetFillColor( Color newValue )
 }
 
 void
-ShapeObject::SetStroke( Paint* newValue )
-{
-	DirtyFlags flags = ( kPaintFlag | kProgramFlag );
-	if ( Paint::ShouldInvalidateColor( fPath->GetStroke(), newValue ) )
-	{
-		flags |= kColorFlag;
-	}
-	if ( newValue && NULL == fPath->GetStroke() )
-	{
-		// When paint goes from NULL to non-NULL,
-		// ensure geometry is prepared
-		flags |= kGeometryFlag;
-	}
-	Invalidate( flags );
-
-	fPath->SetStroke( newValue );
-
-	DidChangePaint( fStrokeData );
-}
-
-void
-ShapeObject::SetStrokeColor( Color newValue )
-{
-	Paint *paint = GetPath().GetStroke();
-	if ( paint )
-	{
-		Rtt_ASSERT( paint->GetObserver() == this );
-		paint->SetColor( newValue );
-		Invalidate( kGeometryFlag | kColorFlag );
-	}
-}
-
-U8
-ShapeObject::GetStrokeWidth() const
-{
-	return fPath->GetInnerStrokeWidth() + fPath->GetOuterStrokeWidth();
-}
-
-void
-ShapeObject::SetInnerStrokeWidth( U8 newValue )
-{
-	fPath->SetInnerStrokeWidth( newValue );
-	Super::Invalidate( kGeometryFlag | kStageBoundsFlag );
-}
-
-U8
-ShapeObject::GetInnerStrokeWidth() const
-{
-	return fPath->GetInnerStrokeWidth();
-}
-
-void
-ShapeObject::SetOuterStrokeWidth( U8 newValue )
-{
-	fPath->SetOuterStrokeWidth( newValue );
-	Super::Invalidate( kGeometryFlag | kStageBoundsFlag );
-}
-
-U8
-ShapeObject::GetOuterStrokeWidth() const
-{
-	return fPath->GetOuterStrokeWidth();
-}
-
-void
 ShapeObject::SetBlend( RenderTypes::BlendType newValue )
 {
 	Paint *paint = fPath->GetFill();
-	if ( paint )
-	{
-		Rtt_ASSERT( paint->GetObserver() == this );
-		paint->SetBlend( newValue );
-	}
-
-	paint = fPath->GetStroke();
 	if ( paint )
 	{
 		Rtt_ASSERT( paint->GetObserver() == this );
@@ -378,10 +273,6 @@ RenderTypes::BlendType
 ShapeObject::GetBlend() const
 {
 	const Paint *paint = fPath->GetFill();
-
-	// Either there's no stroke or (if there is one), it's blend type should match the fill's
-	Rtt_ASSERT( ! fPath->GetStroke() || paint->GetBlend() == fPath->GetStroke()->GetBlend() );
-
     if (paint == NULL)
     {
         return RenderTypes::kNormal; // sensible default

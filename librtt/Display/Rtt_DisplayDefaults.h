@@ -29,7 +29,6 @@ class DisplayDefaults
 	public:
 		Color GetClearColor() const { return fClearColor; }
 		Color GetFillColor() const { return fFillColor; }
-		Color GetStrokeColor() const { return fStrokeColor; }
 		Color GetTextColor() const { return fTextColor; }
 		Color GetLineColor() const { return fLineColor; }
 		float GetAnchorX() const { return fAnchorX; }
@@ -38,7 +37,6 @@ class DisplayDefaults
 		
 		void SetClearColor( Color newValue ) { fClearColor = newValue; }
 		void SetFillColor( Color newValue ) { fFillColor = newValue; }
-		void SetStrokeColor( Color newValue ) { fStrokeColor = newValue; }
 		void SetTextColor( Color newValue ) { fTextColor = newValue; }
 		void SetLineColor( Color newValue ) { fLineColor = newValue; }
 		void SetAnchorX( float newValue ) { fAnchorX = newValue; }
@@ -70,7 +68,6 @@ class DisplayDefaults
 	private:
 		Color fClearColor;
 		Color fFillColor;
-		Color fStrokeColor;
 		Color fTextColor;
 		Color fLineColor;
 		float fAnchorX;

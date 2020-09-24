@@ -66,12 +66,6 @@ TesselatorCircle::GenerateFillTexture( ArrayVertex2& texCoords, const Transform&
 }
 
 void
-TesselatorCircle::GenerateStroke( ArrayVertex2& vertices )
-{
-	AppendCircleStroke( vertices, fRadius, fInnerWidth, fOuterWidth, false );
-}
-
-void
 TesselatorCircle::GetSelfBounds( Rect& rect )
 {
 	rect.Initialize( fRadius, fRadius );

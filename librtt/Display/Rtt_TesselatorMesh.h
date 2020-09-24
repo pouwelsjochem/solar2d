@@ -35,7 +35,6 @@ class TesselatorMesh : public TesselatorShape
 		virtual void GenerateFillIndices( ArrayIndex& outVertices ) override;
 		virtual void GenerateFill( ArrayVertex2& outVertices ) override;
 		virtual void GenerateFillTexture( ArrayVertex2& outTexCoords, const Transform& t ) override;
-		virtual void GenerateStroke( ArrayVertex2& outVertices ) override;
 		virtual void GetSelfBounds( Rect& rect ) override;
 		virtual Geometry::PrimitiveType GetFillPrimitive() const override;
 

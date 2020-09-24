@@ -33,7 +33,6 @@ class TesselatorShape : public Tesselator
 		virtual void GenerateFill( ArrayVertex2& outVertices ) = 0;
 		virtual void GenerateFillTexture( ArrayVertex2& outTexCoords, const Transform& t ) = 0;
 		virtual void GenerateFillIndices( ArrayIndex&  outVertices ) {};
-		virtual void GenerateStrokeTexture( ArrayVertex2& outTexCoords, int numVertices );
 		virtual Geometry::PrimitiveType GetFillPrimitive() const;
 
 		virtual bool SetSelfBounds( Real width, Real height );

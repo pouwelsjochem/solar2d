@@ -71,16 +71,6 @@ class ShapeObject : public DisplayObject
 	public:
 		void SetFill( Paint* newValue );
 		void SetFillColor( Color newValue );
-		void SetStroke( Paint* newValue );
-		void SetStrokeColor( Color newValue );
-
-		U8 GetStrokeWidth() const;
-
-		void SetInnerStrokeWidth( U8 newValue );
-		U8 GetInnerStrokeWidth() const;
-
-		void SetOuterStrokeWidth( U8 newValue );
-		U8 GetOuterStrokeWidth() const;
 
 	public:
 		void SetBlend( RenderTypes::BlendType newValue );
@@ -89,11 +79,9 @@ class ShapeObject : public DisplayObject
 	private:
 		RenderData fFillData;
 		
-		RenderData fStrokeData;
 		ClosedPath *fPath;
 
 		const Shader *fFillShader; // Temporary
-		const Shader *fStrokeShader; // Temporary
 
 //		mutable LuaUserdataProxy *fProxy;
 };

@@ -35,52 +35,12 @@ Tesselator::kUnitCircleVertices[] =
 // ----------------------------------------------------------------------------
 
 Tesselator::Tesselator()
-:	fMaxSubdivideDepth( 0 ),
-	fInnerWidth( Rtt_REAL_0 ),
-	fOuterWidth( Rtt_REAL_0 )
+:	fMaxSubdivideDepth( 0 )
 {
 }
 
 Tesselator::~Tesselator()
 {
-}
-
-Geometry::PrimitiveType
-Tesselator::GetStrokePrimitive() const
-{
-	return Geometry::kTriangleStrip;
-}
-
-void
-Tesselator::SetInnerWidth( Real newValue )
-{
-	if ( newValue > Rtt_REAL_0 || Rtt_RealIsZero( newValue ) )
-	{
-		fInnerWidth = newValue;
-	}
-}
-
-void
-Tesselator::SetOuterWidth( Real newValue )
-{
-	if ( newValue > Rtt_REAL_0 || Rtt_RealIsZero( newValue ) )
-	{
-		fOuterWidth = newValue;
-	}
-}
-
-void
-Tesselator::SetWidth( Real newValue )
-{
-	Real halfW = Rtt_RealDiv2( newValue );
-	SetInnerWidth( halfW );
-	SetOuterWidth( halfW );
-}
-
-bool
-Tesselator::HasStroke() const
-{
-	return ! Rtt_RealIsZero( fInnerWidth ) || Rtt_RealIsZero( fOuterWidth );
 }
 
 void
@@ -187,65 +147,6 @@ Tesselator::SubdivideCircleSector(
 	vertices.Append( kOrigin );
 }
 
-static void
-ArcAppend( ArrayVertex2& vertices, const Vertex2& v, bool appendDuplicate )
-{
-	vertices.Append( v );
-	if ( appendDuplicate )
-	{
-		vertices.Append( v );
-	}
-}
-
-// Subdivide circular arc --- assumes unit circle.
-// NOTE:
-// * Does not append p2.
-// * Does not update fCache.Counts().  Caller must update
-void
-Tesselator::SubdivideCircleArc( ArrayVertex2& vertices, const Vertex2& p1, const Vertex2& p2, int depth, bool appendDuplicate )
-{
-	// TODO: PERFORMANCE
-	// Precalculate vertices on unit circle and group by depth.
-	// These calculations are always the same, so we should just append them to 
-	// the vertex array
-	const int kSubdivideDepth = ( Rtt_VERIFY( fMaxSubdivideDepth > 0 ) ? fMaxSubdivideDepth : 2 );
-
-	const Rtt_Real x1 = p1.x;
-	const Rtt_Real y1 = p1.y;
-	const Rtt_Real x2 = p2.x;
-	const Rtt_Real y2 = p2.y;
-
-	const Rtt_Real d0 = kUnitCircleScaleFactor[depth];
-	const Rtt_Real xm0 = Rtt_RealDiv( (x1+x2), d0 );
-	const Rtt_Real ym0 = Rtt_RealDiv( (y1+y2), d0 );
-
-	const Vertex2 m0 = { xm0, ym0 };
-
-	if ( ++depth < kSubdivideDepth )
-	{
-		SubdivideCircleArc( vertices, p1, m0, depth, appendDuplicate );
-		SubdivideCircleArc( vertices, m0, p2, depth, appendDuplicate );
-	}
-	else
-	{
-		ArcAppend( vertices, p1, appendDuplicate );
-		ArcAppend( vertices, m0, appendDuplicate );
-		/*
-		vertices.Append( p1 );
-		if ( appendDuplicate )
-		{
-			vertices.Append( p1 );
-		}
-
-		vertices.Append( m0 );
-		if ( appendDuplicate )
-		{
-			vertices.Append( m0 );
-		}
-		*/
-	}
-}
-
 /// Gets the log2 of the given value.
 /// Note: This function was taken from internal Lua function luaO_log2(), source file "lobject.c",
 ///       which we cannot access if Lua is provided in library form.
@@ -292,14 +193,6 @@ DepthForRadius( Real radius )
 
 	return result;
 }
-
-/*
-static int
-ArcDepthForRadius( Real radius )
-{
-	return SegmentDepthForRadius( radius );
-}
-*/
 
 void
 Tesselator::AppendCircle( ArrayVertex2& vertices, Real radius, U32 options )
@@ -358,40 +251,6 @@ Tesselator::AppendCircleQuadrants( ArrayVertex2& vertices, Real radius, U32 opti
 }
 
 void
-Tesselator::AppendCircleArc( ArrayVertex2& vertices, Real radius, U32 options )
-{
-	// TODO: Remove the assumption that fVertices is empty
-	Rtt_ASSERT( vertices.Length() == 0 );
-
-	bool appendDuplicate = ( !! ( options & kAppendDuplicate ) );
-	bool appendEndPoints = ( !! ( options & kAppendArcEndPoints ) );
-
-	fMaxSubdivideDepth = DepthForRadius( radius );
-
-	SubdivideCircleArc( vertices, kUnitCircleVertices[1], kUnitCircleVertices[2], 0, appendDuplicate );
-	if ( appendEndPoints ) { ArcAppend( vertices, kUnitCircleVertices[2], appendDuplicate ); }
-
-	SubdivideCircleArc( vertices, kUnitCircleVertices[2], kUnitCircleVertices[3], 0, appendDuplicate );
-	if ( appendEndPoints ) { ArcAppend( vertices, kUnitCircleVertices[3], appendDuplicate ); }
-
-	SubdivideCircleArc( vertices, kUnitCircleVertices[3], kUnitCircleVertices[4], 0, appendDuplicate );
-	if ( appendEndPoints ) { ArcAppend( vertices, kUnitCircleVertices[4], appendDuplicate ); }
-
-	SubdivideCircleArc( vertices, kUnitCircleVertices[4], kUnitCircleVertices[5], 0, appendDuplicate );
-	if ( appendEndPoints ) { ArcAppend( vertices, kUnitCircleVertices[5], appendDuplicate ); }
-
-	// Always append this endpoint to close the loop
-	ArcAppend( vertices, kUnitCircleVertices[5], appendDuplicate );
-
-	fMaxSubdivideDepth = 0;
-
-	if ( ! (options&kNoScale) )
-	{
-		Vertex2_Scale( vertices.WriteAccess(), vertices.Length(), radius, radius );
-	}
-}
-
-void
 Tesselator::AppendRect( ArrayVertex2& vertices, Real halfW, Real halfH )
 {
 	// Append in tri-strip order
@@ -417,89 +276,6 @@ Tesselator::MoveCenterToOrigin( ArrayVertex2& vertices, Vertex2 currentCenter )
 		v.x -= currentCenter.x;
 		v.y -= currentCenter.y;
 	}
-}
-
-void
-Tesselator::AppendCircleStroke(
-	ArrayVertex2& vertices,
-	Real radius, Real innerWidth, Real outerWidth,
-	bool appendEndPoints )
-{
-	const S32 oldLen = vertices.Length();
-
-	// Generate vertices along perimeter of circle. Each vertex is added twice,
-	// one for the inner and one for the outer radius.
-	U32 options = kNoScale | kAppendDuplicate;
-	if ( appendEndPoints )
-	{
-		options |= kAppendArcEndPoints;
-	}
-
-	const Real rInner = Max( radius - innerWidth, Rtt_REAL_0 ); // Ensure > 0
-	const Real rOuter = radius + outerWidth;
-	AppendCircleArc( vertices, rOuter, options );
-	const S32 newLen = vertices.Length() - oldLen;
-
-	// newLen should be multiple of 2 b/c each vertex was added twice
-	Rtt_ASSERT( (newLen %2) == 0 );
-
-	// Vertices are from a unit circle. Scale them out to the correct radius
-	Vertex2* iVertices = vertices.WriteAccess() + oldLen;
-	for ( S32 i = 0; i < newLen; i++ )
-	{
-		Rtt_ASSERT( (i+1) < newLen );
-
-		Vertex2& inner = iVertices[i];
-		Vertex2& outer = iVertices[++i];
-
-		inner.x = Rtt_RealMul( inner.x, rInner );
-		inner.y = Rtt_RealMul( inner.y, rInner );
-
-		outer.x = Rtt_RealMul( outer.x, rOuter );
-		outer.y = Rtt_RealMul( outer.y, rOuter );
-	}
-}
-
-void
-Tesselator::AppendStrokeTextureClosed( ArrayVertex2& vertices, int numVertices )
-{
-	// numVertices should be a multiple of 2 (one for inner; one for outer)
-	Rtt_ASSERT( (numVertices % 2) == 0 );
-
-	Rtt_ASSERT( vertices.Length() == 0 );
-
-	const Vertex2 inner = { Rtt_REAL_HALF, Rtt_REAL_1 };
-	const Vertex2 outer = { Rtt_REAL_HALF, Rtt_REAL_0 };
-
-	// Number of points along the line are half the number of stroke vertices
-	int numPoints = numVertices >> 1;
-	for ( int i = 0; i < numPoints; i++ )
-	{
-		vertices.Append( inner );
-		vertices.Append( outer );
-	}
-}
-
-void
-Tesselator::AppendStrokeTextureEndCap( ArrayVertex2& vertices, int numVertices )
-{
-	const Vertex2 innerStart = { Rtt_REAL_0, Rtt_REAL_1 };
-	const Vertex2 outerStart = { Rtt_REAL_0, Rtt_REAL_0 };
-
-	const Vertex2 innerEnd = { Rtt_REAL_1, Rtt_REAL_1 };
-	const Vertex2 outerEnd = { Rtt_REAL_1, Rtt_REAL_0 };
-
-	// Append end cap coordinates at start and end
-	vertices.Append( innerStart );
-	vertices.Append( outerStart );
-	{
-		Rtt_ASSERT( numVertices > 4 );
-		numVertices -=4;
-
-		AppendStrokeTextureClosed( vertices, numVertices );
-	}
-	vertices.Append( innerEnd );
-	vertices.Append( outerEnd );
 }
 
 // ----------------------------------------------------------------------------

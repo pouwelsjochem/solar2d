@@ -34,12 +34,8 @@ ClosedPath::ClosedPath( Rtt_Allocator* pAllocator )
 	fAdapter( NULL ),
 	fProxy( NULL ),
 	fFill( NULL ),
-	fStroke( NULL ),
-	fStrokeData( NULL ),
 	fProperties( 0 ),
-	fDirtyFlags( kDefault ),
-	fInnerStrokeWidth( 0 ),
-	fOuterStrokeWidth( 0 )
+	fDirtyFlags( kDefault )
 {
 }
 
@@ -51,7 +47,6 @@ ClosedPath::~ClosedPath()
 		fProxy->DetachUserdata(); // Notify proxy that object is invalid
 	}
 
-	Rtt_DELETE( fStroke );
 	if ( ! IsProperty( kIsFillWeakReference ) )
 	{
 		Rtt_DELETE( fFill );
@@ -65,11 +60,6 @@ ClosedPath::Update( RenderData& data, const Matrix& srcToDstSpace )
 	if ( HasFill() && ! fFill->IsValid(Paint::kTextureTransformFlag) )
 	{
 		Invalidate( kFillSourceTexture );
-	}
-	
-	if ( HasStroke() && ! fStroke->IsValid(Paint::kTextureTransformFlag) )
-	{
-		Invalidate( kStrokeSourceTexture );
 	}
 
 }
@@ -146,11 +136,6 @@ ClosedPath::Translate( Real dx, Real dy )
 	{
 		fFill->Translate( dx, dy );
 	}
-
-	if ( HasStroke() )
-	{
-		fStroke->Translate( dx, dy );
-	}
 }
 
 bool
@@ -166,11 +151,6 @@ ClosedPath::UpdatePaint( RenderData& data )
 	{
 		fFill->UpdatePaint( data );
 	}
-
-	if ( HasStroke() && fStrokeData )
-	{
-		fStroke->UpdatePaint( * fStrokeData );
-	}
 }
 
 void
@@ -179,11 +159,6 @@ ClosedPath::UpdateColor( RenderData& data, U8 objectAlpha )
 	if ( HasFill() )
 	{
 		fFill->UpdateColor( data, objectAlpha );
-	}
-
-	if ( HasStroke() && fStrokeData )
-	{
-		fStroke->UpdateColor( * fStrokeData, objectAlpha );
 	}
 }
 
@@ -240,42 +215,6 @@ ClosedPath::SwapFill( ClosedPath& rhs )
 	Invalidate( kFillSource );
 }
 
-void
-ClosedPath::SetStroke( Paint* newValue )
-{
-	if ( fStroke != newValue )
-	{
-		if ( ! fStroke )
-		{
-			// If stroke was NULL, then we need to ensure
-			// source vertices are generated
-			Invalidate( kStrokeSource | kStrokeSourceTexture );
-		}
-
-		Rtt_DELETE( fStroke );
-		fStroke = newValue;
-
-		if ( newValue )
-		{
-			newValue->SetObserver( GetObserver() );
-		}
-	}
-}
-
-void
-ClosedPath::SetInnerStrokeWidth( U8 newValue )
-{
-	fInnerStrokeWidth = newValue;
-	Invalidate( kStrokeSource );
-}
-
-void
-ClosedPath::SetOuterStrokeWidth( U8 newValue )
-{
-	fOuterStrokeWidth = newValue;
-	Invalidate( kStrokeSource );
-}
-
 bool
 ClosedPath::IsFillVisible() const
 {
@@ -284,19 +223,6 @@ ClosedPath::IsFillVisible() const
 	if ( HasFill() )
 	{
 		result = ( fFill->GetRGBA().a > Rtt_REAL_0 );
-	}
-
-	return result;
-}
-
-bool
-ClosedPath::IsStrokeVisible() const
-{
-	bool result = false;
-
-	if ( HasStroke() )
-	{
-		result = ( fStroke->GetRGBA().a > Rtt_REAL_0 ) && GetStrokeWidth() > Rtt_REAL_0;
 	}
 
 	return result;

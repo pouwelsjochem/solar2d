@@ -1014,30 +1014,6 @@ LuaShapeObjectProxyVTable::setFillColor( lua_State *L )
 	return 0;
 }
 
-int
-LuaShapeObjectProxyVTable::setStrokeColor( lua_State *L )
-{
-	ShapeObject* o = (ShapeObject*)LuaProxy::GetProxyableObject( L, 1 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ShapeObject );
-
-	if ( o )
-	{
-		if ( ! o->GetPath().GetStroke() )
-		{
-			Paint* p = LuaLibDisplay::LuaNewColor( L, 2 );
-			o->SetStroke( p );
-		}
-		else
-		{
-			Color c = LuaLibDisplay::toColor( L, 2 );
-			o->SetStrokeColor( c );
-		}
-	}
-
-	return 0;
-}
-
 // object.fill
 int
 LuaShapeObjectProxyVTable::setFill( lua_State *L, int valueIndex )
@@ -1054,23 +1030,6 @@ LuaShapeObjectProxyVTable::setFill( lua_State *L, int valueIndex )
 	return 0;
 }
 
-// object.stroke
-int
-LuaShapeObjectProxyVTable::setStroke( lua_State *L, int valueIndex )
-{
-	ShapeObject* o = (ShapeObject*)LuaProxy::GetProxyableObject( L, 1 );
-
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, ShapeObject );
-
-	if ( Rtt_VERIFY( o ) )
-	{
-		// Use factory method to create paint
-		Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
-		o->SetStroke( paint );
-	}
-	return 0;
-}
-
 int
 LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
@@ -1082,15 +1041,11 @@ LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
 	{
 		"path",				// 0
 		"fill",				// 1
-		"stroke",			// 2
-		"blendMode",		// 3
-		"setFillColor",		// 4
-		"setStrokeColor",	// 5
-		"strokeWidth",		// 6
-		"innerstrokeWidth",	// 7
+		"blendMode",		// 2
+		"setFillColor",		// 3
 	};
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 8, 26, 2, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 1, 1, 1, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 	int index = hash->Lookup( key );
 
@@ -1120,41 +1075,13 @@ LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
 		break;
 	case 2:
 		{
-			const Paint *paint = o.GetPath().GetStroke();
-			if ( paint )
-			{
-				paint->PushProxy( L );
-			}
-            else
-            {
-                lua_pushnil( L );
-            }
-		}
-		break;
-	case 3:
-		{
 			RenderTypes::BlendType blend = o.GetBlend();
 			lua_pushstring( L, RenderTypes::StringForBlendType( blend ) );
 		}
 		break;
-	case 4:
+	case 3:
 		{
 			Lua::PushCachedFunction( L, Self::setFillColor );
-		}
-		break;
-	case 5:
-		{
-			Lua::PushCachedFunction( L, Self::setStrokeColor );
-		}
-		break;
-	case 6:
-		{
-			lua_pushinteger( L, o.GetStrokeWidth() );			
-		}
-		break;
-	case 7:
-		{
-			lua_pushinteger( L, o.GetInnerStrokeWidth() );		
 		}
 		break;
 	default:
@@ -1194,21 +1121,6 @@ LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
 	return result;
 }
 
-static void
-AssignDefaultStrokeColor( lua_State *L, ShapeObject& o )
-{
-	if ( ! o.GetPath().GetStroke() )
-	{
-		const Runtime* runtime = LuaContext::GetRuntime( L );
-		
-		SharedPtr< TextureResource > resource = runtime->GetDisplay().GetTextureFactory().GetDefault();
-		Paint *p = Paint::NewColor(
-							runtime->Allocator(),
-							resource, runtime->GetDisplay().GetDefaults().GetStrokeColor() );
-		o.SetStroke( p );
-	}
-}
-
 bool
 LuaShapeObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const
 {
@@ -1223,10 +1135,7 @@ LuaShapeObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, 
 	static const char * keys[] = 
 	{
 		"fill",				// 0
-		"stroke",			// 1
-		"blendMode",		// 2
-		"strokeWidth",		// 3
-		"innerStrokeWidth", // 4
+		"blendMode",		// 1
 	};
     const int numKeys = sizeof( keys ) / sizeof( const char * );
 	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 5, 0, 1, __FILE__, __LINE__ );
@@ -1240,36 +1149,11 @@ LuaShapeObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, 
 			setFill( L, valueIndex );
 		}
 		break;
-	case 1:
-		{
-			setStroke( L, valueIndex );
-		}
-		break;
 	case 2:
 		{
 			const char *v = lua_tostring( L, valueIndex );
 			RenderTypes::BlendType blend = RenderTypes::BlendTypeForString( v );
 			o.SetBlend( blend );
-		}
-		break;
-	case 3:
-		{
-			U8 width = lua_tointeger( L, valueIndex );
-
-			U8 innerWidth = width >> 1;
-			o.SetInnerStrokeWidth( innerWidth );
-
-			U8 outerWidth = width - innerWidth;
-			o.SetOuterStrokeWidth( outerWidth );
-
-			AssignDefaultStrokeColor( L, o );
-		}
-		break;
-	case 4:
-		{
-			o.SetInnerStrokeWidth( lua_tointeger( L, valueIndex ) );
-
-			AssignDefaultStrokeColor( L, o );
 		}
 		break;
 	default:

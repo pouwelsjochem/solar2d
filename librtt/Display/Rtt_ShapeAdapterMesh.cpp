@@ -292,8 +292,7 @@ int ShapeAdapterMesh::setVertex( lua_State *L )
 		orig.x = x;
 		orig.y = y;
 
-		path->Invalidate( ClosedPath::kFillSource |
-						 ClosedPath::kStrokeSource );
+		path->Invalidate( ClosedPath::kFillSource );
 		
 		path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag |
 										DisplayObject::kStageBoundsFlag |

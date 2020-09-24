@@ -42,8 +42,6 @@ RectPath::RectPath( Rtt_Allocator* pAllocator, TesselatorShape *tesselator )
 :	Super( pAllocator, tesselator )
 {
 	fFillGeometry->Resize( 4, false );
-	fStrokeGeometry->Resize( 10, false );
-
 	SetProperty( kIsRectPath, true );
 }
 
@@ -58,7 +56,6 @@ RectPath::Update( RenderData& data, const Matrix& srcToDstSpace )
 	else
 	{
 		UpdateFill( data, srcToDstSpace );
-		UpdateStroke( srcToDstSpace );
 	}
 }
 

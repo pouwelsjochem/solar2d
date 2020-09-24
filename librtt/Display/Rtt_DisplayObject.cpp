@@ -131,7 +131,7 @@ DisplayObject::PropertyForKey( Rtt_Allocator *allocator, const char key[] )
 }
 
 // This is *not* a full clear. This is only to clear parts of the RenderData
-// when we change the object's paint (fill or stroke)
+// when we change the object's paint (fill)
 void
 DisplayObject::DidChangePaint( RenderData& data )
 {

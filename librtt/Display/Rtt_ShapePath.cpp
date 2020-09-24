@@ -37,8 +37,7 @@ namespace Rtt
 ShapePath *
 ShapePath::NewRoundedRect( Rtt_Allocator *pAllocator, Real width, Real height, Real radius )
 {
-	TesselatorRoundedRect *tesselator = Rtt_NEW( pAllocator,
-		TesselatorRoundedRect( width, height, radius ) );
+	TesselatorRoundedRect *tesselator = Rtt_NEW( pAllocator, TesselatorRoundedRect( width, height, radius ) );
 	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
 	result->SetAdapter( & ShapeAdapterRoundedRect::Constant() );
 	return result;
@@ -47,8 +46,7 @@ ShapePath::NewRoundedRect( Rtt_Allocator *pAllocator, Real width, Real height, R
 ShapePath *
 ShapePath::NewCircle( Rtt_Allocator *pAllocator, Real radius )
 {
-	TesselatorCircle *tesselator = Rtt_NEW( pAllocator,
-		TesselatorCircle( radius ) );
+	TesselatorCircle *tesselator = Rtt_NEW( pAllocator, TesselatorCircle( radius ) );
 	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
 	result->SetAdapter( & ShapeAdapterCircle::Constant() );
 	return result;
@@ -57,8 +55,7 @@ ShapePath::NewCircle( Rtt_Allocator *pAllocator, Real radius )
 ShapePath *
 ShapePath::NewPolygon( Rtt_Allocator *pAllocator )
 {
-	TesselatorPolygon *tesselator = Rtt_NEW( pAllocator,
-		TesselatorPolygon( pAllocator ) );
+	TesselatorPolygon *tesselator = Rtt_NEW( pAllocator, TesselatorPolygon( pAllocator ) );
 	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
 	result->SetAdapter( & ShapeAdapterPolygon::Constant() );
 	return result;
@@ -68,8 +65,7 @@ ShapePath::NewPolygon( Rtt_Allocator *pAllocator )
 ShapePath *
 ShapePath::NewMesh( Rtt_Allocator *pAllocator, Geometry::PrimitiveType meshType )
 {
-	TesselatorMesh *tesselator = Rtt_NEW( pAllocator,
-											TesselatorMesh( pAllocator, meshType ) );
+	TesselatorMesh *tesselator = Rtt_NEW( pAllocator, TesselatorMesh( pAllocator, meshType ) );
 	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
 	result->SetAdapter( & ShapeAdapterMesh::Constant() );
 	return result;
@@ -80,10 +76,8 @@ ShapePath::NewMesh( Rtt_Allocator *pAllocator, Geometry::PrimitiveType meshType 
 ShapePath::ShapePath( Rtt_Allocator *pAllocator, TesselatorShape *tesselator )
 :	Super( pAllocator ),
 	fFillGeometry( Rtt_NEW( pAllocator, Geometry( pAllocator, tesselator->GetFillPrimitive(), 0, 0, tesselator->GetFillPrimitive() == Geometry::kIndexedTriangles ) ) ),
-	fStrokeGeometry( Rtt_NEW( pAllocator, Geometry( pAllocator, tesselator->GetStrokePrimitive(), 0, 0, false ) ) ),
 	fFillSource( pAllocator ),
 	fIndexSource( pAllocator ),
-	fStrokeSource( pAllocator ),
 	fTesselator( tesselator ),
 	fDelegate( NULL )
 {
@@ -95,7 +89,6 @@ ShapePath::~ShapePath()
 	DisplayObject *observer = GetObserver();
 	if ( observer )
 	{
-		observer->QueueRelease( fStrokeGeometry );
 		observer->QueueRelease( fFillGeometry );
 	}
 
@@ -176,57 +169,6 @@ ShapePath::TesselateFill()
 }
 
 void
-ShapePath::TesselateStroke()
-{
-	Rtt_ASSERT( HasStroke() );
-
-	Paint *paint = GetStroke();
-
-	BitmapPaint *bitmapPaint = (BitmapPaint*)paint->AsPaint( Paint::kBitmap );
-	bool hasTexture = ( NULL != bitmapPaint );
-
-	fTesselator->SetInnerWidth( GetInnerStrokeWidth() );
-	fTesselator->SetOuterWidth( GetOuterStrokeWidth() );
-
-	ArrayVertex2& vertices = fStrokeSource.Vertices();
-	if ( ! IsValid( kStrokeSource ) )
-	{
-		vertices.Clear();
-		fTesselator->GenerateStroke( vertices );
-		SetValid( kStrokeSource );
-
-		if ( hasTexture )
-		{
-			Invalidate( kStrokeSourceTexture );
-		}
-
-		// Force renderdata update
-		Invalidate( kStroke );
-
-		// Force per-vertex color data update
-		GetObserver()->Invalidate( DisplayObject::kColorFlag );
-	}
-
-	if ( hasTexture )
-	{
-		if ( ! IsValid( kStrokeSourceTexture )
-			 || ! paint->IsValid( Paint::kTextureTransformFlag ) )
-		{
-			paint->SetValid( Paint::kTextureTransformFlag );
-
-			fStrokeSource.TexVertices().Clear();
-			fTesselator->GenerateStrokeTexture( fStrokeSource.TexVertices(), vertices.Length() );
-			SetValid( kStrokeSourceTexture );
-
-			// Force renderdata update
-			Invalidate( kStrokeTexture );
-
-			Rtt_ASSERT( fStrokeSource.Vertices().Length() == fStrokeSource.TexVertices().Length() );
-		}
-	}
-}
-
-void
 ShapePath::UpdateFill( RenderData& data, const Matrix& srcToDstSpace )
 {
 	if ( HasFill() )
@@ -234,7 +176,7 @@ ShapePath::UpdateFill( RenderData& data, const Matrix& srcToDstSpace )
 		TesselateFill();
 
 		// The flags here are for a common helper (UpdateGeometry)
-		// which is agnostic to stroke vs fill, so we have to map
+		// which is agnostic to fill, so we have to map
 		// the fill-specific flags to generic flags (e.g. kVerticesMask)
 		U32 flags = 0;
 		if ( ! IsValid( kFill ) )
@@ -265,48 +207,11 @@ ShapePath::UpdateFill( RenderData& data, const Matrix& srcToDstSpace )
 }
 
 void
-ShapePath::UpdateStroke( const Matrix& srcToDstSpace )
-{
-	if ( HasStroke() )
-	{
-		TesselateStroke();
-
-		// The flags here are for a common helper (UpdateGeometry)
-		// which is agnostic to stroke vs fill, so we have to map
-		// the stroke-specific flags to generic flags (e.g. kVerticesMask)
-		U32 flags = 0;
-		if ( ! IsValid( kStroke ) )
-		{
-			flags |= kVerticesMask;
-		}
-		if ( ! IsValid( kStrokeTexture ) )
-		{
-			flags |= kTexVerticesMask;
-		}
-
-		RenderData *data = GetStrokeData();
-
-		if ( ! fDelegate )
-		{
-			UpdateGeometry( *fStrokeGeometry, fStrokeSource, srcToDstSpace, flags, NULL );
-		}
-		else
-		{
-			fDelegate->UpdateGeometry( * fStrokeGeometry, fStrokeSource, srcToDstSpace, flags );
-		}
-		data->fGeometry = fStrokeGeometry;
-
-		SetValid( kStroke | kStrokeTexture );
-	}
-}
-
-void
 ShapePath::Update( RenderData& data, const Matrix& srcToDstSpace )
 {
 	Super::Update( data, srcToDstSpace );
 
 	UpdateFill( data, srcToDstSpace );
-	UpdateStroke( srcToDstSpace );
 }
 
 void
@@ -315,11 +220,6 @@ ShapePath::UpdateResources( Renderer& renderer ) const
 	if ( HasFill() && IsFillVisible() && fFillGeometry->GetStoredOnGPU() )
 	{
 		renderer.QueueUpdate( fFillGeometry );
-	}
-
-	if ( HasStroke() && IsStrokeVisible() && fStrokeGeometry->GetStoredOnGPU() )
-	{
-		renderer.QueueUpdate( fStrokeGeometry );
 	}
 }
 
@@ -335,29 +235,12 @@ ShapePath::Translate( Real dx, Real dy )
 		v.x += dx;
 		v.y += dy;
 	}
-
-	if ( HasStroke() )
-	{
-		Rtt_ASSERT_NOT_IMPLEMENTED();
-
-		Geometry::Vertex *strokeVertices = fStrokeGeometry->GetVertexData();
-		for ( int i = 0, iMax = fStrokeGeometry->GetVerticesUsed(); i < iMax; i++ )
-		{
-			Geometry::Vertex& v = strokeVertices[i];
-			v.x += dx;
-			v.y += dy;
-		}
-	}
 }
 
 void
 ShapePath::GetSelfBounds( Rect& rect ) const
 {
 	fTesselator->GetSelfBounds( rect );
-	if ( HasStroke() && GetOuterStrokeWidth() > 0 )
-	{
-		rect = Rect( rect, GetOuterStrokeWidth() );
-	}
 }
 
 bool
@@ -367,7 +250,7 @@ ShapePath::SetSelfBounds( Real width, Real height )
 
 	if ( result )
 	{
-		Invalidate( kFillSource | kStrokeSource );
+		Invalidate( kFillSource );
 	}
 
 	return result;

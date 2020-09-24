@@ -112,7 +112,6 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_StageObject.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_Tesselator.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorCircle.cpp" />
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorLine.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorMesh.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorPolygon.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorRect.cpp" />
@@ -348,7 +347,6 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_StageObject.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_Tesselator.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorCircle.h" />
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorLine.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorMesh.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorPolygon.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorRect.h" />

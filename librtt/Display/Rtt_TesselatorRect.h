@@ -80,7 +80,6 @@ class TesselatorRect : public TesselatorRectBase
 	public:
 		virtual void GenerateFill( ArrayVertex2& outVertices );
 		virtual void GenerateFillTexture( ArrayVertex2& outTexCoords, const Transform& t );
-		virtual void GenerateStroke( ArrayVertex2& outVertices );
 		virtual void GetSelfBounds( Rect& rect );
 		virtual void GetSelfBoundsForAnchor( Rect& rect ) const;
 

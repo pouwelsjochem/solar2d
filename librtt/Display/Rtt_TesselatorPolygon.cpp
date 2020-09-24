@@ -11,7 +11,6 @@
 
 #include "Display/Rtt_TesselatorPolygon.h"
 
-#include "Display/Rtt_TesselatorLine.h"
 #include "Rtt_Matrix.h"
 #include "Rtt_Transform.h"
 
@@ -256,16 +255,6 @@ TesselatorPolygon::GenerateFillTexture( ArrayVertex2& texCoords, const Transform
 			vertices.Append( v );
 		}
 	}
-}
-
-void
-TesselatorPolygon::GenerateStroke( ArrayVertex2& vertices )
-{
-	TesselatorLine t( fContour, TesselatorLine::kLoopMode );
-	t.SetInnerWidth( GetInnerWidth() );
-	t.SetOuterWidth( GetOuterWidth() );
-
-	t.GenerateStroke( vertices );
 }
 
 void

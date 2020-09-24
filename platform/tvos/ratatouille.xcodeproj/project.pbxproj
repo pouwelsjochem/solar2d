@@ -110,7 +110,6 @@
 		A4551E191BAA17CF00FB3BDF /* Rtt_StageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */; };
 		A4551E1A1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */; };
 		A4551E1B1BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */; };
-		A4551E1C1BAA17CF00FB3BDF /* Rtt_TesselatorLine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC21BAA17CF00FB3BDF /* Rtt_TesselatorLine.cpp */; };
 		A4551E1D1BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC41BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp */; };
 		A4551E1E1BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC61BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp */; };
 		A4551E1F1BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC81BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp */; };
@@ -931,8 +930,6 @@
 		A4551DBF1BAA17CF00FB3BDF /* Rtt_Tesselator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Tesselator.h; path = ../../librtt/Display/Rtt_Tesselator.h; sourceTree = "<group>"; };
 		A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorCircle.cpp; path = ../../librtt/Display/Rtt_TesselatorCircle.cpp; sourceTree = "<group>"; };
 		A4551DC11BAA17CF00FB3BDF /* Rtt_TesselatorCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorCircle.h; path = ../../librtt/Display/Rtt_TesselatorCircle.h; sourceTree = "<group>"; };
-		A4551DC21BAA17CF00FB3BDF /* Rtt_TesselatorLine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorLine.cpp; path = ../../librtt/Display/Rtt_TesselatorLine.cpp; sourceTree = "<group>"; };
-		A4551DC31BAA17CF00FB3BDF /* Rtt_TesselatorLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorLine.h; path = ../../librtt/Display/Rtt_TesselatorLine.h; sourceTree = "<group>"; };
 		A4551DC41BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorPolygon.cpp; path = ../../librtt/Display/Rtt_TesselatorPolygon.cpp; sourceTree = "<group>"; };
 		A4551DC51BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorPolygon.h; path = ../../librtt/Display/Rtt_TesselatorPolygon.h; sourceTree = "<group>"; };
 		A4551DC61BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorRect.cpp; path = ../../librtt/Display/Rtt_TesselatorRect.cpp; sourceTree = "<group>"; };
@@ -1867,8 +1864,6 @@
 				A4551DBF1BAA17CF00FB3BDF /* Rtt_Tesselator.h */,
 				A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */,
 				A4551DC11BAA17CF00FB3BDF /* Rtt_TesselatorCircle.h */,
-				A4551DC21BAA17CF00FB3BDF /* Rtt_TesselatorLine.cpp */,
-				A4551DC31BAA17CF00FB3BDF /* Rtt_TesselatorLine.h */,
 				F574F5F91CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp */,
 				F574F5FA1CE60D8300FF04F1 /* Rtt_TesselatorMesh.h */,
 				A4551DC41BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp */,
@@ -3578,7 +3573,6 @@
 				A4551F551BAA182D00FB3BDF /* Rtt_LuaProxy.cpp in Sources */,
 				A4384F531BAA1F49005750A3 /* Reachability.m in Sources */,
 				A4551DF81BAA17CF00FB3BDF /* Rtt_LuaLibDisplay.cpp in Sources */,
-				A4551E1C1BAA17CF00FB3BDF /* Rtt_TesselatorLine.cpp in Sources */,
 				A4551E021BAA17CF00FB3BDF /* Rtt_Shader.cpp in Sources */,
 				A4551DDE1BAA17CF00FB3BDF /* Rtt_BitmapMask.cpp in Sources */,
 				A4551E151BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp in Sources */,

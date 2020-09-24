@@ -631,9 +631,6 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorCircle.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorLine.cpp">
-      <Filter>rtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorMesh.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
@@ -1550,9 +1547,6 @@
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorCircle.h">
-      <Filter>rtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorLine.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TesselatorMesh.h">

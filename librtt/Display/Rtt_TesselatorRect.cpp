@@ -10,7 +10,6 @@
 #include "Core/Rtt_Build.h"
 
 #include "Display/Rtt_TesselatorRect.h"
-#include "Display/Rtt_TesselatorLine.h"
 #include "Rtt_Transform.h"
 
 // ----------------------------------------------------------------------------
@@ -31,12 +30,10 @@ TesselatorRectBase::TesselatorRectBase( Real w, Real h )
 bool
 TesselatorRectBase::SetSelfBounds( Real width, Real height )
 {
-	// TODO: We do not account for stroke width
 	if ( !( width < Rtt_REAL_0 ) ) // (width >= 0)
 	{
 		SetWidth( width );
 	}
-
 	if ( !( height < Rtt_REAL_0 ) ) // (height >= 0)
 	{
 		SetHeight( height );
@@ -209,72 +206,6 @@ TesselatorRect::GenerateFillTexture( ArrayVertex2& texCoords, const Transform& t
 	vertices.Append( uv[1] );
 	vertices.Append( uv[2] );
 	vertices.Append( uv[3] );
-}
-
-void
-TesselatorRect::GenerateStroke( ArrayVertex2& vertices )
-{
-	const Real innerWidth = GetInnerWidth();
-	const Real outerWidth = GetOuterWidth();
-
-	if( ! HasOffset() )
-	{
-		Real halfW = fHalfW;
-		Real halfH = fHalfH;
-
-		// Src vertices in strip order
-		const Vertex2 kSrc[] = {
-			// 0.
-			{ -halfW + innerWidth + GetOffset( kX0 ), -halfH + innerWidth + GetOffset( kY0 ) },
-			{ -halfW - outerWidth + GetOffset( kX0 ), -halfH - outerWidth + GetOffset( kY0 ) },
-			
-			// 1.
-			{ -halfW + innerWidth + GetOffset( kX1 ),  halfH - innerWidth + GetOffset( kY1 ) },
-			{ -halfW - outerWidth + GetOffset( kX1 ),  halfH + outerWidth + GetOffset( kY1 ) },
-			
-			// 2.
-			{  halfW - innerWidth + GetOffset( kX2 ),  halfH - innerWidth + GetOffset( kY2 ) },
-			{  halfW + outerWidth + GetOffset( kX2 ),  halfH + outerWidth + GetOffset( kY2 ) },
-			
-			// 3.
-			{  halfW - innerWidth + GetOffset( kX3 ), -halfH + innerWidth + GetOffset( kY3 ) },
-			{  halfW + outerWidth + GetOffset( kX3 ), -halfH - outerWidth + GetOffset( kY3 ) },
-			
-			// 0. Repeat first point to close the loop
-			{ -halfW + innerWidth + GetOffset( kX0 ), -halfH + innerWidth + GetOffset( kY0 ) },
-			{ -halfW - outerWidth + GetOffset( kX0 ), -halfH - outerWidth + GetOffset( kY0 ) },
-		};
-		const int kNumSrc = sizeof( kSrc ) / sizeof( kSrc[0] );
-
-		for ( int i = 0; i < kNumSrc; i++ )
-		{
-			vertices.Append( kSrc[i] );
-		}
-	}
-	else
-	{
-		ArrayVertex2 rect( vertices.Allocator() );
-		
-		// polyline order
-		Vertex2 quad[] =
-		{
-			{ -fHalfW + GetOffset( kX0 ), -fHalfH + GetOffset( kY0 ) },
-			{ -fHalfW + GetOffset( kX1 ),  fHalfH + GetOffset( kY1 ) },
-			{  fHalfW + GetOffset( kX2 ),  fHalfH + GetOffset( kY2 ) },
-			{  fHalfW + GetOffset( kX3 ), -fHalfH + GetOffset( kY3 ) },
-		};
-		
-		rect.Append( quad[0] );
-		rect.Append( quad[1] );
-		rect.Append( quad[2] );
-		rect.Append( quad[3] );
-
-		TesselatorLine t( rect , TesselatorLine::kLoopMode );
-		t.SetInnerWidth( innerWidth );
-		t.SetOuterWidth( outerWidth );
-		
-		t.GenerateStroke( vertices );
-	}
 }
 
 void

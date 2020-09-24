@@ -149,8 +149,7 @@ ShapeAdapterRect::SetValueForKey(
 					(TesselatorRect::RectOffset)(index - kBase);
 				Real value = luaL_toreal( L, valueIndex );
 				tesselator->SetOffset( offset, value );
-				path->Invalidate( ClosedPath::kStrokeSource |
-									ClosedPath::kFillSource |
+				path->Invalidate(	ClosedPath::kFillSource |
 									ClosedPath::kFillSourceTexture );
 				path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag |
 													DisplayObject::kStageBoundsFlag |
@@ -161,8 +160,7 @@ ShapeAdapterRect::SetValueForKey(
 			{
 				Real newValue = luaL_toreal( L, valueIndex );
 				tesselator->SetWidth( newValue );
-				path->Invalidate( ClosedPath::kFillSource |
-									ClosedPath::kStrokeSource );
+				path->Invalidate( ClosedPath::kFillSource );
 				path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag |
 													DisplayObject::kStageBoundsFlag |
 													DisplayObject::kTransformFlag );
@@ -172,8 +170,7 @@ ShapeAdapterRect::SetValueForKey(
 			{
 				Real newValue = luaL_toreal( L, valueIndex );
 				tesselator->SetHeight( newValue );
-				path->Invalidate( ClosedPath::kFillSource |
-									ClosedPath::kStrokeSource );
+				path->Invalidate( ClosedPath::kFillSource );
 				path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag |
 													DisplayObject::kStageBoundsFlag  |
 													DisplayObject::kTransformFlag );

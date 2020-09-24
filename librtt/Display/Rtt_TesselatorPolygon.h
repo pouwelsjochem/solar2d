@@ -33,7 +33,6 @@ class TesselatorPolygon : public TesselatorShape
 	public:
 		virtual void GenerateFill( ArrayVertex2& outVertices );
 		virtual void GenerateFillTexture( ArrayVertex2& outTexCoords, const Transform& t );
-		virtual void GenerateStroke( ArrayVertex2& outVertices );
 		virtual void GetSelfBounds( Rect& rect );
 		virtual Geometry::PrimitiveType GetFillPrimitive() const;
 

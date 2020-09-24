@@ -110,9 +110,7 @@ class LuaShapeObjectProxyVTable : public LuaDisplayObjectProxyVTable
 
 	public:
 		static int setFillColor( lua_State *L );
-		static int setStrokeColor( lua_State *L );
 		static int setFill( lua_State *L, int valueIndex );
-		static int setStroke( lua_State *L, int valueIndex );
 
 	protected:
 		LuaShapeObjectProxyVTable() {}

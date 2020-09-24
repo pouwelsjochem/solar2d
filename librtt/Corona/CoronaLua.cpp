@@ -417,7 +417,7 @@ int CoronaLuaPropertyToJSON(lua_State *L, int idx, const char *key, char *buf, i
         snprintf(buf, bufLen, "\"%s\": \"%s\"", key, luaL_typename( L, idx ));
 #endif
     }
-    else if (lua_isuserdata(L, idx) && (strcmp(key, "path") == 0 || strcmp(key, "fill") == 0 || strcmp(key, "stroke") == 0))
+    else if (lua_isuserdata(L, idx) && (strcmp(key, "path") == 0 || strcmp(key, "fill") == 0))
     {
         Rtt::LuaUserdataProxy *proxy = Rtt::LuaUserdataProxy::ToProxy( L, idx );
 

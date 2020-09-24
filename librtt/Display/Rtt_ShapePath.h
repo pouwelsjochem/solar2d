@@ -50,10 +50,8 @@ class ShapePath : public ClosedPath
 
 	protected:
 		void TesselateFill();
-		void TesselateStroke();
 
 		void UpdateFill( RenderData& data, const Matrix& srcToDstSpace );
-		void UpdateStroke( const Matrix& srcToDstSpace );
 
 		void CalculateUV( ArrayVertex2& texVertices, Paint *paint, bool canTransformTexture );
 	public:
@@ -76,10 +74,8 @@ class ShapePath : public ClosedPath
 
 	protected:
 		Geometry *fFillGeometry;
-		Geometry *fStrokeGeometry;
 		ArrayIndex fIndexSource;
 		VertexCache fFillSource;
-		VertexCache fStrokeSource;
 		TesselatorShape *fTesselator;
 		const MShapePathDelegate *fDelegate;
 };

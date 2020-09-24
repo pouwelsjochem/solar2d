@@ -66,11 +66,6 @@ class ClosedPath
 
 		enum _DirtyMask
 		{
-			kStroke = 0x1,					// Stroke vertices in renderdata
-			kStrokeTexture = 0x2,			// Stroke tex coords in renderdata
-			kStrokeSource = 0x4,			// Stroke tesselation
-			kStrokeSourceTexture = 0x8,		// Stroke tex tesselation
-
 			kFill = 0x10,					// Fill vertices in renderdata
 			kFillTexture = 0x20,			// Fill tex coords in renderdata
 			kFillSource = 0x40,				// Fill tesselation
@@ -110,12 +105,6 @@ class ClosedPath
 		void UpdateColor( RenderData& data, U8 objectAlpha );
 
 	public:
-		void SetStrokeData( RenderData *data ) { fStrokeData = data; }
-
-	protected:
-		RenderData *GetStrokeData() { return ( HasStroke() ? fStrokeData : NULL ); }
-
-	public:
 		Paint* GetFill() { return fFill; }
 		const Paint* GetFill() const { return fFill; }
 		void SetFill( Paint* newValue );
@@ -125,22 +114,9 @@ class ClosedPath
 	public:
 		void SwapFill( ClosedPath& rhs );
 
-		Paint* GetStroke() { return fStroke; }
-		const Paint* GetStroke() const { return fStroke; }
-		void SetStroke( Paint* newValue );
-
-		Rtt_INLINE U8 GetStrokeWidth() const { return fInnerStrokeWidth + fOuterStrokeWidth; }
-		Rtt_INLINE U8 GetInnerStrokeWidth() const { return fInnerStrokeWidth; }
-		Rtt_INLINE U8 GetOuterStrokeWidth() const { return fOuterStrokeWidth; }
-
-		void SetInnerStrokeWidth( U8 newValue );
-		void SetOuterStrokeWidth( U8 newValue );
-
 		bool HasFill() const { return ( NULL != fFill ); }
-		bool HasStroke() const { return ( NULL != fStroke ); }
 	
 		bool IsFillVisible() const;
-		bool IsStrokeVisible() const;
 
 	public:
 		void Invalidate( DirtyFlags flags ) { fDirtyFlags |= flags; }
@@ -178,14 +154,9 @@ class ClosedPath
 		mutable LuaUserdataProxy *fProxy;
 
 		Paint* fFill; // Only one fill color per path
-		Paint* fStroke;
-
-		RenderData *fStrokeData;
 
 		Properties fProperties;
 		DirtyFlags fDirtyFlags;
-		U8 fInnerStrokeWidth;
-		U8 fOuterStrokeWidth;
 };
 
 // ----------------------------------------------------------------------------

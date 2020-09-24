@@ -558,7 +558,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_StageObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_Tesselator.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorCircle.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorLine.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorPolygon.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorMesh.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorRect.cpp \

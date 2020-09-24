@@ -23,16 +23,6 @@ TesselatorShape::TesselatorShape()
 	ResetNormalization();
 }
 
-void
-TesselatorShape::GenerateStrokeTexture( ArrayVertex2& outTexCoords, int numVertices )
-{
-	ArrayVertex2& vertices = outTexCoords;
-
-	Rtt_ASSERT( vertices.Length() == 0 );
-
-	AppendStrokeTextureClosed( vertices, numVertices );
-}
-
 Geometry::PrimitiveType
 TesselatorShape::GetFillPrimitive() const
 {

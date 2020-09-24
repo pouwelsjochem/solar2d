@@ -117,7 +117,7 @@ ShapeAdapterRoundedRect::SetValueForKey(
 			{
 				Real newValue = luaL_toreal( L, valueIndex );
 				tesselator->SetWidth( newValue );
-				path->Invalidate( ClosedPath::kFillSource | ClosedPath::kStrokeSource );
+				path->Invalidate( ClosedPath::kFillSource );
 				path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag | DisplayObject::kStageBoundsFlag );
 			}
 			break;
@@ -125,7 +125,7 @@ ShapeAdapterRoundedRect::SetValueForKey(
 			{
 				Real newValue = luaL_toreal( L, valueIndex );
 				tesselator->SetHeight( newValue );
-				path->Invalidate( ClosedPath::kFillSource | ClosedPath::kStrokeSource );
+				path->Invalidate( ClosedPath::kFillSource );
 				path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag | DisplayObject::kStageBoundsFlag );
 			}
 			break;
@@ -138,7 +138,7 @@ ShapeAdapterRoundedRect::SetValueForKey(
 				radius = Min( radius, maxRadius );
 
 				tesselator->SetRadius( radius );
-				path->Invalidate( ClosedPath::kFillSource | ClosedPath::kStrokeSource );
+				path->Invalidate( ClosedPath::kFillSource );
 				path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag | DisplayObject::kStageBoundsFlag );
 			}
 			break;

@@ -1053,11 +1053,6 @@ DisplayLibrary::getDefault( lua_State *L )
 		Color c = defaults.GetFillColor();
 		result = PushColor( L, c );
 	}
-	else if ( Rtt_StringCompare( key, "strokeColor" ) == 0 )
-	{
-		Color c = defaults.GetStrokeColor();
-		result = PushColor( L, c );
-	}
 	else if ( Rtt_StringCompare( key, "lineColor" ) == 0 )
 	{
 		Color c = defaults.GetLineColor();
@@ -1145,10 +1140,6 @@ DisplayLibrary::setDefault( lua_State *L )
 	else if ( Rtt_StringCompare( key, "fillColor" ) == 0 )
 	{
 		defaults.SetFillColor( c );
-	}
-	else if ( Rtt_StringCompare( key, "strokeColor" ) == 0 )
-	{
-		defaults.SetStrokeColor( c );
 	}
 	else if ( Rtt_StringCompare( key, "lineColor" ) == 0 )
 	{

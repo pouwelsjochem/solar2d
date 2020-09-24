@@ -32,7 +32,6 @@ static const Color kWhite = 0xFFFFFFFF;
 DisplayDefaults::DisplayDefaults()
 :	fClearColor( kBlack ),
 	fFillColor( kWhite ),
-	fStrokeColor( kWhite ),
 	fTextColor( kWhite ),
 	fLineColor( kWhite ),
 	fAnchorX( 0.5 ),

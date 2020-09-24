@@ -110,7 +110,7 @@ ShapeAdapterCircle::SetValueForKey(
                 {
                     Real radius = luaL_toreal( L, valueIndex );
                     tesselator->SetRadius( radius );
-                    path->Invalidate( ClosedPath::kFillSource | ClosedPath::kStrokeSource );
+                    path->Invalidate( ClosedPath::kFillSource );
                     path->GetObserver()->Invalidate( DisplayObject::kGeometryFlag | DisplayObject::kStageBoundsFlag );
                     result = true;
                 }

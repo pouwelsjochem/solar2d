@@ -119,33 +119,6 @@ TesselatorRoundedRect::GenerateFillTexture( ArrayVertex2& texCoords, const Trans
 }
 
 void
-TesselatorRoundedRect::GenerateStroke( ArrayVertex2& vertices )
-{
-	Real radius = fRadius;
-
-	AppendCircleStroke( vertices, radius, fInnerWidth, fOuterWidth, true );
-
-	Real halfW = fHalfW - radius;
-	Real halfH = fHalfH - radius;
-
-	const S32 numVertices = vertices.Length();
-
-	// An add'l 2 vertices were added at the end to close the loop
-	S32 length = numVertices - 2; Rtt_ASSERT( ( length & 0x3 ) == 0 );
-	length = length >> 2;
-	Vertex2* pVertices = vertices.WriteAccess();
-
-	// Position origin of each circle segment appropriately
-	Vertex2_Translate( pVertices, length, halfW, halfH ); pVertices += length;
-	Vertex2_Translate( pVertices, length, -halfW, halfH ); pVertices += length;
-	Vertex2_Translate( pVertices, length, -halfW, -halfH ); pVertices += length;
-	Vertex2_Translate( pVertices, length, halfW, -halfH ); pVertices += length;
-
-	// Last 2 vertices close the loop
-	Vertex2_Translate( pVertices, 2, halfW, halfH );
-}
-
-void
 TesselatorRoundedRect::GetSelfBounds( Rect& rect )
 {
 	rect.Initialize( fHalfW, fHalfH );
