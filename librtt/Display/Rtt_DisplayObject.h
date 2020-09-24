@@ -48,7 +48,7 @@ struct RenderData;
 //
 // The various parts of RenderData can be broken up into various categories:
 // * Program (DisplayObject --- leaf nodes only?)
-// * Geometry (DisplayPath)
+// * Geometry (ClosedPath)
 // * Material (Paint)
 //     + Color
 //     + Color Offset

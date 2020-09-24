@@ -516,7 +516,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_Display.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayDefaults.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayObject.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_DisplayPath.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GradientPaint.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GradientPaintAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_GroupObject.cpp \

@@ -395,9 +395,6 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayObject.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayPath.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GradientPaint.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
@@ -1106,9 +1103,6 @@
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayObject.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayPath.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayTypes.h">

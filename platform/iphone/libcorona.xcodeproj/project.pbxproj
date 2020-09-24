@@ -347,8 +347,6 @@
 		A47428AB17694EB000C63853 /* Rtt_DisplayDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A474284E17694EB000C63853 /* Rtt_DisplayDefaults.h */; };
 		A47428AC17694EB000C63853 /* Rtt_DisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474284F17694EB000C63853 /* Rtt_DisplayObject.cpp */; };
 		A47428AD17694EB000C63853 /* Rtt_DisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A474285017694EB000C63853 /* Rtt_DisplayObject.h */; };
-		A47428AE17694EB000C63853 /* Rtt_DisplayPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474285117694EB000C63853 /* Rtt_DisplayPath.cpp */; };
-		A47428AF17694EB000C63853 /* Rtt_DisplayPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A474285217694EB000C63853 /* Rtt_DisplayPath.h */; };
 		A47428B017694EB000C63853 /* Rtt_DisplayTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = A474285317694EB000C63853 /* Rtt_DisplayTypes.h */; };
 		A47428B317694EB000C63853 /* Rtt_GroupObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A474285617694EB000C63853 /* Rtt_GroupObject.cpp */; };
 		A47428B417694EB000C63853 /* Rtt_GroupObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A474285717694EB000C63853 /* Rtt_GroupObject.h */; };
@@ -1033,8 +1031,6 @@
 		A474284E17694EB000C63853 /* Rtt_DisplayDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayDefaults.h; path = Display/Rtt_DisplayDefaults.h; sourceTree = "<group>"; };
 		A474284F17694EB000C63853 /* Rtt_DisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DisplayObject.cpp; path = Display/Rtt_DisplayObject.cpp; sourceTree = "<group>"; };
 		A474285017694EB000C63853 /* Rtt_DisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayObject.h; path = Display/Rtt_DisplayObject.h; sourceTree = "<group>"; };
-		A474285117694EB000C63853 /* Rtt_DisplayPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DisplayPath.cpp; path = Display/Rtt_DisplayPath.cpp; sourceTree = "<group>"; };
-		A474285217694EB000C63853 /* Rtt_DisplayPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayPath.h; path = Display/Rtt_DisplayPath.h; sourceTree = "<group>"; };
 		A474285317694EB000C63853 /* Rtt_DisplayTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayTypes.h; path = Display/Rtt_DisplayTypes.h; sourceTree = "<group>"; };
 		A474285617694EB000C63853 /* Rtt_GroupObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GroupObject.cpp; path = Display/Rtt_GroupObject.cpp; sourceTree = "<group>"; };
 		A474285717694EB000C63853 /* Rtt_GroupObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GroupObject.h; path = Display/Rtt_GroupObject.h; sourceTree = "<group>"; };
@@ -1930,8 +1926,6 @@
 				A474284E17694EB000C63853 /* Rtt_DisplayDefaults.h */,
 				A474284F17694EB000C63853 /* Rtt_DisplayObject.cpp */,
 				A474285017694EB000C63853 /* Rtt_DisplayObject.h */,
-				A474285117694EB000C63853 /* Rtt_DisplayPath.cpp */,
-				A474285217694EB000C63853 /* Rtt_DisplayPath.h */,
 				A474285317694EB000C63853 /* Rtt_DisplayTypes.h */,
 				A4B66ADA176E65520077B2BF /* Rtt_GradientPaint.cpp */,
 				A4B66ADB176E65530077B2BF /* Rtt_GradientPaint.h */,
@@ -2337,7 +2331,6 @@
 				A48DA9581852FE84009D1F93 /* Rtt_RuntimeDelegate.h in Headers */,
 				A47428AB17694EB000C63853 /* Rtt_DisplayDefaults.h in Headers */,
 				A47428AD17694EB000C63853 /* Rtt_DisplayObject.h in Headers */,
-				A47428AF17694EB000C63853 /* Rtt_DisplayPath.h in Headers */,
 				A47428B017694EB000C63853 /* Rtt_DisplayTypes.h in Headers */,
 				A47428B417694EB000C63853 /* Rtt_GroupObject.h in Headers */,
 				A47428B617694EB000C63853 /* Rtt_ImageFrame.h in Headers */,
@@ -2852,7 +2845,6 @@
 				A47428A817694EB000C63853 /* Rtt_Display.cpp in Sources */,
 				A47428AA17694EB000C63853 /* Rtt_DisplayDefaults.cpp in Sources */,
 				A47428AC17694EB000C63853 /* Rtt_DisplayObject.cpp in Sources */,
-				A47428AE17694EB000C63853 /* Rtt_DisplayPath.cpp in Sources */,
 				A47428B317694EB000C63853 /* Rtt_GroupObject.cpp in Sources */,
 				A47428B517694EB000C63853 /* Rtt_ImageFrame.cpp in Sources */,
 				A47428B717694EB000C63853 /* Rtt_ImageSheet.cpp in Sources */,

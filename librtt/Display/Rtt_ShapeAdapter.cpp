@@ -234,9 +234,9 @@ ShapeAdapter::SetValueForKey(
 void
 ShapeAdapter::WillFinalize( LuaUserdataProxy& sender ) const
 {
-	DisplayPath *path = (DisplayPath *)sender.GetUserdata();
+	ClosedPath *path = (ClosedPath *)sender.GetUserdata();
 	if ( ! path ) { return; }
-	
+
 	path->DetachProxy();
 }
 

@@ -13,7 +13,7 @@
 
 #include "Display/Rtt_ImageSheetPaint.h"
 #include "Display/Rtt_DisplayObject.h"
-#include "Display/Rtt_DisplayPath.h"
+#include "Display/Rtt_ClosedPath.h"
 #include "Display/Rtt_PaintAdapter.h"
 #include "Display/Rtt_ShapeObject.h"
 #include "Core/Rtt_StringHash.h"

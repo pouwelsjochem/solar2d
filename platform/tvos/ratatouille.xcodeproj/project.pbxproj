@@ -68,7 +68,6 @@
 		A4551DE81BAA17CF00FB3BDF /* Rtt_Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D561BAA17CF00FB3BDF /* Rtt_Display.cpp */; };
 		A4551DE91BAA17CF00FB3BDF /* Rtt_DisplayDefaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D581BAA17CF00FB3BDF /* Rtt_DisplayDefaults.cpp */; };
 		A4551DEA1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D5A1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp */; };
-		A4551DEB1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D5C1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp */; };
 		A4551DEF1BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D651BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp */; };
 		A4551DF01BAA17CF00FB3BDF /* Rtt_GradientPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D671BAA17CF00FB3BDF /* Rtt_GradientPaintAdapter.cpp */; };
 		A4551DF11BAA17CF00FB3BDF /* Rtt_GroupObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551D691BAA17CF00FB3BDF /* Rtt_GroupObject.cpp */; };
@@ -846,8 +845,6 @@
 		A4551D591BAA17CF00FB3BDF /* Rtt_DisplayDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayDefaults.h; path = ../../librtt/Display/Rtt_DisplayDefaults.h; sourceTree = "<group>"; };
 		A4551D5A1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DisplayObject.cpp; path = ../../librtt/Display/Rtt_DisplayObject.cpp; sourceTree = "<group>"; };
 		A4551D5B1BAA17CF00FB3BDF /* Rtt_DisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayObject.h; path = ../../librtt/Display/Rtt_DisplayObject.h; sourceTree = "<group>"; };
-		A4551D5C1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DisplayPath.cpp; path = ../../librtt/Display/Rtt_DisplayPath.cpp; sourceTree = "<group>"; };
-		A4551D5D1BAA17CF00FB3BDF /* Rtt_DisplayPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayPath.h; path = ../../librtt/Display/Rtt_DisplayPath.h; sourceTree = "<group>"; };
 		A4551D5E1BAA17CF00FB3BDF /* Rtt_DisplayTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayTypes.h; path = ../../librtt/Display/Rtt_DisplayTypes.h; sourceTree = "<group>"; };
 		A4551D651BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GradientPaint.cpp; path = ../../librtt/Display/Rtt_GradientPaint.cpp; sourceTree = "<group>"; };
 		A4551D661BAA17CF00FB3BDF /* Rtt_GradientPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GradientPaint.h; path = ../../librtt/Display/Rtt_GradientPaint.h; sourceTree = "<group>"; };
@@ -1782,8 +1779,6 @@
 				A4551D591BAA17CF00FB3BDF /* Rtt_DisplayDefaults.h */,
 				A4551D5A1BAA17CF00FB3BDF /* Rtt_DisplayObject.cpp */,
 				A4551D5B1BAA17CF00FB3BDF /* Rtt_DisplayObject.h */,
-				A4551D5C1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp */,
-				A4551D5D1BAA17CF00FB3BDF /* Rtt_DisplayPath.h */,
 				A4551D5E1BAA17CF00FB3BDF /* Rtt_DisplayTypes.h */,
 				A4551D651BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp */,
 				A4551D661BAA17CF00FB3BDF /* Rtt_GradientPaint.h */,
@@ -3647,7 +3642,6 @@
 				A4551E251BAA17CF00FB3BDF /* Rtt_TextureResourceBitmap.cpp in Sources */,
 				A4DD48071BB260B200FD988E /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				A4551F6E1BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp in Sources */,
-				A4551DEB1BAA17CF00FB3BDF /* Rtt_DisplayPath.cpp in Sources */,
 				A4DD48001BB260B200FD988E /* Rtt_PlatformInputAxis.cpp in Sources */,
 				F50CA3CA1C81115400746C98 /* Rtt_TextureResourceExternalAdapter.cpp in Sources */,
 			);

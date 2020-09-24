@@ -70,7 +70,6 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_Display.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayDefaults.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayObject.cpp" />
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_DisplayPath.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GradientPaint.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GradientPaintAdapter.cpp" />
     <ClCompile Include="..\..\..\librtt\Display\Rtt_GroupObject.cpp" />
@@ -306,7 +305,6 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_Display.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayDefaults.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayObject.h" />
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayPath.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_DisplayTypes.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_GradientPaint.h" />
     <ClInclude Include="..\..\..\librtt\Display\Rtt_GradientPaintAdapter.h" />

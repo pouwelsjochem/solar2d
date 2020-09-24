@@ -12,24 +12,50 @@
 
 #include "Core/Rtt_Matrix.h"
 #include "Core/Rtt_Geometry.h"
-#include "Display/Rtt_DisplayPath.h"
+#include "Display/Rtt_DisplayTypes.h"
+#include "Display/Rtt_ClosedPath.h"
 #include "Renderer/Rtt_RenderData.h"
 
 // ----------------------------------------------------------------------------
+struct lua_State;
 
 namespace Rtt
 {
 
 class Paint;
 class Renderer;
+class DisplayObject;
+class Geometry;
+class LuaUserdataProxy;
+class MLuaUserdataAdapter;
+class Matrix;
+class VertexCache;
+struct Rect;
+struct RenderData;
 
 // ----------------------------------------------------------------------------
 
-class ClosedPath : public DisplayPath
-{
-	Rtt_CLASS_NO_COPIES( ClosedPath )
+// NOTE: DisplayPath instances have no notion of transform
+// Only DisplayObjects have that concept!
+// 
+// Therefore the semantics of Translate in a Path are different than that of an
+// Object.  In a path, translate means to translate all cached vertices, or
+// if that's not possible, to invalidate any cached vertices.
+// In an object, translate means to update its transform and also translate
+// any paths it might own.
 
+class ClosedPath
+{
 	public:
+		typedef ClosedPath Self;
+		
+	public:
+		enum {
+			kVerticesMask = 0x1,
+			kTexVerticesMask = 0x2,
+			kIndicesMask = 0x4,
+		};
+
 		enum _Constants
 		{
 			kIsRectPath = 0x1,
@@ -62,12 +88,22 @@ class ClosedPath : public DisplayPath
 		virtual ~ClosedPath();
 
 	public:
-		virtual void Update( RenderData& data, const Matrix& srcToDstSpace );
+		static void UpdateGeometry(
+			Geometry& dst, 
+			const VertexCache& src, 
+			const Matrix& srcToDstSpace, 
+			U32 flags, 
+			Array<U16> *indices );
+
+	public:
 		virtual void Translate( Real dx, Real dy );
+		virtual void Update( RenderData& data, const Matrix& srcToDstSpace );
+		virtual void UpdateResources( Renderer& renderer ) const = 0;
 
 	public:
 		// Returns true if bounds was actually changed; returns false if no-op.
 		virtual bool SetSelfBounds( Real width, Real height );
+		virtual void GetSelfBounds( Rect& rect ) const = 0;
 
 	public:
 		void UpdatePaint( RenderData& data );
@@ -114,6 +150,16 @@ class ClosedPath : public DisplayPath
 		void SetValid( DirtyFlags flags ) { fDirtyFlags &= (~flags); }
 
 	public:
+		DisplayObject *GetObserver() const { return fObserver; }
+		void SetObserver( DisplayObject *newValue ) { fObserver = newValue; }
+
+	public:
+		const MLuaUserdataAdapter *GetAdapter() const { return fAdapter; }
+		void SetAdapter( const MLuaUserdataAdapter *newValue ) { fAdapter = newValue; }
+		void PushProxy( lua_State *L ) const;
+		void DetachProxy() { fAdapter = NULL; fProxy = NULL; }
+	
+	public:
 		// Use the PropertyMask constants
 		// Make properties only read-only to the public
 		bool IsProperty( Properties mask ) const { return (fProperties & mask) != 0; }
@@ -127,6 +173,10 @@ class ClosedPath : public DisplayPath
 		}
 
 	private:
+		DisplayObject *fObserver; // weak ptr
+		const MLuaUserdataAdapter *fAdapter; // weak ptr
+		mutable LuaUserdataProxy *fProxy;
+
 		Paint* fFill; // Only one fill color per path
 		Paint* fStroke;
 

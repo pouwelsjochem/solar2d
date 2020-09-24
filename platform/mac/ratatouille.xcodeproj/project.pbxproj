@@ -337,7 +337,6 @@
 		A432884D176A621200ACB6FF /* Rtt_Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EE176A621100ACB6FF /* Rtt_Display.cpp */; };
 		A432884F176A621200ACB6FF /* Rtt_DisplayDefaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F0176A621100ACB6FF /* Rtt_DisplayDefaults.cpp */; };
 		A4328851176A621200ACB6FF /* Rtt_DisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F2176A621100ACB6FF /* Rtt_DisplayObject.cpp */; settings = {COMPILER_FLAGS = "-frtti"; }; };
-		A4328853176A621200ACB6FF /* Rtt_DisplayPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F4176A621100ACB6FF /* Rtt_DisplayPath.cpp */; };
 		A4328858176A621200ACB6FF /* Rtt_FilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F9176A621100ACB6FF /* Rtt_FilePath.cpp */; };
 		A432885A176A621200ACB6FF /* Rtt_GroupObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287FB176A621100ACB6FF /* Rtt_GroupObject.cpp */; };
 		A432885C176A621200ACB6FF /* Rtt_HitTestObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287FD176A621100ACB6FF /* Rtt_HitTestObject.cpp */; };
@@ -546,7 +545,6 @@
 		C229DFFE1B32221B00D87A7C /* Rtt_Display.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287EF176A621100ACB6FF /* Rtt_Display.h */; };
 		C229DFFF1B32221B00D87A7C /* Rtt_DisplayDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F1176A621100ACB6FF /* Rtt_DisplayDefaults.h */; };
 		C229E0001B32221B00D87A7C /* Rtt_DisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F3176A621100ACB6FF /* Rtt_DisplayObject.h */; };
-		C229E0021B32221B00D87A7C /* Rtt_DisplayPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F5176A621100ACB6FF /* Rtt_DisplayPath.h */; };
 		C229E0031B32221B00D87A7C /* Rtt_DisplayTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F6176A621100ACB6FF /* Rtt_DisplayTypes.h */; };
 		C229E0061B32221B00D87A7C /* Rtt_Event.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6D612B73EE300D9B6A4 /* Rtt_Event.h */; };
 		C229E0071B32221B00D87A7C /* Rtt_FilePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287FA176A621100ACB6FF /* Rtt_FilePath.h */; };
@@ -704,7 +702,6 @@
 		C229E0D11B32221B00D87A7C /* Rtt_Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287EE176A621100ACB6FF /* Rtt_Display.cpp */; };
 		C229E0D21B32221B00D87A7C /* Rtt_DisplayDefaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F0176A621100ACB6FF /* Rtt_DisplayDefaults.cpp */; };
 		C229E0D31B32221B00D87A7C /* Rtt_DisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F2176A621100ACB6FF /* Rtt_DisplayObject.cpp */; settings = {COMPILER_FLAGS = "-frtti"; }; };
-		C229E0D51B32221B00D87A7C /* Rtt_DisplayPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F4176A621100ACB6FF /* Rtt_DisplayPath.cpp */; };
 		C229E0D91B32221B00D87A7C /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D512B73EE300D9B6A4 /* Rtt_Event.cpp */; };
 		C229E0DB1B32221B00D87A7C /* Rtt_FilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287F9176A621100ACB6FF /* Rtt_FilePath.cpp */; };
 		C229E0DC1B32221B00D87A7C /* Rtt_Fixed.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BC712B71BF20057F594 /* Rtt_Fixed.c */; };
@@ -1065,7 +1062,6 @@
 		C2DA965F1B46460F00DAF684 /* Rtt_SharedPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8B8178A25E700BE6805 /* Rtt_SharedPtr.h */; };
 		C2DA96601B46460F00DAF684 /* Rtt_Time.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BE112B71BF20057F594 /* Rtt_Time.h */; };
 		C2DA96621B46460F00DAF684 /* Rtt_ResourceHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BDB12B71BF20057F594 /* Rtt_ResourceHandle.h */; };
-		C2DA96631B46460F00DAF684 /* Rtt_DisplayPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F5176A621100ACB6FF /* Rtt_DisplayPath.h */; };
 		C2DA96641B46460F00DAF684 /* Rtt_ShapeAdapterCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B1C17727B580077B2BF /* Rtt_ShapeAdapterCircle.h */; };
 		C2DA96651B46460F00DAF684 /* CoronaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186141641DD6100A39286 /* CoronaLibrary.h */; };
 		C2DA96661B46460F00DAF684 /* Rtt_LuaCoronaBaseLib.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D3F20C1613C1A20095C5D6 /* Rtt_LuaCoronaBaseLib.h */; };
@@ -2198,8 +2194,6 @@
 		A43287F1176A621100ACB6FF /* Rtt_DisplayDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayDefaults.h; path = Display/Rtt_DisplayDefaults.h; sourceTree = "<group>"; };
 		A43287F2176A621100ACB6FF /* Rtt_DisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DisplayObject.cpp; path = Display/Rtt_DisplayObject.cpp; sourceTree = "<group>"; };
 		A43287F3176A621100ACB6FF /* Rtt_DisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayObject.h; path = Display/Rtt_DisplayObject.h; sourceTree = "<group>"; };
-		A43287F4176A621100ACB6FF /* Rtt_DisplayPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_DisplayPath.cpp; path = Display/Rtt_DisplayPath.cpp; sourceTree = "<group>"; };
-		A43287F5176A621100ACB6FF /* Rtt_DisplayPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayPath.h; path = Display/Rtt_DisplayPath.h; sourceTree = "<group>"; };
 		A43287F6176A621100ACB6FF /* Rtt_DisplayTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_DisplayTypes.h; path = Display/Rtt_DisplayTypes.h; sourceTree = "<group>"; };
 		A43287F9176A621100ACB6FF /* Rtt_FilePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_FilePath.cpp; sourceTree = "<group>"; };
 		A43287FA176A621100ACB6FF /* Rtt_FilePath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_FilePath.h; sourceTree = "<group>"; };
@@ -3547,8 +3541,6 @@
 				A43287F1176A621100ACB6FF /* Rtt_DisplayDefaults.h */,
 				A43287F2176A621100ACB6FF /* Rtt_DisplayObject.cpp */,
 				A43287F3176A621100ACB6FF /* Rtt_DisplayObject.h */,
-				A43287F4176A621100ACB6FF /* Rtt_DisplayPath.cpp */,
-				A43287F5176A621100ACB6FF /* Rtt_DisplayPath.h */,
 				A43287F6176A621100ACB6FF /* Rtt_DisplayTypes.h */,
 				A43287F9176A621100ACB6FF /* Rtt_FilePath.cpp */,
 				A43287FA176A621100ACB6FF /* Rtt_FilePath.h */,
@@ -4097,7 +4089,6 @@
 				C2DA961C1B46460F00DAF684 /* Rtt_Display.h in Headers */,
 				C2DA96581B46460F00DAF684 /* Rtt_DisplayDefaults.h in Headers */,
 				C2DA96121B46460F00DAF684 /* Rtt_DisplayObject.h in Headers */,
-				C2DA96631B46460F00DAF684 /* Rtt_DisplayPath.h in Headers */,
 				03D1C5621D70CCCD00DB02EE /* Rtt_OperationResult.h in Headers */,
 				C2DA96101B46460F00DAF684 /* Rtt_DisplayTypes.h in Headers */,
 				C2DA96281B46460F00DAF684 /* Rtt_Event.h in Headers */,
@@ -4336,7 +4327,6 @@
 				C229DFFE1B32221B00D87A7C /* Rtt_Display.h in Headers */,
 				C229DFFF1B32221B00D87A7C /* Rtt_DisplayDefaults.h in Headers */,
 				C229E0001B32221B00D87A7C /* Rtt_DisplayObject.h in Headers */,
-				C229E0021B32221B00D87A7C /* Rtt_DisplayPath.h in Headers */,
 				03D1C5611D70CCCC00DB02EE /* Rtt_OperationResult.h in Headers */,
 				C229E0031B32221B00D87A7C /* Rtt_DisplayTypes.h in Headers */,
 				C229E0061B32221B00D87A7C /* Rtt_Event.h in Headers */,
@@ -5162,7 +5152,6 @@
 				A432884D176A621200ACB6FF /* Rtt_Display.cpp in Sources */,
 				A432884F176A621200ACB6FF /* Rtt_DisplayDefaults.cpp in Sources */,
 				A4328851176A621200ACB6FF /* Rtt_DisplayObject.cpp in Sources */,
-				A4328853176A621200ACB6FF /* Rtt_DisplayPath.cpp in Sources */,
 				000CE78212B73EE300D9B6A4 /* Rtt_Event.cpp in Sources */,
 				A4328858176A621200ACB6FF /* Rtt_FilePath.cpp in Sources */,
 				00B73BF312B71BF20057F594 /* Rtt_Fixed.c in Sources */,
@@ -5593,7 +5582,6 @@
 				C229E0D11B32221B00D87A7C /* Rtt_Display.cpp in Sources */,
 				C229E0D21B32221B00D87A7C /* Rtt_DisplayDefaults.cpp in Sources */,
 				C229E0D31B32221B00D87A7C /* Rtt_DisplayObject.cpp in Sources */,
-				C229E0D51B32221B00D87A7C /* Rtt_DisplayPath.cpp in Sources */,
 				C229E0D91B32221B00D87A7C /* Rtt_Event.cpp in Sources */,
 				C229E0DB1B32221B00D87A7C /* Rtt_FilePath.cpp in Sources */,
 				C229E0DC1B32221B00D87A7C /* Rtt_Fixed.c in Sources */,

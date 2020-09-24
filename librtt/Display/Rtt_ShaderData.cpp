@@ -12,7 +12,7 @@
 #include "Display/Rtt_ShaderData.h"
 
 #include "Display/Rtt_DisplayObject.h"
-#include "Display/Rtt_DisplayPath.h"
+#include "Display/Rtt_ClosedPath.h"
 #include "Display/Rtt_Paint.h"
 #include "Display/Rtt_ShaderDataAdapter.h"
 #include "Display/Rtt_ShaderFactory.h"
