@@ -178,10 +178,6 @@ public class TouchTracker implements Cloneable {
 	 * @param phase The current touch phase such as BEGAN, MOVED, or ENDED. Cannot be null.
 	 */
 	public void updateWith(TouchPoint point, TouchPhase phase) {
-		updateWith(point, phase, -1.0f);
-	}
-
-	public void updateWith(TouchPoint point, TouchPhase phase) {
 		// Validate arguments.
 		if ((point == null) || (phase == null)) {
 			throw new NullPointerException();

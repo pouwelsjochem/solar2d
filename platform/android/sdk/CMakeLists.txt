@@ -34,5 +34,4 @@ add_subdirectory("${CORONA_ROOT}/external/JNLua/src/main/c" "${CMAKE_CURRENT_BIN
 add_subdirectory("${CORONA_ROOT}/external/mpg123-1.13.1/src/libmpg123" "${CMAKE_CURRENT_BINARY_DIR}/libmpg123_build/")
 add_subdirectory("${CORONA_ROOT}/external/ALmixer" "${CMAKE_CURRENT_BINARY_DIR}/libalmixer_build/")
 add_subdirectory("${CORONA_ROOT}/plugins/ads" "${CMAKE_CURRENT_BINARY_DIR}/libads_build/")
-add_subdirectory("${CORONA_ROOT}/plugins/licensing/android" "${CMAKE_CURRENT_BINARY_DIR}/liblicensing_build/")
 add_subdirectory("${CORONA_ROOT}/plugins/gameNetwork/android" "${CMAKE_CURRENT_BINARY_DIR}/libgameNetwork_build/")

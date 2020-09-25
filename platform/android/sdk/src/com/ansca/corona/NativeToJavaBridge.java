@@ -47,6 +47,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
+import android.view.DisplayCutout;
 
 import dalvik.system.DexClassLoader;
 
@@ -1082,6 +1083,12 @@ public class NativeToJavaBridge {
 				int contentWidth = JavaToNativeShim.getContentWidthInPixels(runtime);
 				result[ 0 ] = result[ 3 ] = (float)Math.floor(contentHeight * 0.05f);
 				result[ 1 ] = result[ 2 ] = (float)Math.floor(contentWidth * 0.05f);
+			} else if ( (android.os.Build.VERSION.SDK_INT >= 28) && CoronaEnvironment.getCoronaActivity().getGLView().getRootWindowInsets().getDisplayCutout() != null) {
+				DisplayCutout cutout = CoronaEnvironment.getCoronaActivity().getGLView().getRootWindowInsets().getDisplayCutout();
+				result[0] = cutout.getSafeInsetTop();
+				result[1] = cutout.getSafeInsetLeft();
+				result[2] = cutout.getSafeInsetRight();
+				result[3] = cutout.getSafeInsetBottom();
 			} else {
 				for (int i = 0; i < 4; i++) {
 					result [ i ] = 0;

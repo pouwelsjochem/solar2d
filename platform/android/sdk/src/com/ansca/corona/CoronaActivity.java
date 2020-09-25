@@ -33,9 +33,8 @@ import com.ansca.corona.permissions.PermissionsServices;
 import com.ansca.corona.permissions.PermissionState;
 import com.ansca.corona.permissions.RequestPermissionsResultData;
 import com.ansca.corona.storage.ResourceServices;
-import com.ansca.corona.graphics.opengl.GLSurfaceView;
 
-/** 
+/**
  * The activity window that hosts the Corona project. 
  * @see <a href="http://developer.android.com/reference/android/app/Activity.html">Activity</a>
  */
@@ -1390,7 +1389,7 @@ public class CoronaActivity extends Activity {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
 		// Fetch the handler that was assigned the given request code.
-		CoronaActivity.OnRequestPermissionsResultHandler handler = null;
+		CoronaActivity.OnRequestPermissionsResultHandler handler;
 		handler = (CoronaActivity.OnRequestPermissionsResultHandler)fRequestPermissionsResultHandlers.get(Integer.valueOf(requestCode));
 
 		// Do not continue if the given request code is unknown.
@@ -1677,40 +1676,6 @@ public class CoronaActivity extends Activity {
 			} else {
 				// TODO: We don't have a Lua listener to invoke and give the user an update on the status of permissions! Say something!
 			}
-		}
-	}
-
-
-	/**
-	 * Provides access to API Level 16 (Jelly Bean) features.
-	 * Should only be accessed if running on an operating system matching this API Level.
-	 * <p>
-	 * You cannot create instances of this class.
-	 * You are expected to call its static methods instead.
-	 */
-	private static class ApiLevel16 {
-		/** Constructor made private to prevent instances from being made. */
-		private ApiLevel16() {}
-
-		/**
-		 * Removes the given listener from the ViewTreeObserver.
-		 * @param viewTreeObserver The object to remove the listener from. Can be null.
-		 * @param listener The listener reference to be removed. Can be null.
-		 */
-		public static void removeOnGlobalLayoutListener(
-			android.view.ViewTreeObserver viewTreeObserver,
-			android.view.ViewTreeObserver.OnGlobalLayoutListener listener)
-		{
-			// Validate.
-			if ((viewTreeObserver == null) || (listener == null)) {
-				return;
-			}
-
-			// Remove the listener.
-			try {
-				viewTreeObserver.removeOnGlobalLayoutListener(listener);
-			}
-			catch (Exception ex) {}
 		}
 	}
 }

@@ -227,7 +227,7 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeInputDeviceS
  * Signature: (IIIIIJI)V
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeTouchEvent
-  (JNIEnv *, jclass, jlong, jint, jint, jint, jint, jint, jlong, jint, jfloat);
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jint, jint, jlong, jint);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
@@ -299,7 +299,7 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEv
  * Signature: (IIIIILI)V
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEventAdd
-  (JNIEnv *, jclass, jlong, jint, jint, jint, jint, jint, jlong, jint, jfloat);
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jint, jint, jlong, jint);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
