@@ -485,19 +485,7 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ShapeAdapterCircle.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_ShapeAdapterMesh.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorMesh.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_ShapeAdapterPolygon.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ShapeAdapterRect.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_ShapeAdapterRoundedRect.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_ShapeObject.cpp">
@@ -524,13 +512,7 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorCircle.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorPolygon.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorRect.cpp">
-      <Filter>librtt\Display</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Display\Rtt_TesselatorRoundedRect.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Input\Rtt_PlatformInputDeviceManager.cpp">
@@ -1195,19 +1177,7 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ShapeAdapterCircle.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_ShapeAdapterMesh.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorMesh.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_ShapeAdapterPolygon.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ShapeAdapterRect.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_ShapeAdapterRoundedRect.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_ShapeObject.h">
@@ -1234,13 +1204,7 @@
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorCircle.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorPolygon.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorRect.h">
-      <Filter>librtt\Display</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Display\Rtt_TesselatorRoundedRect.h">
       <Filter>librtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Input\Rtt_PlatformInputDeviceManager.h">

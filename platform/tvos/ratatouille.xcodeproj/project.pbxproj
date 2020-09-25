@@ -99,9 +99,7 @@
 		A4551E0D1BAA17CF00FB3BDF /* Rtt_ShaderTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DA41BAA17CF00FB3BDF /* Rtt_ShaderTypes.cpp */; };
 		A4551E0E1BAA17CF00FB3BDF /* Rtt_ShapeAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DA61BAA17CF00FB3BDF /* Rtt_ShapeAdapter.cpp */; };
 		A4551E0F1BAA17CF00FB3BDF /* Rtt_ShapeAdapterCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DA81BAA17CF00FB3BDF /* Rtt_ShapeAdapterCircle.cpp */; };
-		A4551E101BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DAA1BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.cpp */; };
 		A4551E111BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DAC1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.cpp */; };
-		A4551E121BAA17CF00FB3BDF /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DAE1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRoundedRect.cpp */; };
 		A4551E131BAA17CF00FB3BDF /* Rtt_ShapeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB01BAA17CF00FB3BDF /* Rtt_ShapeObject.cpp */; };
 		A4551E141BAA17CF00FB3BDF /* Rtt_ShapePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB21BAA17CF00FB3BDF /* Rtt_ShapePath.cpp */; };
 		A4551E151BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB41BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp */; };
@@ -110,9 +108,7 @@
 		A4551E191BAA17CF00FB3BDF /* Rtt_StageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */; };
 		A4551E1A1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */; };
 		A4551E1B1BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */; };
-		A4551E1D1BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC41BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp */; };
 		A4551E1E1BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC61BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp */; };
-		A4551E1F1BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC81BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp */; };
 		A4551E201BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DCA1BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp */; };
 		A4551E221BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DCE1BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp */; };
 		A4551E231BAA17CF00FB3BDF /* Rtt_TextureResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DD01BAA17CF00FB3BDF /* Rtt_TextureResource.cpp */; };
@@ -474,8 +470,6 @@
 		F517B79F1C6CEC520042F592 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C281C5722A500BE3194 /* NSString+Extensions.h */; };
 		F517B7A01C6CEC580042F592 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C291C5722A500BE3194 /* NSString+Extensions.m */; };
 		F51D55BA1C814021000CE085 /* CoronaGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F574F5FB1CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F574F5F71CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp */; };
-		F574F5FC1CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F574F5F91CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp */; };
 		F58011C01BE295070061E021 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD307A1BAA2B80006A0C97 /* Rtt_AppleTimer.mm */; };
 		F58011C11BE295070061E021 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */; };
 		F58011C21BE295070061E021 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B61BE294F40061E021 /* Rtt_AppleInputDeviceManager.mm */; };
@@ -907,12 +901,8 @@
 		A4551DA71BAA17CF00FB3BDF /* Rtt_ShapeAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapter.h; path = ../../librtt/Display/Rtt_ShapeAdapter.h; sourceTree = "<group>"; };
 		A4551DA81BAA17CF00FB3BDF /* Rtt_ShapeAdapterCircle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterCircle.cpp; path = ../../librtt/Display/Rtt_ShapeAdapterCircle.cpp; sourceTree = "<group>"; };
 		A4551DA91BAA17CF00FB3BDF /* Rtt_ShapeAdapterCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterCircle.h; path = ../../librtt/Display/Rtt_ShapeAdapterCircle.h; sourceTree = "<group>"; };
-		A4551DAA1BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterPolygon.cpp; path = ../../librtt/Display/Rtt_ShapeAdapterPolygon.cpp; sourceTree = "<group>"; };
-		A4551DAB1BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterPolygon.h; path = ../../librtt/Display/Rtt_ShapeAdapterPolygon.h; sourceTree = "<group>"; };
 		A4551DAC1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterRect.cpp; path = ../../librtt/Display/Rtt_ShapeAdapterRect.cpp; sourceTree = "<group>"; };
 		A4551DAD1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterRect.h; path = ../../librtt/Display/Rtt_ShapeAdapterRect.h; sourceTree = "<group>"; };
-		A4551DAE1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRoundedRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterRoundedRect.cpp; path = ../../librtt/Display/Rtt_ShapeAdapterRoundedRect.cpp; sourceTree = "<group>"; };
-		A4551DAF1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterRoundedRect.h; path = ../../librtt/Display/Rtt_ShapeAdapterRoundedRect.h; sourceTree = "<group>"; };
 		A4551DB01BAA17CF00FB3BDF /* Rtt_ShapeObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeObject.cpp; path = ../../librtt/Display/Rtt_ShapeObject.cpp; sourceTree = "<group>"; };
 		A4551DB11BAA17CF00FB3BDF /* Rtt_ShapeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeObject.h; path = ../../librtt/Display/Rtt_ShapeObject.h; sourceTree = "<group>"; };
 		A4551DB21BAA17CF00FB3BDF /* Rtt_ShapePath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapePath.cpp; path = ../../librtt/Display/Rtt_ShapePath.cpp; sourceTree = "<group>"; };
@@ -929,12 +919,8 @@
 		A4551DBF1BAA17CF00FB3BDF /* Rtt_Tesselator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Tesselator.h; path = ../../librtt/Display/Rtt_Tesselator.h; sourceTree = "<group>"; };
 		A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorCircle.cpp; path = ../../librtt/Display/Rtt_TesselatorCircle.cpp; sourceTree = "<group>"; };
 		A4551DC11BAA17CF00FB3BDF /* Rtt_TesselatorCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorCircle.h; path = ../../librtt/Display/Rtt_TesselatorCircle.h; sourceTree = "<group>"; };
-		A4551DC41BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorPolygon.cpp; path = ../../librtt/Display/Rtt_TesselatorPolygon.cpp; sourceTree = "<group>"; };
-		A4551DC51BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorPolygon.h; path = ../../librtt/Display/Rtt_TesselatorPolygon.h; sourceTree = "<group>"; };
 		A4551DC61BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorRect.cpp; path = ../../librtt/Display/Rtt_TesselatorRect.cpp; sourceTree = "<group>"; };
 		A4551DC71BAA17CF00FB3BDF /* Rtt_TesselatorRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRect.h; path = ../../librtt/Display/Rtt_TesselatorRect.h; sourceTree = "<group>"; };
-		A4551DC81BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorRoundedRect.cpp; path = ../../librtt/Display/Rtt_TesselatorRoundedRect.cpp; sourceTree = "<group>"; };
-		A4551DC91BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRoundedRect.h; path = ../../librtt/Display/Rtt_TesselatorRoundedRect.h; sourceTree = "<group>"; };
 		A4551DCA1BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorShape.cpp; path = ../../librtt/Display/Rtt_TesselatorShape.cpp; sourceTree = "<group>"; };
 		A4551DCB1BAA17CF00FB3BDF /* Rtt_TesselatorShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorShape.h; path = ../../librtt/Display/Rtt_TesselatorShape.h; sourceTree = "<group>"; };
 		A4551DCE1BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureFactory.cpp; path = ../../librtt/Display/Rtt_TextureFactory.cpp; sourceTree = "<group>"; };
@@ -1488,10 +1474,6 @@
 		F50CA3C61C81114800746C98 /* Rtt_TextureResourceExternalAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceExternalAdapter.h; path = ../../librtt/Display/Rtt_TextureResourceExternalAdapter.h; sourceTree = "<group>"; };
 		F50CA3CB1C8111A300746C98 /* CoronaGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaGraphics.cpp; path = ../../librtt/Corona/CoronaGraphics.cpp; sourceTree = "<group>"; };
 		F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGraphics.h; path = ../../librtt/Corona/CoronaGraphics.h; sourceTree = "<group>"; };
-		F574F5F71CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterMesh.cpp; path = ../../librtt/Display/Rtt_ShapeAdapterMesh.cpp; sourceTree = "<group>"; };
-		F574F5F81CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterMesh.h; path = ../../librtt/Display/Rtt_ShapeAdapterMesh.h; sourceTree = "<group>"; };
-		F574F5F91CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorMesh.cpp; path = ../../librtt/Display/Rtt_TesselatorMesh.cpp; sourceTree = "<group>"; };
-		F574F5FA1CE60D8300FF04F1 /* Rtt_TesselatorMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorMesh.h; path = ../../librtt/Display/Rtt_TesselatorMesh.h; sourceTree = "<group>"; };
 		F58011B31BE294F40061E021 /* Rtt_AppleInputDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInputDevice.h; path = ../apple/Rtt_AppleInputDevice.h; sourceTree = "<group>"; };
 		F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleInputDevice.mm; path = ../apple/Rtt_AppleInputDevice.mm; sourceTree = "<group>"; };
 		F58011B51BE294F40061E021 /* Rtt_AppleInputDeviceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInputDeviceManager.h; path = ../apple/Rtt_AppleInputDeviceManager.h; sourceTree = "<group>"; };
@@ -1837,14 +1819,8 @@
 				A4551DA71BAA17CF00FB3BDF /* Rtt_ShapeAdapter.h */,
 				A4551DA81BAA17CF00FB3BDF /* Rtt_ShapeAdapterCircle.cpp */,
 				A4551DA91BAA17CF00FB3BDF /* Rtt_ShapeAdapterCircle.h */,
-				A4551DAA1BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.cpp */,
-				F574F5F71CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp */,
-				F574F5F81CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.h */,
-				A4551DAB1BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.h */,
 				A4551DAC1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.cpp */,
 				A4551DAD1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRect.h */,
-				A4551DAE1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRoundedRect.cpp */,
-				A4551DAF1BAA17CF00FB3BDF /* Rtt_ShapeAdapterRoundedRect.h */,
 				A4551DB01BAA17CF00FB3BDF /* Rtt_ShapeObject.cpp */,
 				A4551DB11BAA17CF00FB3BDF /* Rtt_ShapeObject.h */,
 				A4551DB21BAA17CF00FB3BDF /* Rtt_ShapePath.cpp */,
@@ -1861,14 +1837,8 @@
 				A4551DBF1BAA17CF00FB3BDF /* Rtt_Tesselator.h */,
 				A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */,
 				A4551DC11BAA17CF00FB3BDF /* Rtt_TesselatorCircle.h */,
-				F574F5F91CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp */,
-				F574F5FA1CE60D8300FF04F1 /* Rtt_TesselatorMesh.h */,
-				A4551DC41BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp */,
-				A4551DC51BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.h */,
 				A4551DC61BAA17CF00FB3BDF /* Rtt_TesselatorRect.cpp */,
 				A4551DC71BAA17CF00FB3BDF /* Rtt_TesselatorRect.h */,
-				A4551DC81BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp */,
-				A4551DC91BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.h */,
 				A4551DCA1BAA17CF00FB3BDF /* Rtt_TesselatorShape.cpp */,
 				A4551DCB1BAA17CF00FB3BDF /* Rtt_TesselatorShape.h */,
 				A4551DCE1BAA17CF00FB3BDF /* Rtt_TextureFactory.cpp */,
@@ -3427,7 +3397,6 @@
 				03D1C5401D70CBC500DB02EE /* Rtt_PreferenceValue.cpp in Sources */,
 				A4DD474D1BB2490800FD988E /* kernel_filter_chromaKey_gl.lua in Sources */,
 				A4DD474E1BB2490800FD988E /* kernel_filter_color_gl.lua in Sources */,
-				F574F5FB1CE60D8300FF04F1 /* Rtt_ShapeAdapterMesh.cpp in Sources */,
 				A4DD474F1BB2490800FD988E /* kernel_filter_colorChannelOffset_gl.lua in Sources */,
 				A4DD47501BB2490800FD988E /* kernel_filter_colorMatrix_gl.lua in Sources */,
 				A4DD47511BB2490800FD988E /* kernel_filter_colorPolynomial_gl.lua in Sources */,
@@ -3487,7 +3456,6 @@
 				A4551E271BAA17CF00FB3BDF /* Rtt_TextureResourceCanvas.cpp in Sources */,
 				A4551D2F1BAA17BE00FB3BDF /* Rtt_Assert.c in Sources */,
 				A4551F3F1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */,
-				F574F5FC1CE60D8300FF04F1 /* Rtt_TesselatorMesh.cpp in Sources */,
 				A4551F791BAA182D00FB3BDF /* Rtt_Runtime.cpp in Sources */,
 				A4551D311BAA17BE00FB3BDF /* Rtt_AutoResource.cpp in Sources */,
 				A4551F731BAA182D00FB3BDF /* Rtt_PlatformTimer.cpp in Sources */,
@@ -3535,10 +3503,8 @@
 				A4551F561BAA182D00FB3BDF /* Rtt_LuaProxyVTable.cpp in Sources */,
 				A4551D2E1BAA17BE00FB3BDF /* Rtt_ArrayTupleStruct.cpp in Sources */,
 				A4551F4D1BAA182D00FB3BDF /* Rtt_LuaLibInAppStore.cpp in Sources */,
-				A4551E1D1BAA17CF00FB3BDF /* Rtt_TesselatorPolygon.cpp in Sources */,
 				A4551E291BAA17CF00FB3BDF /* Rtt_VertexCache.cpp in Sources */,
 				A4551F441BAA182D00FB3BDF /* Rtt_Lua.cpp in Sources */,
-				A4551E101BAA17CF00FB3BDF /* Rtt_ShapeAdapterPolygon.cpp in Sources */,
 				A4551F591BAA182D00FB3BDF /* Rtt_LuaTableIterator.cpp in Sources */,
 				A4551F411BAA182D00FB3BDF /* Rtt_FilePath.cpp in Sources */,
 				A4551F571BAA182D00FB3BDF /* Rtt_LuaResource.cpp in Sources */,
@@ -3584,7 +3550,6 @@
 				A4551F431BAA182D00FB3BDF /* Rtt_HitTestObject.cpp in Sources */,
 				A4551DF41BAA17CF00FB3BDF /* Rtt_ImageSheetPaint.cpp in Sources */,
 				A4551E0F1BAA17CF00FB3BDF /* Rtt_ShapeAdapterCircle.cpp in Sources */,
-				A4551E121BAA17CF00FB3BDF /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */,
 				A4551D341BAA17BE00FB3BDF /* Rtt_FixedMath.c in Sources */,
 				A4551E981BAA180C00FB3BDF /* CoronaLua.cpp in Sources */,
 				A4551E0B1BAA17CF00FB3BDF /* Rtt_ShaderProxy.cpp in Sources */,
@@ -3611,7 +3576,6 @@
 				A4551DE51BAA17CF00FB3BDF /* Rtt_CompositePaint.cpp in Sources */,
 				A4551D2D1BAA17BE00FB3BDF /* Rtt_ArrayTuple.cpp in Sources */,
 				A4551E0E1BAA17CF00FB3BDF /* Rtt_ShapeAdapter.cpp in Sources */,
-				A4551E1F1BAA17CF00FB3BDF /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				A4551DFE1BAA17CF00FB3BDF /* Rtt_PlatformBitmapTexture.cpp in Sources */,
 				A4551E261BAA17CF00FB3BDF /* Rtt_TextureResourceBitmapAdapter.cpp in Sources */,
 				A4DD47FF1BB260B200FD988E /* Rtt_InputAxisType.cpp in Sources */,

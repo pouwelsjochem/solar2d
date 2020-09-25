@@ -24,8 +24,6 @@
 #include "Display/Rtt_RectObject.h"
 #include "Display/Rtt_Scene.h"
 #include "Display/Rtt_ShaderFactory.h"
-#include "Display/Rtt_ShapeAdapterPolygon.h"
-#include "Display/Rtt_ShapeAdapterMesh.h"
 #include "Display/Rtt_ShapeObject.h"
 #include "Display/Rtt_ShapePath.h"
 #include "Display/Rtt_SnapshotObject.h"
@@ -119,16 +117,13 @@ class DisplayLibrary
 
 	public:
 		static int newCircle( lua_State *L );
-		static int newPolygon( lua_State *L );
 		static int newRect( lua_State *L );
-		static int newRoundedRect( lua_State *L );
 		static int newImage( lua_State *L );
 		static int newImageRect( lua_State *L );
 		static int newGroup( lua_State *L );
 		static int newContainer( lua_State *L );
 		static int newSnapshot( lua_State *L );
 		static int newSprite( lua_State *L );
-		static int newMesh( lua_State *L );
 		static int getDefault( lua_State *L );
 		static int setDefault( lua_State *L );
 		static int getCurrentStage( lua_State *L );
@@ -175,16 +170,13 @@ DisplayLibrary::Open( lua_State *L )
 	const luaL_Reg kVTable[] =
 	{
 		{ "newCircle", newCircle },
-		{ "newPolygon", newPolygon },
 		{ "newRect", newRect },
-		{ "newRoundedRect", newRoundedRect },
 		{ "newImage", newImage },
 		{ "newImageRect", newImageRect },
 		{ "newGroup", newGroup },
 		{ "newContainer", newContainer },
 		{ "newSnapshot", newSnapshot },
 		{ "newSprite", newSprite },
-		{ "newMesh", newMesh },
 		{ "getDefault", getDefault },
 		{ "setDefault", setDefault },
 		{ "getCurrentStage", getCurrentStage },
@@ -434,120 +426,6 @@ DisplayLibrary::newCircle( lua_State *L )
 
 	return result;
 }
-
-int
-DisplayLibrary::newPolygon( lua_State *L )
-{
-	int result = 0;
-
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-
-	int nextArg = 1;
-	GroupObject *parent = GetParent( L, nextArg );
-
-	Real x = luaL_checkreal( L, nextArg++ );
-	Real y = luaL_checkreal( L, nextArg++ );
-
-	ShapePath *path = ShapePath::NewPolygon( display.GetAllocator() );
-
-	TesselatorPolygon *tesselator = (TesselatorPolygon *)path->GetTesselator();
-	if ( ShapeAdapterPolygon::InitializeContour( L, nextArg, * tesselator ) )
-	{
-		ShapeObject *v = Rtt_NEW( display.GetAllocator(), ShapeObject( path ) );
-
-		result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
-		AssignDefaultFillColor( display, * v );
-		v->Translate( x, y );
-	}
-	else
-	{
-		luaL_argerror( L, nextArg, "ERROR: display.newPolygon() expected an array of vertices" );
-		Rtt_DELETE( path );
-	}
-
-	return result;
-}
-
-	
-int
-DisplayLibrary::newMesh( lua_State *L )
-{
-	int result = 0;
-	
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-	
-	int nextArg = 1;
-
-	GroupObject *parent = NULL;
-	Real x=0,y=0;
-	
-	if ( lua_istable( L, nextArg ) && LuaProxy::IsProxy(L, nextArg))
-	{
-		parent = GetParent( L, nextArg );
-	}
-	
-	if(lua_type(L, nextArg) == LUA_TNUMBER && lua_type(L, nextArg+1) == LUA_TNUMBER)
-	{
-		x = lua_tonumber( L, nextArg++ );
-		y = lua_tonumber( L, nextArg++ );
-	}
-	
-	if(lua_istable( L, nextArg ))
-	{
-		lua_getfield( L, -1, "parent" );
-		if ( lua_istable( L, -1) )
-		{
-			int parentArg = Lua::Normalize( L, -1 );
-			parent = GetParent( L, parentArg );
-		}
-		lua_pop( L, 1 );
-		
-		lua_getfield( L, -1, "x" );
-		if (lua_type( L, -1 ) == LUA_TNUMBER)
-		{
-			x = lua_tonumber( L, -1 );
-		}
-		lua_pop( L, 1 );
-		
-		lua_getfield( L, -1, "y" );
-		if (lua_type( L, -1 ) == LUA_TNUMBER)
-		{
-			y = lua_tonumber( L, -1 );
-		}
-		lua_pop( L, 1 );
-	}
-	else
-	{
-		CoronaLuaError( L, "display.newMesh() bad argument #%d: table expected but got %s",
-					   nextArg, lua_typename( L, lua_type( L, nextArg ) ));
-		return result;
-	}
-	
-	ShapePath *path = ShapePath::NewMesh( display.GetAllocator(), ShapeAdapterMesh::GetMeshMode( L, nextArg) );
-	
-	TesselatorMesh *tesselator = (TesselatorMesh *)path->GetTesselator();
-	if ( ShapeAdapterMesh::InitializeMesh( L, nextArg, * tesselator ) )
-	{
-		ShapeObject *v = Rtt_NEW( display.GetAllocator(), ShapeObject( path ) );
-		
-		if (tesselator->GetFillPrimitive() == Geometry::kIndexedTriangles)
-		{
-			path->Invalidate( ShapePath::kFillSourceIndices );
-		}
-		
-		result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
-		AssignDefaultFillColor( display, *v );
-		v->Translate( x, y );
-	}
-	else
-	{
-		Rtt_DELETE( path );
-	}
-	
-	return result;
-}
 	
 int
 DisplayLibrary::newRect( lua_State *L )
@@ -564,32 +442,6 @@ DisplayLibrary::newRect( lua_State *L )
 	Real h = luaL_checkreal( L, nextArg++ );
 
 	ShapeObject* v = RectObject::NewRect( display.GetAllocator(), w, h );
-	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
-
-	v->Translate( x, y );
-	AssignDefaultFillColor( display, * v );
-
-	return result;
-}
-
-int
-DisplayLibrary::newRoundedRect( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-
-	int nextArg = 1;
-	GroupObject *parent = GetParent( L, nextArg );
-
-	Real x = luaL_checkreal( L, nextArg++ );
-	Real y = luaL_checkreal( L, nextArg++ );
-	Real w = luaL_checkreal( L, nextArg++ );
-	Real h = luaL_checkreal( L, nextArg++ );
-	Real r = luaL_checkreal( L, nextArg++ );
-
-	ShapePath *path = ShapePath::NewRoundedRect( display.GetAllocator(), w, h, r );
-	ShapeObject *v = Rtt_NEW( display.GetAllocator(), ShapeObject( path ) );
-
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
 
 	v->Translate( x, y );

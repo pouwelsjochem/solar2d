@@ -33,10 +33,7 @@ ShapeAdapter::Constant()
 // ----------------------------------------------------------------------------
 
 static const char kCircleString[] = "circle";
-static const char kPolygonString[] = "polygon";
 static const char kRectString[] = "rect";
-static const char kRoundedRectString[] = "roundedRect";
-static const char kMeshString[] = "mesh";
 
 const char *
 ShapeAdapter::StringForType( Type t )
@@ -48,17 +45,8 @@ ShapeAdapter::StringForType( Type t )
 		case kCircleType:
 			result = kCircleString;
 			break;
-		case kPolygonType:
-			result = kPolygonString;
-			break;
 		case kRectType:
 			result = kRectString;
-			break;
-		case kRoundedRectType:
-			result = kRoundedRectString;
-			break;
-		case kMeshType:
-			result = kMeshString;
 			break;
 		default:
 			Rtt_ASSERT_NOT_REACHED();

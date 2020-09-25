@@ -44,12 +44,8 @@ class Tesselator
 		enum eType
 		{
 			kType_None,
-			kType_Line,
 			kType_Circle,
-			kType_Polygon,
 			kType_Rect,
-			kType_RoundedRect,
-			kType_Mesh,
 
 			kType_Count
 		};
@@ -78,7 +74,6 @@ class Tesselator
 		};
 
 		void AppendCircle( ArrayVertex2& vertices, Real radius, U32 options );
-		void AppendCircleQuadrants( ArrayVertex2& vertices, Real radius, U32 options );
 
 		static void AppendRect( ArrayVertex2& vertices, Real halfW, Real halfH );
 

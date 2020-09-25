@@ -546,10 +546,7 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ShaderTypes.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ShapeAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ShapeAdapterCircle.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_ShapeAdapterMesh.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_ShapeAdapterPolygon.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ShapeAdapterRect.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_ShapeAdapterRoundedRect.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ShapeObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_ShapePath.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_SnapshotObject.cpp \
@@ -558,10 +555,7 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_StageObject.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_Tesselator.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorCircle.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorPolygon.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorMesh.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorRect.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorRoundedRect.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TesselatorShape.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureFactory.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResource.cpp \

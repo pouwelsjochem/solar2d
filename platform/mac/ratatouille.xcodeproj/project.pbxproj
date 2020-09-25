@@ -376,8 +376,6 @@
 		A4328893176A621200ACB6FF /* Rtt_Tesselator.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328834176A621200ACB6FF /* Rtt_Tesselator.h */; };
 		A4328894176A621200ACB6FF /* Rtt_TesselatorCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328835176A621200ACB6FF /* Rtt_TesselatorCircle.cpp */; };
 		A4328895176A621200ACB6FF /* Rtt_TesselatorCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328836176A621200ACB6FF /* Rtt_TesselatorCircle.h */; };
-		A4328898176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328839176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp */; };
-		A4328899176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */; };
 		A432889A176A621200ACB6FF /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */; };
 		A432889B176A621200ACB6FF /* Rtt_TesselatorShape.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */; };
 		A432889E176A621200ACB6FF /* Rtt_VertexCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883F176A621200ACB6FF /* Rtt_VertexCache.cpp */; };
@@ -409,8 +407,6 @@
 		A45EBE1418E6465A0010C678 /* Rtt_WebAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A45EBE1218E6465A0010C678 /* Rtt_WebAppPackager.cpp */; };
 		A46AC88017820BEB00BE6805 /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */; };
 		A46AC88C17820CA400BE6805 /* Rtt_ShapeAdapterRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */; };
-		A46AC8A6178389CD00BE6805 /* Rtt_TesselatorPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8A4178389B200BE6805 /* Rtt_TesselatorPolygon.cpp */; };
-		A46AC8AC1783F18F00BE6805 /* Rtt_ShapeAdapterPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8AA1783F17100BE6805 /* Rtt_ShapeAdapterPolygon.cpp */; };
 		A46AC8C5178A260300BE6805 /* Rtt_UseCount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8BA178A25ED00BE6805 /* Rtt_UseCount.cpp */; };
 		A46AC8C7178A260300BE6805 /* Rtt_SharedCount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8BB178A25F100BE6805 /* Rtt_SharedCount.cpp */; };
 		A46AC8C9178A260300BE6805 /* Rtt_WeakCount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8BC178A25F300BE6805 /* Rtt_WeakCount.cpp */; };
@@ -469,7 +465,6 @@
 		A4B66B1917726CB80077B2BF /* Rtt_LuaUserdataProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1717726CA90077B2BF /* Rtt_LuaUserdataProxy.cpp */; };
 		A4B66B1D17727B620077B2BF /* Rtt_ShapeAdapterCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1B17727B4F0077B2BF /* Rtt_ShapeAdapterCircle.cpp */; };
 		A4B66B21177287450077B2BF /* Rtt_ShapeAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1F177287350077B2BF /* Rtt_ShapeAdapter.cpp */; };
-		A4B66B2517728D070077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B2317728CF10077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp */; };
 		A4B71B9413F4BDC7009428CF /* Rtt_LuaResourceOwner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */; };
 		A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A4C9CB2C17BAE2480071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */; };
@@ -633,9 +628,7 @@
 		C229E0791B32221B00D87A7C /* Rtt_ShaderName.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328824176A621100ACB6FF /* Rtt_ShaderName.h */; };
 		C229E07A1B32221B00D87A7C /* Rtt_ShapeAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B201772873A0077B2BF /* Rtt_ShapeAdapter.h */; };
 		C229E07B1B32221B00D87A7C /* Rtt_ShapeAdapterCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B1C17727B580077B2BF /* Rtt_ShapeAdapterCircle.h */; };
-		C229E07C1B32221B00D87A7C /* Rtt_ShapeAdapterPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8AB1783F17D00BE6805 /* Rtt_ShapeAdapterPolygon.h */; };
 		C229E07D1B32221B00D87A7C /* Rtt_ShapeAdapterRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC88B17820C9A00BE6805 /* Rtt_ShapeAdapterRect.h */; };
-		C229E07E1B32221B00D87A7C /* Rtt_ShapeAdapterRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B2417728CF90077B2BF /* Rtt_ShapeAdapterRoundedRect.h */; };
 		C229E07F1B32221B00D87A7C /* Rtt_ShapeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328826176A621100ACB6FF /* Rtt_ShapeObject.h */; };
 		C229E0801B32221B00D87A7C /* Rtt_ShapePath.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328828176A621100ACB6FF /* Rtt_ShapePath.h */; };
 		C229E0811B32221B00D87A7C /* Rtt_SharedCount.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8BF178A25FD00BE6805 /* Rtt_SharedCount.h */; };
@@ -649,9 +642,7 @@
 		C229E08A1B32221B00D87A7C /* Rtt_StringHash.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BDF12B71BF20057F594 /* Rtt_StringHash.h */; };
 		C229E08C1B32221B00D87A7C /* Rtt_Tesselator.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328834176A621200ACB6FF /* Rtt_Tesselator.h */; };
 		C229E08D1B32221B00D87A7C /* Rtt_TesselatorCircle.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328836176A621200ACB6FF /* Rtt_TesselatorCircle.h */; };
-		C229E08F1B32221B00D87A7C /* Rtt_TesselatorPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8A5178389C000BE6805 /* Rtt_TesselatorPolygon.h */; };
 		C229E0901B32221B00D87A7C /* Rtt_TesselatorRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC87F17820BE000BE6805 /* Rtt_TesselatorRect.h */; };
-		C229E0911B32221B00D87A7C /* Rtt_TesselatorRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */; };
 		C229E0921B32221B00D87A7C /* Rtt_TesselatorShape.h in Headers */ = {isa = PBXBuildFile; fileRef = A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */; };
 		C229E0951B32221B00D87A7C /* Rtt_TextureFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8D5178A269F00BE6805 /* Rtt_TextureFactory.h */; };
 		C229E0961B32221B00D87A7C /* Rtt_TextureResource.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8D6178A26C200BE6805 /* Rtt_TextureResource.h */; };
@@ -791,9 +782,7 @@
 		C229E14E1B32221B00D87A7C /* Rtt_ShaderTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 072020F817C58EBB00B6D424 /* Rtt_ShaderTypes.cpp */; };
 		C229E14F1B32221B00D87A7C /* Rtt_ShapeAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1F177287350077B2BF /* Rtt_ShapeAdapter.cpp */; };
 		C229E1501B32221B00D87A7C /* Rtt_ShapeAdapterCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1B17727B4F0077B2BF /* Rtt_ShapeAdapterCircle.cpp */; };
-		C229E1511B32221B00D87A7C /* Rtt_ShapeAdapterPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8AA1783F17100BE6805 /* Rtt_ShapeAdapterPolygon.cpp */; };
 		C229E1521B32221B00D87A7C /* Rtt_ShapeAdapterRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */; };
-		C229E1531B32221B00D87A7C /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B2317728CF10077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp */; };
 		C229E1541B32221B00D87A7C /* Rtt_ShapeObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328825176A621100ACB6FF /* Rtt_ShapeObject.cpp */; };
 		C229E1551B32221B00D87A7C /* Rtt_ShapePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328827176A621100ACB6FF /* Rtt_ShapePath.cpp */; };
 		C229E1561B32221B00D87A7C /* Rtt_SharedCount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8BB178A25F100BE6805 /* Rtt_SharedCount.cpp */; };
@@ -805,9 +794,7 @@
 		C229E15D1B32221B00D87A7C /* Rtt_StringHash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73BDE12B71BF20057F594 /* Rtt_StringHash.cpp */; };
 		C229E15F1B32221B00D87A7C /* Rtt_Tesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328833176A621200ACB6FF /* Rtt_Tesselator.cpp */; };
 		C229E1601B32221B00D87A7C /* Rtt_TesselatorCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328835176A621200ACB6FF /* Rtt_TesselatorCircle.cpp */; };
-		C229E1621B32221B00D87A7C /* Rtt_TesselatorPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8A4178389B200BE6805 /* Rtt_TesselatorPolygon.cpp */; };
 		C229E1631B32221B00D87A7C /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */; };
-		C229E1641B32221B00D87A7C /* Rtt_TesselatorRoundedRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328839176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp */; };
 		C229E1651B32221B00D87A7C /* Rtt_TesselatorShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */; };
 		C229E1681B32221B00D87A7C /* Rtt_TextureFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8D4178A268B00BE6805 /* Rtt_TextureFactory.cpp */; };
 		C229E1691B32221B00D87A7C /* Rtt_TextureResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8D3178A267D00BE6805 /* Rtt_TextureResource.cpp */; };
@@ -1011,7 +998,6 @@
 		C2DA96281B46460F00DAF684 /* Rtt_Event.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6D612B73EE300D9B6A4 /* Rtt_Event.h */; };
 		C2DA96291B46460F00DAF684 /* Rtt_Real.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD712B71BF20057F594 /* Rtt_Real.h */; };
 		C2DA962B1B46460F00DAF684 /* Rtt_Archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6BB12B73EE300D9B6A4 /* Rtt_Archive.h */; };
-		C2DA962C1B46460F00DAF684 /* Rtt_ShapeAdapterPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8AB1783F17D00BE6805 /* Rtt_ShapeAdapterPolygon.h */; };
 		C2DA962D1B46460F00DAF684 /* Rtt_RuntimeDelegatePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A48DA96B1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.h */; };
 		C2DA962F1B46460F00DAF684 /* Rtt_Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BE312B71BF20057F594 /* Rtt_Types.h */; };
 		C2DA96311B46460F00DAF684 /* Rtt_Geometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BCD12B71BF20057F594 /* Rtt_Geometry.h */; };
@@ -1037,7 +1023,6 @@
 		C2DA96461B46460F00DAF684 /* Rtt_WeakPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8B9178A25EA00BE6805 /* Rtt_WeakPtr.h */; };
 		C2DA96471B46460F00DAF684 /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 006DC6D613678511008DDB3D /* Reachability.h */; };
 		C2DA96491B46460F00DAF684 /* Rtt_MRuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */; };
-		C2DA964A1B46460F00DAF684 /* Rtt_ShapeAdapterRoundedRect.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B2417728CF90077B2BF /* Rtt_ShapeAdapterRoundedRect.h */; };
 		C2DA964B1B46460F00DAF684 /* Rtt_ImageFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328800176A621100ACB6FF /* Rtt_ImageFrame.h */; };
 		C2DA964C1B46460F00DAF684 /* Rtt_CompositePaint.h in Headers */ = {isa = PBXBuildFile; fileRef = A492760B17B98BAE00DAD62A /* Rtt_CompositePaint.h */; };
 		C2DA964E1B46460F00DAF684 /* Rtt_LuaResourceOwner.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B71B9213F4BDC2009428CF /* Rtt_LuaResourceOwner.h */; };
@@ -1067,7 +1052,6 @@
 		C2DA966B1B46460F00DAF684 /* CoronaLog.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186171641DD6100A39286 /* CoronaLog.h */; };
 		C2DA966C1B46460F00DAF684 /* Rtt_VertexCache.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328840176A621200ACB6FF /* Rtt_VertexCache.h */; };
 		C2DA966D1B46460F00DAF684 /* Rtt_RuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AB447C143E575D00607F77 /* Rtt_RuntimeDelegate.h */; };
-		C2DA966E1B46460F00DAF684 /* Rtt_TesselatorPolygon.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8A5178389C000BE6805 /* Rtt_TesselatorPolygon.h */; };
 		C2DA96701B46460F00DAF684 /* CoronaMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = A491861A1641DD6100A39286 /* CoronaMacros.h */; };
 		C2DA96711B46460F00DAF684 /* CoronaVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = A40C523F16F847EA00AE2ECF /* CoronaVersion.h */; };
 		C2DA96731B46460F00DAF684 /* Rtt_New.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD612B71BF20057F594 /* Rtt_New.h */; };
@@ -1199,14 +1183,6 @@
 		F5B4D0F1246979CC00D32035 /* Rtt_MacDialogController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B4D0E9246979CC00D32035 /* Rtt_MacDialogController.mm */; };
 		F5B5A7521B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B5A7511B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h */; };
 		F5B5A7531B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F5B5A7511B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h */; };
-		F5C40DC21CB68788004F7789 /* Rtt_TesselatorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C40DB81CB6876F004F7789 /* Rtt_TesselatorMesh.cpp */; };
-		F5C40DC31CB68788004F7789 /* Rtt_TesselatorMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C40DB91CB6876F004F7789 /* Rtt_TesselatorMesh.h */; };
-		F5C40DC41CB68789004F7789 /* Rtt_TesselatorMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C40DB81CB6876F004F7789 /* Rtt_TesselatorMesh.cpp */; };
-		F5C40DC51CB68789004F7789 /* Rtt_TesselatorMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C40DB91CB6876F004F7789 /* Rtt_TesselatorMesh.h */; };
-		F5C40DC81CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C40DC61CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp */; };
-		F5C40DC91CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C40DC61CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp */; };
-		F5C40DCA1CB68830004F7789 /* Rtt_ShapeAdapterMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C40DC71CB68830004F7789 /* Rtt_ShapeAdapterMesh.h */; };
-		F5C40DCB1CB68830004F7789 /* Rtt_ShapeAdapterMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C40DC71CB68830004F7789 /* Rtt_ShapeAdapterMesh.h */; };
 		F5C757B21C7538A4004A3604 /* CoronaGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C757B01C7538A4004A3604 /* CoronaGraphics.cpp */; };
 		F5C757B31C7538A4004A3604 /* CoronaGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5C757B01C7538A4004A3604 /* CoronaGraphics.cpp */; };
 		F5C757B41C7538A4004A3604 /* CoronaGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = F5C757B11C7538A4004A3604 /* CoronaGraphics.h */; };
@@ -2245,8 +2221,6 @@
 		A4328834176A621200ACB6FF /* Rtt_Tesselator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Tesselator.h; path = Display/Rtt_Tesselator.h; sourceTree = "<group>"; };
 		A4328835176A621200ACB6FF /* Rtt_TesselatorCircle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorCircle.cpp; path = Display/Rtt_TesselatorCircle.cpp; sourceTree = "<group>"; };
 		A4328836176A621200ACB6FF /* Rtt_TesselatorCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorCircle.h; path = Display/Rtt_TesselatorCircle.h; sourceTree = "<group>"; };
-		A4328839176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorRoundedRect.cpp; path = Display/Rtt_TesselatorRoundedRect.cpp; sourceTree = "<group>"; };
-		A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRoundedRect.h; path = Display/Rtt_TesselatorRoundedRect.h; sourceTree = "<group>"; };
 		A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorShape.cpp; path = Display/Rtt_TesselatorShape.cpp; sourceTree = "<group>"; };
 		A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorShape.h; path = Display/Rtt_TesselatorShape.h; sourceTree = "<group>"; };
 		A432883F176A621200ACB6FF /* Rtt_VertexCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_VertexCache.cpp; path = Display/Rtt_VertexCache.cpp; sourceTree = "<group>"; };
@@ -2283,10 +2257,6 @@
 		A46AC87F17820BE000BE6805 /* Rtt_TesselatorRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRect.h; path = Display/Rtt_TesselatorRect.h; sourceTree = "<group>"; };
 		A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterRect.cpp; path = Display/Rtt_ShapeAdapterRect.cpp; sourceTree = "<group>"; };
 		A46AC88B17820C9A00BE6805 /* Rtt_ShapeAdapterRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterRect.h; path = Display/Rtt_ShapeAdapterRect.h; sourceTree = "<group>"; };
-		A46AC8A4178389B200BE6805 /* Rtt_TesselatorPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorPolygon.cpp; path = Display/Rtt_TesselatorPolygon.cpp; sourceTree = "<group>"; };
-		A46AC8A5178389C000BE6805 /* Rtt_TesselatorPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorPolygon.h; path = Display/Rtt_TesselatorPolygon.h; sourceTree = "<group>"; };
-		A46AC8AA1783F17100BE6805 /* Rtt_ShapeAdapterPolygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterPolygon.cpp; path = Display/Rtt_ShapeAdapterPolygon.cpp; sourceTree = "<group>"; };
-		A46AC8AB1783F17D00BE6805 /* Rtt_ShapeAdapterPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterPolygon.h; path = Display/Rtt_ShapeAdapterPolygon.h; sourceTree = "<group>"; };
 		A46AC8B8178A25E700BE6805 /* Rtt_SharedPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SharedPtr.h; sourceTree = "<group>"; };
 		A46AC8B9178A25EA00BE6805 /* Rtt_WeakPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_WeakPtr.h; sourceTree = "<group>"; };
 		A46AC8BA178A25ED00BE6805 /* Rtt_UseCount.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_UseCount.cpp; sourceTree = "<group>"; };
@@ -2382,8 +2352,6 @@
 		A4B66B1C17727B580077B2BF /* Rtt_ShapeAdapterCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterCircle.h; path = Display/Rtt_ShapeAdapterCircle.h; sourceTree = "<group>"; };
 		A4B66B1F177287350077B2BF /* Rtt_ShapeAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapter.cpp; path = Display/Rtt_ShapeAdapter.cpp; sourceTree = "<group>"; };
 		A4B66B201772873A0077B2BF /* Rtt_ShapeAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapter.h; path = Display/Rtt_ShapeAdapter.h; sourceTree = "<group>"; };
-		A4B66B2317728CF10077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterRoundedRect.cpp; path = Display/Rtt_ShapeAdapterRoundedRect.cpp; sourceTree = "<group>"; };
-		A4B66B2417728CF90077B2BF /* Rtt_ShapeAdapterRoundedRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterRoundedRect.h; path = Display/Rtt_ShapeAdapterRoundedRect.h; sourceTree = "<group>"; };
 		A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaResourceOwner.cpp; sourceTree = "<group>"; };
 		A4B71B9213F4BDC2009428CF /* Rtt_LuaResourceOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaResourceOwner.h; sourceTree = "<group>"; };
 		A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_marchingAnts_gl.lua; path = Display/Shader/kernel_generator_marchingAnts_gl.lua; sourceTree = "<group>"; };
@@ -2507,10 +2475,6 @@
 		F5B4D0F0246979CC00D32035 /* Rtt_MacDialogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacDialogController.h; sourceTree = "<group>"; };
 		F5B5A7511B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceBitmapAdapter.h; path = Display/Rtt_TextureResourceBitmapAdapter.h; sourceTree = "<group>"; };
 		F5C39D7C23EBCC280058DD5E /* CoronaSimulator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoronaSimulator.entitlements; sourceTree = "<group>"; };
-		F5C40DB81CB6876F004F7789 /* Rtt_TesselatorMesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorMesh.cpp; path = Display/Rtt_TesselatorMesh.cpp; sourceTree = "<group>"; };
-		F5C40DB91CB6876F004F7789 /* Rtt_TesselatorMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorMesh.h; path = Display/Rtt_TesselatorMesh.h; sourceTree = "<group>"; };
-		F5C40DC61CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterMesh.cpp; path = Display/Rtt_ShapeAdapterMesh.cpp; sourceTree = "<group>"; };
-		F5C40DC71CB68830004F7789 /* Rtt_ShapeAdapterMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ShapeAdapterMesh.h; path = Display/Rtt_ShapeAdapterMesh.h; sourceTree = "<group>"; };
 		F5C757B01C7538A4004A3604 /* CoronaGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaGraphics.cpp; path = Corona/CoronaGraphics.cpp; sourceTree = "<group>"; };
 		F5C757B11C7538A4004A3604 /* CoronaGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGraphics.h; path = Corona/CoronaGraphics.h; sourceTree = "<group>"; };
 		F5F053F620374B99007E92B0 /* SimpleMutex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SimpleMutex.c; sourceTree = "<group>"; };
@@ -3598,14 +3562,8 @@
 				A4B66B201772873A0077B2BF /* Rtt_ShapeAdapter.h */,
 				A4B66B1B17727B4F0077B2BF /* Rtt_ShapeAdapterCircle.cpp */,
 				A4B66B1C17727B580077B2BF /* Rtt_ShapeAdapterCircle.h */,
-				F5C40DC61CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp */,
-				F5C40DC71CB68830004F7789 /* Rtt_ShapeAdapterMesh.h */,
-				A46AC8AA1783F17100BE6805 /* Rtt_ShapeAdapterPolygon.cpp */,
-				A46AC8AB1783F17D00BE6805 /* Rtt_ShapeAdapterPolygon.h */,
 				A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */,
 				A46AC88B17820C9A00BE6805 /* Rtt_ShapeAdapterRect.h */,
-				A4B66B2317728CF10077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp */,
-				A4B66B2417728CF90077B2BF /* Rtt_ShapeAdapterRoundedRect.h */,
 				A4328825176A621100ACB6FF /* Rtt_ShapeObject.cpp */,
 				A4328826176A621100ACB6FF /* Rtt_ShapeObject.h */,
 				A4328827176A621100ACB6FF /* Rtt_ShapePath.cpp */,
@@ -3622,14 +3580,8 @@
 				A4328834176A621200ACB6FF /* Rtt_Tesselator.h */,
 				A4328835176A621200ACB6FF /* Rtt_TesselatorCircle.cpp */,
 				A4328836176A621200ACB6FF /* Rtt_TesselatorCircle.h */,
-				F5C40DB81CB6876F004F7789 /* Rtt_TesselatorMesh.cpp */,
-				F5C40DB91CB6876F004F7789 /* Rtt_TesselatorMesh.h */,
-				A46AC8A4178389B200BE6805 /* Rtt_TesselatorPolygon.cpp */,
-				A46AC8A5178389C000BE6805 /* Rtt_TesselatorPolygon.h */,
 				A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */,
 				A46AC87F17820BE000BE6805 /* Rtt_TesselatorRect.h */,
-				A4328839176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp */,
-				A432883A176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h */,
 				A432883B176A621200ACB6FF /* Rtt_TesselatorShape.cpp */,
 				A432883C176A621200ACB6FF /* Rtt_TesselatorShape.h */,
 				A46AC8D4178A268B00BE6805 /* Rtt_TextureFactory.cpp */,
@@ -4115,11 +4067,9 @@
 				000CE79712B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h in Headers */,
 				C2DA96371B46460F00DAF684 /* Rtt_LuaLibDisplay.h in Headers */,
 				000CE79B12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h in Headers */,
-				F5C40DC31CB68788004F7789 /* Rtt_TesselatorMesh.h in Headers */,
 				C2DA96321B46460F00DAF684 /* Rtt_LuaLibGraphics.h in Headers */,
 				C2DA96381B46460F00DAF684 /* Rtt_LuaLibInAppStore.h in Headers */,
 				000CE7A112B73EE300D9B6A4 /* Rtt_LuaLibNative.h in Headers */,
-				F5C40DCA1CB68830004F7789 /* Rtt_ShapeAdapterMesh.h in Headers */,
 				000CE7A312B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.h in Headers */,
 				C2DA96671B46460F00DAF684 /* Rtt_LuaLibSQLite.h in Headers */,
 				000CE7AF12B73EE300D9B6A4 /* Rtt_LuaLibSystem.h in Headers */,
@@ -4187,9 +4137,7 @@
 				F50F51BA1B700C04006FEF92 /* Rtt_TextureResourceBitmap.h in Headers */,
 				C2DA96751B46460F00DAF684 /* Rtt_ShapeAdapter.h in Headers */,
 				C2DA96641B46460F00DAF684 /* Rtt_ShapeAdapterCircle.h in Headers */,
-				C2DA962C1B46460F00DAF684 /* Rtt_ShapeAdapterPolygon.h in Headers */,
 				C2DA96351B46460F00DAF684 /* Rtt_ShapeAdapterRect.h in Headers */,
-				C2DA964A1B46460F00DAF684 /* Rtt_ShapeAdapterRoundedRect.h in Headers */,
 				A4328885176A621200ACB6FF /* Rtt_ShapeObject.h in Headers */,
 				A4328887176A621200ACB6FF /* Rtt_ShapePath.h in Headers */,
 				C2DA96521B46460F00DAF684 /* Rtt_SharedCount.h in Headers */,
@@ -4203,9 +4151,7 @@
 				00B73C0B12B71BF20057F594 /* Rtt_StringHash.h in Headers */,
 				A4328893176A621200ACB6FF /* Rtt_Tesselator.h in Headers */,
 				A4328895176A621200ACB6FF /* Rtt_TesselatorCircle.h in Headers */,
-				C2DA966E1B46460F00DAF684 /* Rtt_TesselatorPolygon.h in Headers */,
 				C2DA961F1B46460F00DAF684 /* Rtt_TesselatorRect.h in Headers */,
-				A4328899176A621200ACB6FF /* Rtt_TesselatorRoundedRect.h in Headers */,
 				A432889B176A621200ACB6FF /* Rtt_TesselatorShape.h in Headers */,
 				A46AC8DB178A26D900BE6805 /* Rtt_TextureFactory.h in Headers */,
 				A46AC8DD178A26D900BE6805 /* Rtt_TextureResource.h in Headers */,
@@ -4352,11 +4298,9 @@
 				C229E0211B32221B00D87A7C /* Rtt_LuaLibCrypto.h in Headers */,
 				C229E0221B32221B00D87A7C /* Rtt_LuaLibDisplay.h in Headers */,
 				C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */,
-				F5C40DC51CB68789004F7789 /* Rtt_TesselatorMesh.h in Headers */,
 				C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */,
 				C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */,
 				C229E0291B32221B00D87A7C /* Rtt_LuaLibNative.h in Headers */,
-				F5C40DCB1CB68830004F7789 /* Rtt_ShapeAdapterMesh.h in Headers */,
 				C229E02A1B32221B00D87A7C /* Rtt_LuaLibOpenAL.h in Headers */,
 				C229E02C1B32221B00D87A7C /* Rtt_LuaLibSQLite.h in Headers */,
 				C229E02E1B32221B00D87A7C /* Rtt_LuaLibSystem.h in Headers */,
@@ -4424,9 +4368,7 @@
 				F50F51BB1B700C04006FEF92 /* Rtt_TextureResourceBitmap.h in Headers */,
 				C229E07A1B32221B00D87A7C /* Rtt_ShapeAdapter.h in Headers */,
 				C229E07B1B32221B00D87A7C /* Rtt_ShapeAdapterCircle.h in Headers */,
-				C229E07C1B32221B00D87A7C /* Rtt_ShapeAdapterPolygon.h in Headers */,
 				C229E07D1B32221B00D87A7C /* Rtt_ShapeAdapterRect.h in Headers */,
-				C229E07E1B32221B00D87A7C /* Rtt_ShapeAdapterRoundedRect.h in Headers */,
 				F58CA276245651B2002191EA /* Rtt_HTTPClient.h in Headers */,
 				C229E07F1B32221B00D87A7C /* Rtt_ShapeObject.h in Headers */,
 				C229E0801B32221B00D87A7C /* Rtt_ShapePath.h in Headers */,
@@ -4441,9 +4383,7 @@
 				C229E08A1B32221B00D87A7C /* Rtt_StringHash.h in Headers */,
 				C229E08C1B32221B00D87A7C /* Rtt_Tesselator.h in Headers */,
 				C229E08D1B32221B00D87A7C /* Rtt_TesselatorCircle.h in Headers */,
-				C229E08F1B32221B00D87A7C /* Rtt_TesselatorPolygon.h in Headers */,
 				C229E0901B32221B00D87A7C /* Rtt_TesselatorRect.h in Headers */,
-				C229E0911B32221B00D87A7C /* Rtt_TesselatorRoundedRect.h in Headers */,
 				C229E0921B32221B00D87A7C /* Rtt_TesselatorShape.h in Headers */,
 				C229E0951B32221B00D87A7C /* Rtt_TextureFactory.h in Headers */,
 				C229E0961B32221B00D87A7C /* Rtt_TextureResource.h in Headers */,
@@ -5154,7 +5094,6 @@
 				A432885A176A621200ACB6FF /* Rtt_GroupObject.cpp in Sources */,
 				A432885C176A621200ACB6FF /* Rtt_HitTestObject.cpp in Sources */,
 				A432885E176A621200ACB6FF /* Rtt_ImageFrame.cpp in Sources */,
-				F5C40DC21CB68788004F7789 /* Rtt_TesselatorMesh.cpp in Sources */,
 				A4328860176A621200ACB6FF /* Rtt_ImageSheet.cpp in Sources */,
 				A4328862176A621200ACB6FF /* Rtt_ImageSheetPaint.cpp in Sources */,
 				F5800DF81AE0320D00D11339 /* Rtt_ImageSheetPaintAdapter.cpp in Sources */,
@@ -5242,9 +5181,7 @@
 				C2E9933B1A6B2FEC00E99F46 /* Rtt_ShaderTypes.cpp in Sources */,
 				A4B66B21177287450077B2BF /* Rtt_ShapeAdapter.cpp in Sources */,
 				A4B66B1D17727B620077B2BF /* Rtt_ShapeAdapterCircle.cpp in Sources */,
-				A46AC8AC1783F18F00BE6805 /* Rtt_ShapeAdapterPolygon.cpp in Sources */,
 				A46AC88C17820CA400BE6805 /* Rtt_ShapeAdapterRect.cpp in Sources */,
-				A4B66B2517728D070077B2BF /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */,
 				A4328884176A621200ACB6FF /* Rtt_ShapeObject.cpp in Sources */,
 				A4328886176A621200ACB6FF /* Rtt_ShapePath.cpp in Sources */,
 				A46AC8C7178A260300BE6805 /* Rtt_SharedCount.cpp in Sources */,
@@ -5258,9 +5195,7 @@
 				A4328892176A621200ACB6FF /* Rtt_Tesselator.cpp in Sources */,
 				03D1C59D1D70E65B00DB02EE /* Rtt_Preference.cpp in Sources */,
 				A4328894176A621200ACB6FF /* Rtt_TesselatorCircle.cpp in Sources */,
-				A46AC8A6178389CD00BE6805 /* Rtt_TesselatorPolygon.cpp in Sources */,
 				A46AC88017820BEB00BE6805 /* Rtt_TesselatorRect.cpp in Sources */,
-				A4328898176A621200ACB6FF /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				A432889A176A621200ACB6FF /* Rtt_TesselatorShape.cpp in Sources */,
 				A46AC8D9178A26D900BE6805 /* Rtt_TextureFactory.cpp in Sources */,
 				A46AC8D7178A26D900BE6805 /* Rtt_TextureResource.cpp in Sources */,
@@ -5291,7 +5226,6 @@
 				A492765617BADABA00DAD62A /* kernel_composite_hue_gl.lua in Sources */,
 				A492765717BADABA00DAD62A /* kernel_composite_lighten_gl.lua in Sources */,
 				50C6F48617BDA99E00F06DC8 /* kernel_composite_linearLight_gl.lua in Sources */,
-				F5C40DC81CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp in Sources */,
 				A492765817BADABA00DAD62A /* kernel_composite_luminosity_gl.lua in Sources */,
 				A492765917BADABA00DAD62A /* kernel_composite_multiply_gl.lua in Sources */,
 				A492765A17BADABA00DAD62A /* kernel_composite_negation_gl.lua in Sources */,
@@ -5583,7 +5517,6 @@
 				C229E0E31B32221B00D87A7C /* Rtt_GroupObject.cpp in Sources */,
 				C229E0E41B32221B00D87A7C /* Rtt_HitTestObject.cpp in Sources */,
 				C229E0E51B32221B00D87A7C /* Rtt_ImageFrame.cpp in Sources */,
-				F5C40DC41CB68789004F7789 /* Rtt_TesselatorMesh.cpp in Sources */,
 				C229E0E61B32221B00D87A7C /* Rtt_ImageSheet.cpp in Sources */,
 				C229E0E71B32221B00D87A7C /* Rtt_ImageSheetPaint.cpp in Sources */,
 				C229E0E81B32221B00D87A7C /* Rtt_ImageSheetPaintAdapter.cpp in Sources */,
@@ -5672,9 +5605,7 @@
 				C229E14E1B32221B00D87A7C /* Rtt_ShaderTypes.cpp in Sources */,
 				C229E14F1B32221B00D87A7C /* Rtt_ShapeAdapter.cpp in Sources */,
 				C229E1501B32221B00D87A7C /* Rtt_ShapeAdapterCircle.cpp in Sources */,
-				C229E1511B32221B00D87A7C /* Rtt_ShapeAdapterPolygon.cpp in Sources */,
 				C229E1521B32221B00D87A7C /* Rtt_ShapeAdapterRect.cpp in Sources */,
-				C229E1531B32221B00D87A7C /* Rtt_ShapeAdapterRoundedRect.cpp in Sources */,
 				C229E1541B32221B00D87A7C /* Rtt_ShapeObject.cpp in Sources */,
 				C229E1551B32221B00D87A7C /* Rtt_ShapePath.cpp in Sources */,
 				C229E1561B32221B00D87A7C /* Rtt_SharedCount.cpp in Sources */,
@@ -5688,9 +5619,7 @@
 				C229E15F1B32221B00D87A7C /* Rtt_Tesselator.cpp in Sources */,
 				03D1C59E1D70E65C00DB02EE /* Rtt_Preference.cpp in Sources */,
 				C229E1601B32221B00D87A7C /* Rtt_TesselatorCircle.cpp in Sources */,
-				C229E1621B32221B00D87A7C /* Rtt_TesselatorPolygon.cpp in Sources */,
 				C229E1631B32221B00D87A7C /* Rtt_TesselatorRect.cpp in Sources */,
-				C229E1641B32221B00D87A7C /* Rtt_TesselatorRoundedRect.cpp in Sources */,
 				C229E1651B32221B00D87A7C /* Rtt_TesselatorShape.cpp in Sources */,
 				C229E1681B32221B00D87A7C /* Rtt_TextureFactory.cpp in Sources */,
 				C229E1691B32221B00D87A7C /* Rtt_TextureResource.cpp in Sources */,
@@ -5721,7 +5650,6 @@
 				C229E18A1B32221B00D87A7C /* kernel_composite_hue_gl.lua in Sources */,
 				C229E18B1B32221B00D87A7C /* kernel_composite_lighten_gl.lua in Sources */,
 				C229E18C1B32221B00D87A7C /* kernel_composite_linearLight_gl.lua in Sources */,
-				F5C40DC91CB68830004F7789 /* Rtt_ShapeAdapterMesh.cpp in Sources */,
 				C229E18D1B32221B00D87A7C /* kernel_composite_luminosity_gl.lua in Sources */,
 				C229E18E1B32221B00D87A7C /* kernel_composite_multiply_gl.lua in Sources */,
 				C229E18F1B32221B00D87A7C /* kernel_composite_negation_gl.lua in Sources */,

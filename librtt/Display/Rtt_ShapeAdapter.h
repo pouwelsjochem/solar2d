@@ -27,10 +27,7 @@ class ShapeAdapter : public MLuaUserdataAdapter
 		typedef enum _Type
 		{
 			kCircleType,
-			kPolygonType,
 			kRectType,
-			kRoundedRectType,
-			kMeshType,
 		}
 		Type;
 

@@ -15,12 +15,7 @@
 #include "Display/Rtt_DisplayObject.h"
 #include "Display/Rtt_Paint.h"
 #include "Display/Rtt_ShapeAdapterCircle.h"
-#include "Display/Rtt_ShapeAdapterPolygon.h"
-#include "Display/Rtt_ShapeAdapterRoundedRect.h"
-#include "Display/Rtt_ShapeAdapterMesh.h"
 #include "Display/Rtt_TesselatorCircle.h"
-#include "Display/Rtt_TesselatorPolygon.h"
-#include "Display/Rtt_TesselatorRoundedRect.h"
 #include "Display/Rtt_TesselatorShape.h"
 #include "Renderer/Rtt_Geometry_Renderer.h"
 #include "Renderer/Rtt_Renderer.h"
@@ -35,39 +30,11 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 ShapePath *
-ShapePath::NewRoundedRect( Rtt_Allocator *pAllocator, Real width, Real height, Real radius )
-{
-	TesselatorRoundedRect *tesselator = Rtt_NEW( pAllocator, TesselatorRoundedRect( width, height, radius ) );
-	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
-	result->SetAdapter( & ShapeAdapterRoundedRect::Constant() );
-	return result;
-}
-
-ShapePath *
 ShapePath::NewCircle( Rtt_Allocator *pAllocator, Real radius )
 {
 	TesselatorCircle *tesselator = Rtt_NEW( pAllocator, TesselatorCircle( radius ) );
 	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
 	result->SetAdapter( & ShapeAdapterCircle::Constant() );
-	return result;
-}
-
-ShapePath *
-ShapePath::NewPolygon( Rtt_Allocator *pAllocator )
-{
-	TesselatorPolygon *tesselator = Rtt_NEW( pAllocator, TesselatorPolygon( pAllocator ) );
-	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
-	result->SetAdapter( & ShapeAdapterPolygon::Constant() );
-	return result;
-}
-	
-	
-ShapePath *
-ShapePath::NewMesh( Rtt_Allocator *pAllocator, Geometry::PrimitiveType meshType )
-{
-	TesselatorMesh *tesselator = Rtt_NEW( pAllocator, TesselatorMesh( pAllocator, meshType ) );
-	ShapePath *result = Rtt_NEW( pAllocator, ShapePath( pAllocator, tesselator ) );
-	result->SetAdapter( & ShapeAdapterMesh::Constant() );
 	return result;
 }
 

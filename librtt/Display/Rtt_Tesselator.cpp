@@ -219,38 +219,6 @@ Tesselator::AppendCircle( ArrayVertex2& vertices, Real radius, U32 options )
 }
 
 void
-Tesselator::AppendCircleQuadrants( ArrayVertex2& vertices, Real radius, U32 options )
-{
-	// TODO: Remove the assumption that fVertices is empty
-	Rtt_ASSERT( vertices.Length() == 0 );
-
-	fMaxSubdivideDepth = DepthForRadius( radius );
-
-	// Insert first point of each quadrant (circle sector)
-	vertices.Append( kUnitCircleVertices[1] ); // (-1,0)
-	vertices.Append( kUnitCircleVertices[0] ); //  (0,0)
-	SubdivideCircleSector( vertices, kUnitCircleVertices[1], kUnitCircleVertices[2], 0 );
-
-	vertices.Append( kUnitCircleVertices[2] );
-	vertices.Append( kUnitCircleVertices[0] );
-	SubdivideCircleSector( vertices, kUnitCircleVertices[2], kUnitCircleVertices[3], 0 );
-
-	vertices.Append( kUnitCircleVertices[3] );
-	vertices.Append( kUnitCircleVertices[0] );
-	SubdivideCircleSector( vertices, kUnitCircleVertices[3], kUnitCircleVertices[4], 0 );
-
-	vertices.Append( kUnitCircleVertices[4] );
-	vertices.Append( kUnitCircleVertices[0] );
-	SubdivideCircleSector( vertices, kUnitCircleVertices[4], kUnitCircleVertices[5], 0 );
-	fMaxSubdivideDepth = 0;
-
-	if ( ! (options&kNoScale) )
-	{
-		Vertex2_Scale( vertices.WriteAccess(), vertices.Length(), radius, radius );
-	}
-}
-
-void
 Tesselator::AppendRect( ArrayVertex2& vertices, Real halfW, Real halfH )
 {
 	// Append in tri-strip order
