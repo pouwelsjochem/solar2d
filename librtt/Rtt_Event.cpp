@@ -1198,7 +1198,6 @@ TouchEvent::StringForPhase( Phase phase )
 	const char* result = NULL;
 	static const char kBeganString[] = "began";
 	static const char kMovedString[] = "moved";
-	static const char kStationaryString[] = "stationary";
 	static const char kEndedString[] = "ended";
 	static const char kCancelledString[] = "cancelled";
 
@@ -1209,9 +1208,6 @@ TouchEvent::StringForPhase( Phase phase )
 			break;
 		case kMoved:
 			result = kMovedString;
-			break;
-		case kStationary:
-			result = kStationaryString;
 			break;
 		case kEnded:
 			result = kEndedString;
@@ -1241,12 +1237,9 @@ TouchEvent::phaseForType( int touchType )
 		result = Rtt::TouchEvent::kMoved;
 		break;
 	case 2:
-		result = Rtt::TouchEvent::kStationary;
-		break;
-	case 3:
 		result = Rtt::TouchEvent::kEnded;
 		break;
-	case 4:
+	case 3:
 	default:
 		result = Rtt::TouchEvent::kCancelled;
 		break;

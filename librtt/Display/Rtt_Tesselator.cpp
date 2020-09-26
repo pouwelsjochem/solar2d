@@ -44,12 +44,6 @@ Tesselator::~Tesselator()
 }
 
 void
-Tesselator::MoveTo( ArrayVertex2& vertices, const Vertex2& p )
-{
-	Rtt_ASSERT_NOT_IMPLEMENTED();
-}
-
-void
 Tesselator::ApplyTransform( ArrayVertex2& vertices, const Vertex2& origin )
 {
 	if ( ! Rtt_RealIsZero( origin.x ) || ! Rtt_RealIsZero( origin.y ) )
@@ -233,17 +227,6 @@ Tesselator::AppendRect( ArrayVertex2& vertices, Real halfW, Real halfH )
 
 	const Vertex2 upperRight =	{ halfW, halfH };
 	vertices.Append( upperRight );
-}
-
-void
-Tesselator::MoveCenterToOrigin( ArrayVertex2& vertices, Vertex2 currentCenter )
-{
-	for ( int i = 0, iMax = vertices.Length(); i < iMax; i++ )
-	{
-		Vertex2& v = vertices[i];
-		v.x -= currentCenter.x;
-		v.y -= currentCenter.y;
-	}
 }
 
 // ----------------------------------------------------------------------------

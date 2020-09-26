@@ -760,35 +760,6 @@ JavaToNativeBridge::ApplicationOpenEvent()
 	fRuntime->DispatchEvent(e);
 }
 
-// TODO: Remove this function since there is an identical one in Rtt::TouchEvent
-static Rtt::TouchEvent::Phase
-phaseForType( int touchType )
-{
-	Rtt::TouchEvent::Phase result;
-
-	switch( touchType )
-	{
-	case 0:
-		result = Rtt::TouchEvent::kBegan;
-		break;
-	case 1:
-		result = Rtt::TouchEvent::kMoved;
-		break;
-	case 2:
-		result = Rtt::TouchEvent::kStationary;
-		break;
-	case 3:
-		result = Rtt::TouchEvent::kEnded;
-		break;
-	case 4:
-	default:
-		result = Rtt::TouchEvent::kCancelled;
-		break;
-	}
-
-	return result;
-}
-
 /// Converts a Java SystemClock uptime timestamp to Corona absolute time.
 /// @param time Timestsamp provided by the Java SystemClock.uptimeMillis() method.
 /// @return Returns a Corona absolute time timestamp compatible with Rtt::Runtime.GetElapsedMS().
@@ -811,7 +782,6 @@ absoluteTimeFromSystemClockUptime(Rtt::Runtime *runtimePointer, long time, Nativ
 	return currentAbsoluteTime - deltaTimeInMilliseconds;
 }
 
-// TODO: call Rtt::TouchEvent::phaseForType when above function is removed
 void
 JavaToNativeBridge::TouchEvent(int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId)
 {
@@ -820,7 +790,7 @@ JavaToNativeBridge::TouchEvent(int x, int y, int xStart, int yStart, int touchTy
 	if ( fRuntime == NULL || fNativeToJavaBridge == NULL)
 		return;
 
-	Rtt::TouchEvent e( Rtt_FloatToReal( x ), Rtt_FloatToReal( y ), xStart, yStart, phaseForType(touchType) );
+	Rtt::TouchEvent e( Rtt_FloatToReal( x ), Rtt_FloatToReal( y ), xStart, yStart, Rtt::TouchEvent::phaseForType(touchType) );
 	e.SetId( (void*)touchId );
 	e.SetTime( absoluteTimeFromSystemClockUptime(fRuntime, timestamp, fNativeToJavaBridge) );
 

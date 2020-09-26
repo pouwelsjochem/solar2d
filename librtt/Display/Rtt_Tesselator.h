@@ -57,10 +57,6 @@ class Tesselator
 		void SetWidth( Real newValue ) { fWidth = newValue; };
 
 	protected:
-		// Adds degenerate triangles so two distinct tri strips can coexist in the same array
-		void MoveTo( ArrayVertex2& vertices, const Vertex2& p );
-
-	protected:
 		void ApplyTransform( ArrayVertex2& vertices, const Vertex2& origin );
 
 	private:
@@ -76,8 +72,6 @@ class Tesselator
 		void AppendCircle( ArrayVertex2& vertices, Real radius, U32 options );
 
 		static void AppendRect( ArrayVertex2& vertices, Real halfW, Real halfH );
-
-		static void MoveCenterToOrigin( ArrayVertex2& vertices, Vertex2 currentCenter );
 
 	private:
 		int fMaxSubdivideDepth;

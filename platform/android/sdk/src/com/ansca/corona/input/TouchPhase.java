@@ -43,11 +43,7 @@ public class TouchPhase {
 
 	/** Indicates that the touch input pointer has changed coordinates. */
 	public static final TouchPhase MOVED = new TouchPhase(1, "moved");
-
-//Note: This is defined in "TouchEvent.Phase" in C++, but not currently used by Corona.
-//	/** Indicates that touch input has began, but the pointer is not currently moving. */
-//	public static final TouchPhase STATIONARY = new TouchPhase(2, "stationary");
-
+	
 	/** Indicates that touch input has ended. */
 	public static final TouchPhase ENDED = new TouchPhase(3, "ended");
 

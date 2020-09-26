@@ -603,9 +603,6 @@ UITouchPhaseToTouchEventPhase( UITouchPhase phase )
 		case UITouchPhaseMoved:
 			result = Rtt::TouchEvent::kMoved;
 			break;
-		case UITouchPhaseStationary:
-			result = Rtt::TouchEvent::kStationary;
-			break;
 		case UITouchPhaseEnded:
 			result = Rtt::TouchEvent::kEnded;
 			break;

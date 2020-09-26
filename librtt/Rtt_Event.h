@@ -548,7 +548,6 @@ class TouchEvent : public HitEvent
 		{
 			kBegan = 0,
 			kMoved,
-			kStationary,
 			kEnded,
 			kCancelled,
 
