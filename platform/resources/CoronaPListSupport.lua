@@ -107,6 +107,24 @@ local function getDelegates(tmpDir)
 	return delegates
 end
 
+local function inArray(array, item)
+    for key, value in pairs(array) do
+        if value == item then return key end
+    end
+    return nil
+end
+local function addLiveBuildsPlist(buildSettingsPlist, options)
+	if options.liveBuild then
+		buildSettingsPlist = buildSettingsPlist or {}
+		buildSettingsPlist.NSLocalNetworkUsageDescription = buildSettingsPlist.NSLocalNetworkUsageDescription or "Solar2D Live Builds are using local network to synchronize the project."
+		buildSettingsPlist.NSBonjourServices = buildSettingsPlist.NSBonjourServices or {}
+		if not inArray(buildSettingsPlist.NSBonjourServices, "_corona_live._tcp.") then
+			buildSettingsPlist.NSBonjourServices[#buildSettingsPlist.NSBonjourServices + 1] = "_corona_live._tcp."
+		end
+	end
+	return buildSettingsPlist
+end
+
 function CoronaPListSupport.modifyPlist( options )
 	local delegates
 
@@ -293,6 +311,7 @@ function CoronaPListSupport.modifyPlist( options )
 		if settings then
 			-- add'l custom plist settings specific to tvOS
 			local buildSettingsPlist = settings.tvos and settings.tvos.plist
+			buildSettingsPlist = addLiveBuildsPlist(buildSettingsPlist, options)
 
 			if buildSettingsPlist then
 				if buildSettingsPlist.CFBundleShortVersionString then

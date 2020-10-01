@@ -990,7 +990,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			}
 			else
 			{
-				Rtt_TRACE_SIM( ( "Error: Requested -project file (%s) is not a valid Corona path/file\n", [projectpath UTF8String] ) );
+				Rtt_TRACE_SIM( ( "Error: Requested -project file (%s) is not a valid Solar2D path/file\n", [projectpath UTF8String] ) );
 			}
 		}
 	}
@@ -1254,7 +1254,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		self.fAppPath = [appPath stringByStandardizingPath];
 				
 		// There is an inital state condition where we need to make sure the skin checkmarks have been checked.
-		// This is mostly hit the very first time Corona is run since there is no previous skin and
+		// This is mostly hit the very first time Solar2D is run since there is no previous skin and
 		// the default skin was setup before KVO was setup (in init) so we need to force a menu update.
 		[self updateMenuForSkinChange];
 
@@ -1519,7 +1519,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		
         [alert setMessageText:NSLocalizedString(@"Unknown URL Scheme", @"Unknown URL Scheme")];
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(
-			@"This version of Corona does not support \"%@\""
+			@"This version of Solar2D does not support \"%@\""
 			@" in its URL scheme.",
 			@"Unknown URL Scheme"),
 			[url host]]];
@@ -2371,13 +2371,21 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
         NSInteger minorVersion;
         NSInteger patchVersion;
     } OperatingSystemVersion;
-    OperatingSystemVersion osVersion;
+    OperatingSystemVersion osVersion = {0};
     SEL operatingSystemVersionSelector = NSSelectorFromString(@"operatingSystemVersion");
 
     if ([[NSProcessInfo processInfo] respondsToSelector:operatingSystemVersionSelector])
     {
         // this works on 10.10 and above (and, apparently, 10.9)
-        osVersion = ((OperatingSystemVersion(*)(id, SEL))objc_msgSend_stret)([NSProcessInfo processInfo], operatingSystemVersionSelector);
+        NSMethodSignature *signature = [NSProcessInfo instanceMethodSignatureForSelector:operatingSystemVersionSelector];
+        if(signature)
+        {
+            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+            [invocation setTarget:[NSProcessInfo processInfo]];
+            [invocation setSelector:operatingSystemVersionSelector];
+            [invocation invoke];
+            [invocation getReturnValue:&osVersion];
+        }
     }
     else
     {
@@ -2430,7 +2438,7 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
     }
     else if ([self compareOSVersion:currentOSVersion with:kosVersionCurrent] == NSOrderedDescending)
     {
-        NSString *msg = [NSString stringWithFormat:@"This version of macOS (%@) is not supported. It is newer than the one this version of Corona was designed for (%@).\n\nProceed with caution, as some things might not work correctly.\n\nPlease report any issues you find with Corona and the new version of macOS to support@coronalabs.com", currentOSVersion, kosVersionCurrent];
+        NSString *msg = [NSString stringWithFormat:@"This version of macOS (%@) is not supported. It is newer than the one this version of Solar2D was designed for (%@).\n\nProceed with caution, as some things might not work correctly.\n\nPlease report any issues you find with Solar2D and the new version of macOS to http://github.com/coronalabs/corona/issues", currentOSVersion, kosVersionCurrent];
 
         [alert setMessageText:@"macOS Version Warning"];
         [alert setInformativeText:msg];
@@ -2442,7 +2450,7 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
     }
     else if ([self compareOSVersion:currentOSVersion with:kosVersionPrevious] == NSOrderedAscending)
     {
-        NSString *msg = [NSString stringWithFormat:@"This version of macOS (%@) is not supported. It is older than the one this version of Corona was designed for (%@).\n\nProceed with caution, as some things might not work correctly.", currentOSVersion, kosVersionCurrent];
+        NSString *msg = [NSString stringWithFormat:@"This version of macOS (%@) is not supported. It is older than the one this version of Solar2D was designed for (%@).\n\nProceed with caution, as some things might not work correctly.", currentOSVersion, kosVersionCurrent];
 
         [alert setMessageText:@"macOS Version Warning"];
         [alert setInformativeText:msg];
