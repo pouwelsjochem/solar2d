@@ -1,4 +1,4 @@
-#!/bin/bash -ex	
+#!/bin/bash -ex
 #----------------------------------------------------------------------------
 #
 # This file is part of the Corona game engine.
