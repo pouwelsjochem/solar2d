@@ -1093,6 +1093,8 @@ HitEvent::ScreenToContent( const Display& display, Real xScreen, Real yScreen, R
 void
 HitEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 {
+	Super::Dispatch( L, runtime ); // Send to global Runtime
+
 	// TODO: If receiver is called more than once, we need to restore fX, fY
 	// or alternatively set some flag so that we know that it's been mapped
 	Display& display = runtime.GetDisplay();
@@ -1104,7 +1106,7 @@ HitEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 	bool handled = false;
 	if ( focus )
 	{
-		handled = DispatchFocused( L, runtime, stage, focus );
+		DispatchFocused( L, runtime, stage, focus );
 	}
 	else
 	{
@@ -1112,13 +1114,7 @@ HitEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 		stage.UpdateTransform( identity );
 		HitTestObject root( stage, NULL );
 		Test( root, identity ); // Generates subtree snapshot
-		handled = DispatchEvent( L, root ); // Dispatches to that subtree
-	}
-
-	if ( ! handled )
-	{
-		// Send to global Runtime
-		Super::Dispatch( L, runtime );
+		DispatchEvent( L, root ); // Dispatches to that subtree
 	}
 
 	// Cleanup: Move objects from the snapshot orphanage to the real orphanage
