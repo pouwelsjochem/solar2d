@@ -500,10 +500,26 @@ void WinInputDeviceManager::OnReceivedMessage(
 			if (arguments.GetMessageId() == WM_MOUSEWHEEL)
 			{
 				scrollWheelDeltaY = (float)GET_WHEEL_DELTA_WPARAM(arguments.GetWParam());
+				if (scrollWheelDeltaY < 0)
+				{
+					scrollWheelDeltaY = -1;
+				}
+				else if (scrollWheelDeltaY > 0)
+				{
+					scrollWheelDeltaY = 1;
+				}
 			}
 			else
 			{
 				scrollWheelDeltaX = (float)GET_WHEEL_DELTA_WPARAM(arguments.GetWParam());
+				if (scrollWheelDeltaX < 0)
+				{
+					scrollWheelDeltaX = -1;
+				}
+				else if (scrollWheelDeltaX > 0)
+				{
+					scrollWheelDeltaX = 1;
+				}
 			}
 
 			// Dispatch a "mouse" event to Corona.

@@ -674,7 +674,27 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 
 	// Raise the mouse event
 	// The sign of the deltas is the opposite of what is expected so they are swapped
-	MouseEvent e(MouseEvent::kScroll, p.x, p.y, -([event deltaX]), -([event deltaY]), 0, false, false, false,
+	CGFloat deltaX = -([event deltaX]);
+	if (deltaX < 0) 
+	{
+		deltaX = -1;
+	} 
+	else if (deltaX < 0) 
+	{
+		deltaX = 1;
+	}
+
+	CGFloat deltaY = -([event deltaY]);
+	if (deltaY < 0) 
+	{
+		deltaY = -1;
+	} 
+	else if (deltaY < 0) 
+	{
+		deltaY = 1;
+	}
+	
+	MouseEvent e(MouseEvent::kScroll, p.x, p.y, deltaX, deltaY, 0, false, false, false,
 				 (modifierFlags & NSShiftKeyMask),
 				 (modifierFlags & NSAlternateKeyMask),
 				 (modifierFlags & NSControlKeyMask),
