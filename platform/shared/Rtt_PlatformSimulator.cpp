@@ -59,8 +59,7 @@ SimulatorOptions::~SimulatorOptions()
 // ----------------------------------------------------------------------------
 
 PlatformSimulator::Config::Config( Rtt_Allocator & allocator )
-:	configLoaded( false ),
-	platform( TargetDevice::kUnknownPlatform ),
+:	platform( TargetDevice::kUnknownPlatform ),
 	deviceName( & allocator ),
 	deviceWidth(0.0f),
 	deviceHeight(0.0f)

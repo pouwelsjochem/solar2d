@@ -78,10 +78,6 @@ SimulatorRuntimeEnvironment::CreationResult SimulatorRuntimeEnvironment::CreateU
 	// Do not continue if given an invalid device configuration to simulate, if provided.
 	if (settings.DeviceConfigPointer)
 	{
-		if (false == settings.DeviceConfigPointer->configLoaded)
-		{
-			return CreationResult::FailedWith(L"Failed to load device configuration for the simulator.");
-		}
 		if ((settings.DeviceConfigPointer->deviceWidth <= 0) || (settings.DeviceConfigPointer->deviceHeight <= 0))
 		{
 			return CreationResult::FailedWith(L"Device configuration to simulate has an invalid screen width and height.");

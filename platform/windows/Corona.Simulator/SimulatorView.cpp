@@ -751,7 +751,7 @@ void CSimulatorView::OnUpdateWindowViewAs( CCmdUI *pCmdUI )
 	{
 		CMenu *pMainMenu = pFrameWindowPointer->GetMenu();
 		CMenu *pViewMenu = pMainMenu->GetSubMenu(2);  // position of "View" submenu in main menu
-		CMenu *pViewAsMenu = pViewMenu->GetSubMenu(3);  // position of "View As" submenu in "View" menu
+		CMenu *pViewAsMenu = pViewMenu->GetSubMenu(0);  // position of "View As" submenu in "View" menu
 
 		// Create the skins menu if we haven't already
 		if (pViewAsMenu == NULL || pViewAsMenu->GetMenuItemCount() == 1)

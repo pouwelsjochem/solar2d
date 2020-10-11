@@ -76,7 +76,6 @@ class PlatformSimulator
 			Config( Rtt_Allocator & allocator );
 			~Config();
 
-            bool configLoaded;
 			TargetDevice::Platform platform;
 			String deviceName;
 			float deviceWidth;
