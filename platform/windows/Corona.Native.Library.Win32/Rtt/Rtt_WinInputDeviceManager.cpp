@@ -506,48 +506,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 				scrollWheelDeltaX = (float)GET_WHEEL_DELTA_WPARAM(arguments.GetWParam());
 			}
 
-			// Convert the scroll wheel Win32 deltas to Corona content coordinate deltas.
-			// This way they can be easily used to translate/offset display objects in Lua.
-			// Note: The Win32 scroll values are not in pixels. It is typically used as a scale (value / WHEEL_DELTA) 
-			//       which is multiplied against the system's default number of text lines to scroll vertically
-			//       and default characters to scroll horizontally.
-			//       These line/character scrolling defaults are settable in Windows' "Mouse Properties" dialog.
-			auto runtimePointer = fEnvironment.GetRuntime();
-			if (runtimePointer && (WHEEL_DELTA > 0))
-			{
-				if (scrollWheelDeltaX != 0)
-				{
-					scrollWheelDeltaX *= (float)WHEEL_DELTA;
-					scrollWheelDeltaX *= runtimePointer->GetDisplay().GetScreenToContentScale();
-				}
-				if (scrollWheelDeltaY != 0)
-				{
-					UINT linesToScroll = 3;
-					::SystemParametersInfoW(SPI_GETWHEELSCROLLLINES, 0, &linesToScroll, 0);
-					if (linesToScroll < 1)
-					{
-						linesToScroll = 1;
-					}
-					if (linesToScroll != UINT_MAX)
-					{
-						scrollWheelDeltaY *= (float)WHEEL_DELTA;
-						scrollWheelDeltaY *= -1.0f;
-						scrollWheelDeltaY *= runtimePointer->GetDisplay().GetScreenToContentScale();
-					}
-					else
-					{
-						// The system is set up to scroll by 1 page/screen at a time.
-						// So, scroll by the content height.
-						bool isScrollingUp = (scrollWheelDeltaY >= 0);
-						scrollWheelDeltaY = (float)runtimePointer->GetDisplay().ContentHeight();
-						if (isScrollingUp)
-						{
-							scrollWheelDeltaY *= -1.0f;
-						}
-					}
-				}
-			}
-
 			// Dispatch a "mouse" event to Corona.
 			OnReceivedMouseEvent(
 					Rtt::MouseEvent::kScroll, point, scrollWheelDeltaX, scrollWheelDeltaY, arguments.GetWParam());
