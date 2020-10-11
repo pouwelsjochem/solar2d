@@ -1,9 +1,6 @@
 [submodule "external/CryptoPP"]
 	path = external/CryptoPP
 	url = https://github.com/coronalabs/submodule-CryptoPP.git
-[submodule "external/freetype-2.9"]
-	path = external/freetype-2.9
-	url = https://github.com/coronalabs/submodule-freetype.git
 [submodule "external/luafilesystem"]
 	path = external/luafilesystem
 	url = https://github.com/coronalabs/submodule-lfs.git
