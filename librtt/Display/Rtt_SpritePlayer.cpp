@@ -86,7 +86,7 @@ SpritePlayer::RemoveSprite( SpriteObject *object )
 		{
 			if ( fIsRunning )
 			{
-				object->SetMarked( true );
+				object->SetMarkedToBeRemoved( true );
 
 				// Always insert indices ('i'), small to large
 				int index = 0;
@@ -123,7 +123,7 @@ SpritePlayer::Update( lua_State *L )
 	for ( int i = 0, iMax = fSprites.Length(); i < iMax; i++ )
 	{
 		SpriteObject *sprite = fSprites[i];
-		if ( ! sprite->IsMarked() )
+		if ( ! sprite->IsMarkedToBeRemoved() )
 		{
 			sprite->Update( L, GetAnimationTime() );
 		}

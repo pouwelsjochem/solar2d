@@ -26,6 +26,7 @@
 		03D1C53E1D70CBBF00DB02EE /* Rtt_Preference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5381D70CBB400DB02EE /* Rtt_Preference.cpp */; };
 		03D1C53F1D70CBC200DB02EE /* Rtt_PreferenceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C53A1D70CBB400DB02EE /* Rtt_PreferenceCollection.cpp */; };
 		03D1C5401D70CBC500DB02EE /* Rtt_PreferenceValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C53C1D70CBB400DB02EE /* Rtt_PreferenceValue.cpp */; };
+		1B10D06C2538949800F48B3A /* Rtt_SpriteSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B10D06B2538949800F48B3A /* Rtt_SpriteSequence.cpp */; };
 		A40A90531BD984AD001D2038 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A40A90521BD984AD001D2038 /* CoreText.framework */; };
 		A4384F531BAA1F49005750A3 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A4384F4C1BAA1F49005750A3 /* Reachability.m */; };
 		A4384F561BAA1F49005750A3 /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = A4384F511BAA1F49005750A3 /* lsqlite3.c */; };
@@ -1416,6 +1417,8 @@
 		03D1C53B1D70CBB400DB02EE /* Rtt_PreferenceCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceCollection.h; path = ../../librtt/Rtt_PreferenceCollection.h; sourceTree = "<group>"; };
 		03D1C53C1D70CBB400DB02EE /* Rtt_PreferenceValue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PreferenceValue.cpp; path = ../../librtt/Rtt_PreferenceValue.cpp; sourceTree = "<group>"; };
 		03D1C53D1D70CBB400DB02EE /* Rtt_PreferenceValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceValue.h; path = ../../librtt/Rtt_PreferenceValue.h; sourceTree = "<group>"; };
+		1B10D02F2538949800F48B3A /* Rtt_SpriteSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSequence.h; path = ../../librtt/Display/Rtt_SpriteSequence.h; sourceTree = "<group>"; };
+		1B10D06B2538949800F48B3A /* Rtt_SpriteSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSequence.cpp; path = ../../librtt/Display/Rtt_SpriteSequence.cpp; sourceTree = "<group>"; };
 		A40A90521BD984AD001D2038 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		A4124B7C1BB2070F001421F5 /* CoronaDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaDelegate.h; path = ../iphone/Corona/CoronaDelegate.h; sourceTree = "<group>"; };
 		A4384F4B1BAA1F49005750A3 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = ../../external/Reachability_2.0.4ddg/Reachability/Reachability.h; sourceTree = "<group>"; };
@@ -2572,6 +2575,8 @@
 				A4551DB71BAA17CF00FB3BDF /* Rtt_SpriteObject.h */,
 				A4551DB81BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp */,
 				A4551DB91BAA17CF00FB3BDF /* Rtt_SpritePlayer.h */,
+				1B10D06B2538949800F48B3A /* Rtt_SpriteSequence.cpp */,
+				1B10D02F2538949800F48B3A /* Rtt_SpriteSequence.h */,
 				A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */,
 				A4551DBD1BAA17CF00FB3BDF /* Rtt_StageObject.h */,
 				A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */,
@@ -4963,6 +4968,7 @@
 				A4551F4D1BAA182D00FB3BDF /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				A4551E291BAA17CF00FB3BDF /* Rtt_VertexCache.cpp in Sources */,
 				A4551F441BAA182D00FB3BDF /* Rtt_Lua.cpp in Sources */,
+				1B10D06C2538949800F48B3A /* Rtt_SpriteSequence.cpp in Sources */,
 				A4551F591BAA182D00FB3BDF /* Rtt_LuaTableIterator.cpp in Sources */,
 				A4551F411BAA182D00FB3BDF /* Rtt_FilePath.cpp in Sources */,
 				A4551F571BAA182D00FB3BDF /* Rtt_LuaResource.cpp in Sources */,

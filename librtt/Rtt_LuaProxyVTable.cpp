@@ -1919,18 +1919,8 @@ LuaSpriteObjectProxyVTable::setFrame( lua_State *L )
 	
 	if ( o )
 	{
-		int index = (int) lua_tointeger( L, 2 );
-		if ( index < 1 )
-		{
-			CoronaLuaWarning(L, "sprite:setFrame() given invalid index (%d). Using index of 1 instead", index);
-			index = 1;
-		}
-		else if ( index > o->GetNumFrames() )
-		{
-			CoronaLuaWarning(L, "sprite:setFrame() given invalid index (%d). Using index of %d instead", index, o->GetNumFrames() );
-			index = o->GetNumFrames();
-		}
-		o->SetFrame( index - 1 ); // Lua is 1-based
+		int effectiveFrameIndex = (int) lua_tointeger( L, 2 );
+		o->SetEffectiveFrame( effectiveFrameIndex - 1 ); // Lua is 1-based
 	}
 
 	return 0;
@@ -1946,22 +1936,25 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 	static const char * keys[] =
 	{
 		// Read-write properties
-		"timeScale",	// 0
+		"timeScale",		// 0
 	
 		// Read-only properties
-		"frame",		// 1
-		"numFrames",	// 2
-		"isPlaying",	// 3
-		"sequence",		// 4
+		"frame",			// 1
+		"frameInSequence",	// 2
+		"frameInSheet",		// 3
+		"loopCount",		// 4
+		"sequence",			// 5
+		"numFrames",		// 6
+		"isPlaying",		// 7
 
 		// Methods
-		"play",			// 5
-		"pause",		// 6
-		"setSequence",	// 7
-		"setFrame"		// 8
+		"play",				// 8
+		"pause",			// 9
+		"setSequence",		// 10
+		"setFrame"			// 11
 	};
 	static const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 9, 0, 7, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 12, 21, 3, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -1973,55 +1966,60 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 	{
 	case 0:
 		{
-			Real timeScale = o.GetTimeScale();
-			lua_pushnumber( L, Rtt_RealToFloat( timeScale ) );
+			lua_pushnumber( L, Rtt_RealToFloat( o.GetTimeScale() ) );
 		}
 		break;
 	case 1:
 		{
-			int currentFrame = o.GetFrame() + 1; // Lua is 1-based
-			lua_pushinteger( L, currentFrame );
+			lua_pushinteger( L, o.GetCurrentEffectiveFrameIndex() + 1 ); // Lua is 1-based
 		}
 		break;
 	case 2:
 		{
-			lua_pushinteger( L, o.GetNumFrames() );
+			lua_pushinteger( L, o.GetCurrentSequence()->GetFrameIndexForEffectiveFrameIndex(o.GetCurrentEffectiveFrameIndex()) + 1 ); // Lua is 1-based
 		}
 		break;
 	case 3:
 		{
-			lua_pushboolean( L, o.IsPlaying() );
+			lua_pushinteger( L, o.GetCurrentSequence()->GetSheetFrameIndexForEffectiveFrameIndex(o.GetCurrentEffectiveFrameIndex()) + 1 ); // Lua is 1-based
 		}
 		break;
 	case 4:
 		{
-			const char *sequenceName = o.GetSequence();
-			if ( sequenceName )
-			{
-				lua_pushstring( L, sequenceName );
-			}
-			else
-			{
-				lua_pushnil( L );
-			}
+			lua_pushinteger( L, o.GetCurrentLoopCount() );
 		}
 		break;
 	case 5:
 		{
-			Lua::PushCachedFunction( L, Self::play );
+			lua_pushstring( L, o.GetCurrentSequence()->GetName() );
 		}
 		break;
 	case 6:
 		{
-			Lua::PushCachedFunction( L, Self::pause );
+			lua_pushinteger( L, o.GetCurrentSequence()->GetNumFrames() );
 		}
 		break;
 	case 7:
 		{
-			Lua::PushCachedFunction( L, Self::setSequence );
+			lua_pushboolean( L, o.IsPlaying() );
 		}
 		break;
 	case 8:
+		{
+			Lua::PushCachedFunction( L, Self::play );
+		}
+		break;
+	case 9:
+		{
+			Lua::PushCachedFunction( L, Self::pause );
+		}
+		break;
+	case 10:
+		{
+			Lua::PushCachedFunction( L, Self::setSequence );
+		}
+		break;
+	case 11:
 		{
 			Lua::PushCachedFunction( L, Self::setFrame );
 		}

@@ -273,6 +273,8 @@
 		07912E3C17A1C86A001ABDE0 /* kernel_generator_linearGradient_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3817A1C856001ABDE0 /* kernel_generator_linearGradient_gl.lua */; };
 		07912E3D17A1C86A001ABDE0 /* kernel_generator_random_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 07912E3917A1C856001ABDE0 /* kernel_generator_random_gl.lua */; };
 		07EB77C6178DD3450089B3C5 /* Rtt_SurfaceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 07EB77C5178DD3450089B3C5 /* Rtt_SurfaceInfo.h */; };
+		1B10CFE3253893AA00F48B3A /* Rtt_SpriteSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B10CFE1253893AA00F48B3A /* Rtt_SpriteSequence.cpp */; };
+		1B10CFE4253893AA00F48B3A /* Rtt_SpriteSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B10CFE2253893AA00F48B3A /* Rtt_SpriteSequence.h */; };
 		50310F1217C819EA00293685 /* kernel_filter_crystallize_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50310F1117C819DE00293685 /* kernel_filter_crystallize_gl.lua */; };
 		5038C05E17B4686A003139F4 /* kernel_filter_crosshatch_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 5038C05D17B4684F003139F4 /* kernel_filter_crosshatch_gl.lua */; };
 		5038C07A17B48553003139F4 /* kernel_generator_perlinNoise_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 5038C07917B4853D003139F4 /* kernel_generator_perlinNoise_gl.lua */; };
@@ -943,6 +945,8 @@
 		07912E3817A1C856001ABDE0 /* kernel_generator_linearGradient_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_linearGradient_gl.lua; path = Display/Shader/kernel_generator_linearGradient_gl.lua; sourceTree = "<group>"; };
 		07912E3917A1C856001ABDE0 /* kernel_generator_random_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_random_gl.lua; path = Display/Shader/kernel_generator_random_gl.lua; sourceTree = "<group>"; };
 		07EB77C5178DD3450089B3C5 /* Rtt_SurfaceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SurfaceInfo.h; sourceTree = "<group>"; };
+		1B10CFE1253893AA00F48B3A /* Rtt_SpriteSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSequence.cpp; path = Display/Rtt_SpriteSequence.cpp; sourceTree = "<group>"; };
+		1B10CFE2253893AA00F48B3A /* Rtt_SpriteSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSequence.h; path = Display/Rtt_SpriteSequence.h; sourceTree = "<group>"; };
 		50310F1117C819DE00293685 /* kernel_filter_crystallize_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_crystallize_gl.lua; path = Display/Shader/kernel_filter_crystallize_gl.lua; sourceTree = "<group>"; };
 		5038C05D17B4684F003139F4 /* kernel_filter_crosshatch_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_crosshatch_gl.lua; path = Display/Shader/kernel_filter_crosshatch_gl.lua; sourceTree = "<group>"; };
 		5038C07917B4853D003139F4 /* kernel_generator_perlinNoise_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_perlinNoise_gl.lua; path = Display/Shader/kernel_generator_perlinNoise_gl.lua; sourceTree = "<group>"; };
@@ -1974,6 +1978,8 @@
 				A474288517694EB000C63853 /* Rtt_SpriteObject.h */,
 				A474288617694EB000C63853 /* Rtt_SpritePlayer.cpp */,
 				A474288717694EB000C63853 /* Rtt_SpritePlayer.h */,
+				1B10CFE1253893AA00F48B3A /* Rtt_SpriteSequence.cpp */,
+				1B10CFE2253893AA00F48B3A /* Rtt_SpriteSequence.h */,
 				A474288A17694EB000C63853 /* Rtt_StageObject.cpp */,
 				A474288B17694EB000C63853 /* Rtt_StageObject.h */,
 				A474288C17694EB000C63853 /* Rtt_Tesselator.cpp */,
@@ -2362,6 +2368,7 @@
 				0304FE8F178E3AF80047CC04 /* Rtt_PlatformInputDevice.h in Headers */,
 				0304FE91178E3AF80047CC04 /* Rtt_PlatformInputDeviceManager.h in Headers */,
 				0304FE93178E3AF80047CC04 /* Rtt_ReadOnlyInputDeviceCollection.h in Headers */,
+				1B10CFE4253893AA00F48B3A /* Rtt_SpriteSequence.h in Headers */,
 				0358A36F179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.h in Headers */,
 				0397046D17A3780900681DED /* Rtt_InputAxisCollection.h in Headers */,
 				50E06F39196398C4003451E8 /* Rtt_MUpdatable.h in Headers */,
@@ -2774,6 +2781,7 @@
 				0076A79B160939C400A9757B /* Rtt_Assert.m in Sources */,
 				00D3F2211613E30E0095C5D6 /* Rtt_LuaCoronaBaseLib.c in Sources */,
 				00D3F2231613E30E0095C5D6 /* Rtt_LuaCoronaBaseLib.m in Sources */,
+				1B10CFE3253893AA00F48B3A /* Rtt_SpriteSequence.cpp in Sources */,
 				00EBD7771641DA7C0075DC8D /* lpeg.c in Sources */,
 				F5EEB6DE1B74027F00D34C41 /* Rtt_TextureResourceBitmap.cpp in Sources */,
 				00EBD7781641DA8B0075DC8D /* re.lua in Sources */,

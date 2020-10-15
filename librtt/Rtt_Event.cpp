@@ -1103,7 +1103,6 @@ HitEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 
 	StageObject& stage = * display.GetStage();
 	DisplayObject* focus = stage.GetFocus();
-	bool handled = false;
 	if ( focus )
 	{
 		DispatchFocused( L, runtime, stage, focus );

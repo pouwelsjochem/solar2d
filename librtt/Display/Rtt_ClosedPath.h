@@ -59,8 +59,7 @@ class ClosedPath
 		enum _Constants
 		{
 			kIsRectPath = 0x1,
-			kIsFillWeakReference = 0x2,
-			kIsFillLocked = 0x4,
+			kIsFillLocked = 0x2,
 		};
 		typedef U8 Properties;
 
@@ -108,7 +107,6 @@ class ClosedPath
 		Paint* GetFill() { return fFill; }
 		const Paint* GetFill() const { return fFill; }
 		void SetFill( Paint* newValue );
-		void SetFillWeakReference( bool newValue ) { SetProperty( kIsFillWeakReference, newValue ); }
 		void SetFillLocked( bool newValue ) { SetProperty( kIsFillLocked, newValue ); }
 
 	public:

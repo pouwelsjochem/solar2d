@@ -797,7 +797,7 @@ DisplayLibrary::newSnapshot( lua_State *L )
 	return result;
 }
 
-// display.newSprite( [parent, ] imageSheet, sequenceData )
+// display.newSprite( [parent, ] sheet, width, height, sequenceData )
 int
 DisplayLibrary::newSprite( lua_State *L )
 {
@@ -805,63 +805,48 @@ DisplayLibrary::newSprite( lua_State *L )
 
 	int nextArg = 1;
 	GroupObject *parent = GetParent( L, nextArg );
-	ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, nextArg );
 
-	if ( ud )
+	ImageSheetUserdata *imageSheetUserdata = NULL;
+	if ( lua_isuserdata( L, nextArg ) )
 	{
-		ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, nextArg );
+		imageSheetUserdata = ImageSheet::ToUserdata( L, nextArg );
+	} 
+	else
+	{
+		CoronaLuaError( L, "display.newSprite() bad argument #%d: image sheet expected, but got %s",
+				nextArg, lua_typename( L, lua_type( L, nextArg ) ) );
+	}
 
-		nextArg++;
+	nextArg++;
+	Real width = luaL_checkreal( L, nextArg++ );
+	Real height = luaL_checkreal( L, nextArg++ );
+	
+	Self *library = ToLibrary( L );
+	Display& display = library->GetDisplay();
+	Rtt_Allocator *context = display.GetAllocator();
 
-		if ( lua_istable( L, nextArg ) )
+	SpritePlayer& player = display.GetSpritePlayer();
+	SpriteObject *spriteObject = SpriteObject::Create( context, player, width, height);
+
+	if ( lua_istable( L, nextArg ) )
+	{
+		result = LuaLibDisplay::AssignParentAndPushResult( L, display, spriteObject, parent );
+
+		spriteObject->SetFill(ImageSheetPaint::NewBitmap(context, imageSheetUserdata->GetSheet()));
+		spriteObject->Initialize();
+		
+		int numSequences = (int) lua_objlen( L, nextArg );
+		for ( int i = 0; i < numSequences; i++ )
 		{
-			Self *library = ToLibrary( L );
-			Display& display = library->GetDisplay();
-			Rtt_Allocator *context = display.GetAllocator();
-
-			SpritePlayer& player = display.GetSpritePlayer();
-			SpriteObject *o = SpriteObject::Create( context, ud->GetSheet(), player );
-			if ( o )
-			{
-				// Need to assign parent so we can call Initialize()
-				result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
-
-				o->Initialize( context );
-
-				// Add sequences
-				int numSequences = (int) lua_objlen( L, nextArg );
-
-				if ( 0 == numSequences )
-				{
-					// Table is the (single) sequence data itself
-					SpriteObjectSequence *sequence = SpriteObjectSequence::Create( context, L, nextArg );
-					o->AddSequence( sequence );
-				}
-				else
-				{
-					// Table is the an array of sequence data
-					for ( int i = 0; i < numSequences; i++ )
-					{
-						lua_rawgeti( L, nextArg, i+1); // Lua is 1-based
-						SpriteObjectSequence *sequence = SpriteObjectSequence::Create( context, L, -1 );
-						o->AddSequence( sequence );
-						lua_pop( L, 1 );
-					}
-				}
-			}
-			else
-			{
-				CoronaLuaError( L, "display.newSprite() failed. Returning 'nil'" );
-			}
-		}
-		else
-		{
-			CoronaLuaError( L, "display.newSprite() requires argument #%d to a table containing sequence data", nextArg );
+			lua_rawgeti( L, nextArg, i+1); // Lua is 1-based
+			SpriteSequence *sequence = SpriteSequence::Create( context, L );
+			spriteObject->AddSequence(context, sequence);
+			lua_pop( L, 1 );
 		}
 	}
 	else
 	{
-		CoronaLuaError( L, "display.newSprite() requires argument #%d to be an imageSheet", nextArg );
+		CoronaLuaError( L, "display.newSprite() requires argument #%d to a table containing sequence data", nextArg );
 	}
 
 	return result;

@@ -12,6 +12,7 @@
 
 #include "Display/Rtt_RectObject.h"
 #include "Display/Rtt_ImageSheet.h"
+#include "Display/Rtt_SpriteSequence.h"
 #include "Rtt_Event.h"
 
 #include "Core/Rtt_Array.h"
@@ -29,99 +30,6 @@ class SpritePlayer;
 
 // ----------------------------------------------------------------------------
 
-// A sequence defines which frames in the ImageSheet will be used
-class SpriteObjectSequence
-{
-	public:
-		typedef S16 FrameIndex;
-
-	public:
-		static SpriteObjectSequence* Create( Rtt_Allocator *allocator, lua_State *L, int index );
-
-	protected:
-		SpriteObjectSequence(
-			Rtt_Allocator *allocator,
-			const char *name,
-			Real time,
-			Real *timeArray,
-			FrameIndex start,
-			FrameIndex numFrames,
-			int loopCount);
-
-		// Assumes ownership of 'frames' and assumed alloc'd via Rtt_MALLOC
-		SpriteObjectSequence(
-			Rtt_Allocator *allocator,
-			const char *name,
-			Real time,
-			Real *timeArray,
-			FrameIndex *frames,
-			FrameIndex numFrames,
-			int loopCount);
-
-	public:
-		~SpriteObjectSequence();
-
-	protected:
-		// Called when sheets are per-sequence
-		void Initialize( Rtt_Allocator *pAllocator, const AutoPtr< ImageSheet >& sheet );
-
-	public:
-		void Verify( const SpriteObject& owner ) const;
-
-	public:
-		const AutoPtr< ImageSheet >& GetSheet() const { return fSheet; }
-		bool HasSheet() const { return fSheet.NotNull(); }
-
-		ImageSheetPaint *GetPaint() const { return fPaint; }
-
-	public:
-		const char* GetName() const { return fName.GetString(); }
-		Real GetTime() const { return fTime; }
-		Real *GetTimeArray() const { return fTimeArray; }
-		Real GetTimePerFrame() const { return fTimePerFrame; }
-
-	public:
-		// Returns index in sheet of first frame
-		FrameIndex GetStartFrame() const;
-		FrameIndex GetLastFrame() const;
-		int GetTimeForFrame( int frameIndex ) const;
-
-	protected:
-		FrameIndex GetFrame( int i ) const;
-
-	public:
-		int GetNumFrames() const { return fNumFrames; }
-
-	public:
-		// For 0 <= i < GetEffectiveNumFrames() where i is the sequence index
-		// int GetFrameIndex( int i ) const;
-
-		// Returns index in sheet of ith frame of the sequence.
-		// 'i' is the sequence index
-		// Note that 0 <= i < GetNumEffectiveFrames()
-		FrameIndex GetEffectiveFrame(int i, SpriteEvent::Phase *phase = NULL ) const;
-
-	public:
-		// Returns number of frames in sequence.
-		int GetEffectiveNumFrames() const;
-
-		bool IsConsecutiveFrames() const { return fStart >= 0; }
-
-		int GetLoopCount() const { return fLoopCount; }
-
-	private:
-		ImageSheetPaint *fPaint;
-		AutoPtr< ImageSheet > fSheet;
-		String fName;
-		Real fTime;				// Length of sequence in ms
-		Real *fTimeArray;
-		Real fTimePerFrame;
-		FrameIndex fNumFrames;	// Raw number of frames
-		FrameIndex fStart;		// Sequence is defined by consecutive frames in the sheet
-		FrameIndex *fFrames;	// or an array of frame indices. 
-		int fLoopCount;
-};
-
 class SpriteObject : public RectObject
 {
 	public:
@@ -131,57 +39,38 @@ class SpriteObject : public RectObject
 	protected:
 		typedef enum _PropertyMask
 		{
-			kIsPlaying = 0x1,
-			kIsPlayingBegan = 0x2,
-			kIsPlayingEnded = 0x4,
-			kIsMarked = 0x8,
-			kIsMultiSprite = 0x10,
-			kIsPreviousFrameTrimmed = 0x20,
-
-			// Contains the values we want to preserve across a Reset() call
-			kResetMask = kIsMultiSprite
+			kIsPlayingEnded = 0x1,
+			kIsMarkedToBeRemoved = 0x2
 		}
 		PropertyMask;
 
 		typedef Properties U8;
 
 	public:
-		static SpriteObject* Create(
-			Rtt_Allocator *pAllocator,
-			const AutoPtr< ImageSheet >& sheet,
-			SpritePlayer& player );
+		static SpriteObject* Create(Rtt_Allocator *pAllocator, SpritePlayer& player, Real width, Real height);
 
 	protected:
-		SpriteObject(
-			RectPath *path,
-			Rtt_Allocator *pAllocator,
-			const AutoPtr< ImageSheet >& sheet,
-			SpritePlayer& player );
+		SpriteObject(Rtt_Allocator *pAllocator, SpritePlayer& player, Real width, Real height);
 
 	public:
 		virtual ~SpriteObject();
 
-		void Initialize( Rtt_Allocator *pAllocator );
+		void Initialize();
 
 	public:
 		// Receiver takes ownership of 'sequence'
-		void AddSequence( SpriteObjectSequence *sequence );
-
-	public:
-//		virtual void Translate( Real dx, Real dy );
-//		virtual void Draw( Renderer& renderer ) const;
+		void AddSequence(Rtt_Allocator *pAllocator, SpriteSequence *sequence );
 
 	public:
 		virtual const LuaProxyVTable& ProxyVTable() const;
 
 	public:
-		const AutoPtr< ImageSheet >& GetDefaultSheet() const;
-		const AutoPtr< ImageSheet >& GetCurrentSheet() const;
-		void ResetTimeArrayIteratorCache(SpriteObjectSequence *sequence);
-		int GetFrameIndexForDeltaTime( Real dt, SpriteObjectSequence *sequence, int effectiveNumFrames );
-	
+		void ResetTimeArrayIteratorCacheFor(SpriteSequence *sequence);
+		int CalculateEffectiveFrameIndexForPlayTime( Real dt, SpriteSequence *sequence, int effectiveNumFrames );
+		int CalculateLoopCountForEffectiveFrameIndex( int effectiveFrameIndex ) const;
+
 	protected:
-		void SetBitmapFrame( int frameIndex );
+		void SetBitmapFrame( int effectiveFrameIndex );
 
 	public:
 		void Update( lua_State *L, U64 milliseconds );
@@ -190,14 +79,14 @@ class SpriteObject : public RectObject
 		void Play( lua_State *L );
 		void Pause();
 		void SetSequence( const char *name );
-		const char* GetSequence() const;
 		int GetNumSequences() const;
-		void SetFrame( int index );
+		void SetEffectiveFrame( int index );
 
 	public:
 		// Read-only properties
-		int GetFrame() const;
-		int GetNumFrames() const;
+		SpriteSequence* GetCurrentSequence() const;
+		int GetCurrentLoopCount() const;
+		int GetCurrentEffectiveFrameIndex() const;
 
 	public:
 		Real GetTimeScale() const { return fTimeScale; }
@@ -209,28 +98,24 @@ class SpriteObject : public RectObject
 
 	public:
 		bool IsPlaying() const;
-		void SetPlaying( bool newValue );
 
 	public:
-		bool IsMarked() const { return IsProperty( kIsMarked ); }
-		void SetMarked( bool newValue ) { SetProperty( kIsMarked, newValue ); }
+		bool IsMarkedToBeRemoved() const { return IsProperty( kIsMarkedToBeRemoved ); }
+		void SetMarkedToBeRemoved( bool newValue ) { SetProperty( kIsMarkedToBeRemoved, newValue ); }
 
 	protected:
-		SpriteObjectSequence* GetCurrentSequence() const;
 		void Reset();
 
 	private:
-		ImageSheetPaint *fPaint; // Weak ref to paint
-		AutoPtr< ImageSheet > fSheet; // shared sheet (if all sequences use same sheet)
-		PtrArray< SpriteObjectSequence > fSequences;
+		PtrArray< SpriteSequence > fSequences;
 		SpritePlayer& fPlayer;
 		Real fTimeScale;
-		int fCurrentSequence; // index into fSequences of current sequence
-		int fCurrentFrame; // which frame in sheet are we currently showing
+		int fCurrentSequenceIndex; // index into fSequences of current sequence
+		int fCurrentEffectiveFrameIndex;
 		U64 fStartTime;
-		U64 fPlayTime; // when paused, stores amount of time played
-		int fTimeArrayCachedFrame; // stores iterator state for SpriteObjectSequence::GetFrameIndexForDeltaTime()
-		Real fTimeArrayCachedNextFrameTime; // stores iterator state for SpriteObjectSequence::GetFrameIndexForDeltaTime()
+		U64 fPlayTimeAtPause; // when paused, stores amount of time played
+		int fTimeArrayCachedFrameIndex; // stores iterator state for SpriteSequence::CalculateEffectiveFrameIndexForPlayTime()
+		Real fTimeArrayCachedNextFrameTime; // stores iterator state for SpriteSequence::CalculateEffectiveFrameIndexForPlayTime()
 	
 		Properties fProperties;
 };

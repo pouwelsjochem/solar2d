@@ -46,11 +46,7 @@ ClosedPath::~ClosedPath()
 		GetObserver()->QueueRelease( fProxy ); // Release native ref to Lua-side proxy
 		fProxy->DetachUserdata(); // Notify proxy that object is invalid
 	}
-
-	if ( ! IsProperty( kIsFillWeakReference ) )
-	{
-		Rtt_DELETE( fFill );
-	}
+	Rtt_DELETE( fFill );
 }
 
 void
@@ -182,10 +178,7 @@ ClosedPath::SetFill( Paint* newValue )
 			Invalidate( kFillSource | kFillSourceTexture );
 		}
 
-		if ( ! IsProperty( kIsFillWeakReference ) )
-		{
-			Rtt_DELETE( fFill );
-		}
+		Rtt_DELETE( fFill );
 		fFill = newValue;
 
 		if ( newValue )

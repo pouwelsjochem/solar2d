@@ -273,6 +273,10 @@
 		072020EF17C58DA100B6D424 /* kernel_filter_blurVertical_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 072020E717C58D8A00B6D424 /* kernel_filter_blurVertical_gl.lua */; };
 		072020F017C58DA100B6D424 /* kernel_filter_levels_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 072020E817C58D8A00B6D424 /* kernel_filter_levels_gl.lua */; };
 		0727BA8716E68FE800981C4B /* network.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0727BA8616E68FE800981C4B /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1B10CF722538381000F48B3A /* Rtt_SpriteSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B10CF6B2538381000F48B3A /* Rtt_SpriteSequence.h */; };
+		1B10CF732538381000F48B3A /* Rtt_SpriteSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B10CF6B2538381000F48B3A /* Rtt_SpriteSequence.h */; };
+		1B10CF742538381000F48B3A /* Rtt_SpriteSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B10CF712538381000F48B3A /* Rtt_SpriteSequence.cpp */; };
+		1B10CF752538381000F48B3A /* Rtt_SpriteSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B10CF712538381000F48B3A /* Rtt_SpriteSequence.cpp */; };
 		1F34F53D21115FB2006EE117 /* Rtt_LinuxAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F34F53321115FB1006EE117 /* Rtt_LinuxAppPackager.cpp */; };
 		1F34F54021116446006EE117 /* LinuxAppBuild.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F34F53E21116445006EE117 /* LinuxAppBuild.xib */; };
 		1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F34F5412111661E006EE117 /* LinuxAppBuildController.mm */; };
@@ -2078,6 +2082,8 @@
 		07EB77BA178DD3200089B3C5 /* Rtt_SurfaceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SurfaceInfo.h; sourceTree = "<group>"; };
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = ../../../System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		1B10CF6B2538381000F48B3A /* Rtt_SpriteSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSequence.h; path = Display/Rtt_SpriteSequence.h; sourceTree = "<group>"; };
+		1B10CF712538381000F48B3A /* Rtt_SpriteSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSequence.cpp; path = Display/Rtt_SpriteSequence.cpp; sourceTree = "<group>"; };
 		1F34F53321115FB1006EE117 /* Rtt_LinuxAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LinuxAppPackager.cpp; path = ../shared/Rtt_LinuxAppPackager.cpp; sourceTree = "<group>"; };
 		1F34F53C21115FB2006EE117 /* Rtt_LinuxAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LinuxAppPackager.h; path = ../shared/Rtt_LinuxAppPackager.h; sourceTree = "<group>"; };
 		1F34F53F21116445006EE117 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/LinuxAppBuild.xib; sourceTree = "<group>"; };
@@ -3574,6 +3580,8 @@
 				A432882C176A621200ACB6FF /* Rtt_SpriteObject.h */,
 				A432882D176A621200ACB6FF /* Rtt_SpritePlayer.cpp */,
 				A432882E176A621200ACB6FF /* Rtt_SpritePlayer.h */,
+				1B10CF712538381000F48B3A /* Rtt_SpriteSequence.cpp */,
+				1B10CF6B2538381000F48B3A /* Rtt_SpriteSequence.h */,
 				A4328831176A621200ACB6FF /* Rtt_StageObject.cpp */,
 				A4328832176A621200ACB6FF /* Rtt_StageObject.h */,
 				A4328833176A621200ACB6FF /* Rtt_Tesselator.cpp */,
@@ -4109,6 +4117,7 @@
 				000CE7D912B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h in Headers */,
 				00572B8E12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h in Headers */,
 				000CE7E312B73EE300D9B6A4 /* Rtt_PlatformModalInteraction.h in Headers */,
+				1B10CF722538381000F48B3A /* Rtt_SpriteSequence.h in Headers */,
 				F5B5A7521B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */,
 				000CE7E512B73EE300D9B6A4 /* Rtt_PlatformNotifier.h in Headers */,
 				000CE7E712B73EE300D9B6A4 /* Rtt_PlatformOpenALPlayer.h in Headers */,
@@ -4251,6 +4260,7 @@
 				C229DFEE1B32221B00D87A7C /* Rtt_Assert.h in Headers */,
 				C229DFEF1B32221B00D87A7C /* Rtt_AutoPtr.h in Headers */,
 				F5A752281BFA40F000CCDB94 /* CoronaLuaObjCHelper.h in Headers */,
+				1B10CF732538381000F48B3A /* Rtt_SpriteSequence.h in Headers */,
 				C229DFF01B32221B00D87A7C /* Rtt_AutoResource.h in Headers */,
 				C229DFF11B32221B00D87A7C /* Rtt_BitmapMask.h in Headers */,
 				C229DFF21B32221B00D87A7C /* Rtt_BitmapPaint.h in Headers */,
@@ -5157,6 +5167,7 @@
 				A4328878176A621200ACB6FF /* Rtt_RectPath.cpp in Sources */,
 				00B73C0412B71BF20057F594 /* Rtt_RefCount.cpp in Sources */,
 				000CE7F212B73EE300D9B6A4 /* Rtt_RenderingStream.cpp in Sources */,
+				1B10CF742538381000F48B3A /* Rtt_SpriteSequence.cpp in Sources */,
 				000CE7F412B73EE300D9B6A4 /* Rtt_Resource.cpp in Sources */,
 				00B73C0612B71BF20057F594 /* Rtt_ResourceHandle.cpp in Sources */,
 				000CE7F612B73EE300D9B6A4 /* Rtt_Runtime.cpp in Sources */,
@@ -5624,6 +5635,7 @@
 				C229E1681B32221B00D87A7C /* Rtt_TextureFactory.cpp in Sources */,
 				C229E1691B32221B00D87A7C /* Rtt_TextureResource.cpp in Sources */,
 				C229E16A1B32221B00D87A7C /* Rtt_Time.c in Sources */,
+				1B10CF752538381000F48B3A /* Rtt_SpriteSequence.cpp in Sources */,
 				C229E16B1B32221B00D87A7C /* Rtt_Transform.cpp in Sources */,
 				C229E16D1B32221B00D87A7C /* Rtt_UseCount.cpp in Sources */,
 				C229E16F1B32221B00D87A7C /* Rtt_VersionTimestamp.c in Sources */,
