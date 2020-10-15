@@ -839,8 +839,7 @@ DisplayLibrary::newSprite( lua_State *L )
 		for ( int i = 0; i < numSequences; i++ )
 		{
 			lua_rawgeti( L, nextArg, i+1); // Lua is 1-based
-			SpriteSequence *sequence = SpriteSequence::Create( context, L );
-			spriteObject->AddSequence(context, sequence);
+			spriteObject->AddSequence(context, SpriteSequence::Create( context, L, imageSheetUserdata->GetSheet()->GetNumFrames()));
 			lua_pop( L, 1 );
 		}
 	}

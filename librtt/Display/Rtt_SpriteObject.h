@@ -65,7 +65,7 @@ class SpriteObject : public RectObject
 		virtual const LuaProxyVTable& ProxyVTable() const;
 
 	public:
-		void ResetTimeArrayIteratorCacheFor(SpriteSequence *sequence);
+		void ResetTimePerFrameArrayIteratorCacheFor(SpriteSequence *sequence);
 		int CalculateEffectiveFrameIndexForPlayTime( Real dt, SpriteSequence *sequence, int effectiveNumFrames );
 		int CalculateLoopCountForEffectiveFrameIndex( int effectiveFrameIndex ) const;
 
@@ -114,8 +114,8 @@ class SpriteObject : public RectObject
 		int fCurrentEffectiveFrameIndex;
 		U64 fStartTime;
 		U64 fPlayTimeAtPause; // when paused, stores amount of time played
-		int fTimeArrayCachedFrameIndex; // stores iterator state for SpriteSequence::CalculateEffectiveFrameIndexForPlayTime()
-		Real fTimeArrayCachedNextFrameTime; // stores iterator state for SpriteSequence::CalculateEffectiveFrameIndexForPlayTime()
+		int fTimePerFrameArrayCachedFrameIndex; // stores iterator state for SpriteSequence::CalculateEffectiveFrameIndexForPlayTime()
+		Real fTimePerFrameArrayCachedNextFrameTime; // stores iterator state for SpriteSequence::CalculateEffectiveFrameIndexForPlayTime()
 	
 		Properties fProperties;
 };

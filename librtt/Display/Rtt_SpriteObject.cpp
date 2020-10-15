@@ -55,7 +55,7 @@ void SpriteObject::Initialize() {
 
 void SpriteObject::AddSequence(Rtt_Allocator *pAllocator, SpriteSequence *sequence) {
 	if (0 == fSequences.Length()) {
-		ResetTimeArrayIteratorCacheFor(sequence);
+		ResetTimePerFrameArrayIteratorCacheFor(sequence);
 		SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(0));
 	}
 	fSequences.Append(sequence);
@@ -73,36 +73,36 @@ void SpriteObject::SetBitmapFrame(int sheetFrameIndex) {
 	GetPath().Invalidate(ClosedPath::kFillSourceTexture);
 }
 
-void SpriteObject::ResetTimeArrayIteratorCacheFor(SpriteSequence *sequence) {
-	Real *timeArray = sequence->GetTimeArray();
-	if (timeArray != NULL) {
-		fTimeArrayCachedFrameIndex = 0;
-		fTimeArrayCachedNextFrameTime = timeArray[0];
+void SpriteObject::ResetTimePerFrameArrayIteratorCacheFor(SpriteSequence *sequence) {
+	Real *timePerFrameArray = sequence->GetTimePerFrameArray();
+	if (timePerFrameArray != NULL) {
+		fTimePerFrameArrayCachedFrameIndex = 0;
+		fTimePerFrameArrayCachedNextFrameTime = timePerFrameArray[0];
 	}
 }
 
 int SpriteObject::CalculateEffectiveFrameIndexForPlayTime(Real playTime, SpriteSequence *sequence, int effectiveNumFrames) {
-	if (sequence->GetTimeArray() == NULL) {
+	if (sequence->GetTimePerFrameArray() == NULL) {
 		return (int)Rtt_RealDiv(playTime, sequence->GetTimePerFrame());
-	} else if (playTime < fTimeArrayCachedNextFrameTime) {
-		return fTimeArrayCachedFrameIndex;
+	} else if (playTime < fTimePerFrameArrayCachedNextFrameTime) {
+		return fTimePerFrameArrayCachedFrameIndex;
 	} else {
 		int numFrames = sequence->GetNumFrames();
-		Real *timeArray = sequence->GetTimeArray();
+		Real *timePerFrameArray = sequence->GetTimePerFrameArray();
 		
 		// Increase cachedFrame until dt is lower than cachedNextFrameTime again OR effectiveNumFrames is reached when using finite loops
-		for (int i = fTimeArrayCachedFrameIndex; (0 == sequence->GetLoopCount() && playTime > fTimeArrayCachedNextFrameTime) || i < effectiveNumFrames; ++i) {
-			fTimeArrayCachedFrameIndex += 1;
+		for (int i = fTimePerFrameArrayCachedFrameIndex; (0 == sequence->GetLoopCount() && playTime > fTimePerFrameArrayCachedNextFrameTime) || i < effectiveNumFrames; ++i) {
+			fTimePerFrameArrayCachedFrameIndex += 1;
 			
-			int nextFrame = fTimeArrayCachedFrameIndex % numFrames;
+			int nextFrame = fTimePerFrameArrayCachedFrameIndex % numFrames;
 			if (nextFrame >= numFrames) {
 				nextFrame = 2 * (numFrames - 1) - nextFrame;
 			}
 			
-			fTimeArrayCachedNextFrameTime += timeArray[nextFrame];
-			if (playTime < fTimeArrayCachedNextFrameTime) break;
+			fTimePerFrameArrayCachedNextFrameTime += timePerFrameArray[nextFrame];
+			if (playTime < fTimePerFrameArrayCachedNextFrameTime) break;
 		}
-		return fTimeArrayCachedFrameIndex;
+		return fTimePerFrameArrayCachedFrameIndex;
 	}
 }
 
@@ -137,8 +137,8 @@ void SpriteObject::Update(lua_State *L, U64 milliseconds) {
 					}
 				} else if (loopCount == 0 || CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) {
 					fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
-					if (loopCount == 0 && sequence->GetTimeArray() != NULL) {
-						fTimeArrayCachedFrameIndex = 0;
+					if (loopCount == 0 && sequence->GetTimePerFrameArray() != NULL) {
+						fTimePerFrameArrayCachedFrameIndex = 0;
 					}
 					if (HasListener(kSpriteListener)) {
 						DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kLoop));
@@ -220,7 +220,7 @@ void SpriteObject::SetEffectiveFrame(int effectiveFrameIndex) {
 	}
 	
 	fCurrentEffectiveFrameIndex = effectiveFrameIndex;
-	ResetTimeArrayIteratorCacheFor(sequence);
+	ResetTimePerFrameArrayIteratorCacheFor(sequence);
 	SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(effectiveFrameIndex));
 }
 
@@ -262,7 +262,7 @@ void SpriteObject::Reset() {
 	
 	// Set to initial frame
 	SpriteSequence *sequence = GetCurrentSequence();
-	ResetTimeArrayIteratorCacheFor(sequence);
+	ResetTimePerFrameArrayIteratorCacheFor(sequence);
 	SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(0));
 }
 

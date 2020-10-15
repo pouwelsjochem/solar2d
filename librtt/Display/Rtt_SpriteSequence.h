@@ -32,14 +32,14 @@ class SpriteSequence
 		typedef S16 FrameIndex;
 
 	public:
-		static SpriteSequence* Create( Rtt_Allocator *allocator, lua_State *L );
+		static SpriteSequence* Create( Rtt_Allocator *allocator, lua_State *L, int numFramesInSheet);
 
 	public:
 		SpriteSequence(
 			Rtt_Allocator *allocator,
 			const char *name,
-			Real time,
-			Real *timeArray,
+			Real timePerFrame,
+			Real *timePerFrameArray,
 			FrameIndex start,
 			FrameIndex numFrames,
 			int loopCount);
@@ -48,8 +48,8 @@ class SpriteSequence
 		SpriteSequence(
 			Rtt_Allocator *allocator,
 			const char *name,
-			Real time,
-			Real *timeArray,
+			Real timePerFrame,
+			Real *timePerFrameArray,
 			FrameIndex *frames,
 			FrameIndex numFrames,
 			int loopCount);
@@ -59,8 +59,7 @@ class SpriteSequence
 
 	public:
 		const char* GetName() const { return fName.GetString(); }
-		Real GetTime() const { return fTime; }
-		Real *GetTimeArray() const { return fTimeArray; }
+		Real *GetTimePerFrameArray() const { return fTimePerFrameArray; }
 		Real GetTimePerFrame() const { return fTimePerFrame; }
 
 	public:
@@ -81,8 +80,7 @@ class SpriteSequence
 
 	private:
 		String fName;
-		Real fTime;				// Length of sequence in ms
-		Real *fTimeArray;
+		Real *fTimePerFrameArray;
 		Real fTimePerFrame;
 		FrameIndex fNumFrames;	// Raw number of frames
 		FrameIndex fStart;		// Sequence is defined by consecutive frames in the sheet
