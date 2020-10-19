@@ -127,30 +127,28 @@ void SpriteObject::Update(lua_State *L, U64 milliseconds) {
 
 			int previousSequenceFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(fCurrentEffectiveFrameIndex);
 			int sequenceFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex);
-			SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex));
-
-			if (HasListener(kSpriteListener)) {
-				if (sequenceFrameIndex > previousSequenceFrameIndex) {
-					fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
-					if (HasListener(kSpriteListener)) {
-						DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kNext));
-					}
-				} else if (loopCount == 0 || CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) {
-					fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
-					if (loopCount == 0 && sequence->GetTimePerFrameArray() != NULL) {
-						fTimePerFrameArrayCachedFrameIndex = 0;
-					}
-					if (HasListener(kSpriteListener)) {
-						DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kLoop));
-					}
-				} else {
-					fStartTime = 0;
-					SetProperty(kIsPlayingEnded, true);
-					if (HasListener(kSpriteListener)) {
-						DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kEnded));
-					}
-					break; // effectiveFrameIndexForPlayTime can increase beyond effectiveNumFrames, which would cause the for loop to trigger again. 
+			if (sequenceFrameIndex > previousSequenceFrameIndex) {
+				fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
+				SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex));
+				if (HasListener(kSpriteListener)) {
+					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kNext));
 				}
+			} else if (loopCount == 0 || CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) {
+				fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
+				if (loopCount == 0 && sequence->GetTimePerFrameArray() != NULL) {
+					fTimePerFrameArrayCachedFrameIndex = 0;
+				}
+				SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex));
+				if (HasListener(kSpriteListener)) {
+					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kLoop));
+				}
+			} else {
+				fStartTime = 0;
+				SetProperty(kIsPlayingEnded, true);
+				if (HasListener(kSpriteListener)) {
+					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kEnded));
+				}
+				break; // effectiveFrameIndexForPlayTime can increase beyond effectiveNumFrames, which would cause the for loop to trigger again. 
 			}
 		}
 	}
