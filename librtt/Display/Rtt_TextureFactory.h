@@ -85,7 +85,6 @@ class TextureFactory
 		SharedPtr< TextureResource > GetContainerMask();
 
 	public:
-		void AddToPreloadQueueByKey(std::string cacheKey);
 		void AddToPreloadQueue(SharedPtr< TextureResource > &resource);
 
 		void QueueRelease( Texture *texture );
@@ -136,7 +135,7 @@ class TextureFactory
 
 	private:
 		Cache fCache;
-		Array< WeakPtr< TextureResource > > fCreateQueue;
+		Array< WeakPtr< TextureResource > > fPreloadQueue;
 		Display &fDisplay;
 		WeakPtr< TextureResource > fDefault;
 		WeakPtr< TextureResource > fContainerMask;

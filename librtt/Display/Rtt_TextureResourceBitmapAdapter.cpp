@@ -26,12 +26,11 @@ TextureResourceBitmapAdapter::GetHash( lua_State *L ) const
 {
 	static const char *keys[] =
 	{
-		"preload",            //0
-		"wrapX",              //1
-		"wrapY",              //2
+		"wrapX",              //0
+		"wrapY",              //1
 	};
 	
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof( const char * ), 3, 1, 1, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof( const char * ), 2, 1, 1, __FILE__, __LINE__ );
 	return &sHash;
 }
 
@@ -55,11 +54,6 @@ TextureResourceBitmapAdapter::ValueForKey(
 		switch ( index )
 		{
 			case 0:
-				Lua::PushCachedFunction( L, Self::Preload );
-				results = 1;
-				break;
-
-			case 1:
 				if( entry->GetBitmap() )
 				{
 					RenderTypes::TextureWrap wrap = entry->GetBitmap()->GetWrapX();
@@ -68,7 +62,7 @@ TextureResourceBitmapAdapter::ValueForKey(
 				} // else return nothing - no texture was loaded yet.
 				break;
 
-			case 2:
+			case 1:
 				if( entry->GetBitmap() )
 				{
 					RenderTypes::TextureWrap wrap = entry->GetBitmap()->GetWrapY();
@@ -88,22 +82,6 @@ TextureResourceBitmapAdapter::ValueForKey(
 	}
 	
 	return results;
-}
-
-
-int TextureResourceBitmapAdapter::Preload( lua_State *L )
-{
-	LuaUserdataProxy* sender = LuaUserdataProxy::ToProxy( L, 1 );
-	if (sender)
-	{
-		TextureResourceBitmap *entry = (TextureResourceBitmap *)sender->GetUserdata();
-		if (entry)
-		{
-			entry->Preload();
-		}
-	}
-	return 0;
-
 }
 
 	

@@ -119,12 +119,6 @@ TextureResourceBitmap::GetAdapter() const
 {
 	return TextureResourceBitmapAdapter::Constant();
 }
-
-void TextureResourceBitmap::Preload()
-{
-	GetTextureFactory().AddToPreloadQueueByKey(GetCacheKey());
-}
-	
 	
 } // namespace Rtt
 

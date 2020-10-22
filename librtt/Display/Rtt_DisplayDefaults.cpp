@@ -38,7 +38,6 @@ DisplayDefaults::DisplayDefaults()
 	fMinTextureFilter( RenderTypes::kLinearTextureFilter ),
 	fWrapX( RenderTypes::kClampToEdgeWrap ),
 	fWrapY( RenderTypes::kClampToEdgeWrap ),
-	fPreloadTextures( true ),
 	fShaderCompilerVerbose( kShaderCompilerVerboseDefault ),
 	fIsAnchorClamped( true ),
 	fIsImageSheetSampledInsideFrame( false )

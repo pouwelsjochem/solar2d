@@ -40,13 +40,13 @@ TextureFactory::TextureFactory( Display& display )
 	fDefault(),
 	fContainerMask(),
 	fTextureMemoryUsed( 0 ),
-	fCreateQueue( display.GetAllocator() )
+	fPreloadQueue( display.GetAllocator() )
 {
 }
 
 TextureFactory::~TextureFactory()
 {
-	fCreateQueue.Empty();
+	fPreloadQueue.Empty();
 }
 
 void
@@ -161,30 +161,15 @@ TextureFactory::Find( const std::string& key )
 	
 void TextureFactory::AddToPreloadQueue(SharedPtr< TextureResource > &resource)
 {
-	fCreateQueue.Append( resource );
-}
-	
-void TextureFactory::AddToPreloadQueueByKey(std::string cacheKey)
-{
-	SharedPtr<TextureResource> ptr = Find(cacheKey);
-	AddToPreloadQueue(ptr);
+	fPreloadQueue.Append( resource );
 }
 
-
-	
 SharedPtr< TextureResource >
 TextureFactory::CreateAndAdd( const std::string& key, PlatformBitmap *bitmap, bool useCache )
 {
 	TextureResource *resource = TextureResourceBitmap::Create( * this, bitmap );
 	SharedPtr< TextureResource > result = SharedPtr< TextureResource >( resource );
-
-	bool shouldPreload = fDisplay.GetDefaults().ShouldPreloadTextures();
-
-	if ( shouldPreload )
-	{
-		// Add to create queue
-		AddToPreloadQueue( result );
-	}
+	AddToPreloadQueue( result );
 
 	if ( useCache )
 	{
@@ -199,9 +184,9 @@ TextureFactory::CreateAndAdd( const std::string& key, PlatformBitmap *bitmap, bo
 void
 TextureFactory::Preload( Renderer& renderer )
 {
-	for ( int i = 0; i < fCreateQueue.Length(); i++ )
+	for ( int i = 0; i < fPreloadQueue.Length(); i++ )
 	{
-		const WeakPtr< TextureResource > item = fCreateQueue[i];
+		const WeakPtr< TextureResource > item = fPreloadQueue[i];
 		SharedPtr< TextureResource > texture( item );
 		if ( texture.NotNull() )
 		{
@@ -217,7 +202,7 @@ TextureFactory::Preload( Renderer& renderer )
 			}
 		}
 	}
-	fCreateQueue.Empty();
+	fPreloadQueue.Empty();
 }
 
 SharedPtr< TextureResource >

@@ -1001,12 +1001,6 @@ DisplayLibrary::setDefault( lua_State *L )
 		RenderTypes::TextureWrap wrap = RenderTypes::TextureWrapForString( value );
 		defaults.SetTextureWrapY( wrap );
 	}
-	else if ( Rtt_StringCompare( key, "preloadTextures" ) == 0 )
-	{
-		bool preloadTextures = lua_toboolean( L, index );
-	
-		defaults.SetPreloadTextures( preloadTextures );
-	}
 	else if ( Rtt_StringCompare( key, "isShaderCompilerVerbose" ) == 0 )
 	{
 		bool value = lua_toboolean( L, index ) ? true : false;

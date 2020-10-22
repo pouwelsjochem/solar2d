@@ -34,9 +34,6 @@ class TextureResourceBitmapAdapter : public TextureResourceAdapter
 								const char *key ) const override;
 
 		virtual StringHash *GetHash( lua_State *L ) const override;
-		
-	private:
-		static int Preload( lua_State *L );
 
 };
 	

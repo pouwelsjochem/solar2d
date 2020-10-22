@@ -55,9 +55,6 @@ class DisplayDefaults
 		bool IsImageSheetSampledInsideFrame() const { return fIsImageSheetSampledInsideFrame;}
 		void SetImageSheetSampledInsideFrame( bool newValue ) { fIsImageSheetSampledInsideFrame = newValue; }
 	public:	
-		bool ShouldPreloadTextures() const { return fPreloadTextures; }
-		void SetPreloadTextures( bool newValue ) { fPreloadTextures = newValue; }
-
 		bool IsShaderCompilerVerbose() const { return fShaderCompilerVerbose; }
 		void SetShaderCompilerVerbose( bool newValue ) { fShaderCompilerVerbose = newValue; }
 
@@ -70,7 +67,6 @@ class DisplayDefaults
 		U8 fMinTextureFilter;
 		U8 fWrapX;
 		U8 fWrapY;
-		bool fPreloadTextures;
 		bool fShaderCompilerVerbose;
 		bool fIsAnchorClamped;
 		bool fIsImageSheetSampledInsideFrame;

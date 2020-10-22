@@ -57,8 +57,6 @@ class TextureResourceBitmap : public TextureResource
 
 	public:
 		virtual ~TextureResourceBitmap();
-
-		void Preload();
 	
 	
 	//Lua interface
