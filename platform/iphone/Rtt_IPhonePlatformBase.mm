@@ -462,21 +462,6 @@ IPhonePlatformBase::RuntimeErrorNotification( const char *errorType, const char 
 
 #endif // Rtt_IPHONE_PLATFORM_STUB
 
-// ============================================================================
-
-Rtt_EXPORT CGSize Rtt_GetDeviceSize();
-	
-Rtt_EXPORT CGSize
-Rtt_GetDeviceSize()
-{
-	UIScreen *mainScreen = [UIScreen mainScreen];
-	CGSize result = mainScreen.bounds.size;
-	CGFloat scale = mainScreen.scale;
-	result.width *= scale;
-	result.height *= scale;
-	return result;
-}
-
 // ----------------------------------------------------------------------------
 
 } // namespace Rtt

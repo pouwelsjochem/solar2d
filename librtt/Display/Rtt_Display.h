@@ -62,7 +62,6 @@ class Display
 	public:
 		//! \Return true for success. False for failure.
 		virtual bool Initialize( lua_State *L, int configIndex );
-		virtual void Teardown();
 
 	protected:
 		void ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHeader );

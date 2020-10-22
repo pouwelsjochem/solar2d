@@ -178,11 +178,6 @@ AppleFileBitmap::Initialize()
 	fScale = CalculateScale();
 }
 
-#if !defined( Rtt_WEB_PLUGIN )
-	// Implemented on a per-platform basis
-	Rtt_EXPORT CGSize Rtt_GetDeviceSize();
-#endif
-
 float
 AppleFileBitmap::CalculateScale() const
 {
@@ -195,61 +190,20 @@ AppleFileBitmap::CalculateScale() const
 	
 	size_t w = CGImageGetWidth( fImage );
 	size_t h = CGImageGetHeight( fImage );
-
-#if !defined( Rtt_WEB_PLUGIN )
-	// TODO: Rtt_GetDeviceSize() returns (0,0) if no simulator instance is active.
-	// However, we have CoronaViews that are created independent of simulator,
-	// so for now, we just do a cheap check against 0 to ignore. Later, we should
-	// determine a way to decouple.
-	CGSize deviceSize = Rtt_GetDeviceSize();
-	bool isDeviceSizeValid = ( deviceSize.width > 0 && deviceSize.height > 0 ); 
-
-	size_t wMax = isDeviceSizeValid ? NextPowerOf2( deviceSize.width ) : w;
-	size_t hMax = isDeviceSizeValid ? NextPowerOf2( deviceSize.height ) : h;
-#else
-	// TODO: Figure out how to get "screen" bounds, i.e. content bounds in html page
-	size_t wMax = w;
-	size_t hMax = h;
-#endif
 	
 	// Downscale the image if it exceeds OpenGL's maximum texture size.
 	size_t maxBitmapSize = (size_t)GetMaxTextureSize();
-
-	if ( IsProperty( kIsBitsFullResolution ) )
+	if ( w > maxBitmapSize || h > maxBitmapSize )
 	{
-		// We still have to scale if the bitmap is larger than the largest texture size
-		if ( w <= maxBitmapSize && h <= maxBitmapSize )
+		Rtt_LogException( "WARNING: Image size (%ld,%ld) exceeds max texture dimension (%ld). Image will be resized to fit.\n", w, h, maxBitmapSize );
+		if ( w > h )
 		{
-			return result;
+			result = ((float)maxBitmapSize)/(float)w;
 		}
 		else
 		{
-			Rtt_LogException( "WARNING: Image size (%ld,%ld) exceeds max texture dimension (%ld). Image will be resized to fit.\n", w, h, maxBitmapSize );
-			wMax = maxBitmapSize;
-			hMax = maxBitmapSize;
+			result = ((float)maxBitmapSize)/(float)h;
 		}
-	}
-	else
-	{
-		wMax = Min( wMax, maxBitmapSize );
-		hMax = Min( hMax, maxBitmapSize );
-	}
-
-	// Align longest image edge to the longest screen edge to calculate proper scale.
-	// If image is landscape and screen size is portrait (or vice versa), 
-	// then swap screen dimensions. 
-	bool isScreenLandscape = wMax > hMax;
-	if ( !isScreenLandscape )
-	{
-		size_t tmp = wMax;
-		wMax = hMax; hMax = tmp;
-	}
-
-	if ( w > wMax || h > hMax )
-	{
-		float scaleW = ((float)wMax)/(float)w;
-		float scaleH = ((float)hMax)/(float)h;
-		result = ( scaleH < scaleW ? scaleH : scaleW );
 	}
 
 	// Return the down-scaling factor to be applied to the image.

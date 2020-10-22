@@ -443,10 +443,6 @@ GraphicsLibrary::releaseTextures( lua_State *L )
 			{
 				type = TextureResource::kTextureResourceCanvas;
 			}
-			else if ( strcmp(str, "external") == 0 )
-			{
-				type = TextureResource::kTextureResourceExternal;
-			}
 		}
 	}
 	else if( lua_type(L, index) == LUA_TTABLE )
@@ -464,10 +460,6 @@ GraphicsLibrary::releaseTextures( lua_State *L )
 				else if ( strcmp(str, "canvas") == 0 )
 				{
 					type = TextureResource::kTextureResourceCanvas;
-				}
-				else if ( strcmp(str, "external") == 0 )
-				{
-					type = TextureResource::kTextureResourceExternal;
 				}
 			}
 		}

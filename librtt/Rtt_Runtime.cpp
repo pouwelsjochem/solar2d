@@ -217,10 +217,6 @@ Runtime::~Runtime()
 	Rtt_DELETE( fScheduler );
 	fTimer->Stop();
 	Rtt_DELETE( fTimer );
-	
-	// Notify textures that everything is about to be destroyed. Clean up all dependencies.
-	// This is required because Textures and Objects may be dependent on Lua state, or have to notify plugins
-	fDisplay->Teardown();
 
 	LuaContext::Delete( fVMContext );
 

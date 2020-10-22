@@ -1983,29 +1983,6 @@ MacPlatformServices::Sleep( int milliseconds ) const
 // ----------------------------------------------------------------------------
 
 #endif // Rtt_AUTHORING_SIMULATOR
-	
-// ----------------------------------------------------------------------------
-
-Rtt_EXPORT CGSize
-Rtt_GetDeviceSize()
-{
-	CGSize result;
-	result.width = NSZeroSize.width;
-	result.height = NSZeroSize.height;
-
-#ifdef Rtt_AUTHORING_SIMULATOR
-	// TODO: Generalize this for current window
-	MacSimulator *simulator = (MacSimulator *)[(AppDelegate *)[NSApp delegate] simulator];
-	if ( simulator )
-	{
-		// Fetch the bounds from the screen size of the actual device (not the view size)
-		result.width = simulator->GetDeviceWidth();
-		result.height = simulator->GetDeviceHeight();
-	}
-#endif // Rtt_AUTHORING_SIMULATOR
-
-	return result;
-}
 
 #endif // Rtt_WEB_PLUGIN
 

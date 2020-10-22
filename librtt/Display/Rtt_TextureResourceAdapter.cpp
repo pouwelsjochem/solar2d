@@ -75,9 +75,6 @@ int TextureResourceAdapter::ValueForKey(const LuaUserdataProxy& sender,
 				case TextureResource::kTextureResourceCanvas:
 					lua_pushstring( L, "canvas" );
 					break;
-				case TextureResource::kTextureResourceExternal:
-					lua_pushstring( L, "external" );
-					break;
 				case TextureResource::kTextureResource_Any:
 				default:
 					lua_pushstring( L, "unknown" );

@@ -30,16 +30,6 @@ namespace Rtt
 {
 
 // ----------------------------------------------------------------------------
-
-/*
-SharedPtr< TextureResource >
-BitmapPaint::NewTextureResource( Runtime& runtime, const char* filename, MPlatform::Directory baseDir, U32 flags, bool isMask )
-{
-	TextureFactory& factory = runtime.GetDisplay().GetTextureFactory();
-	return factory.FindOrCreate( filename, baseDir, flags, isMask );
-}
-*/
-
 BitmapPaint*
 BitmapPaint::NewBitmap( Runtime& runtime, const char* filename, MPlatform::Directory baseDir, U32 flags )
 {

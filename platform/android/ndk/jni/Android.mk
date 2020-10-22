@@ -503,7 +503,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Corona/CoronaLog.c \
 	$(CORONA_ROOT)/librtt/Corona/CoronaLua.cpp \
 	$(CORONA_ROOT)/librtt/Corona/CoronaVersion.c \
-	$(CORONA_ROOT)/librtt/Corona/CoronaGraphics.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_BitmapMask.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_BitmapPaint.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_BitmapPaintAdapter.cpp \
@@ -564,8 +563,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResourceBitmapAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResourceCanvas.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResourceCanvasAdapter.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResourceExternal.cpp \
-	$(CORONA_ROOT)/librtt/Display/Rtt_TextureResourceExternalAdapter.cpp \
 	$(CORONA_ROOT)/librtt/Display/Rtt_VertexCache.cpp \
 	$(CORONA_ROOT)/librtt/Input/Rtt_InputAxisCollection.cpp \
 	$(CORONA_ROOT)/librtt/Input/Rtt_InputAxisDescriptor.cpp \

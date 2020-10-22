@@ -584,7 +584,7 @@ DisplayObject::DispatchEvent( lua_State *L, const MEvent& e ) const
 	}
 
 	lua_pop( L, 1 );
-
+	
 	Rtt_ASSERT( previousTop == lua_gettop( L ) );
 
 	return result;

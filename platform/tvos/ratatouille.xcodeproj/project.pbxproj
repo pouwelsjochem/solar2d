@@ -465,12 +465,8 @@
 		C2F9118B1CDC4CE5004A5564 /* mbox.lua in Sources */ = {isa = PBXBuildFile; fileRef = C2F911871CDC4CC1004A5564 /* mbox.lua */; };
 		C2F9118C1CDC4CE5004A5564 /* unix.c in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31401BAB88B6006A0C97 /* unix.c */; };
 		C2F9118E1CDC4DBE004A5564 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4AD31151BAB8852006A0C97 /* libluasocket.a */; };
-		F50CA3C91C81115400746C98 /* Rtt_TextureResourceExternal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50CA3C31C81114800746C98 /* Rtt_TextureResourceExternal.cpp */; };
-		F50CA3CA1C81115400746C98 /* Rtt_TextureResourceExternalAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50CA3C51C81114800746C98 /* Rtt_TextureResourceExternalAdapter.cpp */; };
-		F50CA3CD1C8111A300746C98 /* CoronaGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50CA3CB1C8111A300746C98 /* CoronaGraphics.cpp */; };
 		F517B79F1C6CEC520042F592 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C281C5722A500BE3194 /* NSString+Extensions.h */; };
 		F517B7A01C6CEC580042F592 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C291C5722A500BE3194 /* NSString+Extensions.m */; };
-		F51D55BA1C814021000CE085 /* CoronaGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F58011C01BE295070061E021 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD307A1BAA2B80006A0C97 /* Rtt_AppleTimer.mm */; };
 		F58011C11BE295070061E021 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */; };
 		F58011C21BE295070061E021 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B61BE294F40061E021 /* Rtt_AppleInputDeviceManager.mm */; };
@@ -517,7 +513,6 @@
 		F5C5E131251E114A00217C19 /* CoronaAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E851BAA180C00FB3BDF /* CoronaAssert.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E132251E114A00217C19 /* CoronaEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E871BAA180C00FB3BDF /* CoronaEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E133251E114A00217C19 /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4124B7C1BB2070F001421F5 /* CoronaDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F5C5E134251E114A00217C19 /* CoronaGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E135251E114A00217C19 /* CoronaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E891BAA180C00FB3BDF /* CoronaLibrary.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E136251E114A00217C19 /* CoronaLog.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E8C1BAA180C00FB3BDF /* CoronaLog.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E137251E114A00217C19 /* CoronaLua.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E8E1BAA180C00FB3BDF /* CoronaLua.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -2148,12 +2143,6 @@
 		C2F9117B1CDC4C31004A5564 /* compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = compat.h; path = ../../external/luasocket/src/compat.h; sourceTree = "<group>"; };
 		C2F911861CDC4CC1004A5564 /* headers.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = headers.lua; path = ../../external/luasocket/src/headers.lua; sourceTree = "<group>"; };
 		C2F911871CDC4CC1004A5564 /* mbox.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mbox.lua; path = ../../external/luasocket/src/mbox.lua; sourceTree = "<group>"; };
-		F50CA3C31C81114800746C98 /* Rtt_TextureResourceExternal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceExternal.cpp; path = ../../librtt/Display/Rtt_TextureResourceExternal.cpp; sourceTree = "<group>"; };
-		F50CA3C41C81114800746C98 /* Rtt_TextureResourceExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceExternal.h; path = ../../librtt/Display/Rtt_TextureResourceExternal.h; sourceTree = "<group>"; };
-		F50CA3C51C81114800746C98 /* Rtt_TextureResourceExternalAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceExternalAdapter.cpp; path = ../../librtt/Display/Rtt_TextureResourceExternalAdapter.cpp; sourceTree = "<group>"; };
-		F50CA3C61C81114800746C98 /* Rtt_TextureResourceExternalAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceExternalAdapter.h; path = ../../librtt/Display/Rtt_TextureResourceExternalAdapter.h; sourceTree = "<group>"; };
-		F50CA3CB1C8111A300746C98 /* CoronaGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaGraphics.cpp; path = ../../librtt/Corona/CoronaGraphics.cpp; sourceTree = "<group>"; };
-		F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGraphics.h; path = ../../librtt/Corona/CoronaGraphics.h; sourceTree = "<group>"; };
 		F58011B31BE294F40061E021 /* Rtt_AppleInputDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInputDevice.h; path = ../apple/Rtt_AppleInputDevice.h; sourceTree = "<group>"; };
 		F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleInputDevice.mm; path = ../apple/Rtt_AppleInputDevice.mm; sourceTree = "<group>"; };
 		F58011B51BE294F40061E021 /* Rtt_AppleInputDeviceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInputDeviceManager.h; path = ../apple/Rtt_AppleInputDeviceManager.h; sourceTree = "<group>"; };
@@ -2601,10 +2590,6 @@
 				A4551DD91BAA17CF00FB3BDF /* Rtt_TextureResourceCanvas.h */,
 				A4551DDA1BAA17CF00FB3BDF /* Rtt_TextureResourceCanvasAdapter.cpp */,
 				A4551DDB1BAA17CF00FB3BDF /* Rtt_TextureResourceCanvasAdapter.h */,
-				F50CA3C31C81114800746C98 /* Rtt_TextureResourceExternal.cpp */,
-				F50CA3C41C81114800746C98 /* Rtt_TextureResourceExternal.h */,
-				F50CA3C51C81114800746C98 /* Rtt_TextureResourceExternalAdapter.cpp */,
-				F50CA3C61C81114800746C98 /* Rtt_TextureResourceExternalAdapter.h */,
 				A4551DDC1BAA17CF00FB3BDF /* Rtt_VertexCache.cpp */,
 				A4551DDD1BAA17CF00FB3BDF /* Rtt_VertexCache.h */,
 			);
@@ -2713,8 +2698,6 @@
 				A4551E851BAA180C00FB3BDF /* CoronaAssert.h */,
 				A4551E861BAA180C00FB3BDF /* CoronaEvent.cpp */,
 				A4551E871BAA180C00FB3BDF /* CoronaEvent.h */,
-				F50CA3CB1C8111A300746C98 /* CoronaGraphics.cpp */,
-				F50CA3CC1C8111A300746C98 /* CoronaGraphics.h */,
 				A4551E881BAA180C00FB3BDF /* CoronaLibrary.cpp */,
 				A4551E891BAA180C00FB3BDF /* CoronaLibrary.h */,
 				A4551E8A1BAA180C00FB3BDF /* CoronaLibrary.lua */,
@@ -3518,7 +3501,6 @@
 				A4E0760D1BD1D09D003A733A /* CoronaAssert.h in Headers */,
 				A4E0760E1BD1D09D003A733A /* CoronaEvent.h in Headers */,
 				A4E075EF1BD1CAB3003A733A /* CoronaDelegate.h in Headers */,
-				F51D55BA1C814021000CE085 /* CoronaGraphics.h in Headers */,
 				A4E0760F1BD1D09D003A733A /* CoronaLibrary.h in Headers */,
 				A4E076101BD1D09D003A733A /* CoronaLog.h in Headers */,
 				A4E076111BD1D09D003A733A /* CoronaLua.h in Headers */,
@@ -3555,7 +3537,6 @@
 				F5C5E131251E114A00217C19 /* CoronaAssert.h in Headers */,
 				F5C5E132251E114A00217C19 /* CoronaEvent.h in Headers */,
 				F5C5E133251E114A00217C19 /* CoronaDelegate.h in Headers */,
-				F5C5E134251E114A00217C19 /* CoronaGraphics.h in Headers */,
 				F5C5E135251E114A00217C19 /* CoronaLibrary.h in Headers */,
 				F5C5E136251E114A00217C19 /* CoronaLog.h in Headers */,
 				F5C5E137251E114A00217C19 /* CoronaLua.h in Headers */,
@@ -4901,7 +4882,6 @@
 				A4DD47731BB2490800FD988E /* kernel_filter_wobble_gl.lua in Sources */,
 				A4DD47741BB2490800FD988E /* kernel_filter_woodCut_gl.lua in Sources */,
 				A4DD47751BB2490800FD988E /* kernel_filter_zoomBlur_gl.lua in Sources */,
-				F50CA3CD1C8111A300746C98 /* CoronaGraphics.cpp in Sources */,
 				A4DD47761BB2490800FD988E /* kernel_generator_checkerboard_gl.lua in Sources */,
 				A4DD47771BB2490800FD988E /* kernel_generator_lenticularHalo_gl.lua in Sources */,
 				A4DD47781BB2490800FD988E /* kernel_generator_linearGradient_gl.lua in Sources */,
@@ -4953,7 +4933,6 @@
 				A4AD315D1BAB8C64006A0C97 /* CoronaLuaLibraryMetadata.cpp in Sources */,
 				A4551D3A1BAA17BE00FB3BDF /* Rtt_ResourceHandle.cpp in Sources */,
 				A4551DE01BAA17CF00FB3BDF /* Rtt_BitmapPaintAdapter.cpp in Sources */,
-				F50CA3C91C81115400746C98 /* Rtt_TextureResourceExternal.cpp in Sources */,
 				A4551E951BAA180C00FB3BDF /* CoronaEvent.cpp in Sources */,
 				A4551DFD1BAA17CF00FB3BDF /* Rtt_PlatformBitmap.cpp in Sources */,
 				A4551F4A1BAA182D00FB3BDF /* Rtt_LuaData.cpp in Sources */,
@@ -5060,7 +5039,6 @@
 				A4DD48071BB260B200FD988E /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				A4551F6E1BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp in Sources */,
 				A4DD48001BB260B200FD988E /* Rtt_PlatformInputAxis.cpp in Sources */,
-				F50CA3CA1C81115400746C98 /* Rtt_TextureResourceExternalAdapter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

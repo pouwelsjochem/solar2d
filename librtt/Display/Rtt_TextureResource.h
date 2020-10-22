@@ -37,7 +37,6 @@ class TextureResource
 	enum TextureResourceType{
 		kTextureResourceBitmap,
 		kTextureResourceCanvas,
-		kTextureResourceExternal,
 		
 		kTextureResource_Any
 	};
@@ -59,7 +58,6 @@ class TextureResource
 		const Texture& GetTexture() const { return *fTexture; }
 
 		virtual void Render(Renderer &renderer){};
-		virtual void Teardown(){};
 		virtual void ReleaseLuaReferences( lua_State *L ) {};
 	public:
 		// Dimensions of underlying bit data
