@@ -134,10 +134,7 @@ void SpriteObject::Update(lua_State *L, U64 milliseconds) {
 					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kNext));
 				}
 			} else if (loopCount == 0 || CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) {
-				fCurrentEffectiveFrameIndex = loopCount == 0 ? 0 : nextEffectiveFrameIndex;
-				if (loopCount == 0 && sequence->GetTimePerFrameArray() != NULL) {
-					fTimePerFrameArrayCachedFrameIndex = 0;
-				}
+				fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
 				SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex));
 				if (HasListener(kSpriteListener)) {
 					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kLoop));
