@@ -16,6 +16,9 @@
 
 struct CGImage;
 @class NSString;
+#ifdef Rtt_IPHONE_ENV
+	@class UIImage;
+#endif
 
 namespace Rtt
 {

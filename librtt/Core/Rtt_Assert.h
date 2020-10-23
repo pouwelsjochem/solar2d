@@ -50,7 +50,7 @@ Rtt_EXPORT int Rtt_LogIsEnabled(void);
 	#define Rtt_TRACE_SIM( expr ) Rtt_Log expr
 	#define Rtt_WARN_SIM( cond, expr ) (void)( 0 != (cond) ? (0) : Rtt_TRACE_SIM( expr ) )
 #else
-	#define Rtt_TRACE_SIM( expr ) Rtt_Log expr
+	#define Rtt_TRACE_SIM( expr )
 	#define Rtt_WARN_SIM( cond, expr )
 #endif
 
