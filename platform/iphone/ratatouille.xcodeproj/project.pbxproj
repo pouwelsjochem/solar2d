@@ -535,6 +535,13 @@
 			remoteGlobalIDString = A481B86F15DDA6CC009FFE54;
 			remoteInfo = ads;
 		};
+		A49186B21642195200A39286 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A49186961642195200A39286 /* plugins.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A484DB8015EF595500BDE27A;
+			remoteInfo = analytics;
+		};
 		A4B93F9617596F60003466CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A4B93F9217596F60003466CC /* libtachyon.xcodeproj */;
@@ -1025,13 +1032,6 @@
 			remoteGlobalIDString = C2F9112F1CDC0F20004A5564;
 			remoteInfo = libluasocket;
 		};
-		F5C36BF524FAB49F00775C6E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 000DC9BE12B05ACC00042A5E;
-			remoteInfo = libbox2d;
-		};
 		F5C36BF724FAB49F00775C6E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */;
@@ -1406,11 +1406,46 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4F2ADFF16E0AF7D00814C7B /* Frameworks */ = {
+		F50E7EB924FA923B009F165B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4F2AE2F16E0AF9E00814C7B /* libplayer-trial.a in Frameworks */,
+				F5C36CDB24FAB5E500775C6E /* libplayer-angle.a in Frameworks */,
+				F50E7EBA24FA923B009F165B /* libobjc.dylib in Frameworks */,
+				F5C36AF324FA93A700775C6E /* MetalANGLE.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5C36C3B24FAB49F00775C6E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F52611732500144000671DFE /* libtachyon-angle.a in Frameworks */,
+				F5C36C3D24FAB49F00775C6E /* libalmixer.a in Frameworks */,
+				F5C36C3F24FAB49F00775C6E /* liblua.a in Frameworks */,
+				F5C36C4024FAB49F00775C6E /* libluafilesystem.a in Frameworks */,
+				F5C36C4124FAB49F00775C6E /* libluasocket.a in Frameworks */,
+				F5C36C4224FAB49F00775C6E /* librtt.a in Frameworks */,
+				F5C36C4324FAB49F00775C6E /* libplugins.a in Frameworks */,
+				F5C36C4424FAB49F00775C6E /* libgameNetwork.a in Frameworks */,
+				F5C36C4524FAB49F00775C6E /* liblicensing.a in Frameworks */,
+				F5C36C4624FAB49F00775C6E /* libnetwork.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5C36CAC24FAB4E900775C6E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5C36CD524FAB55B00775C6E /* libplayer-core-angle.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5C36CC124FAB50800775C6E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5C36CD624FAB5CC00775C6E /* libplayer-angle.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2254,6 +2289,7 @@
 				A482FAF7183EB72F0005831B /* PBXTargetDependency */,
 				A482FAF9183EB72F0005831B /* PBXTargetDependency */,
 				A482FAFB183EB72F0005831B /* PBXTargetDependency */,
+				A482FB01183EB72F0005831B /* PBXTargetDependency */,
 				A482FB03183EB72F0005831B /* PBXTargetDependency */,
 			);
 			name = CoronaCards;
@@ -2278,6 +2314,7 @@
 				A44D43F6164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D43F8164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D43FA164B1FD300CFE7B3 /* PBXTargetDependency */,
+				A44D43FC164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D43FE164B1FD300CFE7B3 /* PBXTargetDependency */,
 				A44D41D7164A1D9C00CFE7B3 /* PBXTargetDependency */,
 			);
@@ -2378,22 +2415,89 @@
 			productReference = A4F2ADF516E0AF2E00814C7B /* libtemplate.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		A4F2ADFA16E0AF7D00814C7B /* libtemplate-trial */ = {
+		F50E7EAC24FA923B009F165B /* template-angle */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A4F2AE2716E0AF7D00814C7B /* Build configuration list for PBXNativeTarget "libtemplate-trial" */;
+			buildConfigurationList = F50E7EBF24FA923B009F165B /* Build configuration list for PBXNativeTarget "template-angle" */;
 			buildPhases = (
-				A4F2ADFD16E0AF7D00814C7B /* Sources */,
-				A4F2ADFF16E0AF7D00814C7B /* Frameworks */,
-				A4F2AE0116E0AF7D00814C7B /* Headers */,
+				F50E7EB124FA923B009F165B /* Resources */,
+				F50E7EB724FA923B009F165B /* Sources */,
+				F50E7EB924FA923B009F165B /* Frameworks */,
+				F50E7EBC24FA923B009F165B /* Script: CopyResources and resource.corona-archive */,
+				F50E7EBD24FA923B009F165B /* Script: build.settings to Info.plist */,
+				F5C36AF524FA93A700775C6E /* Embed Frameworks */,
+			);
+			buildRules = (
+				F50E7EBE24FA923B009F165B /* PBXBuildRule */,
+			);
+			dependencies = (
+				F5C36CD824FAB5DD00775C6E /* PBXTargetDependency */,
+				F5C36CDA24FAB5DD00775C6E /* PBXTargetDependency */,
+			);
+			name = "template-angle";
+			productName = ratatouille;
+			productReference = F50E7EC424FA923B009F165B /* template-angle.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F5C36BE724FAB49F00775C6E /* libplayer-core-angle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F5C36C6324FAB49F00775C6E /* Build configuration list for PBXNativeTarget "libplayer-core-angle" */;
+			buildPhases = (
+				F5C36BFA24FAB49F00775C6E /* Sources */,
+				F5C36C3B24FAB49F00775C6E /* Frameworks */,
+				F5C36C4724FAB49F00775C6E /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A4F2AE2E16E0AF9500814C7B /* PBXTargetDependency */,
+				F5C36CDD24FAB65600775C6E /* PBXTargetDependency */,
+				F5C36BEA24FAB49F00775C6E /* PBXTargetDependency */,
+				F52611722500143100671DFE /* PBXTargetDependency */,
+				F5C36BEC24FAB49F00775C6E /* PBXTargetDependency */,
+				F5C36BEE24FAB49F00775C6E /* PBXTargetDependency */,
+				F5C36BF024FAB49F00775C6E /* PBXTargetDependency */,
+				F5C36BF224FAB49F00775C6E /* PBXTargetDependency */,
+				F5C36BF624FAB49F00775C6E /* PBXTargetDependency */,
+				F5C36BF824FAB49F00775C6E /* PBXTargetDependency */,
 			);
-			name = "libtemplate-trial";
+			name = "libplayer-core-angle";
 			productName = libcorona;
-			productReference = A4F2AE2C16E0AF7D00814C7B /* libtemplate-trial.a */;
+			productReference = F5C36C6824FAB49F00775C6E /* libplayer-core-angle.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		F5C36CA724FAB4E900775C6E /* libplayer-angle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F5C36CB624FAB4E900775C6E /* Build configuration list for PBXNativeTarget "libplayer-angle" */;
+			buildPhases = (
+				F5C36CAA24FAB4E900775C6E /* Sources */,
+				F5C36CAC24FAB4E900775C6E /* Frameworks */,
+				F5C36CAE24FAB4E900775C6E /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F5C36CD424FAB55300775C6E /* PBXTargetDependency */,
+			);
+			name = "libplayer-angle";
+			productName = libcorona;
+			productReference = F5C36CBB24FAB4E900775C6E /* libplayer-angle.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		F5C36CBC24FAB50800775C6E /* libtemplate-angle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F5C36CCB24FAB50800775C6E /* Build configuration list for PBXNativeTarget "libtemplate-angle" */;
+			buildPhases = (
+				F5C36CBF24FAB50800775C6E /* Sources */,
+				F5C36CC124FAB50800775C6E /* Frameworks */,
+				F5C36CC324FAB50800775C6E /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F5C36CD224FAB53500775C6E /* PBXTargetDependency */,
+			);
+			name = "libtemplate-angle";
+			productName = libcorona;
+			productReference = F5C36CD024FAB50800775C6E /* libtemplate-angle.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -2469,12 +2573,12 @@
 				A4841094151147BE0074BD57 /* libplayer-core */,
 				F5C36BE724FAB49F00775C6E /* libplayer-core-angle */,
 				A47098A4169E9F2400D31091 /* libplayer */,
-				A469363D169D69EF00723568 /* libplayer-trial */,
+				F5C36CA724FAB4E900775C6E /* libplayer-angle */,
 				A43B955B15C779EE003E6F9F /* testplayer-enterprise */,
 				A4F2ADC316E0AF2E00814C7B /* libtemplate */,
-				A4F2ADFA16E0AF7D00814C7B /* libtemplate-trial */,
+				F5C36CBC24FAB50800775C6E /* libtemplate-angle */,
 				A4693558169D62DA00723568 /* template */,
-				A4693670169D6A0700723568 /* template-trial */,
+				F50E7EAC24FA923B009F165B /* template-angle */,
 				A482FA9F183D74950005831B /* CoronaCards */,
 				A482FADF183D7B860005831B /* CoronaCards.framework */,
 				A48E9B9A183EEC8600F67CB3 /* CoronaCardsTest */,
@@ -3435,11 +3539,79 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4F2ADFD16E0AF7D00814C7B /* Sources */ = {
+		F50E7EB724FA923B009F165B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4F2ADFE16E0AF7D00814C7B /* main.mm in Sources */,
+				F50E7EB824FA923B009F165B /* main.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5C36BFA24FAB49F00775C6E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5C36BFB24FAB49F00775C6E /* CoronaBeacon.mm in Sources */,
+				F5C36BFC24FAB49F00775C6E /* AppleWeakProxy.mm in Sources */,
+				F5C36BFD24FAB49F00775C6E /* Rtt_IPhonePlatformCore.mm in Sources */,
+				F5C36BFE24FAB49F00775C6E /* CoronaSystemResourceManager.mm in Sources */,
+				F5C36C0124FAB49F00775C6E /* Rtt_AppleBitmap.mm in Sources */,
+				F5C36C0224FAB49F00775C6E /* Rtt_AppleCallback.mm in Sources */,
+				F5C36C0324FAB49F00775C6E /* Rtt_AppleData.mm in Sources */,
+				F5C36C0424FAB49F00775C6E /* Rtt_AppleInAppStore.mm in Sources */,
+				F5C36C0524FAB49F00775C6E /* Rtt_AppleInAppStoreApple.mm in Sources */,
+				F5C36C0624FAB49F00775C6E /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
+				F5C36C0724FAB49F00775C6E /* Rtt_ApplePlatform.mm in Sources */,
+				F5C36C0924FAB49F00775C6E /* Rtt_AppleReachability.mm in Sources */,
+				F5C36C0A24FAB49F00775C6E /* Rtt_AppleTimer.mm in Sources */,
+				F5C36C0C24FAB49F00775C6E /* Rtt_AppleCrypto.cpp in Sources */,
+				F5C36C0D24FAB49F00775C6E /* Rtt_AppleEventSound.cpp in Sources */,
+				F5C36C0F24FAB49F00775C6E /* CoronaApplicationMain.mm in Sources */,
+				F5C36C1024FAB49F00775C6E /* AppDelegate.mm in Sources */,
+				F5C36C1224FAB49F00775C6E /* CoronaViewPrivate.mm in Sources */,
+				F5C36C1324FAB49F00775C6E /* Rtt_IPhoneAudioSessionManager.mm in Sources */,
+				F5C36C1424FAB49F00775C6E /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */,
+				F5C36C1524FAB49F00775C6E /* AutoLinkModules.m in Sources */,
+				F5C36C1624FAB49F00775C6E /* CoronaLuaObjC+NSObject.m in Sources */,
+				F5C36C1724FAB49F00775C6E /* Rtt_IPhoneDevice.mm in Sources */,
+				F5C36C1A24FAB49F00775C6E /* CoronaViewRuntimeDelegate.mm in Sources */,
+				F5C36C1B24FAB49F00775C6E /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
+				F5C36C1C24FAB49F00775C6E /* Rtt_IPhoneImageProvider.mm in Sources */,
+				F5C36C1D24FAB49F00775C6E /* Rtt_IPhoneMapViewObject.mm in Sources */,
+				F5C36C1E24FAB49F00775C6E /* Rtt_IPhonePlatform.mm in Sources */,
+				F5C36C1F24FAB49F00775C6E /* CoronaLuaObjC.mm in Sources */,
+				F5C36C2024FAB49F00775C6E /* Rtt_IPhoneScreenSurface.mm in Sources */,
+				F5C36C2124FAB49F00775C6E /* Rtt_IPhoneRuntimeDelegate.mm in Sources */,
+				F5C36C2224FAB49F00775C6E /* CoronaAppDelegate.mm in Sources */,
+				F5C36C2724FAB49F00775C6E /* Rtt_AppleInputDevice.mm in Sources */,
+				F5C36C2924FAB49F00775C6E /* Rtt_TouchInhibitor.mm in Sources */,
+				F5C36C2B24FAB49F00775C6E /* CoronaViewPluginContext.mm in Sources */,
+				F5C36C2D24FAB49F00775C6E /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
+				F5C36C2E24FAB49F00775C6E /* CoronaLuaIOS.mm in Sources */,
+				F5C36C3024FAB49F00775C6E /* Rtt_AppleInputDeviceManager.mm in Sources */,
+				F5C36C3124FAB49F00775C6E /* CoronaViewControllerPrivate.mm in Sources */,
+				F5C36C3424FAB49F00775C6E /* Rtt_IPhoneTimer.mm in Sources */,
+				F5C36C3524FAB49F00775C6E /* Rtt_IPhonePlatformBase.mm in Sources */,
+				F5C36C3624FAB49F00775C6E /* Rtt_IPhoneGLVideoTexture.mm in Sources */,
+				F5C36C3824FAB49F00775C6E /* Rtt_DependencyUtilsApple.mm in Sources */,
+				F5C36C3924FAB49F00775C6E /* CoronaLuaObjCHelper.mm in Sources */,
+				F5C36C3A24FAB49F00775C6E /* Rtt_DependencyLoader.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5C36CAA24FAB4E900775C6E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5C36CAB24FAB4E900775C6E /* Rtt_IPhoneTemplate-Sub.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5C36CBF24FAB50800775C6E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5C36CC024FAB50800775C6E /* main.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3556,10 +3728,70 @@
 			target = A4F2ADC316E0AF2E00814C7B /* libtemplate */;
 			targetProxy = A4F2AE3016E16A6900814C7B /* PBXContainerItemProxy */;
 		};
-		A4F2AE3316E16A6F00814C7B /* PBXTargetDependency */ = {
+		F52611722500143100671DFE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A4F2ADFA16E0AF7D00814C7B /* libtemplate-trial */;
-			targetProxy = A4F2AE3216E16A6F00814C7B /* PBXContainerItemProxy */;
+			name = "tachyon-angle";
+			targetProxy = F52611712500143100671DFE /* PBXContainerItemProxy */;
+		};
+		F5C36BEA24FAB49F00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A48B825B16D594AA00CA01A1 /* CoronaResources */;
+			targetProxy = F5C36BEB24FAB49F00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36BEC24FAB49F00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = librtt;
+			targetProxy = F5C36BED24FAB49F00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36BEE24FAB49F00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = liblua;
+			targetProxy = F5C36BEF24FAB49F00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36BF024FAB49F00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = luafilesystem;
+			targetProxy = F5C36BF124FAB49F00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36BF224FAB49F00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libluasocket;
+			targetProxy = F5C36BF324FAB49F00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36BF624FAB49F00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libalmixer;
+			targetProxy = F5C36BF724FAB49F00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36BF824FAB49F00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = plugins;
+			targetProxy = F5C36BF924FAB49F00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36CD224FAB53500775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F5C36CA724FAB4E900775C6E /* libplayer-angle */;
+			targetProxy = F5C36CD124FAB53500775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36CD424FAB55300775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F5C36BE724FAB49F00775C6E /* libplayer-core-angle */;
+			targetProxy = F5C36CD324FAB55300775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36CD824FAB5DD00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F5C36CA724FAB4E900775C6E /* libplayer-angle */;
+			targetProxy = F5C36CD724FAB5DD00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36CDA24FAB5DD00775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F5C36CBC24FAB50800775C6E /* libtemplate-angle */;
+			targetProxy = F5C36CD924FAB5DD00775C6E /* PBXContainerItemProxy */;
+		};
+		F5C36CDD24FAB65600775C6E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MetalANGLE;
+			targetProxy = F5C36CDC24FAB65600775C6E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3671,137 +3903,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		000DC8B212B046E800042A5E /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				ENABLE_BITCODE = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_PASCAL_STRINGS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					Rtt_IPHONE_ENV,
-					NDEBUG,
-					LUA_USE_OBJC_EXCEPTIONS,
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
-				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../external/b2Separator-cpp",
-					../../external/Box2D,
-					../../external/smoothpolygon,
-					/System/Library/Frameworks/OpenAL.framework/Headers,
-					../../external/luasocket/src,
-					"../../external/CoronaBeacon/Beacon-iOS/Release-universal/include",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				SDKROOT = iphoneos;
-				SEPARATE_STRIP = YES;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = YES;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = (
-					../../librtt,
-					.,
-				);
-			};
-			name = "Release-template";
-		};
-		000DC8B412B046F600042A5E /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				ENABLE_BITCODE = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_CPP_EXCEPTIONS = NO;
-				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_PASCAL_STRINGS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					Rtt_IPHONE_ENV,
-					NDEBUG,
-					LUA_USE_OBJC_EXCEPTIONS,
-				);
-				GCC_THUMB_SUPPORT = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"../../external/b2Separator-cpp",
-					../../external/Box2D,
-					../../external/smoothpolygon,
-					/System/Library/Frameworks/OpenAL.framework/Headers,
-					../../external/luasocket/src,
-					"../../external/CoronaBeacon/Beacon-iOS/Release-universal/include",
-				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				SDKROOT = iphoneos;
-				SEPARATE_STRIP = YES;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = YES;
-				SWIFT_VERSION = 3.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = (
-					../../librtt,
-					.,
-				);
-			};
-			name = "Release-template-trial";
-		};
 		A40D2F9F1889152400B4A354 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3867,68 +3968,6 @@
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
-		};
-		A40D2FA11889152400B4A354 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = "Release-template";
-		};
-		A40D2FA21889152400B4A354 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = "Release-template-trial";
 		};
 		A43B956E15C779EE003E6F9F /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4001,16 +4040,17 @@
 		A46935C3169D62DA00723568 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 9ALGBA85N3;
+				DEVELOPMENT_TEAM = BG2J43EA88;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
@@ -4020,7 +4060,7 @@
 				);
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = ios;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
@@ -4030,36 +4070,6 @@
 		A46935C4169D62DA00723568 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 9ALGBA85N3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = template;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		A46935C5169D62DA00723568 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -4086,236 +4096,7 @@
 				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "Release-template";
-		};
-		A46935C6169D62DA00723568 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = template;
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = ios;
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template-trial";
-		};
-		A469366B169D69EF00723568 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				DSTROOT = "/tmp/libplayer-trial.dst";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "player-trial";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		A469366C169D69EF00723568 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = "/tmp/libplayer-trial.dst";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "player-trial";
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
 			name = Release;
-		};
-		A469366D169D69EF00723568 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = "/tmp/libplayer-trial.dst";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "player-trial";
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template";
-		};
-		A469366E169D69EF00723568 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = "/tmp/libplayer-trial.dst";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "player-trial";
-				SKIP_INSTALL = YES;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template-trial";
-		};
-		A46936A4169D6A0700723568 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "template-trial";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-			};
-			name = Debug;
-		};
-		A46936A5169D6A0700723568 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "template-trial";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		A46936A6169D6A0700723568 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "template-trial";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template";
-		};
-		A46936A7169D6A0700723568 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				INFOPLIST_FILE = Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "template-trial";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template-trial";
 		};
 		A47098D1169E9F2400D31091 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4325,7 +4106,10 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = player;
 				SKIP_INSTALL = YES;
@@ -4341,7 +4125,10 @@
 				DSTROOT = /tmp/libplayer.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = player;
 				SKIP_INSTALL = YES;
@@ -4349,46 +4136,6 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
-		};
-		A47098D3169E9F2400D31091 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/libplayer.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = player;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template";
-		};
-		A47098D4169E9F2400D31091 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/libplayer.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = player;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template-trial";
 		};
 		A482FABD183D74960005831B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4464,78 +4211,6 @@
 			};
 			name = Release;
 		};
-		A482FABF183D74960005831B /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/CoronaCards.dst;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/CoronaCards-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/network/ios\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = debugging;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template";
-		};
-		A482FAC0183D74960005831B /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/CoronaCards.dst;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/CoronaCards-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/network/ios\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = debugging;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template-trial";
-		};
 		A482FAE1183D7B870005831B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4549,20 +4224,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
-		};
-		A482FAE3183D7B870005831B /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = "Release-template";
-		};
-		A482FAE4183D7B870005831B /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = "Release-template-trial";
 		};
 		A484109D151147BF0074BD57 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -4615,60 +4276,6 @@
 			};
 			name = Release;
 		};
-		A484109F151147BF0074BD57 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = "/tmp/libplayer-core.dst";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = LibPlayerPrefix.pch;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../plugins/build-core/network/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork-corona/ios\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "player-core";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template";
-		};
-		A48410A0151147BF0074BD57 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = "/tmp/libplayer-core.dst";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = LibPlayerPrefix.pch;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
-					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../plugins/build-core/network/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork-corona/ios\"",
-				);
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "player-core";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Release-template-trial";
-		};
 		A48B826716D594AA00CA01A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4710,44 +4317,6 @@
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
-		};
-		A48B826916D594AA00CA01A1 /* Release-template */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "../apple/CoronaResources-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = "Release-template";
-		};
-		A48B826A16D594AA00CA01A1 /* Release-template-trial */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "../apple/CoronaResources-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = "Release-template-trial";
 		};
 		A48DA9F918580418009D1F93 /* Debug */ = {
 			isa = XCBuildConfiguration;

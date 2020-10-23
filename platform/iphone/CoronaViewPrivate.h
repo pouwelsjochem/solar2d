@@ -42,7 +42,7 @@ class IPhonePlatformBase;
 
 // ----------------------------------------------------------------------------
 
-@interface CoronaView() <>
+@interface CoronaView()
 
 @property (nonatomic, readonly) Rtt::Runtime *runtime;
 @property (nonatomic, readonly) Rtt::CoronaViewRuntimeDelegate *runtimeDelegate;
