@@ -172,15 +172,15 @@ jobs:
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
-      - name: Build Native
-        run: ./tools/GHAction/build_native.sh
-        env:
-          CERT_PASSWORD: ${{ secrets.CertPassword }}
-      - name: Upload Corona Native
-        uses: actions/upload-artifact@v1
-        with:
-          name: Native
-          path: ./output
+      # - name: Build Native
+      #   run: ./tools/GHAction/build_native.sh
+      #   env:
+      #     CERT_PASSWORD: ${{ secrets.CertPassword }}
+      # - name: Upload Corona Native
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: Native
+      #     path: ./output
 
   # CoronaCards-Android:
   #   needs: native
@@ -234,7 +234,7 @@ jobs:
     needs:
       - source-code
       - collect-ios-templates
-      - native
+      # - native
       # - webtemplate
       # - linux
     runs-on: macos-latest
@@ -267,10 +267,10 @@ jobs:
       #     cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
       #     cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
       - run: mkdir docs
-      - name: Get Native
-        uses: actions/download-artifact@v1
-        with:
-          name: Native
+      # - name: Get Native
+      #   uses: actions/download-artifact@v1
+      #   with:
+      #     name: Native
       - name: install appdmg
         run: npm install -g appdmg
       - name: install imagemagick
@@ -318,7 +318,7 @@ jobs:
   Windows-Simulator:
     needs:
       - source-code
-      - native
+      # - native
       # - webtemplate
       # - linux
     runs-on: windows-latest
@@ -352,21 +352,21 @@ jobs:
       #     cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
       #     cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
         shell: bash
-      - name: Get Corona Native
-        uses: actions/download-artifact@v1
-        with:
-          name: Native
-      - name: Put native in place
-        shell: cmd
-        run: |
-          mkdir "%WORKSPACE%\platform\windows\Bin"
-          cd "%WORKSPACE%\platform\windows\Bin"
-          rmdir /s /q "Native"
-          tar -xvzf "%WORKSPACE%\Native\CoronaNative.tar.gz"
-          rm ._CoronaEnterprise
-          mv CoronaEnterprise Native
-          del /q /f /a Native\.*
-          del /q /f /a Native\Icon?
+      # - name: Get Corona Native
+      #   uses: actions/download-artifact@v1
+      #   with:
+      #     name: Native
+      # - name: Put native in place
+      #   shell: cmd
+      #   run: |
+      #     mkdir "%WORKSPACE%\platform\windows\Bin"
+      #     cd "%WORKSPACE%\platform\windows\Bin"
+      #     rmdir /s /q "Native"
+      #     tar -xvzf "%WORKSPACE%\Native\CoronaNative.tar.gz"
+      #     rm ._CoronaEnterprise
+      #     mv CoronaEnterprise Native
+      #     del /q /f /a Native\.*
+      #     del /q /f /a Native\Icon?
       - name: Build Corona Simulator
         shell: cmd
         run: |
@@ -397,7 +397,7 @@ jobs:
       # - linux
       # - CoronaCards-Android
       # - CoronaCards-iOS
-      - native
+      # - native
     steps:
       - uses: actions/checkout@v2
       - run: ./tools/GHAction/daily_env.sh
@@ -439,9 +439,9 @@ jobs:
       # - uses: actions/download-artifact@v1
       #   with:
       #     name: CoronaCards-Android
-      - uses: actions/download-artifact@v1
-        with:
-          name: Native
+      # - uses: actions/download-artifact@v1
+      #   with:
+      #     name: Native
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -487,15 +487,15 @@ jobs:
       #     asset_path: ./CoronaCards-Android/CoronaCardsAndroidAAR.zip
       #     asset_name: CoronaCards-Android-${{ env.YEAR }}.${{ env.BUILD }}.zip
       #     asset_content_type: application/zip
-      - name: Upload Release Asset Android Debug Symbols
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Native/AndroidDebugSymbols.zip
-          asset_name: AndroidDebugSymbols-${{ env.YEAR }}.${{ env.BUILD }}.zip
-          asset_content_type: application/zip
+      # - name: Upload Release Asset Android Debug Symbols
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PAT }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./Native/AndroidDebugSymbols.zip
+      #     asset_name: AndroidDebugSymbols-${{ env.YEAR }}.${{ env.BUILD }}.zip
+      #     asset_content_type: application/zip
 
   # notify-chats:
   #   if: startsWith(github.ref, 'refs/tags')
