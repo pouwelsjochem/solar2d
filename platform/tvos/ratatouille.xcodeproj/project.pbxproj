@@ -126,7 +126,6 @@
 		A4551E981BAA180C00FB3BDF /* CoronaLua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E8D1BAA180C00FB3BDF /* CoronaLua.cpp */; };
 		A4551E991BAA180C00FB3BDF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A4551E921BAA180C00FB3BDF /* CoronaVersion.c */; };
 		A4551F3A1BAA182D00FB3BDF /* Rtt_Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E9A1BAA182C00FB3BDF /* Rtt_Archive.cpp */; };
-		A4551F3E1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA51BAA182C00FB3BDF /* Rtt_Event.cpp */; };
 		A4551F411BAA182D00FB3BDF /* Rtt_FilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA81BAA182C00FB3BDF /* Rtt_FilePath.cpp */; };
 		A4551F431BAA182D00FB3BDF /* Rtt_HitTestObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EAD1BAA182C00FB3BDF /* Rtt_HitTestObject.cpp */; };
 		A4551F441BAA182D00FB3BDF /* Rtt_Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EAF1BAA182C00FB3BDF /* Rtt_Lua.cpp */; };
@@ -487,10 +486,8 @@
 		F5C5E113251E114A00217C19 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47021BB2476F00FD988E /* AudioToolbox.framework */; };
 		F5C5E114251E114A00217C19 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47031BB2476F00FD988E /* AVFoundation.framework */; };
 		F5C5E115251E114A00217C19 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47041BB2476F00FD988E /* CoreGraphics.framework */; };
-		F5C5E116251E114A00217C19 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47241BB247AB00FD988E /* CoreLocation.framework */; };
 		F5C5E117251E114A00217C19 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A44496B11BC5FF5E0019DA20 /* CoreMedia.framework */; };
 		F5C5E118251E114A00217C19 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A40A90521BD984AD001D2038 /* CoreText.framework */; };
-		F5C5E119251E114A00217C19 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47051BB2476F00FD988E /* CoreVideo.framework */; };
 		F5C5E11A251E114A00217C19 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47061BB2476F00FD988E /* Foundation.framework */; };
 		F5C5E11B251E114A00217C19 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A46DA3B31BBA1A1D009C3CDF /* GameController.framework */; };
 		F5C5E11D251E114A00217C19 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47081BB2476F00FD988E /* ImageIO.framework */; };
@@ -509,7 +506,6 @@
 		F5C5E12D251E114A00217C19 /* CoronaMainViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A4E075D81BD1C78E003A733A /* CoronaMainViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5C5E12E251E114A00217C19 /* CoronaCards.h in Headers */ = {isa = PBXBuildFile; fileRef = A4E075931BD1BC09003A733A /* CoronaCards.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5C5E12F251E114A00217C19 /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD31661BAB9E18006A0C97 /* CoronaLuaIOS.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F5C5E130251E114A00217C19 /* CoronaNativeObjectAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD31681BAB9E19006A0C97 /* CoronaNativeObjectAdapter.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E131251E114A00217C19 /* CoronaAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E851BAA180C00FB3BDF /* CoronaAssert.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E132251E114A00217C19 /* CoronaEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E871BAA180C00FB3BDF /* CoronaEvent.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E133251E114A00217C19 /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4124B7C1BB2070F001421F5 /* CoronaDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -526,9 +522,6 @@
 		F5C5E13F251E114A00217C19 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C281C5722A500BE3194 /* NSString+Extensions.h */; };
 		F5C5E140251E114A00217C19 /* luaconf.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD178A1BAA14EA00BCF507 /* luaconf.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E141251E114A00217C19 /* lualib.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD178B1BAA14EA00BCF507 /* lualib.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F5C5E143251E114A00217C19 /* widget_theme_ios7@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = A44496B31BC83E1B0019DA20 /* widget_theme_ios7@4x.png */; };
-		F5C5E144251E114A00217C19 /* widget_theme_ios7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A44496B51BC83E1B0019DA20 /* widget_theme_ios7@2x.png */; };
-		F5C5E145251E114A00217C19 /* widget_theme_ios7.png in Resources */ = {isa = PBXBuildFile; fileRef = A44496B41BC83E1B0019DA20 /* widget_theme_ios7.png */; };
 		F5C5E166251E115D00217C19 /* Rtt_AppleData.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */; };
 		F5C5E167251E115D00217C19 /* CoronaSystemResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31631BAB9934006A0C97 /* CoronaSystemResourceManager.mm */; };
 		F5C5E168251E115D00217C19 /* CoronaLuaObjC+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30571BAA2B80006A0C97 /* CoronaLuaObjC+NSObject.m */; };
@@ -537,39 +530,25 @@
 		F5C5E16B251E115D00217C19 /* Rtt_KeyName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A465E1A31BCF02A200C8D51B /* Rtt_KeyName.cpp */; };
 		F5C5E16C251E115D00217C19 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B61BE294F40061E021 /* Rtt_AppleInputDeviceManager.mm */; };
 		F5C5E16D251E115D00217C19 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */; };
-		F5C5E16E251E115D00217C19 /* Rtt_IPhoneText.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CC1BAA377C006A0C97 /* Rtt_IPhoneText.mm */; };
-		F5C5E16F251E115D00217C19 /* Rtt_IPhoneFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B81BAA377C006A0C97 /* Rtt_IPhoneFont.mm */; };
 		F5C5E170251E115D00217C19 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30721BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm */; };
 		F5C5E171251E115D00217C19 /* Rtt_AppleInAppStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD306E1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm */; };
 		F5C5E172251E115D00217C19 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */; };
 		F5C5E173251E115D00217C19 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30981BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		F5C5E174251E115D00217C19 /* Rtt_TVOSDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31001BAA38B0006A0C97 /* Rtt_TVOSDevice.mm */; };
 		F5C5E175251E115D00217C19 /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30AA1BAA377C006A0C97 /* CoronaViewPluginContext.mm */; };
-		F5C5E176251E115D00217C19 /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B61BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.mm */; };
 		F5C5E177251E115D00217C19 /* Rtt_IPhoneAudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30AF1BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManager.mm */; };
-		F5C5E178251E115D00217C19 /* CoronaNativeObjectAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31691BAB9E19006A0C97 /* CoronaNativeObjectAdapter.mm */; };
 		F5C5E179251E115D00217C19 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */; };
 		F5C5E17A251E115D00217C19 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */; };
 		F5C5E17B251E115D00217C19 /* Rtt_AppleInAppStoreApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30701BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm */; };
 		F5C5E17C251E115D00217C19 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A61BAA377C006A0C97 /* CoronaViewPrivate.mm */; };
-		F5C5E17D251E115D00217C19 /* Rtt_IPhoneTextBoxObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CE1BAA377C006A0C97 /* Rtt_IPhoneTextBoxObject.mm */; };
-		F5C5E17E251E115D00217C19 /* Rtt_IPhoneNativeObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C21BAA377C006A0C97 /* Rtt_IPhoneNativeObject.mm */; };
 		F5C5E17F251E115D00217C19 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */; };
 		F5C5E180251E115D00217C19 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30651BAA2B80006A0C97 /* Rtt_AppleCallback.mm */; };
-		F5C5E181251E115D00217C19 /* Rtt_IPhoneVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D41BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm */; };
-		F5C5E182251E115D00217C19 /* Rtt_AppleAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD305E1BAA2B80006A0C97 /* Rtt_AppleAudioPlayer.cpp */; };
 		F5C5E183251E115D00217C19 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30DE1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm */; };
-		F5C5E184251E115D00217C19 /* Rtt_AppleEventSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD306A1BAA2B80006A0C97 /* Rtt_AppleEventSound.cpp */; };
-		F5C5E185251E115D00217C19 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD305D1BAA2B80006A0C97 /* Rtt_AppleTextAlignment.mm */; };
-		F5C5E186251E115D00217C19 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30781BAA2B80006A0C97 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
-		F5C5E187251E115D00217C19 /* Rtt_AppleAudioRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30601BAA2B80006A0C97 /* Rtt_AppleAudioRecorder.mm */; };
 		F5C5E188251E115D00217C19 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */; };
 		F5C5E189251E115D00217C19 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B81BE294F40061E021 /* Rtt_AppleInputMFiDeviceListener.mm */; };
 		F5C5E18A251E115D00217C19 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30631BAA2B80006A0C97 /* Rtt_AppleBitmap.mm */; };
 		F5C5E18B251E115D00217C19 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B11BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */; };
-		F5C5E18C251E115D00217C19 /* Rtt_IPhoneTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D01BAA377C006A0C97 /* Rtt_IPhoneTextFieldObject.mm */; };
 		F5C5E18D251E115D00217C19 /* CoronaLuaIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31671BAB9E19006A0C97 /* CoronaLuaIOS.mm */; };
-		F5C5E18E251E115D00217C19 /* Rtt_AppleFont.mm in Sources */ = {isa = PBXBuildFile; fileRef = F54D1E2D1CA36191000B280E /* Rtt_AppleFont.mm */; };
 		F5C5E18F251E115D00217C19 /* Rtt_TVOSPlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31021BAA38B0006A0C97 /* Rtt_TVOSPlatform.mm */; };
 		F5C5E190251E115D00217C19 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD307A1BAA2B80006A0C97 /* Rtt_AppleTimer.mm */; };
 		F5C5E191251E115D00217C19 /* CoronaViewControllerPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A81BAA377C006A0C97 /* CoronaViewControllerPrivate.mm */; };
@@ -579,7 +558,6 @@
 		F5C5E195251E115D00217C19 /* CoronaAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A41BAA377C006A0C97 /* CoronaAppDelegate.mm */; };
 		F5C5E196251E115D00217C19 /* AppleWeakProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30531BAA2B80006A0C97 /* AppleWeakProxy.mm */; };
 		F5C5E198251E115D00217C19 /* libalmixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4384F751BAA20E0005750A3 /* libalmixer.a */; };
-		F5C5E199251E115D00217C19 /* libbox2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4551F861BAA1B5500FB3BDF /* libbox2d.a */; };
 		F5C5E19A251E115D00217C19 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4AD17531BAA14A600BCF507 /* liblua.a */; };
 		F5C5E19B251E115D00217C19 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4AD31151BAB8852006A0C97 /* libluasocket.a */; };
 		F5C5E19D251E115D00217C19 /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4AD17B51BAA14FE00BCF507 /* librtt.a */; };
@@ -606,7 +584,6 @@
 		F5C5E1C7251E11DD00217C19 /* Rtt_FrameBufferObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D938151BAA271E00DF2214 /* Rtt_FrameBufferObject.cpp */; };
 		F5C5E1C8251E11DD00217C19 /* Rtt_Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D938391BAA271E00DF2214 /* Rtt_Texture.cpp */; };
 		F5C5E1C9251E11DD00217C19 /* Rtt_TextureBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D9383B1BAA271E00DF2214 /* Rtt_TextureBitmap.cpp */; };
-		F5C5E1CA251E11DD00217C19 /* Rtt_VideoTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D938411BAA271E00DF2214 /* Rtt_VideoTexture.cpp */; };
 		F5C5E1CB251E11DD00217C19 /* Rtt_GLFrameBufferObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D9381F1BAA271E00DF2214 /* Rtt_GLFrameBufferObject.cpp */; };
 		F5C5E1F2251E126800217C19 /* CoronaCards.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C5E149251E114A00217C19 /* CoronaCards.framework */; };
 		F5C5E1F5251E128700217C19 /* libplayer-angle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C5E1A2251E115D00217C19 /* libplayer-angle.a */; };
@@ -1275,15 +1252,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A453AB7A1BEA85BE0094828B /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4551F841BAA1B5500FB3BDF /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
@@ -2173,13 +2141,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4551F831BAA1B5500FB3BDF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A461DEFF1BE8A72500C9F31B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -2297,10 +2258,8 @@
 				F5C5E113251E114A00217C19 /* AudioToolbox.framework in Frameworks */,
 				F5C5E114251E114A00217C19 /* AVFoundation.framework in Frameworks */,
 				F5C5E115251E114A00217C19 /* CoreGraphics.framework in Frameworks */,
-				F5C5E116251E114A00217C19 /* CoreLocation.framework in Frameworks */,
 				F5C5E117251E114A00217C19 /* CoreMedia.framework in Frameworks */,
 				F5C5E118251E114A00217C19 /* CoreText.framework in Frameworks */,
-				F5C5E119251E114A00217C19 /* CoreVideo.framework in Frameworks */,
 				F5C5E11A251E114A00217C19 /* Foundation.framework in Frameworks */,
 				F5C5E11B251E114A00217C19 /* GameController.framework in Frameworks */,
 				F5C5E11D251E114A00217C19 /* ImageIO.framework in Frameworks */,
@@ -2324,7 +2283,6 @@
 				F5C5E355251E140E00217C19 /* MetalANGLE.framework in Frameworks */,
 				F5C5E1F8251E12B200217C19 /* librenderer-angle.a in Frameworks */,
 				F5C5E198251E115D00217C19 /* libalmixer.a in Frameworks */,
-				F5C5E199251E115D00217C19 /* libbox2d.a in Frameworks */,
 				F5C5E19A251E115D00217C19 /* liblua.a in Frameworks */,
 				F5C5E19B251E115D00217C19 /* libluasocket.a in Frameworks */,
 				F5C5E19D251E115D00217C19 /* librtt.a in Frameworks */,
@@ -2728,20 +2686,6 @@
 			name = external;
 			sourceTree = "<group>";
 		};
-		A4551FDF1BAA1B7300FB3BDF /* Contacts */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Contacts;
-			sourceTree = "<group>";
-		};
-		A4551FF81BAA1B7300FB3BDF /* Joints */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Joints;
-			sourceTree = "<group>";
-		};
 		A461DF0B1BE8A72F00C9F31B /* libluafilesystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -2755,7 +2699,6 @@
 			isa = PBXGroup;
 			children = (
 				F5C5E20C251E139A00217C19 /* OpenGLES.xcodeproj */,
-				A44496B91BC83E210019DA20 /* CoronaResources */,
 				A4DD46EB1BB2265400FD988E /* template */,
 				A4AD30511BAA2B69006A0C97 /* libplayer */,
 				A4AD17D11BAA158A00BCF507 /* libcorona */,
@@ -3533,7 +3476,6 @@
 				F5C5E12D251E114A00217C19 /* CoronaMainViewController.h in Headers */,
 				F5C5E12E251E114A00217C19 /* CoronaCards.h in Headers */,
 				F5C5E12F251E114A00217C19 /* CoronaLuaIOS.h in Headers */,
-				F5C5E130251E114A00217C19 /* CoronaNativeObjectAdapter.h in Headers */,
 				F5C5E131251E114A00217C19 /* CoronaAssert.h in Headers */,
 				F5C5E132251E114A00217C19 /* CoronaEvent.h in Headers */,
 				F5C5E133251E114A00217C19 /* CoronaDelegate.h in Headers */,
@@ -3679,7 +3621,6 @@
 			);
 			dependencies = (
 				A4DD46DA1BB225BF00FD988E /* PBXTargetDependency */,
-				A4DD46DE1BB225BF00FD988E /* PBXTargetDependency */,
 				A4DD46DC1BB225BF00FD988E /* PBXTargetDependency */,
 				A4DD46E41BB225BF00FD988E /* PBXTargetDependency */,
 				A4DD46E01BB225BF00FD988E /* PBXTargetDependency */,
@@ -3732,7 +3673,6 @@
 				A4E0758C1BD1BC09003A733A /* Sources */,
 				A4E0758D1BD1BC09003A733A /* Frameworks */,
 				A4E0758E1BD1BC09003A733A /* Headers */,
-				A4E0758F1BD1BC09003A733A /* Resources */,
 			);
 			buildRules = (
 			);
@@ -3822,7 +3762,6 @@
 				F5C5E10C251E114A00217C19 /* Sources */,
 				F5C5E112251E114A00217C19 /* Frameworks */,
 				F5C5E12A251E114A00217C19 /* Headers */,
-				F5C5E142251E114A00217C19 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -3894,16 +3833,13 @@
 					A453AB7B1BEA85BE0094828B = {
 						CreatedOnToolsVersion = 7.1;
 					};
-					A4551F851BAA1B5500FB3BDF = {
-						CreatedOnToolsVersion = 7.1;
-					};
 					A461DF011BE8A72500C9F31B = {
 						CreatedOnToolsVersion = 7.1;
 					};
 					A4AD17301BAA0D8F00BCF507 = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = BG2J43EA88;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = 9ALGBA85N3;
+						ProvisioningStyle = Automatic;
 					};
 					A4AD17521BAA14A600BCF507 = {
 						CreatedOnToolsVersion = 7.1;
@@ -4436,16 +4372,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F5C5E142251E114A00217C19 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F5C5E143251E114A00217C19 /* widget_theme_ios7@4x.png in Resources */,
-				F5C5E144251E114A00217C19 /* widget_theme_ios7@2x.png in Resources */,
-				F5C5E145251E114A00217C19 /* widget_theme_ios7.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -4721,13 +4647,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4551F821BAA1B5500FB3BDF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A461DEFE1BE8A72500C9F31B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4898,7 +4817,6 @@
 				A4551DEF1BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp in Sources */,
 				A4551E271BAA17CF00FB3BDF /* Rtt_TextureResourceCanvas.cpp in Sources */,
 				A4551D2F1BAA17BE00FB3BDF /* Rtt_Assert.c in Sources */,
-				A4551F3F1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */,
 				A4551F791BAA182D00FB3BDF /* Rtt_Runtime.cpp in Sources */,
 				A4551D311BAA17BE00FB3BDF /* Rtt_AutoResource.cpp in Sources */,
 				A4551F731BAA182D00FB3BDF /* Rtt_PlatformTimer.cpp in Sources */,
@@ -5210,39 +5128,25 @@
 				F5C5E16B251E115D00217C19 /* Rtt_KeyName.cpp in Sources */,
 				F5C5E16C251E115D00217C19 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				F5C5E16D251E115D00217C19 /* Rtt_IPhoneTimer.mm in Sources */,
-				F5C5E16E251E115D00217C19 /* Rtt_IPhoneText.mm in Sources */,
-				F5C5E16F251E115D00217C19 /* Rtt_IPhoneFont.mm in Sources */,
 				F5C5E170251E115D00217C19 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
 				F5C5E171251E115D00217C19 /* Rtt_AppleInAppStore.mm in Sources */,
 				F5C5E172251E115D00217C19 /* Rtt_IPhoneScreenSurface.mm in Sources */,
 				F5C5E173251E115D00217C19 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
 				F5C5E174251E115D00217C19 /* Rtt_TVOSDevice.mm in Sources */,
 				F5C5E175251E115D00217C19 /* CoronaViewPluginContext.mm in Sources */,
-				F5C5E176251E115D00217C19 /* Rtt_IPhoneDisplayObject.mm in Sources */,
 				F5C5E177251E115D00217C19 /* Rtt_IPhoneAudioSessionManager.mm in Sources */,
-				F5C5E178251E115D00217C19 /* CoronaNativeObjectAdapter.mm in Sources */,
 				F5C5E179251E115D00217C19 /* Rtt_AppleInputDevice.mm in Sources */,
 				F5C5E17A251E115D00217C19 /* Rtt_ApplePlatform.mm in Sources */,
 				F5C5E17B251E115D00217C19 /* Rtt_AppleInAppStoreApple.mm in Sources */,
 				F5C5E17C251E115D00217C19 /* CoronaViewPrivate.mm in Sources */,
-				F5C5E17D251E115D00217C19 /* Rtt_IPhoneTextBoxObject.mm in Sources */,
-				F5C5E17E251E115D00217C19 /* Rtt_IPhoneNativeObject.mm in Sources */,
 				F5C5E17F251E115D00217C19 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				F5C5E180251E115D00217C19 /* Rtt_AppleCallback.mm in Sources */,
-				F5C5E181251E115D00217C19 /* Rtt_IPhoneVideoObject.mm in Sources */,
-				F5C5E182251E115D00217C19 /* Rtt_AppleAudioPlayer.cpp in Sources */,
 				F5C5E183251E115D00217C19 /* Rtt_TouchInhibitor.mm in Sources */,
-				F5C5E184251E115D00217C19 /* Rtt_AppleEventSound.cpp in Sources */,
-				F5C5E185251E115D00217C19 /* Rtt_AppleTextAlignment.mm in Sources */,
-				F5C5E186251E115D00217C19 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */,
-				F5C5E187251E115D00217C19 /* Rtt_AppleAudioRecorder.mm in Sources */,
 				F5C5E188251E115D00217C19 /* Rtt_AppleReachability.mm in Sources */,
 				F5C5E189251E115D00217C19 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				F5C5E18A251E115D00217C19 /* Rtt_AppleBitmap.mm in Sources */,
 				F5C5E18B251E115D00217C19 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */,
-				F5C5E18C251E115D00217C19 /* Rtt_IPhoneTextFieldObject.mm in Sources */,
 				F5C5E18D251E115D00217C19 /* CoronaLuaIOS.mm in Sources */,
-				F5C5E18E251E115D00217C19 /* Rtt_AppleFont.mm in Sources */,
 				F5C5E18F251E115D00217C19 /* Rtt_TVOSPlatform.mm in Sources */,
 				F5C5E190251E115D00217C19 /* Rtt_AppleTimer.mm in Sources */,
 				F5C5E191251E115D00217C19 /* CoronaViewControllerPrivate.mm in Sources */,
@@ -5281,7 +5185,6 @@
 				F5C5E1C7251E11DD00217C19 /* Rtt_FrameBufferObject.cpp in Sources */,
 				F5C5E1C8251E11DD00217C19 /* Rtt_Texture.cpp in Sources */,
 				F5C5E1C9251E11DD00217C19 /* Rtt_TextureBitmap.cpp in Sources */,
-				F5C5E1CA251E11DD00217C19 /* Rtt_VideoTexture.cpp in Sources */,
 				F5C5E1CB251E11DD00217C19 /* Rtt_GLFrameBufferObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5381,7 +5284,6 @@
 		};
 		F5C5E15B251E115D00217C19 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A4551F851BAA1B5500FB3BDF /* libbox2d */;
 			targetProxy = F5C5E15C251E115D00217C19 /* PBXContainerItemProxy */;
 		};
 		F5C5E15D251E115D00217C19 /* PBXTargetDependency */ = {
@@ -5507,29 +5409,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../../../librtt/Corona ${PROJECT_DIR}/../../../platform/iphone/Corona ${PROJECT_DIR}/../../../external/lua-5.1.3/src";
-			};
-			name = Release;
-		};
-		A4551F8D1BAA1B5500FB3BDF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				EXECUTABLE_PREFIX = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		A4551F8E1BAA1B5500FB3BDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				EXECUTABLE_PREFIX = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -5665,15 +5544,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				INFOPLIST_FILE = template/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = tvos;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -5686,15 +5565,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = BG2J43EA88;
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				INFOPLIST_FILE = template/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = tvos;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -5733,9 +5612,7 @@
 					ALMIXER_COMPILE_WITHOUT_SDL,
 					"$(inherited)",
 				);
-				HEADER_SEARCH_PATHS = (
-					/System/Library/Frameworks/OpenAL.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/OpenAL.framework/Headers;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -5752,9 +5629,7 @@
 					ALMIXER_COMPILE_WITHOUT_SDL,
 					"$(inherited)",
 				);
-				HEADER_SEARCH_PATHS = (
-					/System/Library/Frameworks/OpenAL.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /System/Library/Frameworks/OpenAL.framework/Headers;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
