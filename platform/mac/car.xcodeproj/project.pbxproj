@@ -212,8 +212,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Jochem Pouwels";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 9ALGBA85N3;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /;
 				PRODUCT_NAME = car;
