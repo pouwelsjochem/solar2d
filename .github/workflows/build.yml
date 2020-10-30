@@ -50,7 +50,7 @@ jobs:
           - template-angle
         platform:
           - iphone
-          # - tvos
+          - tvos
     needs: source-code
     runs-on: macos-latest
     env:
