@@ -5552,7 +5552,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Solar2D tvOS wildcard";
+				PROVISIONING_PROFILE_SPECIFIER = tvos;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -5573,7 +5573,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Solar2D tvOS wildcard";
+				PROVISIONING_PROFILE_SPECIFIER = tvos;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
