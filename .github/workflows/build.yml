@@ -47,10 +47,10 @@ jobs:
           - Xcode_12.1
         target:
           - template
-          - template-angle
+          # - template-angle
         platform:
           - iphone
-          - tvos
+          # - tvos
     needs: source-code
     runs-on: macos-latest
     env:
