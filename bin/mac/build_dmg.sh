@@ -24,7 +24,6 @@ FULL_BUILD_NUM=""
 DAILY_BUILD='false'
 
 RESOURCE_DIR="Resource Library"
-NATIVE_DIR="Native"
 
 while getopts 'dfb:c:s:' flag; do
   case "${flag}" in
@@ -117,7 +116,6 @@ cp -v -X "$SRCROOT"/platform/android/resources/debug.keystore "$TMPPATH/${PRODUC
 # unfortunately, since macOS 10.12 resource forks can not be signed, so removing some icons
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/debugger" "$SRCROOT/platform/resources/icons/CoronaIcon-Debugger.png"
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
-bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/Documentation.html" "$SRCROOT/platform/resources/icons/CoronaIcon-Docs.png"
 #bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/Corona Terminal" "$SRCROOT/platform/resources/icons/CoronaIcon-Terminal.png"
 xcrun SetFile -a E "$TMPPATH/${PRODUCT_DIR}/Documentation.html" # hide extension
