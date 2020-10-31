@@ -104,7 +104,7 @@ echo Building: $Release
 if [ "$Release" = "release" ]
 then
     # build production release
-    bin/mac/build_dmg.sh -b "$YEAR.$BUILD_NUMBER" -e "${WORKSPACE}/../CoronaEnterprise-${YEAR}.${BUILD_NUMBER}.tgz" "${WORKSPACE}" "${WORKSPACE}/docs"
+    bin/mac/build_dmg.sh -b "$YEAR.$BUILD_NUMBER" "${WORKSPACE}" "${WORKSPACE}/docs"
     checkError
     mkdir release
     mv CoronaSDK-$YEAR.$BUILD_NUMBER-release.dmg release/
@@ -112,7 +112,7 @@ then
 # -----------------------------------------------------------------------------
 else
     # build daily build
-    bin/mac/build_dmg.sh -d -b "$YEAR.$BUILD_NUMBER" -c "$CUSTOM_ID" -s "$S3_BUCKET"  -e "${WORKSPACE}/../CoronaEnterprise-${YEAR}.${BUILD_NUMBER}.tgz" "${WORKSPACE}" "${WORKSPACE}/docs"
+    bin/mac/build_dmg.sh -d -b "$YEAR.$BUILD_NUMBER" -c "$CUSTOM_ID" -s "$S3_BUCKET" "${WORKSPACE}" "${WORKSPACE}/docs"
     checkError
 fi
 
