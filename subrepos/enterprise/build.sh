@@ -223,20 +223,6 @@ checkError
 cp -v "$ROOT_DIR/platform/resources/CoronaPListSupport.lua" "$CORONA_SHARED_RESOURCE_DIR"
 checkError
 
-## Enterprise files
-cp -Rv "$CONTENTS_DIR/Project Template" "$OUTPUT_DIR"
-checkError
-
-cp -Rv "$CONTENTS_DIR"/Samples "$OUTPUT_DIR"
-checkError
-
-cp -Rv "$CONTENTS_DIR"/README.html "$OUTPUT_DIR"
-checkError
-
-cp -Rv "$CONTENTS_DIR"/.style.css "$OUTPUT_DIR"
-checkError
-
-
 # 
 # TVOS
 #
@@ -247,9 +233,6 @@ then
 fi
 
 "$PLATFORM_DIR/tvos/build_templates.sh"
-checkError
-
-mv -v "$PLATFORM_DIR/tvos/build/Release-universal/CoronaCards.framework" "$OUTPUT_DIR/Corona/tvos/frameworks"
 checkError
 
 
@@ -264,17 +247,6 @@ checkError
 # 
 # Android
 # 
-if [ "trial" = "$TARGET" ]
-then
-	PRODUCT_TYPE=trial
-elif [ "coronacards" = "$TARGET" ]
-then
-    PRODUCT_TYPE=coronacards
-else
-	PRODUCT_TYPE=all
-fi
-
-
 (
     set -e
     if [ ! -f "$PLATFORM_DIR/android/gradlew" ]
@@ -282,24 +254,10 @@ fi
         exit 0
     fi
     echo Building Gradle artifacts!
-    unset ANDROID_SDK_ROOT
-    unset ANDROID_SDK
-    unset ANDROID_NDK
-    export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
-    SDK_LICENSE_FILE="$ANDROID_SDK_ROOT/licenses/android-sdk-license"
-    SDK_LICENSE="24333f8a63b6825ea9c5514f83c2829b004d1fee"
-    mkdir -p "$(dirname "${SDK_LICENSE_FILE}")"
-    if [ ! -f "${SDK_LICENSE_FILE}" ] || ! grep -q "^${SDK_LICENSE}$" "${SDK_LICENSE_FILE}"
-    then
-        printf '\n%s' "${SDK_LICENSE}" >> "${SDK_LICENSE_FILE}"
-    fi
+
     cd "$PLATFORM_DIR/android"
     ./gradlew clean
-    rm -rf sdk/src/com/ansca/corona/SplashScreenBeacon.java sdk/libs sdk/build app/build
     ./gradlew installAppTemplateAndAARToNative -PcoronaNativeOutputDir="$CORONA_DIR"
-
-    mkdir -p "$CORONA_DIR/android/lib/Corona/libs/"
-    cp "$ROOT_DIR/plugins/build/licensing-google/android/bin/classes.jar" "$CORONA_DIR/android/lib/Corona/libs/licensing-google.jar"
 )
 checkError
 
@@ -308,19 +266,6 @@ checkError
 # 
 #cp -v docs/style.css $OUTPUT_DIR/.
 #cp -v docs/README.html $OUTPUT_DIR/.
-
-#
-# Plugins
-#
-
-PLUGINS_DIR=$OUTPUT_DIR/Plugins
-mkdir "$PLUGINS_DIR"
-checkError
-
-rsync -a -v --exclude="- .*" "$ROOT_DIR"/plugins/licensing-google "$PLUGINS_DIR"
-checkError
-
-cp "$ROOT_DIR"/plugins/README.md "$PLUGINS_DIR"
 
 #
 # zip it up
