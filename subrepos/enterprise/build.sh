@@ -262,7 +262,7 @@ checkError
 
     cd "$PLATFORM_DIR/android"
     ./gradlew clean
-    ./gradlew installAppTemplateAndAARToNative -PcoronaNativeOutputDir="$CORONA_DIR"
+    ./gradlew installAppTemplateAndAARToSim -PcoronaNativeOutputDir="$CORONA_DIR"
 )
 checkError
 
