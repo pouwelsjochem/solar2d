@@ -304,12 +304,6 @@
     <ClCompile Include="..\..\ndk\generated\re.cpp">
       <Filter>generated</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\runtime.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\shell.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\generated\shell_default_gl.cpp">
       <Filter>generated</Filter>
     </ClCompile>

@@ -405,14 +405,9 @@ EXTERNAL_FILES_OLD  := \
 
 PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/generated/init.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/runtime.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/easing.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/json.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/dkjson.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/timer.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/transition.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/transition_v1.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/generated/shell.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_LuaLibOpenSLES.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_PlatformOpenSLESPlayer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidBitmap.cpp \
@@ -420,8 +415,6 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidData.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDevice.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDeviceManager.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidLocation.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidMapViewObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidModalInteraction.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidDevice.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidPlatform.cpp \

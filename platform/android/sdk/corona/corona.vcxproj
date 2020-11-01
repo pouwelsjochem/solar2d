@@ -444,8 +444,6 @@
     <ClCompile Include="..\..\ndk\generated\mbox.cpp" />
     <ClCompile Include="..\..\ndk\generated\mime_generated.cpp" />
     <ClCompile Include="..\..\ndk\generated\re.cpp" />
-    <ClCompile Include="..\..\ndk\generated\runtime.cpp" />
-    <ClCompile Include="..\..\ndk\generated\shell.cpp" />
     <ClCompile Include="..\..\ndk\generated\shell_default_gl.cpp" />
     <ClCompile Include="..\..\ndk\generated\smtp.cpp" />
     <ClCompile Include="..\..\ndk\generated\socket.cpp" />

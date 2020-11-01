@@ -198,11 +198,9 @@ add_library( corona SHARED
 		AndroidZipFileEntry.cpp
 
 		${Lua2CppOutputDir}/init.cpp
-		${Lua2CppOutputDir}/runtime.cpp
 		${Lua2CppOutputDir}/easing.cpp
 		${Lua2CppOutputDir}/json.cpp
 		${Lua2CppOutputDir}/dkjson.cpp
-		${Lua2CppOutputDir}/shell.cpp
 
 		${CORONA_ROOT}/external/luasocket/src/auxiliar.c
 		${CORONA_ROOT}/external/luasocket/src/compat.c
