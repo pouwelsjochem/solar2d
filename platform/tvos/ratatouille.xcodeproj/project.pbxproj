@@ -126,6 +126,7 @@
 		A4551E981BAA180C00FB3BDF /* CoronaLua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E8D1BAA180C00FB3BDF /* CoronaLua.cpp */; };
 		A4551E991BAA180C00FB3BDF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A4551E921BAA180C00FB3BDF /* CoronaVersion.c */; };
 		A4551F3A1BAA182D00FB3BDF /* Rtt_Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551E9A1BAA182C00FB3BDF /* Rtt_Archive.cpp */; };
+		A4551F3F1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA51BAA182C00FB3BDF /* Rtt_Event.cpp */; };
 		A4551F411BAA182D00FB3BDF /* Rtt_FilePath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EA81BAA182C00FB3BDF /* Rtt_FilePath.cpp */; };
 		A4551F431BAA182D00FB3BDF /* Rtt_HitTestObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EAD1BAA182C00FB3BDF /* Rtt_HitTestObject.cpp */; };
 		A4551F441BAA182D00FB3BDF /* Rtt_Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EAF1BAA182C00FB3BDF /* Rtt_Lua.cpp */; };
@@ -4817,6 +4818,7 @@
 				A4551DEF1BAA17CF00FB3BDF /* Rtt_GradientPaint.cpp in Sources */,
 				A4551E271BAA17CF00FB3BDF /* Rtt_TextureResourceCanvas.cpp in Sources */,
 				A4551D2F1BAA17BE00FB3BDF /* Rtt_Assert.c in Sources */,
+				A4551F3F1BAA182D00FB3BDF /* Rtt_Event.cpp in Sources */,
 				A4551F791BAA182D00FB3BDF /* Rtt_Runtime.cpp in Sources */,
 				A4551D311BAA17BE00FB3BDF /* Rtt_AutoResource.cpp in Sources */,
 				A4551F731BAA182D00FB3BDF /* Rtt_PlatformTimer.cpp in Sources */,
