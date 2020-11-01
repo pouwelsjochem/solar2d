@@ -46,11 +46,6 @@ fi
 mkdir -pv "$BUILD_DIR"
 checkError
 
-# the COPYFILE_DISABLE=1 stops tar saving HFS file attributes
-COPYFILE_DISABLE=1 tar xzvf "$path/contents/CoronaEnterpriseTemplate.tgz" -C "$BUILD_DIR"
-checkError
-
-
 # 
 # Canonicalize relative paths to absolute paths
 # 
