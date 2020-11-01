@@ -790,42 +790,6 @@ tasks.register<Zip>("exportCoronaAppTemplate") {
     }
 }
 
-tasks.register<Copy>("exportToNativeAppTemplate") {
-    if (coronaBuiltFromSource) group = "Corona-dev"
-    enabled = coronaBuiltFromSource
-    val templateDir = "$rootDir/../../subrepos/enterprise/contents/Project Template/App/android"
-
-    into(templateDir)
-    from(rootDir) {
-        include("build.gradle.kts")
-        include("gradlew", "gradlew.bat", "gradle/wrapper/**")
-        include("app/**")
-        exclude("app/build/**", "app/CMakeLists.txt", "app/build.gradle.kts")
-        exclude("**/*.iml", "**/\\.*")
-        exclude("**/AndroidManifest.xml")
-    }
-    from(rootDir) {
-        include("app/build.gradle.kts")
-        filter {
-            it.replace("com.corona.test", "com.mycompany.app")
-        }
-    }
-
-    doFirst {
-        delete(fileTree(templateDir) {
-            exclude("plugin/**")
-            exclude("settings.gradle")
-            exclude("**/AndroidManifest.xml")
-            exclude("**/*.java")
-            exclude("gradle.properties")
-        })
-    }
-    doLast {
-        logger.lifecycle("Copied to ${file(templateDir).absolutePath}")
-    }
-}
-
-
 val coronaNativeOutputDir = project.findProperty("coronaNativeOutputDir") as? String
         ?: "$nativeDir/Corona"
 
