@@ -83,7 +83,17 @@ CORONA_SHARED_INCLUDE_CORONA_DIR=$CORONA_SHARED_DIR/include/Corona
 CORONA_SHARED_INCLUDE_LUA_DIR=$CORONA_SHARED_DIR/include/lua
 CORONA_SHARED_RESOURCE_DIR=$CORONA_SHARED_DIR/resource
 
-
+mkdir -p $CORONA_DIR/android/lib/gradle
+mkdir -p $CORONA_DIR/android/resource
+mkdir -p $CORONA_DIR/ios/include/Corona
+mkdir -p $CORONA_DIR/ios/lib
+mkdir -p $CORONA_DIR/ios/resource
+mkdir -p $CORONA_DIR/mac/bin
+mkdir -p $CORONA_DIR/shared/bin
+mkdir -p $CORONA_DIR/shared/include/Corona
+mkdir -p $CORONA_DIR/shared/resource
+mkdir -p $CORONA_DIR/win/bin
+mkdir -p $CORONA_DIR/xcode
 
 # 
 # Shared
