@@ -22,15 +22,18 @@ CUSTOM_ID=""
 S3_BUCKET=""
 FULL_BUILD_NUM=""
 DAILY_BUILD='false'
+ENTERPRISE=""
 
 RESOURCE_DIR="Resource Library"
+NATIVE_DIR="Native"
 
-while getopts 'dfb:c:s:' flag; do
+while getopts 'dfb:c:s:e:' flag; do
   case "${flag}" in
     b) FULL_BUILD_NUM="${OPTARG}" ;;
     c) CUSTOM_ID="${OPTARG}" ;;
     d) DAILY_BUILD='true' ;;
     s) S3_BUCKET="${OPTARG}" ;;
+    e) ENTERPRISE="${OPTARG}" ;;
 	f) FORCE_MOUNT='true' ;;
     *) error "Unexpected option ${flag}" ;;
   esac
@@ -44,7 +47,7 @@ DOCSRC="$2/SDK"
 
 if [ ! -d "$1" ] || [ ! -d "$2" ]
 then
-        echo "USAGE: $0 [-d] -b FULL_BUILD_NUM [-c CUSTOM_ID] [-s S3_BUCKET] destdir docsroot"
+        echo "USAGE: $0 [-d] -b FULL_BUILD_NUM [-c CUSTOM_ID] [-s S3_BUCKET] [-e ENTERPRISE_TARBALL] destdir docsroot"
         exit 1
 fi
 
@@ -113,9 +116,15 @@ fi
 mkdir -p "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/Android"
 cp -v -X "$SRCROOT"/platform/android/resources/debug.keystore "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/Android/"
 
+if [ "$ENTERPRISE" != "" ]
+then
+	(tar -C "$TMPPATH/${PRODUCT_DIR}/" -xf "$ENTERPRISE" && mv "$TMPPATH/${PRODUCT_DIR}/CoronaEnterprise" "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" && ls "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}") || (echo "ERROR: failed to extract Enterprise" && exit 1)
+fi
+
 # unfortunately, since macOS 10.12 resource forks can not be signed, so removing some icons
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/debugger" "$SRCROOT/platform/resources/icons/CoronaIcon-Debugger.png"
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
+bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/Documentation.html" "$SRCROOT/platform/resources/icons/CoronaIcon-Docs.png"
 #bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/Corona Terminal" "$SRCROOT/platform/resources/icons/CoronaIcon-Terminal.png"
 xcrun SetFile -a E "$TMPPATH/${PRODUCT_DIR}/Documentation.html" # hide extension
