@@ -46,6 +46,10 @@ fi
 mkdir -pv "$BUILD_DIR"
 checkError
 
+# the COPYFILE_DISABLE=1 stops tar saving HFS file attributes
+COPYFILE_DISABLE=1 tar xzvf "$path/contents/CoronaEnterpriseTemplate.tgz" -C "$BUILD_DIR"
+checkError
+
 # 
 # Canonicalize relative paths to absolute paths
 # 
@@ -82,18 +86,6 @@ CORONA_SHARED_BIN_DIR=$CORONA_SHARED_DIR/bin
 CORONA_SHARED_INCLUDE_CORONA_DIR=$CORONA_SHARED_DIR/include/Corona
 CORONA_SHARED_INCLUDE_LUA_DIR=$CORONA_SHARED_DIR/include/lua
 CORONA_SHARED_RESOURCE_DIR=$CORONA_SHARED_DIR/resource
-
-mkdir -p $CORONA_DIR/android/lib/gradle
-mkdir -p $CORONA_DIR/android/resource
-mkdir -p $CORONA_DIR/ios/include/Corona
-mkdir -p $CORONA_DIR/ios/lib
-mkdir -p $CORONA_DIR/ios/resource
-mkdir -p $CORONA_DIR/mac/bin
-mkdir -p $CORONA_DIR/shared/bin
-mkdir -p $CORONA_DIR/shared/include/Corona
-mkdir -p $CORONA_DIR/shared/resource
-mkdir -p $CORONA_DIR/win/bin
-mkdir -p $CORONA_DIR/xcode
 
 # 
 # Shared
