@@ -26,7 +26,6 @@
 		03D1C53E1D70CBBF00DB02EE /* Rtt_Preference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5381D70CBB400DB02EE /* Rtt_Preference.cpp */; };
 		03D1C53F1D70CBC200DB02EE /* Rtt_PreferenceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C53A1D70CBB400DB02EE /* Rtt_PreferenceCollection.cpp */; };
 		03D1C5401D70CBC500DB02EE /* Rtt_PreferenceValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C53C1D70CBB400DB02EE /* Rtt_PreferenceValue.cpp */; };
-		1B10D06C2538949800F48B3A /* Rtt_SpriteSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B10D06B2538949800F48B3A /* Rtt_SpriteSequence.cpp */; };
 		A40A90531BD984AD001D2038 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A40A90521BD984AD001D2038 /* CoreText.framework */; };
 		A4384F531BAA1F49005750A3 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A4384F4C1BAA1F49005750A3 /* Reachability.m */; };
 		A4384F561BAA1F49005750A3 /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = A4384F511BAA1F49005750A3 /* lsqlite3.c */; };
@@ -106,6 +105,7 @@
 		A4551E151BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB41BAA17CF00FB3BDF /* Rtt_SnapshotObject.cpp */; };
 		A4551E161BAA17CF00FB3BDF /* Rtt_SpriteObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB61BAA17CF00FB3BDF /* Rtt_SpriteObject.cpp */; };
 		A4551E171BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DB81BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp */; };
+		1B10D06C2538949800F48B3A /* Rtt_SpriteSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B10D06B2538949800F48B3A /* Rtt_SpriteSequence.cpp */; };
 		A4551E191BAA17CF00FB3BDF /* Rtt_StageObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */; };
 		A4551E1A1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */; };
 		A4551E1B1BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551DC01BAA17CF00FB3BDF /* Rtt_TesselatorCircle.cpp */; };
@@ -1381,8 +1381,6 @@
 		03D1C53B1D70CBB400DB02EE /* Rtt_PreferenceCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceCollection.h; path = ../../librtt/Rtt_PreferenceCollection.h; sourceTree = "<group>"; };
 		03D1C53C1D70CBB400DB02EE /* Rtt_PreferenceValue.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PreferenceValue.cpp; path = ../../librtt/Rtt_PreferenceValue.cpp; sourceTree = "<group>"; };
 		03D1C53D1D70CBB400DB02EE /* Rtt_PreferenceValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceValue.h; path = ../../librtt/Rtt_PreferenceValue.h; sourceTree = "<group>"; };
-		1B10D02F2538949800F48B3A /* Rtt_SpriteSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSequence.h; path = ../../librtt/Display/Rtt_SpriteSequence.h; sourceTree = "<group>"; };
-		1B10D06B2538949800F48B3A /* Rtt_SpriteSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSequence.cpp; path = ../../librtt/Display/Rtt_SpriteSequence.cpp; sourceTree = "<group>"; };
 		A40A90521BD984AD001D2038 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		A4124B7C1BB2070F001421F5 /* CoronaDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaDelegate.h; path = ../iphone/Corona/CoronaDelegate.h; sourceTree = "<group>"; };
 		A4384F4B1BAA1F49005750A3 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = ../../external/Reachability_2.0.4ddg/Reachability/Reachability.h; sourceTree = "<group>"; };
@@ -1557,6 +1555,8 @@
 		A4551DB71BAA17CF00FB3BDF /* Rtt_SpriteObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteObject.h; path = ../../librtt/Display/Rtt_SpriteObject.h; sourceTree = "<group>"; };
 		A4551DB81BAA17CF00FB3BDF /* Rtt_SpritePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpritePlayer.cpp; path = ../../librtt/Display/Rtt_SpritePlayer.cpp; sourceTree = "<group>"; };
 		A4551DB91BAA17CF00FB3BDF /* Rtt_SpritePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpritePlayer.h; path = ../../librtt/Display/Rtt_SpritePlayer.h; sourceTree = "<group>"; };
+		1B10D02F2538949800F48B3A /* Rtt_SpriteSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSequence.h; path = ../../librtt/Display/Rtt_SpriteSequence.h; sourceTree = "<group>"; };
+		1B10D06B2538949800F48B3A /* Rtt_SpriteSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSequence.cpp; path = ../../librtt/Display/Rtt_SpriteSequence.cpp; sourceTree = "<group>"; };
 		A4551DBC1BAA17CF00FB3BDF /* Rtt_StageObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_StageObject.cpp; path = ../../librtt/Display/Rtt_StageObject.cpp; sourceTree = "<group>"; };
 		A4551DBD1BAA17CF00FB3BDF /* Rtt_StageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_StageObject.h; path = ../../librtt/Display/Rtt_StageObject.h; sourceTree = "<group>"; };
 		A4551DBE1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Tesselator.cpp; path = ../../librtt/Display/Rtt_Tesselator.cpp; sourceTree = "<group>"; };

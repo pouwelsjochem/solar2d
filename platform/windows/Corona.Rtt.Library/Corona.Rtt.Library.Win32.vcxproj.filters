@@ -494,6 +494,9 @@
     <ClCompile Include="..\..\..\librtt\Display\Rtt_SpritePlayer.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Display\Rtt_SpriteSequence.cpp">
+      <Filter>librtt\Display</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Display\Rtt_StageObject.cpp">
       <Filter>librtt\Display</Filter>
     </ClCompile>

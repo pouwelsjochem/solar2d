@@ -239,6 +239,7 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SnapshotObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpriteObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpritePlayer.cpp" />
+    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_SpriteSequence.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_StageObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_Tesselator.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TesselatorCircle.cpp" />

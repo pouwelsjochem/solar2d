@@ -307,6 +307,7 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Display/Rtt_SnapshotObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_SpriteObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_SpritePlayer.cpp
+		${CORONA_ROOT}/librtt/Display/Rtt_SpriteSequence.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_StageObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_Tesselator.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorCircle.cpp
