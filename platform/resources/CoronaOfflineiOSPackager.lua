@@ -57,6 +57,11 @@ function findBuilder(params)
     if lfs.attributes(builder, 'mode') == 'file' then
         return builder
     end
+    local builder = params.resourceDir .. '/CoronaBuilder.app/Contents/MacOS/CoronaBuilder'
+    print("builder", builder, lfs.attributes(builder, 'mode'))
+    if lfs.attributes(builder, 'mode') == 'file' then
+        return builder
+    end
     builder = params.resourceDir .. '/../../../Native/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder'
     print("builder", builder, lfs.attributes(builder, 'mode'))
     if lfs.attributes(builder, 'mode') == 'file' then
