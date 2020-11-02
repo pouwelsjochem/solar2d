@@ -35,14 +35,17 @@ end
 
 function findTemplate(params)
     local template = params.resourceDir .. '/iostemplate/' .. params.template
+    print("template", template, lfs.attributes(template, 'mode'))
     if lfs.attributes(template, 'mode') == 'file' then
         return template
     end
     template = params.resourceDir .. '/../../../../../../../Corona Simulator.app/Contents/Resources/iostemplate/' .. params.template
+    print("template", template, lfs.attributes(template, 'mode'))
     if lfs.attributes(template, 'mode') == 'file' then
         return template
     end
     template = params.resourceDir .. '/../../../Corona Simulator.app/Contents/Resources/iostemplate/' .. params.template
+    print("template", template, lfs.attributes(template, 'mode'))
     if lfs.attributes(template, 'mode') == 'file' then
         return template
     end
@@ -50,14 +53,17 @@ end
 
 function findBuilder(params)
     local builder = params.resourceDir .. '/../MacOS/CoronaBuilder'
+    print("builder", builder, lfs.attributes(builder, 'mode'))
     if lfs.attributes(builder, 'mode') == 'file' then
         return builder
     end
     builder = params.resourceDir .. '/../../../Native/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder'
+    print("builder", builder, lfs.attributes(builder, 'mode'))
     if lfs.attributes(builder, 'mode') == 'file' then
         return builder
     end
     builder = params.resourceDir .. '/../../../CoronaBuilder.app/Contents/MacOS/CoronaBuilder'
+    print("builder", builder, lfs.attributes(builder, 'mode'))
     if lfs.attributes(builder, 'mode') == 'file' then
         return builder
     end
