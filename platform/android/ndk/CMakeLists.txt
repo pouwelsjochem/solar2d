@@ -201,6 +201,7 @@ add_library( corona SHARED
 		${Lua2CppOutputDir}/easing.cpp
 		${Lua2CppOutputDir}/json.cpp
 		${Lua2CppOutputDir}/dkjson.cpp
+		${Lua2CppOutputDir}/shell.cpp
 
 		${CORONA_ROOT}/external/luasocket/src/auxiliar.c
 		${CORONA_ROOT}/external/luasocket/src/compat.c

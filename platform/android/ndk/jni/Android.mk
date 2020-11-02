@@ -408,6 +408,7 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/generated/easing.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/json.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/generated/dkjson.cpp \
+	$(CORONA_ROOT)/platform/android/ndk/generated/shell.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_LuaLibOpenSLES.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_PlatformOpenSLESPlayer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidBitmap.cpp \

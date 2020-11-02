@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="NsightTegraProject">
     <NsightTegraProjectRevisionNumber>11</NsightTegraProjectRevisionNumber>
@@ -444,6 +444,7 @@
     <ClCompile Include="..\..\ndk\generated\mbox.cpp" />
     <ClCompile Include="..\..\ndk\generated\mime_generated.cpp" />
     <ClCompile Include="..\..\ndk\generated\re.cpp" />
+    <ClCompile Include="..\..\ndk\generated\shell.cpp" />
     <ClCompile Include="..\..\ndk\generated\shell_default_gl.cpp" />
     <ClCompile Include="..\..\ndk\generated\smtp.cpp" />
     <ClCompile Include="..\..\ndk\generated\socket.cpp" />
