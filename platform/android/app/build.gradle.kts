@@ -27,7 +27,6 @@ val coronaBuild: String? by project
 val (dailyBuildYear, dailyBuildRevision) = coronaBuild?.split('.') ?: listOf(null, null)
 val coronaBuildData: String? by project
 val coronaExpansionFileName: String? by project
-val coronaCustomHome: String? by project
 val coronaTargetStore = project.findProperty("coronaTargetStore") as? String ?: "none"
 val isExpansionFileRequired = !coronaExpansionFileName.isNullOrEmpty()
 val coronaSrcDir = project.findProperty("coronaSrcDir") as? String
@@ -47,16 +46,12 @@ val isSimulatorBuild = coronaTmpDir != null
 fun checkCoronaNativeInstallation() {
     if (file("$nativeDir/Corona/android/resource/android-template.zip").exists())
         return
-    if (windows) {
-        throw InvalidUserDataException("Corona Native was not set-up properly. Re-install Corona to fix this issue.")
-    } else {
-        val setupNativeApp = File("/Applications").listFiles { f ->
-            f.isDirectory && f.name.startsWith("Corona")
-        }?.max()?.let {
-            "${it.absolutePath}/Native/Setup Corona Native.app"
-        } ?: "Native/Setup Corona Native.app"
-        throw InvalidUserDataException("Corona Native was not set-up properly. Launch '$setupNativeApp'.")
-    }
+    val setupNativeApp = File("/Applications").listFiles { f ->
+        f.isDirectory && f.name.startsWith("Corona")
+    }?.max()?.let {
+         "${it.absolutePath}/Native/Setup Corona Native.app"
+    } ?: "Native/Setup Corona Native.app"
+    throw InvalidUserDataException("Corona Native was not set-up properly. Launch '$setupNativeApp'.")
 }
 
 val buildToolsDir = "$projectDir/buildTools".takeIf { file(it).exists() }
@@ -118,13 +113,7 @@ val parsedBuildProperties: JsonObject = run {
 val coronaMinSdkVersion = parsedBuildProperties.lookup<Any?>("buildSettings.android.minSdkVersion").firstOrNull()?.toString()?.toIntOrNull()
         ?: 15
 
-val coronaBuilder = if (windows) {
-    "$nativeDir/Corona/win/bin/CoronaBuilder.exe"
-} else {
-    "$nativeDir/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
-}
-
-
+val coronaBuilder = "$nativeDir/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
 val coronaVersionName =
         parsedBuildProperties.lookup<Any?>("buildSettings.android.versionName").firstOrNull()?.toString()
                 ?: project.findProperty("coronaVersionName") as? String ?: "1.0"
@@ -139,15 +128,7 @@ val androidDestPluginPlatform = if (coronaTargetStore.equals("amazon", ignoreCas
     "android"
 }
 
-val coronaAndroidPluginsCache = file(if (windows) {
-    if (coronaCustomHome.isNullOrEmpty()) {
-        "${System.getenv("APPDATA")}/Corona Labs/Corona Simulator/build cache/$androidDestPluginPlatform"
-    } else {
-        "$coronaCustomHome/build cache/$androidDestPluginPlatform"
-    }
-} else {
-    "${System.getenv("HOME")}/Library/Application Support/Corona/build cache/$androidDestPluginPlatform"
-})
+val coronaAndroidPluginsCache = "${System.getenv("HOME")}/Library/Application Support/Corona/build cache/$androidDestPluginPlatform"
 
 val pluginDisabledMetadata = mutableSetOf<String>()
 val pluginDisabledDependencies = mutableSetOf<String>()
