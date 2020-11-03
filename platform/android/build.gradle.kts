@@ -15,11 +15,7 @@ allprojects {
         google()
         jcenter()
         // maven(url = "https:// some custom repo")
-        val nativeDir = if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-            System.getenv("CORONA_ROOT")
-        } else {
-            "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
-        }
+        val nativeDir = "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
         flatDir {
             dirs("$nativeDir/Corona/android/lib/gradle", "$nativeDir/Corona/android/lib/Corona/libs")
         }

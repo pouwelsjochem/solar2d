@@ -37,18 +37,11 @@ val coronaSrcDir = project.findProperty("coronaSrcDir") as? String
             "$rootDir/../Corona"
         }
 val coronaBuiltFromSource = file("CMakeLists.txt").exists() && file("../sdk").exists()
-val windows = System.getProperty("os.name").toLowerCase().contains("windows")
-val shortOsName = if (windows) "win" else "mac"
-val nativeDir = if (windows) {
-    val resourceDir = coronaResourcesDir?.let { file("$it/../Native/").absolutePath }?.takeIf { file(it).exists() }
-    (resourceDir ?: "${System.getenv("CORONA_PATH")}/Native").replace("\\", "/")
-} else {
-    val resourceDir = coronaResourcesDir?.let { file("$it/../../../Native/").absolutePath }?.takeIf { file(it).exists() }
-    resourceDir ?: "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
-}
+val resourceDir = coronaResourcesDir?.let { file("$it/../Native/").absolutePath }?.takeIf { file(it).exists() }
+val nativeDir = resourceDir ?: "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
 
 val coronaPlugins = file("$buildDir/corona-plugins")
-val luaCmd = "$nativeDir/Corona/$shortOsName/bin/lua"
+val luaCmd = "$nativeDir/Corona/mac/bin/lua"
 val isSimulatorBuild = coronaTmpDir != null
 
 fun checkCoronaNativeInstallation() {
@@ -97,7 +90,7 @@ val parsedBuildProperties: JsonObject = run {
 
     val output = ByteArrayOutputStream()
     val execResult = exec {
-        setWorkingDir("$nativeDir/Corona/$shortOsName/bin")
+        setWorkingDir("$nativeDir/Corona/mac/bin")
         commandLine(luaCmd,
                 "-e",
                 "package.path='$nativeDir/Corona/shared/resource/?.lua;'..package.path",
@@ -128,7 +121,7 @@ val coronaMinSdkVersion = parsedBuildProperties.lookup<Any?>("buildSettings.andr
 val coronaBuilder = if (windows) {
     "$nativeDir/Corona/win/bin/CoronaBuilder.exe"
 } else {
-    "$nativeDir/Corona/$shortOsName/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
+    "$nativeDir/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
 }
 
 
@@ -364,7 +357,7 @@ android.applicationVariants.all {
 
     val compileLuaTask = tasks.create("compileLua${baseName.capitalize()}") {
         description = "If required, compiles Lua and archives it into resource.car"
-        val luac = "$nativeDir/Corona/$shortOsName/bin/luac"
+        val luac = "$nativeDir/Corona/mac/bin/luac"
 
         val srcLuaFiles = fileTree(coronaSrcDir) {
             include("**/*.lua")
