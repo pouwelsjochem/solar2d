@@ -11,6 +11,8 @@
 #define _Rtt_AppPackagerFactory_H__
 
 #include "Rtt_Lua.h"
+#include "Rtt_PlatformAppPackager.h"
+#include "Rtt_MPlatformServices.h"
 #include "Rtt_TargetDevice.h"
 
 // ----------------------------------------------------------------------------
