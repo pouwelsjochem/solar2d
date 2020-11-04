@@ -26,7 +26,7 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-#if defined(CORONABUILDER_ANDROID)
+#if defined(CORONABUILDER_WIN32)
 
 AppPackagerParams*
 AppPackagerFactory::CreatePackagerParamsWin32(
@@ -205,7 +205,22 @@ AppPackagerFactory::CreatePackagerParamsWin32(
 	return result;
 }
 
-#endif // defined(CORONABUILDER_ANDROID)
+#if defined(Rtt_WIN_ENV)
+// This is the counterpart of GetResourceDirectoryOSX() in Rtt_MAC_ENV builds
+const char *
+AppPackagerFactory::GetResourceDirectoryWin() const
+{
+	static WinString resourceDir;
+	if (resourceDir.GetLength() == 0)
+	{
+		resourceDir = _wgetenv(_T("CORONA_PATH"));
+		resourceDir.Append("\\Resources");
+	}
+	return resourceDir.GetUTF8();
+}
+#endif
+
+#endif // defined(CORONABUILDER_WIN32)
 
 // ----------------------------------------------------------------------------
 
