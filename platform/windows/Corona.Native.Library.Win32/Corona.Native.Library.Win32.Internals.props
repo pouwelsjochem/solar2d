@@ -18,32 +18,43 @@
     <PostBuildEvent>
       <Command>REM Digitally sign this library if building a release DLL.
 if $(ConfigurationName) == Release.App (
+   echo 1
    call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)"
 )
 
 REM Copy this library's dependencies to the "Bin\Corona" directory.
 if not exist "$(SolutionDir)Bin\Corona" (
+   echo 2
    mkdir "$(SolutionDir)Bin\Corona"
 )
+echo 3
 xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" "$(SolutionDir)Bin\Corona" /Y /I
+echo 4
 
 REM Do the following for debug and release DLL builds. (Skipped for Corona Simulator builds.)
 if $(TargetExt) == .dll (
+   echo 5
    REM Copy this library's DLL to the "Bin\Corona" directory. Used by the Corona Shell app.
    copy /y "$(TargetPath)" "$(SolutionDir)Bin\Corona"
 
+   echo 6
    REM Copy this library's LIB file to the Corona Enterprise directory.
    if $(ConfigurationName) == Release.App (
       if not exist "$(SolutionDir)Bin\Corona.Enterprise\lib" (
+         echo 7
          mkdir "$(SolutionDir)Bin\Corona.Enterprise\lib"
       )
+      echo 8
       copy /y "$(TargetDir)$(TargetName).lib" "$(SolutionDir)Bin\Corona.Enterprise\lib"
    )
+   echo 9
    REM Copy this library's LIB file to the Corona Native directory.
    if $(ConfigurationName) == Release.App (
       if not exist "$(SolutionDir)Bin\Corona\Native\Corona\win\lib" (
+         echo 10
          mkdir "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
       )
+      echo 11
       copy /y "$(TargetDir)$(TargetName).lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
    )
 )
