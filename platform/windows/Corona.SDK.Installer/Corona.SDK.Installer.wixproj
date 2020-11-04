@@ -61,77 +61,48 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
-      echo 12
 		  if $(Configuration) == Release (
    REM Delete the target directories.
-   echo 13
    rmdir /q /s "$(SolutionDir)Bin\$(ProjectName)"
-   echo 14
    rmdir /q /s "$(SolutionDir)Bin\Corona"
-   echo 15
    rmdir /q /s "$(SolutionDir)Bin\Corona.Enterprise"
-   echo 16
    rmdir /q /s "$(SolutionDir)Bin\AppTemplates\Win32"
-   echo 17
 
    mkdir "$(SolutionDir)Bin\Corona"
-   echo 18
    move /y "$(SolutionDir)Bin\Native" "$(SolutionDir)Bin\Corona\"
-   echo 19
 
    REM Compile all Corona related projects to the target directory.
    "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /rebuild "Release|Win32"
-   echo 20
    "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Simulator.sln" /build "Release|Win32"
-   echo 21
    "$(DevEnvDir)devenv" "$(SolutionDir)CoronaBuilder.sln" /build "Release|Win32"
-   echo 22
 
    REM Save Corona Simulator.pdb
    copy "$(SolutionDir)Bin\Corona\Corona Simulator.pdb" %25TEMP%25
-   echo 23
 
    REM Delete intermediate/debugging files from the target directories.
    del /q /s "$(SolutionDir)Bin\Corona\%2a.exp"
-   echo 24
    del /q /s "$(SolutionDir)Bin\Corona\%2a.ilk"
-   echo 25
    del /q /s "$(SolutionDir)Bin\Corona\%2a.lib"
-   echo 26
    del /q /s "$(SolutionDir)Bin\Corona\%2a.pdb"
-   echo 27
    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.exp"
-   echo 28
    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.ilk"
-   echo 29
    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.lib"
-   echo 30
    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.pdb"
-   echo 31
 
    REM copy Native libs
    xcopy /y "$(SolutionDir)Bin\Corona.Enterprise\lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib\"
-   echo 32
 
    REM copy CoronaBuilder files
    xcopy /y "$(SolutionDir)..\..\bin\win\CopyResources.bat" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
-   echo 33
    move /y "$(SolutionDir)Bin\Corona\lfs.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
-   echo 34
    move /y "$(SolutionDir)Bin\Corona\CoronaBuilder.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
-   echo 35
    xcopy /y "$(SolutionDir)..\..\bin\shared\Compile.lua" "$(SolutionDir)Bin\Corona\Native\Corona\shared\bin"
-   echo 36
    xcopy /y "$(SolutionDir)Bin\Lua\lua.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
-   echo 37
    xcopy /y "$(SolutionDir)Bin\Lua\lua.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
-   echo 38
    xcopy /y "$(SolutionDir)Bin\Lua\luac.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
-   echo 39
 
    REM Restore Corona Simulator.pdb
    copy "%25TEMP%25\Corona Simulator.pdb" "$(SolutionDir)Bin\Corona\"
-   echo 40
 )
 
 REM Generate wix files for the Corona and its PDB file
