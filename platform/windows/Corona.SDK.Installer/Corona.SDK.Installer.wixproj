@@ -70,6 +70,39 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
 
    mkdir "$(SolutionDir)Bin\Corona"
    move /y "$(SolutionDir)Bin\Native" "$(SolutionDir)Bin\Corona\"
+
+   REM Compile all Corona related projects to the target directory.
+   "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /rebuild "Release|Win32"
+   "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Simulator.sln" /build "Release|Win32"
+   "$(DevEnvDir)devenv" "$(SolutionDir)CoronaBuilder.sln" /build "Release|Win32"
+
+   REM Save Corona Simulator.pdb
+   copy "$(SolutionDir)Bin\Corona\Corona Simulator.pdb" %25TEMP%25
+
+   REM Delete intermediate/debugging files from the target directories.
+   del /q /s "$(SolutionDir)Bin\Corona\%2a.exp"
+   del /q /s "$(SolutionDir)Bin\Corona\%2a.ilk"
+   del /q /s "$(SolutionDir)Bin\Corona\%2a.lib"
+   del /q /s "$(SolutionDir)Bin\Corona\%2a.pdb"
+   del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.exp"
+   del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.ilk"
+   del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.lib"
+   del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.pdb"
+
+   REM copy Native libs
+   xcopy /y "$(SolutionDir)Bin\Corona.Enterprise\lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib\"
+
+   REM copy CoronaBuilder files
+   xcopy /y "$(SolutionDir)..\..\bin\win\CopyResources.bat" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
+   move /y "$(SolutionDir)Bin\Corona\lfs.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
+   move /y "$(SolutionDir)Bin\Corona\CoronaBuilder.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
+   xcopy /y "$(SolutionDir)..\..\bin\shared\Compile.lua" "$(SolutionDir)Bin\Corona\Native\Corona\shared\bin"
+   xcopy /y "$(SolutionDir)Bin\Lua\lua.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
+   xcopy /y "$(SolutionDir)Bin\Lua\lua.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
+   xcopy /y "$(SolutionDir)Bin\Lua\luac.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
+
+   REM Restore Corona Simulator.pdb
+   copy "%25TEMP%25\Corona Simulator.pdb" "$(SolutionDir)Bin\Corona\"
 )
 </PreBuildEvent>
   </PropertyGroup>
