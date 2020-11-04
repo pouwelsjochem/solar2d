@@ -112,6 +112,12 @@ Display::Initialize( lua_State *L, int configIndex )
 
 	return result;
 }
+    
+void
+Display::Teardown()
+{
+    GetTextureFactory().Teardown();
+}
 
 void
 Display::ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHeader )

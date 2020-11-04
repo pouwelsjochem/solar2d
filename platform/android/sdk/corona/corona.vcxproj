@@ -115,6 +115,7 @@
     <ClCompile Include="..\..\..\..\librtt\Core\Rtt_Geometry.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Corona\CoronaAssert.c" />
     <ClCompile Include="..\..\..\..\librtt\Corona\CoronaEvent.cpp" />
+    <ClCompile Include="..\..\..\..\librtt\Corona\CoronaGraphics.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Corona\CoronaLibrary.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Corona\CoronaLog.c" />
     <ClCompile Include="..\..\..\..\librtt\Corona\CoronaLua.cpp" />
@@ -252,6 +253,8 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceBitmapAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceCanvas.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceCanvasAdapter.cpp" />
+    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternal.cpp" />
+    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternalAdapter.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_VertexCache.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Input\Rtt_InputAxisCollection.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Input\Rtt_InputAxisDescriptor.cpp" />
@@ -545,6 +548,7 @@
     <ClInclude Include="..\..\..\..\librtt\Core\Rtt_WeakPtr.h" />
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaAssert.h" />
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaEvent.h" />
+    <ClInclude Include="..\..\..\..\librtt\Corona\CoronaGraphics.h" />
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaLibrary.h" />
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaLog.h" />
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaLua.h" />
@@ -611,6 +615,8 @@
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceBitmapAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceCanvas.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceCanvasAdapter.h" />
+    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternal.h" />
+    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternalAdapter.h" />
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_VertexCache.h" />
     <ClInclude Include="..\..\..\..\librtt\Input\Rtt_InputAxisCollection.h" />
     <ClInclude Include="..\..\..\..\librtt\Input\Rtt_InputAxisDescriptor.h" />

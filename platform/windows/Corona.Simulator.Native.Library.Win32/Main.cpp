@@ -24,6 +24,7 @@
 #include "CoronaLua.h"
 #include "CoronaMacros.h"
 #include "CoronaVersion.h"
+#include "CoronaGraphics.h"
 //#include "CoronaWin32.h"
 #include <Windows.h>
 
@@ -567,4 +568,31 @@ CORONA_API const char *CoronaVersionBuildString()
 	return CoronaCallbackInvoke();
 }
 
+#pragma endregion
+
+
+
+#pragma region Corona Graphics APIs
+CORONA_API int CoronaExternalPushTexture(lua_State *L, const struct CoronaExternalTextureCallbacks *callbacks, void* userData)
+{
+	typedef int(*CoronaCallbackType)(lua_State*, const struct CoronaExternalTextureCallbacks *, void*);
+	CoronaCallbackLoad();
+	return CoronaCallbackInvoke(L, callbacks, userData);
+}
+
+CORONA_API
+void* CoronaExternalGetUserData(lua_State *L, int index)
+{
+	typedef void*(*CoronaCallbackType)(lua_State*, int);
+	CoronaCallbackLoad();
+	return CoronaCallbackInvoke(L, index);
+}
+
+CORONA_API
+int CoronaExternalFormatBPP(CoronaExternalBitmapFormat format)
+{
+	typedef int(*CoronaCallbackType)(CoronaExternalBitmapFormat);
+	CoronaCallbackLoad();
+	return CoronaCallbackInvoke(format);
+}
 #pragma endregion

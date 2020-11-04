@@ -454,6 +454,12 @@
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceCanvasAdapter.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternal.cpp">
+      <Filter>rtt\Display</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternalAdapter.cpp">
+      <Filter>rtt\Display</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Display\Rtt_VertexCache.cpp">
       <Filter>rtt\Display</Filter>
     </ClCompile>
@@ -919,6 +925,9 @@
     <ClCompile Include="..\..\..\..\librtt\Corona\CoronaLibrary.cpp">
       <Filter>rtt\Corona</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\librtt\Corona\CoronaGraphics.cpp">
+      <Filter>rtt\Corona</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Corona\CoronaEvent.cpp">
       <Filter>rtt\Corona</Filter>
     </ClCompile>
@@ -1343,6 +1352,12 @@
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceCanvasAdapter.h">
+      <Filter>rtt\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternal.h">
+      <Filter>rtt\Display</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\librtt\Display\Rtt_TextureResourceExternalAdapter.h">
       <Filter>rtt\Display</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Display\Rtt_VertexCache.h">
@@ -1832,6 +1847,9 @@
       <Filter>rtt\Corona</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaLibrary.h">
+      <Filter>rtt\Corona</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\librtt\Corona\CoronaGraphics.h">
       <Filter>rtt\Corona</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Corona\CoronaEvent.h">

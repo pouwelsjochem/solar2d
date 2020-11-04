@@ -20,6 +20,11 @@
 
 // ----------------------------------------------------------------------------
 
+extern "C"
+{
+	struct CoronaExternalTextureCallbacks;
+}
+
 namespace Rtt
 {
 
@@ -70,6 +75,11 @@ class TextureFactory
 			const std::string &cacheKey,
 			Real w, Real h,
 			int pixelW, int pixelH, bool isMask );
+	
+		SharedPtr< TextureResource > FindOrCreateExternal(
+			const std::string &cacheKey,
+			const CoronaExternalTextureCallbacks* callbacks,
+			void* context);
 
 
 	// One-off texture resources
@@ -132,6 +142,13 @@ class TextureFactory
 	public:
 		void AddTextureToUpdateList( const std::string &key );
 		void UpdateTextures(Renderer &renderer);
+	
+	protected:
+		TextureKeySet fTeardownList;
+	public:
+		void Teardown();
+		void AddToTeardownList( const std::string &key );
+		void RemoveFromTeardownList( const std::string &key );
 
 	private:
 		Cache fCache;

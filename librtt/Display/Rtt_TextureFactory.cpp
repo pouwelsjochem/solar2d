@@ -21,6 +21,7 @@
 
 #include "Display/Rtt_TextureResourceBitmap.h"
 #include "Display/Rtt_TextureResourceCanvas.h"
+#include "Display/Rtt_TextureResourceExternal.h"
 
 #include "Rtt_FilePath.h"
 #include "Rtt_MPlatform.h"
@@ -456,6 +457,31 @@ TextureFactory::FindOrCreateCanvas(const std::string &cacheKey,
 	
 	return result;
 }
+
+	
+	
+SharedPtr< TextureResource >
+TextureFactory::FindOrCreateExternal(const std::string &cacheKey,
+									 const CoronaExternalTextureCallbacks* callbacks,
+									 void* context)
+
+{
+	if (fOwnedTextures.find(cacheKey) != fOwnedTextures.end())
+	{
+		Rtt_ASSERT_NOT_REACHED(); //we should create only unique external textures... Something is really wrong.
+		return fOwnedTextures[cacheKey];
+	}
+	
+	TextureResource *resource = TextureResourceExternal::Create( *this, callbacks, context, true );
+	SharedPtr< TextureResource > result = SharedPtr< TextureResource >( resource );
+	
+	fCache[cacheKey] = CacheEntry( result );
+	result->SetCacheKey(cacheKey);
+	
+	AddToTeardownList(cacheKey);
+	
+	return result;
+}
 	
 void TextureFactory::Retain(const SharedPtr< TextureResource > &res)
 {
@@ -504,6 +530,31 @@ void TextureFactory::ReleaseByType( TextureResource::TextureResourceType type)
 	}
 }
 
+void TextureFactory::Teardown()
+{
+	for(TextureKeySet::iterator it = fTeardownList.begin(); it!=fTeardownList.end(); it++)
+	{
+		SharedPtr< TextureResource > resource = Find(*it);
+		if(resource.NotNull())
+		{
+			resource->Teardown();
+		}
+	}
+	
+	fTeardownList.clear();
+}
+	
+void TextureFactory::AddToTeardownList( const std::string &key )
+{
+	fTeardownList.insert( key );
+}
+	
+void TextureFactory::RemoveFromTeardownList( const std::string &key )
+{
+	fTeardownList.erase( key );
+}
+	
+	
 void TextureFactory::AddTextureToUpdateList( const std::string &key )
 {
 	fUpdateTextures.insert(key);
