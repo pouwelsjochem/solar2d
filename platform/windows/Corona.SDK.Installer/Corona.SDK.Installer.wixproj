@@ -71,10 +71,6 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
    mkdir "$(SolutionDir)Bin\Corona"
    move /y "$(SolutionDir)Bin\Native" "$(SolutionDir)Bin\Corona\"
 )
-
-REM Generate wix files for the Corona and its PDB file
-$(WIX)\bin\heat" dir "$(SolutionDir)Bin\Corona" -t "$(ProjectDir)ExcludePDB.xsl" -dr APP_INSTALL_FOLDER -cg ApplicationFiles -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "$(ProjectDir)Generated Files\ApplicationFiles.wxs"
-$(WIX)\bin\heat" file "$(SolutionDir)Bin\Corona\Corona Simulator.pdb" -dr APP_INSTALL_FOLDER -cg PDBFile -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "$(ProjectDir)Generated Files\PDBFile.wxs"
 </PreBuildEvent>
   </PropertyGroup>
   <!--
