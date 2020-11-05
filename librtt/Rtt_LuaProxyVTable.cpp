@@ -1149,7 +1149,7 @@ LuaShapeObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, 
 			setFill( L, valueIndex );
 		}
 		break;
-	case 2:
+	case 1:
 		{
 			const char *v = lua_tostring( L, valueIndex );
 			RenderTypes::BlendType blend = RenderTypes::BlendTypeForString( v );
