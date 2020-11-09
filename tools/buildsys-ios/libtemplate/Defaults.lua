@@ -262,6 +262,7 @@ options.frameworks = {
 	'StoreKit',
 	'SystemConfiguration',
 	'UIKit',
+	'WebKit',
 }
 
 options.frameworksOptional = {

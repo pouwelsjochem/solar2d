@@ -363,7 +363,6 @@ CoronaViewListenerAdapter( lua_State *L )
 	if(!fMFiInputListener) {
 		AppleInputDeviceManager& inputDeviceManager = (AppleInputDeviceManager&)_runtime->Platform().GetDevice().GetInputDeviceManager();
 		fMFiInputListener = [[AppleInputMFiDeviceListener alloc] initWithRuntime:_runtime andDeviceManager:&inputDeviceManager];
-		[fMFiInputListener start];
 	}
 
 	// Check if already launched
@@ -411,6 +410,7 @@ CoronaViewListenerAdapter( lua_State *L )
 	NSInteger result =_runtime->LoadApplication( Runtime::kDeviceLaunchOption );
 	if ( result == (NSInteger)Runtime::kSuccess )
 	{
+		[fMFiInputListener start];
 		[self willBeginRunLoop:fParams];
 
 		_runtime->BeginRunLoop();
