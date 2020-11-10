@@ -604,18 +604,18 @@ namespace Rtt
 		// Validate.
 		if ((nullptr == bitmap))
 		{
-			return false;
+			return;
 		}
 		if ((bitmap->Width() <= 0) || (bitmap->Height() <= 0))
 		{
-			return false;
+			return;
 		}
 
 		// Fetch the given bitmap's bits.
 		U8* bits = (U8*)(bitmap->GetBits(&GetAllocator()));
 		if (nullptr == bits)
 		{
-			return false;
+			return;
 		}
 
 		// Fetch the byte indexes for each color channel according to given image format and machine endianness.
@@ -657,7 +657,7 @@ namespace Rtt
 				else
 				{
 					// Given image format is not supported. Abort.
-					return false;
+					return;
 				}
 
 				// Copy the pixel's color to the image buffer to be saved.
@@ -672,8 +672,11 @@ namespace Rtt
 		GetEncoderClsid(L"image/png", &encoderId);
 
 		IStream* istream = nullptr;
-		HRESULT hg = CreateStreamOnHGlobal(NULL, TRUE, &istream);
+		CreateStreamOnHGlobal(NULL, TRUE, &istream);
 		targetImage.Save(istream, &encoderId);
+
+		HGLOBAL hg = NULL;
+		GetHGlobalFromStream(istream, &hg);
 
 		int pngByteSize = GlobalSize(hg);
 		char *pngByteBuffer = new char[pngByteSize];

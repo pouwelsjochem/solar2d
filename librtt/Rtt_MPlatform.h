@@ -11,7 +11,6 @@
 #define _Rtt_Platform_H__
 
 #include "Core/Rtt_Types.h"
-#include "Core/Rtt_Data.h"
 
 #include "Display/Rtt_PlatformBitmap.h"
 #include "Core/Rtt_ResourceHandle.h"
