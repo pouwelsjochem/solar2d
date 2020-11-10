@@ -588,9 +588,8 @@ namespace Rtt
 
 	// Saves the given bitmap to file.
 	// Returns true if bitmap was saved successfully. Returns false if not.
-	bool WinPlatform::SaveBitmap(PlatformBitmap* bitmap, const char* filePath ) const
+	void WinPlatform::SaveBitmap(PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const
 	{
-		WinString stringBuffer;
 		CLSID encoderId;
 		Gdiplus::Color color;
 		WCHAR* encoderName;
@@ -603,7 +602,7 @@ namespace Rtt
 		int yIndex;
 
 		// Validate.
-		if ((nullptr == bitmap) || (nullptr == filePath))
+		if ((nullptr == bitmap))
 		{
 			return false;
 		}
@@ -672,11 +671,18 @@ namespace Rtt
 		// Determine which image format we should save to based on the file extension.
 		GetEncoderClsid(L"image/png", &encoderId);
 
-		// Save the image to file.
-		stringBuffer.SetUTF8(filePath);
-		stringBuffer.MakeLowerCase();
-		targetImage.Save(stringBuffer.GetTCHAR(), &encoderId, nullptr);
-		return true;
+		IStream* istream = nullptr;
+		HRESULT hg = CreateStreamOnHGlobal(NULL, TRUE, &istream);
+		targetImage.Save(istream, &encoderId);
+
+		int pngByteSize = GlobalSize(hg);
+		char *pngByteBuffer = new char[pngByteSize];
+		LPVOID ptr = GlobalLock(hg);
+		memcpy(pngByteBuffer, ptr, pngByteSize);
+		GlobalUnlock(hg);
+
+		istream->Release();
+		pngBytes.Set((const char *)pngByteBuffer, pngByteSize);
 	}
 
 	int WinPlatform::SetSync(lua_State* L) const

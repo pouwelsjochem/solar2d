@@ -73,12 +73,8 @@ class MacPlatform : public ApplePlatform
 		virtual MPlatformDevice& GetDevice() const;
 		virtual PlatformSurface* CreateScreenSurface() const;
 
-	public:
-		static struct CGImage* CreateMacImage( Rtt_Allocator* pAllocator, PlatformBitmap& bitmap );
-
-	protected:
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const;
 #ifdef Rtt_AUTHORING_SIMULATOR
+	protected:
 		ValueResult<Rtt::SharedConstStdStringPtr> GetSimulatedAppPreferenceKeyFor(const char* keyName) const;
 #endif
 
@@ -86,7 +82,7 @@ class MacPlatform : public ApplePlatform
 		virtual Preference::ReadValueResult GetPreference( const char* categoryName, const char* keyName ) const;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
+		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 

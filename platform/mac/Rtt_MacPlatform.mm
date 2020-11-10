@@ -459,48 +459,8 @@ MacPlatform::CreateScreenSurface() const
 	return Rtt_NEW( Allocator(), MacViewSurface( fView ) );
 }
 
-// TODO: Consolidate this with MacPlatform::SaveBitmap(). Lots of duplicate code.
-CGImageRef
-MacPlatform::CreateMacImage( Rtt_Allocator* pAllocator, PlatformBitmap& bitmap )
-{
-	const void* buffer = bitmap.GetBits( pAllocator );
-	size_t w = bitmap.Width();
-	size_t h = bitmap.Height();
-	size_t bytesPerPixel = PlatformBitmap::BytesPerPixel( bitmap.GetFormat() );
-//	size_t bitsPerPixel = (bytesPerPixel << 3);
-	size_t bytesPerRow = w*bytesPerPixel;
-	size_t numBytes = h*bytesPerRow;
-//	const size_t kBitsPerComponent = 8;
-
-	CGDataProviderRef dataProvider = CGDataProviderCreateWithData( NULL, buffer, numBytes, NULL );
-	CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
-	CGImageRef imageRef = CGImageCreate(
-		w, h, 8, 32, w*4,
-		colorspace, kCGBitmapByteOrderDefault, dataProvider,
-		NULL, true, kCGRenderingIntentDefault);
-
-	Rtt_ASSERT( w == CGImageGetWidth( imageRef ) );
-	Rtt_ASSERT( h == CGImageGetHeight( imageRef ) );
-
-	void* pixels = calloc( bytesPerRow, h );
-	CGContextRef context = CGBitmapContextCreate(
-		pixels, w, h, 8, bytesPerRow,
-		CGImageGetColorSpace( imageRef ), kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big );
-	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
-	CGImageRef bitmapImageRef = CGBitmapContextCreateImage(context);
-
-	CGContextRelease( context );
-	free( pixels );
-
-	CGImageRelease( imageRef );
-	CGColorSpaceRelease( colorspace );
-	CGDataProviderRelease( dataProvider );
-
-	return bitmapImageRef;
-}
-
-bool
-MacPlatform::SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const
+void
+MacPlatform::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const
 {
 	const void* buffer = bitmap->GetBits( & GetAllocator() );
 	size_t w = bitmap->Width();
@@ -537,14 +497,9 @@ MacPlatform::SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const
 	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
 	CGImageRef bitmapImageRef = CGBitmapContextCreateImage(context);
     
-    CGImageDestinationRef imageDest = CGImageDestinationCreateWithURL( (CFURLRef)url, kUTTypePNG, 1, NULL );    
-	if ( imageDest )
-	{
-		CGImageDestinationAddImage( imageDest, bitmapImageRef, nil );
-		CGImageDestinationFinalize( imageDest );
-		CFRelease( imageDest );
-	}
-
+	NSBitmapImageRep *bitmapImageRep = [[NSBitmapImageRep alloc] initWithCGImage:bitmapImageRef];
+	NSData *bitmapImageRepData = [bitmapImageRep representationUsingType:NSPNGFileType properties:{}];
+	
 	CGImageRelease( bitmapImageRef );
 	CGContextRelease( context );
 	free( pixels );
@@ -553,13 +508,7 @@ MacPlatform::SaveBitmap( PlatformBitmap* bitmap, NSURL* url ) const
 	CGColorSpaceRelease( colorspace );
 	CGDataProviderRelease( dataProvider );
 
-	return true;
-}
-
-bool
-MacPlatform::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
-{
-	return SaveBitmap( bitmap, [NSURL fileURLWithPath:[NSString stringWithExternalString:filePath]] );
+	pngBytes.Set((const char *)bitmapImageRepData.bytes, bitmapImageRepData.length);
 }
 
 #ifdef Rtt_AUTHORING_SIMULATOR

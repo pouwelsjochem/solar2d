@@ -11,6 +11,7 @@
 #define _Rtt_Platform_H__
 
 #include "Core/Rtt_Types.h"
+#include "Core/Rtt_Data.h"
 
 #include "Display/Rtt_PlatformBitmap.h"
 #include "Core/Rtt_ResourceHandle.h"
@@ -121,7 +122,7 @@ class MPlatform
 		virtual PlatformSurface* CreateOffscreenSurface( const PlatformSurface& parent ) const = 0;
 		virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const = 0;
 		virtual PlatformBitmap* CreateBitmap( const char *filePath, bool convertToGrayscale ) const = 0;
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const = 0;
+		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const = 0;
         virtual bool OpenURL( const char* url ) const = 0;
 		// Return values of CanOpenURL: -1 Unknown; 0 No; 1 Yes
 		virtual int CanOpenURL( const char* url ) const = 0;

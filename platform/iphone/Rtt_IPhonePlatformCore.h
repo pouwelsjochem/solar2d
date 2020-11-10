@@ -48,11 +48,8 @@ class IPhonePlatformCore : public IPhonePlatformBase
 	public:
 		virtual MPlatformDevice& GetDevice() const;
 
-	protected:
-		bool SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) const;
-
 	public:
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
+		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
 
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 

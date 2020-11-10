@@ -46,8 +46,8 @@ IPhonePlatformCore::GetDevice() const
 	return const_cast< IPhoneDevice& >( fDevice );
 }
 
-bool
-IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) const
+void
+IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const
 {
 	Rtt_ASSERT( bitmap );
 
@@ -95,6 +95,8 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) con
 	CGContextRelease( context );
 	//free( pixels );
 
+	NSBitmapImageRep *bitmapImageRep = [[NSBitmapImageRep alloc] initWithCGImage:flippedImageRef];
+	NSData *bitmapImageRepData = [bitmapImageRep representationUsingType:NSPNGFileType properties:{}];
 
 //	UIImage* image = [[UIImage alloc] initWithCGImage:imageRef];
 //	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
@@ -103,14 +105,8 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, NSString* filePath ) con
 	CGImageRelease( imageRef );
 	CGDataProviderRelease( dataProvider );
 	bitmap->FreeBits();
-
-	return true;
-}
-
-bool
-IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
-{
-	return SaveBitmap( bitmap, [NSString stringWithUTF8String:filePath] );
+	
+	pngBytes.Set((const char *)bitmapImageRepData.bytes, bitmapImageRepData.length);
 }
 
 // This is a place where we can add system.getInfo() categories that return arbitrary types

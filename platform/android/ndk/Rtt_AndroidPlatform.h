@@ -100,7 +100,7 @@ class AndroidPlatform : public MPlatform
         char* CopyString( const char* src, bool useAllocator = true ) const;
 
 	public:
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
+		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 

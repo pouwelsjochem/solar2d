@@ -78,10 +78,9 @@ MacConsolePlatform::CreateOffscreenSurface( const PlatformSurface& ) const
 	return NULL;
 }
 
-bool
-MacConsolePlatform::SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const
+void
+MacConsolePlatform::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const
 {
-	return false;
 }
 
 bool

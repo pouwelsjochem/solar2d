@@ -1752,8 +1752,8 @@ NativeToJavaBridge::SetEventNotification( int eventType, bool enable )
 	}
 }
 
-bool
-NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char * path )
+void
+NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, Rtt::Data<const char> & pngBytes )
 {
 	NativeTrace trace( "NativeToJavaBridge::SaveBitmap" );
 #ifdef Rtt_DEBUG
@@ -1765,45 +1765,35 @@ NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char *
 #endif
 
 	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	bool result = false;
-	
 	if ( bridge.isValid() )
 	{
 		jmethodID mid;
 		
-		mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), "callSaveBitmap", "(Lcom/ansca/corona/CoronaRuntime;[IIIILjava/lang/String;)Z" );
-		
-		if ( path == NULL )
-		{
-			path = "";
-		}
-
+		mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), "callSaveBitmap", "(Lcom/ansca/corona/CoronaRuntime;[III)[B" );
 		if ( mid != NULL )
 		{
-			jstringParam pathJ( bridge.getEnv(), path );
-			if ( pathJ.isValid() )
+			int width = bitmap->Width();
+			int height = bitmap->Height();
+			
+			jintArrayParam array( bridge.getEnv(), width * height);
+			
+			if ( array.isValid() )
 			{
-				int width = bitmap->Width();
-				int height = bitmap->Height();
-				
-				jintArrayParam array( bridge.getEnv(), width * height);
-				
-				if ( array.isValid() )
+				if ( width > 0 )
 				{
-					if ( width > 0 )
-					{
-						array.setArray( (const int *) bitmap->GetBits( NULL ), 0, width * height );
-					}
+					array.setArray( (const int *) bitmap->GetBits( NULL ), 0, width * height );
 				}
-
-				result = bridge.getEnv()->CallStaticBooleanMethod(
-							bridge.getClass(), mid, fCoronaRuntime, array.getValue(), width, height, pathJ.getValue());
-				HandleJavaException();
 			}
+
+			jobject jo = bridge.getEnv()->CallStaticObjectMethod(bridge.getClass(), mid, fCoronaRuntime, array.getValue(), width, height);
+			jbyteArrayResult bytesJ( bridge.getEnv(), (jbyteArray) jo );
+			pngBytes.Set( (const char *) bytesJ.getValues(), bytesJ.getLength() );
+			bytesJ.release();
+			bridge.getEnv()->DeleteLocalRef(jo);
+
+			HandleJavaException();
 		}
 	}
-
-	return result;
 }
 
 int 

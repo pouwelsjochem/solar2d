@@ -924,124 +924,34 @@ public class NativeToJavaBridge {
 		return wasCopied;
 	}
 
-	protected static boolean callSaveBitmap( CoronaRuntime runtime, int[] pixels, int width, int height, String filePathName )
+	protected static byte[] callSaveBitmap( CoronaRuntime runtime, int[] pixels, int width, int height )
 	{
 		// Validate.
 		if (runtime.getController() == null) {
 			Log.v( "Corona", "callSaveBitmap has invalid controller" );
-			return false;
+			return new byte[0];
 		}
 
 		CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
 		if (activity == null) {
 			Log.v( "Corona", "callSaveBitmap has null CoronaActivity" );
-			return false;
+			return new byte[0];
 		}
 		
 		// Copy the pixel array into a bitmap object.
-		android.graphics.Bitmap bitmap = null;
 		try {
-			bitmap = android.graphics.Bitmap.createBitmap(
-							pixels, width, height, android.graphics.Bitmap.Config.ARGB_8888);
+			android.graphics.Bitmap bitmap = android.graphics.Bitmap.createBitmap(pixels, width, height, android.graphics.Bitmap.Config.ARGB_8888);
+
+			java.io.ByteArrayOutputStream byteArrayOutputStream = new java.io.ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+			byteArrayOutputStream.flush();
+			byteArrayOutputStream.close();
+			return byteArrayOutputStream.toByteArray();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
+			return new byte[0];
 		}
-		if (bitmap == null) {
-			return false;
-		}
-		
-		SaveBitmapRequestPermissionsResultHandler resultHandler = new SaveBitmapRequestPermissionsResultHandler(
-			runtime, bitmap, filePathName);
-
-		return resultHandler.handleSaveMedia();
-	}
-
-		/** Default handling of the write external storage permission for saveBitmap() on Android 6+. */
-	private static class SaveBitmapRequestPermissionsResultHandler 
-		extends NativeToJavaBridge.SaveMediaRequestPermissionsResultHandler {
-
-		// Arguments for the saveBitmap() method that we can now call safely.
-		private Bitmap fBitmap;
-		private String fFilePathName;
-
-		public SaveBitmapRequestPermissionsResultHandler(
-			CoronaRuntime runtime, Bitmap bitmap, String filePathName) {
-			super(runtime);
-
-			fBitmap = bitmap;
-			fFilePathName = filePathName;
-		}
-
-		@Override
-		public boolean handleSaveMedia() {
-			return executeSaveMedia();
-		}
-
-		@Override
-		public boolean executeSaveMedia() {
-			return fCoronaRuntime.getController().saveBitmap(fBitmap, fFilePathName);
-		}
-	}
-
-	/** Default handling of the write external storage permission for saving media on Android 6+. */
-	private abstract static class SaveMediaRequestPermissionsResultHandler 
-		implements CoronaActivity.OnRequestPermissionsResultHandler {
-
-		protected CoronaRuntime fCoronaRuntime;
-		
-		protected SaveMediaRequestPermissionsResultHandler(CoronaRuntime runtime) {
-			fCoronaRuntime = runtime;
-		}
-
-		public boolean handleSaveMedia() {
-			// Check for WRITE_EXTERNAL_STORAGE permission.
-			PermissionsServices permissionsServices = new PermissionsServices(CoronaEnvironment.getApplicationContext());
-			PermissionState writeExternalStoragePermissionState = 
-				permissionsServices.getPermissionStateFor(PermissionsServices.Permission.WRITE_EXTERNAL_STORAGE);
-			switch(writeExternalStoragePermissionState) {
-				case MISSING:
-					// The Corona developer forgot to add the permission to the AndroidManifest.xml.
-					permissionsServices.showPermissionMissingFromManifestAlert(PermissionsServices.Permission.WRITE_EXTERNAL_STORAGE, 
-						"Saving Images requires access to the device's Storage!");
-					break;
-				case DENIED:
-					// Only possible on Android 6.
-					if (!permissionsServices.shouldNeverAskAgain(PermissionsServices.Permission.WRITE_EXTERNAL_STORAGE)) {
-						// Create our Permissions Settings to compare against in the handler.
-						PermissionsSettings settings = new PermissionsSettings(PermissionsServices.Permission.WRITE_EXTERNAL_STORAGE);
-
-						// Request Write External Storage permission.
-						permissionsServices.requestPermissions(settings, this);
-					}
-					break;
-				default:
-					// Permission is granted!
-					return executeSaveMedia();
-			}
-
-			return false;
-		}
-
-		@Override
-		public void onHandleRequestPermissionsResult(
-				CoronaActivity activity, int requestCode, String[] permissions, int[] grantResults) {
-
-			PermissionsSettings permissionsSettings = activity.unregisterRequestPermissionsResultHandler(this);
-
-			if (permissionsSettings != null) {
-				permissionsSettings.markAsServiced();
-			}
-
-			// Check for WRITE_EXTERNAL_STORAGE permission.
-			PermissionsServices permissionsServices = new PermissionsServices(activity);
-			if (permissionsServices.getPermissionStateFor(
-					PermissionsServices.Permission.WRITE_EXTERNAL_STORAGE) == PermissionState.GRANTED) {
-				executeSaveMedia();
-			} // Otherwise, we have nothing to do!
-		}
-
-		abstract public boolean executeSaveMedia();
 	}
 	
 	/**

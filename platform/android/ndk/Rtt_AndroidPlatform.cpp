@@ -449,18 +449,16 @@ void AndroidPlatform::RaiseError( MPlatform::Error e, const char * reason ) cons
     Rtt_TRACE( ( "MPlatformFactory error(%d): %s\n", e, kNull ) );
 }
 
-bool 
-AndroidPlatform::SaveBitmap( PlatformBitmap * bitmap, const char * filePath ) const
+void
+AndroidPlatform::SaveBitmap( PlatformBitmap * bitmap, Rtt::Data<const char> & pngBytes ) const
 {
 	// TODO: This is a horrible, horrible hack, and must die
 	bitmap->SwapRGB();
 
-	bool retflag = fNativeToJavaBridge->SaveBitmap( bitmap, filePath );
+	fNativeToJavaBridge->SaveBitmap( bitmap, pngBytes );
 
 	// Swap the bytes back
 	bitmap->SwapRGB();
-
-	return retflag;
 }
 
 int

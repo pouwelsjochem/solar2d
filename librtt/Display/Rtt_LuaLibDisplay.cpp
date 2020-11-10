@@ -8,6 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "Core/Rtt_Build.h"
+#include "Core/Rtt_Data.h"
 
 #include "Display/Rtt_LuaLibDisplay.h"
 
@@ -1288,32 +1289,9 @@ DisplayLibrary::save( lua_State *L )
 	}
 
 	// Default values for options.
-	const char* imageName = NULL;
-	MPlatform::Directory baseDir = MPlatform::kDocumentsDir;
 	bool cropObjectToScreenBounds = true;
 	ColorUnion backgroundColor;
 	bool backgroundColorHasBeenProvided = false;
-
-	// filename is required.
-	lua_getfield( L, -1, "filename" );
-	imageName = luaL_checkstring( L, -1 );
-	if( ! Rtt_VERIFY( imageName ) )
-	{
-		// Nothing to do.
-		lua_pop( L, 1 );
-		return 0;
-	}
-	lua_pop( L, 1 );
-
-	lua_getfield( L, -1, "baseDir" );
-	baseDir = LuaLibSystem::ToDirectory( L, -1, MPlatform::kDocumentsDir );
-	if( ! LuaLibSystem::IsWritableDirectory( baseDir ) )
-	{
-		// If the given directory is not writable,
-		// then default to the Documents directory.
-		baseDir = MPlatform::kDocumentsDir;
-	}
-	lua_pop( L, 1 );
 
 	lua_getfield( L, -1, "captureOffscreenArea" );
 	if( lua_isboolean( L, -1 ) )
@@ -1349,14 +1327,14 @@ DisplayLibrary::save( lua_State *L )
 	}
 
 	const MPlatform& platform = runtime->Platform();
-	String bitmapPath( runtime->GetAllocator() );
 
-	platform.PathForFile( imageName, baseDir, MPlatform::kDefaultPathFlags, bitmapPath );
-	platform.SaveBitmap( paint->GetBitmap(), bitmapPath.GetString() );
+	Rtt::Data<const char> pngBytes(display.GetAllocator());
+	platform.SaveBitmap( paint->GetBitmap(), pngBytes );
+	lua_pushlstring(L, pngBytes.GetData(), pngBytes.GetLength());
 
 	Rtt_DELETE( paint );
 
-	return 0;
+	return 1;
 }
 
 int

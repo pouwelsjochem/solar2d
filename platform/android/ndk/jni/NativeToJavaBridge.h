@@ -93,7 +93,7 @@ class NativeToJavaBridge
 		bool LoadImage(
 				const char *filePath, AndroidImageData& imageData, bool convertToGrayscale,
 				int maxWidth, int maxHeight, bool loadImageInfoOnly);
-		bool SaveBitmap( const Rtt::PlatformBitmap * bitmap, const char * path );
+		void SaveBitmap( const Rtt::PlatformBitmap * bitmap, Rtt::Data<const char> & pngBytes );
 	
 		void SetTimer( int milliseconds );
 		void CancelTimer();

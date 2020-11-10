@@ -720,29 +720,6 @@ public class Controller {
 			}
 		}
 	}
-	
-	public boolean saveBitmap(Bitmap bitmap, String filePathName) {
-		boolean result = false;
-		
-		// Validate.
-		if ((bitmap == null) || (filePathName == null) || (filePathName.length() <= 0)) {
-			return false;
-		}
-		
-		// Save the given image to file.
-		try {
-			java.io.FileOutputStream stream = new java.io.FileOutputStream(filePathName);
-			result = bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			stream.flush();
-			stream.close();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		// Returns true if the save was successful.
-		return result;
-	}
 
 	/**
 	 * Creates an AlertDialog.Builder with the proper theme for the given device.

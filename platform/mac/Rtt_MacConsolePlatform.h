@@ -38,7 +38,7 @@ class MacConsolePlatform : public ApplePlatform
 		virtual PlatformSurface* CreateScreenSurface() const;
 		virtual PlatformSurface* CreateOffscreenSurface( const PlatformSurface& parent ) const;
     
-		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath ) const;
+		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
