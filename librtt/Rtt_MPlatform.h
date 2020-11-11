@@ -13,6 +13,7 @@
 #include "Core/Rtt_Types.h"
 
 #include "Display/Rtt_PlatformBitmap.h"
+#include "Core/Rtt_Data.h"
 #include "Core/Rtt_ResourceHandle.h"
 #include "Rtt_PlatformReachability.h" // needed because of enum type
 #include "Rtt_Preference.h"
