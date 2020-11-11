@@ -499,7 +499,8 @@ void WinInputDeviceManager::OnReceivedMessage(
 			float scrollWheelDeltaY = 0;
 			if (arguments.GetMessageId() == WM_MOUSEWHEEL)
 			{
-				scrollWheelDeltaY = (float)GET_WHEEL_DELTA_WPARAM(arguments.GetWParam());
+				// The sign of the deltas is the opposite of what is expected so they are swapped
+				scrollWheelDeltaY = -(float)GET_WHEEL_DELTA_WPARAM(arguments.GetWParam());
 				if (scrollWheelDeltaY < 0)
 				{
 					scrollWheelDeltaY = -1;
@@ -511,7 +512,8 @@ void WinInputDeviceManager::OnReceivedMessage(
 			}
 			else
 			{
-				scrollWheelDeltaX = (float)GET_WHEEL_DELTA_WPARAM(arguments.GetWParam());
+				// The sign of the deltas is the opposite of what is expected so they are swapped
+				scrollWheelDeltaX = -(float)GET_WHEEL_DELTA_WPARAM(arguments.GetWParam());
 				if (scrollWheelDeltaX < 0)
 				{
 					scrollWheelDeltaX = -1;
