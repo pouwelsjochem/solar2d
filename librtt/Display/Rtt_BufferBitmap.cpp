@@ -111,7 +111,7 @@ BufferBitmap::UndoPremultipliedAlpha()
 			U8 a = ((U8 *)p)[0];
 		#endif
 
-		if ( a > 0 )
+		if ( a > 0 && a < 255 )
 		{
 			#ifdef Rtt_OPENGLES
 				//RGBA
