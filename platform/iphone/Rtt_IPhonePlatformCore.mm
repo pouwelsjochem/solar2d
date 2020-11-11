@@ -79,28 +79,13 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & 
 	CGImageRef flippedImageRef = CGBitmapContextCreateImage(context);
 	UIImage* image = [[UIImage alloc] initWithCGImage:flippedImageRef];
 
-	if ( ! filePath )
-	{
-		UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-	}
-	else
-	{
-		NSData *imageData = UIImagePNGRepresentation( image );
-        [imageData writeToFile:filePath atomically:YES];
-	}
+	NSData *bitmapImageRepData = UIImagePNGRepresentation( image );
 
 	[image release];
 	CGImageRelease( flippedImageRef );
 	CGColorSpaceRelease( colorspace );
 	CGContextRelease( context );
 	//free( pixels );
-
-	NSBitmapImageRep *bitmapImageRep = [[NSBitmapImageRep alloc] initWithCGImage:flippedImageRef];
-	NSData *bitmapImageRepData = [bitmapImageRep representationUsingType:NSPNGFileType properties:{}];
-
-//	UIImage* image = [[UIImage alloc] initWithCGImage:imageRef];
-//	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-//	[image release];
 
 	CGImageRelease( imageRef );
 	CGDataProviderRelease( dataProvider );
