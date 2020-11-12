@@ -395,13 +395,13 @@ WinFileGrayscaleBitmap::Unlock()
 U32
 WinFileGrayscaleBitmap::Width() const
 {
-	return WinBitmap::Width();
+	return fWidth;
 }
 
 U32
 WinFileGrayscaleBitmap::Height() const
 {
-	return WinBitmap::Height();
+	return fHeight;
 }
 
 PlatformBitmap::Format 
