@@ -1904,7 +1904,40 @@ LuaSpriteObjectProxyVTable::setSequence( lua_State *L )
 	if ( o )
 	{
 		const char *name = lua_tostring( L, 2 );
-		o->SetSequence( name );
+		o->SetSequence( name, true );
+	}
+
+	return 0;
+}
+
+int
+LuaSpriteObjectProxyVTable::setSequenceAndPlay( lua_State *L )
+{
+	SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
+	
+	Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
+	
+	if ( o )
+	{
+		const char *name = lua_tostring( L, 2 );
+		o->SetSequence( name, true );
+		o->Play( L );
+	}
+
+	return 0;
+}
+
+int
+LuaSpriteObjectProxyVTable::setSequenceWithoutReset( lua_State *L )
+{
+	SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
+	
+	Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
+	
+	if ( o )
+	{
+		const char *name = lua_tostring( L, 2 );
+		o->SetSequence( name, false );
 	}
 
 	return 0;
@@ -1936,25 +1969,27 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 	static const char * keys[] =
 	{
 		// Read-write properties
-		"timeScale",		// 0
-	
-		// Read-only properties
-		"frame",			// 1
-		"frameInSequence",	// 2
-		"frameInSheet",		// 3
-		"loopCount",		// 4
-		"sequence",			// 5
-		"numFrames",		// 6
-		"isPlaying",		// 7
+		"timeScale",			// 0
 
-		// Methods
-		"play",				// 8
-		"pause",			// 9
-		"setSequence",		// 10
-		"setFrame"			// 11
+		// Read-only properties
+		"frame",					// 1
+		"frameInSequence",			// 2
+		"frameInSheet",				// 3
+		"loopCount",				// 4
+		"sequence",					// 5
+		"numFrames",				// 6
+		"isPlaying",				// 7
+
+		// Methods	
+		"play",						// 8
+		"pause",					// 9
+		"setSequence",				// 10
+		"setSequenceAndPlay",		// 11
+		"setSequenceWithoutReset",	// 12
+		"setFrame"					// 13
 	};
 	static const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 12, 21, 3, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 14, 18, 2, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -2020,6 +2055,16 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 		}
 		break;
 	case 11:
+		{
+			Lua::PushCachedFunction( L, Self::setSequenceAndPlay );
+		}
+		break;
+	case 12:
+		{
+			Lua::PushCachedFunction( L, Self::setSequenceWithoutReset );
+		}
+		break;
+	case 13:
 		{
 			Lua::PushCachedFunction( L, Self::setFrame );
 		}

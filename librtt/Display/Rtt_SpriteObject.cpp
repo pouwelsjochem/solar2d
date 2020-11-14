@@ -175,16 +175,25 @@ void SpriteObject::Pause() {
 	}
 }
 
-void SpriteObject::SetSequence(const char *name) {
-	SpriteSequence *sequence = GetCurrentSequence();
-	if (name && Rtt_StringCompare(name, sequence->GetName()) != 0) { // Find sequence since current sequence at 'index' does not match
+void SpriteObject::SetSequence(const char *name, bool shouldReset) {
+	SpriteSequence *originalSequence = GetCurrentSequence();
+	if (name && Rtt_StringCompare(name, originalSequence->GetName()) != 0) { // Find sequence since current sequence at 'index' does not match
 		for (int i = 0, iMax = fSequences.Length(); i < iMax; i++) {
 			if (Rtt_StringCompare(name, fSequences[i]->GetName()) == 0) {					
 				fCurrentSequenceIndex = i;
+
+				 if (shouldReset) 
+				 {
+					Reset();
+				 }
+				 else
+				 {
+				 	SetBitmapFrame(fSequences[i]->GetSheetFrameIndexForEffectiveFrameIndex(fCurrentEffectiveFrameIndex));
+				 }
+
 				break;
 			}
 		}
-		Reset();
 	}
 }
 
