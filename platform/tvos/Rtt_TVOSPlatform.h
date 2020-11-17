@@ -39,7 +39,6 @@ class TVOSPlatform : public IPhonePlatformBase
 
 	public:
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-		virtual PlatformVideoPlayer* GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const;
 
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;

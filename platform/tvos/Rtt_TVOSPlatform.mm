@@ -109,17 +109,6 @@ TVOSPlatform::GetDevice() const
 }
 
 // =====================================================================
-PlatformVideoPlayer*
-TVOSPlatform::GetVideoPlayer( const ResourceHandle<lua_State> & handle ) const
-{
-	if ( ! fVideoPlayer )
-	{
-		fVideoPlayer = Rtt_NEW( fAllocator, IPhoneVideoPlayer( handle ) );
-	}
-
-	return fVideoPlayer;
-}
-
 PlatformStoreProvider*
 TVOSPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
 {

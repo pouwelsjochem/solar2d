@@ -478,8 +478,6 @@
 		F592971F255548860048AF8C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F59296E3255548860048AF8C /* AVKit.framework */; };
 		F5A752361BFA41BF00CCDB94 /* CoronaLuaObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5A752351BFA41BF00CCDB94 /* CoronaLuaObjCHelper.mm */; };
 		F5A752371BFA41C600CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A752341BFA41BF00CCDB94 /* CoronaLuaObjCHelper.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F5B4469B255543BD000BC8A0 /* Rtt_IPhoneVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B4463E255543A8000BC8A0 /* Rtt_IPhoneVideoPlayer.mm */; };
-		F5B446AB255543BE000BC8A0 /* Rtt_IPhoneVideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B4463E255543A8000BC8A0 /* Rtt_IPhoneVideoPlayer.mm */; };
 		F5C5E0D7251E112100217C19 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD17351BAA0D8F00BCF507 /* main.mm */; };
 		F5C5E0D8251E112100217C19 /* compat.c in Sources */ = {isa = PBXBuildFile; fileRef = C2F9117A1CDC4C31004A5564 /* compat.c */; };
 		F5C5E0D9251E112100217C19 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C221F55F1D4BE37F00F45E77 /* Rtt_FileSystem.cpp */; };
@@ -2135,8 +2133,6 @@
 		F59296E3255548860048AF8C /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		F5A752341BFA41BF00CCDB94 /* CoronaLuaObjCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaObjCHelper.h; path = ../iphone/Corona/CoronaLuaObjCHelper.h; sourceTree = "<group>"; };
 		F5A752351BFA41BF00CCDB94 /* CoronaLuaObjCHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaLuaObjCHelper.mm; path = ../iphone/Corona/CoronaLuaObjCHelper.mm; sourceTree = "<group>"; };
-		F5B4463E255543A8000BC8A0 /* Rtt_IPhoneVideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneVideoPlayer.mm; path = ../iphone/Rtt_IPhoneVideoPlayer.mm; sourceTree = "<group>"; };
-		F5B4467A255543A9000BC8A0 /* Rtt_IPhoneVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneVideoPlayer.h; path = ../iphone/Rtt_IPhoneVideoPlayer.h; sourceTree = "<group>"; };
 		F5C5E0E9251E112100217C19 /* template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = template.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5C5E149251E114A00217C19 /* CoronaCards.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoronaCards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5C5E1A2251E115D00217C19 /* libplayer-angle.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libplayer-angle.a"; sourceTree = BUILT_PRODUCTS_DIR; };
