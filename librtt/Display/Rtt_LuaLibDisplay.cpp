@@ -247,14 +247,15 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		"contentHeight",		// 1
 		"fps",					// 2
 		"currentStage",			// 3
-		"contentScale",			// 4
-		"contentCenterX",		// 5
-		"contentCenterY",		// 6
-        "deviceWidth",			// 7
-        "deviceHeight",			// 8
+		"screenToContentScale",	// 4
+		"contentToScreenScale",	// 5
+		"contentCenterX",		// 6
+		"contentCenterY",		// 7
+        "deviceWidth",			// 8
+        "deviceHeight",			// 9
 	};
 	
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 9, 26, 7, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 10, 3, 2, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -280,27 +281,32 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			display.GetStage()->GetProxy()->PushTable( L );
 		}
 		break;
-	case 4:	// "contentScale"
+	case 4:	// "screenToContentScale"
 		{
 			lua_pushnumber( L, Rtt_RealToFloat( display.GetScreenToContentScale() ) );
 		}
 		break;
-	case 5:	// "contentCenterX"
+	case 5:	// "contentToScreenScale"
+		{
+			lua_pushnumber( L, display.GetContentToScreenScale() );
+		}
+		break;
+	case 6:	// "contentCenterX"
 		{
 			lua_pushnumber( L, 0.5*display.ContentWidth() );
 		}
 		break;
-	case 6:	// "contentCenterY"
+	case 7:	// "contentCenterY"
 		{
 			lua_pushnumber( L, 0.5*display.ContentHeight() );
 		}
 		break;
-	case 7:	// "deviceWidth"
+	case 8:	// "deviceWidth"
 		{
 			lua_pushnumber( L, display.DeviceWidth() );
 		}
 		break;
-	case 8:	// "deviceHeight"
+	case 9:	// "deviceHeight"
 		{
 			lua_pushnumber( L, display.DeviceHeight() );
 		}
