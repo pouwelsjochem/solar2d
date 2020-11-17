@@ -147,7 +147,7 @@ function PluginCollectorSolar2DDirectory:collect(destination, plugin, pluginTabl
         return "! " .. pluginObject.e
     end
 
-    local build = tonumber(params.build)
+    local build = tonumber(params.build) + 9000 -- For our own custom Solar2D fork we assume we're always on the newest build
     local vFoundBuid, vFoundObject, vFoundBuildName
     for entryBuild, entryObject in pairs(pluginObject.v or {}) do
         local entryBuildNumber = tonumber(entryBuild:match('^%d+%.(%d+)$'))
