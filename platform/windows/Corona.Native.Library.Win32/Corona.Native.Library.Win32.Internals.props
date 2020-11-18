@@ -16,7 +16,21 @@
     </ClCompile>
     <Link />
     <PostBuildEvent>
-      <Command>echo 1</Command>
+      <Command>REM Digitally sign this library if building a release DLL.
+REM Do the following for debug and release DLL builds. (Skipped for Corona Simulator builds.)
+if $(TargetExt) == .dll (
+   REM Copy this library's DLL to the "Bin\Corona" directory. Used by the Corona Shell app.
+   copy /y "$(TargetPath)" "$(SolutionDir)Bin\Corona"
+
+   REM Copy this library's LIB file to the Corona Native directory.
+   if $(ConfigurationName) == Release.App (
+      if not exist "$(SolutionDir)Bin\Corona\Native\Corona\win\lib" (
+         mkdir "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
+      )
+      copy /y "$(TargetDir)$(TargetName).lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
+   )
+)
+</Command>
     </PostBuildEvent>
     <Link>
       <AdditionalDependencies>..\Corona.Rtt.Library\$(Configuration)\$(Platform)\Corona.Rtt.Library.Win32\*.obj;%(AdditionalDependencies)</AdditionalDependencies>
