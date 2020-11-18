@@ -17,6 +17,16 @@
     <Link />
     <PostBuildEvent>
       <Command>REM Digitally sign this library if building a release DLL.
+if $(ConfigurationName) == Release.App (
+   call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)"
+)
+
+REM Copy this library's dependencies to the "Bin\Corona" directory.
+if not exist "$(SolutionDir)Bin\Corona" (
+   mkdir "$(SolutionDir)Bin\Corona"
+)
+xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" "$(SolutionDir)Bin\Corona" /Y /I
+
 REM Do the following for debug and release DLL builds. (Skipped for Corona Simulator builds.)
 if $(TargetExt) == .dll (
    REM Copy this library's DLL to the "Bin\Corona" directory. Used by the Corona Shell app.
