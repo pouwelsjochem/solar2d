@@ -16,11 +16,7 @@
     </ClCompile>
     <Link />
     <PostBuildEvent>
-      <Command>REM Digitally sign this library if building a release DLL.
-if $(ConfigurationName) == Release.App (
-   call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)"
-)
-
+      <Command>
 REM Copy this library's dependencies to the "Bin\Corona" directory.
 if not exist "$(SolutionDir)Bin\Corona" (
    mkdir "$(SolutionDir)Bin\Corona"
