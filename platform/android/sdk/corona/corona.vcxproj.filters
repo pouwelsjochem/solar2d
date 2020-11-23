@@ -1051,15 +1051,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidScreenSurface.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidStore.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidStoreProvider.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidStoreTransaction.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.cpp">
       <Filter>Android</Filter>
     </ClCompile>
@@ -1964,15 +1955,6 @@
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidScreenSurface.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidStore.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidStoreProvider.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidStoreTransaction.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.h">

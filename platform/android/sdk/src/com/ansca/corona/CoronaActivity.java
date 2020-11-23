@@ -45,7 +45,6 @@ public class CoronaActivity extends Activity {
 	private android.content.Intent myInitialIntent = null;
 	private boolean myIsActivityResumed = false;
 	private com.ansca.corona.graphics.opengl.CoronaGLSurfaceView myGLView;
-	private com.ansca.corona.purchasing.StoreProxy myStore = null;
 	
 	private Controller fController;
 	private CoronaRuntime fCoronaRuntime;
@@ -230,19 +229,12 @@ public class CoronaActivity extends Activity {
 		CoronaShowApiHandler showApiHandler = new CoronaShowApiHandler(this, fCoronaRuntime);
 		fController.setCoronaShowApiListener(showApiHandler);
 
-		CoronaStoreApiHandler storeHandler = new CoronaStoreApiHandler(this);
-		fController.setCoronaStoreApiListener(storeHandler);
-
 		CoronaSystemApiHandler systemHandler = new CoronaSystemApiHandler(this);
 		fController.setCoronaSystemApiListener(systemHandler);
 
 		// Attempt to load/reload this application's expansion files, if they exist.
 		com.ansca.corona.storage.FileServices fileServices = new com.ansca.corona.storage.FileServices(this);
 		fileServices.loadExpansionFiles();
-		
-		// Create and set up a store object used to manage in-app purchases.
-		myStore = new com.ansca.corona.purchasing.StoreProxy(fCoronaRuntime, fCoronaRuntime.getController());
-		myStore.setActivity(this);
 		
 		// Set up a handler for sending messages and posting Runnable object to the main UI threads message queue.
 		myHandler = new Handler();
@@ -577,18 +569,6 @@ public class CoronaActivity extends Activity {
 		if (resourceId > 0)
 			height = getResources().getDimensionPixelSize(resourceId);
 		return height;
-	}
-	
-	/**
-	 * Gets a store proxy object used to manage in-app purchases.
-	 * Allows the caller to purchase products, restore purchases, confirm transactions, etc.
-	 * <p>
-	 * Initially, this store object cannot access a store until it has been told which store. 
-	 * The Lua store.init() function is expected to call one of these methods.
-	 * @return Returns a reference to the a store proxy object. 
-	 */
-	com.ansca.corona.purchasing.StoreProxy getStore() {
-		return myStore;
 	}
 	
 	/**
@@ -958,7 +938,6 @@ public class CoronaActivity extends Activity {
 
 		// Destroy the Corona runtime and this activity's views.
 		myGLView = null;
-		myStore.disable();
 
 		fCoronaRuntime.dispose();
 		fCoronaRuntime = null;

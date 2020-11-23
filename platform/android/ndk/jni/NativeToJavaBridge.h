@@ -150,10 +150,6 @@ class NativeToJavaBridge
 		void ExternalizeResource( const char * assetName, Rtt::String * result );
 
 	public:
-		void StoreInit( const char *storeName );
-		void StorePurchase( const char *productName );
-		void StoreFinishTransaction( const char *transactionStringId );
-		void StoreRestoreCompletedTransactions();
 		void GetAvailableStoreNames( Rtt::PtrArray<Rtt::String> &storeNames );
 		void GetTargetedStoreName( Rtt::String *outValue );
 

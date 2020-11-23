@@ -408,17 +408,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativePopupClosedEvent(JNIEnv * env, jcla
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->PopupClosedEvent(env, popupName, wasCanceled);
 }
 
-JNIEXPORT void JNICALL
-Java_com_ansca_corona_JavaToNativeShim_nativeStoreTransactionEvent(
-	JNIEnv * env, jclass cd, jlong bridgeAddress, jint state, jint errorType, jstring errorMessage, jstring productId, jstring signature,
-	jstring receipt, jstring transactionId, jstring transactionTime,
-	jstring originalReceipt, jstring originalTransactionId, jstring originalTransactionTime)
-{
-	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->StoreTransactionEvent(
-		env, state, errorType, errorMessage, productId, signature, receipt, transactionId, transactionTime,
-		originalReceipt, originalTransactionId, originalTransactionTime);
-}
-
 JNIEXPORT jobject JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeGetCoronaRuntime(
 	JNIEnv * env, jclass cd, jlong bridgeAddress)

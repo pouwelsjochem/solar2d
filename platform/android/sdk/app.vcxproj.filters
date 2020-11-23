@@ -548,9 +548,6 @@
     <JCompile Include="src\com\ansca\corona\input\CoronaKeyEvent.java">
       <Filter>src\com\ansca\corona\input</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\listeners\CoronaStoreApiListener.java">
-      <Filter>src\com\ansca\corona\listener</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\listeners\CoronaSystemApiListener.java">
       <Filter>src\com\ansca\corona\listener</Filter>
     </JCompile>
@@ -599,22 +596,7 @@
     <JCompile Include="src\com\ansca\corona\purchasing\StoreServices.java">
       <Filter>src\com\ansca\corona\purchasing</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreTransactionErrorType.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreTransactionResultSettings.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreTransactionState.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\Store.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\purchasing\StoreName.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreProxy.java">
       <Filter>src\com\ansca\corona\purchasing</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\permissions\PermissionsSettings.java">

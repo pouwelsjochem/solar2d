@@ -51,7 +51,6 @@ import android.view.DisplayCutout;
 
 import dalvik.system.DexClassLoader;
 
-import com.ansca.corona.listeners.CoronaStoreApiListener;
 import com.ansca.corona.listeners.CoronaSystemApiListener;
 import com.ansca.corona.permissions.PermissionsSettings;
 import com.ansca.corona.permissions.PermissionsServices;
@@ -1620,34 +1619,6 @@ public class NativeToJavaBridge {
 
 	protected static byte[] callCryptoCalculateHMAC( String algorithm, byte[] key, byte[] data ) {
 		return Crypto.CalculateHMAC(algorithm, key, data);
-	}
-	
-	protected static void callStoreInit(CoronaRuntime runtime, final String storeName) {
-		CoronaStoreApiListener listener = runtime.getController().getCoronaStoreApiListener();
-		if (listener != null) {
-			listener.storeInit(storeName);
-		}
-	}
-	
-	protected static void callStorePurchase(CoronaRuntime runtime, final String productName) {
-		CoronaStoreApiListener listener = runtime.getController().getCoronaStoreApiListener();
-		if (listener != null) {
-			listener.storePurchase(productName);
-		}
-	}
-	
-	protected static void callStoreFinishTransaction(CoronaRuntime runtime, final String transactionStringId) {
-		CoronaStoreApiListener listener = runtime.getController().getCoronaStoreApiListener();
-		if (listener != null) {
-			listener.storeFinishTransaction(transactionStringId);
-		}
-	}
-	
-	protected static void callStoreRestoreCompletedTransactions(CoronaRuntime runtime) {
-		CoronaStoreApiListener listener = runtime.getController().getCoronaStoreApiListener();
-		if (listener != null) {
-			listener.storeRestore();
-		}
 	}
 	
 	protected static String[] callGetAvailableStoreNames() {

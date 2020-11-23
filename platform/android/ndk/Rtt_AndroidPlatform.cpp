@@ -24,7 +24,6 @@
 #include "Rtt_AndroidBitmap.h"
 #include "Rtt_PlatformExitCallback.h"
 #include "Rtt_AndroidScreenSurface.h"
-#include "Rtt_AndroidStoreProvider.h"
 #include "Rtt_AndroidTimer.h"
 
 #include "AndroidGLView.h"
@@ -64,7 +63,6 @@ AndroidPlatform::AndroidPlatform(
 	fCachesDir( fAllocator ),
 	fSystemCachesDir( fAllocator ),
 	fExpansionFileDir( fAllocator ),
-	fStoreProvider( NULL ),
 	fCrypto( ntjb ),
 	fNativeToJavaBridge( ntjb )
 {
@@ -88,7 +86,6 @@ AndroidPlatform::AndroidPlatform(
 
 AndroidPlatform::~AndroidPlatform()
 {
-	Rtt_DELETE( fStoreProvider );
 }
 
 MPlatformDevice&
@@ -139,11 +136,7 @@ AndroidPlatform::CanOpenURL( const char* url ) const
 PlatformStoreProvider*
 AndroidPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
 {
-	if (!fStoreProvider)
-	{
-		fStoreProvider = Rtt_NEW( Allocator(), AndroidStoreProvider( handle, fNativeToJavaBridge ) );
-	}
-	return fStoreProvider;
+	return NULL;
 }
 
 NativeAlertRef

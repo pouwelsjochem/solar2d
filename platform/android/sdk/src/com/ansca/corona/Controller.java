@@ -43,7 +43,6 @@ import android.content.pm.ResolveInfo;
 
 import com.ansca.corona.events.EventManager;
 import com.ansca.corona.listeners.CoronaShowApiListener;
-import com.ansca.corona.listeners.CoronaStoreApiListener;
 import com.ansca.corona.listeners.CoronaSystemApiListener;
 
 import com.ansca.corona.permissions.PermissionsSettings;
@@ -85,8 +84,6 @@ public class Controller {
 	private CoronaApiListener myCoronaApiListener;
 	// All the show* functions eg. showSmsWindow or showEmailWindow
 	private CoronaShowApiListener myCoronaShowApiListener;
-	// store.init() store.purchase() etc.
-	private CoronaStoreApiListener myCoronaStoreApiListener;
 	// native.requestExit(), pushing in the launch intents
 	private CoronaSystemApiListener myCoronaSystemApiListener;
 
@@ -170,14 +167,6 @@ public class Controller {
 
 	CoronaShowApiListener getCoronaShowApiListener() {
 		return myCoronaShowApiListener;
-	}
-
-	void setCoronaStoreApiListener(CoronaStoreApiListener listener) {
-		myCoronaStoreApiListener = listener;
-	}
-
-	CoronaStoreApiListener getCoronaStoreApiListener() {
-		return myCoronaStoreApiListener;
 	}
 
 	void setCoronaSystemApiListener(CoronaSystemApiListener listener) {

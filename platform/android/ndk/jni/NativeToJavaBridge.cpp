@@ -1916,66 +1916,6 @@ NativeToJavaBridge::ExternalizeResource( const char * assetName, Rtt::String * r
 }
 
 void
-NativeToJavaBridge::StoreInit( const char *storeName )
-{
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	
-	NativeTrace trace( "NativeToJavaBridge::StoreInit" );
-	
-	if (bridge.isValid())
-	{
-		jmethodID mid = bridge.getEnv()->GetStaticMethodID(
-								bridge.getClass(), "callStoreInit", "(Lcom/ansca/corona/CoronaRuntime;Ljava/lang/String;)V");
-		jstringParam storeNameJ(bridge.getEnv(), storeName);
-		bridge.getEnv()->CallStaticVoidMethod(bridge.getClass(), mid, fCoronaRuntime, storeNameJ.getValue());
-		HandleJavaException();
-	}
-}
-
-void
-NativeToJavaBridge::StorePurchase( const char *productName )
-{
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	
-	NativeTrace trace( "NativeToJavaBridge::StorePurchase" );
-	
-	if (bridge.isValid())
-	{
-		jmethodID mid = bridge.getEnv()->GetStaticMethodID(
-								bridge.getClass(), "callStorePurchase", "(Lcom/ansca/corona/CoronaRuntime;Ljava/lang/String;)V");
-		jstringParam productNameJ(bridge.getEnv(), productName);
-		bridge.getEnv()->CallStaticVoidMethod(bridge.getClass(), mid, fCoronaRuntime, productNameJ.getValue());
-		HandleJavaException();
-	}
-}
-
-void
-NativeToJavaBridge::StoreFinishTransaction( const char *transactionStringId )
-{
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	
-	NativeTrace trace( "NativeToJavaBridge::StoreFinishTransaction" );
-	
-	if (bridge.isValid())
-	{
-		jmethodID mid = bridge.getEnv()->GetStaticMethodID(
-								bridge.getClass(), "callStoreFinishTransaction", "(Lcom/ansca/corona/CoronaRuntime;Ljava/lang/String;)V");
-		jstringParam transactionStringIdJ(bridge.getEnv(), transactionStringId);
-		bridge.getEnv()->CallStaticVoidMethod(bridge.getClass(), mid, fCoronaRuntime, transactionStringIdJ.getValue());
-		HandleJavaException();
-	}
-}
-
-void
-NativeToJavaBridge::StoreRestoreCompletedTransactions()
-{
-	NativeTrace trace( "NativeToJavaBridge::StoreRestoreCompletedTransactions" );
-	
-	CallVoidMethod( "callStoreRestoreCompletedTransactions" );
-	HandleJavaException();
-}
-
-void
 NativeToJavaBridge::GetAvailableStoreNames( Rtt::PtrArray<Rtt::String> &storeNames )
 {
 	NativeTrace trace( "NativeToJavaBridge::GetAvailableStoreNames" );

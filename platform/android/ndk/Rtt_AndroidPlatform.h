@@ -24,7 +24,6 @@ class NativeToJavaBridge;
 namespace Rtt
 {
 
-class AndroidStoreProvider;
 class PlatformBitmap;
 class PlatformSurface;
 class PlatformTimer;
@@ -147,7 +146,6 @@ class AndroidPlatform : public MPlatform
 		String fSystemCachesDir;
 		String fExpansionFileDir;
 		AndroidCrypto fCrypto;
-		mutable PlatformStoreProvider *fStoreProvider;
 		NativeToJavaBridge *fNativeToJavaBridge;
 };
 

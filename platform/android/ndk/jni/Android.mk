@@ -421,9 +421,6 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidPlatform.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidRuntimeDelegate.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidScreenSurface.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidStore.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidStoreProvider.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidStoreTransaction.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidSystemOpenEvent.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTimer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReader.cpp \

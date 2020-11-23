@@ -36,9 +36,6 @@
 #include "Rtt_AndroidInputDevice.h"
 #include "Rtt_AndroidPlatform.h"
 #include "Rtt_AndroidRuntimeDelegate.h"
-#include "Rtt_AndroidStore.h"
-#include "Rtt_AndroidStoreProvider.h"
-#include "Rtt_AndroidStoreTransaction.h"
 #include "Rtt_AndroidSystemOpenEvent.h"
 
 #include "JavaToNativeBridge.h"
@@ -1043,68 +1040,6 @@ JavaToNativeBridge::PopupClosedEvent( JNIEnv *env, jstring popupName, jboolean w
 		jstringResult popupNameJavaString(env, popupName);
 		fNativeToJavaBridge->RaisePopupClosedEvent(popupNameJavaString.getUTF8(), wasCanceled);
 	}
-}
-
-void
-JavaToNativeBridge::StoreTransactionEvent(
-	JNIEnv *env, jint state, jint errorType, jstring errorMessage, jstring productId, jstring signature,
-	jstring receipt, jstring transactionId, jstring transactionTime,
-	jstring originalReceipt, jstring originalTransactionId, jstring originalTransactionTime)
-{
-	// Validate.
-	if (!fRuntime || !fPlatform)
-	{
-		return;
-	}
-
-	// Fetch the store interface.
-	Rtt::PlatformStoreProvider *storeProviderPointer = fPlatform->GetStoreProvider(fRuntime->VMContext().LuaState());
-	if (!storeProviderPointer)
-	{
-		return;
-	}
-	Rtt::PlatformStore *storePointer = storeProviderPointer->GetActiveStore();
-	if (!storePointer)
-	{
-		return;
-	}
-
-	// Ignore the event if a Lua listener has not been set up.
-	if (storePointer->GetTransactionNotifier().HasListener() == false)
-	{
-		return;
-	}
-
-	// Get the Java string objects for the given Java references.
-	jstringResult errorMessageJavaString(env, errorMessage);
-	jstringResult productIdJavaString(env, productId);
-	jstringResult signatureJavaString(env, signature);
-	jstringResult receiptJavaString(env, receipt);
-	jstringResult transactionIdJavaString(env, transactionId);
-	jstringResult transactionTimeJavaString(env, transactionTime);
-	jstringResult originalReceiptJavaString(env, originalReceipt);
-	jstringResult originalTransactionIdJavaString(env, originalTransactionId);
-	jstringResult originalTransactionTimeJavaString(env, originalTransactionTime);
-
-	// Create a store transaction object. Will be deleted by the Lua garbage collector.
-	Rtt_Allocator &allocator = fPlatform->GetAllocator();
-	Rtt::AndroidStoreTransaction *transactionPointer = Rtt_NEW(&allocator, Rtt::AndroidStoreTransaction(&allocator));
-	transactionPointer->SetState((Rtt::PlatformStoreTransaction::State)state);
-	transactionPointer->SetErrorType((Rtt::PlatformStoreTransaction::ErrorType)errorType);
-	transactionPointer->SetErrorString(errorMessageJavaString.getUTF8());
-	transactionPointer->SetProductIdentifier(productIdJavaString.getUTF8());
-	transactionPointer->SetSignature(signatureJavaString.getUTF8());
-	transactionPointer->SetReceipt(receiptJavaString.getUTF8());
-	transactionPointer->SetIdentifier(transactionIdJavaString.getUTF8());
-	transactionPointer->SetDate(transactionTimeJavaString.getUTF8());
-	transactionPointer->SetOriginalReceipt(originalReceiptJavaString.getUTF8());
-	transactionPointer->SetOriginalIdentifier(originalTransactionIdJavaString.getUTF8());
-	transactionPointer->SetOriginalDate(originalTransactionTimeJavaString.getUTF8());
-
-	// Raise the store transaction event.
-	// The event object will be automatically deleted by the dispatcher.
-	Rtt::StoreTransactionEvent *eventPointer = Rtt_NEW(&allocator, Rtt::StoreTransactionEvent(transactionPointer));
-	storePointer->GetTransactionNotifier().ScheduleDispatch(eventPointer);
 }
 
 const char*

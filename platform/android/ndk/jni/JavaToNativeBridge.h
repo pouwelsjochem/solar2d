@@ -86,10 +86,6 @@ class JavaToNativeBridge
 		void AdsRequestEvent(bool isError);
 		void MemoryWarningEvent();
 		void PopupClosedEvent(JNIEnv *env, jstring popupName, jboolean wasCanceled);
-		void StoreTransactionEvent(
-					JNIEnv *env, jint state, jint errorType, jstring errorMessage, jstring productId, jstring signature,
-					jstring receipt, jstring transactionId, jstring transactionTime,
-					jstring originalReceipt, jstring originalTransactionId, jstring originalTransactionTime);
 		const char* GetBuildId();
 
 	public:

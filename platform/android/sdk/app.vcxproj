@@ -262,7 +262,6 @@
     <JCompile Include="src\com\ansca\corona\input\ViewInputHandler.java" />
     <JCompile Include="src\com\ansca\corona\JavaToNativeShim.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaShowApiListener.java" />
-    <JCompile Include="src\com\ansca\corona\listeners\CoronaStoreApiListener.java" />
     <JCompile Include="src\com\ansca\corona\listeners\CoronaSystemApiListener.java" />
     <JCompile Include="src\com\ansca\corona\MailSettings.java" />
     <JCompile Include="src\com\ansca\corona\MessageBasedTimer.java" />
@@ -284,13 +283,8 @@
     <JCompile Include="src\com\ansca\corona\permissions\PermissionState.java" />
     <JCompile Include="src\com\ansca\corona\permissions\PermissionUrgency.java" />
     <JCompile Include="src\com\ansca\corona\permissions\RequestPermissionsResultData.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\Store.java" />
     <JCompile Include="src\com\ansca\corona\purchasing\StoreName.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreProxy.java" />
     <JCompile Include="src\com\ansca\corona\purchasing\StoreServices.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreTransactionErrorType.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreTransactionResultSettings.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreTransactionState.java" />
     <JCompile Include="src\com\ansca\corona\SmsSettings.java" />
     <JCompile Include="src\com\ansca\corona\storage\AssetFileLocationInfo.java" />
     <JCompile Include="src\com\ansca\corona\storage\FileContentProvider.java" />

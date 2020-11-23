@@ -79,10 +79,6 @@ public class JavaToNativeShim {
     private static native void nativeMultitouchEventEnd( long bridgeAddress );
 	private static native void nativeMemoryWarningEvent( long bridgeAddress );
 	private static native void nativePopupClosedEvent( long bridgeAddress, String popupName, boolean isError );
-	private static native void nativeStoreTransactionEvent(
-									long bridgeAddress, int state, int errorType, String errorMessage, String productId, String signature,
-									String receipt, String transactionId, String transactionTime,
-									String originalReceipt, String originalTransactionId, String originalTransactionTime );
 	private static native Object nativeGetCoronaRuntime( long bridgeAddress );
 
 	// Load all C/C++ libraries and their dependencies.
@@ -481,36 +477,6 @@ public class JavaToNativeShim {
 			return;
 		}
 		nativePopupClosedEvent( runtime.getJavaToNativeBridgeAddress(), popupName, wasCanceled );
-	}
-	
-	public static void storeTransactionEvent(
-		CoronaRuntime runtime, 
-		com.ansca.corona.purchasing.StoreTransactionResultSettings result)
-	{
-		// Validate.
-		if (result == null) {
-			return;
-		}
-		
-		if (runtime == null || runtime.wasDisposed()) {
-			return;
-		}
-		// Convert transaction timestamps to localized strings.
-		String transactionTimeString = "";
-		String originalTransactionTimeString = "";
-		if (result.hasTransactionTime()) {
-			transactionTimeString = result.getTransactionTime().toString();
-		}
-		if (result.hasOriginalTransactionTime()) {
-			originalTransactionTimeString = result.getOriginalTransactionTime().toString();
-		}
-		
-		// Send the transaction result info to the native side of Corona.
-		nativeStoreTransactionEvent(runtime.getJavaToNativeBridgeAddress(), 
-				result.getState().toValue(), result.getErrorType().toValue(), result.getErrorMessage(),
-				result.getProductName(), result.getSignature(), result.getReceipt(), result.getTransactionStringId(),
-				transactionTimeString, result.getOriginalReceipt(), result.getOriginalTransactionStringId(),
-				originalTransactionTimeString);
 	}
 
 	public static CoronaRuntime getCoronaRuntimeFromBridge(long address) {

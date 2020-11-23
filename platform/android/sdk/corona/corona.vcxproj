@@ -470,9 +470,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidPlatform.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidRuntimeDelegate.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidScreenSurface.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidStore.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidStoreProvider.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidStoreTransaction.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidTimer.cpp" />
     <ClCompile Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.c" />
@@ -760,9 +757,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidPlatform.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidRuntimeDelegate.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidScreenSurface.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidStore.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidStoreProvider.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidStoreTransaction.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidTimer.h" />
     <ClInclude Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.h" />

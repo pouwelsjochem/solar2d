@@ -331,14 +331,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMemoryWarnin
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativePopupClosedEvent
   (JNIEnv *, jclass, jlong, jstring, jboolean);
 
-/*
- * Class:     com_ansca_corona_JavaToNativeShim
- * Method:    nativeStoreTransactionEvent
- * Signature: (IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeStoreTransactionEvent
-  (JNIEnv *, jclass, jlong, jint, jint, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jstring);
-
 JNIEXPORT jobject JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeGetCoronaRuntime
   (JNIEnv *, jclass, jlong);
 
