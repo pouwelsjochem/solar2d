@@ -110,7 +110,7 @@ val parsedBuildProperties: JsonObject = run {
     return@run JsonObject(mapOf("buildSettings" to parsedBuildSettingsFile, "packageName" to coronaAppPackage, "targetedAppStore" to coronaTargetStore))
 }
 
-val coronaMinSdkVersion = parsedBuildProperties.lookup<Any?>("buildSettings.android.minSdkVersion").firstOrNull()?.toString()?.toIntOrNull()
+extra["minSdkVersion"] = parsedBuildProperties.lookup<Any?>("buildSettings.android.minSdkVersion").firstOrNull()?.toString()?.toIntOrNull()
         ?: 15
 
 val coronaBuilder = "$nativeDir/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
@@ -158,7 +158,7 @@ android {
     defaultConfig {
         applicationId = coronaAppPackage
         targetSdkVersion(29)
-        minSdkVersion(coronaMinSdkVersion)
+        minSdkVersion(extra["minSdkVersion"] as Int)
         versionCode = coronaVersionCode
         versionName = coronaVersionName
         multiDexEnabled = true
