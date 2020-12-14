@@ -1086,6 +1086,8 @@ DisplayLibrary::getPreferredContentToScreenScale( lua_State *L )
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
 	lua_pushnumber( L, display.GetPreferredContentToScreenScale() );
+
+	return 0;
 }
 
 int
@@ -1096,6 +1098,8 @@ DisplayLibrary::setPreferredContentToScreenScale( lua_State *L )
 	S32 contentToScreenScale = (S32) lua_tointeger( L, 1 );
 
 	display.SetPreferredContentToScreenScale(contentToScreenScale);
+
+	return 0;
 }
 
 int

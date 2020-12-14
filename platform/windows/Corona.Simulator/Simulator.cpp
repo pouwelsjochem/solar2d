@@ -103,36 +103,35 @@ BOOL CSimulatorApp::InitInstance()
 
 	CWinApp::InitInstance();
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	// of your final executable, you should remove from the following
-	// the specific initialization routines you do not need
-	// Change the registry key under which our settings are stored
-	{
-		SetRegistryKey(L"Ansca Corona");
-
-		// Hacks to make life easier
-		CString ret = GetProfileString(L"Preferences", L"debugBuildProcess", L"");
-		if (ret.GetLength() && _wgetenv(L"DEBUG_BUILD_PROCESS") == NULL) {
-			_wputenv_s(L"DEBUG_BUILD_PROCESS", ret);
-		}
-		if (_wgetenv(L"CORONA_PATH") == NULL) {
-			TCHAR coronaDir[MAX_PATH];
-			GetModuleFileName(NULL, coronaDir, MAX_PATH);
-			TCHAR* end = StrRChr(coronaDir, NULL, '\\');
-			if (end) 
-			{
-				end[1] = 0;
-				_wputenv_s(L"CORONA_PATH", coronaDir);
-			}
-
-		}
+	// Hacks to make life easier
+	CString ret = GetProfileString(L"Preferences", L"debugBuildProcess", L"");
+	if (ret.GetLength() && _wgetenv(L"DEBUG_BUILD_PROCESS") == NULL) {
+		_wputenv_s(L"DEBUG_BUILD_PROCESS", ret);
 	}
+	if (_wgetenv(L"CORONA_PATH") == NULL) {
+		TCHAR coronaDir[MAX_PATH];
+		GetModuleFileName(NULL, coronaDir, MAX_PATH);
+		TCHAR* end = StrRChr(coronaDir, NULL, '\\');
+		if (end) 
+		{
+			end[1] = 0;
+			_wputenv_s(L"CORONA_PATH", coronaDir);
+		}
+
+	}
+
 	// Initialize WinGlobalProperties object which mirrors theApp properties
 	// Make sure this is done before accessing any Solar2D functions
 	WinString strRegistryKey, strRegistryProfile, strResourcesDir;
+	
+	WinString stringTranscoder(L"Ansca Corona");
+	SetRegistryKey(stringTranscoder.GetTCHAR());
 	strRegistryKey.SetTCHAR(m_pszRegistryKey);
-	strRegistryProfile.SetTCHAR(_tcsdup(L"Corona Simulator"));
+
+	WinString profileName(L"Corona Simulator");
+	m_pszProfileName = _tcsdup(profileName.GetTCHAR());
+	strRegistryProfile.SetTCHAR(m_pszProfileName);
+
 	strResourcesDir.SetTCHAR(GetResourceDir());
 	GetWinProperties()->SetRegistryKey(strRegistryKey.GetUTF8());
 	GetWinProperties()->SetRegistryProfile(strRegistryProfile.GetUTF8());
