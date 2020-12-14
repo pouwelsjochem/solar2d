@@ -120,12 +120,6 @@
     <ClInclude Include="Interop\StaticInitializer.h">
       <Filter>Interop</Filter>
     </ClInclude>
-    <ClInclude Include="Interop\ValueChangedEventArgs.h">
-      <Filter>Interop</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\UI\UITextChangedEventArgs.h">
-      <Filter>Interop\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Interop\Input\InputDeviceSettings.h">
       <Filter>Interop\Input</Filter>
     </ClInclude>
@@ -226,9 +220,6 @@
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="Interop\LuaMethodCallback.h">
-      <Filter>Interop</Filter>
-    </ClInclude>
-    <ClInclude Include="Interop\ScopedOleInitializer.h">
       <Filter>Interop</Filter>
     </ClInclude>
     <ClInclude Include="Interop\Nullable.h">
@@ -333,9 +324,6 @@
     <ClCompile Include="..\..\..\external\winutil\XMessageBox.cpp">
       <Filter>%28root%29\external\winutil</Filter>
     </ClCompile>
-    <ClCompile Include="Interop\UI\UITextChangedEventArgs.cpp">
-      <Filter>Interop\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Interop\Input\InputDeviceSettings.cpp">
       <Filter>Interop\Input</Filter>
     </ClCompile>
@@ -428,9 +416,6 @@
     </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinProjectSettings.cpp">
       <Filter>Rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="Interop\ScopedOleInitializer.cpp">
-      <Filter>Interop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

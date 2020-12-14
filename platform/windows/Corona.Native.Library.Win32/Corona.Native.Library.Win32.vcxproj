@@ -189,7 +189,6 @@
     <ClInclude Include="Interop\RuntimeEnvironment.h" />
     <ClInclude Include="Interop\RuntimeState.h" />
     <ClInclude Include="Interop\ScopedComInitializer.h" />
-    <ClInclude Include="Interop\ScopedOleInitializer.h" />
     <ClInclude Include="Interop\StaticFinalizer.h" />
     <ClInclude Include="Interop\StaticInitializer.h" />
     <ClInclude Include="Interop\Storage\MStoredPreferences.h" />
@@ -206,9 +205,7 @@
     <ClInclude Include="Interop\UI\TaskDialogSettings.h" />
     <ClInclude Include="Interop\UI\UIComponent.h" />
     <ClInclude Include="Interop\UI\UIComponentCollection.h" />
-    <ClInclude Include="Interop\UI\UITextChangedEventArgs.h" />
     <ClInclude Include="Interop\UI\Window.h" />
-    <ClInclude Include="Interop\ValueChangedEventArgs.h" />
     <ClInclude Include="Interop\ValueResult.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rtt\Rtt_WinBitmap.h" />
@@ -281,7 +278,6 @@
     <ClCompile Include="Interop\OperationResult.cpp" />
     <ClCompile Include="Interop\RuntimeEnvironment.cpp" />
     <ClCompile Include="Interop\ScopedComInitializer.cpp" />
-    <ClCompile Include="Interop\ScopedOleInitializer.cpp" />
     <ClCompile Include="Interop\StaticFinalizer.cpp" />
     <ClCompile Include="Interop\Storage\SQLiteStoredPreferences.cpp" />
     <ClCompile Include="Interop\Ticks.cpp" />
@@ -295,7 +291,6 @@
     <ClCompile Include="Interop\UI\TaskDialogSettings.cpp" />
     <ClCompile Include="Interop\UI\UIComponent.cpp" />
     <ClCompile Include="Interop\UI\UIComponentCollection.cpp" />
-    <ClCompile Include="Interop\UI\UITextChangedEventArgs.cpp" />
     <ClCompile Include="Interop\UI\Window.cpp" />
     <ClCompile Include="Rtt\Rtt_WinBitmap.cpp" />
     <ClCompile Include="Rtt\Rtt_WinCrypto.cpp" />

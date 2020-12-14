@@ -24,7 +24,6 @@
 #include "Rtt_RuntimeDelegatePlayer.h"
 #include "Rtt_WinProjectSettings.h"
 #include "RuntimeState.h"
-#include "ScopedOleInitializer.h"
 #include "WinString.h"
 #include <list>
 #include <Windows.h>
@@ -920,13 +919,6 @@ class RuntimeEnvironment
 		///  <para>These strings are assigned via the RuntimeEnvironment::CreationSettings::LaunchArguments field.</para>
 		/// </summary>
 		std::list<WinString> fLaunchArguments;
-
-		/// <summary>
-		///  <para>Initializes Microsoft OLE/COM upon construction and unitializes OLE/COM upon destruction.</para>
-		///  <para>OLE is needed to support ActiveX controls, drag & drop, and clipboard copy/paste.</para>
-		///  <para>Note: The Internet Explorer WebBrowser control is an ActiveX control which needs OLE support.</para>
-		/// </summary>
-		ScopedOleInitializer fScopedOleInitializer;
 
 		/// <summary>
 		///  <para>Microsoft GDI+ token received from the GdiplusStartup() function.</para>
