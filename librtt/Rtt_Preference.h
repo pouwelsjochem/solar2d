@@ -41,12 +41,6 @@ class Preference
 		 */
 		static const char kCategoryNameLocale[];
 
-		/** 
-		  Defines the hidden "simulator" category name used by Corona's Lua preference APIs.
-		  Used to access the Corona Simulator application's preferences, such as by the "shell.lua" script.
-		 */
-		static const char kCategoryNameSimulator[];
-
 		/**
 		  Defines the legacy "ui" category name used by Corona's Lua preference APIs.
 		  Used to fetch read-only "System Preferences" to acquire current UI language and display information.

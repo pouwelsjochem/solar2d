@@ -35,13 +35,7 @@ WinProjectSettings::~WinProjectSettings()
 void WinProjectSettings::ResetBuildSettings()
 {
 	ProjectSettings::ResetBuildSettings();
-	fPreferenceStorageType = PreferenceStorageType::kSQLite;
 	fIsSingleInstanceWindowEnabled = true;
-}
-
-WinProjectSettings::PreferenceStorageType WinProjectSettings::GetWin32PreferenceStorageType() const
-{
-	return fPreferenceStorageType;
 }
 
 bool WinProjectSettings::IsWin32SingleInstanceWindowEnabled() const
@@ -72,25 +66,6 @@ void WinProjectSettings::OnLoadedFrom(lua_State* luaStatePointer)
 		lua_getfield(luaStatePointer, -1, "win32");
 		if (lua_istable(luaStatePointer, -1))
 		{
-			// Fetch the preference storage type.
-			lua_getfield(luaStatePointer, -1, "preferenceStorage");
-			if (lua_type(luaStatePointer, -1) == LUA_TSTRING)
-			{
-				auto stringPointer = lua_tostring(luaStatePointer, -1);
-				if (stringPointer)
-				{
-					if (_stricmp(stringPointer, "sqlite") == 0)
-					{
-						fPreferenceStorageType = PreferenceStorageType::kSQLite;
-					}
-					else if (_stricmp(stringPointer, "registry") == 0)
-					{
-						fPreferenceStorageType = PreferenceStorageType::kRegistry;
-					}
-				}
-			}
-			lua_pop(luaStatePointer, 1);
-
 			// Fetch the single instance mode enable setting.
 			lua_getfield(luaStatePointer, -1, "singleInstance");
 			if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)

@@ -559,12 +559,6 @@ MacPlatform::GetPreference( const char* categoryName, const char* keyName ) cons
 		}
 		return Super::GetPreference(Preference::kCategoryNameApp, simulatedKeyResult.GetValue()->c_str());
 	}
-	else if (Rtt_StringCompare(categoryName, Preference::kCategoryNameSimulator) == 0)
-	{
-		// We're accessing a Corona Simulator preference.
-		// Since this is a Corona Simulator app, we can access the preference directly.
-		return Super::GetPreference(Preference::kCategoryNameApp, keyName);
-	}
 #endif
 	return Super::GetPreference(categoryName, keyName);
 }
@@ -594,12 +588,6 @@ MacPlatform::SetPreferences( const char* categoryName, const PreferenceCollectio
 			simulatedKeyCollection.Add(simulatedKeyResult.GetValue(), preferencePointer->GetValue());
 		}
 		return Super::SetPreferences(Preference::kCategoryNameApp, simulatedKeyCollection);
-	}
-	else if (Rtt_StringCompare(categoryName, Preference::kCategoryNameSimulator) == 0)
-	{
-		// We're accessing the Corona Simulator's preferences.
-		// Since this is a Corona Simulator app, we can access these preferences directly.
-		return Super::SetPreferences(Preference::kCategoryNameApp, collection);
 	}
 #endif
 	return Super::SetPreferences(categoryName, collection);
@@ -637,12 +625,6 @@ MacPlatform::DeletePreferences( const char* categoryName, const char** keyNameAr
 		}
 		return Super::DeletePreferences(
 				Preference::kCategoryNameApp, &simulatedKeyNamePointers.front(), (U32)simulatedKeyNamePointers.size());
-	}
-	else if (Rtt_StringCompare(categoryName, Preference::kCategoryNameSimulator) == 0)
-	{
-		// We're deleting the Corona Simulator's preferences.
-		// Since this is a Corona Simulator app, we can delete these preferences directly.
-		return Super::DeletePreferences(Preference::kCategoryNameApp, keyNameArray, keyNameCount);
 	}
 #endif
 	return Super::DeletePreferences(categoryName, keyNameArray, keyNameCount);

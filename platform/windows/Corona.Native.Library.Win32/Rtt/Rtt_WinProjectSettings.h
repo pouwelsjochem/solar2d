@@ -25,17 +25,6 @@ class WinProjectSettings : public ProjectSettings
 	Rtt_CLASS_NO_COPIES(WinProjectSettings)
 
 	public:
-		/// <summary>Indicates where preferences should be stored to.</summary>
-		enum class PreferenceStorageType
-		{
-			/// <summary>Indicates that preferences should be stored to a SQLite database file.</summary>
-			kSQLite,
-
-			/// <summary>Indicates that preferences should be stored to the Windows registry.</summary>
-			kRegistry
-		};
-
-
 		/// <summary>Creates a new project settings initialized to its defaults.</summary>
 		WinProjectSettings();
 
@@ -44,10 +33,6 @@ class WinProjectSettings : public ProjectSettings
 
 		/// <summary>Resets this object's "build.settings" related information back to their defaults.</summary>
 		virtual void ResetBuildSettings();
-
-		/// <summary>Determines where preferences should be stored for a Win32 desktop application.</summary>
-		/// <returns>Returns the storage type such as kSQLite or kRegistry.</returns>
-		WinProjectSettings::PreferenceStorageType GetWin32PreferenceStorageType() const;
 
 		/// <summary>
 		///  Determines if only 1 application window isntance is allowed at a time on the desktpo
@@ -70,9 +55,6 @@ class WinProjectSettings : public ProjectSettings
 		virtual void OnLoadedFrom(lua_State* luaStatePointer);
 
 	private:
-		/// <summary>Indicates if a Win32 app should store preferences to the registry or SQLite.</summary>
-		PreferenceStorageType fPreferenceStorageType;
-
 		/// <summary>Set true if only 1 instance of the app window is allowed. Set false for multiple instances.</summary>
 		bool fIsSingleInstanceWindowEnabled;
 };

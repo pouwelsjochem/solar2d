@@ -12,8 +12,6 @@
 #include "Core\Rtt_Build.h"
 #include "Interop\Ipc\CommandLineRunner.h"
 #include "Interop\Storage\MStoredPreferences.h"
-#include "Interop\Storage\RegistryStoredPreferences.h"
-#include "Interop\Storage\StoredPreferencesProxy.h"
 #include "Interop\UI\CoronaTaskDialogHandler.h"
 #include "Interop\UI\RenderSurfaceControl.h"
 #include "Interop\UI\Window.h"
@@ -931,29 +929,6 @@ namespace Rtt
 		{
 			// Fetch the application's preferences interface.
 			sharedStoredPreferencesPointer = fEnvironment.GetStoredPreferences();
-		}
-		else if (Rtt_StringCompare(categoryName, Rtt::Preference::kCategoryNameSimulator) == 0)
-		{
-			// Fetch an interface to the Corona Simulator's preferences in the registry.
-			sharedStoredPreferencesPointer = Interop::Storage::RegistryStoredPreferences::ForSimulatorPreferences();
-		}
-		else if (Rtt_StringCompareNoCase(categoryName, "win32:registry:32bit") == 0)
-		{
-			// Create an interface which accesses the 32-bit section of the registry.
-			// Caller must use fully qualified paths for preference key names, starting with the registry hive name.
-			Interop::Storage::RegistryStoredPreferences::CreationSettings settings{};
-			settings.IsUsingForwardSlashAsPathSeparator = false;
-			settings.Wow64ViewType = Interop::Storage::RegistryStoredPreferences::Wow64ViewType::k32Bit;
-			sharedStoredPreferencesPointer = std::make_shared<Interop::Storage::RegistryStoredPreferences>(settings);
-		}
-		else if (Rtt_StringCompareNoCase(categoryName, "win32:registry:64bit") == 0)
-		{
-			// Create an interface which accesses the 64-bit section of the registry.
-			// Caller must use fully qualified paths for preference key names, starting with the registry hive name.
-			Interop::Storage::RegistryStoredPreferences::CreationSettings settings{};
-			settings.IsUsingForwardSlashAsPathSeparator = false;
-			settings.Wow64ViewType = Interop::Storage::RegistryStoredPreferences::Wow64ViewType::k64Bit;
-			sharedStoredPreferencesPointer = std::make_shared<Interop::Storage::RegistryStoredPreferences>(settings);
 		}
 
 		// Return an error if given an unkonwn/unsupported category name.

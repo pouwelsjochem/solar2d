@@ -193,10 +193,7 @@
     <ClInclude Include="Interop\StaticFinalizer.h" />
     <ClInclude Include="Interop\StaticInitializer.h" />
     <ClInclude Include="Interop\Storage\MStoredPreferences.h" />
-    <ClInclude Include="Interop\Storage\RegistryStoredPreferences.h" />
     <ClInclude Include="Interop\Storage\SQLiteStoredPreferences.h" />
-    <ClInclude Include="Interop\Storage\StoredPreferencesChain.h" />
-    <ClInclude Include="Interop\Storage\StoredPreferencesProxy.h" />
     <ClInclude Include="Interop\Ticks.h" />
     <ClInclude Include="Interop\UI\Control.h" />
     <ClInclude Include="Interop\UI\CoronaTaskDialogHandler.h" />
@@ -210,10 +207,6 @@
     <ClInclude Include="Interop\UI\UIComponent.h" />
     <ClInclude Include="Interop\UI\UIComponentCollection.h" />
     <ClInclude Include="Interop\UI\UITextChangedEventArgs.h" />
-    <ClInclude Include="Interop\UI\WebBrowserNavigatedEventArgs.h" />
-    <ClInclude Include="Interop\UI\WebBrowser.h" />
-    <ClInclude Include="Interop\UI\WebBrowserNavigatingEventArgs.h" />
-    <ClInclude Include="Interop\UI\WebBrowserNavigationFailedEventArgs.h" />
     <ClInclude Include="Interop\UI\Window.h" />
     <ClInclude Include="Interop\ValueChangedEventArgs.h" />
     <ClInclude Include="Interop\ValueResult.h" />
@@ -290,10 +283,7 @@
     <ClCompile Include="Interop\ScopedComInitializer.cpp" />
     <ClCompile Include="Interop\ScopedOleInitializer.cpp" />
     <ClCompile Include="Interop\StaticFinalizer.cpp" />
-    <ClCompile Include="Interop\Storage\RegistryStoredPreferences.cpp" />
     <ClCompile Include="Interop\Storage\SQLiteStoredPreferences.cpp" />
-    <ClCompile Include="Interop\Storage\StoredPreferencesChain.cpp" />
-    <ClCompile Include="Interop\Storage\StoredPreferencesProxy.cpp" />
     <ClCompile Include="Interop\Ticks.cpp" />
     <ClCompile Include="Interop\UI\Control.cpp" />
     <ClCompile Include="Interop\UI\CoronaTaskDialogHandler.cpp" />
@@ -306,10 +296,6 @@
     <ClCompile Include="Interop\UI\UIComponent.cpp" />
     <ClCompile Include="Interop\UI\UIComponentCollection.cpp" />
     <ClCompile Include="Interop\UI\UITextChangedEventArgs.cpp" />
-    <ClCompile Include="Interop\UI\WebBrowserNavigatedEventArgs.cpp" />
-    <ClCompile Include="Interop\UI\WebBrowser.cpp" />
-    <ClCompile Include="Interop\UI\WebBrowserNavigatingEventArgs.cpp" />
-    <ClCompile Include="Interop\UI\WebBrowserNavigationFailedEventArgs.cpp" />
     <ClCompile Include="Interop\UI\Window.cpp" />
     <ClCompile Include="Rtt\Rtt_WinBitmap.cpp" />
     <ClCompile Include="Rtt\Rtt_WinCrypto.cpp" />

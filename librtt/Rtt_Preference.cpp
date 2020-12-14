@@ -20,7 +20,6 @@ namespace Rtt
 
 const char Preference::kCategoryNameApp[] = "app";
 const char Preference::kCategoryNameLocale[] = "locale";
-const char Preference::kCategoryNameSimulator[] = "simulator";
 const char Preference::kCategoryNameUI[] = "ui";
 
 	

@@ -28,7 +28,6 @@
 
 #include "Core/Rtt_Build.h"
 #include "Interop\Ipc\AsyncPipeReader.h"
-#include "Interop\Storage\RegistryStoredPreferences.h"
 #include "Rtt_Version.h"    // Rtt_STRING_BUILD and Rtt_STRING_BUILD_DATE
 
 
@@ -110,11 +109,7 @@ BOOL CSimulatorApp::InitInstance()
 	// the specific initialization routines you do not need
 	// Change the registry key under which our settings are stored
 	{
-		WinString stringTranscoder(Interop::Storage::RegistryStoredPreferences::kAnscaCoronaKeyName);
-		SetRegistryKey(stringTranscoder.GetTCHAR());
-
-		WinString profileName(Interop::Storage::RegistryStoredPreferences::kCoronaSimulatorKeyName);
-		m_pszProfileName = _tcsdup(profileName.GetTCHAR());
+		SetRegistryKey(L"Ansca Corona");
 
 		// Hacks to make life easier
 		CString ret = GetProfileString(L"Preferences", L"debugBuildProcess", L"");
@@ -137,7 +132,7 @@ BOOL CSimulatorApp::InitInstance()
 	// Make sure this is done before accessing any Solar2D functions
 	WinString strRegistryKey, strRegistryProfile, strResourcesDir;
 	strRegistryKey.SetTCHAR(m_pszRegistryKey);
-	strRegistryProfile.SetTCHAR(m_pszProfileName);
+	strRegistryProfile.SetTCHAR(_tcsdup(L"Corona Simulator"));
 	strResourcesDir.SetTCHAR(GetResourceDir());
 	GetWinProperties()->SetRegistryKey(strRegistryKey.GetUTF8());
 	GetWinProperties()->SetRegistryProfile(strRegistryProfile.GetUTF8());
