@@ -43,7 +43,6 @@ namespace Rtt
 @property (nonatomic, assign) BOOL isReady;
 @property (nonatomic, assign) BOOL sendAllMouseEvents;
 @property (nonatomic, assign) BOOL inFullScreenTransition;
-@property (nonatomic, assign) BOOL isResizable;
 @property (nonatomic, assign) BOOL allowOverlay;
 @property (nonatomic, assign) BOOL cursorHidden;
 @property (nonatomic, assign) NSPoint initialLocation;

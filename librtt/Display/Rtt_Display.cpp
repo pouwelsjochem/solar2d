@@ -103,7 +103,7 @@ Display::Initialize( lua_State *L, int configIndex )
 		{
 			ReadRenderingConfig( L, configIndex, programHeader );
 		}
-		fStream->SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
+		fStream->SetOptimalOrPreferredContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 
 		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader ) );
 
@@ -185,7 +185,7 @@ Display::GetL() const
 void
 Display::Start()
 {
-	// The call to SetOptimalContentSize requires a current OpenGL context which we can't assume yet.
+	// The call to SetOptimalOrPreferredContentSize requires a current OpenGL context which we can't assume yet.
 	// RuntimeGuard will ensure that an OpenGL context is current and that locks are in place for multithreaded conditions.
 	// We must do this inside a scope because the RuntimeGuard destructor is relied on to do unlocking and restoring of OpenGL state as necessary.
 	// The overloaded operator()() below uses this same RuntimeGuard technique.
@@ -194,13 +194,13 @@ Display::Start()
 	RuntimeGuard guard( GetRuntime() );
 
 	RenderingStream& stream = * fStream;
-	stream.SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
+	stream.SetOptimalOrPreferredContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 }
 void
 Display::Restart()
 {
 	RenderingStream& stream = * fStream;
-	stream.SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
+	stream.SetOptimalOrPreferredContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 }
 	
 void
@@ -679,6 +679,30 @@ Display::ContentHeight() const
 	return fStream->ContentHeight();
 }
 
+S32
+Display::MinContentWidth() const
+{
+	return fStream->MinContentWidth();
+}
+
+S32
+Display::MinContentHeight() const
+{
+	return fStream->MinContentHeight();
+}
+
+S32
+Display::MaxContentWidth() const
+{
+	return fStream->MaxContentWidth();
+}
+
+S32
+Display::MaxContentHeight() const
+{
+	return fStream->MaxContentHeight();
+}
+
 
 S32
 Display::ScaledContentWidth() const
@@ -715,6 +739,26 @@ S32
 Display::GetYScreenOffset() const
 {
 	return fStream->GetYScreenOffset();
+}
+
+void
+Display::GetContentSizeForContentToScreenScale( S32 contentScale, S32& outContentToScreenScale, S32& outContentWidth, S32& outContentHeight ) const
+{
+	fStream->GetContentSizeForContentToScreenScale(contentScale, outContentToScreenScale, outContentWidth, outContentHeight);
+}
+
+S32
+Display::GetPreferredContentToScreenScale() const
+{
+	return fStream->GetPreferredContentToScreenScale();
+}
+
+void
+Display::SetPreferredContentToScreenScale( S32 contentScale ) const
+{
+	fStream->SetPreferredContentToScreenScale( contentScale );
+	fStream->SetOptimalOrPreferredContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
+	fOwner.DispatchEvent( Rtt::ResizeEvent() );
 }
 
 void
@@ -761,7 +805,7 @@ Display::WindowSizeChanged()
 		RenderingStream *stream = fStream;
 		if ( stream ) // Is this check neccesary?
 		{
-			stream->SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
+			stream->SetOptimalOrPreferredContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 		}
 	}
 	runtime.End();

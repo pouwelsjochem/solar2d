@@ -314,8 +314,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			// Load the project's "build.settings" and "config.lua" file first.
 			// Used to fetch supported supported image suffix scales, and content width/height.
 			_projectSettings->LoadFromDirectory([_projectPath UTF8String]);
-
-			_GLView.isResizable = _projectSettings->IsWindowResizable();
 			
 			[self setFrameSize:NSMakeSize(CoronaViewPrivateDefaultWidth, CoronaViewPrivateDefaultHeight)];
 		}
@@ -559,11 +557,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 #pragma mark ProjectSettings Helpers
 
-- (BOOL) settingsIsWindowResizable
-{
-	return (BOOL) _projectSettings->IsWindowResizable();
-}
-
 - (BOOL) settingsIsWindowCloseButtonEnabled
 {
 	return (BOOL) _projectSettings->IsWindowCloseButtonEnabled();
@@ -572,11 +565,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (BOOL) settingsIsWindowMinimizeButtonEnabled
 {
 	return (BOOL) _projectSettings->IsWindowMinimizeButtonEnabled();
-}
-
-- (BOOL) settingsIsWindowMaximizeButtonEnabled
-{
-	return (BOOL) _projectSettings->IsWindowMaximizeButtonEnabled();
 }
 
 - (BOOL) settingsSuspendWhenMinimized
@@ -627,30 +615,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     {
         coronaViewWindowMode = kNormal;
     }
-    else if (*nativeWindowMode == Rtt::NativeWindowMode::kMinimized)
-    {
-        coronaViewWindowMode = kMinimized;
-    }
-    else if (*nativeWindowMode == Rtt::NativeWindowMode::kMaximized)
-    {
-        coronaViewWindowMode = kMaximized;
-    }
     else if (*nativeWindowMode == Rtt::NativeWindowMode::kFullscreen)
     {
         coronaViewWindowMode = kFullscreen;
     }
 
 	return coronaViewWindowMode;
-}
-
-- (int) settingsMinWindowViewWidth
-{
-	return _projectSettings->GetMinWindowViewWidth();
-}
-
-- (int) settingsMinWindowViewHeight
-{
-	return _projectSettings->GetMinWindowViewHeight();
 }
 
 - (int) settingsDefaultWindowViewWidth

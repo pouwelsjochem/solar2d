@@ -61,10 +61,6 @@ void Window::SetWindowMode(const Rtt::NativeWindowMode& windowMode)
 	{
 		newWindowMode = SW_MINIMIZE;
 	}
-	else if (windowMode.Equals(Rtt::NativeWindowMode::kMaximized))
-	{
-		newWindowMode = SW_MAXIMIZE;
-	}
 	else if (windowMode.Equals(Rtt::NativeWindowMode::kFullscreen))
 	{
 		newWindowMode = SW_MAXIMIZE;
@@ -160,18 +156,7 @@ const Rtt::NativeWindowMode& Window::GetWindowMode() const
 		{
 			case SW_MAXIMIZE:
 			{
-				// On Windows, a maximized window without a border is displayed "fullscreen".
-				const LONG kBorderStyles = WS_BORDER | WS_DLGFRAME;
-				LONG currentWindowStyles = ::GetWindowLongW(windowHandle, GWL_STYLE);
-				bool hasBorder = (currentWindowStyles & kBorderStyles) ? true : false;
-				if (!hasBorder && (SW_MAXIMIZE == showState))
-				{
-					return Rtt::NativeWindowMode::kFullscreen;
-				}
-				else
-				{
-					return Rtt::NativeWindowMode::kMaximized;
-				}
+				return Rtt::NativeWindowMode::kFullscreen;
 			}
 			case SW_MINIMIZE:
 			{

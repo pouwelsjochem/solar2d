@@ -21,7 +21,6 @@ static NativeWindowModeCollection sWindowModeCollection;
 
 const NativeWindowMode NativeWindowMode::kNormal("normal");
 const NativeWindowMode NativeWindowMode::kMinimized("minimized");
-const NativeWindowMode NativeWindowMode::kMaximized("maximized");
 const NativeWindowMode NativeWindowMode::kFullscreen("fullscreen");
 
 

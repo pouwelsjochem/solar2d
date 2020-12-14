@@ -127,6 +127,9 @@ class DisplayLibrary
 		static int newSprite( lua_State *L );
 		static int getDefault( lua_State *L );
 		static int setDefault( lua_State *L );
+		static int getContentSizeForContentToScreenScale( lua_State *L );
+		static int getPreferredContentToScreenScale( lua_State *L );
+		static int setPreferredContentToScreenScale( lua_State *L );
 		static int getCurrentStage( lua_State *L );
 		static int collectOrphans( lua_State *L );
 		static int capture( lua_State *L );
@@ -180,6 +183,9 @@ DisplayLibrary::Open( lua_State *L )
 		{ "newSprite", newSprite },
 		{ "getDefault", getDefault },
 		{ "setDefault", setDefault },
+		{ "getContentSizeForContentToScreenScale", getContentSizeForContentToScreenScale },
+		{ "getPreferredContentToScreenScale", getPreferredContentToScreenScale },
+		{ "setPreferredContentToScreenScale", setPreferredContentToScreenScale },
 		{ "getCurrentStage", getCurrentStage },
 		{ "_collectOrphans", collectOrphans },
 		{ "capture", capture },
@@ -253,6 +259,10 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		"contentCenterY",		// 7
         "deviceWidth",			// 8
         "deviceHeight",			// 9
+		"minContentWidth",		// 10
+		"minContentHeight",		// 11
+		"maxContentWidth",		// 12
+		"maxContentHeight",		// 13
 	};
 	
 	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 10, 3, 2, __FILE__, __LINE__ );
@@ -309,6 +319,26 @@ DisplayLibrary::ValueForKey( lua_State *L )
 	case 9:	// "deviceHeight"
 		{
 			lua_pushnumber( L, display.DeviceHeight() );
+		}
+		break;
+	case 10:	// "minContentWidth"
+		{
+			lua_pushnumber( L, display.MinContentWidth() );
+		}
+		break;
+	case 11:	// "minContentHeight"
+		{
+			lua_pushnumber( L, display.MinContentHeight() );
+		}
+		break;
+	case 12:	// "maxContentWidth"
+		{
+			lua_pushnumber( L, display.MaxContentWidth() );
+		}
+		break;
+	case 13:	// "maxContentHeight"
+		{
+			lua_pushnumber( L, display.MaxContentHeight() );
 		}
 		break;
 	default:
@@ -1030,6 +1060,42 @@ DisplayLibrary::setDefault( lua_State *L )
 
 
 	return 0;
+}
+
+int
+DisplayLibrary::getContentSizeForContentToScreenScale( lua_State *L )
+{
+	Self *library = ToLibrary( L );
+	Display& display = library->GetDisplay();
+	S32 contentToScreenScale = (S32) lua_tointeger( L, 1 );
+
+	S32 contentWidthForContentToScreenScale;
+	S32 contentHeightForContentToScreenScale;
+	S32 actualContentToScreenScale;
+	display.GetContentSizeForContentToScreenScale(contentToScreenScale, actualContentToScreenScale, contentWidthForContentToScreenScale, contentHeightForContentToScreenScale);
+	lua_pushnumber( L, contentWidthForContentToScreenScale );
+	lua_pushnumber( L, contentHeightForContentToScreenScale );
+	lua_pushnumber( L, actualContentToScreenScale );
+
+	return 3;
+}
+
+int
+DisplayLibrary::getPreferredContentToScreenScale( lua_State *L )
+{
+	Self *library = ToLibrary( L );
+	Display& display = library->GetDisplay();
+	lua_pushnumber( L, display.GetPreferredContentToScreenScale() );
+}
+
+int
+DisplayLibrary::setPreferredContentToScreenScale( lua_State *L )
+{
+	Self *library = ToLibrary( L );
+	Display& display = library->GetDisplay();
+	S32 contentToScreenScale = (S32) lua_tointeger( L, 1 );
+
+	display.SetPreferredContentToScreenScale(contentToScreenScale);
 }
 
 int

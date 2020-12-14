@@ -141,21 +141,13 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 		lua_getfield(luaStatePointer, -1, "window");
 		if (lua_istable(luaStatePointer, -1))
 		{
-			// Fetch the window's default window mode such as "normal", "maximized", "fullscreen", etc.
+			// Fetch the window's default window mode such as "normal", "fullscreen", etc.
 			lua_getfield(luaStatePointer, -1, "defaultMode");
 			if (lua_type(luaStatePointer, -1) == LUA_TSTRING)
 			{
 				fDefaultWindowModePointer = Rtt::NativeWindowMode::FromStringId(lua_tostring(luaStatePointer, -1));
 			}
 			lua_pop(luaStatePointer, 1);
-
-            // Fetch the window's resizable setting.
-            lua_getfield(luaStatePointer, -1, "resizable");
-            if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)
-            {
-                fIsWindowResizable = lua_toboolean(luaStatePointer, -1) ? true : false;
-            }
-            lua_pop(luaStatePointer, 1);
             
             // Fetch the window's suspend when minimized setting.
             lua_getfield(luaStatePointer, -1, "suspendWhenMinimized");
@@ -164,50 +156,6 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
                 fSuspendWhenMinimized = lua_toboolean(luaStatePointer, -1) ? true : false;
             }
             lua_pop(luaStatePointer, 1);
-            
-			// Fetch the minimum width/height the window's client/view area can be resized to.
-			lua_getfield(luaStatePointer, -1, "minViewWidth");
-			if (lua_type(luaStatePointer, -1) == LUA_TNUMBER)
-			{
-				fMinWindowViewWidth = (int)lua_tointeger(luaStatePointer, -1);
-				if (fMinWindowViewWidth < 0)
-				{
-					fMinWindowViewWidth = 0;
-				}
-			}
-			lua_pop(luaStatePointer, 1);
-			lua_getfield(luaStatePointer, -1, "minViewHeight");
-			if (lua_type(luaStatePointer, -1) == LUA_TNUMBER)
-			{
-				fMinWindowViewHeight = (int)lua_tointeger(luaStatePointer, -1);
-				if (fMinWindowViewHeight < 0)
-				{
-					fMinWindowViewHeight = 0;
-				}
-			}
-			lua_pop(luaStatePointer, 1);
-
-			// Fetch the width/height the window's client/view area should default to on startup.
-			lua_getfield(luaStatePointer, -1, "defaultViewWidth");
-			if (lua_type(luaStatePointer, -1) == LUA_TNUMBER)
-			{
-				fDefaultWindowViewWidth = (int)lua_tointeger(luaStatePointer, -1);
-				if (fDefaultWindowViewWidth < 0)
-				{
-					fDefaultWindowViewWidth = 0;
-				}
-			}
-			lua_pop(luaStatePointer, 1);
-			lua_getfield(luaStatePointer, -1, "defaultViewHeight");
-			if (lua_type(luaStatePointer, -1) == LUA_TNUMBER)
-			{
-				fDefaultWindowViewHeight = (int)lua_tointeger(luaStatePointer, -1);
-				if (fDefaultWindowViewHeight < 0)
-				{
-					fDefaultWindowViewHeight = 0;
-				}
-			}
-			lua_pop(luaStatePointer, 1);
 
 			// Fetch the window close, minimize, and maximize button enable settings.
 			lua_getfield(luaStatePointer, -1, "enableCloseButton");
@@ -216,16 +164,11 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 				fIsWindowCloseButtonEnabled = lua_toboolean(luaStatePointer, -1) ? true : false;
 			}
 			lua_pop(luaStatePointer, 1);
+
 			lua_getfield(luaStatePointer, -1, "enableMinimizeButton");
 			if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)
 			{
 				fIsWindowMinimizeButtonEnabled = lua_toboolean(luaStatePointer, -1) ? true : false;
-			}
-			lua_pop(luaStatePointer, 1);
-			lua_getfield(luaStatePointer, -1, "enableMaximizeButton");
-			if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)
-			{
-				fIsWindowMaximizeButtonEnabled = lua_toboolean(luaStatePointer, -1) ? true : false;
 			}
 			lua_pop(luaStatePointer, 1);
 
@@ -348,15 +291,9 @@ void ProjectSettings::ResetBuildSettings()
 {
 	fHasBuildSettings = false;
 	fDefaultWindowModePointer = NULL;
-    fIsWindowResizable = false;
     fSuspendWhenMinimized = false;
-	fMinWindowViewWidth = 0;
-	fMinWindowViewHeight = 0;
-	fDefaultWindowViewWidth = 0;
-	fDefaultWindowViewHeight = 0;
 	fIsWindowCloseButtonEnabled = true;
 	fIsWindowMinimizeButtonEnabled = true;
-	fIsWindowMaximizeButtonEnabled = false;
 	fLocalizedWindowTitleTextMap.clear();
 }
 
@@ -384,24 +321,9 @@ const Rtt::NativeWindowMode* ProjectSettings::GetDefaultWindowMode() const
 	return fDefaultWindowModePointer;
 }
 
-bool ProjectSettings::IsWindowResizable() const
-{
-    return fIsWindowResizable;
-}
-
 bool ProjectSettings::SuspendWhenMinimized() const
 {
     return fSuspendWhenMinimized;
-}
-
-int ProjectSettings::GetMinWindowViewWidth() const
-{
-	return fMinWindowViewWidth;
-}
-
-int ProjectSettings::GetMinWindowViewHeight() const
-{
-	return fMinWindowViewHeight;
 }
 
 int ProjectSettings::GetDefaultWindowViewWidth() const
@@ -422,11 +344,6 @@ bool ProjectSettings::IsWindowCloseButtonEnabled() const
 bool ProjectSettings::IsWindowMinimizeButtonEnabled() const
 {
 	return fIsWindowMinimizeButtonEnabled;
-}
-
-bool ProjectSettings::IsWindowMaximizeButtonEnabled() const
-{
-	return fIsWindowMaximizeButtonEnabled;
 }
 
 const char* ProjectSettings::GetWindowTitleTextForLocale(

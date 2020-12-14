@@ -97,7 +97,6 @@
 @synthesize isReady;
 @synthesize sendAllMouseEvents;
 @synthesize inFullScreenTransition;
-@synthesize isResizable;
 @synthesize allowOverlay;
 @synthesize cursorHidden;
 @synthesize initialLocation;
@@ -461,9 +460,8 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 {
 	BOOL sizeChanged = ! NSEqualSizes(new_size, nativeFrameRect.size);
 
-	NSDEBUG(@"GLView:setFrameSize: newSize %@, frame %@ (isResizable %s, sizeChanged %s, isReady %s, fRuntime %s)",
+	NSDEBUG(@"GLView:setFrameSize: newSize %@, frame %@ (sizeChanged %s, isReady %s, fRuntime %s)",
 		  NSStringFromSize(new_size), NSStringFromRect([self frame]),
-		  (self.isResizable ? "YES" : "NO"),
 		  (sizeChanged ? "YES" : "NO"),
 		  (self.isReady ? "YES" : "NO"),
 		  (fRuntime != NULL ? "YES" : "NO") );

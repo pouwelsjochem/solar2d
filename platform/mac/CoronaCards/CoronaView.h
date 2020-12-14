@@ -12,7 +12,6 @@
 typedef enum {
     kNormal,
     kMinimized,
-    kMaximized,
     kFullscreen,
 } CoronaViewWindowMode;
 
@@ -32,18 +31,14 @@ typedef enum {
 - (void) handleOpenURL:(NSString *)urlStr;
 - (void) restoreWindowProperties;
 
-- (BOOL) settingsIsWindowResizable;
 - (BOOL) settingsIsWindowCloseButtonEnabled;
 - (BOOL) settingsIsWindowMinimizeButtonEnabled;
-- (BOOL) settingsIsWindowMaximizeButtonEnabled;
 - (int) settingsMinContentWidth;
 - (int) settingsMaxContentWidth;
 - (int) settingsMinContentHeight;
 - (int) settingsMaxContentHeight;
 - (NSString *) settingsWindowTitle;
 - (CoronaViewWindowMode) settingsDefaultWindowMode;
-- (int) settingsMinWindowViewWidth;
-- (int) settingsMinWindowViewHeight;
 - (int) settingsDefaultWindowViewWidth;
 - (int) settingsDefaultWindowViewHeight;
 - (BOOL) settingsSuspendWhenMinimized;

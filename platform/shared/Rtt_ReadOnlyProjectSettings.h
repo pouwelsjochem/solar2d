@@ -57,42 +57,13 @@ class ReadOnlyProjectSettings
 		bool HasConfigLua() const;
 
 		/**
-		 * Gets the default mode the window should be launch as such as kNormal, kMaximized, kFullscreen, etc.
+		 * Gets the default mode the window should be launch as such as kNormal, kFullscreen, etc.
 		 * @return
-		 * Returns a pointer to a window mode constant such as kNormal, kMaximized, kFullscreen, etc.
+		 * Returns a pointer to a window mode constant such as kNormal, kFullscreen, etc.
 		 *
 		 * Returns null if a default mode was not provided or if the "build.settings" file was not loaded.
 		 */
 		const Rtt::NativeWindowMode* GetDefaultWindowMode() const;
-
-		/**
-		 * Determines if the window can be resized by the end-user.
-		 * @return
-		 * Returns true if the window can be resized by the end-user.
-		 *
-		 * Returns false if not set up to be resizable.
-		 */
-		bool IsWindowResizable() const;
-
-		/**
-		 * Gets the minimum width in pixels the window's client/view area is allowed to be resized to.
-		 * This is the region within the window's borders that Corona will render to.
-		 * @return
-		 * Returns the minimum width in pixels the window's client/view area is allowed to be.
-		 *
-		 * Returns zero if a minimum was not provided.
-		 */
-		int GetMinWindowViewWidth() const;
-
-		/**
-		 * Gets the minimum height in pixels the window's client/view area is allowed to be resized to.
-		 * This is the region within the window's borders that Corona will render to.
-		 * @return
-		 * Returns the minimum height in pixels the window's client/view area is allowed to be.
-		 *
-		 * Returns zero if a minimum was not provided.
-		 */
-		int GetMinWindowViewHeight() const;
 
 		/**
 		 * Gets the default width in pixels the window's client/view area should be on startup.
@@ -131,15 +102,6 @@ class ReadOnlyProjectSettings
 		 * Returns false if it should be hidden.
 		 */
 		bool IsWindowMinimizeButtonEnabled() const;
-
-		/**
-		 * Determines if the maximize button should be displayed by the window hosting the Corona runtime.
-		 * @return
-		 * Returns true if the maximize button should be displayed by the window.
-		 *
-		 * Returns false if it should be hidden.
-		 */
-		bool IsWindowMaximizeButtonEnabled() const;
 
 		/**
 		 * Fetches the UTF-8 encoded localized window title bar text for the given ISO language and country codes.

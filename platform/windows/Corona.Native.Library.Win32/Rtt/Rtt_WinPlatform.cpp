@@ -1246,7 +1246,7 @@ namespace Rtt
 		}
 		else if (Rtt_StringCompare(key, "windowMode") == 0)
 		{
-			// Fetch the window's current mode such as "normal", "maximized", "fullscreen", etc.
+			// Fetch the window's current mode such as "normal", "fullscreen", etc.
 			auto windowPointer = fEnvironment.GetMainWindow();
 			if (windowPointer)
 			{

@@ -510,7 +510,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 
 - (void) openBuiltApplication
 {
-    NSArray *args = [NSArray arrayWithObjects:@"-makeForeground", kValueYes, nil];
     NSString *launchApp = [self appPackagePath];
     //NSPipe *stdoutPipe = [NSPipe pipe];
     //NSPipe *stderrPipe = [NSPipe pipe];
@@ -523,9 +522,7 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
     NSString *launchPath = [[launchApp stringByAppendingPathComponent:@"Contents/MacOS"] stringByAppendingPathComponent:[[launchApp lastPathComponent] stringByDeletingPathExtension]];
     
     fOpenApplicationTask = [[[NSTask alloc] init] retain];
-    
     [fOpenApplicationTask setLaunchPath:launchPath];
-    [fOpenApplicationTask setArguments:args];
 
     // Allow the Simulator to capture the app's output
     [fOpenApplicationTask setStandardOutput:stdoutHandle];

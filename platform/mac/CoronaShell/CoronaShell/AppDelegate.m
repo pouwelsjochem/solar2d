@@ -18,8 +18,6 @@
 #define NSDEBUG(...)
 #endif
 
-// #define NO_FULLSCREEN_ANIMATION 1
-
 @interface AppDelegate ()
 
 @property (weak) IBOutlet NSWindow *window;
@@ -34,25 +32,6 @@
 @synthesize appPath = _appPath;
 @synthesize coronaView = _coronaView;
 @synthesize suspendWhenMinimized = _suspendWhenMinimized;
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-    // This option is used by the Simulator to make sure the apps it starts come to the foreground
-    BOOL makeForeground = [[NSUserDefaults standardUserDefaults] boolForKey:@"makeForeground"];
-
-    if (makeForeground)
-    {
-        [[NSRunningApplication currentApplication] activateWithOptions:(NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
-    }
-}
-
-- (void)applicationWillTerminate:(NSNotification *)aNotification
-{
-	if (! [_coronaView settingsIsWindowResizable])
-	{
-		[NSWindow removeFrameUsingName:_appPath];
-	}
-}
 
 // FIXME: Shouldn't need to surface GLView here
 -(void)didPrepareOpenGLContext:(id)sender
@@ -71,18 +50,9 @@
  	[_window setDelegate:self];
 
 	_coronaView = [_window contentView];
-
 	_coronaView.coronaViewDelegate = self;
 	
 	_appPath = [[self getProjectURL:nil] path];
-
-	if (_appPath == nil)
-	{
-		NSLog(@"No app found");
-
-		[NSApp terminate:nil];
-	}
-
 	if ([[_appPath lastPathComponent] isEqualToString:@"main.lua"] || [[_appPath lastPathComponent] isEqualToString:@"main.lu"])
 	{
 		_appPath = [_appPath stringByDeletingLastPathComponent];
@@ -90,7 +60,6 @@
 
 	// Default to not showing the "Enter Full Screen" menu item until we know whether we allow fullscreen
 	[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSFullScreenMenuItemEverywhere"];
-
 	if (([NSEvent modifierFlags] & NSDeviceIndependentModifierFlagsMask) & NSShiftKeyMask)
 	{
 		NSLog(@"Resetting window position to defaults");
@@ -102,13 +71,8 @@
 	[[_window windowController] setShouldCascadeWindows:NO];      // Tell the controller to not cascade its windows
 	[_window setFrameAutosaveName:_appPath];
 
-	// Set the application icon for the project if it has one, otherwise use a generic icon
+	// Set the application icon for the project if it has one
 	NSImage *appIcon = [[NSImage alloc] initWithContentsOfFile:[_appPath stringByAppendingPathComponent:@"Icon-osx.icns"]];
-	if (appIcon == nil)
-	{
-		appIcon = [[NSImage alloc] initWithContentsOfFile:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Icon-osx.icns"]];
-	}
-
 	[NSApp setApplicationIconImage:appIcon];
 
 	// init launchargs
@@ -148,17 +112,10 @@
     // Make the window full screen capable (this is always done because the
     // app may set fullscreen in code)
     NSUInteger windowCollectionBehavior = [_window collectionBehavior];
-
 	windowCollectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
     [_window setCollectionBehavior:windowCollectionBehavior];
 
-    if ([_coronaView settingsMinWindowViewWidth] > 0 && [_coronaView settingsMinWindowViewHeight] > 0)
-    {
-        [_window setMinSize:NSMakeSize([_coronaView settingsMinWindowViewWidth], [_coronaView settingsMinWindowViewHeight])];
-    }
-
 	NSString *windowTitle = [_coronaView settingsWindowTitle];
-
 	if (windowTitle == nil)
 	{
         if ([_appPath hasSuffix:@"/Resources/Corona"])
@@ -179,47 +136,16 @@
 	{
 		int defaultWidth = [_coronaView settingsDefaultWindowViewWidth];
 		int defaultHeight = [_coronaView settingsDefaultWindowViewHeight];
-		NSRect screenRect = [[NSScreen mainScreen] visibleFrame];
+		
+		NSRect coronaViewRect = [_coronaView frame];
+		coronaViewRect.size = NSMakeSize(defaultWidth, defaultHeight);
+
+		// Fill the screen with the app (appropriate for games) using the aspect ratio from the width & height in config.lua
 		NSRect customFrame;
-
-		if (defaultWidth == 0 || defaultHeight == 0)
-		{
-			// If we don't have a default window size, size the window suitably for a game on the desktop
-			
-			// Resize the window to fit neatly on the main screen
-
-			NSRect coronaViewRect = [_coronaView frame];
-			NSRect windowRect = [_window frame];
-			coronaViewRect.size = NSMakeSize([_coronaView settingsMinContentWidth], [_coronaView settingsMinContentHeight]);
-
-			// Fill the screen with the app (appropriate for games) using the aspect ratio from the width & height in config.lua
-			customFrame = windowRect;
-
-			customFrame.size.width = screenRect.size.width - 100;
-			customFrame.size.height = ceil(customFrame.size.width * (coronaViewRect.size.height / coronaViewRect.size.width));
-
-			// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
-				// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
-			// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
-				// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
-			// Because screens are wider than they are tall, we may end up with a window that's too high and have to adjust 
-			if (customFrame.size.height > (screenRect.size.height - 100))
-			{
-				customFrame.size.width *=  ((screenRect.size.height - 100) / customFrame.size.height);
-				customFrame.size.height = (screenRect.size.height - 100);
-			}
-
-			customFrame.origin = NSZeroPoint;
-			[_coronaView setFrame:customFrame];
-		}
-		else
-		{
-			// Size the window to be the size specified in build.settings
-			customFrame.size = NSMakeSize(defaultWidth, defaultHeight);
-		}
-
+		
 		// Position the window appropriately on the screen (we don't use [NSWindow center] because
 		// that forces a display of the window which can mess up things like fullscreen transitions)
+		NSRect screenRect = [[NSScreen mainScreen] visibleFrame];
 		customFrame.origin.x = (screenRect.size.width - customFrame.size.width) / 2;
 		customFrame.origin.y = (screenRect.size.height - customFrame.size.height) / 1.2;
 		customFrame.size.height += 22;
@@ -227,41 +153,23 @@
 		[_window setFrame:customFrame display:NO];
 	}
 
-    // Implement the initial window state
-    switch ([_coronaView settingsDefaultWindowMode])
-    {
-        case kNormal:
-            break;
-            
-        case kMinimized:
-            [_window performMiniaturize:nil];
-            break;
-            
-        case kMaximized:
-            [_window performZoom:nil];
-            break;
-            
-        case kFullscreen:
-			// Make the window invisible to avoid white flashing (reset in startCustomAnimationToEnterFullScreenWithDuration:)
-			[_window setIsVisible:NO];
+	CoronaViewWindowMode windowMode = [_coronaView settingsDefaultWindowMode];
 
-            [_window toggleFullScreen:nil];
-            break;
-    }
-
-	// Setting the window styles causes various artifacts when transitioning to fullscreen on app start so
-	// we put it off until [windowWillExitFullScreen:]
-	if ([_coronaView settingsDefaultWindowMode] != kFullscreen)
+	BOOL storedFullscreenMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"solar2D_storedFullscreenMode"];
+	if (storedFullscreenMode)
 	{
-		[self setWindowStyles];
+		windowMode = kFullscreen;
 	}
 
-	// If the maximize button is enabled (or the default window mode is fullscreen), enable the corresponding menu item
-	if ([_coronaView settingsIsWindowMaximizeButtonEnabled] ||
-		[_coronaView settingsDefaultWindowMode] == kFullscreen)
+	switch (windowMode)
 	{
-		// The window is maximizable, enable the "Enter Full Screen" menu item
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"NSFullScreenMenuItemEverywhere"];
+		case kNormal:
+			[self setWindowStyles];
+			break;
+		
+		case kFullscreen:
+			[_window toggleFullScreen:nil];
+			break;
 	}
 
 	// NSDEBUG(@"awakeFromNib: view: %@ (%@)", _coronaView, NSStringFromRect([_coronaView frame]));
@@ -270,12 +178,6 @@
 - (void) setWindowStyles
 {
 	NSUInteger windowStyleMask = [_window styleMask];
-
-	if ([_coronaView settingsIsWindowResizable])
-	{
-		// Make the window resizable
-		windowStyleMask |= NSWindowStyleMaskResizable;
-	}
 
 	if ([_coronaView settingsIsWindowCloseButtonEnabled])
 	{
@@ -292,36 +194,27 @@
 	// This triggers a window resize
 	[_window setStyleMask:windowStyleMask];
 
-	// This has to be done after the styleMask is set (empirically determined)
-	if (! [_coronaView settingsIsWindowMaximizeButtonEnabled])
-	{
-		// Make the window not maximizable
-		NSButton *zoomButton = [_window standardWindowButton:NSWindowZoomButton];
-		[zoomButton setEnabled:NO];
-	}
+	// Make the window not maximizable
+	NSButton *zoomButton = [_window standardWindowButton:NSWindowZoomButton];
+	[zoomButton setEnabled:NO];
 }
 
 // Displaying modal sheets causes the NSWindowZoomButton zoom button to re-enable if
 // we've disabled it so we force it to the state we want here
 - (NSRect)window:(NSWindow *)window willPositionSheet:(NSWindow *)sheet usingRect:(NSRect)rect
 {
-	if (! [_coronaView settingsIsWindowMaximizeButtonEnabled])
-	{
-		NSButton *zoomButton = [_window standardWindowButton:NSWindowZoomButton];
-		[zoomButton setEnabled:NO];
-	}
+	NSButton *zoomButton = [_window standardWindowButton:NSWindowZoomButton];
+	[zoomButton setEnabled:NO];
 
 	return rect;
 }
 
+// Displaying modal sheets causes the NSWindowZoomButton zoom button to re-enable if
+// we've disabled it so we force it to the state we want here
 - (void)windowDidEndSheet:(NSNotification *)notification
 {
-	if (! [_coronaView settingsIsWindowMaximizeButtonEnabled])
-	{
-		// Make the window not maximizable
-		NSButton *zoomButton = [_window standardWindowButton:NSWindowZoomButton];
-		[zoomButton setEnabled:NO];
-	}
+	NSButton *zoomButton = [_window standardWindowButton:NSWindowZoomButton];
+	[zoomButton setEnabled:NO];
 }
 
 - (void)windowDidResize:(NSNotification *)notification
@@ -367,44 +260,14 @@
 {
 	NSScreen *screen = [window screen];
 	NSRect screenFrame = [screen frame];
-
-	NSRect startFrame = [window frame];
-	_nonFullscreenWindowFrame = startFrame;
-	startFrame.size.height = fmax(startFrame.size.height, startFrame.size.height / 4);
-	startFrame.size.width = fmax(startFrame.size.width, startFrame.size.width / 4);
+	_nonFullscreenWindowFrame = [window frame];
 
 	NSRect endFrame = screenFrame;
 	endFrame.size = screenFrame.size;
 	endFrame.size = [self window:window willUseFullScreenContentSize:endFrame.size];
-
 	endFrame.origin.x += floor((NSWidth(screenFrame) - NSWidth(endFrame))/2);
 	endFrame.origin.y += floor((NSHeight(screenFrame) - NSHeight(endFrame))/2);
-	
-	// The animation is in two stages:
-	// 1. the window is moved to the center of its screen
-	// 2. it's enlarged to its full screen size.
-
-	//NSDEBUG(@"EnterFullScreen: startFrame: %@", NSStringFromRect(startFrame));
-	//NSDEBUG(@"EnterFullScreen:   endFrame: %@", NSStringFromRect(endFrame));
-
-	[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-		[context setDuration:duration/4];
-
-		[[window animator] setFrame:startFrame display:YES];
-		[window setIsVisible:YES];
-
-	} completionHandler:^{
-
-		[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-
-			[context setDuration:duration];
-			[[window animator] setFrame:endFrame display:YES];
-
-		} completionHandler:^{
-
-
-		}];
-	}];
+	[window setFrame:endFrame display:YES];
 }
 
 - (NSArray *)customWindowsToExitFullScreenForWindow:(NSWindow *)window
@@ -421,66 +284,15 @@
 {
 	NSScreen *screen = [window screen];
 	NSRect screenFrame = [screen frame];
-
-	NSRect startFrame = screenFrame;
-	startFrame.size = screenFrame.size;
-
-	startFrame.origin = screenFrame.origin;
-
 	NSRect endFrame = _nonFullscreenWindowFrame;
-
-	endFrame.size.height = fmax(endFrame.size.height, startFrame.size.height / 4);
-	endFrame.size.width = fmax(endFrame.size.width, startFrame.size.width / 4);
-
-	//NSDEBUG(@"ExitFullScreen: startFrame: %@", NSStringFromRect(startFrame));
-	//NSDEBUG(@"ExitFullScreen:   endFrame: %@", NSStringFromRect(endFrame));
-
-	[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-
-		[context setDuration:duration/4];
-
-		[[window animator] setFrame:startFrame display:YES];
-
-	} completionHandler:^{
-
-		[NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-
-			[context setDuration:duration];
-			[[window animator] setFrame:endFrame display:YES];
-
-		} completionHandler:^{
-
-		}];
-	}];
-}
-
-- (void)windowWillEnterFullScreen:(NSNotification *)notification
-{
-	//NSDEBUG(@"windowWillEnterFullScreen: %@ %@", NSStringFromRect([_window frame]), NSStringFromRect([[_window screen] frame]) );
+	endFrame.size.height = fmax(endFrame.size.height, screenFrame.size.height / 4);
+	endFrame.size.width = fmax(endFrame.size.width, screenFrame.size.width / 4);
+	[window setFrame:endFrame display:YES];
 }
 
 - (void)windowDidEnterFullScreen:(NSNotification *)notification
 {
-	if ([_coronaView settingsDefaultWindowMode] == kFullscreen)
-	{
-		[self setWindowStyles];
-	}
-}
-
-- (void)windowWillExitFullScreen:(NSNotification *)notification
-{
-	//NSDEBUG(@"windowWillExitFullScreen: %@ (inLiveResize %s)", notification, ([_window inLiveResize] ? "YES" : "NO"));
-
-	if ([_coronaView settingsDefaultWindowMode] == kFullscreen)
-	{
-		[self setWindowStyles];
-	}
-}
-
-// Implementing this makes [NSWindow isZoomed] work properly
-- (NSRect)windowWillUseStandardFrame:(NSWindow *)window defaultFrame:(NSRect)newFrame
-{
-	return newFrame;
+	[self setWindowStyles];
 }
 
 - (void) notifyRuntimeError:(NSString *) mesg

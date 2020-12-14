@@ -1542,43 +1542,6 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 {
 	switch (arguments.GetMessageId())
 	{
-		case WM_SIZING:
-		{
-			// Make sure the window is not made smaller than the configured min width/height, if provided.
-			LONG minClientWidth = (LONG)fProjectSettings.GetMinWindowViewWidth();
-			LONG minClientHeight = (LONG)fProjectSettings.GetMinWindowViewHeight();
-			LPRECT boundsPointer = (LPRECT)arguments.GetLParam();
-			if (boundsPointer && (minClientWidth > 0) && (minClientHeight > 0))
-			{
-				// Fetch the border/margin distance between the edge of the window and its client area.
-				UI::Control& control = dynamic_cast<UI::Control&>(sender);
-				RECT windowBounds = control.GetBounds();
-				RECT clientBounds = control.GetClientBounds();
-				LONG totalMarginX = (windowBounds.right - windowBounds.left) - (clientBounds.right - clientBounds.left);
-				LONG totalMarginY = (windowBounds.bottom - windowBounds.top) - (clientBounds.bottom - clientBounds.top);
-
-				// Update the window's bounds provided by the message if it's less than the minimum.
-				LONG length = (boundsPointer->right - boundsPointer->left);
-				LONG minLength = minClientWidth + totalMarginX;
-				if (length < minLength)
-				{
-					boundsPointer->right += minLength - length;
-					arguments.SetHandled();
-				}
-				length = (boundsPointer->bottom - boundsPointer->top);
-				minLength = minClientHeight + totalMarginY;
-				if (length < minLength)
-				{
-					boundsPointer->bottom += minLength - length;
-					arguments.SetHandled();
-				}
-				if (arguments.WasHandled())
-				{
-					arguments.SetReturnResult(1);
-				}
-			}
-			break;
-		}
 		case WM_SYSCOMMAND:
 		{
 			// Suspend/resume the runtime if the window has been minimized/unminized respectively.
@@ -1655,16 +1618,11 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 
 				// Write the above window info to this app's stored preferences.
 				Rtt::PreferenceCollection preferenceCollection;
-				preferenceCollection.Add(
-						"corona/lastWindowPosition/x", Rtt::PreferenceValue(windowBounds.left));
-				preferenceCollection.Add(
-						"corona/lastWindowPosition/y", Rtt::PreferenceValue(windowBounds.top));
-				preferenceCollection.Add(
-						"corona/lastWindowPosition/viewWidth", Rtt::PreferenceValue(clientSize.cx));
-				preferenceCollection.Add(
-						"corona/lastWindowPosition/viewHeight", Rtt::PreferenceValue(clientSize.cy));
-				preferenceCollection.Add(
-						"corona/lastWindowPosition/mode", Rtt::PreferenceValue(windowMode.GetStringId()));
+				preferenceCollection.Add("corona/lastWindowPosition/x", Rtt::PreferenceValue(windowBounds.left));
+				preferenceCollection.Add("corona/lastWindowPosition/y", Rtt::PreferenceValue(windowBounds.top));
+				preferenceCollection.Add("corona/lastWindowPosition/viewWidth", Rtt::PreferenceValue(clientSize.cx));
+				preferenceCollection.Add("corona/lastWindowPosition/viewHeight", Rtt::PreferenceValue(clientSize.cy));
+				preferenceCollection.Add("corona/lastWindowPosition/mode", Rtt::PreferenceValue(windowMode.GetStringId()));
 				fStoredPreferencesPointer->UpdateWith(preferenceCollection);
 			}
 
@@ -1966,14 +1924,6 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	// Enable/disable the window's icon menu, minimize button, maximize button, and ability to resize.
 	LONG oldWindowStyles = ::GetWindowLongW(windowHandle, GWL_STYLE);
 	LONG newWindowStyles = oldWindowStyles;
-	if (projectSettings.IsWindowResizable())
-	{
-		newWindowStyles |= WS_SIZEBOX;
-	}
-	else
-	{
-		newWindowStyles &= ~WS_SIZEBOX;
-	}
 	if (projectSettings.IsWindowMinimizeButtonEnabled())
 	{
 		newWindowStyles |= WS_MINIMIZEBOX;
@@ -1981,14 +1931,6 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	else
 	{
 		newWindowStyles &= ~WS_MINIMIZEBOX;
-	}
-	if (projectSettings.IsWindowMaximizeButtonEnabled())
-	{
-		newWindowStyles |= WS_MAXIMIZEBOX;
-	}
-	else
-	{
-		newWindowStyles &= ~WS_MAXIMIZEBOX;
 	}
 	if (newWindowStyles != oldWindowStyles)
 	{
@@ -2007,49 +1949,47 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	}
 
 	// Update the window's title bar text.
+	// Fetch the ISO 639 language code with an ISO 15924 script code appended to it if available.
+	// Note: This will return a 3 letter ISO 639-2 code if current language is not in the 2 letter ISO 639-1 standard.
+	//       For example, this can happen with the Hawaiian language, which will return "haw".
+	const size_t kLanguageStringCodeLength = 128;
+	char languageStringCode[kLanguageStringCodeLength];
+	languageStringCode[0] = '\0';
+	::GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SPARENT, languageStringCode, kLanguageStringCodeLength);
+	if (languageStringCode[0] != '\0')
 	{
-		// Fetch the ISO 639 language code with an ISO 15924 script code appended to it if available.
-		// Note: This will return a 3 letter ISO 639-2 code if current language is not in the 2 letter ISO 639-1 standard.
-		//       For example, this can happen with the Hawaiian language, which will return "haw".
-		const size_t kLanguageStringCodeLength = 128;
-		char languageStringCode[kLanguageStringCodeLength];
-		languageStringCode[0] = '\0';
-		::GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SPARENT, languageStringCode, kLanguageStringCodeLength);
-		if (languageStringCode[0] != '\0')
+		// Special handling for older OS versions.
+		// Replace non-standard Chinese "CHS" and "CHT" script names with respective ISO 15924 codes.
+		if (_stricmp(languageStringCode, "zh-chs") == 0)
 		{
-			// Special handling for older OS versions.
-			// Replace non-standard Chinese "CHS" and "CHT" script names with respective ISO 15924 codes.
-			if (_stricmp(languageStringCode, "zh-chs") == 0)
-			{
-				strncpy_s(languageStringCode, kLanguageStringCodeLength, "zh-Hans", kLanguageStringCodeLength);
-			}
-			else if (_stricmp(languageStringCode, "zh-cht") == 0)
-			{
-				strncpy_s(languageStringCode, kLanguageStringCodeLength, "zh-Hant", kLanguageStringCodeLength);
-			}
+			strncpy_s(languageStringCode, kLanguageStringCodeLength, "zh-Hans", kLanguageStringCodeLength);
 		}
-		else
+		else if (_stricmp(languageStringCode, "zh-cht") == 0)
 		{
-			// Use an older API that only fetches the ISO 639 language code if the above API call fails.
-			::GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, languageStringCode, kLanguageStringCodeLength);
+			strncpy_s(languageStringCode, kLanguageStringCodeLength, "zh-Hant", kLanguageStringCodeLength);
 		}
+	}
+	else
+	{
+		// Use an older API that only fetches the ISO 639 language code if the above API call fails.
+		::GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, languageStringCode, kLanguageStringCodeLength);
+	}
 
-		// Fetch the 2 character ISO country code the system is currently using. (Ex: "us" for USA.)
-		char countryStringCode[16];
-		countryStringCode[0] = '\0';
-		::GetLocaleInfoA(
-				LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, countryStringCode, sizeof(countryStringCode));
+	// Fetch the 2 character ISO country code the system is currently using. (Ex: "us" for USA.)
+	char countryStringCode[16];
+	countryStringCode[0] = '\0';
+	::GetLocaleInfoA(
+			LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, countryStringCode, sizeof(countryStringCode));
 
-		// Attempt to update the title bar with the "build.settings" file's localized text for the current locale.
-		auto utf8TitleText = projectSettings.GetWindowTitleTextForLocale(languageStringCode, countryStringCode);
-		if (utf8TitleText)
+	// Attempt to update the title bar with the "build.settings" file's localized text for the current locale.
+	auto utf8TitleText = projectSettings.GetWindowTitleTextForLocale(languageStringCode, countryStringCode);
+	if (utf8TitleText)
+	{
+		auto utf16TitleText = lua_create_utf16_string_from(utf8TitleText);
+		if (utf16TitleText)
 		{
-			auto utf16TitleText = lua_create_utf16_string_from(utf8TitleText);
-			if (utf16TitleText)
-			{
-				::SetWindowTextW(windowHandle, utf16TitleText);
-				lua_destroy_utf16_string(utf16TitleText);
-			}
+			::SetWindowTextW(windowHandle, utf16TitleText);
+			lua_destroy_utf16_string(utf16TitleText);
 		}
 	}
 
@@ -2057,110 +1997,54 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	// We need to do this before setting the width/height below which sometimes sizes based on monitor resolution.
 	if (fStoredPreferencesPointer)
 	{
-		bool hasWindowPosition = false;
 		POINT windowPosition{};
 		{
-			// Fetch the last stored position from preferences, if it exists.
 			auto lastXResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/x");
 			auto lastYResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/y");
 			if (lastXResult.HasSucceeded() && lastYResult.HasSucceeded())
 			{
-				hasWindowPosition = true;
-				auto intConversionResult = lastXResult.GetValue().ToSignedInt32();
-				if (intConversionResult.HasSucceeded())
-				{
-					windowPosition.x = intConversionResult.GetValue();
-				}
-				else
-				{
-					hasWindowPosition = false;
-				}
-				intConversionResult = lastYResult.GetValue().ToSignedInt32();
-				if (intConversionResult.HasSucceeded())
-				{
-					windowPosition.y = intConversionResult.GetValue();
-				}
-				else
-				{
-					hasWindowPosition = false;
-				}
+				windowPosition.x = lastXResult.GetValue().ToSignedInt32().GetValue();
+				windowPosition.y = lastYResult.GetValue().ToSignedInt32().GetValue();
+
+				auto windowBounds = fMainWindowPointer->GetBounds();
+				windowBounds.left = windowPosition.x;
+				windowBounds.top = windowPosition.y;
+				windowBounds.right += windowPosition.x - windowBounds.left;
+				windowBounds.bottom += windowPosition.y - windowBounds.top;
+				fMainWindowPointer->SetBounds(windowBounds);
 			}
-		}
-		if (hasWindowPosition)
-		{
-			// Move the window.
-			auto windowBounds = fMainWindowPointer->GetBounds();
-			auto deltaX = windowPosition.x - windowBounds.left;
-			auto deltaY = windowPosition.y - windowBounds.top;
-			windowBounds.left = windowPosition.x;
-			windowBounds.top = windowPosition.y;
-			windowBounds.right += deltaX;
-			windowBounds.bottom += deltaY;
-			fMainWindowPointer->SetBounds(windowBounds);
 		}
 	}
 
 	// Fetch the last window width/height this application was using before.
 	// Note: We only fetch the previous width/height if the window is set up to be resizable.
 	//       If not resizable, then we leverage the configured width/height and image suffix scaling to fit the monitor.
-	bool isClientSizeFromPreferences = false;
 	SIZE clientSize{};
 	if (fStoredPreferencesPointer)
 	{
-		if (projectSettings.IsWindowResizable())
+		auto lastWidthResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/viewWidth");
+		auto lastHeightResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/viewHeight");
+		if (lastWidthResult.HasSucceeded() && lastHeightResult.HasSucceeded())
 		{
-			auto lastWidthResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/viewWidth");
-			auto lastHeightResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/viewHeight");
-			if (lastWidthResult.HasSucceeded() && lastHeightResult.HasSucceeded())
-			{
-				clientSize.cx = lastWidthResult.GetValue().ToSignedInt32().GetValue();
-				clientSize.cy = lastHeightResult.GetValue().ToSignedInt32().GetValue();
-				isClientSizeFromPreferences = (clientSize.cx > 0) && (clientSize.cy > 0);
-			}
+			clientSize.cx = lastWidthResult.GetValue().ToSignedInt32().GetValue();
+			clientSize.cy = lastHeightResult.GetValue().ToSignedInt32().GetValue();
 		}
 	}
 
 	// If we haven't restored the previous window client width/height above, then do the following:
 	// - First, attempt to fetch the default window client width/height from the "build.settings" file.
-	// - If not provided, then fetch the content width/height from the "config.lua" file for backward compatibility.
 	if ((clientSize.cx <= 0) || (clientSize.cy <= 0))
 	{
 		clientSize.cx = projectSettings.GetDefaultWindowViewWidth();
 		clientSize.cy = projectSettings.GetDefaultWindowViewHeight();
-		if ((clientSize.cx <= 0) || (clientSize.cy <= 0))
-		{
-			clientSize.cx = projectSettings.GetMinWindowViewWidth();
-			clientSize.cy = projectSettings.GetMinWindowViewHeight();
-			if ((clientSize.cx <= 0) || (clientSize.cy <= 0))
-			{
-				clientSize.cx = projectSettings.GetMinContentWidth();
-				clientSize.cy = projectSettings.GetMinContentHeight();
-			}
-		}
-	}
-
-	// Make sure the window width/height does not exceed the minimum in the "build.settings" file, if provided.
-	LONG minClientWidth = projectSettings.GetMinWindowViewWidth();
-	LONG minClientHeight = projectSettings.GetMinWindowViewHeight();
-	if (clientSize.cx < minClientWidth)
-	{
-		clientSize.cx = minClientWidth;
-	}
-	if (clientSize.cy < minClientHeight)
-	{
-		clientSize.cy = minClientHeight;
 	}
 
 	// Resize the window.
 	// Note: This must be done after changing the window's styles.
-	//       Particulary any styles that effect the border size, such as WS_SIZEBOX.
-	if ((clientSize.cx > 0) && (clientSize.cy > 0))
-	{
-		fMainWindowPointer->SetNormalModeClientSize(clientSize);
-	}
+	fMainWindowPointer->SetNormalModeClientSize(clientSize);
 
-	// Fetch the window mode (ie: "normal", "maximized", "fullscreen", etc.) the last time this app was running with.
-	const Rtt::NativeWindowMode* windowModePointer = nullptr;
+	// Fetch the window mode (ie: "normal", "fullscreen", etc.) the last time this app was running with.
+	const Rtt::NativeWindowMode* windowModePointer = projectSettings.GetDefaultWindowMode();
 	if (fStoredPreferencesPointer)
 	{
 		auto fetchResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/mode");
@@ -2173,42 +2057,14 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 			}
 		}
 	}
-	if (windowModePointer)
-	{
-		// Make sure that the fetched window mode is okay to use.
-		if (windowModePointer->Equals(Rtt::NativeWindowMode::kMinimized))
-		{
-			// The window used to be minimized. Do not restore this window mode state. This is what Microsoft does too.
-			// Otherwise, users will get confused and think the app isn't running because the window didn't appear.
-			windowModePointer = nullptr;
-		}
-		else if (windowModePointer->Equals(Rtt::NativeWindowMode::kMaximized))
-		{
-			// The last mode was maximized.
-			// Do not use this mode if the "build.settings" file no longer supports it.
-			if (!projectSettings.IsWindowMaximizeButtonEnabled())
-			{
-				windowModePointer = nullptr;
-			}
-		}
-	}
-	if (!windowModePointer)
-	{
-		// The last window mode was not found or is no longer valid.
-		// Attempt to use the default window mode from the "build.settings" file, if specified.
-		windowModePointer = projectSettings.GetDefaultWindowMode();
-	}
 
 	// Apply the selected window mode up above, if provided.
 	// Note: Do not apply the window mode if the given window is maximimzed or minimized, because this assumes
 	//       that the end-user applied this mode to the application's shortcut, which we should always respect.
-	if (windowModePointer)
+	const Rtt::NativeWindowMode& currentWindowMode = fMainWindowPointer->GetWindowMode();
+	if (currentWindowMode.Equals(Rtt::NativeWindowMode::kNormal))
 	{
-		const Rtt::NativeWindowMode& currentWindowMode = fMainWindowPointer->GetWindowMode();
-		if (currentWindowMode.Equals(Rtt::NativeWindowMode::kNormal))
-		{
-			fMainWindowPointer->SetWindowMode(*windowModePointer);
-		}
+		fMainWindowPointer->SetWindowMode(*windowModePointer);
 	}
 }
 

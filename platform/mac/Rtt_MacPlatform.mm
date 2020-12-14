@@ -1383,7 +1383,6 @@ MacPlatform::SetNativeProperty(lua_State *L, const char *key, int valueIndex) co
     else if (Rtt_StringCompare(key, "windowSize") == 0)
     {
 #ifdef Rtt_AUTHORING_SIMULATOR
-
 		Rtt_Log("Note: native.setProperty(\"windowSize\", mode) does not work in the Simulator");
 #else
 		if (window != nil && (lua_type(L, valueIndex) == LUA_TTABLE))
@@ -1418,51 +1417,21 @@ MacPlatform::SetNativeProperty(lua_State *L, const char *key, int valueIndex) co
 
 #else
 
-        // Change the window mode to normal, minimized, maximized, fullscreen, etc.
-        if (window != nil && (lua_type(L, valueIndex) == LUA_TSTRING))
-        {
-            // Fetch the requested window mode from Lua
-            auto modeName = lua_tostring(L, valueIndex);
-			BOOL isFullScreen = (([window styleMask] & NSFullScreenWindowMask) == NSFullScreenWindowMask);
-
-			// Implement the "windowMode" setting.  Not all of the behaviors are exactly the same as those on
-			// Windows (e.g. you can't go from "fullscreen" to "minimized").  I suspect fixing this is a tar pit.
+		// Change the window mode to normal, minimized, maximized, fullscreen, etc.
+		if ((lua_type(L, valueIndex) == LUA_TSTRING))
+		{
+			// Fetch the requested window mode from Lua
+			auto modeName = lua_tostring(L, valueIndex);
 			if (Rtt_StringCompareNoCase(modeName, "normal") == 0)
 			{
-				// OS X doesn't have the concept of "normal" windows so we just undo any
-				// special presentations that have been applied previously
-				if ([window isZoomed])
-				{
-					[window performZoom:nil]; // toggle zoomed state
-				}
-
-				if ([window isMiniaturized])
-				{
-					[window deminiaturize:nil];
-				}
-
-				if (isFullScreen)
-				{
-					[window toggleFullScreen:nil];
-				}
-			}
-			else if (Rtt_StringCompareNoCase(modeName, "minimized") == 0)
-			{
-				[window performMiniaturize:nil];
-			}
-			else if (Rtt_StringCompareNoCase(modeName, "maximized") == 0)
-			{
-				[window performZoom:nil];
+				[[NSUserDefaults standardUserDefaults] setBool:false forKey:[NSString stringWithFormat:@"solar2D_storedFullscreenMode"]];
 			}
 			else if (Rtt_StringCompareNoCase(modeName, "fullscreen") == 0)
 			{
-				if (! isFullScreen)
-				{
-					[window toggleFullScreen:nil];
-				}
+				[[NSUserDefaults standardUserDefaults] setBool:true forKey:[NSString stringWithFormat:@"solar2D_storedFullscreenMode"]];
 			}
-            else
-            {
+			else
+			{
 				if (Rtt_StringIsEmpty(modeName))
 				{
 					CoronaLuaWarning(L,"native.setProperty(\"windowMode\", mode) was given an empty mode");
@@ -1578,13 +1547,7 @@ MacPlatform::PushNativeProperty( lua_State *L, const char *key ) const
 		BOOL isFullScreen = (([window styleMask] & NSFullScreenWindowMask) == NSFullScreenWindowMask);
 		const char *result = NULL;
 
-		// This seems to be deterministic but it might be necessary to remember the last
-		// mode we were given and return that for 100% consistency
-		if ([window isZoomed])
-		{
-			result = "maximized";
-		}
-		else if ([window isMiniaturized])
+		if ([window isMiniaturized])
 		{
 			result = "minimized";
 		}
@@ -1620,13 +1583,6 @@ MacPlatform::PushNativeProperty( lua_State *L, const char *key ) const
 
 	return pushedValues;
 }
-
-/*
-void
-MacPlatform::NetworkRequest( lua_State *L, const char *url, const char *method, LuaResource *listener, int paramsIndex ) const
-{	
-}
-*/
 
 void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {

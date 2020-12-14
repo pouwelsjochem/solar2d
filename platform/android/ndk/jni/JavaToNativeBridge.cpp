@@ -97,7 +97,7 @@ JavaToNativeBridge::Init(
 		// TODO: Remove need to access Renderer directly
 		Rtt::RenderingStream& stream = display.GetStream();
 		// TEMPORARY_HACK (end)
-		stream.SetOptimalContentSize(width, height);
+		stream.SetOptimalOrPreferredContentSize(width, height);
 
 		display.Restart();
 		display.GetScene().Invalidate();

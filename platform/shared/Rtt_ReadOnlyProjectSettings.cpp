@@ -39,21 +39,6 @@ const Rtt::NativeWindowMode* ReadOnlyProjectSettings::GetDefaultWindowMode() con
 	return fSettings.GetDefaultWindowMode();
 }
 
-bool ReadOnlyProjectSettings::IsWindowResizable() const
-{
-	return fSettings.IsWindowResizable();
-}
-
-int ReadOnlyProjectSettings::GetMinWindowViewWidth() const
-{
-	return fSettings.GetMinWindowViewWidth();
-}
-
-int ReadOnlyProjectSettings::GetMinWindowViewHeight() const
-{
-	return fSettings.GetMinWindowViewHeight();
-}
-
 int ReadOnlyProjectSettings::GetDefaultWindowViewWidth() const
 {
 	return fSettings.GetDefaultWindowViewWidth();
@@ -73,12 +58,6 @@ bool ReadOnlyProjectSettings::IsWindowMinimizeButtonEnabled() const
 {
 	return fSettings.IsWindowMinimizeButtonEnabled();
 }
-
-bool ReadOnlyProjectSettings::IsWindowMaximizeButtonEnabled() const
-{
-	return fSettings.IsWindowMaximizeButtonEnabled();
-}
-
 const char* ReadOnlyProjectSettings::GetWindowTitleTextForLocale(
 	const char* languageCode, const char* countryCode) const
 {

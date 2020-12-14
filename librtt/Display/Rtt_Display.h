@@ -124,6 +124,10 @@ class Display
 		// Dynamic Content Scaling
 		virtual S32 ContentWidth() const;
 		virtual S32 ContentHeight() const;
+		virtual S32 MinContentWidth() const;
+		virtual S32 MinContentHeight() const;
+		virtual S32 MaxContentWidth() const;
+		virtual S32 MaxContentHeight() const;
 		virtual S32 ScaledContentWidth() const;
 		virtual S32 ScaledContentHeight() const;
 	
@@ -132,6 +136,10 @@ class Display
 
 		virtual S32 GetXScreenOffset() const;
 		virtual S32 GetYScreenOffset() const;
+
+		virtual void GetContentSizeForContentToScreenScale( S32 contentScale, S32& outContentToScreenScale, S32& outContentWidth, S32& outContentHeight ) const;
+		virtual S32 GetPreferredContentToScreenScale() const;
+		virtual void SetPreferredContentToScreenScale( S32 contentScale ) const;
 
 		virtual void ContentToScreen( S32& x, S32& y ) const;
 		virtual void ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const;
