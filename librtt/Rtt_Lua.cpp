@@ -1061,29 +1061,6 @@ Lua::CopyValue( lua_State *L, lua_State *srcL, int srcIndex )
 	}
 }
 
-void
-Lua::AddCoronaViewListener( lua_State *L, lua_CFunction listener, void *lightuserdata )
-{
-	Rtt_LUA_STACK_GUARD( L );
-
-	// Push Runtime.addEventListener
-	// Push Runtime
-	Lua::PushRuntime( L );
-	lua_getfield( L, -1, "addEventListener" );
-	lua_insert( L, -2 ); // swap table and function
-
-	// Push 'coronaView'
-	lua_pushstring( L, "coronaView" );
-
-	// Push 'listener'
-	lua_pushlightuserdata( L, lightuserdata );
-	lua_pushcclosure( L, listener, 1 );
-
-	// Runtime.addEventListener( Runtime, "coronaView", listener )
-	int status = Lua::DoCall( L, 3, 0 ); Rtt_UNUSED( status );
-	Rtt_ASSERT( 0 == status );
-}
-
 // ----------------------------------------------------------------------------
 
 LuaStackGuard::LuaStackGuard( lua_State *L, const char *label )

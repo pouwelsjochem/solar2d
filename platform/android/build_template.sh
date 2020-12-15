@@ -187,9 +187,6 @@ pushd "$path/sdk" > /dev/null
 	find "$path/sdk/bin" -type f -name "R\$*.class" -delete
 	rm -Rf gen
 
-	find "$path/sdk/bin" -type f -name "CoronaView.class" -delete
-	find "$path/sdk/bin" -type f -name "CoronaView\$*.class" -delete
-
 	# Create the Corona JAR file.
 	# It should only contain compiled files belonging to Corona and not 3rd party libraries.
 	JAVA_CLASSES_PATH="$path/sdk/bin/classes"

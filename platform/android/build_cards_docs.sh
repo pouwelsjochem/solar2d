@@ -14,7 +14,6 @@ JAVA_SOURCE_PATH="$path/sdk/src/com/ansca/corona"
 
 CORONA_JAVA_FILES="$JAVA_SOURCE_PATH/package-info.java
 	$JAVA_SOURCE_PATH/ApplicationContextProvider.java
-	$JAVA_SOURCE_PATH/CoronaView.java
 	$JAVA_SOURCE_PATH/CoronaEnvironment.java
 	$JAVA_SOURCE_PATH/CoronaLua.java
 	$JAVA_SOURCE_PATH/CoronaLuaEvent.java

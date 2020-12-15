@@ -8,6 +8,6 @@
 
 #import "CoronaKit/CoronaKit.h"
 
-@interface ViewController : UIViewController <CoronaViewDelegate>
+@interface ViewController : UIViewController
 
 @end

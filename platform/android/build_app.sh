@@ -30,7 +30,7 @@ usage() {
 	echo "   ndk__path: optional override to env variable ANDROID_NDK"
 	echo "   sdk__path: optional override to env variable ANDROID_SDK"
 	echo "   device_type: optional override to specify generic, kindle, or all"
-	echo "   product_type: optional override to specify basic, coronacards, or all"
+	echo "   product_type: optional override to specify basic, or all"
 	echo "NOTE: if ndk_path is supplied, so must sdk_path"
 	exit -1
 }
@@ -248,14 +248,7 @@ echo ""
 export ANDROID_NDK=${NDK_PATH}
 export ANDROID_SDK=${SDK_PATH}
 
-if [ "$PRODUCT_TYPE" = "coronacards" ]
-then
-	BUILD_SCRIPT="$SCRIPT_ROOT/build_template_cards.sh"
-else
-	BUILD_SCRIPT="$SCRIPT_ROOT/build_template.sh"
-fi
-
-"$BUILD_SCRIPT" $PRODUCT_TYPE $BUILD_CONFIG $BUILD_TYPE $DEVICE_TYPE
+"$SCRIPT_ROOT/build_template.sh" $PRODUCT_TYPE $BUILD_CONFIG $BUILD_TYPE $DEVICE_TYPE
 checkError "errors encountered building template.apk"
 
 # -----------------------------------------------------------------------------

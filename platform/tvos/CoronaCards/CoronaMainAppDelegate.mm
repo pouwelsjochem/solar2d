@@ -44,7 +44,7 @@ FOUNDATION_EXPORT void CoronaSetDelegateClass( Class c )
 
 // ----------------------------------------------------------------------------
 
-@interface CoronaMainAppDelegate () <CoronaRuntime, CoronaViewLaunchDelegate>
+@interface CoronaMainAppDelegate () <CoronaRuntime>
 
 @property (retain, nonatomic) CoronaMainViewController *viewController;
 @property (retain, nonatomic) id<CoronaDelegate> customAppDelegate;
@@ -271,8 +271,6 @@ FOUNDATION_EXPORT void CoronaSetDelegateClass( Class c )
 	CoronaView *view = [self coronaView];
 	TVOSPlatform *platform = new TVOSPlatform( view );
 
-	view.launchDelegate = self;
-
 	// TODO: Custom UIApplicationDelegate for Enterprise is not implemented
 	id <CoronaDelegate> enterpriseDelegate = nil;
 
@@ -370,8 +368,8 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	CoronaView *view = [self coronaView];
 	if ( view && [view runtimeDelegate] )
 	{
-		Rtt::CoronaViewRuntimeDelegate* coronaViewDelegate = [view runtimeDelegate];
-		Rtt::IPhoneRuntimeDelegate* del = static_cast<Rtt::IPhoneRuntimeDelegate*>((coronaViewDelegate));
+		Rtt::CoronaViewRuntimeDelegate* coronaViewRuntimeDelegate = [view runtimeDelegate];
+		Rtt::IPhoneRuntimeDelegate* del = static_cast<Rtt::IPhoneRuntimeDelegate*>((coronaViewRuntimeDelegate));
 		return del->GetCoronaDelegate();
 	}
 

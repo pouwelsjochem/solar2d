@@ -128,10 +128,6 @@ class Lua
 	public:
 		static void CopyTable( lua_State *L, lua_State *srcL, int srcIndex );
 		static void CopyValue( lua_State *L, lua_State *srcL, int srcIndex );
-
-	// Internal (not public)
-	public:
-		static void AddCoronaViewListener( lua_State *L, lua_CFunction listener, void *lightuserdata );
 };
 
 template < int (*F)( lua_State * ) >

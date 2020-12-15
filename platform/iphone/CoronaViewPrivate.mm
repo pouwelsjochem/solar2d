@@ -115,34 +115,6 @@ CreatePlatform( CoronaView *view )
 
 @end
 
-// CoronaViewListenerAdapter
-// ----------------------------------------------------------------------------
-#pragma mark # CoronaViewListenerAdapter
-
-static int
-CoronaViewListenerAdapter( lua_State *L )
-{
-	using namespace Rtt;
-
-	int result = 0;
-
-	int eventIndex = 1;
-	if ( lua_istable( L, eventIndex ) )
-	{
-		CoronaView *view = (CoronaView *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-		id <CoronaViewDelegate> delegate = view.coronaViewDelegate;
-		if ( [delegate respondsToSelector:@selector(coronaView:receiveEvent:)] )
-		{
-			NSDictionary *event = ApplePlatform::CreateDictionary( L, eventIndex );
-			id value = [delegate coronaView:view receiveEvent:event];
-
-			result = (int)ApplePlatform::Push( L, value );
-		}
-	}
-
-	return result;
-}
-
 
 // CoronaView()
 // ----------------------------------------------------------------------------
@@ -322,29 +294,6 @@ CoronaViewListenerAdapter( lua_State *L )
 			lua_pop( L, 1 );
 		}
 	}
-
-	// Attach listener for "coronaView" events
-	{
-		Lua::AddCoronaViewListener( L, CoronaViewListenerAdapter, self );
-//		Rtt_LUA_STACK_GUARD( L );
-//
-//		// Push Runtime.addEventListener
-//		// Push Runtime
-//		Lua::PushRuntime( L );
-//		lua_getfield( L, -1, "addEventListener" );
-//		lua_insert( L, -2 ); // swap table and function
-//
-//		// Push 'coronaView'
-//		lua_pushstring( L, "coronaView" );
-//
-//		// Push 'CoronaViewListenerAdapter'
-//		lua_pushlightuserdata( L, self );
-//		lua_pushcclosure( L, CoronaViewListenerAdapter, 1 );
-//
-//		// Runtime.addEventListener( Runtime, "coronaView", CoronaViewListenerAdapter )
-//		int status = Lua::DoCall( L, 3, 0 ); Rtt_UNUSED( status );
-//		Rtt_ASSERT( 0 == status );
-	}
 }
 
 - (NSInteger)run
@@ -430,17 +379,7 @@ CoronaViewListenerAdapter( lua_State *L )
 
 		if ( 0 == fSuspendCount++ )
 		{
-			if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewWillSuspend:)] )
-			{
-				[_coronaViewDelegate coronaViewWillSuspend:self];
-			}
-
 			_runtime->Suspend();
-
-			if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewDidSuspend:)] )
-			{
-				[_coronaViewDelegate coronaViewDidSuspend:self];
-			}
 		}
 	}
 }
@@ -453,19 +392,9 @@ CoronaViewListenerAdapter( lua_State *L )
 		{
 			if ( 0 == --fSuspendCount )
 			{
-				if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewWillResume:)] )
-				{
-					[_coronaViewDelegate coronaViewWillResume:self];
-				}
-
 				_runtime->Resume();
 
 				_runtime->GetDisplay().Invalidate();
-
-				if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewDidResume:)] )
-				{
-					[_coronaViewDelegate coronaViewDidResume:self];
-				}
 			}
 		}
 	}

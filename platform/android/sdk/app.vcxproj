@@ -211,7 +211,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaView.java" />
     <JCompile Include="src\com\ansca\corona\Crypto.java" />
     <JCompile Include="src\com\ansca\corona\events\AccelerometerTask.java" />
     <JCompile Include="src\com\ansca\corona\events\AlertTask.java" />

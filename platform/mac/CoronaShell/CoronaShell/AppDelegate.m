@@ -50,7 +50,6 @@
  	[_window setDelegate:self];
 
 	_coronaView = [_window contentView];
-	_coronaView.coronaViewDelegate = self;
 	
 	_appPath = [[self getProjectURL:nil] path];
 	if ([[_appPath lastPathComponent] isEqualToString:@"main.lua"] || [[_appPath lastPathComponent] isEqualToString:@"main.lu"])
@@ -94,7 +93,6 @@
 	[_window setBackgroundColor:NSColor.blackColor];
 
 	// Start the Corona app
-	[_coronaView setCoronaViewDelegate:self];
 	[_coronaView runWithPath:_appPath parameters:launchArgs];
 
 	// Listen for "open URL" Apple Events (which will be sent to us if the Info.plist is
@@ -340,13 +338,6 @@
     }
 
 	[_coronaView restoreWindowProperties];
-}
-
-- (id)coronaView:(CoronaView *)view receiveEvent:(NSDictionary *)event
-{
-	NSLog(@"receiveEvent: %@", event);
-
-	return @"Greetings brother Lua";
 }
 
 -(BOOL)hideHelpMenuItem

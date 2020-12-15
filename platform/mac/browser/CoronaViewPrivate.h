@@ -34,13 +34,6 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-@protocol CoronaViewControllerDelegate
-- (void)willLoadApplication:(CoronaView*)sender;
-- (void)didLoadApplication:(CoronaView*)sender;
-@end
-
-// ----------------------------------------------------------------------------
-
 @interface CoronaView() <GLViewDelegate>
 {
 	@private
@@ -48,7 +41,6 @@ namespace Rtt
 		GLView *_GLView;
 		Rtt::MacPlatform *_platform;
 		Rtt::Runtime *_runtime;
-		id< CoronaViewDelegate > _viewDelegate;
 		Rtt::MacViewCallback *_GLViewCallback;
 		Rtt::ProjectSettings *_projectSettings;
         Rtt::AppleInputHIDDeviceListener *_macHIDInputDeviceListener;
@@ -58,7 +50,6 @@ namespace Rtt
 @property (nonatomic, readwrite, getter=projectPath) NSString *_projectPath;
 @property (nonatomic, readonly, getter=glView) GLView *_GLView;
 @property (nonatomic, readwrite, getter=runtime, setter=setRuntime:) Rtt::Runtime *_runtime;
-@property (nonatomic, readwrite, assign, getter=viewDelegate, setter=setViewDelegate:) id< CoronaViewDelegate > _viewDelegate;
 @property (nonatomic, readonly) Rtt::MacPlatform *_platform;
 @property (nonatomic, readonly) Rtt::CoronaViewRuntimeDelegate *_runtimeDelegate;
 @property (nonatomic, readonly, getter=projectSettings) Rtt::ProjectSettings *_projectSettings;

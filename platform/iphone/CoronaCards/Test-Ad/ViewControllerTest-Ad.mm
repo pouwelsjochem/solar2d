@@ -85,7 +85,6 @@
 	[self addChildViewController:_interstitialController];
 
 	CoronaView *interstitialView = (CoronaView *)_interstitialController.view;
-	interstitialView.coronaViewDelegate = self;
 	[self.view addSubview:interstitialView];
 	
 	// Get path for interstitial ad
@@ -104,22 +103,6 @@
 	CoronaView *interstitialView = (CoronaView *)_interstitialController.view;
 	[interstitialView removeFromSuperview];
 	self.interstitialController = nil;
-}
-
-// CoronaViewDelegate
-// ----------------------------------------------------------------------------
-
-- (id)coronaView:(CoronaView *)view receiveEvent:(NSDictionary *)event
-{
-	id result = nil;
-
-	NSString *action = [event valueForKey:@"action"];
-	if ( [action isEqualToString:@"close"] )
-	{
-		[self closeInterstitial];
-	}
-
-	return result;
 }
 
 @end

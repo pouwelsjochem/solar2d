@@ -9,10 +9,6 @@
 
 #import "CoronaCards/CoronaCards.h"
 
- #define CK_TEST_CORONAVIEWDELEGATE 1
-
 @interface ViewController : CoronaViewController
-								#ifdef CK_TEST_CORONAVIEWDELEGATE
-									<CoronaViewDelegate>
-								#endif
+
 @end

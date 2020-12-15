@@ -217,58 +217,6 @@ public final class CoronaEnvironment {
 		directory.mkdirs();
 		return directory;
 	}
-
-	/**
-	 * Gets the path to Corona's internal web cache directory.
-	 * <p>
-	 * This directory is not made available in Lua. It is a directory used by Corona to cache
-	 * web pages, cookies, and other web resources.
-	 * <p>
-	 * This directory is located in internal storage. Its files will be automatically deleted
-	 * by the operating system if internal storage is low on space.
-	 * <p>
-	 * This is an internal method that can only be called by Corona.
-	 * @param context Context needed to access this application's directories. Cannot be null.
-	 * @return Returns a File object set to the specified directory.
-	 */
-	static java.io.File getInternalWebCachesDirectory(android.content.Context context) {
-		// Store the application context, if not done already.
-		setApplicationContext(context);
-
-		// Return the specified directory as a File object.
-		java.io.File directory = new java.io.File(getInternalCachesDirectory(context), "web");
-		directory.mkdirs();
-		return directory;
-	}
-
-	/**
-	 * Displays the {@link com.ansca.corona.CoronaActivity CoronaActivity} window on screen.
-	 * If the {@link com.ansca.corona.CoronaActivity CoronaActivity} is currently suspended in the background, then this method will
-	 * bring it to the foreground.
-	 * <p>
-	 * <b>DO NOT USE THIS API IN A <a href="http://docs.coronalabs.com/daily/coronacards/android/index.html">CORONACARDS FOR ANDROID</a>
-	 * PROJECT!</b> There's no {@link com.ansca.corona.CoronaActivity CoronaActivity} in
-	 * <a href="http://docs.coronalabs.com/daily/coronacards/android/index.html">CoronaCards for Android</a> so invoking this API will
-	 * <b>crash your app</b>!
-	 * @param context The <a href="http://developer.android.com/reference/android/content/Context.html">context</a> derived object
-	 * 		  needed to display the {@link com.ansca.corona.CoronaActivity CoronaActivity} via
-	 *		  <a href="http://developer.android.com/reference/android/content/Intent.html">intents</a>. Cannot be null.
-	 */
-	public static void showCoronaActivity(android.content.Context context) {
-		// Validate.
-		if (context == null) {
-			return;
-		}
-		
-		// Store the application context if not done already.
-		sApplicationContext = context.getApplicationContext();
-		
-		// Display the Corona activity.
-		android.content.Intent intent = new android.content.Intent(context, CoronaActivity.class);
-		intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.addFlags(android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		context.startActivity(intent);
-	}
 	
 	/**
 	 * Stores a reference to the given Corona activity, making it available to the rest of the application.

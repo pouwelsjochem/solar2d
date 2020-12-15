@@ -15,13 +15,9 @@ typedef enum {
     kFullscreen,
 } CoronaViewWindowMode;
 
-@protocol CoronaViewDelegate;
-
 // ----------------------------------------------------------------------------
 
 @interface CoronaView : NSView
-
-@property (nonatomic, assign) id <CoronaViewDelegate> coronaViewDelegate;
 
 - (NSInteger)run;
 - (NSInteger)runWithPath:(NSString*)path parameters:(NSDictionary *)params;
@@ -45,22 +41,6 @@ typedef enum {
 
 - (id)sendEvent:(NSDictionary *)event;
 
-@end
-
-// ----------------------------------------------------------------------------
-
-@protocol CoronaViewDelegate <NSObject>
-
-@optional
-- (id)coronaView:(CoronaView *)view receiveEvent:(NSDictionary *)event;
-
-@optional
-- (void)coronaViewWillSuspend:(CoronaView *)view;
-- (void)coronaViewDidSuspend:(CoronaView *)view;
-- (void)coronaViewWillResume:(CoronaView *)view;
-- (void)coronaViewDidResume:(CoronaView *)view;
-- (void)notifyRuntimeError:(NSString *)message;
-- (void)didPrepareOpenGLContext:(id)sender;
 @end
 
 // ----------------------------------------------------------------------------

@@ -31,17 +31,6 @@ class IPhonePlatformBase;
 
 // ----------------------------------------------------------------------------
 
-// Used in SDK/Enterprise to enable custom initialization of the Rtt::Runtime
-// and Rtt::IPhonePlatformBase during relaunches
-@protocol CoronaViewLaunchDelegate
-
-@required
-- (NSInteger)runView:(CoronaView *)sender withPath:(NSString *)path parameters:(NSDictionary *) params;
-
-@end
-
-// ----------------------------------------------------------------------------
-
 @interface CoronaView()
 
 @property (nonatomic, readonly) Rtt::Runtime *runtime;
@@ -51,7 +40,6 @@ class IPhonePlatformBase;
 @property (nonatomic, assign) BOOL observeSuspendResume;
 @property (nonatomic, assign) BOOL beginRunLoopManually;
 @property (nonatomic, assign) id< CoronaRuntime > pluginContext; // Weak reference. CoronaViewController has the strong reference.
-@property (nonatomic, assign) id< CoronaViewLaunchDelegate > launchDelegate;
 
 @property (nonatomic, assign) id< CoronaGyroscopeObserver > gyroscopeObserver;
 

@@ -329,9 +329,6 @@
     <JCompile Include="src\com\ansca\corona\Crypto.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaView.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>

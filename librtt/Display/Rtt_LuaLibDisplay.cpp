@@ -265,7 +265,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		"maxContentHeight",		// 13
 	};
 	
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 10, 3, 2, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 14, 25, 5, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );

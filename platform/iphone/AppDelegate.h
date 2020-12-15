@@ -32,7 +32,6 @@ namespace Rtt
 @class CoronaView;
 @class UIViewController;
 @protocol CoronaDelegate;
-@protocol CoronaViewLaunchDelegate;
 
 // ----------------------------------------------------------------------------
 
@@ -53,8 +52,7 @@ namespace Rtt
 @interface AppDelegate : NSObject<
 							CoronaRuntime,
 							UIApplicationDelegate,
-							UIAccelerometerDelegate,
-							CoronaViewLaunchDelegate >
+							UIAccelerometerDelegate >
 {
 	UIWindow *window;
 	CoronaView *view;

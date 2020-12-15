@@ -41,32 +41,6 @@ extern "C" {
 
 // ----------------------------------------------------------------------------
 
-static int
-CoronaViewListenerAdapter( lua_State *L )
-{
-	using namespace Rtt;
-
-	int result = 0;
-
-	int eventIndex = 1;
-	if ( lua_istable( L, eventIndex ) )
-	{
-		CoronaView *view = (CoronaView *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-		id <CoronaViewDelegate> delegate = view.coronaViewDelegate;
-		if ( [delegate respondsToSelector:@selector(coronaView:receiveEvent:)] )
-		{
-			NSDictionary *event = ApplePlatform::CreateDictionary( L, eventIndex );
-			id value = [delegate coronaView:view receiveEvent:event];
-
-			result = (int)ApplePlatform::Push( L, value );
-		}
-	}
-
-	return result;
-}
-
-// ----------------------------------------------------------------------------
-
 @interface CoronaView()
 {
 @private
@@ -80,7 +54,6 @@ CoronaViewListenerAdapter( lua_State *L )
 
 @synthesize _projectPath;
 @synthesize _GLView;
-@synthesize _viewDelegate;
 @synthesize _runtime;
 @synthesize _platform;
 @synthesize _runtimeDelegate;
@@ -178,17 +151,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 		if ( fSuspendCount == 1 )
 		{
-			if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewWillSuspend:)] )
-			{
-				[_coronaViewDelegate coronaViewWillSuspend:self];
-			}
-
 			_runtime->Suspend();
-
-			if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewDidSuspend:)] )
-			{
-				[_coronaViewDelegate coronaViewDidSuspend:self];
-			}
 		}
 	}
 }
@@ -203,19 +166,9 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 			if ( fSuspendCount == 0 )
 			{
-				if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewWillResume:)] )
-				{
-					[_coronaViewDelegate coronaViewWillResume:self];
-				}
-
 				_runtime->Resume();
 
 				_runtime->GetDisplay().Invalidate();
-
-				if ( [_coronaViewDelegate respondsToSelector:@selector(coronaViewDidResume:)] )
-				{
-					[_coronaViewDelegate coronaViewDidResume:self];
-				}
 			}
 		}
 	}
@@ -305,12 +258,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 #endif
 			_GLViewCallback->Initialize( _runtime );
 
-			id delegate = _viewDelegate;
-			if ( [delegate respondsToSelector:@selector(willLoadApplication:)] )
-			{
-				[delegate willLoadApplication:self];
-			}
-
 			// Load the project's "build.settings" and "config.lua" file first.
 			// Used to fetch supported supported image suffix scales, and content width/height.
 			_projectSettings->LoadFromDirectory([_projectPath UTF8String]);
@@ -323,13 +270,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void)didPrepareOpenGLContext:(id)sender
 {
 	NSDEBUG(@"CoronaView: didPrepareOpenGLContext: %@", NSStringFromRect([self frame]));
-
-	if ([_coronaViewDelegate respondsToSelector:@selector(didPrepareOpenGLContext:)])
-	{
-		// Give the host a pointer to the GLView if it wants it
-		[_coronaViewDelegate didPrepareOpenGLContext:_GLView];
-	}
-
 
 #ifdef Rtt_AUTHORING_SIMULATOR
 	U32 launchOptions = Rtt::Runtime::kCoronaViewOption;
@@ -348,13 +288,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		[self willBeginRunLoop:_launchParams];
 
 		_runtime->BeginRunLoop();
-
-		id delegate = _viewDelegate;
-
-		if ( [delegate respondsToSelector:@selector(didLoadApplication:)] )
-		{
-			[delegate didLoadApplication:self];
-		}
         
 		_runtime->GetDisplay().WindowSizeChanged();
 	}
@@ -377,29 +310,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			ApplePlatform::CopyDictionary( L, -1, params );
 			lua_pop( L, 1 );
 		}
-	}
-
-	// Attach listener for "coronaView" events
-	{
-		Lua::AddCoronaViewListener( L, CoronaViewListenerAdapter, self );
-		//		Rtt_LUA_STACK_GUARD( L );
-		//
-		//		// Push Runtime.addEventListener
-		//		// Push Runtime
-		//		Lua::PushRuntime( L );
-		//		lua_getfield( L, -1, "addEventListener" );
-		//		lua_insert( L, -2 ); // swap table and function
-		//
-		//		// Push 'coronaView'
-		//		lua_pushstring( L, "coronaView" );
-		//
-		//		// Push 'CoronaViewListenerAdapter'
-		//		lua_pushlightuserdata( L, self );
-		//		lua_pushcclosure( L, CoronaViewListenerAdapter, 1 );
-		//
-		//		// Runtime.addEventListener( Runtime, "coronaView", CoronaViewListenerAdapter )
-		//		int status = Lua::DoCall( L, 3, 0 ); Rtt_UNUSED( status );
-		//		Rtt_ASSERT( 0 == status );
 	}
 }
 

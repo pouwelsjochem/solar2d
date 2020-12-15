@@ -230,7 +230,6 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 	Rtt_ASSERT( [UIApplication sharedApplication] == application );
 
 	_launchOptions = [launchOptions copy];
-	view.launchDelegate = self;
     if ([self runView:view withPath:nil parameters:nil] != (NSInteger)Rtt::Runtime::kSuccess)
     {
         NSLog(@"CoronaSDK: Failed to initialize Corona runtime");
@@ -305,8 +304,8 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 {
 	if ( view && [view runtimeDelegate] )
 	{
-		Rtt::CoronaViewRuntimeDelegate* coronaViewDelegate = [view runtimeDelegate];
-		Rtt::IPhoneRuntimeDelegate* del = static_cast<Rtt::IPhoneRuntimeDelegate*>((coronaViewDelegate));
+		Rtt::CoronaViewRuntimeDelegate* coronaViewRuntimeDelegate = [view runtimeDelegate];
+		Rtt::IPhoneRuntimeDelegate* del = static_cast<Rtt::IPhoneRuntimeDelegate*>((coronaViewRuntimeDelegate));
 		return del->GetCoronaDelegate();
 	}
 	
