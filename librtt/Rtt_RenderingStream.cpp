@@ -142,8 +142,8 @@ RenderingStream::SetContentSizeForContentToScreenScale( S32 contentToScreenScale
 	S32 actualContentToScreenScale;
 	GetContentSizeForContentToScreenScale(contentToScreenScale, actualContentToScreenScale, contentWidthForContentToScreenScale, contentHeightForContentToScreenScale);
 	
-	S32 xOffsetForScale = (fDeviceWidth - (contentWidthForContentToScreenScale * actualContentToScreenScale)) / 2;
-	S32 yOffsetForScale = (fDeviceHeight - (contentHeightForContentToScreenScale * actualContentToScreenScale)) / 2;
+	S32 xOffsetForScale = ceil(Rtt_RealDiv2(fDeviceWidth - (contentWidthForContentToScreenScale * actualContentToScreenScale)));
+	S32 yOffsetForScale = ceil(Rtt_RealDiv2(fDeviceHeight - (contentHeightForContentToScreenScale * actualContentToScreenScale)));
 
 	if (!onlySetIfBetterThanPrevious || (xOffsetForScale + yOffsetForScale) < (fXScreenOffset + fYScreenOffset)) {
 		fXScreenOffset = xOffsetForScale;

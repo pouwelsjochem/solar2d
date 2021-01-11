@@ -1527,11 +1527,11 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 
 				// Write the above window info to this app's stored preferences.
 				Rtt::PreferenceCollection preferenceCollection;
-				preferenceCollection.Add("corona/lastWindowPosition/x", Rtt::PreferenceValue(windowBounds.left));
-				preferenceCollection.Add("corona/lastWindowPosition/y", Rtt::PreferenceValue(windowBounds.top));
-				preferenceCollection.Add("corona/lastWindowPosition/viewWidth", Rtt::PreferenceValue(clientSize.cx));
-				preferenceCollection.Add("corona/lastWindowPosition/viewHeight", Rtt::PreferenceValue(clientSize.cy));
-				preferenceCollection.Add("corona/lastWindowPosition/mode", Rtt::PreferenceValue(windowMode.GetStringId()));
+				preferenceCollection.Add("solar2D/lastWindowPosition/x", Rtt::PreferenceValue(windowBounds.left));
+				preferenceCollection.Add("solar2D/lastWindowPosition/y", Rtt::PreferenceValue(windowBounds.top));
+				preferenceCollection.Add("solar2D/lastWindowPosition/viewWidth", Rtt::PreferenceValue(clientSize.cx));
+				preferenceCollection.Add("solar2D/lastWindowPosition/viewHeight", Rtt::PreferenceValue(clientSize.cy));
+				preferenceCollection.Add("solar2D/lastWindowPosition/mode", Rtt::PreferenceValue(windowMode.GetStringId()));
 				fStoredPreferencesPointer->UpdateWith(preferenceCollection);
 			}
 
@@ -1908,8 +1908,8 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	{
 		POINT windowPosition{};
 		{
-			auto lastXResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/x");
-			auto lastYResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/y");
+			auto lastXResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/x");
+			auto lastYResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/y");
 			if (lastXResult.HasSucceeded() && lastYResult.HasSucceeded())
 			{
 				windowPosition.x = lastXResult.GetValue().ToSignedInt32().GetValue();
@@ -1931,8 +1931,8 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	SIZE clientSize{};
 	if (fStoredPreferencesPointer)
 	{
-		auto lastWidthResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/viewWidth");
-		auto lastHeightResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/viewHeight");
+		auto lastWidthResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/viewWidth");
+		auto lastHeightResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/viewHeight");
 		if (lastWidthResult.HasSucceeded() && lastHeightResult.HasSucceeded())
 		{
 			clientSize.cx = lastWidthResult.GetValue().ToSignedInt32().GetValue();
@@ -1956,7 +1956,7 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	const Rtt::NativeWindowMode* windowModePointer = projectSettings.GetDefaultWindowMode();
 	if (fStoredPreferencesPointer)
 	{
-		auto fetchResult = fStoredPreferencesPointer->Fetch("corona/lastWindowPosition/mode");
+		auto fetchResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/mode");
 		if (fetchResult.HasSucceeded())
 		{
 			auto modeNamePointer = fetchResult.GetValue().ToString().GetValue();

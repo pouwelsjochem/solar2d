@@ -10,7 +10,7 @@
 simulator =
 {
 	category = "max-supported",
-	deviceWidth = 350 * 2,
-	deviceHeight = 180 * 2,
-	deviceName = "Maximum (350x180 @2x)",
+	deviceWidth = 400 * 2,
+	deviceHeight = 220 * 2,
+	deviceName = "Maximum (400x220 @2x)",
 }
