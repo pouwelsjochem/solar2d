@@ -18,7 +18,7 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_12.3.app/Contents/Developer
   BUILD_NUMBER: ${{ github.event.inputs.buildNumber }}
   YEAR: ${{ github.event.inputs.buildYear }}
 
@@ -45,17 +45,22 @@ jobs:
       matrix:
         xcode:
           - Xcode_12.2
+          - Xcode_12.3
         target:
           - template
           # - template-angle
         platform:
           - iphone
-          # - tvos
+        include:
+          - xcode: Xcode_11.3.1
+            target: template
+            platform: iphone
     needs: source-code
     runs-on: macos-10.15
     env:
       DEVELOPER_DIR: /Applications/${{ matrix.xcode }}.app/Contents/Developer
       TEMPLATE_TARGET: ${{ matrix.target }}
+      TEMPLATE_PLATFORM: ${{ matrix.platform }}
     steps:
       - name: Get processed code
         uses: actions/download-artifact@v1
@@ -69,6 +74,8 @@ jobs:
         run: ./gh_build_templates.sh
         env:
           CERT_PASSWORD: ${{ secrets.CertPassword }}
+      - name: Build templates JSON spec
+        run: ./tools/GHAction/generate_xcode_jsons.py
       - name: Upload templates
         uses: actions/upload-artifact@v1
         with:
@@ -80,14 +87,17 @@ jobs:
       - Xcode-template-matrix
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
       - name: Collect templates together
         run: |
-          mkdir -p output
+          mkdir -p output/iostemplate
           for D in Templates-*
           do
-            mv -v "$D/"* output/
+            mv -v "$D/"*.tar.bz output/iostemplate
           done
+      - name: Generate template JSON
+        run: find Templates-* -name '*_*-SDKs.json' -exec ./tools/GHAction/aggregate_xcode_jsons.py output {} \+
       - name: Upload templates
         uses: actions/upload-artifact@v1
         with:
@@ -129,12 +139,14 @@ jobs:
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
+      - name: Check for macOS min supported version
+        run: exit $( echo  $(cat platform/mac/AppDelegate.mm |  perl -ne 'print for /kosVersionCurrent = @"([0-9.]+)"/') ' < '  $(/usr/bin/xcrun --sdk macosx --show-sdk-version)  | bc )
       - name: Get collected templates
         uses: actions/download-artifact@v1
         with:
           name: Collected-ios-templates
       - name: Put collected iOS templates in place
-        run: cp -v Collected-ios-templates/* platform/resources/iostemplate/
+        run: cp -Rv Collected-ios-templates/* platform/resources/
       # - name: Get Webtemplate
       #   uses: actions/download-artifact@v1
       #   with:
@@ -145,8 +157,8 @@ jobs:
       #   uses: actions/download-artifact@v1
       #   with:
       #     name: Linux-Templates
-      # - name: Put webtemplate in place
       #   run: |
+      # - name: Put webtemplate in place
       #     cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
       #     cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
       - run: mkdir docs
@@ -258,7 +270,7 @@ jobs:
         shell: bash
         run: |
           curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.win32.7z -o jre.win32.7z
-          7z x jre.win32.7z -o"%WORKSPACE%\platform\windows\Bin"
+          7z x jre.win32.7z -o"platform/windows/Bin" -y
       - name: Build Corona Simulator
         shell: cmd
         run: |

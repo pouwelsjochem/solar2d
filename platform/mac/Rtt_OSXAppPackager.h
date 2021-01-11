@@ -122,6 +122,8 @@ class OSXAppPackager : public PlatformAppPackager
 	protected:
 		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
 		virtual int PrepackagePlugins(OSXAppPackagerParams * params, String& tmpPluginsDir, String& outputDir);
+	private:
+		const char *GetAppTemplatePath();
 };
 
 // ----------------------------------------------------------------------------
