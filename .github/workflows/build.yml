@@ -44,17 +44,11 @@ jobs:
     strategy:
       matrix:
         xcode:
-          - Xcode_12.2
           - Xcode_12.3
         target:
           - template
-          # - template-angle
         platform:
           - iphone
-        include:
-          - xcode: Xcode_11.3.1
-            target: template
-            platform: iphone
     needs: source-code
     runs-on: macos-10.15
     env:
