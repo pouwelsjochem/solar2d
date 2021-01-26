@@ -87,7 +87,6 @@ RenderingStream::RenderingStream( Rtt_Allocator* pAllocator )
 	fMaxContentHeight( -1 ), // uninitialized
 	fScreenToContentScale( Rtt_REAL_1 ), // uninitialized
 	fContentToScreenScale( 1 ), // uninitialized
-	fPreferredContentToScreenScale( 0 ), // uninitialized
 	fXScreenOffset( 0 ),
 	fYScreenOffset( 0 ),
 	fScreenContentBounds(),
@@ -106,12 +105,6 @@ RenderingStream::~RenderingStream()
 }
 
 void
-RenderingStream::SetPreferredContentToScreenScale( S32 contentToScreenScale )
-{
-	fPreferredContentToScreenScale = contentToScreenScale;
-}
-
-void
 RenderingStream::SetContentSizeRestrictions( S32 minContentWidth, S32 maxContentWidth, S32 minContentHeight, S32 maxContentHeight )
 {
 	fMinContentWidth = minContentWidth;
@@ -121,53 +114,29 @@ RenderingStream::SetContentSizeRestrictions( S32 minContentWidth, S32 maxContent
 }
 
 void
-RenderingStream::GetContentSizeForContentToScreenScale( S32 contentToScreenScale, S32& outContentToScreenScale, S32& outContentWidth, S32& outContentHeight )
-{
-	S32 contentWidthForScale = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(contentToScreenScale)));
-	S32 contentHeightForScale = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceHeight), Rtt_IntToReal(contentToScreenScale)));
-	if (contentWidthForScale >= fMinContentWidth && contentHeightForScale >= fMinContentHeight) {
-		outContentWidth = Min(contentWidthForScale, fMaxContentWidth);
-		outContentHeight = Min(contentHeightForScale, fMaxContentHeight);
-		outContentToScreenScale = contentToScreenScale;
-	} else {
-		GetContentSizeForContentToScreenScale(contentToScreenScale - 1, outContentToScreenScale, outContentWidth, outContentHeight);
-	}
-}
-
-void
-RenderingStream::SetContentSizeForContentToScreenScale( S32 contentToScreenScale, bool onlySetIfBetterThanPrevious  )
-{
-	S32 contentWidthForContentToScreenScale;
-	S32 contentHeightForContentToScreenScale;
-	S32 actualContentToScreenScale;
-	GetContentSizeForContentToScreenScale(contentToScreenScale, actualContentToScreenScale, contentWidthForContentToScreenScale, contentHeightForContentToScreenScale);
-	
-	S32 xOffsetForScale = ceil(Rtt_RealDiv2(fDeviceWidth - (contentWidthForContentToScreenScale * actualContentToScreenScale)));
-	S32 yOffsetForScale = ceil(Rtt_RealDiv2(fDeviceHeight - (contentHeightForContentToScreenScale * actualContentToScreenScale)));
-
-	if (!onlySetIfBetterThanPrevious || (xOffsetForScale + yOffsetForScale) < (fXScreenOffset + fYScreenOffset)) {
-		fXScreenOffset = xOffsetForScale;
-		fYScreenOffset = yOffsetForScale;
-		fContentWidth = contentWidthForContentToScreenScale;
-		fContentHeight = contentHeightForContentToScreenScale;
-		fContentToScreenScale = actualContentToScreenScale;
-	}
-}
-
-void
-RenderingStream::SetOptimalOrPreferredContentSize( S32 deviceWidth, S32 deviceHeight )
+RenderingStream::SetOptimalContentSize( S32 deviceWidth, S32 deviceHeight )
 {
 	fDeviceWidth = deviceWidth;
 	fDeviceHeight = deviceHeight;
 
-	if (fPreferredContentToScreenScale > 0) {
-		SetContentSizeForContentToScreenScale(fPreferredContentToScreenScale, false);
-	} else {
-		S32 maxContentToScreenScaleForWidth = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(fMinContentWidth))) + 1;
-		S32 maxContentToScreenScaleForHeight = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceHeight), Rtt_IntToReal(fMinContentHeight))) + 1;
-		S32 maxContentToScreenScale = Max(maxContentToScreenScaleForWidth, maxContentToScreenScaleForHeight);
-		for(S32 contentToScreenScale=1; contentToScreenScale <= maxContentToScreenScale; contentToScreenScale++) {
-			SetContentSizeForContentToScreenScale(contentToScreenScale, contentToScreenScale > 1);
+	S32 maxContentToScreenScaleForWidth = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(fMinContentWidth)));
+	S32 maxContentToScreenScaleForHeight = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceHeight), Rtt_IntToReal(fMinContentHeight)));
+	S32 maxContentToScreenScale = Max(maxContentToScreenScaleForWidth, maxContentToScreenScaleForHeight);
+	for(S32 contentToScreenScale=1; contentToScreenScale <= maxContentToScreenScale; contentToScreenScale++) {
+		S32 contentWidth = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(contentToScreenScale)));
+		S32 contentHeight = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceHeight), Rtt_IntToReal(contentToScreenScale)));
+		S32 clampedContentWidth = Min(contentWidth, fMaxContentWidth);
+		S32 clampedContentHeight = Min(contentHeight, fMaxContentHeight);
+
+		S32 xOffset = ceil(Rtt_RealDiv2(Rtt_IntToReal(fDeviceWidth - (clampedContentWidth * contentToScreenScale))));
+		S32 yOffset = ceil(Rtt_RealDiv2(Rtt_IntToReal(fDeviceHeight - (clampedContentHeight * contentToScreenScale))));
+
+		if (contentToScreenScale == 1 || (xOffset + yOffset) < (fXScreenOffset + fYScreenOffset)) {
+			fXScreenOffset = xOffset;
+			fYScreenOffset = yOffset;
+			fContentWidth = clampedContentWidth;
+			fContentHeight = clampedContentHeight;
+			fContentToScreenScale = contentToScreenScale;
 		}
 	}
 

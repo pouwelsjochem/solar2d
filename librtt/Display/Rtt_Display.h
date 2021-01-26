@@ -137,10 +137,6 @@ class Display
 		virtual S32 GetXScreenOffset() const;
 		virtual S32 GetYScreenOffset() const;
 
-		virtual void GetContentSizeForContentToScreenScale( S32 contentScale, S32& outContentToScreenScale, S32& outContentWidth, S32& outContentHeight ) const;
-		virtual S32 GetPreferredContentToScreenScale() const;
-		virtual void SetPreferredContentToScreenScale( S32 contentScale ) const;
-
 		virtual void ContentToScreen( S32& x, S32& y ) const;
 		virtual void ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const;
 		virtual void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;

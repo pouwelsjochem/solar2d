@@ -127,9 +127,6 @@ class DisplayLibrary
 		static int newSprite( lua_State *L );
 		static int getDefault( lua_State *L );
 		static int setDefault( lua_State *L );
-		static int getContentSizeForContentToScreenScale( lua_State *L );
-		static int getPreferredContentToScreenScale( lua_State *L );
-		static int setPreferredContentToScreenScale( lua_State *L );
 		static int getCurrentStage( lua_State *L );
 		static int collectOrphans( lua_State *L );
 		static int capture( lua_State *L );
@@ -183,9 +180,6 @@ DisplayLibrary::Open( lua_State *L )
 		{ "newSprite", newSprite },
 		{ "getDefault", getDefault },
 		{ "setDefault", setDefault },
-		{ "getContentSizeForContentToScreenScale", getContentSizeForContentToScreenScale },
-		{ "getPreferredContentToScreenScale", getPreferredContentToScreenScale },
-		{ "setPreferredContentToScreenScale", setPreferredContentToScreenScale },
 		{ "getCurrentStage", getCurrentStage },
 		{ "_collectOrphans", collectOrphans },
 		{ "capture", capture },
@@ -1058,46 +1052,6 @@ DisplayLibrary::setDefault( lua_State *L )
 		luaL_error( L, "ERROR: display.setDefault() given invalid key (%s)", key );
 	}
 
-
-	return 0;
-}
-
-int
-DisplayLibrary::getContentSizeForContentToScreenScale( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-	S32 contentToScreenScale = (S32) lua_tointeger( L, 1 );
-
-	S32 contentWidthForContentToScreenScale;
-	S32 contentHeightForContentToScreenScale;
-	S32 actualContentToScreenScale;
-	display.GetContentSizeForContentToScreenScale(contentToScreenScale, actualContentToScreenScale, contentWidthForContentToScreenScale, contentHeightForContentToScreenScale);
-	lua_pushnumber( L, contentWidthForContentToScreenScale );
-	lua_pushnumber( L, contentHeightForContentToScreenScale );
-	lua_pushnumber( L, actualContentToScreenScale );
-
-	return 3;
-}
-
-int
-DisplayLibrary::getPreferredContentToScreenScale( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-	lua_pushnumber( L, display.GetPreferredContentToScreenScale() );
-
-	return 0;
-}
-
-int
-DisplayLibrary::setPreferredContentToScreenScale( lua_State *L )
-{
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-	S32 contentToScreenScale = (S32) lua_tointeger( L, 1 );
-
-	display.SetPreferredContentToScreenScale(contentToScreenScale);
 
 	return 0;
 }

@@ -134,13 +134,10 @@
 	{
 		int defaultWidth = [_coronaView settingsDefaultWindowViewWidth];
 		int defaultHeight = [_coronaView settingsDefaultWindowViewHeight];
-		
-		NSRect coronaViewRect = [_coronaView frame];
-		coronaViewRect.size = NSMakeSize(defaultWidth, defaultHeight);
 
-		// Fill the screen with the app (appropriate for games) using the aspect ratio from the width & height in config.lua
 		NSRect customFrame;
-		
+		customFrame.size = NSMakeSize(defaultWidth, defaultHeight);
+
 		// Position the window appropriately on the screen (we don't use [NSWindow center] because
 		// that forces a display of the window which can mess up things like fullscreen transitions)
 		NSRect screenRect = [[NSScreen mainScreen] visibleFrame];

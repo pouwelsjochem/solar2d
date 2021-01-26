@@ -60,13 +60,12 @@ class RenderingStream
 		RenderingStream( Rtt_Allocator* );
 		virtual ~RenderingStream();
 
-		// Call to initialize geometry properties. Should be called before SetOptimalOrPreferredContentSize().
+		// Call to initialize geometry properties. Should be called before SetOptimalContentSize().
 		// 
 		// To support dynamic content scaling, the rendering stream needs to know 
 		// how to scale up the content so that it fills the window. The renderer
 		// only needs to know the rendered content bounds
 		void SetContentSizeRestrictions( S32 minContentWidth, S32 maxContentWidth, S32 minContentHeight, S32 maxContentHeight );
-		void SetPreferredContentToScreenScale( S32 contentScale );
 
 		const Rect& GetScreenContentBounds() const { return fScreenContentBounds; }
 	protected:
@@ -93,8 +92,6 @@ class RenderingStream
 		Real GetScreenToContentScale() const { return fScreenToContentScale; }
 		S32 GetContentToScreenScale() const { return fContentToScreenScale; }
 
-		S32 GetPreferredContentToScreenScale() const { return fPreferredContentToScreenScale; }
-
 		S32 GetXScreenOffset() const { return fXScreenOffset; }
 		S32 GetYScreenOffset() const { return fYScreenOffset; }
 
@@ -103,10 +100,8 @@ class RenderingStream
 		void ContentToPixels( S32& x, S32& y ) const;
 		void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 
-		void GetContentSizeForContentToScreenScale( S32 contentToScreenScale, S32& outContentToScreenScale, S32& outContentWidth, S32& outContentHeight );
-		void SetContentSizeForContentToScreenScale( S32 contentToScreenScale, bool onlySetIfBetterThanPrevious );
 		// Call this method when the window size changes
-		void SetOptimalOrPreferredContentSize( S32 deviceWidth, S32 deviceHeight );
+		void SetOptimalContentSize( S32 deviceWidth, S32 deviceHeight );
 
 	public:
 		Rtt_FORCE_INLINE bool IsProperty( U32 mask ) const { return (fProperties & mask) != 0; }
@@ -128,7 +123,6 @@ class RenderingStream
 
 		Real fScreenToContentScale;
 		S32 fContentToScreenScale;
-		S32 fPreferredContentToScreenScale;
 
 		S32 fXScreenOffset;
 		S32 fYScreenOffset;
