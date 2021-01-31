@@ -132,7 +132,7 @@ function PluginCollectorSolar2DDirectory:init(params)
 	return true
 end
 
-function PluginCollectorSolar2DDirectory:collect(destination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+function PluginCollectorSolar2DDirectory:collect(destination, plugin, pluginTable, pluginPlatform, params)
     if not self.pluginsCache then
         return "Solar2D Directory: directory was not fetched"
     end
@@ -147,7 +147,7 @@ function PluginCollectorSolar2DDirectory:collect(destination, plugin, pluginTabl
         return "! " .. pluginObject.e
     end
 
-    local build = pluginsVersion --tonumber(params.build)
+    local build = tonumber(params.build)
     local vFoundBuid, vFoundObject, vFoundBuildName
     for entryBuild, entryObject in pairs(pluginObject.v or {}) do
         local entryBuildNumber = tonumber(entryBuild:match('^%d+%.(%d+)$'))
@@ -231,7 +231,7 @@ function PluginCollectorSolar2DMarketplaceDirectory:init(params)
 	return true
 end
 
-function PluginCollectorSolar2DMarketplaceDirectory:collect(destination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+function PluginCollectorSolar2DMarketplaceDirectory:collect(destination, plugin, pluginTable, pluginPlatform, params)
     if not self.pluginsCache then
         return "Solar2D Marketplace Directory: directory was not fetched"
     end
@@ -249,7 +249,7 @@ function PluginCollectorSolar2DMarketplaceDirectory:collect(destination, plugin,
         return "! " .. pluginObject.e
     end
 
-    local build = pluginsVersion --tonumber(params.build)
+    local build = tonumber(params.build)
     local vFoundBuid, vFoundObject, vFoundBuildName
     local pluginVersion = pluginObject.r
     for entryBuild, entryObject in pairs(pluginObject.v or {}) do
@@ -316,7 +316,7 @@ function PluginCollectorSolar2DMarketplaceDirectory:collect(destination, plugin,
 end
 
 
-local function pluginLocatorCustomURL(destination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+local function pluginLocatorCustomURL(destination, plugin, pluginTable, pluginPlatform, params)
     if type(pluginTable.supportedPlatforms) ~= 'table' then
         return "Custom URL: skipped because no table supportedPlatforms provided for " .. plugin
     end
@@ -353,7 +353,7 @@ local function pluginLocatorCustomURL(destination, plugin, pluginTable, pluginPl
 end
 locatorNames[pluginLocatorCustomURL] = "Custom URL Locator"
 
-local function pluginLocatorFileSystemVersionized(destination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+local function pluginLocatorFileSystemVersionized(destination, plugin, pluginTable, pluginPlatform, params)
     if type(pluginTable.publisherId) ~= 'string' then
         return "Locally: plugin has no string publisherId"
     end
@@ -362,7 +362,7 @@ local function pluginLocatorFileSystemVersionized(destination, plugin, pluginTab
     if not isDir(pluginDir) then
         return "Locally: no directory " .. pluginDir
     end
-    local targetBuild = pluginsVersion --tonumber(params.build)
+    local targetBuild = tonumber(params.build)
     local lastFound = -1
     local foundDir
     for file in lfs.dir(pluginDir) do
@@ -400,7 +400,7 @@ local function pluginLocatorFileSystemVersionized(destination, plugin, pluginTab
 end
 locatorNames[pluginLocatorFileSystemVersionized] = "Local File System Versionized"
 
-local function pluginLocatorFileSystemAllPlatforms(destination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+local function pluginLocatorFileSystemAllPlatforms(destination, plugin, pluginTable, pluginPlatform, params)
     if type(pluginTable.publisherId) ~= 'string' then
         return "Locally: plugin has no string publisherId"
     end
@@ -416,12 +416,12 @@ local function pluginLocatorFileSystemAllPlatforms(destination, plugin, pluginTa
 end
 locatorNames[pluginLocatorFileSystemAllPlatforms] = "Local File System Per Platform Versionized"
 
-local function pluginLocatorFileSystem(destination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+local function pluginLocatorFileSystem(destination, plugin, pluginTable, pluginPlatform, params)
     if type(pluginTable.publisherId) ~= 'string' then
         return "Locally: plugin has no string publisherId"
     end
     local pluginStorage = params.pluginStorage
-    local localPath = pathJoin(pluginStorage, pluginTable.publisherId, plugin, pluginPlatform, pluginsVersion, 'data.tgz')
+    local localPath = pathJoin(pluginStorage, pluginTable.publisherId, plugin, pluginPlatform, 'data.tgz')
     if isFile(localPath) then
         mkdirs(destination)
         copyFile(localPath, destination)
@@ -435,7 +435,7 @@ local function pluginLocatorFileSystem(destination, plugin, pluginTable, pluginP
 end
 locatorNames[pluginLocatorFileSystem] = "Local File System Per Platform"
 
-local function pluginLocatorIgnoreMissing(destination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+local function pluginLocatorIgnoreMissing(destination, plugin, pluginTable, pluginPlatform, params)
     if type(pluginTable.publisherId) ~= 'string' then
         return "Locally: plugin has no string publisherId"
     end
@@ -454,7 +454,7 @@ local function pluginLocatorIgnoreMissing(destination, plugin, pluginTable, plug
         return true
     end
 
-    local targetBuild = pluginsVersion --tonumber(params.build)
+    local targetBuild = tonumber(params.build)
     local lastFound = -1
     local foundDir
     for file in lfs.dir(pluginDir) do
@@ -488,7 +488,7 @@ local function locatorName(l)
     if type(l) == 'table' and l.name then return l.name end
 end
 
-local function fetchSinglePluginNoFallbacks(dstDir, plugin, pluginTable, pluginPlatform, pluginsVersion, params, pluginLocators, canSkip)
+local function fetchSinglePluginNoFallbacks(dstDir, plugin, pluginTable, pluginPlatform, params, pluginLocators, canSkip)
     params.canSkip = canSkip
     local pluginDestination = pathJoin(dstDir, plugin)
     local err = "Unable to find plugin '" .. plugin .. "' for platform '" .. pluginPlatform .. "':"
@@ -505,9 +505,9 @@ local function fetchSinglePluginNoFallbacks(dstDir, plugin, pluginTable, pluginP
                 end
                 locator.initialized = true
             end
-            success, result = pcall(locator.collect, locator, pluginDestination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+            success, result = pcall(locator.collect, locator, pluginDestination, plugin, pluginTable, pluginPlatform, params)
         else
-            success, result = pcall(locator, pluginDestination, plugin, pluginTable, pluginPlatform, pluginsVersion, params)
+            success, result = pcall(locator, pluginDestination, plugin, pluginTable, pluginPlatform, params)
         end
         if not success then
             print("WARNING: runtime error while executing plugin locator " .. (locatorName(locator) or "<unknown>") .. ": " .. tostring(result))
@@ -532,7 +532,7 @@ local function fetchSinglePluginNoFallbacks(dstDir, plugin, pluginTable, pluginP
     end
 end
 
-local function fetchSinglePlugin(dstDir, plugin, pluginTable, basePluginPlatform, pluginsVersion, params, pluginLocators)
+local function fetchSinglePlugin(dstDir, plugin, pluginTable, basePluginPlatform, params, pluginLocators)
     local fallbackChain = {basePluginPlatform, }
     for i = 1, #platformFallbacks do
         local base, fallback = unpack(platformFallbacks[i])
@@ -651,7 +651,6 @@ local function CollectCoronaPlugins(params)
         }))
     end
 
-    local pluginsVersion = params.pluginsVersion
     local plugins = params.plugins or json.decode(params.buildData).plugins
     if type(plugins) ~= 'table' then return end
 
@@ -660,7 +659,7 @@ local function CollectCoronaPlugins(params)
     for plugin, pluginTable in pairs(plugins) do
         if type(plugin) ~= 'string' then  return "Plugin is not a string" end
         if type(pluginTable) ~= 'table' then return 'Invalid plugin table for ' .. plugin end
-        local result = fetchSinglePlugin(dstDir, plugin, pluginTable, pluginPlatform, pluginsVersion, params, pluginLocators)
+        local result = fetchSinglePlugin(dstDir, plugin, pluginTable, pluginPlatform, params, pluginLocators)
         if type(result) == 'string'  then
             if result:sub(1,2) == "! " then
                 result = result:sub(3)
@@ -681,7 +680,7 @@ local function CollectCoronaPlugins(params)
     repeat
         for plugin, pluginTable in pairs(unresolvedDeps) do
             log("Collecting dependency " .. plugin)
-            local result = fetchSinglePlugin(dstDir, plugin, pluginTable, pluginPlatform, pluginsVersion, params, pluginLocators)
+            local result = fetchSinglePlugin(dstDir, plugin, pluginTable, pluginPlatform, params, pluginLocators)
             if type(result) == 'string'  then
                 if result:sub(1,2) == "! " then
                     result = result:sub(3)
