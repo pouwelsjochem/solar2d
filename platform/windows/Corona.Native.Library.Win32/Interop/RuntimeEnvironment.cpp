@@ -1833,6 +1833,9 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	// Enable/disable the window's icon menu, minimize button, maximize button, and ability to resize.
 	LONG oldWindowStyles = ::GetWindowLongW(windowHandle, GWL_STYLE);
 	LONG newWindowStyles = oldWindowStyles;
+	newWindowStyles &= ~WS_SIZEBOX;
+	newWindowStyles &= ~WS_MAXIMIZEBOX;
+
 	if (projectSettings.IsWindowMinimizeButtonEnabled())
 	{
 		newWindowStyles |= WS_MINIMIZEBOX;
