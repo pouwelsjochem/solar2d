@@ -162,7 +162,7 @@ void SpriteObject::Play(lua_State *L) {
 				DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kBegan));
 			}
 		} else {
-			fStartTime -= fPlayTimeAtPause;
+			fStartTime = fPlayer.GetAnimationTime() - fPlayTimeAtPause;
 			fPlayTimeAtPause = 0;
 		}
 	}
