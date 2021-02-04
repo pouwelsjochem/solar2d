@@ -104,9 +104,15 @@ SpriteSequence::Create(Rtt_Allocator *allocator, lua_State *L, int numFramesInSh
 	
 	if (timePerFrame == 0 && timePerFrameArray == NULL) {
 		lua_getfield(L, index, "duration");
-		Real duration = (int)lua_tonumber(L, -1);
-		timePerFrame = Rtt_RealDiv(duration, Rtt_IntToReal(numFrames));
+		if (lua_isnumber(L, -1)) {
+			Real duration = luaL_toreal(L, -1);
+			timePerFrame = Rtt_RealDiv(duration, Rtt_IntToReal(numFrames));
+		}
 		lua_pop(L, 1);
+	}
+
+	if (timePerFrame == 0 && timePerFrameArray == NULL) { // To make functions like setFrame easier if there is no actual time based animation
+		timePerFrame = 10;
 	}
 
 	if (start > 0) {
