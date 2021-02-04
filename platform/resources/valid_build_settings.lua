@@ -155,6 +155,9 @@ settings =
 			CFBundleLocalizations = {
 				"en",
 			},
+			SKAdNetworkItems = {
+				{ SKAdNetworkIdentifier = "" },
+			},
 			NSAppTransportSecurity = {
 				NSAllowsArbitraryLoads = false,
 			    NSAllowsArbitraryLoadsInMedia = false,
@@ -163,6 +166,7 @@ settings =
 			    NSExceptionDomains = {},
 			},
 			NSAppleMusicUsageDescription = "",
+			NSUserTrackingUsageDescription = "",
 			NSBluetoothPeripheralUsageDescription = "",
 			NSCalendarsUsageDescription = "",
 			NSCameraUsageDescription = "",
