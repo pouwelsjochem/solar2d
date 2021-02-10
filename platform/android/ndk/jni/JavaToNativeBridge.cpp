@@ -92,13 +92,6 @@ JavaToNativeBridge::Init(
 		fView->Resize(width, height);
 
 		Rtt::Display& display = fRuntime->GetDisplay();
-
-		// TEMPORARY_HACK (begin)
-		// TODO: Remove need to access Renderer directly
-		Rtt::RenderingStream& stream = display.GetStream();
-		// TEMPORARY_HACK (end)
-		stream.SetOptimalContentSize(width, height);
-
 		display.Restart();
 		display.GetScene().Invalidate();
 		display.GetStage()->Invalidate( Rtt::DisplayObject::kRenderDirty );
@@ -163,25 +156,6 @@ JavaToNativeBridge::Init(
 		{
 			Rtt_LogException("This application failed to load and execute main.lua");
 		}
-
-		// else
-		// {
-		// 	// Failed to load the "main.lua" file.
-		// 	if (fNativeToJavaBridge->HasLuaErrorOccurred())
-		// 	{
-		// 		// An unhandled Lua runtime error occurred.
-		// 		// These errors are automatically displayed in an alert dialog. So, do nothing.
-		// 	}
-		// 	else
-		// 	{
-		// 		// One of the following has occurred:
-		// 		// - The runtime failed to find the "resource.car" file or it is corrupted.
-		// 		// - A Lua runtime error occurred in the "main.lua", but has been overriden.
-		// 		fNativeToJavaBridge->ShowNativeAlert(
-		// 				"Error", "This application encountered a Lua error (see logs) or has been corrupted.",
-		// 				NULL, 0, NULL );
-		// 	}
-		// }
 	}
 }
 

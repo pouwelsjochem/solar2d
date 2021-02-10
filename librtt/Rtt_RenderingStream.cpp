@@ -121,12 +121,12 @@ RenderingStream::SetOptimalContentSize( S32 deviceWidth, S32 deviceHeight )
 
 	S32 maxContentToScreenScaleForWidth = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(fMinContentWidth)));
 	S32 maxContentToScreenScaleForHeight = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceHeight), Rtt_IntToReal(fMinContentHeight)));
-	S32 maxContentToScreenScale = Max(maxContentToScreenScaleForWidth, maxContentToScreenScaleForHeight);
+	S32 maxContentToScreenScale = Min(maxContentToScreenScaleForWidth, maxContentToScreenScaleForHeight);
 	for(S32 contentToScreenScale=1; contentToScreenScale <= maxContentToScreenScale; contentToScreenScale++) {
 		S32 contentWidth = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceWidth), Rtt_IntToReal(contentToScreenScale)));
 		S32 contentHeight = floor(Rtt_RealDiv(Rtt_IntToReal(fDeviceHeight), Rtt_IntToReal(contentToScreenScale)));
-		S32 clampedContentWidth = Min(contentWidth, fMaxContentWidth);
-		S32 clampedContentHeight = Min(contentHeight, fMaxContentHeight);
+		S32 clampedContentWidth = Min(Max(contentWidth, fMinContentWidth), fMaxContentWidth);
+		S32 clampedContentHeight = Min(Max(contentHeight, fMinContentHeight), fMaxContentHeight);
 
 		S32 xOffset = ceil(Rtt_RealDiv2(Rtt_IntToReal(fDeviceWidth - (clampedContentWidth * contentToScreenScale))));
 		S32 yOffset = ceil(Rtt_RealDiv2(Rtt_IntToReal(fDeviceHeight - (clampedContentHeight * contentToScreenScale))));
