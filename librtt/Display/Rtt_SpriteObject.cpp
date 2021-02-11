@@ -38,6 +38,7 @@ fSequences(pAllocator),
 fPlayer(player),
 fTimeScale(Rtt_REAL_1),
 fCurrentSequenceIndex(0),  // Default is first sequence
+fCurrentFrameIndex(0),
 fCurrentEffectiveFrameIndex(0),
 fStartTime(0),
 fPlayTimeAtPause(0),
@@ -56,7 +57,7 @@ void SpriteObject::Initialize() {
 void SpriteObject::AddSequence(Rtt_Allocator *pAllocator, SpriteSequence *sequence) {
 	if (0 == fSequences.Length()) {
 		ResetTimePerFrameArrayIteratorCacheFor(sequence);
-		SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(0));
+		SetBitmapFrame(sequence->GetSheetFrameIndexForFrameIndex(0));
 	}
 	fSequences.Append(sequence);
 }
@@ -81,17 +82,26 @@ void SpriteObject::ResetTimePerFrameArrayIteratorCacheFor(SpriteSequence *sequen
 	}
 }
 
-int SpriteObject::CalculateEffectiveFrameIndexForPlayTime(Real playTime, SpriteSequence *sequence, int effectiveNumFrames) {
+// Should only be called in Update() since it uses a cache
+int SpriteObject::CalculateEffectiveFrameIndexForPlayTime(Real playTime, SpriteSequence *sequence) {
 	if (sequence->GetTimePerFrameArray() == NULL) {
-		return (int)Rtt_RealDiv(playTime, sequence->GetTimePerFrame());
+		int loopCount = sequence->GetLoopCount();
+		if (loopCount == 0) {
+			return (int)Rtt_RealDiv(playTime, sequence->GetTimePerFrame());
+		} else {
+			return Min(loopCount * sequence->GetNumFrames(), (int)Rtt_RealDiv(playTime, sequence->GetTimePerFrame()));
+		}
 	} else if (playTime < fTimePerFrameArrayCachedNextFrameTime) {
 		return fTimePerFrameArrayCachedFrameIndex;
 	} else {
 		int numFrames = sequence->GetNumFrames();
 		Real *timePerFrameArray = sequence->GetTimePerFrameArray();
 		
-		// Increase cachedFrame until dt is lower than cachedNextFrameTime again OR effectiveNumFrames is reached when using finite loops
-		for (int i = fTimePerFrameArrayCachedFrameIndex; (0 == sequence->GetLoopCount() && playTime > fTimePerFrameArrayCachedNextFrameTime) || i < effectiveNumFrames; ++i) {
+		int loopCount = sequence->GetLoopCount();
+		int numFramesInAllLoops = loopCount * sequence->GetNumFrames();
+
+		// Increase cachedFrame until dt is lower than cachedNextFrameTime again OR numFramesInAllLoops is reached when using finite loops
+		for (int i = fTimePerFrameArrayCachedFrameIndex; (0 == sequence->GetLoopCount() && playTime > fTimePerFrameArrayCachedNextFrameTime) || i < numFramesInAllLoops; ++i) {
 			fTimePerFrameArrayCachedFrameIndex += 1;
 			
 			int nextFrame = fTimePerFrameArrayCachedFrameIndex % numFrames;
@@ -102,6 +112,7 @@ int SpriteObject::CalculateEffectiveFrameIndexForPlayTime(Real playTime, SpriteS
 			fTimePerFrameArrayCachedNextFrameTime += timePerFrameArray[nextFrame];
 			if (playTime < fTimePerFrameArrayCachedNextFrameTime) break;
 		}
+
 		return fTimePerFrameArrayCachedFrameIndex;
 	}
 }
@@ -111,31 +122,32 @@ void SpriteObject::Update(lua_State *L, U64 milliseconds) {
 		return; // Nothing to do.
 	}
 		
-	SpriteSequence *sequence = GetCurrentSequence();
-	int effectiveNumFrames = sequence->GetEffectiveNumFrames();
-	
 	Real playTime = Rtt_IntToReal((U32)(milliseconds - fStartTime));
 	if (!Rtt_RealIsOne(fTimeScale)) {
 		playTime = Rtt_RealMul(playTime, fTimeScale);
 	}
 	
-	int effectiveFrameIndexForPlayTime = CalculateEffectiveFrameIndexForPlayTime(playTime, sequence, effectiveNumFrames);
+	SpriteSequence *sequence = GetCurrentSequence();
+
+	int effectiveFrameIndexForPlayTime = CalculateEffectiveFrameIndexForPlayTime(playTime, sequence);
 	if (effectiveFrameIndexForPlayTime > fCurrentEffectiveFrameIndex) {
 		int loopCount = sequence->GetLoopCount();
+		
 		for (int i = fCurrentEffectiveFrameIndex; i < effectiveFrameIndexForPlayTime; i++) {
 			int nextEffectiveFrameIndex = i + 1;
 
-			int previousSequenceFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(fCurrentEffectiveFrameIndex);
-			int sequenceFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex);
-			if (sequenceFrameIndex > previousSequenceFrameIndex) {
+			int nextFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex);
+			if (nextFrameIndex > fCurrentFrameIndex) {
+				fCurrentFrameIndex = nextFrameIndex;
 				fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
-				SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex));
+				SetBitmapFrame(sequence->GetSheetFrameIndexForFrameIndex(nextFrameIndex));
 				if (HasListener(kSpriteListener)) {
 					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kNext));
 				}
-			} else if (loopCount == 0 || CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) {
+			} else if (loopCount == 0 || sequence->CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) {
+				fCurrentFrameIndex = nextFrameIndex;
 				fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
-				SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex));
+				SetBitmapFrame(sequence->GetSheetFrameIndexForFrameIndex(nextFrameIndex));
 				if (HasListener(kSpriteListener)) {
 					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kLoop));
 				}
@@ -145,7 +157,6 @@ void SpriteObject::Update(lua_State *L, U64 milliseconds) {
 				if (HasListener(kSpriteListener)) {
 					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kEnded));
 				}
-				break; // effectiveFrameIndexForPlayTime can increase beyond effectiveNumFrames, which would cause the for loop to trigger again. 
 			}
 		}
 	}
@@ -182,13 +193,10 @@ void SpriteObject::SetSequence(const char *name, bool shouldReset) {
 			if (Rtt_StringCompare(name, fSequences[i]->GetName()) == 0) {					
 				fCurrentSequenceIndex = i;
 
-				 if (shouldReset) 
-				 {
+				 if (shouldReset) {
 					Reset();
-				 }
-				 else
-				 {
-				 	SetBitmapFrame(fSequences[i]->GetSheetFrameIndexForEffectiveFrameIndex(fCurrentEffectiveFrameIndex));
+				 } else {
+				 	SetBitmapFrame(fSequences[i]->GetSheetFrameIndexForFrameIndex(fCurrentFrameIndex));
 				 }
 
 				break;
@@ -205,35 +213,25 @@ int SpriteObject::GetNumSequences() const {
 	return fSequences.Length();
 }
 
+int SpriteObject::GetCurrentFrameIndex() const {
+	return fCurrentFrameIndex;
+}
+
 int SpriteObject::GetCurrentEffectiveFrameIndex() const {
 	return fCurrentEffectiveFrameIndex;
 }
 
-void SpriteObject::SetEffectiveFrame(int effectiveFrameIndex) {
+void SpriteObject::SetEffectiveFrame(int effectiveFrameIndex) {	
 	SpriteSequence *sequence = GetCurrentSequence();
-	
-	Real playTimeForTargetFrame = sequence->CalculatePlayTimeForEffectiveFrameIndex(effectiveFrameIndex);
-	if (!Rtt_RealIsOne(fTimeScale)) {
-		playTimeForTargetFrame = Rtt_RealDiv(playTimeForTargetFrame, fTimeScale);
-	}
-	
-	if (!IsPlaying()) {
-		fPlayTimeAtPause = Rtt_RealToInt(playTimeForTargetFrame);
-	} else {
-		fStartTime = fPlayer.GetAnimationTime() - Rtt_RealToInt(playTimeForTargetFrame);
-	}
-	
+	fCurrentFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(effectiveFrameIndex);
 	fCurrentEffectiveFrameIndex = effectiveFrameIndex;
 	ResetTimePerFrameArrayIteratorCacheFor(sequence);
-	SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(effectiveFrameIndex));
-}
-
-int SpriteObject::CalculateLoopCountForEffectiveFrameIndex(int effectiveFrameIndex) const {
-	return Rtt_RealToInt(Rtt_RealDiv(effectiveFrameIndex, GetCurrentSequence()->GetNumFrames()));
+	SetBitmapFrame(sequence->GetSheetFrameIndexForFrameIndex(fCurrentFrameIndex));
+	SetStartTimeOrPlayTimeAtPauseForEffectiveFrameIndex(effectiveFrameIndex);
 }
 
 int SpriteObject::GetCurrentLoopCount() const {
-	return CalculateLoopCountForEffectiveFrameIndex(fCurrentEffectiveFrameIndex);
+	return GetCurrentSequence()->CalculateLoopCountForEffectiveFrameIndex(fCurrentEffectiveFrameIndex);
 }
 
 void SpriteObject::SetProperty(PropertyMask mask, bool value) {
@@ -246,28 +244,33 @@ bool SpriteObject::IsPlaying() const {
 }
 
 void SpriteObject::SetTimeScale(Real newTimeScale) {
-	Real playTimeForCurrentFrame = GetCurrentSequence()->CalculatePlayTimeForEffectiveFrameIndex(fCurrentEffectiveFrameIndex);
-	if (!Rtt_RealIsOne(newTimeScale)) {
-	  	playTimeForCurrentFrame = Rtt_RealDiv(playTimeForCurrentFrame, newTimeScale);
+  	fTimeScale = newTimeScale;
+	SetStartTimeOrPlayTimeAtPauseForEffectiveFrameIndex(fCurrentEffectiveFrameIndex);
+}
+
+void SpriteObject::SetStartTimeOrPlayTimeAtPauseForEffectiveFrameIndex(int effectiveFrameIndex) {
+	Real playTimeForEffectiveFrameIndex = GetCurrentSequence()->CalculatePlayTimeForEffectiveFrameIndex(effectiveFrameIndex);
+	if (!Rtt_RealIsOne(fTimeScale)) {
+	  	playTimeForEffectiveFrameIndex = Rtt_RealDiv(playTimeForEffectiveFrameIndex, fTimeScale);
 	}
 	if (!IsPlaying()) {
-	  	fPlayTimeAtPause = Rtt_RealToInt(playTimeForCurrentFrame);
+	  	fPlayTimeAtPause = Rtt_RealToInt(playTimeForEffectiveFrameIndex);
 	} else {
-		fStartTime = fPlayer.GetAnimationTime() - Rtt_RealToInt(playTimeForCurrentFrame);
+		fStartTime = fPlayer.GetAnimationTime() - Rtt_RealToInt(playTimeForEffectiveFrameIndex);
 	}
-  	fTimeScale = newTimeScale;
 }
 
 void SpriteObject::Reset() {
 	fStartTime = 0;
 	fPlayTimeAtPause = 0;
+	fCurrentFrameIndex = 0;
 	fCurrentEffectiveFrameIndex = 0;
 	fProperties = 0;
 	
 	// Set to initial frame
 	SpriteSequence *sequence = GetCurrentSequence();
 	ResetTimePerFrameArrayIteratorCacheFor(sequence);
-	SetBitmapFrame(sequence->GetSheetFrameIndexForEffectiveFrameIndex(0));
+	SetBitmapFrame(sequence->GetSheetFrameIndexForFrameIndex(0));
 }
 
 // ----------------------------------------------------------------------------

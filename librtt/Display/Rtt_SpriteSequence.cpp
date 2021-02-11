@@ -115,10 +115,8 @@ SpriteSequence::Create(Rtt_Allocator *allocator, lua_State *L, int numFramesInSh
 		timePerFrame = 10;
 	}
 
-	if (start > 0) {
-		result = Rtt_NEW(allocator, SpriteSequence(allocator, name, timePerFrame, timePerFrameArray, start - 1, numFrames, loopCount));
-	} else if (frames != NULL) {
-		result = Rtt_NEW(allocator, SpriteSequence(allocator, name, timePerFrame, timePerFrameArray, frames, numFrames, loopCount));
+	if (start > 0 || frames != NULL) {
+		result = Rtt_NEW(allocator, SpriteSequence(allocator, name, timePerFrame, timePerFrameArray, start - 1, frames, numFrames, loopCount));
 	} else {
 		Rtt_TRACE_SIM(("ERROR: sequenceData missing data. One of the following must be supplied: a pair of properties 'start'/'count' or an array value for the property 'frames'.\n"));
 	}
@@ -128,39 +126,29 @@ SpriteSequence::Create(Rtt_Allocator *allocator, lua_State *L, int numFramesInSh
 
 // ----------------------------------------------------------------------------
 
+// Assumes ownership of 'frames'/'timePerFrameArray' and assumes alloc'd via Rtt_MALLOC
 SpriteSequence::SpriteSequence(
 										   Rtt_Allocator *allocator,
 										   const char *name,
 										   Real timePerFrame,
 										   Real *timePerFrameArray,
 										   FrameIndex start,
-										   FrameIndex numFrames,
-										   int loopCount)
-: fName(allocator, name),
-fTimePerFrameArray(timePerFrameArray),
-fTimePerFrame(timePerFrame),
-fNumFrames(numFrames),
-fStart(start),
-fFrames(NULL),
-fLoopCount(loopCount) {
-}
-
-// Assumes ownership of 'frames' and assumes alloc'd via Rtt_MALLOC
-SpriteSequence::SpriteSequence(
-										   Rtt_Allocator *allocator,
-										   const char *name,
-										   Real timePerFrame,
-										   Real *timePerFrameArray,
 										   FrameIndex *frames,
 										   FrameIndex numFrames,
 										   int loopCount)
 : fName(allocator, name),
 fTimePerFrameArray(timePerFrameArray),
 fTimePerFrame(timePerFrame),
-fStart(-1),
+fStart(start),
 fFrames(frames),
 fNumFrames(numFrames),
 fLoopCount(loopCount) {
+	if (fTimePerFrameArray != NULL) {
+		fTimePerFrameArrayDuration = 0;
+		for (int i = 0; i < fNumFrames; ++i) {
+			fTimePerFrameArrayDuration += fTimePerFrameArray[i];
+		}
+	}
 }
 
 SpriteSequence::~SpriteSequence() {
@@ -168,39 +156,41 @@ SpriteSequence::~SpriteSequence() {
 	Rtt_FREE(fTimePerFrameArray);
 }
 
-int SpriteSequence::CalculatePlayTimeForEffectiveFrameIndex(int frameIndex) const {
+int SpriteSequence::CalculateLoopCountForEffectiveFrameIndex(int effectiveFrameIndex) const {
+	return Rtt_RealToInt(Rtt_RealDiv(effectiveFrameIndex, fNumFrames));
+}
+
+int SpriteSequence::CalculatePlayTimeForEffectiveFrameIndex(int effectiveFrameIndex) const {
 	Real *timePerFrameArray = GetTimePerFrameArray();
 	if (timePerFrameArray == NULL) {
-		return frameIndex * fTimePerFrame;
-	} else {
-		Real summedTime = 0;
-		for (int i = 0; i < frameIndex; ++i) {
-			summedTime += timePerFrameArray[i];
+		return effectiveFrameIndex * fTimePerFrame;
+	} else if (fLoopCount == 1) {
+		Real summedTimeOfFrames = 0;
+		for (int i = 0; i < effectiveFrameIndex; ++i) {
+			summedTimeOfFrames += timePerFrameArray[i];
 		}
-		return summedTime;
+		return summedTimeOfFrames;
+	} else {
+		int amountOfLoopsCompleted = CalculateLoopCountForEffectiveFrameIndex(effectiveFrameIndex);
+		int frameIndexInCurrentLoop = GetFrameIndexForEffectiveFrameIndex(effectiveFrameIndex);
+
+		Real summedTimeOfFramesInCurrentLoop = 0;
+		for (int i = 0; i < frameIndexInCurrentLoop; ++i) {
+			summedTimeOfFramesInCurrentLoop += timePerFrameArray[i];
+		}
+
+		return amountOfLoopsCompleted * fTimePerFrameArrayDuration + summedTimeOfFramesInCurrentLoop;
 	}
 }
 
 SpriteSequence::FrameIndex
 SpriteSequence::GetFrameIndexForEffectiveFrameIndex(int effectiveFrameIndex) const {
-	effectiveFrameIndex = effectiveFrameIndex % fNumFrames;
-	if (effectiveFrameIndex >= fNumFrames) {
-		effectiveFrameIndex = effectiveFrameIndex % fNumFrames;
-	}
-	return effectiveFrameIndex;
+	return effectiveFrameIndex % fNumFrames;
 }
 
 SpriteSequence::FrameIndex
-SpriteSequence::GetSheetFrameIndexForEffectiveFrameIndex(int effectiveFrameIndex) const {
-	effectiveFrameIndex = effectiveFrameIndex % fNumFrames;
-	if (effectiveFrameIndex >= fNumFrames) {
-		effectiveFrameIndex = effectiveFrameIndex % fNumFrames;
-	}
-	return (IsConsecutiveFrames() ? (fStart + effectiveFrameIndex) : fFrames[effectiveFrameIndex]);
-}
-
-int SpriteSequence::GetEffectiveNumFrames() const {
-	return fLoopCount == 0 ? fNumFrames : fNumFrames * fLoopCount;
+SpriteSequence::GetSheetFrameIndexForFrameIndex(int frameIndex) const {
+	return (IsConsecutiveFrames() ? (fStart + frameIndex) : fFrames[frameIndex]);
 }
 
 // ----------------------------------------------------------------------------

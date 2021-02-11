@@ -1972,7 +1972,7 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 		"timeScale",			// 0
 
 		// Read-only properties
-		"frame",					// 1
+		"frame",		            // 1
 		"frameInSequence",			// 2
 		"frameInSheet",				// 3
 		"loopCount",				// 4
@@ -2011,12 +2011,12 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 		break;
 	case 2:
 		{
-			lua_pushinteger( L, o.GetCurrentSequence()->GetFrameIndexForEffectiveFrameIndex(o.GetCurrentEffectiveFrameIndex()) + 1 ); // Lua is 1-based
+			lua_pushinteger( L, o.GetCurrentFrameIndex() + 1 ); // Lua is 1-based
 		}
 		break;
 	case 3:
 		{
-			lua_pushinteger( L, o.GetCurrentSequence()->GetSheetFrameIndexForEffectiveFrameIndex(o.GetCurrentEffectiveFrameIndex()) + 1 ); // Lua is 1-based
+			lua_pushinteger( L, o.GetCurrentSequence()->GetSheetFrameIndexForFrameIndex(o.GetCurrentFrameIndex()) + 1 ); // Lua is 1-based
 		}
 		break;
 	case 4:

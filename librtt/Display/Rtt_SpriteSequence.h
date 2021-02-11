@@ -35,21 +35,13 @@ class SpriteSequence
 		static SpriteSequence* Create( Rtt_Allocator *allocator, lua_State *L, int numFramesInSheet);
 
 	public:
+		// Assumes ownership of 'frames'/'timePerFrameArray' and assumes alloc'd via Rtt_MALLOC
 		SpriteSequence(
 			Rtt_Allocator *allocator,
 			const char *name,
 			Real timePerFrame,
 			Real *timePerFrameArray,
 			FrameIndex start,
-			FrameIndex numFrames,
-			int loopCount);
-
-		// Assumes ownership of 'frames' and assumed alloc'd via Rtt_MALLOC
-		SpriteSequence(
-			Rtt_Allocator *allocator,
-			const char *name,
-			Real timePerFrame,
-			Real *timePerFrameArray,
 			FrameIndex *frames,
 			FrameIndex numFrames,
 			int loopCount);
@@ -63,25 +55,25 @@ class SpriteSequence
 		Real GetTimePerFrame() const { return fTimePerFrame; }
 
 	public:
-		int CalculatePlayTimeForEffectiveFrameIndex( int frameIndex ) const;
+		int CalculateLoopCountForEffectiveFrameIndex( int effectiveFrameIndex ) const;
+		int CalculatePlayTimeForEffectiveFrameIndex( int effectiveFrameIndex ) const;
 
 	public:
 		int GetNumFrames() const { return fNumFrames; }
 
 	public:
 		FrameIndex GetFrameIndexForEffectiveFrameIndex(int effectiveFrameIndex) const;
-		FrameIndex GetSheetFrameIndexForEffectiveFrameIndex(int effectiveFrameIndex) const;
+		FrameIndex GetSheetFrameIndexForFrameIndex(int frameIndex) const;
 
 	public:
-		// Returns number of frames in sequence.
-		int GetEffectiveNumFrames() const;
 		bool IsConsecutiveFrames() const { return fStart >= 0; }
 		int GetLoopCount() const { return fLoopCount; }
 
 	private:
 		String fName;
-		Real *fTimePerFrameArray;
 		Real fTimePerFrame;
+		Real fTimePerFrameArrayDuration;
+		Real *fTimePerFrameArray;
 		FrameIndex fNumFrames;	// Raw number of frames
 		FrameIndex fStart;		// Sequence is defined by consecutive frames in the sheet
 		FrameIndex *fFrames;	// or an array of frame indices. 

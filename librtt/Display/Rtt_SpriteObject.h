@@ -66,11 +66,10 @@ class SpriteObject : public RectObject
 
 	public:
 		void ResetTimePerFrameArrayIteratorCacheFor(SpriteSequence *sequence);
-		int CalculateEffectiveFrameIndexForPlayTime( Real dt, SpriteSequence *sequence, int effectiveNumFrames );
-		int CalculateLoopCountForEffectiveFrameIndex( int effectiveFrameIndex ) const;
+		int CalculateEffectiveFrameIndexForPlayTime( Real playTime, SpriteSequence *sequence );
 
 	protected:
-		void SetBitmapFrame( int effectiveFrameIndex );
+		void SetBitmapFrame( int sheetFrameIndex );
 
 	public:
 		void Update( lua_State *L, U64 milliseconds );
@@ -80,12 +79,13 @@ class SpriteObject : public RectObject
 		void Pause();
 		void SetSequence( const char *name, bool shouldReset );
 		int GetNumSequences() const;
-		void SetEffectiveFrame( int index );
+		void SetEffectiveFrame( int effectiveFrameIndex );
 
 	public:
 		// Read-only properties
 		SpriteSequence* GetCurrentSequence() const;
 		int GetCurrentLoopCount() const;
+		int GetCurrentFrameIndex() const;
 		int GetCurrentEffectiveFrameIndex() const;
 
 	public:
@@ -105,13 +105,15 @@ class SpriteObject : public RectObject
 
 	protected:
 		void Reset();
+		void SetStartTimeOrPlayTimeAtPauseForEffectiveFrameIndex(int effectiveFrameIndex);
 
 	private:
 		PtrArray< SpriteSequence > fSequences;
 		SpritePlayer& fPlayer;
 		Real fTimeScale;
 		int fCurrentSequenceIndex; // index into fSequences of current sequence
-		int fCurrentEffectiveFrameIndex;
+		int fCurrentFrameIndex; // index in sequence (resets with loopCount)
+		int fCurrentEffectiveFrameIndex; // index in sequence (does not reset with loopCount, but is limited to loopCount * numFrames if loopCount > 0)
 		U64 fStartTime;
 		U64 fPlayTimeAtPause; // when paused, stores amount of time played
 		int fTimePerFrameArrayCachedFrameIndex; // stores iterator state for SpriteSequence::CalculateEffectiveFrameIndexForPlayTime()
