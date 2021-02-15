@@ -156,8 +156,7 @@ public class CoronaActivity extends Activity {
 		if (android.os.Build.VERSION.SDK_INT < 19) {
 			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE); // On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
 		} else {
-			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 					| View.SYSTEM_UI_FLAG_FULLSCREEN

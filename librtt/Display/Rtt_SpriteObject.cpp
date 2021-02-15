@@ -209,10 +209,6 @@ SpriteSequence* SpriteObject::GetCurrentSequence() const {
 	return fSequences[fCurrentSequenceIndex];
 }
 
-int SpriteObject::GetNumSequences() const {
-	return fSequences.Length();
-}
-
 int SpriteObject::GetCurrentFrameIndex() const {
 	return fCurrentFrameIndex;
 }
@@ -221,7 +217,7 @@ int SpriteObject::GetCurrentEffectiveFrameIndex() const {
 	return fCurrentEffectiveFrameIndex;
 }
 
-void SpriteObject::SetEffectiveFrame(int effectiveFrameIndex) {	
+void SpriteObject::SetEffectiveFrame(int effectiveFrameIndex) {
 	SpriteSequence *sequence = GetCurrentSequence();
 	fCurrentFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(effectiveFrameIndex);
 	fCurrentEffectiveFrameIndex = effectiveFrameIndex;

@@ -78,7 +78,6 @@ class SpriteObject : public RectObject
 		void Play( lua_State *L );
 		void Pause();
 		void SetSequence( const char *name, bool shouldReset );
-		int GetNumSequences() const;
 		void SetEffectiveFrame( int effectiveFrameIndex );
 
 	public:
