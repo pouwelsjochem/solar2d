@@ -157,7 +157,6 @@ public class CoronaActivity extends Activity {
 			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE); // On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
 		} else {
 			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 					| View.SYSTEM_UI_FLAG_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
