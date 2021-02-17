@@ -156,10 +156,12 @@ public class CoronaActivity extends Activity {
 		if (android.os.Build.VERSION.SDK_INT < 19) {
 			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE); // On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
 		} else {
-			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+					| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 					| View.SYSTEM_UI_FLAG_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 		}
 	}
 
@@ -194,6 +196,9 @@ public class CoronaActivity extends Activity {
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		if (Build.VERSION.SDK_INT >= 28){
+			getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+		}
 
 		// If this is a new installation of this app, then delete its "externalized" assets to be replaced by the new ones.
 		// We determine if this is a new installation by storing the APK's timestamp to the preferences file since last the app ran.
