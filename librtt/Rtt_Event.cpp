@@ -1914,9 +1914,13 @@ SpriteEvent::StringForPhase( Phase phase )
 const char
 SpriteEvent::kName[] = "sprite";
 
-SpriteEvent::SpriteEvent( const SpriteObject& target, Phase phase )
+SpriteEvent::SpriteEvent( const SpriteObject& target, Phase phase, const char * sequenceName, int effectiveFrameIndex, int frameIndex, int frameIndexInSheet )
 :	fTarget( target ),
-	fPhase( phase )
+	fPhase( phase ),
+	fSequenceName(sequenceName),
+	fEffectiveFrameIndex(effectiveFrameIndex),
+	fFrameIndex(frameIndex),
+	fFrameIndexInSheet(frameIndexInSheet)
 {
 }
 
@@ -1935,7 +1939,19 @@ SpriteEvent::Push( lua_State *L ) const
 
 		lua_pushstring( L, StringForPhase( (Phase)fPhase ) );
 		lua_setfield( L, -2, kPhaseKey );
-
+		
+		lua_pushstring( L, fSequenceName );
+		lua_setfield( L, -2, "sequence" );
+		
+		lua_pushinteger( L, fEffectiveFrameIndex );
+		lua_setfield( L, -2, "frame" );
+		
+		lua_pushinteger( L, fFrameIndexInSheet );
+		lua_setfield( L, -2, "frameInSheet" );
+		
+		lua_pushinteger( L, fFrameIndex );
+		lua_setfield( L, -2, "frameInSequence" );
+		
 		fTarget.GetProxy()->PushTable( L );
 		lua_setfield( L, -2, "target" );
 	}

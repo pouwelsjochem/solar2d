@@ -128,34 +128,42 @@ void SpriteObject::Update(lua_State *L, U64 milliseconds) {
 	}
 	
 	SpriteSequence *sequence = GetCurrentSequence();
-
+	const char *sequenceName = sequence->GetName();
+	int initialSequenceIndex = fCurrentSequenceIndex;
+	
 	int effectiveFrameIndexForPlayTime = CalculateEffectiveFrameIndexForPlayTime(playTime, sequence);
 	if (effectiveFrameIndexForPlayTime > fCurrentEffectiveFrameIndex) {
 		int loopCount = sequence->GetLoopCount();
-		
+
 		for (int i = fCurrentEffectiveFrameIndex; i < effectiveFrameIndexForPlayTime; i++) {
 			int nextEffectiveFrameIndex = i + 1;
 
 			int nextFrameIndex = sequence->GetFrameIndexForEffectiveFrameIndex(nextEffectiveFrameIndex);
-			if (nextFrameIndex > fCurrentFrameIndex) {
+			if (nextFrameIndex > fCurrentFrameIndex) { // next frame
 				fCurrentFrameIndex = nextFrameIndex;
 				fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
 				SetBitmapFrame(sequence->GetSheetFrameIndexForFrameIndex(nextFrameIndex));
 				if (HasListener(kSpriteListener)) {
-					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kNext));
+					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kNext, sequenceName, fCurrentEffectiveFrameIndex, fCurrentFrameIndex, sequence->GetSheetFrameIndexForFrameIndex(fCurrentFrameIndex)));
+					if (fCurrentSequenceIndex != initialSequenceIndex || fCurrentEffectiveFrameIndex != nextEffectiveFrameIndex) {
+						break; // break if dispatched event executed setSequence of setFrame
+					}
 				}
-			} else if (loopCount == 0 || sequence->CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) {
+			} else if (loopCount == 0 || sequence->CalculateLoopCountForEffectiveFrameIndex(nextEffectiveFrameIndex) < loopCount) { // first frame again
 				fCurrentFrameIndex = nextFrameIndex;
 				fCurrentEffectiveFrameIndex = nextEffectiveFrameIndex;
 				SetBitmapFrame(sequence->GetSheetFrameIndexForFrameIndex(nextFrameIndex));
 				if (HasListener(kSpriteListener)) {
-					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kLoop));
+					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kLoop, sequenceName, fCurrentEffectiveFrameIndex, fCurrentFrameIndex, sequence->GetSheetFrameIndexForFrameIndex(fCurrentFrameIndex)));
+					if (fCurrentSequenceIndex != initialSequenceIndex || fCurrentEffectiveFrameIndex != nextEffectiveFrameIndex) {
+						break; // break if dispatched event executed setSequence of setFrame
+					}
 				}
-			} else {
+			} else { // last frame ended without any loops left
 				fStartTime = 0;
 				SetProperty(kIsPlayingEnded, true);
 				if (HasListener(kSpriteListener)) {
-					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kEnded));
+					DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kEnded, sequenceName, fCurrentEffectiveFrameIndex, fCurrentFrameIndex, sequence->GetSheetFrameIndexForFrameIndex(fCurrentFrameIndex)));
 				}
 			}
 		}
@@ -170,7 +178,7 @@ void SpriteObject::Play(lua_State *L) {
 			}
 			fStartTime = fPlayer.GetAnimationTime();
 			if (HasListener(kSpriteListener)) {
-				DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kBegan));
+				DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kBegan, GetCurrentSequence()->GetName(), 1, 1, GetCurrentSequence()->GetSheetFrameIndexForFrameIndex(1)));
 			}
 		} else {
 			fStartTime = fPlayer.GetAnimationTime() - fPlayTimeAtPause;
