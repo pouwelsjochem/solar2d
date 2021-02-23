@@ -55,7 +55,7 @@ class SpriteSequence
 		Real GetTimePerFrame() const { return fTimePerFrame; }
 
 	public:
-		int CalculateLoopCountForEffectiveFrameIndex( int effectiveFrameIndex ) const;
+		int CalculateLoopIndexForEffectiveFrameIndex( int effectiveFrameIndex ) const;
 		int CalculatePlayTimeForEffectiveFrameIndex( int effectiveFrameIndex ) const;
 
 	public:

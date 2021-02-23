@@ -1914,10 +1914,11 @@ SpriteEvent::StringForPhase( Phase phase )
 const char
 SpriteEvent::kName[] = "sprite";
 
-SpriteEvent::SpriteEvent( const SpriteObject& target, Phase phase, const char * sequenceName, int effectiveFrameIndex, int frameIndex, int frameIndexInSheet )
+SpriteEvent::SpriteEvent( const SpriteObject& target, Phase phase, const char * sequenceName, int loopIndex, int effectiveFrameIndex, int frameIndex, int frameIndexInSheet )
 :	fTarget( target ),
 	fPhase( phase ),
 	fSequenceName(sequenceName),
+	fLoopIndex(loopIndex),
 	fEffectiveFrameIndex(effectiveFrameIndex),
 	fFrameIndex(frameIndex),
 	fFrameIndexInSheet(frameIndexInSheet)
@@ -1942,6 +1943,9 @@ SpriteEvent::Push( lua_State *L ) const
 		
 		lua_pushstring( L, fSequenceName );
 		lua_setfield( L, -2, "sequence" );
+		
+		lua_pushinteger( L, fLoopIndex );
+		lua_setfield( L, -2, "loopIndex" );
 		
 		lua_pushinteger( L, fEffectiveFrameIndex );
 		lua_setfield( L, -2, "frame" );

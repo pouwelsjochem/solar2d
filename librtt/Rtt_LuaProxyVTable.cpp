@@ -1975,7 +1975,7 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 		"frame",		            // 1
 		"frameInSequence",			// 2
 		"frameInSheet",				// 3
-		"loopCount",				// 4
+		"loopIndex",				// 4
 		"sequence",					// 5
 		"numFrames",				// 6
 		"isPlaying",				// 7
@@ -2021,7 +2021,7 @@ LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obje
 		break;
 	case 4:
 		{
-			lua_pushinteger( L, o.GetCurrentLoopCount() );
+			lua_pushinteger( L, o.GetCurrentLoopIndex() );
 		}
 		break;
 	case 5:

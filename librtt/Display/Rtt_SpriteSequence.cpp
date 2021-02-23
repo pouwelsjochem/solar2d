@@ -156,8 +156,8 @@ SpriteSequence::~SpriteSequence() {
 	Rtt_FREE(fTimePerFrameArray);
 }
 
-int SpriteSequence::CalculateLoopCountForEffectiveFrameIndex(int effectiveFrameIndex) const {
-	return Rtt_RealToInt(Rtt_RealDiv(effectiveFrameIndex, fNumFrames));
+int SpriteSequence::CalculateLoopIndexForEffectiveFrameIndex(int effectiveFrameIndex) const {
+	return 1 + Rtt_RealToInt(Rtt_RealDiv(effectiveFrameIndex, fNumFrames));
 }
 
 int SpriteSequence::CalculatePlayTimeForEffectiveFrameIndex(int effectiveFrameIndex) const {
@@ -171,7 +171,7 @@ int SpriteSequence::CalculatePlayTimeForEffectiveFrameIndex(int effectiveFrameIn
 		}
 		return summedTimeOfFrames;
 	} else {
-		int amountOfLoopsCompleted = CalculateLoopCountForEffectiveFrameIndex(effectiveFrameIndex);
+		int amountOfLoopsCompleted = CalculateLoopIndexForEffectiveFrameIndex(effectiveFrameIndex) - 1;
 		int frameIndexInCurrentLoop = GetFrameIndexForEffectiveFrameIndex(effectiveFrameIndex);
 
 		Real summedTimeOfFramesInCurrentLoop = 0;

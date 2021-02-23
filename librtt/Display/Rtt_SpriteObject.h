@@ -83,7 +83,7 @@ class SpriteObject : public RectObject
 	public:
 		// Read-only properties
 		SpriteSequence* GetCurrentSequence() const;
-		int GetCurrentLoopCount() const;
+		int GetCurrentLoopIndex() const;
 		int GetCurrentFrameIndex() const;
 		int GetCurrentEffectiveFrameIndex() const;
 

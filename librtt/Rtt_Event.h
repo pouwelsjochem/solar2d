@@ -931,7 +931,7 @@ class SpriteEvent : public VirtualEvent
 		static const char kName[];
 
 	public:
-		SpriteEvent( const SpriteObject& target, Phase phase, const char* sequenceName, int effectiveFrameIndex, int frameIndex, int frameIndexInSheet );
+		SpriteEvent( const SpriteObject& target, Phase phase, const char* sequenceName, int loopIndex, int effectiveFrameIndex, int frameIndex, int frameIndexInSheet );
 
 	public:
 		virtual const char* Name() const;
@@ -941,6 +941,7 @@ class SpriteEvent : public VirtualEvent
 		const SpriteObject& fTarget;
 		U8 fPhase;
 		const char* fSequenceName;
+		int fLoopIndex;
 		int fEffectiveFrameIndex;
 		int fFrameIndex;
 		int fFrameIndexInSheet;
