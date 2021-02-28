@@ -172,7 +172,7 @@ void SpriteObject::Play(lua_State *L) {
 			}
 			fStartTime = fPlayer.GetAnimationTime();
 			if (HasListener(kSpriteListener)) {
-				DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kBegan, GetCurrentSequence()->GetName(), 0, 1, 1, GetCurrentSequence()->GetSheetFrameIndexForFrameIndex(1)));
+				DispatchEvent(L, SpriteEvent(*this,  SpriteEvent::kBegan, GetCurrentSequence()->GetName(), 0, 0, 0, GetCurrentSequence()->GetSheetFrameIndexForFrameIndex(0)));
 			}
 		} else {
 			fStartTime = fPlayer.GetAnimationTime() - fPlayTimeAtPause;

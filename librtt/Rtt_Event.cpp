@@ -1947,13 +1947,13 @@ SpriteEvent::Push( lua_State *L ) const
 		lua_pushinteger( L, fLoopIndex );
 		lua_setfield( L, -2, "loopIndex" );
 		
-		lua_pushinteger( L, fEffectiveFrameIndex );
+		lua_pushinteger( L, fEffectiveFrameIndex + 1 ); // Lua is 1-based
 		lua_setfield( L, -2, "frame" );
 		
-		lua_pushinteger( L, fFrameIndexInSheet );
+		lua_pushinteger( L, fFrameIndexInSheet + 1 ); // Lua is 1-based
 		lua_setfield( L, -2, "frameInSheet" );
 		
-		lua_pushinteger( L, fFrameIndex );
+		lua_pushinteger( L, fFrameIndex + 1 ); // Lua is 1-based
 		lua_setfield( L, -2, "frameInSequence" );
 		
 		fTarget.GetProxy()->PushTable( L );
