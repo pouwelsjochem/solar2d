@@ -624,6 +624,9 @@ Display::Capture( DisplayObject *object,
 
 	Rtt_DELETE( fbo );
 
+	// If object was just created this will draw it to main scene as well, not only to FBO
+	scene.Invalidate();
+
 	return paint;
 }
 
