@@ -351,6 +351,10 @@ Display::Capture( DisplayObject *object,
 	Runtime& runtime = GetRuntime();
 	Rtt_Allocator *allocator = runtime.GetAllocator();
 
+	// Save current state so we can restore it later
+	FrameBufferObject *previous_fbo = fRenderer->GetFrameBufferObject();
+	FrameBufferObject *fbo = NULL;
+
 	////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////
 	//FBO SETUP
@@ -455,6 +459,13 @@ Display::Capture( DisplayObject *object,
 
 	BitmapPaint *paint = Rtt_NEW( allocator,
 									BitmapPaint( tex ) );
+
+	fbo = Rtt_NEW( allocator,
+					FrameBufferObject( allocator,
+										paint->GetTexture() ) );
+
+
+	Rtt_DELETE( fbo );
 
 	return paint;
 }
