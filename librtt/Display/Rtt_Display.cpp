@@ -464,6 +464,74 @@ Display::Capture( DisplayObject *object,
 					FrameBufferObject( allocator,
 										paint->GetTexture() ) );
 
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	//FROM SnapshotObject::Draw()
+	//PREPARE TO DRAW!!!!!
+
+	//// Save these so we can restore them later.
+	//
+	Rtt::Real previous_viewMatrix[16];
+	Rtt::Real previous_projMatrix[16];
+	fRenderer->GetFrustum( previous_viewMatrix, previous_projMatrix );
+
+	S32 previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height;
+	fRenderer->GetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
+	//
+	////
+
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	//SCENE RENDER
+
+	Scene& scene = GetScene();
+
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	//FROM SnapshotObject::Draw()
+	//PREPARE TO DRAW!!!!!
+	Real texW = Rtt_IntToReal( fbo->GetTexture()->GetWidth() );
+	Real texH = Rtt_IntToReal( fbo->GetTexture()->GetHeight() );
+
+	fRenderer->SetFrameBufferObject( fbo );
+	fRenderer->PushMaskCount();
+	fRenderer->SetViewport( 0, 0, texW, texH );
+	fRenderer->Clear( 0.0f, 0.0f, 0.0f, 0.0f );
+
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	//FROM THIS ORIGINAL FUNCTION MADE BUILDABLE!!!!!!!
+	//DRAW!!!!!
+
+	fRenderer->PopMaskCount();
+
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	//FBO CLEANUP
+
+	fRenderer->EndFrame();
+	fRenderer->Swap();
+	fRenderer->Render();
+
+	// Restore state so further rendering is unaffected
+	fRenderer->SetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
+	fRenderer->SetFrustum( previous_viewMatrix, previous_projMatrix );
+	fRenderer->SetFrameBufferObject( previous_fbo );
+
+#	if ENABLE_DEBUG_PRINT 
+
+		printf( "capture bounds in content units: x: %d y: %d w: %d h: %d\n",
+				x_in_content_units,
+				y_in_content_units,
+				w_in_content_units,
+				h_in_content_units );
+		printf( "capture bounds in pixels: x: %d y: %d w: %d h: %d\n",
+				x_in_pixels,
+				y_in_pixels,
+				w_in_pixels,
+				h_in_pixels );
+
+#	endif // ENABLE_DEBUG_PRINT
 
 	Rtt_DELETE( fbo );
 
