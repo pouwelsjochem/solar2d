@@ -562,10 +562,65 @@ Display::Capture( DisplayObject *object,
 	fRenderer->Swap();
 	fRenderer->Render();
 
+	if( will_be_saved_to_file ||
+		optional_output_color )
+	{
+		// Create screen capture.
+		BufferBitmap *bitmap = static_cast< BufferBitmap * >( tex->GetBitmap() );
+
+		// This function requires coordinates in pixels.
+		fStream->CaptureFrameBuffer( *bitmap,
+										x_in_pixels,
+										y_in_pixels,
+										w_in_pixels,
+										h_in_pixels );
+		bitmap->UndoPremultipliedAlpha();
+
+		if( optional_output_color )
+		{
+			// We want the RGBA value of the first pixel.
+
+			const unsigned char *bytes = static_cast< const unsigned char * >( bitmap->ReadAccess() );
+
+#			ifdef Rtt_OPENGLES
+
+				// IMPORTANT: We're assuming the format is GL_RGBA and GL_UNSIGNED_BYTE.
+				optional_output_color->r = bytes[ 0 ];
+				optional_output_color->g = bytes[ 1 ];
+				optional_output_color->b = bytes[ 2 ];
+				optional_output_color->a = bytes[ 3 ];
+
+#			else // Not Rtt_OPENGLES
+
+				// IMPORTANT: We're assuming the format is GL_ARGB and GL_UNSIGNED_BYTE.
+				optional_output_color->r = bytes[ 1 ];
+				optional_output_color->g = bytes[ 2 ];
+				optional_output_color->b = bytes[ 3 ];
+				optional_output_color->a = bytes[ 0 ];
+
+#			endif // Rtt_OPENGLES
+		}
+	}
+
 	// Restore state so further rendering is unaffected
 	fRenderer->SetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
 	fRenderer->SetFrustum( previous_viewMatrix, previous_projMatrix );
 	fRenderer->SetFrameBufferObject( previous_fbo );
+
+#	if ENABLE_DEBUG_PRINT 
+
+		printf( "capture bounds in content units: x: %d y: %d w: %d h: %d\n",
+				x_in_content_units,
+				y_in_content_units,
+				w_in_content_units,
+				h_in_content_units );
+		printf( "capture bounds in pixels: x: %d y: %d w: %d h: %d\n",
+				x_in_pixels,
+				y_in_pixels,
+				w_in_pixels,
+				h_in_pixels );
+
+#	endif // ENABLE_DEBUG_PRINT
 
 	Rtt_DELETE( fbo );
 
