@@ -503,55 +503,6 @@ Display::Capture( DisplayObject *object,
 	//FROM THIS ORIGINAL FUNCTION MADE BUILDABLE!!!!!!!
 	//DRAW!!!!!
 
-	// Fetch the bounds of the portion of the screen that we are
-	// going to capture and re-render that part of the screen.
-	if ( object )
-	{
-		// Set the background color to transparent.
-		ColorUnion previousClearColor;
-		ColorUnion transparentClearColor;
-
-		if( optionalBackgroundColor )
-		{
-			transparentClearColor.rgba = optionalBackgroundColor->rgba;
-		}
-		else
-		{
-			transparentClearColor.rgba.r = 0;
-			transparentClearColor.rgba.g = 0;
-			transparentClearColor.rgba.b = 0;
-			transparentClearColor.rgba.a = 0;
-		}
-
-		previousClearColor.pixel = GetDefaults().GetClearColor();
-		GetDefaults().SetClearColor( transparentClearColor.pixel );
-
-		fRenderer->SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
-
-		const Rect* snb = GetStage()->GetSnapshotBounds();
-		Rect empty;
-		if (!screenBounds && object && !crop_object_to_screen_bounds)
-		{
-			// this will disable culling of ofscreen children
-			GetStage()->SetSnapshotBounds(&empty);
-		}
-		// Render only the given object and its children, if any, to be captured down below.
-		scene.Render( *fRenderer, *fScreenSurface, *object );
-		if (!screenBounds && object && !crop_object_to_screen_bounds)
-		{
-			GetStage()->SetSnapshotBounds(snb);
-		}
-
-		// Restore background back to its previous color.
-		GetDefaults().SetClearColor( previousClearColor.pixel );
-	}
-	else // Full screen or screenBounds.
-	{
-		fRenderer->SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
-
-		scene.Render( *fRenderer, *fScreenSurface, scene.CurrentStage() );
-	}
-
 	fRenderer->PopMaskCount();
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -566,6 +517,21 @@ Display::Capture( DisplayObject *object,
 	fRenderer->SetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
 	fRenderer->SetFrustum( previous_viewMatrix, previous_projMatrix );
 	fRenderer->SetFrameBufferObject( previous_fbo );
+
+#	if ENABLE_DEBUG_PRINT 
+
+		printf( "capture bounds in content units: x: %d y: %d w: %d h: %d\n",
+				x_in_content_units,
+				y_in_content_units,
+				w_in_content_units,
+				h_in_content_units );
+		printf( "capture bounds in pixels: x: %d y: %d w: %d h: %d\n",
+				x_in_pixels,
+				y_in_pixels,
+				w_in_pixels,
+				h_in_pixels );
+
+#	endif // ENABLE_DEBUG_PRINT
 
 	Rtt_DELETE( fbo );
 
