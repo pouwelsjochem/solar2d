@@ -432,7 +432,31 @@ Display::Capture( DisplayObject *object,
 		y_in_pixels = 0;
 	}
 
-	return NULL;
+#	if defined( Rtt_OPENGLES )
+		const Texture::Format kFormat = Texture::kRGBA;
+#	else
+		const Texture::Format kFormat = Texture::kBGRA;
+#	endif
+
+	// Using Texture::kNearest and Texture::kClampToEdge here is absolutely
+	// mandatory. See:
+	//
+	//	http://www.khronos.org/registry/gles/extensions/APPLE/APPLE_texture_2D_limited_npot.txt
+	//
+	//		"A NPOT 2D texture with a wrap mode that is not CLAMP_TO_EDGE or
+	//		a minfilter that is not NEAREST or LINEAR is considered incomplete."
+	TextureFactory &factory = GetTextureFactory();
+	SharedPtr< TextureResource > tex = factory.Create( w_in_pixels,
+														h_in_pixels,
+														kFormat,
+														Texture::kNearest,
+														Texture::kClampToEdge,
+														will_be_saved_to_file );
+
+	BitmapPaint *paint = Rtt_NEW( allocator,
+									BitmapPaint( tex ) );
+
+	return paint;
 }
 
 void
