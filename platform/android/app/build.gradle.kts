@@ -17,7 +17,7 @@ val coronaResourcesDir: String? by project
 val coronaDstDir: String? by project
 val coronaTmpDir: String? by project
 val coronaAppFileName: String? by project
-val coronaAppPackage = project.findProperty("coronaAppPackage") as? String ?: "com.corona.test"
+val coronaAppPackage = project.findProperty("coronaAppPackage") as? String ?: "com.corona.app"
 val coronaKeystore: String? by project
 val coronaKeystorePassword: String? by project
 val coronaKeyAlias: String? by project
@@ -217,6 +217,9 @@ android {
     }
     aaptOptions {
         additionalParameters("--extra-packages", extraPackages.filter { it.isNotBlank() }.joinToString(":"))
+    }
+    if (isExpansionFileRequired) {
+        assetPacks.add(":preloadedAssets")
     }
     // This is dirty hack because Android Assets refuse to copy assets which start with . or _
     if (!isExpansionFileRequired) {
@@ -459,7 +462,7 @@ android.applicationVariants.all {
         }
         doFirst {
             if (!file(coronaSrcDir).isDirectory) {
-                throw InvalidUserDataException("Unable to find Corona project to build!")
+                throw InvalidUserDataException("Unable to find Solar2D project (for example platform/test/assets2/main.lua)!")
             }
         }
     }
@@ -748,6 +751,7 @@ tasks.register<Zip>("exportCoronaAppTemplate") {
         exclude("app/build/**", "app/CMakeLists.txt")
         exclude("**/*.iml", "**/\\.*")
         include("setup.sh", "setup.bat")
+        include("preloadedAssets/build.gradle.kts")
         into("template")
     }
     from(android.sdkDirectory) {
@@ -767,6 +771,42 @@ tasks.register<Zip>("exportCoronaAppTemplate") {
         logger.lifecycle("Exported to '${archiveFile.get()}'")
     }
 }
+
+tasks.register<Copy>("exportToNativeAppTemplate") {
+    if (coronaBuiltFromSource) group = "Corona-dev"
+    enabled = coronaBuiltFromSource
+    val templateDir = "$rootDir/../../subrepos/enterprise/contents/Project Template/App/android"
+
+    into(templateDir)
+    from(rootDir) {
+        include("build.gradle.kts")
+        include("gradlew", "gradlew.bat", "gradle/wrapper/**")
+        include("app/**")
+        exclude("app/build/**", "app/CMakeLists.txt", "app/build.gradle.kts")
+        exclude("**/*.iml", "**/\\.*")
+        exclude("**/AndroidManifest.xml")
+    }
+    from(rootDir) {
+        include("app/build.gradle.kts")
+        filter {
+            it.replace("com.corona.app", "com.mycompany.app")
+        }
+    }
+
+    doFirst {
+        delete(fileTree(templateDir) {
+            exclude("plugin/**")
+            exclude("settings.gradle")
+            exclude("**/AndroidManifest.xml")
+            exclude("**/*.java")
+            exclude("gradle.properties")
+        })
+    }
+    doLast {
+        logger.lifecycle("Copied to ${file(templateDir).absolutePath}")
+    }
+}
+
 
 val coronaNativeOutputDir = project.findProperty("coronaNativeOutputDir") as? String
         ?: "$nativeDir/Corona"
