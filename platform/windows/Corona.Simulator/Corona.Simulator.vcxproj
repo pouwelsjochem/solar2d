@@ -120,8 +120,6 @@
     <ClInclude Include="..\..\shared\Rtt_PlatformSimulator.h" />
     <ClInclude Include="..\..\shared\Rtt_TargetDevice.h" />
     <ClInclude Include="AboutDlg.h" />
-    <ClInclude Include="BuildNxSDlg.h" />
-    <ClInclude Include="BuildWin32AppDlg.h" />
     <ClInclude Include="CoronaInterface.h" />
     <ClInclude Include="CoronaProject.h" />
     <ClInclude Include="Interop\SimulatorRuntimeEnvironment.h" />
@@ -161,8 +159,6 @@
     <ClCompile Include="..\..\shared\Rtt_PlatformSimulator.cpp" />
     <ClCompile Include="..\..\shared\Rtt_TargetDevice.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="BuildNxSDlg.cpp" />
-    <ClCompile Include="BuildWin32AppDlg.cpp" />
     <ClCompile Include="CoronaInterface.cpp" />
     <ClCompile Include="CoronaProject.cpp" />
     <ClCompile Include="Interop\SimulatorRuntimeEnvironment.cpp" />

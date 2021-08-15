@@ -31,8 +31,6 @@
 #include "SimulatorDoc.h"
 #include "SimulatorView.h"
 #include "AboutDlg.h"
-#include "BuildNxSDlg.h"
-#include "BuildWin32AppDlg.h"
 #include "WinString.h"
 #include "WinGlobalProperties.h"  // WMU_ message IDs
 #include "MessageDlg.h"   // Alert
@@ -77,8 +75,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_COMMAND(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnViewNavigateBack)
 	ON_COMMAND(ID_FILE_MRU_FILE1, &CSimulatorView::OnFileMRU1)
 	ON_COMMAND(ID_FILE_OPEN, &CSimulatorView::OnFileOpen)
-	ON_COMMAND(ID_BUILD_FOR_NXS, &CSimulatorView::OnBuildForNxS)
-	ON_COMMAND(ID_BUILD_FOR_WIN32, &CSimulatorView::OnBuildForWin32)
 	ON_COMMAND(ID_FILE_OPENINEDITOR, &CSimulatorView::OnFileOpenInEditor)
 	ON_COMMAND(ID_FILE_RELAUNCH, &CSimulatorView::OnFileRelaunch)
 	ON_COMMAND(ID_FILE_CLOSE, &CSimulatorView::OnFileClose)
@@ -92,7 +88,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnUpdateViewNavigateBack)
 	ON_UPDATE_COMMAND_UI(ID_FILE_RELAUNCH, &CSimulatorView::OnUpdateFileRelaunch)
 	ON_UPDATE_COMMAND_UI(ID_FILE_CLOSE, &CSimulatorView::OnUpdateFileClose)
-	ON_UPDATE_COMMAND_UI(ID_BUILD_FOR_NXS, &CSimulatorView::OnUpdateBuildMenuItem)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPENINEDITOR, &CSimulatorView::OnUpdateFileOpenInEditor)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOW_PROJECT_FILES, &CSimulatorView::OnUpdateShowProjectFiles)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOWPROJECTSANDBOX, &CSimulatorView::OnUpdateShowProjectSandbox)
@@ -384,76 +379,6 @@ void CSimulatorView::OnFileOpen()
 			  ++mRelaunchCount;
 			  RestartSimulation();
 		  }
-	}
-}
-
-/// <summary>Opens a dialog to build the currently selected project as an NxS Switch app.</summary>
-void CSimulatorView::OnBuildForNxS()
-{
-	CSimulatorApp* applicationPointer = (CSimulatorApp*)AfxGetApp();
-	if (!applicationPointer->ShouldShowNXBuildDlg())
-	{
-		return;
-	}
-	// If app is running, suspend it during the build
-	bool buildSuspendedSimulator = false;
-	bool isSuspended = IsSimulationSuspended();
-	if (false == isSuspended)
-	{
-		buildSuspendedSimulator = true;
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-
-	// Display the build window.
-	CBuildNxSDlg dlg;
-	dlg.SetProject(GetDocument()->GetProject());
-	dlg.DoModal();
-	if (buildSuspendedSimulator)
-	{
-		// Toggle suspend
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-}
-
-/// <summary>Opens a dialog to build the currently selected project as a Win32 desktop app.</summary>
-void CSimulatorView::OnBuildForWin32()
-{
-	// Ask the user to select a Corona project if we're not currently running one.
-	// Note: This should never happen, but check just in case.
-	if (!mRuntimeEnvironmentPointer || !mRuntimeEnvironmentPointer->GetRuntime())
-	{
-		OnFileOpen();
-		if (!mRuntimeEnvironmentPointer || !mRuntimeEnvironmentPointer->GetRuntime())
-		{
-			return;
-		}
-	}
-
-	// Do not contnue if not all plugins have been acquired for the selected project.
-	// We do this because local Win32 app builds require the plugins zips to be downloaded first.
-	if (VerifyAllPluginsAcquired() == false)
-	{
-		return;
-	}
-
-	// If app is running, suspend it during the build.
-	bool wasAppRunning = false;
-	bool isSuspended = IsSimulationSuspended();
-	if (false == isSuspended)
-	{
-		wasAppRunning = true;
-		SuspendResumeSimulationWithOverlay(true, false);
-	}
-
-	// Display the build window.
-	CBuildWin32AppDlg dialog;
-	dialog.SetProject(GetDocument()->GetProject());
-	dialog.DoModal();
-
-	// Resume the project if it was previously running and the user hasn't started running the built app.
-	if (wasAppRunning && !dialog.HasRanBuiltApp())
-	{
-		SuspendResumeSimulationWithOverlay(true, false);
 	}
 }
 

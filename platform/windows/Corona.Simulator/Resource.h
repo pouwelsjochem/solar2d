@@ -206,7 +206,6 @@
 #define ID_VIEW_NAVIGATE_BACK           32817
 #define ID_FILE_CLEARPROJECTSANDBOX     32818
 #define ID_VIEW_CONSOLE                 32819
-#define ID_BUILD_FOR_NXS           32821
 #define ID_VIEWAS_BEGIN                 32900
 #define ID_VIEWAS_END                   32999
 

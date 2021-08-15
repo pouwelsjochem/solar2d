@@ -53,7 +53,6 @@
     <ClInclude Include="..\..\..\external\winutil\dirent.h">
       <Filter>%28root%29\external\winutil</Filter>
     </ClInclude>
-    <ClInclude Include="BuildWin32AppDlg.h" />
     <ClInclude Include="Rtt\Rtt_Win32AppPackager.h">
       <Filter>Rtt</Filter>
     </ClInclude>
@@ -85,7 +84,6 @@
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\html_blocks.h">
       <Filter>%28root%29\external\sundown</Filter>
     </ClInclude>
-    <ClInclude Include="BuildNxSDlg.h" />
     <ClInclude Include="..\..\shared\Rtt_NxSAppPackager.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
@@ -138,15 +136,8 @@
     <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp">
       <Filter>%28root%29\external\winutil</Filter>
     </ClCompile>
-    <ClCompile Include="BuildWin32AppDlg.cpp" />
-    <ClCompile Include="Rtt\Rtt_Win32AppPackager.cpp">
-      <Filter>Rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\external\rcedit\Project\src\rescle.cc">
       <Filter>%28root%29\external\rcedit\src</Filter>
-    </ClCompile>
-    <ClCompile Include="Rtt\Rtt_Win32AppPackagerParams.cpp">
-      <Filter>Rtt</Filter>
     </ClCompile>
     <ClCompile Include="SimulatorDocTemplate.cpp" />
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\html_smartypants.c">
@@ -172,10 +163,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\html.c">
       <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="BuildNxSDlg.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_NxSAppPackager.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

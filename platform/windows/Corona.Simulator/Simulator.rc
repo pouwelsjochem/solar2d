@@ -141,11 +141,6 @@ BEGIN
     BEGIN
         MENUITEM "&Open Project...\tCtrl+O",    ID_FILE_OPEN
         MENUITEM SEPARATOR
-        POPUP "&Build"
-        BEGIN
-            MENUITEM "&Windows...\tCtrl+Shift+B",   ID_BUILD_FOR_WIN32
-            MENUITEM "&NX Switch...\tShift+Alt+B", ID_BUILD_FOR_NXS
-        END
         MENUITEM "Open in &Editor\tCtrl+Shift+O", ID_FILE_OPENINEDITOR
         MENUITEM "Show Project &Files",         ID_FILE_SHOW_PROJECT_FILES
         MENUITEM "Show Project &Sandbox",       ID_FILE_SHOWPROJECTSANDBOX
@@ -190,8 +185,6 @@ END
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
-    "B",            ID_BUILD_FOR_NXS,  VIRTKEY, SHIFT, ALT, NOINVERT
-    "B",            ID_BUILD_FOR_WIN32,     VIRTKEY, SHIFT, CONTROL, NOINVERT
     "W",            ID_FILE_CLOSE,          VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPENINEDITOR,   VIRTKEY, SHIFT, CONTROL, NOINVERT
