@@ -113,6 +113,7 @@ class CSimulatorView : public CView
 		afx_msg void OnViewNavigateBack();
 		afx_msg void OnFileMRU1();
 		afx_msg void OnFileOpen();
+		afx_msg void OnBuildForNxS();
 		afx_msg void OnBuildForWin32();
 		afx_msg void OnFileOpenInEditor();
 		afx_msg void OnFileRelaunch();

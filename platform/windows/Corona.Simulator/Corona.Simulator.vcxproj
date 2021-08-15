@@ -112,6 +112,7 @@
     <ClInclude Include="..\..\..\external\winutil\dirent.h" />
     <ClInclude Include="..\..\shared\Rtt_DeviceBuildData.h" />
     <ClInclude Include="..\..\shared\Rtt_MPlatformServices.h" />
+    <ClInclude Include="..\..\shared\Rtt_NxSAppPackager.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformAppPackager.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformDictionaryWrapper.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="..\..\shared\Rtt_PlatformSimulator.h" />
     <ClInclude Include="..\..\shared\Rtt_TargetDevice.h" />
     <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="BuildNxSDlg.h" />
     <ClInclude Include="BuildWin32AppDlg.h" />
     <ClInclude Include="CoronaInterface.h" />
     <ClInclude Include="CoronaProject.h" />
@@ -151,6 +153,7 @@
     <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp" />
     <ClCompile Include="..\..\shared\AntHost.cpp" />
     <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp" />
+    <ClCompile Include="..\..\shared\Rtt_NxSAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp" />
@@ -158,6 +161,7 @@
     <ClCompile Include="..\..\shared\Rtt_PlatformSimulator.cpp" />
     <ClCompile Include="..\..\shared\Rtt_TargetDevice.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
+    <ClCompile Include="BuildNxSDlg.cpp" />
     <ClCompile Include="BuildWin32AppDlg.cpp" />
     <ClCompile Include="CoronaInterface.cpp" />
     <ClCompile Include="CoronaProject.cpp" />
@@ -186,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua" />
+    <LuaToCpp Include="..\..\resources\nxsPackageApp.lua" />
     <LuaToCpp Include="..\..\resources\shell.lua" />
   </ItemGroup>
   <ItemGroup>

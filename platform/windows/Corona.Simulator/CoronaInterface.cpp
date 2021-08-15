@@ -20,6 +20,7 @@
 #include "Rtt_WinPlatformServices.h"
 #include "Rtt_WinPlatform.h"
 #include "Rtt_PlatformAppPackager.h"
+#include "Rtt_NxSAppPackager.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
@@ -47,6 +48,103 @@ static UINT GetStatusMessageResourceIdFor(int resultCode)
 			break;
 	}
 	return resourceId;
+}
+
+CBuildResult appNxSBuild(
+	Interop::SimulatorRuntimeEnvironment* pSim,
+	const char* srcDir,
+	const char* nmetaPath,
+	const char* applicationName, const char* versionName,
+	const char* dstDir,
+	const Rtt::TargetDevice::Platform targetPlatform,
+	const char* targetos, bool isDistribution, int versionCode, bool useStandartResources)
+{
+	Rtt::WinPlatformServices* pServices = GetWinProperties()->GetServices();
+
+
+	// Translate targetOS in BuildAndroidDlg.h into enum from Rtt_PlatformAppPackager.h
+	int targetVersion = Rtt::TargetDevice::kNxS;
+
+	// Create the app packager.
+	Rtt::NxSAppPackager packager(*pServices);
+
+	// Read the application's "build.settings" file.
+	bool wasSuccessful = packager.ReadBuildSettings(srcDir);
+	if (!wasSuccessful)
+	{
+		LogAnalytics("NxS", "build-bungled", "reason", "bad-build-settings");
+
+		CString message;
+		message.LoadString(IDS_BUILD_SETTINGS_FILE_ERROR);
+		return CBuildResult(5, message);
+	}
+
+	// Check if a custom build ID has been assigned.
+	// This is typically assigned to daily build versions of Corona.
+	const char* customBuildId = packager.GetCustomBuildId();
+	if (!Rtt_StringIsEmpty(customBuildId))
+	{
+		Rtt_Log("\nUsing custom Build Id %s\n", customBuildId);
+
+		LogAnalytics("NxS", "build-with-custom-id", customBuildId);
+	}
+
+	// these are currently unused
+	const char* bundleId = "bundleId"; //TODO
+	const char* sdkRoot = "";
+
+	// Package build settings parameters.
+	Rtt::NxSAppPackagerParams params(
+		applicationName, versionName, NULL, NULL,
+		srcDir, dstDir, nmetaPath, NULL,
+		targetPlatform, targetVersion,
+		Rtt::TargetDevice::kNxS, customBuildId,
+		NULL, bundleId, isDistribution, NULL, useStandartResources);
+
+	// Select build template
+	Rtt::Runtime* runtimePointer = pSim->GetRuntime();
+	U32 luaModules = runtimePointer->VMContext().GetModules();
+	params.InitializeProductId(luaModules);
+
+	const char kBuildSettings[] = "build.settings";
+	Rtt::String buildSettingsPath;
+	params.SetBuildSettingsPath(buildSettingsPath.GetString());
+	pSim->GetPlatform()->PathForFile(kBuildSettings, Rtt::MPlatform::kResourceDir, Rtt::MPlatform::kTestFileExists, buildSettingsPath);
+
+	// Get Windows temp directory
+	TCHAR TempPath[MAX_PATH];
+	GetTempPath(MAX_PATH, TempPath);  // ends in '\\'
+	TCHAR* sCompanyName = _T("Corona Labs");
+	_tcsncpy_s(TempPath + _tcslen(TempPath), (MAX_PATH - _tcslen(TempPath)), sCompanyName, _tcslen(sCompanyName));
+	TempPath[_tcslen(TempPath)] = '\0';  // ensure null-termination
+	WinString strTempDir;
+	strTempDir.SetTCHAR(TempPath);
+
+	// Have the server build the app. (Warning! This is a long blocking call.)
+	int code = packager.Build(&params, strTempDir.GetUTF8());
+
+	// Return the result of the build.
+	CString statusMessage;
+	if (0 == code)
+	{
+		statusMessage.LoadString(GetStatusMessageResourceIdFor(code));
+
+		LogAnalytics("NxS", "build-succeeded");
+	}
+	else
+	{
+		WinString serverMsg;
+
+		serverMsg.SetUTF8(params.GetBuildMessage() ? params.GetBuildMessage() : "Error while building app");
+
+		serverMsg.Append("\r\nMore information may be available in the Simulator console");
+		statusMessage.Format(IDS_BUILD_ERROR_FORMAT_MESSAGE, code, serverMsg.GetTCHAR());
+
+		CStringA logMesg;
+		logMesg.Format("[%ld] %s", code, params.GetBuildMessage());
+		LogAnalytics("NxS", "build-failed", "reason", logMesg);
+	}
+	return CBuildResult(code, statusMessage);
 }
 
 void appEndNativeAlert(void *resource, int nButtonIndex, bool bCanceled)

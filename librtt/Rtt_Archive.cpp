@@ -24,7 +24,7 @@
 #include <string.h>
 #include <fcntl.h>
 
-#if defined( Rtt_WIN_ENV ) || defined( Rtt_NINTENDO_ENV )
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_NXS_ENV )
 	#include <io.h>
 	#include <sys/stat.h>
 	static const unsigned S_IRUSR = _S_IREAD;     ///< read by user
@@ -924,7 +924,43 @@ Archive::Archive( Rtt_Allocator& allocator, const char *srcPath )
 #endif
 	fData( NULL )
 {
-#if defined( Rtt_ANDROID_ENV )
+#if defined(Rtt_NXS_ENV)
+	FILE* filePointer = Rtt_FileOpen(srcPath, "rb");
+	if (filePointer)
+	{
+		fseek(filePointer, 0, SEEK_END);
+		fDataLen = ftell(filePointer);
+		if (fDataLen > 0)
+		{
+			const size_t MAX_BYTES_PER_READ = 1024;
+			rewind(filePointer);
+			fData = Rtt_MALLOC(&allocator, fDataLen);
+			for (long totalBytesRead = 0; totalBytesRead < fDataLen;)
+			{
+				size_t bytesRead = fread(((U8*)fData + totalBytesRead), 1, MAX_BYTES_PER_READ, filePointer);
+				if (bytesRead < MAX_BYTES_PER_READ)
+				{
+					int errorNumber = errno;
+					if (ferror(filePointer) && errorNumber)
+					{
+						Rtt_FREE((void*)fData);
+						fData = NULL;
+						fDataLen = 0;
+						Rtt_LogException(strerror(errorNumber));
+						break;
+					}
+				}
+				totalBytesRead += (long)bytesRead;
+				if (feof(filePointer))
+				{
+					fDataLen = totalBytesRead;
+					break;
+				}
+			}
+		}
+		Rtt_FileClose(filePointer);
+	}
+#elif defined( Rtt_ANDROID_ENV )
 	bool ok = NativeToJavaBridge::GetRawAsset( srcPath, fBits );
 	if ( ok ) {
 		fData = fBits.Get();
@@ -1022,7 +1058,7 @@ Archive::Archive( Rtt_Allocator& allocator, const char *srcPath )
 
 Archive::~Archive()
 {
-#if defined( Rtt_ANDROID_ENV ) || defined( Rtt_EMSCRIPTEN_ENV ) || defined( Rtt_NINTENDO_ENV )
+#if defined( Rtt_ANDROID_ENV ) || defined( Rtt_EMSCRIPTEN_ENV ) || defined( Rtt_NXS_ENV )
 	// Do nothing.
 #else
 	if ( Rtt_VERIFY( fData ) )

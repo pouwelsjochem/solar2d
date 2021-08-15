@@ -206,6 +206,7 @@ static const char kLinuxPlatformString[] = "LINUX";
 static const char kWin32PlatformString[] = "Win32";
 static const char kOSXPlatformString[] = "OSX";
 static const char kTVOSPlatformString[] = "tvOS";
+static const char kSwitchPlatformString[] = "NxS Switch";
 
 const char*
 TargetDevice::StringForPlatform( TargetDevice::Platform platform )

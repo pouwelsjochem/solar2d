@@ -37,6 +37,7 @@ class TargetDevice
 			kWin32Platform = 5, // Win32 Windows desktop app
 			kTVOSPlatform = 6, // tvOS
 			kLinuxPlatform = 7, // Linux desktop
+			kNxSPlatform = 8, // NxS switch app
 
 			kNumPlatforms
 		}
@@ -80,7 +81,8 @@ class TargetDevice
 			kAndroidOS2_3_3	=  123300,
 			kAndroidOS4_0_3 =  140300,
 			kWeb1_0         =   10000,
-			kLinux         =   160000,
+			kLinux					=	160000,
+			kNxS				= 170000,
 		} Version;
 
 		static Version VersionForPlatform( Platform platform ); // Return current stable version

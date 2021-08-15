@@ -237,6 +237,8 @@ external/facebook-ios-sdk
 external/facebook-android-sdk
 commit-email.sh
 platform/resources/iostemplate
+platform/tvos/license.ccdata
+platform/resources/nxtemplate
 
 platform/iphone/*.tar.bz
 platform/tvos/*.tar.bz

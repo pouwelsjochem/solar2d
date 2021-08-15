@@ -144,6 +144,7 @@ BEGIN
         POPUP "&Build"
         BEGIN
             MENUITEM "&Windows...\tCtrl+Shift+B",   ID_BUILD_FOR_WIN32
+            MENUITEM "&NX Switch...\tShift+Alt+B", ID_BUILD_FOR_NXS
         END
         MENUITEM "Open in &Editor\tCtrl+Shift+O", ID_FILE_OPENINEDITOR
         MENUITEM "Show Project &Files",         ID_FILE_SHOW_PROJECT_FILES
@@ -189,6 +190,7 @@ END
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
+    "B",            ID_BUILD_FOR_NXS,  VIRTKEY, SHIFT, ALT, NOINVERT
     "B",            ID_BUILD_FOR_WIN32,     VIRTKEY, SHIFT, CONTROL, NOINVERT
     "W",            ID_FILE_CLOSE,          VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
@@ -283,6 +285,7 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,282,222,50,14
 END
 
+IDD_BUILD_NXS DIALOGEX 0, 0, 370, 150
 IDD_BUILD_WIN32_APP DIALOGEX 0, 0, 315, 176
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_CONTEXTHELP
@@ -345,7 +348,7 @@ BEGIN
             VALUE "FileDescription", "Solar2D Simulator"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "Solar2D Simulator"
-            VALUE "LegalCopyright", "Copyright © 2020 Solar2D"
+            VALUE "LegalCopyright", "Copyright © 2020-2021 Solar2D"
             VALUE "OriginalFilename", "Solar2D Simulator"
             VALUE "ProductName", "Solar2D Simulator"
             VALUE "ProductVersion", "1.0.0.1"
@@ -414,6 +417,14 @@ BEGIN
         BOTTOMMARGIN, 236
     END
 
+    IDD_BUILD_NXS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 306
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 109
+    END
+
     IDD_BUILD_WIN32_APP, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -469,6 +480,7 @@ END
 
 STRINGTABLE
 BEGIN
+    IDS_BUILD_NMETA_NAME_NOT_PROVIDED "You must provide path to .nmeta file."
     IDS_OPENMAINLUA         "Select a main.lua"
     IDS_ONLYMAINLUA         "Only main.lua can be opened"
     IDS_EXPIRE              "This version of the Solar2D Simulator has expired. Please visit https://solar2d.com."

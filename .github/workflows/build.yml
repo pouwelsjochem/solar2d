@@ -264,22 +264,26 @@ jobs:
       - run: mkdir -f docs
       - name: Move docs outside the directory
         run: mv docs ../docs
-      # - name: Get Webtemplate
-      #   uses: actions/download-artifact@v1
-      #   with:
-      #     name: Webtemplate
-      # - name: Put webtemplate in place
-      #   run: cp -v Webtemplate/webtemplate.zip platform/resources/
-      #   shell: bash
-      # - name: Get Linux templates
-      #   uses: actions/download-artifact@v1
-      #   with:
-      #     name: Linux-Templates
-      # - name: Put webtemplate in place
-      #   run: |
-      #     cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
-      #     cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
-      #   shell: bash
+     # - name: Get Webtemplate
+     #   uses: actions/download-artifact@v1
+     #   with:
+     #     name: Webtemplate
+     # - name: Put webtemplate in place
+     #   run: cp -v Webtemplate/webtemplate.zip platform/resources/
+     #   shell: bash
+     # - name: Get NX Template
+     #   shell: bash
+     #   run: |
+     #     curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/nxtemplate > platform/resources/nxtemplate
+     # - name: Get Linux templates
+     #   uses: actions/download-artifact@v1
+     #   with:
+     #     name: Linux-Templates
+     # - name: Put webtemplate in place
+     #   run: |
+     #     cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
+     #     cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
+     #   shell: bash
       - name: Get Corona Native
         uses: actions/download-artifact@v1
         with:
@@ -346,13 +350,9 @@ jobs:
           then
           GIT_LOG="Changes since previous build:
           $GIT_LOG
-
-          For Linux builds see [Solar2DTux](https://solar2dtux.com/).
           "
           else
           GIT_LOG='See https://github.com/pouwelsjochem/corona for details
-
-          For Linux builds see [Solar2DTux](https://solar2dtux.com/).
           '
           fi
           echo 'GIT_LOG<<EOF' >> $GITHUB_ENV
@@ -372,7 +372,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Solar2D ${{ env.YEAR }}.${{ env.BUILD }}
@@ -380,7 +380,7 @@ jobs:
       - name: Upload Release Asset for macOS Simulator
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./Simulator-macOS/Corona-${{ env.YEAR }}.${{ env.BUILD }}.dmg
@@ -389,7 +389,7 @@ jobs:
       - name: Upload Release Asset for Windows Simulator
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./Simulator-Windows/Corona-${{ env.BUILD }}.msi
@@ -398,7 +398,7 @@ jobs:
       # - name: Upload Release Asset Android Debug Symbols
       #   uses: actions/upload-release-asset@v1
       #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PAT }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ steps.create_release.outputs.upload_url }}
       #     asset_path: ./Native/AndroidDebugSymbols.zip

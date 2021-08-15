@@ -7,6 +7,7 @@
 #define IDR_SIMULATOR_MENU              128
 #define IDR_ACTIVEWND                   129
 #define IDS_INVALID_WEB_APP_VERSION_NUMBER 130
+#define IDS_INVALID_NXS_APP_VERSION_NUMBER 132
 #define IDD_LICENSE                     314
 #define IDD_PASSWORD                    316
 #define IDD_MESSAGE                     317
@@ -49,6 +50,7 @@
 #define IDD_RELAUNCH_PREF               375
 #define IDD_BUILD_WIN32_APP             378
 #define IDD_HTML_MESSAGE                379
+#define IDD_BUILD_NXS              382
 #define IDS_OPENFORBUILD_s              500
 #define IDS_OPENMAINLUA                 501
 #define IDS_ONLYMAINLUA                 502
@@ -119,6 +121,7 @@
 #define IDS_BUILD_WIN32_VERSION_STRING_INVALID 669
 #define IDS_BUILD_VERSION_STRING_NOT_PROVIDED 670
 #define IDS_CANNOT_BUILD_WITHOUT_PLUGINS 671
+#define IDS_BUILD_NMETA_NAME_NOT_PROVIDED 677
 #define IDC_LINK_ANSCAMOBILE            1000
 #define IDC_BUILD_APPNAME               1001
 #define IDC_BUILD_VERSION_CODE          1002
@@ -184,6 +187,7 @@
 #define IDC_STOP_BUILD                  1103
 #define IDC_INCLUDE_STANDART_RESOURCES  1104
 #define IDC_CREATE_FB_INSTANT_ARCHIVE   1105
+#define IDC_BUILD_NMETA_PATH            1106
 #define ID_Menu                         32771
 #define ID_FILE_RELAUNCH                32774
 #define ID_VIEW_SUSPEND                 32778
@@ -202,6 +206,7 @@
 #define ID_VIEW_NAVIGATE_BACK           32817
 #define ID_FILE_CLEARPROJECTSANDBOX     32818
 #define ID_VIEW_CONSOLE                 32819
+#define ID_BUILD_FOR_NXS           32821
 #define ID_VIEWAS_BEGIN                 32900
 #define ID_VIEWAS_END                   32999
 
@@ -209,9 +214,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        381
+#define _APS_NEXT_RESOURCE_VALUE        383
 #define _APS_NEXT_COMMAND_VALUE         32820
 #define _APS_NEXT_CONTROL_VALUE         1104
-#define _APS_NEXT_SYMED_VALUE           380
+#define _APS_NEXT_SYMED_VALUE           382
 #endif
 #endif

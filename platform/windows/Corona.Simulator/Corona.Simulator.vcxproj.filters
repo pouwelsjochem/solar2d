@@ -85,6 +85,10 @@
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\html_blocks.h">
       <Filter>%28root%29\external\sundown</Filter>
     </ClInclude>
+    <ClInclude Include="BuildNxSDlg.h" />
+    <ClInclude Include="..\..\shared\Rtt_NxSAppPackager.h">
+      <Filter>%28root%29\platform\shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -169,6 +173,10 @@
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\html.c">
       <Filter>%28root%29\external\sundown</Filter>
     </ClCompile>
+    <ClCompile Include="BuildNxSDlg.cpp" />
+    <ClCompile Include="..\..\shared\Rtt_NxSAppPackager.cpp">
+      <Filter>%28root%29\platform\shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="res">
@@ -230,6 +238,9 @@
       <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua">
+      <Filter>%28root%29\platform\resources</Filter>
+    </LuaToCpp>
+    <LuaToCpp Include="..\..\resources\nxsPackageApp.lua">
       <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>
   </ItemGroup>
