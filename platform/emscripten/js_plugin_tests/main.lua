@@ -45,18 +45,6 @@ local f1 = p.callSayHello('JS')
 local f2 = p.sayHello('Lua')
 print("Bffs forever: " .. tostring(f1) .. " & " .. tostring(f2))
 
-
-local widget = require "widget"
-local toggleBtn = widget.newButton({
-	label = "test widget callbacks",
-	textOnly = true,
-	x = display.contentCenterX,
-	y = display.contentCenterY + 80,
-	onRelease = p.log
-})
-  
-
-
 function cmp(a,b)
 	local t = type(a)
 	if t ~= type(b) then return false end

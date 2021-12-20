@@ -1698,9 +1698,6 @@
     <LuaToCpp Include="..\..\..\subrepos\easing\easing.lua">
       <Filter>subrepos\easing</Filter>
     </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\timer\timer.lua">
-      <Filter>subrepos\timer</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\..\plugins\gameNetwork\shared\gameNetwork.lua">
       <Filter>plugins\gameNetwork\shared</Filter>
     </LuaToCpp>

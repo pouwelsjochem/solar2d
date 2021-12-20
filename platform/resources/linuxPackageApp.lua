@@ -538,18 +538,6 @@ local function makeApp(arch, linuxAppFolder, template, args, templateName)
 	local defaultFontPath = sFormat("%s/%s", templatePath, "FreeSans.ttf")
 	copyFile(defaultFontPath, pathJoin(resourcesFolder, "FreeSans.ttf"))
 
-	-- copy standard resources
-	if (args.useWidgetResources) then
-		for file in lfs.dir(templatePath) do
-			if (file ~= "." and file ~= "..") then
-				if (file:find("widget_")) then
-					copyFile(pathJoin(templatePath, file), pathJoin(resourcesFolder, file))
-				end
-			end
-		end
-		printf("%s copied widget resources", linuxBuilderPrefx)
-	end
-
 	-- delete unused files
 	deleteUnusedFiles(resourcesFolder, getExcludePredecate())
 

@@ -263,8 +263,6 @@ OBJECTS := \
 	$(OBJDIR)/Rtt_ReadOnlyInputDeviceCollection.o \
 	$(OBJDIR)/b2Separator.o \
 	$(OBJDIR)/SmoothPolygon.o \
-	$(OBJDIR)/composer.o \
-	$(OBJDIR)/composer_scene.o \
 	$(OBJDIR)/CoronaPrototype.o \
 	$(OBJDIR)/CoronaProvider.o \
 	$(OBJDIR)/easing.o \
@@ -359,38 +357,10 @@ OBJECTS := \
 	$(OBJDIR)/runtime.o \
 	$(OBJDIR)/shell.o \
 	$(OBJDIR)/shell_default_gl.o \
-	$(OBJDIR)/timer.o \
-	$(OBJDIR)/transition.o \
-	$(OBJDIR)/transition_v1.o \
-	$(OBJDIR)/widget.o \
-	$(OBJDIR)/widget_button.o \
-	$(OBJDIR)/widget_momentumScrolling.o \
-	$(OBJDIR)/widget_pickerWheel.o \
-	$(OBJDIR)/widget_progressView.o \
-	$(OBJDIR)/widget_scrollview.o \
-	$(OBJDIR)/widget_searchField.o \
-	$(OBJDIR)/widget_segmentedControl.o \
-	$(OBJDIR)/widget_slider.o \
-	$(OBJDIR)/widget_spinner.o \
-	$(OBJDIR)/widget_stepper.o \
-	$(OBJDIR)/widget_switch.o \
-	$(OBJDIR)/widget_tabbar.o \
-	$(OBJDIR)/widget_tableview.o \
-	$(OBJDIR)/widget_theme_android.o \
-	$(OBJDIR)/widget_theme_android_sheet.o \
-	$(OBJDIR)/widget_theme_android_holo_dark.o \
-	$(OBJDIR)/widget_theme_android_holo_dark_sheet.o \
-	$(OBJDIR)/widget_theme_android_holo_light.o \
-	$(OBJDIR)/widget_theme_android_holo_light_sheet.o \
-	$(OBJDIR)/widget_theme_ios.o \
-	$(OBJDIR)/widget_theme_ios7.o \
-	$(OBJDIR)/widget_theme_ios7_sheet.o \
-	$(OBJDIR)/widget_theme_ios_sheet.o \
 	$(OBJDIR)/kernel_filter_water_gl.o \
 	$(OBJDIR)/kernel_filter_step_gl.o \
 	$(OBJDIR)/dkjson.o \
 	$(OBJDIR)/CoronaLibrary-lua.o \
-	$(OBJDIR)/launchpad.o \
 	$(OBJDIR)/loader_callback.o \
 	$(OBJDIR)/loader_ccdata.o \
 
@@ -1232,14 +1202,6 @@ $(OBJDIR)/SmoothPolygon.o: ../../../external/smoothpolygon/SmoothPolygon.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
-$(OBJDIR)/composer.o: ../lua/composer.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/composer_scene.o: ../lua/composer_scene.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
 $(OBJDIR)/CoronaPrototype.o: ../lua/CoronaPrototype.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
@@ -1616,119 +1578,7 @@ $(OBJDIR)/shell_default_gl.o: ../lua/shell_default_gl.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
-$(OBJDIR)/timer.o: ../lua/timer.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/transition.o: ../lua/transition.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/transition_v1.o: ../lua/transition_v1.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget.o: ../lua/widget.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_button.o: ../lua/widget_button.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_momentumScrolling.o: ../lua/widget_momentumScrolling.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_pickerWheel.o: ../lua/widget_pickerWheel.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_progressView.o: ../lua/widget_progressView.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_scrollview.o: ../lua/widget_scrollview.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_searchField.o: ../lua/widget_searchField.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_segmentedControl.o: ../lua/widget_segmentedControl.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_slider.o: ../lua/widget_slider.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_spinner.o: ../lua/widget_spinner.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_stepper.o: ../lua/widget_stepper.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_switch.o: ../lua/widget_switch.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_tabbar.o: ../lua/widget_tabbar.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_tableview.o: ../lua/widget_tableview.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_android.o: ../lua/widget_theme_android.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_android_sheet.o: ../lua/widget_theme_android_sheet.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_android_holo_dark.o: ../lua/widget_theme_android_holo_dark.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_android_holo_dark_sheet.o: ../lua/widget_theme_android_holo_dark_sheet.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_android_holo_light.o: ../lua/widget_theme_android_holo_light.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_android_holo_light_sheet.o: ../lua/widget_theme_android_holo_light_sheet.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_ios.o: ../lua/widget_theme_ios.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_ios7.o: ../lua/widget_theme_ios7.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_ios7_sheet.o: ../lua/widget_theme_ios7_sheet.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/widget_theme_ios_sheet.o: ../lua/widget_theme_ios_sheet.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
 $(OBJDIR)/CoronaLibrary-lua.o: ../lua/CoronaLibrary.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/launchpad.o: ../lua/launchpad.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 

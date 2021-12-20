@@ -48,9 +48,6 @@ cp -r ../template.webapp/fbinstant fbinstant/
 # mkdir res_font
 # cp ../../mac/OpenSans-Regular.ttf res_font
 
-mkdir res_widget
-cp ../../../../subrepos/widget/widget_theme_*.png res_widget/
-
 # mkdir bin
 # cp ../obj/Release/libcorona.o bin/
 # cp ../../*.js bin/

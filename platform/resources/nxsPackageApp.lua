@@ -510,14 +510,6 @@ function nxsPackageApp( args )
 	end
 	logd("Copied " .. args.srcDir .. ' to ' .. appFolder)
 
-	if args.useStandartResources then
-		local ret = copyDir( pathJoin(templateFolder, 'res_widget'), appFolder )
-		if ret ~= 0 then
-			return "Failed to copy standard resources"
-		end
-		logd("Copied startard resources")
-	end
-
 	-- compile .lua
 	local rc = compileScriptsAndMakeCAR(args.nxsParams, appFolder, appFolder, args.tmpDir)
 	if not rc then

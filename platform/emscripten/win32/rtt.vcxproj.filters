@@ -1277,93 +1277,6 @@
     <ClCompile Include="GeneratedFiles\shell_luaload.cpp">
       <Filter>GeneratedFiles</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\timer_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\transition_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\transition_v1_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_button_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_momentumScrolling_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_pickerWheel_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_progressView_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_scrollview_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_searchField_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_segmentedControl_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_slider_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_spinner_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_stepper_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_switch_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_tabbar_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_tableview_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_android_holo_dark_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_android_holo_dark_sheet_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_android_holo_light_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_android_holo_light_sheet_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_android_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_android_sheet_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_ios_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_ios_sheet_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_ios7_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\widget_theme_ios7_sheet_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\composer_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\composer_scene_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\CoronaLibrary_luaload.cpp">
       <Filter>GeneratedFiles</Filter>
     </ClCompile>
@@ -1647,9 +1560,6 @@
       <Filter>GeneratedFiles</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\kernel_generator_sunbeams_gl_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\launchpad_luaload.cpp">
       <Filter>GeneratedFiles</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2862,9 +2772,6 @@
     <Filter Include="LuaFiles\resources">
       <UniqueIdentifier>{380c9602-b358-4c20-b80b-aa3d1924d9c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LuaFiles\composer">
-      <UniqueIdentifier>{ed59994e-6065-46d4-84a0-46e73fcd07fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="LuaFiles\corona">
       <UniqueIdentifier>{13f73a80-6df8-47da-9196-ea81451473f0}</UniqueIdentifier>
     </Filter>
@@ -2893,9 +2800,6 @@
     <LuaToCpp Include="..\..\resources\json.lua">
       <Filter>LuaFiles\resources</Filter>
     </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\launchpad.lua">
-      <Filter>LuaFiles\resources</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\resources\loader_callback.lua">
       <Filter>LuaFiles\resources</Filter>
     </LuaToCpp>
@@ -2907,12 +2811,6 @@
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\subrepos\easing\easing.lua">
       <Filter>LuaFiles\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\composer\composer.lua">
-      <Filter>LuaFiles\composer</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\composer\composer_scene.lua">
-      <Filter>LuaFiles\composer</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\librtt\Corona\CoronaLibrary.lua">
       <Filter>LuaFiles\corona</Filter>
@@ -3190,88 +3088,7 @@
     <LuaToCpp Include="..\..\..\librtt\Display\Shader\kernel_filter_median_gl.lua">
       <Filter>LuaFiles\shader</Filter>
     </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_dark.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_dark_sheet.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_light.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_holo_light_sheet.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_android_sheet.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios_sheet.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios7.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widget_theme_ios7_sheet.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_button.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_momentumScrolling.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_pickerWheel.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_progressView.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_scrollview.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_searchField.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_segmentedControl.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_slider.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_spinner.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_stepper.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_switch.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_tabbar.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget_tableview.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\widget\widgetLibrary\widget.lua">
-      <Filter>LuaFiles\widgert</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\..\plugins\network\shared\network.lua">
-      <Filter>LuaFiles</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\timer\timer.lua">
-      <Filter>LuaFiles</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\transition\transition.lua">
-      <Filter>LuaFiles</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\subrepos\transition\transition_v1.lua">
       <Filter>LuaFiles</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\shell.lua">

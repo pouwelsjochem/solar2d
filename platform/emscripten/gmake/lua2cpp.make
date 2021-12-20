@@ -11,39 +11,7 @@ SRCS =	../shell.lua \
 		$(ROOT)/resources/runtime.lua \
 		$(ROOT)/resources/loader_ccdata.lua \
 		$(ROOT)/resources/loader_callback.lua \
-		$(ROOT)/resources/launchpad.lua \
 		$(ROOT)/../subrepos/easing/easing.lua \
-		$(ROOT)/../subrepos/composer/composer.lua \
-		$(ROOT)/../subrepos/composer/composer_scene.lua \
-		$(ROOT)/../subrepos/timer/timer.lua \
-		$(ROOT)/../subrepos/transition/transition.lua \
-		$(ROOT)/../subrepos/transition/transition_v1.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_button.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_momentumScrolling.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_pickerWheel.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_scrollview.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_slider.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_tabbar.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_tableview.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_progressView.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_searchField.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_segmentedControl.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_spinner.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_stepper.lua \
-		$(ROOT)/../subrepos/widget/widgetLibrary/widget_switch.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_android_sheet.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_android.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_android_holo_dark.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_android_holo_dark_sheet.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_android_holo_light.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_android_holo_light_sheet.lua \
-		\
-		$(ROOT)/../subrepos/widget/widget_theme_ios_sheet.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_ios.lua \
-		\
-		$(ROOT)/../subrepos/widget/widget_theme_ios7_sheet.lua \
-		$(ROOT)/../subrepos/widget/widget_theme_ios7.lua \
 		\
 		$(ROOT)/../librtt/Corona/CoronaLibrary.lua \
 		$(ROOT)/../librtt/Corona/CoronaPrototype.lua \

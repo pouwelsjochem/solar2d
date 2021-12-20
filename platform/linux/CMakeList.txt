@@ -109,37 +109,7 @@ SET( LUA_SOURCES
 	"${CORONA_ROOT}/platform/resources/runtime.lua"
 	"${CORONA_ROOT}/platform/resources/loader_ccdata.lua"
 	"${CORONA_ROOT}/platform/resources/loader_callback.lua"
-	"${CORONA_ROOT}/platform/resources/launchpad.lua"
 	"${CORONA_ROOT}/subrepos/easing/easing.lua"
-	"${CORONA_ROOT}/subrepos/composer/composer.lua" 
-	"${CORONA_ROOT}/subrepos/composer/composer_scene.lua"
-	"${CORONA_ROOT}/subrepos/timer/timer.lua"
-	"${CORONA_ROOT}/subrepos/transition/transition.lua"
-	"${CORONA_ROOT}/subrepos/transition/transition_v1.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_button.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_momentumScrolling.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_pickerWheel.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_scrollview.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_slider.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_tabbar.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_tableview.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_progressView.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_searchField.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_segmentedControl.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_spinner.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_stepper.lua"
-	"${CORONA_ROOT}/subrepos/widget/widgetLibrary/widget_switch.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_dark.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_dark_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_light.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_android_holo_light_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios7_sheet.lua"
-	"${CORONA_ROOT}/subrepos/widget/widget_theme_ios7.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaLibrary.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaPrototype.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaProvider.lua"
@@ -341,36 +311,6 @@ SET( SOLAR2D_SOURCES
 		${Lua2CppOutputDir}/dkjson.cpp
 		${Lua2CppOutputDir}/loader_ccdata.cpp
 		${Lua2CppOutputDir}/loader_callback.cpp
-		${Lua2CppOutputDir}/launchpad.cpp
-		${Lua2CppOutputDir}/composer.cpp
-		${Lua2CppOutputDir}/composer_scene.cpp
-		${Lua2CppOutputDir}/timer.cpp
-		${Lua2CppOutputDir}/transition.cpp
-		${Lua2CppOutputDir}/transition_v1.cpp
-		${Lua2CppOutputDir}/widget.cpp
-		${Lua2CppOutputDir}/widget_button.cpp
-		${Lua2CppOutputDir}/widget_momentumScrolling.cpp
-		${Lua2CppOutputDir}/widget_pickerWheel.cpp
-		${Lua2CppOutputDir}/widget_scrollview.cpp
-		${Lua2CppOutputDir}/widget_slider.cpp
-		${Lua2CppOutputDir}/widget_tabbar.cpp
-		${Lua2CppOutputDir}/widget_tableview.cpp
-		${Lua2CppOutputDir}/widget_progressView.cpp
-		${Lua2CppOutputDir}/widget_searchField.cpp
-		${Lua2CppOutputDir}/widget_segmentedControl.cpp
-		${Lua2CppOutputDir}/widget_spinner.cpp
-		${Lua2CppOutputDir}/widget_stepper.cpp
-		${Lua2CppOutputDir}/widget_switch.cpp
-		${Lua2CppOutputDir}/widget_theme_android_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_android.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_dark.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_dark_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_light.cpp
-		${Lua2CppOutputDir}/widget_theme_android_holo_light_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_ios_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_ios.cpp
-		${Lua2CppOutputDir}/widget_theme_ios7_sheet.cpp
-		${Lua2CppOutputDir}/widget_theme_ios7.cpp
 		${Lua2CppOutputDir}/shell.cpp
 		${Lua2CppOutputDir}/BuilderPluginDownloader.cpp
 		${Lua2CppOutputDir}/CoronaBuilderPluginCollector.cpp
