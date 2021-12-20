@@ -1256,12 +1256,6 @@
     <ClCompile Include="..\..\shared\Rtt_BitmapUtils.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\loader_callback_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\loader_ccdata_luaload.cpp">
-      <Filter>GeneratedFiles</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\network_luaload.cpp">
       <Filter>GeneratedFiles</Filter>
     </ClCompile>
@@ -2801,9 +2795,6 @@
       <Filter>LuaFiles\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\loader_callback.lua">
-      <Filter>LuaFiles\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\loader_ccdata.lua">
       <Filter>LuaFiles\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\runtime.lua">

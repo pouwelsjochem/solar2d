@@ -361,8 +361,6 @@ OBJECTS := \
 	$(OBJDIR)/kernel_filter_step_gl.o \
 	$(OBJDIR)/dkjson.o \
 	$(OBJDIR)/CoronaLibrary-lua.o \
-	$(OBJDIR)/loader_callback.o \
-	$(OBJDIR)/loader_ccdata.o \
 
 RESOURCES := \
 
@@ -1579,14 +1577,6 @@ $(OBJDIR)/shell_default_gl.o: ../lua/shell_default_gl.cpp
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
 $(OBJDIR)/CoronaLibrary-lua.o: ../lua/CoronaLibrary.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/loader_callback.o: ../lua/loader_callback.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/loader_ccdata.o: ../lua/loader_ccdata.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 

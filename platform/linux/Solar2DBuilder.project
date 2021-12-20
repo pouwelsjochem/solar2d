@@ -879,8 +879,6 @@
       <File Name="lua/shell.cpp"/>
       <File Name="lua/runtime.cpp"/>
       <File Name="lua/re.cpp"/>
-      <File Name="lua/loader_ccdata.cpp"/>
-      <File Name="lua/loader_callback.cpp"/>
       <File Name="lua/json.cpp"/>
       <File Name="lua/init.cpp"/>
       <File Name="lua/easing.cpp"/>

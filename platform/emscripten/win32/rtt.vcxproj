@@ -1079,8 +1079,6 @@
     <ClCompile Include="GeneratedFiles\kernel_generator_random_gl_luaload.cpp" />
     <ClCompile Include="GeneratedFiles\kernel_generator_stripes_gl_luaload.cpp" />
     <ClCompile Include="GeneratedFiles\kernel_generator_sunbeams_gl_luaload.cpp" />
-    <ClCompile Include="GeneratedFiles\loader_callback_luaload.cpp" />
-    <ClCompile Include="GeneratedFiles\loader_ccdata_luaload.cpp" />
     <ClCompile Include="GeneratedFiles\network_luaload.cpp" />
     <ClCompile Include="GeneratedFiles\re_luaload.cpp" />
     <ClCompile Include="GeneratedFiles\runtime_luaload.cpp" />
@@ -1191,8 +1189,6 @@
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\init.lua" />
     <LuaToCpp Include="..\..\resources\json.lua" />
-    <LuaToCpp Include="..\..\resources\loader_callback.lua" />
-    <LuaToCpp Include="..\..\resources\loader_ccdata.lua" />
     <LuaToCpp Include="..\..\resources\runtime.lua" />
     <LuaToCpp Include="..\shell.lua" />
   </ItemGroup>

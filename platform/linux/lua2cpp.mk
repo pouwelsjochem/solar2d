@@ -9,8 +9,6 @@ SRCS =	shell.lua \
 		$(ROOT)/resources/json.lua \
 		$(ROOT)/resources/dkjson.lua \
 		$(ROOT)/resources/runtime.lua \
-		$(ROOT)/resources/loader_ccdata.lua \
-		$(ROOT)/resources/loader_callback.lua \
 		$(ROOT)/../subrepos/easing/easing.lua \
 		\
 		$(ROOT)/../librtt/Corona/CoronaLibrary.lua \
