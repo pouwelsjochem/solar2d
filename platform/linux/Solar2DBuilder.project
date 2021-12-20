@@ -877,7 +877,6 @@
       <File Name="lua/ValidateSettings_luaload.cpp"/>
       <File Name="lua/shell_default_gl.cpp"/>
       <File Name="lua/shell.cpp"/>
-      <File Name="lua/runtime.cpp"/>
       <File Name="lua/re.cpp"/>
       <File Name="lua/json.cpp"/>
       <File Name="lua/init.cpp"/>
