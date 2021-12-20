@@ -61,6 +61,12 @@ AndroidDevice::Vibrate(const char * hapticType, const char* hapticStyle) const
 }
 
 void
+AndroidDevice::Vibrate(const char * hapticType, const char* hapticStyle) const
+{
+	fNativeToJavaBridge->Vibrate(hapticType, hapticStyle);
+}
+
+void
 AndroidDevice::SetAccelerometerInterval( U32 frequency ) const
 {
 	fNativeToJavaBridge->SetAccelerometerInterval( frequency );

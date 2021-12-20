@@ -330,6 +330,32 @@ jobs:
           name: Simulator-Windows
           path: ./output
 
+  publish-snap:
+    runs-on: ubuntu-20.04
+    needs:
+      - linux
+    steps:
+      - uses: actions/download-artifact@v1
+        with:
+          name: Snap
+      - name: Determine release
+        run: |
+          if ls Snap/*2100.9999* &> /dev/null
+          then
+            export SNAP_RELEASE=edge
+          else
+            export SNAP_RELEASE=stable
+          fi
+          echo "SNAP_RELEASE=$SNAP_RELEASE" >> $GITHUB_ENV
+          mv -v Snap/*.snap s2d.snap
+      - uses: snapcore/action-publish@v1
+        if: false
+        with:
+          store_login: ${{ secrets.SNAP_STORE_LOGIN }}
+          snap: s2d.snap
+          release: ${{ env.SNAP_RELEASE }}
+
+
   release:
     if: startsWith(github.ref, 'refs/tags')
     runs-on: ubuntu-20.04
@@ -350,6 +376,9 @@ jobs:
           then
           GIT_LOG="Changes since previous build:
           $GIT_LOG
+          For linux it is recommended to use snap:
+          
+               sudo snap install '~/Downloads/solar2d_$YEAR.$BUILD_amd64.snap' --classic --dangerous
           "
           else
           GIT_LOG='See https://github.com/pouwelsjochem/corona for details
@@ -368,6 +397,9 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: Native
+      - uses: actions/download-artifact@v1
+        with:
+          name: Snap
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
