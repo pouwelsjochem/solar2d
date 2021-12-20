@@ -2797,9 +2797,6 @@
     <LuaToCpp Include="..\..\resources\loader_callback.lua">
       <Filter>LuaFiles\resources</Filter>
     </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\runtime.lua">
-      <Filter>LuaFiles\resources</Filter>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\..\subrepos\easing\easing.lua">
       <Filter>LuaFiles\resources</Filter>
     </LuaToCpp>

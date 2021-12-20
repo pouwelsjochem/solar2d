@@ -1189,7 +1189,6 @@
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\init.lua" />
     <LuaToCpp Include="..\..\resources\json.lua" />
-    <LuaToCpp Include="..\..\resources\runtime.lua" />
     <LuaToCpp Include="..\shell.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

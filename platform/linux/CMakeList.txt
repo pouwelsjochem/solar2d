@@ -106,7 +106,6 @@ SET( LUA_SOURCES
 	"${CORONA_ROOT}/platform/resources/init.lua"
 	"${CORONA_ROOT}/platform/resources/json.lua"
 	"${CORONA_ROOT}/platform/resources/dkjson.lua"
-	"${CORONA_ROOT}/platform/resources/runtime.lua"
 	"${CORONA_ROOT}/subrepos/easing/easing.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaLibrary.lua"
 	"${CORONA_ROOT}/librtt/Corona/CoronaPrototype.lua"
@@ -303,7 +302,6 @@ add_executable( Solar2DConsole
 
 SET( SOLAR2D_SOURCES
 		${Lua2CppOutputDir}/init.cpp
-		${Lua2CppOutputDir}/runtime.cpp
 		${Lua2CppOutputDir}/easing.cpp
 		${Lua2CppOutputDir}/json.cpp
 		${Lua2CppOutputDir}/dkjson.cpp

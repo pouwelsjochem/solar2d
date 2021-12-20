@@ -8,7 +8,6 @@ SRCS =	shell.lua \
 		$(ROOT)/../external/lpeg/re.lua \
 		$(ROOT)/resources/json.lua \
 		$(ROOT)/resources/dkjson.lua \
-		$(ROOT)/resources/runtime.lua \
 		$(ROOT)/../subrepos/easing/easing.lua \
 		\
 		$(ROOT)/../librtt/Corona/CoronaLibrary.lua \
