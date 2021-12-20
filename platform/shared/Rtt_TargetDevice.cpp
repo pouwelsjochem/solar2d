@@ -300,6 +300,7 @@ static const char kWin32PlatformTag[] = "win32";
 static const char kOSXPlatformTag1[] = "osx";
 static const char kOSXPlatformTag2[] = "macos";
 static const char kTVOSPlatformTag[] = "tvos";
+static const char kNXSPlatformTag[] = "nx64";
 
 const char*
 TargetDevice::TagForPlatform( TargetDevice::Platform platform )
@@ -332,6 +333,8 @@ TargetDevice::TagForPlatform( TargetDevice::Platform platform )
 		case kTVOSPlatform:
 			result = kTVOSPlatformTag;
 			break;
+		case kNxSPlatform:
+			result = kNXSPlatformTag;
 		default:
 			Rtt_ASSERT_NOT_IMPLEMENTED();
 			break;
@@ -379,6 +382,10 @@ TargetDevice::PlatformForTag( const char *str )
 		else if ( 0 == Rtt_StringCompareNoCase( str, kTVOSPlatformTag ) )
 		{
 			result = kTVOSPlatform;
+		}
+		else if (0 == Rtt_StringCompareNoCase(str, kNXSPlatformTag))
+		{
+			result = kNxSPlatform;
 		}
 	}
 

@@ -36,8 +36,20 @@ val coronaSrcDir = project.findProperty("coronaSrcDir") as? String
             "$rootDir/../Corona"
         }
 val coronaBuiltFromSource = file("CMakeLists.txt").exists() && file("../sdk").exists()
-val resourceDir = coronaResourcesDir?.let { file("$it/../Native/").absolutePath }?.takeIf { file(it).exists() }
-val nativeDir = resourceDir ?: "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
+
+val windows = System.getProperty("os.name").toLowerCase().contains("windows")
+val linux = System.getProperty("os.name").toLowerCase().contains("linux")
+val shortOsName = if (windows) "win" else if (linux) "linux" else "mac"
+
+val nativeDir = if (windows) {
+    val resourceDir = coronaResourcesDir?.let { file("$it/../Native/").absolutePath }?.takeIf { file(it).exists() }
+    (resourceDir ?: "${System.getenv("CORONA_PATH")}/Native").replace("\\", "/")
+} else if (linux) {
+    "$coronaResourcesDir/Native"    
+} else {
+    val resourceDir = coronaResourcesDir?.let { file("$it/../../../Native/").absolutePath }?.takeIf { file(it).exists() }
+    resourceDir ?: "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
+}
 
 val coronaPlugins = file("$buildDir/corona-plugins")
 val luaCmd = "$nativeDir/Corona/mac/bin/lua"
@@ -113,7 +125,14 @@ val parsedBuildProperties: JsonObject = run {
 extra["minSdkVersion"] = parsedBuildProperties.lookup<Any?>("buildSettings.android.minSdkVersion").firstOrNull()?.toString()?.toIntOrNull()
         ?: 15
 
-val coronaBuilder = "$nativeDir/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
+val coronaBuilder = if (windows) {
+    "$nativeDir/Corona/win/bin/CoronaBuilder.exe"
+} else if (linux) {
+    "$coronaResourcesDir/../Solar2DBuilder"    
+} else {
+    "$nativeDir/Corona/$shortOsName/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
+}
+
 val coronaVersionName =
         parsedBuildProperties.lookup<Any?>("buildSettings.android.versionName").firstOrNull()?.toString()
                 ?: project.findProperty("coronaVersionName") as? String ?: "1.0"

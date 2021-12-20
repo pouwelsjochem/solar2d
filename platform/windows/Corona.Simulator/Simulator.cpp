@@ -467,7 +467,7 @@ CString CSimulatorApp::GetResourceDir()
 
 bool CSimulatorApp::ShouldShowNXBuildDlg()
 {
-	bool show = GetProfileInt(REGISTRY_SECTION, REGISTRY_SHOWNXSBUILD, REGISTRY_SHOWNXSBUILD_DEFAULT) ? true : false;
+	bool show = getenv("NINTENDO_SDK_ROOT") != NULL;
 	return show;
 }
 

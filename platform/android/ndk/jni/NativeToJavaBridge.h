@@ -139,7 +139,7 @@ class NativeToJavaBridge
 		void SetEventNotification( int eventType, bool enable );
 		bool HasAccelerometer();
 		bool HasGyroscope();
-		void Vibrate();
+		void Vibrate(const char * hapticType = NULL, const char* hapticStyle = NULL);
 		
 	public:
 		int CryptoGetDigestLength( const char * algorithm );

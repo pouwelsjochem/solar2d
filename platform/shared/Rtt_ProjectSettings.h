@@ -13,6 +13,7 @@
 #include "Core/Rtt_Macros.h"
 #include <map>
 #include <set>
+#include <string>
 extern "C"
 {
 	struct lua_State;

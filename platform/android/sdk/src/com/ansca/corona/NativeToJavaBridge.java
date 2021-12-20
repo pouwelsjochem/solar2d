@@ -1604,9 +1604,9 @@ public class NativeToJavaBridge {
 		return null;
 	}
 
-	protected static void callVibrate(CoronaRuntime runtime)
+	protected static void callVibrate(CoronaRuntime runtime, String hapticType, String hapticStyle)
 	{
-		runtime.getController().vibrate();
+		runtime.getController().vibrate(hapticType, hapticStyle);
 	}
 
 	protected static int callCryptoGetDigestLength( String algorithm ) {

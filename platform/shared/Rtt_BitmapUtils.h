@@ -13,10 +13,8 @@
 #include <stdio.h>
 #include "Display/Rtt_PlatformBitmap.h"
 
-class bitmapUtil
+namespace bitmapUtil
 {
-public:
-
 	static uint8_t* loadPNG(FILE* infile, int& w, int& h);
 	static bool savePNG(const char* filename, uint8_t* data, int width, int height, Rtt::PlatformBitmap::Format format);
 };

@@ -314,7 +314,7 @@ TextureFactory::GetDefault()
 static BufferBitmap *
 NewContainerMaskBitmap( Rtt_Allocator *pAllocator )
 {
-#if defined(Rtt_NXS_ENV) || defined(Rtt_LINUX_ENV)
+#if defined(Rtt_LINUX_ENV)
 	const size_t kLength = 8;
 	const size_t kBorder = 2;
 	const PlatformBitmap::Format kFormat = PlatformBitmap::kRGBA;

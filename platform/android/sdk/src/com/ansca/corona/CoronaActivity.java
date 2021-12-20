@@ -39,7 +39,7 @@ import com.ansca.corona.storage.ResourceServices;
  * @see <a href="http://developer.android.com/reference/android/app/Activity.html">Activity</a>
  */
 public class CoronaActivity extends Activity {
-	
+
 	private final int MIN_REQUEST_CODE = 1;
 
 	private android.content.Intent myInitialIntent = null;
@@ -54,49 +54,49 @@ public class CoronaActivity extends Activity {
 	}
 
 	/** Handler used to post messages and Runnable objects to main UI thread's message queue. */
-    private Handler myHandler = null;
+	private Handler myHandler = null;
 
-    /** Listens for input events from the root content view and dispatches them to Corona's Lua listeners. */
-    private com.ansca.corona.input.ViewInputHandler myInputHandler;
-	
+	/** Listens for input events from the root content view and dispatches them to Corona's Lua listeners. */
+	private com.ansca.corona.input.ViewInputHandler myInputHandler;
+
 	/** Sends CoronaRuntimeTask objects to the Corona runtime's EventManager in a thread safe manner. */
 	private CoronaRuntimeTaskDispatcher myRuntimeTaskDispatcher = null;
 
 	/** Dictionary of activity result handlers which uses request codes as the key. */
 	private java.util.HashMap<Integer, CoronaActivity.ResultHandler> fActivityResultHandlers =
-						new java.util.HashMap<Integer, CoronaActivity.ResultHandler>();
+			new java.util.HashMap<Integer, CoronaActivity.ResultHandler>();
 
 	/** ArrayList of new intent result handlers. */
 	private java.util.ArrayList<CoronaActivity.OnNewIntentResultHandler> fNewIntentResultHandlers = new java.util.ArrayList<CoronaActivity.OnNewIntentResultHandler>();
 
 	/** Dictionary of request permissions result handlers which uses request codes as the key. */
 	private java.util.HashMap<Integer, CoronaActivity.ResultHandler> fRequestPermissionsResultHandlers =
-						new java.util.HashMap<Integer, CoronaActivity.ResultHandler>();
-	
-	/** 
+			new java.util.HashMap<Integer, CoronaActivity.ResultHandler>();
+
+	/**
 	 * Base Result Handler interface used for various handler types we may need.
 	 */
 	private interface ResultHandler {}
 
 	/**
-	 * Handler that is invoked by the {@link com.ansca.corona.CoronaActivity CoronaActivity} when a result has been received from a 
+	 * Handler that is invoked by the {@link com.ansca.corona.CoronaActivity CoronaActivity} when a result has been received from a
 	 * child <a href="http://developer.android.com/reference/android/app/Activity.html">Activity</a>.
 	 * <p>
-	 * This handler is assigned to the {@link com.ansca.corona.CoronaActivity CoronaActivity} via its 
-	 * {@link com.ansca.corona.CoronaActivity#registerActivityResultHandler(com.ansca.corona.CoronaActivity.OnActivityResultHandler) 
-	 * registerActivityResultHandler()} method, which returns a unique request code for you to use when calling 
+	 * This handler is assigned to the {@link com.ansca.corona.CoronaActivity CoronaActivity} via its
+	 * {@link com.ansca.corona.CoronaActivity#registerActivityResultHandler(com.ansca.corona.CoronaActivity.OnActivityResultHandler)
+	 * registerActivityResultHandler()} method, which returns a unique request code for you to use when calling
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a>.
 	 * @see CoronaActivity
 	 */
 	public interface OnActivityResultHandler extends ResultHandler {
 		/**
-		 * Called when returning from an activity you've launched via the 
+		 * Called when returning from an activity you've launched via the
 		 * <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a>
 		 * method. This method will yield the returned result of that activity.
 		 * @param activity The {@link com.ansca.corona.CoronaActivity CoronaActivity} that is receiving the result.
-		 * @param requestCode The integer request code originally supplied to 
+		 * @param requestCode The integer request code originally supplied to
 		 * <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a>. Allows you to identify which child activity that the result is coming from.
-		 * @param resultCode The integer result code returned by the child activity via its 
+		 * @param resultCode The integer result code returned by the child activity via its
 		 * <a href="http://developer.android.com/reference/android/app/Activity.html#setResult(int)">setResult()</a> method.
 		 * @param data An <a href="http://developer.android.com/reference/android/content/Intent.html">Intent</a> object which can return result data to the caller. Can be null.
 		 */
@@ -129,9 +129,9 @@ public class CoronaActivity extends Activity {
 	 * Only used in Android 6.0 and above.
 	 * <p>
 	 * This handler is assigned to the {@link com.ansca.corona.CoronaActivity CoronaActivity} via its
-	 * {@link com.ansca.corona.CoronaActivity#registerRequestPermissionsResultHandler(com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler) registerRequestPermissionsResultHandler()} 
+	 * {@link com.ansca.corona.CoronaActivity#registerRequestPermissionsResultHandler(com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler) registerRequestPermissionsResultHandler()}
 	 * method, which returns a unique request code for you to use when calling which returns a unique request code for you to use when
-	 * calling 
+	 * calling
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a>.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
@@ -141,11 +141,11 @@ public class CoronaActivity extends Activity {
 		/**
 		 * Called when returning from the request permission dialog.
 		 * @param activity The {@link com.ansca.corona.CoronaActivity CoronaActivity} that is receiving the result.
-		 * @param requestCode The integer request code originally supplied to 
+		 * @param requestCode The integer request code originally supplied to
 		 * <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a>. Allows you to identify which permissions request this came from.
-		 * @param permissions The requested permissions. Never null. 
-		 * @param grantResults The grant results for the corresponding permissions which is either 
-		 * <a href="http://developer.android.com/reference/android/content/pm/PackageManager.html#PERMISSION_GRANTED">PERMISSION_GRANTED</a> or 
+		 * @param permissions The requested permissions. Never null.
+		 * @param grantResults The grant results for the corresponding permissions which is either
+		 * <a href="http://developer.android.com/reference/android/content/pm/PackageManager.html#PERMISSION_GRANTED">PERMISSION_GRANTED</a> or
 		 * <a href="http://developer.android.com/reference/android/content/pm/PackageManager.html#PERMISSION_DENIED">PERMISSION_DENIED</a>. Never null.
 		 */
 		public void onHandleRequestPermissionsResult(
@@ -167,7 +167,7 @@ public class CoronaActivity extends Activity {
 
 	/**
 	 * Called when this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
-	 * has been created, just before it starts. Initializes this 
+	 * has been created, just before it starts. Initializes this
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> view and member variables.
 	 * @param savedInstanceState If the activity is being re-initialized after previously being shut down, then this bundle
 	 * contains the data it most recently supplied in <a href="http://developer.android.com/reference/android/app/Activity.html#onSaveInstanceState(android.os.Bundle)">onSaveInstanceState()</a>. Otherwise it is null.
@@ -206,7 +206,7 @@ public class CoronaActivity extends Activity {
 			CoronaEnvironment.onNewInstall(this);
 		}
 		CoronaEnvironment.deleteTempDirectory(this);
-		
+
 		// Make this activity available to the rest of the application.
 		CoronaEnvironment.setCoronaActivity(this);
 
@@ -241,7 +241,7 @@ public class CoronaActivity extends Activity {
 		
 		// Set up a handler for sending messages and posting Runnable object to the main UI threads message queue.
 		myHandler = new Handler();
-		
+
 		// Set up a dispatcher for sending tasks to the Corona runtime via the EventManager.
 		// This is mostly intended for customers who use the Enterprise version of Corona.
 		myRuntimeTaskDispatcher = new CoronaRuntimeTaskDispatcher(fCoronaRuntime);
@@ -253,7 +253,7 @@ public class CoronaActivity extends Activity {
 		catch (Exception ex) {
 			fController.showNativeAlert("Error", ex.getMessage(), null);
 		}
-		
+
 		// Create the views for this activity.
 		// Create the OpenGL view and initialize the Corona runtime.
 		myGLView.setActivity(this);
@@ -265,7 +265,7 @@ public class CoronaActivity extends Activity {
 		myInputHandler = new com.ansca.corona.input.ViewInputHandler(fCoronaRuntime.getController());
 		myInputHandler.setDispatcher(myRuntimeTaskDispatcher);
 		myInputHandler.setView(viewManager.getContentView());
-		
+
 		// Start up the notification system, if not done already.
 		// Note: Creating the NotificationServices object is all it takes.
 		new com.ansca.corona.notifications.NotificationServices(this);
@@ -275,8 +275,8 @@ public class CoronaActivity extends Activity {
 		new com.ansca.corona.input.InputDeviceServices(this);
 
 		// Sync up status of dangerous-level permissions.
-		// This is to work around the possibility of a partially granted permission group which 
-		// can occur if access to a permission group is granted, but then the app is updated with 
+		// This is to work around the possibility of a partially granted permission group which
+		// can occur if access to a permission group is granted, but then the app is updated with
 		// another permission in that group after access to the group has been granted.
 		if (android.os.Build.VERSION.SDK_INT >= 23) {
 			syncPermissionStateForAllPermissions();
@@ -287,16 +287,16 @@ public class CoronaActivity extends Activity {
 	/* Public APIs that connect to the Controller class */
 
 	/**
-	 * Creates an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a> 
+	 * Creates an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a>
 	 * with the proper theme for the given device.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2932/">daily build 2016.2932</a></b>.
-	 * @param context The <a href="http://developer.android.com/reference/android/content/Context.html">Context</a> 
+	 * @param context The <a href="http://developer.android.com/reference/android/content/Context.html">Context</a>
 	 *				  to help infer what theme to use.
 	 * @return Returns an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a>
 	 *		   that uses as close to the native device's theme as possible.
 	 *		   <p>
-	 *		   Returns null if an 
+	 *		   Returns null if an
 	 *		   <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a> could not
 	 *		   be created. If this happens, this means that your app is closing and you shouldn't be presenting an alert anyway.
 	 */
@@ -306,16 +306,16 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Creates an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a> 
+	 * Creates an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a>
 	 * with the dark theme.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2961/">daily build 2016.2961</a></b>.
-	 * @param context The <a href="http://developer.android.com/reference/android/content/Context.html">Context</a> 
+	 * @param context The <a href="http://developer.android.com/reference/android/content/Context.html">Context</a>
 	 *				  to help infer what theme to use.
 	 * @return Returns an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a>
 	 *		   that uses a dark theme as close to the native device's theme as possible.
 	 *		   <p>
-	 *		   Returns null if an 
+	 *		   Returns null if an
 	 *		   <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a> could not
 	 *		   be created. If this happens, this means that your app is closing and you shouldn't be presenting an alert anyway.
 	 */
@@ -325,16 +325,16 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Creates an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a> 
+	 * Creates an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a>
 	 * with the light theme.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2961/">daily build 2016.2961</a></b>.
-	 * @param context The <a href="http://developer.android.com/reference/android/content/Context.html">Context</a> 
+	 * @param context The <a href="http://developer.android.com/reference/android/content/Context.html">Context</a>
 	 *				  to help infer what theme to use.
 	 * @return Returns an <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a>
 	 *		   that uses a light theme as close to the native device's theme as possible.
 	 *		   <p>
-	 *		   Returns null if an 
+	 *		   Returns null if an
 	 *		   <a href="http://developer.android.com/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a> could not
 	 *		   be created. If this happens, this means that your app is closing and you shouldn't be presenting an alert anyway.
 	 */
@@ -344,7 +344,7 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Displays a native alert stating that this permission is missing from the 
+	 * Displays a native alert stating that this permission is missing from the
 	 * <a href="http://developer.android.com/guide/topics/manifest/manifest-intro.html">AndroidManifest.xml</a>.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
@@ -357,7 +357,7 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Displays a native alert stating that the 
+	 * Displays a native alert stating that the
 	 * <a href="http://developer.android.com/guide/topics/manifest/manifest-intro.html">AndroidManifest.xml</a>
 	 * doesn't contain any permissions from the desired permission group.
 	 * <p>
@@ -435,9 +435,9 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Gets the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that created and launched this 
+	 * Gets the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that created and launched this
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
-	 * @return Returns the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that created this 
+	 * @return Returns the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that created this
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 */
 	public android.content.Intent getInitialIntent() {
@@ -445,38 +445,38 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Gets the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that last started/resumed this 
+	 * Gets the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that last started/resumed this
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 * <p>
-	 * The returned <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> will initially be the 
-	 * <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that created and launched this 
+	 * The returned <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> will initially be the
+	 * <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that created and launched this
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 * <p>
-	 * The returned <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> will change when this 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> is started by a call to the 
+	 * The returned <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> will change when this
+	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> is started by a call to the
 	 * <a href="http://developer.android.com/reference/android/content/Context.html#startActivity(android.content.Intent)">startActivity()</a>
-	 * or <a href="http://developer.android.com/reference/android/app/Activity.html#setIntent(android.content.Intent)">setIntent()</a> 
-	 * methods, which typically happens external to this application such as when a notification gets tapped by the end-user or by 
+	 * or <a href="http://developer.android.com/reference/android/app/Activity.html#setIntent(android.content.Intent)">setIntent()</a>
+	 * methods, which typically happens external to this application such as when a notification gets tapped by the end-user or by
 	 * another application such as Facebook.
-	 * @return Returns the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that last started 
+	 * @return Returns the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that last started
 	 * this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 */
 	@Override
 	public android.content.Intent getIntent() {
 		return super.getIntent();
 	}
-	
+
 	/**
-	 * Gets the horizontal margin of the Corona content. This is the distance 
+	 * Gets the horizontal margin of the Corona content. This is the distance
 	 * between the origins of the screen and the Corona content.
 	 * @return Returns the value in pixel units.
 	 */
 	public int getHorizontalMarginInPixels() {
 		return JavaToNativeShim.getHorizontalMarginInPixels(fCoronaRuntime);
 	}
-	
+
 	/**
-	 * Gets the vertical margin of the Corona content. This is the distance 
+	 * Gets the vertical margin of the Corona content. This is the distance
 	 * between the origins of the screen and the Corona content.
 	 * @return Returns the value in pixel units.
 	 */
@@ -491,7 +491,7 @@ public class CoronaActivity extends Activity {
 	public int getContentWidthInPixels() {
 		return JavaToNativeShim.getContentWidthInPixels(fCoronaRuntime);
 	}
-	
+
 	/**
 	 * Gets the height of the Corona content.
 	 * @return Returns the height in pixel units.
@@ -501,31 +501,31 @@ public class CoronaActivity extends Activity {
 	}
 	
 	/**
-	 * Gets the <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> 
-	 * <a href="http://developer.android.com/reference/android/os/Handler.html">handler</a> used to post 
-	 * <a href="http://developer.android.com/reference/android/os/Message.html">messages</a> and {@link java.lang.Runnable runnables} 
+	 * Gets the <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a>
+	 * <a href="http://developer.android.com/reference/android/os/Handler.html">handler</a> used to post
+	 * <a href="http://developer.android.com/reference/android/os/Message.html">messages</a> and {@link java.lang.Runnable runnables}
 	 * to the <a href="http://developer.android.com/reference/android/os/MessageQueue.html">message queue</a> on the main UI thread.
 	 * <p>
 	 * You can call this method from any thread. The intention of this method is to provide a thread safe mechanism
 	 * for other threads to post {@link java.lang.Runnable Runnable objects} to be ran on the main UI thread.
-	 * @return Returns a reference to the <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> 
+	 * @return Returns a reference to the <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a>
 	 * <a href="http://developer.android.com/reference/android/os/Handler.html">handler</a> which is associated with the main UI thread.
 	 */
 	public Handler getHandler() {
 		return myHandler;
 	}
-	
+
 	/**
-	 * Gets a dispatcher for sending {@link com.ansca.corona.CoronaRuntimeTask CoronaRuntimeTask objects} to the 
-	 * {@link com.ansca.corona.CoronaRuntime CoronaRuntime} owned by this 
+	 * Gets a dispatcher for sending {@link com.ansca.corona.CoronaRuntimeTask CoronaRuntimeTask objects} to the
+	 * {@link com.ansca.corona.CoronaRuntime CoronaRuntime} owned by this
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 * <p>
 	 * You can call this method from any thread. The intention of this method is to provide a thread safe mechanism
-	 * for sending tasks to the {@link com.ansca.corona.CoronaRuntime CoronaRuntime} thread so that you can access its 
+	 * for sending tasks to the {@link com.ansca.corona.CoronaRuntime CoronaRuntime} thread so that you can access its
 	 * {@link com.naef.jnlua.LuaState LuaState}.
 	 * @return Returns a dispatcher for sending tasks to the {@link com.ansca.corona.CoronaRuntime CoronaRuntime} thread.
 	 *         <p>
-	 *         Returns null if the CoronaActivity's {@link com.ansca.corona.CoronaActivity#onCreate(Bundle) onCreate()} 
+	 *         Returns null if the CoronaActivity's {@link com.ansca.corona.CoronaActivity#onCreate(Bundle) onCreate()}
 	 *		   method has not been called yet.
 	 */
 	public CoronaRuntimeTaskDispatcher getRuntimeTaskDispatcher() {
@@ -536,23 +536,23 @@ public class CoronaActivity extends Activity {
 	 * Returns true if device HAS software navigation bar or false if it hasn't
 	 */
 	public boolean HasSoftwareKeys()
-    {
+	{
 		boolean hasSoftwareKeys = true;
 		if (android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.JELLY_BEAN_MR1){
 			android.view.Display display = getWindowManager().getDefaultDisplay();
-	
+
 			android.util.DisplayMetrics realDisplayMetrics = new android.util.DisplayMetrics();
 			display.getRealMetrics(realDisplayMetrics);
-	
+
 			int realHeight = realDisplayMetrics.heightPixels;
 			int realWidth = realDisplayMetrics.widthPixels;
-	
+
 			android.util.DisplayMetrics displayMetrics = new android.util.DisplayMetrics();
 			display.getMetrics(displayMetrics);
-	
+
 			int displayHeight = displayMetrics.heightPixels;
 			int displayWidth = displayMetrics.widthPixels;
-	
+
 			hasSoftwareKeys = (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
 		} else {
 			boolean hasMenuKey = android.view.ViewConfiguration.get(CoronaEnvironment.getApplicationContext()).hasPermanentMenuKey();
@@ -560,7 +560,7 @@ public class CoronaActivity extends Activity {
 			hasSoftwareKeys = !(hasMenuKey || hasBackKey);
 		}
 		return hasSoftwareKeys;
-    }
+	}
 
 	/**
 	 * Tries to get the navigation bar height based on system resources.
@@ -583,8 +583,8 @@ public class CoronaActivity extends Activity {
 	 *         Returns -1 if given an invalid argument.
 	 *         <p>
 	 */
-	private int registerResultHandler(CoronaActivity.ResultHandler handler, 
-		java.util.HashMap<Integer, CoronaActivity.ResultHandler> handlerHashMap) {
+	private int registerResultHandler(CoronaActivity.ResultHandler handler,
+									  java.util.HashMap<Integer, CoronaActivity.ResultHandler> handlerHashMap) {
 
 		// Validate.
 		if (handler == null || handlerHashMap == null) {
@@ -599,7 +599,7 @@ public class CoronaActivity extends Activity {
 				requestCode = MIN_REQUEST_CODE;
 			}
 		}
-		
+
 		// Add the given handler to the collection.
 		handlerHashMap.put(Integer.valueOf(requestCode), handler);
 		return requestCode;
@@ -618,7 +618,7 @@ public class CoronaActivity extends Activity {
 	 *         Makes no assumptions about the status of the handler.
 	 */
 	private int registerResultHandler(CoronaActivity.ResultHandler handler, int numRequestCodes,
-		java.util.HashMap<Integer, CoronaActivity.ResultHandler> handlerHashMap) {
+									  java.util.HashMap<Integer, CoronaActivity.ResultHandler> handlerHashMap) {
 
 		// Validate.
 		if (handler == null || numRequestCodes < 1 || handlerHashMap == null) {
@@ -640,13 +640,13 @@ public class CoronaActivity extends Activity {
 		}
 
 		// Add each of the desired request codes for this handler
-		for (int requestCode = requestCodeOffset; 
-			requestCode < requestCodeOffset + numRequestCodes; requestCode++) {
-			
+		for (int requestCode = requestCodeOffset;
+			 requestCode < requestCodeOffset + numRequestCodes; requestCode++) {
+
 			// Add the given handler to the collection.
 			handlerHashMap.put(Integer.valueOf(requestCode), handler);
 		}
-		
+
 		return requestCodeOffset;
 	}
 
@@ -663,7 +663,7 @@ public class CoronaActivity extends Activity {
 	 *         <p>
 	 */
 	private java.util.ArrayList<Integer> unregisterResultHandler(CoronaActivity.ResultHandler handler,
-		java.util.HashMap<Integer, CoronaActivity.ResultHandler> handlerHashMap) {
+																 java.util.HashMap<Integer, CoronaActivity.ResultHandler> handlerHashMap) {
 
 		// Validate arguments.
 		if (handler == null || handlerHashMap == null) {
@@ -673,7 +673,7 @@ public class CoronaActivity extends Activity {
 		// Fetch all request codes assigned to the given handler.
 		java.util.ArrayList<Integer> requestCodes = new java.util.ArrayList<Integer>();
 		for (java.util.Map.Entry<Integer, CoronaActivity.ResultHandler> entry :
-		     handlerHashMap.entrySet())
+				handlerHashMap.entrySet())
 		{
 			if (entry.getValue() == handler) {
 				requestCodes.add(entry.getKey());
@@ -689,13 +689,13 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Registers an {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} to be called when a child 
+	 * Registers an {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} to be called when a child
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> result has been received by the
-	 * {@link com.ansca.corona.CoronaActivity CoronaActivity's} 
+	 * {@link com.ansca.corona.CoronaActivity CoronaActivity's}
 	 * {@link com.ansca.corona.CoronaActivity#onActivityResult(int, int, Intent) onActivityResult()} method.
 	 * @param handler The {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} to be called when the
 	 * child <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> result has been received.
-	 * @return Returns a unique request code that you can pass into the <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a> 
+	 * @return Returns a unique request code that you can pass into the <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a>
 	 *		   method when launching the child <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 *         <p>
 	 *         Returns -1 if given an invalid argument.
@@ -706,24 +706,24 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Registers an {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} to be called when a child 
+	 * Registers an {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} to be called when a child
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> result has been received by the
-	 * {@link com.ansca.corona.CoronaActivity CoronaActivity's} 
-	 * {@link com.ansca.corona.CoronaActivity#onActivityResult(int, int, Intent) onActivityResult()} method. 
+	 * {@link com.ansca.corona.CoronaActivity CoronaActivity's}
+	 * {@link com.ansca.corona.CoronaActivity#onActivityResult(int, int, Intent) onActivityResult()} method.
 	 * <p>
 	 * <b>The assigned request codes are guarenteed to be contiguous!</b>
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2015/2669/">daily build 2015.2669</a></b>.
 	 * @param handler The {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} to be called when the
 	 * 		  child <a href="http://developer.android.com/reference/android/app/Activity.html">activity's</a> result has been received.
-	 * @param numRequestCodes The amount of request codes to map this 
+	 * @param numRequestCodes The amount of request codes to map this
 	 * 		  {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} to.
-	 * @return Returns a unique request code that you can pass into the <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a> 
+	 * @return Returns a unique request code that you can pass into the <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a>
 	 *		   method when launching the child <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 *         <p>
 	 *         Returns -1 if given an invalid argument.
 	 *         <p>
-	 *         Makes no assumptions about the status of the 
+	 *         Makes no assumptions about the status of the
 	 *		   {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler}.
 	 */
 	public int registerActivityResultHandler(CoronaActivity.OnActivityResultHandler handler, int numRequestCodes) {
@@ -731,10 +731,10 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Unregisters the {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} that was given to the 
-	 * {@link com.ansca.corona.CoronaActivity#registerActivityResultHandler(com.ansca.corona.CoronaActivity.OnActivityResultHandler) registerActivityResultHandler()} 
+	 * Unregisters the {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} that was given to the
+	 * {@link com.ansca.corona.CoronaActivity#registerActivityResultHandler(com.ansca.corona.CoronaActivity.OnActivityResultHandler) registerActivityResultHandler()}
 	 * method. This prevents that {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} from getting
-	 * called and frees its request code to be used for future registered 
+	 * called and frees its request code to be used for future registered
 	 * {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandlers}.
 	 * @param handler Reference to the {@link com.ansca.corona.CoronaActivity.OnActivityResultHandler OnActivityResultHandler} that was
 	 * given to the {@link com.ansca.corona.CoronaActivity#registerActivityResultHandler(com.ansca.corona.CoronaActivity.OnActivityResultHandler) registerActivityResultHandler()} method.
@@ -773,30 +773,30 @@ public class CoronaActivity extends Activity {
 
 	/**
 	 * Registers a {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} to be
-	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's} 
+	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's}
 	 * {@link com.ansca.corona.CoronaActivity#onRequestPermissionsResult(int, java.lang.String[], int[]) onRequestPermissionsResult()} method.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
 	 * @param handler The {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 *				  to be called when the request permission dialog's result has been received.
-	 * @return Returns a unique request code that you can pass into the 
+	 * @return Returns a unique request code that you can pass into the
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a> method.
 	 *         <p>
 	 *         Returns -1 if given an invalid argument.
 	 *         <p>
-	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need 
-	 *         to register an 
-	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} 
+	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need
+	 *         to register an
+	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 *		   on this version of Android.
 	 */
 	public int registerRequestPermissionsResultHandler(CoronaActivity.OnRequestPermissionsResultHandler handler) {
-		return android.os.Build.VERSION.SDK_INT >= 23 ? 
-			registerResultHandler(handler, fRequestPermissionsResultHandlers) : 0;
+		return android.os.Build.VERSION.SDK_INT >= 23 ?
+				registerResultHandler(handler, fRequestPermissionsResultHandlers) : 0;
 	}
 
 	/**
 	 * Registers a {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} to be
-	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's} 
+	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's}
 	 * {@link com.ansca.corona.CoronaActivity#onRequestPermissionsResult(int, java.lang.String[], int[]) onRequestPermissionsResult()} method.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
@@ -804,19 +804,19 @@ public class CoronaActivity extends Activity {
 	 *				  to be called when the request permission dialog's result has been received.
 	 * @param settings The {@link com.ansca.corona.permissions.PermissionsSettings PermissionsSettings} used to create the request
 	 *				   permissions dialog.
-	 * @return Returns a unique request code that you can pass into the 
+	 * @return Returns a unique request code that you can pass into the
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a> method.
 	 *         <p>
 	 *         Returns -1 if given an invalid argument.
 	 *         <p>
-	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need 
-	 *         to register an 
-	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} 
+	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need
+	 *         to register an
+	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 *		   on this version of Android.
 	 */
 	public int registerRequestPermissionsResultHandler(
-		CoronaActivity.OnRequestPermissionsResultHandler handler, PermissionsSettings settings) {
-		
+			CoronaActivity.OnRequestPermissionsResultHandler handler, PermissionsSettings settings) {
+
 		int requestCode = registerRequestPermissionsResultHandler(handler);
 		if (requestCode > 0) {
 			// Add the permission settings since we have a legit request code
@@ -827,7 +827,7 @@ public class CoronaActivity extends Activity {
 
 	/**
 	 * Registers a {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} to be
-	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's} 
+	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's}
 	 * {@link com.ansca.corona.CoronaActivity#onRequestPermissionsResult(int, java.lang.String[], int[]) onRequestPermissionsResult()} method.
 	 * <p>
 	 * <b>The assigned request codes are guarenteed to be contiguous!</b>
@@ -835,29 +835,29 @@ public class CoronaActivity extends Activity {
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
 	 * @param handler The {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 *				  to be called when the request permission dialog's result has been received.
-	 * @param numRequestCodes The amount of request codes to map this 
+	 * @param numRequestCodes The amount of request codes to map this
 	 * {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} to.
-	 * @return Returns a unique request code that you can pass into the 
+	 * @return Returns a unique request code that you can pass into the
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a> method.
 	 *         <p>
 	 *         Returns -1 if given an invalid argument.
 	 *         <p>
-	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need 
-	 *         to register an 
-	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} 
+	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need
+	 *         to register an
+	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 *		   on this version of Android.
 	 *         <p>
-	 *         Makes no assumptions about the status of the 
+	 *         Makes no assumptions about the status of the
 	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}.
 	 */
 	public int registerRequestPermissionsResultHandler(CoronaActivity.OnRequestPermissionsResultHandler handler, int numRequestCodes) {
-		return android.os.Build.VERSION.SDK_INT >= 23 ? 
-			registerResultHandler(handler, numRequestCodes, fRequestPermissionsResultHandlers) : 0;
+		return android.os.Build.VERSION.SDK_INT >= 23 ?
+				registerResultHandler(handler, numRequestCodes, fRequestPermissionsResultHandlers) : 0;
 	}
 
 	/**
 	 * Registers a {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} to be
-	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's} 
+	 * called when a result has been received by the {@link com.ansca.corona.CoronaActivity CoronaActivity's}
 	 * {@link com.ansca.corona.CoronaActivity#onRequestPermissionsResult(int, java.lang.String[], int[]) onRequestPermissionsResult()} method.
 	 * <p>
 	 * <b>The assigned request codes are guarenteed to be contiguous!</b>
@@ -865,26 +865,26 @@ public class CoronaActivity extends Activity {
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
 	 * @param handler The {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 *				  to be called when the request permission dialog's result has been received.
-	 * @param numRequestCodes The amount of request codes to map this 
+	 * @param numRequestCodes The amount of request codes to map this
 	 * {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} to.
 	 * @param settings The {@link com.ansca.corona.permissions.PermissionsSettings PermissionsSettings} used to create the request
 	 *				   permissions dialog.
-	 * @return Returns a unique request code that you can pass into the 
+	 * @return Returns a unique request code that you can pass into the
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a> method.
 	 *         <p>
 	 *         Returns -1 if given an invalid argument.
 	 *         <p>
-	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need 
-	 *         to register an 
-	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} 
+	 *         Returns 0 if not on Android 6.0 or above, meaning that you don't need
+	 *         to register an
+	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 *		   on this version of Android.
 	 *         <p>
-	 *         Makes no assumptions about the status of the 
+	 *         Makes no assumptions about the status of the
 	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}.
 	 */
 	public int registerRequestPermissionsResultHandler(
-		CoronaActivity.OnRequestPermissionsResultHandler handler, int numRequestCodes, PermissionsSettings settings) {
-		
+			CoronaActivity.OnRequestPermissionsResultHandler handler, int numRequestCodes, PermissionsSettings settings) {
+
 		int requestCodeOffset = registerRequestPermissionsResultHandler(handler);
 		if (requestCodeOffset > 0) {
 			// Add the permission settings for each request code granted.
@@ -898,24 +898,24 @@ public class CoronaActivity extends Activity {
 	/**
 	 * Unregisters the {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
 	 * that was given to the {@link com.ansca.corona.CoronaActivity#registerRequestPermissionsResultHandler(com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler) registerRequestPermissionsResultHandler()} method.
-	 * This prevents that {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} 
-	 * from getting called and frees its request code to be used for future registered 
+	 * This prevents that {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}
+	 * from getting called and frees its request code to be used for future registered
 	 * {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandlers}.
 	 * <p>
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
-	 * @param handler Reference to the {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} that was given to the 
+	 * @param handler Reference to the {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} that was given to the
 	 * {@link com.ansca.corona.CoronaActivity#registerRequestPermissionsResultHandler(com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler) registerRequestPermissionsResultHandler()} method.
 	 * @return Returns the {@link com.ansca.corona.permissions.PermissionsSettings PermissionsSettings} used to create the Request
-	 *		   Permissions dialog that provided a result to this 
+	 *		   Permissions dialog that provided a result to this
 	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}.
 	 *         <p>
 	 *         Returns null if no {@link com.ansca.corona.permissions.PermissionsSettings PermissionsSettings} were associated with
-	 *		   this {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} or 
-	 *		   given an invalid 
+	 *		   this {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler} or
+	 *		   given an invalid
 	 *		   {@link com.ansca.corona.CoronaActivity.OnRequestPermissionsResultHandler OnRequestPermissionsResultHandler}.
 	 */
 	public PermissionsSettings unregisterRequestPermissionsResultHandler(CoronaActivity.OnRequestPermissionsResultHandler handler) {
-		
+
 		PermissionsSettings settingsServiced = null;
 		java.util.ArrayList<Integer> requestCodesToFree = unregisterResultHandler(handler, fRequestPermissionsResultHandlers);
 
@@ -931,10 +931,10 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Called just before this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> 
+	 * Called just before this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 * is closed and destroyed.
 	 */
-    @Override
+	@Override
 	protected void onDestroy() {
 		// wait renderer thread completing
 		myGLView.requestExitAndWait();
@@ -952,17 +952,17 @@ public class CoronaActivity extends Activity {
 		// Destroy this activity.
 		super.onDestroy();
 	}
-	
+
 	/**
-	 * This method is called when the user navigates to this 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>, forward or back, 
+	 * This method is called when the user navigates to this
+	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>, forward or back,
 	 * from another <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 */
-    @Override
+	@Override
 	protected void onStart() {
 		super.onStart();
-  	}
-	
+	}
+
 	/**
 	 * This method is called when this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 * can be interacted with.
@@ -981,15 +981,15 @@ public class CoronaActivity extends Activity {
 			fCoronaRuntime.updateViews();
 		}
 	}
-	
+
 	/**
 	 * This method is called when this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 * cannot be interacted with by the user, which can happen when:
 	 * <ul>
-	 *  <li> Leaving this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> 
+	 *  <li> Leaving this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 *		 to go to another <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 *  <li> The power button was pressed or the screen lock is displayed.
-	 *  <li> The task manager view is overlayed on top of this 
+	 *  <li> The task manager view is overlayed on top of this
 	 *		 <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 * </ul>
 	 */
@@ -1002,16 +1002,16 @@ public class CoronaActivity extends Activity {
 		myIsActivityResumed = false;
 		requestSuspendCoronaRuntime();
 	}
-	
+
 	/**
-	 * This method is called when backing out of this 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> or when displaying another 
+	 * This method is called when backing out of this
+	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> or when displaying another
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 * <p>
 	 * <b>This method is NOT called when the user presses the power button or during screen lock.</b>
 	 * Because of this behavior, you never want to use this method to suspend the app.
 	 */
-    @Override
+	@Override
 	protected void onStop() {
 		super.onStop();
 	}
@@ -1019,21 +1019,21 @@ public class CoronaActivity extends Activity {
 	/**
 	 * This method is called when this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 * is resumed with a new <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a>.
-	 * This happens when the <a href="http://developer.android.com/reference/android/content/Context.html#startActivity(android.content.Intent)">startActivity()</a> or 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html#setIntent(android.content.Intent)">setIntent()</a> 
+	 * This happens when the <a href="http://developer.android.com/reference/android/content/Context.html#startActivity(android.content.Intent)">startActivity()</a> or
+	 * <a href="http://developer.android.com/reference/android/app/Activity.html#setIntent(android.content.Intent)">setIntent()</a>
 	 * methods get called for this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 * <p>
-	 * Note that the {@link com.ansca.corona.CoronaActivity#getIntent() getIntent()} method will return the 
+	 * Note that the {@link com.ansca.corona.CoronaActivity#getIntent() getIntent()} method will return the
 	 * <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> given to this method.
 	 * @param intent The new <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that has started
 	 *				 this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
-	 *               Typically indicates what this 
+	 *               Typically indicates what this
 	 *				 <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> should display to the user.
 	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		
+
 		// Validate.
 		if (intent == null || fCoronaRuntime == null) {
 			return;
@@ -1043,8 +1043,8 @@ public class CoronaActivity extends Activity {
 		// by the end-user in which case the activity should display the last screen shown.
 		android.os.Bundle bundle = intent.getExtras();
 		if ((intent.getData() == null) &&
-		    ((bundle == null) || (bundle.size() <= 0)) &&
-		    ((intent.getAction() == null) || intent.getAction().equals(Intent.ACTION_MAIN))) {
+				((bundle == null) || (bundle.size() <= 0)) &&
+				((intent.getAction() == null) || intent.getAction().equals(Intent.ACTION_MAIN))) {
 			return;
 		}
 
@@ -1072,17 +1072,17 @@ public class CoronaActivity extends Activity {
 		// Pass the intent to each OnNewIntentResultHandler.
 		for (CoronaActivity.OnNewIntentResultHandler handler : fNewIntentResultHandlers) {
 			handler.onHandleNewIntentResult(intent);
-	}
+		}
 	}
 
 	/**
-	 * This method is called when this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> 
+	 * This method is called when this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 * has gained or lost the focus.
 	 * <p>
 	 * The <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> window can lose the focus for the
 	 * following reasons:
 	 * <ul>
-	 *  <li> This window is no longer visible because another 
+	 *  <li> This window is no longer visible because another
 	 *		 <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> was shown.
 	 *  <li> This window is no longer visible due to screen lock or the press of the power button.
 	 *  <li> A dialog is displayed on top of this window, such as an alert, but this window is still visible.
@@ -1096,7 +1096,7 @@ public class CoronaActivity extends Activity {
 			setSystemUiVisibility(); // Set systemUiVisibility again (was recommended do to this @ onResume, onWindowFocusChanged and onSystemUiVisibilityChange)
 		}
 	}
-	
+
 	/**
 	 * Called by Corona's SystemMonitor object indicating when the screen is or isn't locked.
 	 * @param isScreenLocked Set true if the screen is currently locked or powered off.
@@ -1121,7 +1121,7 @@ public class CoronaActivity extends Activity {
 
 		// Do not continue if the controller is no longer available. (Probably terminating.)
 		if (fController == null) {
-			Log.i("Corona", "ERROR: CoronaActivity.requestResumeCoronaRuntime(): " + 
+			Log.i("Corona", "ERROR: CoronaActivity.requestResumeCoronaRuntime(): " +
 					"Can't resume the CoronaRuntime because our Controller died!");
 			return;
 		}
@@ -1140,7 +1140,7 @@ public class CoronaActivity extends Activity {
 			myGLView.onResumeCoronaRuntime();
 		}
 	}
-	
+
 	/** Suspends the Corona runtime. To be called when this activity's window is no longer visible. */
 	private void requestSuspendCoronaRuntime() {
 		// Suspend the Corona runtime.
@@ -1148,7 +1148,7 @@ public class CoronaActivity extends Activity {
 			fController.stop();
 		}
 		else {
-			Log.i("Corona", "ERROR: CoronaActivity.requestSuspendCoronaRuntime(): " + 
+			Log.i("Corona", "ERROR: CoronaActivity.requestSuspendCoronaRuntime(): " +
 					"Can't suspend the CoronaRuntime because our Controller died!");
 		}
 
@@ -1160,8 +1160,8 @@ public class CoronaActivity extends Activity {
 
 	private boolean canWriteToExternalStorage() {
 		String permissionName = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-		if (checkCallingOrSelfPermission(permissionName) == android.content.pm.PackageManager.PERMISSION_GRANTED 
-			&& android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
+		if (checkCallingOrSelfPermission(permissionName) == android.content.pm.PackageManager.PERMISSION_GRANTED
+				&& android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
 			return true;
 		}
 		return false;
@@ -1176,13 +1176,13 @@ public class CoronaActivity extends Activity {
 		if (settings == null) {
 			settings = new MailSettings();
 		}
-		
+
 		// Display the mail activity.
 		android.content.Intent intent = settings.toIntent();
 		int requestCode = registerActivityResultHandler(new PopupActivityResultHandler("mail"));
 		startActivityForResult(intent, requestCode);
 	}
-	
+
 	/**
 	 * Displays a "Send SMS" activity using the given settings.
 	 * @param settings Initializes SMS window's recipients and text field.
@@ -1192,7 +1192,7 @@ public class CoronaActivity extends Activity {
 		if (settings == null) {
 			settings = new SmsSettings();
 		}
-		
+
 		// Display the SMS activity.
 		android.content.Intent intent = settings.toIntent();
 		int requestCode = registerActivityResultHandler(new PopupActivityResultHandler("sms"));
@@ -1217,12 +1217,12 @@ public class CoronaActivity extends Activity {
 			Log.v("Corona", "No App Permissions requested!");
 			return;
 		}
-		
+
 		// Convert PermissionsSettings from Lua to Android permissions.
 		PermissionsServices permissionsServices = new PermissionsServices(CoronaEnvironment.getApplicationContext());
 		java.util.LinkedHashSet<String> requestList = new java.util.LinkedHashSet<String>();
 		for (String appPermission : appPermissions) {
-			
+
 			String[] permissionsToRequest;
 
 			if (permissionsServices.isPAAppPermissionName(appPermission)) {
@@ -1246,7 +1246,7 @@ public class CoronaActivity extends Activity {
 					showPermissionGroupMissingFromManifestAlert(appPermission);
 					return;
 				}
-			
+
 			} else {
 				// This is already an Android permission. So just add it to the request list!
 				// TODO: SEE IF THE WAY THIS FAILS WHEN GIVEN GARBAGE IS SUFFICIENT!
@@ -1292,15 +1292,15 @@ public class CoronaActivity extends Activity {
 		 */
 		@Override
 		public void onHandleActivityResult(
-			CoronaActivity activity, int requestCode, int resultCode, android.content.Intent data)
+				CoronaActivity activity, int requestCode, int resultCode, android.content.Intent data)
 		{
 			// Unregister this handler.
 			activity.unregisterActivityResultHandler(this);
 
-			 if (fCoronaRuntime == null)
-			 {
-			 return;
-			 }
+			if (fCoronaRuntime == null)
+			{
+				return;
+			}
 
 			// We've returned from the mail or sms activity. Send an event to the Lua listener.
 			// Note: Mail and SMS activities always returns "canceled" for its result code, even after a
@@ -1319,15 +1319,15 @@ public class CoronaActivity extends Activity {
 			}
 		}
 	}
-	
+
 	/**
 	 * Called when an <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> you launched exits,
 	 * yielding the results of that <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 * @param requestCode The integer request code originally supplied to <a href="http://developer.android.com/reference/android/app/Activity.html#startActivityForResult(android.content.Intent, int)">startActivityForResult()</a>.
-	 * Allows you to identify which <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> 
+	 * Allows you to identify which <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>
 	 * the result is coming from.
-	 * @param resultCode The integer result code returned by the child 
-	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> through its 
+	 * @param resultCode The integer result code returned by the child
+	 * <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a> through its
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#setResult(int)">setResult()</a> method.
 	 * @param data An <a href="http://developer.android.com/reference/android/content/Intent.html">Intent</a> object which can return
 	 * result data to the caller. Can be null.
@@ -1350,7 +1350,7 @@ public class CoronaActivity extends Activity {
 	}
 
 	/**
-	 * Callback for the result from requesting permissions. This method is invoked for every call on 
+	 * Callback for the result from requesting permissions. This method is invoked for every call on
 	 * <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a>.
 	 * This callback will only be invoked on Android 6.0 and above devices!
 	 * <p>
@@ -1360,10 +1360,10 @@ public class CoronaActivity extends Activity {
 	 * <b>Added in <a href="http://developer.coronalabs.com/release-ent/2016/2828/">daily build 2016.2828</a></b>.
 	 * @param requestCode The request code passed in <a href="http://developer.android.com/reference/android/app/Activity.html#requestPermissions(java.lang.String[], int)">requestPermissions()</a>.
 	 * @param permissions The requested permissions. Never null.
-	 * @param grantResults The grant results for the corresponding permissions which is either 
+	 * @param grantResults The grant results for the corresponding permissions which is either
 	 * <a href="http://developer.android.com/reference/android/content/pm/PackageManager.html#PERMISSION_GRANTED">PERMISSION_GRANTED</a>
-	 * or 
-	 * <a href="http://developer.android.com/reference/android/content/pm/PackageManager.html#PERMISSION_DENIED">PERMISSION_DENIED</a>. 
+	 * or
+	 * <a href="http://developer.android.com/reference/android/content/pm/PackageManager.html#PERMISSION_DENIED">PERMISSION_DENIED</a>.
 	 * Never null.
 	 */
 	@Override
@@ -1386,7 +1386,7 @@ public class CoronaActivity extends Activity {
 
 	/**
 	 * Called when a key has been pressed down.
-	 * @param keyCode Unique integer ID of the key, matching a key code constant in the 
+	 * @param keyCode Unique integer ID of the key, matching a key code constant in the
 	 *				  <a href="http://developer.android.com/reference/android/view/KeyEvent.html">KeyEvent</a> class.
 	 * @param event Provides all information about the key event such as the key pressed,
 	 *              modifiers such as Shift/Ctrl, and the device it came from.
@@ -1410,7 +1410,7 @@ public class CoronaActivity extends Activity {
 		// We have to do this because this activity's ViewInputHandler typically steals this event
 		// from the system and the Activity's default handler does not control volume.
 		if ((keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) ||
-		    (keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN)) {
+				(keyCode == android.view.KeyEvent.KEYCODE_VOLUME_DOWN)) {
 			try {
 				int audioDirection;
 				if (keyCode == android.view.KeyEvent.KEYCODE_VOLUME_UP) {
@@ -1420,8 +1420,8 @@ public class CoronaActivity extends Activity {
 					audioDirection = android.media.AudioManager.ADJUST_LOWER;
 				}
 				int flags = android.media.AudioManager.FLAG_SHOW_UI |
-							android.media.AudioManager.FLAG_PLAY_SOUND |
-							android.media.AudioManager.FLAG_VIBRATE;
+						android.media.AudioManager.FLAG_PLAY_SOUND |
+						android.media.AudioManager.FLAG_VIBRATE;
 				((android.media.AudioManager)getSystemService(AUDIO_SERVICE)).adjustSuggestedStreamVolume(
 						audioDirection, getVolumeControlStream(), flags);
 				return true;
@@ -1435,7 +1435,7 @@ public class CoronaActivity extends Activity {
 
 	/**
 	 * Called when a key has been released.
-	 * @param keyCode Unique integer ID of the key, matching a key code constant in the 
+	 * @param keyCode Unique integer ID of the key, matching a key code constant in the
 	 *				  <a href="http://developer.android.com/reference/android/view/KeyEvent.html">KeyEvent</a> class.
 	 * @param event Provides all information about the key event such as the key pressed,
 	 *              modifiers such as Shift/Ctrl, and the device it came from.
@@ -1461,35 +1461,35 @@ public class CoronaActivity extends Activity {
 	/** Default handling of permissions on Android 6+. 
 	 * <!-- TODO: CLEAN THIS UP SINCE IT'LL BE AVAILABLE FOR ENTERPRISE DEVS TO CREATE!
 	 * OPEN THIS UP TO ENTERPRISE WHEN READY!--> */
-	static class DefaultRequestPermissionsResultHandler 
-		implements CoronaActivity.OnRequestPermissionsResultHandler {
+	static class DefaultRequestPermissionsResultHandler
+			implements CoronaActivity.OnRequestPermissionsResultHandler {
 
 		/** TODO: Have this use the CoronaData class instead, since it's well-exercised code!
 		 * Creates a Lua table out of an array of strings.
 		 * Leaves the Lua table on top of the stack.
-	     */
-	    private static int createLuaTableFromStringArray(com.naef.jnlua.LuaState L, String[] array) {
+		 */
+		private static int createLuaTableFromStringArray(com.naef.jnlua.LuaState L, String[] array) {
 
-	        L.newTable(array.length, 0);
-	        for (int i = 0; i < array.length; i++) {
-	            // Push this string to the top of the stack
-	            L.pushString(array[i]);
+			L.newTable(array.length, 0);
+			for (int i = 0; i < array.length; i++) {
+				// Push this string to the top of the stack
+				L.pushString(array[i]);
 
-	            // Assign this string to the table 2nd from the top of the stack.
-	            // Lua arrays are 1-based so add 1 to index correctly.
-	            L.rawSet(-2, i + 1);
-	        }
+				// Assign this string to the table 2nd from the top of the stack.
+				// Lua arrays are 1-based so add 1 to index correctly.
+				L.rawSet(-2, i + 1);
+			}
 
-	        // Result is on top of the lua stack.
-	        return 1;
-	    }
+			// Result is on top of the lua stack.
+			return 1;
+		}
 
-	    /**
-	     * Send the results of this permission request to Lua.
-	     * <!--TODO: LOTS OF THINGS IN HERE SHOULD REALLY BE NULL-CHECKED!-->
-	     */
-	    public void forwardRequestPermissionsResultToLua(final RequestPermissionsResultData data) {
-    		// Invoke the lua listener if PermissionSettings are provided.
+		/**
+		 * Send the results of this permission request to Lua.
+		 * <!--TODO: LOTS OF THINGS IN HERE SHOULD REALLY BE NULL-CHECKED!-->
+		 */
+		public void forwardRequestPermissionsResultToLua(final RequestPermissionsResultData data) {
+			// Invoke the lua listener if PermissionSettings are provided.
 			CoronaRuntimeTask invokeListenerTask = new CoronaRuntimeTask() {
 				@Override
 				public void executeUsing(CoronaRuntime runtime) {
@@ -1536,19 +1536,19 @@ public class CoronaActivity extends Activity {
 								L.setField(-2, "deniedAppPermissions");
 							}
 
-				            // Never Ask Again flag
-				            L.pushBoolean( data.getUserHitNeverAskAgain() );
-				            L.setField( -2, "neverAskAgain");
+							// Never Ask Again flag
+							L.pushBoolean( data.getUserHitNeverAskAgain() );
+							L.setField( -2, "neverAskAgain");
 
 							// Dispatch the event
 							CoronaLua.dispatchEvent( L, luaListenerRegistryId, 0 );
 						} else {
-							Log.i("Corona", "ERROR: CoronaActivity.DefaultRequestPermissiosnResultHandler.forwardRequestPermissionsResultToLua():" + 
-								"Cannot forward results to Lua as no registry ID was found!");
+							Log.i("Corona", "ERROR: CoronaActivity.DefaultRequestPermissiosnResultHandler.forwardRequestPermissionsResultToLua():" +
+									"Cannot forward results to Lua as no registry ID was found!");
 						}
 					}
-					catch ( Exception ex ) { 
-						ex.printStackTrace(); 
+					catch ( Exception ex ) {
+						ex.printStackTrace();
 					}
 				}
 			};
@@ -1560,13 +1560,13 @@ public class CoronaActivity extends Activity {
 			// Force this task to execute this frame in case we have no other reason to request a render
 			data.getCoronaActivity().getRuntime().getController().getEventManager().sendEvents();
 			data.getPermissionsSettings().markAsServiced();
-	    }
+		}
 
 		@Override
 		public void onHandleRequestPermissionsResult(
 				CoronaActivity activity, int requestCode, String[] permissions, int[] grantResults) {
 			PermissionsServices permissionsServices = new PermissionsServices(activity);
-			
+
 			// Seperate out the granted and denied permissions.
 			java.util.ArrayList<String> androidGrantedPermissions = new java.util.ArrayList<String>();
 			final java.util.ArrayList<String> grantedPermissions = new java.util.ArrayList<String>();
@@ -1574,7 +1574,7 @@ public class CoronaActivity extends Activity {
 			final java.util.ArrayList<String> deniedPermissions = new java.util.ArrayList<String>();
 
 			for (int permissionIdx = 0; permissionIdx < permissions.length; permissionIdx++) {
-				
+
 				// Convert permissions to the appropriate platform-agnostic app permission names if needed.
 				String currentPermission = permissions[permissionIdx];
 				if (permissionsServices.isPartOfPAAppPermission(currentPermission)) {
@@ -1583,19 +1583,19 @@ public class CoronaActivity extends Activity {
 
 				// Now, categorize the permissions.
 				if (grantResults[permissionIdx] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-					
+
 					androidGrantedPermissions.add(permissions[permissionIdx]);
 					// Only add to platform-agnostic app permission list if this isn't a duplicate.
-					if (!grantedPermissions.contains(currentPermission) 
-						&& !deniedPermissions.contains(currentPermission)) {
+					if (!grantedPermissions.contains(currentPermission)
+							&& !deniedPermissions.contains(currentPermission)) {
 						grantedPermissions.add(currentPermission);
 					}
 				} else { // The permission was denied!
-					
+
 					androidDeniedPermissions.add(permissions[permissionIdx]);
 					// Only add to platform-agnostic app permission list if this isn't a duplicate.
-					if (!grantedPermissions.contains(currentPermission) 
-						&& !deniedPermissions.contains(currentPermission)) {
+					if (!grantedPermissions.contains(currentPermission)
+							&& !deniedPermissions.contains(currentPermission)) {
 						deniedPermissions.add(currentPermission);
 					}
 				}
@@ -1616,30 +1616,30 @@ public class CoronaActivity extends Activity {
 					for (String deniedPermission : androidDeniedPermissions) {
 						boolean showRequestPermissionRationale = activity.shouldShowRequestPermissionRationale(deniedPermission);
 
-						if (urgency != com.ansca.corona.permissions.PermissionUrgency.LOW 
-							&& showRequestPermissionRationale && permissionsSettings.needsService()) {
-							
+						if (urgency != com.ansca.corona.permissions.PermissionUrgency.LOW
+								&& showRequestPermissionRationale && permissionsSettings.needsService()) {
+
 							// Gather data to send back to Lua.
 							requestPermissionsResultData = new RequestPermissionsResultData(
-								permissionsSettings, grantedPermissions, deniedPermissions, false, requestCode, activity, this);
-							
+									permissionsSettings, grantedPermissions, deniedPermissions, false, requestCode, activity, this);
+
 							// We show the permission rationale dialog.
 							activity.getRuntime().getController().showPermissionRationaleAlert
-								(deniedPermission, requestPermissionsResultData);
+									(deniedPermission, requestPermissionsResultData);
 							permissionsSettings.markAsServiced();
 							return;
 						} else if (!showRequestPermissionRationale) { // TODO: Verify the safety of this conditional.
-							
+
 							// The user hit the "Never Ask Again button".
 							if (urgency == com.ansca.corona.permissions.PermissionUrgency.CRITICAL) {
 
 								// Gather data to send back to Lua.
 								requestPermissionsResultData = new RequestPermissionsResultData(
-									permissionsSettings, grantedPermissions, deniedPermissions, true, requestCode, activity, this);
+										permissionsSettings, grantedPermissions, deniedPermissions, true, requestCode, activity, this);
 
 								// We present the Settings Redirect dialog.
 								activity.getRuntime().getController().showSettingsRedirectForPermissionAlert
-									(deniedPermission, requestPermissionsResultData);
+										(deniedPermission, requestPermissionsResultData);
 								permissionsSettings.markAsServiced();
 								return;
 							} else {
@@ -1652,7 +1652,7 @@ public class CoronaActivity extends Activity {
 
 				// Send out results back to Lua!
 				requestPermissionsResultData = new RequestPermissionsResultData(
-					permissionsSettings, grantedPermissions, deniedPermissions, userHitNeverAskAgain, requestCode, activity, this);
+						permissionsSettings, grantedPermissions, deniedPermissions, userHitNeverAskAgain, requestCode, activity, this);
 				forwardRequestPermissionsResultToLua(requestPermissionsResultData);
 
 			} else {
