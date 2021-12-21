@@ -991,6 +991,159 @@ JavaToNativeBridge::MultitouchEventEnd()
 	}
 }
 
+void 
+JavaToNativeBridge::WebViewShouldLoadUrl( JNIEnv * env, int id, jstring urlJ, int sourceType )
+{
+	// Validate.
+	if (!fPlatform)
+	{
+		return;
+	}
+	
+	// Fetch the display object by ID.
+	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
+	if (!view)
+	{
+		return;
+	}
+	
+	// Raise the event.
+	jstringResult url(env, urlJ);
+	url.setNotLocal();
+	if (view->IsPopup())
+	{
+		// This web view belongs to a web popup.
+		// Make sure that the popup is still referencing the web view in case it just closed it.
+		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
+		if (popup && (popup->GetWebViewId() == view->GetId()))
+		{
+			// If the Lua listener returns false, then close the popup.
+			// Also, the "event.type" property is not supported by web popup.
+			bool wasCloseRequested = !(popup->ShouldLoadUrl(url.getUTF8()));
+			if (wasCloseRequested)
+			{
+				popup->Close();
+			}
+		}
+	}
+	else
+	{
+		// This web view is a display object.
+		Rtt::UrlRequestEvent e(url.getUTF8(), (Rtt::UrlRequestEvent::Type)sourceType);
+		view->DispatchEventWithTarget(e);
+	}
+}
+
+void 
+JavaToNativeBridge::WebViewFinishedLoadUrl( JNIEnv * env, int id, jstring urlJ )
+{
+	// Validate.
+	if (!fPlatform)
+	{
+		return;
+	}
+	
+	// Fetch the display object by ID.
+	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
+	if (!view)
+	{
+		return;
+	}
+	
+	//TODO: Raise an event to notify Lua that the page has finished loading.
+	jstringResult url(env, urlJ);
+	url.setNotLocal();
+	Rtt::UrlRequestEvent e( url.getUTF8(), Rtt::UrlRequestEvent::kLoaded );
+	view->DispatchEventWithTarget( e );
+}
+
+void 
+JavaToNativeBridge::WebViewDidFailLoadUrl( JNIEnv * env, int id, jstring urlJ, jstring msgJ, int code )
+{
+	// Fetch the display object by ID.
+	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
+	if (!view)
+	{
+		return;
+	}
+	
+	// Raise the event.
+	jstringResult url(env, urlJ);
+	url.setNotLocal();
+	jstringResult message(env, msgJ);
+	message.setNotLocal();
+	if (view->IsPopup())
+	{
+		// This web view belongs to a web popup.
+		// Make sure that the popup is still referencing the web view in case it just closed it.
+		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
+		if (popup && (popup->GetWebViewId() == view->GetId()))
+		{
+			// If the Lua listener returns false, then close the popup.
+			bool wasCloseRequested = !(popup->DidFailLoadUrl(url.getUTF8(), message.getUTF8(), code));
+			if (wasCloseRequested)
+			{
+				popup->Close();
+			}
+		}
+	}
+	else
+	{
+		// The web view is a display object.
+		Rtt::UrlRequestEvent e(url.getUTF8(), message.getUTF8(), code);
+		view->DispatchEventWithTarget(e);
+	}
+}
+
+void 
+JavaToNativeBridge::WebViewHistoryUpdated( JNIEnv * env, int id, jboolean canGoBack, jboolean canGoForward )
+{
+	// Validate.
+	if (!fPlatform)
+	{
+		return;
+	}
+	
+	// Fetch the display object by ID.
+	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
+	if (!view)
+	{
+		return;
+	}
+	
+	// Update the web view's navigation history.
+	view->SetCanGoBack(canGoBack);
+	view->SetCanGoForward(canGoForward);
+}
+
+void
+JavaToNativeBridge::WebViewClosed( JNIEnv * env, int id )
+{
+	// Validate.
+	if (!fPlatform)
+	{
+		return;
+	}
+	
+	// Fetch the display object by ID.
+	Rtt::AndroidWebViewObject *view = (Rtt::AndroidWebViewObject*)(fPlatform->GetNativeDisplayObjectById(id));
+	if (!view)
+	{
+		return;
+	}
+	
+	// If the web view belongs to a web popup object, then close it.
+	if (view->IsPopup())
+	{
+		// Make sure that the popup is still referencing the given web view.
+		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
+		if (popup && (popup->GetWebViewId() == view->GetId()))
+		{
+			popup->Close();
+		}
+	}
+}
+
 void
 JavaToNativeBridge::AdsRequestEvent( bool isError )
 {

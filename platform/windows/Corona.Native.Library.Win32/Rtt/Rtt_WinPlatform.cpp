@@ -33,6 +33,7 @@
 #include "Rtt_WinFBConnect.h"
 #include "Rtt_WinScreenSurface.h"
 #include "Rtt_WinTimer.h"
+#include "Rtt_WinWebPopup.h"
 #include "WinString.h"
 #include <algorithm>
 #include <Gdiplus.h>
@@ -58,6 +59,7 @@ namespace Rtt
 	WinPlatform::WinPlatform(Interop::RuntimeEnvironment& environment)
 		: fEnvironment(environment),
 		fDevice(environment),
+		fWebPopup(nullptr),
 		fFBConnect(nullptr),
 		fExitCallback(environment)
 	{
@@ -112,6 +114,7 @@ namespace Rtt
 	WinPlatform::~WinPlatform()
 	{
 		// Delete platform's owned objects.
+		Rtt_DELETE(fWebPopup);
 		Rtt_DELETE(fFBConnect);
 	}
 
@@ -999,6 +1002,15 @@ namespace Rtt
 		return false;
 	}
 
+	PlatformWebPopup* WinPlatform::GetWebPopup() const
+	{
+		if (!fWebPopup)
+		{
+			fWebPopup = Rtt_NEW(&GetAllocator(), WinWebPopup(fEnvironment));
+		}
+		return fWebPopup;
+	}
+
 	PlatformFBConnect* WinPlatform::GetFBConnect() const
 	{
 		if (!fFBConnect)
@@ -1019,6 +1031,11 @@ namespace Rtt
 
 	void WinPlatform::CancelNotification(void* notificationId) const
 	{
+	}
+
+	PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const
+	{
+		return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
 	}
 
 	void WinPlatform::SetNativeProperty(lua_State* L, const char* key, int valueIndex) const

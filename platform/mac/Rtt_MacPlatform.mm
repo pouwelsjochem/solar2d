@@ -17,6 +17,8 @@
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacFBConnect.h"
 #include "Rtt_MacViewSurface.h"
+#include "Rtt_MacWebPopup.h"
+#include "Rtt_MacWebViewObject.h"
 #include "Rtt_PlatformInAppStore.h"
 #include "Rtt_AppleInAppStore.h"
 #include "Rtt_PlatformPlayer.h"
@@ -359,6 +361,7 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fDevice( GetAllocator(), view ),
 	fMutexCount( 0 ),
 	fDelegate( [[AlertDelegate alloc] init] ),
+	fWebPopup( NULL ),
 #if Rtt_AUTHORING_SIMULATOR
 	fFBConnect( NULL ),
 #endif // Rtt_AUTHORING_SIMULATOR
@@ -380,6 +383,7 @@ MacPlatform::~MacPlatform()
 #if Rtt_AUTHORING_SIMULATOR
 	Rtt_DELETE( fFBConnect );
 #endif // Rtt_AUTHORING_SIMULATOR
+	Rtt_DELETE( fWebPopup );
 	[fDelegate release];
 	pthread_mutex_destroy( & fMutex );
 
@@ -799,6 +803,22 @@ MacPlatform::PushSystemInfo( lua_State *L, const char *key ) const
 }
 
 // ----------------------------------------------------------------------------
+PlatformWebPopup*
+MacPlatform::GetWebPopup() const
+{
+	if ( ! fWebPopup )
+	{
+		fWebPopup = Rtt_NEW( & GetAllocator(), MacWebPopup );
+	}
+
+	return fWebPopup;
+}
+
+PlatformDisplayObject *
+MacPlatform::CreateNativeWebView( const Rect& bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), MacWebViewObject( bounds ) );
+}
 
 PlatformFBConnect*
 MacPlatform::GetFBConnect() const

@@ -22,6 +22,7 @@
 #include "Rtt_LuaResource.h"
 #include "Rtt_MPlatform.h"
 #include "Display/Rtt_PlatformBitmap.h"
+#include "Rtt_PlatformWebPopup.h"
 #include "Rtt_PreferenceCollection.h"
 #include "Rtt_Runtime.h"
 #include "NativeToJavaBridge.h"
@@ -1983,6 +1984,89 @@ NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, Rtt::Data<co
 	}
 }
 
+void
+NativeToJavaBridge::WebViewCreate(
+	int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled)
+{
+	NativeTrace trace( "NativeToJavaBridge::WebViewCreate" );
+	
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+	
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callWebViewCreate", "(Lcom/ansca/corona/CoronaRuntime;IIIIIZZ)V" );
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, 
+				fCoronaRuntime, id, left, top, width, height, (jboolean)isPopup, (jboolean)autoCancelEnabled );
+			HandleJavaException();
+		}
+	}
+}
+
+void
+NativeToJavaBridge::WebViewRequestLoadUrl( int id, const char * url )
+{
+	NativeTrace trace( "NativeToJavaBridge::WebViewRequestLoadUrl" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() )
+	{
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callWebViewRequestLoadUrl", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;)V" );
+		
+		if ( mid != NULL )
+		{
+			jstringParam textJ( bridge.getEnv(), url );
+			if ( textJ.isValid() )
+			{
+				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, textJ.getValue() );
+				HandleJavaException();
+			}
+		}
+	}
+}
+
+void
+NativeToJavaBridge::WebViewRequestReload( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::WebViewRequestReload" );
+	CallIntMethod( "callWebViewRequestReload", id );
+	HandleJavaException();
+}
+
+void
+NativeToJavaBridge::WebViewRequestStop( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::WebViewRequestStop" );
+	CallIntMethod( "callWebViewRequestStop", id );
+	HandleJavaException();
+}
+
+void
+NativeToJavaBridge::WebViewRequestGoBack( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::WebViewRequestGoBack" );
+	CallIntMethod( "callWebViewRequestGoBack", id );
+	HandleJavaException();
+}
+
+void
+NativeToJavaBridge::WebViewRequestGoForward( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::WebViewRequestGoForward" );
+	CallIntMethod( "callWebViewRequestGoForward", id );
+	HandleJavaException();
+}
+
+void
+NativeToJavaBridge::WebViewRequestDeleteCookies( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::WebViewRequestDeleteCookies" );
+	CallIntMethod( "callWebViewRequestDeleteCookies", id );
+	HandleJavaException();
+}
+
 int 
 NativeToJavaBridge::CryptoGetDigestLength( const char * algorithm )
 {
@@ -2070,6 +2154,26 @@ NativeToJavaBridge::CryptoCalculateHMAC( const char * algorithm, const Rtt::Data
 			}
 		}
 	}
+}
+
+bool
+NativeToJavaBridge::WebPopupShouldLoadUrl( int id, const char * url )
+{
+	Rtt::PlatformWebPopup * owner = (Rtt::PlatformWebPopup *) id;
+	
+	bool result = owner->ShouldLoadUrl( url );
+	
+	return result;
+}
+
+bool
+NativeToJavaBridge::WebPopupDidFailLoadUrl( int id, const char * url, const char * msg, int code )
+{
+	Rtt::PlatformWebPopup * owner = (Rtt::PlatformWebPopup *) id;
+	
+	bool result = owner->DidFailLoadUrl( url, msg, code );
+	
+	return result;
 }
 
 void

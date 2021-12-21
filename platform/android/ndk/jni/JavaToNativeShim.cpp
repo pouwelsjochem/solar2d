@@ -390,6 +390,36 @@ Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEventEnd(JNIEnv * env, jc
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->MultitouchEventEnd();
 }
 
+JNIEXPORT void JNICALL 
+Java_com_ansca_corona_JavaToNativeShim_nativeWebViewShouldLoadUrl(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jstring url, jint sourceType)
+{
+	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewShouldLoadUrl( env, id, url, sourceType );
+}
+
+JNIEXPORT void JNICALL 
+Java_com_ansca_corona_JavaToNativeShim_nativeWebViewFinishedLoadUrl(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jstring url)
+{
+	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewFinishedLoadUrl( env, id, url );
+}
+
+JNIEXPORT void JNICALL 
+Java_com_ansca_corona_JavaToNativeShim_nativeWebViewDidFailLoadUrl(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jstring url, jstring msg, jint code)
+{
+	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewDidFailLoadUrl( env, id, url, msg, code );
+}
+
+JNIEXPORT void JNICALL 
+Java_com_ansca_corona_JavaToNativeShim_nativeWebViewHistoryUpdated(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id, jboolean canGoBack, jboolean canGoForward)
+{
+	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewHistoryUpdated( env, id, canGoBack, canGoForward );
+}
+
+JNIEXPORT void JNICALL
+Java_com_ansca_corona_JavaToNativeShim_nativeWebViewClosed(JNIEnv * env, jclass cd, jlong bridgeAddress, jint id)
+{
+	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->WebViewClosed( env, id );
+}
+
 JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeAdsRequestEvent(JNIEnv * env, jclass cd, jlong bridgeAddress, jboolean isError )
 {

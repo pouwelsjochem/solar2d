@@ -424,6 +424,19 @@ IPhonePlatformBase::GetStoreProvider( const ResourceHandle<lua_State>& handle ) 
 	return NULL;
 }
 
+PlatformWebPopup*
+IPhonePlatformBase::GetWebPopup() const
+{
+	Rtt_ASSERT_NOT_REACHED();
+	return NULL;
+}
+
+PlatformDisplayObject*
+IPhonePlatformBase::CreateNativeWebView( const Rect& bounds ) const
+{
+	Rtt_ASSERT_NOT_REACHED();
+	return NULL;
+}
 #endif // Rtt_IPHONE_PLATFORM_STUB
 
 #if Rtt_IPHONE_PLATFORM_STUB

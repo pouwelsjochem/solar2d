@@ -181,6 +181,8 @@ add_library( corona SHARED
 		Rtt_AndroidScreenSurface.cpp
 		Rtt_AndroidSystemOpenEvent.cpp
 		Rtt_AndroidTimer.cpp
+		Rtt_AndroidWebPopup.cpp
+		Rtt_AndroidWebViewObject.cpp
 		AndroidBinaryReader.cpp
 		AndroidBinaryReadResult.cpp
 		AndroidDisplayObjectRegistry.cpp
@@ -374,6 +376,7 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_PlatformReachability.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformSurface.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformTimer.cpp
+		${CORONA_ROOT}/librtt/Rtt_PlatformWebPopup.cpp
 		${CORONA_ROOT}/librtt/Rtt_Preference.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceValue.cpp

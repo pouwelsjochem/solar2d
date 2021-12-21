@@ -362,6 +362,9 @@
     <JCompile Include="src\com\ansca\corona\FileContentProvider.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
+    <JCompile Include="src\com\ansca\corona\CoronaWebView.java"> 
+      <Filter>src\com\ansca\corona</Filter> 
+    </JCompile> 
     <JCompile Include="src\com\ansca\corona\Crypto.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -410,6 +413,9 @@
     <JCompile Include="src\com\ansca\corona\events\EventManager.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
+    <JCompile Include="src\com\ansca\corona\events\FinishedLoadUrlTask.java"> 
+      <Filter>src\com\ansca\corona\events</Filter> 
+    </JCompile> 
     <JCompile Include="src\com\ansca\corona\events\GyroscopeTask.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
@@ -425,12 +431,21 @@
     <JCompile Include="src\com\ansca\corona\events\RunnableEvent.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
+    <JCompile Include="src\com\ansca\corona\events\ShouldLoadUrlTask.java"> 
+      <Filter>src\com\ansca\corona\events</Filter> 
+    </JCompile> 
+    <JCompile Include="src\com\ansca\corona\events\WebHistoryUpdatedTask.java"> 
+      <Filter>src\com\ansca\corona\events</Filter> 
+    </JCompile> 
     <JCompile Include="src\com\ansca\corona\events\AccelerometerTask.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\events\AlertTask.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>
+    <JCompile Include="src\com\ansca\corona\events\WebHistoryUpdatedTask.java"> 
+      <Filter>src\com\ansca\corona\events</Filter> 
+    </JCompile> 
     <JCompile Include="src\com\ansca\corona\events\Event.java">
       <Filter>src\com\ansca\corona\events</Filter>
     </JCompile>

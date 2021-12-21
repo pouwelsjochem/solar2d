@@ -1654,6 +1654,36 @@ public class NativeToJavaBridge {
 		// runtime.getViewManager().setTextViewFocus(id, focus);
 	}
 
+	protected static void callWebViewCreate(
+		CoronaRuntime runtime, int id, int left, int top, int width, int height, boolean isPopup, boolean autoCloseEnabled)
+	{
+		runtime.getViewManager().addWebView(id, left, top, width, height, isPopup, autoCloseEnabled);
+	}
+
+	protected static void callWebViewRequestLoadUrl( CoronaRuntime runtime, int id, String url ) {
+		runtime.getViewManager().requestWebViewLoadUrl(id, url);
+	}
+
+	protected static void callWebViewRequestReload(int id, CoronaRuntime runtime) {
+		runtime.getViewManager().requestWebViewReload(id);
+	}
+	
+	protected static void callWebViewRequestStop(int id, CoronaRuntime runtime) {
+		runtime.getViewManager().requestWebViewStop(id);
+	}
+	
+	protected static void callWebViewRequestGoBack(int id, CoronaRuntime runtime) {
+		runtime.getViewManager().requestWebViewGoBack(id);
+	}
+	
+	protected static void callWebViewRequestGoForward(int id, CoronaRuntime runtime) {
+		runtime.getViewManager().requestWebViewGoForward(id);
+	}
+
+	protected static void callWebViewRequestDeleteCookies(int id, CoronaRuntime runtime) {
+		runtime.getViewManager().requestWebViewDeleteCookies(id);
+	}
+
 	protected static int callCryptoGetDigestLength( String algorithm ) {
 		return Crypto.GetDigestLength(algorithm);
 	}

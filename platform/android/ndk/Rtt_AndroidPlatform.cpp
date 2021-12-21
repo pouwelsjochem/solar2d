@@ -25,6 +25,8 @@
 #include "Rtt_PlatformExitCallback.h"
 #include "Rtt_AndroidScreenSurface.h"
 #include "Rtt_AndroidTimer.h"
+#include "Rtt_AndroidWebPopup.h"
+#include "Rtt_AndroidWebViewObject.h"
 
 #include "AndroidDisplayObjectRegistry.h"
 #include "AndroidGLView.h"
@@ -57,6 +59,7 @@ AndroidPlatform::AndroidPlatform(
   :	fAllocator( Rtt_AllocatorCreate() ),
 	fView( pView ),
 	fDevice( *fAllocator, ntjb ),
+	fWebPopup( NULL ),	
 	fPackage( fAllocator ),
 	fDocumentsDir( fAllocator ),
 	fApplicationSupportDir( fAllocator ),
@@ -89,6 +92,7 @@ AndroidPlatform::AndroidPlatform(
 
 AndroidPlatform::~AndroidPlatform()
 {
+	Rtt_DELETE( fWebPopup );
 	Rtt_DELETE( fDisplayObjectRegistry );
 }
 
@@ -558,6 +562,17 @@ AndroidPlatform::DeletePreferences( const char* categoryName, const char** keyNa
 	return fNativeToJavaBridge->DeletePreferences(keyNameArray, (size_t)keyNameCount);
 }
 
+PlatformWebPopup* 
+AndroidPlatform::GetWebPopup() const
+{
+	if ( ! fWebPopup )
+	{
+		fWebPopup = Rtt_NEW( & GetAllocator(), AndroidWebPopup(fDisplayObjectRegistry, fNativeToJavaBridge) );
+	}
+
+	return fWebPopup;
+}
+
 bool
 AndroidPlatform::CanShowPopup( const char *name ) const
 {
@@ -646,6 +661,12 @@ bool
 AndroidPlatform::HidePopup( const char *name ) const
 {
 	return false;
+}
+
+PlatformDisplayObject *
+AndroidPlatform::CreateNativeWebView( const Rect& bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), AndroidWebViewObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge ) );
 }
 
 PlatformFBConnect*

@@ -309,6 +309,46 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMultitouchEv
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
+ * Method:    nativeWebViewShouldLoadUrl
+ * Signature: (ILjava/lang/String;I)V
+ */
+JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewShouldLoadUrl
+  (JNIEnv *, jclass, jlong, jint, jstring, jint);
+
+/*
+ * Class:     com_ansca_corona_JavaToNativeShim
+ * Method:    nativeWebViewFinishedLoadUrl
+ * Signature: (ILjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewFinishedLoadUrl
+  (JNIEnv *, jclass, jlong, jint, jstring);
+
+/*
+ * Class:     com_ansca_corona_JavaToNativeShim
+ * Method:    nativeWebViewDidFailLoadUrl
+ * Signature: (ILjava/lang/String;Ljava/lang/String;I)V
+ */
+JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewDidFailLoadUrl
+  (JNIEnv *, jclass, jlong, jint, jstring, jstring, jint);
+
+/*
+ * Class:     com_ansca_corona_JavaToNativeShim
+ * Method:    nativeWebViewHistoryUpdated
+ * Signature: (IZZ)V
+ */
+JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewHistoryUpdated
+  (JNIEnv *, jclass, jlong, jint, jboolean, jboolean);
+
+/*
+ * Class:     com_ansca_corona_JavaToNativeShim
+ * Method:    nativeWebViewShouldLoadUrl
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeWebViewClosed
+  (JNIEnv *, jclass, jlong, jint);
+
+/*
+ * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeAdsRequestEvent
  * Signature: (Z)V
  */

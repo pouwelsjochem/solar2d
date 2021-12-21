@@ -83,6 +83,11 @@ class JavaToNativeBridge
 		void MultitouchEventBegin();
 		void MultitouchEventAdd( JNIEnv * env, int x, int y, int xStart, int yStart, int touchType, long timestamp, int touchId );
 		void MultitouchEventEnd();
+		void WebViewShouldLoadUrl( JNIEnv * env, int id, jstring url, int sourceType );
+		void WebViewFinishedLoadUrl( JNIEnv * env, int id, jstring url );
+		void WebViewDidFailLoadUrl( JNIEnv * env, int id, jstring url, jstring msg, int code );
+		void WebViewHistoryUpdated( JNIEnv * env, int id, jboolean canGoBack, jboolean canGoForward );
+		void WebViewClosed( JNIEnv * env, int id );
 		void AdsRequestEvent(bool isError);
 		void MemoryWarningEvent();
 		void PopupClosedEvent(JNIEnv *env, jstring popupName, jboolean wasCanceled);

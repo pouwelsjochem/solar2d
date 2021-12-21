@@ -22,6 +22,12 @@
 namespace Rtt
 {
 	
+const LuaProxyVTable&
+PlatformDisplayObject::GetWebViewObjectProxyVTable()
+{
+	return LuaPlatformWebViewObjectProxyVTable::Constant();
+}
+
 // ----------------------------------------------------------------------------
 
 PlatformDisplayObject::PlatformDisplayObject()

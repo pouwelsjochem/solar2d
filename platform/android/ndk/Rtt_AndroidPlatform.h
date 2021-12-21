@@ -25,6 +25,7 @@ class NativeToJavaBridge;
 namespace Rtt
 {
 
+class AndroidWebPopup;
 class PlatformBitmap;
 class PlatformSurface;
 class PlatformTimer;
@@ -68,10 +69,14 @@ class AndroidPlatform : public MPlatform
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const;
 
+		virtual PlatformWebPopup* GetWebPopup() const;
+
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
 		
+		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
+
 		virtual PlatformFBConnect* GetFBConnect() const;
 
 	public:
@@ -139,6 +144,7 @@ class AndroidPlatform : public MPlatform
 		AndroidGLView* fView;
 		AndroidDevice fDevice;
 //		AlertViewDelegate *fDelegate;
+		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		String fPackage;
 		String fDocumentsDir;
 		String fApplicationSupportDir;

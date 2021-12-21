@@ -424,6 +424,8 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidScreenSurface.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidSystemOpenEvent.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTimer.cpp \
+	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidWebPopup.cpp \
+	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidWebViewObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReader.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReadResult.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidDisplayObjectRegistry.cpp \
@@ -613,6 +615,7 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformReachability.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformSurface.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformTimer.cpp \
+	$(CORONA_ROOT)/librtt/Rtt_PlatformWebPopup.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Preference.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PreferenceCollection.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PreferenceValue.cpp \

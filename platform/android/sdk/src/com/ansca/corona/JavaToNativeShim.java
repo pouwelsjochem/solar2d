@@ -77,6 +77,11 @@ public class JavaToNativeShim {
     private static native void nativeMultitouchEventBegin(long bridgeAddress);
     private static native void nativeMultitouchEventAdd( long bridgeAddress, int xLast, int yLast, int xStart, int yStart, int phaseType, long timestamp, int id );
     private static native void nativeMultitouchEventEnd( long bridgeAddress );
+    private static native void nativeWebViewShouldLoadUrl( long bridgeAddress, int id, String url, int sourceType );
+    private static native void nativeWebViewFinishedLoadUrl( long bridgeAddress, int id, String url );
+    private static native void nativeWebViewDidFailLoadUrl( long bridgeAddress, int id, String url, String msg, int code );
+    private static native void nativeWebViewHistoryUpdated( long bridgeAddress, int id, boolean canGoBack, boolean canGoForward );
+    private static native void nativeWebViewClosed( long bridgeAddress, int id );
 	private static native void nativeMemoryWarningEvent( long bridgeAddress );
 	private static native void nativePopupClosedEvent( long bridgeAddress, String popupName, boolean isError );
 	private static native Object nativeGetCoronaRuntime( long bridgeAddress );
@@ -463,6 +468,41 @@ public class JavaToNativeShim {
 		nativeAlertCallback( runtime.getJavaToNativeBridgeAddress(), buttonIndex, cancelled );
 	}
 	
+	public static void webViewShouldLoadUrl( CoronaRuntime runtime, int id, String url, int sourceType ) {
+		if (runtime == null || runtime.wasDisposed()) {
+			return;
+		}
+		nativeWebViewShouldLoadUrl( runtime.getJavaToNativeBridgeAddress(), id, url, sourceType );
+	}
+	
+	public static void webViewFinishedLoadUrl( CoronaRuntime runtime, int id, String url ) {
+		if (runtime == null || runtime.wasDisposed()) {
+			return;
+		}
+		nativeWebViewFinishedLoadUrl( runtime.getJavaToNativeBridgeAddress(), id, url );
+	}
+	
+	public static void webViewDidFailLoadUrl( CoronaRuntime runtime, int id, String url, String msg, int code ) {
+		if (runtime == null || runtime.wasDisposed()) {
+			return;
+		}
+    	nativeWebViewDidFailLoadUrl( runtime.getJavaToNativeBridgeAddress(), id, url, msg, code );
+	}
+	
+	public static void webViewHistoryUpdated( CoronaRuntime runtime, int id, boolean canGoBack, boolean canGoForward ) {
+		if (runtime == null || runtime.wasDisposed()) {
+			return;
+		}
+		nativeWebViewHistoryUpdated( runtime.getJavaToNativeBridgeAddress(), id, canGoBack, canGoForward );
+	}
+	
+	public static void webViewClosed( CoronaRuntime runtime, int id ) {
+		if (runtime == null || runtime.wasDisposed()) {
+			return;
+		}
+		nativeWebViewClosed( runtime.getJavaToNativeBridgeAddress(), id );
+	}
+
 	public static void memoryWarningEvent( CoronaRuntime runtime )
 	{
 		if (runtime == null || runtime.wasDisposed()) {

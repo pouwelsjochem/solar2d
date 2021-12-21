@@ -52,6 +52,9 @@ class MacConsolePlatform : public ApplePlatform
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
+		virtual PlatformWebPopup* GetWebPopup() const;
+
+		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
         virtual PlatformFBConnect* GetFBConnect() const;
 
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;

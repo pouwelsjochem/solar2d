@@ -38,6 +38,7 @@ public class ViewManager {
 	private ViewGroup myContentView;
 	private android.widget.FrameLayout myOverlayView;
 	private android.widget.AbsoluteLayout myAbsoluteViewLayout;
+	private android.widget.AbsoluteLayout myAbsolutePopupLayout;
 	private CoronaRuntime myCoronaRuntime;
 	private Handler myHandler;
 	
@@ -56,6 +57,7 @@ public class ViewManager {
 		myContentView = null;
 		myOverlayView = null;
 		myAbsoluteViewLayout = null;
+		myAbsolutePopupLayout = null;
 
 		// The main looper lives on the main thread of the application.  
 		// This will bind the handler to post all runnables to the main ui thread.
@@ -92,6 +94,17 @@ public class ViewManager {
 		return myAbsoluteViewLayout;
 	}
 	
+	/**
+	 * Gets an absolute layout view group for displaying UI objects as popups, such as web views.
+	 * This view group's objects are always displayed on top of the overlay view's objects.
+	 * This view allows you to set pixel position of UI objects on top of the OpenGL view.
+	 * @return Returns an AbsoluteLayout object. Returns null if its CoronaActivity is not available.
+	 */
+	public android.widget.AbsoluteLayout getAbsolutePopupLayout()
+	{
+		return myAbsolutePopupLayout;
+	}
+
 	/**
 	 * Fetches a Corona display object by its unique ID.
 	 * @param id The unique integer ID assigned to the object via the View.setId() method.
@@ -193,6 +206,11 @@ public class ViewManager {
 		myAbsoluteViewLayout = new android.widget.AbsoluteLayout(myContext);
 		myOverlayView.addView(myAbsoluteViewLayout);
 		myContentView.addView(myOverlayView);
+
+		// Add a popup view to the root content view.
+		// This is a view container whose UI objects are always displayed on top of the overlay view.
+		myAbsolutePopupLayout = new android.widget.AbsoluteLayout(myContext);
+		myContentView.addView(myAbsolutePopupLayout);
 	}
 
 	public void destroy() {
@@ -241,6 +259,12 @@ public class ViewManager {
 				android.view.ViewParent parentView = view.getParent();
 				if ((parentView != null) && (parentView instanceof android.view.ViewGroup)) {
 					((android.view.ViewGroup)parentView).removeView(view);
+				}
+
+				// Destroy the view, if necessary.
+				if (view instanceof android.webkit.WebView) {
+					((android.webkit.WebView)view).stopLoading();
+					((android.webkit.WebView)view).destroy();
 				}
 
 				// Set the view's ID to an invalid value.
@@ -331,6 +355,11 @@ public class ViewManager {
 					
 					// Alpha blend the view via an animation object.
 					if ((newAlpha < 0.9999f) && (view.getVisibility() == View.VISIBLE)) {
+						if ((view instanceof android.webkit.WebView)) {
+							// A hardware accelerated WebView shows graphics glitches with animations applied to it.
+							// We must disable hardware acceleration permanently to work-around this issue.
+							setHardwareAccelerationEnabled(view, false);
+						}
 						android.view.animation.AlphaAnimation animation;
 						animation = new android.view.animation.AlphaAnimation(1.0f, newAlpha);
 						animation.setDuration(0);
@@ -353,46 +382,58 @@ public class ViewManager {
 				if (view == null) {
 					return;
 				}
-				
-				// Fetch the view's background drawable object.
-				// Note that it will be null if the background has been hidden.
-				android.graphics.drawable.Drawable background = view.getBackground();
-				
-				// Do not continue if the background visibility state isn't going to changing.
-				if ((isVisible && (background != null)) ||
-				    (!isVisible && (background == null))) {
-					return;
-				}
-				
-				// If the background was not found, then attempt to fetch it from the HashMap tagged to the view.
-				StringObjectHashMap hashMap = null;
-				Object tag = view.getTag();
-				if (tag instanceof StringObjectHashMap) {
-					hashMap = (StringObjectHashMap)tag;
-				}
-				if ((background == null) && (hashMap != null)) {
-					Object value = hashMap.get("backgroundDrawable");
-					if (value instanceof android.graphics.drawable.Drawable) {
-						background = (android.graphics.drawable.Drawable)value;
-					}
-				}
-				
-				// Hide the background by settings the background drawable to null.
-				// Show the background by assigning the view the last displayed background.
-				// If the last displayed background is unknown, then generate a new background drawable.
-				if (isVisible && (background == null)) {
-					view.setBackgroundColor(android.graphics.Color.WHITE);
-					background = view.getBackground();
+
+				// Show/hide the view's background.
+				if (view instanceof android.webkit.WebView) {
+					// Unlike other views, web views do not use drawable objects for their backgrounds.
+					// Their backgrounds can only be changed via the setBackgroundColor() method.
+					int color = isVisible ? android.graphics.Color.WHITE : android.graphics.Color.TRANSPARENT;
+					view.setBackgroundColor(color);
+					
+					// A hardware accelerated WebView will not show a transparent background.
+					// We must disable hardware acceleration to work-around this issue.
+					setHardwareAccelerationEnabled(view, isVisible);
 				}
 				else {
-					view.setBackgroundDrawable(isVisible ? background : null);
+					// Fetch the view's background drawable object.
+					// Note that it will be null if the background has been hidden.
+					android.graphics.drawable.Drawable background = view.getBackground();
+					
+					// Do not continue if the background visibility state isn't going to changing.
+					if ((isVisible && (background != null)) ||
+						(!isVisible && (background == null))) {
+						return;
+					}
+					
+					// If the background was not found, then attempt to fetch it from the HashMap tagged to the view.
+					StringObjectHashMap hashMap = null;
+					Object tag = view.getTag();
+					if (tag instanceof StringObjectHashMap) {
+						hashMap = (StringObjectHashMap)tag;
+					}
+					if ((background == null) && (hashMap != null)) {
+						Object value = hashMap.get("backgroundDrawable");
+						if (value instanceof android.graphics.drawable.Drawable) {
+							background = (android.graphics.drawable.Drawable)value;
+						}
+					}
+					
+					// Hide the background by settings the background drawable to null.
+					// Show the background by assigning the view the last displayed background.
+					// If the last displayed background is unknown, then generate a new background drawable.
+					if (isVisible && (background == null)) {
+						view.setBackgroundColor(android.graphics.Color.WHITE);
+						background = view.getBackground();
+					}
+					else {
+						view.setBackgroundDrawable(isVisible ? background : null);
+					}
+					
+					// If we are hiding the background, then store it to the HashMap to be restored later.
+					if ((isVisible == false) && (hashMap != null)) {
+						hashMap.put("backgroundDrawable", background);
+					}
 				}
-				
-				// If we are hiding the background, then store it to the HashMap to be restored later.
-				if ((isVisible == false) && (hashMap != null)) {
-					hashMap.put("backgroundDrawable", background);
-				}
-				
 				// Redraw the view.
 				view.invalidate();
 			}
@@ -407,20 +448,29 @@ public class ViewManager {
 		if (view == null) {
 			return false;
 		}
-		
-		// Determine if there is a background by looking at its drawable object.
-		android.graphics.drawable.Drawable background = view.getBackground();
-		if (background instanceof android.graphics.drawable.ColorDrawable) {
-			hasBackground = (((android.graphics.drawable.ColorDrawable)background).getAlpha() > 0);
+
+		// Determine if the view has a background.
+		if (view instanceof android.webkit.WebView) {
+			// Unlike other views, web views do not use drawable objects for their backgrounds.
+			// Their background colors must be retrieved specially.
+			int color = CoronaWebView.getBackgroundColorFrom((android.webkit.WebView)view);
+			hasBackground = (color != android.graphics.Color.TRANSPARENT);
 		}
-		else if (background instanceof android.graphics.drawable.ShapeDrawable) {
-			android.graphics.Paint paint = ((android.graphics.drawable.ShapeDrawable)background).getPaint();
-			if (paint != null) {
-				hasBackground = (paint.getColor() != android.graphics.Color.TRANSPARENT);
+		else {
+			// Determine if there is a background by looking at its drawable object.
+			android.graphics.drawable.Drawable background = view.getBackground();
+			if (background instanceof android.graphics.drawable.ColorDrawable) {
+				hasBackground = (((android.graphics.drawable.ColorDrawable)background).getAlpha() > 0);
 			}
-		}
-		else if (background != null) {
-			hasBackground = true;
+			else if (background instanceof android.graphics.drawable.ShapeDrawable) {
+				android.graphics.Paint paint = ((android.graphics.drawable.ShapeDrawable)background).getPaint();
+				if (paint != null) {
+					hasBackground = (paint.getColor() != android.graphics.Color.TRANSPARENT);
+				}
+			}
+			else if (background != null) {
+				hasBackground = true;
+			}
 		}
 		return hasBackground;
 	}
@@ -440,5 +490,133 @@ public class ViewManager {
 		}
 		catch (Exception ex) { }
 	}
+
+	public void addWebView(
+		final int id, final int left, final int top, final int width, final int height,
+		final boolean isPopup, final boolean autoCloseEnabled)
+	{
+		postOnUiThread(new Runnable() {
+			public void run() {
+				// Do not continue if the activity has just exited out.
+				if (myContext == null) {
+					return;
+				}
+				
+				// Get the view group that will contain this web view.
+				android.widget.AbsoluteLayout viewGroup = isPopup ? myAbsolutePopupLayout : myAbsoluteViewLayout;
+				if (viewGroup == null) {
+					return;
+				}
+				
+				// Create and set up the web view.
+				CoronaWebView view = new CoronaWebView(myContext, myCoronaRuntime);
+				view.setId(id);
+				view.setTag(new StringObjectHashMap());
+				view.setBackKeySupported(isPopup);
+				view.setAutoCloseEnabled(autoCloseEnabled);
+				
+				// Position the web view on screen.
+				LayoutParams layoutParams;
+				if ((width <= 0) || (height <= 0)) {
+					RelativeLayout.LayoutParams relativeParams = new RelativeLayout.LayoutParams(
+										LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+					relativeParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+					layoutParams = relativeParams;
+				}
+				else {
+					layoutParams = new AbsoluteLayout.LayoutParams(width, height, left, top);
+				}
+				viewGroup.addView(view, layoutParams);
+				view.bringToFront();
+				
+				// Add the view to the display object collection to be made accessible to the native side of Corona.
+				synchronized (myDisplayObjects) {
+					myDisplayObjects.add(view);
+				}
+			}
+		} );
+	}
 	
+	public void requestWebViewLoadUrl(final int id, final String finalUrl) {
+		postOnUiThread(new Runnable() {
+			public void run() {
+				CoronaWebView view = getDisplayObjectById(CoronaWebView.class, id);
+				if (view != null) {
+					String url = finalUrl;
+					android.content.Context context = CoronaEnvironment.getApplicationContext();
+					if (context != null) {
+						// If the given URL is to a local file within the APK or expansion file,
+						// then create a content URI for it.
+						com.ansca.corona.storage.FileServices fs = new com.ansca.corona.storage.FileServices(context);
+						if (fs.doesAssetFileExist(url)) {
+							android.net.Uri contentProviderUri =
+									com.ansca.corona.storage.FileContentProvider.createContentUriForFile(context, url);
+							if (contentProviderUri != null) {
+								url = contentProviderUri.toString();
+							}
+						}
+					}
+					view.loadUrl(url);
+					view.requestFocus(android.view.View.FOCUS_DOWN);
+				}
+			}
+		});
+	}
+	
+	public void requestWebViewReload(final int id) {
+		postOnUiThread(new Runnable() {
+			public void run() {
+				CoronaWebView view = getDisplayObjectById(CoronaWebView.class, id);
+				if (view != null) {
+					view.reload();
+					view.requestFocus(android.view.View.FOCUS_DOWN);
+				}
+			}
+		});
+	}
+	
+	public void requestWebViewStop(final int id) {
+		postOnUiThread(new Runnable() {
+			public void run() {
+				CoronaWebView view = getDisplayObjectById(CoronaWebView.class, id);
+				if (view != null) {
+					view.stopLoading();
+				}
+			}
+		});
+	}
+	
+	public void requestWebViewGoBack(final int id) {
+		postOnUiThread(new Runnable() {
+			public void run() {
+				CoronaWebView view = getDisplayObjectById(CoronaWebView.class, id);
+				if (view != null) {
+					view.goBack();
+					view.requestFocus(android.view.View.FOCUS_DOWN);
+				}
+			}
+		});
+	}
+	
+	public void requestWebViewGoForward(final int id) {
+		postOnUiThread(new Runnable() {
+			public void run() {
+				CoronaWebView view = getDisplayObjectById(CoronaWebView.class, id);
+				if (view != null) {
+					view.goForward();
+					view.requestFocus(android.view.View.FOCUS_DOWN);
+				}
+			}
+		});
+	}
+
+	public void requestWebViewDeleteCookies(final int id) {
+		postOnUiThread(new Runnable() {
+			public void run() {
+				CookieManager manager = CookieManager.getInstance();
+				manager.removeAllCookie();
+			}
+		});
+	}
+
 }

@@ -152,6 +152,16 @@ class NativeToJavaBridge
 		void DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height );
 	
 	public:
+		void WebViewCreate( int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled );
+		void WebViewRequestLoadUrl( int id, const char * url );
+		void WebViewRequestReload( int id );
+		void WebViewRequestStop( int id );
+		void WebViewRequestGoBack( int id );
+		void WebViewRequestGoForward( int id );
+		void WebViewRequestDeleteCookies( int id );
+		bool WebPopupShouldLoadUrl( int id, const char * url );
+		bool WebPopupDidFailLoadUrl( int id, const char * url, const char * msg, int code );
+
 		int CryptoGetDigestLength( const char * algorithm );
 		void CryptoCalculateDigest( const char * algorithm, const Rtt::Data<const char> & data, U8 * digest );
 		void CryptoCalculateHMAC( const char * algorithm, const Rtt::Data<const char> & key, const Rtt::Data<const char> & data, 

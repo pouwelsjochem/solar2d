@@ -227,6 +227,9 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformTimer.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Rtt_PlatformWebPopup.cpp">
+      <Filter>librtt</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_RenderingStream.cpp">
       <Filter>librtt</Filter>
     </ClCompile>

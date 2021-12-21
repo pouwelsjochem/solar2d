@@ -327,6 +327,7 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformReachability.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformSurface.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformTimer.cpp" />
+    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.cpp" /> 
     <ClCompile Include="..\..\..\..\librtt\Rtt_Preference.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PreferenceCollection.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PreferenceValue.cpp" />
@@ -476,6 +477,8 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidScreenSurface.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidTimer.cpp" />
+    <ClCompile Include="..\..\ndk\Rtt_AndroidWebPopup.cpp" /> 
+    <ClCompile Include="..\..\ndk\Rtt_AndroidWebViewObject.cpp" /> 
     <ClCompile Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.c" />
   </ItemGroup>
   <ItemGroup>

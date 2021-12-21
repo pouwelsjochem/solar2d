@@ -32,6 +32,7 @@ namespace Rtt
 	class PlatformSurface;
 	class PlatformTimer;
 	class RenderingStream;
+	class WinWebPopup;
 }
 class WinGLView;
 
@@ -70,9 +71,11 @@ class WinPlatform : public MPlatform
 					const char *title, const char *message, const char **buttonLabels,
 					U32 buttonCount, LuaResource *resourcePointer) const;
 		virtual void CancelNativeAlert(NativeAlertRef alertReference, S32 buttonIndex) const;
+		virtual PlatformWebPopup* GetWebPopup() const;
 		virtual bool CanShowPopup(const char *name) const;
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
+		virtual PlatformDisplayObject* CreateNativeWebView(const Rect& bounds) const;
 		virtual PlatformFBConnect* GetFBConnect() const;
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const;
 		virtual void ReleaseNotification(void *notificationId) const;
@@ -109,6 +112,7 @@ class WinPlatform : public MPlatform
 		Interop::RuntimeEnvironment& fEnvironment;
 		WinDevice fDevice;
 		WinCrypto fCrypto;
+		mutable WinWebPopup *fWebPopup;
 		mutable PlatformFBConnect *fFBConnect;
 		WinExitCallback fExitCallback;
 };

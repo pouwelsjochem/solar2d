@@ -44,6 +44,7 @@ namespace Rtt
 
 class MacConsoleDevice;
 class MacFBConnect;
+class MacWebPopup;
 class MacViewSurface;
 class PlatformSimulator;
 class PlatformSurface;
@@ -95,6 +96,10 @@ class MacPlatform : public ApplePlatform
 			U32 numButtons,
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
+
+		virtual PlatformWebPopup* GetWebPopup() const;
+
+		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 
         virtual PlatformFBConnect* GetFBConnect() const;
 

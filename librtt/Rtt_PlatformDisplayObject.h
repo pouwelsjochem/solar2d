@@ -32,6 +32,9 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		typedef DisplayObject Super;
 
 	public:
+		static const LuaProxyVTable& GetWebViewObjectProxyVTable();
+
+	public:
 		PlatformDisplayObject();
 		virtual ~PlatformDisplayObject();
 
