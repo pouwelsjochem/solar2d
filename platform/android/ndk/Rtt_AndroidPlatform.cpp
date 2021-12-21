@@ -669,6 +669,16 @@ AndroidPlatform::CreateNativeWebView( const Rect& bounds ) const
 	return Rtt_NEW( & GetAllocator(), AndroidWebViewObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge ) );
 }
 
+PlatformDisplayObject *
+AndroidPlatform::GetNativeDisplayObjectById( const int objectId ) const
+{
+	if (fDisplayObjectRegistry)
+	{
+		return fDisplayObjectRegistry->GetById(objectId);
+	}
+	return NULL;
+}
+
 PlatformFBConnect*
 AndroidPlatform::GetFBConnect() const
 {

@@ -77,6 +77,8 @@ class AndroidPlatform : public MPlatform
 		
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 
+		PlatformDisplayObject* GetNativeDisplayObjectById( const int objectId ) const;
+
 		virtual PlatformFBConnect* GetFBConnect() const;
 
 	public:
@@ -144,7 +146,7 @@ class AndroidPlatform : public MPlatform
 		AndroidGLView* fView;
 		AndroidDevice fDevice;
 //		AlertViewDelegate *fDelegate;
-		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
+		mutable AndroidWebPopup *fWebPopup;
 		String fPackage;
 		String fDocumentsDir;
 		String fApplicationSupportDir;
