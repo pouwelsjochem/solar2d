@@ -95,7 +95,10 @@ public class CoronaRuntime {
 		fWasDisposed = true;
 
 		fController.destroy();
+
 		fController = null;
+
+		fViewManager.destroy();
 
 		fViewManager = null;
 	}
@@ -113,12 +116,14 @@ public class CoronaRuntime {
 	void onPause() {
 		fController.stop();
 		fGLView.onSuspendCoronaRuntime();
+		fViewManager.suspend();
 	}
 
 	void onResume() {
 		fController.start();
 		fGLView.onResumeCoronaRuntime();
 		updateViews();
+		fViewManager.resume();
 	}
 
 	/** Shows or hides the views according to the current state of the activity. */

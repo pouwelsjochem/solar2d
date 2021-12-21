@@ -35,6 +35,7 @@ class MCrypto;
 class MPlatformDevice;
 class RenderingStream;
 class PlatformBitmap;
+class PlatformDisplayObject;
 class PlatformExitCallback;
 class PlatformFBConnect;
 class PlatformOpenALPlayer;

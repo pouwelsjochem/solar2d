@@ -141,6 +141,16 @@ class NativeToJavaBridge
 		bool HasGyroscope();
 		void Vibrate(const char * hapticType = NULL, const char* hapticStyle = NULL);
 		
+		void DisplayObjectDestroy( int id );
+		void DisplayObjectSetVisible( int id, bool visible );
+		bool DisplayObjectGetVisible( int id );
+		void DisplayObjectSetAlpha( int id, float alpha );
+		float DisplayObjectGetAlpha( int id );
+		void DisplayObjectSetBackground( int id, bool bg );
+		bool DisplayObjectGetBackground( int id );
+		void DisplayObjectSetFocus( int id, bool focus );
+		void DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height );
+	
 	public:
 		int CryptoGetDigestLength( const char * algorithm );
 		void CryptoCalculateDigest( const char * algorithm, const Rtt::Data<const char> & data, U8 * digest );

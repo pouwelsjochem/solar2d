@@ -212,6 +212,7 @@
     <ClInclude Include="Rtt\Rtt_WinCrypto.h" />
     <ClInclude Include="Rtt\Rtt_WinData.h" />
     <ClInclude Include="Rtt\Rtt_WinDevice.h" />
+    <ClInclude Include="Rtt\Rtt_WinDisplayObject.h" />
     <ClInclude Include="Rtt\Rtt_WinExitCallback.h" />
     <ClInclude Include="Rtt\Rtt_WinFBConnect.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDevice.h" />
@@ -296,6 +297,7 @@
     <ClCompile Include="Rtt\Rtt_WinCrypto.cpp" />
     <ClCompile Include="Rtt\Rtt_WinData.cpp" />
     <ClCompile Include="Rtt\Rtt_WinDevice.cpp" />
+    <ClCompile Include="Rtt\Rtt_WinDisplayObject.cpp" />
     <ClCompile Include="Rtt\Rtt_WinExitCallback.cpp" />
     <ClCompile Include="Rtt\Rtt_WinFBConnect.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDevice.cpp" />

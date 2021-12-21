@@ -1608,6 +1608,51 @@ public class NativeToJavaBridge {
 	{
 		runtime.getController().vibrate(hapticType, hapticStyle);
 	}
+	
+	protected static void callDisplayObjectDestroy( CoronaRuntime runtime, int id )
+	{
+		runtime.getViewManager().destroyDisplayObject(id);
+	}
+	
+	protected static void callDisplayObjectSetVisible( CoronaRuntime runtime, int id, boolean visible )
+	{
+		runtime.getViewManager().setDisplayObjectVisible(id, visible);
+	}
+	
+	protected static void callDisplayObjectUpdateScreenBounds( CoronaRuntime runtime, int id, int x, int y, int w, int h )
+	{
+		runtime.getViewManager().displayObjectUpdateScreenBounds(id, x, y, w, h);
+	}
+	
+	protected static void callDisplayObjectSetAlpha( CoronaRuntime runtime, int id, float alpha )
+	{
+		runtime.getViewManager().setDisplayObjectAlpha(id, alpha);
+	}
+	
+	protected static void callDisplayObjectSetBackground( CoronaRuntime runtime, int id, boolean bg )
+	{
+		runtime.getViewManager().setDisplayObjectBackground(id, bg);
+	}
+	
+	protected static boolean callDisplayObjectGetVisible( CoronaRuntime runtime, int id )
+	{
+		return runtime.getViewManager().getDisplayObjectVisible(id);
+	}
+	
+	protected static float callDisplayObjectGetAlpha( CoronaRuntime runtime, int id )
+	{
+		return runtime.getViewManager().getDisplayObjectAlpha(id);
+	}
+	
+	protected static boolean callDisplayObjectGetBackground( CoronaRuntime runtime, int id )
+	{
+		return 	runtime.getViewManager().getDisplayObjectBackground(id);
+	}
+
+	protected static void callDisplayObjectSetFocus( CoronaRuntime runtime, int id, boolean focus )
+	{
+		// runtime.getViewManager().setTextViewFocus(id, focus);
+	}
 
 	protected static int callCryptoGetDigestLength( String algorithm ) {
 		return Crypto.GetDigestLength(algorithm);

@@ -23,6 +23,7 @@
 #include "Rtt_IPhoneRuntimeDelegate.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaContext.h"
+#include "Rtt_PlatformDisplayObject.h"
 #include "Rtt_Runtime.h"
 
 // ----------------------------------------------------------------------------
@@ -223,6 +224,32 @@ FOUNDATION_EXPORT void CoronaSetDelegateClass( Class c )
 - (lua_State *)L
 {
 	return [self coronaView].runtime->VMContext().L();
+}
+
+- (CGPoint)coronaPointToUIKitPoint:(CGPoint)coronaPoint
+{
+	using namespace Rtt;
+
+	Rtt_Real x = Rtt_FloatToReal( coronaPoint.x );
+	Rtt_Real y = Rtt_FloatToReal( coronaPoint.y );
+
+	Rtt::Rect bounds;
+	bounds.xMin = x;
+	bounds.yMin = y;
+	bounds.xMax = x;
+	bounds.yMax = y;
+
+	const Display& display = [self coronaView].runtime->GetDisplay();
+
+	Rtt_Real contentToScreenScale = display.GetContentToScreenScale();
+	if ( !Rtt_RealIsOne(contentToScreenScale) )
+	{
+		PlatformDisplayObject::CalculateScreenBounds( display, contentToScreenScale, bounds );
+	}
+
+	CGPoint result = { Rtt_RealToFloat( bounds.xMin ), Rtt_RealToFloat( bounds.yMin ) };
+
+	return result;
 }
 
 - (void)suspend

@@ -171,6 +171,7 @@ add_library( corona SHARED
 		Rtt_AndroidBitmap.cpp
 		Rtt_AndroidCrypto.cpp
 		Rtt_AndroidData.cpp
+		Rtt_AndroidDisplayObject.cpp
 		Rtt_AndroidInputDevice.cpp
 		Rtt_AndroidInputDeviceManager.cpp
 		Rtt_AndroidModalInteraction.cpp
@@ -182,6 +183,7 @@ add_library( corona SHARED
 		Rtt_AndroidTimer.cpp
 		AndroidBinaryReader.cpp
 		AndroidBinaryReadResult.cpp
+		AndroidDisplayObjectRegistry.cpp
 		AndroidFileReader.cpp
 		AndroidGLView.cpp
 		AndroidBaseImageDecoder.cpp
@@ -335,6 +337,7 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_Archive.cpp
 		${CORONA_ROOT}/librtt/Rtt_Event.cpp
+		${CORONA_ROOT}/librtt/Rtt_ExplicitTemplates.cpp
 		${CORONA_ROOT}/librtt/Rtt_FilePath.cpp
 		${CORONA_ROOT}/librtt/Rtt_HitTestObject.cpp
 		${CORONA_ROOT}/librtt/Rtt_KeyName.cpp
@@ -361,6 +364,7 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_Matrix.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformAudioSessionManager.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformData.cpp
+		${CORONA_ROOT}/librtt/Rtt_PlatformDisplayObject.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformExitCallback.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformFBConnect.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp

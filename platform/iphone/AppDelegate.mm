@@ -34,6 +34,7 @@
 
 #include "CoronaIOSLoader.h"
 
+#include "Rtt_IPhoneNativeObject.h"
 #include "Rtt_IPhoneTemplate.h"
 
 #include "CoronaAppDelegate.h"
@@ -273,6 +274,32 @@ SetLaunchArgs( UIApplication *application, NSDictionary *launchOptions, Rtt::Run
 - (lua_State *)L
 {
 	return view.runtime->VMContext().L();
+}
+
+- (CGPoint)coronaPointToUIKitPoint:(CGPoint)coronaPoint
+{
+	using namespace Rtt;
+
+	Rtt_Real x = Rtt_FloatToReal( coronaPoint.x );
+	Rtt_Real y = Rtt_FloatToReal( coronaPoint.y );
+
+	Rtt::Rect bounds;
+	bounds.xMin = x;
+	bounds.yMin = y;
+	bounds.xMax = x;
+	bounds.yMax = y;
+
+	const Display& display = view.runtime->GetDisplay();
+
+	Rtt_Real contentToScreenScale = display.GetContentToScreenScale();
+	if ( !Rtt_RealIsOne(contentToScreenScale) )
+	{
+		PlatformDisplayObject::CalculateScreenBounds( display, contentToScreenScale, bounds );
+	}
+
+	CGPoint result = { Rtt_RealToFloat( bounds.xMin ), Rtt_RealToFloat( bounds.yMin ) };
+
+	return result;
 }
 
 - (void)suspend

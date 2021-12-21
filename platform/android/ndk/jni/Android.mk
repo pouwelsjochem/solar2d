@@ -414,6 +414,7 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidBitmap.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidCrypto.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidData.cpp \
+	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidDisplayObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDevice.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDeviceManager.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidModalInteraction.cpp \
@@ -425,6 +426,7 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidTimer.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReader.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBinaryReadResult.cpp \
+	$(CORONA_ROOT)/platform/android/ndk/AndroidDisplayObjectRegistry.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidFileReader.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidGLView.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/AndroidBaseImageDecoder.cpp \
@@ -573,6 +575,7 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Archive.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_Event.cpp \
+	$(CORONA_ROOT)/librtt/Rtt_ExplicitTemplates.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_FilePath.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_HitTestObject.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_KeyName.cpp \
@@ -599,6 +602,7 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_Matrix.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformAudioSessionManager.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformData.cpp \
+	$(CORONA_ROOT)/librtt/Rtt_PlatformDisplayObject.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformExitCallback.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformFBConnect.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformInAppStore.cpp \

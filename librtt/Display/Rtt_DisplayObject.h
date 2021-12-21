@@ -166,6 +166,7 @@ class DisplayObject : public MLuaProxyable
 
 	public:
 		virtual bool HitTest( Real contentX, Real contentY );
+		virtual void DidUpdateTransform( Matrix& srcToDst );
 
 	public:
 		// Treats as assignment when isNewValue is true
@@ -230,6 +231,8 @@ class DisplayObject : public MLuaProxyable
 		bool Intersects( const DisplayObject& rhs ) const;
 
 		//const String& StageName() const { return fStageName; }
+
+		bool IsAbove( const DisplayObject& object ) const;
 
 		bool IsReachable() const { return NULL != fLuaProxy; }
 

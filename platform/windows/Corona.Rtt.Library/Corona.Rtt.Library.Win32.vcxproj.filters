@@ -120,6 +120,9 @@
     <ClCompile Include="..\..\..\librtt\Rtt_Event.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Rtt_ExplicitTemplates.cpp">
+      <Filter>librtt</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_FilePath.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -193,6 +196,9 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformData.cpp">
+      <Filter>librtt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Rtt_PlatformDisplayObject.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformExitCallback.cpp">
@@ -839,6 +845,9 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformData.h">
+      <Filter>librtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\librtt\Rtt_PlatformDisplayObject.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformExitCallback.h">

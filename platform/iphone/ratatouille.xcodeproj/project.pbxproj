@@ -27,6 +27,7 @@
 		0727BA9F16E6908300981C4B /* libnetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0727BA9E16E6908300981C4B /* libnetwork.a */; };
 		0748724918C1C469004FB786 /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 0748724718C1C469004FB786 /* NSData+Base64.h */; };
 		0748724A18C1C469004FB786 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0748724818C1C469004FB786 /* NSData+Base64.m */; };
+		0795D25A18861C6600B3F4B7 /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */; };
 		A40D2F5D1887699100B4A354 /* CoronaViewPluginContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A40D2F5B1887699100B4A354 /* CoronaViewPluginContext.h */; };
 		A40D2F5E1887699100B4A354 /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F5C1887699100B4A354 /* CoronaViewPluginContext.mm */; };
 		A40D2F6818876D5200B4A354 /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F5C1887699100B4A354 /* CoronaViewPluginContext.mm */; };
@@ -78,6 +79,7 @@
 		A46936F0169DED9300723568 /* Rtt_IPhoneAudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936BF169DED9200723568 /* Rtt_IPhoneAudioSessionManager.mm */; };
 		A46936F3169DED9300723568 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C1169DED9200723568 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */; };
 		A46936FA169DED9300723568 /* Rtt_IPhoneDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C6169DED9200723568 /* Rtt_IPhoneDevice.mm */; };
+		A46936FD169DED9300723568 /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */; };
 		A469371E169DED9300723568 /* Rtt_IPhonePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */; };
 		A4693721169DED9300723568 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E0169DED9200723568 /* Rtt_IPhoneScreenSurface.mm */; };
 		A4698839169E642E00EAA645 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
@@ -193,6 +195,8 @@
 		A4F5C3C518456F1800E5ED54 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3B718456DBC00E5ED54 /* Main_iPad.storyboard */; };
 		A4F5C3C618456F1800E5ED54 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3B918456DBC00E5ED54 /* Main_iPhone.storyboard */; };
 		A4F5C3D2184574E200E5ED54 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3D0184574E200E5ED54 /* InfoPlist.strings */; };
+		A4FA8053170BFECE002A7FC9 /* CoronaNativeObjectAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */; };
+		A4FA8057170BFF09002A7FC9 /* Rtt_IPhoneNativeObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */; };
 		C2074EBA1E160FCF009FC33C /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */; };
 		C2F911791CDC15F4004A5564 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4359164B1D5200CFE7B3 /* libluasocket.a */; };
 		F50E7EB324FA923B009F165B /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
@@ -240,6 +244,7 @@
 		F5C36C1524FAB49F00775C6E /* AutoLinkModules.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FD0AE02373933C0066F6A6 /* AutoLinkModules.m */; };
 		F5C36C1624FAB49F00775C6E /* CoronaLuaObjC+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4728FE61AE7F77B00BC088D /* CoronaLuaObjC+NSObject.m */; };
 		F5C36C1724FAB49F00775C6E /* Rtt_IPhoneDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C6169DED9200723568 /* Rtt_IPhoneDevice.mm */; };
+		F5C36C1824FAB49F00775C6E /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */; };
 		F5C36C1A24FAB49F00775C6E /* CoronaViewRuntimeDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B2D5371842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm */; };
 		F5C36C1B24FAB49F00775C6E /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9601852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		F5C36C1E24FAB49F00775C6E /* Rtt_IPhonePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */; };
@@ -254,6 +259,8 @@
 		F5C36C2E24FAB49F00775C6E /* CoronaLuaIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */; };
 		F5C36C3024FAB49F00775C6E /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36B1BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm */; };
 		F5C36C3124FAB49F00775C6E /* CoronaViewControllerPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BF5183EF42400F67CB3 /* CoronaViewControllerPrivate.mm */; };
+		F5C36C3224FAB49F00775C6E /* CoronaNativeObjectAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */; };
+		F5C36C3324FAB49F00775C6E /* Rtt_IPhoneNativeObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */; };
 		F5C36C3424FAB49F00775C6E /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0720731117CD2C93004720D2 /* Rtt_IPhoneTimer.mm */; };
 		F5C36C3524FAB49F00775C6E /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A482FAE9183D7F460005831B /* Rtt_IPhonePlatformBase.mm */; };
 		F5C36C3924FAB49F00775C6E /* CoronaLuaObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5A7520D1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm */; };
@@ -1186,6 +1193,8 @@
 		A46936C1169DED9200723568 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneAudioSessionManagerImplementation.mm; path = platform/iphone/Rtt_IPhoneAudioSessionManagerImplementation.mm; sourceTree = "<group>"; };
 		A46936C5169DED9200723568 /* Rtt_IPhoneDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneDevice.h; path = platform/iphone/Rtt_IPhoneDevice.h; sourceTree = "<group>"; };
 		A46936C6169DED9200723568 /* Rtt_IPhoneDevice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneDevice.mm; path = platform/iphone/Rtt_IPhoneDevice.mm; sourceTree = "<group>"; };
+		A46936C7169DED9200723568 /* Rtt_IPhoneDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneDisplayObject.h; path = platform/iphone/Rtt_IPhoneDisplayObject.h; sourceTree = "<group>"; };
+		A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneDisplayObject.mm; path = platform/iphone/Rtt_IPhoneDisplayObject.mm; sourceTree = "<group>"; };
 		A46936DD169DED9200723568 /* Rtt_IPhonePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhonePlatform.h; path = platform/iphone/Rtt_IPhonePlatform.h; sourceTree = "<group>"; };
 		A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhonePlatform.mm; path = platform/iphone/Rtt_IPhonePlatform.mm; sourceTree = "<group>"; };
 		A46936DF169DED9200723568 /* Rtt_IPhoneScreenSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneScreenSurface.h; path = platform/iphone/Rtt_IPhoneScreenSurface.h; sourceTree = "<group>"; };
@@ -1272,6 +1281,10 @@
 		A4F5C3B818456DBC00E5ED54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = CoronaCards/Test/Base.lproj/Main_iPad.storyboard; sourceTree = SOURCE_ROOT; };
 		A4F5C3BA18456DBC00E5ED54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = CoronaCards/Test/Base.lproj/Main_iPhone.storyboard; sourceTree = SOURCE_ROOT; };
 		A4F5C3D1184574E200E5ED54 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		A4FA8051170BFEAC002A7FC9 /* CoronaNativeObjectAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaNativeObjectAdapter.h; path = Corona/CoronaNativeObjectAdapter.h; sourceTree = SOURCE_ROOT; };
+		A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaNativeObjectAdapter.mm; path = Corona/CoronaNativeObjectAdapter.mm; sourceTree = SOURCE_ROOT; };
+		A4FA8054170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneNativeObject.h; path = platform/iphone/Rtt_IPhoneNativeObject.h; sourceTree = "<group>"; };
+		A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneNativeObject.mm; path = platform/iphone/Rtt_IPhoneNativeObject.mm; sourceTree = "<group>"; };
 		C2074EB81E160FC1009FC33C /* CoronaBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaBeacon.h; path = platform/iphone/CoronaBeacon.h; sourceTree = "<group>"; };
 		C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaBeacon.mm; path = platform/iphone/CoronaBeacon.mm; sourceTree = "<group>"; };
 		F50E7EC424FA923B009F165B /* template-angle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "template-angle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1508,6 +1521,10 @@
 				A46936C1169DED9200723568 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */,
 				A46936C5169DED9200723568 /* Rtt_IPhoneDevice.h */,
 				A46936C6169DED9200723568 /* Rtt_IPhoneDevice.mm */,
+				A46936C7169DED9200723568 /* Rtt_IPhoneDisplayObject.h */,
+				A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */,
+				A4FA8054170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.h */,
+				A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */,
 				A46936DD169DED9200723568 /* Rtt_IPhonePlatform.h */,
 				A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */,
 				A482FAE8183D7F460005831B /* Rtt_IPhonePlatformBase.h */,
@@ -1678,6 +1695,8 @@
 				A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */,
 				F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */,
 				F5A7520D1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm */,
+				A4FA8051170BFEAC002A7FC9 /* CoronaNativeObjectAdapter.h */,
+				A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */,
 				A4543E7F151AA23A00486F8A /* CoronaRuntime.h */,
 			);
 			name = Corona;
@@ -3407,6 +3426,7 @@
 				A48E9BFE183F0B7800F67CB3 /* CoronaViewPrivate.mm in Sources */,
 				A4B2D53B1842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm in Sources */,
 				A48E9C04183F57B400F67CB3 /* Rtt_IPhonePlatformBase.mm in Sources */,
+				0795D25A18861C6600B3F4B7 /* Rtt_IPhoneDisplayObject.mm in Sources */,
 				A4B2D52A184038AA001311C9 /* Rtt_AppleCrypto.cpp in Sources */,
 				A415ECB11BD861D5003E7114 /* Rtt_IPhonePlatformCore.mm in Sources */,
 				A48DA97A1853094C009D1F93 /* CoronaIOSLoader.mm in Sources */,
@@ -3462,6 +3482,7 @@
 				F5FD0AE32373933C0066F6A6 /* AutoLinkModules.m in Sources */,
 				A4728FE91AE7F77B00BC088D /* CoronaLuaObjC+NSObject.m in Sources */,
 				A46936FA169DED9300723568 /* Rtt_IPhoneDevice.mm in Sources */,
+				A46936FD169DED9300723568 /* Rtt_IPhoneDisplayObject.mm in Sources */,
 				A4B2D53A1842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm in Sources */,
 				A48DA9621852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
 				A469371E169DED9300723568 /* Rtt_IPhonePlatform.mm in Sources */,
@@ -3476,6 +3497,8 @@
 				A480725F16CACD6E00960127 /* CoronaLuaIOS.mm in Sources */,
 				F564C3761BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				A48E9BF7183EF42400F67CB3 /* CoronaViewControllerPrivate.mm in Sources */,
+				A4FA8053170BFECE002A7FC9 /* CoronaNativeObjectAdapter.mm in Sources */,
+				A4FA8057170BFF09002A7FC9 /* Rtt_IPhoneNativeObject.mm in Sources */,
 				0720731917CD2CC2004720D2 /* Rtt_IPhoneTimer.mm in Sources */,
 				A482FAEB183D7F460005831B /* Rtt_IPhonePlatformBase.mm in Sources */,
 				F5A7520F1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,

@@ -291,6 +291,7 @@
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Archive.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_Event.cpp" />
+    <ClCompile Include="..\..\..\..\librtt\Rtt_ExplicitTemplates.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_FilePath.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_HitTestObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_JavaHost.cpp" />
@@ -317,6 +318,7 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_Matrix.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformData.cpp" />
+    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
@@ -336,6 +338,7 @@
     <ClCompile Include="..\..\ndk\AndroidBaseNativeImageDecoder.cpp" />
     <ClCompile Include="..\..\ndk\AndroidBinaryReader.cpp" />
     <ClCompile Include="..\..\ndk\AndroidBinaryReadResult.cpp" />
+    <ClCompile Include="..\..\ndk\AndroidDisplayObjectRegistry.cpp" />
     <ClCompile Include="..\..\ndk\AndroidFileReader.cpp" />
     <ClCompile Include="..\..\ndk\AndroidGLView.cpp" />
     <ClCompile Include="..\..\ndk\AndroidImageData.cpp" />
@@ -464,6 +467,7 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidCrypto.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidData.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidDevice.cpp" />
+    <ClCompile Include="..\..\ndk\Rtt_AndroidDisplayObject.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDevice.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDeviceManager.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidModalInteraction.cpp" />
@@ -702,6 +706,7 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_MUpdatable.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformData.h" />
+    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h" />
@@ -733,6 +738,7 @@
     <ClInclude Include="..\..\ndk\AndroidBaseNativeImageDecoder.h" />
     <ClInclude Include="..\..\ndk\AndroidBinaryReader.h" />
     <ClInclude Include="..\..\ndk\AndroidBinaryReadResult.h" />
+    <ClInclude Include="..\..\ndk\AndroidDisplayObjectRegistry.h" />
     <ClInclude Include="..\..\ndk\AndroidFileReader.h" />
     <ClInclude Include="..\..\ndk\AndroidGLView.h" />
     <ClInclude Include="..\..\ndk\AndroidImageData.h" />
@@ -751,6 +757,7 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidCrypto.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidData.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidDevice.h" />
+    <ClInclude Include="..\..\ndk\Rtt_AndroidDisplayObject.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDevice.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDeviceManager.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidModalInteraction.h" />

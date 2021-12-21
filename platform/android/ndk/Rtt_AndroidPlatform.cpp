@@ -26,6 +26,7 @@
 #include "Rtt_AndroidScreenSurface.h"
 #include "Rtt_AndroidTimer.h"
 
+#include "AndroidDisplayObjectRegistry.h"
 #include "AndroidGLView.h"
 #include "NativeToJavaBridge.h"
 #include "CoronaLua.h"
@@ -63,6 +64,7 @@ AndroidPlatform::AndroidPlatform(
 	fCachesDir( fAllocator ),
 	fSystemCachesDir( fAllocator ),
 	fExpansionFileDir( fAllocator ),
+	fDisplayObjectRegistry( NULL ),
 	fCrypto( ntjb ),
 	fNativeToJavaBridge( ntjb )
 {
@@ -74,6 +76,7 @@ AndroidPlatform::AndroidPlatform(
 	fCachesDir.Set( cachesDir );
 	fSystemCachesDir.Set( systemCachesDir );
 	fExpansionFileDir.Set( expansionFileDir );
+	fDisplayObjectRegistry = Rtt_NEW( fAllocator, AndroidDisplayObjectRegistry() );
 
 	// Set up SQLite to create its temp files to a valid writable directory, if not done already.
 	// Works-around an issue where SQLite defaults to a Unix style /tmp directory that doesn't exist on Android.
@@ -86,6 +89,7 @@ AndroidPlatform::AndroidPlatform(
 
 AndroidPlatform::~AndroidPlatform()
 {
+	Rtt_DELETE( fDisplayObjectRegistry );
 }
 
 MPlatformDevice&

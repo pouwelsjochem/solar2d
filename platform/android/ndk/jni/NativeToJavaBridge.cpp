@@ -1770,6 +1770,176 @@ NativeToJavaBridge::SetEventNotification( int eventType, bool enable )
 }
 
 void
+NativeToJavaBridge::DisplayObjectDestroy( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectDestroy" );
+	
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+	
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID(
+							bridge.getClass(), "callDisplayObjectDestroy", "(Lcom/ansca/corona/CoronaRuntime;I)V" );
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id );
+			HandleJavaException();
+		}
+	}
+}
+
+void
+NativeToJavaBridge::DisplayObjectSetVisible( int id, bool visible )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectSetVisible" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectSetVisible", "(Lcom/ansca/corona/CoronaRuntime;IZ)V" );
+		
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, visible );
+			HandleJavaException();
+		}
+	}
+}
+
+void 
+NativeToJavaBridge::DisplayObjectSetAlpha( int id, float alpha )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectSetAlpha" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectSetAlpha", "(Lcom/ansca/corona/CoronaRuntime;IF)V" );
+		
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, alpha );
+			HandleJavaException();
+		}
+	}
+}
+
+void 
+NativeToJavaBridge::DisplayObjectSetBackground( int id, bool bg )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectSetBackground" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectSetBackground", "(Lcom/ansca/corona/CoronaRuntime;IZ)V" );
+		
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, bg );
+			HandleJavaException();
+		}
+	}
+}
+
+bool 
+NativeToJavaBridge::DisplayObjectGetVisible( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectGetVisible" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectGetVisible", "(Lcom/ansca/corona/CoronaRuntime;I)Z" );
+		
+		if ( mid != NULL ) {
+			jboolean result = bridge.getEnv()->CallStaticBooleanMethod( bridge.getClass(), mid, fCoronaRuntime, id );
+			HandleJavaException();
+			return result;
+		}
+	}
+	
+	return false;
+}
+
+float 
+NativeToJavaBridge::DisplayObjectGetAlpha( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectGetAlpha" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectGetAlpha", "(Lcom/ansca/corona/CoronaRuntime;I)F" );
+		
+		if ( mid != NULL ) {
+			jfloat result = bridge.getEnv()->CallStaticFloatMethod( bridge.getClass(), mid, fCoronaRuntime, id );
+			HandleJavaException();
+			return result;
+		}
+	}
+	
+	return 0;
+}
+
+bool
+NativeToJavaBridge::DisplayObjectGetBackground( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectGetBackground" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+	jboolean result = false;
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectGetBackground", "(Lcom/ansca/corona/CoronaRuntime;I)Z" );
+		
+		if ( mid != NULL ) {
+			result = bridge.getEnv()->CallStaticBooleanMethod( bridge.getClass(), mid, fCoronaRuntime, id );
+			HandleJavaException();
+		}
+	}
+	
+	return result;
+}
+
+void
+NativeToJavaBridge::DisplayObjectSetFocus( int id, bool focus )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectSetFocus" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectSetFocus", "(Lcom/ansca/corona/CoronaRuntime;IZ)V" );
+		
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, focus );
+			HandleJavaException();
+		}
+	}
+}
+
+void 
+NativeToJavaBridge::DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height )
+{
+	NativeTrace trace( "NativeToJavaBridge::DisplayObjectUpdateScreenBounds" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
+			"callDisplayObjectUpdateScreenBounds", "(Lcom/ansca/corona/CoronaRuntime;IIIII)V" );
+		
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, x, y, width, height );
+			HandleJavaException();
+		}
+	}
+}
+
+bool
 NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, Rtt::Data<const char> & pngBytes )
 {
 	NativeTrace trace( "NativeToJavaBridge::SaveBitmap" );

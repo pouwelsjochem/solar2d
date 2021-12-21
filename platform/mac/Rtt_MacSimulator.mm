@@ -252,7 +252,7 @@ MacSimulator::WillSuspend()
 {
     GLView* layerhostview = GetScreenView();
 
-    [layerhostview suspendNativeDisplayObjects];
+    [layerhostview suspendNativeDisplayObjects:YES];
 }
 
 void

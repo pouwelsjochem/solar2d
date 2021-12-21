@@ -104,6 +104,7 @@
 		000DCBA112B05F3E00042A5E /* Rtt_Archive.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAC812B05F3D00042A5E /* Rtt_Archive.h */; };
 		000DCBBB12B05F3E00042A5E /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAE212B05F3E00042A5E /* Rtt_Event.cpp */; };
 		000DCBBC12B05F3E00042A5E /* Rtt_Event.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAE312B05F3E00042A5E /* Rtt_Event.h */; };
+		000DCBBD12B05F3E00042A5E /* Rtt_ExplicitTemplates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAE412B05F3E00042A5E /* Rtt_ExplicitTemplates.cpp */; };
 		000DCBC012B05F3E00042A5E /* Rtt_GPU.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAE712B05F3E00042A5E /* Rtt_GPU.h */; };
 		000DCBC912B05F3E00042A5E /* Rtt_Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCAF012B05F3E00042A5E /* Rtt_Lua.cpp */; };
 		000DCBCA12B05F3E00042A5E /* Rtt_Lua.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCAF112B05F3E00042A5E /* Rtt_Lua.h */; };
@@ -143,6 +144,8 @@
 		000DCBFE12B05F3E00042A5E /* Rtt_MReloadableResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB2512B05F3E00042A5E /* Rtt_MReloadableResource.h */; };
 		000DCC0B12B05F3E00042A5E /* Rtt_PlatformData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3212B05F3E00042A5E /* Rtt_PlatformData.cpp */; };
 		000DCC0C12B05F3E00042A5E /* Rtt_PlatformData.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3312B05F3E00042A5E /* Rtt_PlatformData.h */; };
+		000DCC0D12B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3412B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp */; };
+		000DCC0E12B05F3E00042A5E /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */; };
 		000DCC1112B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */; };
 		000DCC1212B05F3E00042A5E /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */; };
 		000DCC1B12B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4212B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp */; };
@@ -740,6 +743,7 @@
 		000DCAC812B05F3D00042A5E /* Rtt_Archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Archive.h; sourceTree = "<group>"; };
 		000DCAE212B05F3E00042A5E /* Rtt_Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Event.cpp; sourceTree = "<group>"; };
 		000DCAE312B05F3E00042A5E /* Rtt_Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Event.h; sourceTree = "<group>"; };
+		000DCAE412B05F3E00042A5E /* Rtt_ExplicitTemplates.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_ExplicitTemplates.cpp; sourceTree = "<group>"; };
 		000DCAE712B05F3E00042A5E /* Rtt_GPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_GPU.h; sourceTree = "<group>"; };
 		000DCAF012B05F3E00042A5E /* Rtt_Lua.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Lua.cpp; sourceTree = "<group>"; };
 		000DCAF112B05F3E00042A5E /* Rtt_Lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Lua.h; sourceTree = "<group>"; };
@@ -779,6 +783,8 @@
 		000DCB2512B05F3E00042A5E /* Rtt_MReloadableResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MReloadableResource.h; sourceTree = "<group>"; };
 		000DCB3212B05F3E00042A5E /* Rtt_PlatformData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformData.cpp; sourceTree = "<group>"; };
 		000DCB3312B05F3E00042A5E /* Rtt_PlatformData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformData.h; sourceTree = "<group>"; };
+		000DCB3412B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformDisplayObject.cpp; sourceTree = "<group>"; };
+		000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
 		000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFBConnect.cpp; sourceTree = "<group>"; };
 		000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
 		000DCB3E12B05F3E00042A5E /* Rtt_PlatformListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformListener.cpp; sourceTree = "<group>"; };
@@ -1410,6 +1416,7 @@
 				000DCAC812B05F3D00042A5E /* Rtt_Archive.h */,
 				000DCAE212B05F3E00042A5E /* Rtt_Event.cpp */,
 				000DCAE312B05F3E00042A5E /* Rtt_Event.h */,
+				000DCAE412B05F3E00042A5E /* Rtt_ExplicitTemplates.cpp */,
 				A474292C176959FE00C63853 /* Rtt_FilePath.cpp */,
 				A474292D176959FE00C63853 /* Rtt_FilePath.h */,
 				000DCAE712B05F3E00042A5E /* Rtt_GPU.h */,
@@ -1475,6 +1482,8 @@
 				00622ED013AA927500886E28 /* Rtt_PlatformAudioSessionManager.h */,
 				000DCB3212B05F3E00042A5E /* Rtt_PlatformData.cpp */,
 				000DCB3312B05F3E00042A5E /* Rtt_PlatformData.h */,
+				000DCB3412B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp */,
+				000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */,
 				000DCB3812B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp */,
 				000DCB3912B05F3E00042A5E /* Rtt_PlatformFBConnect.h */,
 				0044F0DF12CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp */,
@@ -2247,6 +2256,7 @@
 				000DCBFE12B05F3E00042A5E /* Rtt_MReloadableResource.h in Headers */,
 				03D1C51F1D70C12800DB02EE /* Rtt_OperationResult.h in Headers */,
 				000DCC0C12B05F3E00042A5E /* Rtt_PlatformData.h in Headers */,
+				000DCC0E12B05F3E00042A5E /* Rtt_PlatformDisplayObject.h in Headers */,
 				000DCC1212B05F3E00042A5E /* Rtt_PlatformFBConnect.h in Headers */,
 				000DCC1C12B05F3E00042A5E /* Rtt_PlatformModalInteraction.h in Headers */,
 				000DCC1E12B05F3E00042A5E /* Rtt_PlatformNotifier.h in Headers */,
@@ -2736,6 +2746,7 @@
 				000DCBA012B05F3E00042A5E /* Rtt_Archive.cpp in Sources */,
 				A48DA9571852FE84009D1F93 /* Rtt_RuntimeDelegate.cpp in Sources */,
 				000DCBBB12B05F3E00042A5E /* Rtt_Event.cpp in Sources */,
+				000DCBBD12B05F3E00042A5E /* Rtt_ExplicitTemplates.cpp in Sources */,
 				000DCBC912B05F3E00042A5E /* Rtt_Lua.cpp in Sources */,
 				000DCBCB12B05F3E00042A5E /* Rtt_LuaContext.cpp in Sources */,
 				000DCBCF12B05F3E00042A5E /* Rtt_LuaLibCrypto.cpp in Sources */,
@@ -2750,6 +2761,7 @@
 				000DCBEF12B05F3E00042A5E /* Rtt_LuaTableIterator.cpp in Sources */,
 				000DCBF112B05F3E00042A5E /* Rtt_Matrix.cpp in Sources */,
 				000DCC0B12B05F3E00042A5E /* Rtt_PlatformData.cpp in Sources */,
+				000DCC0D12B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp in Sources */,
 				000DCC1112B05F3E00042A5E /* Rtt_PlatformFBConnect.cpp in Sources */,
 				000DCC1B12B05F3E00042A5E /* Rtt_PlatformModalInteraction.cpp in Sources */,
 				000DCC1D12B05F3E00042A5E /* Rtt_PlatformNotifier.cpp in Sources */,
