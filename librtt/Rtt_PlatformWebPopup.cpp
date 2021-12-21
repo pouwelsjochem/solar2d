@@ -43,7 +43,7 @@ PlatformWebPopup::~PlatformWebPopup()
 void
 PlatformWebPopup::Preinitialize( const Display& display )
 {
-	SetContentToScreenScale( display.CalculateContentToScreenScale() );
+	SetContentToScreenScale( display.GetContentToScreenScale() );
 }
 
 

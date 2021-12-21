@@ -51,15 +51,6 @@ class ShaderFactory
 
 	protected:
 		bool Initialize();
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-		Program *NewProgram(ShaderBinaryVersions &compiledShaders, ShaderResource::ProgramMod mod ) const;
-		SharedPtr< ShaderResource > NewShaderResource(
-				ShaderTypes::Category category,
-				const char *name,
-				ShaderBinaryVersions &compiledDefaultShaders,
-				ShaderBinaryVersions &compiled25DShaders,
-                int localStubsIndex );
-#else
 		Program *NewProgram(
 				const char *shellVert,
 				const char *shellFrag,
@@ -72,7 +63,6 @@ class ShaderFactory
 				const char *kernelVert,
 				const char *kernelFrag,
                 int localStubsIndex );
-#endif
 		Shader *NewShaderPrototype( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
 
 	private:

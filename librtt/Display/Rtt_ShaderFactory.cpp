@@ -173,50 +173,6 @@ ShaderFactory::Initialize()
 }
 
 Program *
-ShaderFactory::NewProgram(ShaderBinaryVersions &compiledShaders, ShaderResource::ProgramMod mod) const
-{
-	// Fetch the allocator.
-	Rtt_Allocator *allocatorPointer = fOwner.GetRuntime().Allocator();
-
-	// Store the given compiled shaders into a new program object.
-	Program *programPointer = Rtt_NEW(allocatorPointer, Program(allocatorPointer));
-	if (programPointer)
-	{
-		programPointer->GetCompiledShaders()->CopyFrom(&compiledShaders);
-	}
-
-	// Return the new program containing the given shaders.
-	return programPointer;
-}
-
-SharedPtr< ShaderResource >
-ShaderFactory::NewShaderResource(
-	ShaderTypes::Category category, const char *name,
-	ShaderBinaryVersions &compiledDefaultShaders, ShaderBinaryVersions &compiled25DShaders,
-                                 int localStubsIndex )
-{
-	// Caller is not allowed to create a "default" shader.
-	if (ShaderTypes::kCategoryDefault == category)
-	{
-		return SharedPtr< ShaderResource >();
-	}
-
-	// Check if the given shader was already created.
-	// Note: Caller should check for existence and avoid creating a duplicate shader resource.
-	Rtt_ASSERT( NULL == FindPrototype( category, name, localStubsIndex ) );
-
-	// Create a new resource object and have it store the given compiled shaders.
-	Program *program = NewProgram( compiledDefaultShaders, ShaderResource::kDefault );
-	SharedPtr< ShaderResource > result( Rtt_NEW( fAllocator, ShaderResource( program, category, name ) ) );
-	Program *program25D = NewProgram( compiled25DShaders, ShaderResource::k25D );
-	result->SetProgramMod( ShaderResource::k25D, program25D );
-
-	// Return the resource storing the given compiled shaders.
-	return result;
-}
-
-#else
-Program *
 ShaderFactory::NewProgram(
 		const char *shellVert,
 		const char *shellFrag,
@@ -714,20 +670,7 @@ ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *nam
 							Rtt_LUA_STACK_GUARD( L );
 
 							SharedPtr< ShaderResource > resource;
-#if defined( Rtt_USE_PRECOMPILED_SHADERS )
-							ShaderBinaryVersions compiledDefaultShaders( fAllocator );
-							ShaderBinaryVersions compiled25DShaders( fAllocator );
 
-							lua_getfield( L, tableIndex, "compiledShaders" );
-							bool wasLoaded = LoadAllCompiledShaders(
-													L, lua_gettop( L ), compiledDefaultShaders, compiled25DShaders );
-							if ( wasLoaded )
-							{
-								resource = NewShaderResource( category, name, compiledDefaultShaders, compiled25DShaders, localStubsIndex );
-							}
-							lua_pop( L, 1 );
-
-#else
 							lua_getfield( L, tableIndex, "vertex" );
 							const char *kernelVert = lua_tostring( L, -1 );
 
