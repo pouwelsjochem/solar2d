@@ -12,7 +12,6 @@
 #include "Rtt_MacDisplayObject.h"
 #include "Rtt_MacPlatform.h"
 #include "Rtt_MacSimulator.h"
-#import "SimulatorDeviceWindow.h"
 
 #import <AppKit/AppKit.h>
 #import "AppDelegate.h"
@@ -261,25 +260,6 @@ MacDisplayObject::RecomputeNextKeyViews()
 		lastview = view;
 	}
 	[lastview setNextKeyView:firstview];
-}
-
-bool
-MacDisplayObject::IsInSimulator() const
-{
-#if Rtt_AUTHORING_SIMULATOR
-	MacSimulator *simulator = [(AppDelegate*)[NSApp delegate] simulator];
-	const StageObject *stageObject = GetStage();
-	if ( simulator && stageObject )
-	{
-		const MacPlatform &platform = (const MacPlatform&)(stageObject->GetDisplay().GetRuntime().Platform());
-		SimulatorDeviceWindow *simulatorWindow = (SimulatorDeviceWindow*)(simulator->GetWindow());
-		if ( [platform.GetView() window] == simulatorWindow )
-		{
-			return true;
-		}
-	}
-#endif // Rtt_AUTHORING_SIMULATOR
-	return false;
 }
 
 int

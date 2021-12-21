@@ -246,7 +246,7 @@ MacWebPopup::~MacWebPopup()
 void
 MacWebPopup::Preinitialize( const Display& display )
 {
-	SetContentToScreenScale( display.CalculateContentToScreenScale() );
+	SetContentToScreenScale( display.GetContentToScreenScale() );
 }
 	
 void

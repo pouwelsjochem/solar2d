@@ -22,7 +22,6 @@
 #include "Rtt_LuaProxyVTable.h"
 #include "Rtt_LuaResource.h"
 #include "Rtt_PlatformWebPopup.h"
-#include "Rtt_Rendering.h"
 
 #import <WebKit/WebKit.h>
 #import <WebKit/WebPolicyDelegate.h>

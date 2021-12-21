@@ -202,12 +202,6 @@ namespace Rtt
 			debugBuildProcess = (int)strtol(debugBuildProcessPref.GetString(), (char**)NULL, 10);
 		}
 
-	// params
-	lua_newtable(L);
-	{
-		String resourceDir;
-		const MPlatform& platform = GetServices().Platform();
-
 		lua_State* L = fVM;
 		lua_getglobal(L, "linuxPackageApp");
 		Rtt_ASSERT(lua_isfunction(L, -1));
