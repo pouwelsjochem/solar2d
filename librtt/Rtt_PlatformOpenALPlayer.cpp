@@ -218,13 +218,13 @@ PlatformOpenALPlayer::InitializeOpenALPlayer()
 	
 	/* AudioSession stuff is only for iOS.
 	 */
-	PlatformAudioSessionManager* audioSessionMananger = PlatformAudioSessionManager::SharedInstance();
 #if (TARGET_OS_IOS == 1)
+	PlatformAudioSessionManager* audioSessionMananger = PlatformAudioSessionManager::SharedInstance();
 	// On iOS, the OpenAL way of setting the frequency has no effect and we must set a special setting via AudioSession Services
 	((IPhoneAudioSessionManager*)(audioSessionMananger))->SetProperty(kAudioSessionProperty_PreferredHardwareSampleRate, (Float64)s_playerFrequency);
 
-#endif
 	audioSessionMananger->SetAudioSessionActive(true);
+#endif
 	
 	ALboolean did_init = ALmixer_Init(s_playerFrequency, kOpenALPlayerMaxNumberOfSources, 0);
 	// Windows users may not have sound cards	
@@ -997,10 +997,12 @@ PlatformOpenALPlayer::BeginInterruption()
 
 	ALmixer_BeginInterruption();
 
+#if (TARGET_OS_IOS == 1)
 	// In a real interruption, the audio session is automatically set inactive,
 	// but we use this for non-real interruptions and our manager needs to get explicitly set
 	// to shadow the state correctly.
 	PlatformAudioSessionManager::SharedInstance()->SetAudioSessionActive(false);
+#endif
 }
 
 void 
@@ -1011,6 +1013,7 @@ PlatformOpenALPlayer::EndInterruption()
 		return;
 	}
 	
+#if (TARGET_OS_IOS == 1)
 	bool is_success = PlatformAudioSessionManager::SharedInstance()->SetAudioSessionActive(true);
 	
 	// iOS 4/5 bug: A user leaving an app via notification center triggers a unnecessary resume/suspend event in Cocoa.
@@ -1033,6 +1036,7 @@ PlatformOpenALPlayer::EndInterruption()
 		PlatformAudioSessionManager::SharedInstance()->SetAudioSessionActive(false);
 		return;
 	}
+#endif
 
 	ALmixer_EndInterruption();
 	ResumeChannelsForInterruption();
