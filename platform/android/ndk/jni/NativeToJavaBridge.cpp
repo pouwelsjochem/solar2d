@@ -1940,7 +1940,7 @@ NativeToJavaBridge::DisplayObjectUpdateScreenBounds( int id, int x, int y, int w
 	}
 }
 
-bool
+void
 NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, Rtt::Data<const char> & pngBytes )
 {
 	NativeTrace trace( "NativeToJavaBridge::SaveBitmap" );
