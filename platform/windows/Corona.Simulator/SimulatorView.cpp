@@ -384,100 +384,115 @@ void CSimulatorView::OnFileOpen()
 
 // OnFileOpenInEditor - give project name to shell, if associated with an editor
 // Note TODO item below
-void CSimulatorView::OnFileOpenInEditor()
+void CSimulatorView::OnFileOpenInEditor() // TEMPORARY REPLACED WITH NX BUILD
 {
-	const int MAX_PATH_LENGTH = 512;
-	CString applicationFileName;
-	CString fileAssociation;
-	DWORD fileAssociationLength = MAX_PATH_LENGTH;
-	HRESULT result;
-	int length;
-	int index;
-	bool hasValidFileAssociation = false;
+	CFrameWnd *pFrameWnd = (CFrameWnd *)AfxGetMainWnd();
+	CSimulatorView* pView = (CSimulatorView*)pFrameWnd->GetActiveView();
+	appNxSBuild(
+		pView->GetRuntimeEnvironment(), 
+		"C:\\Users\\Gebruiker\\Documents\\coromon\\",
+		"C:\\Users\\Gebruiker\\Documents\\coromon\\nmeta.png",
+		"Coromon",
+		"0.9.1",
+		"C:\\Users\\Gebruiker\\Desktop\\Build\\",
+		Rtt::TargetDevice::kNxSPlatform,
+		"",
+		true,
+		"0.9.1"
+	);
 
-	try
-	{
-		// Fetch this application's file name without the path.
-		length = ::GetModuleFileName(NULL, applicationFileName.GetBuffer(MAX_PATH_LENGTH), MAX_PATH_LENGTH);
-		applicationFileName.ReleaseBuffer(length);
-		if (length > 0)
-		{
-			index = applicationFileName.ReverseFind(_T('\\'));
-			if (index > 0)
-			{
-				applicationFileName.Delete(0, index + 1);
-			}
-		}
+	// const int MAX_PATH_LENGTH = 512;
+	// CString applicationFileName;
+	// CString fileAssociation;
+	// DWORD fileAssociationLength = MAX_PATH_LENGTH;
+	// HRESULT result;
+	// int length;
+	// int index;
+	// bool hasValidFileAssociation = false;
 
-		// Fetch the file association in Windows for all Lua files, if assigned.
-		// ie: This is the default executable used to open a Lua file when double clicked on.
-		result = ::AssocQueryString(
-						ASSOCF_INIT_DEFAULTTOSTAR, ASSOCSTR_EXECUTABLE, _T(".lua"),
-						NULL, fileAssociation.GetBuffer(MAX_PATH_LENGTH), &fileAssociationLength);
-		fileAssociation.ReleaseBuffer();
-		CString fullAssociationPath(fileAssociation);
-		if (S_OK == result)
-		{
-			index = fileAssociation.ReverseFind(_T('\\'));
-			if (index > 0)
-			{
-				fileAssociation.Delete(0, index + 1);
-			}
-		}
+	// try
+	// {
+	// 	// Fetch this application's file name without the path.
+	// 	length = ::GetModuleFileName(NULL, applicationFileName.GetBuffer(MAX_PATH_LENGTH), MAX_PATH_LENGTH);
+	// 	applicationFileName.ReleaseBuffer(length);
+	// 	if (length > 0)
+	// 	{
+	// 		index = applicationFileName.ReverseFind(_T('\\'));
+	// 		if (index > 0)
+	// 		{
+	// 			applicationFileName.Delete(0, index + 1);
+	// 		}
+	// 	}
 
-		// Check if we have a valid file association in Windows to edit the "main.lua" file.
-		// Note: The default association on Windows XP or lower is an empty string.
-		if (fileAssociation.GetLength() > 0)
-		{
-			// A file association has been assigned.
-			// Make sure it is associated with an application that can open the file.
-			// Note: The default association on Windows Vista or higher is "shell32.dll".
-			CString extension = fileAssociation.Right(4);
-			if ((extension.CompareNoCase(_T(".exe")) == 0) ||
-			    (extension.CompareNoCase(_T(".com")) == 0) ||
-			    (extension.CompareNoCase(_T(".bat")) == 0))
-			{
-				// Also, don't allow the applications below since they won't edit the file.
-				if ((fileAssociation.CompareNoCase(applicationFileName) != 0) &&
-				    (fileAssociation.CompareNoCase(_T("Lightroom.exe")) != 0))     // Adobe Lightroom
-				{
-					// The application associated with the file is valid.
-					hasValidFileAssociation = true;
-				}
-			}
-		}
+	// 	// Fetch the file association in Windows for all Lua files, if assigned.
+	// 	// ie: This is the default executable used to open a Lua file when double clicked on.
+	// 	result = ::AssocQueryString(
+	// 					ASSOCF_INIT_DEFAULTTOSTAR, ASSOCSTR_EXECUTABLE, _T(".lua"),
+	// 					NULL, fileAssociation.GetBuffer(MAX_PATH_LENGTH), &fileAssociationLength);
+	// 	fileAssociation.ReleaseBuffer();
+	// 	CString fullAssociationPath(fileAssociation);
+	// 	if (S_OK == result)
+	// 	{
+	// 		index = fileAssociation.ReverseFind(_T('\\'));
+	// 		if (index > 0)
+	// 		{
+	// 			fileAssociation.Delete(0, index + 1);
+	// 		}
+	// 	}
 
-		// Open the Lua file for editing using the default application assigned in Windows.
-		// If Windows doesn't have a valid file association, then open it with Notepad.
-		if (hasValidFileAssociation)
-		{
-			if (fileAssociation == _T("sublime_text.exe") || fileAssociation == _T("Code.exe")) {
-				CString fullPath(GetDocument()->GetPath());
-				index = fullPath.ReverseFind(_T('\\'));
-				if (index > 0)
-				{
-					CString dirPath(fullPath);
-					dirPath.Delete(index, dirPath.GetLength() - index);
-					fullPath.Insert(0, _T('"'));
-					fullPath.Append(_T("\" --add \""));
-					fullPath.Append(dirPath);
-					fullPath.Append(_T("\""));
-				}
-				::ShellExecute(nullptr, nullptr, fullAssociationPath, fullPath, nullptr, SW_SHOWNORMAL);
-			}
-			else {
-				::ShellExecute(nullptr, _T("open"), GetDocument()->GetPath(), nullptr, nullptr, SW_SHOWNORMAL);
-			}
-			WinString appName;
-			appName.SetTCHAR(fileAssociation);
-		}
-		else
-		{
-			::ShellExecute(nullptr, nullptr, _T("notepad.exe"), GetDocument()->GetPath(), nullptr, SW_SHOWNORMAL);
-		}
-	}
-	catch (...)
-	{ }
+	// 	// Check if we have a valid file association in Windows to edit the "main.lua" file.
+	// 	// Note: The default association on Windows XP or lower is an empty string.
+	// 	if (fileAssociation.GetLength() > 0)
+	// 	{
+	// 		// A file association has been assigned.
+	// 		// Make sure it is associated with an application that can open the file.
+	// 		// Note: The default association on Windows Vista or higher is "shell32.dll".
+	// 		CString extension = fileAssociation.Right(4);
+	// 		if ((extension.CompareNoCase(_T(".exe")) == 0) ||
+	// 		    (extension.CompareNoCase(_T(".com")) == 0) ||
+	// 		    (extension.CompareNoCase(_T(".bat")) == 0))
+	// 		{
+	// 			// Also, don't allow the applications below since they won't edit the file.
+	// 			if ((fileAssociation.CompareNoCase(applicationFileName) != 0) &&
+	// 			    (fileAssociation.CompareNoCase(_T("Lightroom.exe")) != 0))     // Adobe Lightroom
+	// 			{
+	// 				// The application associated with the file is valid.
+	// 				hasValidFileAssociation = true;
+	// 			}
+	// 		}
+	// 	}
+
+	// 	// Open the Lua file for editing using the default application assigned in Windows.
+	// 	// If Windows doesn't have a valid file association, then open it with Notepad.
+	// 	if (hasValidFileAssociation)
+	// 	{
+	// 		if (fileAssociation == _T("sublime_text.exe") || fileAssociation == _T("Code.exe")) {
+	// 			CString fullPath(GetDocument()->GetPath());
+	// 			index = fullPath.ReverseFind(_T('\\'));
+	// 			if (index > 0)
+	// 			{
+	// 				CString dirPath(fullPath);
+	// 				dirPath.Delete(index, dirPath.GetLength() - index);
+	// 				fullPath.Insert(0, _T('"'));
+	// 				fullPath.Append(_T("\" --add \""));
+	// 				fullPath.Append(dirPath);
+	// 				fullPath.Append(_T("\""));
+	// 			}
+	// 			::ShellExecute(nullptr, nullptr, fullAssociationPath, fullPath, nullptr, SW_SHOWNORMAL);
+	// 		}
+	// 		else {
+	// 			::ShellExecute(nullptr, _T("open"), GetDocument()->GetPath(), nullptr, nullptr, SW_SHOWNORMAL);
+	// 		}
+	// 		WinString appName;
+	// 		appName.SetTCHAR(fileAssociation);
+	// 	}
+	// 	else
+	// 	{
+	// 		::ShellExecute(nullptr, nullptr, _T("notepad.exe"), GetDocument()->GetPath(), nullptr, SW_SHOWNORMAL);
+	// 	}
+	// }
+	// catch (...)
+	// { }
 }
 
 // OnUpdateFileOpenInEditor - enable menu item when project is open

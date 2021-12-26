@@ -101,8 +101,6 @@ namespace Rtt
 
 		time_t startTime = time(NULL);
 
-		bool useStandartResources = params->fUseStandartResources;
-
 		const char tmpTemplate[] = "CLtmpXXXXXX";
 		char tmpDir[kDefaultNumBytes]; Rtt_ASSERT(kDefaultNumBytes > (strlen(tmpDirBase) + strlen(tmpTemplate)));
 
@@ -177,9 +175,6 @@ namespace Rtt
 
 			lua_pushstring(L, params->GetIdentity());
 			lua_setfield(L, -2, "user");
-
-			lua_pushboolean(L, useStandartResources);
-			lua_setfield(L, -2, "useStandartResources");
 
 			lua_pushinteger(L, Rtt_BUILD_YEAR);
 			lua_setfield(L, -2, "buildYear");

@@ -44,22 +44,19 @@ class NxSAppPackagerParams : public AppPackagerParams
 			const char * productId,
 			const char * appPackage,
 			bool isDistributionBuild,
-			const char * nxTemplate,
-			bool useStandartResources
+			const char * nxTemplate
 			)
 		: AppPackagerParams( 
 			appName, version, identity, provisionFile, srcDir, dstDir, sdkRoot,
 			targetPlatform, (char*)"nx", targetVersion, targetDevice, customBuildId, productId,
 			appPackage, isDistributionBuild )
 		, fNXTemplate(nxTemplate)
-		, fUseStandartResources(useStandartResources)
 		, fNmetaPath(nmetaPath)
 		{
 		}
 
 	public:
 		const String fNXTemplate;
-		const bool fUseStandartResources;
 		const String fNmetaPath;
 };
 

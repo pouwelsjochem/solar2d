@@ -50,7 +50,6 @@
 #define IDD_RELAUNCH_PREF               375
 #define IDD_BUILD_WIN32_APP             378
 #define IDD_HTML_MESSAGE                379
-#define IDD_BUILD_NXS              382
 #define IDS_OPENFORBUILD_s              500
 #define IDS_OPENMAINLUA                 501
 #define IDS_ONLYMAINLUA                 502

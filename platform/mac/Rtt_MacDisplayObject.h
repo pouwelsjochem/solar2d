@@ -64,7 +64,6 @@ class MacDisplayObject : public PlatformDisplayObject
 		NSView* GetLayerHostSuperView();
 		void AddSubviewToLayerHostView();
 		void RecomputeNextKeyViews();
-		bool IsInSimulator() const;
         static int setReturnKey( lua_State *L );
 
 #if 0 // See TODO in .mm regarding Rtt_NATIVE_PROPERTIES_MAC
