@@ -34,6 +34,7 @@
 #include "Rtt_WinScreenSurface.h"
 #include "Rtt_WinTimer.h"
 #include "Rtt_WinWebPopup.h"
+#include "Rtt_WinWebViewObject.h"
 #include "WinString.h"
 #include <algorithm>
 #include <Gdiplus.h>
@@ -1006,7 +1007,7 @@ namespace Rtt
 	{
 		if (!fWebPopup)
 		{
-			fWebPopup = Rtt_NEW(&GetAllocator(), WinWebPopup(fEnvironment));
+			// fWebPopup = Rtt_NEW(&GetAllocator(), WinWebPopup(fEnvironment));
 		}
 		return fWebPopup;
 	}
@@ -1035,7 +1036,7 @@ namespace Rtt
 
 	PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const
 	{
-		return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
+		return nullptr; // Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
 	}
 
 	void WinPlatform::SetNativeProperty(lua_State* L, const char* key, int valueIndex) const

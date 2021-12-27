@@ -189,10 +189,14 @@
     <ClInclude Include="Interop\RuntimeEnvironment.h" />
     <ClInclude Include="Interop\RuntimeState.h" />
     <ClInclude Include="Interop\ScopedComInitializer.h" />
+    <ClInclude Include="Interop\ScopedOleInitializer.h" />
     <ClInclude Include="Interop\StaticFinalizer.h" />
     <ClInclude Include="Interop\StaticInitializer.h" />
     <ClInclude Include="Interop\Storage\MStoredPreferences.h" />
     <ClInclude Include="Interop\Storage\SQLiteStoredPreferences.h" />
+    <ClInclude Include="Interop\Storage\RegistryStoredPreferences.h" />
+    <ClInclude Include="Interop\Storage\StoredPreferencesChain.h" />
+    <ClInclude Include="Interop\Storage\StoredPreferencesProxy.h" />
     <ClInclude Include="Interop\Ticks.h" />
     <ClInclude Include="Interop\UI\Control.h" />
     <ClInclude Include="Interop\UI\CoronaTaskDialogHandler.h" />
@@ -205,6 +209,10 @@
     <ClInclude Include="Interop\UI\TaskDialogSettings.h" />
     <ClInclude Include="Interop\UI\UIComponent.h" />
     <ClInclude Include="Interop\UI\UIComponentCollection.h" />
+    <ClInclude Include="Interop\UI\WebBrowserNavigatedEventArgs.h" />
+    <ClInclude Include="Interop\UI\WebBrowser.h" />
+    <ClInclude Include="Interop\UI\WebBrowserNavigatingEventArgs.h" />
+    <ClInclude Include="Interop\UI\WebBrowserNavigationFailedEventArgs.h" />
     <ClInclude Include="Interop\UI\Window.h" />
     <ClInclude Include="Interop\ValueResult.h" />
     <ClInclude Include="resource.h" />
@@ -222,8 +230,8 @@
     <ClInclude Include="Rtt\Rtt_WinProjectSettings.h" />
     <ClInclude Include="Rtt\Rtt_WinScreenSurface.h" />
     <ClInclude Include="Rtt\Rtt_WinTimer.h" />
-    <ClInclude Include="Rtt\Rtt_WinWebPopup.h" /> 
-    <ClInclude Include="Rtt\Rtt_WinWebViewObject.h" /> 
+    <ClInclude Include="Rtt\Rtt_WinWebPopup.h" />
+    <ClInclude Include="Rtt\Rtt_WinWebViewObject.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WinFile.h" />
@@ -281,8 +289,12 @@
     <ClCompile Include="Interop\OperationResult.cpp" />
     <ClCompile Include="Interop\RuntimeEnvironment.cpp" />
     <ClCompile Include="Interop\ScopedComInitializer.cpp" />
+    <ClCompile Include="Interop\ScopedOleInitializer.cpp" />
     <ClCompile Include="Interop\StaticFinalizer.cpp" />
     <ClCompile Include="Interop\Storage\SQLiteStoredPreferences.cpp" />
+    <ClCompile Include="Interop\Storage\RegistryStoredPreferences.cpp" />
+    <ClCompile Include="Interop\Storage\StoredPreferencesChain.cpp" />
+    <ClCompile Include="Interop\Storage\StoredPreferencesProxy.cpp" />
     <ClCompile Include="Interop\Ticks.cpp" />
     <ClCompile Include="Interop\UI\Control.cpp" />
     <ClCompile Include="Interop\UI\CoronaTaskDialogHandler.cpp" />
@@ -294,6 +306,10 @@
     <ClCompile Include="Interop\UI\TaskDialogSettings.cpp" />
     <ClCompile Include="Interop\UI\UIComponent.cpp" />
     <ClCompile Include="Interop\UI\UIComponentCollection.cpp" />
+    <ClCompile Include="Interop\UI\WebBrowserNavigatedEventArgs.cpp" />
+    <ClCompile Include="Interop\UI\WebBrowser.cpp" />
+    <ClCompile Include="Interop\UI\WebBrowserNavigatingEventArgs.cpp" />
+    <ClCompile Include="Interop\UI\WebBrowserNavigationFailedEventArgs.cpp" />
     <ClCompile Include="Interop\UI\Window.cpp" />
     <ClCompile Include="Rtt\Rtt_WinBitmap.cpp" />
     <ClCompile Include="Rtt\Rtt_WinCrypto.cpp" />
@@ -309,8 +325,8 @@
     <ClCompile Include="Rtt\Rtt_WinProjectSettings.cpp" />
     <ClCompile Include="Rtt\Rtt_WinScreenSurface.cpp" />
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp" />
-    <ClInclude Include="Rtt\Rtt_WinWebPopup.h" /> 
-    <ClInclude Include="Rtt\Rtt_WinWebViewObject.h" /> 
+    <ClCompile Include="Rtt\Rtt_WinWebPopup.cpp" /> 
+    <ClInclude Include="Rtt\Rtt_WinWebViewObject.cpp" /> 
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.App|Win32'">Create</PrecompiledHeader>

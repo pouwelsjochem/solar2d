@@ -98,10 +98,6 @@ void appNxSBuild(
 		NULL, bundleId, isDistribution, NULL);
 
 	// Select build template
-	Rtt::Runtime* runtimePointer = pSim->GetRuntime();
-	U32 luaModules = runtimePointer->VMContext().GetModules();
-	params.InitializeProductId(luaModules);
-
 	const char kBuildSettings[] = "build.settings";
 	Rtt::String buildSettingsPath;
 	pSim->GetPlatform()->PathForFile(kBuildSettings, Rtt::MPlatform::kResourceDir, Rtt::MPlatform::kTestFileExists, buildSettingsPath);
@@ -124,8 +120,6 @@ void appNxSBuild(
 	if (0 == code)
 	{
 		statusMessage.LoadString(GetStatusMessageResourceIdFor(code));
-
-		LogAnalytics("NxS", "build-succeeded");
 	}
 	else
 	{
@@ -138,7 +132,6 @@ void appNxSBuild(
 
 		CStringA logMesg;
 		logMesg.Format("[%ld] %s", code, params.GetBuildMessage());
-		LogAnalytics("NxS", "build-failed", "reason", logMesg);
 	}
 	return;
 }

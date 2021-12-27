@@ -33,7 +33,7 @@
     <ClInclude Include="Rtt\Rtt_WinTimer.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-      <ClInclude Include="Rtt\Rtt_WinWebPopup.h"> 
+    <ClInclude Include="Rtt\Rtt_WinWebPopup.h"> 
       <Filter>Rtt</Filter> 
     </ClInclude> 
     <ClInclude Include="Rtt\Rtt_WinWebViewObject.h"> 
@@ -225,11 +225,35 @@
     <ClInclude Include="Interop\Storage\SQLiteStoredPreferences.h">
       <Filter>Interop\Storage</Filter>
     </ClInclude>
+    <ClInclude Include="Interop\Storage\RegistryStoredPreferences.h">
+      <Filter>Interop\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\Storage\StoredPreferencesProxy.h">
+      <Filter>Interop\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\Storage\StoredPreferencesChain.h">
+      <Filter>Interop\Storage</Filter>
+    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinProjectSettings.h">
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="Interop\LuaMethodCallback.h">
       <Filter>Interop</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\ScopedOleInitializer.h">
+      <Filter>Interop</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\UI\WebBrowser.h">
+      <Filter>Interop\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\UI\WebBrowserNavigatedEventArgs.h">
+      <Filter>Interop\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\UI\WebBrowserNavigatingEventArgs.h">
+      <Filter>Interop\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\UI\WebBrowserNavigationFailedEventArgs.h">
+      <Filter>Interop\UI</Filter>
     </ClInclude>
     <ClInclude Include="Interop\Nullable.h">
       <Filter>Interop</Filter>
@@ -432,8 +456,32 @@
     <ClCompile Include="Interop\Storage\SQLiteStoredPreferences.cpp">
       <Filter>Interop\Storage</Filter>
     </ClCompile>
+    <ClCompile Include="Interop\Storage\RegistryStoredPreferences.cpp">
+      <Filter>Interop\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\Storage\StoredPreferencesProxy.cpp">
+      <Filter>Interop\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\Storage\StoredPreferencesChain.cpp">
+      <Filter>Interop\Storage</Filter>
+    </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinProjectSettings.cpp">
       <Filter>Rtt</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\ScopedOleInitializer.cpp">
+      <Filter>Interop</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\UI\WebBrowser.cpp">
+      <Filter>Interop\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\UI\WebBrowserNavigatedEventArgs.cpp">
+      <Filter>Interop\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\UI\WebBrowserNavigatingEventArgs.cpp">
+      <Filter>Interop\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\UI\WebBrowserNavigationFailedEventArgs.cpp">
+      <Filter>Interop\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

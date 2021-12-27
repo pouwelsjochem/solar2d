@@ -21,7 +21,6 @@ namespace Rtt
 	struct SimulatorOptions;
 };
 
-
 void appNxSBuild(Interop::SimulatorRuntimeEnvironment* pSim,
 						const char* srcDir,
 						const char* nmetaPath,

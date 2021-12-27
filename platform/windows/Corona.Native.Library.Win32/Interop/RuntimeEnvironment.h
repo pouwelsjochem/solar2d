@@ -409,6 +409,14 @@ class RuntimeEnvironment
 		const wchar_t* GetUtf16PathFor(Rtt::MPlatform::Directory value) const;
 
 		/// <summary>
+		///  <para>Gets a UTF-16 registry path used by the Corona project.</para>
+		///  <para>The returned path will not be prefixed with a registry hive name, such as HKCU or HKLM.</para>
+		///  <para>The returned path will not end with a trailing slash.</para>
+		/// </summary>
+		/// <returns>Returns a UTF-16 registry path used by the Corona project.</returns>
+		const wchar_t* GetRegistryPathWithoutHive() const;
+
+		/// <summary>
 		///  <para>Gets an object used to read, write, and delete application preferences to storage.</para>
 		///  <para>Preferences are key-value pairs used to easily store simple data/settings for the current user.</para>
 		/// </summary>
@@ -907,6 +915,9 @@ class RuntimeEnvironment
 		///  kResourceDir, kDcoumentsDir, etc.
 		/// </summary>
 		WinString fDirectoryPaths[Rtt::MPlatform::kNumDirs];
+
+		/// <summary>Registry path used by the Corona project without the hive name prefix.</summary>
+		std::wstring fRegistryPathWithoutHive;
 
 		/// <summary>Pointer to an object used to read, write, and delete stored preferences for this runtime.</summary>
 		std::shared_ptr<Interop::Storage::MStoredPreferences> fStoredPreferencesPointer;

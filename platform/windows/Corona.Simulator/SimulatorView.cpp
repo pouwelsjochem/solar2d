@@ -390,15 +390,15 @@ void CSimulatorView::OnFileOpenInEditor() // TEMPORARY REPLACED WITH NX BUILD
 	CSimulatorView* pView = (CSimulatorView*)pFrameWnd->GetActiveView();
 	appNxSBuild(
 		pView->GetRuntimeEnvironment(), 
-		"C:\\Users\\Gebruiker\\Documents\\coromon\\",
-		"C:\\Users\\Gebruiker\\Documents\\coromon\\nmeta.png",
+		"C:\\Users\\Gebruiker\\Documents\\coromon",
+		"C:\\Users\\Gebruiker\\Documents\\coromon\\Coromon.nmeta",
 		"Coromon",
 		"0.9.1",
 		"C:\\Users\\Gebruiker\\Desktop\\Build\\",
 		Rtt::TargetDevice::kNxSPlatform,
 		"",
 		true,
-		"0.9.1"
+		0
 	);
 
 	// const int MAX_PATH_LENGTH = 512;

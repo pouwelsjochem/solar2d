@@ -40,12 +40,123 @@ extern "C" {
 
 namespace Rtt
 {
-	bool CompileScriptsInDirectory(lua_State* L, AppPackagerParams& params, const char* dstDir, const char* srcDir);
+		bool CompileScriptsInDirectory(lua_State* L, AppPackagerParams& params, const char* dstDir, const char* srcDir);
 	bool FetchDirectoryTreeFilePaths(const char* directoryPath, std::vector<std::string>& filePathCollection);
 
-	int prn(lua_State* L);
-	int CompileScriptsAndMakeCAR(lua_State* L);
-	int processExecute(lua_State* L);
+
+	int prn(lua_State* L)
+	{
+		int n = lua_gettop(L);  /* number of arguments */
+		int i;
+		lua_getglobal(L, "tostring");
+		for (i = 1; i <= n; i++)
+		{
+			const char* s;
+			lua_pushvalue(L, -1);  /* function to be called */
+			lua_pushvalue(L, i);   /* value to print */
+			lua_call(L, 1, 1);
+			s = lua_tostring(L, -1);  /* get result */
+			if (s == NULL)
+				return luaL_error(L, LUA_QL("tostring") " must return a string to " LUA_QL("print"));
+
+			if (i > 1)
+				Rtt_Log("\t");
+
+			Rtt_Log("%s\n", s);
+			lua_pop(L, 1);  /* pop result */
+		}
+		return 0;
+	}
+
+	// it's used only for Windows
+	int processExecute(lua_State* L)
+	{
+		int results = 1;
+		int ret = 0;
+		std::string output;
+
+		const char* cmdBuf = luaL_checkstring(L, 1);
+		bool capture_stdout = false;
+		if (lua_isboolean(L, 2))
+		{
+			capture_stdout = lua_toboolean(L, 2);
+			results++;
+		}
+
+#if defined(Rtt_WIN_ENV) && !defined(Rtt_LINUX_ENV)
+		Interop::Ipc::CommandLine::SetOutputCaptureEnabled(capture_stdout);
+		Interop::Ipc::CommandLineRunResult result = Interop::Ipc::CommandLine::RunShellCommandUntilExit(cmdBuf);
+		ret = result.HasFailed() ? result.GetExitCode() : 0;
+		output = result.GetOutput();
+#elif defined(Rtt_LINUX_ENV) || defined(Rtt_MAC_ENV_ENV)
+		ret = system(cmdBuf);
+#endif
+
+		lua_pushinteger(L, ret);
+		if (capture_stdout)
+			lua_pushstring(L, output.c_str());
+
+		return results;
+	}
+
+	int CompileScriptsAndMakeCAR(lua_State* L)
+	{
+		Rtt_ASSERT(lua_isuserdata(L, 1));
+		AppPackagerParams* p = (AppPackagerParams*)lua_touserdata(L, 1);
+		Rtt_ASSERT(lua_isstring(L, 2));
+		const char* srcDir = lua_tostring(L, 2);
+		Rtt_ASSERT(lua_isstring(L, 3));
+		const char* dstDir = lua_tostring(L, 3);
+
+		// Package build settings parameters.
+		Rtt::AppPackagerParams params(p->GetAppName(), p->GetVersion(), p->GetIdentity(), NULL, srcDir, dstDir, NULL, p->GetTargetPlatform(), NULL, 0, 0, NULL, NULL, NULL, true);
+		params.SetStripDebug(p->IsStripDebug());
+
+		bool rc = CompileScriptsInDirectory(L, params, dstDir, srcDir);
+		if (rc)
+		{
+			// Bundle all of the compiled Lua scripts in the intermediate directory into a "resource.car" file.
+			String resourceCarPath(params.GetSrcDir());
+			resourceCarPath.AppendPathSeparator();
+			resourceCarPath.Append("resource.car");
+
+			// create .car file
+
+			// Fetch all file paths under the given source directory.
+			std::vector<std::string> sourceFilePathCollection;
+			bool wasSuccessful = FetchDirectoryTreeFilePaths(srcDir, sourceFilePathCollection);
+			if (wasSuccessful && sourceFilePathCollection.empty() == false)
+			{
+				// Allocate enough space for ALL file paths to a string array.
+				const char** sourceFilePathArray = new const char* [sourceFilePathCollection.size()];
+				int fileToIncludeCount = 0;
+				for (int fileIndex = (int)sourceFilePathCollection.size() - 1; fileIndex >= 0; fileIndex--)
+				{
+					const char* fileToInclude = sourceFilePathCollection.at(fileIndex).c_str();
+
+					// pack only .lu files because all other files will be packed by html5 Lua builder
+					int size = strlen(fileToInclude);
+					if (size > 3 && strcmp(fileToInclude + size - 3, ".lu") == 0)
+					{
+						sourceFilePathArray[fileToIncludeCount++] = fileToInclude;
+					}
+				}
+
+				// Create the "resource.car" archive file containing the files fetched up above.
+				Archive::Serialize(resourceCarPath.GetString(), fileToIncludeCount, sourceFilePathArray);
+
+				// Clean up memory allocated up above.
+				delete[] sourceFilePathArray;
+
+				// Return true if the archive file was successfully created.
+				rc = Rtt_FileExists(resourceCarPath.GetString());
+			}
+		}
+
+		lua_pushboolean(L, rc);
+		return 1;
+	}
+
 
 	// TODO: Move webPackageApp.lua out of librtt and into rtt_player in XCode
 	// Current issue with doing that is this lua file needs to be precompiled into C

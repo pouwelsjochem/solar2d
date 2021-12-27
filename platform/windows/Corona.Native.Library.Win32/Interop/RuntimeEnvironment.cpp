@@ -346,6 +346,16 @@ const wchar_t* RuntimeEnvironment::GetUtf16PathFor(Rtt::MPlatform::Directory val
 	return fDirectoryPaths[value].GetUTF16();
 }
 
+const wchar_t* RuntimeEnvironment::GetRegistryPathWithoutHive() const
+{
+	if (fRegistryPathWithoutHive.empty())
+	{
+		Rtt_ASSERT(0);
+		return L"";
+	}
+	return fRegistryPathWithoutHive.c_str();
+}
+
 std::shared_ptr<Interop::Storage::MStoredPreferences> RuntimeEnvironment::GetStoredPreferences() const
 {
 	return fStoredPreferencesPointer;
