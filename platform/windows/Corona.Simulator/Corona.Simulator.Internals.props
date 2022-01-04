@@ -32,6 +32,7 @@ copy "..\Build.Tools\7za.exe" "$(OutDir)" /Y
 copy "..\Build.Tools\zipalign.exe" "$(OutDir)Resources" /Y
 copy "..\..\resources\AppSettings.lua" "$(OutDir)Resources" /Y
 copy "..\..\resources\nxtemplate" "$(OutDir)Resources" /Y
+copy "..\..\resources\linuxtemplate_x64.tgz" "$(OutDir)Resources" /Y
 copy "..\..\..\sdk\dmg\Corona_License.rtf" "$(OutDir)" /Y
 copy "..\..\..\sdk\dmg\Corona3rdPartyLicenses.txt" "$(OutDir)" /Y
 </Command>
