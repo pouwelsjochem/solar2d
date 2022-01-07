@@ -92,30 +92,47 @@ namespace bitmapUtil
 		return im;
 	}
 
+	struct mem_encode
+	{
+		char* buffer;
+		size_t size;
+	};
+
 	void pngWriteFunc(png_structp png_ptr, png_bytep data, png_size_t length)
 	{
-#ifndef Rtt_LINUX_ENV
-		fwrite(data, length, 1, (FILE*)png_ptr->io_ptr);
-#endif
+		/* with libpng15 next line causes pointer deference error; use libpng12 */
+		struct mem_encode* p = (struct mem_encode*)png_get_io_ptr(png_ptr); /* was png_ptr->io_ptr */
+		size_t nsize = p->size + length;
+
+		/* allocate or grow buffer */
+		if (p->buffer)
+			p->buffer = (char*) realloc(p->buffer, nsize);
+		else
+			p->buffer = (char*) malloc(nsize);
+
+		if (!p->buffer)
+			png_error(png_ptr, "Write Error");
+
+		/* copy new bytes to end of buffer */
+		memcpy(p->buffer + p->size, data, length);
+		p->size += length;
 	}
 
-	bool	savePNG(const char* filename, uint8_t* data, int width, int height, Rtt::PlatformBitmap::Format format)
+	char* savePNG(size_t &length, uint8_t* data, int width, int height, Rtt::PlatformBitmap::Format format)
 		// Writes a 24 or 32-bit color image in .png format, to the
 		// given output stream.  Data should be in [RGB or RGBA...] byte order.
 	{
 		int bpp = Rtt::PlatformBitmap::BytesPerPixel(format);
 		if (bpp != 3 && bpp != 4)
 		{
-			//		printf("png writer: bpp must be 3 or 4\n");
-			return false;
+			length = 0;
+			return nullptr;
 		}
 
-		FILE* out = fopen(filename, "wb");
-		if (out == NULL)
-		{
-			//		printf("png writer: can't create %s\n", filename);
-			return false;
-		}
+		/* static */
+		struct mem_encode state;
+		state.buffer = NULL;
+		state.size = 0;
 
 		png_structp	png_ptr;
 		png_infop	info_ptr;
@@ -124,8 +141,8 @@ namespace bitmapUtil
 		if (png_ptr == NULL)
 		{
 			// @@ log error here!
-			fclose(out);
-			return false;
+			length = 0;
+			return nullptr;
 		}
 
 		info_ptr = png_create_info_struct(png_ptr);
@@ -133,12 +150,11 @@ namespace bitmapUtil
 		{
 			// @@ log error here!
 			png_destroy_write_struct(&png_ptr, NULL);
-			fclose(out);
-			return false;
+			length = 0;
+			return nullptr;
 		}
 
-		png_init_io(png_ptr, out);
-		png_set_write_fn(png_ptr, (png_voidp)out, pngWriteFunc, NULL);
+		png_set_write_fn(png_ptr, &state, pngWriteFunc, NULL);
 		png_set_IHDR(png_ptr, info_ptr, width, height, 8, bpp == 3 ? PNG_COLOR_TYPE_RGB : PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
 		if (format == Rtt::PlatformBitmap::Format::kBGRA)
@@ -155,8 +171,9 @@ namespace bitmapUtil
 
 		png_write_end(png_ptr, info_ptr);
 		png_destroy_write_struct(&png_ptr, &info_ptr);
-		fclose(out);
-		return true;
+
+		length = state.size;
+		return state.buffer;
 	}
 }
 
