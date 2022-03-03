@@ -40,6 +40,7 @@
 #include "CoronaLua.h"
 
 // ----------------------------------------------------------------------------
+typedef unsigned char UC;
 
 namespace Rtt
 {
@@ -47,6 +48,215 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 static const char kNotificationMetatable[] = "notification";
+
+/*-------------------------------------------------------------------------*\
+	* Quoted-printable globals
+	\*-------------------------------------------------------------------------*/
+	static UC qpclass[256];
+	static UC qpbase[] = "0123456789ABCDEF";
+	static UC qpunbase[256];
+	enum { QP_PLAIN, QP_QUOTED, QP_CR, QP_IF_LAST };
+
+	/*-------------------------------------------------------------------------*\
+	* Base64 globals
+	\*-------------------------------------------------------------------------*/
+	static const UC b64base[] =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	static UC b64unbase[256];
+
+
+	/*-------------------------------------------------------------------------*\
+	* Acumulates bytes in input buffer until 3 bytes are available.
+	* Translate the 3 bytes into Base64 form and append to buffer.
+	* Returns new number of bytes in buffer.
+	\*-------------------------------------------------------------------------*/
+	static size_t b64encode(UC c, UC* input, size_t size,
+		luaL_Buffer* buffer)
+	{
+		input[size++] = c;
+		if (size == 3) {
+			UC code[4];
+			unsigned long value = 0;
+			value += input[0]; value <<= 8;
+			value += input[1]; value <<= 8;
+			value += input[2];
+			code[3] = b64base[value & 0x3f]; value >>= 6;
+			code[2] = b64base[value & 0x3f]; value >>= 6;
+			code[1] = b64base[value & 0x3f]; value >>= 6;
+			code[0] = b64base[value];
+			luaL_addlstring(buffer, (char*)code, 4);
+			size = 0;
+		}
+		return size;
+	}
+
+	/*-------------------------------------------------------------------------*\
+	* Acumulates bytes in input buffer until 4 bytes are available.
+	* Translate the 4 bytes from Base64 form and append to buffer.
+	* Returns new number of bytes in buffer.
+	\*-------------------------------------------------------------------------*/
+	static size_t b64decode(UC c, UC* input, size_t size,
+		luaL_Buffer* buffer)
+	{
+		/* ignore invalid characters */
+		if (b64unbase[c] > 64) return size;
+		input[size++] = c;
+		/* decode atom */
+		if (size == 4) {
+			UC decoded[3];
+			int valid, value = 0;
+			value = b64unbase[input[0]]; value <<= 6;
+			value |= b64unbase[input[1]]; value <<= 6;
+			value |= b64unbase[input[2]]; value <<= 6;
+			value |= b64unbase[input[3]];
+			decoded[2] = (UC)(value & 0xff); value >>= 8;
+			decoded[1] = (UC)(value & 0xff); value >>= 8;
+			decoded[0] = (UC)value;
+			/* take care of paddding */
+			valid = (input[2] == '=') ? 1 : (input[3] == '=') ? 2 : 3;
+			luaL_addlstring(buffer, (char*)decoded, valid);
+			return 0;
+			/* need more data */
+		}
+		else return size;
+	}
+
+	/*-------------------------------------------------------------------------*\
+	* Encodes the Base64 last 1 or 2 bytes and adds padding '='
+	* Result, if any, is appended to buffer.
+	* Returns 0.
+	\*-------------------------------------------------------------------------*/
+	static size_t b64pad(const UC* input, size_t size,
+		luaL_Buffer* buffer)
+	{
+		unsigned long value = 0;
+		UC code[4] = { '=', '=', '=', '=' };
+		switch (size) {
+		case 1:
+			value = input[0] << 4;
+			code[1] = b64base[value & 0x3f]; value >>= 6;
+			code[0] = b64base[value];
+			luaL_addlstring(buffer, (char*)code, 4);
+			break;
+		case 2:
+			value = input[0]; value <<= 8;
+			value |= input[1]; value <<= 2;
+			code[2] = b64base[value & 0x3f]; value >>= 6;
+			code[1] = b64base[value & 0x3f]; value >>= 6;
+			code[0] = b64base[value];
+			luaL_addlstring(buffer, (char*)code, 4);
+			break;
+		default:
+			break;
+		}
+		return 0;
+	}
+
+	/*-------------------------------------------------------------------------*\
+	* Incrementally applies the Base64 transfer content encoding to a string
+	* A, B = b64(C, D)
+	* A is the encoded version of the largest prefix of C .. D that is
+	* divisible by 3. B has the remaining bytes of C .. D, *without* encoding.
+	* The easiest thing would be to concatenate the two strings and
+	* encode the result, but we can't afford that or Lua would dupplicate
+	* every chunk we received.
+	\*-------------------------------------------------------------------------*/
+	static int mime_global_b64(lua_State* L)
+	{
+		UC atom[3];
+		size_t isize = 0, asize = 0;
+		const UC* input = (const UC*)luaL_optlstring(L, 1, NULL, &isize);
+		const UC* last = input + isize;
+		luaL_Buffer buffer;
+		/* end-of-input blackhole */
+		if (!input) {
+			lua_pushnil(L);
+			lua_pushnil(L);
+			return 2;
+		}
+		/* make sure we don't confuse buffer stuff with arguments */
+		lua_settop(L, 2);
+		/* process first part of the input */
+		luaL_buffinit(L, &buffer);
+		while (input < last)
+			asize = b64encode(*input++, atom, asize, &buffer);
+		input = (const UC*)luaL_optlstring(L, 2, NULL, &isize);
+		/* if second part is nil, we are done */
+		if (!input) {
+			size_t osize = 0;
+			asize = b64pad(atom, asize, &buffer);
+			luaL_pushresult(&buffer);
+			/* if the output is empty  and the input is nil, return nil */
+			lua_tolstring(L, -1, &osize);
+			if (osize == 0) lua_pushnil(L);
+			lua_pushnil(L);
+			return 2;
+		}
+		/* otherwise process the second part */
+		last = input + isize;
+		while (input < last)
+			asize = b64encode(*input++, atom, asize, &buffer);
+		luaL_pushresult(&buffer);
+		lua_pushlstring(L, (char*)atom, asize);
+		return 2;
+	}
+
+	/*-------------------------------------------------------------------------*\
+	* Incrementally removes the Base64 transfer content encoding from a string
+	* A, B = b64(C, D)
+	* A is the encoded version of the largest prefix of C .. D that is
+	* divisible by 4. B has the remaining bytes of C .. D, *without* encoding.
+	\*-------------------------------------------------------------------------*/
+	static int mime_global_unb64(lua_State* L)
+	{
+		UC atom[4];
+		size_t isize = 0, asize = 0;
+		const UC* input = (const UC*)luaL_optlstring(L, 1, NULL, &isize);
+		const UC* last = input + isize;
+		luaL_Buffer buffer;
+		/* end-of-input blackhole */
+		if (!input) {
+			lua_pushnil(L);
+			lua_pushnil(L);
+			return 2;
+		}
+		/* make sure we don't confuse buffer stuff with arguments */
+		lua_settop(L, 2);
+		/* process first part of the input */
+		luaL_buffinit(L, &buffer);
+		while (input < last)
+			asize = b64decode(*input++, atom, asize, &buffer);
+		input = (const UC*)luaL_optlstring(L, 2, NULL, &isize);
+		/* if second is nil, we are done */
+		if (!input) {
+			size_t osize = 0;
+			luaL_pushresult(&buffer);
+			/* if the output is empty  and the input is nil, return nil */
+			lua_tolstring(L, -1, &osize);
+			if (osize == 0) lua_pushnil(L);
+			lua_pushnil(L);
+			return 2;
+		}
+		/* otherwise, process the rest of the input */
+		last = input + isize;
+		while (input < last)
+			asize = b64decode(*input++, atom, asize, &buffer);
+		luaL_pushresult(&buffer);
+		lua_pushlstring(L, (char*)atom, asize);
+		return 2;
+	}
+
+	/*-------------------------------------------------------------------------*\
+	* Fill base64 decode map.
+	\*-------------------------------------------------------------------------*/
+	static void b64setup(UC* unbase)
+	{
+		int i;
+		for (i = 0; i <= 255; i++) unbase[i] = (UC)255;
+		for (i = 0; i < 64; i++) unbase[b64base[i]] = (UC)i;
+		unbase['='] = 0;
+	}
+
 
 static void PushStringOrNil( lua_State *L, const char *str )
 {
@@ -1328,9 +1538,29 @@ LuaLibSystem::GetFilename( lua_State *L, int& index, MPlatform::Directory& baseD
 	return result;
 }
 
+static int xor_crypt(lua_State* L)
+{
+	size_t srcsize = 0;
+	const UC* src = (const UC*)luaL_optlstring(L, 1, NULL, &srcsize);
+
+	const char* key = lua_tostring(L, 2);
+	long unsigned int klen = strlen(key);
+
+	std::vector<unsigned char> dst(srcsize);
+
+    for (int i = 0; i < srcsize; i++)
+        dst[i] = src[i] ^ key[i % klen];
+
+	lua_pushlstring(L, (const char *) dst.data(), dst.size());
+
+	return 1;
+}
+
 void
 LuaLibSystem::Initialize( lua_State *L )
 {
+	b64setup(b64unbase);
+
 	static const luaL_Reg kVTable[] =
 	{
 		{ "__proxyindex", LuaProxy::__proxyindex },
@@ -1353,6 +1583,10 @@ LuaLibSystem::Initialize( lua_State *L )
 		{ "scheduleNotification", scheduleNotification },
 		{ "cancelNotification", cancelNotification },
 		{ "request", request },
+
+		{ "b64", mime_global_b64 },
+		{ "unb64", mime_global_unb64 },
+		{ "xor_crypt", xor_crypt },
 
 		// TODO: Move this into a Lua "device" library
 		{ "getInputDevices", getInputDevices },
