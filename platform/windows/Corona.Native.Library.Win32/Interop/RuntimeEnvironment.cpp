@@ -20,6 +20,7 @@
 #include "Display\Rtt_Display.h"
 #include "Display\Rtt_Scene.h"
 #include "Display\Rtt_StageObject.h"
+#include "Interop\Storage\RegistryStoredPreferences.h"
 #include "Interop\Storage\SQLiteStoredPreferences.h"
 #include "Interop\UI\RenderSurfaceControl.h"
 #include "Interop\UI\Window.h"
@@ -163,6 +164,66 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	if (settings.IsRuntimeCreationEnabled)
 	{
 		fProjectSettings.LoadFromDirectory(fDirectoryPaths[Rtt::MPlatform::kResourceDir].GetUTF8());
+	}
+
+	// Set up a registry path for this project.
+	{
+		std::wstringstream stringStream;
+		stringStream << L"Software";
+		if (ApplicationServices::IsCoronaSdkApp())
+		{
+			// Simulated apps are sandboxed under the "Corona Simulator" registry tree.
+			stringStream << L'\\';
+			stringStream << Storage::RegistryStoredPreferences::kAnscaCoronaKeyName;
+			stringStream << L'\\';
+			stringStream << Storage::RegistryStoredPreferences::kCoronaSimulatorKeyName;
+			stringStream << L'\\';
+			{
+				WinString escapedDirectoryPath(fDirectoryPaths[Rtt::MPlatform::kResourceDir].GetUTF16());
+				escapedDirectoryPath.MakeLowerCase();
+				escapedDirectoryPath.Replace("/", "\\");
+				escapedDirectoryPath.Replace("\\\\", "");
+				stringStream << escapedDirectoryPath.GetUTF16();
+			}
+			stringStream << L'\\';
+			stringStream << Storage::RegistryStoredPreferences::kSimulatorPreferencesKeyName;
+		}
+		else
+		{
+			// This is a Win32 app template. Registry path defaults to:  <CompanyName>\<AppName>
+			auto companyName = ApplicationServices::GetCompanyName();
+			if (companyName && (companyName[0] != L'\0'))
+			{
+				std::wstring escapedString(companyName);
+				std::replace(escapedString.begin(), escapedString.end(), L'\\', L' ');
+				std::replace(escapedString.begin(), escapedString.end(), L'/', L' ');
+				stringStream << L'\\';
+				stringStream << escapedString;
+			}
+			auto productName = ApplicationServices::GetProductName();
+			if (productName && (productName[0] != L'\0'))
+			{
+				std::wstring escapedString(productName);
+				std::replace(escapedString.begin(), escapedString.end(), L'\\', L' ');
+				std::replace(escapedString.begin(), escapedString.end(), L'/', L' ');
+				stringStream << L'\\';
+				stringStream << escapedString;
+			}
+			else
+			{
+				auto exeFileNameWithoutExtension = ApplicationServices::GetExeFileNameWithoutExtension();
+				if (exeFileNameWithoutExtension && (exeFileNameWithoutExtension[0] != L'\0'))
+				{
+					stringStream << L'\\';
+					stringStream << exeFileNameWithoutExtension;
+				}
+				else
+				{
+					stringStream << L"\\Corona App";
+				}
+			}
+		}
+		fRegistryPathWithoutHive = stringStream.str();
 	}
 
 	// Preferences are stored to a SQLite database file under Corona's undocumented system caches directory.

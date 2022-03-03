@@ -36,6 +36,10 @@
 #include "MessageDlg.h"   // Alert
 #include "CoronaInterface.h"
 
+#include "Rtt_Win32AppPackager.h"
+#include "Rtt_Win32AppPackagerParams.h"
+#include "Rtt_WinPlatformServices.h"
+
 // ----------------------------------------------------------------------------
 
 // Microsoft Visual C++ macro which allows us to easily do bitwise operations on the given enum like in C.
@@ -688,7 +692,108 @@ void CSimulatorView::OnUpdateShowProjectSandbox(CCmdUI *pCmdUI)
 // OnFileClose - close project
 void CSimulatorView::OnFileClose()
 {
-	StopSimulation();
+	CFrameWnd *pFrameWnd = (CFrameWnd *)AfxGetMainWnd();
+	CSimulatorView* simulatorViewPointer = (CSimulatorView*)pFrameWnd->GetActiveView();
+
+	auto fProjectPointer = GetDocument()->GetProject();
+
+	auto runtimeEnvironmentPointer = simulatorViewPointer->GetRuntimeEnvironment();
+	if (!runtimeEnvironmentPointer || !runtimeEnvironmentPointer->GetRuntime())
+	{
+		// A Corona project is not currently selected by the simulator.
+		// This should never happen, but if it does, attempt to restart the simulator with this dialog's selected project.
+		CString mainLuaFilePath = fProjectPointer->GetDir() + _T("\\main.lua");
+		simulatorViewPointer->GetDocument()->GetDocTemplate()->OpenDocumentFile(mainLuaFilePath);
+		return;
+	}
+
+	// Do not continue if not all plugins for this Corona project have been downloaded yet.
+	// We do this because local Win32 app builds require the plugins zips to be downloaded first.
+	if (simulatorViewPointer->VerifyAllPluginsAcquired() == false)
+	{
+		return;
+	}
+
+	// Create the packager used to build the app.
+	const auto platformServicesPointer = GetWinProperties()->GetServices();
+	Rtt::Win32AppPackager packager(*platformServicesPointer);
+
+	// Read and validate the project's "build.settings" file.
+	WinString projectDirectoryPath;
+	projectDirectoryPath.SetTCHAR(fProjectPointer->GetDir());
+	bool wasBuildSettingsFileRead = packager.ReadBuildSettings(projectDirectoryPath.GetUTF8());
+
+	// Configure the Win32 app packager's parameters.
+	Rtt::Win32AppPackagerParams::CoreSettings paramsSettings{};
+	paramsSettings.AppName = "Coromon";
+	paramsSettings.VersionString = "1.0.5";
+	paramsSettings.DestinationDirectoryPath = "C:\\Users\\Gebruiker\\Desktop\\Build\\";
+	paramsSettings.SourceDirectoryPath = projectDirectoryPath.GetUTF8();
+	Rtt::Win32AppPackagerParams params(paramsSettings);
+	params.SetExeFileName("coromon.exe");
+	params.SetCompanyName("TRAGsoft");
+	params.SetCopyrightString("TRAGsoft");
+	params.SetAppDescription("");
+	params.SetIncludeBuildSettings(true);
+	params.SetStripDebug(true);
+
+	params.SetRuntime(runtimeEnvironmentPointer->GetRuntime());
+	{
+		std::string utf8BuildSettingsPath(projectDirectoryPath.GetUTF8());
+		if (!projectDirectoryPath.EndsWith("\\") && !projectDirectoryPath.EndsWith("/"))
+		{
+			utf8BuildSettingsPath.append("\\");
+		}
+		utf8BuildSettingsPath.append("build.settings");
+		params.SetBuildSettingsPath(utf8BuildSettingsPath.c_str());
+	}
+
+	// Choose a good hidden temp directory path to be used by the build system.
+	// Will be used as an intermediate directory for compiled Lua files, app template extraction, and other purposes.
+	// The build system will automatically delete this directory once the build ends.
+	WinString tempDirectoryPath;
+	{
+		const size_t kBufferSize = 1024;
+		wchar_t utf16TempDirectoryPath[kBufferSize];
+		utf16TempDirectoryPath[0] = L'\0';
+		::GetTempPathW(kBufferSize, utf16TempDirectoryPath);
+		if (L'\0' == utf16TempDirectoryPath[0])
+		{
+			CStringW title;
+			title.LoadStringW(IDS_WARNING);
+			MessageBoxW(L"Failed to create temp directory for build.", title, MB_OK | MB_ICONWARNING);
+			return;
+		}
+		wcscat_s(utf16TempDirectoryPath, kBufferSize, L"Corona Labs\\Win32 Build XXXXXX");
+		_wmktemp_s(utf16TempDirectoryPath, wcslen(utf16TempDirectoryPath) + 1);
+		tempDirectoryPath.SetUTF16(utf16TempDirectoryPath);
+	}
+
+	// Build the Win32 desktop application.
+	BeginWaitCursor();
+	int buildResultCode = packager.Build(&params, tempDirectoryPath.GetUTF8());
+	EndWaitCursor();
+
+	// Display an error message if the build failed.
+	if (buildResultCode != 0)
+	{
+		// Display the error message reported by the build system.
+		CStringW title;
+		title.LoadStringW(IDS_WARNING);
+		WinString errorMessage;
+		errorMessage.SetUTF8(params.GetBuildMessage());
+		MessageBoxW(errorMessage.GetUTF16(), title, MB_OK | MB_ICONEXCLAMATION);
+
+		// Log the build failure.
+		CStringA logMesg;
+		logMesg.Format("[%ld] %s", buildResultCode, params.GetBuildMessage());
+		Rtt_LogException(params.GetBuildMessage());
+		return;
+	}
+
+	// Log that the build was successful.
+	Rtt_LogException("Win32 desktop app build succeeded");
+	// StopSimulation();
 }
 
 // OnUpdateFileClose - enable menu item if project is open
