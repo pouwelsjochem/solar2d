@@ -326,7 +326,7 @@
     <ClCompile Include="Rtt\Rtt_WinScreenSurface.cpp" />
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp" />
     <ClCompile Include="Rtt\Rtt_WinWebPopup.cpp" /> 
-    <ClInclude Include="Rtt\Rtt_WinWebViewObject.cpp" /> 
+    <ClCompile Include="Rtt\Rtt_WinWebViewObject.cpp" /> 
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.App|Win32'">Create</PrecompiledHeader>

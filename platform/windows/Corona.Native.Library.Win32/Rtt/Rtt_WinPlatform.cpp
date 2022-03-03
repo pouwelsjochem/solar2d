@@ -12,6 +12,8 @@
 #include "Core\Rtt_Build.h"
 #include "Interop\Ipc\CommandLineRunner.h"
 #include "Interop\Storage\MStoredPreferences.h"
+#include "Interop\Storage\RegistryStoredPreferences.h"
+#include "Interop\Storage\StoredPreferencesProxy.h"
 #include "Interop\UI\CoronaTaskDialogHandler.h"
 #include "Interop\UI\RenderSurfaceControl.h"
 #include "Interop\UI\Window.h"
@@ -1007,7 +1009,7 @@ namespace Rtt
 	{
 		if (!fWebPopup)
 		{
-			// fWebPopup = Rtt_NEW(&GetAllocator(), WinWebPopup(fEnvironment));
+			fWebPopup = Rtt_NEW(&GetAllocator(), WinWebPopup(fEnvironment));
 		}
 		return fWebPopup;
 	}
@@ -1036,7 +1038,7 @@ namespace Rtt
 
 	PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const
 	{
-		return nullptr; // Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
+		return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
 	}
 
 	void WinPlatform::SetNativeProperty(lua_State* L, const char* key, int valueIndex) const

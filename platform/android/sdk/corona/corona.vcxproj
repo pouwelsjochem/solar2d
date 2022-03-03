@@ -769,6 +769,7 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidScreenSurface.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidSystemOpenEvent.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidTimer.h" />
+    <ClInclude Include="..\..\ndk\Rtt_AndroidWebViewObject.h" /> 
     <ClInclude Include="C:\NVPACK\android-ndk-r12b\sources\android\cpufeatures\cpu-features.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
