@@ -13,10 +13,7 @@
 #include <png.h>
 #include <cstring>		// for memcpy
 #include <memory>
-
-#ifndef Rtt_LINUX_ENV
 #include <SDL.h>
-#endif
 
 namespace bitmapUtil
 {

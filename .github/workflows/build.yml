@@ -297,8 +297,9 @@ jobs:
           tar -xvzf "%WORKSPACE%\Native\CoronaNative.tar.gz"
           rm ._CoronaEnterprise
           mv CoronaEnterprise Native
-          del /q /f /a Native\.*
-          del /q /f /a Native\Icon?
+          del /q /f Native\.*
+          del /q /f Native\Icon?
+          del /q /f /s Native\Corona\tvos\frameworks\CoronaCards.framework
       - name: Put JRE in place
         shell: bash
         run: |
@@ -379,7 +380,8 @@ jobs:
           $GIT_LOG
           For linux it is recommended to use snap:
           
-               sudo snap install '~/Downloads/solar2d_$YEAR.$BUILD_amd64.snap' --classic --dangerous
+               sudo snap install solar2d
+          
           "
           else
           GIT_LOG='See https://github.com/pouwelsjochem/corona for details
