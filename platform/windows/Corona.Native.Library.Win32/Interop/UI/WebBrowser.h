@@ -130,6 +130,10 @@ class WebBrowser : public Control
 		/// <param name="url">The URL of local file path to navigate to. Will be ignored if null or empty.</param>
 		void NavigateTo(const wchar_t* url);
 
+		/// <summary>Commands the web browser to navigate to the given URL or file path.</summary>
+		/// <param name="url">The URL of local file path to navigate to. Will be ignored if null or empty.</param>
+		void NavigateToWithHeader(const wchar_t* url, const wchar_t* header);
+
 		/// <summary>Commands the web browser to reload the current page.</summary>
 		void Reload();
 
@@ -298,6 +302,7 @@ class WebBrowser : public Control
 				void NavigateBack();
 				void NavigateForward();
 				void NavigateTo(const wchar_t* url);
+				void NavigateToWithHeader(const wchar_t* url, const wchar_t* header);
 				void Reload();
 				void StopLoading();
 

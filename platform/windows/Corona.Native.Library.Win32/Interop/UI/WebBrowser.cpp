@@ -19,7 +19,6 @@
 #include <string>
 #include <strsafe.h>
 
-
 namespace Interop { namespace UI {
 
 #pragma region Constructors/Destructors
@@ -133,6 +132,14 @@ void WebBrowser::NavigateTo(const wchar_t* url)
 	if (fWebBrowserHandlerPointer)
 	{
 		fWebBrowserHandlerPointer->NavigateTo(url);
+	}
+}
+
+void WebBrowser::NavigateToWithHeader(const wchar_t* url, const wchar_t* header)
+{
+	if (fWebBrowserHandlerPointer)
+	{
+		fWebBrowserHandlerPointer->NavigateToWithHeader(url, header);
 	}
 }
 
@@ -412,6 +419,48 @@ void WebBrowser::MicrosoftWebBrowserHandler::NavigateTo(const wchar_t* url)
 		VARIANT emptyVariant;
 		::VariantInit(&emptyVariant);
 		interfacePointer->Navigate(oleUrl, &emptyVariant, &emptyVariant, &emptyVariant, &emptyVariant);
+		::SysFreeString(oleUrl);
+	}
+	interfacePointer->Release();
+}
+
+void WebBrowser::MicrosoftWebBrowserHandler::NavigateToWithHeader(const wchar_t* url, const wchar_t* header)
+{
+	// Validate,
+	if (!fWebBrowserOleObjectPointer)
+	{
+		return;
+	}
+	if (!url || (L'\0' == url[0]))
+	{
+		return;
+	}
+
+	// Fetch an interface to the web browser ActiveX.
+	IWebBrowser2* interfacePointer = nullptr;
+	fWebBrowserOleObjectPointer->QueryInterface(&interfacePointer);
+	if (!interfacePointer)
+	{
+		return;
+	}
+
+	// Load the given URL.
+	BSTR oleUrl = ::SysAllocString(url);
+	if (oleUrl)
+	{
+		BSTR oleHeader = ::SysAllocString(header);
+		if (oleHeader) {
+			VARIANT emptyVariant;
+			::VariantInit(&emptyVariant);
+
+			VARIANT headerVariant;
+			::VariantInit(&headerVariant);
+			headerVariant.vt = VT_BSTR;
+			headerVariant.bstrVal = oleHeader;
+
+			interfacePointer->Navigate(oleUrl, &emptyVariant, &emptyVariant, &emptyVariant, &headerVariant);
+			::SysFreeString(oleHeader);
+		}
 		::SysFreeString(oleUrl);
 	}
 	interfacePointer->Release();

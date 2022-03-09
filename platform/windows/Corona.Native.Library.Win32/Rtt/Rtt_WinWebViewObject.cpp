@@ -275,7 +275,20 @@ int WinWebViewObject::OnRequest(lua_State *L)
 	auto webBrowserPointer = displayObjectPointer->fWebBrowserPointer;
 	if (webBrowserPointer)
 	{
-		webBrowserPointer->NavigateTo(url.GetUTF16());
+		if (lua_type(L, 4) == LUA_TSTRING)
+		{
+			WinString header(lua_tostring(L, 4));
+			if (!header.IsEmpty())
+			{
+				webBrowserPointer->NavigateToWithHeader(url.GetUTF16(), header.GetUTF16());
+			}
+			else {
+				webBrowserPointer->NavigateTo(url.GetUTF16());
+			}
+		}
+		else {
+			webBrowserPointer->NavigateTo(url.GetUTF16());
+		}
 	}
 	return 0;
 }
