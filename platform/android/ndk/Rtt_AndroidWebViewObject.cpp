@@ -95,7 +95,7 @@ AndroidWebViewObject::Request( lua_State *L )
 	// Fetch the base directory, if provided, and then fetch the requested web page.
 	if (lua_type(L, 3) == LUA_TSTRING)
 	{
-		view->Request(url, lua_tostring(L, 3));
+		view->Request(url, lua_tostring(L, 3), NULL);
 	}
 	else if (lua_islightuserdata(L, 3))
 	{
@@ -104,17 +104,20 @@ AndroidWebViewObject::Request( lua_State *L )
 												lua_touserdata( L, 3 ),
 												MPlatform::kNumDirs,
 												MPlatform::kUnknownDir);
-		view->Request(url, baseDirectory);
+		view->Request(url, baseDirectory, NULL);
 	}
-	else
+	else if (lua_type(L, 4) == LUA_TSTRING)
 	{
-		view->Request(url, NULL);
+		view->Request(url, NULL, lua_tostring(L, 4));
+	} else 
+	{
+		view->Request(url, NULL, NULL);
 	}
 	return 0;
 }
 
 void
-AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseDirectory )
+AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseDirectory, const char *header )
 {
 	// Validate.
 	if (!url)
@@ -154,7 +157,7 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 }
 
 void
-AndroidWebViewObject::Request( const char *url, const char *baseUrl )
+AndroidWebViewObject::Request( const char *url, const char *baseUrl, const char *header )
 {
 	if (url)
 	{
@@ -164,11 +167,11 @@ AndroidWebViewObject::Request( const char *url, const char *baseUrl )
 		{
 			String path(&platform.GetAllocator(), baseUrl);
 			path.Append(url);
-			fNativeToJavaBridge->WebViewRequestLoadUrl(GetId(), path.GetString());
+			fNativeToJavaBridge->WebViewRequestLoadUrl(GetId(), path.GetString(), header);
 		}
 		else
 		{
-			fNativeToJavaBridge->WebViewRequestLoadUrl(GetId(), url);
+			fNativeToJavaBridge->WebViewRequestLoadUrl(GetId(), url, header);
 		}
 	}
 }

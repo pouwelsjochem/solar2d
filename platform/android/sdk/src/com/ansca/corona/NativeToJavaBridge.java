@@ -1660,8 +1660,8 @@ public class NativeToJavaBridge {
 		runtime.getViewManager().addWebView(id, left, top, width, height, isPopup, autoCloseEnabled);
 	}
 
-	protected static void callWebViewRequestLoadUrl( CoronaRuntime runtime, int id, String url ) {
-		runtime.getViewManager().requestWebViewLoadUrl(id, url);
+	protected static void callWebViewRequestLoadUrl( CoronaRuntime runtime, int id, String url, String header) {
+		runtime.getViewManager().requestWebViewLoadUrl(id, url, header);
 	}
 
 	protected static void callWebViewRequestReload(int id, CoronaRuntime runtime) {

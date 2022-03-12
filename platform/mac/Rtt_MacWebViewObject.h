@@ -54,7 +54,7 @@ class MacWebViewObject : public MacDisplayObject
 
 	public:
 		void Load( NSString *htmlBody, NSURL *baseURL );
-		void Request( NSString *urlString, NSURL *baseUrl );
+		void Request( NSString *urlString, NSURL *baseUrl, NSString *headerString );
 		void Stop();
 		void Resize( const Rect& bounds );
 

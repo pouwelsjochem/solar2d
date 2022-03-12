@@ -286,8 +286,15 @@ MacWebViewObject::Request( lua_State *L )
 		NSString *urlString = [NSString stringWithExternalString:url];
 
 		NSURL *baseUrl = GetBaseURLFromLuaState( L, 3);
-
-		o->Request( urlString, baseUrl );
+		
+		NSString *headerString = nil;
+		if ( lua_isstring( L, 4 ) )
+		{
+			const char *header = lua_tostring( L, 4 );
+			headerString = [NSString stringWithExternalString:header];
+		}
+		
+		o->Request( urlString, baseUrl, headerString);
 	}
 
 	return 0;
@@ -301,7 +308,7 @@ MacWebViewObject::Load( NSString *htmlBody, NSURL *baseUrl )
 }
 
 void
-MacWebViewObject::Request( NSString *urlString, NSURL *baseUrl )
+MacWebViewObject::Request( NSString *urlString, NSURL *baseUrl, NSString *headerString )
 {
 	NSURL *u = (nil != baseUrl)
 		? [[NSURL alloc] initWithString:urlString relativeToURL:baseUrl]
@@ -310,24 +317,11 @@ MacWebViewObject::Request( NSString *urlString, NSURL *baseUrl )
 	[u release];
 	
 	[request setHTTPMethod:@"GET"];
-	/*
-	if ( NSOrderedSame == [fMethod caseInsensitiveCompare:@"POST"] )
-	{
-		Rtt_ASSERT_NOT_IMPLEMENTED();
-		NSString *boundary = @"";
-		NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-		[request setValue:contentType forHTTPHeaderField:@"Content-Type"];
-
-		NSData* body = nil; Rtt_ASSERT_NOT_IMPLEMENTED();
-		if (body)
-		{
-			[request setHTTPBody:body];
-		}
+	
+	if (nil != headerString) {
+		NSArray *headerKeyAndValue = [headerString componentsSeparatedByString:@": "];
+		[request addValue:headerKeyAndValue[1] forHTTPHeaderField:headerKeyAndValue[0]];
 	}
-	else
-	{
-	}
-	*/
 
 	Rtt_WebView *view = (Rtt_WebView*)GetView();
 	[view loadRequest:request];

@@ -15,6 +15,8 @@ import com.ansca.corona.permissions.PermissionState;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -537,7 +539,7 @@ public class ViewManager {
 		} );
 	}
 	
-	public void requestWebViewLoadUrl(final int id, final String finalUrl) {
+	public void requestWebViewLoadUrl(final int id, final String finalUrl, final String finalHeader) {
 		postOnUiThread(new Runnable() {
 			public void run() {
 				CoronaWebView view = getDisplayObjectById(CoronaWebView.class, id);
@@ -556,7 +558,16 @@ public class ViewManager {
 							}
 						}
 					}
-					view.loadUrl(url);
+
+					if (finalHeader == null) {
+						view.loadUrl(url);
+					} else {
+						String[] headerKeyValue = finalHeader.split(": ");
+						Map<String, String> headers = new HashMap();
+						headers.put(headerKeyValue[1], headerKeyValue[0]);
+						view.loadUrl(url, headers);
+					}
+					
 					view.requestFocus(android.view.View.FOCUS_DOWN);
 				}
 			}

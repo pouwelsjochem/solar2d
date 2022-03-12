@@ -323,6 +323,24 @@ public class CoronaWebView extends WebView {
 		super.loadUrl(url);
 	}
 
+	/**
+	 * Requests this WebView to go to the given URL.
+	 * @param url The URL to be loaded.
+	 */
+	@Override
+	public void loadUrl(String url, Map<String, String> additionalHttpHeaders) {
+		// Make sure that the given URL is set to a valid string.
+		if (url == null) {
+			url = "";
+		}
+		
+		// Load the given URL.
+		stopLoading();
+		fIsLoading = true;
+		fUrlRequestSourceType = UrlRequestSourceType.OTHER;
+		super.loadUrl(url, additionalHttpHeaders);
+	}
+
 	@Override
 	public void stopLoading() {
 		// If the webview isn't loading anything then calling stopLoading will cause it to freeze

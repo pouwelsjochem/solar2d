@@ -2004,7 +2004,7 @@ NativeToJavaBridge::WebViewCreate(
 }
 
 void
-NativeToJavaBridge::WebViewRequestLoadUrl( int id, const char * url )
+NativeToJavaBridge::WebViewRequestLoadUrl( int id, const char * url, const char * header )
 {
 	NativeTrace trace( "NativeToJavaBridge::WebViewRequestLoadUrl" );
 
@@ -2013,14 +2013,15 @@ NativeToJavaBridge::WebViewRequestLoadUrl( int id, const char * url )
 	if ( bridge.isValid() )
 	{
 		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), 
-			"callWebViewRequestLoadUrl", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;)V" );
+			"callWebViewRequestLoadUrl", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;Ljava/lang/String;)V" );
 		
 		if ( mid != NULL )
 		{
 			jstringParam textJ( bridge.getEnv(), url );
+			jstringParam headerJ( bridge.getEnv(), header );
 			if ( textJ.isValid() )
 			{
-				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, textJ.getValue() );
+				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, textJ.getValue(), headerJ.getValue() );
 				HandleJavaException();
 			}
 		}

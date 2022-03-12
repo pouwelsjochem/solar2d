@@ -153,7 +153,7 @@ class NativeToJavaBridge
 	
 	public:
 		void WebViewCreate( int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled );
-		void WebViewRequestLoadUrl( int id, const char * url );
+		void WebViewRequestLoadUrl( int id, const char * url, const char * header );
 		void WebViewRequestReload( int id );
 		void WebViewRequestStop( int id );
 		void WebViewRequestGoBack( int id );

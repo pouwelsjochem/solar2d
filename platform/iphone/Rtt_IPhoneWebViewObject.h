@@ -51,7 +51,7 @@ class IPhoneWebViewObject : public IPhoneDisplayObject
 
 	public:
 		void Load( NSString *htmlBody, NSURL *baseURL );
-		void Request( NSString *urlString, NSURL *baseUrl );
+		void Request( NSString *urlString, NSURL *baseUrl, NSString *header );
 		void Stop();
 		void Resize( const Rect& bounds );
 
