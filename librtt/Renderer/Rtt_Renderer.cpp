@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -33,12 +33,12 @@
 
 // ----------------------------------------------------------------------------
 
-namespace /*anonymous*/ 
+namespace /*anonymous*/
 {
 	// To avoid the cost of a system call, return zero if stats are disabled.
 	#define START_TIMING() fStatisticsEnabled ? Rtt_GetPreciseAbsoluteTime() : 0;
 
-	// To avoid loss of precision, Rtt_AbsoluteToMilliseconds() is not used 
+	// To avoid loss of precision, Rtt_AbsoluteToMilliseconds() is not used
 	// here when converting to milliseconds because it uses integer division.
 	#define STOP_TIMING(start) fStatisticsEnabled ? Rtt_PreciseAbsoluteToMilliseconds( Rtt_GetPreciseAbsoluteTime() - start ) : 0.0f;
 
@@ -130,12 +130,13 @@ Renderer::Renderer( Rtt_Allocator* allocator )
 
 Renderer::~Renderer()
 {
+	Rtt_DELETE( fGeometryPool );
+	
 	DestroyQueuedGPUResources();
 	
 	Rtt_DELETE( fBackCommandBuffer );
 	Rtt_DELETE( fFrontCommandBuffer );
-	Rtt_DELETE( fGeometryPool );
-    
+	
 	Rtt_DELETE( fTotalTime );
 	Rtt_DELETE( fDeltaTime );
 	Rtt_DELETE( fTexelSize );
@@ -148,7 +149,7 @@ Renderer::~Renderer()
 	}
 }
 
-void 
+void
 Renderer::Initialize()
 {
 	fBackCommandBuffer->Initialize();
@@ -208,7 +209,7 @@ Renderer::EndFrame()
 	DEBUG_PRINT( "--End Frame: Renderer--\n\n" );
 }
 
-void 
+void
 Renderer::GetFrustum( Real* viewMatrix, Real* projMatrix ) const
 {
 	const U32 ELEMENTS_PER_MAT4 = 16;
@@ -216,7 +217,7 @@ Renderer::GetFrustum( Real* viewMatrix, Real* projMatrix ) const
 	memcpy( projMatrix, fProjMatrix, ELEMENTS_PER_MAT4 * sizeof( Real ) );
 }
 
-void 
+void
 Renderer::SetFrustum( const Real* viewMatrix, const Real* projMatrix )
 {
 	Rtt_ASSERT( viewMatrix );
@@ -235,7 +236,7 @@ Renderer::SetFrustum( const Real* viewMatrix, const Real* projMatrix )
 	DEBUG_PRINT( "Set frustum: view=%p, projection=%p\n", viewMatrix, projMatrix );
 }
 
-void 
+void
 Renderer::GetViewport( S32& x, S32& y, S32& width, S32& height ) const
 {
 	x = fViewport[0];
@@ -244,7 +245,7 @@ Renderer::GetViewport( S32& x, S32& y, S32& width, S32& height ) const
 	height = fViewport[3];
 }
 
-void 
+void
 Renderer::SetViewport( S32 x, S32 y, S32 width, S32 height )
 {
 	fViewport[0] = x;
@@ -260,7 +261,7 @@ Renderer::SetViewport( S32 x, S32 y, S32 width, S32 height )
 
 
 
-void 
+void
 Renderer::GetScissor( S32& x, S32& y, S32& width, S32& height ) const
 {
 	x = fScissor[0];
@@ -301,13 +302,13 @@ Renderer::SetScissor( S32 x, S32 y, S32 width, S32 height )
 	DEBUG_PRINT( "Set scissor window: x=%i, y=%i, width=%i, height=%i\n", x, y, width, height );
 }
 
-bool 
+bool
 Renderer::GetScissorEnabled() const
 {
 	return fScissorEnabled;
 }
 
-void 
+void
 Renderer::SetScissorEnabled( bool enabled )
 {
 	fScissorEnabled = enabled;
@@ -323,7 +324,7 @@ Renderer::GetFrameBufferObject() const
 	return fFrameBufferObject;
 }
 
-void 
+void
 Renderer::SetFrameBufferObject( FrameBufferObject* fbo )
 {
 	fFrameBufferObject = fbo;
@@ -348,7 +349,7 @@ Renderer::SetFrameBufferObject( FrameBufferObject* fbo )
 	DEBUG_PRINT( "Bind FrameBufferObject: %p\n", fbo );
 }
 
-void 
+void
 Renderer::Clear( Real r, Real g, Real b, Real a )
 {
 	CheckAndInsertDrawCommand();
@@ -357,7 +358,7 @@ Renderer::Clear( Real r, Real g, Real b, Real a )
 	DEBUG_PRINT( "Clear: r=%f, g=%f, b=%f, a=%f\n", r, g, b, a );
 }
 
-void 
+void
 Renderer::PushMask( Texture* maskTexture, Uniform* maskMatrix )
 {
 	CheckAndInsertDrawCommand();
@@ -372,7 +373,7 @@ Renderer::PushMask( Texture* maskTexture, Uniform* maskMatrix )
 	DEBUG_PRINT( "Push mask: texture=%p, uniform=%p\n", maskTexture, maskMatrix );
 }
 
-void 
+void
 Renderer::PopMask()
 {
 	--MaskCount();
@@ -387,7 +388,7 @@ Renderer::PopMask()
 	DEBUG_PRINT( "Pop mask\n" );
 }
 
-void 
+void
 Renderer::PushMaskCount()
 {
 	++fMaskCountIndex;
@@ -404,7 +405,7 @@ Renderer::PushMaskCount()
 	}
 }
 
-void 
+void
 Renderer::PopMaskCount()
 {
 	Rtt_ASSERT( fMaskCountIndex > 0 );
@@ -412,7 +413,7 @@ Renderer::PopMaskCount()
 	--fMaskCountIndex;
 }
 
-void 
+void
 Renderer::Insert( const RenderData* data )
 {
 	// For debug visualization, the number of insertions may be limited
@@ -698,7 +699,7 @@ Renderer::Insert( const RenderData* data )
 	#endif
 }
 
-void 
+void
 Renderer::Render()
 {
 	Rtt_AbsoluteTime start = START_TIMING();
@@ -706,7 +707,7 @@ Renderer::Render()
 	fStatistics.fRenderTimeCPU = STOP_TIMING(start);
 }
 
-void 
+void
 Renderer::Swap()
 {
 	// Create GPUResources
@@ -785,13 +786,13 @@ Renderer::TallyTimeDependency( bool usesTime )
 	}
 }
 
-void 
+void
 Renderer::QueueUpdate( CPUResource* resource )
 {
 	fUpdateQueue.Append( resource );
 }
 
-void 
+void
 Renderer::QueueDestroy( GPUResource* resource )
 {
 	fDestroyQueue.Append( resource );
@@ -864,7 +865,7 @@ Renderer::SetMaximumRenderDataCount( U32 count )
 	fInsertionLimit = count;
 }
 
-void 
+void
 Renderer::BindTexture( Texture* texture, U32 unit )
 {
 	if( !texture->fGPUResource )
@@ -876,7 +877,7 @@ Renderer::BindTexture( Texture* texture, U32 unit )
 	INCREMENT( fStatistics.fTextureBindCount );
 }
 
-void 
+void
 Renderer::BindUniform( Uniform* uniform, U32 unit )
 {
 	if( !uniform->fGPUResource )
@@ -888,7 +889,7 @@ Renderer::BindUniform( Uniform* uniform, U32 unit )
 	INCREMENT( fStatistics.fUniformBindCount );
 }
 
-void 
+void
 Renderer::CheckAndInsertDrawCommand()
 {
 	if( fRenderDataCount != 0 )
