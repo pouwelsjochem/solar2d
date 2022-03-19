@@ -52,12 +52,6 @@
 namespace /*anonymous*/
 {
 	using namespace Rtt;
-
-	const char* kWireframeSource =
-		"void main()" \
-		"{" \
-			"gl_FragColor = vec4(1.0);" \
-		"}";
 }
 
 // ----------------------------------------------------------------------------
@@ -171,7 +165,6 @@ VulkanProgram::Update( CPUResource* resource )
 	if( fData[Program::kMaskCount1].IsValid() ) Update( Program::kMaskCount1, fData[Program::kMaskCount1] );
 	if( fData[Program::kMaskCount2].IsValid() ) Update( Program::kMaskCount2, fData[Program::kMaskCount2] );
 	if( fData[Program::kMaskCount3].IsValid() ) Update( Program::kMaskCount3, fData[Program::kMaskCount3] );
-	if( fData[Program::kWireframe].IsValid() ) Update( Program::kWireframe, fData[Program::kWireframe]);
 }
 
 void 
@@ -1399,7 +1392,7 @@ VulkanProgram::UpdateShaderSource( VulkanCompilerMaps & maps, Program* program, 
 
 	// Fragment shader.
 	{
-		shader_source[3] = ( version == Program::kWireframe ) ? kWireframeSource : program->GetFragmentShaderSource();
+		shader_source[3] = program->GetFragmentShaderSource();
 
 		fragmentCode.SetSources( shader_source, sizeof( shader_source ) / sizeof( shader_source[0] ) );
 

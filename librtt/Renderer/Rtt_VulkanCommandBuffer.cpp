@@ -948,7 +948,7 @@ VulkanCommandBuffer::Execute( bool measureGPU )
 					VulkanProgram* program = Read<VulkanProgram*>();
 					program->Bind( fRenderer, fCurrentDrawVersion );
 
-					stages = Program::Version::kWireframe != fCurrentDrawVersion ? program->GetPushConstantStages() : 0U;
+					stages = program->GetPushConstantStages();
 
 					DEBUG_PRINT( "Bind Program: program=%p version=%i", program, fCurrentDrawVersion );
 					CHECK_ERROR_AND_BREAK;

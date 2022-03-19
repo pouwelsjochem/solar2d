@@ -69,7 +69,7 @@ VulkanTexture::VulkanTexture( VulkanContext * context )
 void 
 VulkanTexture::Create( CPUResource* resource )
 {
-	Rtt_ASSERT( CPUResource::kTexture == resource->GetType() || CPUResource::kVideoTexture == resource->GetType() );
+	Rtt_ASSERT( CPUResource::kTexture == resource->GetType() );
 	Texture* texture = static_cast< Texture* >( resource );
 
     if (Texture::kNumFilters == texture->GetFilter()) // dummy swapchain texture?

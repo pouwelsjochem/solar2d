@@ -127,8 +127,6 @@ Display::Initialize( lua_State *L, int configIndex, const char * backend, void *
 		}
 		fStream->SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 
-		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader ) );
-
 		result = true;
 
 		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader, backend ) );
@@ -367,7 +365,7 @@ Display::Capture( DisplayObject *object,
 		}
 	}
 
-	fRenderer->BeginFrame( 0.1f, 0.1f, GetScreenToContentScale() );
+	fRenderer->BeginFrame( 0.1f, 0.1f, GetScreenToContentScale(), true );
     
 	////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////

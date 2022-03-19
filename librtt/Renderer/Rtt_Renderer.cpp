@@ -27,7 +27,7 @@
 #include "Core/Rtt_Types.h"
 #include "Renderer/Rtt_MCPUResourceObserver.h"
 
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 
 #define ENABLE_DEBUG_PRINT	0
 
@@ -162,7 +162,7 @@ Renderer::Initialize()
 }
 
 void 
-Renderer::BeginFrame( Real totalTime, Real deltaTime, Real contentScaleX )
+Renderer::BeginFrame( Real totalTime, Real deltaTime, Real contentScaleX, bool )
 {
 	fContentScaleX = contentScaleX;
 
