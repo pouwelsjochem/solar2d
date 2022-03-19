@@ -68,7 +68,7 @@ TextureResourceCanvas* TextureResourceCanvas::Create(Rtt::TextureFactory &factor
 							   TextureVolatile( display.GetAllocator(), texWidth, texHeight, format, filter, wrap, wrap ) );
 	
 	FrameBufferObject * fbo = Rtt_NEW( pAllocator,
-									  FrameBufferObject( pAllocator, texture ) );
+									  FrameBufferObject( pAllocator, texture, false ) );
 
 	GroupObject *cache = Rtt_NEW( pAllocator,
 								 GroupObject(display.GetAllocator(), display.GetStageOffscreen() ) );
@@ -189,6 +189,7 @@ void TextureResourceCanvas::Render(Rtt::Renderer &renderer, GroupObject *group, 
 			renderer.Clear( color.rgba.r * inv255, color.rgba.g * inv255, color.rgba.b * inv255, color.rgba.a * inv255 );
 		}
 		
+		renderer.BeginDrawing();
 		group->Draw( renderer );
 	}
 	renderer.PopMaskCount();

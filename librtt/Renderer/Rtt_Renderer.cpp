@@ -27,6 +27,8 @@
 #include "Core/Rtt_Types.h"
 #include "Renderer/Rtt_MCPUResourceObserver.h"
 
+#include "Rtt_GPUStream.h"
+
 #define ENABLE_DEBUG_PRINT	0
 
 #include <limits>
@@ -121,7 +123,10 @@ Renderer::Renderer( Rtt_Allocator* allocator )
 	fStatisticsEnabled( false ),
 	fScissorEnabled( false ),
 	fFrameBufferObject( NULL ),
-	fInsertionLimit( std::numeric_limits<U32>::max() ),
+	fInsertionLimit( (std::numeric_limits<U32>::max)() ),
+	fRenderDataCount( 0 ),
+	fVertexOffset( 0 ),
+	fCurrentGeometry( NULL ),
 	fTimeDependencyCount( 0 )
 {
 	// Always have at least 1 mask count.
@@ -209,7 +214,24 @@ Renderer::EndFrame()
 	DEBUG_PRINT( "--End Frame: Renderer--\n\n" );
 }
 
+
 void
+Renderer::BeginDrawing()
+{
+	fBackCommandBuffer->WillRender();
+}
+
+void
+Renderer::CaptureFrameBuffer( RenderingStream & stream, BufferBitmap & bitmap, S32 x_in_pixels, S32 y_in_pixels, S32 w_in_pixels, S32 h_in_pixels )
+{
+	stream.CaptureFrameBuffer( bitmap,
+		x_in_pixels,
+		y_in_pixels,
+		w_in_pixels,
+		h_in_pixels );
+}
+
+void 
 Renderer::GetFrustum( Real* viewMatrix, Real* projMatrix ) const
 {
 	const U32 ELEMENTS_PER_MAT4 = 16;

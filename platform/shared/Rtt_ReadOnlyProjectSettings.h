@@ -147,6 +147,13 @@ class ReadOnlyProjectSettings
 		 */
 		const char* GetWindowTitleTextForLocaleWithoutFallback(const char* languageCode, const char* countryCode) const;
 
+		/**
+		 * Get a string describing the backend status.
+		 * @return
+		 * Returns one of "gl", "vulkanWanted", "vulkanRequired".
+		 */
+		const char * Backend() const;
+
 		int GetMinContentWidth() const;
 		int GetMaxContentWidth() const;
 		int GetMinContentHeight() const;

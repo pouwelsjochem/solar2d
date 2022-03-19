@@ -29,6 +29,7 @@
 #include "CoronaLua.h"
 
 #include "Renderer/Rtt_GLRenderer.h"
+#include "Renderer/Rtt_VulkanExports.h"
 #include "Renderer/Rtt_FrameBufferObject.h"
 #include "Renderer/Rtt_Matrix_Renderer.h"
 #include "Renderer/Rtt_Program.h"
@@ -82,8 +83,14 @@ Display::~Display()
 	Rtt_DELETE( fDefaults );
 }
 
+static void
+InvalidateDisplay( void * display )
+{
+	static_cast< Display * >( display )->GetScene().Invalidate();
+}
+
 bool
-Display::Initialize( lua_State *L, int configIndex )
+Display::Initialize( lua_State *L, int configIndex, const char * backend, void * backendContext )
 {
 	bool result = false;
 
@@ -91,7 +98,22 @@ Display::Initialize( lua_State *L, int configIndex )
 	if ( Rtt_VERIFY( ! fRenderer ) )
 	{
 		Rtt_Allocator *allocator = GetRuntime().GetAllocator();
-		fRenderer = Rtt_NEW( allocator, GLRenderer( allocator ) );
+
+		if (strcmp( backend, "glBackend" ) == 0)
+		{
+			fRenderer = Rtt_NEW( allocator, GLRenderer( allocator ) );
+		}
+
+		else if (strcmp( backend, "vulkanBackend" ) == 0)
+		{
+			fRenderer = VulkanExports::CreateVulkanRenderer( allocator, backendContext, &InvalidateDisplay, this );
+		}
+
+		else
+		{
+			Rtt_ASSERT_NOT_REACHED();
+		}
+
 		fRenderer->Initialize();
 		
 		CPUResourcePool *resourcePoolObserver = Rtt_NEW(allocator,CPUResourcePool());
@@ -108,6 +130,8 @@ Display::Initialize( lua_State *L, int configIndex )
 		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader ) );
 
 		result = true;
+
+		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader, backend ) );
 	}
 
 	return result;
@@ -344,7 +368,7 @@ Display::Capture( DisplayObject *object,
 	}
 
 	fRenderer->BeginFrame( 0.1f, 0.1f, GetScreenToContentScale() );
-
+    
 	////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////
 
@@ -569,7 +593,7 @@ Display::Capture( DisplayObject *object,
 		BufferBitmap *bitmap = static_cast< BufferBitmap * >( tex->GetBitmap() );
 
 		// This function requires coordinates in pixels.
-		fStream->CaptureFrameBuffer( *bitmap,
+		fRenderer->CaptureFrameBuffer( *fStream, *bitmap,
 										x_in_pixels,
 										y_in_pixels,
 										w_in_pixels,
@@ -621,6 +645,8 @@ Display::Capture( DisplayObject *object,
 				h_in_pixels );
 
 #	endif // ENABLE_DEBUG_PRINT
+		
+	fRenderer->EndCapture();
 
 	Rtt_DELETE( fbo );
 

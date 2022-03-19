@@ -61,7 +61,7 @@ class Display
 
 	public:
 		//! \Return true for success. False for failure.
-		virtual bool Initialize( lua_State *L, int configIndex );
+		virtual bool Initialize( lua_State *L, int configIndex, const char * backend, void * backendContext );
 		virtual void Teardown();
 
 	protected:

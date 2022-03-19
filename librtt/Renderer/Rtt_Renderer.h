@@ -34,6 +34,8 @@ class FrameBufferObject;
 class GeometryPool;
 class Texture;
 class Uniform;
+class RenderingStream;
+class BufferBitmap;
 
 // ----------------------------------------------------------------------------
 
@@ -58,6 +60,11 @@ class Renderer
 
 		// Perform any per-frame finalization.
 		virtual void EndFrame();
+
+		void BeginDrawing();
+
+		virtual void CaptureFrameBuffer( RenderingStream & stream, BufferBitmap & bitmap, S32 x_in_pixels, S32 y_in_pixels, S32 w_in_pixels, S32 h_in_pixels );
+		virtual void EndCapture() {}
 
 		// Get the current view and projection matrices. These 4x4 matrices are
 		// returned via the given pointers, which are assumed to be non-null.

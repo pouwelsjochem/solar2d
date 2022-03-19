@@ -1067,4 +1067,11 @@ void GLCommandBuffer::WriteUniform( Uniform* uniform )
 
 } // namespace Rtt
 
+#undef READ_UNIFORM_DATA
+#undef READ_UNIFORM_DATA_WITH_PROGRAM
+#undef CHECK_ERROR_AND_BREAK
+#undef WRITE_COMMAND
+#undef DEBUG_PRINT
+#undef DEBUG_PRINT_MATRIX
+
 // ----------------------------------------------------------------------------
