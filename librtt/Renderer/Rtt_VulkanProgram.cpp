@@ -15,10 +15,6 @@
 #include "Renderer/Rtt_Geometry_Renderer.h"
 #include "Renderer/Rtt_ShaderCode.h"
 #include "Renderer/Rtt_Texture.h"
-#ifdef Rtt_USE_PRECOMPILED_SHADERS
-	#include "Renderer/Rtt_ShaderBinary.h"
-	#include "Renderer/Rtt_ShaderBinaryVersions.h"
-#endif
 #include "Core/Rtt_Assert.h"
 #include "CoronaLog.h"
 
@@ -175,13 +171,8 @@ VulkanProgram::Destroy()
 	for( U32 i = 0; i < Program::kNumVersions; ++i )
 	{
 		VersionData& data = fData[i];
-
-	#ifndef Rtt_USE_PRECOMPILED_SHADERS
 		vkDestroyShaderModule( ci.device, data.fVertexShader, ci.allocator );
 		vkDestroyShaderModule( ci.device, data.fFragmentShader, ci.allocator );
-	#endif
-
-		Reset( data );
 	}
 }
 
@@ -1351,7 +1342,6 @@ InstallReplacement( ShaderCode & code, const char * toReplace, const std::string
 void
 VulkanProgram::UpdateShaderSource( VulkanCompilerMaps & maps, Program* program, Program::Version version, VersionData& data )
 {
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	char maskBuffer[] = "#define MASK_COUNT 0\n";
 	switch( version )
 	{
@@ -1533,9 +1523,6 @@ VulkanProgram::UpdateShaderSource( VulkanCompilerMaps & maps, Program* program, 
 
 	vertexCompileState.Report( "vertex shader" );
 	fragmentCompileState.Report( "fragment shader" );
-#else
-	// no need to compile, but reflection here...
-#endif
 	data.fAttemptedCreation = true;
 }
 
@@ -1548,26 +1535,6 @@ VulkanProgram::Update( Program::Version version, VersionData& data )
 	
 	UpdateShaderSource( maps, program, version,	data );
 
-#ifdef Rtt_USE_PRECOMPILED_SHADERS // TODO! (can probably just load spv?)
-	ShaderBinary *shaderBinary = program->GetCompiledShaders()->Get(version);
-	glProgramBinaryOES(data.fProgram, GL_PROGRAM_BINARY_ANGLE, shaderBinary->GetBytes(), shaderBinary->GetByteCount());
-	GL_CHECK_ERROR();
-	GLint linkResult = 0;
-	glGetProgramiv(data.fProgram, GL_LINK_STATUS, &linkResult);
-	if (!linkResult)
-	{
-		const int MAX_MESSAGE_LENGTH = 1024;
-		char message[MAX_MESSAGE_LENGTH];
-		GLint resultLength = 0;
-		glGetProgramInfoLog(data.fProgram, MAX_MESSAGE_LENGTH, &resultLength, message);
-		Rtt_LogException(message);
-	}
-	int locationIndex;
-	locationIndex = glGetAttribLocation(data.fProgram, "a_Position");
-	locationIndex = glGetAttribLocation(data.fProgram, "a_TexCoord");
-	locationIndex = glGetAttribLocation(data.fProgram, "a_ColorScale");
-	locationIndex = glGetAttribLocation(data.fProgram, "a_UserData");
-#else
 	bool isVerbose = program->IsCompilerVerbose();
 	int kernelStartLine = 0;
 
@@ -1582,7 +1549,6 @@ VulkanProgram::Update( Program::Version version, VersionData& data )
 	{
 		kernelStartLine = data.fHeaderNumLines + program->GetFragmentShellNumLines();
 	}
-#endif
 
 	data.fUniformLocations[Uniform::kViewProjectionMatrix] = maps.CheckForUniform( "ViewProjectionMatrix" );
 	data.fUniformLocations[Uniform::kMaskMatrix0] = maps.CheckForUniform( "MaskMatrix0" );
