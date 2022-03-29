@@ -736,14 +736,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;shaderc_combinedd.lib;spirv-cross-cored.lib;spirv-cross-glsld.lib;</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;shaderc_combined.lib;spirv-cross-core.lib;spirv-cross-glsl.lib;</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\external\vulkan\Lib32;</AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
       <Command>set DIRECTORY=$(ProjectDir)../../../external/vulkan/Lib32
-set LIBRARYROOT=%DIRECTORY%/shaderc_combinedd
+set LIBRARYROOT=%DIRECTORY%/shaderc_combined
 set LIBRARY=%LIBRARYROOT%.lib
 set ARCHIVE=%LIBRARYROOT%.7z
 set ZIP=$(ProjectDir)../Build.Tools/7za
@@ -767,7 +767,7 @@ if NOT EXIST %LIBRARY% (
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>vulkan-1.lib;shaderc_combinedd.lib;spirv-cross-cored.lib;spirv-cross-glsld.lib;</AdditionalDependencies>
+      <AdditionalDependencies>vulkan-1.lib;shaderc_combined.lib;spirv-cross-core.lib;spirv-cross-glsl.lib;</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>..\..\..\external\vulkan\Lib32;</AdditionalLibraryDirectories>
