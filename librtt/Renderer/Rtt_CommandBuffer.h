@@ -113,6 +113,10 @@ class CommandBuffer
 		U32 fNumCommands;
 		U32 fBytesAllocated;
 		U32 fBytesUsed;
+	// STEVE CHANGE
+		char * fBigBuffer;
+		U32 fBufferOffset;
+	// /STEVE CHANGE
 };
 
 // ----------------------------------------------------------------------------
