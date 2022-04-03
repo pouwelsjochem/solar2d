@@ -932,6 +932,14 @@ Renderer::CheckAndInsertDrawCommand()
 	}
 }
 
+// STEVE CHANGE
+void
+Renderer::GrabOutput( char * output )
+{
+	fBackCommandBuffer->GetBufferData( output, fBackCommandBuffer->GetBufferCount() );
+}
+// /STEVE CHANGE
+
 void
 Renderer::FlushBatch()
 {

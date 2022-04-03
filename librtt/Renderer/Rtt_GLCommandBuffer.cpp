@@ -28,7 +28,7 @@
 #include <string.h>
 #include "Core/Rtt_String.h"
 
-#define ENABLE_DEBUG_PRINT	0
+#define ENABLE_DEBUG_PRINT	2
 
 // ----------------------------------------------------------------------------
 
@@ -103,7 +103,17 @@ namespace /*anonymous*/
 	
 	// Used to validate that the appropriate OpenGL commands
 	// are being generated and that their arguments are correct
-	#if ENABLE_DEBUG_PRINT 
+	#if ENABLE_DEBUG_PRINT == 2
+// STEVE CHANGE
+		#define DEBUG_PRINT( ... ) LogToBuffer( __VA_ARGS__ ); LogToBuffer("\n");
+		#define DEBUG_PRINT_MATRIX( message, data, count ) \
+			LogToBuffer( "%s\n", message ); \
+			LogToBuffer( "[ %.3f", data[0] ); \
+			for( U32 i = 1; i < count; ++i ) \
+				LogToBuffer( ", %.3f", data[i] ); \
+			LogToBuffer ("]\n" );
+// /STEVE CHANGE
+	#elif ENABLE_DEBUG_PRINT 
 		#define DEBUG_PRINT( ... ) Rtt_LogException( __VA_ARGS__ ); Rtt_LogException("\n");
 		#define DEBUG_PRINT_MATRIX( message, data, count ) \
 			Rtt_LogException( "%s\n", message ); \
@@ -295,11 +305,18 @@ GLCommandBuffer::GLCommandBuffer( Rtt_Allocator* allocator )
 		fUniformUpdates[i].uniform = NULL;
 		fUniformUpdates[i].timestamp = 0;
 	}
+// STEVE CHANGE
+	fBufferOffset = 0;
+	fBigBuffer = new char[GetBufferCount()];
+// /STEVE CHANGE
 }
 
 GLCommandBuffer::~GLCommandBuffer()
 {
 	delete [] fTimerQueries;
+// STEVE CHANGE
+	delete [] fBigBuffer;
+// /STEVE CHANGE
 }
 
 void
@@ -652,9 +669,112 @@ GLCommandBuffer::GetCachedParam( CommandBuffer::QueryableParams param )
 	return result;
 }
 
+//
+#include <stdio.h>
+
+static int
+LogExceptionToBuffer( char * buffer, U32 & offset, const char *format, va_list ap )
+{
+	int result = 0;
+
+	if (format != NULL)
+	{
+		char stringBufferOnStack[4 * 1024];
+
+		// Acquire a string buffer that will fit the formatted text.
+		// For best performance, attempt to use a small string buffer on the stack.
+		char* stringPointer = stringBufferOnStack;
+
+		// Format and output the string.
+		result = vsnprintf(stringPointer, 4 * 1024, format, ap);
+		size_t stringLength = strlen(stringPointer);
+		if (result >= 0)
+		{
+			// Update our string length with number of characters actually copied to the buffer.
+			// Should never differ, but we should check just in case.
+			if (result < (int)stringLength)
+			{
+				stringLength = result;
+			}
+			else if (result >(int)stringLength)
+			{
+				result = stringLength;
+			}
+
+			// Make sure the string is null terminated.
+			stringPointer[stringLength] = '\0';
+
+			// Replace all "\r\n" pairs with "\n" in the string.
+			// We do this because stdout is in "text mode" by default, which means it'll replace all "\n" with "\r\n".
+			// If we don't remove the '\r' characters, then the outputted string will contain "\r\r\n" line endings.
+			{
+				size_t destinationIndex;
+				size_t sourceIndex;
+				for (sourceIndex = 0, destinationIndex = 0; sourceIndex < stringLength; sourceIndex++)
+				{
+					if (('\r' == stringPointer[sourceIndex]) &&
+						((sourceIndex + 1) < stringLength) && ('\n' == stringPointer[sourceIndex + 1]))
+					{
+						result--;
+						continue;
+					}
+					stringPointer[destinationIndex] = stringPointer[sourceIndex];
+					destinationIndex++;
+				}
+				stringLength = result;
+				stringPointer[stringLength] = '\0';
+			}
+
+			// Add a newline character to the end of the message if it doesn't have one.
+			if ((stringLength <= 0) || (stringPointer[stringLength - 1] != '\n'))
+			{
+				stringPointer[stringLength] = '\n';
+				stringPointer[stringLength + 1] = '\0';
+				stringLength++;
+				result++;
+			}
+
+			strcpy( buffer + offset, stringPointer );
+			
+			offset += stringLength;
+		}
+	}
+
+	return result;
+}
+
+int
+GLCommandBuffer::LogToBuffer( const char *format, ... )
+{
+	int result = 0;
+	va_list ap;
+
+	va_start( ap, format );
+	result = LogExceptionToBuffer( fBigBuffer, fBufferOffset, format, ap );
+	va_end( ap );
+
+	return result;
+}
+
+U32
+GLCommandBuffer::GetBufferCount() const
+{
+	return 1024 * 1024;
+}
+
+void
+GLCommandBuffer::GetBufferData( char * buffer, U32 count ) const
+{
+	strcpy( buffer, fBigBuffer );
+}
+// /STEVE CHANGE
+
 Real 
 GLCommandBuffer::Execute( bool measureGPU )
 {
+// STEVE CHANGE
+	fBufferOffset = 0;
+// /STEVE CHANGE
 	DEBUG_PRINT( "--Begin Rendering: GLCommandBuffer --" );
 
 //TODO - make this a property that can be invalidated for specific platforms

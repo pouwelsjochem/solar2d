@@ -228,6 +228,11 @@ class Renderer
 		// this is called in response to a change in render state.
 		void CheckAndInsertDrawCommand();
 
+	// STEVE CHANGE
+	public:
+		void GrabOutput( char * output );
+	// /STEVE CHANGE
+	
 	private:
 		void FlushBatch();
 

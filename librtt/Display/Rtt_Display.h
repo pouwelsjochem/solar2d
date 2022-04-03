@@ -179,6 +179,10 @@ class Display
 		static bool GetGpuSupportsHighPrecisionFragmentShaders();
 		static size_t GetMaxVertexTextureUnits();
 
+	// STEVE CHANGE
+		int GrabOutput( lua_State * L );
+	// /STEVE CHANGE
+	
 	public:
 		Scene& GetScene() { return *fScene; }
 		const Scene& GetScene() const { return *fScene; }

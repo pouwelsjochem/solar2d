@@ -86,7 +86,14 @@ class CommandBuffer
 		virtual void Draw( U32 offset, U32 count, Geometry::PrimitiveType type ) = 0;
 		virtual void DrawIndexed( U32 offset, U32 count, Geometry::PrimitiveType type ) = 0;
 		virtual S32 GetCachedParam( CommandBuffer::QueryableParams param ) = 0;
-		
+	// STEVE CHANGE
+		virtual int LogToBuffer( const char *format, ... ) = 0;
+		virtual U32 GetBufferCount() const = 0;
+	   virtual void GetBufferData( char * buffer, U32 count ) const = 0;
+	
+		U32 GetBufferOffset() const { return fBufferOffset; }
+	// /STEVE CHANGE
+
 		// Execute the generated command buffer. This function should only be
 		// called from a thread with an active rendering context. If requested
 		// (and the platform supports it), this function should return the time
