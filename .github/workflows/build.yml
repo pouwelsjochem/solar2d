@@ -25,7 +25,7 @@ env:
 jobs:
   source-code:
     name: Check out and process source code
-    if: "!contains(github.ref, 'refs/tags/') || github.repository == 'coronalabs/corona'"
+    if: "!contains(github.ref, 'refs/tags/') || github.repository == 'pouwelsjochem/corona'"
     runs-on: macos-12
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
@@ -86,7 +86,7 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-10.15
+          - macos-11
         xcode:
           - Xcode_12.5.1
           - Xcode_13.2.1
@@ -154,7 +154,7 @@ jobs:
 
   native:
     needs: source-code
-    runs-on: macos-10.15
+    runs-on: macos-12
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
@@ -179,7 +179,7 @@ jobs:
       - source-code
       - collect-ios-templates
       - native
-    runs-on: macos-10.15
+    runs-on: macos-12
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
@@ -197,20 +197,6 @@ jobs:
           name: Collected-ios-templates
       - name: Put collected iOS templates in place
         run: cp -Rv Collected-ios-templates/* platform/resources/
-      # - name: Get Webtemplate
-      #   uses: actions/download-artifact@v1
-      #   with:
-      #     name: Webtemplate
-      # - name: Put webtemplate in place
-      #   run: cp -v Webtemplate/webtemplate.zip platform/resources/
-      # - name: Get Linux templates
-      #   uses: actions/download-artifact@v1
-      #   with:
-      #     name: Linux-Templates
-      #   run: |
-      # - name: Put webtemplate in place
-      #     cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
-      #     cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
       - run: mkdir docs
       - name: Get Native
         uses: actions/download-artifact@v1
@@ -290,8 +276,6 @@ jobs:
     needs:
       - source-code
       - native
-      # - webtemplate
-      # - linux
     runs-on: windows-2019
     steps:
       - name: Get processed code
@@ -307,26 +291,6 @@ jobs:
       - run: mkdir -f docs
       - name: Move docs outside the directory
         run: mv docs ../docs
-     # - name: Get Webtemplate
-     #   uses: actions/download-artifact@v1
-     #   with:
-     #     name: Webtemplate
-     # - name: Put webtemplate in place
-     #   run: cp -v Webtemplate/webtemplate.zip platform/resources/
-     #   shell: bash
-     # - name: Get NX Template
-     #   shell: bash
-     #   run: |
-     #     curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/nxtemplate > platform/resources/nxtemplate
-     # - name: Get Linux templates
-     #   uses: actions/download-artifact@v1
-     #   with:
-     #     name: Linux-Templates
-     # - name: Put webtemplate in place
-     #   run: |
-     #     cp -v Linux-Templates/linuxtemplate.tar.gz platform/resources/
-     #     cp -v Linux-Templates/raspbiantemplate.tar.gz platform/resources/
-     #   shell: bash
       - name: Get Corona Native
         uses: actions/download-artifact@v1
         with:
@@ -374,32 +338,6 @@ jobs:
           name: Simulator-Windows
           path: ./output
 
-  publish-snap:
-    runs-on: ubuntu-20.04
-    needs:
-      - linux
-      - release
-    steps:
-      - uses: actions/download-artifact@v1
-        with:
-          name: Snap
-      - name: Determine release
-        run: |
-          if ls Snap/*2100.9999* &> /dev/null
-          then
-            export SNAP_RELEASE=edge
-          else
-            export SNAP_RELEASE=stable
-          fi
-          echo "SNAP_RELEASE=$SNAP_RELEASE" >> $GITHUB_ENV
-          find Snap -name '*.snap' -execdir mv -v {} s2d.snap \; -quit
-      - uses: snapcore/action-publish@v1
-        continue-on-error: true
-        with:
-          store_login: ${{ secrets.SNAP_STORE_LOGIN }}
-          snap: ./Snap/s2d.snap
-          release: ${{ env.SNAP_RELEASE }}
-
 
   release:
     if: startsWith(github.ref, 'refs/tags')
@@ -407,7 +345,6 @@ jobs:
     needs:
       - Windows-Simulator
       - macOS-Simulator
-      # - linux
       - native
     steps:
       - uses: actions/checkout@v2
@@ -443,22 +380,6 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: Native
-      - uses: actions/download-artifact@v1
-        with:
-          name: Flatpak
-      - uses: actions/download-artifact@v1
-        with:
-          name: Snap
-      - run: find Snap -name '*.snap' -execdir mv -v {} s2d.snap \; -quit
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Solar2D ${{ env.YEAR }}.${{ env.BUILD }}
-          body: ${{ env.GIT_LOG }}
       - name: Upload Release Asset for macOS Simulator
         uses: actions/upload-release-asset@v1
         env:
@@ -477,12 +398,3 @@ jobs:
           asset_path: ./Simulator-Windows/Corona-${{ env.BUILD }}.msi
           asset_name: Solar2D-Windows-${{ env.YEAR }}.${{ env.BUILD }}.msi
           asset_content_type: application/x-msi
-      # - name: Upload Release Asset Android Debug Symbols
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./Native/AndroidDebugSymbols.zip
-      #     asset_name: AndroidDebugSymbols-${{ env.YEAR }}.${{ env.BUILD }}.zip
-      #     asset_content_type: application/zip
