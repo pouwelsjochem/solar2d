@@ -75,6 +75,8 @@
 		000CE7E912B73EE300D9B6A4 /* Rtt_PlatformSurface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */; };
 		000CE7EA12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */; };
 		000CE7EB12B73EE300D9B6A4 /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */; };
+		000CE7EE12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */; };
+		000CE7EF12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */; };
 		000CE7F212B73EE300D9B6A4 /* Rtt_RenderingStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74612B73EE300D9B6A4 /* Rtt_RenderingStream.cpp */; };
 		000CE7F312B73EE300D9B6A4 /* Rtt_RenderingStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74712B73EE300D9B6A4 /* Rtt_RenderingStream.h */; };
 		000CE7F412B73EE300D9B6A4 /* Rtt_Resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74812B73EE300D9B6A4 /* Rtt_Resource.cpp */; };

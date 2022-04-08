@@ -722,6 +722,7 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformReachability.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformSurface.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformTimer.h" />
+    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_Preference.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PreferenceCollection.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PreferenceValue.h" />

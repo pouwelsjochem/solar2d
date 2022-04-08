@@ -158,8 +158,8 @@
 		000DCC2212B05F3E00042A5E /* Rtt_PlatformSurface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4912B05F3E00042A5E /* Rtt_PlatformSurface.h */; };
 		000DCC2312B05F3E00042A5E /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4A12B05F3E00042A5E /* Rtt_PlatformTimer.cpp */; };
 		000DCC2412B05F3E00042A5E /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4B12B05F3E00042A5E /* Rtt_PlatformTimer.h */; };
-		000DCB4E12B05F3E00042A5E /* Rtt_PlatformWebPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformWebPopup.cpp; sourceTree = "<group>"; };
-		000DCB4F12B05F3E00042A5E /* Rtt_PlatformWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformWebPopup.h; sourceTree = "<group>"; };
+		000DCC2712B05F3E00042A5E /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB4E12B05F3E00042A5E /* Rtt_PlatformWebPopup.cpp */; };
+		000DCC2812B05F3E00042A5E /* Rtt_PlatformWebPopup.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB4F12B05F3E00042A5E /* Rtt_PlatformWebPopup.h */; };
 		000DCC2B12B05F3E00042A5E /* Rtt_RenderingStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB5212B05F3E00042A5E /* Rtt_RenderingStream.cpp */; };
 		000DCC2C12B05F3E00042A5E /* Rtt_RenderingStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DCB5312B05F3E00042A5E /* Rtt_RenderingStream.h */; };
 		000DCC2D12B05F3E00042A5E /* Rtt_Resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCB5412B05F3E00042A5E /* Rtt_Resource.cpp */; };
@@ -801,6 +801,8 @@
 		000DCB4912B05F3E00042A5E /* Rtt_PlatformSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformSurface.h; sourceTree = "<group>"; };
 		000DCB4A12B05F3E00042A5E /* Rtt_PlatformTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformTimer.cpp; sourceTree = "<group>"; };
 		000DCB4B12B05F3E00042A5E /* Rtt_PlatformTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformTimer.h; sourceTree = "<group>"; };
+		000DCB4E12B05F3E00042A5E /* Rtt_PlatformWebPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformWebPopup.cpp; sourceTree = "<group>"; };
+		000DCB4F12B05F3E00042A5E /* Rtt_PlatformWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformWebPopup.h; sourceTree = "<group>"; };
 		000DCB5212B05F3E00042A5E /* Rtt_RenderingStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RenderingStream.cpp; sourceTree = "<group>"; };
 		000DCB5312B05F3E00042A5E /* Rtt_RenderingStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RenderingStream.h; sourceTree = "<group>"; };
 		000DCB5412B05F3E00042A5E /* Rtt_Resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Resource.cpp; sourceTree = "<group>"; };

@@ -161,6 +161,7 @@
 		A4551F711BAA182D00FB3BDF /* Rtt_PlatformReachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F181BAA182D00FB3BDF /* Rtt_PlatformReachability.cpp */; };
 		A4551F721BAA182D00FB3BDF /* Rtt_PlatformSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F1A1BAA182D00FB3BDF /* Rtt_PlatformSurface.cpp */; };
 		A4551F731BAA182D00FB3BDF /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F1C1BAA182D00FB3BDF /* Rtt_PlatformTimer.cpp */; };
+		A4551F761BAA182D00FB3BDF /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F221BAA182D00FB3BDF /* Rtt_PlatformWebPopup.cpp */; };
 		A4551F771BAA182D00FB3BDF /* Rtt_RenderingStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F241BAA182D00FB3BDF /* Rtt_RenderingStream.cpp */; };
 		A4551F781BAA182D00FB3BDF /* Rtt_Resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F261BAA182D00FB3BDF /* Rtt_Resource.cpp */; };
 		A4551F791BAA182D00FB3BDF /* Rtt_Runtime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F281BAA182D00FB3BDF /* Rtt_Runtime.cpp */; };
@@ -1786,6 +1787,8 @@
 		A4551F1B1BAA182D00FB3BDF /* Rtt_PlatformSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformSurface.h; path = ../../librtt/Rtt_PlatformSurface.h; sourceTree = "<group>"; };
 		A4551F1C1BAA182D00FB3BDF /* Rtt_PlatformTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformTimer.cpp; path = ../../librtt/Rtt_PlatformTimer.cpp; sourceTree = "<group>"; };
 		A4551F1D1BAA182D00FB3BDF /* Rtt_PlatformTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformTimer.h; path = ../../librtt/Rtt_PlatformTimer.h; sourceTree = "<group>"; };
+		A4551F221BAA182D00FB3BDF /* Rtt_PlatformWebPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformWebPopup.cpp; path = ../../librtt/Rtt_PlatformWebPopup.cpp; sourceTree = "<group>"; };
+		A4551F231BAA182D00FB3BDF /* Rtt_PlatformWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformWebPopup.h; path = ../../librtt/Rtt_PlatformWebPopup.h; sourceTree = "<group>"; };
 		A4551F241BAA182D00FB3BDF /* Rtt_RenderingStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_RenderingStream.cpp; path = ../../librtt/Rtt_RenderingStream.cpp; sourceTree = "<group>"; };
 		A4551F251BAA182D00FB3BDF /* Rtt_RenderingStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_RenderingStream.h; path = ../../librtt/Rtt_RenderingStream.h; sourceTree = "<group>"; };
 		A4551F261BAA182D00FB3BDF /* Rtt_Resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_Resource.cpp; path = ../../librtt/Rtt_Resource.cpp; sourceTree = "<group>"; };
@@ -2947,6 +2950,8 @@
 				A4551F1B1BAA182D00FB3BDF /* Rtt_PlatformSurface.h */,
 				A4551F1C1BAA182D00FB3BDF /* Rtt_PlatformTimer.cpp */,
 				A4551F1D1BAA182D00FB3BDF /* Rtt_PlatformTimer.h */,
+				A4551F221BAA182D00FB3BDF /* Rtt_PlatformWebPopup.cpp */,
+				A4551F231BAA182D00FB3BDF /* Rtt_PlatformWebPopup.h */,
 				03D1C5381D70CBB400DB02EE /* Rtt_Preference.cpp */,
 				03D1C5391D70CBB400DB02EE /* Rtt_Preference.h */,
 				03D1C53A1D70CBB400DB02EE /* Rtt_PreferenceCollection.cpp */,
