@@ -44,7 +44,6 @@ namespace Rtt
 
 class MacConsoleDevice;
 class MacFBConnect;
-class MacWebPopup;
 class MacViewSurface;
 class PlatformSimulator;
 class PlatformSurface;
@@ -147,7 +146,6 @@ class MacPlatform : public ApplePlatform
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
-	    mutable MacWebPopup *fWebPopup;
 #if Rtt_AUTHORING_SIMULATOR
 		mutable MacFBConnect *fFBConnect;
 #endif // Rtr_AUTHORING_SIMULATOR	

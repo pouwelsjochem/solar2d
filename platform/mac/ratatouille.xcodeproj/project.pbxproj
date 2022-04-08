@@ -234,7 +234,6 @@
 		00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */; };
 		00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */; };
 		00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */; };
-		00B73DA412B720CA0057F594 /* Rtt_MacWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */; };
 		00B73DAA12B720CA0057F594 /* VersionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1712B720C90057F594 /* VersionLabel.m */; };
 		00B73DAC12B720CA0057F594 /* DimView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1B12B720C90057F594 /* DimView.m */; };
 		00B73DB012B720CA0057F594 /* TextEditorSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D2312B720CA0057F594 /* TextEditorSupport.m */; };
@@ -953,7 +952,6 @@
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
 		C2A377791B34D38400BB5B88 /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */; };
-		C2A3777A1B34D38400BB5B88 /* Rtt_MacWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */; };
 		C2A377801B34D3BE00BB5B88 /* Rtt_MacWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
 		C2ADB45A1B6C1C31008C9BF2 /* OSXAppPackageSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2ADB4591B6C1C31008C9BF2 /* OSXAppPackageSheet.xib */; };
@@ -2019,8 +2017,6 @@
 		00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacSimulator.h; sourceTree = "<group>"; };
 		00B73D0612B720C90057F594 /* Rtt_MacViewSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewSurface.mm; sourceTree = "<group>"; };
 		00B73D0712B720C90057F594 /* Rtt_MacViewSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewSurface.h; sourceTree = "<group>"; };
-		00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacWebPopup.mm; sourceTree = "<group>"; };
-		00B73D0B12B720C90057F594 /* Rtt_MacWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacWebPopup.h; sourceTree = "<group>"; };
 		00B73D1412B720C90057F594 /* PassiveHitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassiveHitView.h; sourceTree = "<group>"; };
 		00B73D1512B720C90057F594 /* PassiveHitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassiveHitView.m; sourceTree = "<group>"; };
 		00B73D1612B720C90057F594 /* VersionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionLabel.h; sourceTree = "<group>"; };
@@ -3265,8 +3261,6 @@
 				00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */,
 				00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */,
 				00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */,
-				00B73D0B12B720C90057F594 /* Rtt_MacWebPopup.h */,
-				00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */,
 				A4BED90B14B65EAD0028BE25 /* Rtt_MacWebViewObject.h */,
 				A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */,
 				00B73CD812B720C90057F594 /* Rtt_Player.pch */,
@@ -5481,7 +5475,6 @@
 				00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */,
 				00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */,
 				1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */,
-				00B73DA412B720CA0057F594 /* Rtt_MacWebPopup.mm in Sources */,
 				A4BED90D14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm in Sources */,
 				C21733781B20F21A00F79CB8 /* Rtt_OSXAppPackager.mm in Sources */,
 				000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */,
@@ -5851,7 +5844,6 @@
 				C2E9930B1A6B1A3100E99F46 /* Rtt_MacViewCallback.mm in Sources */,
 				C2E9930C1A6B1A3100E99F46 /* Rtt_MacViewSurface.mm in Sources */,
 				F57AE2061F051610000A4245 /* Rtt_AppleInAppStoreApple.mm in Sources */,
-				C2A3777A1B34D38400BB5B88 /* Rtt_MacWebPopup.mm in Sources */,
 				C2A377801B34D3BE00BB5B88 /* Rtt_MacWebViewObject.mm in Sources */,
 				C2D3DA6B1B179DA000137331 /* Rtt_NativeWindowMode.cpp in Sources */,
 				C2E9934F1A6B335D00E99F46 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
