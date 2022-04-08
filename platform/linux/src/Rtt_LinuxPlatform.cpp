@@ -28,7 +28,6 @@
 #include "Rtt_LinuxVideoObject.h"
 #include "Rtt_LinuxVideoPlayer.h"
 #include "Rtt_LinuxVideoProvider.h"
-#include "Rtt_LinuxWebPopup.h"
 #include "Rtt_LinuxWebView.h"
 #include "Rtt_LinuxContainer.h"
 #include "Rtt_LinuxUtils.h"
@@ -49,7 +48,6 @@ namespace Rtt
 		fVideoPlayer(NULL),
 		fImageProvider(NULL),
 		fVideoProvider(NULL),
-		fWebPopup(NULL),
 		fResourceDir(fAllocator),
 		fDocumentsDir(fAllocator),
 		fTemporaryDir(fAllocator),
@@ -76,7 +74,6 @@ namespace Rtt
 	{
 		Rtt_DELETE(fFBConnect);
 		Rtt_DELETE(fStoreProvider);
-		Rtt_DELETE(fWebPopup);
 		Rtt_DELETE(fVideoPlayer);
 		Rtt_DELETE(fAudioPlayer);
 		Rtt_DELETE(fImageProvider);
@@ -600,20 +597,6 @@ namespace Rtt
 	void LinuxPlatform::SetActivityIndicator(bool visible) const
 	{
 		app->SetActivityIndicator(visible);
-	}
-
-	PlatformWebPopup* LinuxPlatform::GetWebPopup() const
-	{
-#if (wxUSE_WEBVIEW == 1)
-		if (!fWebPopup)
-		{
-			fWebPopup = Rtt_NEW(&GetAllocator(), LinuxWebPopup());
-		}
-
-		return fWebPopup;
-#else
-		return NULL;
-#endif
 	}
 
 	bool LinuxPlatform::CanShowPopup(const char* name) const

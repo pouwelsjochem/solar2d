@@ -667,9 +667,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformTimer.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.cpp"> 
-      <Filter>rtt</Filter> 
-    </ClCompile> 
     <ClCompile Include="..\..\..\..\librtt\Rtt_Preference.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -1072,9 +1069,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidTimer.cpp">
       <Filter>Android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidWebPopup.cpp"> 
-      <Filter>Android</Filter> 
-    </ClCompile> 
     <ClCompile Include="..\..\ndk\Rtt_AndroidWebViewObject.cpp"> 
       <Filter>Android</Filter> 
     </ClCompile> 
@@ -1576,9 +1570,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformTimer.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformWebPopup.h"> 
-      <Filter>rtt</Filter> 
-    </ClInclude> 
     <ClInclude Include="..\..\..\..\librtt\Rtt_Preference.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -1996,9 +1987,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidTimer.h">
       <Filter>Android</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidWebPopup.h"> 
-      <Filter>Android</Filter> 
-    </ClInclude> 
     <ClInclude Include="..\..\ndk\Rtt_AndroidWebViewObject.h"> 
       <Filter>Android</Filter> 
     </ClInclude> 

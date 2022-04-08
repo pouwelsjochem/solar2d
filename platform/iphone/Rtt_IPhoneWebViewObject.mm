@@ -29,7 +29,6 @@
 #include "Rtt_LuaProxy.h"
 #include "Rtt_LuaProxyVTable.h"
 #include "Rtt_MPlatform.h"
-#include "Rtt_PlatformWebPopup.h"
 #include "Renderer/Rtt_RenderTypes.h"
 #include "Core/Rtt_String.h"
 

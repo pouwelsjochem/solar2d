@@ -800,12 +800,6 @@ MacPlatform::PushSystemInfo( lua_State *L, const char *key ) const
 }
 
 // ----------------------------------------------------------------------------
-PlatformWebPopup*
-MacPlatform::GetWebPopup() const
-{
-	return nullptr;
-}
-
 PlatformDisplayObject *
 MacPlatform::CreateNativeWebView( const Rect& bounds ) const
 {

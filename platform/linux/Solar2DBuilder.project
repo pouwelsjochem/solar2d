@@ -72,7 +72,6 @@
         <File Name="src/Rtt_LinuxIPCClient.h"/>
         <File Name="src/Rtt_LinuxIPCClientConnection.h"/>
         <File Name="src/Rtt_LinuxWebView.h"/>
-        <File Name="src/Rtt_LinuxWebPopup.h"/>
         <File Name="src/Rtt_LinuxVideoProvider.h"/>
         <File Name="src/Rtt_LinuxVideoPlayer.h"/>
         <File Name="src/Rtt_LinuxVideoObject.h"/>
@@ -482,7 +481,6 @@
         <File Name="../../librtt/Rtt_PreferenceValue.h"/>
         <File Name="../../librtt/Rtt_PreferenceCollection.h"/>
         <File Name="../../librtt/Rtt_Preference.h"/>
-        <File Name="../../librtt/Rtt_PlatformWebPopup.h"/>
         <File Name="../../librtt/Rtt_PlatformVideoProvider.h"/>
         <File Name="../../librtt/Rtt_PlatformVideoPlayer.h"/>
         <File Name="../../librtt/Rtt_PlatformTimer.h"/>
@@ -897,7 +895,6 @@
       <File Name="../../librtt/Rtt_PreferenceValue.cpp"/>
       <File Name="../../librtt/Rtt_PreferenceCollection.cpp"/>
       <File Name="../../librtt/Rtt_Preference.cpp"/>
-      <File Name="../../librtt/Rtt_PlatformWebPopup.cpp"/>
       <File Name="../../librtt/Rtt_PlatformVideoProvider.cpp"/>
       <File Name="../../librtt/Rtt_PlatformVideoPlayer.cpp"/>
       <File Name="../../librtt/Rtt_PlatformTimer.cpp"/>

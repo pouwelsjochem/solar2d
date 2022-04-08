@@ -208,7 +208,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformReachability.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformSurface.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformTimer.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformWebPopup.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Preference.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceCollection.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceValue.cpp" />

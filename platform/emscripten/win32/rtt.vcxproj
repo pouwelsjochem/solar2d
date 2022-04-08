@@ -509,7 +509,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformTimer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoPlayer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoProvider.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformWebPopup.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Preference.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PreferenceCollection.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PreferenceValue.h" />
@@ -555,7 +554,6 @@
     <ClInclude Include="..\Rtt_EmscriptenVideoObject.h" />
     <ClInclude Include="..\Rtt_EmscriptenVideoPlayer.h" />
     <ClInclude Include="..\Rtt_EmscriptenVideoProvider.h" />
-    <ClInclude Include="..\Rtt_EmscriptenWebPopup.h" />
     <ClInclude Include="..\Rtt_EmscriptenWebViewObject.h" />
     <ClInclude Include="..\Rtt_LuaLibWebAudio.h" />
     <ClInclude Include="..\Rtt_PlatformWebAudioPlayer.h" />
@@ -930,7 +928,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformTimer.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoPlayer.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoProvider.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformWebPopup.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Preference.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceCollection.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceValue.cpp" />
@@ -976,7 +973,6 @@
     <ClCompile Include="..\Rtt_EmscriptenVideoObject.cpp" />
     <ClCompile Include="..\Rtt_EmscriptenVideoPlayer.cpp" />
     <ClCompile Include="..\Rtt_EmscriptenVideoProvider.cpp" />
-    <ClCompile Include="..\Rtt_EmscriptenWebPopup.cpp" />
     <ClCompile Include="..\Rtt_EmscriptenWebViewObject.cpp" />
     <ClCompile Include="..\Rtt_LuaLibWebAudio.cpp" />
     <ClCompile Include="..\Rtt_PlatformWebAudioPlayer.cpp">

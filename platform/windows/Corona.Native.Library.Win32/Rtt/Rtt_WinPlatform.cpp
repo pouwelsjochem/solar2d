@@ -35,7 +35,6 @@
 #include "Rtt_WinFBConnect.h"
 #include "Rtt_WinScreenSurface.h"
 #include "Rtt_WinTimer.h"
-#include "Rtt_WinWebPopup.h"
 #include "Rtt_WinWebViewObject.h"
 #include "WinString.h"
 #include <algorithm>
@@ -62,7 +61,6 @@ namespace Rtt
 	WinPlatform::WinPlatform(Interop::RuntimeEnvironment& environment)
 		: fEnvironment(environment),
 		fDevice(environment),
-		fWebPopup(nullptr),
 		fFBConnect(nullptr),
 		fExitCallback(environment)
 	{
@@ -117,7 +115,6 @@ namespace Rtt
 	WinPlatform::~WinPlatform()
 	{
 		// Delete platform's owned objects.
-		Rtt_DELETE(fWebPopup);
 		Rtt_DELETE(fFBConnect);
 	}
 
@@ -1003,15 +1000,6 @@ namespace Rtt
 	bool WinPlatform::HidePopup(const char* name) const
 	{
 		return false;
-	}
-
-	PlatformWebPopup* WinPlatform::GetWebPopup() const
-	{
-		if (!fWebPopup)
-		{
-			fWebPopup = Rtt_NEW(&GetAllocator(), WinWebPopup(fEnvironment));
-		}
-		return fWebPopup;
 	}
 
 	PlatformFBConnect* WinPlatform::GetFBConnect() const

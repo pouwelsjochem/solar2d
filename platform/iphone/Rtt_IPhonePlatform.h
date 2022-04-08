@@ -20,7 +20,6 @@ namespace Rtt
 {
 
 class AppleStoreProvider;
-class IPhoneWebPopup;
 
 // ----------------------------------------------------------------------------
 
@@ -39,8 +38,6 @@ class IPhonePlatform : public IPhonePlatformCore
 
 	public:
 		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
-		virtual PlatformWebPopup* GetWebPopup() const;
 
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
@@ -63,7 +60,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		mutable AppleStoreProvider *fInAppStoreProvider;
 		UIView *fActivityView;
 		id fPopupControllerDelegate;
-		mutable IPhoneWebPopup *fWebPopup;
 };
 
 // ----------------------------------------------------------------------------
