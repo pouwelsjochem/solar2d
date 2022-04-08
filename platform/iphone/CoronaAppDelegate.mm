@@ -13,9 +13,6 @@
 
 #include "Rtt_Event.h"
 #include "Rtt_Runtime.h"
-#if ! defined(Rtt_TVOS_ENV)
-	#include "Rtt_IPhoneOrientation.h"
-#endif
 #import "CoronaLua.h"
 #import "CoronaViewPrivate.h"
 
