@@ -18,7 +18,7 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_13.2.app/Contents/Developer
   BUILD_NUMBER: ${{ github.event.inputs.buildNumber }}
   YEAR: ${{ github.event.inputs.buildYear }}
 
@@ -26,7 +26,7 @@ jobs:
   source-code:
     name: Check out and process source code
     if: "!contains(github.ref, 'refs/tags/') || github.repository == 'pouwelsjochem/corona'"
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - uses: actions/checkout@v2
@@ -45,9 +45,9 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-10.15
+          - macos-11
         xcode:
-          - Xcode_12.4
+          - Xcode_13.2
         target:
           - template
           - template-angle
@@ -58,7 +58,7 @@ jobs:
           - xcode: Xcode_11.3.1
             target: template
             platform: iphone
-            runner: macos-10.15
+            runner: macos-11
     needs: source-code
     runs-on: ${{ matrix.runner }}
     env:
@@ -112,7 +112,7 @@ jobs:
 
   native:
     needs: source-code
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
@@ -137,7 +137,7 @@ jobs:
       - source-code
       - collect-ios-templates
       - native
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
@@ -181,7 +181,7 @@ jobs:
   notarize:
     needs:
       - macOS-Simulator
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: Get built simulator
         uses: actions/download-artifact@v1
@@ -209,7 +209,7 @@ jobs:
           APPLE_AUTH: ${{ secrets.AppleAuth }} # --username apple@id.email --password secret-app-specific-pwd --asc-provider anscainc
 
   check-notarization:
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: Check notarization credentials
         run: |
