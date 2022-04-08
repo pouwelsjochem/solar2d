@@ -50,6 +50,7 @@ jobs:
           - Xcode_12.4
         target:
           - template
+          - template-angle
         platform:
           - iphone
           - tvos
