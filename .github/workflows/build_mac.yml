@@ -45,10 +45,9 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-11
+          - macos-10.15
         xcode:
-          - Xcode_12.5.1
-          - Xcode_13.2.1
+          - Xcode_12.4
         target:
           - template
         platform:
