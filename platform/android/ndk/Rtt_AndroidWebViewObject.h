@@ -53,8 +53,8 @@ class AndroidWebViewObject : public AndroidDisplayObject
 		static int DeleteCookies( lua_State *L );
 
 	public:
-		void Request(const char *url, const MPlatform::Directory baseDirectory);
-		void Request(const char *url, const char *baseUrl);
+		void Request(const char *url, const MPlatform::Directory baseDirectory, const char *header );
+		void Request(const char *url, const char *baseUrl, const char *header );
 		bool IsPopup() const { return fIsPopup; }
 		bool IsAutoCancelEnabled() const { return fAutoCancelEnabled; }
 		bool CanGoBack() const { return fCanGoBack; }
