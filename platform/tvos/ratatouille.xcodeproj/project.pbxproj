@@ -550,6 +550,7 @@
 		F5C5E173251E115D00217C19 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30981BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		F5C5E174251E115D00217C19 /* Rtt_TVOSDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31001BAA38B0006A0C97 /* Rtt_TVOSDevice.mm */; };
 		F5C5E175251E115D00217C19 /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30AA1BAA377C006A0C97 /* CoronaViewPluginContext.mm */; };
+		F5C5E176251E115D00217C19 /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30B61BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.mm */; };
 		F5C5E177251E115D00217C19 /* Rtt_IPhoneAudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30AF1BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManager.mm */; };
 		F5C5E179251E115D00217C19 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */; };
 		F5C5E17A251E115D00217C19 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */; };
@@ -5197,6 +5198,7 @@
 				F5C5E173251E115D00217C19 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
 				F5C5E174251E115D00217C19 /* Rtt_TVOSDevice.mm in Sources */,
 				F5C5E175251E115D00217C19 /* CoronaViewPluginContext.mm in Sources */,
+				F5C5E176251E115D00217C19 /* Rtt_IPhoneDisplayObject.mm in Sources */,
 				F5C5E177251E115D00217C19 /* Rtt_IPhoneAudioSessionManager.mm in Sources */,
 				F5C5E179251E115D00217C19 /* Rtt_AppleInputDevice.mm in Sources */,
 				F5C5E17A251E115D00217C19 /* Rtt_ApplePlatform.mm in Sources */,

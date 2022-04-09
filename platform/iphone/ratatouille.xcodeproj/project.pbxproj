@@ -3585,6 +3585,7 @@
 				F5C36C1524FAB49F00775C6E /* AutoLinkModules.m in Sources */,
 				F5C36C1624FAB49F00775C6E /* CoronaLuaObjC+NSObject.m in Sources */,
 				F5C36C1724FAB49F00775C6E /* Rtt_IPhoneDevice.mm in Sources */,
+				F5C36C1824FAB49F00775C6E /* Rtt_IPhoneDisplayObject.mm in Sources */,
 				F5C36C1A24FAB49F00775C6E /* CoronaViewRuntimeDelegate.mm in Sources */,
 				F5C36C1B24FAB49F00775C6E /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
 				F5C36C1E24FAB49F00775C6E /* Rtt_IPhonePlatform.mm in Sources */,
