@@ -132,7 +132,7 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 	    Rtt_StringStartsWith(url, "http:") ||
 	    Rtt_StringStartsWith(url, "https:"))
 	{
-		Request(url, NULL);
+		Request(url, NULL, NULL);
 		return;
 	}
 	
@@ -153,7 +153,7 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 	}
 	
 	// Request the web page.
-	Request(url, baseUrl.GetString());
+	Request(url, baseUrl.GetString(), header);
 }
 
 void
