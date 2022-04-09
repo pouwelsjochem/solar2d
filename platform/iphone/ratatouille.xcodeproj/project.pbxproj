@@ -256,6 +256,7 @@
 		F5C36C2724FAB49F00775C6E /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C3691BE430F900C241E6 /* Rtt_AppleInputDevice.mm */; };
 		F5C36C2924FAB49F00775C6E /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BFB183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm */; };
 		F5C36C2B24FAB49F00775C6E /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F5C1887699100B4A354 /* CoronaViewPluginContext.mm */; };
+		F5C36C2C24FAB49F00775C6E /* Rtt_IPhoneWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */; };
 		F5C36C2D24FAB49F00775C6E /* Rtt_AppleInputMFiDeviceListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36F1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm */; };
 		F5C36C2E24FAB49F00775C6E /* CoronaLuaIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */; };
 		F5C36C3024FAB49F00775C6E /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36B1BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm */; };
@@ -3594,6 +3595,7 @@
 				F5C36C2724FAB49F00775C6E /* Rtt_AppleInputDevice.mm in Sources */,
 				F5C36C2924FAB49F00775C6E /* Rtt_TouchInhibitor.mm in Sources */,
 				F5C36C2B24FAB49F00775C6E /* CoronaViewPluginContext.mm in Sources */,
+				F5C36C2C24FAB49F00775C6E /* Rtt_IPhoneWebViewObject.mm in Sources */,
 				F5C36C2D24FAB49F00775C6E /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				F5C36C2E24FAB49F00775C6E /* CoronaLuaIOS.mm in Sources */,
 				F5C36C3024FAB49F00775C6E /* Rtt_AppleInputDeviceManager.mm in Sources */,
