@@ -38,6 +38,7 @@
 #include "Rtt_AndroidPlatform.h"
 #include "Rtt_AndroidRuntimeDelegate.h"
 #include "Rtt_AndroidSystemOpenEvent.h"
+#include "Rtt_AndroidWebViewObject.h"
 
 #include "JavaToNativeBridge.h"
 #include "AndroidImageData.h"
