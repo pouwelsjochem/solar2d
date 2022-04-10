@@ -188,6 +188,29 @@ public class ViewManager {
 
 	}
 
+	public boolean goBack() {
+		// Validate.
+		if (myDisplayObjects == null) {
+			return false;
+		}
+		
+		// Check if any display objects support the back key event.
+		android.view.KeyEvent backKeyEvent = new android.view.KeyEvent(
+				android.view.KeyEvent.ACTION_DOWN, android.view.KeyEvent.KEYCODE_BACK);
+		synchronized (myDisplayObjects) {
+			for (android.view.View view : myDisplayObjects) {
+				if (view instanceof CoronaWebView) {
+					if (view.onKeyDown(backKeyEvent.getKeyCode(), backKeyEvent)) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		// Back key event was not overridden.
+		return false;
+	}
+
 	public void setGLView(View glView)
 	{
 		// Set up the root content view that will contain all other views.

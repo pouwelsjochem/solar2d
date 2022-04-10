@@ -17,6 +17,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Map;
+
 /** View for displaying web pages. */
 public class CoronaWebView extends WebView {
 	/**
