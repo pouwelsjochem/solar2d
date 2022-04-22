@@ -1989,11 +1989,19 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 				windowPosition.x = lastXResult.GetValue().ToSignedInt32().GetValue();
 				windowPosition.y = lastYResult.GetValue().ToSignedInt32().GetValue();
 
+				HMONITOR monitorAtWindowPosition = ::MonitorFromPoint(windowPosition, MONITOR_DEFAULTTONULL);
+				if (monitorAtWindowPosition == NULL) { // point is off screen
+					windowPosition.x = 0;
+					windowPosition.y = 0;
+				}
+
 				auto windowBounds = fMainWindowPointer->GetBounds();
+				auto deltaX = windowPosition.x - windowBounds.left;
+				auto deltaY = windowPosition.y - windowBounds.top;
 				windowBounds.left = windowPosition.x;
 				windowBounds.top = windowPosition.y;
-				windowBounds.right += windowPosition.x - windowBounds.left;
-				windowBounds.bottom += windowPosition.y - windowBounds.top;
+				windowBounds.right += deltaX;
+				windowBounds.bottom += deltaY;
 				fMainWindowPointer->SetBounds(windowBounds);
 			}
 		}
@@ -2014,9 +2022,9 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 		}
 	}
 
-	// If we haven't restored the previous window client width/height above, then do the following:
-	// - First, attempt to fetch the default window client width/height from the "build.settings" file.
-	if ((clientSize.cx <= 0) || (clientSize.cy <= 0))
+	// If we haven't safely restored the previous window client width/height above, then
+	// attempt to fetch the default window client width/height from the "build.settings" file.
+	if ((clientSize.cx <= projectSettings.GetMinContentWidth()) || (clientSize.cy <= projectSettings.GetMinContentHeight()))
 	{
 		clientSize.cx = projectSettings.GetDefaultWindowViewWidth();
 		clientSize.cy = projectSettings.GetDefaultWindowViewHeight();
