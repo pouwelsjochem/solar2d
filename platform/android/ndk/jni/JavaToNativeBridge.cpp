@@ -38,6 +38,7 @@
 #include "Rtt_AndroidPlatform.h"
 #include "Rtt_AndroidRuntimeDelegate.h"
 #include "Rtt_AndroidSystemOpenEvent.h"
+#include "Rtt_AndroidWebViewObject.h"
 
 #include "JavaToNativeBridge.h"
 #include "AndroidImageData.h"
@@ -1010,28 +1011,9 @@ JavaToNativeBridge::WebViewShouldLoadUrl( JNIEnv * env, int id, jstring urlJ, in
 	// Raise the event.
 	jstringResult url(env, urlJ);
 	url.setNotLocal();
-	if (view->IsPopup())
-	{
-		// This web view belongs to a web popup.
-		// Make sure that the popup is still referencing the web view in case it just closed it.
-		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
-		if (popup && (popup->GetWebViewId() == view->GetId()))
-		{
-			// If the Lua listener returns false, then close the popup.
-			// Also, the "event.type" property is not supported by web popup.
-			bool wasCloseRequested = !(popup->ShouldLoadUrl(url.getUTF8()));
-			if (wasCloseRequested)
-			{
-				popup->Close();
-			}
-		}
-	}
-	else
-	{
-		// This web view is a display object.
-		Rtt::UrlRequestEvent e(url.getUTF8(), (Rtt::UrlRequestEvent::Type)sourceType);
-		view->DispatchEventWithTarget(e);
-	}
+	// This web view is a display object.
+	Rtt::UrlRequestEvent e(url.getUTF8(), (Rtt::UrlRequestEvent::Type)sourceType);
+	view->DispatchEventWithTarget(e);
 }
 
 void 
@@ -1072,27 +1054,10 @@ JavaToNativeBridge::WebViewDidFailLoadUrl( JNIEnv * env, int id, jstring urlJ, j
 	url.setNotLocal();
 	jstringResult message(env, msgJ);
 	message.setNotLocal();
-	if (view->IsPopup())
-	{
-		// This web view belongs to a web popup.
-		// Make sure that the popup is still referencing the web view in case it just closed it.
-		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
-		if (popup && (popup->GetWebViewId() == view->GetId()))
-		{
-			// If the Lua listener returns false, then close the popup.
-			bool wasCloseRequested = !(popup->DidFailLoadUrl(url.getUTF8(), message.getUTF8(), code));
-			if (wasCloseRequested)
-			{
-				popup->Close();
-			}
-		}
-	}
-	else
-	{
-		// The web view is a display object.
-		Rtt::UrlRequestEvent e(url.getUTF8(), message.getUTF8(), code);
-		view->DispatchEventWithTarget(e);
-	}
+
+	// The web view is a display object.
+	Rtt::UrlRequestEvent e(url.getUTF8(), message.getUTF8(), code);
+	view->DispatchEventWithTarget(e);
 }
 
 void 
@@ -1130,17 +1095,6 @@ JavaToNativeBridge::WebViewClosed( JNIEnv * env, int id )
 	if (!view)
 	{
 		return;
-	}
-	
-	// If the web view belongs to a web popup object, then close it.
-	if (view->IsPopup())
-	{
-		// Make sure that the popup is still referencing the given web view.
-		Rtt::AndroidWebPopup *popup = (Rtt::AndroidWebPopup*)(fPlatform->GetWebPopup());
-		if (popup && (popup->GetWebViewId() == view->GetId()))
-		{
-			popup->Close();
-		}
 	}
 }
 

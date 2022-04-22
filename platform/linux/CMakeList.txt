@@ -504,7 +504,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_PlatformTimer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformVideoPlayer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformVideoProvider.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformWebPopup.cpp
 		${CORONA_ROOT}/librtt/Rtt_Preference.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceValue.cpp
@@ -815,7 +814,6 @@ add_executable( Solar2D
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoObject.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoPlayer.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoProvider.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxWebPopup.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxWebView.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxKeyListener.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxMouseListener.cpp
@@ -852,7 +850,6 @@ add_executable( Solar2DSimulator
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoObject.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoPlayer.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoProvider.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxWebPopup.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxWebView.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxKeyListener.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxMouseListener.cpp

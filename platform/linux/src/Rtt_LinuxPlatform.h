@@ -26,7 +26,6 @@ namespace Rtt
 	class LinuxStoreProvider;
 	class LinuxVideoPlayer;
 	class LinuxVideoProvider;
-	class LinuxWebPopup;
 	class PlatformBitmap;
 	class PlatformSurface;
 	class PlatformTimer;
@@ -73,7 +72,6 @@ namespace Rtt
 		virtual const MCrypto &GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String *value) const;
 		virtual void SetActivityIndicator(bool visible) const;
-		virtual PlatformWebPopup *GetWebPopup() const;
 		virtual bool CanShowPopup(const char *name) const;
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
@@ -179,7 +177,6 @@ namespace Rtt
 		mutable LinuxVideoPlayer *fVideoPlayer;
 		mutable LinuxImageProvider *fImageProvider;
 		mutable LinuxVideoProvider *fVideoProvider;
-		mutable LinuxWebPopup *fWebPopup;
 		String fResourceDir;
 		String fDocumentsDir;
 		String fTemporaryDir;

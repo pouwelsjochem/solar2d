@@ -28,7 +28,6 @@
 #include "Rtt_LinuxVideoObject.h"
 #include "Rtt_LinuxVideoPlayer.h"
 #include "Rtt_LinuxVideoProvider.h"
-#include "Rtt_LinuxWebPopup.h"
 #include "Rtt_LinuxWebView.h"
 #include "Rtt_LinuxContainer.h"
 #include "Rtt_LinuxUtils.h"

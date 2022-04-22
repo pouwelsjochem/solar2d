@@ -1475,17 +1475,6 @@ public class CoronaActivity extends Activity {
 			}
 			catch (Exception ex) { }
 		}
-
-				// Pass the back key to any child views that may want to handle it, such as a web view.
-		if ((keyCode == android.view.KeyEvent.KEYCODE_BACK) ) {
-			ViewManager viewManager = fCoronaRuntime.getViewManager();
-			if (viewManager != null) {
-				boolean hasChildViewOverridenBackKey = viewManager.goBack();
-				if (hasChildViewOverridenBackKey) {
-					return true;
-				}
-			}
-		}
 		
 		// Pass the back key to any child views that may want to handle it, such as a web view.
 		if ((keyCode == android.view.KeyEvent.KEYCODE_BACK) ) {

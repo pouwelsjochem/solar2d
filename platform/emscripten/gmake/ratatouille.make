@@ -91,7 +91,6 @@ OBJECTS := \
 	$(OBJDIR)/Rtt_EmscriptenVideoObject.o \
 	$(OBJDIR)/Rtt_EmscriptenVideoPlayer.o \
 	$(OBJDIR)/Rtt_EmscriptenVideoProvider.o \
-	$(OBJDIR)/Rtt_EmscriptenWebPopup.o \
 	$(OBJDIR)/Rtt_EmscriptenWebViewObject.o \
 	$(OBJDIR)/Rtt_EmscriptenContainer.o \
 	$(OBJDIR)/Rtt_EmscriptenCPluginLoader.o \
@@ -264,10 +263,6 @@ $(OBJDIR)/Rtt_EmscriptenVideoPlayer.o: ../Rtt_EmscriptenVideoPlayer.cpp
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
 $(OBJDIR)/Rtt_EmscriptenVideoProvider.o: ../Rtt_EmscriptenVideoProvider.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-
-$(OBJDIR)/Rtt_EmscriptenWebPopup.o: ../Rtt_EmscriptenWebPopup.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 

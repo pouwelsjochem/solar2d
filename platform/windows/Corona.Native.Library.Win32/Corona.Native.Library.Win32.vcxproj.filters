@@ -33,9 +33,6 @@
     <ClInclude Include="Rtt\Rtt_WinTimer.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_WinWebPopup.h"> 
-      <Filter>Rtt</Filter> 
-    </ClInclude> 
     <ClInclude Include="Rtt\Rtt_WinWebViewObject.h"> 
       <Filter>Rtt</Filter> 
     </ClInclude>
@@ -292,9 +289,6 @@
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
-    <ClCompile Include="Rtt\Rtt_WinWebPopup.cpp"> 
-      <Filter>Rtt</Filter> 
-    </ClCompile> 
     <ClCompile Include="Rtt\Rtt_WinWebViewObject.cpp"> 
       <Filter>Rtt</Filter> 
     </ClCompile> 

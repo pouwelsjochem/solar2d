@@ -16,8 +16,6 @@
 #import <WebKit/WebKit.h>
 #import "AppDelegate.h"
 
-
-
 //#include "Rtt_IPhoneFont.h"
 
 #include "Rtt_Event.h"
@@ -29,7 +27,6 @@
 #include "Rtt_LuaProxy.h"
 #include "Rtt_LuaProxyVTable.h"
 #include "Rtt_MPlatform.h"
-#include "Rtt_PlatformWebPopup.h"
 #include "Renderer/Rtt_RenderTypes.h"
 #include "Core/Rtt_String.h"
 
@@ -552,8 +549,8 @@ IPhoneWebViewObject::Initialize()
 	UIViewController *controller = delegate.viewController;
 
 	// TODO: Remove asserts. Already done in IPhoneDisplayObject::Preinitialize()
-	Rtt_ASSERT( delegate.runtime->GetDisplay().PointsWidth() == [UIScreen mainScreen].bounds.size.width );
-	Rtt_ASSERT( delegate.runtime->GetDisplay().PointsHeight() == [UIScreen mainScreen].bounds.size.height );
+//	Rtt_ASSERT( delegate.runtime->GetDisplay().PointsWidth() == [UIScreen mainScreen].bounds.size.width );
+//	Rtt_ASSERT( delegate.runtime->GetDisplay().PointsHeight() == [UIScreen mainScreen].bounds.size.height );
 
 	Rect screenBounds;
 	GetScreenBounds( screenBounds );
@@ -634,14 +631,14 @@ IPhoneWebViewObject::Request( lua_State *L )
 
 		NSURL *baseUrl = GetBaseURLFromLuaState(L,3);
 
-		NSString *headerString = nil;
-		if ( lua_isstring( L, 4 ) )
-		{
-			const char *header = lua_tostring( L, 4 );
-			headerString = [NSString stringWithExternalString:header];
-		}
+//		NSString *headerString = nil;
+//		if ( lua_isstring( L, 4 ) )
+//		{
+//			const char *header = lua_tostring( L, 4 );
+//			headerString = [NSString stringWithExternalString:header];
+//		}
 		
-		o->Request( urlString, baseUrl, headerString);
+		o->Request( urlString, baseUrl, nil);
 	}
 
 	return 0;
@@ -679,10 +676,10 @@ IPhoneWebViewObject::Request( NSString *urlString, NSURL *baseUrl, NSString *hea
 	{
 	}
 
-	if (nil != headerString) {
-		NSArray *headerKeyAndValue = [headerString componentsSeparatedByString:@": "];
-		[request addValue:headerKeyAndValue[1] forHTTPHeaderField:headerKeyAndValue[0]];
-	}
+//	if (nil != headerString) {
+//		NSArray *headerKeyAndValue = [headerString componentsSeparatedByString:@": "];
+//		[request addValue:headerKeyAndValue[1] forHTTPHeaderField:headerKeyAndValue[0]];
+//	}
 
 	Rtt_iOSWebViewContainer *container = (Rtt_iOSWebViewContainer*)GetView();
 	[container loadRequest:request baseURL:baseUrl];

@@ -34,9 +34,6 @@
     <ClCompile Include="..\Rtt_EmscriptenVideoProvider.cpp">
       <Filter>emscripten</Filter>
     </ClCompile>
-    <ClCompile Include="..\Rtt_EmscriptenWebPopup.cpp">
-      <Filter>emscripten</Filter>
-    </ClCompile>
     <ClCompile Include="..\Rtt_EmscriptenWebViewObject.cpp">
       <Filter>emscripten</Filter>
     </ClCompile>
@@ -332,9 +329,6 @@
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformVideoProvider.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformWebPopup.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Preference.cpp">
@@ -1624,9 +1618,6 @@
     <ClInclude Include="..\Rtt_EmscriptenVideoProvider.h">
       <Filter>emscripten</Filter>
     </ClInclude>
-    <ClInclude Include="..\Rtt_EmscriptenWebPopup.h">
-      <Filter>emscripten</Filter>
-    </ClInclude>
     <ClInclude Include="..\Rtt_EmscriptenWebViewObject.h">
       <Filter>emscripten</Filter>
     </ClInclude>
@@ -1889,9 +1880,6 @@
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformVideoProvider.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformWebPopup.h">
       <Filter>rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Preference.h">

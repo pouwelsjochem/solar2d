@@ -159,8 +159,6 @@ class NativeToJavaBridge
 		void WebViewRequestGoBack( int id );
 		void WebViewRequestGoForward( int id );
 		void WebViewRequestDeleteCookies( int id );
-		bool WebPopupShouldLoadUrl( int id, const char * url );
-		bool WebPopupDidFailLoadUrl( int id, const char * url, const char * msg, int code );
 
 		int CryptoGetDigestLength( const char * algorithm );
 		void CryptoCalculateDigest( const char * algorithm, const Rtt::Data<const char> & data, U8 * digest );

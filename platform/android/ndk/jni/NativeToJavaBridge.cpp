@@ -22,7 +22,6 @@
 #include "Rtt_LuaResource.h"
 #include "Rtt_MPlatform.h"
 #include "Display/Rtt_PlatformBitmap.h"
-#include "Rtt_PlatformWebPopup.h"
 #include "Rtt_PreferenceCollection.h"
 #include "Rtt_Runtime.h"
 #include "NativeToJavaBridge.h"
@@ -2155,26 +2154,6 @@ NativeToJavaBridge::CryptoCalculateHMAC( const char * algorithm, const Rtt::Data
 			}
 		}
 	}
-}
-
-bool
-NativeToJavaBridge::WebPopupShouldLoadUrl( int id, const char * url )
-{
-	Rtt::PlatformWebPopup * owner = (Rtt::PlatformWebPopup *) id;
-	
-	bool result = owner->ShouldLoadUrl( url );
-	
-	return result;
-}
-
-bool
-NativeToJavaBridge::WebPopupDidFailLoadUrl( int id, const char * url, const char * msg, int code )
-{
-	Rtt::PlatformWebPopup * owner = (Rtt::PlatformWebPopup *) id;
-	
-	bool result = owner->DidFailLoadUrl( url, msg, code );
-	
-	return result;
 }
 
 void

@@ -94,7 +94,6 @@ namespace Rtt
 		    U32 buttonCount, LuaResource *resourcePointer) const { return nullptr; };
 		virtual void CancelNativeAlert(NativeAlertRef alertReference, S32 buttonIndex) const { return; };
 		virtual void SetActivityIndicator(bool visible) const { return; };
-		virtual PlatformWebPopup* GetWebPopup() const { return nullptr; };
 		virtual bool CanShowPopup(const char *name) const { return false; };
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const { return false; };
 		virtual bool HidePopup(const char *name) const { return false; };

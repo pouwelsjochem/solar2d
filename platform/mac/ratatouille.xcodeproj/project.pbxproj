@@ -232,7 +232,6 @@
 		00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */; };
 		00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */; };
 		00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */; };
-		00B73DA412B720CA0057F594 /* Rtt_MacWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */; };
 		00B73DAA12B720CA0057F594 /* VersionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1712B720C90057F594 /* VersionLabel.m */; };
 		00B73DAC12B720CA0057F594 /* DimView.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D1B12B720C90057F594 /* DimView.m */; };
 		00B73DB012B720CA0057F594 /* TextEditorSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D2312B720CA0057F594 /* TextEditorSupport.m */; };
@@ -619,7 +618,6 @@
 		C229E0621B32221B00D87A7C /* Rtt_PlatformReachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 006DC6DE13678AB5008DDB3D /* Rtt_PlatformReachability.h */; };
 		C229E0631B32221B00D87A7C /* Rtt_PlatformSurface.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */; };
 		C229E0641B32221B00D87A7C /* Rtt_PlatformTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */; };
-		C229E0671B32221B00D87A7C /* Rtt_PlatformWebPopup.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */; };
 		C229E0681B32221B00D87A7C /* Rtt_Real.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD712B71BF20057F594 /* Rtt_Real.h */; };
 		C229E0691B32221B00D87A7C /* Rtt_RectObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328818176A621100ACB6FF /* Rtt_RectObject.h */; };
 		C229E06A1B32221B00D87A7C /* Rtt_RectPath.h in Headers */ = {isa = PBXBuildFile; fileRef = A432881A176A621100ACB6FF /* Rtt_RectPath.h */; };
@@ -769,7 +767,6 @@
 		C229E1301B32221B00D87A7C /* Rtt_PlatformReachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DD13678AB5008DDB3D /* Rtt_PlatformReachability.cpp */; };
 		C229E1311B32221B00D87A7C /* Rtt_PlatformSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73C12B73EE300D9B6A4 /* Rtt_PlatformSurface.cpp */; };
 		C229E1321B32221B00D87A7C /* Rtt_PlatformTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */; };
-		C229E1351B32221B00D87A7C /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */; };
 		C229E1361B32221B00D87A7C /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043F17A3774E00681DED /* Rtt_ReadOnlyInputAxisCollection.cpp */; };
 		C229E1371B32221B00D87A7C /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE70178E18B00047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp */; };
 		C229E1381B32221B00D87A7C /* Rtt_RectObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328817176A621100ACB6FF /* Rtt_RectObject.cpp */; };
@@ -950,8 +947,6 @@
 		C2A377711B34BAB000BB5B88 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
-		C2A377791B34D38400BB5B88 /* Rtt_PlatformWebPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */; };
-		C2A3777A1B34D38400BB5B88 /* Rtt_MacWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */; };
 		C2A377801B34D3BE00BB5B88 /* Rtt_MacWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
 		C2ADB45A1B6C1C31008C9BF2 /* OSXAppPackageSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2ADB4591B6C1C31008C9BF2 /* OSXAppPackageSheet.xib */; };
@@ -1730,8 +1725,6 @@
 		000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformSurface.h; sourceTree = "<group>"; };
 		000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformTimer.cpp; sourceTree = "<group>"; };
 		000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformTimer.h; sourceTree = "<group>"; };
-		000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformWebPopup.cpp; sourceTree = "<group>"; };
-		000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformWebPopup.h; sourceTree = "<group>"; };
 		000CE74612B73EE300D9B6A4 /* Rtt_RenderingStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RenderingStream.cpp; sourceTree = "<group>"; };
 		000CE74712B73EE300D9B6A4 /* Rtt_RenderingStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RenderingStream.h; sourceTree = "<group>"; };
 		000CE74812B73EE300D9B6A4 /* Rtt_Resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Resource.cpp; sourceTree = "<group>"; };
@@ -2017,8 +2010,6 @@
 		00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacSimulator.h; sourceTree = "<group>"; };
 		00B73D0612B720C90057F594 /* Rtt_MacViewSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewSurface.mm; sourceTree = "<group>"; };
 		00B73D0712B720C90057F594 /* Rtt_MacViewSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacViewSurface.h; sourceTree = "<group>"; };
-		00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacWebPopup.mm; sourceTree = "<group>"; };
-		00B73D0B12B720C90057F594 /* Rtt_MacWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacWebPopup.h; sourceTree = "<group>"; };
 		00B73D1412B720C90057F594 /* PassiveHitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassiveHitView.h; sourceTree = "<group>"; };
 		00B73D1512B720C90057F594 /* PassiveHitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PassiveHitView.m; sourceTree = "<group>"; };
 		00B73D1612B720C90057F594 /* VersionLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VersionLabel.h; sourceTree = "<group>"; };
@@ -3090,8 +3081,6 @@
 				000CE73D12B73EE300D9B6A4 /* Rtt_PlatformSurface.h */,
 				000CE73E12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp */,
 				000CE73F12B73EE300D9B6A4 /* Rtt_PlatformTimer.h */,
-				000CE74212B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp */,
-				000CE74312B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h */,
 				03C89D521D6FE7B2004CD668 /* Rtt_Preference.cpp */,
 				03C89D531D6FE7B2004CD668 /* Rtt_Preference.h */,
 				03C89D541D6FE7B2004CD668 /* Rtt_PreferenceCollection.cpp */,
@@ -3263,8 +3252,6 @@
 				00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */,
 				00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */,
 				00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */,
-				00B73D0B12B720C90057F594 /* Rtt_MacWebPopup.h */,
-				00B73D0A12B720C90057F594 /* Rtt_MacWebPopup.mm */,
 				A4BED90B14B65EAD0028BE25 /* Rtt_MacWebViewObject.h */,
 				A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */,
 				00B73CD812B720C90057F594 /* Rtt_Player.pch */,
@@ -4159,7 +4146,6 @@
 				000CE7E912B73EE300D9B6A4 /* Rtt_PlatformSurface.h in Headers */,
 				000CE7EB12B73EE300D9B6A4 /* Rtt_PlatformTimer.h in Headers */,
 				03D1C55E1D70CCB200DB02EE /* Rtt_PreferenceValue.h in Headers */,
-				000CE7EF12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.h in Headers */,
 				C2DA96291B46460F00DAF684 /* Rtt_Real.h in Headers */,
 				C2DA965C1B46460F00DAF684 /* Rtt_RectObject.h in Headers */,
 				C2DA96531B46460F00DAF684 /* Rtt_RectPath.h in Headers */,
@@ -4393,7 +4379,6 @@
 				C229E0631B32221B00D87A7C /* Rtt_PlatformSurface.h in Headers */,
 				C229E0641B32221B00D87A7C /* Rtt_PlatformTimer.h in Headers */,
 				03D1C55D1D70CCB100DB02EE /* Rtt_PreferenceValue.h in Headers */,
-				C229E0671B32221B00D87A7C /* Rtt_PlatformWebPopup.h in Headers */,
 				C229E0681B32221B00D87A7C /* Rtt_Real.h in Headers */,
 				C229E0691B32221B00D87A7C /* Rtt_RectObject.h in Headers */,
 				C229E06A1B32221B00D87A7C /* Rtt_RectPath.h in Headers */,
@@ -5222,7 +5207,6 @@
 				03D1C55C1D70CCAE00DB02EE /* Rtt_PreferenceValue.cpp in Sources */,
 				000CE7E812B73EE300D9B6A4 /* Rtt_PlatformSurface.cpp in Sources */,
 				000CE7EA12B73EE300D9B6A4 /* Rtt_PlatformTimer.cpp in Sources */,
-				000CE7EE12B73EE300D9B6A4 /* Rtt_PlatformWebPopup.cpp in Sources */,
 				C2E993461A6B2FEC00E99F46 /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				C2E993471A6B2FEC00E99F46 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				A4328876176A621200ACB6FF /* Rtt_RectObject.cpp in Sources */,
@@ -5479,7 +5463,6 @@
 				00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */,
 				00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */,
 				1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */,
-				00B73DA412B720CA0057F594 /* Rtt_MacWebPopup.mm in Sources */,
 				A4BED90D14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm in Sources */,
 				C21733781B20F21A00F79CB8 /* Rtt_OSXAppPackager.mm in Sources */,
 				000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */,
@@ -5653,7 +5636,6 @@
 				03D1C55B1D70CCAE00DB02EE /* Rtt_PreferenceValue.cpp in Sources */,
 				C229E1311B32221B00D87A7C /* Rtt_PlatformSurface.cpp in Sources */,
 				C229E1321B32221B00D87A7C /* Rtt_PlatformTimer.cpp in Sources */,
-				C229E1351B32221B00D87A7C /* Rtt_PlatformWebPopup.cpp in Sources */,
 				C229E1361B32221B00D87A7C /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				C229E1371B32221B00D87A7C /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				C229E1381B32221B00D87A7C /* Rtt_RectObject.cpp in Sources */,
@@ -5849,13 +5831,11 @@
 				C2E9930B1A6B1A3100E99F46 /* Rtt_MacViewCallback.mm in Sources */,
 				C2E9930C1A6B1A3100E99F46 /* Rtt_MacViewSurface.mm in Sources */,
 				F57AE2061F051610000A4245 /* Rtt_AppleInAppStoreApple.mm in Sources */,
-				C2A3777A1B34D38400BB5B88 /* Rtt_MacWebPopup.mm in Sources */,
 				C2A377801B34D3BE00BB5B88 /* Rtt_MacWebViewObject.mm in Sources */,
 				C2D3DA6B1B179DA000137331 /* Rtt_NativeWindowMode.cpp in Sources */,
 				C2E9934F1A6B335D00E99F46 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
 				C2E993531A6B3D3900E99F46 /* Rtt_PlatformExitCallback.cpp in Sources */,
 				C2E993501A6B338900E99F46 /* Rtt_PlatformObjectWrapper.cpp in Sources */,
-				C2A377791B34D38400BB5B88 /* Rtt_PlatformWebPopup.cpp in Sources */,
 				C2D3DA5A1B179C2400137331 /* Rtt_ProjectSettings.cpp in Sources */,
 				C2D3DA5E1B179C2400137331 /* Rtt_ReadOnlyProjectSettings.cpp in Sources */,
 				C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */,

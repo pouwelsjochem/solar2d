@@ -82,7 +82,6 @@
 		A46936FD169DED9300723568 /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */; };
 		A469371E169DED9300723568 /* Rtt_IPhonePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */; };
 		A4693721169DED9300723568 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E0169DED9200723568 /* Rtt_IPhoneScreenSurface.mm */; };
-		A4693730169DED9300723568 /* Rtt_IPhoneWebPopup.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936EA169DED9200723568 /* Rtt_IPhoneWebPopup.mm */; };
 		A4693733169DED9300723568 /* Rtt_IPhoneWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */; };
 		A4698839169E642E00EAA645 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
 		A47098A8169E9F2400D31091 /* Rtt_IPhoneTemplate-Sub.mm in Sources */ = {isa = PBXBuildFile; fileRef = A469881B169E23B200EAA645 /* Rtt_IPhoneTemplate-Sub.mm */; };
@@ -257,6 +256,7 @@
 		F5C36C2724FAB49F00775C6E /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C3691BE430F900C241E6 /* Rtt_AppleInputDevice.mm */; };
 		F5C36C2924FAB49F00775C6E /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BFB183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm */; };
 		F5C36C2B24FAB49F00775C6E /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F5C1887699100B4A354 /* CoronaViewPluginContext.mm */; };
+		F5C36C2C24FAB49F00775C6E /* Rtt_IPhoneWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */; };
 		F5C36C2D24FAB49F00775C6E /* Rtt_AppleInputMFiDeviceListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36F1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm */; };
 		F5C36C2E24FAB49F00775C6E /* CoronaLuaIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */; };
 		F5C36C3024FAB49F00775C6E /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36B1BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm */; };
@@ -1201,8 +1201,6 @@
 		A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhonePlatform.mm; path = platform/iphone/Rtt_IPhonePlatform.mm; sourceTree = "<group>"; };
 		A46936DF169DED9200723568 /* Rtt_IPhoneScreenSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneScreenSurface.h; path = platform/iphone/Rtt_IPhoneScreenSurface.h; sourceTree = "<group>"; };
 		A46936E0169DED9200723568 /* Rtt_IPhoneScreenSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneScreenSurface.mm; path = platform/iphone/Rtt_IPhoneScreenSurface.mm; sourceTree = "<group>"; };
-		A46936E9169DED9200723568 /* Rtt_IPhoneWebPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneWebPopup.h; path = platform/iphone/Rtt_IPhoneWebPopup.h; sourceTree = "<group>"; };
-		A46936EA169DED9200723568 /* Rtt_IPhoneWebPopup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneWebPopup.mm; path = platform/iphone/Rtt_IPhoneWebPopup.mm; sourceTree = "<group>"; };
 		A46936EB169DED9300723568 /* Rtt_IPhoneWebViewObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneWebViewObject.h; path = platform/iphone/Rtt_IPhoneWebViewObject.h; sourceTree = "<group>"; };
 		A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneWebViewObject.mm; path = platform/iphone/Rtt_IPhoneWebViewObject.mm; sourceTree = "<group>"; };
 		A4693764169DF23D00723568 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1543,8 +1541,6 @@
 				A46936E0169DED9200723568 /* Rtt_IPhoneScreenSurface.mm */,
 				0720731017CD2C93004720D2 /* Rtt_IPhoneTimer.h */,
 				0720731117CD2C93004720D2 /* Rtt_IPhoneTimer.mm */,
-				A46936E9169DED9200723568 /* Rtt_IPhoneWebPopup.h */,
-				A46936EA169DED9200723568 /* Rtt_IPhoneWebPopup.mm */,
 				A46936EB169DED9300723568 /* Rtt_IPhoneWebViewObject.h */,
 				A46936EC169DED9300723568 /* Rtt_IPhoneWebViewObject.mm */,
 				A48E9BFA183EFFC500F67CB3 /* Rtt_TouchInhibitor.h */,
@@ -3502,7 +3498,6 @@
 				F81D63B31A609F8B00C7ADAA /* CoronaAppDelegate.mm in Sources */,
 				F564C3721BE430F900C241E6 /* Rtt_AppleInputDevice.mm in Sources */,
 				A48E9BFD183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm in Sources */,
-				A4693730169DED9300723568 /* Rtt_IPhoneWebPopup.mm in Sources */,
 				A40D2F5E1887699100B4A354 /* CoronaViewPluginContext.mm in Sources */,
 				A4693733169DED9300723568 /* Rtt_IPhoneWebViewObject.mm in Sources */,
 				F564C37E1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
@@ -3590,6 +3585,7 @@
 				F5C36C1524FAB49F00775C6E /* AutoLinkModules.m in Sources */,
 				F5C36C1624FAB49F00775C6E /* CoronaLuaObjC+NSObject.m in Sources */,
 				F5C36C1724FAB49F00775C6E /* Rtt_IPhoneDevice.mm in Sources */,
+				F5C36C1824FAB49F00775C6E /* Rtt_IPhoneDisplayObject.mm in Sources */,
 				F5C36C1A24FAB49F00775C6E /* CoronaViewRuntimeDelegate.mm in Sources */,
 				F5C36C1B24FAB49F00775C6E /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
 				F5C36C1E24FAB49F00775C6E /* Rtt_IPhonePlatform.mm in Sources */,
@@ -3600,6 +3596,7 @@
 				F5C36C2724FAB49F00775C6E /* Rtt_AppleInputDevice.mm in Sources */,
 				F5C36C2924FAB49F00775C6E /* Rtt_TouchInhibitor.mm in Sources */,
 				F5C36C2B24FAB49F00775C6E /* CoronaViewPluginContext.mm in Sources */,
+				F5C36C2C24FAB49F00775C6E /* Rtt_IPhoneWebViewObject.mm in Sources */,
 				F5C36C2D24FAB49F00775C6E /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				F5C36C2E24FAB49F00775C6E /* CoronaLuaIOS.mm in Sources */,
 				F5C36C3024FAB49F00775C6E /* Rtt_AppleInputDeviceManager.mm in Sources */,

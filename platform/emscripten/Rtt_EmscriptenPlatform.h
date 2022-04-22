@@ -27,7 +27,6 @@ namespace Rtt
 	class EmscriptenStoreProvider;
 	class EmscriptenVideoPlayer;
 	class EmscriptenVideoProvider;
-	class EmscriptenWebPopup;
 	class PlatformBitmap;
 	class PlatformSurface;
 	class PlatformTimer;
@@ -83,8 +82,6 @@ namespace Rtt
 		virtual void GetPreference(Category category, Rtt::String * value) const;
 
 		virtual void SetActivityIndicator(bool visible) const;
-
-		virtual PlatformWebPopup* GetWebPopup() const;
 
 		virtual bool CanShowPopup(const char *name) const;
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
@@ -200,7 +197,6 @@ namespace Rtt
 		mutable EmscriptenVideoPlayer* fVideoPlayer;
 		mutable EmscriptenImageProvider* fImageProvider;
 		mutable EmscriptenVideoProvider* fVideoProvider;
-		mutable EmscriptenWebPopup *fWebPopup;
 		String fResourceDir;
 		String fDocumentsDir;
 		String fTemporaryDir;

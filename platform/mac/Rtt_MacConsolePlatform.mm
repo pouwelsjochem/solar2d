@@ -117,12 +117,6 @@ MacConsolePlatform::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 {
 }
 
-PlatformWebPopup*
-MacConsolePlatform::GetWebPopup() const
-{
-	return NULL;
-}
-
 PlatformDisplayObject *
 MacConsolePlatform::CreateNativeWebView( const Rect& bounds ) const
 {

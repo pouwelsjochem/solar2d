@@ -17,7 +17,6 @@
 #include "Rtt_IPhoneAudioSessionManager.h"
 #include "Rtt_AppleInAppStore.h"
 #include "Rtt_IPhoneScreenSurface.h"
-#include "Rtt_IPhoneWebPopup.h"
 #include "Rtt_IPhoneWebViewObject.h"
 
 #include "Rtt_LuaLibNative.h"
@@ -117,7 +116,6 @@ namespace Rtt
 IPhonePlatform::IPhonePlatform( CoronaView *view )
 :	Super( view ),
 	fInAppStoreProvider( NULL ),
-	fWebPopup( NULL ),
 	fPopupControllerDelegate( [[PopupControllerDelegate alloc] init] )
 {
 }
@@ -125,7 +123,6 @@ IPhonePlatform::IPhonePlatform( CoronaView *view )
 IPhonePlatform::~IPhonePlatform()
 {
 	[fPopupControllerDelegate release];
-	Rtt_DELETE( fWebPopup );
 	[fActivityView release];
 	Rtt_DELETE( fInAppStoreProvider );
 }
@@ -188,17 +185,6 @@ IPhonePlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) cons
 //	CustomAlertView *alertView = [fDelegate objectForKey:alert];
 //	[alertView dismissWithClickedButtonIndex:index animated:true];
 //}
-
-PlatformWebPopup*
-IPhonePlatform::GetWebPopup() const
-{
-	if ( ! fWebPopup )
-	{
-		fWebPopup = Rtt_NEW( fAllocator, IPhoneWebPopup );
-	}
-
-	return fWebPopup;
-}
 
 // Returns an array of NSStrings. The object at index t is either a string
 // or a (table) array of strings.

@@ -44,7 +44,6 @@ namespace Rtt
 
 class MacConsoleDevice;
 class MacFBConnect;
-class MacWebPopup;
 class MacViewSurface;
 class PlatformSimulator;
 class PlatformSurface;
@@ -97,8 +96,6 @@ class MacPlatform : public ApplePlatform
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
-		virtual PlatformWebPopup* GetWebPopup() const;
-
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 
         virtual PlatformFBConnect* GetFBConnect() const;
@@ -147,7 +144,6 @@ class MacPlatform : public ApplePlatform
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
-	    mutable MacWebPopup *fWebPopup;
 #if Rtt_AUTHORING_SIMULATOR
 		mutable MacFBConnect *fFBConnect;
 #endif // Rtr_AUTHORING_SIMULATOR	

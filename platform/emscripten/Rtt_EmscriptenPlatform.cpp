@@ -27,7 +27,6 @@
 #include "Rtt_EmscriptenVideoObject.h"
 #include "Rtt_EmscriptenVideoPlayer.h"
 #include "Rtt_EmscriptenVideoProvider.h"
-#include "Rtt_EmscriptenWebPopup.h"
 #include "Rtt_EmscriptenWebViewObject.h"
 #include "Rtt_EmscriptenContainer.h"
 #include "Rtt_PreferenceCollection.h"
@@ -112,7 +111,6 @@ namespace Rtt
 		fVideoPlayer(NULL),
 		fImageProvider(NULL),
 		fVideoProvider(NULL),
-		fWebPopup(NULL),
 		fResourceDir(fAllocator),
 		fDocumentsDir(fAllocator),
 		fTemporaryDir(fAllocator),
@@ -136,7 +134,6 @@ namespace Rtt
 		fVideoPlayer(NULL),
 		fImageProvider(NULL),
 		fVideoProvider(NULL),
-		fWebPopup(NULL),
 		fResourceDir(fAllocator),
 		fDocumentsDir(fAllocator),
 		fTemporaryDir(fAllocator),
@@ -158,7 +155,6 @@ namespace Rtt
 	{
 		Rtt_DELETE(fFBConnect);
 		Rtt_DELETE(fStoreProvider);
-		Rtt_DELETE(fWebPopup);
 		Rtt_DELETE(fVideoPlayer);
 		Rtt_DELETE(fAudioPlayer);
 		Rtt_DELETE(fImageProvider);
@@ -588,15 +584,6 @@ namespace Rtt
 	void EmscriptenPlatform::SetActivityIndicator(bool visible) const
 	{
 		jsSetActivityIndicator(visible);
-	}
-
-	PlatformWebPopup* EmscriptenPlatform::GetWebPopup() const
-	{
-		if (!fWebPopup)
-		{
-			fWebPopup = Rtt_NEW(&GetAllocator(), EmscriptenWebPopup());
-		}
-		return fWebPopup;
 	}
 
 	bool EmscriptenPlatform::CanShowPopup(const char *name) const
