@@ -1305,6 +1305,11 @@ namespace Rtt
 			lua_pushstring(L, "com.coronalabs.NewApp");
 			pushedValues = 1;
 		}
+		else if (Rtt_StringCompare(key, "didDiscordInjectDll") == 0)
+		{
+			pushedValues = 1;
+			lua_pushboolean(L, ::GetModuleHandle(L"DiscordHook.dll") || ::GetModuleHandle(L"DiscordHook64.dll"));
+		}
 		else if (Rtt_StringCompare(key, "isoCountryCode") == 0)
 		{
 			// Fetch the ISO 3166-1 country code.
