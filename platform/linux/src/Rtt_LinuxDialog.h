@@ -33,7 +33,7 @@ namespace Rtt
 
 	struct Window : public ref_counted
 	{
-		Window(const std::string& title, int w, int h);
+		Window(const std::string& title, int w, int h, Uint32 flags = 0);
 		virtual ~Window();
 
 		virtual void Draw() = 0;
@@ -129,6 +129,7 @@ namespace Rtt
 		bool fShowErrors;
 		bool fOpenlastProject;
 		int fStyleIndex;
+		bool fDebugBuildProcess;
 	};
 
 	struct DlgAskRelaunch : public Window

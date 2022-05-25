@@ -437,7 +437,6 @@ Java_com_ansca_corona_JavaToNativeShim_nativePopupClosedEvent(JNIEnv * env, jcla
 {
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->PopupClosedEvent(env, popupName, wasCanceled);
 }
-
 JNIEXPORT jobject JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeGetCoronaRuntime(
 	JNIEnv * env, jclass cd, jlong bridgeAddress)

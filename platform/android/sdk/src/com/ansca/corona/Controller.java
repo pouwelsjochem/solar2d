@@ -10,15 +10,18 @@
 package com.ansca.corona;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 import android.app.AlertDialog;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,10 +31,12 @@ import android.net.MailTo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -708,7 +713,6 @@ public class Controller {
 			}
 		}
 	}
-
 	/**
 	 * Creates an AlertDialog.Builder with the proper theme for the given device.
 	 * TODO: Somehow choose light or dark themed alert based on what theme choice someone makes wither in their manifest or through Corona widgets.

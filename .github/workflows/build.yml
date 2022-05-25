@@ -18,7 +18,7 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_13.3.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_13.4.app/Contents/Developer
   BUILD_NUMBER: ${{ github.event.inputs.buildNumber }}
   YEAR: ${{ github.event.inputs.buildYear }}
 
@@ -47,7 +47,7 @@ jobs:
         runner:
           - macos-12
         xcode:
-          - Xcode_13.3
+          - Xcode_13.4
         target:
           - template
           - template-angle
@@ -151,7 +151,6 @@ jobs:
         with:
           name: Collected-ios-templates
           path: ./output
-
   native:
     needs: source-code
     runs-on: macos-12
@@ -232,7 +231,7 @@ jobs:
       - name: Notarize
         run: |
           if [ -z "$APPLE_AUTH" ]
-          then 
+          then
             echo 'Skipping because no authorization provided'
             exit 0
           fi
@@ -256,7 +255,7 @@ jobs:
       - name: Check notarization credentials
         run: |
           if [ -z "$APPLE_AUTH" ]
-          then 
+          then
             echo 'Skipping because no authorization provided'
             exit 0
           fi
@@ -266,7 +265,7 @@ jobs:
           echo "::add-mask::$Z"
           if ! eval xcrun altool $APPLE_AUTH  --list-apps  &> /dev/null
           then
-            curl -X POST -H "Content-Type: application/json" -d '{}' https://maker.ifttt.com/trigger/NotarizationBroken/with/key/$Z$T
+            curl -X POST -H "Content-Type: application/json" -d '{"value1":"'$GITHUB_REPOSITORY'"}' https://maker.ifttt.com/trigger/NotarizationBroken/with/key/$Z$T
           fi
         shell: bash
         env:
@@ -359,9 +358,9 @@ jobs:
           GIT_LOG="Changes since previous build:
           $GIT_LOG
           For linux it is recommended to use snap:
-          
+
                sudo snap install solar2d
-          
+
           "
           else
           GIT_LOG='See https://github.com/pouwelsjochem/corona for details

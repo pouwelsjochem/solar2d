@@ -557,7 +557,6 @@
     <ClInclude Include="..\Rtt_EmscriptenWebViewObject.h" />
     <ClInclude Include="..\Rtt_LuaLibWebAudio.h" />
     <ClInclude Include="..\Rtt_PlatformWebAudioPlayer.h" />
-    <ClInclude Include="..\win32\Rtt_EmscriptenPlatformWin.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\external\ALmixer\luaal.c" />
@@ -979,7 +978,6 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Emscripten'">-std=c++11 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Emscripten'">-std=c++11 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
-    <ClCompile Include="..\win32\Rtt_EmscriptenPlatformWin.cpp" />
     <ClCompile Include="GeneratedFiles\CoronaLibrary_luaload.cpp" />
     <ClCompile Include="GeneratedFiles\CoronaPrototype_luaload.cpp" />
     <ClCompile Include="GeneratedFiles\CoronaProvider_luaload.cpp" />

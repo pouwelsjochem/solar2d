@@ -518,7 +518,6 @@ public class JavaToNativeShim {
 		}
 		nativePopupClosedEvent( runtime.getJavaToNativeBridgeAddress(), popupName, wasCanceled );
 	}
-
 	public static CoronaRuntime getCoronaRuntimeFromBridge(long address) {
 		return (CoronaRuntime)nativeGetCoronaRuntime(address);
 	}

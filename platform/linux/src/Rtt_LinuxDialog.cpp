@@ -42,7 +42,7 @@ namespace Rtt
 	bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* w, int* h)
 	{
 		// Load from file
-		FILE * f = fopen(filename, "rb");
+		FILE* f = fopen(filename, "rb");
 		if (f)
 		{
 			unsigned char* img = bitmapUtil::loadPNG(f, *w, *h);
@@ -116,14 +116,15 @@ namespace Rtt
 	// Dlg base class
 	//
 
-	Window::Window(const string& title, int w, int h)
+	Window::Window(const string& title, int w, int h, Uint32 flags)
 	{
 		// save state
 		window = SDL_GL_GetCurrentWindow();
 		glcontext = SDL_GL_GetCurrentContext();
 		imctx = ImGui::GetCurrentContext();
 
-		fWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+		flags |= SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI;
+		fWindow = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, flags);
 		fGLcontext = SDL_GL_CreateContext(fWindow);
 
 		fImCtx = ImGui::CreateContext();
@@ -983,6 +984,7 @@ namespace Rtt
 		, fShowErrors(true)
 		, fOpenlastProject(false)
 		, fStyleIndex(0)
+		, fDebugBuildProcess(false)
 	{
 		Config& cfg = app->GetConfig();
 		fRelaunchIndex = cfg["relaunchOnFileChange"].to_string() == "Always" ? 0 : (cfg["relaunchOnFileChange"].to_string() == "Ask" ? 2 : 1);
@@ -990,6 +992,7 @@ namespace Rtt
 		fShowErrors = cfg["showRuntimeErrors"].to_bool();
 		fOpenlastProject = cfg["openLastProject"].to_bool();
 		fStyleIndex = cfg["ColorScheme"].to_string() == "Light" ? 0 : (cfg["ColorScheme"].to_string() == "Dark" ? 2 : 1);
+		fDebugBuildProcess = cfg["debugBuildProcess"].to_int() > 0;
 	}
 
 	DlgPreferences::~DlgPreferences()
@@ -1006,6 +1009,7 @@ namespace Rtt
 			ImGui::Checkbox("Don't show the Welcome window", &fShowWelcome);
 			ImGui::Checkbox("Show Runtime Errorrs", &fShowErrors);
 			ImGui::Checkbox("Automatically open last project", &fOpenlastProject);
+			ImGui::Checkbox("Debug Build Process", &fDebugBuildProcess);
 
 			string s = "Relaunch Simulator when project is modified";
 			ImGui::Dummy(ImVec2(100, 10));
@@ -1041,6 +1045,7 @@ namespace Rtt
 				cfg["ShowWelcome"] = fShowWelcome;
 				cfg["showRuntimeErrors"] = fShowErrors;
 				cfg["openLastProject"] = fOpenlastProject;
+				cfg["debugBuildProcess"] = fDebugBuildProcess ? 100 : 0;
 				cfg["ColorScheme"] = fStyleIndex == 0 ? "Light" : (fStyleIndex == 2 ? "Dark" : "Standard");
 				cfg.Save();
 
@@ -1243,7 +1248,7 @@ namespace Rtt
 	//
 
 	DlgAlert::DlgAlert(const char* title, const char* msg, const char** buttonLabels, int numButtons, LuaResource* resource)
-		: Window(title, 400, 300)
+		: Window(title, 400, 150)
 		, fMsg(msg)
 		, fCallback(resource)
 	{

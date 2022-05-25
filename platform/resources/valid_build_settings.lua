@@ -23,9 +23,10 @@ stoplist = {
 	"strings",
 	"coronaActivityFlags",
 	"entitlements",
+	"xcassets",
 }
 
-settings = 
+settings =
 {
 	android =
 	{
@@ -35,8 +36,6 @@ settings =
 		versionName = "",  -- Can be a string or number. String is preferred.
 		installLocation = "",
 
-		supportsTV = true,
-		isGame = true,
 		versionCode = "",
 		usesExpansionFile = true,
 		supportsTV = true,
@@ -110,7 +109,7 @@ settings =
 
 	iphone =
 	{
-        iCloud = true,
+		iCloud = true,
 		skipPNGCrush = true,
 		xcassets = "",
 		entitlements = { },
@@ -120,36 +119,36 @@ settings =
 			CFBundleIconFile = "DEPRECATED",
 			CFBundleIconFiles =
 			{
-				"", 
+				"",
 			},
 			CFBundleURLTypes =
 			{
 				CFBundleURLSchemes = {
-					"", 
+					"",
 				}
 			},
 			UISupportedInterfaceOrientations = { "CORONA" },
 			UIApplicationExitsOnSuspend = false,
-			UIPrerenderedIcon = true,
 			LSApplicationQueriesSchemes = { "" },
 			FacebookAppID = "",
 			CFBundleIdentifier = "",
 			CFBundleShortVersionString = "",
 			CFBundleDisplayName = "",
-            CFBundleName = "",
+			CFBundleName = "",
 			CFBundleVersion = "",
-            UILaunchImages = {
-                {
-                    ["UILaunchImageMinimumOSVersion"] = "",
-                    ["UILaunchImageName"] = "",
-                    ["UILaunchImageOrientation"] = "",
-                    ["UILaunchImageSize"] = "",
-                },
+			UILaunchImages = {
+				{
+					["UILaunchImageMinimumOSVersion"] = "",
+					["UILaunchImageName"] = "",
+					["UILaunchImageOrientation"] = "",
+					["UILaunchImageSize"] = "",
+				},
 			},
-            UILaunchStoryboardName = "", -- optional replacement for UILaunchImages
-            UIPrerenderedIcon = true,
-            MinimumOSVersion = "",
+			UILaunchStoryboardName = "", -- optional replacement for UILaunchImages
+			UIPrerenderedIcon = true,
+			MinimumOSVersion = "",
 			UIRequiredDeviceCapabilities = { },
+			UIViewControllerBasedStatusBarAppearance = false,
             CoronaUseIOS8LandscapeOnlyWorkaround = true,
 			UIBackgroundModes = {'remote-notification'},
 			CoronaWindowMovesWhenKeyboardAppears = false,
@@ -161,10 +160,10 @@ settings =
 			},
 			NSAppTransportSecurity = {
 				NSAllowsArbitraryLoads = false,
-			    NSAllowsArbitraryLoadsInMedia = false,
-			    NSAllowsArbitraryLoadsInWebContent = false,
-			    NSAllowsLocalNetworking = false,
-			    NSExceptionDomains = {},
+				NSAllowsArbitraryLoadsInMedia = false,
+				NSAllowsArbitraryLoadsInWebContent = false,
+				NSAllowsLocalNetworking = false,
+				NSExceptionDomains = {},
 			},
 			NSAppleMusicUsageDescription = "",
 			NSUserTrackingUsageDescription = "",
@@ -192,29 +191,29 @@ settings =
 		iCloud = {},
 		bundleResourcesDirectory = "",
 		entitlements = { },
-		plist = 
+		plist =
 		{
 			CFBundleURLTypes = {
 				{
 					CFBundleURLName = "",
-					CFBundleURLSchemes = 
+					CFBundleURLSchemes =
 					{
 						"",
 					}
 				}
 			},
-			CFBundleDocumentTypes = 
+			CFBundleDocumentTypes =
 			{
 				{
-                    CFBundleTypeExtensions =
-                    {
-                        "png",
-                    },
+					CFBundleTypeExtensions =
+					{
+						"png",
+					},
 					CFBundleTypeIconFile = "",
 					CFBundleTypeName = "",
-                    CFBundleTypeRole = "",
+					CFBundleTypeRole = "",
 					LSHandlerRank = "",
-					LSItemContentTypes = 
+					LSItemContentTypes =
 					{
 						"",
 					}
@@ -224,10 +223,10 @@ settings =
 			NSContactsUsageDescription = "",
 			NSAppTransportSecurity = {
 				NSAllowsArbitraryLoads = true,
-			    NSAllowsArbitraryLoadsInMedia = true,
-			    NSAllowsArbitraryLoadsInWebContent = true,
-			    NSAllowsLocalNetworking = true,
-			    NSExceptionDomains = {},
+				NSAllowsArbitraryLoadsInMedia = true,
+				NSAllowsArbitraryLoadsInWebContent = true,
+				NSAllowsLocalNetworking = true,
+				NSExceptionDomains = {},
 			},
 			ITSAppUsesNonExemptEncryption = false,
 			LSMinimumSystemVersion = "",

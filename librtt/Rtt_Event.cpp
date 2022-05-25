@@ -2106,7 +2106,6 @@ PopupClosedEvent::Push( lua_State *L ) const
 }
 
 // ----------------------------------------------------------------------------
-
 const char FinalizeEvent::kName[] = "finalize";
 
 FinalizeEvent::FinalizeEvent()

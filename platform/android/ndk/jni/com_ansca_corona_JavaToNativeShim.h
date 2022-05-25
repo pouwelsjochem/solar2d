@@ -370,7 +370,6 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeMemoryWarnin
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativePopupClosedEvent
   (JNIEnv *, jclass, jlong, jstring, jboolean);
-
 JNIEXPORT jobject JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeGetCoronaRuntime
   (JNIEnv *, jclass, jlong);
 

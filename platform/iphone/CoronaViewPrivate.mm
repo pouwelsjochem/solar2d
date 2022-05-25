@@ -33,6 +33,7 @@
 #include "Rtt_IPhonePlatformBase.h"
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_Runtime.h"
+#import <objc/runtime.h>
 
 #if defined( Rtt_IPHONE_ENV )
 	#include "Rtt_IPhonePlatformCore.h"
@@ -900,7 +901,6 @@ PrintTouches( NSSet *touches, const char *header )
 	[super setBounds:bounds];
 	fShouldInvalidate = true;
 }
-
 // CoronaGyroscopeObserver
 // ----------------------------------------------------------------------------
 #pragma mark # CoronaGyroscopeObserver

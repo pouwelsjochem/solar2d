@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -61,18 +61,17 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & 
 
 	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast);
 	CGBitmapInfo dstBitmapInfo = kCGImageAlphaPremultipliedLast;
-
 	CGDataProviderRef dataProvider = CGDataProviderCreateWithData( NULL, buffer, numBytes, NULL );
 	CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
 	CGImageRef imageRef = CGImageCreate(w, h, 8, 32, w*bytesPerPixel,
                                         colorspace, srcBitmapInfo, dataProvider,
                                         NULL, true, kCGRenderingIntentDefault);
-    
+
 
 	Rtt_ASSERT( w == CGImageGetWidth( imageRef ) );
 	Rtt_ASSERT( h == CGImageGetHeight( imageRef ) );
-    
-    
+
+
 	//void* pixels = calloc( bytesPerRow, h );
 	CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, w*bytesPerPixel, colorspace, dstBitmapInfo);
 	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
@@ -80,7 +79,6 @@ IPhonePlatformCore::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & 
 	UIImage* image = [[UIImage alloc] initWithCGImage:flippedImageRef];
 
 	NSData *bitmapImageRepData = UIImagePNGRepresentation( image );
-
 	[image release];
 	CGImageRelease( flippedImageRef );
 	CGColorSpaceRelease( colorspace );
@@ -134,13 +132,12 @@ IPhonePlatformCore::RegisterUserNotificationSettings(int type) const
 		[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
 	}
 }
-	
+
 void
 IPhonePlatformCore::RegisterUserNotificationSettings() const
 {
 	RegisterUserNotificationSettings(Rtt_UIUserNotificationTypeAlert|Rtt_UIUserNotificationTypeBadge|Rtt_UIUserNotificationTypeSound);
 }
-
 void
 IPhonePlatformCore::SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const
 {
@@ -198,4 +195,3 @@ IPhonePlatformCore::PushNativeProperty( lua_State *L, const char *key ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -1123,7 +1123,6 @@ JavaToNativeBridge::PopupClosedEvent( JNIEnv *env, jstring popupName, jboolean w
 		fNativeToJavaBridge->RaisePopupClosedEvent(popupNameJavaString.getUTF8(), wasCanceled);
 	}
 }
-
 const char*
 JavaToNativeBridge::GetBuildId()
 {

@@ -1892,7 +1892,6 @@ public class NativeToJavaBridge {
 			inputDeviceInterface.vibrate();
 		}
 	}
-
 	/**
 	 * Provides access to API Level 21 (Android 5.0 Lollipop) features.
 	 * Should only be accessed if running on an operating system matching this API Level.
