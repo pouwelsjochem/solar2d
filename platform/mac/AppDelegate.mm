@@ -93,7 +93,6 @@
 
 #import "IOSAppBuildController.h"
 #import "AndroidAppBuildController.h"
-#import "WebAppBuildController.h"
 #import "LinuxAppBuildController.h"
 #import "OSXAppBuildController.h"
 #import "TVOSAppBuildController.h"
@@ -522,7 +521,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         fAndroidAppBuildController = nil;
         fIOSAppBuildController = nil;
 		fOSXAppBuildController = nil;
-		fWebAppBuildController = nil;
 		fLinuxAppBuildController = nil;
 
 		fServices = NULL;
@@ -1917,11 +1915,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	return [self isBuildAvailable];
 }
 
--(BOOL)isHTML5BuildHidden
-{
-	return false;
-}
-
 -(BOOL)isLinuxBuildHidden
 {
 	return ! [[NSUserDefaults standardUserDefaults] boolForKey:kEnableLinuxBuild];
@@ -2037,39 +2030,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	}
 
     [fAndroidAppBuildController showWindow:self];
-}
-
--(IBAction)openForBuildHTML5:(id)sender
-{
-	[self willOpenForBuild:sender];
-	
-	if ( ! fWebAppBuildController )
-	{
-		fWebAppBuildController = [[WebAppBuildController alloc] initWithWindowNibName:@"WebAppBuild" projectPath:fAppPath];
-	}
-	
-	Rtt_ASSERT(fWebAppBuildController);
-	
-	// If the simulator was not suspended prior to building, suspend it.
-	fSimulatorWasSuspended = fSimulator->GetPlayer()->GetRuntime().IsSuspended();
-	if( ! fSimulatorWasSuspended )
-	{
-		[self willChangeValueForKey:@"suspendResumeLabel"];
-		fSimulator->ToggleSuspendResume(false);
-		[self didChangeValueForKey:@"suspendResumeLabel"];
-	}
-	
-	[self willChangeValueForKey:@"projectPath"];
-	projectPath = fAppPath;
-	[self didChangeValueForKey:@"projectPath"];
-	
-	[self prepareController:fWebAppBuildController];
-	if (! [fWebAppBuildController verifyBuildTools:sender])
-	{
-		return;
-	}
-
-	[fWebAppBuildController showWindow:self];
 }
 
 -(IBAction)openForBuildLinux:(id)sender

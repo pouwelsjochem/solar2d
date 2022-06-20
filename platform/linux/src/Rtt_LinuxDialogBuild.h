@@ -85,19 +85,4 @@ namespace Rtt
 		smart_ptr<mythread> fThread;
 	};
 
-	struct DlgHTML5Build : public DlgBuild
-	{
-		DlgHTML5Build(const std::string& title, int w, int h);
-		virtual ~DlgHTML5Build();
-
-		void Draw() override;
-
-	private:
-
-		void Build();
-
-		ImGui::FileBrowser fileDialog;
-		smart_ptr<mythread> fThread;
-	};
-
 }

@@ -28,7 +28,6 @@
 @class IOSAppBuildController;
 @class OSXAppBuildController;
 @class TVOSAppBuildController;
-@class WebAppBuildController;
 @class LinuxAppBuildController;
 @class NSError;
 @class NSMatrix;
@@ -116,7 +115,6 @@ namespace Rtt
     IOSAppBuildController *fIOSAppBuildController;
 	OSXAppBuildController *fOSXAppBuildController;
 	TVOSAppBuildController *fTVOSAppBuildController;
-	WebAppBuildController *fWebAppBuildController;
 	LinuxAppBuildController *fLinuxAppBuildController;
 
 	Rtt::MacPlatformServices *fServices;
@@ -156,7 +154,6 @@ namespace Rtt
 -(BOOL)isRunnable;
 -(BOOL)isBuildAvailable;
 -(BOOL)isAndroidBuildAvailable;
--(BOOL)isHTML5BuildHidden;
 @property (assign) IBOutlet NSMenuItem *ccc;
 -(BOOL)isLinuxBuildHidden;
 -(BOOL)isTVOSBuildHidden;
@@ -189,7 +186,6 @@ namespace Rtt
 
 -(IBAction)openForBuildiOS:(id)sender;
 -(IBAction)openForBuildAndroid:(id)sender;
--(IBAction)openForBuildHTML5:(id)sender;
 -(IBAction)openForBuildLinux:(id)sender;
 -(IBAction)openForBuildOSX:(id)sender;
 -(IBAction)openForBuildTVOS:(id)sender;

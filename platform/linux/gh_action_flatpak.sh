@@ -15,11 +15,6 @@ sudo flatpak install org.freedesktop.Sdk//21.08 -y
 
 rm -rf docs/SampleCode/.git docs/SampleCode/.gitignore
 
-if [ -e Webtemplate/webtemplate.zip ]
-then
-    cp -v Webtemplate/webtemplate.zip platform/resources/webtemplate.zip
-fi
-
 if [ -e Native/CoronaNative.tar.gz ]
 then
     tar -xvzf Native/CoronaNative.tar.gz CoronaEnterprise/Corona/android/resource/android-template.zip CoronaEnterprise/Corona/android/lib/gradle/Corona.aar

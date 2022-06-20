@@ -5,7 +5,7 @@ Sometimes Xcode doesn't follow dependency order for tools, so you may have to bu
 
 # Building your app with simulator
 
-Note, that updated code would only work in Simulator. Device builds (like iOS, Android or HTML5) require special templates to be built first.
+Note, that updated code would only work in Simulator. Device builds (like iOS, Android) require special templates to be built first.
 
 ## Building iOS/tvOS apps
 

@@ -335,8 +335,6 @@
 		A40C524016F847EA00AE2ECF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A40C523E16F847EA00AE2ECF /* CoronaVersion.c */; };
 		A41AC0E716A5DB5C00AD331A /* easing.lua in Sources */ = {isa = PBXBuildFile; fileRef = A41AC0E516A5DAD300AD331A /* easing.lua */; };
 		A41AC1B916A75A9E00AD331A /* gameNetwork.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A41AC1B516A75A7600AD331A /* gameNetwork.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		A425455B18DBA04800EE06A8 /* WebAppBuild.xib in Resources */ = {isa = PBXBuildFile; fileRef = A425455918DBA04700EE06A8 /* WebAppBuild.xib */; };
-		A425457418E4FD6400EE06A8 /* webPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A425457318E4FD1800EE06A8 /* webPackageApp.lua */; };
 		A4328841176A621200ACB6FF /* Rtt_BitmapMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E2176A621100ACB6FF /* Rtt_BitmapMask.cpp */; };
 		A4328843176A621200ACB6FF /* Rtt_BitmapPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E4176A621100ACB6FF /* Rtt_BitmapPaint.cpp */; };
 		A4328845176A621200ACB6FF /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E6176A621100ACB6FF /* Rtt_BufferBitmap.cpp */; };
@@ -412,7 +410,6 @@
 		A43FE9BD14F057DA0042FA41 /* Rtt_ArrayTupleStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43FE9BB14F057D80042FA41 /* Rtt_ArrayTupleStruct.cpp */; };
 		A43FE9C314F068400042FA41 /* Rtt_ArrayTuple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43FE9C114F0683F0042FA41 /* Rtt_ArrayTuple.cpp */; };
 		A44308DC164C755600B9117B /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44308DA164C74BE00B9117B /* libplugins.a */; };
-		A45EBE1418E6465A0010C678 /* Rtt_WebAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A45EBE1218E6465A0010C678 /* Rtt_WebAppPackager.cpp */; };
 		A46AC88017820BEB00BE6805 /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */; };
 		A46AC88C17820CA400BE6805 /* Rtt_ShapeAdapterRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */; };
 		A46AC8C5178A260300BE6805 /* Rtt_UseCount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8BA178A25ED00BE6805 /* Rtt_UseCount.cpp */; };
@@ -915,7 +912,6 @@
 		C229E1DB1B32221B00D87A7C /* remdebug_engine.lua in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C8612B720C90057F594 /* remdebug_engine.lua */; };
 		C229E1DE1B32221B00D87A7C /* shell.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D112B7400900D9B6A4 /* shell.lua */; };
 		C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A43288A1176A626B00ACB6FF /* shell_default_gl.lua */; };
-		C229E1E71B32221B00D87A7C /* webPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A425457318E4FD1800EE06A8 /* webPackageApp.lua */; };
 		C231262F1B8FC1B20061A232 /* android_sendapp.sh in Resources */ = {isa = PBXBuildFile; fileRef = C231262E1B8FC1B20061A232 /* android_sendapp.sh */; };
 		C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C244C1001A8183B1008DBA56 /* network.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = 0727BA8616E68FE800981C4B /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -1141,9 +1137,7 @@
 		C2FCD3E11B38CF4B00EF7B02 /* Rtt_IOSAppPackager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CE912B720C90057F594 /* Rtt_IOSAppPackager.mm */; };
 		C2FCD3E31B38D03C00EF7B02 /* AndroidAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F36554146C44200019808D /* AndroidAppBuildController.mm */; };
 		C2FCD3E41B38D06000EF7B02 /* AppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B00FA014565609008FB6E6 /* AppBuildController.mm */; };
-		C2FCD3E61B38D0BD00EF7B02 /* WebAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A425454E18DB9EF400EE06A8 /* WebAppBuildController.mm */; };
 		E23CD30D147C725200BC9038 /* BuildSessionState.mm in Sources */ = {isa = PBXBuildFile; fileRef = E23CD30C147C725200BC9038 /* BuildSessionState.mm */; };
-		F500FB401FED5CE20050B28B /* webtemplate.zip in Resources */ = {isa = PBXBuildFile; fileRef = F500FB3F1FED5CE20050B28B /* webtemplate.zip */; };
 		F50F51B81B700C04006FEF92 /* Rtt_TextureResourceBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50F51B61B700C04006FEF92 /* Rtt_TextureResourceBitmap.cpp */; };
 		F50F51B91B700C04006FEF92 /* Rtt_TextureResourceBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F50F51B61B700C04006FEF92 /* Rtt_TextureResourceBitmap.cpp */; };
 		F50F51BA1B700C04006FEF92 /* Rtt_TextureResourceBitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = F50F51B71B700C04006FEF92 /* Rtt_TextureResourceBitmap.h */; };
@@ -2163,10 +2157,6 @@
 		A41AC0E516A5DAD300AD331A /* easing.lua */ = {isa = PBXFileReference; lastKnownFileType = text; name = easing.lua; path = ../../subrepos/easing/easing.lua; sourceTree = SOURCE_ROOT; };
 		A41AC0F316A5DC6D00AD331A /* Rtt_LuaFrameworks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaFrameworks.h; sourceTree = "<group>"; };
 		A41AC1B516A75A7600AD331A /* gameNetwork.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = gameNetwork.dylib; path = "../../plugins/build-core/gameNetwork/mac/gameNetwork.dylib"; sourceTree = "<group>"; };
-		A425454D18DB9EF400EE06A8 /* WebAppBuildController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebAppBuildController.h; sourceTree = "<group>"; };
-		A425454E18DB9EF400EE06A8 /* WebAppBuildController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebAppBuildController.mm; sourceTree = "<group>"; };
-		A425455A18DBA04700EE06A8 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/WebAppBuild.xib; sourceTree = "<group>"; };
-		A425457318E4FD1800EE06A8 /* webPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = webPackageApp.lua; path = ../platform/resources/webPackageApp.lua; sourceTree = "<group>"; };
 		A42C5BFB12D56EEE0046B8A6 /* Rtt_TargetDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_TargetDevice.h; sourceTree = "<group>"; };
 		A42C5BFC12D56EFE0046B8A6 /* Rtt_TargetDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_TargetDevice.cpp; sourceTree = "<group>"; };
 		A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MRuntimeDelegate.h; sourceTree = "<group>"; };
@@ -2271,8 +2261,6 @@
 		A43FE9BC14F057D90042FA41 /* Rtt_ArrayTupleStruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_ArrayTupleStruct.h; sourceTree = "<group>"; };
 		A43FE9C114F0683F0042FA41 /* Rtt_ArrayTuple.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_ArrayTuple.cpp; sourceTree = "<group>"; };
 		A43FE9C214F068400042FA41 /* Rtt_ArrayTuple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_ArrayTuple.h; sourceTree = "<group>"; };
-		A45EBE1218E6465A0010C678 /* Rtt_WebAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_WebAppPackager.cpp; path = ../shared/Rtt_WebAppPackager.cpp; sourceTree = "<group>"; };
-		A45EBE1318E6465A0010C678 /* Rtt_WebAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_WebAppPackager.h; path = ../shared/Rtt_WebAppPackager.h; sourceTree = "<group>"; };
 		A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TesselatorRect.cpp; path = Display/Rtt_TesselatorRect.cpp; sourceTree = "<group>"; };
 		A46AC87F17820BE000BE6805 /* Rtt_TesselatorRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TesselatorRect.h; path = Display/Rtt_TesselatorRect.h; sourceTree = "<group>"; };
 		A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ShapeAdapterRect.cpp; path = Display/Rtt_ShapeAdapterRect.cpp; sourceTree = "<group>"; };
@@ -2460,7 +2448,6 @@
 		C2FCEBA51B701A1800587F1E /* gameoverlayrenderer.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = gameoverlayrenderer.dylib; path = /Applications/Steam.app/Contents/MacOS/gameoverlayrenderer.dylib; sourceTree = "<group>"; };
 		E23CD30B147C725200BC9038 /* BuildSessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuildSessionState.h; sourceTree = "<group>"; };
 		E23CD30C147C725200BC9038 /* BuildSessionState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BuildSessionState.mm; sourceTree = "<group>"; };
-		F500FB3F1FED5CE20050B28B /* webtemplate.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; name = webtemplate.zip; path = ../resources/webtemplate.zip; sourceTree = "<group>"; };
 		F50F51B61B700C04006FEF92 /* Rtt_TextureResourceBitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceBitmap.cpp; path = Display/Rtt_TextureResourceBitmap.cpp; sourceTree = "<group>"; };
 		F50F51B71B700C04006FEF92 /* Rtt_TextureResourceBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceBitmap.h; path = Display/Rtt_TextureResourceBitmap.h; sourceTree = "<group>"; };
 		F53594B31B6185EA00C8CAAD /* Rtt_TextureResourceCanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceCanvas.cpp; path = Display/Rtt_TextureResourceCanvas.cpp; sourceTree = "<group>"; };
@@ -3123,7 +3110,6 @@
 				000CE8D112B7400900D9B6A4 /* shell.lua */,
 				A40A90781BD9A5C1001D2038 /* tvosPackageApp.lua */,
 				C2AF1E4F1DA6D80B00907A65 /* ValidateSettings.lua */,
-				A425457318E4FD1800EE06A8 /* webPackageApp.lua */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -3278,7 +3264,6 @@
 			children = (
 				F57469D6240291FA00CA5949 /* iostemplate */,
 				F5C39D7C23EBCC280058DD5E /* CoronaSimulator.entitlements */,
-				F500FB3F1FED5CE20050B28B /* webtemplate.zip */,
 				F545474A21178F7400D5EDB7 /* linuxtemplate_x64.tgz */,
 				C2088D251D8A1B8300F2AD0B /* device-support */,
 				C220A3B31BFBED7F00161EC8 /* xcodesim_syslog.sh */,
@@ -3817,11 +3802,6 @@
 				A40A906E1BD99B23001D2038 /* TVOSAppPackageSheet.xib */,
 				A40A90751BD9A4B1001D2038 /* Rtt_TVOSAppPackager.h */,
 				A40A90761BD9A4B1001D2038 /* Rtt_TVOSAppPackager.mm */,
-				A425455918DBA04700EE06A8 /* WebAppBuild.xib */,
-				A425454D18DB9EF400EE06A8 /* WebAppBuildController.h */,
-				A425454E18DB9EF400EE06A8 /* WebAppBuildController.mm */,
-				A45EBE1218E6465A0010C678 /* Rtt_WebAppPackager.cpp */,
-				A45EBE1318E6465A0010C678 /* Rtt_WebAppPackager.h */,
 			);
 			name = "App Builds";
 			sourceTree = "<group>";
@@ -4875,7 +4855,6 @@
 				004A5F371368DB24003BD9DA /* Corona3rdPartyLicenses.txt in Resources */,
 				00B73ECE12B730AA0057F594 /* ant-launcher.jar in Resources */,
 				C2AF1E501DA6D80B00907A65 /* ValidateSettings.lua in Resources */,
-				F500FB401FED5CE20050B28B /* webtemplate.zip in Resources */,
 				00B73ECF12B730AA0057F594 /* ant.jar in Resources */,
 				00B73ED012B730AA0057F594 /* ListKeyStore.jar in Resources */,
 				00B73ED112B730AA0057F594 /* AntInvoke.jar in Resources */,
@@ -4915,7 +4894,6 @@
 				C25E494E1A772743009551DB /* Credits.rtfd in Resources */,
 				A4F36552146C44030019808D /* AndroidAppBuild.xib in Resources */,
 				C26D8DA4195104D7008DE65C /* re.lua in Resources */,
-				A425455B18DBA04800EE06A8 /* WebAppBuild.xib in Resources */,
 				F5FED7091DF8E1C7001CA415 /* AntLiveManifest.jar in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5363,7 +5341,6 @@
 				C208322D1AA54ADD005D2680 /* remdebug_engine.lua in Sources */,
 				000CE8D612B7400900D9B6A4 /* shell.lua in Sources */,
 				A43288B9176A67E600ACB6FF /* shell_default_gl.lua in Sources */,
-				A425457418E4FD6400EE06A8 /* webPackageApp.lua in Sources */,
 				F5A752291BFA40F000CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5471,7 +5448,6 @@
 				000CE90212B7404400D9B6A4 /* Rtt_PlatformPlayer.cpp in Sources */,
 				000CE90312B7404400D9B6A4 /* Rtt_PlatformSimulator.cpp in Sources */,
 				0718C13916E94A9D00FD5F45 /* Rtt_TargetAndroidAppStore.cpp in Sources */,
-				A45EBE1418E6465A0010C678 /* Rtt_WebAppPackager.cpp in Sources */,
 				F57D17761BE2713B00AABAC1 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				C20F8AD81AD78CAB0034BD21 /* SDKList.m in Sources */,
 				002D1B48145BB621002B69B6 /* SPILDTopLayerView.m in Sources */,
@@ -5483,7 +5459,6 @@
 				A40A90771BD9A4B1001D2038 /* Rtt_TVOSAppPackager.mm in Sources */,
 				0026295A12F88DB4009CB2A1 /* ValidationToolOutputViewController.m in Sources */,
 				00B73DAA12B720CA0057F594 /* VersionLabel.m in Sources */,
-				C2FCD3E61B38D0BD00EF7B02 /* WebAppBuildController.mm in Sources */,
 				0028FC4014FEC5E400B40EC3 /* XcodeToolHelper.m in Sources */,
 				002D1B4B145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m in Sources */,
 				000CE90A12B7409400D9B6A4 /* hmac_sha2.c in Sources */,
@@ -5793,7 +5768,6 @@
 				C229E1DB1B32221B00D87A7C /* remdebug_engine.lua in Sources */,
 				C229E1DE1B32221B00D87A7C /* shell.lua in Sources */,
 				C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */,
-				C229E1E71B32221B00D87A7C /* webPackageApp.lua in Sources */,
 				F5A7522A1BFA40F000CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6082,14 +6056,6 @@
 				A40A90621BD99B0D001D2038 /* English */,
 			);
 			name = TVOSAppBuild.xib;
-			sourceTree = "<group>";
-		};
-		A425455918DBA04700EE06A8 /* WebAppBuild.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A425455A18DBA04700EE06A8 /* English */,
-			);
-			name = WebAppBuild.xib;
 			sourceTree = "<group>";
 		};
 		A4B00FA5145656A9008FB6E6 /* OSXAppBuild.xib */ = {

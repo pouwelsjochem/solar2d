@@ -35,7 +35,6 @@ bool ValidationSupportMacUI_ValidateIOSAppName( const char* name, const char* fi
 - (id) initWithParentWindow:(NSWindow*)window;
 - (bool) runAndroidFileValidationTestsInProjectPath:(NSString*)projectpath;
 - (bool) runIOSAppNameValidation:(NSString*)appname;
-- (bool) runWebAppNameValidation:(NSString*)appname;
 - (bool) runOSXAppNameValidation:(NSString*)appname;
 
 @end

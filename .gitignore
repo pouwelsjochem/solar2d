@@ -131,7 +131,6 @@ platform/win32/runtime.cpp
 platform/win32/shell.cpp
 platform/win32/remdebug_engine.cpp
 platform/win32/remdebug_engine.lua
-platform/win32/webPackageApp.cpp
 platform/windows/Bin/*
 platform/windows/**/Bin/*
 platform/windows/**/Generated Files/*

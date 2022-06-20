@@ -308,10 +308,6 @@ namespace Rtt
 			fDlg = new DlgAndroidBuild("Android Build Setup", 650, 350);
 			break;
 
-		case sdl::OnBuildHTML5:
-			fDlg = new DlgHTML5Build("HTML5 Build Setup", 640, 260);
-			break;
-
 		case sdl::OnStyleColorsLight:
 			ImGui::StyleColorsLight();
 			break;

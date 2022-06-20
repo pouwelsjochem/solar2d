@@ -191,7 +191,6 @@ SET( LUA_SOURCES
 	"${CORONA_ROOT}/librtt/Display/Shader/shell_default_gl.lua"
 	"${CORONA_ROOT}/external/lpeg/re.lua"
 	"${CORONA_ROOT}/platform/resources/linuxPackageApp.lua"
-	"${CORONA_ROOT}/platform/resources/webPackageApp.lua"
 	"${CORONA_ROOT}/plugins/network/shared/network.lua"
 	"${CORONA_ROOT}/tools/CoronaBuilder/CoronaBuilder.lua"
 	"${CORONA_ROOT}/tools/CoronaBuilder/BuilderPluginDownloader.lua"
@@ -613,7 +612,6 @@ SET( SOLAR2D_SOURCES
 		${Lua2CppOutputDir}/kernel_generator_sunbeams_gl.cpp
 		${Lua2CppOutputDir}/shell_default_gl.cpp
 		${Lua2CppOutputDir}/linuxPackageApp.cpp
-		${Lua2CppOutputDir}/webPackageApp.cpp
 		${Lua2CppOutputDir}/network.cpp
 		${Lua2CppOutputDir}/create_build_properties.cpp
 		${Lua2CppOutputDir}/CoronaBuilder.cpp
@@ -785,7 +783,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/platform/shared/Rtt_BitmapUtils.cpp
 		${CORONA_ROOT}/platform/shared/Rtt_LinuxAppPackager.cpp
 		${CORONA_ROOT}/platform/android/Rtt_AndroidAppPackager.cpp
-		${CORONA_ROOT}/platform/shared/Rtt_WebAppPackager.cpp
 		${CORONA_ROOT}/platform/shared/Rtt_PlatformAppPackager.cpp
 		${CORONA_ROOT}/platform/linux/src/NetworkLibrary.cpp
 		${CORONA_ROOT}/platform/linux/src/NetworkSupport.cpp
@@ -878,7 +875,6 @@ add_executable( Solar2DBuilder
 	${CORONA_ROOT}/tools/CoronaBuilder/Rtt_CoronaBuilder.cpp
 	${CORONA_ROOT}/tools/CoronaBuilder/Rtt_AppPackagerFactory.cpp
 	${CORONA_ROOT}/tools/CoronaBuilder/Rtt_AppPackagerAndroidFactory.cpp
-	${CORONA_ROOT}/tools/CoronaBuilder/Rtt_AppPackagerHTML5Factory.cpp
 	${CORONA_ROOT}/tools/CoronaBuilder/Rtt_AppPackagerLinuxFactory.cpp
 	${CORONA_ROOT}/tools/CoronaBuilder/Rtt_BuildParams.cpp
 	${CORONA_ROOT}/tools/CoronaBuilder/Rtt_DownloadPluginsMain.cpp

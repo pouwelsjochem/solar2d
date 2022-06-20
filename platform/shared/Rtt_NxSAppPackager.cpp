@@ -134,7 +134,7 @@ namespace Rtt
 				{
 					const char* fileToInclude = sourceFilePathCollection.at(fileIndex).c_str();
 
-					// pack only .lu files because all other files will be packed by html5 Lua builder
+					// pack only .lu files because all other files will be packed by Lua builder
 					int size = strlen(fileToInclude);
 					if (size > 3 && strcmp(fileToInclude + size - 3, ".lu") == 0)
 					{

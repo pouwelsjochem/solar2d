@@ -16,7 +16,7 @@ A clear and concise description of what the bug is.
 
 **Platforms involved**
 Building on: macOS 10-15-16/Windows 7-8-10/
-Building for: tvOS/iOS/macOS/Windows/HTML5/Linux/Android
+Building for: tvOS/iOS/macOS/Windows/Linux/Android
 
 **Attach your build.settings**
 

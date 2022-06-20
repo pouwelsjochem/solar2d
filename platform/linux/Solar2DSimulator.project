@@ -30,12 +30,9 @@
       <File Name="src/Rtt_HTTPClientLinux.cpp"/>
       <VirtualDirectory Name="packagers">
         <VirtualDirectory Name="include">
-          <File Name="../shared/Rtt_WebAppPackager.h"/>
           <File Name="../shared/Rtt_LinuxAppPackager.h"/>
           <File Name="../android/Rtt_AndroidAppPackager.h"/>
         </VirtualDirectory>
-        <File Name="lua/webPackageApp.cpp"/>
-        <File Name="../shared/Rtt_WebAppPackager.cpp"/>
         <File Name="../shared/Rtt_LinuxAppPackager.cpp"/>
         <File Name="lua/linuxPackageApp.cpp"/>
         <File Name="../android/Rtt_AndroidAppPackager.cpp"/>

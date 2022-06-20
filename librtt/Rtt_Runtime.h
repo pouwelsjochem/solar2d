@@ -92,7 +92,6 @@ class Runtime : public MCallback,
 			kDeviceLaunchOption = kLaunchDeviceShell,
 			kSimulatorLaunchOption = kLaunchDeviceShell,
 			kCoronaViewOption = (  kLaunchDeviceShell ),
-			kHTML5LaunchOption = ( kLaunchDeviceShell ),
 			kWebPluginLaunchOption = 0, // TODO: Remove???
 			kLinuxLaunchOption = ( kLaunchDeviceShell ),
 

@@ -142,38 +142,6 @@ bool ValidationSupportMacUI_ValidateIOSAppName( const char* name, const char* fi
 	return true;
 }
 
-- (bool) runWebAppNameValidation:(NSString*)appname
-{
-	bool isvalid = false;
-	
-	// Validate Subdirectories for Lua files
-
-	if ( [appname length] > 0 )
-	{
-		lua_State* L = luaState;
-
-		isvalid = Rtt_CommonSupportTools_ValidateNameForRestrictedASCIICharacters( L, [appname UTF8String] );
-	}
-
-	if ( ! isvalid )
-	{
-		NSBeginAlertSheet(
-			@"Application Name only supports standard characters.",
-			nil,
-			nil,
-			nil,
-			[self parentWindow],
-			nil,
-			nil,
-			nil,
-			nil,
-			@"Please use only ASCII characters in your application name."
-		);
-	}
-
-	return isvalid;
-}
-
 - (bool) runOSXAppNameValidation:(NSString*)appname
 {
 	// Currently, we don't have any more validation tests to run on the post-press-build-button step.

@@ -26,9 +26,6 @@
 #if defined(CORONABUILDER_OSX)
 #include "Rtt_OSXAppPackager.h"
 #endif
-#if defined(CORONABUILDER_HTML5)
-#include "Rtt_WebAppPackager.h"
-#endif
 #if defined(CORONABUILDER_LINUX)
 #include "Rtt_LinuxAppPackager.h"
 #endif
@@ -269,24 +266,6 @@ AppPackagerFactory::CreatePackagerParams( lua_State *L, int index, TargetDevice:
 	}
 	else
 #endif
-#if defined(CORONABUILDER_HTML5)
-		if (targetPlatform == TargetDevice::kWebPlatform)
-	{
-		result = CreatePackagerParamsHTML5(L,
-										   index,
-										   targetPlatform,
-										   targetPlatformVersion,
-										   appName,
-										   version,
-										   certificatePath,
-										   projectPath,
-										   dstPath,
-										   sdkPath,
-										   customBuildId,
-										   templateType );
-	}
-	else
-#endif
 #if defined(CORONABUILDER_LINUX)
 		if (targetPlatform == TargetDevice::kLinuxPlatform)
 	{
@@ -358,14 +337,6 @@ AppPackagerFactory::CreatePackager( lua_State *L, int index, TargetDevice::Platf
 		case TargetDevice::kWin32Platform:
 		{
 			result = new Win32AppPackager( fServices );
-		}
-			break;
-#endif
-
-#if defined(CORONABUILDER_HTML5)
-		case TargetDevice::kWebPlatform:
-		{
-			result = new WebAppPackager( fServices );
 		}
 			break;
 #endif

@@ -68,7 +68,5 @@ if(EXISTS "${CORONA_ROOT}/CoronaEnterprise/Corona/android/resource/android-templ
   file(COPY "${CORONA_ROOT}/CoronaEnterprise/Corona/android" DESTINATION "${RESOURCES}/Native/Corona")
 endif()
 
-file(COPY "${CORONA_ROOT}/platform/resources/webtemplate.zip" DESTINATION "${RESOURCES}")
-
 
 

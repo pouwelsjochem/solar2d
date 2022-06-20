@@ -108,10 +108,7 @@
 		F58CA29E245658E3002191EA /* Rtt_HTTPClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58CA29D245658E3002191EA /* Rtt_HTTPClient.mm */; };
 		F5BEA4B823FFE98200206A6A /* CoronaOfflineiOSPackager.lua in Sources */ = {isa = PBXBuildFile; fileRef = F5BEA4A723FFE97300206A6A /* CoronaOfflineiOSPackager.lua */; };
 		F5DB5B312113702800EC5CBC /* linuxPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = F5DB5B202113701300EC5CBC /* linuxPackageApp.lua */; };
-		F5FBD1CE20696145009A9D32 /* Rtt_WebAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FBD1CC20696145009A9D32 /* Rtt_WebAppPackager.cpp */; };
 		F5FBD1DB206961A4009A9D32 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C221F5231D48156700F45E77 /* libluasocket.a */; };
-		F5FBD1E020696224009A9D32 /* webPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = F5FBD1DE20696201009A9D32 /* webPackageApp.lua */; };
-		F5FBD1E2206964F5009A9D32 /* Rtt_AppPackagerHTML5Factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5FBD1E1206964F5009A9D32 /* Rtt_AppPackagerHTML5Factory.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -522,10 +519,6 @@
 		F58CA29D245658E3002191EA /* Rtt_HTTPClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_HTTPClient.mm; sourceTree = "<group>"; };
 		F5BEA4A723FFE97300206A6A /* CoronaOfflineiOSPackager.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaOfflineiOSPackager.lua; path = ../resources/CoronaOfflineiOSPackager.lua; sourceTree = "<group>"; };
 		F5DB5B202113701300EC5CBC /* linuxPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = linuxPackageApp.lua; path = ../resources/linuxPackageApp.lua; sourceTree = "<group>"; };
-		F5FBD1CC20696145009A9D32 /* Rtt_WebAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_WebAppPackager.cpp; path = ../shared/Rtt_WebAppPackager.cpp; sourceTree = "<group>"; };
-		F5FBD1CD20696145009A9D32 /* Rtt_WebAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_WebAppPackager.h; path = ../shared/Rtt_WebAppPackager.h; sourceTree = "<group>"; };
-		F5FBD1DE20696201009A9D32 /* webPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = webPackageApp.lua; path = ../resources/webPackageApp.lua; sourceTree = "<group>"; };
-		F5FBD1E1206964F5009A9D32 /* Rtt_AppPackagerHTML5Factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AppPackagerHTML5Factory.cpp; path = ../../tools/CoronaBuilder/Rtt_AppPackagerHTML5Factory.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -701,7 +694,6 @@
 				1F23C321211ABCE30003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp */,
 				C2A2E8011EC2637300900729 /* Rtt_LuaLibBuilder.cpp */,
 				C2A2E8021EC2637300900729 /* Rtt_LuaLibBuilder.h */,
-				F5FBD1E1206964F5009A9D32 /* Rtt_AppPackagerHTML5Factory.cpp */,
 				C27B68C31D01009D00236968 /* Rtt_AppPackagerAndroidFactory.cpp */,
 				C27B68C41D01009D00236968 /* Rtt_AppPackagerAppleFactory.mm */,
 				A4AEC12A152E502E007A4C83 /* main.mm */,
@@ -808,8 +800,6 @@
 				0793BD9016EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.h */,
 				A4BABCD614CF4AD100696484 /* Rtt_TargetDevice.cpp */,
 				A4BABCD714CF4AD200696484 /* Rtt_TargetDevice.h */,
-				F5FBD1CC20696145009A9D32 /* Rtt_WebAppPackager.cpp */,
-				F5FBD1CD20696145009A9D32 /* Rtt_WebAppPackager.h */,
 			);
 			name = shared;
 			sourceTree = "<group>";
@@ -921,7 +911,6 @@
 				C217F6CC19525FA400D3BFFE /* json.lua */,
 				C22BAF751C1B8FBD00EF1795 /* OSXPackageApp.lua */,
 				C22BAF761C1B8FBD00EF1795 /* tvosPackageApp.lua */,
-				F5FBD1DE20696201009A9D32 /* webPackageApp.lua */,
 				F53C328E2404E2C000BC2BED /* CoronaBuilderPluginCollector.lua */,
 				F5BEA4A723FFE97300206A6A /* CoronaOfflineiOSPackager.lua */,
 			);
@@ -1204,7 +1193,6 @@
 				F53C329F2404E30900BC2BED /* CoronaBuilderPluginCollector.lua in Sources */,
 				F5BEA4B823FFE98200206A6A /* CoronaOfflineiOSPackager.lua in Sources */,
 				F5DB5B312113702800EC5CBC /* linuxPackageApp.lua in Sources */,
-				F5FBD1E020696224009A9D32 /* webPackageApp.lua in Sources */,
 				C205D57F1C7D271D000A8EE1 /* CoronaBuilder.lua in Sources */,
 				C22BAF791C1B8FD000EF1795 /* OSXPackageApp.lua in Sources */,
 				C22BAF7A1C1B8FD000EF1795 /* tvosPackageApp.lua in Sources */,
@@ -1232,7 +1220,6 @@
 				C2A2E8031EC2637300900729 /* Rtt_LuaLibBuilder.cpp in Sources */,
 				A4BABF8E14CF68AE00696484 /* Rtt_MacPlatformServices.mm in Sources */,
 				A4BAC00E14CF7DE200696484 /* Rtt_MacConsolePlatform.mm in Sources */,
-				F5FBD1E2206964F5009A9D32 /* Rtt_AppPackagerHTML5Factory.cpp in Sources */,
 				A4BAC01114CF7E8600696484 /* Rtt_ApplePlatform.mm in Sources */,
 				A4BAC01414CF7EBE00696484 /* Rtt_MacDevice.mm in Sources */,
 				A4BAC08A14CFB07100696484 /* Rtt_AppleCallback.mm in Sources */,
@@ -1252,7 +1239,6 @@
 				A4A47E0514D225D400B5111C /* Rtt_RefCount.cpp in Sources */,
 				A4A47E0614D225D400B5111C /* Rtt_ResourceHandle.cpp in Sources */,
 				C27B68C51D01009D00236968 /* Rtt_AppPackagerAndroidFactory.cpp in Sources */,
-				F5FBD1CE20696145009A9D32 /* Rtt_WebAppPackager.cpp in Sources */,
 				A4A47E0714D225D400B5111C /* Rtt_String.cpp in Sources */,
 				A4A47E0814D225D400B5111C /* Rtt_StringHash.cpp in Sources */,
 				A4A47E0914D225D400B5111C /* Rtt_Time.c in Sources */,
@@ -1365,7 +1351,6 @@
 					CORONABUILDER_TVOS,
 					CORONABUILDER_OSX,
 					CORONABUILDER_IOS,
-					CORONABUILDER_HTML5,
 					CORONABUILDER_LINUX,
 					Rtt_MAC_ENV,
 					Rtt_DEBUG,
@@ -1419,7 +1404,6 @@
 					CORONABUILDER_TVOS,
 					CORONABUILDER_OSX,
 					CORONABUILDER_IOS,
-					CORONABUILDER_HTML5,
 					CORONABUILDER_LINUX,
 					Rtt_MAC_ENV,
 					Rtt_LUA_COMPILER,

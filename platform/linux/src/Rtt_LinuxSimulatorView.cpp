@@ -25,7 +25,6 @@
 #include "Rtt_LinuxSimulatorView.h"
 #include "Rtt_LinuxUtils.h"
 #include "Rtt_SimulatorRecents.h"
-#include "Rtt_WebAppPackager.h"
 #include "Rtt_LinuxAppPackager.h"
 #include "Rtt_AndroidAppPackager.h"
 #include "Core/Rtt_FileSystem.h"

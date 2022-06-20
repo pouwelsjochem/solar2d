@@ -56,11 +56,11 @@ using namespace Rtt;
 		// Run file validation tools so we can alert the users of any problems before we submit to the server.
 		NSWindow *buildWindow = [self window];
 
-		ValidationSupportMacUI *validator = [[ValidationSupportMacUI alloc] initWithParentWindow:buildWindow];
-		{
-			result = [validator runWebAppNameValidation:[self appName]];
-		}
-		[validator release];
+		// ValidationSupportMacUI *validator = [[ValidationSupportMacUI alloc] initWithParentWindow:buildWindow];
+		// {
+		// 	result = [validator runWebAppNameValidation:[self appName]];
+		// }
+		// [validator release];
 	}
 
 	return result;

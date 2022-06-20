@@ -54,7 +54,6 @@ enum sdl
 	OnFileSystemEvent,
 	OnBuildLinux,
 	OnBuildAndroid,
-	OnBuildHTML5,
 	OnRotateLeft,
 	OnRotateRight,
 	OnShake,

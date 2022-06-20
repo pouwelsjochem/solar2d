@@ -103,14 +103,6 @@
                                                 <binding destination="207" name="enabled" keyPath="self.isBuildAvailable" id="546"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="HTML5 (beta)..." hidden="YES" keyEquivalent="b" id="8FZ-Ol-eek">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES"/>
-                                            <connections>
-                                                <action selector="openForBuildHTML5:" target="207" id="kuJ-yi-JgR"/>
-                                                <binding destination="207" name="enabled" keyPath="self.isBuildAvailable" id="iId-Ce-SzP"/>
-                                                <binding destination="207" name="hidden" keyPath="self.isHTML5BuildHidden" previousBinding="iId-Ce-SzP" id="Euz-dq-8bw"/>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="macOS…" hidden="YES" keyEquivalent="b" id="566">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>

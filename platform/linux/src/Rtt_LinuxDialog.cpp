@@ -527,11 +527,6 @@ namespace Rtt
 			{
 				PushEvent(sdl::OnBuildLinux);
 			}
-			// Build HTML5
-			else if (ctrl && !shift && alt && ImGui::IsKeyPressed(ImGuiKey_B, false))
-			{
-				PushEvent(sdl::OnBuildHTML5);
-			}
 			// ZoomIn
 			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Equal, false))
 			{
@@ -564,10 +559,6 @@ namespace Rtt
 						if (ImGui::MenuItem("Android...", "Ctrl+B"))
 						{
 							PushEvent(sdl::OnBuildAndroid);
-						}
-						if (ImGui::MenuItem("HTML5...", "Ctrl+Alt+B"))
-						{
-							PushEvent(sdl::OnBuildHTML5);
 						}
 						if (ImGui::MenuItem("Linux...", "Ctrl+Shift+Alt+B"))
 						{
