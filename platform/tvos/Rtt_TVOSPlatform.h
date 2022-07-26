@@ -43,6 +43,8 @@ class TVOSPlatform : public IPhonePlatformBase
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
+		virtual bool SaveBitmap( PlatformBitmap* bitmap, const char* filePath, float jpegQuality ) const override;
+
 
 	public:
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
