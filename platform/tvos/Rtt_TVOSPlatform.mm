@@ -200,23 +200,16 @@ double DegreesToRadians( double degrees )
 	return degrees * M_PI/180;
 }
 
-bool
-TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, const char* cFilePath, float jpegQuality ) const
+void
+TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const
 {
-	NSString* filePath = [NSString stringWithUTF8String:cFilePath];
 	Rtt_ASSERT( bitmap );
-	PlatformBitmap::Orientation orientation = bitmap->GetOrientation();
-	bool isSideways = PlatformBitmap::kLeft == orientation || PlatformBitmap::kRight == orientation;
 
 	const void* buffer = bitmap->GetBits( & GetAllocator() );
 	size_t w = bitmap->Width();
 	size_t h = bitmap->Height();
 	size_t wDst = w;
 	size_t hDst = h;
-	if ( isSideways )
-	{
-		Swap( wDst, hDst );
-	}
 
 	size_t bytesPerPixel = PlatformBitmap::BytesPerPixel( bitmap->GetFormat() );
 //	size_t bitsPerPixel = (bytesPerPixel << 3);
@@ -229,21 +222,8 @@ TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, const char* cFilePath, float j
 	UIImage* image = [UIImage imageWithData:data];
 	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
 #else
-
-
-
-	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault);
-	CGBitmapInfo dstBitmapInfo = CGBitmapInfo(kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big);
-    bool enablePngAlphaSave = false;
-    NSString *lowercase = [filePath lowercaseString];
-    if ( [lowercase hasSuffix:@"png"] ||  filePath == NULL)
-    {
-        enablePngAlphaSave = true;
-		srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast);
-        dstBitmapInfo = kCGImageAlphaPremultipliedLast;
-        
-
-    }
+	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast);
+	CGBitmapInfo dstBitmapInfo = kCGImageAlphaPremultipliedLast;
 
 	CGDataProviderRef dataProvider = CGDataProviderCreateWithData( NULL, buffer, numBytes, NULL );
 	CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceRGB();
@@ -263,66 +243,26 @@ TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, const char* cFilePath, float j
 	// we read them in using glReadPixels, the window buffer is physically oriented
 	// as upright, so glReadPixels returns them assuming the buffer is physically
 	// oriented upright, rather than sideways.
-	if ( isSideways )
-	{
-		S32 angle = - ( bitmap->DegreesToUprightBits() );
-		CGFloat dx = (CGFloat)wDst;
-		CGFloat dy = (CGFloat)hDst;
-		if ( 90 == angle )
-		{
-			dy = 0.f;
-		}
-		if ( -90 == angle )
-		{
-			dx = 0.f;
-		}
-
-		CGContextTranslateCTM( context, dx, dy );
-		CGContextRotateCTM( context, DegreesToRadians( angle ) );
-	}
-	else if ( PlatformBitmap::kDown == orientation )
-	{
-		CGContextTranslateCTM( context, wDst, hDst );
-		CGContextRotateCTM( context, DegreesToRadians( 180 ) );
-	}
+    CGContextTranslateCTM( context, wDst, hDst );
+    CGContextRotateCTM( context, DegreesToRadians( 180 ) );
 
 	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
-	CGImageRef flippedImageRef = CGBitmapContextCreateImage(context);
-	UIImage* image = [[UIImage alloc] initWithCGImage:flippedImageRef];
+	CGImageRef bitmapImageRef = CGBitmapContextCreateImage(context);
+	UIImage* image = [[UIImage alloc] initWithCGImage:bitmapImageRef];
 
-	if ( filePath )
-	{
-		NSData *imageData = nil;
-        if (enablePngAlphaSave)
-		{
-            imageData = UIImagePNGRepresentation( image );
-		}
-        else
-		{
-            imageData = UIImageJPEGRepresentation( image, jpegQuality );
-		}
-
-        [imageData writeToFile:filePath atomically:YES];
-	}
+    NSBitmapImageRep *bitmapImageRep = [[NSBitmapImageRep alloc] initWithCGImage:bitmapImageRef];
+    NSData *bitmapImageRepData = [bitmapImageRep representationUsingType:NSPNGFileType properties:{}];
 
 	[image release];
-	CGImageRelease( flippedImageRef );
+	CGImageRelease( bitmapImageRef );
 	CGColorSpaceRelease( colorspace );
 	CGContextRelease( context );
-	//free( pixels );
-
-
-//	UIImage* image = [[UIImage alloc] initWithCGImage:imageRef];
-//	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-//	[image release];
-
 	CGImageRelease( imageRef );
 	CGDataProviderRelease( dataProvider );
 #endif
 
 	bitmap->FreeBits();
-
-	return true;
+    pngBytes.Set((const char *)bitmapImageRepData.bytes, bitmapImageRepData.length);
 }
 
 
