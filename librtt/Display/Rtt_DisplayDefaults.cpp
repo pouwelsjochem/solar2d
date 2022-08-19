@@ -40,7 +40,8 @@ DisplayDefaults::DisplayDefaults()
 	fWrapY( RenderTypes::kClampToEdgeWrap ),
 	fShaderCompilerVerbose( kShaderCompilerVerboseDefault ),
 	fIsAnchorClamped( true ),
-	fIsImageSheetSampledInsideFrame( false )
+	fIsImageSheetSampledInsideFrame( false ),
+	fIsExternalTextureRetina( true )
 {
 }
 
