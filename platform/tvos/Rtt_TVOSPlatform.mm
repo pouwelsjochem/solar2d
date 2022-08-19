@@ -249,9 +249,7 @@ TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngByt
 	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
 	CGImageRef bitmapImageRef = CGBitmapContextCreateImage(context);
 	UIImage* image = [[UIImage alloc] initWithCGImage:bitmapImageRef];
-
-    NSBitmapImageRep *bitmapImageRep = [[NSBitmapImageRep alloc] initWithCGImage:bitmapImageRef];
-    NSData *bitmapImageRepData = [bitmapImageRep representationUsingType:NSPNGFileType properties:{}];
+    NSData *bitmapImageRepData = UIImagePNGRepresentation( image );
 
 	[image release];
 	CGImageRelease( bitmapImageRef );
