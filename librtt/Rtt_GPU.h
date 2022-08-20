@@ -15,12 +15,8 @@
 #if defined( Rtt_OPENGLES )
 	#if defined( Rtt_IPHONE_ENV ) || defined( Rtt_TVOS_ENV )
 		#include <OpenGLES/ES2/gl.h>
-	#elif defined( Rtt_SYMBIAN_ENV )
-		#include <gles/gl.h>
-	#elif defined( Rtt_ANDROID_ENV ) || defined( Rtt_WEBOS_ENV )
+	#elif defined( Rtt_ANDROID_ENV )
 		#include <GLES/gl.h>
-	#elif defined( defined( Rtt_EMSCRIPTEN_ENV )
-		#include <GLES2/gl2.h>
 	#else
 		#error TODO: Add path to gl.h header
 	#endif
@@ -37,12 +33,8 @@
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 
-	#ifdef Rtt_EMSCRIPTEN_ENV
-		#include <GL/glew.h>
-	#else
-		#include <GL/gl.h>
-		#include <GL/glu.h>
-	#endif
+	#include <GL/gl.h>
+	#include <GL/glu.h>
 #else
 	#include <OpenGL/gl.h>
 	#include <OpenGL/glext.h>

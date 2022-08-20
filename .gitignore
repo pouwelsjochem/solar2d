@@ -207,12 +207,8 @@ platform/linux/deb/
 platform/linux/deb_arm/
 
 tools/node-post
-# ignore abandoned, prototyes and closed source
-platform/bada
-platform/gametree
+# ignore closed source
 platform/nintendo
-platform/symbian
-platform/webos
 
 .hg*
 _hg/

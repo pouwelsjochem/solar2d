@@ -32,7 +32,7 @@
 // Linkage visibility
 // ----------------------------------------------------------------------------
 
-#if defined( __APPLE__ ) && !defined( Rtt_EMSCRIPTEN_ENV )
+#if defined( __APPLE__ )
 	#define CORONA_PUBLIC __attribute__((visibility("default")))
 	#define CORONA_PUBLIC_SUFFIX
 #elif __ANDROID__

@@ -42,27 +42,8 @@ Alloc( )
 	#if defined( Rtt_MAC_ENV ) || defined( Rtt_IPHONE_ENV ) || defined( Rtt_TVOS_ENV )
 		result = valloc( kSize );
 		Rtt_ASSERT( kSize == malloc_size( result ) );
-	#elif defined( Rtt_SYMBIAN_ENV )
-		Rtt_STATIC_ASSERT( false );
-
-		// Need a way to manage RChunk's!
-		static TInt sPageSize = 0;
-		static RChunk* sChunk = NULL;
-		if ( ! sPageSize )
-		{
-			HAL::Get( HAL::EMemoryPageSize, sPageSize );
-			Rtt_ASSERT( pageSize == kSize );
-
-			sChunk = new RChunk;
-
-			// Max of 8 pages
-			sChunk->CreateLocal( sPageSize, sPageSize << 3 );
-		}
-		result = pChunk->Base();
 	#elif defined( Rtt_ANDROID_ENV )
 		result = memalign( sysconf( _SC_PAGESIZE ), kSize );
-	#elif defined( Rtt_WEBOS_ENV ) || (defined( Rtt_EMSCRIPTEN_ENV ) && !defined(WIN32))
-		result = valloc( kSize );
 	#elif defined( Rtt_WIN_ENV ) || defined( Rtt_NXS_ENV )
 		result = malloc( kSize );
 		// TODO: Need to return page-aligned memory block or else we'll crash

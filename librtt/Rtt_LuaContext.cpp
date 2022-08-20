@@ -47,10 +47,6 @@
 #include <string.h>
 #include <signal.h>
 
-#ifdef Rtt_SYMBIAN_ENV
-	#include <sys/signal.h>
-#endif
-
 #include "Rtt_Lua.h"
 
 #include "CoronaLibrary.h"
@@ -66,26 +62,6 @@ Rtt_EXPORT_END
 
 
 // ----------------------------------------------------------------------------
-
-#if defined(Rtt_EMSCRIPTEN_ENV)
-CORONA_EXPORT	int luaopen_network( lua_State *L );
-CORONA_EXPORT	int luaopen_lfs( lua_State *L );
-
-extern "C" {
-	int luaopen_socket_core(lua_State *L);
-	int CoronaPluginLuaLoad_ftp(lua_State *L);
-	int CoronaPluginLuaLoad_socket(lua_State *L);
-	int CoronaPluginLuaLoad_headers(lua_State *L);
-	int CoronaPluginLuaLoad_http(lua_State *L);
-	int CoronaPluginLuaLoad_mbox(lua_State *L);
-	int CoronaPluginLuaLoad_smtp(lua_State *L);
-	int CoronaPluginLuaLoad_tp(lua_State *L);
-	int CoronaPluginLuaLoad_url(lua_State *L);
-	int CoronaPluginLuaLoad_mime(lua_State *L);
-	int CoronaPluginLuaLoad_ltn12(lua_State *L);
-	int luaopen_mime_core(lua_State *L);
-}
-#endif
 
 #ifdef Rtt_NXS_ENV
 	int luaopen_network(lua_State* L);
@@ -106,10 +82,6 @@ extern "C" {
 
 namespace Rtt
 {
-
-#ifdef Rtt_EMSCRIPTEN_ENV
-	void LuaLibWebAudio_Initialize(lua_State* L);
-#endif
 
 #ifdef Rtt_NXS_ENV
 	int luaload_nnNativeAlert(lua_State* L);
@@ -231,34 +203,13 @@ LuaContext::lstop( lua_State* L, lua_Debug *ar )
 	luaL_error(L, "interrupted!");
 }
 
-#ifdef Rtt_SYMBIAN_ENV
-	// TODO: Change over to POSIX libs --- this should eliminate this ifdef...
-
-	// TODO: Figure out why on gcce builds, the compiler complains about "signal"
-	// even though in pre-processed output, signal is declared!!!!!
-	#if defined( __GNUC__ )
-		#define signal( a, b ) ((void)0)
-	#endif
-
-	static void laction()
-	{
-#if !defined(EMSCRIPTEN)
-		signal( SIGINT, SIG_DFL );
-#endif
-		
-		lua_sethook( sLuaContext, LuaContext::lstop, LUA_MASKCALL | LUA_MASKRET | LUA_MASKCOUNT, 1 );
-	}
-#else
-	static void laction( int i )
-	{
-		// if another SIGINT happens before lstop, terminate process (default action)
-#if !defined(EMSCRIPTEN)
-		signal( i, SIG_DFL );
-#endif
-		
-		lua_sethook( sLuaContext, LuaContext::lstop, LUA_MASKCALL | LUA_MASKRET | LUA_MASKCOUNT, 1 );
-	}
-#endif
+static void laction( int i )
+{
+	// if another SIGINT happens before lstop, terminate process (default action)
+	signal( i, SIG_DFL );
+	
+	lua_sethook( sLuaContext, LuaContext::lstop, LUA_MASKCALL | LUA_MASKRET | LUA_MASKCOUNT, 1 );
+}
 
 #endif // Rtt_DEBUG || Rtt_DEBUGGER
 
@@ -738,23 +689,6 @@ LuaContext::InitializeLuaCore( lua_State* L )
 		{ "remdebug_engine", Lua::Open< luaload_remdebug_engine > },
 #endif
 
-#if defined(Rtt_EMSCRIPTEN_ENV)
-		{ "network", luaopen_network },
-		{ "lfs", luaopen_lfs },
-//		{ "socket.core", luaopen_socket_core },
-//		{ "socket", Lua::Open< CoronaPluginLuaLoad_socket >  },
-//		{ "socket.ftp", Lua::Open< CoronaPluginLuaLoad_ftp > },
-//		{ "socket.headers", Lua::Open< CoronaPluginLuaLoad_headers > },
-//		{ "socket.http", Lua::Open< CoronaPluginLuaLoad_http > },
-//		{ "socket.mbox", Lua::Open< CoronaPluginLuaLoad_mbox > },
-//		{ "socket.smtp", Lua::Open< CoronaPluginLuaLoad_smtp > },
-//		{ "socket.tp", Lua::Open< CoronaPluginLuaLoad_tp > },
-//		{ "socket.url", Lua::Open< CoronaPluginLuaLoad_url > },
-//		{ "mime.core", luaopen_mime_core },
-//		{ "mime", Lua::Open< CoronaPluginLuaLoad_mime > },
-//		{ "ltn12", Lua::Open< CoronaPluginLuaLoad_ltn12 > },
-#endif
-
 #if defined(Rtt_LINUX_ENV)
 		{ "network", luaopen_network },
 		{ "lfs", luaopen_lfs },
@@ -823,9 +757,6 @@ LuaContext::InitializeRttCore( lua_State* L, Runtime *runtime )
 #if defined ( Rtt_USE_OPENSLES )
 	LuaLibOpenSLES::Initialize( L );
 #endif
-#if defined ( Rtt_EMSCRIPTEN_ENV )
-	LuaLibWebAudio_Initialize( L );
-#endif
 	LuaLibNative::Initialize( L );
 	LuaLibGraphics::Initialize( L, runtime->GetDisplay() );
 
@@ -881,14 +812,14 @@ LuaContext::DoCall( lua_State* L, int narg, int nresults )
 		errfunc = base;
 	}
 
-#if (defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )) && !defined(EMSCRIPTEN) && !defined(Rtt_NXS_ENV)
+#if (defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )) && !defined(Rtt_NXS_ENV)
 	signal(SIGINT, laction);
 #endif
 
 	// The actual call
 	int status = lua_pcall(L, narg, nresults, errfunc);
 
-#if (defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )) && !defined(EMSCRIPTEN) && !defined(Rtt_NXS_ENV)
+#if (defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )) && !defined(Rtt_NXS_ENV)
 	signal(SIGINT, SIG_DFL);
 #endif
 

@@ -27,18 +27,7 @@ namespace /*anonymous*/
 {
 	using namespace Rtt;
 
-#if defined( Rtt_EMSCRIPTEN_ENV )
-	#ifdef Rtt_EGL
-		PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES = NULL;
-		PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOES = NULL;
-		PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOES = NULL;
-	#endif
-
-	bool isVertexArrayObjectSupported()
-	{
-		return false;
-	}
-#elif defined( Rtt_EGL )
+#if defined( Rtt_EGL )
 	PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES = NULL;
 	PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOES = NULL;
 	PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOES = NULL;

@@ -36,11 +36,7 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-#ifdef Rtt_SYMBIAN_ENV
-	#define Rtt_TYPES_INLINE	Rtt_INLINE
-#else
-	#define Rtt_TYPES_INLINE	Rtt_FORCE_INLINE
-#endif
+#define Rtt_TYPES_INLINE	Rtt_FORCE_INLINE
 
 template < typename T > Rtt_TYPES_INLINE T Max( T a, T b ) { return a > b ? a : b; }
 template < typename T > Rtt_TYPES_INLINE T Min( T a, T b ) { return a < b ? a : b; }

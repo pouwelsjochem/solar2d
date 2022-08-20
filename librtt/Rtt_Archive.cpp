@@ -985,15 +985,6 @@ Archive::Archive( Rtt_Allocator& allocator, const char *srcPath )
 	Rtt_FileDescriptorClose(fileDescriptor);
 #endif
 
-#if defined( EMSCRIPTEN )
-	// On browser, mmap is not reliable wrt byte-alignment,
-	// so ensure byte-alignment by copying data to a malloc'd buffer
-	fBits.Set( (const char *)fData, fDataLen );
-	munmap( (void *)fData, fDataLen );
-	fData = fBits.Get();
-#endif
-
-
 #if Rtt_DEBUG_ARCHIVE
 
 	Rtt_TRACE( ( "[Archive] fDataLen(%ld)\n", fDataLen ) );
@@ -1058,7 +1049,7 @@ Archive::Archive( Rtt_Allocator& allocator, const char *srcPath )
 
 Archive::~Archive()
 {
-#if defined( Rtt_ANDROID_ENV ) || defined( Rtt_EMSCRIPTEN_ENV ) || defined( Rtt_NXS_ENV )
+#if defined( Rtt_ANDROID_ENV ) || defined( Rtt_NXS_ENV )
 	// Do nothing.
 #else
 	if ( Rtt_VERIFY( fData ) )

@@ -6,7 +6,6 @@
 #define IDR_MAINFRAME                   128
 #define IDR_SIMULATOR_MENU              128
 #define IDR_ACTIVEWND                   129
-#define IDS_INVALID_WEB_APP_VERSION_NUMBER 130
 #define IDS_INVALID_NXS_APP_VERSION_NUMBER 132
 #define IDD_LICENSE                     314
 #define IDD_PASSWORD                    316

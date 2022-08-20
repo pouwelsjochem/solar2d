@@ -19,9 +19,7 @@
 #include "Renderer/Rtt_RenderTypes.h"
 
 #if defined( Rtt_WIN_DESKTOP_ENV )
-	#if defined(Rtt_EMSCRIPTEN_ENV)
-		#include <GL/glew.h>
-	#elif defined(Rtt_LINUX_ENV)
+	#if defined(Rtt_LINUX_ENV)
 		#ifdef _WIN32
 			#include <GL/glew.h>
 		#else
@@ -54,7 +52,7 @@ RenderingStream::GetMaxTextureUnits()
 	// For some reason GL_MAX_TEXTURE_IMAGE_UNITS is not defined on Android...
 	glGetIntegerv( GL_MAX_TEXTURE_UNITS, & maxTextureUnits );
 	Rtt_ASSERT( maxTextureUnits > 1 ); // OpenGL-ES 1.x mandates at least 2
-#elif !defined( Rtt_EMSCRIPTEN_ENV )
+#else
 	glGetIntegerv( GL_MAX_TEXTURE_IMAGE_UNITS, & maxTextureUnits );
 	Rtt_ASSERT( maxTextureUnits > 1 ); // OpenGL-ES 1.x mandates at least 2
 #endif

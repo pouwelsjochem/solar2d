@@ -49,7 +49,7 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-#if ! defined( Rtt_ANDROID_ENV ) && ! defined( Rtt_EMSCRIPTEN_ENV )
+#if ! defined( Rtt_ANDROID_ENV )
 
 // TODO: Move to a separate file
 // GPU-specific

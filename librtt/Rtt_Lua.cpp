@@ -627,9 +627,7 @@ static void
 LuaAction( int i )
 {
 	// if another SIGINT happens before lstop, terminate process (default action)
-#if !defined(EMSCRIPTEN)
 	signal( i, SIG_DFL );
-#endif
 	
 	lua_sethook( sLuaContext, LuaStop, LUA_MASKCALL | LUA_MASKRET | LUA_MASKCOUNT, 1 );
 }
@@ -794,15 +792,11 @@ Lua::DoCall( lua_State* L, int narg, int nresults )
 
 	sLuaContext = L;
 
-#if !defined(EMSCRIPTEN) && !defined(Rtt_NXS_ENV)
 	signal(SIGINT, LuaAction);
-#endif
 
     int status = lua_pcall(L, narg, nresults, errfunc);
 	
-#if !defined(EMSCRIPTEN) && !defined(Rtt_NXS_ENV)
 	signal(SIGINT, SIG_DFL);
-#endif
 	
 	lua_remove(L, errfunc);  /* remove errfunc */
 

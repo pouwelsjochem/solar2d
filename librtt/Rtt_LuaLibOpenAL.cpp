@@ -51,9 +51,7 @@ namespace Rtt
 #if defined(Rtt_WIN_ENV ) || defined(Rtt_ANDROID_ENV) || defined(Rtt_NXS_ENV ) || defined(Rtt_LINUX_ENV )
 #include <malloc.h>
 #else
-	#ifndef EMSCRIPTEN
-		#include <malloc/malloc.h>
-	#endif
+	#include <malloc/malloc.h>
 #endif
 
 static bool

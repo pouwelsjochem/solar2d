@@ -76,7 +76,6 @@ class Runtime : public MCallback,
 			//
 			// NOTE: Do not use these in IsProperty b/c it violates the semantics, e.g.
 			kIsCoronaKit = ( kIsLuaParserAvailable ),
-			kEmscriptenMaskSet = ( kIsLuaParserAvailable ),
 			kLinuxMaskSet = ( kIsLuaParserAvailable ),
 		};
 

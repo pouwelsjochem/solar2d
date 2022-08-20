@@ -12,10 +12,6 @@
 #include <stddef.h>
 #include <wchar.h>
 
-#if EMSCRIPTEN
-	#include <stdio.h>
-#endif
-
 /*
 ** ==================================================================
 ** Search for "@@" to find all configurable definitions.

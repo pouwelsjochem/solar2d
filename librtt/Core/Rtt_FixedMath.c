@@ -22,17 +22,6 @@ Rtt_EXPORT_BEGIN
 
 // ----------------------------------------------------------------------------
 
-/*
-// For Symbian...
-#ifdef _STRICT_ANSI
-	#define sqrtf		(float)sqrt
-	#define M_LOG2_E	0.693147180559945309417
-	#define log2f(a)	(float)(log(a)/M_LOG2_E)
-	#define cosf		(float)cos
-	#define sinf		(float)sin
-	#define tanf		(float)tan
-#endif
-*/
 #if defined( Rtt_WIN_ENV ) || defined( Rtt_ANDROID_ENV )
 #define M_LOG2_E	0.693147180559945309417
 #define log2f(a)	(float)(logf(a)/M_LOG2_E)

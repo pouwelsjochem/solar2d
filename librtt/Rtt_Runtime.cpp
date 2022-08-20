@@ -36,9 +36,6 @@
 #ifdef Rtt_USE_ALMIXER
 	#include "Rtt_PlatformOpenALPlayer.h"
 #endif
-#ifdef Rtt_USE_WEBMIXER
-#include "Rtt_PlatformWebAudioPlayer.h"
-#endif
 #ifdef Rtt_USE_OPENSLES
 #include "Rtt_PlatformOpenSLESPlayer.h"
 #endif
@@ -971,10 +968,6 @@ Runtime::CoronaAllSuspend()
 		player->SuspendPlayer();
 	}
 #endif
-#ifdef Rtt_USE_WEBMIXER
-	PlatformWebAudioPlayer* player = getSDLAudio();
-	player->SuspendPlayer();
-#endif
 #ifdef Rtt_USE_OPENSLES
 	getOpenSLES_player()->SuspendPlayer();
 #endif
@@ -1031,18 +1024,6 @@ Runtime::Suspend(bool sendApplicationEvents /* = true */)
 		if ( !IsSuspendOverrideProperty( kBackgroundAudio ) )
 		{
 			PlatformOpenALPlayer::SharedInstance()->SuspendPlayer();
-		}
-#endif
-#ifdef Rtt_USE_WEBMIXER
-		if ( IsSuspendOverrideProperty( kBackgroundAudio ) )
-		{
-			// TODO: We need a better story about what to do about Corona event callbacks during background.
-			// For initial testing, switch to a background timer if available which currently has lower CPU utilization.
-		}
-		else
-		{
-			PlatformWebAudioPlayer* player = getSDLAudio();
-			player->SuspendPlayer();
 		}
 #endif
 
@@ -1114,10 +1095,6 @@ Runtime::CoronaResumeAll()
 	{
 		PlatformOpenALPlayer::SharedInstance()->EndInterruption();
 	}
-#endif
-#ifdef Rtt_USE_WEBMIXER
-	PlatformWebAudioPlayer* player = getSDLAudio();
-	player->ResumePlayer();
 #endif
 #ifdef Rtt_USE_OPENSLES
 	getOpenSLES_player()->ResumePlayer();

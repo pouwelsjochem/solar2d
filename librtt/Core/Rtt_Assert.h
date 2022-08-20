@@ -17,7 +17,7 @@ Rtt_EXPORT void Rtt_LogEnable(void);
 Rtt_EXPORT void Rtt_LogDisable(void);
 Rtt_EXPORT int Rtt_LogIsEnabled(void);
 
-#if defined( Rtt_MAC_ENV ) || defined(EMSCRIPTEN)
+#if defined( Rtt_MAC_ENV )
 	// On OSX we can easily validate printf-style function arguments
 	Rtt_EXPORT int Rtt_Log( const char *format, ... ) __attribute__ ((format (printf, 1, 2)));
 	Rtt_EXPORT int Rtt_LogException( const char *format, ... ) __attribute__ ((format (printf, 1, 2)));

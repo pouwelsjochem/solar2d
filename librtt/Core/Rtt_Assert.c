@@ -15,16 +15,6 @@
 
 #include "Core/Rtt_Assert.h"
 
-#ifdef Rtt_EMSCRIPTEN_ENV
-	#undef Rtt_Log
-	#undef Rtt_LogException
-
-#if EMSCRIPTEN
-	#include "emscripten/emscripten.h"
-#endif
-
-#endif
-
 // ----------------------------------------------------------------------------
 
 Rtt_EXPORT_BEGIN
@@ -190,16 +180,6 @@ Rtt_VLogException(const char *format, va_list ap)
 	}
 #elif defined( Rtt_ANDROID_ENV )
 	result = __android_log_vprint( ANDROID_LOG_INFO, "Corona", format, ap );
-#elif defined(EMSCRIPTEN)
-		char	buffer[4096];
-		int n = vsnprintf(buffer, 4096, format, ap);	
-		if (n > 0)
-		{
-			EM_ASM({
-				var msg = UTF8ToString($0);
-				Module.printErr(msg);
-			}, buffer);
-		}
 #else
 	result = vfprintf( stderr, format, ap );
 	fflush( stderr );
@@ -252,8 +232,7 @@ Rtt_Log( const char *format, ... )
 	#include <stdio.h>
 	#include <stdlib.h>
 #endif // 0
-#elif defined( Rtt_EMSCRIPTEN_ENV )
-	#define Rtt_Log printf
+
 #endif
 
 //Fix for Arm based Macs (M1), checks if being debugged (see https://developer.apple.com/library/archive/qa/qa1361/_index.html)
@@ -317,11 +296,7 @@ Rtt_UserBreak( )
 static void
 Rtt_LogStack()
 {
-	#if defined( Rtt_EMSCRIPTEN_ENV )
-		#if EMSCRIPTEN
-			emscripten_log( EM_LOG_C_STACK | EM_LOG_JS_STACK | EM_LOG_DEMANGLE, "" );
-		#endif
-	#elif defined( Rtt_MAC_ENV ) || defined( Rtt_IPHONE_ENV )
+	#if defined( Rtt_MAC_ENV ) || defined( Rtt_IPHONE_ENV )
 		/*
 		
 		Rtt_LogEnable();

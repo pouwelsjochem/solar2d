@@ -24,9 +24,7 @@
 #if defined( Rtt_FEATURES_ALL )
 #endif
 
-#ifdef Rtt_EMSCRIPTEN_ENV
-	#define Rtt_USE_WEBMIXER
-#elif Rtt_ANDROID_ENV
+#if Rtt_ANDROID_ENV
 	#define Rtt_USE_OPENSLES
 	#define Rtt_USE_ALMIXER
 #elif Rtt_NXS_ENV
@@ -133,41 +131,6 @@
 #endif
 
 
-// Symbian Series 60
-// ----------------------------------------------------------------------------
-
-#if defined( Rtt_SYMBIAN_ENV )
-
-	#define Rtt_ALLOCATOR_SYSTEM
-
-	#define Rtt_OPENGLES
-	#define Rtt_OPENGL_CLIENT_SIDE_ARRAYS 1
-	#define Rtt_OPENGL_RESET_VERTEX_ARRAY 1
-	#define Rtt_DEVICE_ENV
-
-	#if defined( __arm__ )
-		#define Rtt_ARM_ASM
-	#endif
-
-	#if defined( __arm__ ) || defined( __arm64__ )
-	#else
-		#define Rtt_DEVICE_SIMULATOR
-	#endif
-
-	#define Rtt_REAL_FIXED
-
-	#undef Rtt_MATH_INLINE
-
-	#define Rtt_NO_STRICT_ANSI
-	#define Rtt_NO_LONG_DOUBLE
-
-	#define Rtt_VPRINTF_SUPPORTED
-
-	#define Rtt_LUA_LFS
-
-#endif
-
-
 // Windows
 // ----------------------------------------------------------------------------
 
@@ -182,7 +145,7 @@
 	#define Rtt_NETWORK
 	#define Rtt_LUA_LFS
 
-#if !defined(Rtt_EMSCRIPTEN_ENV) && !defined( Rtt_LINUX_ENV) 
+#if !defined( Rtt_LINUX_ENV) 
 	#define Rtt_DEBUGGER
 #endif
 
@@ -194,7 +157,7 @@
 	#define Rtt_VPRINTF_SUPPORTED
 	#define Rtt_USE_LIMITS
 	#define Rtt_ALLOCATOR_SYSTEM
-#if !defined( Rtt_EMSCRIPTEN_ENV ) && !defined( Rtt_LINUX_ENV )
+#if !defined( Rtt_LINUX_ENV )
 	#define Rtt_SQLITE
 #endif
 	#define Rtt_OPENGL_CLIENT_SIDE_ARRAYS 1
@@ -243,56 +206,6 @@
 	#define Rtt_NETWORK
 	#define Rtt_LUA_LFS
 
-#endif
-
-
-// WebOS
-// ----------------------------------------------------------------------------
-
-#if defined( Rtt_WEBOS_ENV )
-
-	#define Rtt_DEVICE_ENV
-
-	#define Rtt_USE_GLOBAL_VARIABLES
-	#define Rtt_ALLOCATOR_SYSTEM
-	#define Rtt_USE_LIMITS
-	#define Rtt_VPRINTF_SUPPORTED
-
-	#define Rtt_OPENGLES
-	#define Rtt_OPENGL_CLIENT_SIDE_ARRAYS 1
-	#define Rtt_OPENGL_RESET_VERTEX_ARRAY 1
-	#define Rtt_SQLITE
-	#define Rtt_NETWORK
-	#define Rtt_LUA_LFS
-
-#endif
-
-
-// Emscripten
-// ----------------------------------------------------------------------------
-
-#if defined( Rtt_EMSCRIPTEN_ENV )
-	#undef Rtt_OPENGL_CLIENT_SIDE_ARRAYS
-
-	#define Rtt_DEVICE_ENV
-
-	#define Rtt_USE_GLOBAL_VARIABLES
-	#define Rtt_ALLOCATOR_SYSTEM
-	#define Rtt_USE_LIMITS
-	#define Rtt_VPRINTF_SUPPORTED
-	#define Rtt_NETWORK
-
-	// disabled in order to reduce app size
-	// #define Rtt_SQLITE
-
-	#if EMSCRIPTEN
-		#define Rtt_OPENGLES
-		#define Rtt_EGL
-		#define Rtt_BROWSER_ENV
-	#else
-		#define Rtt_OPENGL_EXT_APPLE
-		#define Rtt_LUA_C_MODULE_DYLIB
-	#endif
 #endif
 
 //

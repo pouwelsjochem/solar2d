@@ -12,7 +12,7 @@
 
 #if !defined( Rtt_NO_ARCHIVE )
 	#include "Rtt_Lua.h"
-	#if defined( Rtt_ANDROID_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )
+	#if defined( Rtt_ANDROID_ENV )
 		#define Rtt_ARCHIVE_COPY_DATA 1
 	#endif
 #endif

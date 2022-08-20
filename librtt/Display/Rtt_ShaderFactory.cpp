@@ -199,11 +199,7 @@ ShaderFactory::NewProgram(
 		program->SetVertexShellNumLines( Program::CountLines( shellVert ) );
 	}
 
-#if defined( Rtt_EMSCRIPTEN_ENV )
-	const char *sourceVert = lua_pushfstring( L, shellVert, kernelVert );
-#else
 	const char *sourceVert = lua_pushfstring( L, "%s%s", shellVert, kernelVert );
-#endif
 
 	program->SetVertexShaderSource( sourceVert );
 //	Rtt_TRACE( ( "Vertex source:\n%s\n", program->GetVertexShaderSource() ) );
@@ -214,11 +210,7 @@ ShaderFactory::NewProgram(
 		program->SetFragmentShellNumLines( Program::CountLines( shellFrag ) );
 	}
 
-#if defined( Rtt_EMSCRIPTEN_ENV )
-	const char *sourceFrag = lua_pushfstring( L, shellFrag, kernelFrag );
-#else
 	const char *sourceFrag = lua_pushfstring( L, "%s%s", shellFrag, kernelFrag );
-#endif
 
 	program->SetFragmentShaderSource( sourceFrag );
 //	Rtt_TRACE( ( "Fragment source:\n%s\n", program->GetFragmentShaderSource() ) );
@@ -242,10 +234,6 @@ ShaderFactory::NewProgram(
 		{
 			header = header + std::string("#define TEX_COORD_Z 1\n");
 		}
-
-#if defined( Rtt_EMSCRIPTEN_ENV )
-		header = header +  "#define Rtt_WEBGL_ENV\n";
-#endif
 		
 		if (header.length() != 0)
 		{

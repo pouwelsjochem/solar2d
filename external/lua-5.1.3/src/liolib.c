@@ -132,11 +132,6 @@ static int io_fclose (lua_State *L) {
   int ok = (fclose(*p) == 0);
   *p = NULL;
 
-#if defined(EMSCRIPTEN)
-	// todo: sync only files open for writing
-	jsContextSyncFS();
-#endif
-
   return pushresult(L, ok, NULL);
 }
 

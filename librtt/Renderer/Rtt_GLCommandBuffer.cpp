@@ -188,7 +188,7 @@ CommandBuffer::GetGlString( const char *s )
 bool
 CommandBuffer::GetGpuSupportsHighPrecisionFragmentShaders()
 {
-#if defined( Rtt_MAC_ENV ) || defined( Rtt_WIN_DESKTOP_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )|| defined( Rtt_LINUX_ENV )
+#if defined( Rtt_MAC_ENV ) || defined( Rtt_WIN_DESKTOP_ENV ) || defined( Rtt_LINUX_ENV )
 
 	// Assume desktops support HIGHP.
 	return true;

@@ -441,8 +441,6 @@ END
 STRINGTABLE
 BEGIN
     IDR_MAINFRAME           "Solar2D Simulator"
-    IDS_INVALID_WEB_APP_VERSION_NUMBER 
-                            "Your version code is invalid.\r\n\r\n It must be a single number and may not contain dots. This version number cannot be less than 1."
 END
 
 STRINGTABLE

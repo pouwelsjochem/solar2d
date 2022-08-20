@@ -129,11 +129,6 @@ GLTexture::Create( CPUResource* resource )
 	const U32 h = texture->GetHeight();
 	const U8* data = texture->GetData();
 	{
-#if defined( Rtt_EMSCRIPTEN_ENV )
-		glPixelStorei( GL_UNPACK_ALIGNMENT, texture->GetByteAlignment() );
-		GL_CHECK_ERROR();
-#endif
-
 		// It is valid to pass a NULL pointer, so allocation is done either way
 		glTexImage2D( GL_TEXTURE_2D, 0, internalFormat, w, h, 0, format, type, data );
 		GL_CHECK_ERROR();

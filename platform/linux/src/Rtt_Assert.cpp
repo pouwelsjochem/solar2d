@@ -17,16 +17,6 @@
 void LinuxLog(const char* buf, int len);
 #endif
 
-#ifdef Rtt_EMSCRIPTEN_ENV
-#undef Rtt_Log
-#undef Rtt_LogException
-
-#if EMSCRIPTEN
-#include "emscripten/emscripten.h"
-#endif
-
-#endif
-
 // ----------------------------------------------------------------------------
 
 Rtt_EXPORT_BEGIN
@@ -225,17 +215,6 @@ Rtt_VLogException(const char* format, va_list ap)
 	}
 #elif defined( Rtt_ANDROID_ENV )
 	result = __android_log_vprint(ANDROID_LOG_INFO, "Corona", format, ap);
-#elif defined(EMSCRIPTEN)
-	char buffer[4096];
-	int n = vsnprintf(buffer, 4096, format, ap);
-	if (n > 0)
-	{
-		EM_ASM(
-			{
-				var msg = UTF8ToString($0);
-				Module.printErr(msg);
-			}, buffer);
-	}
 #else
 #if defined(Rtt_LINUX_ENV) && defined(Rtt_SIMULATOR)
 #if !defined(CORONABUILDER_LINUX)
@@ -298,8 +277,7 @@ Rtt_Log( const char *format, ... )
 #include <stdio.h>
 #include <stdlib.h>
 #endif // 0
-#elif defined( Rtt_EMSCRIPTEN_ENV )
-#define Rtt_Log printf
+
 #endif
 
 static void
@@ -317,11 +295,7 @@ Rtt_UserBreak( )
 static void
 Rtt_LogStack()
 {
-#if defined( Rtt_EMSCRIPTEN_ENV )
-#if EMSCRIPTEN
-	emscripten_log( EM_LOG_C_STACK | EM_LOG_JS_STACK | EM_LOG_DEMANGLE, "" );
-#endif
-#elif defined( Rtt_MAC_ENV ) || defined( Rtt_IPHONE_ENV )
+#if defined( Rtt_MAC_ENV ) || defined( Rtt_IPHONE_ENV )
 	/*
 
 	Rtt_LogEnable();

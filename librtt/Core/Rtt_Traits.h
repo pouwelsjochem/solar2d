@@ -257,7 +257,7 @@ namespace Private
 
 	// ------------------------------------------------------------------------
 
-	#if defined( __MWERKS__ ) && ! defined ( Rtt_SYMBIAN_ENV )
+	#if defined( __MWERKS__ )
 
 		#include <msl_utility>
 

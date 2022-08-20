@@ -98,8 +98,6 @@
 		return absoluteTime;
 	}
 
-#elif defined( Rtt_SYMBIAN_ENV )
-	Rtt_STATIC_ASSERT( false );
 #elif defined( Rtt_WIN_ENV )
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>

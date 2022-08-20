@@ -17,9 +17,7 @@
 	#if defined( Rtt_IPHONE_ENV ) || defined( Rtt_TVOS_ENV )
 		#include <OpenGLES/ES2/gl.h>
 		#include <OpenGLES/ES2/glext.h>
-	#elif defined( Rtt_SYMBIAN_ENV )
-		#include <gles/gl.h>
-	#elif defined( Rtt_ANDROID_ENV ) || defined( Rtt_WEBOS_ENV ) || defined( Rtt_EMSCRIPTEN_ENV )
+	#elif defined( Rtt_ANDROID_ENV )
 		#include <GLES2/gl2.h>
 		#include <GLES2/gl2ext.h>
 	#elif defined(Rtt_NXS_ENV)
