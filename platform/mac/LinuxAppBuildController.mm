@@ -54,7 +54,7 @@ using namespace Rtt;
 	if ( result )
 	{
 		// Run file validation tools so we can alert the users of any problems before we submit to the server.
-		NSWindow *buildWindow = [self window];
+		// NSWindow *buildWindow = [self window];
 
 		// ValidationSupportMacUI *validator = [[ValidationSupportMacUI alloc] initWithParentWindow:buildWindow];
 		// {
