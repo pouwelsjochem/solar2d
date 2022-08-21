@@ -681,10 +681,12 @@ function OSXPostPackage( params )
 	if ( not err ) then
 		local err = getNames( bundledisplayname, options )
 		if ( not err ) then
-
+			
 			-- Special case for no provision profile (e.g. Xcode simulator)
-			if not provisionFile then
-				options.bundleid = "com.example." .. sanitizeBundleString(bundledisplayname)
+			if not provisionFile then -- TODO: This is currently just a quick fix for Coromon
+				-- options.bundleid = "com.example." .. sanitizeBundleString(bundledisplayname)
+				options.appid = "com.tragsoft.coromon.Coromon"
+				options.bundleid = "com.tragsoft.coromon"
 			else
 				err = getIDs( provisionFile, options )
 			end
