@@ -56,7 +56,38 @@ namespace Rtt
 
 	bool CompileScriptsInDirectory(lua_State* L, AppPackagerParams& params, const char* dstDir, const char* srcDir);
 	bool FetchDirectoryTreeFilePaths(const char* directoryPath, std::vector<std::string>& filePathCollection);
-	int processExecute(lua_State* L);
+
+	// it's used only for Windows
+	int processExecute(lua_State* L)
+	{
+		int results = 1;
+		int ret = 0;
+		std::string output;
+
+		const char* cmdBuf = luaL_checkstring(L, 1);
+		bool capture_stdout = false;
+		if (lua_isboolean(L, 2))
+		{
+			capture_stdout = lua_toboolean(L, 2);
+			results++;
+		}
+
+#if defined(Rtt_WIN_ENV) && !defined(Rtt_LINUX_ENV)
+		Interop::Ipc::CommandLine::SetOutputCaptureEnabled(capture_stdout);
+		Interop::Ipc::CommandLineRunResult result = Interop::Ipc::CommandLine::RunShellCommandUntilExit(cmdBuf);
+		ret = result.HasFailed() ? result.GetExitCode() : 0;
+		output = result.GetOutput();
+#elif defined(Rtt_LINUX_ENV) || defined(Rtt_MAC_ENV_ENV)
+		ret = system(cmdBuf);
+#endif
+
+		lua_pushinteger(L, ret);
+		if (capture_stdout)
+			lua_pushstring(L, output.c_str());
+
+		return results;
+	}
+
 	int luaload_linuxPackageApp(lua_State* L);
 
 	int GenerateResourceCar(lua_State* L)
