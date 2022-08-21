@@ -282,7 +282,6 @@
 		1B82AC4D2550028900ABD09C /* Rtt_SpriteSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B10CF6B2538381000F48B3A /* Rtt_SpriteSequence.h */; };
 		1B82AC5B2550029300ABD09C /* Rtt_SpriteSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B10CF712538381000F48B3A /* Rtt_SpriteSequence.cpp */; };
 		1F34F53D21115FB2006EE117 /* Rtt_LinuxAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F34F53321115FB1006EE117 /* Rtt_LinuxAppPackager.cpp */; };
-		1F34F54021116446006EE117 /* LinuxAppBuild.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F34F53E21116445006EE117 /* LinuxAppBuild.xib */; };
 		1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F34F5412111661E006EE117 /* LinuxAppBuildController.mm */; };
 		4C111FCB1B2A41B200DF8BE8 /* Rtt_KeyName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4C111FC91B2A41B200DF8BE8 /* Rtt_KeyName.cpp */; };
 		50310F0C17C819AE00293685 /* kernel_filter_crystallize_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50310F0517C8199C00293685 /* kernel_filter_crystallize_gl.lua */; };
@@ -2095,7 +2094,6 @@
 		1B10CF712538381000F48B3A /* Rtt_SpriteSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSequence.cpp; path = Display/Rtt_SpriteSequence.cpp; sourceTree = "<group>"; };
 		1F34F53321115FB1006EE117 /* Rtt_LinuxAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LinuxAppPackager.cpp; path = ../shared/Rtt_LinuxAppPackager.cpp; sourceTree = "<group>"; };
 		1F34F53C21115FB2006EE117 /* Rtt_LinuxAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LinuxAppPackager.h; path = ../shared/Rtt_LinuxAppPackager.h; sourceTree = "<group>"; };
-		1F34F53F21116445006EE117 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/LinuxAppBuild.xib; sourceTree = "<group>"; };
 		1F34F5412111661E006EE117 /* LinuxAppBuildController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LinuxAppBuildController.mm; sourceTree = "<group>"; };
 		1F34F5422111661E006EE117 /* LinuxAppBuildController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinuxAppBuildController.h; sourceTree = "<group>"; };
 		1F46A96521136B51009CC875 /* linuxPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = linuxPackageApp.lua; path = ../platform/resources/linuxPackageApp.lua; sourceTree = "<group>"; };
@@ -3769,7 +3767,6 @@
 			children = (
 				1F34F5422111661E006EE117 /* LinuxAppBuildController.h */,
 				1F34F5412111661E006EE117 /* LinuxAppBuildController.mm */,
-				1F34F53E21116445006EE117 /* LinuxAppBuild.xib */,
 				1F34F53321115FB1006EE117 /* Rtt_LinuxAppPackager.cpp */,
 				1F34F53C21115FB2006EE117 /* Rtt_LinuxAppPackager.h */,
 				A4F36550146C44030019808D /* AndroidAppBuild.xib */,
@@ -4887,7 +4884,6 @@
 				00E14F6513428CBF0089C390 /* Localizable.strings in Resources */,
 				F545475321178F7400D5EDB7 /* linuxtemplate_x64.tgz in Resources */,
 				C21D9DBD1BF67C300042C5A9 /* android_syslog.sh in Resources */,
-				1F34F54021116446006EE117 /* LinuxAppBuild.xib in Resources */,
 				A4B00FA7145656A9008FB6E6 /* OSXAppBuild.xib in Resources */,
 				A4B00FB714685113008FB6E6 /* AppBuildProgressBanner.xib in Resources */,
 				C2DC53BF1ADF15540077A44A /* iOS-SDKs.json in Resources */,
@@ -6042,14 +6038,6 @@
 				089C165DFE840E0CC02AAC07 /* English */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		1F34F53E21116445006EE117 /* LinuxAppBuild.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1F34F53F21116445006EE117 /* English */,
-			);
-			name = LinuxAppBuild.xib;
 			sourceTree = "<group>";
 		};
 		A40A90611BD99B0D001D2038 /* TVOSAppBuild.xib */ = {
