@@ -1986,23 +1986,25 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 			auto lastYResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/y");
 			if (lastXResult.HasSucceeded() && lastYResult.HasSucceeded())
 			{
-				windowPosition.x = lastXResult.GetValue().ToSignedInt32().GetValue();
-				windowPosition.y = lastYResult.GetValue().ToSignedInt32().GetValue();
+				auto intConversionResultForLastX = lastXResult.GetValue().ToSignedInt32();
+				auto intConversionResultForLastY = lastYResult.GetValue().ToSignedInt32();
+				if (intConversionResultForLastX.HasSucceeded() && intConversionResultForLastY.HasSucceeded())
+				{
+					windowPosition.x = intConversionResultForLastX.GetValue();
+					windowPosition.y = intConversionResultForLastY.GetValue();
 
-				HMONITOR monitorAtWindowPosition = ::MonitorFromPoint(windowPosition, MONITOR_DEFAULTTONULL);
-				if (monitorAtWindowPosition == NULL) { // point is off screen
-					windowPosition.x = 0;
-					windowPosition.y = 0;
+					HMONITOR monitorAtWindowPosition = ::MonitorFromPoint(windowPosition, MONITOR_DEFAULTTONULL);
+					if (monitorAtWindowPosition != NULL) { // point is off screen
+						auto windowBounds = fMainWindowPointer->GetBounds();
+						auto deltaX = windowPosition.x - windowBounds.left;
+						auto deltaY = windowPosition.y - windowBounds.top;
+						windowBounds.left = windowPosition.x;
+						windowBounds.top = windowPosition.y;
+						windowBounds.right += deltaX;
+						windowBounds.bottom += deltaY;
+						fMainWindowPointer->SetBounds(windowBounds);
+					}
 				}
-
-				auto windowBounds = fMainWindowPointer->GetBounds();
-				auto deltaX = windowPosition.x - windowBounds.left;
-				auto deltaY = windowPosition.y - windowBounds.top;
-				windowBounds.left = windowPosition.x;
-				windowBounds.top = windowPosition.y;
-				windowBounds.right += deltaX;
-				windowBounds.bottom += deltaY;
-				fMainWindowPointer->SetBounds(windowBounds);
 			}
 		}
 	}
@@ -2011,23 +2013,27 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	// Note: We only fetch the previous width/height if the window is set up to be resizable.
 	//       If not resizable, then we leverage the configured width/height and image suffix scaling to fit the monitor.
 	SIZE clientSize{};
+	clientSize.cx = projectSettings.GetDefaultWindowViewWidth();
+	clientSize.cy = projectSettings.GetDefaultWindowViewHeight();
 	if (fStoredPreferencesPointer)
 	{
 		auto lastWidthResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/viewWidth");
 		auto lastHeightResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/viewHeight");
 		if (lastWidthResult.HasSucceeded() && lastHeightResult.HasSucceeded())
 		{
-			clientSize.cx = lastWidthResult.GetValue().ToSignedInt32().GetValue();
-			clientSize.cy = lastHeightResult.GetValue().ToSignedInt32().GetValue();
+			auto intConversionResultForLastWidth = lastWidthResult.GetValue().ToSignedInt32();
+			auto intConversionResultForLastHeight = lastHeightResult.GetValue().ToSignedInt32();
+			if (intConversionResultForLastWidth.HasSucceeded() && intConversionResultForLastHeight.HasSucceeded())
+			{
+				auto lastWidth = intConversionResultForLastWidth.GetValue();
+				auto lastHeight = intConversionResultForLastHeight.GetValue();
+				if (lastWidth >= projectSettings.GetMinContentWidth() && lastHeight >= projectSettings.GetMinContentHeight())
+				{
+					clientSize.cx = lastWidth;
+					clientSize.cy = lastHeight;
+				}
+			}
 		}
-	}
-
-	// If we haven't safely restored the previous window client width/height above, then
-	// attempt to fetch the default window client width/height from the "build.settings" file.
-	if ((clientSize.cx <= projectSettings.GetMinContentWidth()) || (clientSize.cy <= projectSettings.GetMinContentHeight()))
-	{
-		clientSize.cx = projectSettings.GetDefaultWindowViewWidth();
-		clientSize.cy = projectSettings.GetDefaultWindowViewHeight();
 	}
 
 	// Resize the window.
@@ -2038,25 +2044,17 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	const Rtt::NativeWindowMode* windowModePointer = projectSettings.GetDefaultWindowMode();
 	if (fStoredPreferencesPointer)
 	{
-		auto fetchResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/mode");
-		if (fetchResult.HasSucceeded())
+		auto lastModeResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/mode");
+		if (lastModeResult.HasSucceeded())
 		{
-			auto modeNamePointer = fetchResult.GetValue().ToString().GetValue();
-			if (modeNamePointer.NotNull())
+			auto lastModeString = lastModeResult.GetValue().ToString().GetValue();
+			if (lastModeString.NotNull())
 			{
-				windowModePointer = Rtt::NativeWindowMode::FromStringId(modeNamePointer->c_str());
+				windowModePointer = Rtt::NativeWindowMode::FromStringId(lastModeString->c_str());
 			}
 		}
 	}
-
-	// Apply the selected window mode up above, if provided.
-	// Note: Do not apply the window mode if the given window is maximimzed or minimized, because this assumes
-	//       that the end-user applied this mode to the application's shortcut, which we should always respect.
-	const Rtt::NativeWindowMode& currentWindowMode = fMainWindowPointer->GetWindowMode();
-	if (currentWindowMode.Equals(Rtt::NativeWindowMode::kNormal))
-	{
-		fMainWindowPointer->SetWindowMode(*windowModePointer);
-	}
+	fMainWindowPointer->SetWindowMode(*windowModePointer);
 }
 
 int RuntimeEnvironment::OnLuaLoadPackage(lua_State* luaStatePointer)
