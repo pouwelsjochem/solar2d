@@ -609,8 +609,6 @@ static NSString *kValueNone = @"None";
         {
             if (! [self isStoreBuild])
             {
-				[self logEvent:@"build-bungled" key:@"reason" value:@"not-distribution-provisioning-profile"];
-
                 [self showError:@"Cannot Send To App Store" message:@"Only apps built with distribution profiles can be sent to the App Store.\n\nChoose a provisioning profile signed with an \"iPhone Distribution\" or \"Apple Distribution\" certificate and note that the provisioning profile used should not specify any devices (i.e. is not \"ad hoc\")." helpURL:@"https://docs.coronalabs.com/guide/distribution/iOSBuild/index.html#build-process" parentWindow:[self window]];
 
                 result = NO;

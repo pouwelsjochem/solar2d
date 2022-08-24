@@ -450,9 +450,6 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
 	// Some IDEs will terminate us quite abruptly so make sure we're on disk before starting a long operation
 	[[NSUserDefaults standardUserDefaults] synchronize];
 
-	// Do the actual build
-	[self logEvent:@"build"];
-
 	NSString* tmpDirBase = NSTemporaryDirectory();
 	size_t code = osxPackager->Build( params, [tmpDirBase UTF8String] );
 
