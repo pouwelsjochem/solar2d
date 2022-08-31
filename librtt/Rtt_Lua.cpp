@@ -792,12 +792,15 @@ Lua::DoCall( lua_State* L, int narg, int nresults )
 
 	sLuaContext = L;
 
+#if !defined(Rtt_NXS_ENV)
 	signal(SIGINT, LuaAction);
-
+#endif
     int status = lua_pcall(L, narg, nresults, errfunc);
 	
+#if !defined(Rtt_NXS_ENV)
 	signal(SIGINT, SIG_DFL);
-	
+#endif
+
 	lua_remove(L, errfunc);  /* remove errfunc */
 
 	/* force a complete garbage collection in case of errors */
