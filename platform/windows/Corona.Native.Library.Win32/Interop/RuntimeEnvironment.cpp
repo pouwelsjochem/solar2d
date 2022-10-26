@@ -89,6 +89,7 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fRenderSurfacePointer(nullptr),
 	fGdiPlusToken(0),
 	fDebuggerSemaphoreHandle(nullptr),
+	fLastActivatedSent(true),
 	fSingleWindowInstanceSemaphoreHandle(nullptr)
 {
 	// Do not continue if the given render surface handle (if provided) is already being used by another runtime.
@@ -1522,6 +1523,20 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 {
 	switch (arguments.GetMessageId())
 	{
+		case WM_ACTIVATE:
+		{
+			if (fRuntimePointer)
+			{
+				bool foreground = LOWORD(arguments.GetWParam()) > 0;
+				if (fLastActivatedSent != foreground)
+				{
+					fLastActivatedSent = foreground;
+					Rtt::WindowStateEvent event(foreground);
+					fRuntimePointer->DispatchEvent(event);
+				}
+			}
+			break;
+		}
 		case WM_SYSCOMMAND:
 		{
 			// Suspend/resume the runtime if the window has been minimized/unminized respectively.

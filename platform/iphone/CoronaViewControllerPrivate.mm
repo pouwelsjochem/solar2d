@@ -25,7 +25,6 @@
 // ----------------------------------------------------------------------------
 
 @implementation CoronaViewController
-
 -(void)viewWillLayoutSubviews
 {
 

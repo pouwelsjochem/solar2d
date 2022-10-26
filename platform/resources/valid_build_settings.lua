@@ -30,6 +30,7 @@ settings =
 {
 	android =
 	{
+		onDemandResources = { },
 		usesFeatures = { },
 		intentFilters = { },
 		usesPermissions = { "" },
@@ -109,6 +110,7 @@ settings =
 
 	iphone =
 	{
+		onDemandResources = { },
 		iCloud = true,
 		skipPNGCrush = true,
 		xcassets = "",
@@ -188,6 +190,7 @@ settings =
 
 	osx = 
 	{
+		onDemandResources = { },
 		iCloud = {},
 		bundleResourcesDirectory = "",
 		entitlements = { },
@@ -243,9 +246,7 @@ settings =
 	{
 		iCloud = true,
 		xcassets = "",
-		onDemandResources = {
-			{ },
-		},
+		onDemandResources = { },
 		-- tvOS app icons require multiple layers, and must provide both a small and a large size.
 		icon =
 		{
