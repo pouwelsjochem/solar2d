@@ -1082,6 +1082,11 @@ public class NativeToJavaBridge {
 		return runtime.getController().getName();
 	}
 
+	protected static String callGetManufacturerName(CoronaRuntime runtime)
+	{
+		return runtime.getController().getManufacturerName();
+	}
+
 	protected static String callGetUniqueIdentifier( int identifierType, CoronaRuntime runtime )
 	{
 		return runtime.getController().getUniqueIdentifier( identifierType );
