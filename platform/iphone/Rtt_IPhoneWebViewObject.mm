@@ -637,8 +637,7 @@ IPhoneWebViewObject::Request( lua_State *L )
 			const char *header = lua_tostring( L, 4 );
 			headerString = [NSString stringWithExternalString:header];
 		}
-		
-		o->Request( urlString, baseUrl, nil);
+		o->Request( urlString, baseUrl, headerString);
 	}
 
 	return 0;
@@ -676,8 +675,8 @@ IPhoneWebViewObject::Request( NSString *urlString, NSURL *baseUrl, NSString *hea
 	{
 	}
 
-	if ( headerString != nil ) {
-		NSArray *headerKeyAndValue = [headerString componentsSeparatedByString:@": "];
+	if ( header != nil ) {
+		NSArray *headerKeyAndValue = [header componentsSeparatedByString:@": "];
 		[request addValue:headerKeyAndValue[1] forHTTPHeaderField:headerKeyAndValue[0]];
 	}
 
