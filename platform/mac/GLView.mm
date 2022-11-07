@@ -473,7 +473,9 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	[super setFrameSize:new_size];
 
 	// Update rectangle used for mouseMoved: events
-	[self removeTrackingRect:trackingRectTag];
+	if(trackingRectTag) {
+		[self removeTrackingRect:trackingRectTag];
+	}
 	trackingRectTag = [self addTrackingRect:[self bounds] owner:self userData:nil assumeInside:NO];
 
 	if (sizeChanged && self.isReady && self.runtime != NULL )
@@ -601,7 +603,9 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 - (void)viewDidMoveToWindow
 {
 	// We may have called addTrackingRect: in a setFrame: call before we get here
-	[self removeTrackingRect:trackingRectTag];
+	if(trackingRectTag) {
+		[self removeTrackingRect:trackingRectTag];
+	}
 
 	// Limit mouse events to the view's bounds
 	NSRect r = [self bounds];

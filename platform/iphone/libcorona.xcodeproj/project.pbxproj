@@ -503,6 +503,9 @@
 		A4C9CB2E17BAE2950071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2D17BAE2840071753E /* kernel_generator_marchingAnts_gl.lua */; };
 		A4C9CB3017BAE2F50071753E /* kernel_generator_checkerboard_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2F17BAE2E80071753E /* kernel_generator_checkerboard_gl.lua */; };
 		A4E76F5313A935CC00AFB095 /* json.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F5213A935CC00AFB095 /* json.lua */; };
+		AA2C69B729147BC40093B0BE /* kernel_filter_blurGaussianLinear_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = AA2C69B529147B3B0093B0BE /* kernel_filter_blurGaussianLinear_gl.lua */; };
+		AA2C69B829147BC40093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = AA2C69B629147B3B0093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua */; };
+		AA2C69B929147BC40093B0BE /* kernel_filter_blurLinearVertical_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = AA2C69B429147B3A0093B0BE /* kernel_filter_blurLinearVertical_gl.lua */; };
 		C2756C261C57220300BE3194 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C241C57220300BE3194 /* NSString+Extensions.h */; };
 		C2756C271C57220300BE3194 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C251C57220300BE3194 /* NSString+Extensions.m */; };
 		C2A8710D1D4BE48000AF3326 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */; };
@@ -1178,6 +1181,9 @@
 		A4C9CB2D17BAE2840071753E /* kernel_generator_marchingAnts_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_marchingAnts_gl.lua; path = Display/Shader/kernel_generator_marchingAnts_gl.lua; sourceTree = "<group>"; };
 		A4C9CB2F17BAE2E80071753E /* kernel_generator_checkerboard_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_checkerboard_gl.lua; path = Display/Shader/kernel_generator_checkerboard_gl.lua; sourceTree = "<group>"; };
 		A4E76F5213A935CC00AFB095 /* json.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = json.lua; path = ../resources/json.lua; sourceTree = SOURCE_ROOT; };
+		AA2C69B429147B3A0093B0BE /* kernel_filter_blurLinearVertical_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_blurLinearVertical_gl.lua; path = Display/Shader/kernel_filter_blurLinearVertical_gl.lua; sourceTree = "<group>"; };
+		AA2C69B529147B3B0093B0BE /* kernel_filter_blurGaussianLinear_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_blurGaussianLinear_gl.lua; path = Display/Shader/kernel_filter_blurGaussianLinear_gl.lua; sourceTree = "<group>"; };
+		AA2C69B629147B3B0093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_blurLinearHorizontal_gl.lua; path = Display/Shader/kernel_filter_blurLinearHorizontal_gl.lua; sourceTree = "<group>"; };
 		C2756C241C57220300BE3194 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../platform/apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C2756C251C57220300BE3194 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../platform/apple/NSString+Extensions.m"; sourceTree = "<group>"; };
 		C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_FileSystem.cpp; sourceTree = "<group>"; };
@@ -2062,6 +2068,9 @@
 				50B9673B17CF278B00BB1178 /* kernel_filter_blurGaussian_gl.lua */,
 				0720210D17C8167E00B6D424 /* kernel_filter_blurHorizontal_gl.lua */,
 				0720210E17C8167E00B6D424 /* kernel_filter_blurVertical_gl.lua */,
+				AA2C69B529147B3B0093B0BE /* kernel_filter_blurGaussianLinear_gl.lua */,
+				AA2C69B629147B3B0093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua */,
+				AA2C69B429147B3A0093B0BE /* kernel_filter_blurLinearVertical_gl.lua */,
 				A47428FA17694EE700C63853 /* kernel_filter_brightness_gl.lua */,
 				A47428FB17694EE700C63853 /* kernel_filter_bulge_gl.lua */,
 				A47428FC17694EE700C63853 /* kernel_filter_chromaKey_gl.lua */,
@@ -2653,6 +2662,9 @@
 				50B5987417BDAA1D006CA2C9 /* kernel_composite_glow_gl.lua in Sources */,
 				50B5987517BDAA1D006CA2C9 /* kernel_composite_linearLight_gl.lua in Sources */,
 				0720211017C816DD00B6D424 /* kernel_filter_blurVertical_gl.lua in Sources */,
+				AA2C69B929147BC40093B0BE /* kernel_filter_blurLinearVertical_gl.lua in Sources */,
+				AA2C69B829147BC40093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua in Sources */,
+				AA2C69B729147BC40093B0BE /* kernel_filter_blurGaussianLinear_gl.lua in Sources */,
 				0720211217C816DF00B6D424 /* kernel_filter_levels_gl.lua in Sources */,
 				0720211117C816DE00B6D424 /* kernel_filter_bloom_gl.lua in Sources */,
 				50B5987617BDAA1D006CA2C9 /* kernel_composite_phoenix_gl.lua in Sources */,
