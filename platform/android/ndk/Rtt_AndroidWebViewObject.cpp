@@ -132,7 +132,7 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 	    Rtt_StringStartsWith(url, "http:") ||
 	    Rtt_StringStartsWith(url, "https:"))
 	{
-		Request(url, NULL, NULL);
+		Request(url, NULL, header);
 		return;
 	}
 	

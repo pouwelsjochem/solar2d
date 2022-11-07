@@ -631,12 +631,12 @@ IPhoneWebViewObject::Request( lua_State *L )
 
 		NSURL *baseUrl = GetBaseURLFromLuaState(L,3);
 
-//		NSString *headerString = nil;
-//		if ( lua_isstring( L, 4 ) )
-//		{
-//			const char *header = lua_tostring( L, 4 );
-//			headerString = [NSString stringWithExternalString:header];
-//		}
+		NSString *headerString = nil;
+		if ( lua_isstring( L, 4 ) )
+		{
+			const char *header = lua_tostring( L, 4 );
+			headerString = [NSString stringWithExternalString:header];
+		}
 		
 		o->Request( urlString, baseUrl, nil);
 	}
@@ -676,10 +676,10 @@ IPhoneWebViewObject::Request( NSString *urlString, NSURL *baseUrl, NSString *hea
 	{
 	}
 
-//	if (nil != headerString) {
-//		NSArray *headerKeyAndValue = [headerString componentsSeparatedByString:@": "];
-//		[request addValue:headerKeyAndValue[1] forHTTPHeaderField:headerKeyAndValue[0]];
-//	}
+	if ( headerString != nil ) {
+		NSArray *headerKeyAndValue = [headerString componentsSeparatedByString:@": "];
+		[request addValue:headerKeyAndValue[1] forHTTPHeaderField:headerKeyAndValue[0]];
+	}
 
 	Rtt_iOSWebViewContainer *container = (Rtt_iOSWebViewContainer*)GetView();
 	[container loadRequest:request baseURL:baseUrl];
