@@ -781,13 +781,6 @@
 			remoteGlobalIDString = A4384F741BAA20E0005750A3;
 			remoteInfo = libalmixer;
 		};
-		F5C5E15C251E115D00217C19 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A4AD17291BAA0D8F00BCF507 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A4551F851BAA1B5500FB3BDF;
-			remoteInfo = libbox2d;
-		};
 		F5C5E15E251E115D00217C19 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A4AD17291BAA0D8F00BCF507 /* Project object */;
@@ -3855,7 +3848,6 @@
 				F5C5E366251E143000217C19 /* PBXTargetDependency */,
 				F5C5E1F7251E12AD00217C19 /* PBXTargetDependency */,
 				F5C5E159251E115D00217C19 /* PBXTargetDependency */,
-				F5C5E15B251E115D00217C19 /* PBXTargetDependency */,
 				F5C5E15D251E115D00217C19 /* PBXTargetDependency */,
 				F5C5E15F251E115D00217C19 /* PBXTargetDependency */,
 				F5C5E163251E115D00217C19 /* PBXTargetDependency */,
@@ -5358,10 +5350,6 @@
 			isa = PBXTargetDependency;
 			target = A4384F741BAA20E0005750A3 /* libalmixer */;
 			targetProxy = F5C5E15A251E115D00217C19 /* PBXContainerItemProxy */;
-		};
-		F5C5E15B251E115D00217C19 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			targetProxy = F5C5E15C251E115D00217C19 /* PBXContainerItemProxy */;
 		};
 		F5C5E15D251E115D00217C19 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

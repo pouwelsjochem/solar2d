@@ -257,7 +257,6 @@
         <File Name="../shared/Rtt_ProjectSettings.h"/>
         <File Name="../shared/Rtt_NativeWindowMode.h"/>
         <File Name="../../librtt/Rtt_GPU.h"/>
-        <File Name="../../external/smoothpolygon/SmoothPolygon.h"/>
         <File Name="../../librtt/Rtt_WorkFlowConstants.h"/>
         <File Name="../../librtt/Core/Rtt_WeakPtr.h"/>
         <File Name="../../librtt/Core/Rtt_WeakCount.h"/>
@@ -482,8 +481,6 @@
         <File Name="../../librtt/Display/LuaReader.h"/>
         <File Name="../../external/LuaHashMap/LuaHashMap.h"/>
         <File Name="../../external/ALmixer/luaal.h"/>
-        <File Name="../../librtt/b2GLESDebugDraw.h"/>
-        <File Name="../../external/b2Separator-cpp/b2Separator.h"/>
       </VirtualDirectory>
       <File Name="../shared/Rtt_TargetDevice.cpp"/>
       <File Name="../shared/Rtt_TargetAndroidAppStore.cpp"/>
@@ -628,7 +625,6 @@
       <File Name="../../librtt/Core/Rtt_Geometry.cpp"/>
       <File Name="../../librtt/Core/Rtt_UseCount.cpp"/>
       <File Name="../../librtt/Core/Rtt_SharedCount.cpp"/>
-      <File Name="../../external/smoothpolygon/SmoothPolygon.cpp"/>
       <File Name="../../librtt/Core/Rtt_ResourceHandle.cpp"/>
       <File Name="../../librtt/Core/Rtt_StringHash.cpp"/>
       <File Name="../../librtt/Core/Rtt_String.cpp"/>
@@ -727,7 +723,6 @@
       <File Name="lua/init.cpp"/>
       <File Name="lua/easing.cpp"/>
       <File Name="lua/dkjson.cpp"/>
-      <File Name="../../external/b2Separator-cpp/b2Separator.cpp"/>
       <File Name="../../librtt/Rtt_Transform.cpp"/>
       <File Name="../../librtt/Rtt_TesselatorStream.cpp"/>
       <File Name="../../librtt/Rtt_StrokeTesselatorStream.cpp"/>
@@ -806,7 +801,6 @@
       <File Name="../../librtt/Rtt_CKWorkflow.cpp"/>
       <File Name="../../librtt/Rtt_CachedPath.cpp"/>
       <File Name="../../librtt/Rtt_Archive.cpp"/>
-      <File Name="../../librtt/b2GLESDebugDraw.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="renderer">
       <VirtualDirectory Name="include">
@@ -946,152 +940,6 @@
       </VirtualDirectory>
       <File Name="../../external/luafilesystem/src/lfs.c"/>
     </VirtualDirectory>
-    <VirtualDirectory Name="box2D">
-      <VirtualDirectory Name="Rope">
-        <VirtualDirectory Name="include">
-          <File Name="../../external/Box2D/Box2D/Rope/b2Rope.h"/>
-        </VirtualDirectory>
-        <File Name="../../external/Box2D/Box2D/Rope/b2Rope.cpp"/>
-      </VirtualDirectory>
-      <VirtualDirectory Name="Particle">
-        <VirtualDirectory Name="include">
-          <File Name="../../external/Box2D/Box2D/Particle/b2VoronoiDiagram.h"/>
-          <File Name="../../external/Box2D/Box2D/Particle/b2StackQueue.h"/>
-          <File Name="../../external/Box2D/Box2D/Particle/b2ParticleSystem.h"/>
-          <File Name="../../external/Box2D/Box2D/Particle/b2ParticleGroup.h"/>
-          <File Name="../../external/Box2D/Box2D/Particle/b2ParticleAssembly.h"/>
-          <File Name="../../external/Box2D/Box2D/Particle/b2Particle.h"/>
-        </VirtualDirectory>
-        <File Name="../../external/Box2D/Box2D/Particle/b2VoronoiDiagram.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Particle/b2ParticleSystem.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Particle/b2ParticleGroup.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Particle/b2ParticleAssembly.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Particle/b2Particle.cpp"/>
-      </VirtualDirectory>
-      <VirtualDirectory Name="Dynamic">
-        <VirtualDirectory Name="include">
-          <File Name="../../external/Box2D/Box2D/Dynamics/b2WorldCallbacks.h"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/b2World.h"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/b2TimeStep.h"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/b2Island.h"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/b2Fixture.h"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/b2ContactManager.h"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/b2Body.h"/>
-        </VirtualDirectory>
-        <VirtualDirectory Name="Joints">
-          <VirtualDirectory Name="include">
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2WheelJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2WeldJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2RopeJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2RevoluteJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2PulleyJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2PrismaticJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2MouseJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2MotorJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2Joint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2GearJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2FrictionJoint.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2DistanceJoint.h"/>
-          </VirtualDirectory>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2WheelJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2WeldJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2RopeJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2PulleyJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2MouseJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2MotorJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2Joint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2GearJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2FrictionJoint.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Joints/b2DistanceJoint.cpp"/>
-        </VirtualDirectory>
-        <VirtualDirectory Name="Contacts">
-          <VirtualDirectory Name="include">
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2PolygonContact.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2ContactSolver.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2Contact.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2CircleContact.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.h"/>
-            <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.h"/>
-          </VirtualDirectory>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2PolygonContact.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2ContactSolver.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2Contact.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2CircleContact.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp"/>
-        </VirtualDirectory>
-        <File Name="../../external/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Dynamics/b2World.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Dynamics/b2Island.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Dynamics/b2Fixture.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Dynamics/b2ContactManager.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Dynamics/b2Body.cpp"/>
-      </VirtualDirectory>
-      <VirtualDirectory Name="Common">
-        <VirtualDirectory Name="include">
-          <File Name="../../external/Box2D/Box2D/Common/b2TrackedBlock.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2Timer.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2Stat.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2StackAllocator.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2SlabAllocator.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2Settings.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2Math.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2IntrusiveList.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2GrowableStack.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2GrowableBuffer.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2FreeList.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2Draw.h"/>
-          <File Name="../../external/Box2D/Box2D/Common/b2BlockAllocator.h"/>
-        </VirtualDirectory>
-        <File Name="../../external/Box2D/Box2D/Common/b2TrackedBlock.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2Timer.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2Stat.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2StackAllocator.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2Settings.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2Math.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2FreeList.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2Draw.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Common/b2BlockAllocator.cpp"/>
-      </VirtualDirectory>
-      <VirtualDirectory Name="Collision">
-        <VirtualDirectory Name="include">
-          <File Name="../../external/Box2D/Box2D/Collision/b2TimeOfImpact.h"/>
-          <File Name="../../external/Box2D/Box2D/Collision/b2DynamicTree.h"/>
-          <File Name="../../external/Box2D/Box2D/Collision/b2Distance.h"/>
-          <File Name="../../external/Box2D/Box2D/Collision/b2Collision.h"/>
-          <File Name="../../external/Box2D/Box2D/Collision/b2BroadPhase.h"/>
-        </VirtualDirectory>
-        <File Name="../../external/Box2D/Box2D/Collision/b2TimeOfImpact.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Collision/b2DynamicTree.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Collision/b2Distance.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Collision/b2Collision.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Collision/b2CollidePolygon.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Collision/b2CollideEdge.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Collision/b2CollideCircle.cpp"/>
-        <File Name="../../external/Box2D/Box2D/Collision/b2BroadPhase.cpp"/>
-        <VirtualDirectory Name="Shapes">
-          <VirtualDirectory Name="include">
-            <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2Shape.h"/>
-            <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2PolygonShape.h"/>
-            <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2EdgeShape.h"/>
-            <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2CircleShape.h"/>
-            <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2ChainShape.h"/>
-          </VirtualDirectory>
-          <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2PolygonShape.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2EdgeShape.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2CircleShape.cpp"/>
-          <File Name="../../external/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp"/>
-        </VirtualDirectory>
-      </VirtualDirectory>
-    </VirtualDirectory>
     <File Name="src/main.cpp"/>
   </VirtualDirectory>
   <Dependencies Name="ARM"/>
@@ -1120,15 +968,12 @@
         <IncludePath Value="../../external/rsa"/>
         <IncludePath Value="../../plugins/shared"/>
         <IncludePath Value="../../librtt/Corona"/>
-        <IncludePath Value="../../external/Box2D"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
         <IncludePath Value="../../external/LuaHashMap"/>
-        <IncludePath Value="../../external/b2Separator-cpp"/>
         <IncludePath Value="../../external/luafilesystem/src"/>
         <IncludePath Value="../../external/opengl"/>
         <IncludePath Value="../shared"/>
-        <IncludePath Value="../../external/smoothpolygon"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
         <IncludePath Value="../../external/mpg123-1.13.1/src/libmpg123"/>
@@ -1217,16 +1062,13 @@
         <IncludePath Value="../../external/rsa"/>
         <IncludePath Value="../../plugins/shared"/>
         <IncludePath Value="../../librtt/Corona"/>
-        <IncludePath Value="../../external/Box2D"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
         <IncludePath Value="../../external/openal-soft-1.12.854/include/AL"/>
         <IncludePath Value="../../external/LuaHashMap"/>
-        <IncludePath Value="../../external/b2Separator-cpp"/>
         <IncludePath Value="../../external\luafilesystem\src"/>
         <IncludePath Value="../../external\opengl"/>
         <IncludePath Value="../shared"/>
-        <IncludePath Value="../../external/smoothpolygon"/>
         <IncludePath Value="../../external/freetype-2.9/include"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
@@ -1325,16 +1167,13 @@
         <IncludePath Value="../../external/rsa"/>
         <IncludePath Value="../../plugins/shared"/>
         <IncludePath Value="../../librtt/Corona"/>
-        <IncludePath Value="../../external/Box2D"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
         <IncludePath Value="../../external/openal-soft-1.12.854/include/AL"/>
         <IncludePath Value="../../external/LuaHashMap"/>
-        <IncludePath Value="../../external/b2Separator-cpp"/>
         <IncludePath Value="../../external\luafilesystem\src"/>
         <IncludePath Value="../../external\opengl"/>
         <IncludePath Value="../shared"/>
-        <IncludePath Value="../../external/smoothpolygon"/>
         <IncludePath Value="../../external/freetype-2.9/include"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>

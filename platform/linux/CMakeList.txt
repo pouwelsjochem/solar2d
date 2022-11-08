@@ -82,9 +82,6 @@ include_directories (
 	${CORONA_ROOT}/librtt/Renderer
 	${CORONA_ROOT}/plugins/shared
 	${CORONA_ROOT}/platform/shared
-	${CORONA_ROOT}/external/Box2D
-	${CORONA_ROOT}/external/b2Separator-cpp
-  ${CORONA_ROOT}/external/smoothpolygon
   ${CORONA_ROOT}/modules/simulator
   ${CORONA_ROOT}/platform
   ${CORONA_ROOT}/platform/android
@@ -452,7 +449,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Input/Rtt_PlatformInputDeviceManager.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp
-		${CORONA_ROOT}/librtt/b2GLESDebugDraw.cpp
 		${CORONA_ROOT}/librtt/Rtt_Archive.cpp
 		${CORONA_ROOT}/librtt/Rtt_CKWorkflow.cpp
 		${CORONA_ROOT}/librtt/Rtt_DeviceOrientation.cpp
@@ -659,63 +655,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/external/luafilesystem/src/lfs.c
 		${CORONA_ROOT}/external/sqlite3/sqlite3.c
 		${CORONA_ROOT}/external/lsqlite3-7/lsqlite3.c
-
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2BroadPhase.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2CollideCircle.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2CollideEdge.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2CollidePolygon.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2Collision.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2Distance.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2DynamicTree.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/b2TimeOfImpact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2ChainShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2CircleShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2EdgeShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Collision/Shapes/b2PolygonShape.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2BlockAllocator.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Draw.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2FreeList.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Math.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Settings.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2StackAllocator.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Stat.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2Timer.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Common/b2TrackedBlock.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2Body.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2ContactManager.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2Fixture.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2Island.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2World.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/b2WorldCallbacks.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2CircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2Contact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2ContactSolver.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Contacts/b2PolygonContact.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2DistanceJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2FrictionJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2GearJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2Joint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2MotorJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2MouseJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2PulleyJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2RopeJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2WeldJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Dynamics/Joints/b2WheelJoint.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2Particle.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2ParticleAssembly.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2ParticleGroup.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2ParticleSystem.cpp
-		${CORONA_ROOT}/external/Box2D/Box2D/Particle/b2VoronoiDiagram.cpp
-
-		${CORONA_ROOT}/external/b2Separator-cpp/b2Separator.cpp
-		${CORONA_ROOT}/external/smoothpolygon/SmoothPolygon.cpp
 
 		# Lua
 		${LUA51_SOURCES}

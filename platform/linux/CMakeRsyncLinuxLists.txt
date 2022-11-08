@@ -28,9 +28,6 @@
 + external/luafilesystem/***
 + external/sqlite3/***
 + external/lsqlite3-7/***
-+ external/Box2D/***
-+ external/b2Separator-cpp/***
-+ external/smoothpolygon/***
 + external/loop-2.3-beta/
 + external/loop-2.3-beta/lua/***
 + external/ALmixer/***
