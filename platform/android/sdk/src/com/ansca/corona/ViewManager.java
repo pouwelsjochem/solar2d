@@ -601,8 +601,8 @@ public class ViewManager {
 					} else {
 						String[] headerKeyValue = finalHeader.split(": ");
 						Map<String, String> headers = new HashMap();
-						headers.put(headerKeyValue[1], headerKeyValue[0]);
-						System.out.println("ViewManager: " + url + headerKeyValue[1] + ": " + headerKeyValue[0]);
+						headers.put(headerKeyValue[0], headerKeyValue[1]);
+						System.out.println("ViewManager: " + url + headerKeyValue[0] + ": " + headerKeyValue[1]);
 						view.loadUrl(url, headers);
 					}
 					
