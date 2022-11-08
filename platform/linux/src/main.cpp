@@ -23,13 +23,7 @@ int main(int argc, char* argv[])
 	string resourcesDir = GetStartupPath(NULL);
 	resourcesDir.append("/Resources");
 
-	// look for welcomescereen
-	if (Rtt_FileExists((resourcesDir + "/homescreen/main.lua").c_str()))
-	{
-		resourcesDir.append("/homescreen");
-		app = new Rtt::SolarSimulator(resourcesDir);
-	}
-	else if (Rtt_IsDirectory(resourcesDir.c_str()))
+	if (Rtt_IsDirectory(resourcesDir.c_str()))
 	{
 		app = new Rtt::SolarApp(resourcesDir);
 	}

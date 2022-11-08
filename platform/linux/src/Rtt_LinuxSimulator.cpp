@@ -79,22 +79,10 @@ namespace Rtt
 	{
 		if (InitSDL())
 		{
-			// load Config, default values
-			fConfig["showRuntimeErrors"] = true;
-			fConfig["showWelcome"] = true;
-			fConfig["openLastProject"] = false;
-			fConfig["debugBuildProcess"] = 0;
-			fConfig["relaunchOnFileChange"] = "Always";
-			fConfig.Load(GetConfigPath(HOMESCREEN_ID));
-
-			// saved passwords
-			fPwdStore.Load(GetKeystorePath(HOMESCREEN_ID), true);
-
 			StartConsole();
 
 			const string& lastProjectDirectory = fConfig["lastProjectDirectory"].to_string();
-			bool openlastProject = fConfig["openLastProject"].to_bool();
-			return LoadApp(openlastProject && !lastProjectDirectory.empty() ? lastProjectDirectory : fResourceDir);
+			return LoadApp(!lastProjectDirectory.empty() ? lastProjectDirectory : fResourceDir);
 		}
 		return false;
 	}
@@ -120,19 +108,12 @@ namespace Rtt
 			GetRuntime()->SetProperty(Rtt::Runtime::kShowRuntimeErrors, showErrors);
 
 			string title;
-			if (IsHomeScreen(GetAppName()))
-			{
-				title = "Solar2D Simulator";
-				GetPlatform()->fShowRuntimeErrors = fConfig["showRuntimeErrors"].to_bool();
-			}
-			else
-			{
-				UpdateRecentDocs(GetAppName(), path + "/main.lua");
-				fConfig["lastProjectDirectory"] = fContext->GetAppPath();
 
-				WatchFolder(GetAppPath());
-				LinuxSimulatorView::OnLinuxPluginGet(GetAppPath().c_str(), GetAppName().c_str(), fContext->GetPlatform());
-			}
+			UpdateRecentDocs(GetAppName(), path + "/main.lua");
+			fConfig["lastProjectDirectory"] = fContext->GetAppPath();
+
+			WatchFolder(GetAppPath());
+			LinuxSimulatorView::OnLinuxPluginGet(GetAppPath().c_str(), GetAppName().c_str(), fContext->GetPlatform());
 
 			Rtt_Log("Loading project from: %s\n", fContext->GetAppPath().c_str());
 			Rtt_Log("Project sandbox folder: %s\n", GetSandboxPath(GetAppName()).c_str());
@@ -148,11 +129,6 @@ namespace Rtt
 		//Rtt_Log("SolarEvent %d\n", e.type);
 		switch (e.type)
 		{
-		case sdl::OnNewProject:
-		{
-			fDlg = new DlgNewProject("New Project", 640, 350);
-			break;
-		}
 
 		case sdl::OnPreferencesChanged:
 		{
@@ -203,9 +179,6 @@ namespace Rtt
 		case sdl::OnCloseProject:
 		{
 			fDlg = NULL;
-			string path(GetStartupPath(NULL));
-			path.append("/Resources/homescreen/main.lua");
-			OnOpen(path);
 			break;
 		}
 
@@ -358,10 +331,7 @@ namespace Rtt
 
 	void SolarSimulator::OnRelaunch()
 	{
-		if (!IsHomeScreen(GetAppName()))
-		{
-			LoadApp(GetAppPath());
-		}
+		LoadApp(GetAppPath());
 	}
 
 	void SolarSimulator::OnZoomIn()

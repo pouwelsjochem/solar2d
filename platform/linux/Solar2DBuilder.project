@@ -53,8 +53,6 @@
           <File Name="src/Rtt_LinuxRelaunchProjectDialog.h"/>
           <File Name="src/Rtt_LinuxRuntimeErrorDialog.h"/>
           <File Name="src/Rtt_LinuxPreferencesDialog.h"/>
-          <File Name="src/Rtt_LinuxNewProjectDialog.h"/>
-          <File Name="src/Rtt_LinuxCloneProjectDialog.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="include">

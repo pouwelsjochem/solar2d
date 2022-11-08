@@ -28,8 +28,6 @@
 #include <string>
 #include <SDL2/SDL.h>
 
-#define HOMESCREEN_ID "homescreen"
-
 namespace Rtt
 {
 	class SolarApp;

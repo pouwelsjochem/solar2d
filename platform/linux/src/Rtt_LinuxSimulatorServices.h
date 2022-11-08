@@ -35,11 +35,6 @@ namespace Rtt
 		/// <summary>Destroys this object and its owned objects.</summary>
 		virtual ~LinuxSimulatorServices();
 
-		virtual bool CloneProject() const;
-
-		/// <summary>Displays a "New Project" window for creating a new Corona project.</summary>
-		virtual bool NewProject() const override;
-
 		/// <summary>Opens a Corona project for simulation.</summary>
 		/// <param name="name">
 		///  <para>Set to the absolute path to the Corona project directory to open and simulate.</para>

@@ -52,8 +52,6 @@
         <File Name="src/Rtt_LinuxRelaunchProjectDialog.cpp"/>
         <File Name="src/Rtt_LinuxRuntimeErrorDialog.cpp"/>
         <File Name="src/Rtt_LinuxPreferencesDialog.cpp"/>
-        <File Name="src/Rtt_LinuxNewProjectDialog.cpp"/>
-        <File Name="src/Rtt_LinuxCloneProjectDialog.cpp"/>
         <VirtualDirectory Name="include">
           <File Name="src/Rtt_AndroidBuildDialog.h"/>
           <File Name="src/Rtt_LinuxClearSandboxDialog.h"/>
@@ -61,8 +59,6 @@
           <File Name="src/Rtt_LinuxRelaunchProjectDialog.h"/>
           <File Name="src/Rtt_LinuxRuntimeErrorDialog.h"/>
           <File Name="src/Rtt_LinuxPreferencesDialog.h"/>
-          <File Name="src/Rtt_LinuxNewProjectDialog.h"/>
-          <File Name="src/Rtt_LinuxCloneProjectDialog.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="include">

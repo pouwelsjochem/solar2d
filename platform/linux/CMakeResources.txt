@@ -49,11 +49,6 @@ file(COPY "${CORONA_ROOT}/librtt/Corona" DESTINATION ${RESOURCES}/include  FILES
 file(MAKE_DIRECTORY "${RESOURCES}/include/lua")
 file(COPY "${CORONA_ROOT}/external/lua-5.1.3/src/" DESTINATION ${RESOURCES}/include/lua FILES_MATCHING PATTERN "*.h")
 
-# homescreen
-file(COPY "${CORONA_ROOT}/simulator-extensions/welcomescreen" DESTINATION ${RESOURCES}) 
-file(REMOVE_RECURSE ${RESOURCES}/homescreen) 
-file(RENAME ${RESOURCES}/welcomescreen ${RESOURCES}/homescreen)
-
 # icon
 file(COPY "${CORONA_ROOT}/platform/linux/snapcraft/snap/gui/solar2d.png" DESTINATION ${RESOURCES}) 
 

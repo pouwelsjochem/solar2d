@@ -302,11 +302,6 @@ namespace Rtt
 				}
 				case SDL_WINDOWEVENT_MOVED:
 				{
-					if (evt.window.windowID == SDL_GetWindowID(fWindow) && IsHomeScreen(GetAppName()))
-					{
-						fConfig["x"] = evt.window.data1;
-						fConfig["y"] = evt.window.data2;
-					}
 					break;
 				}
 				case SDL_WINDOWEVENT_CLOSE:

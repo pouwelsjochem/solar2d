@@ -95,26 +95,6 @@ namespace Rtt
 		ImVec2 fMenuSize;
 	};
 
-	struct DlgNewProject : public Window
-	{
-		DlgNewProject(const std::string& title, int w, int h);
-		void Draw() override;
-
-	private:
-
-		bool CreateProject();
-		ImGui::FileBrowser fileDialog;
-		std::string fProjectDir;
-
-		char fApplicationNameInput[32];
-		char fProjectDirInput[1024];
-		int fTemplateIndex;
-		int fSizeIndex;
-		int fOrientationIndex;
-		char fWidthInput[10];
-		char fHeightInput[10];
-	};
-
 	struct DlgPreferences : public Window
 	{
 		DlgPreferences(const std::string& title, int w, int h);

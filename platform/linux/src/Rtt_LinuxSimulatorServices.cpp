@@ -31,18 +31,6 @@ namespace Rtt
 	{
 	}
 
-	bool LinuxSimulatorServices::CloneProject() const
-	{
-		PushEvent(sdl::OnCloneProject);
-		return true;
-	}
-
-	bool LinuxSimulatorServices::NewProject() const
-	{
-		PushEvent(sdl::OnNewProject);
-		return true;
-	}
-
 	bool LinuxSimulatorServices::OpenProject(const char* name) const
 	{
 		SDL_Event e = {};

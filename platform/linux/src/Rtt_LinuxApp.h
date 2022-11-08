@@ -35,8 +35,6 @@
 enum sdl
 {
 	OnOpenProject = SDL_USEREVENT + 1,
-	OnNewProject,
-	OnCloneProject,
 	OnBuild,
 	OnOpenInEditor,
 	OnRelaunch,
@@ -99,8 +97,6 @@ namespace Rtt
 
 		virtual bool IsRunningOnSimulator() { return false; }
 		bool IsSuspended() const { return GetRuntime()->IsSuspended(); }
-
-		inline bool IsHomeScreen(const std::string& appName) { return appName.compare(HOMESCREEN_ID) == 0; }
 
 		void RenderGUI();
 		inline void Pause() { fContext->Pause(); }

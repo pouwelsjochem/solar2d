@@ -40,11 +40,6 @@
 using namespace Rtt;
 using namespace std;
 
-static bool IsHomeScreen(string appName)
-{
-	return appName.compare(HOMESCREEN_ID) == 0;
-}
-
 // for redirecting output to Solar2DConsole
 extern "C"
 {
@@ -508,9 +503,8 @@ namespace Rtt
 		return SDL_GetWindowTitle(fWindow);
 	}
 
-	void SolarAppContext::SetTitle(const string& xtitle)
+	void SolarAppContext::SetTitle(const string& title)
 	{
-		string title = xtitle == HOMESCREEN_ID ? "Solar2D Simulator" : xtitle;
 		SDL_SetWindowTitle(fWindow, title.c_str());
 		SDL_ShowWindow(fWindow);
 		fConfig["title"] = title;

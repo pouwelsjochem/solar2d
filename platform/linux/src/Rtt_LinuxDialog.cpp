@@ -388,7 +388,7 @@ namespace Rtt
 
 	DlgMenu::DlgMenu(const std::string& appName)
 	{
-		fIsMainMenu = appName == "homescreen";
+		
 	}
 
 	void DlgMenu::Draw()
@@ -398,570 +398,208 @@ namespace Rtt
 		bool shift = ImGui::IsKeyDown(ImGuiKey_LeftShift) | ImGui::IsKeyDown(ImGuiKey_RightShift);
 		bool alt = ImGui::IsKeyDown(ImGuiKey_LeftAlt) | ImGui::IsKeyDown(ImGuiKey_RightAlt);
 
-		if (fIsMainMenu)
+		// project menu
+		// shortcuts
+		if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_O, false))
 		{
-			// hot keys
-			if (ctrl && !shift && !alt)
+			PushEvent(sdl::OnOpenProject);
+		}
+		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_R, false))
+		{
+			PushEvent(sdl::OnRelaunch);
+		}
+		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_W, false))
+		{
+			PushEvent(sdl::OnCloseProject);
+		}
+		else if (ctrl && shift && !alt && ImGui::IsKeyPressed(ImGuiKey_O, false))
+		{
+			PushEvent(sdl::OnOpenInEditor);
+		}
+		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Q, false))
+		{
+			PushEvent(SDL_QUIT);
+		}
+		// Suspend
+		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_DownArrow, false))
+		{
+			if (app->IsSuspended())
+				app->Resume();
+			else
+				app->Pause();
+		}
+		// Back
+		else if (alt && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_LeftArrow, false))
+		{
+			PushEvent(sdl::OnCloseProject);
+		}
+		// Build Android
+		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_B, false))
+		{
+			PushEvent(sdl::OnBuildAndroid);
+		}
+		// Build Linux
+		else if (ctrl && shift && alt && ImGui::IsKeyPressed(ImGuiKey_B, false))
+		{
+			PushEvent(sdl::OnBuildLinux);
+		}
+		// ZoomIn
+		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Equal, false))
+		{
+			PushEvent(sdl::OnZoomIn);
+		}
+		// ZoomOut
+		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Minus, false))
+		{
+			PushEvent(sdl::OnZoomOut);
+		}
+
+
+		if (ImGui::BeginMainMenuBar())
+		{
+			// project menu
+			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::IsKeyPressed(ImGuiKey_N, false))
-				{
-					PushEvent(sdl::OnNewProject);
-				}
-				else if (ImGui::IsKeyPressed(ImGuiKey_O, false))
+				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
 				{
 					PushEvent(sdl::OnOpenProject);
 				}
-				else if (ImGui::IsKeyPressed(ImGuiKey_R, false))
+				ImGui::Separator();
+
+				if (ImGui::BeginMenu("Build"))
 				{
-					PushEvent(sdl::OnRelaunchLastProject);
+					if (ImGui::MenuItem("Android...", "Ctrl+B"))
+					{
+						PushEvent(sdl::OnBuildAndroid);
+					}
+					if (ImGui::MenuItem("Linux...", "Ctrl+Shift+Alt+B"))
+					{
+						PushEvent(sdl::OnBuildLinux);
+					}
+					ImGui::EndMenu();
 				}
-				else if (ImGui::IsKeyPressed(ImGuiKey_Q, false))
+
+				if (ImGui::MenuItem("Open in Editor", "Ctrl+Shift+O"))
+				{
+					PushEvent(sdl::OnOpenInEditor);
+				}
+				if (ImGui::MenuItem("Show Project Files", NULL))
+				{
+					PushEvent(sdl::OnShowProjectFiles);
+				}
+				if (ImGui::MenuItem("Show Project Sandbox", NULL))
+				{
+					PushEvent(sdl::OnShowProjectSandbox);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Clear Project Sandbox", NULL))
+				{
+					PushEvent(sdl::OnClearProjectSandbox);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Relaunch", "Ctrl+R"))
+				{
+					PushEvent(sdl::OnRelaunch);
+				}
+				if (ImGui::MenuItem("Close Project", "Ctrl+W"))
+				{
+					PushEvent(sdl::OnCloseProject);
+				}
+				if (ImGui::MenuItem("Preferences...", NULL))
+				{
+					PushEvent(sdl::OnOpenPreferences);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Exit", "Ctrl+Q"))
 				{
 					PushEvent(SDL_QUIT);
 				}
+				ImGui::EndMenu();
 			}
 
-			// main menu
-			if (ImGui::BeginMainMenuBar())
-			{
-				// main menu
-				if (ImGui::BeginMenu("File"))
-				{
-					if (ImGui::MenuItem("New Project...", "Ctrl+N"))
-					{
-						PushEvent(sdl::OnNewProject);
-					}
-					if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
-					{
-						PushEvent(sdl::OnOpenProject);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Relaunch Last Project", "Ctrl+R"))
-					{
-						PushEvent(sdl::OnRelaunchLastProject);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Preferences...", NULL))
-					{
-						PushEvent(sdl::OnOpenPreferences);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Exit", "Ctrl+Q"))
-					{
-						PushEvent(SDL_QUIT);
-					}
-					ImGui::EndMenu();
-				}
-
-				// main menu
-				if (ImGui::BeginMenu("Help"))
-				{
-					if (ImGui::MenuItem("Online Documentation...", NULL))
-					{
-						PushEvent(sdl::OnOpenDocumentation);
-					}
-					if (ImGui::MenuItem("Sample projects...", NULL))
-					{
-						PushEvent(sdl::OnOpenSampleProjects);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("About Simulator...", NULL))
-					{
-						PushEvent(sdl::OnAbout);
-					}
-					ImGui::EndMenu();
-				}
-				fMenuSize = ImGui::GetWindowSize();
-				ImGui::EndMainMenuBar();
-			}
-		}
-		else
-		{
 			// project menu
-
-			// shortcuts
-			if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_N, false))
+			if (ImGui::BeginMenu("Hardware"))
 			{
-				PushEvent(sdl::OnNewProject);
-			}
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_O, false))
-			{
-				PushEvent(sdl::OnOpenProject);
-			}
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_R, false))
-			{
-				PushEvent(sdl::OnRelaunch);
-			}
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_W, false))
-			{
-				PushEvent(sdl::OnCloseProject);
-			}
-			else if (ctrl && shift && !alt && ImGui::IsKeyPressed(ImGuiKey_O, false))
-			{
-				PushEvent(sdl::OnOpenInEditor);
-			}
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Q, false))
-			{
-				PushEvent(SDL_QUIT);
-			}
-			// Suspend
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_DownArrow, false))
-			{
-				if (app->IsSuspended())
-					app->Resume();
-				else
-					app->Pause();
-			}
-			// Back
-			else if (alt && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_LeftArrow, false))
-			{
-				PushEvent(sdl::OnCloseProject);
-			}
-			// Build Android
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_B, false))
-			{
-				PushEvent(sdl::OnBuildAndroid);
-			}
-			// Build Linux
-			else if (ctrl && shift && alt && ImGui::IsKeyPressed(ImGuiKey_B, false))
-			{
-				PushEvent(sdl::OnBuildLinux);
-			}
-			// ZoomIn
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Equal, false))
-			{
-				PushEvent(sdl::OnZoomIn);
-			}
-			// ZoomOut
-			else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Minus, false))
-			{
-				PushEvent(sdl::OnZoomOut);
-			}
-
-
-			if (ImGui::BeginMainMenuBar())
-			{
-				// project menu
-				if (ImGui::BeginMenu("File"))
+				if (ImGui::MenuItem("Rotate Left", "Ctrl+Left"))
 				{
-					if (ImGui::MenuItem("New Project...", "Ctrl+N"))
-					{
-						PushEvent(sdl::OnNewProject);
-					}
-					if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
-					{
-						PushEvent(sdl::OnOpenProject);
-					}
-					ImGui::Separator();
-
-					if (ImGui::BeginMenu("Build"))
-					{
-						if (ImGui::MenuItem("Android...", "Ctrl+B"))
-						{
-							PushEvent(sdl::OnBuildAndroid);
-						}
-						if (ImGui::MenuItem("Linux...", "Ctrl+Shift+Alt+B"))
-						{
-							PushEvent(sdl::OnBuildLinux);
-						}
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::MenuItem("Open in Editor", "Ctrl+Shift+O"))
-					{
-						PushEvent(sdl::OnOpenInEditor);
-					}
-					if (ImGui::MenuItem("Show Project Files", NULL))
-					{
-						PushEvent(sdl::OnShowProjectFiles);
-					}
-					if (ImGui::MenuItem("Show Project Sandbox", NULL))
-					{
-						PushEvent(sdl::OnShowProjectSandbox);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Clear Project Sandbox", NULL))
-					{
-						PushEvent(sdl::OnClearProjectSandbox);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Relaunch", "Ctrl+R"))
-					{
-						PushEvent(sdl::OnRelaunch);
-					}
-					if (ImGui::MenuItem("Close Project", "Ctrl+W"))
-					{
-						PushEvent(sdl::OnCloseProject);
-					}
-					if (ImGui::MenuItem("Preferences...", NULL))
-					{
-						PushEvent(sdl::OnOpenPreferences);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Exit", "Ctrl+Q"))
-					{
-						PushEvent(SDL_QUIT);
-					}
-					ImGui::EndMenu();
+					PushEvent(sdl::OnRotateLeft);
+				}
+				if (ImGui::MenuItem("Rotate Right", "Ctrl+Right"))
+				{
+					PushEvent(sdl::OnRotateRight);
+				}
+				if (ImGui::MenuItem("Shake", "Ctrl+Up"))
+				{
+					PushEvent(sdl::OnShake);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Back", "Alt+Left"))
+				{
+					PushEvent(sdl::OnCloseProject);
 				}
 
-				// project menu
-				if (ImGui::BeginMenu("Hardware"))
+				ImGui::Separator();
+				if (ImGui::MenuItem(app->IsSuspended() ? "Resume" : "Suspend", "Ctrl+Down"))
 				{
-					if (ImGui::MenuItem("Rotate Left", "Ctrl+Left"))
-					{
-						PushEvent(sdl::OnRotateLeft);
-					}
-					if (ImGui::MenuItem("Rotate Right", "Ctrl+Right"))
-					{
-						PushEvent(sdl::OnRotateRight);
-					}
-					if (ImGui::MenuItem("Shake", "Ctrl+Up"))
-					{
-						PushEvent(sdl::OnShake);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Back", "Alt+Left"))
-					{
-						PushEvent(sdl::OnCloseProject);
-					}
-
-					ImGui::Separator();
-					if (ImGui::MenuItem(app->IsSuspended() ? "Resume" : "Suspend", "Ctrl+Down"))
-					{
-						if (app->IsSuspended())
-							app->Resume();
-						else
-							app->Pause();
-					}
-
-					ImGui::EndMenu();
-				}
-
-				// project menu
-				if (ImGui::BeginMenu("View"))
-				{
-					if (ImGui::MenuItem("Zoom In", "Ctrl+Plus"))
-					{
-						PushEvent(sdl::OnZoomIn);
-					}
-					if (ImGui::MenuItem("Zoom Out", "Ctrl+Minus"))
-					{
-						PushEvent(sdl::OnZoomOut);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Welcome screen", NULL))
-					{
-						PushEvent(sdl::OnCloseProject);
-					}
-					if (ImGui::MenuItem("Console", NULL))
-					{
-						PushEvent(sdl::OnSetFocusConsole);
-					}
-					ImGui::Separator();
-
-					if (ImGui::MenuItem("View As..."))
-					{
-						PushEvent(sdl::OnViewAs);
-					}
-					ImGui::EndMenu();
-				}
-
-				// project menu
-				if (ImGui::BeginMenu("Help"))
-				{
-					if (ImGui::MenuItem("Online Documentation...", NULL))
-					{
-						PushEvent(sdl::OnOpenDocumentation);
-					}
-					if (ImGui::MenuItem("Sample projects...", NULL))
-					{
-						PushEvent(sdl::OnOpenSampleProjects);
-					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("About Simulator...", NULL))
-					{
-						PushEvent(sdl::OnAbout);
-					}
-					ImGui::EndMenu();
-				}
-				fMenuSize = ImGui::GetWindowSize();
-				ImGui::EndMainMenuBar();
-			}
-		}
-	}
-
-	//
-	// DlgNewProject
-	//
-
-	DlgNewProject::DlgNewProject(const std::string& title, int w, int h)
-		: Window(title, w, h)
-		, fileDialog(ImGuiFileBrowserFlags_SelectDirectory | ImGuiFileBrowserFlags_CreateNewDir)
-		, fTemplateIndex(0)
-		, fSizeIndex(0)
-		, fOrientationIndex(0)
-	{
-		*fApplicationNameInput = 0;
-		*fProjectDirInput = 0;
-		strcpy(fWidthInput, "320");
-		strcpy(fHeightInput, "480");
-
-		struct passwd* pw = getpwuid(getuid());
-		const char* homedir = pw->pw_dir;
-		fProjectDir = string(homedir);
-		fProjectDir += LUA_DIRSEP;
-		fProjectDir += "Documents";
-		fProjectDir += LUA_DIRSEP;
-		fProjectDir += "Solar2D Projects";
-		if (!Rtt_IsDirectory(fProjectDir.c_str()))
-		{
-			int rc = Rtt_MakeDirectory(fProjectDir.c_str());
-			if (!rc)
-			{
-				Rtt_LogException("Failed to create %s\n", fProjectDir.c_str());
-			}
-		}
-
-		fileDialog.SetTitle("Browse For Folder");
-		fileDialog.SetWindowSize(w, h);
-	}
-
-	void DlgNewProject::Draw()
-	{
-		begin();
-		if (ImGui::Begin("##DlgNewProject", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			fileDialog.Display();
-			if (fileDialog.HasSelected())
-			{
-				fProjectDir = fileDialog.GetSelected().string();
-				strncpy(fProjectDirInput, fProjectDir.c_str(), sizeof(fProjectDirInput) - 1);
-				fileDialog.ClearSelected();
-			}
-
-			string s;
-			const ImVec2& window_size = ImGui::GetWindowSize();
-
-			ImGui::Dummy(ImVec2(10, 10));
-
-			ImGui::PushItemWidth(350);		// input field width
-
-			s = "   Application Name :";
-			float label_width = ImGui::CalcTextSize(s.c_str()).x;
-			ImGui::TextUnformatted(s.c_str());
-			ImGui::SameLine();
-			ImGui::SetCursorPosX(label_width + 20);
-			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);	// hack
-			ImGui::InputText("##ApplicationName", fApplicationNameInput, sizeof(fApplicationNameInput), ImGuiInputTextFlags_CharsNoBlank);
-
-			s = "   Project Folder: ";
-			strncpy(fProjectDirInput, fProjectDir.c_str(), sizeof(fProjectDirInput) - 1);
-			ImGui::TextUnformatted(s.c_str());
-			ImGui::SameLine();
-			ImGui::SetCursorPosX(label_width + 20);
-			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);	// hack
-			ImGui::InputText("##ProjectFolder", fProjectDirInput, sizeof(fProjectDirInput));
-			ImGui::SameLine();
-			if (ImGui::Button("Browse..."))
-			{
-				fileDialog.SetPwd(fProjectDir);
-				fileDialog.Open();
-			}
-			ImGui::PopItemWidth();
-
-			// templates
-			ImGui::Dummy(ImVec2(10, 10));
-			float yGroup1 = ImGui::GetCursorPosY();
-			ImGui::TextUnformatted("Project Template");
-			ImGui::RadioButton("Blank", &fTemplateIndex, 0);
-			ImGui::TextUnformatted("   Creates a project folder with an empty \"main.lua\"");
-			ImGui::RadioButton("Tab Bar Application", &fTemplateIndex, 1);
-			ImGui::TextUnformatted("   Multiscreen application using a Tab Bar for");
-			ImGui::RadioButton("Physics Based Game", &fTemplateIndex, 2);
-			ImGui::TextUnformatted("   Application using the physics and composer");
-			ImGui::RadioButton("eBook", &fTemplateIndex, 3);
-			ImGui::TextUnformatted("   Multi-page interface using the composer");
-
-			float x = 400;
-			ImGui::SetCursorPosY(yGroup1);
-
-			// project template combo
-			ImGui::SetCursorPosX(x);
-			ImGui::TextUnformatted("Upright Screen Size");
-			const char* templates[] = { "Phone Preset", "Tablet Preset", "Custom" };
-			ImGui::SetCursorPosX(x);
-			if (ImGui::Combo("##UprightScreenSize", &fSizeIndex, templates, IM_ARRAYSIZE(templates)))
-			{
-				if (fSizeIndex == 0)
-				{
-					strcpy(fWidthInput, "320");
-					strcpy(fHeightInput, "480");
-				}
-				else if (fSizeIndex == 1)
-				{
-					strcpy(fWidthInput, "768");
-					strcpy(fHeightInput, "1024");
-				}
-			}
-
-			ImGui::BeginDisabled(fSizeIndex < 2);		// disable if not custom
-			ImGui::PushItemWidth(50);		// input field width
-
-			s = "Width:";
-			float label2 = x + ImGui::CalcTextSize(s.c_str()).x;
-			ImGui::SetCursorPosX(x);
-			ImGui::TextUnformatted(s.c_str());
-			ImGui::SameLine();
-			ImGui::SetCursorPosX(label2 + 20);
-			//			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);	// hack
-			ImGui::InputText("##templateWidth", fWidthInput, sizeof(fWidthInput), ImGuiInputTextFlags_CharsDecimal);
-
-			s = "Height:";
-			ImGui::SetCursorPosX(x);
-			ImGui::TextUnformatted(s.c_str());
-			ImGui::SameLine();
-			ImGui::SetCursorPosX(label2 + 20);
-			//			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);	// hack
-			ImGui::InputText("##templateHeight", fHeightInput, sizeof(fHeightInput), ImGuiInputTextFlags_CharsDecimal);
-
-			ImGui::PopItemWidth();
-			ImGui::EndDisabled();
-
-			// default orientation
-			ImGui::Dummy(ImVec2(20, 20));
-			ImGui::SetCursorPosX(x);
-			ImGui::TextUnformatted("Default orientation");
-			ImGui::SetCursorPosX(x);
-			ImGui::RadioButton("Upright", &fOrientationIndex, 0);	ImGui::SameLine();
-			ImGui::RadioButton("Sideways", &fOrientationIndex, 1);
-
-			// ok + cancel
-			s = "OK";
-			ImGui::Dummy(ImVec2(70, 40));
-			ImGui::SetCursorPosX((window_size.x - BUTTON_WIDTH) * 0.5f);
-			if (ImGui::Button(s.c_str(), ImVec2(BUTTON_WIDTH, 0)) || (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Enter)))
-			{
-				// sanity check
-				if (*fApplicationNameInput != 0)
-				{
-					if (CreateProject())
-					{
-						PushEvent(sdl::onCloseDialog);
-					}
+					if (app->IsSuspended())
+						app->Resume();
 					else
-					{
-						Rtt_LogException("Failed to create Application %s\n", fApplicationNameInput);
-					}
+						app->Pause();
 				}
-				else
-				{
-					Rtt_LogException("Empty Application name\n");
-				}
-			}
-			ImGui::SetItemDefaultFocus();
 
-			s = "Cancel";
-			ImGui::SameLine();
-			if (ImGui::Button(s.c_str(), ImVec2(BUTTON_WIDTH, 0)) || (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Escape)))
+				ImGui::EndMenu();
+			}
+
+			// project menu
+			if (ImGui::BeginMenu("View"))
 			{
-				PushEvent(sdl::onCloseDialog);
+				if (ImGui::MenuItem("Zoom In", "Ctrl+Plus"))
+				{
+					PushEvent(sdl::OnZoomIn);
+				}
+				if (ImGui::MenuItem("Zoom Out", "Ctrl+Minus"))
+				{
+					PushEvent(sdl::OnZoomOut);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Welcome screen", NULL))
+				{
+					PushEvent(sdl::OnCloseProject);
+				}
+				if (ImGui::MenuItem("Console", NULL))
+				{
+					PushEvent(sdl::OnSetFocusConsole);
+				}
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("View As..."))
+				{
+					PushEvent(sdl::OnViewAs);
+				}
+				ImGui::EndMenu();
 			}
 
-			ImGui::End();
+			// project menu
+			if (ImGui::BeginMenu("Help"))
+			{
+				if (ImGui::MenuItem("Online Documentation...", NULL))
+				{
+					PushEvent(sdl::OnOpenDocumentation);
+				}
+				if (ImGui::MenuItem("Sample projects...", NULL))
+				{
+					PushEvent(sdl::OnOpenSampleProjects);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("About Simulator...", NULL))
+				{
+					PushEvent(sdl::OnAbout);
+				}
+				ImGui::EndMenu();
+			}
+			fMenuSize = ImGui::GetWindowSize();
+			ImGui::EndMainMenuBar();
 		}
-		end();
-	}
-
-	bool DlgNewProject::CreateProject()
-	{
-		string fResourcePath = string(GetStartupPath(NULL));
-		fResourcePath.append("/Resources");
-
-		string fNewProjectLuaScript(fResourcePath);
-		fNewProjectLuaScript.append("/homescreen/newproject.lua");
-
-		string fTemplatesDir(fResourcePath);
-		fTemplatesDir.append("/homescreen/templates");
-
-		string projectPath = fProjectDir;
-		projectPath.append(LUA_DIRSEP);
-		projectPath.append(fApplicationNameInput);
-
-		// check if project folder already exists and that the height and width are numbers
-		if (Rtt_IsDirectory(projectPath.c_str()))
-		{
-			Rtt_LogException("Project of that name already exists\n");
-			return false;
-		}
-
-		if (!Rtt_MakeDirectory(projectPath.c_str()))
-		{
-			Rtt_LogException("Failed to create %s\n", projectPath.c_str());
-			return false;
-		}
-
-		lua_State* L = luaL_newstate();
-		luaL_openlibs(L);
-		Rtt::LuaContext::RegisterModuleLoader(L, "lfs", luaopen_lfs);
-
-		const char* script = fNewProjectLuaScript.c_str();
-		int status = luaL_loadfile(L, script);
-		if (0 != status)
-		{
-			Rtt_LogException("Failed to load %s\n", script);
-			return false;
-		}
-
-		lua_createtable(L, 0, 6);
-		{
-			lua_pushboolean(L, true);
-			lua_setfield(L, -2, "isSimulator");
-
-			Rtt_ASSERT(fTemplateIndex >= 0 && fTemplateIndex < 4);
-			array<string, 4> templates = { "blank","app","game","ebook" };
-			lua_pushstring(L, templates[fTemplateIndex].c_str());
-			lua_setfield(L, -2, "template");
-
-			int w = atoi(fWidthInput);
-			lua_pushinteger(L, w);
-			lua_setfield(L, -2, "width");
-
-			int h = atoi(fHeightInput);
-			lua_pushinteger(L, h);
-			lua_setfield(L, -2, "height");
-
-			lua_pushstring(L, fOrientationIndex == 0 ? "portrait" : "landscapeRight");
-			lua_setfield(L, -2, "orientation");
-
-			lua_pushstring(L, projectPath.c_str());
-			lua_setfield(L, -2, "savePath");
-
-			lua_pushstring(L, fTemplatesDir.c_str());
-			lua_setfield(L, -2, "templateBaseDir");
-		}
-
-		status = Rtt::LuaContext::DoCall(L, 1, 0);
-		lua_close(L);
-		if (0 == status)
-		{
-			// show the project folder
-			OpenURL(projectPath);
-
-			// open project in the simulator
-			projectPath.append("/main.lua");
-
-			SDL_Event e = {};
-			e.type = sdl::OnOpenProject;
-			e.user.data1 = strdup(projectPath.c_str());
-			SDL_PushEvent(&e);
-		}
-		else
-		{
-			Rtt_LogException("Failed to create %s project\n", fApplicationNameInput);
-			return false;
-		}
-		return true;
 	}
 
 	//
