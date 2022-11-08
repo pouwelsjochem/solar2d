@@ -136,7 +136,6 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 	    Rtt_StringStartsWith(url, "http:") ||
 	    Rtt_StringStartsWith(url, "https:"))
 	{
-		luaL_error(L, "AndroidWebViewObject: 5");
 		Request(url, NULL, header);
 		return;
 	}
@@ -158,7 +157,6 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 	}
 	
 	// Request the web page.
-	luaL_error(L, "AndroidWebViewObject: 6");
 	Request(url, baseUrl.GetString(), header);
 }
 
