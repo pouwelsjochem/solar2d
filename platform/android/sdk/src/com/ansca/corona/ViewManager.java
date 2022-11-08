@@ -596,11 +596,13 @@ public class ViewManager {
 					}
 
 					if (finalHeader == null) {
+						System.out.println("ViewManager: " + url);
 						view.loadUrl(url);
 					} else {
 						String[] headerKeyValue = finalHeader.split(": ");
 						Map<String, String> headers = new HashMap();
 						headers.put(headerKeyValue[1], headerKeyValue[0]);
+						System.out.println("ViewManager: " + url + headerKeyValue[1] + ": " + headerKeyValue[0]);
 						view.loadUrl(url, headers);
 					}
 					

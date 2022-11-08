@@ -95,10 +95,12 @@ AndroidWebViewObject::Request( lua_State *L )
 	// Fetch the base directory, if provided, and then fetch the requested web page.
 	if (lua_type(L, 3) == LUA_TSTRING)
 	{
+		luaL_error(L, "AndroidWebViewObject: 1");
 		view->Request(url, lua_tostring(L, 3), NULL);
 	}
 	else if (lua_islightuserdata(L, 3))
 	{
+		luaL_error(L, "AndroidWebViewObject: 2");
 		MPlatform::Directory baseDirectory = (MPlatform::Directory)EnumForUserdata(
 												LuaLibSystem::Directories(),
 												lua_touserdata( L, 3 ),
@@ -108,9 +110,11 @@ AndroidWebViewObject::Request( lua_State *L )
 	}
 	else if (lua_type(L, 4) == LUA_TSTRING)
 	{
+		luaL_error(L, "AndroidWebViewObject: 3");
 		view->Request(url, NULL, lua_tostring(L, 4));
 	} else 
 	{
+		luaL_error(L, "AndroidWebViewObject: 4");
 		view->Request(url, NULL, NULL);
 	}
 	return 0;
@@ -132,6 +136,7 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 	    Rtt_StringStartsWith(url, "http:") ||
 	    Rtt_StringStartsWith(url, "https:"))
 	{
+		luaL_error(L, "AndroidWebViewObject: 5");
 		Request(url, NULL, header);
 		return;
 	}
@@ -153,6 +158,7 @@ AndroidWebViewObject::Request( const char *url, const MPlatform::Directory baseD
 	}
 	
 	// Request the web page.
+	luaL_error(L, "AndroidWebViewObject: 6");
 	Request(url, baseUrl.GetString(), header);
 }
 

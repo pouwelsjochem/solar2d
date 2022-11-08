@@ -2018,8 +2018,9 @@ NativeToJavaBridge::WebViewRequestLoadUrl( int id, const char * url, const char 
 		{
 			jstringParam textJ( bridge.getEnv(), url );
 			jstringParam headerJ( bridge.getEnv(), header );
-			if ( textJ.isValid() )
+			if ( textJ.isValid() && headerJ.isValid() )
 			{
+		        __android_log_print(ANDROID_LOG_INFO, "NativeToJavaBridge.cpp: " + headerJ.getValue());
 				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, textJ.getValue(), headerJ.getValue() );
 				HandleJavaException();
 			}
