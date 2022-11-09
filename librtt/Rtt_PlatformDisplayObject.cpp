@@ -98,7 +98,7 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 	GetContentOffsets( offsetX, offsetY );
 
 	outBounds.Translate( offsetX, offsetY );
-	outBounds.Scale( GetContentToScreenScale(), GetContentToScreenScale() );
+	outBounds.Scale( Rtt_RealDiv( Rtt_REAL_1, GetContentToScreenScale() ), Rtt_RealDiv( Rtt_REAL_1, GetContentToScreenScale() ) );
 }
 
 void
