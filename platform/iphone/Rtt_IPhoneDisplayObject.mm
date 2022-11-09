@@ -131,8 +131,8 @@ IPhoneDisplayObject::Prepare( const Display& display )
 						content_offset_y );
 
 	CGPoint c;
-	c.x = ( ( transf.Tx() + content_offset_x ) / GetContentToScreenScale() );
-	c.y = ( ( transf.Ty() + content_offset_y ) / GetContentToScreenScale() );
+	c.x = ( GetContentToScreenScale() * ( transf.Tx() + content_offset_x ) );
+	c.y = ( GetContentToScreenScale() * ( transf.Ty() + content_offset_y ) );
 	fView.center = c;
 
 	fView.transform = xfm;
@@ -166,9 +166,9 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		//SelfBounds needs to represent Corona coordinates
 		//whereas the newFrame size is in content units, so we calculate
 		//both to keep everything in sync
-		float newPointWidth = width / GetContentToScreenScale();
+		float newPointWidth = width * GetContentToScreenScale();
 		float coronaWidth	= width;
-		float coronaHeight	= newFrame.size.height * GetContentToScreenScale();
+		float coronaHeight	= newFrame.size.height / GetContentToScreenScale();
 		
 		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
@@ -182,8 +182,8 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		//SelfBounds needs to represent Corona coordinates
 		//whereas the newFrame size is in content units, so we calculate
 		//both to keep everything in sync
-		float newPointHeight	= height / GetContentToScreenScale();
-		float coronaWidth		= newFrame.size.width * GetContentToScreenScale();
+		float newPointHeight	= height * GetContentToScreenScale();
+		float coronaWidth		= newFrame.size.width / GetContentToScreenScale();
 		float coronaHeight		= height;
 		
 		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
