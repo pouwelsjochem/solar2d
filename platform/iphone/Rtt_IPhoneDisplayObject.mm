@@ -173,7 +173,7 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
-		newFrame.size.width = newPointWidth;
+		newFrame.size.width = newPointWidth / 4.0f;
 		
 	}
 	if ( !( height < Rtt_REAL_0 ) ) // (height >= 0)
@@ -189,7 +189,7 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
-		newFrame.size.height = newPointHeight;
+		newFrame.size.height = newPointHeight / 2.0f;
 	}
 	
 	[fView setFrame:newFrame];
