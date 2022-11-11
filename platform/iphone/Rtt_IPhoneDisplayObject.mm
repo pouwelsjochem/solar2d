@@ -141,31 +141,28 @@ IPhoneDisplayObject::Prepare( const Display& display )
 {
   	Super::Prepare( display );
 	
-	if ( ShouldPrepare() )
+	Preinitialize( display );
+	
+	Rect screenBounds;
+	GetScreenBounds( screenBounds );
+
+	CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
+	
+	CGFloat contentToScreenScale = GetContentToScreenScale();
+	if (contentToScreenScale > 1.0)
 	{
-		Preinitialize( display );
-		
-		Rect screenBounds;
-		GetScreenBounds( screenBounds );
+		newFrame.origin.x *= contentToScreenScale;
+		newFrame.origin.y *= contentToScreenScale;
+		newFrame.size.width *= contentToScreenScale;
+		newFrame.size.height *= contentToScreenScale;
+	}
 
-        CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
-        
-        CGFloat contentToScreenScale = GetContentToScreenScale();
-		if (contentToScreenScale > 1.0)
-		{
-            newFrame.origin.x /= contentToScreenScale;
-            newFrame.origin.y /= contentToScreenScale;
-            newFrame.size.width /= contentToScreenScale;
-            newFrame.size.height /= contentToScreenScale;
-		}
+	[fView setFrame:newFrame];
 
-		[fView setFrame:newFrame];
-
-        if ( ! fHidden )
-		{
-			// Only restore the object if the user hasn't requested it hidden
-			[fView setHidden:NO];
-		}
+	if ( ! fHidden )
+	{
+		// Only restore the object if the user hasn't requested it hidden
+		[fView setHidden:NO];
 	}
 }
 
