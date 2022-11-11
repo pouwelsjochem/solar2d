@@ -33,7 +33,7 @@ namespace Rtt
 MacDisplayObject::MacDisplayObject( const Rect& bounds )
 :	fSelfBounds( bounds),
 	fView( nil ),
-	fLayerHostSuperView( nil ),
+	fCoronaView( nil ),
 	fIsHidden ( false )
 {
 	// Note: Setting the reference point to center is not done in any of the other implementations because
@@ -51,12 +51,12 @@ MacDisplayObject::MacDisplayObject( const Rect& bounds )
 	// transform included that translation, so we need to factor this out during Build()
 	// NOTE: The incoming bounds are in content coordinates, not native UIView coordinates,
 	// so we must record these separately instead of relying on the values of [fView center]
-	fViewCenter.x = bounds.xMin + halfW;
-	fViewCenter.y = bounds.yMin + halfH;
+	float fViewCenterX = bounds.xMin + halfW;
+	float fViewCenterY = bounds.yMin + halfH;
 	
 	// Update DisplayObject so that it corresponds to the actual position of the UIView
 	// where DisplayObject's self bounds will be centered around its local origin.
-	Translate( fViewCenter.x, fViewCenter.y );
+	Translate( fViewCenterX, fViewCenterY );
 
 	// The self bounds needs to be centered around DisplayObject's local origin
 	// even though UIView's bounds will not be.
@@ -112,19 +112,17 @@ MacDisplayObject::CanCull() const
 void
 MacDisplayObject::PreInitialize( const Display& display )
 {
-
 	PlatformDisplayObject::Preinitialize( display );
     
     // We can access the GLView at this point via the display's runtime, so save it for later
     const Rtt::MacPlatform& platform = static_cast< const Rtt::MacPlatform& >( display.GetRuntime().Platform() );
-    fLayerHostSuperView = platform.GetView();
+    fCoronaView = platform.GetView();
 }
 
 void
 MacDisplayObject::Translate( Real dx, Real dy )
 {
 	Super::Translate( dx, dy );
-	
 }
 
 void
@@ -142,7 +140,7 @@ MacDisplayObject::Prepare( const Display& display )
 		GetScreenBounds( screenBounds );
 
 		NSRect r = NSMakeRect( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
-		CGFloat backingScaleFactor = [[fLayerHostSuperView window] backingScaleFactor];
+		CGFloat backingScaleFactor = [[fCoronaView window] backingScaleFactor];
 		if (backingScaleFactor > 1.0)
 		{
 			r.origin.x /= backingScaleFactor;
@@ -216,8 +214,8 @@ MacDisplayObject::SetSelfBounds( Real width, Real height )
 NSView*
 MacDisplayObject::GetLayerHostSuperView()
 {
-    Rtt_ASSERT(fLayerHostSuperView); // this is set in PreInitialize()
-	return fLayerHostSuperView;
+    Rtt_ASSERT(fCoronaView); // this is set in PreInitialize()
+	return fCoronaView;
 }
 
 void

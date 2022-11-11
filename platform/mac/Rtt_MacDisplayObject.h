@@ -76,10 +76,9 @@ class MacDisplayObject : public PlatformDisplayObject
 
 	protected:
 		Rect fSelfBounds;
-		Vertex2 fViewCenter;
 		NSView *fView;
 		// Don't retain this. I'm worried about circular references.
-		NSView *fLayerHostSuperView;
+		NSView *fCoronaView;
 		NSRect fNSViewFrame;
 		bool fIsHidden; // I need a second flag because I need to hide objects when scaling/rotating
 };

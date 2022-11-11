@@ -67,7 +67,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		void SetContentToScreenScale( Real newValue ) { fContentToScreenScale = newValue; }
 		S32 GetContentToScreenScale() const { return fContentToScreenScale; }
 
-		void GetContentOffsets( Real& outX, Real& outY ) const;
+		void GetScreenOffsets( Real& outX, Real& outY ) const;
 
 	protected:
 		virtual int GetNativeProperty( lua_State *L, const char key[] ) const;

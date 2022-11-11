@@ -47,12 +47,12 @@ IPhoneDisplayObject::IPhoneDisplayObject( const Rect& bounds )
 	// transform included that translation, so we need to factor this out during Build()
 	// NOTE: The incoming bounds are in content coordinates, not native UIView coordinates,
 	// so we must record these separately instead of relying on the values of [fView center]
-	fViewCenter.x = bounds.xMin + halfW;
-	fViewCenter.y = bounds.yMin + halfH;
+	float fViewCenterX = bounds.xMin + halfW;
+	float fViewCenterY = bounds.yMin + halfH;
 
 	// Update DisplayObject so that it corresponds to the actual position of the UIView
 	// where DisplayObject's self bounds will be centered around its local origin.
-	Translate( fViewCenter.x, fViewCenter.y );
+	Translate( fViewCenterX, fViewCenterY );
 
 	// The self bounds needs to be centered around DisplayObject's local origin
 	// even though UIView's bounds will not be.

@@ -75,7 +75,6 @@ class IPhoneDisplayObject : public PlatformDisplayObject
 
 	private:
 		Rect fSelfBounds;
-		Vertex2 fViewCenter;
 		UIView *fView;
 		CoronaView *fCoronaView;
 		BOOL fHidden; // used by DidMoveOffscreen/WillMoveOnscreen

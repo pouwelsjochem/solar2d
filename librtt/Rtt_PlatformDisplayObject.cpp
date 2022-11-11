@@ -95,14 +95,14 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 	outBounds = StageBounds();
 
 	Real offsetX, offsetY;
-	GetContentOffsets( offsetX, offsetY );
+	GetScreenOffsets( offsetX, offsetY );
 
 	outBounds.Translate( offsetX, offsetY );
 	outBounds.Scale( GetContentToScreenScale(), GetContentToScreenScale() );
 }
 
 void
-PlatformDisplayObject::GetContentOffsets( Real& outX, Real& outY ) const
+PlatformDisplayObject::GetScreenOffsets( Real& outX, Real& outY ) const
 {
 	const StageObject *stage = GetStage();
 	if ( Rtt_VERIFY( stage ) )
