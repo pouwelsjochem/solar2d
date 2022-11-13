@@ -44,7 +44,7 @@ PlatformDisplayObject::~PlatformDisplayObject()
 void
 PlatformDisplayObject::Preinitialize( const Display& display )
 {
-	SetContentToScreenScale( Rtt_RealDiv( Rtt_REAL_1, display.GetContentToScreenScale() ) );
+	SetContentToScreenScale( display.GetContentToScreenScale() );
 }
 
 int
