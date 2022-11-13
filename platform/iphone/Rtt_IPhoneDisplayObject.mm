@@ -123,10 +123,7 @@ IPhoneDisplayObject::Prepare( const Display& display )
 		[fView setHidden:NO];
 	}
 
-	GLView* coronaView = (GLView *)GetCoronaView();
-    [coronaView addSubview:fView];
-	// Setting the NSView's wantsLayer is necessary for the native controls to work with the OpenGL canvas
-	[fView setWantsLayer:YES];
+    [fCoronaView addSubview:fView];
 }
 
 void
