@@ -178,7 +178,7 @@ MacDisplayObject::Prepare( const Display& display )
 	// The workaround is to defer adding the object to the view until after this method has been computed at least once.
 	if ( nil == [fView superview] )
 	{
-		AddSubviewToLayerHostView();
+		AddSubviewToCoronaView();
 	}
 
 }
@@ -212,18 +212,18 @@ MacDisplayObject::SetSelfBounds( Real width, Real height )
 }
 
 NSView*
-MacDisplayObject::GetLayerHostSuperView()
+MacDisplayObject::GetCoronaView()
 {
     Rtt_ASSERT(fCoronaView); // this is set in PreInitialize()
 	return fCoronaView;
 }
 
 void
-MacDisplayObject::AddSubviewToLayerHostView()
+MacDisplayObject::AddSubviewToCoronaView()
 {
-	GLView* layerhostview = (GLView *)GetLayerHostSuperView();
+	GLView* coronaView = (GLView *)GetCoronaView();
 	
-    [layerhostview addSubview:fView];
+    [coronaView addSubview:fView];
 
 	// Setting the NSView's wantsLayer is necessary for the native controls to work with the OpenGL canvas
 	[fView setWantsLayer:YES];
@@ -235,7 +235,7 @@ MacDisplayObject::AddSubviewToLayerHostView()
 void
 MacDisplayObject::RecomputeNextKeyViews()
 {
-	NSView* layerhostview = GetLayerHostSuperView();
+	NSView* coronaView = GetCoronaView();
 	
 	
 	// This block tries to set the nextkeyview's for all the subviews in the layer host view.
@@ -244,7 +244,7 @@ MacDisplayObject::RecomputeNextKeyViews()
 	// Our deferred insertion technique to avoid the Build/jumping problem may cause problems in the future.
 	NSView* lastview = nil;
 	NSView* firstview = nil;
-	for(NSView* view in [layerhostview subviews])
+	for(NSView* view in [coronaView subviews])
 	{
 		if(nil == lastview)
 		{

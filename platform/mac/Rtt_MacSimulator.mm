@@ -250,17 +250,17 @@ MacSimulator::Back()
 void
 MacSimulator::WillSuspend()
 {
-    GLView* layerhostview = GetScreenView();
+    GLView* coronaView = GetScreenView();
 
-    [layerhostview suspendNativeDisplayObjects:YES];
+    [coronaView suspendNativeDisplayObjects:YES];
 }
 
 void
 MacSimulator::DidResume()
 {
-	GLView* layerhostview = GetScreenView();
+	GLView* coronaView = GetScreenView();
 
-	[layerhostview resumeNativeDisplayObjects];
+	[coronaView resumeNativeDisplayObjects];
 }
 
 // ----------------------------------------------------------------------------

@@ -104,38 +104,6 @@ IPhoneDisplayObject::WillMoveOnscreen()
 	fHidden = NO;			// Restore to default value
 }
 
-//void
-//IPhoneDisplayObject::Prepare( const Display& display )
-//{
-//	Super::Prepare( display );
-//
-//	const Matrix &transf = GetSrcToDstMatrix();
-//
-//	CGAffineTransform xfm = CGAffineTransformIdentity;
-//
-//	const Real *x_row = transf.Row0();
-//	const Real *y_row = transf.Row1();
-//
-//	// We have to invert "b" and "c" because our rotation
-//	// direction is opposite of the one in a UIView.
-//	xfm.a = x_row[0]; // x.
-//	xfm.b = ( - x_row[1] ); // y.
-//
-//	xfm.c = ( - y_row[0] ); // x.
-//	xfm.d = y_row[1]; // y.
-//
-//	// Take into account screen offsets.
-//	float screen_offset_x = 0.0f;
-//	float screen_offset_y = 0.0f;
-//	GetScreenOffsets( screen_offset_x, screen_offset_y );
-//
-//	CGPoint c;
-//	c.x = ( GetContentToScreenScale() * ( transf.Tx() + screen_offset_x ) );
-//	c.y = ( GetContentToScreenScale() * ( transf.Ty() + screen_offset_y ) );
-//	fView.center = c;
-//	fView.transform = xfm;
-//}
-
 void
 IPhoneDisplayObject::Prepare( const Display& display )
 {
@@ -147,16 +115,6 @@ IPhoneDisplayObject::Prepare( const Display& display )
 	GetScreenBounds( screenBounds );
 
 	CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
-	
-	CGFloat contentToScreenScale = GetContentToScreenScale();
-	if (contentToScreenScale > 1.0)
-	{
-		newFrame.origin.x *= contentToScreenScale;
-		newFrame.origin.y *= contentToScreenScale;
-		newFrame.size.width *= contentToScreenScale;
-		newFrame.size.height *= contentToScreenScale;
-	}
-
 	[fView setFrame:newFrame];
 
 	if ( ! fHidden )
@@ -164,6 +122,11 @@ IPhoneDisplayObject::Prepare( const Display& display )
 		// Only restore the object if the user hasn't requested it hidden
 		[fView setHidden:NO];
 	}
+
+	GLView* coronaView = (GLView *)GetCoronaView();
+    [coronaView addSubview:fView];
+	// Setting the NSView's wantsLayer is necessary for the native controls to work with the OpenGL canvas
+	[fView setWantsLayer:YES];
 }
 
 void

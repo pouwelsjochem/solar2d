@@ -61,8 +61,8 @@ class MacDisplayObject : public PlatformDisplayObject
 
 	protected:
 		NSView* GetView() const { return fView; }
-		NSView* GetLayerHostSuperView();
-		void AddSubviewToLayerHostView();
+		NSView* GetCoronaView();
+		void AddSubviewToCoronaView();
 		void RecomputeNextKeyViews();
         static int setReturnKey( lua_State *L );
 
