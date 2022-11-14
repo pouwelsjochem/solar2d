@@ -108,22 +108,28 @@ void
 IPhoneDisplayObject::Prepare( const Display& display )
 {
   	Super::Prepare( display );
+    
+    if ( ShouldPrepare() ) {
+        Preinitialize( display );
+        
+        Rect screenBounds;
+        GetScreenBounds( screenBounds );
+
+        CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
+        [fView setFrame:newFrame];
+
+        if ( ! fHidden )
+        {
+            // Only restore the object if the user hasn't requested it hidden
+            [fView setHidden:NO];
+        }
+
+    }
 	
-	Preinitialize( display );
-	
-	Rect screenBounds;
-	GetScreenBounds( screenBounds );
-
-	CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
-	[fView setFrame:newFrame];
-
-	if ( ! fHidden )
-	{
-		// Only restore the object if the user hasn't requested it hidden
-		[fView setHidden:NO];
-	}
-
-    [fCoronaView addSubview:fView];
+    if ( nil == [fView superview] )
+    {
+        [fCoronaView addSubview:fView];
+    }
 }
 
 void
