@@ -9,7 +9,7 @@
 
 #include "Core/Rtt_Build.h"
 #include "Core/Rtt_FileSystem.h"
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_Runtime.h"
@@ -114,7 +114,7 @@ namespace Rtt
 
 	RenderingStream* LinuxPlatform::CreateRenderingStream(bool antialias) const
 	{
-		RenderingStream* result = Rtt_NEW(fAllocator, GPUStream(fAllocator));
+		RenderingStream* result = Rtt_NEW(fAllocator, RenderingStream(fAllocator));
 		result->SetProperty(RenderingStream::kFlipHorizontalAxis, true);
 		return result;
 	}

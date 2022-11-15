@@ -354,7 +354,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Display/Rtt_BitmapPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ImageSheetPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_BufferBitmap.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_CameraPaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ClosedPath.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_CompositePaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_ContainerObject.cpp
@@ -435,7 +434,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_Event.cpp
 		${CORONA_ROOT}/librtt/Rtt_ExplicitTemplates.cpp
 		${CORONA_ROOT}/librtt/Rtt_FilePath.cpp
-		${CORONA_ROOT}/librtt/Rtt_GPUStream.cpp
 		${CORONA_ROOT}/librtt/Rtt_HitTestObject.cpp
 		${CORONA_ROOT}/librtt/Rtt_KeyName.cpp
 		${CORONA_ROOT}/librtt/Rtt_Lua.cpp

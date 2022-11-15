@@ -540,7 +540,6 @@
         <File Name="../../librtt/Display/Rtt_GroupObject.h"/>
         <File Name="../../librtt/Display/Rtt_GradientPaintAdapter.h"/>
         <File Name="../../librtt/Display/Rtt_GradientPaint.h"/>
-        <File Name="../../librtt/Rtt_GPUStream.h"/>
         <File Name="../../librtt/Core/Rtt_Geometry.h"/>
         <File Name="../../librtt/Rtt_FillTesselatorStream.h"/>
         <File Name="../../librtt/Core/Rtt_FileSystem.h"/>
@@ -561,7 +560,6 @@
         <File Name="../../librtt/Display/Rtt_ClosedPath.h"/>
         <File Name="../../librtt/Rtt_CKWorkFlowConstants.h"/>
         <File Name="../../librtt/Rtt_CKWorkflow.h"/>
-        <File Name="../../librtt/Display/Rtt_CameraPaint.h"/>
         <File Name="../../librtt/Rtt_Callback.h"/>
         <File Name="../../librtt/Rtt_CachedPath.h"/>
         <File Name="../../librtt/Display/Rtt_BufferBitmap.h"/>
@@ -790,7 +788,6 @@
       <File Name="../../librtt/Display/Rtt_ContainerObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_CompositePaint.cpp"/>
       <File Name="../../librtt/Display/Rtt_ClosedPath.cpp"/>
-      <File Name="../../librtt/Display/Rtt_CameraPaint.cpp"/>
       <File Name="../../librtt/Display/Rtt_BufferBitmap.cpp"/>
       <File Name="../../librtt/Display/Rtt_BitmapPaintAdapter.cpp"/>
       <File Name="../../librtt/Display/Rtt_BitmapPaint.cpp"/>
@@ -865,7 +862,6 @@
       <File Name="../../librtt/Rtt_JavaHost.cpp"/>
       <File Name="../../librtt/Rtt_ImageGroupObject.cpp"/>
       <File Name="../../librtt/Rtt_HitTestObject.cpp"/>
-      <File Name="../../librtt/Rtt_GPUStream.cpp"/>
       <File Name="../../librtt/Rtt_FillTesselatorStream.cpp"/>
       <File Name="../../librtt/Rtt_FilePath.cpp"/>
       <File Name="../../librtt/Rtt_ExplicitTemplates.cpp"/>

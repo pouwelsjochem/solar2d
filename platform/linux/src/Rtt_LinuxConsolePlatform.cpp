@@ -9,7 +9,7 @@
 
 #include "Core/Rtt_Build.h"
 #include "Core/Rtt_FileSystem.h"
-#include "Rtt_GPUStream.h"
+#include "Rtt_RendererStream.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_Runtime.h"
