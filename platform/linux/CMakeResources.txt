@@ -28,7 +28,6 @@ file(COPY "${CORONA_ROOT}/external/apache-ant-1.8.1/lib/ant-launcher.jar" DESTIN
 
 # copy Skins
 file(COPY "${CORONA_ROOT}/platform/resources/Skins" DESTINATION ${RESOURCES})
-file(COPY "${CORONA_ROOT}/platform/linux/Resources/Skins" DESTINATION ${RESOURCES})
 
 # copy plugins/licensing-google
 file(MAKE_DIRECTORY "${RESOURCES}/Native/plugins")
@@ -45,17 +44,3 @@ file(COPY "${CORONA_ROOT}/external/lua-5.1.3/src/" DESTINATION ${RESOURCES}/incl
 
 # icon
 file(COPY "${CORONA_ROOT}/platform/linux/snapcraft/snap/gui/solar2d.png" DESTINATION ${RESOURCES}) 
-
-
-# resource from different artifacts
-if(EXISTS "${CORONA_ROOT}/docs/SampleCode")
-  file(COPY "${CORONA_ROOT}/docs/SampleCode" DESTINATION "${RESOURCES}/SampleCode")
-endif()
-
-if(EXISTS "${CORONA_ROOT}/CoronaEnterprise/Corona/android/resource/android-template.zip")
-  file(MAKE_DIRECTORY "${RESOURCES}/Native/Corona")
-  file(COPY "${CORONA_ROOT}/CoronaEnterprise/Corona/android" DESTINATION "${RESOURCES}/Native/Corona")
-endif()
-
-
-
