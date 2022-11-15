@@ -28,7 +28,7 @@ namespace Rtt
 		virtual int ValueForKey(lua_State *L, const char key[]) const;
 		virtual bool SetValueForKey(lua_State *L, const char key[], int valueIndex);
 		virtual void Prepare(const Display &display) override;
-		void openURL(const char *url);
+		void openURL(const char *url, const char *header);
 		bool Close();
 		void Draw(Renderer& renderer) const override;
 		bool ProcessEvent(const SDL_Event& evt) override;

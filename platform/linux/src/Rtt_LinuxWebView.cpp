@@ -170,7 +170,7 @@ namespace Rtt
 
 				baseUrl += url;
 
-				view->openURL(baseUrl.c_str());
+				view->openURL(baseUrl.c_str(), NULL);
 				return 0;
 			}
 		}
@@ -187,12 +187,18 @@ namespace Rtt
 
 				String localurl("file://");
 				localurl.Append(result.GetString());
-				view->openURL(localurl.GetString());
+				view->openURL(localurl.GetString(), NULL);
 				return 0;
 			}
 		}
+		else if (lua_type(L, 4) == LUA_TSTRING)
+		{
+			view->openURL(url, lua_tostring(L, 4));
+		} else 
+		{
+			view->openURL(url, NULL);
+		}
 
-		view->openURL(url);
 		return 0;
 	}
 
@@ -237,10 +243,10 @@ namespace Rtt
 		//arg->fThiz->DispatchEventWithTarget(event);
 	}
 
-	void LinuxWebView::openURL(const char* url)
+	void LinuxWebView::openURL(const char* url, const char *header)
 	{
 		Rect bounds = StageBounds();
-		fWebView = new WebView(bounds, url);
+		fWebView = new WebView(bounds, url, header);
 	}
 
 	void LinuxWebView::Prepare(const Display& display)

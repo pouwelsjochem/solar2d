@@ -96,6 +96,32 @@ namespace Rtt
 		printf("onResourceRedirect\n");
 	}
 
+	int CEF_CALLBACK onBeforeResourceLoad(
+		struct _cef_request_handler_t* self, cef_browser_t* browser,
+		cef_request_t* request, cef_string_t* redirectUrl,
+		struct _cef_stream_reader_t** resourceStream,
+		struct _cef_response_t* response, int loadFlags) {
+	{
+		const weak_ptr<WebView>& thiz = *(const weak_ptr<WebView>*)((Uint8*)self + sizeof(struct _cef_render_handler_t));
+
+		auto initialHeaderString = thiz->InitialHeader();
+		auto initialHeaderColonIndex = str.find(': ');
+		if (initialHeaderColonIndex != std::string::npos) {
+			std::pair<std::string,std::string> initialHeaderPair = std::make_pair(
+				str.substr(0,index),
+				str.substr(index+1)
+			)
+
+			auto headerMap = request->GetHeaderMap();
+			headerMap.insert(initialHeaderPair);
+			request->SetHeaderMap(headerMap);
+		}
+
+		printf("onBeforeResourceLoad\n");
+
+		return 1;
+	}
+
 	_cef_render_handler_t* CEF_CALLBACK get_render_handler(struct _cef_client_t* self)
 	{
 		const weak_ptr<WebView>& thiz = *(const weak_ptr<WebView>*)((Uint8*)self + sizeof(struct _cef_client_t));
@@ -139,7 +165,7 @@ namespace Rtt
 		free(buf);
 	}
 
-	WebView::WebView(const Rect& bounds, const char* url)
+	WebView::WebView(const Rect& bounds, const char* url, const char* header)
 		: fBounds(bounds)
 		, fUrl(url)
 		, fBrowser(NULL)
@@ -165,12 +191,14 @@ namespace Rtt
 		fTex = SharedPtr< TextureResourceBitmap >(resourceY);
 		fData.fFillTexture0 = &fTex->GetTexture();
 
+		fInitialHeader = std::string(header);
 		fRender.base.size = sizeof(cef_render_handler_t);
 		fRender.on_paint = onPaint;
 		fRender.get_view_rect = getViewRect;
 
 		fRequestHandler.base.size = sizeof(cef_request_handler_t);
 		//fRequesthandler.on_before_browse = onBeforeBrowse;
+		fRequesthandler.on_before_resource_load = onBeforeResourceLoad;
 		//fRequesthandler.on_resource_redirect = onResourceRedirect;
 
 		fClient.base.size = sizeof(cef_client_t);

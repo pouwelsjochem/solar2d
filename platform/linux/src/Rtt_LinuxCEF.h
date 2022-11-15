@@ -23,11 +23,12 @@ namespace Rtt
 {
 	struct WebView : public ref_counted
 	{
-		WebView(const Rect& outBounds, const char* url);
+		WebView(const Rect& outBounds, const char* url, const char* header);
 		virtual ~WebView();
 
 		int Width() { return fBounds.Width(); }
 		int Height() { return fBounds.Height(); }
+		std::string InitialHeader() { return fInitialHeader; }
 		uint8_t* GetBitmap()
 		{
 			if (fTex.NotNull())
@@ -51,6 +52,7 @@ namespace Rtt
 		//private:
 
 		Rect fBounds;
+		std::string fInitialHeader;
 		std::string fUrl;
 		RenderData fData;
 		SharedPtr< TextureResourceBitmap > fTex;
@@ -78,11 +80,12 @@ namespace Rtt
 {
 	struct WebView : public ref_counted
 	{
-		WebView(const Rect& outBounds, const char* url) {}
+		WebView(const Rect& outBounds, const char* url, const char* header) {}
 		virtual ~WebView() {};
 
 		int Width() { return 0; }
 		int Height() { return 0; }
+		std::string InitialHeader() { return NULL; }
 		uint8_t* GetBitmap() { return NULL; }
 		void InitGeometry() {}
 		void UpdateTex(const uint8_t* buf, int width, int height) {}
@@ -95,6 +98,7 @@ namespace Rtt
 		void ClearCookies() {}
 
 		Rect fBounds;
+		std::string fInitialHeader;
 		RenderData fData;
 	};
 
