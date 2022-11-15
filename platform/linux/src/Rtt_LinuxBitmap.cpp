@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "Core/Rtt_Build.h"
-#include "Rtt_RendererStream.h"
+#include "Rtt_RenderingStream.h"
 #include "Rtt_LinuxBitmap.h"
 #include "Rtt_LinuxContainer.h"
 #include "Display/Rtt_Display.h"
