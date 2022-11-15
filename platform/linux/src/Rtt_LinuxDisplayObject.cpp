@@ -43,9 +43,6 @@ namespace Rtt
 		float fViewCenterX = bounds.xMin + halfW;
 		float fViewCenterY = bounds.yMin + halfH;
 
-		// If running in the Corona simulator, then fetch its current zoom level scale.
-		//CacheSimulatorScale();
-
 		// Update DisplayObject so that it corresponds to the actual position of the UIView
 		// where DisplayObject's self bounds will be centered around its local origin.
 		Translate(fViewCenterX, fViewCenterY);

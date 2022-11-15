@@ -21,8 +21,6 @@ namespace Rtt
 
 		void OnOpen(const std::string& path);
 		void OnRelaunch();
-		void OnZoomIn();
-		void OnZoomOut();
 		void OnViewAsChanged(const SkinProperties* skin);
 
 		void WatchFolder(const std::string& path);

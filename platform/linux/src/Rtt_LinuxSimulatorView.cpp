@@ -156,8 +156,8 @@ namespace Rtt
 			SkinProperties sProperties;
 			if (filename.rfind(".lua") != string::npos && Load(L, filename, sProperties))
 			{
-				string skinTitle(sProperties.windowTitleBarName);
-				skinTitle += " (" + to_string(sProperties.screenWidth) + "x" + to_string(sProperties.screenHeight) + ")";
+				string skinTitle(sProperties.deviceName);
+				skinTitle += " (" + to_string(sProperties.deviceWidth) + "x" + to_string(sProperties.deviceHeight) + ")";
 				sProperties.skinTitle = skinTitle;
 
 				if (sProperties.device.find("android") != string::npos && !sProperties.device.find("tv") != string::npos)
@@ -213,73 +213,24 @@ namespace Rtt
 			}
 			lua_pop(L, 1);
 
-			lua_getfield(L, -1, "screenOriginX");
+			lua_getfield(L, -1, "deviceWidth");
 			if (lua_type(L, -1) == LUA_TNUMBER)
 			{
-				skin.screenOriginX = lua_tointeger(L, -1);
+				skin.deviceWidth = lua_tointeger(L, -1);
 			}
 			lua_pop(L, 1);
 
-			lua_getfield(L, -1, "screenOriginY");
+			lua_getfield(L, -1, "deviceHeight");
 			if (lua_type(L, -1) == LUA_TNUMBER)
 			{
-				skin.screenOriginY = lua_tointeger(L, -1);
+				skin.deviceHeight = lua_tointeger(L, -1);
 			}
 			lua_pop(L, 1);
 
-			lua_getfield(L, -1, "screenWidth");
-			if (lua_type(L, -1) == LUA_TNUMBER)
-			{
-				skin.screenWidth = lua_tointeger(L, -1);
-			}
-			lua_pop(L, 1);
-
-			lua_getfield(L, -1, "screenHeight");
-			if (lua_type(L, -1) == LUA_TNUMBER)
-			{
-				skin.screenHeight = lua_tointeger(L, -1);
-			}
-			lua_pop(L, 1);
-
-			lua_getfield(L, -1, "androidDisplayApproximateDpi");
-			if (lua_type(L, -1) == LUA_TNUMBER)
-			{
-				skin.androidDisplayApproximateDpi = lua_tointeger(L, -1);
-			}
-			lua_pop(L, 1);
-
-			lua_getfield(L, -1, "displayManufacturer");
+			lua_getfield(L, -1, "deviceName");
 			if (lua_type(L, -1) == LUA_TSTRING)
 			{
-				skin.displayManufacturer = lua_tostring(L, -1);
-			}
-			lua_pop(L, 1);
-
-			lua_getfield(L, -1, "displayName");
-			if (lua_type(L, -1) == LUA_TSTRING)
-			{
-				skin.displayName = lua_tostring(L, -1);
-			}
-			lua_pop(L, 1);
-
-			lua_getfield(L, -1, "isUprightOrientationPortrait");
-			if (lua_type(L, -1) == LUA_TBOOLEAN)
-			{
-				skin.isUprightOrientationPortrait = lua_toboolean(L, -1);
-			}
-			lua_pop(L, 1);
-
-			lua_getfield(L, -1, "supportsScreenRotation");
-			if (lua_type(L, -1) == LUA_TBOOLEAN)
-			{
-				skin.supportsScreenRotation = lua_toboolean(L, -1);
-			}
-			lua_pop(L, 1);
-
-			lua_getfield(L, -1, "windowTitleBarName");
-			if (lua_type(L, -1) == LUA_TSTRING)
-			{
-				skin.windowTitleBarName = lua_tostring(L, -1);
+				skin.deviceName = lua_tostring(L, -1);
 			}
 			lua_pop(L, 1);
 
@@ -287,8 +238,8 @@ namespace Rtt
 			lua_pop(L, 1);
 			lua_settop(L, top);
 
-			string skinTitle(skin.windowTitleBarName);
-			skinTitle += to_string(skin.screenWidth) + "x" + to_string(skin.screenHeight);
+			string skinTitle(skin.deviceName);
+			skinTitle += to_string(skin.deviceWidth) + "x" + to_string(skin.deviceHeight);
 			skin.skinTitle = skinTitle;
 			skin.selected = false;
 		}

@@ -8,7 +8,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "Rtt_MPlatformDevice.h"
-#include "Rtt_DeviceOrientation.h"
 #include "Input/Rtt_PlatformInputDeviceManager.h"
 #include "Rtt_LinuxInputDeviceManager.h"
 
@@ -39,15 +38,12 @@ namespace Rtt
 		virtual bool HasEventSource(EventType type) const override;
 		virtual void SetAccelerometerInterval(U32 frequency) const override;
 		virtual void SetGyroscopeInterval(U32 frequency) const override;
-		virtual void SetOrientation(DeviceOrientation::Type orientation);
-		virtual DeviceOrientation::Type GetOrientation() const override;
 		virtual const char *GetPlatform() const override;
 		virtual const char *GetManufacturer() const override;
 
 	private:
 		Rtt_Allocator &fAllocator;
 		DeviceNotificationTracker fTracker;
-		DeviceOrientation::Type fOrientation;
 		LinuxInputDeviceManager fInputDeviceManager;
 		mutable std::string fName;
 		mutable std::string fArchitecture;

@@ -21,10 +21,6 @@ namespace Rtt
 	/// Creates a new delegate used to receive events from the Corona runtime.
 	LinuxRuntimeDelegate::LinuxRuntimeDelegate()
 		: RuntimeDelegate()
-		, fContentWidth(0)
-		, fContentHeight(0)
-		, fFPS(30)
-		, fOrientation(DeviceOrientation::kUpright)
 	{
 	}
 
@@ -57,56 +53,6 @@ namespace Rtt
 
 	void LinuxRuntimeDelegate::WillLoadConfig(const Runtime& sender, lua_State* L) const
 	{
-		// Rtt_ASSERT( ! fDisplay );
-		Rtt_ASSERT(1 == lua_gettop(L));
-		Rtt_ASSERT(lua_istable(L, -1));
-
-		lua_getfield(L, -1, "width");
-		if (lua_tonumber(L, -1) > 0 && fContentWidth == 0) // use width from build.settings if it exist there
-		{
-			const_cast<LinuxRuntimeDelegate*>(this)->SetWidth(lua_tonumber(L, -1));
-		}
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "height");
-		if (lua_tonumber(L, -1) > 0 && fContentHeight == 0) // use width from build.settings if it exist there
-		{
-			const_cast<LinuxRuntimeDelegate*>(this)->SetHeight(lua_tonumber(L, -1));
-		}
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "fps");
-		int fps = (int)lua_tointeger(L, -1);
-
-		if (60 == fps) // Besides default (30), only 60 fps is supported
-		{
-			fFPS = 60;
-		}
-		lua_pop(L, 1);
-
-		lua_getfield(L, -1, "scale");
-		if (lua_type(L, -1) == LUA_TSTRING)
-		{
-			fScaleMode = lua_tostring(L, -1);
-		}
-		lua_pop(L, 1);
-
-		if (fScaleMode.empty())
-		{
-			fScaleMode = "none";
-		}
-
-		// default
-		if (fContentWidth == 0)
-		{
-			const_cast<LinuxRuntimeDelegate*>(this)->SetWidth(320);
-		}
-		if (fContentHeight == 0)
-		{
-			const_cast<LinuxRuntimeDelegate*>(this)->SetHeight(480);
-		}
-
-		Rtt_ASSERT(1 == lua_gettop(L));
 	}
 
 	void LinuxRuntimeDelegate::DidLoadConfig(const Runtime& sender, lua_State* L) const

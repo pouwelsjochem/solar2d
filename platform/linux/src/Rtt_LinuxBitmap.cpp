@@ -64,13 +64,11 @@ namespace Rtt
 
 	U32 LinuxBaseBitmap::Width() const
 	{
-		//return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceWidth() : UprightWidth() );
 		return fWidth;
 	}
 
 	U32 LinuxBaseBitmap::Height() const
 	{
-		//return ( ! IsPropertyInternal( kIsBitsAutoRotated ) ? SourceHeight() : UprightHeight() );
 		return fHeight;
 	}
 
@@ -96,8 +94,6 @@ namespace Rtt
 		switch (mask)
 		{
 			case kIsBitsFullResolution:
-				break;
-			case kIsBitsAutoRotated:
 				break;
 			default:
 				break;

@@ -451,8 +451,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_Archive.cpp
 		${CORONA_ROOT}/librtt/Rtt_CKWorkflow.cpp
-		${CORONA_ROOT}/librtt/Rtt_DeviceOrientation.cpp
-		${CORONA_ROOT}/librtt/Rtt_DisplayObjectExtensions.cpp
 		${CORONA_ROOT}/librtt/Rtt_Event.cpp
 		${CORONA_ROOT}/librtt/Rtt_ExplicitTemplates.cpp
 		${CORONA_ROOT}/librtt/Rtt_FilePath.cpp

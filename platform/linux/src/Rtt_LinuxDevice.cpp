@@ -18,8 +18,7 @@ namespace Rtt
 #pragma region Constructors / Destructors
 	LinuxDevice::LinuxDevice(Rtt_Allocator& allocator)
 		: fAllocator(allocator),
-		fInputDeviceManager(&allocator),
-		fOrientation(DeviceOrientation::kUnknown)
+		fInputDeviceManager(&allocator)
 	{
 	}
 
@@ -30,11 +29,6 @@ namespace Rtt
 #pragma endregion
 
 #pragma region Public Member Functions
-
-	void LinuxDevice::SetOrientation(DeviceOrientation::Type orientation)
-	{
-		fOrientation = orientation;
-	}
 
 	void LinuxDevice::Vibrate() const
 	{
@@ -56,7 +50,6 @@ namespace Rtt
 		{
 		case MPlatformDevice::kGyroscopeEvent:
 			break;
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kMultitouchEvent:
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kAccelerometerEvent:
@@ -75,7 +68,6 @@ namespace Rtt
 
 		switch (type)
 		{
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 		case MPlatformDevice::kMultitouchEvent:
@@ -92,7 +84,6 @@ namespace Rtt
 
 		switch (type)
 		{
-		case MPlatformDevice::kOrientationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
 		case MPlatformDevice::kMultitouchEvent:
@@ -174,11 +165,6 @@ namespace Rtt
 	PlatformInputDeviceManager& LinuxDevice::GetInputDeviceManager()
 	{
 		return fInputDeviceManager;
-	}
-
-	DeviceOrientation::Type LinuxDevice::GetOrientation() const
-	{
-		return fOrientation;
 	}
 
 	const char* LinuxDevice::GetPlatform() const

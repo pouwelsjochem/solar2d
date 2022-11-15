@@ -443,16 +443,6 @@ namespace Rtt
 		{
 			PushEvent(sdl::OnBuildLinux);
 		}
-		// ZoomIn
-		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Equal, false))
-		{
-			PushEvent(sdl::OnZoomIn);
-		}
-		// ZoomOut
-		else if (ctrl && !shift && !alt && ImGui::IsKeyPressed(ImGuiKey_Minus, false))
-		{
-			PushEvent(sdl::OnZoomOut);
-		}
 
 
 		if (ImGui::BeginMainMenuBar())
@@ -520,18 +510,6 @@ namespace Rtt
 			// project menu
 			if (ImGui::BeginMenu("Hardware"))
 			{
-				if (ImGui::MenuItem("Rotate Left", "Ctrl+Left"))
-				{
-					PushEvent(sdl::OnRotateLeft);
-				}
-				if (ImGui::MenuItem("Rotate Right", "Ctrl+Right"))
-				{
-					PushEvent(sdl::OnRotateRight);
-				}
-				if (ImGui::MenuItem("Shake", "Ctrl+Up"))
-				{
-					PushEvent(sdl::OnShake);
-				}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Back", "Alt+Left"))
 				{
@@ -553,14 +531,6 @@ namespace Rtt
 			// project menu
 			if (ImGui::BeginMenu("View"))
 			{
-				if (ImGui::MenuItem("Zoom In", "Ctrl+Plus"))
-				{
-					PushEvent(sdl::OnZoomIn);
-				}
-				if (ImGui::MenuItem("Zoom Out", "Ctrl+Minus"))
-				{
-					PushEvent(sdl::OnZoomOut);
-				}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Welcome screen", NULL))
 				{

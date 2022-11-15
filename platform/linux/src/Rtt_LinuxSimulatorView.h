@@ -74,16 +74,8 @@ namespace Rtt
 	struct SkinProperties
 	{
 		std::string device;
-		int screenOriginX;
-		int screenOriginY;
-		int screenWidth;
-		int screenHeight;
-		int androidDisplayApproximateDpi;
-		std::string displayManufacturer;
-		std::string displayName;
-		bool isUprightOrientationPortrait;
-		bool supportsScreenRotation;
-		std::string windowTitleBarName;
+		int deviceWidth;
+		int deviceHeight;
 		std::string skinTitle;
 		bool selected;
 	};

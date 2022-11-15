@@ -46,25 +46,10 @@ namespace Rtt
 		return fContext->GetHeight();
 	}
 
-	S32 LinuxScreenSurface::DeviceWidth() const
-	{
-		return (fContext->GetOrientation() == DeviceOrientation::kUpright  || fContext->GetOrientation() == DeviceOrientation::kUpsideDown) ? Width() : Height();
-	}
-
-	S32 LinuxScreenSurface::DeviceHeight() const
-	{
-		return (fContext->GetOrientation() == DeviceOrientation::kUpright  || fContext->GetOrientation() == DeviceOrientation::kUpsideDown) ? Height() : Width();
-	}
-
 	void LinuxScreenSurface::getWindowSize(int* w, int* h)
 	{
 		*w = Width();
 		*h = Height();
-	}
-
-	DeviceOrientation::Type LinuxScreenSurface::GetOrientation() const
-	{
-		return fContext->GetOrientation();
 	}
 
 	#pragma endregion

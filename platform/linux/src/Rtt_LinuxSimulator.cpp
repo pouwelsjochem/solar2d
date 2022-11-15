@@ -45,8 +45,6 @@ namespace Rtt
 	// SolarSimulator
 	//
 
-	static float skinScaleFactor = 1.5f;
-
 	SolarSimulator::SolarSimulator(const string& resourceDir)
 		: SolarApp(resourceDir)
 	{
@@ -309,14 +307,6 @@ namespace Rtt
 			break;
 		}
 
-		case sdl::OnZoomIn:
-			OnZoomIn();
-			break;
-
-		case sdl::OnZoomOut:
-			OnZoomOut();
-			break;
-
 		default:
 			break;
 		}
@@ -334,34 +324,6 @@ namespace Rtt
 		LoadApp(GetAppPath());
 	}
 
-	void SolarSimulator::OnZoomIn()
-	{
-		SDL_DisplayMode screen;
-		if (SDL_GetCurrentDisplayMode(0, &screen) == 0)
-		{
-			int proposedWidth = fContext->GetWidth() * skinScaleFactor;
-			int proposedHeight = fContext->GetHeight() * skinScaleFactor;
-			if (proposedWidth <= screen.w && proposedHeight <= screen.h)
-			{
-				fContext->SetSize(proposedWidth, proposedHeight);
-			}
-		}
-	}
-
-	void SolarSimulator::OnZoomOut()
-	{
-		SDL_DisplayMode screen;
-		if (SDL_GetCurrentDisplayMode(0, &screen) == 0)
-		{
-			int proposedWidth = fContext->GetWidth() / skinScaleFactor;
-			int proposedHeight = fContext->GetHeight() / skinScaleFactor;
-			if (proposedWidth >= 320) //skinMinWidth)
-			{
-				fContext->SetSize(proposedWidth, proposedHeight);
-			}
-		}
-	}
-
 	void SolarSimulator::OnViewAsChanged(const SkinProperties* skin)
 	{
 		SDL_DisplayMode screen;
@@ -371,13 +333,8 @@ namespace Rtt
 			title.append(" - ").append(skin->skinTitle);
 			fContext->SetTitle(title);
 
-			int w = skin->screenWidth;
-			int h = skin->screenHeight;
-			while (w > screen.w || h > screen.h)
-			{
-				w /= skinScaleFactor;
-				h /= skinScaleFactor;
-			}
+			int w = skin->deviceWidth;
+			int h = skin->deviceHeight;
 			fContext->SetSize(w, h);
 		}
 	}

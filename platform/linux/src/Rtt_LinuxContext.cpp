@@ -172,8 +172,7 @@ namespace Rtt
 			int minWidth = fProjectSettings->GetMinWindowViewWidth();
 			int minHeight = fProjectSettings->GetMinWindowViewHeight();
 			const Rtt::NativeWindowMode* nativeWindowMode = fProjectSettings->GetDefaultWindowMode();
-			DeviceOrientation::Type orientation = fProjectSettings->GetDefaultOrientation();
-
+			
 			if (*nativeWindowMode == Rtt::NativeWindowMode::kFullscreen)
 			{
 				fMode = NativeWindowMode::kFullscreen.GetStringId();
@@ -194,76 +193,21 @@ namespace Rtt
 				height = fProjectSettings->GetDefaultWindowViewHeight();
 			}
 
-			switch (orientation)
+			if (width > 0 && height > 0)
 			{
-			case DeviceOrientation::kSidewaysRight:
-				fRuntimeDelegate->fOrientation = DeviceOrientation::kSidewaysRight; // bottom of device is to the right
-
-				if (width > 0 && height > 0)
-				{
-					fRuntimeDelegate->SetWidth(width);
-					fRuntimeDelegate->SetHeight(height);
-				}
-				else
-				{
-					// no valid defaultViewWidth & defaultViewHeight in 'build.settings', default values of fWidth & fHeight for Portrait
-					// use swapped default settings
-					int w = fRuntimeDelegate->GetWidth();
-					int h = fRuntimeDelegate->GetHeight();
-					fRuntimeDelegate->SetWidth(480);
-					fRuntimeDelegate->SetHeight(320);
-				}
-				break;
-
-			case DeviceOrientation::kSidewaysLeft:
-				fRuntimeDelegate->fOrientation = DeviceOrientation::kSidewaysLeft; // bottom of device is to the left
-
-				if (width > 0 && height > 0)
-				{
-					fRuntimeDelegate->SetWidth(width);
-					fRuntimeDelegate->SetHeight(height);
-				}
-				else
-				{
-					// no valid defaultViewWidth & defaultViewHeight in 'build.settings', default values of fWidth & fHeight for Portrait
-					// use swapped default settings
-					int w = fRuntimeDelegate->GetWidth();
-					int h = fRuntimeDelegate->GetHeight();
-					fRuntimeDelegate->SetWidth(h);
-					fRuntimeDelegate->SetHeight(w);
-				}
-				break;
-
-			case DeviceOrientation::kUpright:
-				fRuntimeDelegate->fOrientation = DeviceOrientation::kUpright; // bottom of device is at the bottom
-
-				if (width > 0 && height > 0)
-				{
-					fRuntimeDelegate->SetWidth(width);
-					fRuntimeDelegate->SetHeight(height);
-				}
-				else
-				{
-					// no valid defaultViewWidth & defaultViewHeight in 'build.settings', default values of fWidth & fHeight for Portrait
-					// use default settings
-				}
-				break;
-
-			case DeviceOrientation::kUpsideDown:
-				fRuntimeDelegate->fOrientation = DeviceOrientation::kUpsideDown; // bottom of device is at the top
-
-				if (width > 0 && height > 0)
-				{
-					fRuntimeDelegate->SetWidth(width);
-					fRuntimeDelegate->SetHeight(height);
-				}
-				else
-				{
-					// no valid defaultViewWidth & defaultViewHeight in 'build.settings', default values of fWidth & fHeight for Portrait
-					// use default settings
-				}
-				break;
+				fRuntimeDelegate->SetWidth(width);
+				fRuntimeDelegate->SetHeight(height);
 			}
+			else
+			{
+				// no valid defaultViewWidth & defaultViewHeight in 'build.settings', default values of fWidth & fHeight for Portrait
+				// use swapped default settings
+				int w = fRuntimeDelegate->GetWidth();
+				int h = fRuntimeDelegate->GetHeight();
+				fRuntimeDelegate->SetWidth(480);
+				fRuntimeDelegate->SetHeight(320);
+			}
+			break;
 		}
 
 		fPlatform->setWindow(this);
@@ -349,7 +293,7 @@ namespace Rtt
 
 		Init();
 
-		if (Runtime::kSuccess != fRuntime->LoadApplication(Runtime::kLinuxLaunchOption, fRuntimeDelegate->fOrientation))
+		if (Runtime::kSuccess != fRuntime->LoadApplication(Runtime::kLinuxLaunchOption))
 		{
 			delete fRuntime;
 			delete fPlatform;
@@ -362,11 +306,6 @@ namespace Rtt
 		luapath.append("/Resources/?.lua;");
 
 		setenv("LUA_PATH", luapath.c_str(), true);
-
-		if (fRuntimeDelegate->fOrientation == DeviceOrientation::kSidewaysRight || fRuntimeDelegate->fOrientation == DeviceOrientation::kSidewaysLeft)
-		{
-			// Swap(fRuntimeDelegate->fContentWidth, fRuntimeDelegate->fContentHeight);
-		}
 
 		if (app->IsRunningOnSimulator())
 		{
@@ -461,7 +400,7 @@ namespace Rtt
 	void SolarAppContext::RestartRenderer()
 	{
 		fRuntime->GetDisplay().WindowSizeChanged();
-		fRuntime->RestartRenderer(fRuntimeDelegate->fOrientation);
+		fRuntime->RestartRenderer();
 		fRuntime->GetDisplay().Invalidate();
 		fRuntime->DispatchEvent(ResizeEvent());
 	}

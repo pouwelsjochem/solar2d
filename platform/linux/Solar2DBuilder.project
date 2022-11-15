@@ -571,11 +571,9 @@
         <File Name="../../librtt/Display/Rtt_DisplayV2.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayTypes.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayPath.h"/>
-        <File Name="../../librtt/Rtt_DisplayObjectExtensions.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayObject.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayDefaults.h"/>
         <File Name="../../librtt/Display/Rtt_Display.h"/>
-        <File Name="../../librtt/Rtt_DeviceOrientation.h"/>
         <File Name="../shared/Rtt_DeviceBuildData.h"/>
         <File Name="../../librtt/Display/Rtt_CPUResourcePool.h"/>
         <File Name="../../librtt/Display/Rtt_ContainerObject.h"/>
@@ -909,8 +907,6 @@
       <File Name="../../librtt/Rtt_ExplicitTemplates.cpp"/>
       <File Name="../../librtt/Rtt_Event.cpp"/>
       <File Name="../../librtt/Rtt_EllipsePath.cpp"/>
-      <File Name="../../librtt/Rtt_DisplayObjectExtensions.cpp"/>
-      <File Name="../../librtt/Rtt_DeviceOrientation.cpp"/>
       <File Name="../../librtt/Rtt_CKWorkflow.cpp"/>
       <File Name="../../librtt/Rtt_CachedPath.cpp"/>
       <File Name="../../librtt/Rtt_Archive.cpp"/>
