@@ -11,7 +11,6 @@
 #include "Rtt_GPUStream.h"
 #include "Rtt_LinuxBitmap.h"
 #include "Rtt_LinuxContainer.h"
-#include "Rtt_Freetype.h"
 #include "Display/Rtt_Display.h"
 #include "Core/Rtt_Types.h"
 #include "Rtt_BitmapUtils.h"

@@ -18,7 +18,6 @@
 #include "shared/Rtt_ProjectSettings.h"
 #include "shared/Rtt_NativeWindowMode.h"
 #include "Rtt_LinuxInputDeviceManager.h"
-#include "Rtt_LinuxSimulatorServices.h"
 #include "Rtt_LinuxRuntime.h"
 #include "Rtt_LinuxRuntimeDelegate.h"
 #include "Rtt_LinuxKeyListener.h"
@@ -96,7 +95,6 @@ namespace Rtt
 		void RenderGUI();
 		inline void Pause() { fContext->Pause(); }
 		inline void Resume() { fContext->Resume(); }
-		inline void SetActivityIndicator(bool visible) { fActivityIndicator = visible; }
 		void Log(const char* buf, int len);
 
 		bool IsFullScreen() { return false; }
@@ -142,7 +140,6 @@ namespace Rtt
 		ImGuiContext* fImCtx;
 		smart_ptr<DlgMenu> fMenu;
 		smart_ptr<Window> fDlg;
-		bool fActivityIndicator;
 		std::vector<LinuxDisplayObject*> fNativeObjects;
 
 		// console

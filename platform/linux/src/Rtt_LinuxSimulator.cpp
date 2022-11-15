@@ -254,20 +254,6 @@ namespace Rtt
 		{
 			string path = (const char*)e.user.data1;
 			free(e.user.data1);
-
-			if (path.size() >= 5 && path.substr(0, 2) != ".#" && path.rfind(".lua") != string::npos)
-			{
-				//Rtt_Log("OnFileSystemEvent 0x%X: %s\n", e.user.code, path.c_str());
-				const string& s = fConfig["relaunchOnFileChange"].to_string();
-				if (s == "Always")
-				{
-					PushEvent(sdl::OnRelaunchLastProject);
-				}
-				else if (s == "Ask")
-				{
-					fDlg = new DlgAskRelaunch("Solar2D", 320, 240);
-				}
-			}
 			break;
 		}
 

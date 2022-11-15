@@ -71,47 +71,6 @@ namespace Rtt
 		return false;
 	}
 
-	void DrawActivity()
-	{
-		Window::MoveToCenter();
-
-		ImGui::Begin("##DrawActivity", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
-		ImGuiWindow* window = ImGui::GetCurrentWindow();
-
-		const char* label = "##spinner";
-		const float indicator_radius = 14;
-		const ImVec4 main_color(0, 0, 1, 1);
-		const ImVec4 backdrop_color(0, 0, 1, 0.7f);
-		const int circle_count = 8;
-		const float speed = 8;
-
-		ImGuiContext& g = *GImGui;
-		const ImGuiID id = window->GetID(label);
-
-		const ImVec2 pos = window->DC.CursorPos;
-		const float circle_radius = indicator_radius / 10.0f;
-		const ImRect bb(pos, ImVec2(pos.x + indicator_radius * 2.0f, pos.y + indicator_radius * 2.0f));
-		ImGui::ItemSize(bb, 0);
-		if (ImGui::ItemAdd(bb, id))
-		{
-			const float t = g.Time;
-			const auto degree_offset = 2.0f * IM_PI / circle_count;
-			for (int i = 0; i < circle_count; ++i)
-			{
-				const auto x = indicator_radius * std::sin(degree_offset * i);
-				const auto y = indicator_radius * std::cos(degree_offset * i);
-				const auto growth = std::max(0.0f, std::sin(t * speed - i * degree_offset));
-				ImVec4 color;
-				color.x = main_color.x * growth + backdrop_color.x * (1.0f - growth);
-				color.y = main_color.y * growth + backdrop_color.y * (1.0f - growth);
-				color.z = main_color.z * growth + backdrop_color.z * (1.0f - growth);
-				color.w = 1.0f;
-				window->DrawList->AddCircleFilled(ImVec2(pos.x + indicator_radius + x, pos.y + indicator_radius - y), circle_radius + growth * circle_radius, ImGui::GetColorU32(color));
-			}
-		}
-		ImGui::End();
-	}
-
 	//
 	// Dlg base class
 	//
@@ -578,17 +537,11 @@ namespace Rtt
 
 	DlgPreferences::DlgPreferences(const std::string& title, int w, int h)
 		: Window(title, w, h)
-		, fRelaunchIndex(1)
-		, fShowWelcome(false)
-		, fShowErrors(true)
 		, fOpenlastProject(false)
 		, fStyleIndex(0)
 		, fDebugBuildProcess(false)
 	{
 		Config& cfg = app->GetConfig();
-		fRelaunchIndex = cfg["relaunchOnFileChange"].to_string() == "Always" ? 0 : (cfg["relaunchOnFileChange"].to_string() == "Ask" ? 2 : 1);
-		fShowWelcome = cfg["ShowWelcome"].to_bool();
-		fShowErrors = cfg["showRuntimeErrors"].to_bool();
 		fOpenlastProject = cfg["openLastProject"].to_bool();
 		fStyleIndex = cfg["ColorScheme"].to_string() == "Light" ? 0 : (cfg["ColorScheme"].to_string() == "Dark" ? 2 : 1);
 		fDebugBuildProcess = cfg["debugBuildProcess"].to_int() > 0;
@@ -605,17 +558,8 @@ namespace Rtt
 		{
 			const ImVec2& window_size = ImGui::GetWindowSize();
 
-			ImGui::Checkbox("Don't show the Welcome window", &fShowWelcome);
-			ImGui::Checkbox("Show Runtime Errorrs", &fShowErrors);
 			ImGui::Checkbox("Automatically open last project", &fOpenlastProject);
 			ImGui::Checkbox("Debug Build Process", &fDebugBuildProcess);
-
-			string s = "Relaunch Simulator when project is modified";
-			ImGui::Dummy(ImVec2(100, 10));
-			ImGui::TextUnformatted(s.c_str());
-			ImGui::RadioButton("Always", &fRelaunchIndex, 0);
-			ImGui::RadioButton("Never", &fRelaunchIndex, 1);
-			ImGui::RadioButton("Ask every time", &fRelaunchIndex, 2);
 
 			s = "GUI Color Scheme";
 			ImGui::Dummy(ImVec2(100, 10));
@@ -640,9 +584,6 @@ namespace Rtt
 			if (IsOkPressed || (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Enter)))
 			{
 				Config& cfg = app->GetConfig();
-				cfg["relaunchOnFileChange"] = fRelaunchIndex == 0 ? "Always" : (fRelaunchIndex == 2 ? "Ask" : "Never");
-				cfg["ShowWelcome"] = fShowWelcome;
-				cfg["showRuntimeErrors"] = fShowErrors;
 				cfg["openLastProject"] = fOpenlastProject;
 				cfg["debugBuildProcess"] = fDebugBuildProcess ? 100 : 0;
 				cfg["ColorScheme"] = fStyleIndex == 0 ? "Light" : (fStyleIndex == 2 ? "Dark" : "Standard");
@@ -665,57 +606,6 @@ namespace Rtt
 			ImGui::End();
 		}
 		end();
-	}
-
-	//
-	// DlgAskRelaunch
-	//
-
-	void DlgAskRelaunch::Draw()
-	{
-		begin();
-		if (ImGui::Begin("##DlgAskRelaunch", NULL, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_AlwaysAutoResize))
-		{
-			const ImVec2& window_size = ImGui::GetWindowSize();
-
-			ImGui::Dummy(ImVec2(100, 10));
-			ImGui::TextUnformatted("   Solar2D project has been modified");
-			ImGui::TextUnformatted("Whould you like to relaunch the project?");
-
-			ImGui::Dummy(ImVec2(150, 30));
-			ImGui::Checkbox("Remember my preference", &fSaveMyPreference);
-
-			// ok + cancel
-			string s = "Relaunch";
-			ImGui::Dummy(ImVec2(100, 30));
-			ImGui::SetCursorPosX((window_size.x - BUTTON_WIDTH) * 0.5f);
-			if (ImGui::Button(s.c_str(), ImVec2(BUTTON_WIDTH, 0)) || (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Enter)))
-			{
-				SaveMyPreference("Always");
-				PushEvent(sdl::onCloseDialog);
-				PushEvent(sdl::OnRelaunchLastProject);
-			}
-			ImGui::SetItemDefaultFocus();
-
-			s = "Ignore";
-			ImGui::SameLine();
-			if (ImGui::Button(s.c_str(), ImVec2(BUTTON_WIDTH, 0)) || (ImGui::IsWindowFocused() && ImGui::IsKeyPressed(ImGuiKey_Escape)))
-			{
-				SaveMyPreference("Never");
-				PushEvent(sdl::onCloseDialog);
-			}
-			ImGui::End();
-		}
-		end();
-	}
-
-	void DlgAskRelaunch::SaveMyPreference(const char* val)
-	{
-		if (fSaveMyPreference)
-		{
-			Config& cfg = app->GetConfig();
-			cfg["relaunchOnFileChange"] = val;
-		}
 	}
 
 	//

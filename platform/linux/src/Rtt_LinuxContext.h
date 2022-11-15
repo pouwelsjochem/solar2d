@@ -18,7 +18,6 @@
 #include "shared/Rtt_ProjectSettings.h"
 #include "shared/Rtt_NativeWindowMode.h"
 #include "Rtt_LinuxInputDeviceManager.h"
-#include "Rtt_LinuxSimulatorServices.h"
 #include "Rtt_LinuxRuntime.h"
 #include "Rtt_LinuxRuntimeDelegate.h"
 #include "Rtt_LinuxKeyListener.h"
@@ -109,7 +108,6 @@ namespace Rtt
 		bool fTouchDeviceExist;
 		const char* fMode;
 		bool fIsDebApp;
-		LinuxSimulatorServices* fLinuxSimulatorServices;
 		std::string fSaveFolder;
 		ProjectSettings* fProjectSettings;
 

@@ -58,7 +58,6 @@ namespace Rtt
 		virtual void HttpPost(const char *url, const char *key, const char *value) const;
 		virtual const MCrypto &GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String *value) const;
-		virtual void SetActivityIndicator(bool visible) const;
 		virtual bool CanShowPopup(const char *name) const;
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
@@ -97,8 +96,6 @@ namespace Rtt
 		virtual bool OpenURL(const char *url) const;
 		virtual int CanOpenURL(const char *url) const;
 		virtual PlatformStoreProvider *GetStoreProvider(const ResourceHandle<lua_State> &handle) const;
-		virtual void SetIdleTimer(bool enabled) const;
-		virtual bool GetIdleTimer() const;
 
 		virtual NativeAlertRef ShowNativeAlert(
 		    const char *title,

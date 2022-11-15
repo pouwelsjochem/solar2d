@@ -164,7 +164,6 @@ parts:
       chmod -c -R a+r .      
     build-packages:
       - libcurl4-openssl-dev
-      - libfreetype6-dev
       - libgl1-mesa-dev
       - libglu1-mesa-dev
       - libogg-dev
@@ -183,7 +182,6 @@ parts:
       - libpulse-dev
     stage-packages:
       - libcurl4
-      - libfreetype6
       - libgl1
       - libogg0
       - libopenal1

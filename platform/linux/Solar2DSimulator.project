@@ -24,7 +24,6 @@
       <File Name="src/Rtt_ConsoleApp.cpp"/>
       <File Name="src/Rtt_LinuxKeyListener.cpp"/>
       <File Name="src/Rtt_LinuxRuntime.cpp"/>
-      <File Name="src/Rtt_Freetype.cpp"/>
       <File Name="src/Rtt_LinuxIPCClient.cpp"/>
       <File Name="src/Rtt_LinuxIPCClientConnection.cpp"/>
       <File Name="src/Rtt_HTTPClientLinux.cpp"/>
@@ -38,11 +37,9 @@
         <File Name="../android/Rtt_AndroidAppPackager.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="simulator">
-        <File Name="src/Rtt_LinuxSimulatorServices.cpp"/>
         <File Name="src/Rtt_LinuxSimulatorView.cpp"/>
         <VirtualDirectory Name="include">
           <File Name="src/Rtt_LinuxSimulatorView.h"/>
-          <File Name="src/Rtt_LinuxSimulatorServices.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="dialogs">
@@ -68,7 +65,6 @@
         <File Name="src/Rtt_ConsoleApp.h"/>
         <File Name="src/Rtt_LinuxKeyListener.h"/>
         <File Name="src/Rtt_LinuxRuntime.h"/>
-        <File Name="src/Rtt_Freetype.h"/>
         <File Name="src/Rtt_LinuxIPCClient.h"/>
         <File Name="src/Rtt_LinuxIPCClientConnection.h"/>
         <File Name="src/Rtt_LinuxWebView.h"/>
@@ -264,11 +260,7 @@
         <File Name="../../librtt/Display/Rtt_TextObject.h"/>
         <File Name="../../librtt/Rtt_TesselatorStream.h"/>
         <File Name="../../librtt/Display/Rtt_TesselatorShape.h"/>
-        <File Name="../../librtt/Display/Rtt_TesselatorRoundedRect.h"/>
         <File Name="../../librtt/Display/Rtt_TesselatorRect.h"/>
-        <File Name="../../librtt/Display/Rtt_TesselatorPolygon.h"/>
-        <File Name="../../librtt/Display/Rtt_TesselatorMesh.h"/>
-        <File Name="../../librtt/Display/Rtt_TesselatorLine.h"/>
         <File Name="../../librtt/Display/Rtt_TesselatorCircle.h"/>
         <File Name="../../librtt/Display/Rtt_Tesselator.h"/>
         <File Name="../shared/Rtt_TargetDevice.h"/>
@@ -278,8 +270,8 @@
         <File Name="../../librtt/Core/Rtt_StringHash.h"/>
         <File Name="../../librtt/Core/Rtt_String.h"/>
         <File Name="../../librtt/Display/Rtt_StageObject.h"/>
-        <File Name="../../librtt/Display/Rtt_SpriteSourceFrame.h"/>
         <File Name="../../librtt/Display/Rtt_SpritePlayer.h"/>
+        <File Name="../../librtt/Display/Rtt_SpriteSequence.h"/>        
         <File Name="../../librtt/Display/Rtt_SpriteObject.h"/>
         <File Name="../../librtt/Display/Rtt_SnapshotObject.h"/>
         <File Name="../../modules/simulator/Rtt_SimulatorRecents.h"/>
@@ -287,10 +279,7 @@
         <File Name="../../librtt/Core/Rtt_SharedCount.h"/>
         <File Name="../../librtt/Display/Rtt_ShapePath.h"/>
         <File Name="../../librtt/Display/Rtt_ShapeObject.h"/>
-        <File Name="../../librtt/Display/Rtt_ShapeAdapterRoundedRect.h"/>
         <File Name="../../librtt/Display/Rtt_ShapeAdapterRect.h"/>
-        <File Name="../../librtt/Display/Rtt_ShapeAdapterPolygon.h"/>
-        <File Name="../../librtt/Display/Rtt_ShapeAdapterMesh.h"/>
         <File Name="../../librtt/Display/Rtt_ShapeAdapterCircle.h"/>
         <File Name="../../librtt/Display/Rtt_ShapeAdapter.h"/>
         <File Name="../../librtt/Display/Rtt_ShaderTypes.h"/>
@@ -303,7 +292,6 @@
         <File Name="../../librtt/Display/Rtt_ShaderCompositeAdapter.h"/>
         <File Name="../../librtt/Display/Rtt_ShaderData.h"/>
         <File Name="../../librtt/Display/Rtt_ShaderComposite.h"/>
-        <File Name="../../librtt/Display/Rtt_ShaderCache.h"/>
         <File Name="../../librtt/Display/Rtt_ShaderBuiltin.h"/>
         <File Name="../../librtt/Display/Rtt_Shader.h"/>
         <File Name="../../librtt/Rtt_Scheduler.h"/>
@@ -345,9 +333,7 @@
         <File Name="../../librtt/Display/Rtt_PaintAdapter.h"/>
         <File Name="../../librtt/Display/Rtt_Paint.h"/>
         <File Name="../../librtt/Core/Rtt_OperationResult.h"/>
-        <File Name="../../librtt/Display/Rtt_OpenPath.h"/>
         <File Name="../../librtt/Rtt_MUpdatable.h"/>
-        <File Name="../../modules/simulator/Rtt_MSimulatorServices.h"/>
         <File Name="../../librtt/Rtt_MRuntimeDelegate.h"/>
         <File Name="../../librtt/Rtt_MReloadableResource.h"/>
         <File Name="../../librtt/Rtt_MPlatformDevice.h"/>
@@ -356,8 +342,6 @@
         <File Name="../../librtt/Rtt_MLuaProxyable.h"/>
         <File Name="../../librtt/Rtt_MKeyValueIterable.h"/>
         <File Name="../../librtt/Rtt_MIterable.h"/>
-        <File Name="../../librtt/Display/Rtt_MDrawable.h"/>
-        <File Name="../../librtt/Display/Rtt_MDisplayDelegate.h"/>
         <File Name="../../librtt/Rtt_MCrypto.h"/>
         <File Name="../../librtt/Rtt_MCriticalSection.h"/>
         <File Name="../../librtt/Rtt_MCallback.h"/>
@@ -372,7 +356,6 @@
         <File Name="../../librtt/Rtt_LuaLibSystem.h"/>
         <File Name="../../librtt/Rtt_LuaLibSQLite.h"/>
         <File Name="../../librtt/Rtt_LuaLibSocket.h"/>
-        <File Name="../../modules/simulator/Rtt_LuaLibSimulator.h"/>
         <File Name="../../librtt/Rtt_LuaLibOpenAL.h"/>
         <File Name="../../librtt/Rtt_LuaLibNative.h"/>
         <File Name="../../librtt/Rtt_LuaLibInAppStore.h"/>
@@ -391,7 +374,6 @@
         <File Name="../../librtt/Rtt_LuaAux.h"/>
         <File Name="../../librtt/Rtt_LuaAssert.h"/>
         <File Name="../../librtt/Rtt_Lua.h"/>
-        <File Name="../../librtt/Display/Rtt_LineObject.h"/>
         <File Name="../../librtt/Rtt_KeyName.h"/>
         <File Name="../../librtt/Rtt_JavaHost.h"/>
         <File Name="../../librtt/Input/Rtt_InputDeviceType.h"/>
@@ -422,7 +404,6 @@
         <File Name="../../librtt/Rtt_EllipsePath.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayV2.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayTypes.h"/>
-        <File Name="../../librtt/Display/Rtt_DisplayPath.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayObject.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayDefaults.h"/>
         <File Name="../../librtt/Display/Rtt_Display.h"/>
@@ -430,7 +411,6 @@
         <File Name="../../librtt/Display/Rtt_CPUResourcePool.h"/>
         <File Name="../../librtt/Display/Rtt_ContainerObject.h"/>
         <File Name="../../librtt/Display/Rtt_CompositePaint.h"/>
-        <File Name="../../librtt/Display/Rtt_CompositeObject.h"/>
         <File Name="../../librtt/Display/Rtt_ClosedPath.h"/>
         <File Name="../../librtt/Rtt_CKWorkFlowConstants.h"/>
         <File Name="../../librtt/Rtt_CKWorkflow.h"/>
@@ -446,7 +426,6 @@
         <File Name="../../librtt/Core/Rtt_Array.h"/>
         <File Name="../../librtt/Rtt_Archive.h"/>
         <File Name="../../librtt/Core/Rtt_Allocator.h"/>
-        <File Name="../../librtt/Display/LuaReader.h"/>
         <File Name="../../external/LuaHashMap/LuaHashMap.h"/>
         <File Name="../../external/ALmixer/luaal.h"/>
       </VirtualDirectory>
@@ -455,7 +434,6 @@
       <File Name="../shared/Rtt_PlatformObjectWrapper.cpp"/>
       <File Name="../shared/Rtt_PlatformDictionaryWrapper.cpp"/>
       <File Name="../shared/Rtt_PlatformAppPackager.cpp"/>
-      <File Name="../../modules/simulator/Rtt_LuaLibSimulator.cpp"/>
       <File Name="../shared/Rtt_DeviceBuildData.cpp"/>
       <File Name="lua/create_build_properties.cpp"/>
       <VirtualDirectory Name="Shaders">
@@ -613,24 +591,17 @@
       <File Name="../../librtt/Display/Rtt_TextureFactory.cpp"/>
       <File Name="../../librtt/Display/Rtt_TextObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_TesselatorShape.cpp"/>
-      <File Name="../../librtt/Display/Rtt_TesselatorRoundedRect.cpp"/>
       <File Name="../../librtt/Display/Rtt_TesselatorRect.cpp"/>
-      <File Name="../../librtt/Display/Rtt_TesselatorPolygon.cpp"/>
-      <File Name="../../librtt/Display/Rtt_TesselatorMesh.cpp"/>
-      <File Name="../../librtt/Display/Rtt_TesselatorLine.cpp"/>
       <File Name="../../librtt/Display/Rtt_TesselatorCircle.cpp"/>
       <File Name="../../librtt/Display/Rtt_Tesselator.cpp"/>
       <File Name="../../librtt/Display/Rtt_StageObject.cpp"/>
-      <File Name="../../librtt/Display/Rtt_SpriteSourceFrame.cpp"/>
       <File Name="../../librtt/Display/Rtt_SpritePlayer.cpp"/>
+      <File Name="../../librtt/Display/Rtt_SpriteSequence.cpp"/>      
       <File Name="../../librtt/Display/Rtt_SpriteObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_SnapshotObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShapePath.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShapeObject.cpp"/>
-      <File Name="../../librtt/Display/Rtt_ShapeAdapterRoundedRect.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShapeAdapterRect.cpp"/>
-      <File Name="../../librtt/Display/Rtt_ShapeAdapterPolygon.cpp"/>
-      <File Name="../../librtt/Display/Rtt_ShapeAdapterMesh.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShapeAdapterCircle.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShapeAdapter.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShaderTypes.cpp"/>
@@ -643,7 +614,6 @@
       <File Name="../../librtt/Display/Rtt_ShaderData.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShaderCompositeAdapter.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShaderComposite.cpp"/>
-      <File Name="../../librtt/Display/Rtt_ShaderCache.cpp"/>
       <File Name="../../librtt/Display/Rtt_ShaderBuiltin.cpp"/>
       <File Name="../../librtt/Display/Rtt_Shader.cpp"/>
       <File Name="../../librtt/Display/Rtt_Scene.cpp"/>
@@ -653,10 +623,8 @@
       <File Name="../../librtt/Display/Rtt_PlatformBitmap.cpp"/>
       <File Name="../../librtt/Display/Rtt_PaintAdapter.cpp"/>
       <File Name="../../librtt/Display/Rtt_Paint.cpp"/>
-      <File Name="../../librtt/Display/Rtt_OpenPath.cpp"/>
       <File Name="../../librtt/Display/Rtt_LuaLibGraphics.cpp"/>
       <File Name="../../librtt/Display/Rtt_LuaLibDisplay.cpp"/>
-      <File Name="../../librtt/Display/Rtt_LineObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_ImageSheetUserdata.cpp"/>
       <File Name="../../librtt/Display/Rtt_ImageSheetPaintAdapter.cpp"/>
       <File Name="../../librtt/Display/Rtt_ImageSheetPaint.cpp"/>
@@ -668,14 +636,12 @@
       <File Name="../../librtt/Display/Rtt_EmitterObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_EmbossedTextObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_DisplayV2.cpp"/>
-      <File Name="../../librtt/Display/Rtt_DisplayPath.cpp"/>
       <File Name="../../librtt/Display/Rtt_DisplayObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_DisplayDefaults.cpp"/>
       <File Name="../../librtt/Display/Rtt_Display.cpp"/>
       <File Name="../../librtt/Display/Rtt_CPUResourcePool.cpp"/>
       <File Name="../../librtt/Display/Rtt_ContainerObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_CompositePaint.cpp"/>
-      <File Name="../../librtt/Display/Rtt_CompositeObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_ClosedPath.cpp"/>
       <File Name="../../librtt/Display/Rtt_CameraPaint.cpp"/>
       <File Name="../../librtt/Display/Rtt_BufferBitmap.cpp"/>
@@ -907,7 +873,6 @@
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-Wfatal-errors;-O0;-std=c++11;-g3;-Wno-narrowing" C_Options="-O0;-g3;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="/usr/include/AL"/>
-        <IncludePath Value="/usr/include/freetype2"/>
         <IncludePath Value="/usr/local/lib/wx/include/gtk3-unicode-3.1"/>
         <IncludePath Value="/usr/local/include/wx-3.1"/>
         <IncludePath Value="."/>
@@ -964,7 +929,7 @@
         <Preprocessor Value="NO_REAL"/>
         <Preprocessor Value="ENABLE_ALMIXER_THREADS"/>
       </Compiler>
-      <Linker Options="-ldl -lGL -lz -lpthread -lopenal -lfreetype -lpng -lcrypto -lcurl -lgdk-3 -lwx_baseu-3.1 -lwx_baseu_net-3.1 -lwx_gtk3u_adv-3.1 -lwx_gtk3u_gl-3.1 -lwx_gtk3u_media-3.1 -lwx_gtk3u_core-3.1 -lwx_gtk3u_html-3.1 -lwx_gtk3u_stc-3.1 -lwx_gtk3u_webview-3.1" Required="yes"/>
+      <Linker Options="-ldl -lGL -lz -lpthread -lopenal -lpng -lcrypto -lcurl -lgdk-3 -lwx_baseu-3.1 -lwx_baseu_net-3.1 -lwx_gtk3u_adv-3.1 -lwx_gtk3u_gl-3.1 -lwx_gtk3u_media-3.1 -lwx_gtk3u_core-3.1 -lwx_gtk3u_html-3.1 -lwx_gtk3u_stc-3.1 -lwx_gtk3u_webview-3.1" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="CoronaSimulator/$(ProjectName)" IntermediateDirectory="./.Solar2DSimulator" Command="CoronaSimulator/$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="Solar2DSimulator" PauseExecWhenProcTerminates="yes" IsGUIProgram="yes" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>
@@ -1020,7 +985,6 @@
         <IncludePath Value="../../external\luafilesystem\src"/>
         <IncludePath Value="../../external\opengl"/>
         <IncludePath Value="../shared"/>
-        <IncludePath Value="../../external/freetype-2.9/include"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
         <IncludePath Value="../../external/mpg123-1.13.1/src/libmpg123"/>
@@ -1069,7 +1033,7 @@
         <Preprocessor Value="Rtt_BUILD_MONTH=1"/>
         <Preprocessor Value="Rtt_BUILD_DAY=1"/>
       </Compiler>
-      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lfontconfig -lfreetype -lpng -lz -lexpat -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
+      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lpng -lz -lexpat -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(ProjectName)/$(ProjectName)" IntermediateDirectory="./Simulator" Command="../$(OutputFile)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(ProjectName)/" PauseExecWhenProcTerminates="yes" IsGUIProgram="yes" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>
@@ -1125,7 +1089,6 @@
         <IncludePath Value="../../external\luafilesystem\src"/>
         <IncludePath Value="../../external\opengl"/>
         <IncludePath Value="../shared"/>
-        <IncludePath Value="../../external/freetype-2.9/include"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
         <IncludePath Value="../../external/mpg123-1.13.1/src/libmpg123"/>
@@ -1173,7 +1136,7 @@
         <Preprocessor Value="Rtt_BUILD_MONTH=1"/>
         <Preprocessor Value="Rtt_BUILD_DAY=1"/>
       </Compiler>
-      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lfontconfig -lfreetype -lpng -lz -lexpat -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
+      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lpng -lz -lexpat -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(ProjectName)/$(ProjectName)" IntermediateDirectory="./Simulator" Command="../$(OutputFile)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(ProjectName)/" PauseExecWhenProcTerminates="yes" IsGUIProgram="yes" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>

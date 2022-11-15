@@ -639,7 +639,6 @@ namespace Rtt
 		// builder ended ?
 		if (fThread)
 		{
-			DrawActivity();
 			if (fThread->is_running() == false)
 			{
 				fThread = NULL;
@@ -944,7 +943,6 @@ namespace Rtt
 		// builder ended ?
 		if (fThread)
 		{
-			DrawActivity();
 			if (fThread->is_running() == false)
 			{
 				fThread = NULL;

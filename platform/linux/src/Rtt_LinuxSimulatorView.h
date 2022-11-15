@@ -13,7 +13,6 @@
 #include "Core/Rtt_Array.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_TargetDevice.h"
-#include "Rtt_LinuxSimulatorServices.h"
 #include "Rtt_LinuxContext.h"
 #include "Rtt_LinuxContainer.h"
 #include "Rtt_MPlatformServices.h"

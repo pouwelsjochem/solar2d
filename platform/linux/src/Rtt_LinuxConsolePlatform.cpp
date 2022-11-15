@@ -22,7 +22,6 @@
 #include "Rtt_LinuxContainer.h"
 #include "Rtt_LinuxUtils.h"
 #include "Rtt_PreferenceCollection.h"
-#include "Rtt_Freetype.h"
 #include <pwd.h>
 
 using namespace std;

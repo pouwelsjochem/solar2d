@@ -22,8 +22,6 @@
 #include "Rtt_Archive.h"
 #include "Display/Rtt_Display.h"
 #include "Display/Rtt_DisplayDefaults.h"
-#include "Rtt_Freetype.h"
-#include "Rtt_LuaLibSimulator.h"
 #include "Rtt_LinuxSimulatorView.h"
 #include "Rtt_LinuxUtils.h"
 #include "Rtt_MPlatformServices.h"
@@ -56,7 +54,6 @@ namespace Rtt
 		: fResourceDir(resourceDir)
 		, fWindow(NULL)
 		, fImCtx(NULL)
-		, fActivityIndicator(false)
 	{
 		fMouse = new LinuxMouseListener();
 	}
@@ -477,12 +474,6 @@ namespace Rtt
 		for (int i = 0; i < fNativeObjects.size(); i++)
 		{
 			fNativeObjects[i]->Draw();
-		}
-
-		// Activity Indicator
-		if (fActivityIndicator)
-		{
-			DrawActivity();
 		}
 
 		ImGui::EndFrame();

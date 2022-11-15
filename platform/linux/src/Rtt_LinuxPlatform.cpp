@@ -23,7 +23,6 @@
 #include "Rtt_LinuxUtils.h"
 #include "Rtt_LinuxApp.h"
 #include "Rtt_PreferenceCollection.h"
-#include "Rtt_Freetype.h"
 #include <pwd.h>
 
 using namespace std;
@@ -94,15 +93,6 @@ namespace Rtt
 	PlatformStoreProvider* LinuxPlatform::GetStoreProvider(const ResourceHandle<lua_State>& handle) const
 	{
 		return NULL;
-	}
-
-	void LinuxPlatform::SetIdleTimer(bool enabled) const
-	{
-	}
-
-	bool LinuxPlatform::GetIdleTimer() const
-	{
-		return true;
 	}
 
 	NativeAlertRef LinuxPlatform::ShowNativeAlert(const char* title, const char* msg, const char** buttonLabels, U32 numButtons, LuaResource* resource) const
@@ -441,10 +431,6 @@ namespace Rtt
 		value->Set(resultPointer);
 	}
 
-	void LinuxPlatform::SetActivityIndicator(bool visible) const
-	{
-		app->SetActivityIndicator(visible);
-	}
 	bool LinuxPlatform::CanShowPopup(const char* name) const
 	{
 		return true;

@@ -20,7 +20,6 @@
 #include "Rtt_RenderingStream.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_LinuxPlatform.h"
-#include "Rtt_LinuxSimulatorServices.h"
 #include "Rtt_LinuxSimulatorView.h"
 #include "Rtt_LinuxUtils.h"
 #include "Rtt_SimulatorRecents.h"

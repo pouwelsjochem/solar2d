@@ -25,8 +25,6 @@
 
 namespace Rtt
 {
-	void DrawActivity();
-
 	//
 	// base class
 	//
@@ -104,28 +102,9 @@ namespace Rtt
 
 	private:
 
-		int fRelaunchIndex;
-		bool fShowWelcome;
-		bool fShowErrors;
 		bool fOpenlastProject;
 		int fStyleIndex;
 		bool fDebugBuildProcess;
-	};
-
-	struct DlgAskRelaunch : public Window
-	{
-		DlgAskRelaunch(const std::string& title, int w, int h)
-			: Window(title, w, h)
-			, fSaveMyPreference(false)
-		{
-		}
-
-		void Draw() override;
-
-	private:
-
-		void SaveMyPreference(const char* val);
-		bool fSaveMyPreference;
 	};
 
 	struct Skins;

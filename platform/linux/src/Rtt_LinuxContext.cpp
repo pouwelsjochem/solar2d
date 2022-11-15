@@ -23,8 +23,6 @@
 #include "Rtt_Archive.h"
 #include "Display/Rtt_Display.h"
 #include "Display/Rtt_DisplayDefaults.h"
-#include "Rtt_Freetype.h"
-#include "Rtt_LuaLibSimulator.h"
 #include "Rtt_LinuxSimulatorView.h"
 #include "Rtt_LinuxUtils.h"
 #include "Rtt_LinuxUtils.h"
@@ -59,7 +57,6 @@ namespace Rtt
 		, fTouchDeviceExist(false)
 		, fMode("normal")
 		, fIsDebApp(false)
-		, fLinuxSimulatorServices(NULL)
 		, fProjectSettings(new ProjectSettings())
 		, fWindow(window)
 		, fBeginRunLoop(true)
@@ -80,10 +77,7 @@ namespace Rtt
 		delete fRuntime;
 		delete fRuntimeDelegate;
 		delete fPlatform;
-		delete fLinuxSimulatorServices;
 		delete fProjectSettings;
-
-		setGlyphProvider(NULL);
 	}
 
 	void SolarAppContext::Init()
@@ -127,7 +121,6 @@ namespace Rtt
 			Rtt_MakeDirectory(cachesDir.c_str());
 		}
 
-		setGlyphProvider(new glyph_freetype_provider(fPathToApp.c_str()));
 		fPlatform = new LinuxPlatform(fPathToApp.c_str(), documentsDir.c_str(), temporaryDir.c_str(), cachesDir.c_str(), systemCachesDir.c_str(), skinDir.c_str(), GetStartupPath(NULL));
 		fRuntime = new LinuxRuntime(*fPlatform, NULL);
 		fRuntime->SetDelegate(fRuntimeDelegate);
@@ -306,14 +299,6 @@ namespace Rtt
 		luapath.append("/Resources/?.lua;");
 
 		setenv("LUA_PATH", luapath.c_str(), true);
-
-		if (app->IsRunningOnSimulator())
-		{
-			fLinuxSimulatorServices = new LinuxSimulatorServices();
-			lua_State* luaStatePointer = fRuntime->VMContext().L();
-			lua_pushlightuserdata(luaStatePointer, fLinuxSimulatorServices);
-			Rtt::LuaContext::RegisterModuleLoader(luaStatePointer, Rtt::LuaLibSimulator::kName, Rtt::LuaLibSimulator::Open, 1);
-		}
 
 		// re-define
 		lua_State* L = fRuntime->VMContext().L();
