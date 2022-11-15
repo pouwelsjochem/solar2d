@@ -39,7 +39,7 @@ namespace Rtt
 		virtual bool IsProperty(PropertyMask mask) const;
 		virtual void SetProperty(PropertyMask mask, bool newValue);
 		bool LoadFileBitmap(Rtt_Allocator &context, const char *path);
-		static bool SaveBitmap(Rtt_Allocator *context, PlatformBitmap *bitmap, const char *filePath);
+		static void SaveBitmap(Rtt_Allocator *context, PlatformBitmap *bitmap, Rtt::Data<const char> & pngBytes);
 
 	protected:
 		Rtt_INLINE bool IsPropertyInternal(PropertyMask mask) const { return (fProperties & mask) ? true : false; }

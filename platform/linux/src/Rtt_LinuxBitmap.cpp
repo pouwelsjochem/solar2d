@@ -136,28 +136,16 @@ namespace Rtt
 		return fData != NULL;
 	}
 
-	bool LinuxBaseBitmap::SaveBitmap(Rtt_Allocator *context, PlatformBitmap *bitmap, const char *filePath)
+	void LinuxBaseBitmap::SaveBitmap(Rtt_Allocator *context, PlatformBitmap *bitmap, Rtt::Data<const char> & pngBytes)
 	{
-		// Validate.
-		if ((NULL == bitmap) || (NULL == filePath))
-			return false;
-
 		S32 w = bitmap->Width();
 		S32 h = bitmap->Height();
-		if (w <= 0 || h <= 0)
-			return false;
-
-		// Fetch the given bitmap's bits.
 		U8* bits = (U8*)(bitmap->GetBits(context));
-		if (bits == NULL)
-			return false;
 
-		Format fmt = bitmap->GetFormat();
-		bool rc = false;
+		size_t byteBufferLength;
+		char* byteBuffer = bitmapUtil::savePNG(byteBufferLength, bits, w, h, bitmap->GetFormat());
 
-		std::string path = filePath;
-		rc = bitmapUtil::savePNG(filePath, bits, w, h, fmt);
-		return rc;
+		pngBytes.Set((const char *)byteBuffer, byteBufferLength)
 	}
 
 	// FileBitmap
