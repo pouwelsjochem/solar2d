@@ -11,7 +11,6 @@
 #include "Core/Rtt_Build.h"
 #include "Rtt_LinuxPlatform.h"
 #include "Rtt_TargetDevice.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_LinuxSimulator.h"
 #include "Rtt_LinuxSimulatorView.h"
 #include "Rtt_LinuxUtils.h"
@@ -170,10 +169,6 @@ namespace Rtt
 	void LinuxSimulatorServices::SetBuildMessage(const char* message) const
 	{
 		Rtt_TRACE_SIM(("WARNING: SetBuildMessage not available on Linux\n"));
-	}
-
-	void LinuxSimulatorServices::SendAnalytics(const char* eventName, const char* keyName, const char* value) const
-	{
 	}
 
 	bool LinuxSimulatorServices::RelaunchProject() const

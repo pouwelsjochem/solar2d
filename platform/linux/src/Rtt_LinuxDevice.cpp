@@ -57,8 +57,6 @@ namespace Rtt
 		case MPlatformDevice::kGyroscopeEvent:
 			break;
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMultitouchEvent:
 		case MPlatformDevice::kKeyEvent:
 		case MPlatformDevice::kAccelerometerEvent:
@@ -78,10 +76,8 @@ namespace Rtt
 		switch (type)
 		{
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMultitouchEvent:
 			break;
 		default:
@@ -97,10 +93,8 @@ namespace Rtt
 		switch (type)
 		{
 		case MPlatformDevice::kOrientationEvent:
-		case MPlatformDevice::kLocationEvent:
 		case MPlatformDevice::kAccelerometerEvent:
 		case MPlatformDevice::kGyroscopeEvent:
-		case MPlatformDevice::kHeadingEvent:
 		case MPlatformDevice::kMultitouchEvent:
 			break;
 		default:
@@ -180,14 +174,6 @@ namespace Rtt
 	PlatformInputDeviceManager& LinuxDevice::GetInputDeviceManager()
 	{
 		return fInputDeviceManager;
-	}
-
-	void LinuxDevice::SetLocationAccuracy(Real meters) const
-	{
-	}
-
-	void LinuxDevice::SetLocationThreshold(Real meters) const
-	{
 	}
 
 	DeviceOrientation::Type LinuxDevice::GetOrientation() const

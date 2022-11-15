@@ -19,7 +19,6 @@
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_RenderingStream.h"
 #include "Rtt_Runtime.h"
-#include "Rtt_SimulatorAnalytics.h"
 #include "Rtt_LinuxPlatform.h"
 #include "Rtt_LinuxSimulatorServices.h"
 #include "Rtt_LinuxSimulatorView.h"

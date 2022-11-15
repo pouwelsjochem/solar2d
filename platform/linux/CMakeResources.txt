@@ -7,12 +7,6 @@ SET(RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/Resources")
 # create Resources folder
 file(MAKE_DIRECTORY ${RESOURCES})
 
-# copy common widget*.png
-file(GLOB WIDGETS ${CORONA_ROOT}/subrepos/widget/widget*.png)
-foreach(pngFile IN LISTS WIDGETS)
-  file(COPY ${pngFile} DESTINATION ${RESOURCES})
-endforeach()
-
 # copy Android resources
 
 #file(COPY "${CORONA_ROOT}/platform/resources/CoronaBuilderPluginCollector.lua" DESTINATION ${RESOURCES} FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ)

@@ -15,8 +15,6 @@
 
 namespace Rtt
 {
-	class PlatformFont;
-
 	class LinuxBaseBitmap : public PlatformBitmap
 	{
 	public:
@@ -75,24 +73,5 @@ namespace Rtt
 
 	private:
 		String fPath;
-	};
-
-	class LinuxTextBitmap : public LinuxBaseBitmap
-	{
-	public:
-		typedef LinuxBaseBitmap Super;
-
-		LinuxTextBitmap(Rtt_Allocator &context, const char str[], const PlatformFont &font, int width, int height, const char alignment[], Real &baselineOffset);
-		virtual ~LinuxTextBitmap();
-
-		virtual void FreeBits() const override {};
-		virtual PlatformBitmap::Format GetFormat() const;
-		virtual U8 GetByteAlignment() const;
-
-	private:
-		void wrapText();
-
-		int fWrapWidth;
-		String fAlignment;
 	};
 }; // namespace Rtt

@@ -171,17 +171,3 @@ clean:
 
 
 .DEFAULT_GOAL := all
-
-
-
-
-# skipped this: 
-
-# # ads plugin
-# $BIN_DIR/lua2c.sh $(ROOT)/../plugins/ads/shared/ads.lua. $LUA2C_CONFIGURATION $LUA_DIR
-# $BIN_DIR/lua2c.sh $(ROOT)/../plugins/ads/shared/CoronaProvider.ads.lua. $LUA2C_CONFIGURATION $LUA_DIR
-
-# # analytics plugin
-# $BIN_DIR/lua2c.sh $(ROOT)/../plugins/analytics/shared/analytics.lua. $LUA2C_CONFIGURATION $LUA_DIR
-# $BIN_DIR/lua2c.sh $(ROOT)/../plugins/analytics/shared/CoronaProvider.analytics.lua. $LUA2C_CONFIGURATION $LUA_DIR
-

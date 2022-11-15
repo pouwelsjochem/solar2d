@@ -10,8 +10,6 @@
 #include "Core/Rtt_Build.h"
 #include "Rtt_GPUStream.h"
 #include "Rtt_LinuxBitmap.h"
-#include "Rtt_LinuxFont.h"
-#include "Rtt_PlatformFont.h"
 #include "Rtt_LinuxContainer.h"
 #include "Rtt_Freetype.h"
 #include "Display/Rtt_Display.h"
@@ -252,84 +250,5 @@ namespace Rtt
 
 	LinuxMaskFileBitmap::~LinuxMaskFileBitmap()
 	{
-	}
-
-	// TextBitmap
-	LinuxTextBitmap::LinuxTextBitmap(Rtt_Allocator &context, const char str[], const Rtt::PlatformFont &inFont, int width, int height, const char alignment[], Real &baselineOffset)
-		: Super(), fWrapWidth(width), fAlignment(&context, alignment)
-	{
-		glyph_freetype_provider *gp = getGlyphProvider();
-
-		if (gp == NULL)
-		{
-			return;
-		}
-
-		int align = 0;
-		bool is_bold = false;
-		bool is_italic = false;
-		std::vector<int> xleading;
-		std::vector<int> yleading;
-		bool multiline = false;
-		float xscale = 1;
-		float yscale = 1;
-		const char *fontFile = inFont.Name();
-		int fontSize = inFont.Size();
-		
-		if (width > 0 && width < 4)
-		{
-			width = 4;
-		}
-		
-		smart_ptr<alpha> im = gp->render_string(str, alignment, fontFile, is_bold, is_italic, fontSize, xleading, yleading, width, height, multiline, xscale, yscale, &baselineOffset);
-
-		if (im == NULL)
-		{
-			return;
-		}
-
-		fWidth = im->m_width;
-		fHeight = im->m_height;
-		const U8 *image = im->m_data;
-
-		if (fWidth & 0x3)
-		{
-			fWidth = (fWidth + 3) & -4;
-		}
-
-		fData = (U8 *)Rtt_MALLOC(&context, fHeight * fWidth * 4);
-		memset(fData, 0, fHeight * fWidth * 4);
-
-		int pitch = fWidth * 4; // rgba
-		int bpp = 4;
-
-		for (int y = 0; y < fHeight; y++)
-		{
-			for (int x = 0; x < fWidth; x++)
-			{
-				const U8 *src = image + y * im->m_pitch + x * im->m_bpp;
-				U8 *dst = fData + y * pitch + x * bpp;
-				dst[0] = src[0];
-				dst[1] = src[0];
-				dst[2] = src[0];
-				dst[3] = src[0];
-			}
-		}
-
-		fFormat = kRGBA;
-	}
-
-	LinuxTextBitmap::~LinuxTextBitmap()
-	{
-	}
-
-	PlatformBitmap::Format LinuxTextBitmap::GetFormat() const
-	{
-		return PlatformBitmap::kRGBA;
-	}
-
-	U8 LinuxTextBitmap::GetByteAlignment() const
-	{
-		return 1;
 	}
 }; // namespace Rtt

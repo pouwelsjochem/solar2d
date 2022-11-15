@@ -39,8 +39,6 @@ namespace Rtt
 		virtual bool HasEventSource(EventType type) const override;
 		virtual void SetAccelerometerInterval(U32 frequency) const override;
 		virtual void SetGyroscopeInterval(U32 frequency) const override;
-		virtual void SetLocationAccuracy(Real meters) const override;
-		virtual void SetLocationThreshold(Real meters) const override;
 		virtual void SetOrientation(DeviceOrientation::Type orientation);
 		virtual DeviceOrientation::Type GetOrientation() const override;
 		virtual const char *GetPlatform() const override;

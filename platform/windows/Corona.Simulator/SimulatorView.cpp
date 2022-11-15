@@ -1472,8 +1472,6 @@ bool CSimulatorView::InitSkin( Rtt::TargetDevice::Skin skinId )
 	m_nSkinId = skinId;
 
 	// Get the skins directory which is wherever the Lua file for the skin is
-	// (things like the skin bitmap and statusbar images will be specified 
-	// relative to this)
 	wchar_t skinPathBuf[MAX_PATH];
 
 	_tcsncpy_s(skinPathBuf, skinFile.GetTCHAR(), MAX_PATH);

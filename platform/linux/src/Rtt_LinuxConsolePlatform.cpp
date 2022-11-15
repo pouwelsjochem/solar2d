@@ -14,20 +14,10 @@
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_LinuxConsolePlatform.h"
-#include "Rtt_LinuxAudioPlayer.h"
 #include "Rtt_LinuxAudioRecorder.h"
 #include "Rtt_LinuxBitmap.h"
-//#include "Rtt_LinuxEventSound.h"
 //#include "Rtt_LinuxFBConnect.h"
-#include "Rtt_LinuxFont.h"
-#include "Rtt_LinuxImageProvider.h"
-//#include "Rtt_LinuxMapViewObject.h"
 #include "Rtt_LinuxScreenSurface.h"
-//#include "Rtt_LinuxStoreProvider.h"
-#include "Rtt_LinuxTextBoxObject.h"
-#include "Rtt_LinuxVideoObject.h"
-#include "Rtt_LinuxVideoPlayer.h"
-#include "Rtt_LinuxVideoProvider.h"
 #include "Rtt_LinuxWebView.h"
 #include "Rtt_LinuxContainer.h"
 #include "Rtt_LinuxUtils.h"
@@ -64,27 +54,6 @@ namespace Rtt
 	{
 	}
 
-	FontMetricsMap LinuxConsolePlatform::GetFontMetrics(const PlatformFont &font) const
-	{
-		FontMetricsMap ret;
-		float ascent = 0;
-		float descent = 0;
-		float height = 0;
-		float leading = 0;
-
-		glyph_freetype_provider* gp = getGlyphProvider();
-		if (gp)
-		{
-			gp->getMetrics(font.Name(), font.Size(), &ascent, &descent, &height, &leading);
-		}
-
-		ret["ascent"] = ascent;
-		ret["descent"] = descent;
-		ret["leading"] = leading;
-		ret["height"] = height;
-		return ret;
-	}
-
 	void LinuxConsolePlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 	{
 		top = left = bottom = right = 0;
@@ -103,11 +72,6 @@ namespace Rtt
 	const MCrypto &LinuxConsolePlatform::GetCrypto() const
 	{
 		return fCrypto;
-	}
-
-	MPlatform::StatusBarMode LinuxConsolePlatform::GetStatusBarMode() const
-	{
-		return MPlatform::kDefaultStatusBar;
 	}
 
 	bool LinuxConsolePlatform::FileExists(const char *filename) const
@@ -298,20 +262,6 @@ namespace Rtt
 				resultPointer = localeName.c_str();
 				break;
 			}
-			case kDefaultStatusBarFile:
-				break;
-			case kDarkStatusBarFile:
-				break;
-			case kTranslucentStatusBarFile:
-				break;
-			case kLightTransparentStatusBarFile:
-				break;
-			case kDarkTransparentStatusBarFile:
-				break;
-			case kScreenDressingFile:
-				break;
-			case kSubscription:
-				break;
 			default:
 				//Rtt_ASSERT_NOT_REACHED();
 				break;

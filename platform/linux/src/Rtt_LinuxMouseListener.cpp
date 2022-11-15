@@ -109,16 +109,6 @@ namespace Rtt
 			DispatchEvent(t);
 		}
 
-		// Dispatch a "tap" event if mouse button was released in the same position it was pressed in.
-		int dx = abs(fStartPoint[fid].x - x);
-		int dy = abs(fStartPoint[fid].y - y);
-		const int delta = 10;
-		if (dx < delta && dy < delta)
-		{
-			Rtt::TapEvent event(x, y, fid + 1);
-			DispatchEvent(event);
-		}
-
 		fStartPoint.erase(fid);
 	}
 

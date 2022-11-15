@@ -468,13 +468,11 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_LuaData.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibCrypto.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibFacebook.cpp
-		${CORONA_ROOT}/librtt/Rtt_LuaLibFlurry.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibGameNetwork.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibInAppStore.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibMedia.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibNative.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibOpenAL.cpp
-		${CORONA_ROOT}/librtt/Rtt_LuaLibPhysics.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibSQLite.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibSystem.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaProxy.cpp
@@ -484,31 +482,18 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_LuaTableIterator.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaUserdataProxy.cpp
 		${CORONA_ROOT}/librtt/Rtt_Matrix.cpp
-		${CORONA_ROOT}/librtt/Rtt_ParticleSystemObject.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsContact.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsContactListener.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsJoint.cpp
-		${CORONA_ROOT}/librtt/Rtt_PhysicsWorld.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformAudioPlayer.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformAudioRecorder.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformAudioSessionManager.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformData.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformDisplayObject.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformEventSound.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformExitCallback.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformFBConnect.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformFont.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformImageProvider.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformLocation.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformModalInteraction.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformNotifier.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformOpenALPlayer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformReachability.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformSurface.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformTimer.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformVideoPlayer.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformVideoProvider.cpp
 		${CORONA_ROOT}/librtt/Rtt_Preference.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_PreferenceValue.cpp
@@ -644,7 +629,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureBitmap.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureVolatile.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_Uniform.cpp
-		${CORONA_ROOT}/librtt/Renderer/Rtt_VideoTexture.cpp
 
 		${CORONA_ROOT}/plugins/shared/CoronaLuaLibrary.cpp
 		${CORONA_ROOT}/plugins/shared/CoronaLuaLibraryMetadata.cpp
@@ -754,15 +738,9 @@ add_executable( Solar2D
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxBitmap.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxData.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDisplayObject.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxFont.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxImageProvider.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxPlatform.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxRuntimeDelegate.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxScreenSurface.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxTextBoxObject.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoObject.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoPlayer.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoProvider.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxWebView.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxCEF.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxKeyListener.cpp
@@ -790,15 +768,9 @@ add_executable( Solar2DSimulator
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxBitmap.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxData.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDisplayObject.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxFont.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxImageProvider.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxPlatform.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxRuntimeDelegate.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxScreenSurface.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxTextBoxObject.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoObject.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoPlayer.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxVideoProvider.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxWebView.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxCEF.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxKeyListener.cpp

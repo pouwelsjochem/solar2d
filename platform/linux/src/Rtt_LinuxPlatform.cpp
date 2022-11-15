@@ -14,20 +14,10 @@
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_LinuxPlatform.h"
-#include "Rtt_LinuxAudioPlayer.h"
 #include "Rtt_LinuxAudioRecorder.h"
 #include "Rtt_LinuxBitmap.h"
-//#include "Rtt_LinuxEventSound.h"
 //#include "Rtt_LinuxFBConnect.h"
-#include "Rtt_LinuxFont.h"
-#include "Rtt_LinuxImageProvider.h"
-//#include "Rtt_LinuxMapViewObject.h"
 #include "Rtt_LinuxScreenSurface.h"
-//#include "Rtt_LinuxStoreProvider.h"
-#include "Rtt_LinuxTextBoxObject.h"
-#include "Rtt_LinuxVideoObject.h"
-#include "Rtt_LinuxVideoPlayer.h"
-#include "Rtt_LinuxVideoProvider.h"
 #include "Rtt_LinuxWebView.h"
 #include "Rtt_LinuxContainer.h"
 #include "Rtt_LinuxUtils.h"
@@ -44,10 +34,6 @@ namespace Rtt
 		const char* cachesDir, const char* systemCachesDir, const char* skinDir, const char* installDir)
 		: fAllocator(Rtt_AllocatorCreate()),
 		fDevice(*fAllocator),
-		fAudioPlayer(NULL),
-		fVideoPlayer(NULL),
-		fImageProvider(NULL),
-		fVideoProvider(NULL),
 		fResourceDir(fAllocator),
 		fDocumentsDir(fAllocator),
 		fTemporaryDir(fAllocator),
@@ -66,7 +52,6 @@ namespace Rtt
 		fSystemCachesDir.Set(systemCachesDir);
 		fSkinDir.Set(skinDir);
 		fInstallDir.Set(installDir);
-		fStatusBarMode = MPlatform::StatusBarMode::kDefaultStatusBar;
 		isMouseCursorVisible = true;
 	}
 
@@ -74,10 +59,6 @@ namespace Rtt
 	{
 		Rtt_DELETE(fFBConnect);
 		Rtt_DELETE(fStoreProvider);
-		Rtt_DELETE(fVideoPlayer);
-		Rtt_DELETE(fAudioPlayer);
-		Rtt_DELETE(fImageProvider);
-		Rtt_DELETE(fVideoProvider);
 
 		// it will be deleted in Rtt_Display by Rtt_DELETE( fTarget );
 		//Rtt_DELETE(fScreenSurface);
@@ -108,35 +89,6 @@ namespace Rtt
 	bool LinuxPlatform::OpenURL(const char* url) const
 	{
 		return ::OpenURL(url);
-	}
-
-	PlatformVideoPlayer* LinuxPlatform::GetVideoPlayer(const Rtt::ResourceHandle<lua_State>& handle) const
-	{
-		Rtt_ASSERT(0 && "todo");
-		return NULL;
-	}
-
-	PlatformImageProvider* LinuxPlatform::GetImageProvider(const Rtt::ResourceHandle<lua_State>& handle) const
-	{
-		if (!fImageProvider)
-		{
-			fImageProvider = Rtt_NEW(&GetAllocator(), LinuxImageProvider(handle));
-		}
-
-		return fImageProvider;
-	}
-
-	PlatformVideoProvider* LinuxPlatform::GetVideoProvider(const Rtt::ResourceHandle<lua_State>& handle) const
-	{
-		if (!fVideoProvider)
-		{
-			int w, h;
-			fScreenSurface->getWindowSize(&w, &h);
-
-			fVideoProvider = Rtt_NEW(fAllocator, LinuxVideoProvider(handle, w, h));
-		}
-
-		return fVideoProvider;
 	}
 
 	PlatformStoreProvider* LinuxPlatform::GetStoreProvider(const ResourceHandle<lua_State>& handle) const
@@ -386,37 +338,6 @@ namespace Rtt
 		// Rtt_ASSERT_NOT_IMPLEMENTED();
 	}
 
-	PlatformEventSound* LinuxPlatform::CreateEventSound(const ResourceHandle<lua_State>& handle, const char* filePath) const
-	{
-		// LinuxEventSound *p = Rtt_NEW(fAllocator, LinuxEventSound(handle, *fAllocator));
-		// p->Load(filePath);
-		return NULL;
-	}
-
-	void LinuxPlatform::ReleaseEventSound(PlatformEventSound* soundID) const
-	{
-		Rtt_DELETE(soundID);
-	}
-
-	void LinuxPlatform::PlayEventSound(PlatformEventSound* soundID) const
-	{
-		//soundID->Play();
-	}
-
-	PlatformAudioPlayer* LinuxPlatform::GetAudioPlayer(const ResourceHandle<lua_State>& handle) const
-	{
-		//if (!fAudioPlayer)
-		//{
-		//fAudioPlayer = Rtt_NEW(fAllocator, LinuxAudioPlayer(handle, *fAllocator));
-		//}
-		return NULL; //fAudioPlayer;
-	}
-
-	PlatformAudioRecorder* LinuxPlatform::CreateAudioRecorder(const Rtt::ResourceHandle<lua_State>& handle, const char* filePath) const
-	{
-		return Rtt_NEW(fAllocator, LinuxAudioRecorder(handle, *fAllocator, filePath));
-	}
-
 	void LinuxPlatform::RaiseError(MPlatform::Error e, const char* reason) const
 	{
 		const char kNull[] = "(null)";
@@ -429,65 +350,9 @@ namespace Rtt
 		Rtt_TRACE(("MPlatformFactory error(%d): %s\n", e, kNull));
 	}
 
-	bool LinuxPlatform::SaveImageToPhotoLibrary(const char* filePath) const
-	{
-		return false;
-	}
-
 	bool LinuxPlatform::SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float jpegQuality) const
 	{
 		return LinuxBaseBitmap::SaveBitmap(fAllocator, bitmap, filePath);
-	}
-
-	bool LinuxPlatform::AddBitmapToPhotoLibrary(PlatformBitmap* bitmap) const
-	{
-		return SaveBitmap(bitmap, NULL, 1.0f);
-	}
-
-	void LinuxPlatform::SetStatusBarMode(MPlatform::StatusBarMode newValue) const
-	{
-		switch (newValue)
-		{
-		case MPlatform::StatusBarMode::kHiddenStatusBar:
-			break;
-
-		case MPlatform::StatusBarMode::kDefaultStatusBar:
-			break;
-
-		case MPlatform::StatusBarMode::kTranslucentStatusBar:
-			break;
-
-		case MPlatform::StatusBarMode::kDarkStatusBar:
-			break;
-
-		case MPlatform::StatusBarMode::kLightTransparentStatusBar:
-			break;
-
-		case MPlatform::StatusBarMode::kDarkTransparentStatusBar:
-			break;
-		}
-
-		fStatusBarMode = newValue;
-	}
-
-	MPlatform::StatusBarMode LinuxPlatform::GetStatusBarMode() const
-	{
-		return fStatusBarMode;
-	}
-
-	int LinuxPlatform::GetStatusBarHeight() const
-	{
-		return 0;
-	}
-
-	int LinuxPlatform::GetTopStatusBarHeightPixels() const
-	{
-		return 0;
-	}
-
-	int LinuxPlatform::GetBottomStatusBarHeightPixels() const
-	{
-		return 0;
 	}
 
 	int LinuxPlatform::SetSync(lua_State* L) const
@@ -566,20 +431,6 @@ namespace Rtt
 			resultPointer = localeName.c_str();
 			break;
 		}
-		case kDefaultStatusBarFile:
-			break;
-		case kDarkStatusBarFile:
-			break;
-		case kTranslucentStatusBarFile:
-			break;
-		case kLightTransparentStatusBarFile:
-			break;
-		case kDarkTransparentStatusBarFile:
-			break;
-		case kScreenDressingFile:
-			break;
-		case kSubscription:
-			break;
 		default:
 			//Rtt_ASSERT_NOT_REACHED();
 			break;
@@ -637,97 +488,14 @@ namespace Rtt
 		return true;
 	}
 
-	PlatformDisplayObject* LinuxPlatform::CreateNativeTextBox(const Rect& bounds) const
-	{
-		return new LinuxTextBoxObject(bounds, false);
-	}
-
-	PlatformDisplayObject* LinuxPlatform::CreateNativeTextField(const Rect& bounds) const
-	{
-		return new LinuxTextBoxObject(bounds, true);
-	}
-
-	void LinuxPlatform::SetKeyboardFocus(PlatformDisplayObject* textObject) const
-	{
-		if (textObject)
-		{
-			//			((LinuxDisplayObject *)textObject)->SetFocus();
-		}
-		else
-		{
-			//TODO: Remove keyboard focus from native display objects.
-		}
-	}
-
-	PlatformDisplayObject* LinuxPlatform::CreateNativeMapView(const Rect& bounds) const
-	{
-		return NULL;
-	}
-
 	PlatformDisplayObject* LinuxPlatform::CreateNativeWebView(const Rect& bounds) const
 	{
 		return new LinuxWebView(bounds);
 	}
 
-	PlatformDisplayObject* LinuxPlatform::CreateNativeVideo(const Rect& bounds) const
-	{
-#if (wxUSE_MEDIACTRL == 1)
-		return Rtt_NEW(&GetAllocator(), LinuxVideoObject(bounds));
-#else
-		return NULL;
-#endif
-	}
-
 	PlatformDisplayObject* LinuxPlatform::GetNativeDisplayObjectById(const int objectId) const
 	{
 		return NULL;
-	}
-
-	Rtt_Real LinuxPlatform::GetStandardFontSize() const
-	{
-		return 16.0f;
-	}
-
-	S32 LinuxPlatform::GetFontNames(lua_State* L, int index) const
-	{
-		S32 numFonts = 0;
-#if 0
-		Rtt::StringArray fonts(fAllocator);
-
-		if (NativeToJavaBridge::GetInstance()->GetFonts(fonts))
-		{
-			numFonts = fonts.GetLength();
-
-			for (int i = 0; i < numFonts; i++)
-			{
-				lua_pushstring(L, fonts.GetElement(i));
-				lua_rawseti(L, index, i + 1);
-			}
-		}
-#endif
-
-		return numFonts;
-	}
-
-	PlatformFont* LinuxPlatform::CreateFont(PlatformFont::SystemFont fontType, Rtt_Real size) const
-	{
-		return Rtt_NEW(fAllocator, LinuxFont(*fAllocator, fontType, size));
-	}
-
-	PlatformFont* LinuxPlatform::CreateFont(const char* fontName, Rtt_Real size) const
-	{
-		bool isBold = false;
-		return Rtt_NEW(fAllocator, LinuxFont(*fAllocator, fontName, size, isBold));
-	}
-
-	void LinuxPlatform::SetTapDelay(Rtt_Real delay) const
-	{
-		// todo:
-	}
-
-	Rtt_Real LinuxPlatform::GetTapDelay() const
-	{
-		return 1.0f;
 	}
 
 	PlatformFBConnect* LinuxPlatform::GetFBConnect() const
@@ -754,14 +522,6 @@ namespace Rtt
 		{
 			//TODO: Cancel the given notification by its ID.
 		}
-	}
-
-	void LinuxPlatform::FlurryInit(const char* applicationKey) const
-	{
-	}
-
-	void LinuxPlatform::FlurryEvent(const char* eventId) const
-	{
 	}
 
 	void LinuxPlatform::SetNativeProperty(lua_State* L, const char* key, int valueIndex) const
@@ -986,32 +746,6 @@ namespace Rtt
 	bool LinuxPlatform::SupportsNetworkStatus() const
 	{
 		return false;
-	}
-
-	PlatformBitmap* LinuxPlatform::CreateBitmapMask(const char str[], const PlatformFont& font, Real w, Real h, const char alignment[], Real& baselineOffset) const
-	{
-		return Rtt_NEW(&GetAllocator(), LinuxTextBitmap(GetAllocator(), str, font, (int)(w + 0.5f), (int)(h + 0.5f), alignment, baselineOffset));
-	}
-
-	FontMetricsMap LinuxPlatform::GetFontMetrics(const PlatformFont& font) const
-	{
-		FontMetricsMap ret;
-		float ascent = 0;
-		float descent = 0;
-		float height = 0;
-		float leading = 0;
-
-		glyph_freetype_provider* gp = getGlyphProvider();
-		if (gp)
-		{
-			gp->getMetrics(font.Name(), font.Size(), &ascent, &descent, &height, &leading);
-		}
-
-		ret["ascent"] = ascent;
-		ret["descent"] = descent;
-		ret["leading"] = leading;
-		ret["height"] = height;
-		return ret;
 	}
 
 	void LinuxPlatform::GetSafeAreaInsetsPixels(Rtt_Real& top, Rtt_Real& left, Rtt_Real& bottom, Rtt_Real& right) const
