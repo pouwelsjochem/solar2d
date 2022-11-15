@@ -167,7 +167,6 @@ parts:
       - libfreetype6-dev
       - libgl1-mesa-dev
       - libglu1-mesa-dev
-      - libjpeg-dev
       - libogg-dev
       - libopenal-dev
       - libpng-dev
@@ -186,7 +185,6 @@ parts:
       - libcurl4
       - libfreetype6
       - libgl1
-      - libjpeg8
       - libogg0
       - libopenal1
       - libpng16-16

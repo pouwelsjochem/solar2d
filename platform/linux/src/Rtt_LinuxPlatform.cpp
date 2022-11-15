@@ -350,7 +350,7 @@ namespace Rtt
 		Rtt_TRACE(("MPlatformFactory error(%d): %s\n", e, kNull));
 	}
 
-	bool LinuxPlatform::SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float jpegQuality) const
+	bool LinuxPlatform::SaveBitmap(PlatformBitmap* bitmap, const char* filePath) const
 	{
 		return LinuxBaseBitmap::SaveBitmap(fAllocator, bitmap, filePath);
 	}

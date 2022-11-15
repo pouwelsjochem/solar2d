@@ -329,7 +329,6 @@
         <File Name="../shared/Rtt_PlatformObjectWrapper.h"/>
         <File Name="../../librtt/Rtt_PlatformNotifier.h"/>
         <File Name="../../librtt/Rtt_PlatformModalInteraction.h"/>
-        <File Name="../../librtt/Rtt_PlatformMediaProviderBase.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputDeviceManager.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputDevice.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputAxis.h"/>
@@ -376,7 +375,6 @@
         <File Name="../../modules/simulator/Rtt_LuaLibSimulator.h"/>
         <File Name="../../librtt/Rtt_LuaLibOpenAL.h"/>
         <File Name="../../librtt/Rtt_LuaLibNative.h"/>
-        <File Name="../../librtt/Rtt_LuaLibMedia.h"/>
         <File Name="../../librtt/Rtt_LuaLibInAppStore.h"/>
         <File Name="../../librtt/Display/Rtt_LuaLibGraphics.h"/>
         <File Name="../../librtt/Rtt_LuaLibGameNetwork.h"/>
@@ -733,7 +731,6 @@
       <File Name="../../librtt/Rtt_LuaLibSQLite.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibOpenAL.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibNative.cpp"/>
-      <File Name="../../librtt/Rtt_LuaLibMedia.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibInAppStore.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibGameNetwork.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibFacebook.cpp"/>
@@ -1072,7 +1069,7 @@
         <Preprocessor Value="Rtt_BUILD_MONTH=1"/>
         <Preprocessor Value="Rtt_BUILD_DAY=1"/>
       </Compiler>
-      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lfontconfig -lfreetype -lpng -lz -lexpat -ljpeg -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
+      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lfontconfig -lfreetype -lpng -lz -lexpat -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(ProjectName)/$(ProjectName)" IntermediateDirectory="./Simulator" Command="../$(OutputFile)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(ProjectName)/" PauseExecWhenProcTerminates="yes" IsGUIProgram="yes" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>
@@ -1176,7 +1173,7 @@
         <Preprocessor Value="Rtt_BUILD_MONTH=1"/>
         <Preprocessor Value="Rtt_BUILD_DAY=1"/>
       </Compiler>
-      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lfontconfig -lfreetype -lpng -lz -lexpat -ljpeg -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
+      <Linker Options="-s;-export-dynamic ./CryptoPP/libcryptopp.a ./curl-7.61.0/libcurl.a ./openssl-1.0.2o/libssl.a ./openssl-1.0.2o/libcrypto.a ./wx/lib/libwx_gtk3u-3.1.a ./wx/lib/libwx_gtk3u_gl-3.1.a ./wx/lib/libwxtiff-3.1.a ./wx/lib/libwxregexu-3.1.a -lGL -lopenal -lgdk-3 -lpangocairo-1.0 -lgthread-2.0 -pthread -lX11 -lXxf86vm -lSM -lgtk-3 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lXtst -lpangoft2-1.0 -lpango-1.0 -lfontconfig -lfreetype -lpng -lz -lexpat -ldl -lm -lwebkit2gtk-4.0 -ljavascriptcoregtk-4.0 -lgstreamer-1.0 -lgstvideo-1.0" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(ProjectName)/$(ProjectName)" IntermediateDirectory="./Simulator" Command="../$(OutputFile)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(ProjectName)/" PauseExecWhenProcTerminates="yes" IsGUIProgram="yes" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>

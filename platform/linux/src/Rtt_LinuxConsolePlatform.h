@@ -52,7 +52,7 @@ namespace Rtt
 		virtual PlatformSurface* CreateOffscreenSurface(const PlatformSurface& parent) const { return NULL; };
 		virtual PlatformTimer* CreateTimerWithCallback(MCallback& callback) const { return NULL; };
 		virtual PlatformBitmap* CreateBitmap(const char* filename, bool convertToGrayscale) const { return NULL; };
-		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath, float jpegQuality) const { return false; };
+		virtual bool SaveBitmap(PlatformBitmap* bitmap, const char* filePath) const { return false; };
 		virtual const MCrypto& GetCrypto() const;
 		virtual void GetPreference(Category category, Rtt::String * value) const;
 		virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const;

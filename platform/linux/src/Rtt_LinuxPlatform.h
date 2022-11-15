@@ -93,7 +93,7 @@ namespace Rtt
 		char *CopyString(const char *src, bool useAllocator = true) const;
 
 	public:
-		virtual bool SaveBitmap(PlatformBitmap *bitmap, const char *filePath, float jpegQuality) const;
+		virtual bool SaveBitmap(PlatformBitmap *bitmap, const char *filePath) const;
 		virtual bool OpenURL(const char *url) const;
 		virtual int CanOpenURL(const char *url) const;
 		virtual PlatformStoreProvider *GetStoreProvider(const ResourceHandle<lua_State> &handle) const;

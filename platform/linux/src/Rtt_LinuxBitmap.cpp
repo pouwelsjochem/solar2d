@@ -104,51 +104,15 @@ namespace Rtt
 	{
 		Rtt_ASSERT(fData == NULL);
 
-		// get file ext
-		int n = strlen(path);
-		if (n < 5)
+		FILE* f = fopen(path, "rb");
+		if (f)
 		{
-			return false;
-		}
-
-		std::string ext = path + n - 4;
-		if (ext == ".bmp")
-		{
-			fData = bitmapUtil::loadBMP(path, fWidth, fHeight, fFormat);
+			fData = bitmapUtil::loadPNG(f, fWidth, fHeight);
 			if (fData)
 			{
 				fFormat = kRGBA;
 			}
-		}
-		else if (ext == ".png")
-		{
-			FILE* f = fopen(path, "rb");
-			if (f)
-			{
-				fData = bitmapUtil::loadPNG(f, fWidth, fHeight);
-				if (fData)
-				{
-					fFormat = kRGBA;
-				}
-				fclose(f);
-			}
-		}
-		else if (ext == ".jpg")
-		{
-			FILE* f = fopen(path, "rb");
-			if (f)
-			{
-				fData = bitmapUtil::loadJPG(f, fWidth, fHeight);
-				if (fData)
-				{
-					fFormat = kRGB;
-				}
-				else
-				{
-					Rtt_LogException("Failed to load %s\n", path);
-				}
-				fclose(f);
-			}
+			fclose(f);
 		}
 
 		if (fData && fFormat == kRGBA)
@@ -193,14 +157,7 @@ namespace Rtt
 		bool rc = false;
 
 		std::string path = filePath;
-		if (path.rfind(".png") != std::string::npos)
-		{
-			rc = bitmapUtil::savePNG(filePath, bits, w, h, fmt);
-		}
-		else if (path.rfind(".jpg") != std::string::npos)
-		{
-			rc = bitmapUtil::saveJPG(filePath, bits, w, h, fmt, 75); // jpegQuality);
-		}
+		rc = bitmapUtil::savePNG(filePath, bits, w, h, fmt);
 		return rc;
 	}
 
