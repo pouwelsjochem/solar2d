@@ -14,7 +14,6 @@
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_LinuxConsolePlatform.h"
-#include "Rtt_LinuxAudioRecorder.h"
 #include "Rtt_LinuxBitmap.h"
 //#include "Rtt_LinuxFBConnect.h"
 #include "Rtt_LinuxScreenSurface.h"

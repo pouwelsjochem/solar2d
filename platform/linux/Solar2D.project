@@ -79,7 +79,6 @@
         <File Name="src/Rtt_LinuxContext.h"/>
         <File Name="src/Rtt_LinuxContainer.h"/>
         <File Name="src/Rtt_LinuxBitmap.h"/>
-        <File Name="src/Rtt_LinuxAudioRecorder.h"/>
       </VirtualDirectory>
       <File Name="src/Rtt_Assert.cpp"/>
       <File Name="src/Rtt_LinuxWebView.cpp"/>
@@ -94,7 +93,6 @@
       <File Name="src/Rtt_LinuxContext.cpp"/>
       <File Name="src/Rtt_LinuxContainer.cpp"/>
       <File Name="src/Rtt_LinuxBitmap.cpp"/>
-      <File Name="src/Rtt_LinuxAudioRecorder.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="luasockets">
       <File Name="lua/ftp.cpp"/>
@@ -257,7 +255,6 @@
         <File Name="../../librtt/Display/Rtt_TextureResourceAdapter.h"/>
         <File Name="../../librtt/Display/Rtt_TextureResource.h"/>
         <File Name="../../librtt/Display/Rtt_TextureFactory.h"/>
-        <File Name="../../librtt/Display/Rtt_TextObject.h"/>
         <File Name="../../librtt/Rtt_TesselatorStream.h"/>
         <File Name="../../librtt/Display/Rtt_TesselatorShape.h"/>
         <File Name="../../librtt/Display/Rtt_TesselatorRect.h"/>
@@ -398,10 +395,7 @@
         <File Name="../../librtt/Core/Rtt_FileSystem.h"/>
         <File Name="../../librtt/Rtt_FilePath.h"/>
         <File Name="../../librtt/Rtt_Event.h"/>
-        <File Name="../../librtt/Display/Rtt_EmitterObject.h"/>
-        <File Name="../../librtt/Display/Rtt_EmbossedTextObject.h"/>
         <File Name="../../librtt/Rtt_EllipsePath.h"/>
-        <File Name="../../librtt/Display/Rtt_DisplayV2.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayTypes.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayObject.h"/>
         <File Name="../../librtt/Display/Rtt_DisplayDefaults.h"/>
@@ -584,7 +578,6 @@
       <File Name="../../librtt/Display/Rtt_TextureResourceAdapter.cpp"/>
       <File Name="../../librtt/Display/Rtt_TextureResource.cpp"/>
       <File Name="../../librtt/Display/Rtt_TextureFactory.cpp"/>
-      <File Name="../../librtt/Display/Rtt_TextObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_TesselatorShape.cpp"/>
       <File Name="../../librtt/Display/Rtt_TesselatorRect.cpp"/>
       <File Name="../../librtt/Display/Rtt_TesselatorCircle.cpp"/>
@@ -628,9 +621,6 @@
       <File Name="../../librtt/Display/Rtt_GroupObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_GradientPaintAdapter.cpp"/>
       <File Name="../../librtt/Display/Rtt_GradientPaint.cpp"/>
-      <File Name="../../librtt/Display/Rtt_EmitterObject.cpp"/>
-      <File Name="../../librtt/Display/Rtt_EmbossedTextObject.cpp"/>
-      <File Name="../../librtt/Display/Rtt_DisplayV2.cpp"/>
       <File Name="../../librtt/Display/Rtt_DisplayObject.cpp"/>
       <File Name="../../librtt/Display/Rtt_DisplayDefaults.cpp"/>
       <File Name="../../librtt/Display/Rtt_Display.cpp"/>
@@ -692,7 +682,6 @@
       <File Name="../../librtt/Rtt_LuaLibOpenAL.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibNative.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibInAppStore.cpp"/>
-      <File Name="../../librtt/Rtt_LuaLibGameNetwork.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibFacebook.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibCrypto.cpp"/>
       <File Name="../../librtt/Rtt_LuaData.cpp"/>
@@ -710,7 +699,6 @@
       <File Name="../../librtt/Rtt_ExplicitTemplates.cpp"/>
       <File Name="../../librtt/Rtt_Event.cpp"/>
       <File Name="../../librtt/Rtt_EllipsePath.cpp"/>
-      <File Name="../../librtt/Rtt_CKWorkflow.cpp"/>
       <File Name="../../librtt/Rtt_CachedPath.cpp"/>
       <File Name="../../librtt/Rtt_Archive.cpp"/>
     </VirtualDirectory>

@@ -361,9 +361,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Display/Rtt_Display.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayDefaults.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_DisplayObject.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_DisplayV2.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_EmbossedTextObject.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_EmitterObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GradientPaint.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GradientPaintAdapter.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_GroupObject.cpp
@@ -406,7 +403,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorCircle.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorRect.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TesselatorShape.cpp
-		${CORONA_ROOT}/librtt/Display/Rtt_TextObject.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TextureFactory.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TextureResource.cpp
 		${CORONA_ROOT}/librtt/Display/Rtt_TextureResourceAdapter.cpp
@@ -430,7 +426,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputAxisCollection.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_ReadOnlyInputDeviceCollection.cpp
 		${CORONA_ROOT}/librtt/Rtt_Archive.cpp
-		${CORONA_ROOT}/librtt/Rtt_CKWorkflow.cpp
 		${CORONA_ROOT}/librtt/Rtt_Event.cpp
 		${CORONA_ROOT}/librtt/Rtt_ExplicitTemplates.cpp
 		${CORONA_ROOT}/librtt/Rtt_FilePath.cpp
@@ -445,7 +440,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_LuaData.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibCrypto.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibFacebook.cpp
-		${CORONA_ROOT}/librtt/Rtt_LuaLibGameNetwork.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibInAppStore.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibNative.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibOpenAL.cpp
@@ -708,7 +702,6 @@ add_executable( Solar2D
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDialog.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDialogBuild.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxContext.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxAudioRecorder.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxBitmap.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxData.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDisplayObject.cpp
@@ -737,7 +730,6 @@ add_executable( Solar2DSimulator
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDialog.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDialogBuild.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxContext.cpp
-	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxAudioRecorder.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxBitmap.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxData.cpp
 	${CORONA_ROOT}/platform/linux/src/Rtt_LinuxDisplayObject.cpp
