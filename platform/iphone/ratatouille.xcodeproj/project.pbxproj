@@ -194,8 +194,6 @@
 		A4F5C3C518456F1800E5ED54 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3B718456DBC00E5ED54 /* Main_iPad.storyboard */; };
 		A4F5C3C618456F1800E5ED54 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3B918456DBC00E5ED54 /* Main_iPhone.storyboard */; };
 		A4F5C3D2184574E200E5ED54 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3D0184574E200E5ED54 /* InfoPlist.strings */; };
-		A4FA8053170BFECE002A7FC9 /* CoronaNativeObjectAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */; };
-		A4FA8057170BFF09002A7FC9 /* Rtt_IPhoneNativeObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */; };
 		C2074EBA1E160FCF009FC33C /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */; };
 		C2F911791CDC15F4004A5564 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4359164B1D5200CFE7B3 /* libluasocket.a */; };
 		DB56B4A0284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */; };
@@ -265,8 +263,6 @@
 		F5C36C2E24FAB49F00775C6E /* CoronaLuaIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */; };
 		F5C36C3024FAB49F00775C6E /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36B1BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm */; };
 		F5C36C3124FAB49F00775C6E /* CoronaViewControllerPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BF5183EF42400F67CB3 /* CoronaViewControllerPrivate.mm */; };
-		F5C36C3224FAB49F00775C6E /* CoronaNativeObjectAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */; };
-		F5C36C3324FAB49F00775C6E /* Rtt_IPhoneNativeObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */; };
 		F5C36C3424FAB49F00775C6E /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0720731117CD2C93004720D2 /* Rtt_IPhoneTimer.mm */; };
 		F5C36C3524FAB49F00775C6E /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A482FAE9183D7F460005831B /* Rtt_IPhonePlatformBase.mm */; };
 		F5C36C3924FAB49F00775C6E /* CoronaLuaObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5A7520D1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm */; };
@@ -1318,10 +1314,6 @@
 		A4F5C3B818456DBC00E5ED54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = CoronaCards/Test/Base.lproj/Main_iPad.storyboard; sourceTree = SOURCE_ROOT; };
 		A4F5C3BA18456DBC00E5ED54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = CoronaCards/Test/Base.lproj/Main_iPhone.storyboard; sourceTree = SOURCE_ROOT; };
 		A4F5C3D1184574E200E5ED54 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
-		A4FA8051170BFEAC002A7FC9 /* CoronaNativeObjectAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaNativeObjectAdapter.h; path = Corona/CoronaNativeObjectAdapter.h; sourceTree = SOURCE_ROOT; };
-		A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaNativeObjectAdapter.mm; path = Corona/CoronaNativeObjectAdapter.mm; sourceTree = SOURCE_ROOT; };
-		A4FA8054170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneNativeObject.h; path = platform/iphone/Rtt_IPhoneNativeObject.h; sourceTree = "<group>"; };
-		A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneNativeObject.mm; path = platform/iphone/Rtt_IPhoneNativeObject.mm; sourceTree = "<group>"; };
 		C2074EB81E160FC1009FC33C /* CoronaBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaBeacon.h; path = platform/iphone/CoronaBeacon.h; sourceTree = "<group>"; };
 		C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaBeacon.mm; path = platform/iphone/CoronaBeacon.mm; sourceTree = "<group>"; };
 		DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_AppleKeyServices.mm; sourceTree = "<group>"; };
@@ -1565,8 +1557,6 @@
 				A46936C6169DED9200723568 /* Rtt_IPhoneDevice.mm */,
 				A46936C7169DED9200723568 /* Rtt_IPhoneDisplayObject.h */,
 				A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */,
-				A4FA8054170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.h */,
-				A4FA8055170BFEFA002A7FC9 /* Rtt_IPhoneNativeObject.mm */,
 				A46936DD169DED9200723568 /* Rtt_IPhonePlatform.h */,
 				A46936DE169DED9200723568 /* Rtt_IPhonePlatform.mm */,
 				A482FAE8183D7F460005831B /* Rtt_IPhonePlatformBase.h */,
@@ -1738,8 +1728,6 @@
 				A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */,
 				F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */,
 				F5A7520D1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm */,
-				A4FA8051170BFEAC002A7FC9 /* CoronaNativeObjectAdapter.h */,
-				A4FA8052170BFEAD002A7FC9 /* CoronaNativeObjectAdapter.mm */,
 				A4543E7F151AA23A00486F8A /* CoronaRuntime.h */,
 			);
 			name = Corona;
@@ -3561,8 +3549,6 @@
 				A480725F16CACD6E00960127 /* CoronaLuaIOS.mm in Sources */,
 				F564C3761BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				A48E9BF7183EF42400F67CB3 /* CoronaViewControllerPrivate.mm in Sources */,
-				A4FA8053170BFECE002A7FC9 /* CoronaNativeObjectAdapter.mm in Sources */,
-				A4FA8057170BFF09002A7FC9 /* Rtt_IPhoneNativeObject.mm in Sources */,
 				0720731917CD2CC2004720D2 /* Rtt_IPhoneTimer.mm in Sources */,
 				A482FAEB183D7F460005831B /* Rtt_IPhonePlatformBase.mm in Sources */,
 				F5A7520F1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,

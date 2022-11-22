@@ -34,7 +34,7 @@
 
 #include "CoronaIOSLoader.h"
 
-#include "Rtt_IPhoneNativeObject.h"
+#include "Rtt_IPhoneDisplayObject.h"
 #include "Rtt_IPhoneTemplate.h"
 
 #include "CoronaAppDelegate.h"

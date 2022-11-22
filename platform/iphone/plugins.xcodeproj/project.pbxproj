@@ -10,7 +10,6 @@
 		07071E0B18C0045400BC657C /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 07071E0918C0045400BC657C /* NSData+Base64.h */; };
 		07071E0C18C0045400BC657C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 07071E0A18C0045400BC657C /* NSData+Base64.m */; };
 		A45F9A6D15ED6C250093646B /* CoronaProvider.ads.lua in Sources */ = {isa = PBXBuildFile; fileRef = A45F9A6915EC35830093646B /* CoronaProvider.ads.lua */; };
-		A4607544162E71CD00DFDF97 /* CoronaNativeObjectAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A4607543162E71CD00DFDF97 /* CoronaNativeObjectAdapter.h */; };
 		A47B5C6415FAA980001D60AB /* CoronaLuaLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47B5C6015FAA97F001D60AB /* CoronaLuaLibrary.cpp */; };
 		A47B5C6515FAA980001D60AB /* CoronaLuaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A47B5C6115FAA980001D60AB /* CoronaLuaLibrary.h */; };
 		A47B5C6615FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47B5C6215FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp */; };
@@ -79,7 +78,6 @@
 		07071E0918C0045400BC657C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "../../plugins/ios/NSData+Base64.h"; sourceTree = "<group>"; };
 		07071E0A18C0045400BC657C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "../../plugins/ios/NSData+Base64.m"; sourceTree = "<group>"; };
 		A45F9A6915EC35830093646B /* CoronaProvider.ads.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaProvider.ads.lua; path = ../../plugins/ads/shared/CoronaProvider.ads.lua; sourceTree = "<group>"; };
-		A4607543162E71CD00DFDF97 /* CoronaNativeObjectAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaNativeObjectAdapter.h; path = Corona/CoronaNativeObjectAdapter.h; sourceTree = "<group>"; };
 		A47B5C6015FAA97F001D60AB /* CoronaLuaLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaLuaLibrary.cpp; path = ../../plugins/shared/CoronaLuaLibrary.cpp; sourceTree = "<group>"; };
 		A47B5C6115FAA980001D60AB /* CoronaLuaLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaLibrary.h; path = ../../plugins/shared/CoronaLuaLibrary.h; sourceTree = "<group>"; };
 		A47B5C6215FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaLuaLibraryMetadata.cpp; path = ../../plugins/shared/CoronaLuaLibraryMetadata.cpp; sourceTree = "<group>"; };
@@ -130,7 +128,6 @@
 		A4607546162E71EB00DFDF97 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				A4607543162E71CD00DFDF97 /* CoronaNativeObjectAdapter.h */,
 				A481B82815DC6F3F009FFE54 /* CoronaRuntime.h */,
 			);
 			name = iOS;
@@ -229,7 +226,6 @@
 				A47B5C6515FAA980001D60AB /* CoronaLuaLibrary.h in Headers */,
 				A47B5C6715FAA980001D60AB /* CoronaLuaLibraryMetadata.h in Headers */,
 				07071E0B18C0045400BC657C /* NSData+Base64.h in Headers */,
-				A4607544162E71CD00DFDF97 /* CoronaNativeObjectAdapter.h in Headers */,
 				A491870B1642201900A39286 /* CoronaIOSLoader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
