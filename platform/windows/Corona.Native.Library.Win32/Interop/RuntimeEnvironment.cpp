@@ -2057,6 +2057,32 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 
 	// Fetch the window mode (ie: "normal", "fullscreen", etc.) the last time this app was running with.
 	const Rtt::NativeWindowMode* windowModePointer = projectSettings.GetDefaultWindowMode();
+
+	// Try to detect Steam Deck and set defaultWindowMode to "fullScreen" when detected
+    static const char *(CDECL *pwine_get_version)(void);
+    HMODULE hntdll = GetModuleHandle("ntdll.dll");
+    if(hntdll)
+    {
+		pwine_get_version = (void *)GetProcAddress(hntdll, "wine_get_version");
+		if(pwine_get_version)
+		{
+			POINT mainWindowPosition{0,0};
+			HMONITOR mainMonitor = ::MonitorFromPoint(mainWindowPosition, MONITOR_DEFAULTTONULL);
+			if (mainMonitor != NULL) 
+			{
+				MONITORINFO mainMonitorInfo;
+				mainMonitorInfo.cbSize = sizeof(MONITORINFO);
+				GetMonitorInfo(monitor, &mainMonitorInfo);
+
+				int mainMonitorWidth = mainMonitorInfo.rcMonitor.right - mainMonitorInfo.rcMonitor.left;
+				int mainMonitorHeight = mainMonitorInfo.rcMonitor.bottom - mainMonitorInfo.rcMonitor.top;
+				if (mainMonitorWidth == 1280 && mainMonitorHeight == 800) {
+					windowModePointer = Rtt::NativeWindowMode::kFullscreen;
+				}
+			}
+		}
+    }
+
 	if (fStoredPreferencesPointer)
 	{
 		auto lastModeResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/mode");
@@ -2069,6 +2095,7 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 			}
 		}
 	}
+
 	fMainWindowPointer->SetWindowMode(*windowModePointer);
 }
 
