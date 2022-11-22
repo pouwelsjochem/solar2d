@@ -79,7 +79,6 @@
         <File Name="src/Rtt_LinuxContext.h"/>
         <File Name="src/Rtt_LinuxContainer.h"/>
         <File Name="src/Rtt_LinuxBitmap.h"/>
-        <File Name="src/Rtt_LinuxAudioRecorder.h"/>
       </VirtualDirectory>
       <File Name="src/Rtt_Assert.cpp"/>
       <File Name="src/Rtt_LinuxWebView.cpp"/>
@@ -94,7 +93,6 @@
       <File Name="src/Rtt_LinuxContext.cpp"/>
       <File Name="src/Rtt_LinuxContainer.cpp"/>
       <File Name="src/Rtt_LinuxBitmap.cpp"/>
-      <File Name="src/Rtt_LinuxAudioRecorder.cpp"/>
     </VirtualDirectory>
     <VirtualDirectory Name="luasockets">
       <File Name="lua/ftp.cpp"/>

@@ -2220,7 +2220,7 @@ void RuntimeEnvironment::RuntimeDelegate::InitializeConfig(const Rtt::Runtime& s
 
 void RuntimeEnvironment::RuntimeDelegate::DidLoadConfig(const Rtt::Runtime& sender, lua_State *L) const
 {
-	// Startup Microsoft GDI+. Needed by Corona to load images and generate text bitmaps.
+	// Startup Microsoft GDI+. Needed by Corona to load images.
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	Gdiplus::GdiplusStartup(&fEnvironmentPointer->fGdiPlusToken, &gdiplusStartupInput, nullptr);
 

@@ -74,7 +74,6 @@
         <File Name="src/Rtt_LinuxContext.h"/>
         <File Name="src/Rtt_LinuxContainer.h"/>
         <File Name="src/Rtt_LinuxBitmap.h"/>
-        <File Name="src/Rtt_LinuxAudioRecorder.h"/>
       </VirtualDirectory>
       <File Name="src/Rtt_LinuxInputDeviceManager.cpp" ExcludeProjConfig=""/>
       <File Name="src/Rtt_LinuxInputDevice.cpp" ExcludeProjConfig=""/>
