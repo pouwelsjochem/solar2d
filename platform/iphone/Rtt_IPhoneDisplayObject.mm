@@ -114,28 +114,29 @@ IPhoneDisplayObject::Prepare( const Display& display )
         
         Rect screenBounds;
         GetScreenBounds( screenBounds );
-
+        
         CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
+
+        S32 contentToScreenScale = GetContentToScreenScale();
+        newFrame.origin.x *= contentToScreenScale;
+        newFrame.origin.y *= contentToScreenScale;
+        newFrame.size.width *= contentToScreenScale;
+        newFrame.size.height *= contentToScreenScale;
+        
         [fView setFrame:newFrame];
 
 		CGPoint c;
-		c.x = screenBounds.Width() / 2;
-		c.y = screenBounds.Height() / 2;
+		c.x = newFrame.size.width / 2.0f;
+		c.y = newFrame.size.height / 2.0f;
+        fView.frame = newFrame;
 		fView.center = c;
 		fView.transform = CGAffineTransformIdentity;
-		fView.frame = newFrame;
 
         if ( ! fHidden )
         {
             // Only restore the object if the user hasn't requested it hidden
             [fView setHidden:NO];
         }
-
-    }
-	
-    if ( nil == [fView superview] )
-    {
-        [fCoronaView addSubview:fView];
     }
 }
 
