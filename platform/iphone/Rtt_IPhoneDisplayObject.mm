@@ -118,6 +118,13 @@ IPhoneDisplayObject::Prepare( const Display& display )
         CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
         [fView setFrame:newFrame];
 
+		CGPoint c;
+		c.x = screenBounds.Width() / 2;
+		c.y = screenBounds.Height() / 2;
+		fView.center = c;
+		fView.transform = CGAffineTransformIdentity;
+		fView.frame = newFrame;
+
         if ( ! fHidden )
         {
             // Only restore the object if the user hasn't requested it hidden

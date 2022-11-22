@@ -312,7 +312,7 @@ namespace Rtt
 		{
 			Rect boundsScreen;
 			GetScreenBounds(boundsScreen);
-			float k = 1 / GetContentToScreenSx();
+			float k = 1 / GetContentToScreenScale();
 
 			switch (evt.type)
 			{
