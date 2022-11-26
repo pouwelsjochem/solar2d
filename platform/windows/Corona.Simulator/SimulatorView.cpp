@@ -397,7 +397,7 @@ void CSimulatorView::OnFileOpenInEditor() // TEMPORARY REPLACED WITH NX BUILD
 		"C:\\Users\\Gebruiker\\Documents\\coromon",
 		"C:\\Users\\Gebruiker\\Documents\\coromon\\Coromon.nmeta",
 		"Coromon",
-		"1.1.0",
+		"1.1.0.4",
 		"C:\\Users\\Gebruiker\\Desktop\\Build\\Coromon.NX64\\",
 		Rtt::TargetDevice::kNxSPlatform,
 		"",
@@ -726,8 +726,8 @@ void CSimulatorView::OnFileClose()
 	// Configure the Win32 app packager's parameters.
 	Rtt::Win32AppPackagerParams::CoreSettings paramsSettings{};
 	paramsSettings.AppName = "Coromon";
-	paramsSettings.VersionString = "1.0.19";
-	paramsSettings.DestinationDirectoryPath = "C:\\Users\\Gebruiker\\Desktop\\Build\\Win.32\\";
+	paramsSettings.VersionString = "1.1.0.4";
+	paramsSettings.DestinationDirectoryPath = "E:\\Coromon local\\Build\\Win.32\\";
 	paramsSettings.SourceDirectoryPath = projectDirectoryPath.GetUTF8();
 	Rtt::Win32AppPackagerParams params(paramsSettings);
 	params.SetExeFileName("coromon.exe");
