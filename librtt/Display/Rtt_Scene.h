@@ -26,7 +26,6 @@ namespace Rtt
 class Display;
 class PlatformSurface;
 class Runtime;
-class MUpdatable;
 
 // ----------------------------------------------------------------------------
 
@@ -82,11 +81,6 @@ class Scene
 		StageObject* PushStage();
 		void PopStage();
 
-	public:
-		void RemoveActiveUpdatable( MUpdatable *e ){ fActiveUpdatable.erase( e ); }
-		void AddActiveUpdatable( MUpdatable *e ){ fActiveUpdatable.insert( e ); }
-		void QueueUpdateOfUpdatables();
-
 	private:
 		Display& fOwner;
 		PtrArray< CPUResource > *fFrontResourceOrphanage;
@@ -98,10 +92,6 @@ class Scene
 		LightPtrArray< LuaUserdataProxy > fProxyOrphanage;
 		bool fIsValid;
 		U8 fCounter; // DO NOT change type --- must be U8
-
-		// IMPORTANT: The purpose of this set is to iterate over all active
-		// MUpdatable. This class DOESN'T own these MUpdatable.
-		std::set< MUpdatable * > fActiveUpdatable;
 };
 
 // ----------------------------------------------------------------------------

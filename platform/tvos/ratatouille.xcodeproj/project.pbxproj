@@ -1757,7 +1757,6 @@
 		A4551EEA1BAA182D00FB3BDF /* Rtt_MPlatformDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MPlatformDevice.h; path = ../../librtt/Rtt_MPlatformDevice.h; sourceTree = "<group>"; };
 		A4551EEB1BAA182D00FB3BDF /* Rtt_MReloadableResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MReloadableResource.h; path = ../../librtt/Rtt_MReloadableResource.h; sourceTree = "<group>"; };
 		A4551EEC1BAA182D00FB3BDF /* Rtt_MRuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MRuntimeDelegate.h; path = ../../librtt/Rtt_MRuntimeDelegate.h; sourceTree = "<group>"; };
-		A4551EED1BAA182D00FB3BDF /* Rtt_MUpdatable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MUpdatable.h; path = ../../librtt/Rtt_MUpdatable.h; sourceTree = "<group>"; };
 		A4551EFD1BAA182D00FB3BDF /* Rtt_PlatformAudioSessionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformAudioSessionManager.cpp; path = ../../librtt/Rtt_PlatformAudioSessionManager.cpp; sourceTree = "<group>"; };
 		A4551EFE1BAA182D00FB3BDF /* Rtt_PlatformAudioSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformAudioSessionManager.h; path = ../../librtt/Rtt_PlatformAudioSessionManager.h; sourceTree = "<group>"; };
 		A4551EFF1BAA182D00FB3BDF /* Rtt_PlatformData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformData.cpp; path = ../../librtt/Rtt_PlatformData.cpp; sourceTree = "<group>"; };
@@ -2920,7 +2919,6 @@
 				A4551EEA1BAA182D00FB3BDF /* Rtt_MPlatformDevice.h */,
 				A4551EEB1BAA182D00FB3BDF /* Rtt_MReloadableResource.h */,
 				A4551EEC1BAA182D00FB3BDF /* Rtt_MRuntimeDelegate.h */,
-				A4551EED1BAA182D00FB3BDF /* Rtt_MUpdatable.h */,
 				A4551EFD1BAA182D00FB3BDF /* Rtt_PlatformAudioSessionManager.cpp */,
 				A4551EFE1BAA182D00FB3BDF /* Rtt_PlatformAudioSessionManager.h */,
 				A4551EFF1BAA182D00FB3BDF /* Rtt_PlatformData.cpp */,

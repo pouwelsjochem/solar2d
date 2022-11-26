@@ -13,7 +13,6 @@
 
 #include "Display/Rtt_Display.h"
 #include "Display/Rtt_DisplayDefaults.h"
-#include "Rtt_MUpdatable.h"
 #include "Display/Rtt_TextureFactory.h"
 #include "Renderer/Rtt_Renderer.h"
 #include "Renderer/Rtt_CPUResource.h"
@@ -50,8 +49,7 @@ Scene::Scene( Rtt_Allocator* pAllocator, Display& owner)
 	fSnapshotOrphanage( Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) ) ),
 	fProxyOrphanage( owner.GetAllocator() ),
 	fIsValid( false ),
-	fCounter( 0 ),
-	fActiveUpdatable()
+	fCounter( 0 )
 {
 	fOffscreenStage->SetRenderedOffScreen( true );
 }
@@ -144,10 +142,7 @@ Scene::QueueRelease( LuaUserdataProxy *proxy )
 bool
 Scene::IsValid() const
 {
-	// If any MUpdatable is active, then the scene SHOULDN'T be considered
-	// valid. This will trigger a call to DisplayObject::Prepare() of all
-	// fActiveUpdatable.
-	return ( fIsValid && fActiveUpdatable.empty() );
+	return fIsValid;
 }
 
 void
@@ -267,16 +262,6 @@ Scene::PopStage()
 	fCurrentStage = newHead;
 	oldHead->SetNext( NULL );
 	Rtt_DELETE( oldHead );
-}
-
-void Scene::QueueUpdateOfUpdatables()
-{
-	for( std::set< MUpdatable * >::iterator u = fActiveUpdatable.begin();
-			u != fActiveUpdatable.end();
-			++u )
-	{
-		(*u)->QueueUpdate();
-	}
 }
 
 // ----------------------------------------------------------------------------

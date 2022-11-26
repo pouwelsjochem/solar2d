@@ -599,7 +599,6 @@
 		C229E03F1B32221B00D87A7C /* Rtt_MPlatformDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71812B73EE300D9B6A4 /* Rtt_MPlatformDevice.h */; };
 		C229E0401B32221B00D87A7C /* Rtt_MReloadableResource.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE71912B73EE300D9B6A4 /* Rtt_MReloadableResource.h */; };
 		C229E0411B32221B00D87A7C /* Rtt_MRuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */; };
-		C229E0421B32221B00D87A7C /* Rtt_MUpdatable.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E06F2C1963988C003451E8 /* Rtt_MUpdatable.h */; };
 		C229E0431B32221B00D87A7C /* Rtt_Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BCF12B71BF20057F594 /* Rtt_Macros.h */; };
 		C229E0441B32221B00D87A7C /* Rtt_Math.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BD112B71BF20057F594 /* Rtt_Math.h */; };
 		C229E0451B32221B00D87A7C /* Rtt_Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE70D12B73EE300D9B6A4 /* Rtt_Matrix.h */; };
@@ -995,7 +994,6 @@
 		C2DA96101B46460F00DAF684 /* Rtt_DisplayTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F6176A621100ACB6FF /* Rtt_DisplayTypes.h */; };
 		C2DA96111B46460F00DAF684 /* Rtt_ImageSheetUserdata.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328806176A621100ACB6FF /* Rtt_ImageSheetUserdata.h */; };
 		C2DA96121B46460F00DAF684 /* Rtt_DisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287F3176A621100ACB6FF /* Rtt_DisplayObject.h */; };
-		C2DA96141B46460F00DAF684 /* Rtt_MUpdatable.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E06F2C1963988C003451E8 /* Rtt_MUpdatable.h */; };
 		C2DA96151B46460F00DAF684 /* Rtt_PaintAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = A475032217739AD80064ABA0 /* Rtt_PaintAdapter.h */; };
 		C2DA96161B46460F00DAF684 /* Rtt_ContainerObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A43287ED176A621100ACB6FF /* Rtt_ContainerObject.h */; };
 		C2DA96171B46460F00DAF684 /* Rtt_Paint.h in Headers */ = {isa = PBXBuildFile; fileRef = A4328812176A621100ACB6FF /* Rtt_Paint.h */; };
@@ -2145,7 +2143,6 @@
 		50DF2C6D17C1613D002AF9FD /* kernel_composite_normalMapWith1DirLight_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_normalMapWith1DirLight_gl.lua; path = Display/Shader/kernel_composite_normalMapWith1DirLight_gl.lua; sourceTree = "<group>"; };
 		50E0248617B321B00015DF1F /* kernel_filter_colorChannelOffset_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_colorChannelOffset_gl.lua; path = Display/Shader/kernel_filter_colorChannelOffset_gl.lua; sourceTree = "<group>"; };
 		50E0248717B321B00015DF1F /* kernel_generator_stripes_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_stripes_gl.lua; path = Display/Shader/kernel_generator_stripes_gl.lua; sourceTree = "<group>"; };
-		50E06F2C1963988C003451E8 /* Rtt_MUpdatable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MUpdatable.h; sourceTree = "<group>"; };
 		50E3BC13179A09F800DF20FC /* kernel_filter_hue_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_hue_gl.lua; path = Display/Shader/kernel_filter_hue_gl.lua; sourceTree = "<group>"; };
 		50FB088917B1E1CE005ED7B7 /* kernel_filter_scatter_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_scatter_gl.lua; path = Display/Shader/kernel_filter_scatter_gl.lua; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Corona Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Corona Simulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3051,7 +3048,6 @@
 				000CE71812B73EE300D9B6A4 /* Rtt_MPlatformDevice.h */,
 				000CE71912B73EE300D9B6A4 /* Rtt_MReloadableResource.h */,
 				A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */,
-				50E06F2C1963988C003451E8 /* Rtt_MUpdatable.h */,
 				006E5C4C13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.cpp */,
 				006E5C4D13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.h */,
 				000CE72612B73EE300D9B6A4 /* Rtt_PlatformData.cpp */,
@@ -4113,7 +4109,6 @@
 				000CE7C412B73EE300D9B6A4 /* Rtt_MPlatformDevice.h in Headers */,
 				000CE7C512B73EE300D9B6A4 /* Rtt_MReloadableResource.h in Headers */,
 				C2DA96491B46460F00DAF684 /* Rtt_MRuntimeDelegate.h in Headers */,
-				C2DA96141B46460F00DAF684 /* Rtt_MUpdatable.h in Headers */,
 				C2DA96511B46460F00DAF684 /* Rtt_Macros.h in Headers */,
 				C2DA96401B46460F00DAF684 /* Rtt_Math.h in Headers */,
 				03D1C5641D70CCD400DB02EE /* Rtt_SharedStringPtr.h in Headers */,
@@ -4347,7 +4342,6 @@
 				C229E03F1B32221B00D87A7C /* Rtt_MPlatformDevice.h in Headers */,
 				C229E0401B32221B00D87A7C /* Rtt_MReloadableResource.h in Headers */,
 				C229E0411B32221B00D87A7C /* Rtt_MRuntimeDelegate.h in Headers */,
-				C229E0421B32221B00D87A7C /* Rtt_MUpdatable.h in Headers */,
 				C229E0431B32221B00D87A7C /* Rtt_Macros.h in Headers */,
 				C229E0441B32221B00D87A7C /* Rtt_Math.h in Headers */,
 				03D1C5631D70CCD300DB02EE /* Rtt_SharedStringPtr.h in Headers */,

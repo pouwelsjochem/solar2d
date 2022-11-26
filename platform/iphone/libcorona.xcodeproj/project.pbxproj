@@ -310,7 +310,6 @@
 		50DF2C7A17C1617E002AF9FD /* kernel_composite_normalMapWith1DirLight_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C7917C1616B002AF9FD /* kernel_composite_normalMapWith1DirLight_gl.lua */; };
 		50E0249617B3223F0015DF1F /* kernel_filter_colorChannelOffset_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50E0249417B322220015DF1F /* kernel_filter_colorChannelOffset_gl.lua */; };
 		50E0249717B322450015DF1F /* kernel_generator_stripes_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50E0249517B322220015DF1F /* kernel_generator_stripes_gl.lua */; };
-		50E06F39196398C4003451E8 /* Rtt_MUpdatable.h in Headers */ = {isa = PBXBuildFile; fileRef = 50E06F38196398C4003451E8 /* Rtt_MUpdatable.h */; };
 		50FB089117B1E208005ED7B7 /* kernel_filter_scatter_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50FB089017B1E1E8005ED7B7 /* kernel_filter_scatter_gl.lua */; };
 		50FE9BE517A2FEE5002762DD /* kernel_filter_sharpenLuminance_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = 50FE9BE417A2FE13002762DD /* kernel_filter_sharpenLuminance_gl.lua */; };
 		A40C523B16F847CD00AE2ECF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A40C523916F847CD00AE2ECF /* CoronaVersion.c */; };
@@ -988,7 +987,6 @@
 		50DF2C7917C1616B002AF9FD /* kernel_composite_normalMapWith1DirLight_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_normalMapWith1DirLight_gl.lua; path = Display/Shader/kernel_composite_normalMapWith1DirLight_gl.lua; sourceTree = "<group>"; };
 		50E0249417B322220015DF1F /* kernel_filter_colorChannelOffset_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_colorChannelOffset_gl.lua; path = Display/Shader/kernel_filter_colorChannelOffset_gl.lua; sourceTree = "<group>"; };
 		50E0249517B322220015DF1F /* kernel_generator_stripes_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_stripes_gl.lua; path = Display/Shader/kernel_generator_stripes_gl.lua; sourceTree = "<group>"; };
-		50E06F38196398C4003451E8 /* Rtt_MUpdatable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MUpdatable.h; sourceTree = "<group>"; };
 		50FB089017B1E1E8005ED7B7 /* kernel_filter_scatter_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_scatter_gl.lua; path = Display/Shader/kernel_filter_scatter_gl.lua; sourceTree = "<group>"; };
 		50FE9BE417A2FE13002762DD /* kernel_filter_sharpenLuminance_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_sharpenLuminance_gl.lua; path = Display/Shader/kernel_filter_sharpenLuminance_gl.lua; sourceTree = "<group>"; };
 		A40C523916F847CD00AE2ECF /* CoronaVersion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CoronaVersion.c; path = Corona/CoronaVersion.c; sourceTree = "<group>"; };
@@ -1483,7 +1481,6 @@
 				000DCB2412B05F3E00042A5E /* Rtt_MPlatformDevice.h */,
 				000DCB2512B05F3E00042A5E /* Rtt_MReloadableResource.h */,
 				077EEE2D16CD9F7B009024CA /* Rtt_MRuntimeDelegate.h */,
-				50E06F38196398C4003451E8 /* Rtt_MUpdatable.h */,
 				00622ECF13AA927400886E28 /* Rtt_PlatformAudioSessionManager.cpp */,
 				00622ED013AA927500886E28 /* Rtt_PlatformAudioSessionManager.h */,
 				000DCB3212B05F3E00042A5E /* Rtt_PlatformData.cpp */,
@@ -2390,7 +2387,6 @@
 				1B10CFE4253893AA00F48B3A /* Rtt_SpriteSequence.h in Headers */,
 				0358A36F179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.h in Headers */,
 				0397046D17A3780900681DED /* Rtt_InputAxisCollection.h in Headers */,
-				50E06F39196398C4003451E8 /* Rtt_MUpdatable.h in Headers */,
 				0397046F17A3780900681DED /* Rtt_InputAxisDescriptor.h in Headers */,
 				0397047117A3780900681DED /* Rtt_InputAxisType.h in Headers */,
 				0397047317A3780900681DED /* Rtt_PlatformInputAxis.h in Headers */,

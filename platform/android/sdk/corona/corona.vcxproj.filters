@@ -1714,9 +1714,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_MRuntimeDelegate.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_MUpdatable.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.h">
       <Filter>rtt</Filter>
     </ClInclude>

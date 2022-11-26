@@ -330,7 +330,6 @@
         <File Name="../../librtt/Display/Rtt_PaintAdapter.h"/>
         <File Name="../../librtt/Display/Rtt_Paint.h"/>
         <File Name="../../librtt/Core/Rtt_OperationResult.h"/>
-        <File Name="../../librtt/Rtt_MUpdatable.h"/>
         <File Name="../../librtt/Rtt_MRuntimeDelegate.h"/>
         <File Name="../../librtt/Rtt_MReloadableResource.h"/>
         <File Name="../../librtt/Rtt_MPlatformDevice.h"/>

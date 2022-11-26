@@ -704,7 +704,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_MPlatformDevice.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_MReloadableResource.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_MRuntimeDelegate.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_MUpdatable.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformAudioSessionManager.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformData.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.h" />

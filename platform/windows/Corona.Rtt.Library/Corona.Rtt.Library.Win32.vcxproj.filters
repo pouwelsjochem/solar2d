@@ -838,9 +838,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_MRuntimeDelegate.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_MUpdatable.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformAudioSessionManager.h">
       <Filter>librtt</Filter>
     </ClInclude>

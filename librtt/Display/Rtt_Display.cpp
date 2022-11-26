@@ -210,8 +210,6 @@ Display::Update()
 	lua_State *L = fOwner.VMContext().L();
 	fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
 
-	GetScene().QueueUpdateOfUpdatables();
-
 	const FrameEvent& fe = FrameEvent::Constant();
 	fe.Dispatch( L, runtime );
 	
