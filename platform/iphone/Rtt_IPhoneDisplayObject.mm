@@ -127,14 +127,22 @@ IPhoneDisplayObject::Prepare( const Display& display )
 	// Take into account content-scaling.
 	float content_offset_x = 0.0f;
 	float content_offset_y = 0.0f;
-	GetContentOffsets( content_offset_x,
+	GetScreenOffsets( content_offset_x,
 						content_offset_y );
-
+    Rtt_TRACE( ( "DisplayObject Prepare content_offset_x %d\n", content_offset_x ) );
+    Rtt_TRACE( ( "DisplayObject Prepare content_offset_y %d\n", content_offset_y ) );
+    
 	CGPoint c;
 	c.x = ( GetContentToScreenScale() * ( transf.Tx() + content_offset_x ) );
 	c.y = ( GetContentToScreenScale() * ( transf.Ty() + content_offset_y ) );
+    Rtt_TRACE( ( "DisplayObject Prepare c.x %d\n", c.x ) );
+    Rtt_TRACE( ( "DisplayObject Prepare c.y %d\n", c.y ) );
 	fView.center = c;
 
+    Rtt_TRACE( ( "DisplayObject Prepare xfm.a %d\n", xfm.a ) );
+    Rtt_TRACE( ( "DisplayObject Prepare xfm.b %d\n", xfm.b ) );
+    Rtt_TRACE( ( "DisplayObject Prepare xfm.c %d\n", xfm.c ) );
+    Rtt_TRACE( ( "DisplayObject Prepare xfm.d %d\n", xfm.d ) );
 	fView.transform = xfm;
 }
 
@@ -174,7 +182,10 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
 		newFrame.size.width = newPointWidth;
-		
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 1 coronaWidth %d\n", coronaWidth ) );
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 1 coronaHeight %d\n", coronaHeight ) );
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 1 newFrame.size.width %d\n", newFrame.size.width ) );
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 1 newFrame.size.height %d\n", newFrame.size.height ) );
 	}
 	if ( !( height < Rtt_REAL_0 ) ) // (height >= 0)
 	{
@@ -190,8 +201,12 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
 		newFrame.size.height = newPointHeight;
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 2 coronaWidth %d\n", coronaWidth ) );
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 2 coronaHeight %d\n", coronaHeight ) );
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 2 newFrame.size.width %d\n", newFrame.size.width ) );
+        Rtt_TRACE( ( "DisplayObject SetSelfBounds 2 newFrame.size.height %d\n", newFrame.size.height ) );
 	}
-	
+
 	[fView setFrame:newFrame];
 
 }

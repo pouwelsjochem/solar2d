@@ -25,11 +25,6 @@
 // ----------------------------------------------------------------------------
 
 @implementation CoronaViewController
--(void)viewWillLayoutSubviews
-{
-
-}
-
 
 - (void)dealloc
 {
