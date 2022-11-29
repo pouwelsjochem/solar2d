@@ -32,15 +32,6 @@
 #include "Rtt_FileSystem.h"
 #include "Rtt_Archive.h"
 
-#ifdef Rtt_DEBUG
-// #warning *** Using test durations ***
-const int ONE_DAY_IN_SECONDS = 60; // make things happen every minute instead of every day for testing
-#else
-const int ONE_DAY_IN_SECONDS = (24 * 60 * 60);
-#endif
-const int MAX_MISSED_REAUTHS = 7;
-const int ONE_WEEK_IN_SECONDS = (7 * ONE_DAY_IN_SECONDS);
-
 #if defined(Rtt_MAC_ENV)
 #include <stdio.h>
 #include <stdlib.h>

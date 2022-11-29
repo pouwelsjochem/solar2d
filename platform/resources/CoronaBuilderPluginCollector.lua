@@ -162,6 +162,9 @@ function PluginCollectorSolar2DDirectory:collect(destination, plugin, pluginTabl
     if pluginObject.e then
         return "! " .. pluginObject.e
     end
+    if pluginObject.r and forceVersion and pluginObject.r ~= forceVersion then
+        print("WARNING: Solar2D Directory: not using latest version of '" .. plugin .. "'; Using '" .. forceVersion .. "' while latest is '" .. pluginObject.r .. "'")
+    end
 
     local build = tonumber(params.build)
     local vFoundBuid, vFoundObject, vFoundBuildName
@@ -268,15 +271,23 @@ function PluginCollectorSolar2DMarketplaceDirectory:collect(destination, plugin,
         return "Solar2D Marketplace Directory: plugin " .. plugin .. " was not found at Solar2D Marketplace Directory"
     end
 
+    local forceVersion
+    if pluginTable.version then
+        forceVersion = pluginTable.version
+    end
+
     local pluginObject = pluginEntry.plugin
     local repoOwner = pluginEntry.repo
     if pluginObject.e then
         return "! " .. pluginObject.e
     end
+    if pluginObject.r and forceVersion and pluginObject.r ~= forceVersion then
+        print("WARNING: Solar2D Marketplace Directory: not using latest version of '" .. plugin .. "'; Using '" .. forceVersion .. "' while latest is '" .. pluginObject.r .. "'")
+    end
 
     local build = tonumber(params.build)
     local vFoundBuid, vFoundObject, vFoundBuildName
-    local pluginVersion = pluginObject.r
+    local pluginVersion = (forceVersion or pluginObject.r)
     for entryBuild, entryObject in pairs(pluginObject.v or {}) do
         local entryBuildNumber = tonumber(entryBuild:match('^%d+%.(%d+)$'))
         if entryBuildNumber <= build and entryBuildNumber > (vFoundBuid or 0) then
@@ -451,7 +462,6 @@ function PluginCollectorSolar2DMarketplaceResourceDirectory:collect(destination,
     return true
 end
 
-
 local function pluginLocatorCustomURL(destination, plugin, pluginTable, pluginPlatform, params)
     if type(pluginTable.supportedPlatforms) ~= 'table' then
         return "Custom URL: skipped because no table supportedPlatforms provided for " .. plugin
@@ -570,53 +580,6 @@ local function pluginLocatorFileSystem(destination, plugin, pluginTable, pluginP
     end
 end
 locatorNames[pluginLocatorFileSystem] = "Local File System Per Platform"
-
-local function pluginLocatorIgnoreMissing(destination, plugin, pluginTable, pluginPlatform, params)
-    if type(pluginTable.publisherId) ~= 'string' then
-        return "Locally: plugin has no string publisherId"
-    end
-    local function hasIgnoreMissingMarker(path)
-        return isFile(pathJoin(path, params.ignoreMissingMarker))
-    end
-    local pluginStorage = params.pluginStorage
-    local pluginDir = pathJoin(pluginStorage, pluginTable.publisherId, plugin)
-    if not isDir(pluginDir) then
-        return "Ignore Missing checker: no plugin directory " .. pluginDir
-    end
-    if hasIgnoreMissingMarker(pluginDir) then
-        return true
-    end
-    if hasIgnoreMissingMarker(pathJoin(pluginDir, pluginPlatform)) then
-        return true
-    end
-
-    local targetBuild = tonumber(params.build)
-    local lastFound = -1
-    local foundDir
-    for file in lfs.dir(pluginDir) do
-        if file ~= "." and file ~= ".." then
-            local f = pathJoin(pluginDir, file)
-            if isDir(f) then
-                local dirBuild = file:match('^%d+%.(%d+)$')
-                if dirBuild then
-                    dirBuild = tonumber(dirBuild)
-                    if dirBuild > lastFound and dirBuild <= targetBuild then
-                        lastFound = dirBuild
-                        foundDir = f
-                    end
-                end
-            end
-        end
-    end
-    if not foundDir then
-        return "Ignore Missing checker: didn't find suitable version in " .. pluginDir
-    end
-    if hasIgnoreMissingMarker(foundDir) or hasIgnoreMissingMarker(pathJoin(foundDir, pluginPlatform)) then
-        return true
-    end
-    return "Ignore Missing checker: did not find marker in " .. foundDir
-end
-locatorNames[pluginLocatorIgnoreMissing] = "Missing Marker"
 
 -- Funcitonality
 local function locatorName(l)
@@ -741,35 +704,13 @@ local function CollectCoronaPlugins(params)
 
     local ret = nil
 
-    local pluginLocators = { pluginLocatorCustomURL, pluginLocatorFileSystemVersionized, pluginLocatorFileSystem, pluginLocatorFileSystemAllPlatforms, PluginCollectorSolar2DMarketplaceDirectory, PluginCollectorSolar2DMarketplaceResourceDirectory, PluginCollectorSolar2DDirectory, pluginLocatorIgnoreMissing }
+    local pluginLocators = { pluginLocatorCustomURL, pluginLocatorFileSystemVersionized, pluginLocatorFileSystem, pluginLocatorFileSystemAllPlatforms, PluginCollectorSolar2DMarketplaceDirectory, PluginCollectorSolar2DMarketplaceResourceDirectory, PluginCollectorSolar2DDirectory }
 
     local dstDir = params.destinationDirectory
 
     params.pluginLocators = pluginLocators
     if not params.pluginStorage then
         params.pluginStorage = pathJoin(os.getenv("HOME") or os.getenv("APPDATA"), 'Solar2DPlugins')
-    end
-    if not params.ignoreMissingMarker then
-        params.ignoreMissingMarker = 'IgnoreMissing'
-    end
-    params.customCollectorsDir = pathJoin(params.pluginStorage, "Collectors")
-    if isDir(params.customCollectorsDir) then
-        local pathBackup = package.path
-        package.path = pathJoin(params.customCollectorsDir, "?.lua") .. ';' .. package.path
-        for file in lfs.dir(params.customCollectorsDir) do
-            local module = file:match("(.*)%.lua")
-            if module then
-                local err, module = pcall(require, module)
-                if type(module) == 'function' then
-                    table.insert(params.pluginLocators, #params.pluginLocators, module)
-                elseif type(module) == 'table' and type(module.collect) == 'function' then
-                    table.insert(params.pluginLocators, #params.pluginLocators, module)
-                else
-                    print("WARNING: error importing plugin locator " .. file .. ": " .. tostring(module))
-                end
-            end
-        end
-        package.path = path
     end
 
     debugBuildProcess = tonumber(debugBuildProcess) or 0
@@ -881,7 +822,6 @@ local function CollectCoronaPlugins(params)
     until allFetched
     return ret
 end
-
 
 return {
     collect = CollectCoronaPlugins

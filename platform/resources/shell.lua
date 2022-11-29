@@ -119,29 +119,24 @@ end
 function PluginSync:addPluginToQueueIfRequired( required_plugin )
 
 	local pluginName = required_plugin.pluginName
+	local pluginVersion = required_plugin.version
 	local publisherId = required_plugin.publisherId
-	local key = tostring(publisherId) .. '/' .. pluginName
+	local key = tostring(publisherId) .. '/' .. pluginName .. '@' .. pluginVersion
 	required_plugin.clientCatalogKey = key
 
 	-- Find reasons to queue the plugin for download.
-	local should_queue = false
-	local maxAge = 86400
+	local should_queue = true
 
 	local manifest = self.clientCatalog[ key ]
-	should_queue = should_queue or ( not manifest )
 	if type(manifest) == 'table' and type(manifest.lastUpdate) == 'number'  then
 		local age = os.difftime(self.now, manifest.lastUpdate)
-		-- update plugins every 24 hours or so
-		should_queue = should_queue or ( age > maxAge and maxAge > 0)
-	else
-		should_queue = true
+		local maxAge = 24 * 60 * 60 -- update Simulator plugins every 24 hours
+		should_queue = age > maxAge
 	end
 
-	if should_queue then
-		-- Queue for download.
+	if should_queue then -- Queue for download
 		table.insert( self.queue, required_plugin )
 	end
-
 end
 
 local function collectPlugins(localQueue, extractLocation, platform, continueOnError, asyncOnComplete)
@@ -173,6 +168,10 @@ local function collectPlugins(localQueue, extractLocation, platform, continueOnE
 		extractLocation = extractLocation,
 		continueOnError = continueOnError,
 	}
+
+	if #plugins > 0 then
+		print("Cache expired for " .. #plugins .. " plugins, recollecting now...")
+	end
 	return params.shellPluginCollector(json.encode(collectorParams), asyncOnComplete)
 end
 
