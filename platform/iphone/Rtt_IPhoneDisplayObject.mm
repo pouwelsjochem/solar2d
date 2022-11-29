@@ -107,43 +107,42 @@ IPhoneDisplayObject::WillMoveOnscreen()
 void
 IPhoneDisplayObject::Prepare( const Display& display )
 {
-  	Super::Prepare( display );
-    
-    if ( ShouldPrepare() ) {
-        Preinitialize( display );
-        
-        Rect screenBounds;
-        GetScreenBounds( screenBounds );
-        
-        CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
+	Super::Prepare( display );
 
-        S32 contentToScreenScale = GetContentToScreenScale();
-        newFrame.origin.x *= contentToScreenScale;
-        newFrame.origin.y *= contentToScreenScale;
-        newFrame.size.width *= contentToScreenScale;
-        newFrame.size.height *= contentToScreenScale;
-        
-        [fView setFrame:newFrame];
+	const Matrix &transf = GetSrcToDstMatrix();
 
-		CGPoint c;
-		c.x = newFrame.size.width / 2.0f;
-		c.y = newFrame.size.height / 2.0f;
-        fView.frame = newFrame;
-		fView.center = c;
-		fView.transform = CGAffineTransformIdentity;
+	CGAffineTransform xfm = CGAffineTransformIdentity;
 
-        if ( ! fHidden )
-        {
-            // Only restore the object if the user hasn't requested it hidden
-            [fView setHidden:NO];
-        }
-    }
+	const Real *x_row = transf.Row0();
+	const Real *y_row = transf.Row1();
+
+	// We have to invert "b" and "c" because our rotation
+	// direction is opposite of the one in a UIView.
+	xfm.a = x_row[0]; // x.
+	xfm.b = ( - x_row[1] ); // y.
+
+	xfm.c = ( - y_row[0] ); // x.
+	xfm.d = y_row[1]; // y.
+
+	// Take into account content-scaling.
+	float content_offset_x = 0.0f;
+	float content_offset_y = 0.0f;
+	GetContentOffsets( content_offset_x,
+						content_offset_y );
+
+	CGPoint c;
+	c.x = ( GetContentToScreenScale() * ( transf.Tx() + content_offset_x ) );
+	c.y = ( GetContentToScreenScale() * ( transf.Ty() + content_offset_y ) );
+	fView.center = c;
+
+	fView.transform = xfm;
 }
 
 void
 IPhoneDisplayObject::Translate( Real dx, Real dy )
 {
 	Super::Translate( dx, dy );
+
 }
 
 void
@@ -160,17 +159,41 @@ IPhoneDisplayObject::GetSelfBounds( Rect& rect ) const
 void
 IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 {
-	if ( width > Rtt_REAL_0 )
+	CGRect newFrame = fView.frame;
+	
+	if ( !( width < Rtt_REAL_0 ) ) // (width >= 0)
 	{
-		fSelfBounds.Initialize( Rtt_RealDiv2(width), Rtt_RealDiv2(GetGeometricProperty(kHeight)) );
+		//SelfBounds needs to represent Corona coordinates
+		//whereas the newFrame size is in content units, so we calculate
+		//both to keep everything in sync
+		float newPointWidth = width * GetContentToScreenScale();
+		float coronaWidth	= width;
+		float coronaHeight	= newFrame.size.height / GetContentToScreenScale();
+		
+		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
+		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
+		
+		newFrame.size.width = newPointWidth;
+		
 	}
-	if ( height > Rtt_REAL_0 )
+	if ( !( height < Rtt_REAL_0 ) ) // (height >= 0)
 	{
-		fSelfBounds.Initialize( Rtt_RealDiv2(GetGeometricProperty(kWidth)), Rtt_RealDiv2(height) );
+	
+		//SelfBounds needs to represent Corona coordinates
+		//whereas the newFrame size is in content units, so we calculate
+		//both to keep everything in sync
+		float newPointHeight	= height * GetContentToScreenScale();
+		float coronaWidth		= newFrame.size.width / GetContentToScreenScale();
+		float coronaHeight		= height;
+		
+		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
+		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
+		
+		newFrame.size.height = newPointHeight;
 	}
+	
+	[fView setFrame:newFrame];
 
-	// Causes prepare to be called which does the actual resizing
-	Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 }
 
 int
