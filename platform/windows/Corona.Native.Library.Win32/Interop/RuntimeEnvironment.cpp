@@ -2059,10 +2059,10 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	const Rtt::NativeWindowMode* windowModePointer = projectSettings.GetDefaultWindowMode();
 
 	// Try to detect Steam Deck and set defaultWindowMode to "fullScreen" when detected
-    HMODULE hntdll = GetModuleHandle((LPCWSTR) "ntdll.dll");
+    HMODULE hntdll = GetModuleHandle(L"ntdll.dll");
     if(hntdll)
     {
-		auto pwine_get_version = GetProcAddress(hntdll, "wine_get_version");
+		FARPROC pwine_get_version = GetProcAddress(hntdll, "wine_get_version");
 		if(pwine_get_version)
 		{
 			POINT mainWindowPosition{0,0};
