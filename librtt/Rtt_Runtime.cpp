@@ -575,7 +575,7 @@ Runtime::PopAndClearConfig( lua_State *L )
 
 void
 Runtime::AddDownloadablePlugin(
-	lua_State *L, const char *pluginName, const char *publisherId,
+	lua_State *L, const char *pluginName, const char *pluginVersion, const char *publisherId,
 	int downloadablePluginsIndex, bool isSupportedOnThisPlatform, const char *pluginEntryJSON)
 {
 	Rtt_LUA_STACK_GUARD( L );
@@ -584,6 +584,9 @@ Runtime::AddDownloadablePlugin(
 	{
 		lua_pushstring( L, pluginName );
 		lua_setfield( L, -2, "pluginName" );
+
+		lua_pushstring( L, pluginVersion );
+		lua_setfield( L, -2, "pluginVersion" );
 
 		lua_pushstring( L, publisherId );
 		lua_setfield( L, -2, "publisherId" );
@@ -711,16 +714,18 @@ Runtime::FindDownloadablePlugins( const char *simPlatformName )
 						if (availableOnPlatform)
 #endif
 						{
-							lua_getfield(L, -1, "publisherId");
-							{
-								const char *publisherId = lua_tostring(L, -1); // push publisherId
+							// Transfer information to Runtime's list of downloadable plugins.
+							// Note, we use runtimeL instead of L here!
+							lua_getfield(L, -1, "version");
+							const char *pluginVersion = lua_tostring(L, -1); // push version
+							lua_pop(L, 1); // pop version
 
-								// Transfer information to Runtime's list of downloadable plugins.
-								// Note, we use runtimeL instead of L here!
-								AddDownloadablePlugin(
-									runtimeL, pluginName, publisherId, downloadablePluginsIndex, availableOnPlatform, pluginJsonStr.GetString());
-							}
+							lua_getfield(L, -1, "publisherId");
+							const char *publisherId = lua_tostring(L, -1); // push publisherId
 							lua_pop(L, 1); // pop publisherId
+
+							AddDownloadablePlugin(
+								runtimeL, pluginName, pluginVersion, publisherId, downloadablePluginsIndex, availableOnPlatform, pluginJsonStr.GetString());
 						}
 					}
 					else

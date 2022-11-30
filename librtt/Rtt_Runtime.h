@@ -158,7 +158,7 @@ class Runtime : public MCallback,
 
 	protected:
 		void AddDownloadablePlugin(
-				lua_State *L, const char *pluginName, const char *publisherId,
+				lua_State *L, const char *pluginName, const char *pluginVersion, const char *publisherId,
 				int downloadablePluginsIndex, bool isSupportedOnThisPlatform, const char *pluginEntryJSON);
 
 	public:
