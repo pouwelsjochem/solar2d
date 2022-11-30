@@ -586,7 +586,7 @@ Runtime::AddDownloadablePlugin(
 		lua_setfield( L, -2, "pluginName" );
 
 		lua_pushstring( L, pluginVersion );
-		lua_setfield( L, -2, "pluginVersion" );
+		lua_setfield( L, -2, "version" );
 
 		lua_pushstring( L, publisherId );
 		lua_setfield( L, -2, "publisherId" );
