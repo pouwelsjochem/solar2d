@@ -1,4 +1,4 @@
-name: Daily Build
+name: Release
 
 on:
   push:
@@ -6,21 +6,17 @@ on:
       - '*'
   workflow_dispatch:
     inputs:
-      buildNumber:
-        description: 'Build Number'
+      forkBuildName:
+        description: 'Fork Build Name'
         required: true
-        default: '9999'
-      buildYear:
-        description: 'Build Year'
-        required: true
-        default: '2100'
-
+        default: ''
 
 env:
   WORKSPACE: ${{ github.workspace }}
   DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
-  BUILD_NUMBER: ${{ github.event.inputs.buildNumber }}
-  YEAR: ${{ github.event.inputs.buildYear }}
+  BUILD_NUMBER: 3683
+  YEAR: 2022
+  FORK_BUILD_NAME: ${{ github.event.inputs.forkBuildName }}
 
 jobs:
   source-code:
@@ -93,6 +89,7 @@ jobs:
           - Xcode_13.2.1
         target:
           - template
+          - template-angle
         platform:
           - iphone
           - tvos
@@ -147,6 +144,7 @@ jobs:
         with:
           name: Collected-ios-templates
           path: ./output
+
   native:
     needs: source-code
     runs-on: macos-12
@@ -325,7 +323,7 @@ jobs:
       - name: Copy Simulator
         run: |
           mkdir output
-          cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Corona-$BUILD.msi
+          cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-$BUILD.msi
         shell: bash
       - name: Upload Widnows Corona artifact
         uses: actions/upload-artifact@v1
@@ -353,11 +351,6 @@ jobs:
           then
           GIT_LOG="Changes since previous build:
           $GIT_LOG
-          For linux it is recommended to use snap:
-
-               sudo snap install solar2d
-
-          "
           else
           GIT_LOG='See https://github.com/pouwelsjochem/corona for details
           '
@@ -375,14 +368,23 @@ jobs:
       - uses: actions/download-artifact@v1
         with:
           name: Native
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Solar2D ${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}
+          body: ${{ env.GIT_LOG }}
       - name: Upload Release Asset for macOS Simulator
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Simulator-macOS/Corona-${{ env.YEAR }}.${{ env.BUILD }}.dmg
-          asset_name: Solar2D-macOS-${{ env.YEAR }}.${{ env.BUILD }}.dmg
+          asset_path: ./Simulator-macOS/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.dmg
+          asset_name: Solar2D-macOS-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
           asset_content_type: application/x-apple-diskimage
       - name: Upload Release Asset for Windows Simulator
         uses: actions/upload-release-asset@v1
@@ -390,6 +392,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Simulator-Windows/Corona-${{ env.BUILD }}.msi
-          asset_name: Solar2D-Windows-${{ env.YEAR }}.${{ env.BUILD }}.msi
+          asset_path: ./Simulator-Windows/Solar2D-${{ env.BUILD }}.msi
+          asset_name: Solar2D-Windows-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
           asset_content_type: application/x-msi
