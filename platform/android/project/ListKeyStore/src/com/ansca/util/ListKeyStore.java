@@ -38,7 +38,7 @@ public class ListKeyStore {
 		
 		try {
 		    FileInputStream stream = new FileInputStream(filename);
-		    KeyStore keystore = KeyStore.getInstance("JKS");
+		    KeyStore keystore = KeyStore.getInstance("PKCS12");
 	
 		    keystore.load( stream, password.toCharArray() );
 
@@ -61,7 +61,7 @@ public class ListKeyStore {
 		
 		try {
 		    FileInputStream stream = new FileInputStream(filename);
-		    KeyStore keystore = KeyStore.getInstance("JKS");
+		    KeyStore keystore = KeyStore.getInstance("PKCS12");
 	
 		    keystore.load( stream, password.toCharArray() );
 
