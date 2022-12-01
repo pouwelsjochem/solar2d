@@ -108,42 +108,10 @@ void
 IPhoneDisplayObject::Prepare( const Display& display )
 {
 	Super::Prepare( display );
-
-	const Matrix &transf = GetSrcToDstMatrix();
-
-	CGAffineTransform xfm = CGAffineTransformIdentity;
-
-	const Real *x_row = transf.Row0();
-	const Real *y_row = transf.Row1();
-
-	// We have to invert "b" and "c" because our rotation
-	// direction is opposite of the one in a UIView.
-	xfm.a = x_row[0]; // x.
-	xfm.b = ( - x_row[1] ); // y.
-
-	xfm.c = ( - y_row[0] ); // x.
-	xfm.d = y_row[1]; // y.
-
-	// Take into account content-scaling.
-	float content_offset_x = 0.0f;
-	float content_offset_y = 0.0f;
-	GetScreenOffsets( content_offset_x,
-						content_offset_y );
-    NSLog(@"DisplayObject Prepare content_offset_x %f\n", content_offset_x);
-    NSLog(@"DisplayObject Prepare content_offset_y %f\n", content_offset_y);
-    
-	CGPoint c;
-	c.x = ( GetContentToScreenScale() * ( transf.Tx() + content_offset_x) );
-	c.y = ( GetContentToScreenScale() * ( transf.Ty() + content_offset_y) );
-    NSLog(@"DisplayObject Prepare c.x %f\n", c.x);
-    NSLog(@"DisplayObject Prepare c.y %f\n", c.y);
-	fView.center = c;
-
-    NSLog(@"DisplayObject Prepare xfm.a %f\n", xfm.a);
-    NSLog(@"DisplayObject Prepare xfm.b %f\n", xfm.b);
-    NSLog(@"DisplayObject Prepare xfm.c %f\n", xfm.c);
-    NSLog(@"DisplayObject Prepare xfm.d %f\n", xfm.d);
-	fView.transform = xfm;
+	if (ShouldPrepare())
+	{
+		
+	}
 }
 
 void
@@ -182,10 +150,6 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
 		newFrame.size.width = newPointWidth;
-        NSLog(@"DisplayObject SetSelfBounds 1 coronaWidth %f\n", coronaWidth);
-        NSLog(@"DisplayObject SetSelfBounds 1 coronaHeight %f\n", coronaHeight);
-        NSLog(@"DisplayObject SetSelfBounds 1 newFrame.size.width %f\n", newFrame.size.width);
-        NSLog(@"DisplayObject SetSelfBounds 1 newFrame.size.height %f\n", newFrame.size.height);
 	}
 	if ( !( height < Rtt_REAL_0 ) ) // (height >= 0)
 	{
@@ -201,10 +165,6 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
 		newFrame.size.height = newPointHeight;
-        NSLog(@"DisplayObject SetSelfBounds 2 coronaWidth %f\n", coronaWidth);
-        NSLog(@"DisplayObject SetSelfBounds 2 coronaHeight %f\n", coronaHeight);
-        NSLog(@"DisplayObject SetSelfBounds 2 newFrame.size.width %f\n", newFrame.size.width);
-        NSLog(@"DisplayObject SetSelfBounds 2 newFrame.size.height %f\n", newFrame.size.height);
 	}
 
 	[fView setFrame:newFrame];
