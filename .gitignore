@@ -249,4 +249,7 @@ external/JNLua/.classpath
 external/JNLua/.project
 /output/
 
+/jre/
+/jre.macos.tgz
+jre.win32.7z
 redist.win32.7z

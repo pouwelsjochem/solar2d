@@ -195,6 +195,10 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: Native
+      - name: Put JRE in place
+        shell: bash
+        run: |
+          curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.macos.tgz -o jre.macos.tgz
       - name: install appdmg
         run: npm install -g appdmg
       - name: install imagemagick
@@ -296,6 +300,11 @@ jobs:
           del /q /f Native\.*
           del /q /f Native\Icon?
           del /q /f /s Native\Corona\tvos\frameworks\CoronaCards.framework
+      - name: Put JRE in place
+        shell: bash
+        run: |
+          curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.win32.7z -o jre.win32.7z
+          7z x jre.win32.7z -o"platform/windows/Bin" -y
       - name: Put redistributables in place
         shell: bash
         run: |

@@ -228,7 +228,13 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 			gradleGo.append(" && cd template &&");
 			
 #if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
-			gradleGo.append(" ./setup.sh && ./gradlew");
+			bool java8Installed = 0 == system("JAVA_VERSION=1.8 /usr/bin/java -version > /dev/null 2>/dev/null");
+			if(java8Installed) {
+				gradleGo.append(" ./setup.sh && JAVA_VERSION=1.8 ./gradlew");
+			} else {
+				Rtt_TRACE_SIM(("WARNING: Java 1.8 does not seems to be available. If build fails, install Java 1.8."));
+				gradleGo.append(" ./setup.sh && ./gradlew");
+			}
 #else
 			gradleGo.append(" setup.bat");
 			if (androidParams->IsWindowsNonAsciiUser())
