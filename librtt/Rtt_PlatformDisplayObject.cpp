@@ -104,20 +104,8 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 void
 PlatformDisplayObject::GetScreenOffsets( Real& outX, Real& outY ) const
 {
-	const StageObject *stage = GetStage();
-	if ( Rtt_VERIFY( stage ) )
-	{
-		// Lazily grab the offsets so they match the orientation of the content
-		const Display& display = stage->GetDisplay();
-
-		outX = display.GetXScreenOffset();
-		outY = display.GetYScreenOffset();
-	}
-	else
-	{
-		outX = Rtt_REAL_0;
-		outY = Rtt_REAL_0;
-	}
+    outX = Rtt_REAL_0;
+    outY = Rtt_REAL_0;
 }
 bool
 PlatformDisplayObject::HitTest( Real contentX, Real contentY )
