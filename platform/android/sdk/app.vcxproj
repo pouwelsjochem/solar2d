@@ -72,7 +72,7 @@
       <JarDependencies>JNLua.jar;org.apache.http.legacy.jar;android-support-multidex.jar;classes.jar;network.jar;</JarDependencies>
       <AndroidManifestLocation>$(ProjectDir)\assets\AndroidManifest.xml</AndroidManifestLocation>
       <NativeLibDirectories>Z:\corona\main\platform\android\sdk\Tegra-Android\Debug;$(ProjectDir)\..\libs</NativeLibDirectories>
-      <NativeLibDependencies>corona;jnlua5.1;lua;openal;almixer;mpg123;ads;gameNetwork;licensing;plugins</NativeLibDependencies>
+      <NativeLibDependencies>corona;jnlua5.1;lua;openal;almixer;mpg123;ads;licensing;plugins</NativeLibDependencies>
       <JavaSourceDir>%(JavaSourceDir)</JavaSourceDir>
     </AntBuild>
     <PreBuildEvent>

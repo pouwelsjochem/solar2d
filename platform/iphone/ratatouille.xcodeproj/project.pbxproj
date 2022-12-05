@@ -57,7 +57,6 @@
 		A43B959615C7807C003E6F9F /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		A43B959E15C78721003E6F9F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A43B959C15C78721003E6F9F /* InfoPlist.strings */; };
 		A43E5D41185EE7C90055BC21 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A43E5D40185EE7C90055BC21 /* Images.xcassets */; };
-		A445AA5F16B204FF00A9A764 /* libgameNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A445AA5D16B2049900A9A764 /* libgameNetwork.a */; };
 		A44D43FF164B201300CFE7B3 /* libalmixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D435D164B1D5200CFE7B3 /* libalmixer.a */; };
 		A44D4401164B201300CFE7B3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4355164B1D5200CFE7B3 /* liblua.a */; };
 		A44D4402164B201300CFE7B3 /* libluafilesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4357164B1D5200CFE7B3 /* libluafilesystem.a */; };
@@ -272,7 +271,6 @@
 		F5C36C4124FAB49F00775C6E /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4359164B1D5200CFE7B3 /* libluasocket.a */; };
 		F5C36C4224FAB49F00775C6E /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4353164B1D5200CFE7B3 /* librtt.a */; };
 		F5C36C4324FAB49F00775C6E /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A49186A91642195200A39286 /* libplugins.a */; };
-		F5C36C4424FAB49F00775C6E /* libgameNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A445AA5D16B2049900A9A764 /* libgameNetwork.a */; };
 		F5C36C4524FAB49F00775C6E /* liblicensing.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4F12C2616D4379F002BCCFB /* liblicensing.a */; };
 		F5C36C4824FAB49F00775C6E /* LibPlayerPrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A484115115115CE20074BD57 /* LibPlayerPrefix.pch */; };
 		F5C36C4924FAB49F00775C6E /* CoronaApplicationMain.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7C151AA23A00486F8A /* CoronaApplicationMain.h */; };
@@ -1204,7 +1202,6 @@
 		A43B959015C78057003E6F9F /* TestAppMain.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestAppMain.mm; path = enterprise/TestApp/TestAppMain.mm; sourceTree = SOURCE_ROOT; };
 		A43B959D15C78721003E6F9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = enterprise/TestApp/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
 		A43E5D40185EE7C90055BC21 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "CoronaCards/Test-Tabs/Images.xcassets"; sourceTree = SOURCE_ROOT; };
-		A445AA5D16B2049900A9A764 /* libgameNetwork.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgameNetwork.a; path = "../../plugins/build-core/gameNetwork/ios/libgameNetwork.a"; sourceTree = "<group>"; };
 		A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = libcorona.xcodeproj; sourceTree = "<group>"; };
 		A4543E7C151AA23A00486F8A /* CoronaApplicationMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaApplicationMain.h; path = Corona/CoronaApplicationMain.h; sourceTree = SOURCE_ROOT; };
 		A4543E7D151AA23A00486F8A /* CoronaApplicationMain.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaApplicationMain.mm; path = Corona/CoronaApplicationMain.mm; sourceTree = SOURCE_ROOT; };
@@ -1397,7 +1394,6 @@
 				C2F911791CDC15F4004A5564 /* libluasocket.a in Frameworks */,
 				A44D4404164B201300CFE7B3 /* librtt.a in Frameworks */,
 				A49186D416421AEC00A39286 /* libplugins.a in Frameworks */,
-				A445AA5F16B204FF00A9A764 /* libgameNetwork.a in Frameworks */,
 				A4F12C2716D437A6002BCCFB /* liblicensing.a in Frameworks */,
 				F5E8ABD928134BF0004295B4 /* libNetworkPlugin.a in Frameworks */,
 			);
@@ -1458,7 +1454,6 @@
 				F5C36C4124FAB49F00775C6E /* libluasocket.a in Frameworks */,
 				F5C36C4224FAB49F00775C6E /* librtt.a in Frameworks */,
 				F5C36C4324FAB49F00775C6E /* libplugins.a in Frameworks */,
-				F5C36C4424FAB49F00775C6E /* libgameNetwork.a in Frameworks */,
 				F5C36C4524FAB49F00775C6E /* liblicensing.a in Frameworks */,
 				F5E8ABDA28134BF9004295B4 /* libNetworkPlugin.a in Frameworks */,
 			);
@@ -1700,7 +1695,6 @@
 		A445AA5E16B2049B00A9A764 /* Core Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				A445AA5D16B2049900A9A764 /* libgameNetwork.a */,
 				A4F12C2616D4379F002BCCFB /* liblicensing.a */,
 			);
 			name = "Core Plugins";
@@ -4059,7 +4053,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 				);
 				OTHER_LDFLAGS = (
@@ -4090,7 +4083,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
 				);
 				OTHER_LDFLAGS = (
@@ -4118,7 +4110,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4148,7 +4139,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4296,10 +4286,8 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork-corona/ios\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "player-core";
@@ -4320,10 +4308,8 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork-corona/ios\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "player-core";
@@ -4815,7 +4801,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4849,7 +4834,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -4883,10 +4867,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork-corona/ios\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "player-core-angle";
@@ -4912,10 +4894,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/ios\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork-corona/ios\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "player-core-angle";

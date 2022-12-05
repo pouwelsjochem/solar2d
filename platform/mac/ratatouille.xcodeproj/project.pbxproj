@@ -330,7 +330,6 @@
 		A40A907B1BD9A5F2001D2038 /* tvosPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A40A90781BD9A5C1001D2038 /* tvosPackageApp.lua */; };
 		A40C524016F847EA00AE2ECF /* CoronaVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = A40C523E16F847EA00AE2ECF /* CoronaVersion.c */; };
 		A41AC0E716A5DB5C00AD331A /* easing.lua in Sources */ = {isa = PBXBuildFile; fileRef = A41AC0E516A5DAD300AD331A /* easing.lua */; };
-		A41AC1B916A75A9E00AD331A /* gameNetwork.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A41AC1B516A75A7600AD331A /* gameNetwork.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A4328841176A621200ACB6FF /* Rtt_BitmapMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E2176A621100ACB6FF /* Rtt_BitmapMask.cpp */; };
 		A4328843176A621200ACB6FF /* Rtt_BitmapPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E4176A621100ACB6FF /* Rtt_BitmapPaint.cpp */; };
 		A4328845176A621200ACB6FF /* Rtt_BufferBitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43287E6176A621100ACB6FF /* Rtt_BufferBitmap.cpp */; };
@@ -931,7 +930,6 @@
 		C26E84821A5DE1AE008950FB /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733FB12B6F6BC0057F594 /* liblua.a */; };
 		C26E84831A5DE1AE008950FB /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733F312B6F6740057F594 /* librtt.a */; };
 		C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		C27945301B585BD60046B6E8 /* gameNetwork.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A41AC1B516A75A7600AD331A /* gameNetwork.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A4F12C2316D43662002BCCFB /* licensing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27E338D1A71748C00DDED18 /* CoronaCards.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992961A6B135500E99F46 /* CoronaCards.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C27E338E1A71748C00DDED18 /* CoronaView.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992971A6B135500E99F46 /* CoronaView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1626,7 +1624,6 @@
 			dstSubfolderSpec = 7;
 			files = (
 				A4F12C2516D43685002BCCFB /* licensing.dylib in CopyFiles */,
-				A41AC1B916A75A9E00AD331A /* gameNetwork.dylib in CopyFiles */,
 				0727BA8716E68FE800981C4B /* network.dylib in CopyFiles */,
 				A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */,
 			);
@@ -1648,7 +1645,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */,
-				C27945301B585BD60046B6E8 /* gameNetwork.dylib in Copy Frameworks and dylibs */,
 				C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */,
 				C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */,
 				C244C1001A8183B1008DBA56 /* network.dylib in Copy Frameworks and dylibs */,
@@ -2149,7 +2145,6 @@
 		A40C523F16F847EA00AE2ECF /* CoronaVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaVersion.h; path = Corona/CoronaVersion.h; sourceTree = "<group>"; };
 		A41AC0E516A5DAD300AD331A /* easing.lua */ = {isa = PBXFileReference; lastKnownFileType = text; name = easing.lua; path = ../../subrepos/easing/easing.lua; sourceTree = SOURCE_ROOT; };
 		A41AC0F316A5DC6D00AD331A /* Rtt_LuaFrameworks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaFrameworks.h; sourceTree = "<group>"; };
-		A41AC1B516A75A7600AD331A /* gameNetwork.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = gameNetwork.dylib; path = "../../plugins/build-core/gameNetwork/mac/gameNetwork.dylib"; sourceTree = "<group>"; };
 		A42C5BFB12D56EEE0046B8A6 /* Rtt_TargetDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_TargetDevice.h; sourceTree = "<group>"; };
 		A42C5BFC12D56EFE0046B8A6 /* Rtt_TargetDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_TargetDevice.cpp; sourceTree = "<group>"; };
 		A42E68AC143AB5BA00693E3A /* Rtt_MRuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MRuntimeDelegate.h; sourceTree = "<group>"; };
@@ -3465,7 +3460,6 @@
 		A41AC1B416A75A6400AD331A /* plugins */ = {
 			isa = PBXGroup;
 			children = (
-				A41AC1B516A75A7600AD331A /* gameNetwork.dylib */,
 				A4F12C2316D43662002BCCFB /* licensing.dylib */,
 				0727BA8616E68FE800981C4B /* network.dylib */,
 			);
@@ -6361,7 +6355,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/mac\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/mac\"",
 					/opt/X11/lib,
 					"$(SYSTEM_APPS_DIR)/Steam.app/Contents/MacOS",
@@ -6620,7 +6613,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/mac\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/mac\"",
 					/opt/X11/lib,
 					"$(SYSTEM_APPS_DIR)/Steam.app/Contents/MacOS",
@@ -6677,7 +6669,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/gameNetwork/mac\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/mac\"",
 					/opt/X11/lib,
 					"$(SYSTEM_APPS_DIR)/Steam.app/Contents/MacOS",

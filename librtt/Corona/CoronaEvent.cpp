@@ -72,12 +72,6 @@ const char *CoronaEventAdsRequestName()
 }
 
 CORONA_API
-const char *CoronaEventGameNetworkName()
-{
-	return Rtt::GameNetworkEvent::kName;
-}
-
-CORONA_API
 const char *CoronaEventPopupName()
 {
 	return "popup";

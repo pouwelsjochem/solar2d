@@ -147,7 +147,6 @@
             <copy file="./libs/network.jar" todir="../template/coreJars/"/>
 
             <!-- Native libraries -->
-            <copy file="../../../plugins/build-core/gameNetwork/android/libgameNetwork.so" todir="libs/armeabi-v7a" />
             <copy file="../../../plugins/build-core/licensing/android/liblicensing.so" todir="libs/armeabi-v7a" />
             <copy file="../../../plugins/build-core/licensing/android/libcorona.so" todir="libs/armeabi-v7a" />
             <copy file="../../../plugins/build-core/licensing/android/liblua.so" todir="libs/armeabi-v7a" />

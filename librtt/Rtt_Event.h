@@ -860,21 +860,6 @@ class CompletionEvent : public VirtualEvent
 		virtual const char* Name() const;
 };
 
-// For gameNetwork request event callbacks
-class GameNetworkEvent : public ErrorEvent
-{
-	public:
-		typedef ErrorEvent Super;
-		typedef GameNetworkEvent Self;
-
-	public:
-		static const char kName[];
-
-	public:
-		virtual const char* Name() const;
-};	
-
-
 // ----------------------------------------------------------------------------
 
 // Local event

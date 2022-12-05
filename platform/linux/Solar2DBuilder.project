@@ -503,7 +503,6 @@
         <File Name="../../librtt/Rtt_LuaLibNative.h"/>
         <File Name="../../librtt/Rtt_LuaLibInAppStore.h"/>
         <File Name="../../librtt/Display/Rtt_LuaLibGraphics.h"/>
-        <File Name="../../librtt/Rtt_LuaLibGameNetwork.h"/>
         <File Name="../../librtt/Rtt_LuaLibFacebook.h"/>
         <File Name="../../librtt/Display/Rtt_LuaLibDisplay.h"/>
         <File Name="../../librtt/Rtt_LuaLibCrypto.h"/>

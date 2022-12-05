@@ -46,9 +46,6 @@ CORONA_API const char *CoronaEventDataKey(void) CORONA_PUBLIC_SUFFIX;
 // For "ads" providers
 CORONA_API const char *CoronaEventAdsRequestName(void) CORONA_PUBLIC_SUFFIX;
 
-// For "gameNetwork" providers
-CORONA_API const char *CoronaEventGameNetworkName(void) CORONA_PUBLIC_SUFFIX;
-
 // For "native.popup" providers
 CORONA_API const char *CoronaEventPopupName(void) CORONA_PUBLIC_SUFFIX;
 

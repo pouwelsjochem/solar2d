@@ -20,12 +20,8 @@
 	branch = master
 [submodule "plugins/build-core"]
 	path = plugins/build-core
-	url = https://github.com/coronalabs/submodule-plugins-build-core.git
+	url = https://github.com/pouwelsjochem/submodule-plugins-build-core.git
 	branch = master
-[submodule "plugins/gameNetwork"]
-	path = plugins/gameNetwork
-	url = https://github.com/pouwelsjochem/submodule-plugins-gameNetwork.git
-    branch = master
 [submodule "plugins/network"]
 	path = plugins/network
 	url = https://github.com/pouwelsjochem/submodule-plugins-network

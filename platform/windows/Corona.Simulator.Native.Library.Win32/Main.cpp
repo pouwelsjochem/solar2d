@@ -144,12 +144,6 @@ CORONA_API const char *CoronaEventAdsRequestName()
 	return CoronaCallbackInvoke();
 }
 
-CORONA_API const char *CoronaEventGameNetworkName()
-{
-	typedef const char*(*CoronaCallbackType)();
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke();
-}
 
 CORONA_API const char *CoronaEventPopupName()
 {

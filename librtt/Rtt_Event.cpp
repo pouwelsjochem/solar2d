@@ -1794,16 +1794,6 @@ CompletionEvent::Name() const
 }
 
 // ----------------------------------------------------------------------------
-	
-const char GameNetworkEvent::kName[] = "gameNetwork";
-
-const char*
-GameNetworkEvent::Name() const
-{
-	return Self::kName;
-}
-
-// ----------------------------------------------------------------------------
 
 const char UrlRequestEvent::kName[] = "urlRequest";
 

@@ -432,8 +432,8 @@ require = function (modname)
 	if ( "simulator" == system.getInfo( "environment" ) ) or ( "win32" == system.getInfo( "platform" ) ) or ( "macos" == system.getInfo( "platform" ) ) then
 		-- Replace '.' with '_' for the following cases:
 		-- (1) For plugins
-		-- (2) For subclasses CoronaProvider's, e.g. CoronaProvider.gameNetwork.corona.
-		-- Note that this does _not_ affect core provider classes (CoronaProvider.gameNetwork)
+		-- (2) For subclasses CoronaProvider's, e.g. CoronaProvider.ads.corona.
+		-- Note that this does _not_ affect core provider classes (CoronaProvider.ads)
 		local prefix = "plugin."
 		if ( string.sub( modname, 1, string.len( prefix ) ) == prefix )
 			or ( nil ~= string.match( modname, 'CoronaProvider%.(.*)%.(.*)' ) ) then
