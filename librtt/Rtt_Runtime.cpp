@@ -905,7 +905,6 @@ Runtime::BeginRunLoop()
 	fTimer->SetInterval( kInterval );
 
 	// Initial call to main.lua can cause runtime to be suspended,
-	// e.g. via PlatformModalInteraction
 	// Otherwise, it's < 0 (i.e. uninitialized)
 	if ( fIsSuspended < 0 )
 	{

@@ -212,9 +212,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformModalInteraction.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Resource.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -854,9 +851,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformModalInteraction.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_RenderingStream.h">

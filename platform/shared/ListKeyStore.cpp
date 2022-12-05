@@ -19,10 +19,6 @@
 #include "Interop/Ipc/CommandLine.h"
 #endif
 
-#if USE_JNI
-#include "jniUtils.h"
-#endif
-
 #ifndef Rtt_LINUX_ENV
 const char *ReplaceString(const char *c_subject, const char * c_search, const char * c_replace)
 {
@@ -68,21 +64,10 @@ ListKeyStore::EscapeArgument(std::string arg)
 {
 	std::string result = arg;
 
-#if defined(Rtt_MAC_ENV ) || defined(Rtt_LINUX_ENV)
-
 	// On macOS escape shell special characters in the strings by replacing single quotes with "'\''" and
 	// then enclosing in single quotes
 	ReplaceString(result, "'", "'\\''");	// escape single quotes
 	result = "'" + result + "'";
-
-#else
-
-	// On Windows escape shell special characters in the strings by replacing double quotes with "\"" and
-	// then enclosing in double quotes
-	ReplaceString(result, "\"", "\\\"");	// escape double quotes
-	result = "\"" + result + "\"";
-
-#endif
 
 	return result;
 }

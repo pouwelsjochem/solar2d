@@ -417,7 +417,6 @@ PLATFORM_FILES := \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidDisplayObject.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDevice.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidInputDeviceManager.cpp \
-	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidModalInteraction.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidDevice.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidPlatform.cpp \
 	$(CORONA_ROOT)/platform/android/ndk/Rtt_AndroidRuntimeDelegate.cpp \
@@ -608,7 +607,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformFBConnect.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformInAppStore.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformLocation.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformModalInteraction.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformNotifier.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformOpenALPlayer.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformReachability.cpp \

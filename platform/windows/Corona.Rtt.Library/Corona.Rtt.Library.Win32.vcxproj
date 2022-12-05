@@ -202,7 +202,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformExitCallback.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformFBConnect.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformModalInteraction.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformNotifier.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformOpenALPlayer.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformReachability.cpp" />
@@ -438,7 +437,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformExitCallback.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformFBConnect.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h" />
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformModalInteraction.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformNotifier.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformOpenALPlayer.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformReachability.h" />

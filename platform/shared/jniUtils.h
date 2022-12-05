@@ -5,7 +5,7 @@
 #ifndef _H_jniUtil_
 #define _H_jniUtil_
 
-#if defined(Rtt_ANDROID_ENV) || defined(Rtt_WIN_ENV)
+#if defined(Rtt_ANDROID_ENV)
 	#include <jni.h>   
 	// $JAVA_HOME/include and $JAVA_HOME/include/win32
 

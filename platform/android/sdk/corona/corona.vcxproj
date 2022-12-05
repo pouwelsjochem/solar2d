@@ -321,7 +321,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformNotifier.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformReachability.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformSurface.cpp" />
@@ -469,7 +468,6 @@
     <ClCompile Include="..\..\ndk\Rtt_AndroidDisplayObject.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDevice.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDeviceManager.cpp" />
-    <ClCompile Include="..\..\ndk\Rtt_AndroidModalInteraction.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidPlatform.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidRuntimeDelegate.cpp" />
     <ClCompile Include="..\..\ndk\Rtt_AndroidScreenSurface.cpp" />
@@ -708,7 +706,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformNotifier.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformOpenALPlayer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug386|Tegra-Android'">true</ExcludedFromBuild>
@@ -758,7 +755,6 @@
     <ClInclude Include="..\..\ndk\Rtt_AndroidDisplayObject.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDevice.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDeviceManager.h" />
-    <ClInclude Include="..\..\ndk\Rtt_AndroidModalInteraction.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidPlatform.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidRuntimeDelegate.h" />
     <ClInclude Include="..\..\ndk\Rtt_AndroidScreenSurface.h" />

@@ -313,7 +313,6 @@
         <File Name="../../librtt/Rtt_PlatformOpenALPlayer.h"/>
         <File Name="../shared/Rtt_PlatformObjectWrapper.h"/>
         <File Name="../../librtt/Rtt_PlatformNotifier.h"/>
-        <File Name="../../librtt/Rtt_PlatformModalInteraction.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputDeviceManager.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputDevice.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputAxis.h"/>
@@ -664,7 +663,6 @@
       <File Name="../../librtt/Rtt_PlatformReachability.cpp"/>
       <File Name="../../librtt/Rtt_PlatformOpenALPlayer.cpp"/>
       <File Name="../../librtt/Rtt_PlatformNotifier.cpp"/>
-      <File Name="../../librtt/Rtt_PlatformModalInteraction.cpp"/>
       <File Name="../../librtt/Rtt_PlatformInAppStore.cpp"/>
       <File Name="../../librtt/Rtt_PlatformFBConnect.cpp"/>
       <File Name="../../librtt/Rtt_PlatformExitCallback.cpp"/>

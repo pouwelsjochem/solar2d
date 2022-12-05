@@ -177,7 +177,6 @@ add_library( corona SHARED
 		Rtt_AndroidDisplayObject.cpp
 		Rtt_AndroidInputDevice.cpp
 		Rtt_AndroidInputDeviceManager.cpp
-		Rtt_AndroidModalInteraction.cpp
 		Rtt_AndroidDevice.cpp
 		Rtt_AndroidPlatform.cpp
 		Rtt_AndroidRuntimeDelegate.cpp
@@ -372,7 +371,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Rtt_PlatformExitCallback.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformFBConnect.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformModalInteraction.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformNotifier.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformOpenALPlayer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformReachability.cpp

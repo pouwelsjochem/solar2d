@@ -781,9 +781,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.cpp">
-      <Filter>rtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformNotifier.cpp">
       <Filter>rtt</Filter>
     </ClCompile>
@@ -1046,9 +1043,6 @@
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidInputDeviceManager.cpp">
-      <Filter>Android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\Rtt_AndroidModalInteraction.cpp">
       <Filter>Android</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\Rtt_AndroidPlatform.cpp">
@@ -1726,9 +1720,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformModalInteraction.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformNotifier.h">
       <Filter>rtt</Filter>
     </ClInclude>
@@ -1958,9 +1949,6 @@
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidInputDeviceManager.h">
-      <Filter>Android</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ndk\Rtt_AndroidModalInteraction.h">
       <Filter>Android</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ndk\Rtt_AndroidPlatform.h">

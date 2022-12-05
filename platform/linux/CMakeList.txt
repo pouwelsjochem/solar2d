@@ -458,7 +458,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_PlatformExitCallback.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformFBConnect.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformModalInteraction.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformNotifier.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformOpenALPlayer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformReachability.cpp

@@ -155,7 +155,6 @@
 		A4551F661BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F011BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp */; };
 		A4551F681BAA182D00FB3BDF /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F051BAA182D00FB3BDF /* Rtt_PlatformFBConnect.cpp */; };
 		A4551F6B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */; };
-		A4551F6E1BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F121BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp */; };
 		A4551F6F1BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F141BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp */; };
 		A4551F701BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F161BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp */; };
 		A4551F711BAA182D00FB3BDF /* Rtt_PlatformReachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F181BAA182D00FB3BDF /* Rtt_PlatformReachability.cpp */; };
@@ -1767,8 +1766,6 @@
 		A4551F061BAA182D00FB3BDF /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformFBConnect.h; path = ../../librtt/Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
 		A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformInAppStore.cpp; path = ../../librtt/Rtt_PlatformInAppStore.cpp; sourceTree = "<group>"; };
 		A4551F0C1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformInAppStore.h; path = ../../librtt/Rtt_PlatformInAppStore.h; sourceTree = "<group>"; };
-		A4551F121BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformModalInteraction.cpp; path = ../../librtt/Rtt_PlatformModalInteraction.cpp; sourceTree = "<group>"; };
-		A4551F131BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformModalInteraction.h; path = ../../librtt/Rtt_PlatformModalInteraction.h; sourceTree = "<group>"; };
 		A4551F141BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformNotifier.cpp; path = ../../librtt/Rtt_PlatformNotifier.cpp; sourceTree = "<group>"; };
 		A4551F151BAA182D00FB3BDF /* Rtt_PlatformNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformNotifier.h; path = ../../librtt/Rtt_PlatformNotifier.h; sourceTree = "<group>"; };
 		A4551F161BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformOpenALPlayer.cpp; path = ../../librtt/Rtt_PlatformOpenALPlayer.cpp; sourceTree = "<group>"; };
@@ -2929,8 +2926,6 @@
 				A4551F061BAA182D00FB3BDF /* Rtt_PlatformFBConnect.h */,
 				A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */,
 				A4551F0C1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.h */,
-				A4551F121BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp */,
-				A4551F131BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.h */,
 				A4551F141BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp */,
 				A4551F151BAA182D00FB3BDF /* Rtt_PlatformNotifier.h */,
 				A4551F161BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp */,
@@ -5005,7 +5000,6 @@
 				A4551E051BAA17CF00FB3BDF /* Rtt_ShaderCompositeAdapter.cpp in Sources */,
 				A4551E251BAA17CF00FB3BDF /* Rtt_TextureResourceBitmap.cpp in Sources */,
 				A4DD48071BB260B200FD988E /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
-				A4551F6E1BAA182D00FB3BDF /* Rtt_PlatformModalInteraction.cpp in Sources */,
 				A4DD48001BB260B200FD988E /* Rtt_PlatformInputAxis.cpp in Sources */,
 				F50CA3CA1C81115400746C98 /* Rtt_TextureResourceExternalAdapter.cpp in Sources */,
 			);

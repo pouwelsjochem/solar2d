@@ -23,15 +23,6 @@
 
 #include <string>
 
-#if defined(Rtt_WIN_ENV) && !defined(Rtt_LINUX_ENV)
-#include "stdafx.h"
-#include "WinString.h"
-#include "Interop/Ipc/CommandLine.h"
-#if !defined( Rtt_NO_GUI )
-#include "Simulator.h"
-#endif
-#endif
-
 extern "C"
 {
 #	include "lfs.h"
