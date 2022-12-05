@@ -37,7 +37,6 @@ class RenderingStream;
 class PlatformBitmap;
 class PlatformDisplayObject;
 class PlatformExitCallback;
-class PlatformFBConnect;
 class PlatformOpenALPlayer;
 class PlatformStoreProvider;
 class PlatformSurface;
@@ -155,7 +154,6 @@ class MPlatform
 		virtual bool HidePopup( const char *name ) const = 0;
 		
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const = 0;
-        virtual PlatformFBConnect* GetFBConnect() const = 0;
 		
 	public:
 		// Creates notification based on table at 'index'. Returns notificationId

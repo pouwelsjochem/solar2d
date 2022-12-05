@@ -465,7 +465,6 @@
         <File Name="../../librtt/Input/Rtt_PlatformInputDevice.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputAxis.h"/>
         <File Name="../../librtt/Rtt_PlatformInAppStore.h"/>
-        <File Name="../../librtt/Rtt_PlatformFBConnect.h"/>
         <File Name="../../librtt/Rtt_PlatformExitCallback.h"/>
         <File Name="../../librtt/Rtt_PlatformDisplayObject.h"/>
         <File Name="../shared/Rtt_PlatformDictionaryWrapper.h"/>
@@ -503,7 +502,6 @@
         <File Name="../../librtt/Rtt_LuaLibNative.h"/>
         <File Name="../../librtt/Rtt_LuaLibInAppStore.h"/>
         <File Name="../../librtt/Display/Rtt_LuaLibGraphics.h"/>
-        <File Name="../../librtt/Rtt_LuaLibFacebook.h"/>
         <File Name="../../librtt/Display/Rtt_LuaLibDisplay.h"/>
         <File Name="../../librtt/Rtt_LuaLibCrypto.h"/>
         <File Name="../../librtt/Rtt_LuaGCInhibitor.h"/>
@@ -818,7 +816,6 @@
       <File Name="../../librtt/Rtt_PlatformOpenALPlayer.cpp"/>
       <File Name="../../librtt/Rtt_PlatformNotifier.cpp"/>
       <File Name="../../librtt/Rtt_PlatformInAppStore.cpp"/>
-      <File Name="../../librtt/Rtt_PlatformFBConnect.cpp"/>
       <File Name="../../librtt/Rtt_PlatformExitCallback.cpp"/>
       <File Name="../../librtt/Rtt_PlatformDisplayObject.cpp"/>
       <File Name="../../librtt/Rtt_PlatformData.cpp"/>
@@ -835,7 +832,6 @@
       <File Name="../../librtt/Rtt_LuaLibOpenAL.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibNative.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibInAppStore.cpp"/>
-      <File Name="../../librtt/Rtt_LuaLibFacebook.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibCrypto.cpp"/>
       <File Name="../../librtt/Rtt_LuaData.cpp"/>
       <File Name="../../librtt/Rtt_LuaContext.cpp"/>

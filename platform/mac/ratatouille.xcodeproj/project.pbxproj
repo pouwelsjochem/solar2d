@@ -31,8 +31,6 @@
 		000CE79512B73EE300D9B6A4 /* Rtt_LuaGCInhibitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6E812B73EE300D9B6A4 /* Rtt_LuaGCInhibitor.h */; };
 		000CE79612B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6E912B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp */; };
 		000CE79712B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */; };
-		000CE79A12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */; };
-		000CE79B12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */; };
 		000CE7A012B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */; };
 		000CE7A112B73EE300D9B6A4 /* Rtt_LuaLibNative.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F512B73EE300D9B6A4 /* Rtt_LuaLibNative.h */; };
 		000CE7A212B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F612B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp */; };
@@ -63,8 +61,6 @@
 		000CE7D312B73EE300D9B6A4 /* Rtt_PlatformData.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72712B73EE300D9B6A4 /* Rtt_PlatformData.h */; };
 		000CE7D412B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */; };
 		000CE7D512B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */; };
-		000CE7D812B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */; };
-		000CE7D912B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */; };
 		000CE7E412B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73812B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp */; };
 		000CE7E512B73EE300D9B6A4 /* Rtt_PlatformNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73912B73EE300D9B6A4 /* Rtt_PlatformNotifier.h */; };
 		000CE7E612B73EE300D9B6A4 /* Rtt_PlatformOpenALPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73A12B73EE300D9B6A4 /* Rtt_PlatformOpenALPlayer.cpp */; };
@@ -226,7 +222,6 @@
 		00B73D6B12B720CA0057F594 /* build.xml in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C9412B720C90057F594 /* build.xml */; };
 		00B73D8B12B720CA0057F594 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CD912B720C90057F594 /* main.m */; };
 		00B73D9712B720CA0057F594 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
-		00B73D9812B720CA0057F594 /* Rtt_MacFBConnect.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */; };
 		00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */; };
 		00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */; };
 		00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */; };
@@ -572,7 +567,6 @@
 		C229E0201B32221B00D87A7C /* Rtt_LuaGCInhibitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6E812B73EE300D9B6A4 /* Rtt_LuaGCInhibitor.h */; };
 		C229E0211B32221B00D87A7C /* Rtt_LuaLibCrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */; };
 		C229E0221B32221B00D87A7C /* Rtt_LuaLibDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */; };
-		C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */; };
 		C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880C176A621100ACB6FF /* Rtt_LuaLibGraphics.h */; };
 		C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */; };
 		C229E0291B32221B00D87A7C /* Rtt_LuaLibNative.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE6F512B73EE300D9B6A4 /* Rtt_LuaLibNative.h */; };
@@ -607,7 +601,6 @@
 		C229E0561B32221B00D87A7C /* Rtt_PlatformData.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72712B73EE300D9B6A4 /* Rtt_PlatformData.h */; };
 		C229E0571B32221B00D87A7C /* Rtt_PlatformDisplayObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */; };
 		C229E0591B32221B00D87A7C /* Rtt_PlatformExitCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = 002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */; };
-		C229E05A1B32221B00D87A7C /* Rtt_PlatformFBConnect.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */; };
 		C229E05D1B32221B00D87A7C /* Rtt_PlatformInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 00572B8A12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h */; };
 		C229E0601B32221B00D87A7C /* Rtt_PlatformNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73912B73EE300D9B6A4 /* Rtt_PlatformNotifier.h */; };
 		C229E0611B32221B00D87A7C /* Rtt_PlatformOpenALPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE73B12B73EE300D9B6A4 /* Rtt_PlatformOpenALPlayer.h */; };
@@ -729,7 +722,6 @@
 		C229E0FA1B32221B00D87A7C /* Rtt_LuaData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 072020FD17C6884000B6D424 /* Rtt_LuaData.cpp */; };
 		C229E0FB1B32221B00D87A7C /* Rtt_LuaLibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6E912B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp */; };
 		C229E0FC1B32221B00D87A7C /* Rtt_LuaLibDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328809176A621100ACB6FF /* Rtt_LuaLibDisplay.cpp */; };
-		C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */; };
 		C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432880B176A621100ACB6FF /* Rtt_LuaLibGraphics.cpp */; };
 		C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */; };
 		C229E1031B32221B00D87A7C /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */; };
@@ -752,7 +744,6 @@
 		C229E1211B32221B00D87A7C /* Rtt_PlatformData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72612B73EE300D9B6A4 /* Rtt_PlatformData.cpp */; };
 		C229E1221B32221B00D87A7C /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */; };
 		C229E1241B32221B00D87A7C /* Rtt_PlatformExitCallback.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 002D74A912FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp */; };
-		C229E1251B32221B00D87A7C /* Rtt_PlatformFBConnect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */; };
 		C229E1281B32221B00D87A7C /* Rtt_PlatformInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00572B8912D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp */; };
 		C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043D17A3774E00681DED /* Rtt_PlatformInputAxis.cpp */; };
 		C229E12A1B32221B00D87A7C /* Rtt_PlatformInputDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE6C178E18B00047CC04 /* Rtt_PlatformInputDevice.cpp */; };
@@ -1667,8 +1658,6 @@
 		000CE6E812B73EE300D9B6A4 /* Rtt_LuaGCInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaGCInhibitor.h; sourceTree = "<group>"; };
 		000CE6E912B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibCrypto.cpp; sourceTree = "<group>"; };
 		000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibCrypto.h; sourceTree = "<group>"; };
-		000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibFacebook.cpp; sourceTree = "<group>"; };
-		000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibFacebook.h; sourceTree = "<group>"; };
 		000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibNative.cpp; sourceTree = "<group>"; };
 		000CE6F512B73EE300D9B6A4 /* Rtt_LuaLibNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibNative.h; sourceTree = "<group>"; };
 		000CE6F612B73EE300D9B6A4 /* Rtt_LuaLibOpenAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibOpenAL.cpp; sourceTree = "<group>"; };
@@ -1700,8 +1689,6 @@
 		000CE72712B73EE300D9B6A4 /* Rtt_PlatformData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformData.h; sourceTree = "<group>"; };
 		000CE72812B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformDisplayObject.cpp; sourceTree = "<group>"; };
 		000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
-		000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformFBConnect.cpp; sourceTree = "<group>"; };
-		000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformFBConnect.h; sourceTree = "<group>"; };
 		000CE73212B73EE300D9B6A4 /* Rtt_PlatformListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformListener.cpp; sourceTree = "<group>"; };
 		000CE73312B73EE300D9B6A4 /* Rtt_PlatformListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformListener.h; sourceTree = "<group>"; };
 		000CE73812B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformNotifier.cpp; sourceTree = "<group>"; };
@@ -1984,8 +1971,6 @@
 		00B73CF012B720C90057F594 /* Rtt_MacDeviceIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacDeviceIdentifier.h; sourceTree = "<group>"; };
 		00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacDisplayObject.mm; sourceTree = "<group>"; };
 		00B73CF212B720C90057F594 /* Rtt_MacDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacDisplayObject.h; sourceTree = "<group>"; };
-		00B73CF312B720C90057F594 /* Rtt_MacFBConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacFBConnect.h; sourceTree = "<group>"; };
-		00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacFBConnect.mm; sourceTree = "<group>"; };
 		00B73CF812B720C90057F594 /* Rtt_MacPlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacPlatform.mm; sourceTree = "<group>"; };
 		00B73CF912B720C90057F594 /* Rtt_MacPlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacPlatform.h; sourceTree = "<group>"; };
 		00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacRemotePlayerHost.mm; sourceTree = "<group>"; };
@@ -2994,8 +2979,6 @@
 				000CE6E812B73EE300D9B6A4 /* Rtt_LuaGCInhibitor.h */,
 				000CE6E912B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp */,
 				000CE6EA12B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h */,
-				000CE6EE12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp */,
-				000CE6EF12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h */,
 				00572B8712D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp */,
 				00572B8812D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.h */,
 				000CE6F412B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp */,
@@ -3041,8 +3024,6 @@
 				000CE72912B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h */,
 				002D74A912FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp */,
 				002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */,
-				000CE72C12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp */,
-				000CE72D12B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h */,
 				00572B8912D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp */,
 				00572B8A12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h */,
 				000CE73212B73EE300D9B6A4 /* Rtt_PlatformListener.cpp */,
@@ -3217,8 +3198,6 @@
 				00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */,
 				002D72E012FB2C30006C7E9B /* Rtt_MacExitCallback.h */,
 				002D72E112FB2C30006C7E9B /* Rtt_MacExitCallback.mm */,
-				00B73CF312B720C90057F594 /* Rtt_MacFBConnect.h */,
-				00B73CF412B720C90057F594 /* Rtt_MacFBConnect.mm */,
 				00B73CFB12B720C90057F594 /* Rtt_MacRemotePlayerHost.h */,
 				00B73CFA12B720C90057F594 /* Rtt_MacRemotePlayerHost.mm */,
 				00B73CFD12B720C90057F594 /* Rtt_MacServer.h */,
@@ -4062,7 +4041,6 @@
 				000CE79512B73EE300D9B6A4 /* Rtt_LuaGCInhibitor.h in Headers */,
 				000CE79712B73EE300D9B6A4 /* Rtt_LuaLibCrypto.h in Headers */,
 				C2DA96371B46460F00DAF684 /* Rtt_LuaLibDisplay.h in Headers */,
-				000CE79B12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.h in Headers */,
 				C2DA96321B46460F00DAF684 /* Rtt_LuaLibGraphics.h in Headers */,
 				C2DA96381B46460F00DAF684 /* Rtt_LuaLibInAppStore.h in Headers */,
 				000CE7A112B73EE300D9B6A4 /* Rtt_LuaLibNative.h in Headers */,
@@ -4102,7 +4080,6 @@
 				000CE7D512B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.h in Headers */,
 				03D1C5661D70CCDA00DB02EE /* Rtt_ValueResult.h in Headers */,
 				002D74AA12FB438A006C7E9B /* Rtt_PlatformExitCallback.h in Headers */,
-				000CE7D912B73EE300D9B6A4 /* Rtt_PlatformFBConnect.h in Headers */,
 				00572B8E12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.h in Headers */,
 				F5B5A7521B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */,
 				000CE7E512B73EE300D9B6A4 /* Rtt_PlatformNotifier.h in Headers */,
@@ -4294,7 +4271,6 @@
 				C229E0201B32221B00D87A7C /* Rtt_LuaGCInhibitor.h in Headers */,
 				C229E0211B32221B00D87A7C /* Rtt_LuaLibCrypto.h in Headers */,
 				C229E0221B32221B00D87A7C /* Rtt_LuaLibDisplay.h in Headers */,
-				C229E0231B32221B00D87A7C /* Rtt_LuaLibFacebook.h in Headers */,
 				C229E0261B32221B00D87A7C /* Rtt_LuaLibGraphics.h in Headers */,
 				C229E0271B32221B00D87A7C /* Rtt_LuaLibInAppStore.h in Headers */,
 				C229E0291B32221B00D87A7C /* Rtt_LuaLibNative.h in Headers */,
@@ -4333,7 +4309,6 @@
 				C229E0571B32221B00D87A7C /* Rtt_PlatformDisplayObject.h in Headers */,
 				03D1C5651D70CCD900DB02EE /* Rtt_ValueResult.h in Headers */,
 				C229E0591B32221B00D87A7C /* Rtt_PlatformExitCallback.h in Headers */,
-				C229E05A1B32221B00D87A7C /* Rtt_PlatformFBConnect.h in Headers */,
 				C229E05D1B32221B00D87A7C /* Rtt_PlatformInAppStore.h in Headers */,
 				C229E0601B32221B00D87A7C /* Rtt_PlatformNotifier.h in Headers */,
 				F5B5A7531B7545C20020027E /* Rtt_TextureResourceBitmapAdapter.h in Headers */,
@@ -5131,7 +5106,6 @@
 				C2E9934B1A6B2FEC00E99F46 /* Rtt_LuaData.cpp in Sources */,
 				000CE79612B73EE300D9B6A4 /* Rtt_LuaLibCrypto.cpp in Sources */,
 				A4328868176A621200ACB6FF /* Rtt_LuaLibDisplay.cpp in Sources */,
-				000CE79A12B73EE300D9B6A4 /* Rtt_LuaLibFacebook.cpp in Sources */,
 				A432886A176A621200ACB6FF /* Rtt_LuaLibGraphics.cpp in Sources */,
 				00572B8B12D2B9BB00FB6A11 /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				000CE7A012B73EE300D9B6A4 /* Rtt_LuaLibNative.cpp in Sources */,
@@ -5154,7 +5128,6 @@
 				000CE7D212B73EE300D9B6A4 /* Rtt_PlatformData.cpp in Sources */,
 				000CE7D412B73EE300D9B6A4 /* Rtt_PlatformDisplayObject.cpp in Sources */,
 				002D74AB12FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp in Sources */,
-				000CE7D812B73EE300D9B6A4 /* Rtt_PlatformFBConnect.cpp in Sources */,
 				00572B8D12D2B9BB00FB6A11 /* Rtt_PlatformInAppStore.cpp in Sources */,
 				03D1C5571D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C2E993431A6B2FEC00E99F46 /* Rtt_PlatformInputAxis.cpp in Sources */,
@@ -5419,7 +5392,6 @@
 				C287481B19F6E01F002D5B27 /* Rtt_MacConsolePlatform.mm in Sources */,
 				00B73D9712B720CA0057F594 /* Rtt_MacDisplayObject.mm in Sources */,
 				002D72E212FB2C30006C7E9B /* Rtt_MacExitCallback.mm in Sources */,
-				00B73D9812B720CA0057F594 /* Rtt_MacFBConnect.mm in Sources */,
 				00B73D9C12B720CA0057F594 /* Rtt_MacRemotePlayerHost.mm in Sources */,
 				00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */,
 				00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */,
@@ -5559,7 +5531,6 @@
 				C229E0FA1B32221B00D87A7C /* Rtt_LuaData.cpp in Sources */,
 				C229E0FB1B32221B00D87A7C /* Rtt_LuaLibCrypto.cpp in Sources */,
 				C229E0FC1B32221B00D87A7C /* Rtt_LuaLibDisplay.cpp in Sources */,
-				C229E0FD1B32221B00D87A7C /* Rtt_LuaLibFacebook.cpp in Sources */,
 				C229E1001B32221B00D87A7C /* Rtt_LuaLibGraphics.cpp in Sources */,
 				C229E1011B32221B00D87A7C /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				C229E1031B32221B00D87A7C /* Rtt_LuaLibNative.cpp in Sources */,
@@ -5582,7 +5553,6 @@
 				C229E1211B32221B00D87A7C /* Rtt_PlatformData.cpp in Sources */,
 				C229E1221B32221B00D87A7C /* Rtt_PlatformDisplayObject.cpp in Sources */,
 				C229E1241B32221B00D87A7C /* Rtt_PlatformExitCallback.cpp in Sources */,
-				C229E1251B32221B00D87A7C /* Rtt_PlatformFBConnect.cpp in Sources */,
 				C229E1281B32221B00D87A7C /* Rtt_PlatformInAppStore.cpp in Sources */,
 				03D1C5581D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */,

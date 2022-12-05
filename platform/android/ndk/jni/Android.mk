@@ -587,7 +587,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_LuaCoronaBaseLib.c \
 	$(CORONA_ROOT)/librtt/Rtt_LuaData.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibCrypto.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_LuaLibFacebook.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibInAppStore.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibNative.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_LuaLibOpenAL.cpp \
@@ -604,7 +603,6 @@ LIBRTT_FILES := \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformData.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformDisplayObject.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformExitCallback.cpp \
-	$(CORONA_ROOT)/librtt/Rtt_PlatformFBConnect.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformInAppStore.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformLocation.cpp \
 	$(CORONA_ROOT)/librtt/Rtt_PlatformNotifier.cpp \

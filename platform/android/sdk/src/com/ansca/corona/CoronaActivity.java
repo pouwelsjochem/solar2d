@@ -189,7 +189,7 @@ public class CoronaActivity extends Activity {
 
 		// Store the intent that initially launched this activity. To be passed to Lua as launch argument later.
 		// Note: The getIntent() method will return a different intent object if this activity gets resumed
-		//       externally such as by a notification or the Facebook app.
+		//       externally such as by a notification.
 		myInitialIntent = getIntent();
 
 		// Show the window fullscreen, if possible.
@@ -481,7 +481,7 @@ public class CoronaActivity extends Activity {
 	 * <a href="http://developer.android.com/reference/android/content/Context.html#startActivity(android.content.Intent)">startActivity()</a>
 	 * or <a href="http://developer.android.com/reference/android/app/Activity.html#setIntent(android.content.Intent)">setIntent()</a>
 	 * methods, which typically happens external to this application such as when a notification gets tapped by the end-user or by
-	 * another application such as Facebook.
+	 * another application.
 	 * @return Returns the <a href="http://developer.android.com/reference/android/content/Intent.html">intent</a> that last started
 	 * this <a href="http://developer.android.com/reference/android/app/Activity.html">activity</a>.
 	 */

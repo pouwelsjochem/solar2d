@@ -16,7 +16,7 @@
 	branch = master
 [submodule "plugins/build"]
 	path = plugins/build
-	url = https://github.com/coronalabs/submodule-plugins-build.git
+	url = https://github.com/pouwelsjochem/submodule-plugins-build.git
 	branch = master
 [submodule "plugins/build-core"]
 	path = plugins/build-core

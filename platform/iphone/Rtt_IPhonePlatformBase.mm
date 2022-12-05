@@ -434,12 +434,6 @@ IPhonePlatformBase::CreateNativeWebView( const Rect& bounds ) const
 
 #if Rtt_IPHONE_PLATFORM_STUB
 
-PlatformFBConnect*
-IPhonePlatformBase::GetFBConnect() const
-{
-	return NULL;
-}
-
 void*
 IPhonePlatformBase::CreateAndScheduleNotification( lua_State *L, int index ) const
 {

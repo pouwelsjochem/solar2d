@@ -76,8 +76,6 @@ class AndroidPlatform : public MPlatform
 
 		PlatformDisplayObject* GetNativeDisplayObjectById( const int objectId ) const;
 
-		virtual PlatformFBConnect* GetFBConnect() const;
-
 	public:
         virtual void RaiseError( MPlatform::Error e, const char* reason ) const;
         virtual void PathForFile( const char *filename, MPlatform::Directory baseDir, U32 flags, String& result ) const;

@@ -15,7 +15,6 @@
 #include "Rtt_Runtime.h"
 #include "Rtt_LinuxPlatform.h"
 #include "Rtt_LinuxBitmap.h"
-//#include "Rtt_LinuxFBConnect.h"
 #include "Rtt_LinuxScreenSurface.h"
 #include "Rtt_LinuxWebView.h"
 #include "Rtt_LinuxContainer.h"
@@ -40,7 +39,6 @@ namespace Rtt
 		fInstallDir(fAllocator),
 		fSkinDir(fAllocator),
 		fStoreProvider(NULL),
-		fFBConnect(NULL),
 		fScreenSurface(NULL)
 	{
 		fResourceDir.Set(resourceDir);
@@ -55,7 +53,6 @@ namespace Rtt
 
 	LinuxPlatform::~LinuxPlatform()
 	{
-		Rtt_DELETE(fFBConnect);
 		Rtt_DELETE(fStoreProvider);
 
 		// it will be deleted in Rtt_Display by Rtt_DELETE( fTarget );
@@ -481,11 +478,6 @@ namespace Rtt
 	PlatformDisplayObject* LinuxPlatform::GetNativeDisplayObjectById(const int objectId) const
 	{
 		return NULL;
-	}
-
-	PlatformFBConnect* LinuxPlatform::GetFBConnect() const
-	{
-		return 0;
 	}
 
 	void* LinuxPlatform::CreateAndScheduleNotification(lua_State* L, int index) const

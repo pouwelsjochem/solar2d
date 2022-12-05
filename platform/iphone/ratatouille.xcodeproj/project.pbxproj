@@ -4036,10 +4036,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "enterprise/TestApp/TestApp-Prefix.pch";
@@ -4050,11 +4047,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "enterprise/TestApp/Testapp-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-Obj-C",
 					"-all_load",
@@ -4072,19 +4065,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "enterprise/TestApp/TestApp-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				INFOPLIST_FILE = "enterprise/TestApp/Testapp-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"-Obj-C",
 					"-all_load",
@@ -4163,10 +4149,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = player;
 				SKIP_INSTALL = YES;
@@ -4182,10 +4165,7 @@
 				DSTROOT = /tmp/libplayer.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = player;
 				SKIP_INSTALL = YES;
@@ -4614,12 +4594,7 @@
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios/FacebookSDK.framework/Versions/A\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = template;
 				SKIP_INSTALL = YES;
@@ -4635,12 +4610,7 @@
 				DSTROOT = /tmp/libtemplate.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios/FacebookSDK.framework/Versions/A\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = template;
 				SKIP_INSTALL = YES;
@@ -4866,7 +4836,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
 				);
@@ -4893,7 +4862,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
 					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
 				);
@@ -4916,10 +4884,7 @@
 					"$(inherited)\nRtt_MetalANGLE",
 				);
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "player-angle";
 				SKIP_INSTALL = YES;
@@ -4938,10 +4903,7 @@
 					"$(inherited)\nRtt_MetalANGLE",
 				);
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "player-angle";
 				SKIP_INSTALL = YES;
@@ -4962,14 +4924,7 @@
 					Rtt_MetalANGLE,
 				);
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
-					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios/FacebookSDK.framework/Versions/A\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "template-angle";
 				SKIP_INSTALL = YES;
@@ -4991,11 +4946,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../external/InMobi/iOS/InMobi iOS SDK Bundle\"",
 					"\"$(SRCROOT)/../../plugins/build/ads-iads/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/facebook/ios\"",
-					"\"$(SRCROOT)/../../plugins/build/native-popup-twitter/ios\"",
-					"\"$(SRCROOT)/../../plugins/sdk-facebook/ios/FacebookSDK.framework/Versions/A\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "template-angle";

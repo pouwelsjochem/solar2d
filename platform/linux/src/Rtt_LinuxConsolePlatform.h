@@ -70,7 +70,6 @@ namespace Rtt
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const { return false; };
 		virtual bool HidePopup(const char *name) const { return false; };
 		virtual PlatformDisplayObject* CreateNativeWebView(const Rect& bounds) const { return nullptr; };
-		virtual PlatformFBConnect* GetFBConnect() const { return nullptr; };
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const { return nullptr; };
 		virtual void ReleaseNotification(void *notificationId) const { return; };
 		virtual void CancelNotification(void *notificationId) const { return; };

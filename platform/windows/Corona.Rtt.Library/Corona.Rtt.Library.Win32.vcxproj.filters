@@ -147,9 +147,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibCrypto.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibFacebook.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibInAppStore.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -196,11 +193,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformExitCallback.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformFBConnect.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
@@ -751,9 +743,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibCrypto.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibFacebook.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibInAppStore.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -836,9 +825,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformExitCallback.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformFBConnect.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h">

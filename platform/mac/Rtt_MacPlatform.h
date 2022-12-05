@@ -43,7 +43,6 @@ namespace Rtt
 {
 
 class MacConsoleDevice;
-class MacFBConnect;
 class MacViewSurface;
 class PlatformSimulator;
 class PlatformSurface;
@@ -98,8 +97,6 @@ class MacPlatform : public ApplePlatform
 
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 
-        virtual PlatformFBConnect* GetFBConnect() const;
-
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const;
@@ -144,9 +141,6 @@ class MacPlatform : public ApplePlatform
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
-#if Rtt_AUTHORING_SIMULATOR
-		mutable MacFBConnect *fFBConnect;
-#endif // Rtr_AUTHORING_SIMULATOR	
 		mutable PlatformStoreProvider *fStoreProvider;
 		PlatformExitCallback* fExitCallback;
 };

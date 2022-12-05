@@ -665,12 +665,6 @@ AndroidPlatform::GetNativeDisplayObjectById( const int objectId ) const
 	return NULL;
 }
 
-PlatformFBConnect*
-AndroidPlatform::GetFBConnect() const
-{
-	return NULL;
-}
-
 // ----------------------------------------------------------------------------
 
 void*

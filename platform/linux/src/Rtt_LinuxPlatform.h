@@ -63,7 +63,6 @@ namespace Rtt
 		virtual bool HidePopup(const char *name) const;
 		virtual PlatformDisplayObject *CreateNativeWebView(const Rect &bounds) const;
 		PlatformDisplayObject *GetNativeDisplayObjectById(const int objectId) const;
-		virtual PlatformFBConnect *GetFBConnect() const;
 
 	public:
 		virtual void RaiseError(MPlatform::Error e, const char *reason) const;
@@ -142,7 +141,6 @@ namespace Rtt
 		String fSkinDir;
 		LinuxCrypto fCrypto;
 		mutable PlatformStoreProvider *fStoreProvider;
-		mutable PlatformFBConnect *fFBConnect;
 		mutable LinuxScreenSurface *fScreenSurface;
 
 	public:

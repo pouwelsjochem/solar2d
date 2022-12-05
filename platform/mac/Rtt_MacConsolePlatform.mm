@@ -122,12 +122,6 @@ MacConsolePlatform::CreateNativeWebView( const Rect& bounds ) const
 	return NULL;
 }
 
-PlatformFBConnect*
-MacConsolePlatform::GetFBConnect() const
-{
-	return NULL;
-}
-
 void
 MacConsolePlatform::RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const
 {

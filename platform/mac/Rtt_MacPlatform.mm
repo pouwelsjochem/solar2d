@@ -15,7 +15,6 @@
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaResource.h"
 #include "Rtt_LuaContext.h"
-#include "Rtt_MacFBConnect.h"
 #include "Rtt_MacViewSurface.h"
 #include "Rtt_MacWebViewObject.h"
 #include "Rtt_PlatformInAppStore.h"
@@ -359,9 +358,6 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fDevice( GetAllocator(), view ),
 	fMutexCount( 0 ),
 	fDelegate( [[AlertDelegate alloc] init] ),
-#if Rtt_AUTHORING_SIMULATOR
-	fFBConnect( NULL ),
-#endif // Rtt_AUTHORING_SIMULATOR
 	fStoreProvider( NULL ),
 	fExitCallback( NULL )
 {
@@ -377,9 +373,6 @@ MacPlatform::~MacPlatform()
 
 	Rtt_DELETE( fExitCallback );
 	Rtt_DELETE( fStoreProvider );
-#if Rtt_AUTHORING_SIMULATOR
-	Rtt_DELETE( fFBConnect );
-#endif // Rtt_AUTHORING_SIMULATOR
 	[fDelegate release];
 	pthread_mutex_destroy( & fMutex );
 
@@ -803,23 +796,6 @@ PlatformDisplayObject *
 MacPlatform::CreateNativeWebView( const Rect& bounds ) const
 {
 	return Rtt_NEW( & GetAllocator(), MacWebViewObject( bounds ) );
-}
-
-PlatformFBConnect*
-MacPlatform::GetFBConnect() const
-{
-#if Rtt_AUTHORING_SIMULATOR
-	if ( ! fFBConnect )
-	{
-		fFBConnect = Rtt_NEW( Allocator(), MacFBConnect );
-	}
-
-	Rtt_TRACE_SIM( ( "WARNING: Facebook Connect is not supported in the simulator. Please build for device.\n" ) );
-
-	return fFBConnect;
-#else
-    return NULL;
-#endif // Rtt_AUTHORING_SIMULATOR
 }
 
 BOOL

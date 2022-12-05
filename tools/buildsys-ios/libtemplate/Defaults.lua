@@ -213,7 +213,6 @@ end
 
 
 --'-F/Users/wluh/Library/Developer/Xcode/DerivedData/ratatouille-fsolxbgsiczraldzhktzzkjjdowc/Build/Products/Release-iphoneos',
---'-F/Volumes/rttmain/main/platform/iphone/../../plugins/sdk-facebook/ios',
 
 -- The set of slices organized by SDK type
 legacySlices = function ()

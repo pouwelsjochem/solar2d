@@ -32,7 +32,6 @@
 #include "Rtt_String.h"
 #include "Rtt_WinBitmap.h"
 #include "Rtt_WinCrypto.h"
-#include "Rtt_WinFBConnect.h"
 #include "Rtt_WinScreenSurface.h"
 #include "Rtt_WinTimer.h"
 #include "Rtt_WinWebViewObject.h"
@@ -61,7 +60,6 @@ namespace Rtt
 	WinPlatform::WinPlatform(Interop::RuntimeEnvironment& environment)
 		: fEnvironment(environment),
 		fDevice(environment),
-		fFBConnect(nullptr),
 		fExitCallback(environment)
 	{
 		// Set up a plugin DLL lookup path if one was provided and it doesn't reference the EXE's directory.
@@ -114,8 +112,6 @@ namespace Rtt
 
 	WinPlatform::~WinPlatform()
 	{
-		// Delete platform's owned objects.
-		Rtt_DELETE(fFBConnect);
 	}
 
 	MPlatformDevice& WinPlatform::GetDevice() const
@@ -1000,15 +996,6 @@ namespace Rtt
 	bool WinPlatform::HidePopup(const char* name) const
 	{
 		return false;
-	}
-
-	PlatformFBConnect* WinPlatform::GetFBConnect() const
-	{
-		if (!fFBConnect)
-		{
-			fFBConnect = Rtt_NEW(&GetAllocator(), WinFBConnect);
-		}
-		return fFBConnect;
 	}
 
 	void* WinPlatform::CreateAndScheduleNotification(lua_State* L, int index) const

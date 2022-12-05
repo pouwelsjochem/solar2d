@@ -24,7 +24,6 @@
 #include "Rtt_LuaGCInhibitor.h"
 #include "Rtt_LuaCoronaBaseLib.h"
 #include "Rtt_LuaLibCrypto.h"
-#include "Rtt_LuaLibFacebook.h"
 #if defined ( Rtt_USE_ALMIXER )
 #include "Rtt_LuaLibOpenAL.h"
 #endif

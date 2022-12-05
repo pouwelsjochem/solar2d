@@ -58,7 +58,6 @@
 		(void*)CoronaEventErrorCodeKey,
 		(void*)CoronaEventDataKey,
 		(void*)CoronaEventAdsRequestName,
-		(void*)CoronaEventGameNetworkName,
 		(void*)CoronaEventPopupName,
 		
 		(void*)CoronaLuaCreateDictionary,

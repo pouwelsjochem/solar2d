@@ -161,8 +161,6 @@ platform/android/template/coreJars
 platform/android/template/external-libs-paths
 platform/android/template/externals
 platform/android/template/res
-external/facebook-android-sdk/facebook/bin
-external/facebook-android-sdk/facebook/gen
 external/papaya-corona-sdk-global-1.7.1/Library/bin
 external/papaya-corona-sdk-global-1.7.1/Library/gen
 local.properties
@@ -228,8 +226,6 @@ librtt/Renderer/mac/build
 #legacy entries
 /plugins/viewer
 external/DeskMetrics
-external/facebook-ios-sdk
-external/facebook-android-sdk
 commit-email.sh
 platform/resources/iostemplate
 platform/tvos/license.ccdata

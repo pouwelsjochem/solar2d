@@ -222,7 +222,6 @@
     <ClInclude Include="Rtt\Rtt_WinDevice.h" />
     <ClInclude Include="Rtt\Rtt_WinDisplayObject.h" />
     <ClInclude Include="Rtt\Rtt_WinExitCallback.h" />
-    <ClInclude Include="Rtt\Rtt_WinFBConnect.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDevice.h" />
     <ClInclude Include="Rtt\Rtt_WinInputDeviceManager.h" />
     <ClInclude Include="Rtt\Rtt_WinPlatform.h" />
@@ -315,7 +314,6 @@
     <ClCompile Include="Rtt\Rtt_WinDevice.cpp" />
     <ClCompile Include="Rtt\Rtt_WinDisplayObject.cpp" />
     <ClCompile Include="Rtt\Rtt_WinExitCallback.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinFBConnect.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDevice.cpp" />
     <ClCompile Include="Rtt\Rtt_WinInputDeviceManager.cpp" />
     <ClCompile Include="Rtt\Rtt_WinPlatform.cpp" />

@@ -72,8 +72,6 @@ class IPhonePlatformBase : public ApplePlatform
 				
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 
-		virtual PlatformFBConnect* GetFBConnect() const;
-
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const;
 		virtual void ReleaseNotification( void *notificationId ) const;
 		virtual void CancelNotification( void *notificationId ) const;
