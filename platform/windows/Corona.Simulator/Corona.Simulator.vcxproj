@@ -149,7 +149,6 @@
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\stack.c" />
     <ClCompile Include="..\..\..\external\winutil\BtnST.cpp" />
     <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp" />
-    <ClCompile Include="..\..\shared\AntHost.cpp" />
     <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp" />
     <ClCompile Include="..\..\shared\Rtt_NxSAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp" />

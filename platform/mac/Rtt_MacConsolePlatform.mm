@@ -13,7 +13,6 @@
 
 #import <Foundation/Foundation.h>
 #import "NSString+Extensions.h"
-#include "Rtt_JavaHost.h"
 
 #include "Core/Rtt_String.h"
 

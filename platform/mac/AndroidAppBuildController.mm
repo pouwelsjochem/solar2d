@@ -21,8 +21,6 @@
 #import "XcodeToolHelper.h"
 
 #include "Rtt_TargetAndroidAppStore.h"
-#include "Rtt_JavaHost.h"
-#include "AntHost.h"
 
 #include "ListKeyStore.h"
 #include "Rtt_MacDialogController.h"

@@ -177,7 +177,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_HTTPClientCommon.cpp" />
     <ClCompile Include="..\Corona.Rtt.Library\Rtt_HTTPClientWindows.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_WinConsolePlatform.cpp" />
-    <ClCompile Include="..\..\shared\AntHost.cpp" />
     <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp" />

@@ -56,7 +56,6 @@
 #endif
 
 #include "Rtt_Lua.h"
-#include "Rtt_JavaHost.h"
 
 #include <pthread.h>
 #include <sstream>

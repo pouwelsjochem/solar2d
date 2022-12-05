@@ -17,7 +17,6 @@
 #include "Rtt_MPlatformServices.h"
 #include "Rtt_TargetAndroidAppStore.h"
 #include "Rtt_FileSystem.h"
-#include "Rtt_JavaHost.h"
 #include "Rtt_DeviceBuildData.h"
 
 #include "ListKeyStore.h"
@@ -31,10 +30,6 @@
 #if !defined( Rtt_NO_GUI )
 #include "Simulator.h"
 #endif
-#endif
-
-#if USE_JNI
-#include "AntHost.h"
 #endif
 
 extern "C"
@@ -51,9 +46,6 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 #define kDefaultNumBytes 1024
-
-// This is set on the server. This also doesn't belong here.
-#define MAX_PERMISSIONS 9
 
 AndroidAppPackagerParams::AndroidAppPackagerParams(
 	const char* appName,
@@ -139,67 +131,13 @@ AndroidAppPackager::EscapeArgument(std::string arg)
 {
 	std::string result = arg;
 
-#if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
-
 	// On macOS escape shell special characters in the strings by replacing single quotes with "'\''" and
 	// then enclosing in single quotes
 	ReplaceString(result, "'", "'\\''");	// escape single quotes
 	result = "'" + result + "'";
-
-#else // Windows
-
-	// On Windows escape shell special characters in the strings by replacing double quotes with "\"" and
-	// then enclosing in double quotes
-	ReplaceString(result, "\"", "\\\"");	// escape double quotes
-	result = "\"" + result + "\"";
-
-#endif
 	
 	return result;
 }
-
-#if defined(Rtt_WIN_ENV) && !defined(Rtt_NO_GUI)
-int system_hidden(const char* cmdArgsUtf8)
-{
-	wchar_t cmdArgs[4096] = { 0 };
-	MultiByteToWideChar(CP_UTF8, 0, cmdArgsUtf8, -1, cmdArgs, 4096);
-
-	PROCESS_INFORMATION pinfo;
-	STARTUPINFO sinfo;
-	if (!GetConsoleWindow()) {
-		AllocConsole();
-		ShowWindow(GetConsoleWindow(), SW_HIDE);
-	}
-
-	memset(&sinfo, 0, sizeof(sinfo));
-	sinfo.cb = sizeof(sinfo);
-	CreateProcess(NULL, cmdArgs,
-		NULL, NULL, false,
-		0,
-		NULL, NULL, &sinfo, &pinfo);
-	DWORD ret;
-	while (true)
-	{
-		HANDLE array[1];
-		array[0] = pinfo.hProcess;
-		ret = MsgWaitForMultipleObjects(1, array, false, INFINITE,
-			QS_ALLPOSTMESSAGE);
-		if ((ret == WAIT_FAILED) || (ret == WAIT_OBJECT_0))
-			break;
-		
-		MSG msg;
-		while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-	}
-
-	DWORD pret;
-	GetExitCodeProcess(pinfo.hProcess, &pret);
-	return pret;
-}
-#endif
 
 int
 AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
@@ -221,13 +159,9 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 			const AndroidAppPackagerParams * androidParams = (const AndroidAppPackagerParams *)params;
 
 			std::string gradleGo = "cd ";
-#if defined(Rtt_WIN_ENV)
-			gradleGo.append("/d ");
-#endif
 			gradleGo.append(EscapeArgument(tmpDir));
 			gradleGo.append(" && cd template &&");
 			
-#if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
 			bool java8Installed = 0 == system("JAVA_VERSION=1.8 /usr/bin/java -version > /dev/null 2>/dev/null");
 			if(java8Installed) {
 				gradleGo.append(" ./setup.sh && JAVA_VERSION=1.8 ./gradlew");
@@ -235,14 +169,7 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 				Rtt_TRACE_SIM(("WARNING: Java 1.8 does not seems to be available. If build fails, install Java 1.8."));
 				gradleGo.append(" ./setup.sh && ./gradlew");
 			}
-#else
-			gradleGo.append(" setup.bat");
-			if (androidParams->IsWindowsNonAsciiUser())
-			{
-				gradleGo.append(" /T");
-			}
-			gradleGo.append(" && gradlew.bat");
-#endif
+
 			if (androidParams->IsWindowsNonAsciiUser()) {
 				std::string gradleDir(tmpDirBase);
 				gradleDir += LUA_DIRSEP ".gradle";
@@ -386,11 +313,7 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 				Rtt_Log("Build: running: %s\n", sanitizedCmdBuf.c_str());
 			}
 
-#if defined(Rtt_WIN_ENV)
-			gradleGo.append(" < NUL ");
-#else
 			gradleGo.append(" < /dev/null ");
-#endif
 
 #if !defined(Rtt_NO_GUI)
 			gradleGo.insert(0, "(");
@@ -402,18 +325,7 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 			gradleGo.append(" 2>&1 ");
 #endif
 
-#if defined(Rtt_WIN_ENV)
-			gradleGo.insert(0, "\"");
-			gradleGo.append("\"");
-#if defined(Rtt_NO_GUI)
 			result = system(gradleGo.c_str());
-#else
-			gradleGo.insert(0, "CMD /C ");
-			result = system_hidden(gradleGo.c_str());
-#endif
-#else
-			result = system(gradleGo.c_str());
-#endif
 
 #if !defined(Rtt_NO_GUI)
 			if (debugBuildProcess >= 1 || result != 0)
@@ -551,14 +463,7 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 	
 	if ( CompileScripts( params, tmpDir ) && CreateBuildProperties( * params, tmpDir ) )
 	{
-		std::string javaCmd;
-#if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
-		javaCmd = "/usr/bin/java";
-#else // Windows
-		std::string jdkPath = Rtt::JavaHost::GetJdkPath();
-
-		javaCmd = jdkPath + "\\bin\\java.exe";
-#endif
+		std::string javaCmd = "/usr/bin/java";
 
 		const char kCmdFormat[] = "\"%s\" -Djava.class.path=%s org.apache.tools.ant.launch.Launcher %s -DTEMP_DIR=%s -DSRC_DIR=%s -DBUNDLE_DIR=%s -f %s/build.xml build-input-zip";
 
@@ -573,20 +478,12 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 		jarPathStr.append("/");
 		jarPathStr.append("ant.jar");
 
-#if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
 		jarPathStr.append(":");
-#else // Windows
-		jarPathStr.append(";");
-#endif
 		jarPathStr.append(fResourcesDir.GetString());
 		jarPathStr.append("/");
 		jarPathStr.append("ant-launcher.jar" );
 
-#if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
 		jarPathStr.append(":");
-#else // Windows
-		jarPathStr.append(";");
-#endif
 		jarPathStr.append(fResourcesDir.GetString());
 		jarPathStr.append("/");
 		jarPathStr.append("AntLiveManifest.jar");
@@ -621,85 +518,8 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 			Rtt_Log("Prepackage: running: %s\n", cmdBuf);
 		}
 
-#if defined(Rtt_MAC_ENV) || defined(Rtt_LINUX_ENV)
-
 		iresult = system( cmdBuf );
-		
-#else // Windows
-
-#if !defined( Rtt_NO_GUI )
-		WinString cmdBufStr;
-		cmdBufStr.SetUTF8(cmdBuf);
-
-		std::wstring utf16CommandLine(cmdBufStr.GetUTF16());
-
-		Interop::Ipc::CommandLine::SetOutputCaptureEnabled(true);
-		Interop::Ipc::CommandLineRunResult cmdResult = Interop::Ipc::CommandLine::RunUntilExit(utf16CommandLine.c_str());
-
-		iresult = cmdResult.GetExitCode();
-
-		CSimulatorApp *pApp = ((CSimulatorApp *)AfxGetApp());
-		if (pApp!= NULL && pApp->IsStopBuildRequested())
-		{
-			// A request to stop the build was made while the Java was running
-			iresult = -1;
-		}
-
-		if (debugBuildProcess > 1)
-		{
-			std::string output = cmdResult.GetOutput();
-			Rtt_Log("%s", output.c_str());
-		}
-#else
-		// due to windows bug whole thing must be quoted for some reason
-		int len = strlen(cmdBuf);
-		for (int i = len; i>0; i--) {
-			cmdBuf[i] = cmdBuf[i - 1];
-		}
-		cmdBuf[0] = '"';
-		cmdBuf[len + 1] = '"';
-		cmdBuf[len + 2] = 0;
-		iresult = system(cmdBuf);
-#endif
-
-#endif
-
-#if USE_JNI
-		AntHost	antTask;
-
-		char buildFilePath[1024];
-		snprintf( buildFilePath, sizeof(buildFilePath), "%s%sbuild.xml", fResourcesDir.GetString(), LUA_DIRSEP );
-
-		antTask.SetProperty( "TEMP_DIR", tmpDir );
-		antTask.SetProperty( "SRC_DIR", params->GetSrcDir() );
-		antTask.SetProperty( "BUNDLE_DIR", fResourcesDir.GetString() );
-
-		String debugBuildProcessPref;
-		int debugBuildProcess = 0;
-		fServices.GetPreference( "debugBuildProcess", &debugBuildProcessPref );
-
-		if (! debugBuildProcessPref.IsEmpty())
-		{
-			debugBuildProcess = (int) strtol(debugBuildProcessPref.GetString(), (char **)NULL, 10);
-		}
-		else
-		{
-			debugBuildProcess = 0;
-		}
-
-		String antResult;
-		int antCode;
-
-		antCode = antTask.AntCall( buildFilePath, "build-input-zip", debugBuildProcess, &antResult );
-		Rtt_ASSERT( antCode == 1 );
-		if ( antCode == 0 )
-		{
-			Rtt_TRACE_SIM( ( "ANT build-input-zip failed: %s", antResult.GetString() ) );
-		}
-		if ( antCode == 1 )
-			iresult = 0;
-#endif
-
+	
 		if ( iresult == 0 )
 		{
 			const char kDstName[] = "input.zip";

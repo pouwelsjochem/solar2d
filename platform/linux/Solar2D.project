@@ -371,7 +371,6 @@
         <File Name="../../librtt/Rtt_LuaAssert.h"/>
         <File Name="../../librtt/Rtt_Lua.h"/>
         <File Name="../../librtt/Rtt_KeyName.h"/>
-        <File Name="../../librtt/Rtt_JavaHost.h"/>
         <File Name="../../librtt/Input/Rtt_InputDeviceType.h"/>
         <File Name="../../librtt/Input/Rtt_InputDeviceDescriptor.h"/>
         <File Name="../../librtt/Input/Rtt_InputDeviceConnectionState.h"/>
@@ -690,7 +689,6 @@
       <File Name="../../librtt/Rtt_LuaAssert.cpp"/>
       <File Name="../../librtt/Rtt_Lua.cpp"/>
       <File Name="../../librtt/Rtt_KeyName.cpp"/>
-      <File Name="../../librtt/Rtt_JavaHost.cpp"/>
       <File Name="../../librtt/Rtt_ImageGroupObject.cpp"/>
       <File Name="../../librtt/Rtt_HitTestObject.cpp"/>
       <File Name="../../librtt/Rtt_FillTesselatorStream.cpp"/>

@@ -99,9 +99,6 @@
     <ClCompile Include="SimulatorDoc.cpp" />
     <ClCompile Include="SimulatorView.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="..\..\shared\AntHost.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>

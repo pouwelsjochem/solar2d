@@ -245,7 +245,6 @@
 		00B73ECE12B730AA0057F594 /* ant-launcher.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8B12B720C90057F594 /* ant-launcher.jar */; };
 		00B73ECF12B730AA0057F594 /* ant.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8C12B720C90057F594 /* ant.jar */; };
 		00B73ED012B730AA0057F594 /* ListKeyStore.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8D12B720C90057F594 /* ListKeyStore.jar */; };
-		00B73ED112B730AA0057F594 /* AntInvoke.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8E12B720C90057F594 /* AntInvoke.jar */; };
 		00C8225E13452C80005D1EEB /* ValidationSupportMacUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C8225D13452C80005D1EEB /* ValidationSupportMacUI.m */; };
 		00D3F20B1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c in Sources */ = {isa = PBXBuildFile; fileRef = 00D3F20A1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c */; };
 		00D3F20F1613C4490095C5D6 /* Rtt_LuaCoronaBaseLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D3F20E1613C4490095C5D6 /* Rtt_LuaCoronaBaseLib.m */; };
@@ -1221,7 +1220,6 @@
 		F5FA0AFB1C73D61700E926A7 /* Rtt_TextureResourceExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FA0AF81C73D61700E926A7 /* Rtt_TextureResourceExternal.h */; };
 		F5FA0AFC1C73D61700E926A7 /* Rtt_TextureResourceExternal.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FA0AF81C73D61700E926A7 /* Rtt_TextureResourceExternal.h */; };
 		F5FED0972512248E00AE2911 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5FED0962512248E00AE2911 /* StoreKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		F5FED7091DF8E1C7001CA415 /* AntLiveManifest.jar in Resources */ = {isa = PBXBuildFile; fileRef = F5FED7061DF8DFE2001CA415 /* AntLiveManifest.jar */; };
 		F5FFADBC23FFC7DB004E61A9 /* CoronaOfflineiOSPackager.lua in Sources */ = {isa = PBXBuildFile; fileRef = F5FFADB123FFC798004E61A9 /* CoronaOfflineiOSPackager.lua */; };
 		F5FFADBE23FFC80E004E61A9 /* CoronaOfflineiOSPackager.lua in Sources */ = {isa = PBXBuildFile; fileRef = F5FFADB123FFC798004E61A9 /* CoronaOfflineiOSPackager.lua */; };
 /* End PBXBuildFile section */
@@ -1976,7 +1974,6 @@
 		00B73C8B12B720C90057F594 /* ant-launcher.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = "ant-launcher.jar"; path = "../../external/apache-ant-1.8.1/lib/ant-launcher.jar"; sourceTree = SOURCE_ROOT; };
 		00B73C8C12B720C90057F594 /* ant.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = ant.jar; path = "../../external/apache-ant-1.8.1/lib/ant.jar"; sourceTree = SOURCE_ROOT; };
 		00B73C8D12B720C90057F594 /* ListKeyStore.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = ListKeyStore.jar; path = ../android/project/ListKeyStore/ListKeyStore.jar; sourceTree = SOURCE_ROOT; };
-		00B73C8E12B720C90057F594 /* AntInvoke.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = AntInvoke.jar; path = ../android/project/AntInvoke/AntInvoke.jar; sourceTree = SOURCE_ROOT; };
 		00B73C8F12B720C90057F594 /* debug.keystore */ = {isa = PBXFileReference; lastKnownFileType = file; name = debug.keystore; path = ../android/resources/debug.keystore; sourceTree = SOURCE_ROOT; };
 		00B73C9012B720C90057F594 /* zipalign */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = zipalign; path = ../android/resources/zipalign; sourceTree = SOURCE_ROOT; };
 		00B73C9112B720C90057F594 /* Rtt_AndroidAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AndroidAppPackager.cpp; path = ../android/Rtt_AndroidAppPackager.cpp; sourceTree = SOURCE_ROOT; };
@@ -2509,7 +2506,6 @@
 		F5FA0AF71C73D61700E926A7 /* Rtt_TextureResourceExternal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceExternal.cpp; path = Display/Rtt_TextureResourceExternal.cpp; sourceTree = "<group>"; };
 		F5FA0AF81C73D61700E926A7 /* Rtt_TextureResourceExternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceExternal.h; path = Display/Rtt_TextureResourceExternal.h; sourceTree = "<group>"; };
 		F5FED0962512248E00AE2911 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		F5FED7061DF8DFE2001CA415 /* AntLiveManifest.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = AntLiveManifest.jar; path = ../android/AntLiveManifest/AntLiveManifest.jar; sourceTree = SOURCE_ROOT; };
 		F5FFADB123FFC798004E61A9 /* CoronaOfflineiOSPackager.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaOfflineiOSPackager.lua; path = ../platform/resources/CoronaOfflineiOSPackager.lua; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3302,10 +3298,6 @@
 			isa = PBXGroup;
 			children = (
 				C2AEAC1418E23B34004F30FE /* _coronatest.jar */,
-				00B73C8B12B720C90057F594 /* ant-launcher.jar */,
-				00B73C8C12B720C90057F594 /* ant.jar */,
-				00B73C8E12B720C90057F594 /* AntInvoke.jar */,
-				F5FED7061DF8DFE2001CA415 /* AntLiveManifest.jar */,
 				00B73C9312B720C90057F594 /* build.properties */,
 				00B73C9412B720C90057F594 /* build.xml */,
 				00B73C8F12B720C90057F594 /* debug.keystore */,
@@ -4865,7 +4857,6 @@
 				C2AF1E501DA6D80B00907A65 /* ValidateSettings.lua in Resources */,
 				00B73ECF12B730AA0057F594 /* ant.jar in Resources */,
 				00B73ED012B730AA0057F594 /* ListKeyStore.jar in Resources */,
-				00B73ED112B730AA0057F594 /* AntInvoke.jar in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				C28165201B9AAC3500F16B5A /* OSXCreateDMGSheet.xib in Resources */,
 				C26149EB18DA10E300F34F71 /* CoronaResources-Info.plist in Resources */,
@@ -4902,7 +4893,6 @@
 				C25E494E1A772743009551DB /* Credits.rtfd in Resources */,
 				A4F36552146C44030019808D /* AndroidAppBuild.xib in Resources */,
 				C26D8DA4195104D7008DE65C /* re.lua in Resources */,
-				F5FED7091DF8E1C7001CA415 /* AntLiveManifest.jar in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

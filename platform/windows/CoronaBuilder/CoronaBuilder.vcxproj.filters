@@ -63,9 +63,6 @@
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_BuildParams.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_CoronaBuilder.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="..\..\shared\AntHost.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>

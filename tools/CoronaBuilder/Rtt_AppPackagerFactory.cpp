@@ -30,10 +30,6 @@
 #include "Rtt_LinuxAppPackager.h"
 #endif
 
-#ifdef Rtt_WIN_ENV
-#include "Rtt_JavaHost.h"
-#endif
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -53,23 +49,11 @@ AppPackagerContext::AppPackagerContext( TargetDevice::Platform platform )
 		default:
 			break;
 	}
-
-#if defined(USE_JNI) && defined(Rtt_WIN_ENV)
-	if ( fRequiresJava )
-	{
-		JavaHost::Initialize();
-	}
-#endif
 }
 
 AppPackagerContext::~AppPackagerContext()
 {
-#if defined(USE_JNI) && defined(Rtt_WIN_ENV)
-	if ( fRequiresJava )
-	{
-		JavaHost::Terminate();
-	}
-#endif
+
 }
 
 // ----------------------------------------------------------------------------
