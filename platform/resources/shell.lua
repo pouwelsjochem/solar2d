@@ -119,7 +119,7 @@ end
 function PluginSync:addPluginToQueueIfRequired( required_plugin )
 
 	local pluginName = required_plugin.pluginName
-	local pluginVersion = required_plugin.version
+	local pluginVersion = required_plugin.version or ""
 	local publisherId = required_plugin.publisherId
 	local key = tostring(publisherId) .. '/' .. pluginName .. '@' .. pluginVersion
 	required_plugin.clientCatalogKey = key
