@@ -16,7 +16,7 @@ set -e # exit on any error
 TOOLSPATH=$(dirname "$0")
 SRCROOT="$TOOLSPATH/../.."
 PLATFORM_MAC="$SRCROOT/platform/mac"
-PRODUCT_DIR=Corona
+PRODUCT_DIR=Solar2D
 DSTDIR=$(date "+Solar2D.%Y.%m.%d")
 CUSTOM_ID=""
 S3_BUCKET=""

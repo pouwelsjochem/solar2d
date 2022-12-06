@@ -498,11 +498,6 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 				 srcDirStr.c_str(),
 				 resourcesDirStr.c_str(),
 				 resourcesDirStr.c_str() );
-		
-		if (debugBuildProcess > 0)
-		{
-			Rtt_Log("Prepackage: Building server data file");
-		}
 
 		if (debugBuildProcess > 1)
 		{
