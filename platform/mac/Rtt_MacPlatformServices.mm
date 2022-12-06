@@ -36,7 +36,6 @@ MacPlatformServices::Platform() const
 
 #define Rtt_CORONA_DOMAIN "com.coronalabs.Corona_Simulator" // "com.anscamobile.ratatouille"
 static const char kCoronaDomainUTF8[] = Rtt_CORONA_DOMAIN;
-static CFStringRef kCoronaDomain = CFSTR( Rtt_CORONA_DOMAIN );
 #undef Rtt_CORONA_DOMAIN
 
 void
@@ -45,42 +44,12 @@ MacPlatformServices::GetPreference( const char *key, Rtt::String * value ) const
 	const char *result = NULL;
 	NSString *k = [[NSString alloc] initWithUTF8String:key];
 
-	// A little strange, but here's the backstory:
-	// Corona started with using CFPreferences and an explict custom app domain that differed 
-	// than what you would normally get with NSUserDefaults.
-	// Eventually NSUserDefaults started being used which obviously mapped to a different preference file.
-	// As kind of a nice side-effect-quirk though, some of the nasty preferences like username/email/authentication
-	// checks go to the CFPreference while mostly UI stuff goes to NSUserDefaults. This is convenient for people who
-	// like to blow-away non-important settings (delete NSUserDefaults) and start over without breaking their app
-	// which actually conforms to desired Apple-UI guidelines.
-	// But to deal with Windows, more settings are being pushed though the Get/SetPreferences API.
-	// But the API is not aware of this quirk we currently have in the code.
-	// For now, I am going to case the settings so that legacy-non-throw-away settings go through CFPrefernences,
-	// and everything else goes through NSUserDefaults.
-
-
 	// Try NSUserDefaults first
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *v = [defaults stringForKey:k]; Rtt_ASSERT( !v || [v isKindOfClass:[NSString class]] );
 	if( nil != v)
 	{
 		result = [v UTF8String];
-	}
-	else // fallback to CFPreferences
-	{
-		// TODO: Figure out how to do this on a suite domain
-		//	CFPropertyListRef v = CFPreferencesCopyValue(
-		//		(CFStringRef)k, kCoronaDomain, kCFPreferencesCurrentUser, kCFPreferencesCurrentHost );
-		CFPropertyListRef v = CFPreferencesCopyAppValue( (CFStringRef)k, kCoronaDomain );
-		if ( v )
-		{
-			if ( CFStringGetTypeID() == CFGetTypeID( v ) )
-			{
-				result = [(NSString*)v UTF8String];
-			}
-			
-			CFRelease( v );
-		}
 	}
 
 	[k release];
@@ -91,31 +60,13 @@ MacPlatformServices::GetPreference( const char *key, Rtt::String * value ) const
 void
 MacPlatformServices::SetPreference( const char *key, const char *value ) const
 {
-	// A little strange, but here's the backstory:
-	// Corona started with using CFPreferences and an explict custom app domain that differed 
-	// than what you would normally get with NSUserDefaults.
-	// Eventually NSUserDefaults started being used which obviously mapped to a different preference file.
-	// As kind of a nice side-effect-quirk though, some of the nasty preferences like username/email/authentication
-	// checks go to the CFPreference while mostly UI stuff goes to NSUserDefaults. This is convenient for people who
-	// like to blow-away non-important settings (delete NSUserDefaults) and start over without breaking their app
-	// which actually conforms to desired Apple-UI guidelines.
-	// But to deal with Windows, more settings are being pushed though the Get/SetPreferences API.
-	// But the API is not aware of this quirk we currently have in the code.
-	// For now, I am going to case the settings so that legacy-non-throw-away settings go through CFPrefernences,
-	// and everything else goes through NSUserDefaults.
-	
 	if ( Rtt_VERIFY( key ) )
 	{
-
-		NSString *k = [[NSString alloc] initWithUTF8String:key];
-		// TODO: Figure out how to do this on a suite domain
 		NSString *v = ( value ? [[NSString alloc] initWithUTF8String:value] : nil );
-
-		CFPreferencesSetAppValue( (CFStringRef)k, (CFPropertyListRef)v, kCoronaDomain );
-		(void)Rtt_VERIFY( CFPreferencesAppSynchronize( kCoronaDomain ) );
+		
+		[[NSUserDefaults standardUserDefaults] setObject:v forKey:[NSString stringWithExternalString:key]];
 		
 		[v release];
-		[k release];
 	}
 }
 
