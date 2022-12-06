@@ -93,11 +93,6 @@ int Runtime::ShellPluginCollector_Async(lua_State* L)
 		lua_pushcfunction(L, luaopen_coronabaselib);
 		lua_pushstring(L, "coronabaselib");
 		lua_call(L, 1, 0);
-		const char* debugBuildProcess = getenv("DEBUG_BUILD_PROCESS");
-		if (debugBuildProcess) {
-			lua_pushstring(L, debugBuildProcess);
-			lua_setglobal(L, "debugBuildProcess");
-		}
 
 		HTTPClient::registerFetcherModuleLoaders(L);
 		std::string result;

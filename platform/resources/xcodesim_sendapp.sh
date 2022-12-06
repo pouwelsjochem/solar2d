@@ -16,14 +16,8 @@
 # or become unnecessary with future versions of Xcode
 #
 
-DEBUG_BUILD_PROCESS=$(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null)
-
 exec 2>&1
-
-if [ "${DEBUG_BUILD_PROCESS:=0}" -gt 1 ]
-then
-	set -x
-fi
+set -x
 
 trap 'kill -TERM 0' EXIT
 

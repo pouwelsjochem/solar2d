@@ -18,10 +18,6 @@ local function quoteString( str )
 	return "\"" .. str .. "\""
 end
 
--- get the numeric value of the "debugBuildProcess" preference or 0 if it's not set (note due to a Lua bug
--- the value is actually the exit code multiplied by 256)
-local debugBuildProcess = os.execute("exit $(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null || echo 0)")
-
 CoronaPListSupport = {}
 
 -- Generate plugin dir names
@@ -98,9 +94,7 @@ local function getDelegates(tmpDir)
 	
 	-- Reformat the table because this is the way that the json->plist stuff expects it
 	for k, v in pairs(delegatesSet) do
-		if debugBuildProcess and debugBuildProcess ~= 0 then
-			print("Delegate class: ", k)
-		end
+		print("Delegate class: ", k)
 		table.insert( delegates, k )
 	end
 
@@ -133,9 +127,7 @@ function CoronaPListSupport.modifyPlist( options )
 		delegates = getDelegates(options.tmpDir)
 	end
 	
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("CoronaPListSupport.modifyPlist: options: "..json.prettify(options))
-	end
+	print("CoronaPListSupport.modifyPlist: options: "..json.prettify(options))
 
 	local infoPlistFile
 	local tmpJSONFile = os.tmpname()
@@ -176,9 +168,7 @@ function CoronaPListSupport.modifyPlist( options )
 
 	-- infoPlist now contains a Lua table representing the Info.plist
 
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("Base Info.plist: " .. json.encode(infoPlist, { indent = true }))
-	end
+	print("Base Info.plist: " .. json.encode(infoPlist, { indent = true }))
 
 	if delegates then
 		infoPlist.CoronaDelegates = delegates
@@ -372,9 +362,7 @@ function CoronaPListSupport.modifyPlist( options )
 		end
 	end
 
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("Final Info.plist: " .. json.encode(infoPlist, { indent = true }))
-	end
+	print("Final Info.plist: " .. json.encode(infoPlist, { indent = true }))
 
 	local outFP, errorString = io.open( tmpJSONFile, "w" )
 	if outFP ~= nil then
@@ -439,9 +427,7 @@ function CoronaPListSupport.captureCommandOutput( cmd, debugLevel )
 	local debugLevel = debugLevel or 0
 	local result = ""
 
-	if debugBuildProcess and debugBuildProcess > debugLevel then
-		print("captureCommandOutput: ".. cmd)
-	end
+	print("captureCommandOutput: ".. cmd)
 
 	local cmdStdout = io.popen(cmd, "r")
 
@@ -575,9 +561,7 @@ function CoronaPListSupport.compileXcassets(options, tmpDir, srcAssets, xcassetP
 
 		local actoolCMD = "xcrun actool"
 		actoolCMD = actoolCMD .. ' --output-format human-readable-text --warnings'
-		if debugBuildProcess > 0 then
-			actoolCMD = actoolCMD .. ' --notices'
-		end
+		actoolCMD = actoolCMD .. ' --notices'
 		actoolCMD = actoolCMD .. ' --export-dependency-info ' .. quoteString(tmpDir .. '/assetcatalog_dependencies')
 		actoolCMD = actoolCMD .. ' --output-partial-info-plist ' .. quoteString(iconPlistFile)
 		actoolCMD = actoolCMD .. ' --compress-pngs'
@@ -625,9 +609,7 @@ function CoronaPListSupport.compileXcassets(options, tmpDir, srcAssets, xcassetP
 
 		if not settingsEntry.plist then settingsEntry.plist = {} end
 
-		if debugBuildProcess > 0 then
-			print("Icon JSON:", iconJson)
-		end
+		print("Icon JSON:", iconJson)
 
 		local plist = settingsEntry.plist
 		for k,v in pairs(json.decode(iconJson)) do

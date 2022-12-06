@@ -19,18 +19,3 @@ Building on: macOS 10-15-16/Windows 7-8-10/
 Building for: tvOS/iOS/macOS/Windows/Linux/Android
 
 **Attach your build.settings**
-
-**Full build log**
-Enable full build log:
-On macOS:
-```
-defaults write com.coronalabs.Corona_Simulator debugBuildProcess  -int 5
-```
-On Windows:
-```
-reg ADD "HKEY_CURRENT_USER\Software\Ansca Corona\Corona Simulator\Preferences" /f /v debugBuildProcess /d 5
-```
-
-Before the build clean console and then copy log between backticks below
-```
-```

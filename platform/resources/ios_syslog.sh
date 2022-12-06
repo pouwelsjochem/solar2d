@@ -10,16 +10,11 @@
 
 # Tail the syslog of a connected iOS device filtering for Corona
 
-DEBUG_BUILD_PROCESS=$(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null)
-
 # Add "noise" logs to exclude here (egrep pattern)
 EXCLUDE_PATTERNS='nw_connection_|nw_endpoint_|__nw_socket_service_|subsystem: com\.apple\.|\[Device\] TIC |HTTPCookieStorage singleton|Creating default cookie storage'
 
-if [ "${DEBUG_BUILD_PROCESS:=0}" -gt 2 ]
-then
-	set -x
-	exec 2>&1
-fi
+set -x
+exec 2>&1
 
 PROGRAM_NAME="ERROR" # $(basename "$0")
 SEND_TO_ALL=$(defaults read com.coronalabs.Corona_Simulator sendToAllDevices 2>/dev/null)

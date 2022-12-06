@@ -267,17 +267,6 @@ CoronaBuilder::Usage( const char *arg0 )
 int
 CoronaBuilder::Main( int argc, const char *argv[] )
 {
-	String debugBuildProcess;
-	fServices.GetPreference("debugBuildProcess", &debugBuildProcess);
-	if(!debugBuildProcess.IsEmpty()) {
-#if defined(Rtt_WIN_ENV)
-		if (getenv("DEBUG_BUILD_PROCESS") == NULL) {
-			_putenv_s("DEBUG_BUILD_PROCESS", debugBuildProcess);
-		}
-#else
-		setenv("DEBUG_BUILD_PROCESS", debugBuildProcess, 0);
-#endif
-	}
 	int result = -1;
     Rtt::String ticketData;
 

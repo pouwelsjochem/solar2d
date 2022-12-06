@@ -19,10 +19,6 @@ local lfs = require('lfs')
 local CoronaPListSupport = require("CoronaPListSupport")
 local captureCommandOutput = CoronaPListSupport.captureCommandOutput
 
--- get the numeric value of the "debugBuildProcess" preference or 0 if it's not set (note due to a Lua bug
--- the value is actually the exit code multiplied by 256)
-local debugBuildProcess = os.execute("exit $(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null || echo 0)") / 256
-
 local xcodetoolhelper = nil
 
 -- Read a value from the user's preferences
@@ -224,9 +220,7 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 
 	local args = ""
 
-	if debugBuildProcess > 0 then
-		args = args.."set -x\n"
-	end
+	args = args.."set -x\n"
 
 	args = args.."SRC_DIR="..src.."\n"
 
@@ -237,16 +231,14 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 	end
 
 	-- Replace the placeholders in the script with the generated code (or an empty string if there was none)
-	local debugFlags = (debugBuildProcess > 0) and "-v --itemize-changes" or ""
+	local debugFlags = "-v --itemize-changes"
 	script = script:gsub("{{EXCLUDED_FILES}}", excludedFilesSh)
 	script = script:gsub("{{EXCLUDE_LUA_AND_BUILD_SETTINGS}}", "--exclude='**/*.lua' --exclude='build.settings'")
 	script = script:gsub("{{DEBUG_FLAGS}}", debugFlags)
 
 	script = args .. script
 
-	if debugBuildProcess > 0 then
-		print("getCopyResourcesScript: ".. script)
-	end
+	print("getCopyResourcesScript: ".. script)
 
 	return script
 end
@@ -346,12 +338,9 @@ end
 --------------------------------------------------------------------------------
 
 function runScript( script, debugLevel )
-	local debugLevel = debugLevel or 0
 	local errMsg = nil
 
-	if debugBuildProcess and debugBuildProcess > debugLevel then
-		print("Running: ".. tostring(script))
-	end
+	print("Running: ".. tostring(script))
 
 	-- Run the command capturing any output
 	local tmpFile = os.tmpname()
@@ -418,9 +407,7 @@ local function generateXcent( options )
 
 	-- Set "get-task-allow" to the same value as in the provisioning profile
 	local get_task_allow_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'get-task-allow'")
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("get_task_allow_setting: ".. tostring(get_task_allow_setting))
-	end
+	print("get_task_allow_setting: ".. tostring(get_task_allow_setting))
 
 	if get_task_allow_setting ~= "" then
 		-- set the value appropriately
@@ -442,9 +429,7 @@ local function generateXcent( options )
 	-- We can only put things in the .xcent file that are in the provisioning profile.  Current distribution profiles all have "beta-reports-active"
 	-- but older ones do not and while it's generally set to true if present, this isn't relied upon
 	local beta_reports_active_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'beta-reports-active'")
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("beta_reports_active_setting: ".. tostring(beta_reports_active_setting))
-	end
+	print("beta_reports_active_setting: ".. tostring(beta_reports_active_setting))
 
 	if beta_reports_active_setting ~= "" then
 		-- set the value appropriately
@@ -502,9 +487,7 @@ local function generateXcent( options )
 
 	print( "Created XCENT: " .. filename );
 
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		runScript("cat "..filename)
-	end
+	runScript("cat "..filename)
 end
 
 
@@ -869,9 +852,7 @@ local function packageApp( options )
 			return errMsg
 		end
 
-		if debugBuildProcess > 1 then
-			runScript( "cp -v " .. entitlements .. " /tmp/")
-		end
+		runScript( "cp -v " .. entitlements .. " /tmp/")
 	else
 		setStatus("Signing application for Xcode Simulator")
 		local result, errMsg = runScript( "/usr/bin/codesign --force --sign - --timestamp=none "..appBundleFile )
@@ -1069,24 +1050,20 @@ function buildExe( options )
 			dstPath = dstDir .. '/' .. dstName,
 			librarySearchPaths = { libtemplateDir, },
 			pluginsDir = buildDir,
-			verbose = options.verbose or debugBuildProcess,
+			verbose = options.verbose == nil and true or options.verbose,
 			sdkType = options.sdkType,
 			tmpDir = options.tmpDir,
 			settings = options.settings
 		}
 
 		setStatus("Adding plugins")
-		if debugBuildProcess > 1 then
-			print("builder: buildOptions: "..json.prettify(buildOptions))
-		end
+		print("builder: buildOptions: "..json.prettify(buildOptions))
 
 		-- Perform build
 		local buildCallSucceeded, buildResult = pcall( function() builder:build( buildOptions ) end )
 		options.usesSwift = buildOptions.usesSwift
 
-		if debugBuildProcess and debugBuildProcess > 1 then
-			print("builder: buildCallSucceeded: "..tostring(buildCallSucceeded).."; buildResult: "..tostring(buildResult))
-		end
+		print("builder: buildCallSucceeded: "..tostring(buildCallSucceeded).."; buildResult: "..tostring(buildResult))
 
 		-- Did the Builder code assert()?
 		if not buildCallSucceeded then
@@ -1158,7 +1135,7 @@ function iPhonePostPackage( params )
 	local sdkRoot = params.sdkRoot
 	local targetDevice = params.targetDevice
 	local targetPlatform = params.targetPlatform
-	local verbose = ( debugBuildProcess and debugBuildProcess > 1 )
+	local verbose = true
 	local osPlatform = params.osPlatform
 	local err = nil
 
@@ -1240,10 +1217,8 @@ function iPhonePostPackage( params )
 		serverDirName = serverDirName:gsub(' ', '')
 		serverAppName = serverAppName:gsub(' ', '')
 
-		if debugBuildProcess > 0 then
-			print("Server dir name: "..tostring(serverDirName))
-			print("Server app name: "..tostring(serverAppName) .. " (local name: "..tostring(options.dstFile)..")")
-		end
+		print("Server dir name: "..tostring(serverDirName))
+		print("Server app name: "..tostring(serverAppName) .. " (local name: "..tostring(options.dstFile)..")")
 
 		runScript("mkdir -p "..  quoteString(makepath(dstDir, serverDirName)))
 
@@ -1255,12 +1230,10 @@ function iPhonePostPackage( params )
 		end
 
 		-- extract output.zip into dstDir
-		if debugBuildProcess > 1 then
-			print("Contents of ZIP file from server:")
-			runScript( "unzip -l "..tmpDir.."/output.zip" )
-			-- uncomment to save a copy of the server zip file
-			-- runScript( "cp "..tmpDir.."/output.zip /tmp/" )
-		end
+		print("Contents of ZIP file from server:")
+		runScript( "unzip -l "..tmpDir.."/output.zip" )
+		-- uncomment to save a copy of the server zip file
+		-- runScript( "cp "..tmpDir.."/output.zip /tmp/" )
 
 		setStatus("Unpacking build with plugins")
 
@@ -1330,11 +1303,9 @@ function iPhonePostPackage( params )
 			end
 		end
 
-		if options and debugBuildProcess and debugBuildProcess ~= 0 then
-			print("====================================")
-			print("iPhonePostPackage: options: "..json.prettify(options))
-			print("====================================")
-		end
+		print("====================================")
+		print("iPhonePostPackage: options: "..json.prettify(options))
+		print("====================================")
 
 		-- finalize package
 		result = generateFiles( options )

@@ -19,10 +19,6 @@ local lfs = require('lfs')
 local CoronaPListSupport = require("CoronaPListSupport")
 local captureCommandOutput = CoronaPListSupport.captureCommandOutput
 
--- get the numeric value of the "debugBuildProcess" preference or 0 if it's not set (note due to a Lua bug
--- the value is actually the exit code multiplied by 256)
-local debugBuildProcess = os.execute("exit $(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null || echo 0)") / 256
-
 local xcodetoolhelper = nil
 
 
@@ -225,9 +221,7 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 
 	local args = ""
 
-	if debugBuildProcess > 0 then
-		args = args.."set -x\n"
-	end
+	args = args.."set -x\n"
 
 	args = args.."SRC_DIR="..src.."\n"
 	args = args.."DST_DIR="..dst.."\n"
@@ -237,16 +231,14 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 	end
 
 	-- Replace the placeholders in the script with the generated code (or an empty string if there was none)
-	local debugFlags = (debugBuildProcess > 0) and "-v --itemize-changes" or ""
+	local debugFlags = "-v --itemize-changes"
 	script = script:gsub("{{EXCLUDED_FILES}}", excludedFilesSh)
 	script = script:gsub("{{EXCLUDE_LUA_AND_BUILD_SETTINGS}}", "--exclude='**/*.lua' --exclude='build.settings'")
 	script = script:gsub("{{DEBUG_FLAGS}}", debugFlags)
 
 	script = args .. script
 
-	if debugBuildProcess > 0 then
-		print("getCopyResourcesScript: ".. script)
-	end
+	print("getCopyResourcesScript: ".. script)
 
 	return script
 end
@@ -646,11 +638,7 @@ function getActoolCommand( options )
 	cmd = cmd .. " --compress-pngs"
 	cmd = cmd .. " --target-device tv"
 	cmd = cmd .. " --minimum-deployment-target 9.0"
-
-	-- Show notices if default com.coronalabs.Corona_Simulator:debugBuildProcess > 1
-	if ( debugBuildProcess > 0 ) then
-		cmd = cmd .. " --notices"
-	end
+	cmd = cmd .. " --notices"
 
 	-- Set where we're outputting plist information to.
 	cmd = cmd .. " --output-partial-info-plist " .. quoteString( getActoolPlistLocation( options ) )
@@ -743,9 +731,7 @@ function runScript( script, debugLevel )
 	local debugLevel = debugLevel or 0
 	local errMsg = nil
 
-	if debugBuildProcess and debugBuildProcess > debugLevel then
-		print("Running: ".. tostring(script))
-	end
+	print("Running: ".. tostring(script))
 
 	-- Run the command capturing any output
 	local tmpFile = os.tmpname()
@@ -812,9 +798,7 @@ local function generateXcent( options )
 
 	-- Set "get-task-allow" to the same value as in the provisioning profile
 	local get_task_allow_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'get-task-allow'")
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("get_task_allow_setting: ".. tostring(get_task_allow_setting))
-	end
+	print("get_task_allow_setting: ".. tostring(get_task_allow_setting))
 	
 	if get_task_allow_setting ~= "" then
 		-- set the value appropriately
@@ -836,9 +820,7 @@ local function generateXcent( options )
 	-- We can only put things in the .xcent file that are in the provisioning profile.  Current distribution profiles all have "beta-reports-active"
 	-- but older ones do not and while it's generally set to true if present, this isn't relied upon
 	local beta_reports_active_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'beta-reports-active'")
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("beta_reports_active_setting: ".. tostring(beta_reports_active_setting))
-	end
+	print("beta_reports_active_setting: ".. tostring(beta_reports_active_setting))
 
 	if beta_reports_active_setting ~= "" then
 		-- set the value appropriately
@@ -896,9 +878,7 @@ local function generateXcent( options )
 
 	print( "Created XCENT: " .. filename );
 
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		runScript("cat "..filename)
-	end
+	runScript("cat "..filename)
 end
 
 
@@ -1414,9 +1394,7 @@ function buildExe( options )
 			-- Move the plugins frameworks into the .app/Frameworks directory
 			buildResult = runScript( 'mv "' .. pluginFrameworkPath .. '" "' .. dstFrameworksDir .. '"' )
 		else
-			if debugBuildProcess and debugBuildProcess > 0 then
-				print( "Plugins: The plugin (" .. pluginName .. ") is missing a .framework file at path (" .. pluginFrameworkPath .. ")" )
-			end
+			print( "Plugins: The plugin (" .. pluginName .. ") is missing a .framework file at path (" .. pluginFrameworkPath .. ")" )
 		end
 	end
 
@@ -1550,7 +1528,7 @@ function tvosPostPackage( params )
 	local sdkRoot = params.xcodetoolhelper.sdkRoot
 	local targetDevice = params.targetDevice
 	local targetPlatform = params.targetPlatform
-	local verbose = ( debugBuildProcess and debugBuildProcess > 1 )
+	local verbose = true
 	local osPlatform = params.osPlatform
 	local err = nil
 
@@ -1623,10 +1601,8 @@ function tvosPostPackage( params )
 		serverDirName = serverDirName:gsub(' ', '')
 		serverAppName = serverAppName:gsub(' ', '')
 
-		if debugBuildProcess then
-			print("Server dir name: "..tostring(serverDirName))
-			print("Server app name: "..tostring(serverAppName) .. " (local name: "..tostring(options.dstFile)..")")
-		end
+		print("Server dir name: "..tostring(serverDirName))
+		print("Server app name: "..tostring(serverAppName) .. " (local name: "..tostring(options.dstFile)..")")
 
 		runScript("mkdir -p "..  quoteString(makepath(dstDir, serverDirName)))
 
@@ -1639,10 +1615,8 @@ function tvosPostPackage( params )
 
 
 		-- extract output.zip into dstDir
-		if debugBuildProcess then
-			print("Contents of ZIP file from server:")
-			runScript( "unzip -Z -1 "..tmpDir.."/output.zip" )
-		end
+		print("Contents of ZIP file from server:")
+		runScript( "unzip -Z -1 "..tmpDir.."/output.zip" )
 
 		setStatus("Unpacking build with plugins")
 
@@ -1772,11 +1746,9 @@ function tvosPostPackage( params )
 			end
 		end
 
-		if options and debugBuildProcess and debugBuildProcess ~= 0 then
-			print("====================================")
-			print("tvosPostPackage: options: "..json.prettify(options))
-			print("====================================")
-		end
+		print("====================================")
+		print("tvosPostPackage: options: "..json.prettify(options))
+		print("====================================")
 
 		-- finalize package
 		result = generateFiles( options )

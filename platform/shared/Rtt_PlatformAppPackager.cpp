@@ -169,24 +169,9 @@ AppPackagerParams::GetDeviceBuildData( const MPlatform& platform, const MPlatfor
 			fProductId.GetString(), // TODO: What is this?
 			clientPlatformName );
 
-		String debugBuildProcessPref;
-		int debugBuildProcess = 0;
-		services.GetPreference( "debugBuildProcess", &debugBuildProcessPref );
-
-		if (! debugBuildProcessPref.IsEmpty())
-		{
-			debugBuildProcess = (int) strtol(debugBuildProcessPref.GetString(), (char **)NULL, 10);
-		}
-		else
-		{
-			debugBuildProcess = 0;
-		}
-
-
 		fDeviceBuildData->Initialize(
 			appSettingsPath.GetString(),
-			buildSettingsPath,
-			debugBuildProcess);
+			buildSettingsPath);
 	}
 
 	return * fDeviceBuildData;

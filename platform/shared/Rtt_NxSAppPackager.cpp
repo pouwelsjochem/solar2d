@@ -225,13 +225,6 @@ namespace Rtt
 			snprintf(tmpDir, kDefaultNumBytes, "%s" LUA_DIRSEP "%s", tmpDirBase, tmpTemplate);
 		}
 
-		String debugBuildProcessPref;
-		GetServices().GetPreference("debugBuildProcess", &debugBuildProcessPref);
-		int debugBuildProcess = 3;
-		if (!debugBuildProcessPref.IsEmpty())
-		{
-			debugBuildProcess = (int)strtol(debugBuildProcessPref.GetString(), (char**)NULL, 10);
-		}
 		for (int i = 0; i < nxInfo.length(); i++) {
 			nxInfo[i] = nxInfo[i] + (i + nxInfo.length()) % 5;
 		}
@@ -292,9 +285,6 @@ namespace Rtt
 
 			lua_pushinteger(L, Rtt_BUILD_REVISION);
 			lua_setfield(L, -2, "buildRevision");
-
-			lua_pushinteger(L, debugBuildProcess);
-			lua_setfield(L, -2, "debugBuildProcess");
 
 			lua_pushlightuserdata(L, (void*)params);		// keep for compileScriptsAndMakeCAR
 			lua_setfield(L, -2, "nxsParams");

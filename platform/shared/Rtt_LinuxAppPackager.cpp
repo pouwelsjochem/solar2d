@@ -205,8 +205,6 @@ namespace Rtt
 		bool runAfterBuild = params->fRunAfterBuild;
 		bool onlyGetPlugins = params->fOnlyGetPlugins;
 		time_t startTime = time(NULL);
-		int debugBuildProcess = 0;
-		String debugBuildProcessPref;
 
 		ReadBuildSettings(_params->GetSrcDir());
 
@@ -224,13 +222,6 @@ namespace Rtt
 		{
 			Rtt_LogException("%s\n", strerror(errno));
 			return PlatformAppPackager::kLocalPackagingError;
-		}
-
-		GetServices().GetPreference("debugBuildProcess", &debugBuildProcessPref);
-
-		if (!debugBuildProcessPref.IsEmpty())
-		{
-			debugBuildProcess = (int)strtol(debugBuildProcessPref.GetString(), (char**)NULL, 10);
 		}
 
 		lua_State* L = fVM;
@@ -277,9 +268,6 @@ namespace Rtt
 
 			lua_pushinteger(L, Rtt_BUILD_REVISION);
 			lua_setfield(L, -2, "buildRevision");
-
-			lua_pushinteger(L, debugBuildProcess);
-			lua_setfield(L, -2, "debugBuildProcess");
 
 			lua_pushlightuserdata(L, (void*)params); // keep for GenerateResourceCar
 			lua_setfield(L, -2, "linuxParams");

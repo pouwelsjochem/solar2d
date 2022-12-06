@@ -30,8 +30,6 @@ static const char kBuildBucketKey[] = "buildBucket";
 static const char kBuildYearKey[] = "buildYear";
 static const char kBuildRevisionKey[] = "buildRevision";
 
-static const char kDebugBuildProcessKey[] = "debugBuildProcess";
-
 // ----------------------------------------------------------------------------
 
 static lua_State *
@@ -78,8 +76,7 @@ DeviceBuildData::DeviceBuildData(
 	fBuildQueue( pAllocator ),
 	fBuildBucket( pAllocator ),
 	fBuildYear( Rtt_BUILD_YEAR ),
-	fBuildRevision( Rtt_BUILD_REVISION ),
-	fDebugBuildProcess( 0 )
+	fBuildRevision( Rtt_BUILD_REVISION )
 {
 }
 
@@ -222,8 +219,7 @@ DeviceBuildData::ReadBuildSettings( lua_State *L, const char *buildSettingsPath 
 bool
 DeviceBuildData::Initialize(
 	const char *appSettingsPath,
-	const char *buildSettingsPath,
-	int debugBuildProcess)
+	const char *buildSettingsPath)
 {
 	bool result = true;
 
@@ -235,8 +231,6 @@ DeviceBuildData::Initialize(
 
 	// NOTE: build.settings overrides AppSettings
 	ReadBuildSettings( L, buildSettingsPath );
-
-	fDebugBuildProcess = debugBuildProcess;
 
 	return result;
 }
@@ -355,9 +349,6 @@ DeviceBuildData::PushTable( lua_State *L ) const
 	lua_pushstring( L, fBuildBucket.GetString() );
 	lua_setfield( L, -2, kBuildBucketKey );
 
-	lua_pushinteger( L, fDebugBuildProcess );
-	lua_setfield( L, -2, kDebugBuildProcessKey );
-
 	// Plugins
 	lua_getfield( L, LUA_REGISTRYINDEX, kPluginsMetadataKey );
 	lua_setfield( L, -2, "plugins" );
@@ -380,10 +371,7 @@ DeviceBuildData::GetJSON( String& result ) const
 	Lua::DoCall( L, 1, 1 );
 
 	const char *jsonValue = lua_tostring( L, -1 );
-	if (fDebugBuildProcess)
-	{
-		Rtt_TRACE_SIM( ( "DeviceBuildData: %s\n", jsonValue ) );
-	}
+	Rtt_TRACE_SIM( ( "DeviceBuildData: %s\n", jsonValue ) );
 	result.Set( jsonValue );
 
 	lua_pop( L, 2 );

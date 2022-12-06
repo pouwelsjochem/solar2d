@@ -44,7 +44,6 @@ MacPlatformServices::GetPreference( const char *key, Rtt::String * value ) const
 	const char *result = NULL;
 	NSString *k = [[NSString alloc] initWithUTF8String:key];
 
-	// Try NSUserDefaults first
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	NSString *v = [defaults stringForKey:k]; Rtt_ASSERT( !v || [v isKindOfClass:[NSString class]] );
 	if( nil != v)

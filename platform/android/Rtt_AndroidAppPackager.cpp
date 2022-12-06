@@ -256,53 +256,30 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 
 			gradleGo.append(" -PcoronaBuildData=");
 			gradleGo.append(EscapeArgument(buildDataFileOutput));
-
-			String debugBuildProcessPref;
-			int debugBuildProcess = 0;
-			fServices.GetPreference( "debugBuildProcess", &debugBuildProcessPref );
 			
-			if (! debugBuildProcessPref.IsEmpty())
-			{
-				debugBuildProcess = (int) strtol(debugBuildProcessPref.GetString(), (char **)NULL, 10);
-			}
-			else
-			{
-				debugBuildProcess = 0;
-			}
+			gradleGo.append(" --console=plain -q");
 			
-			gradleGo.append(" --console=plain");
-			if(debugBuildProcess == 0) {
-				gradleGo.append(" -q");
+			// Obfuscate passwords
+			std::string placeHolder = EscapeArgument("XXXXXX");
+			std::string sanitizedCmdBuf = gradleGo;
+			
+			std::string keystorePasswordStr = EscapeArgument(androidParams->GetAndroidKeyStorePassword());
+			if (keystorePasswordStr.length() > 0)
+			{
+				ReplaceString(sanitizedCmdBuf, keystorePasswordStr, placeHolder);
 			}
 			
-			if (debugBuildProcess > 1)
+			std::string keyaliasPasswordStr;
+			if (androidParams->GetAndroidKeyAliasPassword() != NULL)
 			{
-				// Obfuscate passwords
-				std::string placeHolder = EscapeArgument("XXXXXX");
-				std::string sanitizedCmdBuf = gradleGo;
-				
-				String unsanitizedBuildSettingStr;
-				fServices.GetPreference( "unsanitizedBuildLog", &unsanitizedBuildSettingStr );
-				if(Rtt_StringCompare(unsanitizedBuildSettingStr, "1") != 0) {
-					std::string keystorePasswordStr = EscapeArgument(androidParams->GetAndroidKeyStorePassword());
-					if (keystorePasswordStr.length() > 0)
-					{
-						ReplaceString(sanitizedCmdBuf, keystorePasswordStr, placeHolder);
-					}
-					
-					std::string keyaliasPasswordStr;
-					if (androidParams->GetAndroidKeyAliasPassword() != NULL)
-					{
-						keyaliasPasswordStr = EscapeArgument(androidParams->GetAndroidKeyAliasPassword());
-					}
-					if (keyaliasPasswordStr.length() > 0)
-					{
-						ReplaceString(sanitizedCmdBuf, keyaliasPasswordStr, placeHolder);
-					}
-				}
-				
-				Rtt_Log("Build: running: %s\n", sanitizedCmdBuf.c_str());
+				keyaliasPasswordStr = EscapeArgument(androidParams->GetAndroidKeyAliasPassword());
 			}
+			if (keyaliasPasswordStr.length() > 0)
+			{
+				ReplaceString(sanitizedCmdBuf, keyaliasPasswordStr, placeHolder);
+			}
+			
+			Rtt_Log("Build: running: %s\n", sanitizedCmdBuf.c_str());
 
 			gradleGo.append(" < /dev/null ");
 
@@ -319,24 +296,21 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 			result = system(gradleGo.c_str());
 
 #if !defined(Rtt_NO_GUI)
-			if (debugBuildProcess >= 1 || result != 0)
+			FILE *log = Rtt_FileOpen(gradleLogFile.c_str(), "rb");
+			if (log) {
+				Rtt_FileSeek(log, 0, SEEK_END);
+				long sz = Rtt_FileTell(log);
+				Rtt_FileSeek(log, 0, SEEK_SET);
+				char* buf = new char[sz + 1];
+				long read = Rtt_FileRead(buf, sizeof(char), sz, log);
+				buf[read] = 0;
+				Rtt_Log("%s", buf);
+				delete[] buf;
+				Rtt_FileClose(log);
+			}
+			else 
 			{
-				FILE *log = Rtt_FileOpen(gradleLogFile.c_str(), "rb");
-				if (log) {
-					Rtt_FileSeek(log, 0, SEEK_END);
-					long sz = Rtt_FileTell(log);
-					Rtt_FileSeek(log, 0, SEEK_SET);
-					char* buf = new char[sz + 1];
-					long read = Rtt_FileRead(buf, sizeof(char), sz, log);
-					buf[read] = 0;
-					Rtt_Log("%s", buf);
-					delete[] buf;
-					Rtt_FileClose(log);
-				}
-				else 
-				{
-					Rtt_Log("%s", "Unable to open build log file");
-				}
+				Rtt_Log("%s", "Unable to open build log file");
 			}
 #endif
 		}
@@ -434,23 +408,7 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 
 	// Convert build.settings into build.properties
 	// And run Android specific pre package script
-	String debugBuildProcessPref;
-	int debugBuildProcess = 0;
-	fServices.GetPreference("debugBuildProcess", &debugBuildProcessPref);
-
-	if (!debugBuildProcessPref.IsEmpty())
-	{
-		debugBuildProcess = (int)strtol(debugBuildProcessPref.GetString(), (char **)NULL, 10);
-	}
-	else
-	{
-		debugBuildProcess = 0;
-	}
-
-	if (debugBuildProcess > 0)
-	{
-		Rtt_Log("Prepackage: Compiling Lua ...");
-	}
+	Rtt_Log("Prepackage: Compiling Lua ...");
 	
 	if ( CompileScripts( params, tmpDir ) && CreateBuildProperties( * params, tmpDir ) )
 	{
@@ -480,15 +438,7 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 		jarPathStr.append("AntLiveManifest.jar");
 		jarPathStr = EscapeArgument(jarPathStr);
 
-		const char *antDebugFlag = "-q";
-		if (debugBuildProcess >= 2)
-		{
-			antDebugFlag = "-v";
-		}
-		if (debugBuildProcess > 4)
-		{
-			antDebugFlag = "-d";
-		}
+		const char *antDebugFlag = "-d";
 
 		snprintf(cmdBuf, sizeof(cmdBuf), kCmdFormat,
 				 javaCmd.c_str(),
@@ -498,11 +448,7 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 				 srcDirStr.c_str(),
 				 resourcesDirStr.c_str(),
 				 resourcesDirStr.c_str() );
-
-		if (debugBuildProcess > 1)
-		{
-			Rtt_Log("Prepackage: running: %s\n", cmdBuf);
-		}
+		Rtt_Log("Prepackage: running: %s\n", cmdBuf);
 
 		iresult = system( cmdBuf );
 	

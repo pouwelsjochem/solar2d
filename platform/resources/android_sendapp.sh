@@ -10,14 +10,8 @@
 
 # Send an APK to an Android device connected to the computer and optionally launch it
 
-DEBUG_BUILD_PROCESS=$(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null)
-
 exec 2>&1
-
-if [ "${DEBUG_BUILD_PROCESS:=0}" -gt 1 ]
-then
-	set -x
-fi
+set -x
 
 CORONA_ACTIVITY_NAME="com.ansca.corona.CoronaActivity"
 PROGRAM_NAME="ERROR" # $(basename "$0")

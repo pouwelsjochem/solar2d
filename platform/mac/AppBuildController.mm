@@ -642,7 +642,6 @@ static NSString *kValueNotSet = @"not set";
 	}
 }
 
-// TODO: Not have results affected by DEBUG_BUILD_PROCESS preference.
 - (NSString *) launchTaskAndReturnOutput:(NSString *)cmd arguments:(NSArray *)args
 {
 	NSString *result = @"";

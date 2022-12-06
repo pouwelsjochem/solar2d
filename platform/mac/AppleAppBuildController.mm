@@ -324,7 +324,7 @@ NSString *kAppleDistributionIdentityTag = @"Apple Distribution";
 
 - (NSString *) developerRoot:(BOOL *)outOkayToBuild errorString:(NSString **)errorString
 {
-    BOOL debugBuildProcess = ([[NSUserDefaults standardUserDefaults] integerForKey:@"debugBuildProcess"] > 1);
+    BOOL debugBuildProcess = YES;
     NSString *sdkRoot = nil;
     NSString* temporaryErrorString = @"";
 

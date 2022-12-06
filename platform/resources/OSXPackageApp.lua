@@ -14,11 +14,6 @@ local lfs = require('lfs')
 local CoronaPListSupport = require("CoronaPListSupport")
 local captureCommandOutput = CoronaPListSupport.captureCommandOutput
 
--- get the numeric value of the "debugBuildProcess" preference or 0 if it's not set (note due to a Lua bug
--- the value is actually the exit code multiplied by 256)
-local debugBuildProcess = os.execute("exit $(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null || echo 0)") / 256
-
-
 -- Read a value from the user's preferences
 local function getPreference( prefName )
 	return captureCommandOutput("defaults read com.coronalabs.Corona_Simulator "..tostring(prefName))
@@ -212,9 +207,7 @@ local function getCopyResourcesScript( src, dst, options )
 	-- Replace the placeholders in the script with the generated code (or an empty string if there was none)
 	script = args .. script:gsub("{{EXCLUDED_FILES}}", excludedFilesSh)
 
-	if debugBuildProcess > 0 then
-		print("script: ".. script)
-	end
+	print("script: ".. script)
 
 	return script
 end
@@ -233,10 +226,7 @@ local function getCodesignScript( entitlements, path, appIdentity, codesign )
 	if entitlements ~= nil and entitlements ~= "" then
 		entitlementsParam = " --entitlements ".. entitlements .." "
 	end
-	local verboseParam = ""
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		verboseParam = "-".. string.rep("v", debugBuildProcess) .." "
-	end
+	local verboseParam = "-".. string.rep("v", 5) .." "
 
 	local cmd = removeXattrs .. codesign.." --options runtime --deep -f -s "..quoteString(appIdentity).." "..entitlementsParam..verboseParam..quotedpath
 
@@ -295,11 +285,7 @@ local function getCreateDMGScript( path )
 	local dmgPath = path:gsub('(.*)%.%w+$', '%1') .. ".dmg"
 	local dmgName = path:gsub('.*/(.+)', '%1'):gsub('%.app$', '')
 
-	local verboseParam = ""
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		verboseParam = "-verbose"
-	end
-
+	local verboseParam = "-verbose"
 	local cmd = "/usr/bin/hdiutil create -srcfolder '"..path.."' -volname '"..dmgName.."' -fs HFS+ -format UDZO -imagekey zlib-level=9 '"..dmgPath.."'"
 
 	return cmd
@@ -324,9 +310,7 @@ function runScript( script, debugLevel )
 	local debugLevel = debugLevel or 0
 	local errMsg = nil
 
-	if debugBuildProcess and debugBuildProcess > debugLevel then
-		print("Running: ".. tostring(script))
-	end
+	print("Running: ".. tostring(script))
 
 	-- Run the command capturing any output
 	local tmpFile = os.tmpname()
@@ -377,10 +361,8 @@ local function generateOSXEntitlements(filename, settings, provisionFile)
 	outFile:write(data)
 	outFile:close()
 
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print( "Created entitlements file: " .. filename );
-		runScript("/bin/cat "..filename)
-	end
+	print( "Created entitlements file: " .. filename );
+	runScript("/bin/cat "..filename)
 
 	return "", includeProvisioning
 end
@@ -467,9 +449,7 @@ end
 local function getIDs( mobileProvision, result )
 	local err
 
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("getIDs: mobileProvision '"..tostring(mobileProvision).."'")
-	end
+	print("getIDs: mobileProvision '"..tostring(mobileProvision).."'")
 
 	if not mobileProvision then
 		result.mobileProvision = nil
@@ -552,9 +532,7 @@ function getBundleId( mobileProvision, bundledisplayname )
 	local options = {}
 
 	local err = getNames( bundledisplayname, options )
-	if debugBuildProcess and debugBuildProcess ~= 0 then
-		print("getBundleId: bundledisplayname '"..tostring(bundledisplayname).."'; options: "..json.prettify(options))
-	end
+	print("getBundleId: bundledisplayname '"..tostring(bundledisplayname).."'; options: "..json.prettify(options))
 	if ( not err ) then
 		err = getIDs( mobileProvision, options )
 
@@ -625,7 +603,7 @@ function OSXPostPackage( params )
 	local signingIdentity = params.signingIdentity
 	local targetDevice = params.targetDevice
 	local targetPlatform = params.targetPlatform
-	local verbose = ( debugBuildProcess and debugBuildProcess > 1 )
+	local verbose = true
 	local osPlatform = params.osPlatform
 	local sdkRoot = params.xcodetoolhelper.sdkRoot
 	local err = nil
@@ -757,11 +735,9 @@ function OSXPostPackage( params )
 			end
 		end
 
-		if options and debugBuildProcess and debugBuildProcess ~= 0 then
-			print("====================================")
-			print("OSXPostPackage: options: "..json.prettify(options))
-			print("====================================")
-		end
+		print("====================================")
+		print("OSXPostPackage: options: "..json.prettify(options))
+		print("====================================")
 
 		-- finalize package
 		setStatus("Creating Info.plist")

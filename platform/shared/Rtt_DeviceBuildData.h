@@ -45,8 +45,7 @@ class DeviceBuildData
 	public:
 		bool Initialize(
 				const char *appSettingsPath,
-				const char *buildSettingsPath,
-				int debugBuildProcess);
+				const char *buildSettingsPath);
 
 		void SetBuild( int buildYear, int buildRevision );
 
@@ -74,7 +73,6 @@ class DeviceBuildData
 		String fBuildBucket;
 		int fBuildYear;
 		int fBuildRevision;
-		int fDebugBuildProcess;
 };
 
 // ----------------------------------------------------------------------------

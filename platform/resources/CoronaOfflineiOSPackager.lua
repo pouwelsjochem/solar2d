@@ -11,11 +11,8 @@ local json = require "json"
 local lfs = require "lfs"
 local pluginCollector = require "CoronaBuilderPluginCollector"
 
-local debugBuildProcess = os.execute("exit $(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null || echo 0)")
 function log(...)
-    if debugBuildProcess > 1 then
-        print(...)
-    end
+    print(...)
 end
 
 local function quoteString( str )
@@ -26,9 +23,6 @@ end
 
 local function exec(cmd)
     log('Running command', cmd)
-    if debugBuildProcess < 1 then
-        cmd = cmd .. ' &> /dev/null'
-    end
     return (0 == os.execute(cmd))
 end
 

@@ -10,14 +10,8 @@
 
 # Send an APP to an iOS device connected to the computer
 
-DEBUG_BUILD_PROCESS=$(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null)
-
 exec 2>&1
-
-if [ "${DEBUG_BUILD_PROCESS:=0}" -gt 1 ]
-then
-	set -x
-fi
+set -x
 
 PROGRAM_NAME="ERROR" # "$(basename "$0"): "
 SEND_TO_ALL=$(defaults read com.coronalabs.Corona_Simulator sendToAllDevices 2>/dev/null)
@@ -96,10 +90,7 @@ do
 	fi
 done
 
-if [ "$DEBUG_BUILD_PROCESS" -gt 1 ]
-then
-	echo "DEBUG: IOS_DEVICES: ${IOS_DEVICES[*]}"
-fi
+echo "DEBUG: IOS_DEVICES: ${IOS_DEVICES[*]}"
 
 if [ "${#IOS_DEVICES[@]}" == 0 ]
 then

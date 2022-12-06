@@ -14,13 +14,8 @@
 # Tail the syslog the specified iOS device filtering for Corona
 #
 
-DEBUG_BUILD_PROCESS=$(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null)
-
-if [ "${DEBUG_BUILD_PROCESS:=0}" -gt 2 ]
-then
-	set -x
-	exec 2>&1
-fi
+set -x
+exec 2>&1
 
 # Add "noise" logs to exclude here (egrep pattern)
 EXCLUDE_PATTERNS="IOHIDLib|MobileContainerManager|com.apple.containermanagerd.internal|systemgroup.com.apple.configurationprofiles|Overriding MCM with the one true path|assertion failed: .*: libxpc.dylib"

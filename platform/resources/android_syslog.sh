@@ -10,13 +10,8 @@
 
 # Tail the syslogs of all connected Android devices filtering for Corona
 
-DEBUG_BUILD_PROCESS=$(defaults read com.coronalabs.Corona_Simulator debugBuildProcess 2>/dev/null)
-
-if [ "${DEBUG_BUILD_PROCESS:=0}" -gt 2 ]
-then
-	set -x
-	exec 2>&1
-fi
+set -x
+exec 2>&1
 
 PROGRAM_NAME="ERROR" # $(basename "$0")
 CORONA_RES_DIR=$(dirname "$0")

@@ -8,7 +8,7 @@
 ------------------------------------------------------------------------------
 
 --luacheck: globals platformFallbacks fetch download coronabaselib json lfs SEP isWindows locatorNames
---luacheck: globals locatorNames pathJoin debugBuildProcess log isDir isFile quoteString mkdirs exec copyFile
+--luacheck: globals locatorNames pathJoin log isDir isFile quoteString mkdirs exec copyFile
 --luacheck: ignore 121/print
 
 platformFallbacks = {
@@ -33,11 +33,8 @@ function fetch() assert(false, "HTTP Fetch is not set!") end
 function download() assert(false, "HTTP Download is not set!") end
 locatorNames = {}
 
-debugBuildProcess = tonumber(debugBuildProcess or os.getenv('DEBUG_BUILD_PROCESS') or "0")
 function log(...)
-    if debugBuildProcess > 0 then
-        print(...)
-    end
+    print(...)
 end
 
 function pathJoin(p1, p2, ... )
@@ -93,12 +90,6 @@ end
 
 function exec(cmd)
     log('Running command', cmd)
-    if debugBuildProcess < 1 then
-        if isWindows then
-        else
-            cmd = cmd .. ' &> /dev/null'
-        end
-    end
     local ret = (0 == os.execute2(cmd))
     return ret
 end
@@ -713,21 +704,18 @@ local function CollectCoronaPlugins(params)
         params.pluginStorage = pathJoin(os.getenv("HOME") or os.getenv("APPDATA"), 'Solar2DPlugins')
     end
 
-    debugBuildProcess = tonumber(debugBuildProcess) or 0
-    if debugBuildProcess > 0 then
-        local copyLocators = {}
-        for i=1,#params.pluginLocators do
-            copyLocators[params.pluginLocators[i]] = true
-        end
-        log("Collecting plugins", json.encode(params, {
-            tables = copyLocators,
-            exception = function(reason, value, state, defaultmessage)
-                local cn = locatorName(value)
-                if cn then return "<Collector: " .. cn .. ">" end
-                return quoteString("<" .. defaultmessage .. ">")
-            end
-        }))
+    local copyLocators = {}
+    for i=1,#params.pluginLocators do
+        copyLocators[params.pluginLocators[i]] = true
     end
+    log("Collecting plugins", json.encode(params, {
+        tables = copyLocators,
+        exception = function(reason, value, state, defaultmessage)
+            local cn = locatorName(value)
+            if cn then return "<Collector: " .. cn .. ">" end
+            return quoteString("<" .. defaultmessage .. ">")
+        end
+    }))
 
     local plugins = params.plugins or json.decode(params.buildData).plugins
     if type(plugins) ~= 'table' then return end

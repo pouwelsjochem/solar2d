@@ -902,10 +902,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 {
 	fServices = new Rtt::MacPlatformServices( *fConsolePlatform );
 	fNextUpsellTime = 0;
-	NSString* v = [[NSUserDefaults standardUserDefaults] stringForKey:@"debugBuildProcess"];
-	if(v) {
-		setenv("DEBUG_BUILD_PROCESS", [v UTF8String], 0);
-	}
 
 	[self checkOpenGLRequirements];
 	[self coronaInit:aNotification];

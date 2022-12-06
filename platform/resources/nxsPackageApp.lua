@@ -10,7 +10,6 @@ processExecute = processExecute or os.execute
 local lfs = require "lfs"
 local json = require "json"
 local http = require( "socket.http" )
-local debugBuildProcess = 0
 
 local dirSeparator = package.config:sub(1,1)
 local windows = (dirSeparator == '\\')
@@ -21,9 +20,7 @@ local function log(...)
 end
 
 local function logd(...)
-	if debugBuildProcess >= 3 then
-		myprint(...)
-	end
+	myprint(...)
 end
 
 local function quoteString( str )
@@ -401,7 +398,6 @@ function nxsPackageApp( args )
 		return "NX SDK not found"
 	end
 
-	debugBuildProcess = args.debugBuildProcess
 	log('NX Switch App builder started')
 	local nxInfo = args.nxInfo
 	args.nxInfo = nil

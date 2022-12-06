@@ -14,7 +14,6 @@ local lfs = require("lfs")
 local json = require("json")
 local http = require("socket.http")
 local ltn12 = require("ltn12")
-debugBuildProcess = 0
 local dirSeparator = package.config:sub(1,1)
 local buildSettings = nil
 local sFormat = string.format
@@ -37,9 +36,7 @@ local function log(...)
 end
 
 local function log3(...)
-	if (debugBuildProcess >= 3) then
-		luaPrint(...)
-	end
+	luaPrint(...)
 end
 
 local function quoteString(str)
@@ -551,8 +548,6 @@ end
 
 -- global script to call from C++
 function linuxPackageApp(args)
-	debugBuildProcess = tonumber(args.debugBuildProcess) or 0
-
 	if not args.onlyGetPlugins then
 		log('Linux app builder started')
 	end

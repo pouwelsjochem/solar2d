@@ -275,7 +275,7 @@ TVOSAppPackager::Build( AppPackagerParams * params, const char* tmpDirBase )
 
                     lua_newtable(L);
                     {
-                        BOOL debugBuildProcess = ([[NSUserDefaults standardUserDefaults] integerForKey:@"debugBuildProcess"] > 1);
+                        BOOL debugBuildProcess = YES;
                         NSString* sdkRoot = [XcodeToolHelper getXcodePath];
                         NSString* copypng = [XcodeToolHelper pathForCopyPngUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
                         NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
@@ -410,7 +410,7 @@ TVOSAppPackager::SendToAppStore( TVOSAppPackagerParams *params, const char *itun
 
         lua_newtable(L);
         {
-            BOOL debugBuildProcess = ([[NSUserDefaults standardUserDefaults] integerForKey:@"debugBuildProcess"] > 1);
+            BOOL debugBuildProcess = YES;
             NSString* sdkRoot = [XcodeToolHelper getXcodePath];
             NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
             NSString* productBuild = [XcodeToolHelper pathForProductBuildUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];

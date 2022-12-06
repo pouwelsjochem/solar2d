@@ -104,10 +104,6 @@ BOOL CSimulatorApp::InitInstance()
 	CWinApp::InitInstance();
 
 	// Hacks to make life easier
-	CString ret = GetProfileString(L"Preferences", L"debugBuildProcess", L"");
-	if (ret.GetLength() && _wgetenv(L"DEBUG_BUILD_PROCESS") == NULL) {
-		_wputenv_s(L"DEBUG_BUILD_PROCESS", ret);
-	}
 	if (_wgetenv(L"CORONA_PATH") == NULL) {
 		TCHAR coronaDir[MAX_PATH];
 		GetModuleFileName(NULL, coronaDir, MAX_PATH);
