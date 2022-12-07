@@ -1,9 +1,6 @@
 name: Daily Build (MacOS only)
 
 on:
-  push:
-    tags:
-      - '*'
   workflow_dispatch:
 
 env:

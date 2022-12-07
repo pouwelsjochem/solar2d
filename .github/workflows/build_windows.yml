@@ -1,9 +1,6 @@
 name: Daily Build (Windows)
 
 on:
-  push:
-    tags:
-      - '*'
   workflow_dispatch:
 
 env:
