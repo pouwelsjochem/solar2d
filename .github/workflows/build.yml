@@ -301,6 +301,7 @@ jobs:
           then
           GIT_LOG="Changes since previous build:
           $GIT_LOG
+          "
           else
           GIT_LOG='See https://github.com/pouwelsjochem/corona for details
           '
