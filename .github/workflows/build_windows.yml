@@ -5,18 +5,13 @@ on:
     tags:
       - '*'
   workflow_dispatch:
-    inputs:
-      forkBuildName:
-        description: 'Fork Build Name'
-        required: true
-        default: ''
 
 env:
   WORKSPACE: ${{ github.workspace }}
   DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
   BUILD_NUMBER: 3683
   YEAR: 2022
-  FORK_BUILD_NAME: ${{ github.event.inputs.forkBuildName }}
+  FORK_BUILD_NAME: a
 
 jobs:
   source-code:
