@@ -51,13 +51,13 @@ then
         exit 1
 fi
 
-if [ -d "/Volumes/${PRODUCT_DIR}${FULL_BUILD_NUM}" ]
+if [ -d "/Volumes/${PRODUCT_DIR}-${FULL_BUILD_NUM}" ]
 then
 	if [ "$FORCE_MOUNT" == true ]
 	then
-		hdiutil detach "/Volumes/${PRODUCT_DIR}${FULL_BUILD_NUM}"
+		hdiutil detach "/Volumes/${PRODUCT_DIR}-${FULL_BUILD_NUM}"
 	else
-		echo "Error: '${PRODUCT_DIR}${FULL_BUILD_NUM}' volume already mounted.  Unmount and try again."
+		echo "Error: '${PRODUCT_DIR}-${FULL_BUILD_NUM}' volume already mounted.  Unmount and try again."
 		exit 1
 	fi
 fi
@@ -196,10 +196,10 @@ fi
 RESULT_DIR="$DSTDIR/${PRODUCT_DIR}"
 if [ "${FULL_BUILD_NUM}" != "" ] && [ "$DAILY_BUILD" == true ]
 then
-	RESULT_DIR="$DSTDIR/${PRODUCT_DIR}${FULL_BUILD_NUM}"
-	mv "$TMPPATH"/${PRODUCT_DIR} "$TMPPATH/${PRODUCT_DIR}${FULL_BUILD_NUM}"
-	VOLUME_NAME=${PRODUCT_DIR}${FULL_BUILD_NUM}
-	ICON_NAME=${PRODUCT_DIR}${FULL_BUILD_NUM}
+	RESULT_DIR="$DSTDIR/${PRODUCT_DIR}-${FULL_BUILD_NUM}"
+	mv "$TMPPATH"/${PRODUCT_DIR} "$TMPPATH/${PRODUCT_DIR}-${FULL_BUILD_NUM}"
+	VOLUME_NAME=${PRODUCT_DIR}-${FULL_BUILD_NUM}
+	ICON_NAME=${PRODUCT_DIR}-${FULL_BUILD_NUM}
 	DMG_FILE=${PRODUCT_DIR}-${FULL_BUILD_NUM}.dmg
 else
 	VOLUME_NAME=${PRODUCT_DIR}
