@@ -51,24 +51,13 @@ then
         exit 1
 fi
 
-if [ "${FULL_BUILD_NUM}" != "" ]
-then
-	# Get the base buildnum with a dash at the front of it suitable for concatenating with "${PRODUCT_DIR}"
-	# (the code that follows is ok with this not being set)
-	# shellcheck disable=2001
-	BUILD_NUM=$(echo "$FULL_BUILD_NUM" | sed -e 's/.*\.\(.*\)/-\1/')
-else
-	echo "Error: FULL_BUILD_NUM is a required parameter"
-	exit 1
-fi
-
-if [ -d "/Volumes/${PRODUCT_DIR}${BUILD_NUM}" ]
+if [ -d "/Volumes/${PRODUCT_DIR}${FULL_BUILD_NUM}" ]
 then
 	if [ "$FORCE_MOUNT" == true ]
 	then
-		hdiutil detach "/Volumes/${PRODUCT_DIR}${BUILD_NUM}"
+		hdiutil detach "/Volumes/${PRODUCT_DIR}${FULL_BUILD_NUM}"
 	else
-		echo "Error: '${PRODUCT_DIR}${BUILD_NUM}' volume already mounted.  Unmount and try again."
+		echo "Error: '${PRODUCT_DIR}${FULL_BUILD_NUM}' volume already mounted.  Unmount and try again."
 		exit 1
 	fi
 fi
@@ -205,12 +194,12 @@ then
 fi
 
 RESULT_DIR="$DSTDIR/${PRODUCT_DIR}"
-if [ "${BUILD_NUM}" != "" ] && [ "$DAILY_BUILD" == true ]
+if [ "${FULL_BUILD_NUM}" != "" ] && [ "$DAILY_BUILD" == true ]
 then
-	RESULT_DIR="$DSTDIR/${PRODUCT_DIR}${BUILD_NUM}"
-	mv "$TMPPATH"/${PRODUCT_DIR} "$TMPPATH/${PRODUCT_DIR}${BUILD_NUM}"
-	VOLUME_NAME=${PRODUCT_DIR}${BUILD_NUM}
-	ICON_NAME=${PRODUCT_DIR}${BUILD_NUM}
+	RESULT_DIR="$DSTDIR/${PRODUCT_DIR}${FULL_BUILD_NUM}"
+	mv "$TMPPATH"/${PRODUCT_DIR} "$TMPPATH/${PRODUCT_DIR}${FULL_BUILD_NUM}"
+	VOLUME_NAME=${PRODUCT_DIR}${FULL_BUILD_NUM}
+	ICON_NAME=${PRODUCT_DIR}${FULL_BUILD_NUM}
 	DMG_FILE=${PRODUCT_DIR}-${FULL_BUILD_NUM}.dmg
 else
 	VOLUME_NAME=${PRODUCT_DIR}

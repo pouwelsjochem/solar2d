@@ -242,6 +242,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Simulator-macOS/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.dmg
+          asset_path: ./Simulator-macOS/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
           asset_name: Solar2D-macOS-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
           asset_content_type: application/x-apple-diskimage

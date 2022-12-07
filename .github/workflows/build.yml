@@ -279,7 +279,7 @@ jobs:
       - name: Copy Simulator
         run: |
           mkdir output
-          cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-$BUILD.msi
+          cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
         shell: bash
       - name: Upload Widnows Corona artifact
         uses: actions/upload-artifact@v1
@@ -339,7 +339,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Simulator-macOS/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.dmg
+          asset_path: ./Simulator-macOS/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
           asset_name: Solar2D-macOS-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
           asset_content_type: application/x-apple-diskimage
       - name: Upload Release Asset for Windows Simulator
@@ -348,6 +348,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Simulator-Windows/Solar2D-${{ env.BUILD }}.msi
+          asset_path: ./Simulator-Windows/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
           asset_name: Solar2D-Windows-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
           asset_content_type: application/x-msi
