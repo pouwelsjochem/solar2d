@@ -530,7 +530,7 @@
 	</target>
 
 	<!-- Creates a signed APK file from a pre-built APK template containing no assets. -->
-	<target name="build" depends="build-signed-apk,copy-to" />
+	<target name="build" depends="build-signed-apk" />
 
 	<!-- 
 	  Test sign a jar to see if we have a valid PW
