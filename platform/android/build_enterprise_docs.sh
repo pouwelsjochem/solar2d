@@ -29,6 +29,4 @@ javadoc -d "$JAVA_DOC_OUTPUT_PATH" -link http://docs.oracle.com/javase/7/docs/ap
 	"$JAVA_SOURCE_PATH/storage/package-info.java" \
 	"$JAVA_SOURCE_PATH/storage/FileContentProvider.java" \
 	"$JAVA_SOURCE_PATH/storage/FileServices.java" \
-	"$JAVA_SOURCE_PATH/storage/PackageServices.java" \
-	"$JAVA_SOURCE_PATH/storage/PackageState.java" \
 	"$JAVA_SOURCE_PATH/storage/ZipFileEntryInputStream.java"

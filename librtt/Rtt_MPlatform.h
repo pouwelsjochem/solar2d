@@ -38,7 +38,6 @@ class PlatformBitmap;
 class PlatformDisplayObject;
 class PlatformExitCallback;
 class PlatformOpenALPlayer;
-class PlatformStoreProvider;
 class PlatformSurface;
 class PlatformTimer;
 class PreferenceCollection;
@@ -132,8 +131,6 @@ class MPlatform
 		virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const = 0;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const = 0;
 		virtual OperationResult DeletePreferences( const char* categoryName, const char** keyNameArray, U32 keyNameCount ) const = 0;
-
-		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const = 0;
 
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const = 0;
 

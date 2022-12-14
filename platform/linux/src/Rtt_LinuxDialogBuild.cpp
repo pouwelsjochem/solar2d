@@ -16,7 +16,6 @@
 #include "Rtt_LinuxSimulatorView.h"
 #include "Rtt_LinuxAppPackager.h"
 #include "Rtt_AndroidAppPackager.h"
-#include "Rtt_TargetAndroidAppStore.h"
 #include "ListKeyStore.h"
 
 using namespace std;
@@ -87,7 +86,6 @@ namespace Rtt
 		, fileDialogKeyStore(ImGuiFileBrowserFlags_EnterNewFilename | ImGuiFileBrowserFlags_CloseOnEsc)
 		, fileDialogSaveTo(ImGuiFileBrowserFlags_SelectDirectory | ImGuiFileBrowserFlags_CreateNewDir | ImGuiFileBrowserFlags_CloseOnEsc)
 		, fCreateLiveBuild(false)
-		, fAppStoreIndex(1)		// google play
 		, fKeyAliases(NULL)
 		, fKeyAliasesSize(0)
 		, fKeyAliasIndex(0)
@@ -509,13 +507,6 @@ namespace Rtt
 			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 2);	// hack
 			ImGui::InputText("##fProjectPathInput", fProjectPathInput, sizeof(fProjectPathInput), 0);
 
-			// Target App Store
-			ImGui::TextUnformatted("   Target App Store:");
-			ImGui::SameLine();
-			const char* appstores[] = { "Amazon", "Google Play", "Samsung" };
-			ImGui::SetCursorPosX(label_width + 20);
-			ImGui::Combo("##fAppStoreIndex", &fAppStoreIndex, appstores, IM_ARRAYSIZE(appstores));
-
 			float leftPadding = ImGui::CalcTextSize("   ").x;
 			ImGui::SetCursorPosX(leftPadding);
 			if (ImGui::Button("Keystore:      "))
@@ -657,7 +648,6 @@ namespace Rtt
 		Rtt::Runtime* runtimePointer = app->GetRuntime();
 		std::string androidTemplate(platform->getInstallDir());
 		std::string tmp = Rtt_GetSystemTempDirectory();
-		std::string targetAppStoreName(TargetAndroidAppStore::kGoogle.GetStringId());
 		const char* identity = "no-identity";
 		const char* bundleId = "bundleId";
 		const char* provisionFile = "";
@@ -796,25 +786,11 @@ namespace Rtt
 			Rtt_Log("Using custom Build Id %s\n", customBuildId);
 		}
 
-		// set the target app store
-		if (fAppStoreIndex == 1) // GOOGLE_PLAY_STORE_TARGET
-		{
-			targetAppStoreName = TargetAndroidAppStore::kGoogle.GetStringId();
-		}
-		else if (fAppStoreIndex == 0) // AMAZON_STORE_TARGET
-		{
-			targetAppStoreName = TargetAndroidAppStore::kAmazon.GetStringId();
-		}
-		else if (fAppStoreIndex == 2) // Samsung
-		{
-			targetAppStoreName = TargetAndroidAppStore::kSamsung.GetStringId();
-		}
-
 		Rtt_ASSERT(fKeyAliasIndex > 0 && fKeyAliasIndex < fKeyAliasesSize);
 		const char* keyAlias = fKeyAliases[fKeyAliasIndex];
 
 		AndroidAppPackagerParams androidBuilderParams(fApplicationNameInput, fVersionCodeInput, identity, provisionFile,
-			fProjectPathInput, outputDir.c_str(), androidTemplate.c_str(), targetPlatform, targetAppStoreName.c_str(),
+			fProjectPathInput, outputDir.c_str(), androidTemplate.c_str(), targetPlatform,
 			(S32)Rtt::TargetDevice::VersionForPlatform(Rtt::TargetDevice::kAndroidPlatform), customBuildId, NULL,
 			fPackageInput, isDistribution, fKeyStoreInput, fStorePasswordInput, keyAlias, fAliasPasswordInput, versionCode);
 

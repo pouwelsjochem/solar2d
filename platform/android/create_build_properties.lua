@@ -97,7 +97,7 @@ end
 
 -- Creates a "build.properties" file with the given settings and the "build.settings" file.
 -- Returns nil if succeeded. Returns an error message string if there was a failure.
-function androidCreateProperties(destinationDirectory, packageName, projectDirectory, versionCode, versionName, targetedAppStore, appName)
+function androidCreateProperties(destinationDirectory, packageName, projectDirectory, versionCode, versionName, appName)
 	local json = require("json")
 	local lfs = require('lfs')
 	local errorMessage = nil
@@ -108,9 +108,6 @@ function androidCreateProperties(destinationDirectory, packageName, projectDirec
 	end
 	if not versionName then
 		versionName = "1.0"
-	end
-	if not targetedAppStore then
-		targetedAppStore = "none"
 	end
 
 	-- Load the "build.settings" file, if it exists.
@@ -144,7 +141,6 @@ function androidCreateProperties(destinationDirectory, packageName, projectDirec
 	buildProperties.packageName = packageName
 	buildProperties.versionCode = versionCode
 	buildProperties.versionName = versionName
-	buildProperties.targetedAppStore = targetedAppStore
 	buildProperties.appName = appName
 	if type(settings) == "table" then
 		buildProperties.buildSettings = settings
@@ -246,12 +242,12 @@ end
 if arg then
 	-- If no valid arguments have been received, then explain how to use this script.
 	if (arg[1] == nil) or (arg[2] == nil) then
-		print("USAGE: " .. arg[0] .. " destinationDirectory packageName [projectDirectory [versionCode [versionName [targetedAppStore]]]]")
+		print("USAGE: " .. arg[0] .. " destinationDirectory packageName [projectDirectory [versionCode [versionName]]]")
 		os.exit( -1 )
 	end
 
 	-- Create the "build.properties" file.
-	local errorMessage = androidCreateProperties(arg[1], arg[2], arg[3], arg[4], arg[5], arg[6], arg[7])
+	local errorMessage = androidCreateProperties(arg[1], arg[2], arg[3], arg[4], arg[5], arg[6])
 	if errorMessage then
 		local logMessage = 'ERROR: Failed to create the "build.properties" file. '
 		if ("string" == type(errorMessage)) and (string.len(errorMessage) > 0) then

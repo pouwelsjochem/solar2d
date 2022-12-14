@@ -57,7 +57,6 @@ namespace Rtt
 		smart_ptr<mythread> fThread;
 		char** fKeyAliases;
 		int fKeyAliasesSize;
-		int fAppStoreIndex;
 		int fKeyAliasIndex;
 		char fStorePasswordInput[64];
 		char fAliasPasswordInput[64];

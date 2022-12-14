@@ -27,7 +27,6 @@
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_NativeWindowMode.h"
-#include "Rtt_PlatformInAppStore.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_String.h"
 #include "Rtt_WinBitmap.h"
@@ -277,11 +276,6 @@ namespace Rtt
 		}
 		catch (...) {}
 		return wasOpened;
-	}
-
-	PlatformStoreProvider* WinPlatform::GetStoreProvider(const ResourceHandle<lua_State>& handle) const
-	{
-		return nullptr;
 	}
 
 	NativeAlertRef WinPlatform::ShowNativeAlert(

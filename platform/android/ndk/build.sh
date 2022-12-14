@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # USAGE: ./build.sh device_type product_type [debug/release [clean]]
-# device_type:   generic, kindle, all
+# device_type:   generic, all
 # build_config:  debug, release
 # build_type:    clean, incremental
 # Default is debug/incremental
@@ -195,16 +195,9 @@ $path/lua_to_native.sh -m luasocket $path/../../../external/luasocket/src/url.lu
 
 pushd $path/jni > /dev/null
 
-CFLAGS=
+CFLAGS=""
 ALMIXER_CFLAGS=
 ALMIXER_CFLAGS_LINKED_LIBRARIES=
-if [ "$DEVICE_TYPE" = "generic" ]
-then
-	CFLAGS=""
-elif [ "$DEVICE_TYPE" = "kindle" ]
-then
-	CFLAGS="-DRtt_SUPPORTS_KINDLE"
-fi
 
 if [ "$OPTIM_FLAGS" = "debug" ]
 then

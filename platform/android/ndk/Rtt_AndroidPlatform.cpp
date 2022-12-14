@@ -15,8 +15,6 @@
 #include "Rtt_RenderingStream.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaLibNative.h"
-#include "Rtt_PlatformInAppStore.h"
-#include "Rtt_PlatformInAppStore.h"
 #include "Rtt_PreferenceCollection.h"
 #include "Rtt_Runtime.h"
 
@@ -54,7 +52,7 @@ namespace Rtt
 
 AndroidPlatform::AndroidPlatform(
 	AndroidGLView * pView, const char * package, const char * documentsDir, const char * applicationSupportDir, const char * temporaryDir,
-	const char * cachesDir, const char * systemCachesDir, const char * expansionFileDir, NativeToJavaBridge *ntjb )
+	const char * cachesDir, const char * systemCachesDir, NativeToJavaBridge *ntjb )
   :	fAllocator( Rtt_AllocatorCreate() ),
 	fView( pView ),
 	fDevice( *fAllocator, ntjb ),
@@ -64,7 +62,6 @@ AndroidPlatform::AndroidPlatform(
 	fTemporaryDir( fAllocator ),
 	fCachesDir( fAllocator ),
 	fSystemCachesDir( fAllocator ),
-	fExpansionFileDir( fAllocator ),
 	fDisplayObjectRegistry( NULL ),
 	fCrypto( ntjb ),
 	fNativeToJavaBridge( ntjb )
@@ -76,7 +73,6 @@ AndroidPlatform::AndroidPlatform(
 	fTemporaryDir.Set( temporaryDir );
 	fCachesDir.Set( cachesDir );
 	fSystemCachesDir.Set( systemCachesDir );
-	fExpansionFileDir.Set( expansionFileDir );
 	fDisplayObjectRegistry = Rtt_NEW( fAllocator, AndroidDisplayObjectRegistry() );
 
 	// Set up SQLite to create its temp files to a valid writable directory, if not done already.
@@ -136,12 +132,6 @@ int
 AndroidPlatform::CanOpenURL( const char* url ) const
 {
 	return fNativeToJavaBridge->CanOpenUrl( url ) ? 1 : 0;
-}
-
-PlatformStoreProvider*
-AndroidPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
-{
-	return NULL;
 }
 
 NativeAlertRef
@@ -403,24 +393,10 @@ AndroidPlatform::PathForPluginFile( const char * filename, String & result ) con
 void
 AndroidPlatform::PathForFile( const char * filename, const char * baseDir, String & result ) const
 {
-	static const char* EXPANSION_FILE_DIRECTORY_PREFIX = "[[ExpansionFileDirectory]]";
-
 	if ( filename )
 	{
 		// Append directory.
-		// Note: If the file name is prefixed with "[[ExpansionFileDirectory]]MyFile.obb",
-		//       then we ignore the given base directory and append the Android expansion file directory instead.
-		//       This is a hack until we have official support for platform specific directories.
-		if ((filename[0] == EXPANSION_FILE_DIRECTORY_PREFIX[0]) &&
-		    Rtt_StringStartsWith(filename, EXPANSION_FILE_DIRECTORY_PREFIX))
-		{
-			result.Append( fExpansionFileDir.GetString() );
-			filename += strlen(EXPANSION_FILE_DIRECTORY_PREFIX);
-		}
-		else
-		{
-			result.Append( baseDir );
-		}
+		result.Append( baseDir );
 		
 		// Append directory separator, if not already there.
 		size_t npl = strlen( result.GetString() );
@@ -592,13 +568,6 @@ AndroidPlatform::ShowPopup( lua_State *L, const char *name, int optionsIndex ) c
 						NativeToJavaBridge::DictionaryCreate(L, optionsIndex, fNativeToJavaBridge);
 		fNativeToJavaBridge->ShowSendSmsPopup(dictionaryOfSettings, NULL);
 		result = true;
-	}
-	else if ((Rtt_StringCompareNoCase(name, "rateApp") == 0) || (Rtt_StringCompareNoCase(name, "appStore") == 0))
-	{
-		// Display the app store window.
-		NativeToJavaBridge::DictionaryRef dictionaryOfSettings =
-						NativeToJavaBridge::DictionaryCreate(L, optionsIndex, fNativeToJavaBridge);
-		result = fNativeToJavaBridge->ShowAppStorePopup(dictionaryOfSettings, NULL);
 	}
 	else if ((Rtt_StringCompareNoCase(name, "requestAppPermission") == 0) 
 		|| (Rtt_StringCompareNoCase(name, "requestAppPermissions") == 0))

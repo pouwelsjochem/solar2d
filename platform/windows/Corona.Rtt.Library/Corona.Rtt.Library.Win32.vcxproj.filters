@@ -147,9 +147,6 @@
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibCrypto.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibInAppStore.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_LuaLibNative.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -193,9 +190,6 @@
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_PlatformExitCallback.cpp">
-      <Filter>librtt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\librtt\Rtt_PlatformInAppStore.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Resource.cpp">
@@ -743,9 +737,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibCrypto.h">
       <Filter>librtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibInAppStore.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_LuaLibNative.h">
       <Filter>librtt</Filter>
     </ClInclude>
@@ -825,9 +816,6 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_PlatformExitCallback.h">
-      <Filter>librtt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\librtt\Rtt_PlatformInAppStore.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_RenderingStream.h">

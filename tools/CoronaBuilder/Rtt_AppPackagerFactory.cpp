@@ -43,7 +43,6 @@ AppPackagerContext::AppPackagerContext( TargetDevice::Platform platform )
 	switch ( platform )
 	{
 		case TargetDevice::kAndroidPlatform:
-		case TargetDevice::kKindlePlatform:
 			fRequiresJava = true;
 			break;
 		default:
@@ -214,8 +213,7 @@ AppPackagerFactory::CreatePackagerParams( lua_State *L, int index, TargetDevice:
 	else
 #endif
 #if defined(CORONABUILDER_ANDROID)
-	if (targetPlatform == TargetDevice::kAndroidPlatform
-		|| targetPlatform == TargetDevice::kKindlePlatform)
+	if (targetPlatform == TargetDevice::kAndroidPlatform)
 	{
 		result = CreatePackagerParamsAndroid(L,
 											 index,
@@ -302,7 +300,6 @@ AppPackagerFactory::CreatePackager( lua_State *L, int index, TargetDevice::Platf
 
 #if defined(CORONABUILDER_ANDROID)
 	case TargetDevice::kAndroidPlatform:
-		case TargetDevice::kKindlePlatform:
 		{
 			result = new AndroidAppPackager( fServices, GetResourceDirectory() );
 		}

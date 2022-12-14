@@ -42,7 +42,7 @@ class AndroidPlatform : public MPlatform
 	public:
 		AndroidPlatform(
 				AndroidGLView * pView, const char * package, const char * documentsDir, const char * applicationSupportDir,
-				const char * temporaryDir, const char * cachesDir, const char * systemCachesDir, const char * expansionFileDir,
+				const char * temporaryDir, const char * cachesDir, const char * systemCachesDir,
 				NativeToJavaBridge *ntjb);
 		~AndroidPlatform();
 
@@ -106,8 +106,6 @@ class AndroidPlatform : public MPlatform
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
-		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
 		virtual NativeAlertRef ShowNativeAlert(
 			const char *title,
 			const char *msg,
@@ -147,7 +145,6 @@ class AndroidPlatform : public MPlatform
 		String fTemporaryDir;
 		String fCachesDir;
 		String fSystemCachesDir;
-		String fExpansionFileDir;
 		AndroidCrypto fCrypto;
 		AndroidDisplayObjectRegistry *fDisplayObjectRegistry;
 		NativeToJavaBridge *fNativeToJavaBridge;

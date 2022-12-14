@@ -26,7 +26,6 @@
 #include "librtt/Rtt_Event.h"
 #include "librtt/Rtt_LuaContext.h"
 #include "librtt/Rtt_LuaResource.h"
-#include "librtt/Rtt_PlatformInAppStore.h"
 #include "librtt/Input/Rtt_InputAxisType.h"
 #include "librtt/Input/Rtt_InputDeviceConnectionState.h"
 #include "librtt/Input/Rtt_InputDeviceType.h"
@@ -52,10 +51,6 @@
 #include <android/log.h>
 
 #include "importgl.h"
-
-#if defined( Rtt_SUPPORTS_KINDLE )
-	#define Rtt_ENTERPRISE 1
-#endif
 
 // ----------------------------------------------------------------------------
 
@@ -86,7 +81,7 @@ JavaToNativeBridge::~JavaToNativeBridge()
 void
 JavaToNativeBridge::Init(
 	JNIEnv * env, jstring packageJ, jstring documentsDirJ, jstring applicationSupportDirJ, jstring temporaryDirJ, jstring cachesDirJ,
-	jstring systemCachesDirJ, jstring expansionFileDirJ, int width, int height, bool isCoronaKit )
+	jstring systemCachesDirJ, int width, int height, bool isCoronaKit )
 {
 	NativeTrace trace( "JavaToNativeBridge::Init" );
 	if ( fView != NULL )
@@ -111,7 +106,6 @@ JavaToNativeBridge::Init(
 		jstringResult temporaryDir( env, temporaryDirJ );
 		jstringResult cachesDir( env, cachesDirJ );
 		jstringResult systemCachesDir( env, systemCachesDirJ );
-		jstringResult expansionFileDir( env, expansionFileDirJ );
 
 		packageName.setNotLocal();
 		documentsDir.setNotLocal();
@@ -119,11 +113,10 @@ JavaToNativeBridge::Init(
 		temporaryDir.setNotLocal();
 		cachesDir.setNotLocal();
 		systemCachesDir.setNotLocal();
-		expansionFileDir.setNotLocal();
 		fNativeToJavaBridge = NativeToJavaBridge::InitInstance( env, fRuntime, fCoronaRuntime );
 		fPlatform = new Rtt::AndroidPlatform(
 							fView, packageName.getUTF8(), documentsDir.getUTF8(), applicationSupportDir.getUTF8(),
-							temporaryDir.getUTF8(), cachesDir.getUTF8(), systemCachesDir.getUTF8(), expansionFileDir.getUTF8(),
+							temporaryDir.getUTF8(), cachesDir.getUTF8(), systemCachesDir.getUTF8(),
 							fNativeToJavaBridge );
 
 		fRuntime = Rtt_NEW( & fPlatform->GetAllocator(), Rtt::Runtime( * fPlatform ) );

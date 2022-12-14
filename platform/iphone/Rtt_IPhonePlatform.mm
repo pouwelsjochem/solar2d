@@ -15,7 +15,6 @@
 #include "Rtt_IPhoneTimer.h"
 
 #include "Rtt_IPhoneAudioSessionManager.h"
-#include "Rtt_AppleInAppStore.h"
 #include "Rtt_IPhoneScreenSurface.h"
 #include "Rtt_IPhoneWebViewObject.h"
 
@@ -115,7 +114,6 @@ namespace Rtt
 
 IPhonePlatform::IPhonePlatform( CoronaView *view )
 :	Super( view ),
-	fInAppStoreProvider( NULL ),
 	fPopupControllerDelegate( [[PopupControllerDelegate alloc] init] )
 {
 }
@@ -124,19 +122,6 @@ IPhonePlatform::~IPhonePlatform()
 {
 	[fPopupControllerDelegate release];
 	[fActivityView release];
-	Rtt_DELETE( fInAppStoreProvider );
-}
-
-// =====================================================================
-	
-PlatformStoreProvider*
-IPhonePlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
-{
-	if (!fInAppStoreProvider)
-	{
-		fInAppStoreProvider = Rtt_NEW( fAllocator, AppleStoreProvider( handle ) );
-	}
-	return fInAppStoreProvider;
 }
 
 // =====================================================================
@@ -366,9 +351,7 @@ IPhonePlatform::CanShowPopup( const char *name ) const
 {
 	bool result =
 		( Rtt_StringCompareNoCase( name, "mail" ) == 0 && [MFMailComposeViewController canSendMail] )
-		|| ( Rtt_StringCompareNoCase( name, "sms" ) == 0 && [MFMessageComposeViewController canSendText] )
-		|| ( Rtt_StringCompareNoCase( name, "rateApp" ) == 0 )
-		|| ( Rtt_StringCompareNoCase( name, "appStore" ) == 0 );
+		|| ( Rtt_StringCompareNoCase( name, "sms" ) == 0 && [MFMessageComposeViewController canSendText] );
 
 	return result;
 }
@@ -422,30 +405,6 @@ IPhonePlatform::ShowPopup( lua_State *L, const char *name, int optionsIndex ) co
 		else
 		{
 			Rtt_ERROR( ( "ERROR: This device cannot send SMS. The 'sms' popup will not be shown.\n" ) );
-		}
-	}
-	else if ( !Rtt_StringCompareNoCase( name, "rateApp" ) || !Rtt_StringCompareNoCase( name, "appStore" ) )
-	{
-		const char *appStringId = NULL;
-		if ( lua_istable( L, optionsIndex ) )
-		{
-			lua_getfield( L, optionsIndex, "iOSAppId" );
-			if ( lua_type( L, -1 ) == LUA_TSTRING )
-			{
-				appStringId = lua_tostring( L, -1 );
-			}
-			lua_pop( L, 1 );
-		}
-		if ( appStringId )
-		{
-			char url[256];
-			snprintf( url, sizeof(url), "itms-apps://itunes.apple.com/%s/app/id%s",
-					[[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode] UTF8String], appStringId );
-			result = OpenURL( url );
-		}
-		else
-		{
-			Rtt_ERROR( ( "ERROR: native.showPopup('rateApp') requires the iOS app ID.\n" ) );
 		}
 	}
 

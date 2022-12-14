@@ -13,7 +13,7 @@ package com.ansca.corona.storage;
 /**
  * This provider allows other applications read-only access to this application's files under its
  * private directory under internal storage, as well as its asset files within the APK's "assets"
- * directory or within Google Play expansion files. This class is needed because other applications
+ * directory. This class is needed because other applications
  * do not have permission to access this application's private files for tasks such as attaching files
  * to an e-mail, posting a photo to a social media app etc.
  * <p>
@@ -412,7 +412,7 @@ public class FileContentProvider extends android.content.ContentProvider {
 	 * @param file The file to create a content URI for.
 	 *             <p>
 	 *             If this file is set to a relative path, then this method will treat it as an asset file
-	 *             within the APK's "assets" directory or within the Google Play expansion file.
+	 *             within the APK's "assets" directory.
 	 *             <p>
 	 *             Cannot be null or else an exception will be thrown.
 	 * @return Returns a matching "content://" URI for the given file.
@@ -434,7 +434,7 @@ public class FileContentProvider extends android.content.ContentProvider {
 	 * @param filePath A relative or absolute path to a file belonging to this application.
 	 *                 <p>
 	 *                 If this file is set to a relative path, then this method will treat it as an asset file
-	 *                 within the APK's "assets" directory or within the Google Play expansion file.
+	 *                 within the APK's "assets" directory.
 	 *                 <p>
 	 *                 An exception will be thrown if set to null or empty string.
 	 * @return Returns a matching "content://" URI for the given file.

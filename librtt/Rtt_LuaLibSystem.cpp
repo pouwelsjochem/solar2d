@@ -22,7 +22,6 @@
 #include "Rtt_Runtime.h"
 #include "Rtt_GPU.h"
 #include "Rtt_RenderingStream.h"
-#include "Rtt_PlatformInAppStore.h"
 #include "Rtt_PreferenceCollection.h"
 #include "Core/Rtt_String.h"
 #include "Input/Rtt_PlatformInputDeviceManager.h"
@@ -385,17 +384,6 @@ LuaLibSystem::getInfo( lua_State *L )
 		Rtt_ASSERT_NOT_IMPLEMENTED();
 		bool supportsScreenCapture = false;
 		lua_pushboolean( L, supportsScreenCapture );
-	}
-	else if ( Rtt_StringCompare( key, "targetAppStore" ) == 0 )
-	{
-		Runtime *runtime = LuaContext::GetRuntime( L );
-		PlatformStoreProvider *storeProvider = runtime->Platform().GetStoreProvider(runtime->VMContext().LuaState());
-		const char *storeName = storeProvider ? storeProvider->GetTargetedStoreName() : NULL;
-		if (!storeName)
-		{
-			storeName = "none";
-		}
-		lua_pushstring( L, storeName );
 	}
 	else if ( Rtt_StringCompare( key, "version" ) == 0 )
 	{

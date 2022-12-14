@@ -371,9 +371,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java">
-      <Filter>src\com\ansca\corona</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java">
       <Filter>src\com\ansca\corona</Filter>
     </JCompile>
@@ -584,12 +581,6 @@
     <JCompile Include="src\com\ansca\corona\storage\package-info.java">
       <Filter>src\com\ansca\corona\storage</Filter>
     </JCompile>
-    <JCompile Include="src\com\ansca\corona\storage\PackageServices.java">
-      <Filter>src\com\ansca\corona\storage</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\storage\PackageState.java">
-      <Filter>src\com\ansca\corona\storage</Filter>
-    </JCompile>
     <JCompile Include="src\com\ansca\corona\storage\ResourceServices.java">
       <Filter>src\com\ansca\corona\storage</Filter>
     </JCompile>
@@ -604,12 +595,6 @@
     </JCompile>
     <JCompile Include="src\com\ansca\corona\storage\FileContentProvider.java">
       <Filter>src\com\ansca\corona\storage</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreServices.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
-    </JCompile>
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreName.java">
-      <Filter>src\com\ansca\corona\purchasing</Filter>
     </JCompile>
     <JCompile Include="src\com\ansca\corona\permissions\PermissionsSettings.java">
       <Filter>src\com\ansca\corona\permissions</Filter>

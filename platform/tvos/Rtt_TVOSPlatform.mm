@@ -16,7 +16,6 @@
 
 #include "Rtt_IPhoneAudioSessionManager.h"
 
-#include "Rtt_AppleInAppStore.h"
 #include "Rtt_IPhoneScreenSurface.h"
 
 #include "Rtt_LuaLibNative.h"
@@ -88,15 +87,13 @@ namespace Rtt
 
 TVOSPlatform::TVOSPlatform( CoronaView *view )
 :	Super( view ),
-	fDevice( GetAllocator(), view ),
-	fInAppStoreProvider( NULL )
+	fDevice( GetAllocator(), view )
 {
 }
 
 TVOSPlatform::~TVOSPlatform()
 {
 	[fActivityView release];
-	Rtt_DELETE( fInAppStoreProvider );
 }
 
 // =====================================================================
@@ -109,24 +106,11 @@ TVOSPlatform::GetDevice() const
 }
 
 // =====================================================================
-PlatformStoreProvider*
-TVOSPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
-{
-	if (!fInAppStoreProvider)
-	{
-		fInAppStoreProvider = Rtt_NEW( fAllocator, AppleStoreProvider( handle ) );
-	}
-	return fInAppStoreProvider;
-}
 
 bool
 TVOSPlatform::CanShowPopup( const char *name ) const
 {
-	bool result =
-		( Rtt_StringCompareNoCase( name, "rateApp" ) == 0 )
-		|| ( Rtt_StringCompareNoCase( name, "appStore" ) == 0 );
-
-	return result;
+	return false;
 }
 
 bool
@@ -139,40 +123,6 @@ TVOSPlatform::ShowPopup( lua_State *L, const char *name, int optionsIndex ) cons
 	if ( viewController.presentedViewController )
 	{
 		Rtt_ERROR( ( "ERROR: There is already a native modal interface being displayed. The '%s' popup will not be shown.\n", name ? name : "" ) );
-	}
-	else if ( !Rtt_StringCompareNoCase( name, "rateApp" ) || !Rtt_StringCompareNoCase( name, "appStore" ) )
-	{
-		const char *appStringId = NULL;
-		if ( lua_istable( L, optionsIndex ) )
-		{
-			lua_getfield( L, optionsIndex, "tvOSAppId" );
-			if ( lua_type( L, -1 ) == LUA_TSTRING )
-			{
-				appStringId = lua_tostring( L, -1 );
-			}
-			lua_pop( L, 1 );
-
-			if( NULL == appStringId )
-			{
-				lua_getfield( L, optionsIndex, "iOSAppId" );
-				if ( lua_type( L, -1 ) == LUA_TSTRING )
-				{
-					appStringId = lua_tostring( L, -1 );
-				}
-				lua_pop( L, 1 );
-			}
-		}
-		if ( appStringId )
-		{
-			char url[256];
-			// undocumented woodoo. If doesn't work use "https://geo.itunes.apple.com/app/id%s" instead.
-			snprintf( url, sizeof(url), "com.apple.TVAppStore://itunes.apple.com/app/id%s", appStringId );
-			result = OpenURL( url );
-		}
-		else
-		{
-			Rtt_ERROR( ( "ERROR: native.showPopup('%s') requires the iOS or tvOS app Id.\n", name ) );
-		}
 	}
 
 	return result;

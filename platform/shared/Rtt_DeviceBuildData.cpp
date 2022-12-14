@@ -58,7 +58,6 @@ DeviceBuildData::DeviceBuildData(
 	S32 targetDevice,
 	TargetDevice::Platform targetPlatform,
 	S32 targetPlatformVersion,
-	const char *targetAppStoreName,
 	const char *targetCertType, // bool isDistribution
 	const char *clientDeviceId,
 	const char *clientProductId,
@@ -68,7 +67,6 @@ DeviceBuildData::DeviceBuildData(
 	fTargetDevice( targetDevice ),
 	fTargetPlatform( targetPlatform ),
 	fTargetPlatformVersion( targetPlatformVersion ),
-	fTargetAppStoreName( pAllocator, targetAppStoreName ),
 	fTargetCertType( pAllocator, targetCertType ),
 	fClientDeviceId( pAllocator, clientDeviceId ),
 	fClientProductId( pAllocator, clientProductId ),
@@ -321,9 +319,6 @@ DeviceBuildData::PushTable( lua_State *L ) const
 
 	lua_pushinteger( L, fTargetPlatformVersion );
 	lua_setfield( L, -2, "targetPlatformVersion" );
-
-	lua_pushstring( L, fTargetAppStoreName.GetString() );
-	lua_setfield( L, -2, "targetAppStore" );
 
 	lua_pushstring( L, fTargetCertType.GetString() );
 	lua_setfield( L, -2, "targetCertType" );

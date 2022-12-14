@@ -7,7 +7,7 @@ Download the latest build from the [Releases](https://github.com/coronalabs/coro
 ![Solar2D Logo](logo.png)
 
 ## Easy-to-learn & powerful
-Solar2D is a cross-platform framework which is ideal for rapidly creating apps and games for mobile devices, TV, desktop systems. That means you can create your project once and publish it to multiple devices, including Apple iPhone and iPad, Android phones and tablets, Amazon Fire, Mac Desktop, Windows Desktop, Linux and even connected TVs such as Apple TV, Amazon Fire TV, and Android TV.
+Solar2D is a cross-platform framework which is ideal for rapidly creating apps and games for mobile devices, TV, desktop systems. That means you can create your project once and publish it to multiple devices, including Apple iPhone and iPad, Android phones and tablets, Mac Desktop, Windows Desktop, Linux and even connected TVs such as Apple TV and Android TV.
 
 ## Benefits of usage Solar2D
 * Free for everybody – Enterprise features for every developer.

@@ -57,7 +57,6 @@
 
 // -------------------------
 #include "Rtt_TargetDevice.h"
-#include "Rtt_TargetAndroidAppStore.h"
 
 #include "Rtt_MacConsolePlatform.h"
 #include "Rtt_MacPlatform.h"

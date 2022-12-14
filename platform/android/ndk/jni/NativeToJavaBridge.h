@@ -112,7 +112,6 @@ class NativeToJavaBridge
 		bool CanShowPopup( const char *name );
 		void ShowSendMailPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );
 		void ShowSendSmsPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );
-		bool ShowAppStorePopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );
 		void ShowRequestPermissionsPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource );
 		void RaisePopupClosedEvent( const char *popupName, bool wasCanceled );
 	
@@ -166,10 +165,6 @@ class NativeToJavaBridge
 			U8 * digest );
 	
 		void ExternalizeResource( const char * assetName, Rtt::String * result );
-
-	public:
-		void GetAvailableStoreNames( Rtt::PtrArray<Rtt::String> &storeNames );
-		void GetTargetedStoreName( Rtt::String *outValue );
 
 	public:
 		int NotificationSchedule( lua_State *L, int index );

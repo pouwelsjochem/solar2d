@@ -66,13 +66,13 @@
       <AdditionalOptions>-U"_WIN32" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <AntBuild>
-      <JarDirectories>$(ProjectDir)\..\..\..\external\apache-http-legacy;$(ProjectDir)\..\..\..\external\JNLua\bin;$(ProjectDir)\..\..\..\external\android-support-libs\multidex;$(ProjectDir)\..\..\..\plugins\build\licensing-google\android\bin;$(ProjectDir)\jarlibs;$(ProjectDir)\..\..\..\plugins\build-core\network\android</JarDirectories>
+      <JarDirectories>$(ProjectDir)\..\..\..\external\apache-http-legacy;$(ProjectDir)\..\..\..\external\JNLua\bin;$(ProjectDir)\..\..\..\external\android-support-libs\multidex;$(ProjectDir)\jarlibs;$(ProjectDir)\..\..\..\plugins\build-core\network\android</JarDirectories>
     </AntBuild>
     <AntBuild>
       <JarDependencies>JNLua.jar;org.apache.http.legacy.jar;android-support-multidex.jar;classes.jar;network.jar;</JarDependencies>
       <AndroidManifestLocation>$(ProjectDir)\assets\AndroidManifest.xml</AndroidManifestLocation>
       <NativeLibDirectories>Z:\corona\main\platform\android\sdk\Tegra-Android\Debug;$(ProjectDir)\..\libs</NativeLibDirectories>
-      <NativeLibDependencies>corona;jnlua5.1;lua;openal;almixer;mpg123;ads;licensing;plugins</NativeLibDependencies>
+      <NativeLibDependencies>corona;jnlua5.1;lua;openal;almixer;mpg123;ads;plugins</NativeLibDependencies>
       <JavaSourceDir>%(JavaSourceDir)</JavaSourceDir>
     </AntBuild>
     <PreBuildEvent>
@@ -92,7 +92,7 @@
       <AdditionalOptions>-U"_WIN32" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <AntBuild>
-      <JarDirectories>$(ProjectDir)\..\..\..\external\apache-http-legacy;$(ProjectDir)\..\..\..\external\JNLua\bin;$(ProjectDir)\..\..\..\external\android-support-libs\multidex;$(ProjectDir)\..\..\..\plugins\build\licensing-google\android\bin;$(ProjectDir)\jarlibs;$(ProjectDir)\..\..\..\plugins\build-core\network\android</JarDirectories>
+      <JarDirectories>$(ProjectDir)\..\..\..\external\apache-http-legacy;$(ProjectDir)\..\..\..\external\JNLua\bin;$(ProjectDir)\..\..\..\external\android-support-libs\multidex;$(ProjectDir)\jarlibs;$(ProjectDir)\..\..\..\plugins\build-core\network\android</JarDirectories>
     </AntBuild>
     <AntBuild>
       <JarDependencies>JNLua.jar;org.apache.http.legacy.jar;android-support-multidex.jar;classes.jar;network.jar;</JarDependencies>
@@ -209,7 +209,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaSensorManager.java" />
     <JCompile Include="src\com\ansca\corona\CoronaService.java" />
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaWebView.java" /> 
     <JCompile Include="src\com\ansca\corona\Crypto.java" />
@@ -287,15 +286,11 @@
     <JCompile Include="src\com\ansca\corona\permissions\PermissionState.java" />
     <JCompile Include="src\com\ansca\corona\permissions\PermissionUrgency.java" />
     <JCompile Include="src\com\ansca\corona\permissions\RequestPermissionsResultData.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreName.java" />
-    <JCompile Include="src\com\ansca\corona\purchasing\StoreServices.java" />
     <JCompile Include="src\com\ansca\corona\SmsSettings.java" />
     <JCompile Include="src\com\ansca\corona\storage\AssetFileLocationInfo.java" />
     <JCompile Include="src\com\ansca\corona\storage\FileContentProvider.java" />
     <JCompile Include="src\com\ansca\corona\storage\FileServices.java" />
     <JCompile Include="src\com\ansca\corona\storage\package-info.java" />
-    <JCompile Include="src\com\ansca\corona\storage\PackageServices.java" />
-    <JCompile Include="src\com\ansca\corona\storage\PackageState.java" />
     <JCompile Include="src\com\ansca\corona\storage\ResourceServices.java" />
     <JCompile Include="src\com\ansca\corona\storage\ZipFileEntryInputStream.java" />
     <JCompile Include="src\com\ansca\corona\storage\ZipResourceFile.java" />

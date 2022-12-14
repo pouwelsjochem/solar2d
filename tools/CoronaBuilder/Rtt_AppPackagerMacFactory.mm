@@ -20,7 +20,6 @@
 #include "Rtt_TVOSAppPackager.h"
 #include "Rtt_OSXAppPackager.h"
 
-#include "Rtt_TargetAndroidAppStore.h"
 #include "Rtt_AndroidSupportTools.h"
 
 #include <string.h>
@@ -196,7 +195,6 @@ AppPackagerFactory::CreatePackagerParamsInternal(
 
 #if defined(CORONABUILDER_ANDROID)
 		case TargetDevice::kAndroidPlatform:
-		case TargetDevice::kKindlePlatform:
 		{
 			// WARNING: Change value to lua_checkstack
 			// if you increase the number of lua_getfield() calls!!!
@@ -292,10 +290,6 @@ AppPackagerFactory::CreatePackagerParamsInternal(
 			}
 			
 			//Temporary hack just to get build working
-			const char *storeTarget = Rtt::TargetAndroidAppStore::kGoogle.GetStringId();
-			if (targetPlatform == TargetDevice::kKindlePlatform)
-				storeTarget = Rtt::TargetAndroidAppStore::kAmazon.GetStringId();
-
 			result = new AndroidAppPackagerParams(
 				appName,
 				version,
@@ -305,7 +299,6 @@ AppPackagerFactory::CreatePackagerParamsInternal(
 				dstPath,
 				NULL,
 				targetPlatform,
-				storeTarget,
 				targetPlatformVersion, // TargetDevice::kAndroidOS2_2,
 				customBuildId,
 				NULL,
@@ -393,7 +386,6 @@ AppPackagerFactory::CreatePackager( lua_State *L, int index, TargetDevice::Platf
 		break;
 
 		case TargetDevice::kAndroidPlatform:
-		case TargetDevice::kKindlePlatform:
 		{
 			NSString *resourcesDir = [[NSBundle mainBundle] resourcePath];
 			result = new AndroidAppPackager( fServices, [resourcesDir UTF8String] );

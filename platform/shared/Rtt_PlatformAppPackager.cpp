@@ -96,7 +96,6 @@ AppPackagerParams::AppPackagerParams( const char* appName,
 	const char* dstDir,
 	const char* sdkRoot,
 	TargetDevice::Platform targetPlatform,
-	const char * targetAppStoreName,
 	S32 targetVersion,
 	S32 targetDevice,
 	const char * customBuildId,
@@ -131,7 +130,6 @@ AppPackagerParams::AppPackagerParams( const char* appName,
 	}
 	fAppPackage.Set( appPackage );
 	fCertType.Set( isDistributionBuild ? "distribution" : "developer" );
-	fTargetAppStoreName.Set( targetAppStoreName );
 }
 
 AppPackagerParams::~AppPackagerParams()
@@ -163,7 +161,6 @@ AppPackagerParams::GetDeviceBuildData( const MPlatform& platform, const MPlatfor
 			fTargetDevice,
 			(TargetDevice::Platform)fTargetPlatform,
 			fTargetVersion,
-			fTargetAppStoreName.GetString(),
 			fCertType.GetString(),
 			deviceId,
 			fProductId.GetString(), // TODO: What is this?

@@ -41,7 +41,6 @@
 #include "Rtt_Runtime.h"
 #include "Rtt_MRuntimeDelegate.h"
 #include "Core/Rtt_String.h"
-#include "Rtt_LuaLibInAppStore.h"
 
 #include <string.h>
 #include <signal.h>

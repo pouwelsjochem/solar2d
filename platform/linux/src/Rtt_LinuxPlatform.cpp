@@ -38,7 +38,6 @@ namespace Rtt
 		fSystemCachesDir(fAllocator),
 		fInstallDir(fAllocator),
 		fSkinDir(fAllocator),
-		fStoreProvider(NULL),
 		fScreenSurface(NULL)
 	{
 		fResourceDir.Set(resourceDir);
@@ -53,8 +52,6 @@ namespace Rtt
 
 	LinuxPlatform::~LinuxPlatform()
 	{
-		Rtt_DELETE(fStoreProvider);
-
 		// it will be deleted in Rtt_Display by Rtt_DELETE( fTarget );
 		//Rtt_DELETE(fScreenSurface);
 	}
@@ -84,11 +81,6 @@ namespace Rtt
 	bool LinuxPlatform::OpenURL(const char* url) const
 	{
 		return ::OpenURL(url);
-	}
-
-	PlatformStoreProvider* LinuxPlatform::GetStoreProvider(const ResourceHandle<lua_State>& handle) const
-	{
-		return NULL;
 	}
 
 	NativeAlertRef LinuxPlatform::ShowNativeAlert(const char* title, const char* msg, const char** buttonLabels, U32 numButtons, LuaResource* resource) const
@@ -448,10 +440,6 @@ namespace Rtt
 			// Display a "Send Mail" window.
 		}
 		else if (Rtt_StringCompareNoCase(name, "sms") == 0)
-		{
-			// nop
-		}
-		else if ((Rtt_StringCompareNoCase(name, "rateApp") == 0) || (Rtt_StringCompareNoCase(name, "appStore") == 0))
 		{
 			// nop
 		}

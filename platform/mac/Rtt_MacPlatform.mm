@@ -17,8 +17,6 @@
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacViewSurface.h"
 #include "Rtt_MacWebViewObject.h"
-#include "Rtt_PlatformInAppStore.h"
-#include "Rtt_AppleInAppStore.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_PreferenceCollection.h"
@@ -75,7 +73,6 @@ NSString* const kUserPreferenceLastTVOSCertificate = @"lastTVOSCertificate";
 NSString* const kUserPreferenceLastOSXCertificate = @"lastOSXCertificate";
 NSString* const kUserPreferenceLastAndroidKeyAlias = @"lastAndroidKeyAlias";
 NSString* const kUserPreferenceLastAndroidKeystore = @"lastAndroidKeystore";
-NSString* const kUserPreferenceLastAndroidTargetStore = @"lastAndroidTargetStore";
 
 
 @interface CustomAlert : NSAlert
@@ -358,7 +355,6 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fDevice( GetAllocator(), view ),
 	fMutexCount( 0 ),
 	fDelegate( [[AlertDelegate alloc] init] ),
-	fStoreProvider( NULL ),
 	fExitCallback( NULL )
 {
 	NSString *path = [[NSBundle mainBundle] resourcePath];
@@ -372,7 +368,6 @@ MacPlatform::~MacPlatform()
 	Rtt_ASSERT( 0 == fMutexCount );
 
 	Rtt_DELETE( fExitCallback );
-	Rtt_DELETE( fStoreProvider );
 	[fDelegate release];
 	pthread_mutex_destroy( & fMutex );
 
@@ -652,22 +647,6 @@ MacPlatform::CanOpenURL( const char *url ) const
 		}
 	}
 	return result;
-}
-
-PlatformStoreProvider*
-MacPlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
-{
-#ifdef Rtt_AUTHORING_SIMULATOR
-	// Because the simulator doesn't run under the user's bundle identifier, I don't think it is possible to comminicate with the Store.
-	// Don't bother to create the store provider and let this function return NULL.
-	return NULL;
-#else
-	if (!fStoreProvider)
-	{
-		fStoreProvider = Rtt_NEW( fAllocator, AppleStoreProvider( handle ) );
-	}
-	return fStoreProvider;
-#endif // Rtt_AUTHORING_SIMULATOR
 }
 
 NativeAlertRef

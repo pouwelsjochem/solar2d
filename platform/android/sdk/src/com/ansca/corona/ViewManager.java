@@ -570,7 +570,7 @@ public class ViewManager {
 					String url = finalUrl;
 					android.content.Context context = CoronaEnvironment.getApplicationContext();
 					if (context != null) {
-						// If the given URL is to a local file within the APK or expansion file,
+						// If the given URL is to a local file within the APK file,
 						// then create a content URI for it.
 						String path = url;
 						String suffix = "";

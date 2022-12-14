@@ -13,7 +13,6 @@
 
 #include "Rtt_AndroidAppPackager.h"
 
-#include "Rtt_TargetAndroidAppStore.h"
 #include "Rtt_AndroidSupportTools.h"
 
 #include <string.h>
@@ -58,7 +57,6 @@ AppPackagerFactory::CreatePackagerParamsAndroid(
 		break;
 
 		case TargetDevice::kAndroidPlatform:
-		case TargetDevice::kKindlePlatform:
 		{
 			// WARNING: Change value to lua_checkstack
 			// if you increase the number of lua_getfield() calls!!!
@@ -171,25 +169,6 @@ AppPackagerFactory::CreatePackagerParamsAndroid(
 				packager.ReadBuildSettings( projectPath );
 				customBuildId = packager.GetCustomBuildId();
 			}
-			
-			//Temporary hack just to get build working
-			const char *storeTarget = Rtt::TargetAndroidAppStore::kGoogle.GetStringId();
-			if (targetPlatform == TargetDevice::kKindlePlatform)
-				storeTarget = Rtt::TargetAndroidAppStore::kAmazon.GetStringId();
-
-			lua_getfield( L, index, "androidStore" );
-			const char* customStore = lua_tostring( L, -1 );
-			if (customStore != NULL)
-			{
-				if(Rtt::TargetAndroidAppStore::GetByStringId(customStore) != NULL)
-				{
-					storeTarget = customStore;
-				}
-				else
-				{
-					fprintf( stderr, "WARNING: uknown androidStore: %s, defaulting to %s\n", customStore, storeTarget );
-				}
-			}
 
 			result = new AndroidAppPackagerParams(
 				appName,
@@ -200,7 +179,6 @@ AppPackagerFactory::CreatePackagerParamsAndroid(
 				dstPath,
 				NULL,
 				targetPlatform,
-				storeTarget,
 				targetPlatformVersion, // TargetDevice::kAndroidOS2_2,
 				customBuildId,
 				NULL,

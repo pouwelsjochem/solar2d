@@ -289,12 +289,11 @@ Java_com_ansca_corona_JavaToNativeShim_nativeInputDeviceStatusEvent(
 JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeResize(
 	JNIEnv * env, jclass c, jlong bridgeAddress, jstring package, jstring documentsDir, jstring applicationSupportDir,
-	jstring temporaryDir, jstring cachesDir, jstring systemCachesDir, jstring expansionFileDir,
+	jstring temporaryDir, jstring cachesDir, jstring systemCachesDir,
 	jint w, jint h, jboolean isCoronaKit)
 {
 		JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->Init(
-    		env, package, documentsDir, applicationSupportDir, temporaryDir, cachesDir, systemCachesDir,
-    		expansionFileDir, w, h, isCoronaKit);
+    		env, package, documentsDir, applicationSupportDir, temporaryDir, cachesDir, systemCachesDir, w, h, isCoronaKit);
 }
 
 /* Call to render the next GL frame */

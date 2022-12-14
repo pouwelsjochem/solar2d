@@ -94,12 +94,6 @@ MacConsolePlatform::CanOpenURL( const char* url ) const
 	return -1;
 }
 
-PlatformStoreProvider*
-MacConsolePlatform::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
-{
-	return NULL;
-}
-
 NativeAlertRef
 MacConsolePlatform::ShowNativeAlert(
 	const char *title,

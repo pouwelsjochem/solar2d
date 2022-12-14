@@ -26,9 +26,7 @@ val configureCoronaPlugins: String? by project
 val coronaBuild: String? by project
 val (dailyBuildYear, dailyBuildRevision) = coronaBuild?.split('.') ?: listOf(null, null)
 val coronaBuildData: String? by project
-val coronaExpansionFileName: String? by project
-val coronaTargetStore = project.findProperty("coronaTargetStore") as? String ?: "none"
-val isExpansionFileRequired = !coronaExpansionFileName.isNullOrEmpty()
+val coronaExpansionFileName: "dummyExpansionFile.obb"
 val coronaSrcDir = project.findProperty("coronaSrcDir") as? String
         ?: if (file("$rootDir/../test/assets2").exists()) {
             "$rootDir/../test/assets2"
@@ -92,7 +90,7 @@ val parsedBuildProperties: JsonObject = run {
 
     val buildSettingsFile = file("$coronaSrcDir/build.settings")
     if (!buildSettingsFile.exists()) {
-        return@run JsonObject(mapOf("buildSettings" to JsonObject(), "packageName" to coronaAppPackage, "targetedAppStore" to coronaTargetStore))
+        return@run JsonObject(mapOf("buildSettings" to JsonObject(), "packageName" to coronaAppPackage))
     }
 
     val output = ByteArrayOutputStream()
@@ -119,7 +117,7 @@ val parsedBuildProperties: JsonObject = run {
         throw InvalidUserDataException("Build.settings file could not be parsed: ${output.toString().replace(luaCmd, "")}")
     }
     val parsedBuildSettingsFile = Parser.default().parse(StringBuilder(output.toString())) as? JsonObject
-    return@run JsonObject(mapOf("buildSettings" to parsedBuildSettingsFile, "packageName" to coronaAppPackage, "targetedAppStore" to coronaTargetStore))
+    return@run JsonObject(mapOf("buildSettings" to parsedBuildSettingsFile, "packageName" to coronaAppPackage))
 }
 
 extra["minSdkVersion"] = parsedBuildProperties.lookup<Any?>("buildSettings.android.minSdkVersion").firstOrNull()?.toString()?.toIntOrNull()
@@ -140,16 +138,6 @@ val coronaVersionName =
 val coronaVersionCode: Int =
         parsedBuildProperties.lookup<Any?>("buildSettings.android.versionCode").firstOrNull()?.toString()?.toIntOrNull()
                 ?: (project.findProperty("coronaVersionCode") as? String)?.toIntOrNull() ?: 1
-
-val androidDestPluginPlatform = if (coronaTargetStore.equals("amazon", ignoreCase = true)) {
-    "android-kindle"
-} else if (coronaTargetStore.equals("samsung", ignoreCase = true)) {
-    "android-nongoogle"
-} else {
-    "android"
-}
-
-val coronaAndroidPluginsCache = "${System.getenv("HOME")}/Library/Application Support/Corona/build cache/$androidDestPluginPlatform"
 
 val pluginDisabledMetadata = mutableSetOf<String>()
 val pluginDisabledDependencies = mutableSetOf<String>()
@@ -241,30 +229,11 @@ android {
     aaptOptions {
         additionalParameters("--extra-packages", extraPackages.filter { it.isNotBlank() }.joinToString(":"))
     }
-    if (isExpansionFileRequired) {
-        assetPacks.add(":preloadedAssets")
-    }
+    assetPacks.add(":preloadedAssets")
 
     parsedBuildProperties.lookup<JsonArray<JsonObject>>("buildSettings.android.onDemandResources").firstOrNull()?.forEach {
         it["tag"].let { tag ->
             assetPacks.add(":pda-$tag")
-        }
-    }
-
-    // This is dirty hack because Android Assets refuse to copy assets which start with . or _
-    if (!isExpansionFileRequired) {
-        android.applicationVariants.all {
-            mergeAssetsProvider!!.configure {
-                val mergeTask = this
-                doLast {
-                    copy {
-                        from(generatedPluginAssetsDir) {
-                            include(".corona-plugins/**")
-                        }
-                        into(mergeTask.outputDir)
-                    }
-                }
-            }
         }
     }
 }
@@ -345,33 +314,6 @@ fun processPluginGradleScripts() {
     }
 }
 processPluginGradleScripts()
-
-
-fun coronaAssetsCopySpec(spec: CopySpec) {
-    with(spec) {
-        file("$coronaTmpDir/excludesfile.properties").takeIf { it.exists() }?.readLines()?.forEach {
-            exclude(it)
-        }
-        parsedBuildProperties.lookup<JsonArray<JsonObject>>("buildSettings.android.onDemandResources").firstOrNull()?.forEach {
-            it["resource"].let { res ->
-                exclude("$res")
-                exclude("$res/**")
-            }
-        }
-        if (!isSimulatorBuild) {
-            // use build.settings properties only if this is not simulator build
-            parsedBuildProperties.lookup<JsonArray<String>>("buildSettings.excludeFiles.all").firstOrNull()?.forEach {
-                exclude("**/$it")
-            }
-            parsedBuildProperties.lookup<JsonArray<String>>("buildSettings.excludeFiles.android").firstOrNull()?.forEach {
-                exclude("**/$it")
-            }
-        }
-        exclude("**/Icon\r")
-        exclude("AndroidResources/**")
-        exclude("**/*.lua", "build.settings")
-    }
-}
 
 android.applicationVariants.all {
     val baseName = this.baseName.toLowerCase()
@@ -485,13 +427,6 @@ android.applicationVariants.all {
         from("$coronaTmpDir/output/assets")
         from(compiledLuaArchive)
 
-        if (!isExpansionFileRequired) {
-            from(coronaSrcDir) {
-                coronaAssetsCopySpec(this)
-            }
-        }
-
-
         doFirst {
             delete(generatedAssetsDir)
             mkdir(generatedAssetsDir)
@@ -526,7 +461,6 @@ fun downloadAndProcessCoronaPlugins(reDownloadPlugins: Boolean = true) {
 
         val buildDataStr = coronaBuildData?.let { file(it).readText() } ?: run {
             val fakeBuildData = (parsedBuildProperties.obj("buildSettings") ?: JsonObject())
-            fakeBuildData["targetAppStore"] = coronaTargetStore
             fakeBuildData["dailyBuildYear"] = dailyBuildYear
             fakeBuildData["dailyBuildRevision"] = dailyBuildRevision
             fakeBuildData["appName"] = coronaAppFileName ?: "Corona App"
@@ -539,7 +473,7 @@ fun downloadAndProcessCoronaPlugins(reDownloadPlugins: Boolean = true) {
                 "buildData" to buildDataStr,
                 "modernPlatform" to "android",
                 "platform" to "android",
-                "pluginPlatform" to androidDestPluginPlatform,
+                "pluginPlatform" to "android",
                 "destinationDirectory" to coronaPlugins.absolutePath
         )).toJsonString()
         val builderInput = file("$buildDir/tmp/builderInput.json")
@@ -797,11 +731,6 @@ tasks.register<Zip>("exportCoronaAppTemplate") {
         include("AndroidManifest.template.xml", "convert_metadata.lua", "update_manifest.lua", "strings.xml")
         into("template/app/buildTools")
     }
-    from("$rootDir/../../plugins/build/licensing-google/android/bin") {
-        include("classes.jar")
-        into("template/app/libs")
-        rename("classes.jar", "licensing-google.jar")
-    }
     doLast {
         logger.lifecycle("Exported to '${archiveFile.get()}'")
     }
@@ -884,12 +813,6 @@ fun copyWithAppFilename(dest: String, appName: String?) {
         android.applicationVariants.matching {
             it.name.equals("release", true)
         }.all {
-            if(!isExpansionFileRequired && !hasODR) {
-                copyTask.from(packageApplicationProvider!!.get().outputDirectory) {
-                    include("*.apk")
-                    exclude("*unsigned*")
-                }
-            }
             copyTask.from("$buildDir/outputs/bundle/$name") {
                 include("*.aab")
             }
@@ -1048,8 +971,7 @@ tasks.create<Copy>("copyDefaultNotificationIcons") {
     }
 }
 
-tasks.register<Zip>("createExpansionFile") {
-    enabled = isExpansionFileRequired
+tasks.register<Zip>("createExpansionFile") {   
     destinationDirectory.set(file("$buildDir/outputs"))
     archiveFileName.set(coronaExpansionFileName)
 
@@ -1068,7 +990,6 @@ tasks.register<Zip>("createExpansionFile") {
 dependencies {
     if (coronaBuiltFromSource) {
         implementation(project(":Corona"))
-        implementation(files("$rootDir/../../plugins/build/licensing-google/android/bin/classes.jar"))
     } else {
         val coronaLocal = file("libs/Corona.aar")
         if (coronaLocal.exists()) {
@@ -1076,7 +997,6 @@ dependencies {
         } else {
             checkCoronaNativeInstallation()
             implementation(":Corona@aar")
-            implementation(":licensing-google@jar")
         }
         implementation(fileTree("libs") {
             include("**/*.jar")

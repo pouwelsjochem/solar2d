@@ -417,13 +417,6 @@ IPhonePlatformBase::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & 
 	Rtt_ASSERT_NOT_REACHED();
 }
 
-PlatformStoreProvider*
-IPhonePlatformBase::GetStoreProvider( const ResourceHandle<lua_State>& handle ) const
-{
-	Rtt_ASSERT_NOT_REACHED();
-	return NULL;
-}
-
 PlatformDisplayObject*
 IPhonePlatformBase::CreateNativeWebView( const Rect& bounds ) const
 {

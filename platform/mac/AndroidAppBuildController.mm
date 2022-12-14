@@ -20,8 +20,6 @@
 #import "TextEditorSupport.h"
 #import "XcodeToolHelper.h"
 
-#include "Rtt_TargetAndroidAppStore.h"
-
 #include "ListKeyStore.h"
 #include "Rtt_MacDialogController.h"
 
@@ -47,7 +45,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 @synthesize appVersionCode;
 @synthesize androidKeyAlias;
 @synthesize androidKeyAliasPassword;
-@synthesize targetStoreId;
 
 - (id)initWithWindowNibName:(NSString*)nibFile
                 projectPath:(NSString *)projPath
@@ -100,15 +97,9 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 {
     [super showWindow:sender];
 
-	[self initTargetStore];
-
-	TargetDevice::Platform targetPlatform = [self getPlatformFromMenuSelection];
+	TargetDevice::Platform targetPlatform = Rtt::TargetDevice::kAndroidPlatform;
 
 	[self window].title = @"Build for Android";
-	if ( TargetDevice::kKindlePlatform == targetPlatform )
-	{
-		[self window].title = @"Build for Amazon/Kindle";
-	}
 
 	if ( [self.androidAppPackage length] == 0 )
 	{
@@ -240,12 +231,7 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 
     NSString *keystorePath = [self keystorePath];
     NSString *keystorePassword = [self keystorePassword];
-    NSMenuItem *targetStartMenuItem = [fTargetStore selectedItem];
-    self.targetStoreId = [targetStartMenuItem representedObject];
-    Rtt::TargetAndroidAppStore *pLastSelectedStore = Rtt::TargetAndroidAppStore::GetByStringId([self.targetStoreId UTF8String]);
-    TargetDevice::Platform targetPlatform = pLastSelectedStore->GetPlatform();
-
-    [appDelegate saveAppSpecificPreference:kUserPreferenceLastAndroidTargetStore value:self.targetStoreId];
+    TargetDevice::Platform targetPlatform = Rtt::TargetDevice::kAndroidPlatform;
 
     NSMenuItem *keyAliasItem = [fSigningIdentitiesAndroid selectedItem];
     self.androidKeyAlias = [keyAliasItem title];
@@ -301,9 +287,7 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 
     const char * customBuildId = androidPackager->GetCustomBuildId();
 
-    Rtt_ASSERT(
-               TargetDevice::kAndroidPlatform == targetPlatform
-               || TargetDevice::kKindlePlatform == targetPlatform);
+    Rtt_ASSERT(TargetDevice::kAndroidPlatform == targetPlatform);
 
     params = new AndroidAppPackagerParams(
                                           name,
@@ -314,7 +298,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
                                           dstDir,
                                           "",  // TODO: sdkRoot needed?
                                           targetPlatform,
-                                          [self.targetStoreId UTF8String],
                                           targetVersion,
                                           customBuildId,
                                           NULL,
@@ -952,72 +935,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
     }
 }
 
-- (Rtt::TargetDevice::Platform) getPlatformFromMenuSelection
-{
-    Rtt::TargetAndroidAppStore *pLastSelectedStore = Rtt::TargetAndroidAppStore::GetByStringId([self.targetStoreId UTF8String]);
-
-    Rtt::TargetDevice::Platform result = Rtt::TargetDevice::kAndroidPlatform;
-    if (NULL != pLastSelectedStore)
-    {
-        result = pLastSelectedStore->GetPlatform();
-    }
-    
-    return result;
-}
-
--(void)initTargetStore
-{
-    [fTargetStore removeAllItems];
-
-    NSString* lastAndroidTargetStoreId = [appDelegate restoreAppSpecificPreference:@"androidTargetStore" defaultValue:kValueNotSet];
-
-    if ([lastAndroidTargetStoreId isEqualToString:kValueNotSet])
-    {
-        lastAndroidTargetStoreId = [[NSUserDefaults standardUserDefaults] stringForKey:kUserPreferenceLastAndroidTargetStore];
-    }
-
-    Rtt::TargetAndroidAppStore *pLastSelectedStore = Rtt::TargetAndroidAppStore::GetByStringId([lastAndroidTargetStoreId UTF8String]);
-
-    int iStoreCount = Rtt::TargetAndroidAppStore::GetCount();
-    for (int iStoreIndex = 0; iStoreIndex < iStoreCount; iStoreIndex++)
-    {
-        Rtt::TargetAndroidAppStore *pNextStore = Rtt::TargetAndroidAppStore::GetByIndex(iStoreIndex);
-        if (pNextStore != NULL)
-        {
-
-            NSString *storeName = [[NSString alloc] initWithUTF8String:pNextStore->GetName()];
-            NSMenuItem *item = [self addTargetStoreWithTitle:storeName];
-            if (nil != item)
-            {
-                NSString *storeId = [[NSString alloc] initWithUTF8String:pNextStore->GetStringId()];
-
-                [item setRepresentedObject:storeId];
-
-                if (pNextStore == pLastSelectedStore)
-                {
-                    [fTargetStore selectItem:item];
-                }
-                
-                if (pLastSelectedStore == NULL && pNextStore == &Rtt::TargetAndroidAppStore::kGoogle)
-                {
-                    [fTargetStore selectItem:item];
-                }
-            }
-            
-        }
-    }
-}
-
--(NSMenuItem*)addTargetStoreWithTitle:(NSString*)store
-{
-    NSString *title = store;
-    [fTargetStore addItemWithTitle:title];
-    NSMenuItem *item = [fTargetStore itemWithTitle:title];
-    [title release];
-
-    return item;
-}
-
 -(void)didSelectAlias:(NSNotification*)notification
 {
     [fSigningIdentities setTitle:@"Selection made"];
@@ -1041,7 +958,6 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 	[appDelegate saveAppSpecificPreference:@"androidAppVersionCode" value:[self.appVersionCode stringValue]];
     [appDelegate saveAppSpecificPreference:@"androidKeystore" value:[[fAndroidKeystore selectedItem] title]];
     [appDelegate saveAppSpecificPreference:@"androidKeystoreAlias" value:self.androidKeyAlias];
-    [appDelegate saveAppSpecificPreference:@"androidTargetStore" value:self.targetStoreId];
 }
 
 - (BOOL)verifyBuildTools:(id)sender

@@ -1049,35 +1049,6 @@ NativeToJavaBridge::ShowSendSmsPopup( NativeToJavaBridge::DictionaryRef dictiona
 	}
 }
 
-bool
-NativeToJavaBridge::ShowAppStorePopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource )
-{
-	NativeTrace trace( "NativeToJavaBridge::ShowAppStorePopup" );
-
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	jboolean result = false;
-	if ( bridge.isValid() )
-	{
-		jmethodID mid = bridge.getEnv()->GetStaticMethodID(
-						bridge.getClass(), "callShowAppStorePopup", "(Lcom/ansca/corona/CoronaRuntime;Ljava/util/HashMap;)Z" );
-		if ( mid != NULL )
-		{
-			if (!fPopupClosedEventResource)
-			{
-				fPopupClosedEventResource = resource;
-			}
-			jobject hashMapObject = NULL;
-			if (dictionaryOfSettings)
-			{
-				hashMapObject = ((jHashMapParam*)dictionaryOfSettings)->getHashMapObject();
-			}
-			result = bridge.getEnv()->CallStaticBooleanMethod( bridge.getClass(), mid, fCoronaRuntime, hashMapObject );
-			HandleJavaException();
-		}
-	}
-	return (bool)result;
-}
-
 void
 NativeToJavaBridge::ShowRequestPermissionsPopup( NativeToJavaBridge::DictionaryRef dictionaryOfSettings, Rtt::LuaResource *resource )
 {
@@ -2184,56 +2155,6 @@ NativeToJavaBridge::ExternalizeResource( const char * assetName, Rtt::String * r
 			}
 		}
 	}
-}
-
-void
-NativeToJavaBridge::GetAvailableStoreNames( Rtt::PtrArray<Rtt::String> &storeNames )
-{
-	NativeTrace trace( "NativeToJavaBridge::GetAvailableStoreNames" );
-	
-	// Fetch store names from the Java side of Corona.
-	bool didReceiveStrings = false;
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-	if (bridge.isValid())
-	{
-		jmethodID mid =  bridge.getEnv()->GetStaticMethodID(
-								bridge.getClass(), "callGetAvailableStoreNames", "()[Ljava/lang/String;");
-		jobject resultArray = bridge.getEnv()->CallStaticObjectMethod(bridge.getClass(), mid);
-		HandleJavaException();
-		if (resultArray)
-		{
-			jstringArrayResult jstrings(bridge.getEnv(), (jobjectArray)resultArray);
-			jsize arraySize = jstrings.getLength();
-			if (arraySize > 0)
-			{
-				// Copy the received Java strings to the given string array.
-				// String objects allocated here will be automatically deleted by the given array.
-				storeNames.Reserve(arraySize);
-				jstringResult javaString(bridge.getEnv());
-				for (int index = 0; index < arraySize; index++)
-				{
-					javaString.setString(jstrings.getString(index));
-					storeNames.Append(new Rtt::String(storeNames.Allocator(), javaString.getUTF8()));
-				}
-				didReceiveStrings = true;
-			}
-			bridge.getEnv()->DeleteLocalRef(resultArray);
-		}
-	}
-	
-	// If strings were not received, then clear the given array.
-	// Doing this last is an optimization. No sense in deleting the array's memory if we don't have to.
-	if (!didReceiveStrings)
-	{
-		storeNames.Empty();
-	}
-}
-
-void
-NativeToJavaBridge::GetTargetedStoreName( Rtt::String *outValue )
-{
-	GetString( "callGetTargetedStoreName", outValue );
-	HandleJavaException();
 }
 
 int

@@ -20,10 +20,8 @@
 		NSNumber *appVersionCode;
         NSString *androidKeyAlias;
         NSString *androidKeyAliasPassword;
-        NSString *targetStoreId;
 
 	@private
-        IBOutlet NSPopUpButton *fTargetStore;
 		IBOutlet NSPopUpButton *fAndroidKeystore;
 		IBOutlet NSPopUpButton *fSigningIdentitiesAndroid;
 		DialogController *fAndroidPasswordController;
@@ -34,7 +32,6 @@
 @property (nonatomic, readwrite, copy) NSNumber* appVersionCode;
 @property (nonatomic, readwrite, copy) NSString* androidKeyAlias;
 @property (nonatomic, readwrite, copy) NSString* androidKeyAliasPassword;
-@property (nonatomic, readwrite, copy) NSString* targetStoreId;
 
 - (IBAction)browseKeystorePath:(id)sender;
 

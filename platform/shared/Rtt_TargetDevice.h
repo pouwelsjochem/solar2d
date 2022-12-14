@@ -32,7 +32,6 @@ class TargetDevice
 			kIPhonePlatform = 0, // iOS Store
 			kAndroidPlatform = 1, // Android Marketplace
 			kOSXPlatform = 2, // Mac App Store
-			kKindlePlatform = 3, // Amazon app store (Android forks are considered separate platforms)
 			kWin32Platform = 4, // Win32 Windows desktop app
 			kTVOSPlatform = 5, // tvOS
 			kLinuxPlatform = 6, // Linux desktop

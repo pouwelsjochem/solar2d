@@ -20,11 +20,7 @@ if (file("sdk").exists()) {
     include(":Corona")
     project(":Corona").projectDir = file("sdk")
 }
-
-val coronaExpansionFileName: String? by settings
-if(!coronaExpansionFileName.isNullOrBlank()) {
-    include(":preloadedAssets")
-}
+include(":preloadedAssets")
 
 val coronaTmpDir: String? by settings
 val parsedBuildProperties: JsonObject? = run {

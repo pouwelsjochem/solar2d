@@ -45,7 +45,6 @@ class AppPackagerParams
 		String fProductId;
 		String fAppPackage;
 		String fCertType;
-		String fTargetAppStoreName;
 		String fBuildMessage;
 		String fCustomTemplate;
 		TargetDevice::Platform fTargetPlatform;
@@ -66,7 +65,6 @@ class AppPackagerParams
 			const char* dstDir,
 			const char* sdkRoot,
 			TargetDevice::Platform targetPlatform,
-			const char * targetAppStoreName,
 			S32 targetVersion,
 			S32 targetDevice,
 		    const char * customBuildId,
@@ -82,7 +80,6 @@ class AppPackagerParams
 		const char * GetSrcDir() const { return fSrcDir.GetString(); }
 		const char * GetDstDir() const { return fDstDir.GetString(); }
 		const char * GetSdkRoot() const { return fSdkRoot.GetString(); }
-		const char * GetTargetAppStoreName() const { return fTargetAppStoreName.GetString(); }
 		void SetCustomTemplate( const char * newValue ) { fCustomTemplate.Set( newValue ); }
 		const char * GetCustomTemplate() const { return fCustomTemplate.IsEmpty() ? "" : fCustomTemplate.GetString(); }
 		TargetDevice::Platform GetTargetPlatform() const { return fTargetPlatform; }

@@ -235,10 +235,6 @@ public class CoronaActivity extends Activity {
 
 		CoronaSystemApiHandler systemHandler = new CoronaSystemApiHandler(this);
 		fController.setCoronaSystemApiListener(systemHandler);
-
-		// Attempt to load/reload this application's expansion files, if they exist.
-		com.ansca.corona.storage.FileServices fileServices = new com.ansca.corona.storage.FileServices(this);
-		fileServices.loadExpansionFiles();
 		
 		// Set up a handler for sending messages and posting Runnable object to the main UI threads message queue.
 		myHandler = new Handler();
@@ -1204,15 +1200,6 @@ public class CoronaActivity extends Activity {
 		else {
 			Log.i("Corona", "ERROR: CoronaActivity.onPause(): Can't suspend the CoronaActivity's views since there's no ViewManager!");
 		}
-	}
-
-	private boolean canWriteToExternalStorage() {
-		String permissionName = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-		if (checkCallingOrSelfPermission(permissionName) == android.content.pm.PackageManager.PERMISSION_GRANTED
-				&& android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
-			return true;
-		}
-		return false;
 	}
 
 	/**

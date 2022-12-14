@@ -427,7 +427,7 @@ public class Controller {
 					isSandboxedFile = file.exists();
 				}
 				else {
-					// The URL likely references a file inside of the APK or expansion file.
+					// The URL likely references a file inside of the APK.
 					// Attempt to fetch a relative path to the file, if in fact it belongs to this app.
 					final String androidAssetsPrefix = "file:///android_asset/";
 					if (url.toLowerCase().startsWith(androidAssetsPrefix)) {
@@ -1258,9 +1258,6 @@ public class Controller {
 			} else if ( nameLowerCase.equals( "sms" ) ) {
 				SmsSettings settings = new SmsSettings();
 				intent = settings.toIntent();
-			} else if ( nameLowerCase.equals( "appstore" ) || nameLowerCase.equals( "rateapp" ) ) {
-				// This just indicates that Android version understand the concept of "appStore" and "rateApp"
-				result = true;
 			} else if ( nameLowerCase.equals( "requestapppermission" ) || nameLowerCase.equals( "requestapppermissions" ) ) {
 				// The request permission dialog only exists on Android 6.0 and above.
 				result = android.os.Build.VERSION.SDK_INT >= 23;
@@ -1316,21 +1313,6 @@ public class Controller {
 				 }
 			 }
 		 } );
-	}
-	
-	/**
-	 * Displays the app store window for displaying an app's details and writing a review.
-	 * @param settings A hashtable of app IDs and supported stores.
-	 * @return Returns true if the window is about to be displayed.
-	 *         <p>
-	 *         Returns false if the App Store could not be found and is unable to display a window.
-	 */
-	public boolean showAppStoreWindow(java.util.HashMap<String, Object> settings) {
-		if (myCoronaShowApiListener == null) {
-			return false;
-		}
-
-		return myCoronaShowApiListener.showAppStoreWindow(settings);
 	}
 
 	/**

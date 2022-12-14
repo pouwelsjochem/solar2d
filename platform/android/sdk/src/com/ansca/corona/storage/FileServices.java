@@ -11,43 +11,20 @@ package com.ansca.corona.storage;
 
 
 /**
- * Provides easy seamless access to files that are external to the application, files within the APK's
- * "assets" directory, and files within Google Play expansion files. Also provides simple methods
+ * Provides easy seamless access to files that are external to the application and files within the APK's
+ * "assets" directory. Also provides simple methods
  * for copying, moving, and opening these files as well as fetching their extensions and mime types.
- * <p>
- * If the application uses Google Play expansion files, then this class will attempt to fetch asset
- * files within these expansion files first before looking for them within the APK's "assets" directory.
- * By default, this class assumes that these expansion files are named after the application's package
- * name and version code. If they use a different name (such as a different version code), then you
- * can change it by calling this class' setMainExpansionFileName() and setPatchExpansionFileName() methods.
- * If this application uses Corona's built-in Google Licensing feature, then Corona will set these
- * file names automatically according to the names provided by the Google Licensing server.
  * <p>
  * All methods in this class are thread safe and can be called from any thread.
  */
 public class FileServices extends com.ansca.corona.ApplicationContextProvider {
-	/** Set to true if this application has attempted to load expansion files. */
-	private static boolean sHasAccessedExpansionFileDirectory = false;
-
-	/** Stores the path to the "patch" expansion file for fast access. */
-	private static java.io.File sPatchExpansionFile = null;
-
-	/** Stores the path to the "main" expansion file for fast access. */
-	private static java.io.File sMainExpansionFile = null;
-
-	/** Provides fast access to zip file entries within an open "patch" expansion file. */
-	private static ZipResourceFile sPatchExpansionZipReader = null;
-
-	/** Provides fast access to zip file entries within an open "main" expansion file. */
-	private static ZipResourceFile sMainExpansionZipReader = null;
 
 	/** Provides fast access to file entries within an APK file, which is really a zip file. */
 	private static ZipResourceFile sApkZipEntryReader = null;
 
-
 	/**
 	 * Creates an object that provides easy access to the file system and this application's
-	 * internal files in the APK's asset files and Google Play expansion files.
+	 * internal files in the APK's asset files.
 	 * @param context Reference to an Android created context used to access the system's directories.
 	 *                <p>
 	 *                Setting this to null will cause an exception to be thrown.
@@ -69,9 +46,9 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 	}
 
 	/**
-	 * Determines if the given path\file name is an asset file inside of the APK or expansion file.
+	 * Determines if the given path\file name is an asset file inside of the APK file.
 	 * @param filePath The path and file name to check if it is an asset file. Cannot be null or empty.
-	 * @return Returns true if the given file is inside of the APK or expansion file.
+	 * @return Returns true if the given file is inside of the APK file.
 	 *         <p>
 	 *         Returns false if the given file is an external file, null, or an empty string.
 	 */
@@ -91,9 +68,9 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 	}
 
 	/**
-	 * Determines if the given file exists in the application's assets directory or in its expansion files.
+	 * Determines if the given file exists in the application's assets directory.
 	 * @param filePath Relative path to the asset file.
-	 * @return Returns true if the file exists in this application's assets directory or in its expansions files.
+	 * @return Returns true if the file exists in this application's assets directory.
 	 *         <p>
 	 *         Returns false if the file could not be found.
 	 */
@@ -160,7 +137,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 	/**
 	 * Determines where the given asset file can be found.
 	 * <p>
-	 * Note that assets files are packaged within an APK file or within a Google Play expansion file.
+	 * Note that assets files are packaged within an APK file.
 	 * This method determines which package file contains the given asset, where the asset's bytes
 	 * can be found within the package file, determines the asset's zip entry name if applicable,
 	 * and whether or not the asset is compressed.
@@ -181,23 +158,6 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 		// Do not continue if the given file is not an asset file.
 		if (isAssetFile(filePath) == false) {
 			return null;
-		}
-
-		// Attempt to load expansion files, if not done already.
-		if (sHasAccessedExpansionFileDirectory == false) {
-			loadExpansionFiles();
-		}
-
-		// First, attempt to fetch asset information from the "patch" expansion file.
-		if (sPatchExpansionZipReader != null) {
-			entryName = filePath;
-			zipEntry = sPatchExpansionZipReader.getEntry(entryName);
-		}
-
-		// If asset not found, then attempt to fetch it from the "main" expansion file.
-		if ((zipEntry == null) && (sMainExpansionZipReader != null)) {
-			entryName = filePath;
-			zipEntry = sMainExpansionZipReader.getEntry(entryName);
 		}
 
 		// If asset not found, then attempt to fetch it from the APK's "assets" directory.
@@ -264,172 +224,6 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 	}
 
 	/**
-	 * Gets the directory where this application's "main" and "patch" expansion files are supposed to reside in.
-	 * @return Returns the expansion file directory as a File object.
-	 *         <p>
-	 *         Returns null if the expansion directory could not be found.
-	 */
-	public java.io.File getExpansionFileDirectory() {
-		// Fetch the directory where the "main" and "patch" expansion files are supposed to reside.
-		java.io.File path = null;
-		try {
-			path = android.os.Environment.getExternalStorageDirectory();
-			if (path != null) {
-				path = new java.io.File(path, "Android/obb/" + getApplicationContext().getPackageName());
-			}
-		}
-		catch (Exception ex) { }
-		return path;
-	}
-
-	/**
-	 * Sets the name of the "main" expansion file to be loaded.
-	 * <p>
-	 * This method is expected to be called if Google Licensing returns an expansion file name. Otherwise, the
-	 * system will assume the expansion file name matches this application's package name and version code.
-	 * @param fileName The name of the "main" expansion file, including the extension, but excluding the path.
-	 *                 <p>
-	 *                 For example: "main.1.my.package.name.obb"
-	 *                 <p>
-	 *                 Set to null or empty string to use the default expansion file name using this
-	 *                 application's package name and version code.
-	 */
-	public void setMainExpansionFileName(String fileName) {
-		// Build the path to the given expansion file name.
-		java.io.File path = null;
-		if ((fileName != null) && (fileName.length() > 0)) {
-			path = getExpansionFileDirectory();
-			if (path != null) {
-				path = new java.io.File(path, fileName);
-			}
-		}
-
-		// Store the expansion file path and flag the system to reload it.
-		sMainExpansionFile = path;
-		sHasAccessedExpansionFileDirectory = false;
-	}
-
-	/**
-	 * Gets the path and file name of this application's "main" expansion file.
-	 * @return Returns the expansion file's path and name as a File object.
-	 *         <p>
-	 *         Returns null if the expansion directory could not be found.
-	 */
-	public java.io.File getMainExpansionFile() {
-		java.io.File file = sMainExpansionFile;
-		if (file == null) {
-			file = getExpansionFileOfType("main");
-			sMainExpansionFile = file;
-		}
-		return file;
-	}
-	
-	/**
-	 * Sets the name of the "patch" expansion file to be loaded.
-	 * <p>
-	 * This method is expected to be called if Google Licensing returns an expansion file name. Otherwise, the
-	 * system will assume the expansion file name matches this application's package name and version code.
-	 * @param fileName The name of the "patch" expansion file, including the extension, but excluding the path.
-	 *                 <p>
-	 *                 For example: "patch.1.my.package.name.obb"
-	 *                 <p>
-	 *                 Set to null or empty string to use the default expansion file name using this
-	 *                 application's package name and version code.
-	 */
-	public void setPatchExpansionFileName(String fileName) {
-		// Build the path to the given expansion file name.
-		java.io.File path = null;
-		if ((fileName != null) && (fileName.length() > 0)) {
-			path = getExpansionFileDirectory();
-			if (path != null) {
-				path = new java.io.File(path, fileName);
-			}
-		}
-
-		// Store the expansion file path and flag the system to reload it.
-		sPatchExpansionFile = path;
-		sHasAccessedExpansionFileDirectory = false;
-	}
-
-	/**
-	 * Gets the path and file name of this application's "patch" expansion file.
-	 * @return Returns the expansion file's path and name as a File object.
-	 *         <p>
-	 *         Returns null if the expansion directory could not be found.
-	 */
-	public java.io.File getPatchExpansionFile() {
-		java.io.File file = sPatchExpansionFile;
-		if (file == null) {
-			file = getExpansionFileOfType("patch");
-			sPatchExpansionFile = file;
-		}
-		return file;
-	}
-	
-	/**
-	 * Gets the path and file name of this application's expansion file.
-	 * @param typeName Must be set to either "main" or "patch".
-	 * @return Returns the expansion file's path and name as a File object.
-	 *         <p>
-	 *         Returns null if the expansion directory could not be found.
-	 */
-	private java.io.File getExpansionFileOfType(String typeName) {
-		// Fetch the path to the expansion file.
-		java.io.File path = null;
-		try {
-			path = getExpansionFileDirectory();
-			if (path != null) {
-				android.content.Context context = getApplicationContext();
-				int versionCode = context.getPackageManager().getPackageInfo(
-											context.getPackageName(), 0).versionCode;
-				StringBuilder fileNameBuilder = new StringBuilder();
-				fileNameBuilder.append(typeName);
-				fileNameBuilder.append(".");
-				fileNameBuilder.append(Integer.toString(versionCode));
-				fileNameBuilder.append(".");
-				fileNameBuilder.append(context.getPackageName());
-				fileNameBuilder.append(".obb");
-				path = new java.io.File(path, fileNameBuilder.toString());
-			}
-		}
-		catch (Exception ex) { }
-		return path;
-	}
-
-	/**
-	 * Loads this application's expansion files for fast access.
-	 * <p>
-	 * Calling this method twice will cause it to close access to the last loaded expansion files
-	 * and then reload the current expansion files. This method is called by the CoronaActivity's
-	 * onCreate() method in case the existing expansion files were replaced while the application
-	 * process was running in the background, which typically happens during testing.
-	 */
-	public void loadExpansionFiles() {
-		// Close the last loaded expansion files.
-		if (sPatchExpansionZipReader != null) {
-			sPatchExpansionZipReader.close();
-			sPatchExpansionZipReader = null;
-		}
-		if (sMainExpansionZipReader != null) {
-			sMainExpansionZipReader.close();
-			sMainExpansionZipReader = null;
-		}
-
-		// Attempt to load the expansion files.
-		sHasAccessedExpansionFileDirectory = false;
-		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			java.io.File expansionDirectory = getExpansionFileDirectory();
-			if ((expansionDirectory != null) && expansionDirectory.exists()) {
-				try { sPatchExpansionZipReader = new ZipResourceFile(getPatchExpansionFile()); }
-				catch (Exception ex) { }
-				try { sMainExpansionZipReader = new ZipResourceFile(getMainExpansionFile()); }
-				catch (Exception ex) { }
-			}
-		}
-		sHasAccessedExpansionFileDirectory = true;
-	}
-
-	/**
 	 * Safely opens an input stream to the given file without exceptions.
 	 * @param filePath The path and name of the file to be opened.
 	 * @return Returns an input stream to the given file.
@@ -445,38 +239,28 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 		// Open a stream to the given file.
 		java.io.InputStream inputStream = null;
 		if (isAssetFile(filePath)) {
-			// Attempt to access the file in the "patch" expansion file, if it exists.
-			java.io.File zipFile = getPatchExpansionFile();
-			inputStream = openZipFileEntry(zipFile, filePath);
+			// Attempt to access the file in the APK's "assets" directory.
+			try {
+				android.content.res.AssetManager assetManager = getApplicationContext().getAssets();
+				inputStream = assetManager.open(filePath, android.content.res.AssetManager.ACCESS_BUFFER);
+			}
+			catch (Exception ex) { }
 			if (inputStream == null) {
-				// Attempt to access the file in the "main" expansion file, if it exists.
-				zipFile = getMainExpansionFile();
-				inputStream = openZipFileEntry(zipFile, filePath);
+				// Attempt to use extracted "coronaResources" file
+				try
+				{
+					inputStream = new java.io.FileInputStream(getCoronaResourcesFile(filePath));
+				} catch (Exception ex) { }
 				if (inputStream == null) {
-					// Attempt to access the file in the APK's "assets" directory.
+					// Attempt to access the file in the APK's "raw" resource directory.
 					try {
-						android.content.res.AssetManager assetManager = getApplicationContext().getAssets();
-						inputStream = assetManager.open(filePath, android.content.res.AssetManager.ACCESS_BUFFER);
-					}
-					catch (Exception ex) { }
-					if (inputStream == null) {
-						// Attempt to use extracted "coronaResources" file
-						try
-						{
-							inputStream = new java.io.FileInputStream(getCoronaResourcesFile(filePath));
-						} catch (Exception ex) { }
-						if (inputStream == null) {
-							// Attempt to access the file in the APK's "raw" resource directory.
-							try {
-								String resourceName = createRawResourceNameForAsset(filePath);
-								ResourceServices resourceServices = new ResourceServices(getApplicationContext());
-								int resourceId = resourceServices.getRawResourceId(resourceName);
-								if (resourceId != ResourceServices.INVALID_RESOURCE_ID) {
-									inputStream = resourceServices.getResources().openRawResource(resourceId);
-								}
-							} catch (Exception ex) {
-							}
+						String resourceName = createRawResourceNameForAsset(filePath);
+						ResourceServices resourceServices = new ResourceServices(getApplicationContext());
+						int resourceId = resourceServices.getRawResourceId(resourceName);
+						if (resourceId != ResourceServices.INVALID_RESOURCE_ID) {
+							inputStream = resourceServices.getResources().openRawResource(resourceId);
 						}
+					} catch (Exception ex) {
 					}
 				}
 			}
@@ -545,29 +329,6 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 			return null;
 		}
 
-		// Attempt to load expansion files, if not done already.
-		if (sHasAccessedExpansionFileDirectory == false) {
-			loadExpansionFiles();
-		}
-
-		// If given a "patch" expansion file, then access its entry from the pre-loaded zip file.
-		if (file.equals(getPatchExpansionFile())) {
-			if (sPatchExpansionZipReader != null) {
-				try { return sPatchExpansionZipReader.getInputStream(entryName); }
-				catch (Exception ex) { }
-			}
-			return null;
-		}
-
-		// If given a "main" expansion file, then access its entry from the pre-loaded zip file.
-		if (file.equals(getMainExpansionFile())) {
-			if (sMainExpansionZipReader != null) {
-				try { return sMainExpansionZipReader.getInputStream(entryName); }
-				catch (Exception ex) { }
-			}
-			return null;
-		}
-
 		// Open a stream to the zip file entry.
 		return ZipFileEntryInputStream.tryOpen(file, entryName);
 	}
@@ -588,22 +349,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 		// Open the file via a descriptor.
 		android.content.res.AssetFileDescriptor descriptor = null;
 		if (isAssetFile(filePath)) {
-			// Load this application's expansion files, if not done already.
-			if (sHasAccessedExpansionFileDirectory == false) {
-				loadExpansionFiles();
-			}
-
-			// Attempt to access the file in the pre-loaded "patch" expansion file.
-			if (sPatchExpansionZipReader != null) {
-				try { descriptor = sPatchExpansionZipReader.getAssetFileDescriptor(filePath); }
-				catch (Exception ex) { }
-			}
 			if (descriptor == null) {
-				// Attempt to access the file in the pre-loaded "main" expansion file.
-				if (sMainExpansionZipReader != null) {
-					try { descriptor = sMainExpansionZipReader.getAssetFileDescriptor(filePath); }
-					catch (Exception ex) { }
-				}
 				if (descriptor == null) {
 					// Attempt to access the file in the APK's "assets" directory.
 					try { descriptor = getApplicationContext().getAssets().openFd(filePath); }
@@ -675,13 +421,13 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 
 	/**
 	 * Extracts the given asset file to an external directory to make it available to native C/C++ APIs
-	 * that do not have access to this application's assets directory within the APK or its expansion files.
+	 * that do not have access to this application's assets directory within the APK.
 	 * The file will be extracted to a hidden folder under the application's directory.
 	 * <p>
 	 * If the given file has already been extracted, then this method will not attempt to extract it again
 	 * unless this application has been re-installed on the device. For the re-installed case, Corona
 	 * must assume that this application might have modified assets that need to be re-extracted.
-	 * @param filePath Relative path to the asset file within the APK's assets directory or expansion files.
+	 * @param filePath Relative path to the asset file within the APK's assets directory.
 	 * @return Returns an absolute path to where the asset file was copied to.
 	 *         <p>
 	 *         Returns null if unable to find the given asset file.
@@ -692,11 +438,11 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 
 	/**
 	 * Extracts the given asset file to an external directory to make it available to native C/C++ APIs
-	 * that do not have access to this application's assets directory within the APK or its expansion files.
+	 * that do not have access to this application's assets directory within the APK.
 	 * The file will be extracted to a hidden folder under the application's directory.
 	 * <p>
 	 * If the given file has already been extracted, you can tell force the rewrite 
-	 * @param filePath Relative path to the asset file within the APK's assets directory or expansion files.
+	 * @param filePath Relative path to the asset file within the APK's assets directory.
 	 * @param overwrite Whether the file should be overwrite whats already extracted, if anything.  True to overwrite.
 	 * @return Returns an absolute path to where the asset file was copied to.
 	 *         <p>
@@ -720,13 +466,13 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 
 	/**
 	 * Extracts the given asset file to an external directory to make it available to native C/C++ APIs
-	 * that do not have access to this application's assets directory within the APK or its expansion files.
+	 * that do not have access to this application's assets directory within the APK.
 	 * The file will be extracted to a hidden folder under the application's directory.
 	 * <p>
 	 * If the given file has already been extracted, then this method will not attempt to extract it again
 	 * unless this application has been re-installed on the device. For the re-installed case, Corona
 	 * must assume that this application might have modified assets that need to be re-extracted.
-	 * @param assetFile The asset file within the APK's assets directory or expansion files.
+	 * @param assetFile The asset file within the APK's assets directory.
 	 * @return Returns an absolute path to where the asset file was copied to.
 	 *         <p>
 	 *         Returns null if unable to find the given asset file.
@@ -737,11 +483,11 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 
 	/**
 	 * Extracts the given asset file to an external directory to make it available to native C/C++ APIs
-	 * that do not have access to this application's assets directory within the APK or its expansion files.
+	 * that do not have access to this application's assets directory within the APK.
 	 * The file will be extracted to a hidden folder under the application's directory.
 	 * <p>
 	 * If the given file has already been extracted, then this method WILL attempt to extract it again
-	 * @param assetFile The asset file within the APK's assets directory or expansion files.
+	 * @param assetFile The asset file within the APK's assets directory.
 	 * @param overwrite Whether the file should be overwrite whats already extracted, if anything.  True to overwrite.
 	 * @return Returns an absolute path to where the asset file was copied to.
 	 *         <p>
@@ -753,7 +499,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 			return null;
 		}
 
-		// Do not continue if the given file is not an asset file within the APK or expansion files.
+		// Do not continue if the given file is not an asset file within the APK.
 		// This means that it is already an external file. Just return a path to it as is.
 		if (isAssetFile(assetFile.getPath()) == false) {
 			return assetFile;

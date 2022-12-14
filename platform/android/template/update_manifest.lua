@@ -78,11 +78,9 @@ local mainIntentFilterCategories =
 	["android.intent.category.LAUNCHER"] = true,
 }
 local intentFilters = {}
-local usesExpansionFile = false
 local largeHeap = false
 local isGame = false
 local installLocation = "auto"
-local targetedAppStore = "none"
 local manifestChildXmlElements = {}
 local applicationChildXmlElements = {}
 local googlePlayGamesAppId = false
@@ -368,11 +366,6 @@ if buildProperties then
 	fetchVersionCodeFrom(buildProperties.versionCode)
 	fetchVersionNameFrom(buildProperties.versionName)
 
-	-- Fetch the targeted app store.
-	if ("string" == type(buildProperties.targetedAppStore)) and (string.len(buildProperties.targetedAppStore) > 0) then
-		targetedAppStore = buildProperties.targetedAppStore
-	end
-
 	if "string" == type(buildProperties.appName) then
 		strings["app_name"] = buildProperties.appName
 	end
@@ -402,11 +395,6 @@ if "table" == type(buildSettings) then
 
 		-- Fetch minimum sdk version.
 		fetchMinSdkVersionFrom(buildSettings.android.minSdkVersion)
-
-		-- Fetch the "usesExpansionFile" flag.
-		if type(buildSettings.android.usesExpansionFile) == "boolean" then
-			usesExpansionFile = buildSettings.android.usesExpansionFile
-		end
 
 		-- Fetch the large heap flag.
 		if type(buildSettings.android.largeHeap) == "boolean" then
@@ -546,19 +534,6 @@ manifestKeys.USER_MIN_SDK_VERSION = tostring(minSdkVersion)
 manifestKeys.USER_FILE_CONTENT_PROVIDER_EXPORTED = tostring(allowAppsReadOnlyAccessToFiles)
 
 -- Create a meta-data tag for the targeted app store if provided.
-stringBuffer = ""
-if ("string" == type(targetedAppStore)) and (string.len(targetedAppStore) > 0) then
-	stringBuffer = '<meta-data android:name="targetedAppStore" android:value="' .. targetedAppStore .. '" />'
-end
-manifestKeys.USER_TARGETED_APP_STORE = stringBuffer
-
--- Create a meta-data tag for the "usesExpansionFile" setting if provided and only if targeting Google Play.
-stringBuffer = ""
-if usesExpansionFile and (targetedAppStore == "google") then
-	stringBuffer = '<meta-data android:name="usesExpansionFile" android:value="true" />'
-end
-manifestKeys.USER_USES_EXPANSION_FILE = stringBuffer
-
 stringBuffer = ""
 if googlePlayGamesAppId then
 	stringBuffer = '<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/corona_app_gsm_id" />'

@@ -439,7 +439,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_LuaCoronaBaseLib.c
 		${CORONA_ROOT}/librtt/Rtt_LuaData.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibCrypto.cpp
-		${CORONA_ROOT}/librtt/Rtt_LuaLibInAppStore.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibNative.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibOpenAL.cpp
 		${CORONA_ROOT}/librtt/Rtt_LuaLibSQLite.cpp
@@ -455,7 +454,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_PlatformData.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformDisplayObject.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformExitCallback.cpp
-		${CORONA_ROOT}/librtt/Rtt_PlatformInAppStore.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformNotifier.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformOpenALPlayer.cpp
 		${CORONA_ROOT}/librtt/Rtt_PlatformReachability.cpp
@@ -681,7 +679,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/platform/shared/Rtt_PlatformAppPackager.cpp
 		${CORONA_ROOT}/platform/linux/src/NetworkLibrary.cpp
 		${CORONA_ROOT}/platform/linux/src/NetworkSupport.cpp
-		${CORONA_ROOT}/platform/shared/Rtt_TargetAndroidAppStore.cpp
 		${CORONA_ROOT}/platform/shared/Rtt_DeviceBuildData.cpp
 		${CORONA_ROOT}/platform/shared/Rtt_TargetDevice.cpp
 		${CORONA_ROOT}/platform/shared/Rtt_PlatformDictionaryWrapper.cpp

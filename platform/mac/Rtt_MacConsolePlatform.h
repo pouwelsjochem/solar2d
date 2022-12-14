@@ -42,8 +42,6 @@ class MacConsolePlatform : public ApplePlatform
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
-		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
 		virtual NativeAlertRef ShowNativeAlert(
 			const char *title,
 			const char *msg,

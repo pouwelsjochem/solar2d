@@ -409,7 +409,6 @@
         <File Name="../../librtt/Display/Rtt_TesselatorCircle.h"/>
         <File Name="../../librtt/Display/Rtt_Tesselator.h"/>
         <File Name="../shared/Rtt_TargetDevice.h"/>
-        <File Name="../shared/Rtt_TargetAndroidAppStore.h"/>
         <File Name="../../librtt/Rtt_SurfaceInfo.h"/>
         <File Name="../../librtt/Rtt_StrokeTesselatorStream.h"/>
         <File Name="../../librtt/Core/Rtt_StringHash.h"/>
@@ -464,7 +463,6 @@
         <File Name="../../librtt/Input/Rtt_PlatformInputDeviceManager.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputDevice.h"/>
         <File Name="../../librtt/Input/Rtt_PlatformInputAxis.h"/>
-        <File Name="../../librtt/Rtt_PlatformInAppStore.h"/>
         <File Name="../../librtt/Rtt_PlatformExitCallback.h"/>
         <File Name="../../librtt/Rtt_PlatformDisplayObject.h"/>
         <File Name="../shared/Rtt_PlatformDictionaryWrapper.h"/>
@@ -500,7 +498,6 @@
         <File Name="../../librtt/Rtt_LuaLibSocket.h"/>
         <File Name="../../librtt/Rtt_LuaLibOpenAL.h"/>
         <File Name="../../librtt/Rtt_LuaLibNative.h"/>
-        <File Name="../../librtt/Rtt_LuaLibInAppStore.h"/>
         <File Name="../../librtt/Display/Rtt_LuaLibGraphics.h"/>
         <File Name="../../librtt/Display/Rtt_LuaLibDisplay.h"/>
         <File Name="../../librtt/Rtt_LuaLibCrypto.h"/>
@@ -564,7 +561,6 @@
         <File Name="../../external/ALmixer/luaal.h"/>
       </VirtualDirectory>
       <File Name="../shared/Rtt_TargetDevice.cpp"/>
-      <File Name="../shared/Rtt_TargetAndroidAppStore.cpp"/>
       <File Name="../shared/Rtt_PlatformObjectWrapper.cpp"/>
       <File Name="../shared/Rtt_PlatformDictionaryWrapper.cpp"/>
       <File Name="../shared/Rtt_PlatformAppPackager.cpp"/>
@@ -815,7 +811,6 @@
       <File Name="../../librtt/Rtt_PlatformReachability.cpp"/>
       <File Name="../../librtt/Rtt_PlatformOpenALPlayer.cpp"/>
       <File Name="../../librtt/Rtt_PlatformNotifier.cpp"/>
-      <File Name="../../librtt/Rtt_PlatformInAppStore.cpp"/>
       <File Name="../../librtt/Rtt_PlatformExitCallback.cpp"/>
       <File Name="../../librtt/Rtt_PlatformDisplayObject.cpp"/>
       <File Name="../../librtt/Rtt_PlatformData.cpp"/>
@@ -831,7 +826,6 @@
       <File Name="../../librtt/Rtt_LuaLibSQLite.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibOpenAL.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibNative.cpp"/>
-      <File Name="../../librtt/Rtt_LuaLibInAppStore.cpp"/>
       <File Name="../../librtt/Rtt_LuaLibCrypto.cpp"/>
       <File Name="../../librtt/Rtt_LuaData.cpp"/>
       <File Name="../../librtt/Rtt_LuaContext.cpp"/>

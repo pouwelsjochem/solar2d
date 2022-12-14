@@ -188,10 +188,6 @@
 		000DCFFC12B084DA00042A5E /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 000DCFFB12B084DA00042A5E /* lsqlite3.c */; };
 		003E5893153CF8F800483125 /* lobjectivec_exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 003E5891153CF8F800483125 /* lobjectivec_exceptions.h */; };
 		003E5894153CF8F800483125 /* lobjectivec_exceptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 003E5892153CF8F800483125 /* lobjectivec_exceptions.m */; settings = {COMPILER_FLAGS = "-Wno-unused-function"; }; };
-		0044F0E012CA9D74006EB396 /* Rtt_PlatformInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 0044F0DE12CA9D74006EB396 /* Rtt_PlatformInAppStore.h */; };
-		0044F0E112CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0044F0DF12CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp */; };
-		0044F1D912CAB806006EB396 /* Rtt_LuaLibInAppStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 0044F1D712CAB806006EB396 /* Rtt_LuaLibInAppStore.h */; };
-		0044F1DA12CAB806006EB396 /* Rtt_LuaLibInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0044F1D812CAB806006EB396 /* Rtt_LuaLibInAppStore.cpp */; };
 		00537DB0154F755C008CEF00 /* lfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 00537DA6154F755C008CEF00 /* lfs.c */; settings = {COMPILER_FLAGS = "-Wno-unused-variable"; }; };
 		00537DB1154F755C008CEF00 /* lfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 00537DA8154F755C008CEF00 /* lfs.h */; };
 		0054B9241382055B00BC962A /* lua_hash_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0054B9161382055B00BC962A /* lua_hash_map.hpp */; };
@@ -830,10 +826,6 @@
 		000DD00012B0853500042A5E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		003E5891153CF8F800483125 /* lobjectivec_exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lobjectivec_exceptions.h; sourceTree = "<group>"; };
 		003E5892153CF8F800483125 /* lobjectivec_exceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = lobjectivec_exceptions.m; sourceTree = "<group>"; };
-		0044F0DE12CA9D74006EB396 /* Rtt_PlatformInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformInAppStore.h; sourceTree = "<group>"; };
-		0044F0DF12CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformInAppStore.cpp; sourceTree = "<group>"; };
-		0044F1D712CAB806006EB396 /* Rtt_LuaLibInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibInAppStore.h; sourceTree = "<group>"; };
-		0044F1D812CAB806006EB396 /* Rtt_LuaLibInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibInAppStore.cpp; sourceTree = "<group>"; };
 		00537D7F154F752C008CEF00 /* libluafilesystem.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libluafilesystem.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00537D8E154F755C008CEF00 /* config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config; sourceTree = "<group>"; };
 		00537D8F154F755C008CEF00 /* config.win */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.win; sourceTree = "<group>"; };
@@ -1438,8 +1430,6 @@
 				000DCAF512B05F3E00042A5E /* Rtt_LuaGCInhibitor.h */,
 				000DCAF612B05F3E00042A5E /* Rtt_LuaLibCrypto.cpp */,
 				000DCAF712B05F3E00042A5E /* Rtt_LuaLibCrypto.h */,
-				0044F1D812CAB806006EB396 /* Rtt_LuaLibInAppStore.cpp */,
-				0044F1D712CAB806006EB396 /* Rtt_LuaLibInAppStore.h */,
 				000DCB0012B05F3E00042A5E /* Rtt_LuaLibNative.cpp */,
 				000DCB0112B05F3E00042A5E /* Rtt_LuaLibNative.h */,
 				000DCB0212B05F3E00042A5E /* Rtt_LuaLibOpenAL.cpp */,
@@ -1479,8 +1469,6 @@
 				000DCB3312B05F3E00042A5E /* Rtt_PlatformData.h */,
 				000DCB3412B05F3E00042A5E /* Rtt_PlatformDisplayObject.cpp */,
 				000DCB3512B05F3E00042A5E /* Rtt_PlatformDisplayObject.h */,
-				0044F0DF12CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp */,
-				0044F0DE12CA9D74006EB396 /* Rtt_PlatformInAppStore.h */,
 				000DCB3E12B05F3E00042A5E /* Rtt_PlatformListener.cpp */,
 				000DCB3F12B05F3E00042A5E /* Rtt_PlatformListener.h */,
 				000DCB4412B05F3E00042A5E /* Rtt_PlatformNotifier.cpp */,
@@ -2263,8 +2251,6 @@
 				C2A8710E1D4BE48000AF3326 /* Rtt_FileSystem.h in Headers */,
 				000DCC4212B05F3E00042A5E /* Rtt_Transform.h in Headers */,
 				000DCEFC12B082EF00042A5E /* luaal.h in Headers */,
-				0044F0E012CA9D74006EB396 /* Rtt_PlatformInAppStore.h in Headers */,
-				0044F1D912CAB806006EB396 /* Rtt_LuaLibInAppStore.h in Headers */,
 				00E867D5136625DB00AAFA26 /* Reachability.h in Headers */,
 				00E867DA136630D600AAFA26 /* Rtt_PlatformReachability.h in Headers */,
 				F587878C1C80ADCA0033F1D4 /* Rtt_TextureResourceExternalAdapter.h in Headers */,
@@ -2769,8 +2755,6 @@
 				000DCCFF12B06E9400042A5E /* init.lua in Sources */,
 				000DCEFD12B082F300042A5E /* luaal.c in Sources */,
 				000DCFFC12B084DA00042A5E /* lsqlite3.c in Sources */,
-				0044F0E112CA9D74006EB396 /* Rtt_PlatformInAppStore.cpp in Sources */,
-				0044F1DA12CAB806006EB396 /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				A49EC13C1BD76DA10093F529 /* Rtt_KeyName.cpp in Sources */,
 				00E867D6136625DB00AAFA26 /* Reachability.m in Sources */,
 				00E867D9136630D600AAFA26 /* Rtt_PlatformReachability.cpp in Sources */,

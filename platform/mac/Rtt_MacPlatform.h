@@ -37,7 +37,6 @@ extern NSString* const kUserPreferenceLastTVOSCertificate;
 extern NSString* const kUserPreferenceLastOSXCertificate;
 extern NSString* const kUserPreferenceLastAndroidKeyAlias;
 extern NSString* const kUserPreferenceLastAndroidKeystore;
-extern NSString* const kUserPreferenceLastAndroidTargetStore;
 
 namespace Rtt
 {
@@ -84,8 +83,6 @@ class MacPlatform : public ApplePlatform
 		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
-
-		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 
 		virtual NativeAlertRef ShowNativeAlert(
 			const char *title,
@@ -141,7 +138,6 @@ class MacPlatform : public ApplePlatform
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
-		mutable PlatformStoreProvider *fStoreProvider;
 		PlatformExitCallback* fExitCallback;
 };
 

@@ -14,7 +14,7 @@ package com.ansca.corona.storage;
  * Indicates where an asset can be found such as the package file that contains it, the byte offset
  * within the package file the asset starts at, the byte count within the package, etc.
  * <p>
- * This information can be used to directly access an asset within an APK or Google Play expansion file
+ * This information can be used to directly access an asset within an APK file
  * via a ZipFile class or, if the asset is not compressed, access the byte stream directly for fast access.
  */
 public class AssetFileLocationInfo {
@@ -50,7 +50,7 @@ public class AssetFileLocationInfo {
 	/**
 	 * Gets the package file which contains the asset.
 	 * @return Returns the path to the package file which contains the asset.
-	 *         This is typically the path to the APK file or the Google Play expansion file.
+	 *         This is typically the path to the APK file.
 	 */
 	public java.io.File getPackageFile() {
 		return fSettings.getPackageFile();
@@ -60,8 +60,7 @@ public class AssetFileLocationInfo {
 	 * Gets the asset's relative path and file name.
 	 * <p>
 	 * Note that the asset's path is really a virtual path within the package file.
-	 * The path is expected to be relative to the APK's "asssets" directory or relative to the
-	 * Google Play expansion file's root directory.
+	 * The path is expected to be relative to the APK's "asssets" directory.
 	 * @return Returns the asset's relative path and file name.
 	 */
 	public String getAssetFilePath() {
@@ -72,7 +71,6 @@ public class AssetFileLocationInfo {
 	 * Gets the asset's unique entry name within the zip/package file that contains it.
 	 * <p>
 	 * Note that an APK is really a zip file and its assets can be accessed via the Java ZipFile class.
-	 * Google Play expansion files are expected to be zip files too.
 	 * @return Returns the asset's unique entry name.
 	 */
 	public String getZipEntryName() {
@@ -164,7 +162,7 @@ public class AssetFileLocationInfo {
 
 		/**
 		 * Sets the package file which contains the asset.
-		 * Expected to be set to the APK's file path or to the Google Play expansion file's path.
+		 * Expected to be set to the APK's file path.
 		 * @param file The path to the package file which contains the asset file.
 		 */
 		public void setPackageFile(java.io.File file) {
@@ -174,7 +172,7 @@ public class AssetFileLocationInfo {
 		/**
 		 * Gets the package file which contains the asset.
 		 * @return Returns the path to the package file which contains the asset.
-		 *         This is typically the path to the APK file or the Google Play expansion file.
+		 *         This is typically the path to the APK file.
 		 *         <p>
 		 *         Returns null if the file was not assigned via the setPackageFile() method.
 		 */
@@ -186,8 +184,7 @@ public class AssetFileLocationInfo {
 		 * Sets the asset's relative path and file name.
 		 * <p>
 		 * Note that the asset's path is really a virtual path within the package file.
-		 * The path is expected to be relative to the APK's "asssets" directory or relative to the
-		 * Google Play expansion file's root directory.
+		 * The path is expected to be relative to the APK's "asssets" directory.
 		 * @param filePath The asset's relative path and file name.
 		 */
 		public void setAssetFilePath(String filePath) {
@@ -198,8 +195,7 @@ public class AssetFileLocationInfo {
 		 * Gets the asset's relative path and file name.
 		 * <p>
 		 * Note that the asset's path is really a virtual path within the package file.
-		 * The path is expected to be relative to the APK's "asssets" directory or relative to the
-		 * Google Play expansion file's root directory.
+		 * The path is expected to be relative to the APK's "asssets" directory.
 		 * @return Returns the asset's relative path and file name.
 		 *         <p>
 		 *         Returns null if the path was not assigned via the setAssetFilePath() method.
@@ -212,7 +208,6 @@ public class AssetFileLocationInfo {
 		 * Sets the asset's unique entry name within the zip/package file that contains it.
 		 * <p>
 		 * Note that an APK is really a zip file and its assets can be accessed via the Java ZipFile class.
-		 * Google Play expansion files are expected to be zip files too.
 		 * @param entryName The asset's unique entry name within the zip file.
 		 */
 		public void setZipEntryName(String entryName) {
@@ -223,7 +218,6 @@ public class AssetFileLocationInfo {
 		 * Gets the asset's unique entry name within the zip/package file that contains it.
 		 * <p>
 		 * Note that an APK is really a zip file and its assets can be accessed via the Java ZipFile class.
-		 * Google Play expansion files are expected to be zip files too.
 		 * @return Returns the asset's unique entry name.
 		 *         <p>
 		 *         Returns null if the entry name was not assigned by calling the setZipEntryName() method.

@@ -81,13 +81,6 @@ public class CoronaLuaEvent {
 	 * &emsp; Constant Value: "adsRequest"
 	 */
 	public static final String ADSREQUEST_TYPE = "adsRequest";
-
-	/**
-	 * Generic license type key.
-	 * <p>
-	 * &emsp; Constant Value: "licensing"
-	 */
-	public static final String LICENSE_REQUEST_TYPE = "licensing";
 }
 
 

@@ -28,15 +28,6 @@ public interface CoronaShowApiListener{
 	public void showSendSmsWindowUsing(SmsSettings smsSettings);
 
 	/**
-	 * Called from native.showPopup().  The lua script wants to show an app store popup.
-	 * @param settings A hash map of the app IDs and supported stores.
-	 * @return Returns true if the window is about to be displayed
-	 *         <p>
-	 *         Returns false if the App Store could not be found and is unable to display a window.
-	 */
-	public boolean showAppStoreWindow(java.util.HashMap<String, Object> settings);
-
-	/**
 	 * Called from native.showPopup().  The lua script wants to request permissions with the settings.
 	 * @param permissionsSettings the settings the lua script passed made into an object.
 	 */

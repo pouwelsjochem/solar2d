@@ -37,7 +37,7 @@ class JavaToNativeBridge
 	public:
 		void Init(
 				JNIEnv * env, jstring package, jstring documentsDir, jstring applicationSupportDir, jstring temporaryDir, jstring cachesDir,
-				jstring systemCachesDir, jstring expansionFileDir, int width, int height, bool isCoronaKit );
+				jstring systemCachesDir, int width, int height, bool isCoronaKit );
 		void UnloadResources();
 		void ReloadResources();
 		void Deinit();

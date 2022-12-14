@@ -94,7 +94,7 @@ AndroidOperationResult AndroidBaseNativeImageDecoder::DecodeFrom(AndroidBinaryRe
 ///         GetErrorMessage() function will typically provide a reason why it failed.
 AndroidOperationResult AndroidBaseNativeImageDecoder::OnDecodeFromFile(const char *filePath)
 {
-	// Check if the given file path references an asset within the APK or Google Play expansion file.
+	// Check if the given file path references an asset within the APK.
 	// If so, then the below function will find its package file and byte offset within the file.
 	AndroidZipFileEntry zipFileEntry(GetAllocator());
 	bool isAssetFile = fNativeToJavaBridge->GetAssetFileLocation(filePath, zipFileEntry);

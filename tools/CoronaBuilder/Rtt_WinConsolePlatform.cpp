@@ -20,7 +20,6 @@
 #include "Rtt_Allocator.h"
 #include "Rtt_FileSystem.h"
 #include "Rtt_LuaContext.h"
-#include "Rtt_PlatformInAppStore.h"
 #include "Rtt_PreferenceCollection.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_String.h"

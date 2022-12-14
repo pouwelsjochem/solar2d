@@ -63,7 +63,7 @@ usage() {
 	echo "   product_type:   basic, coronacards, all (default)"
 	echo "   build_config:   debug (default) or release"
 	echo "   build_type:     incremental (default) or clean"
-	echo "   device_type:    generic, kindle, all (default)"
+	echo "   device_type:    generic, all (default)"
 	exit 0
 }
 
@@ -96,10 +96,6 @@ DEVICE_TYPE=$4
 if [ "generic" = "$4" ]
 then
 	echo "Building for generic Android devices"
-elif [ "kindle" = "$4" ]
-then
-	echo "Building for Kindle Fire"
-	cp -Rf "$path/sdk/amazon_game_circle_res/" "$path/sdk/res/"
 else
 	echo "Building for all Android devices"
 	DEVICE_TYPE="all"
@@ -200,7 +196,6 @@ pushd "$path/sdk" > /dev/null
 	cp -Rf "$path/sdk/libs/armeabi-v7a/" "$path/bin/enterprise/Libraries/Corona/libs/armeabi-v7a"
 	cp -Rf "$path/sdk/libs/JNLua.jar" "$path/bin/enterprise/Libraries/Corona/libs/JNLua.jar"
 	cp -Rf "$path/sdk/libs/org.apache.http.legacy.jar" "$path/bin/enterprise/Libraries/Corona/libs/org.apache.http.legacy.jar"
-	cp -Rf "$path/sdk/libs/licensing-google.jar" "$path/bin/enterprise/Libraries/Corona/libs/licensing-google.jar"
 
 	cp -vf "$path"/sdk/libs/network.jar "$path"/bin/enterprise/Libraries/Corona/libs/
 	checkError
@@ -246,8 +241,6 @@ pushd "$path/sdk" > /dev/null
 		"$JAVA_SOURCE_PATH/storage/package-info.java" \
 		"$JAVA_SOURCE_PATH/storage/FileContentProvider.java" \
 		"$JAVA_SOURCE_PATH/storage/FileServices.java" \
-		"$JAVA_SOURCE_PATH/storage/PackageServices.java" \
-		"$JAVA_SOURCE_PATH/storage/PackageState.java" \
 		"$JAVA_SOURCE_PATH/storage/ZipFileEntryInputStream.java" > "$JAVA_DOC_LOGFILE" 2>&1
 
 	# Copy files needed by the Android "Tools" directory.

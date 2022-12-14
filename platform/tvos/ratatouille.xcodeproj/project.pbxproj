@@ -138,7 +138,6 @@
 		A4551F491BAA182D00FB3BDF /* Rtt_LuaCoronaBaseLib.m in Sources */ = {isa = PBXBuildFile; fileRef = A4551EB91BAA182C00FB3BDF /* Rtt_LuaCoronaBaseLib.m */; };
 		A4551F4A1BAA182D00FB3BDF /* Rtt_LuaData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EBA1BAA182C00FB3BDF /* Rtt_LuaData.cpp */; };
 		A4551F4B1BAA182D00FB3BDF /* Rtt_LuaLibCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EBF1BAA182C00FB3BDF /* Rtt_LuaLibCrypto.cpp */; };
-		A4551F4D1BAA182D00FB3BDF /* Rtt_LuaLibInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EC31BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.cpp */; };
 		A4551F4F1BAA182D00FB3BDF /* Rtt_LuaLibNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EC71BAA182C00FB3BDF /* Rtt_LuaLibNative.cpp */; };
 		A4551F501BAA182D00FB3BDF /* Rtt_LuaLibOpenAL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EC91BAA182C00FB3BDF /* Rtt_LuaLibOpenAL.cpp */; };
 		A4551F531BAA182D00FB3BDF /* Rtt_LuaLibSQLite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551ECF1BAA182C00FB3BDF /* Rtt_LuaLibSQLite.cpp */; };
@@ -153,7 +152,6 @@
 		A4551F641BAA182D00FB3BDF /* Rtt_PlatformAudioSessionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EFD1BAA182D00FB3BDF /* Rtt_PlatformAudioSessionManager.cpp */; };
 		A4551F651BAA182D00FB3BDF /* Rtt_PlatformData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551EFF1BAA182D00FB3BDF /* Rtt_PlatformData.cpp */; };
 		A4551F661BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F011BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp */; };
-		A4551F6B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */; };
 		A4551F6F1BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F141BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp */; };
 		A4551F701BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F161BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp */; };
 		A4551F711BAA182D00FB3BDF /* Rtt_PlatformReachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4551F181BAA182D00FB3BDF /* Rtt_PlatformReachability.cpp */; };
@@ -212,9 +210,6 @@
 		A4AD30861BAA2B80006A0C97 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30651BAA2B80006A0C97 /* Rtt_AppleCallback.mm */; };
 		A4AD30871BAA2B80006A0C97 /* Rtt_AppleCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30661BAA2B80006A0C97 /* Rtt_AppleCrypto.cpp */; };
 		A4AD30881BAA2B80006A0C97 /* Rtt_AppleData.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */; };
-		A4AD308A1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD306E1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm */; };
-		A4AD308B1BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30701BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm */; };
-		A4AD308C1BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30721BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm */; };
 		A4AD308D1BAA2B80006A0C97 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */; };
 		A4AD308E1BAA2B80006A0C97 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */; };
 		A4AD309A1BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30981BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp */; };
@@ -542,8 +537,6 @@
 		F5C5E16B251E115D00217C19 /* Rtt_KeyName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A465E1A31BCF02A200C8D51B /* Rtt_KeyName.cpp */; };
 		F5C5E16C251E115D00217C19 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B61BE294F40061E021 /* Rtt_AppleInputDeviceManager.mm */; };
 		F5C5E16D251E115D00217C19 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */; };
-		F5C5E170251E115D00217C19 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30721BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm */; };
-		F5C5E171251E115D00217C19 /* Rtt_AppleInAppStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD306E1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm */; };
 		F5C5E172251E115D00217C19 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */; };
 		F5C5E173251E115D00217C19 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30981BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		F5C5E174251E115D00217C19 /* Rtt_TVOSDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31001BAA38B0006A0C97 /* Rtt_TVOSDevice.mm */; };
@@ -552,7 +545,6 @@
 		F5C5E177251E115D00217C19 /* Rtt_IPhoneAudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30AF1BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManager.mm */; };
 		F5C5E179251E115D00217C19 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */; };
 		F5C5E17A251E115D00217C19 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */; };
-		F5C5E17B251E115D00217C19 /* Rtt_AppleInAppStoreApple.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30701BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm */; };
 		F5C5E17C251E115D00217C19 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A61BAA377C006A0C97 /* CoronaViewPrivate.mm */; };
 		F5C5E17F251E115D00217C19 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */; };
 		F5C5E180251E115D00217C19 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30651BAA2B80006A0C97 /* Rtt_AppleCallback.mm */; };
@@ -1720,8 +1712,6 @@
 		A4551EBE1BAA182C00FB3BDF /* Rtt_LuaGCInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaGCInhibitor.h; path = ../../librtt/Rtt_LuaGCInhibitor.h; sourceTree = "<group>"; };
 		A4551EBF1BAA182C00FB3BDF /* Rtt_LuaLibCrypto.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibCrypto.cpp; path = ../../librtt/Rtt_LuaLibCrypto.cpp; sourceTree = "<group>"; };
 		A4551EC01BAA182C00FB3BDF /* Rtt_LuaLibCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibCrypto.h; path = ../../librtt/Rtt_LuaLibCrypto.h; sourceTree = "<group>"; };
-		A4551EC31BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibInAppStore.cpp; path = ../../librtt/Rtt_LuaLibInAppStore.cpp; sourceTree = "<group>"; };
-		A4551EC41BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibInAppStore.h; path = ../../librtt/Rtt_LuaLibInAppStore.h; sourceTree = "<group>"; };
 		A4551EC71BAA182C00FB3BDF /* Rtt_LuaLibNative.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibNative.cpp; path = ../../librtt/Rtt_LuaLibNative.cpp; sourceTree = "<group>"; };
 		A4551EC81BAA182C00FB3BDF /* Rtt_LuaLibNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LuaLibNative.h; path = ../../librtt/Rtt_LuaLibNative.h; sourceTree = "<group>"; };
 		A4551EC91BAA182C00FB3BDF /* Rtt_LuaLibOpenAL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LuaLibOpenAL.cpp; path = ../../librtt/Rtt_LuaLibOpenAL.cpp; sourceTree = "<group>"; };
@@ -1761,8 +1751,6 @@
 		A4551F001BAA182D00FB3BDF /* Rtt_PlatformData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformData.h; path = ../../librtt/Rtt_PlatformData.h; sourceTree = "<group>"; };
 		A4551F011BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformDisplayObject.cpp; path = ../../librtt/Rtt_PlatformDisplayObject.cpp; sourceTree = "<group>"; };
 		A4551F021BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformDisplayObject.h; path = ../../librtt/Rtt_PlatformDisplayObject.h; sourceTree = "<group>"; };
-		A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformInAppStore.cpp; path = ../../librtt/Rtt_PlatformInAppStore.cpp; sourceTree = "<group>"; };
-		A4551F0C1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformInAppStore.h; path = ../../librtt/Rtt_PlatformInAppStore.h; sourceTree = "<group>"; };
 		A4551F141BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformNotifier.cpp; path = ../../librtt/Rtt_PlatformNotifier.cpp; sourceTree = "<group>"; };
 		A4551F151BAA182D00FB3BDF /* Rtt_PlatformNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PlatformNotifier.h; path = ../../librtt/Rtt_PlatformNotifier.h; sourceTree = "<group>"; };
 		A4551F161BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PlatformOpenALPlayer.cpp; path = ../../librtt/Rtt_PlatformOpenALPlayer.cpp; sourceTree = "<group>"; };
@@ -1868,12 +1856,6 @@
 		A4AD30671BAA2B80006A0C97 /* Rtt_AppleCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleCrypto.h; path = ../apple/Rtt_AppleCrypto.h; sourceTree = "<group>"; };
 		A4AD30681BAA2B80006A0C97 /* Rtt_AppleData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleData.h; path = ../apple/Rtt_AppleData.h; sourceTree = "<group>"; };
 		A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleData.mm; path = ../apple/Rtt_AppleData.mm; sourceTree = "<group>"; };
-		A4AD306D1BAA2B80006A0C97 /* Rtt_AppleInAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInAppStore.h; path = ../apple/Rtt_AppleInAppStore.h; sourceTree = "<group>"; };
-		A4AD306E1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleInAppStore.mm; path = ../apple/Rtt_AppleInAppStore.mm; sourceTree = "<group>"; };
-		A4AD306F1BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInAppStoreApple.h; path = ../apple/Rtt_AppleInAppStoreApple.h; sourceTree = "<group>"; };
-		A4AD30701BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleInAppStoreApple.mm; path = ../apple/Rtt_AppleInAppStoreApple.mm; sourceTree = "<group>"; };
-		A4AD30711BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleInAppStoreAppleTransactionObjectWrapper.h; path = ../apple/Rtt_AppleInAppStoreAppleTransactionObjectWrapper.h; sourceTree = "<group>"; };
-		A4AD30721BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm; path = ../apple/Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm; sourceTree = "<group>"; };
 		A4AD30731BAA2B80006A0C97 /* Rtt_ApplePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ApplePlatform.h; path = ../apple/Rtt_ApplePlatform.h; sourceTree = "<group>"; };
 		A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_ApplePlatform.mm; path = ../apple/Rtt_ApplePlatform.mm; sourceTree = "<group>"; };
 		A4AD30751BAA2B80006A0C97 /* Rtt_AppleReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleReachability.h; path = ../apple/Rtt_AppleReachability.h; sourceTree = "<group>"; };
@@ -2878,8 +2860,6 @@
 				A4551EBE1BAA182C00FB3BDF /* Rtt_LuaGCInhibitor.h */,
 				A4551EBF1BAA182C00FB3BDF /* Rtt_LuaLibCrypto.cpp */,
 				A4551EC01BAA182C00FB3BDF /* Rtt_LuaLibCrypto.h */,
-				A4551EC31BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.cpp */,
-				A4551EC41BAA182C00FB3BDF /* Rtt_LuaLibInAppStore.h */,
 				A4551EC71BAA182C00FB3BDF /* Rtt_LuaLibNative.cpp */,
 				A4551EC81BAA182C00FB3BDF /* Rtt_LuaLibNative.h */,
 				A4551EC91BAA182C00FB3BDF /* Rtt_LuaLibOpenAL.cpp */,
@@ -2919,8 +2899,6 @@
 				A4551F001BAA182D00FB3BDF /* Rtt_PlatformData.h */,
 				A4551F011BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.cpp */,
 				A4551F021BAA182D00FB3BDF /* Rtt_PlatformDisplayObject.h */,
-				A4551F0B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp */,
-				A4551F0C1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.h */,
 				A4551F141BAA182D00FB3BDF /* Rtt_PlatformNotifier.cpp */,
 				A4551F151BAA182D00FB3BDF /* Rtt_PlatformNotifier.h */,
 				A4551F161BAA182D00FB3BDF /* Rtt_PlatformOpenALPlayer.cpp */,
@@ -2973,12 +2951,6 @@
 				A4AD30671BAA2B80006A0C97 /* Rtt_AppleCrypto.h */,
 				A4AD30681BAA2B80006A0C97 /* Rtt_AppleData.h */,
 				A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */,
-				A4AD306D1BAA2B80006A0C97 /* Rtt_AppleInAppStore.h */,
-				A4AD306E1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm */,
-				A4AD306F1BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.h */,
-				A4AD30701BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm */,
-				A4AD30711BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.h */,
-				A4AD30721BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm */,
 				A4AD30731BAA2B80006A0C97 /* Rtt_ApplePlatform.h */,
 				A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */,
 				A4AD30751BAA2B80006A0C97 /* Rtt_AppleReachability.h */,
@@ -4900,7 +4872,6 @@
 				A4DD48061BB260B200FD988E /* Rtt_PlatformInputDevice.cpp in Sources */,
 				A4551F561BAA182D00FB3BDF /* Rtt_LuaProxyVTable.cpp in Sources */,
 				A4551D2E1BAA17BE00FB3BDF /* Rtt_ArrayTupleStruct.cpp in Sources */,
-				A4551F4D1BAA182D00FB3BDF /* Rtt_LuaLibInAppStore.cpp in Sources */,
 				A4551E291BAA17CF00FB3BDF /* Rtt_VertexCache.cpp in Sources */,
 				A4551F441BAA182D00FB3BDF /* Rtt_Lua.cpp in Sources */,
 				1B10D06C2538949800F48B3A /* Rtt_SpriteSequence.cpp in Sources */,
@@ -4914,7 +4885,6 @@
 				A4551E1A1BAA17CF00FB3BDF /* Rtt_Tesselator.cpp in Sources */,
 				A4551F641BAA182D00FB3BDF /* Rtt_PlatformAudioSessionManager.cpp in Sources */,
 				A4551D3D1BAA17BE00FB3BDF /* Rtt_StringHash.cpp in Sources */,
-				A4551F6B1BAA182D00FB3BDF /* Rtt_PlatformInAppStore.cpp in Sources */,
 				A4551D301BAA17BE00FB3BDF /* Rtt_Assert.m in Sources */,
 				A4551F5A1BAA182D00FB3BDF /* Rtt_LuaUserdataProxy.cpp in Sources */,
 				A4551F3A1BAA182D00FB3BDF /* Rtt_Archive.cpp in Sources */,
@@ -5011,8 +4981,6 @@
 				A465E1A51BCF02A200C8D51B /* Rtt_KeyName.cpp in Sources */,
 				F58011C21BE295070061E021 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				A4AD30F71BAA377C006A0C97 /* Rtt_IPhoneTimer.mm in Sources */,
-				A4AD308C1BAA2B80006A0C97 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
-				A4AD308A1BAA2B80006A0C97 /* Rtt_AppleInAppStore.mm in Sources */,
 				A4AD30F31BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm in Sources */,
 				A4AD309A1BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
 				A4AD31051BAA38B0006A0C97 /* Rtt_TVOSDevice.mm in Sources */,
@@ -5021,7 +4989,6 @@
 				A4AD30E61BAA377C006A0C97 /* Rtt_IPhoneAudioSessionManager.mm in Sources */,
 				F58011C11BE295070061E021 /* Rtt_AppleInputDevice.mm in Sources */,
 				A4AD308D1BAA2B80006A0C97 /* Rtt_ApplePlatform.mm in Sources */,
-				A4AD308B1BAA2B80006A0C97 /* Rtt_AppleInAppStoreApple.mm in Sources */,
 				A4AD30E21BAA377C006A0C97 /* CoronaViewPrivate.mm in Sources */,
 				A4AD30F21BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				A4AD30861BAA2B80006A0C97 /* Rtt_AppleCallback.mm in Sources */,
@@ -5168,8 +5135,6 @@
 				F5C5E16B251E115D00217C19 /* Rtt_KeyName.cpp in Sources */,
 				F5C5E16C251E115D00217C19 /* Rtt_AppleInputDeviceManager.mm in Sources */,
 				F5C5E16D251E115D00217C19 /* Rtt_IPhoneTimer.mm in Sources */,
-				F5C5E170251E115D00217C19 /* Rtt_AppleInAppStoreAppleTransactionObjectWrapper.mm in Sources */,
-				F5C5E171251E115D00217C19 /* Rtt_AppleInAppStore.mm in Sources */,
 				F5C5E172251E115D00217C19 /* Rtt_IPhoneScreenSurface.mm in Sources */,
 				F5C5E173251E115D00217C19 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
 				F5C5E174251E115D00217C19 /* Rtt_TVOSDevice.mm in Sources */,
@@ -5178,7 +5143,6 @@
 				F5C5E177251E115D00217C19 /* Rtt_IPhoneAudioSessionManager.mm in Sources */,
 				F5C5E179251E115D00217C19 /* Rtt_AppleInputDevice.mm in Sources */,
 				F5C5E17A251E115D00217C19 /* Rtt_ApplePlatform.mm in Sources */,
-				F5C5E17B251E115D00217C19 /* Rtt_AppleInAppStoreApple.mm in Sources */,
 				F5C5E17C251E115D00217C19 /* CoronaViewPrivate.mm in Sources */,
 				F5C5E17F251E115D00217C19 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				F5C5E180251E115D00217C19 /* Rtt_AppleCallback.mm in Sources */,

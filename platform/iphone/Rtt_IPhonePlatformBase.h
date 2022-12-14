@@ -68,7 +68,6 @@ class IPhonePlatformBase : public ApplePlatform
 
 #if Rtt_IPHONE_PLATFORM_STUB
 		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
-		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
 				
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 

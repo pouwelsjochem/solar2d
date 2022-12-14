@@ -61,7 +61,6 @@ namespace Rtt
 		virtual bool OpenURL(const char* url) const { return false; };
 		virtual int CanOpenURL(const char* url) const { return 0; };
 		virtual void HttpPost(const char* url, const char* key, const char* value) const { return; };
-		virtual PlatformStoreProvider* GetStoreProvider(const ResourceHandle<lua_State> & handle) const { return nullptr; };
 		virtual NativeAlertRef ShowNativeAlert(
 		    const char *title, const char *message, const char **buttonLabels,
 		    U32 buttonCount, LuaResource *resourcePointer) const { return nullptr; };

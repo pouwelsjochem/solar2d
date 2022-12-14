@@ -19,8 +19,6 @@
 namespace Rtt
 {
 
-class AppleStoreProvider;
-
 // ----------------------------------------------------------------------------
 
 // This is the implementation of MPlatform for use by Corona/Native.
@@ -37,8 +35,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual ~IPhonePlatform();
 
 	public:
-		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
@@ -57,7 +53,6 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
 
 	private:
-		mutable AppleStoreProvider *fInAppStoreProvider;
 		UIView *fActivityView;
 		id fPopupControllerDelegate;
 };

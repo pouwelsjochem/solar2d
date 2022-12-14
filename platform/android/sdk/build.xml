@@ -137,19 +137,9 @@
             <copy file="../../../external/android-support-libs/multidex/android-support-multidex.jar" todir="libs"/>
             <copy file="./libs/android-support-multidex.jar" todir="../template/coreJars/"/>
 
-            <!-- Google Licensing -->
-            <!-- TODO: Exclude from Amazon builds since there's no Google Play store to connect to. -->
-            <copy file="../../../plugins/build/licensing-google/android/bin/classes.jar" tofile="libs/licensing-google.jar" />
-            <copy file="./libs/licensing-google.jar" todir="../template/coreJars/"/>
-
             <!-- Networking plugin -->
             <copy file="../../../plugins/build-core/network/android/network.jar" tofile="libs/network.jar"/>
             <copy file="./libs/network.jar" todir="../template/coreJars/"/>
-
-            <!-- Native libraries -->
-            <copy file="../../../plugins/build-core/licensing/android/liblicensing.so" todir="libs/armeabi-v7a" />
-            <copy file="../../../plugins/build-core/licensing/android/libcorona.so" todir="libs/armeabi-v7a" />
-            <copy file="../../../plugins/build-core/licensing/android/liblua.so" todir="libs/armeabi-v7a" />
         </sequential>
     </macrodef>
     <target name="release">

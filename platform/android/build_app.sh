@@ -29,7 +29,7 @@ usage() {
 	echo "   project_path: the path to the Corona project folder"
 	echo "   ndk__path: optional override to env variable ANDROID_NDK"
 	echo "   sdk__path: optional override to env variable ANDROID_SDK"
-	echo "   device_type: optional override to specify generic, kindle, or all"
+	echo "   device_type: optional override to specify generic, or all"
 	echo "   product_type: optional override to specify basic, or all"
 	echo "NOTE: if ndk_path is supplied, so must sdk_path"
 	exit -1

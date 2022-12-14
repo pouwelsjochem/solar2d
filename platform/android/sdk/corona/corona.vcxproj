@@ -303,7 +303,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaCoronaBaseLib.c" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaData.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibCrypto.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibNative.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibSQLite.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_LuaLibSystem.cpp" />
@@ -318,7 +317,6 @@
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformData.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.cpp" />
-    <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformNotifier.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformReachability.cpp" />
     <ClCompile Include="..\..\..\..\librtt\Rtt_PlatformSurface.cpp" />
@@ -670,7 +668,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaFrameworks.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaGCInhibitor.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibCrypto.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibInAppStore.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibNative.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_LuaLibOpenAL.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug386|Tegra-Android'">true</ExcludedFromBuild>
@@ -701,7 +698,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformData.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformDisplayObject.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.h" />
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformInAppStore.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformNotifier.h" />
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformOpenALPlayer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug386|Tegra-Android'">true</ExcludedFromBuild>

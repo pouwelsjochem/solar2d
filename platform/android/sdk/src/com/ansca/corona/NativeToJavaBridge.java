@@ -521,7 +521,7 @@ public class NativeToJavaBridge {
 		// Determine if the given asset name exists.
 		boolean wasAssetFound = false;
 
-		// The asset is likely a file within the APK or Google Play expansion file.
+		// The asset is likely a file within the APK file.
 		android.content.Context context = CoronaEnvironment.getApplicationContext();
 		if (context != null) {
 			com.ansca.corona.storage.FileServices fileServices;
@@ -1030,11 +1030,6 @@ public class NativeToJavaBridge {
 	protected static void callShowSendSmsPopup(CoronaRuntime runtime, java.util.HashMap dictionaryOfSettings)
 	{
 		runtime.getController().showSendSmsWindow((java.util.HashMap<String, Object>)dictionaryOfSettings);
-	}
-	
-	protected static boolean callShowAppStorePopup(CoronaRuntime runtime, java.util.HashMap dictionaryOfSettings)
-	{
-		return runtime.getController().showAppStoreWindow((java.util.HashMap<String, Object>)dictionaryOfSettings);
 	}
 	
 	protected static void callShowRequestPermissionsPopup(CoronaRuntime runtime, java.util.HashMap dictionaryOfSettings)
@@ -1699,14 +1694,6 @@ public class NativeToJavaBridge {
 
 	protected static byte[] callCryptoCalculateHMAC( String algorithm, byte[] key, byte[] data ) {
 		return Crypto.CalculateHMAC(algorithm, key, data);
-	}
-	
-	protected static String[] callGetAvailableStoreNames() {
-		return com.ansca.corona.purchasing.StoreServices.getAvailableInAppStoreNames();
-	}
-
-	protected static String callGetTargetedStoreName(CoronaRuntime runtime) {
-		return com.ansca.corona.purchasing.StoreServices.getTargetedAppStoreName();
 	}
 
 	protected static int callNotificationSchedule(CoronaRuntime runtime, long luaStateMemoryAddress, int luaStackIndex) {

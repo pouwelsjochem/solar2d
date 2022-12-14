@@ -47,7 +47,6 @@ class AndroidAppPackagerParams : public AppPackagerParams
 						  const char* dstDir,
 						  const char* sdkRoot,
 						  TargetDevice::Platform targetPlatform,
-						  const char * targetAppStore,
 						  S32 targetVersion,
 						  const char * customBuildId,
 						  const char * productId,
@@ -83,7 +82,6 @@ class AndroidAppPackager : public PlatformAppPackager
 		virtual int Build( AppPackagerParams *params, const char *tmpDirBase );
 
 		virtual bool VerifyConfiguration() const;
-		bool IsUsingExpansionFile() const { return fIsUsingExpansionFile; }
 
 	protected:
 		bool CreateBuildProperties( const AppPackagerParams& params, const char *tmpDir );
@@ -93,7 +91,6 @@ class AndroidAppPackager : public PlatformAppPackager
 
 	private:
 		String fResourcesDir;
-		bool fIsUsingExpansionFile;
 		
 };
 

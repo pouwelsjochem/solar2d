@@ -15,7 +15,6 @@
 #include "Rtt_LuaFrameworks.h"
 #include "Rtt_MPlatform.h"
 #include "Rtt_MPlatformServices.h"
-#include "Rtt_TargetAndroidAppStore.h"
 #include "Rtt_FileSystem.h"
 #include "Rtt_DeviceBuildData.h"
 
@@ -47,7 +46,6 @@ AndroidAppPackagerParams::AndroidAppPackagerParams(
 	const char* dstDir,
 	const char* sdkRoot,
 	TargetDevice::Platform targetPlatform,
-	const char * targetAppStoreName,
 	S32 targetVersion,
 	const char * customBuildId,
 	const char * productId,
@@ -61,7 +59,7 @@ AndroidAppPackagerParams::AndroidAppPackagerParams(
 )
  :	AppPackagerParams(
 		appName, versionName, identity, provisionFile, srcDir, dstDir, sdkRoot,
-		targetPlatform, targetAppStoreName, targetVersion, TargetDevice::kAndroidGenericDevice,
+		targetPlatform, targetVersion, TargetDevice::kAndroidGenericDevice,
 		customBuildId, productId, appPackage, isDistributionBuild ),
 	fVersionCode(versionCode)
 	, fWindowsNonAscii(false)
@@ -102,8 +100,7 @@ int luaload_create_build_properties(lua_State* L);
 
 AndroidAppPackager::AndroidAppPackager( const MPlatformServices & services, const char * resourcesDir )
 :	PlatformAppPackager( services, TargetDevice::kAndroidPlatform ),
-	fResourcesDir( & services.Platform().GetAllocator(), resourcesDir ),
-	fIsUsingExpansionFile( false )
+	fResourcesDir( & services.Platform().GetAllocator(), resourcesDir )
 {
     Lua::RegisterModuleLoader( fVM, "lfs", luaopen_lfs );
     Lua::RegisterModuleLoader( fVM, "lpeg", luaopen_lpeg ); // json depends on lpeg
@@ -218,9 +215,6 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 			
 			gradleGo.append(" -PcoronaKeyAlias=");
 			gradleGo.append(EscapeArgument(androidParams->GetAndroidKeyAlias()));
-			
-			gradleGo.append(" -PcoronaTargetStore=");
-			gradleGo.append(EscapeArgument(androidParams->GetTargetAppStoreName()));
 
 			gradleGo.append(" -PcoronaKeyAliasPassword=");
 			if(androidParams->GetAndroidKeyAliasPassword()!=NULL)
@@ -230,18 +224,6 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
 			else
 			{
 				gradleGo.append(EscapeArgument(androidParams->GetAndroidKeyStorePassword()));
-			}
-			
-			if (fIsUsingExpansionFile &&
-				params->GetTargetAppStoreName() &&
-				!strcmp(params->GetTargetAppStoreName(), TargetAndroidAppStore::kGoogle.GetStringId()))
-			{
-				char expansionFileName[255];
-				snprintf(
-						 expansionFileName, sizeof(expansionFileName) - 1, "main.%d.%s.obb",
-						 androidParams->GetVersionCode(), params->GetAppPackage());
-				gradleGo.append(" -PcoronaExpansionFileName=");
-				gradleGo.append(expansionFileName);
 			}
 			
 			DeviceBuildData& deviceBuildData = params->GetDeviceBuildData( fServices.Platform(), fServices );
@@ -362,18 +344,7 @@ AndroidAppPackager::VerifyConfiguration() const
 void
 AndroidAppPackager::OnReadingBuildSettings( lua_State *L, int index )
 {
-	// Fetch the "usesExpansionFile" flag in the "build.settings" file, if provided.
-	lua_getfield( L, index, "android" );
-	if (lua_istable( L, -1 ))
-	{
-		lua_getfield( L, -1, "usesExpansionFile" );
-		if (lua_isboolean( L, -1 ))
-		{
-			fIsUsingExpansionFile = lua_toboolean( L, -1 ) ? true : false;
-		}
-		lua_pop( L, 1 );
-	}
-	lua_pop( L, 1 );
+
 }
 
 bool
@@ -386,7 +357,6 @@ AndroidAppPackager::CreateBuildProperties( const AppPackagerParams& params, cons
 	lua_pushstring( L, params.GetSrcDir() );
 	lua_pushinteger( L, ((AndroidAppPackagerParams&)params).GetVersionCode() );
 	lua_pushstring( L, params.GetVersion() );
-	lua_pushstring( L, params.GetTargetAppStoreName() );
 	lua_pushstring( L, params.GetAppName() );
 
 	bool result = Rtt_VERIFY( 0 == Lua::DoCall( L, 7, 1 ) );

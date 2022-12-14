@@ -47,7 +47,7 @@
       <AdditionalOptions>-U"_WIN32" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <AntBuild>
-      <JarDirectories>Z:\corona\main\external\apache-http-legacy;Z:\corona\main\external\JNLua\bin;Z:\corona\main\external\android-support-libs\multidex;Z:\corona\main\plugins\build\licensing-google\android\bin;Z:\corona\main\plugins\build-core\network\android</JarDirectories>
+      <JarDirectories>Z:\corona\main\external\apache-http-legacy;Z:\corona\main\external\JNLua\bin;Z:\corona\main\external\android-support-libs\multidex;Z:\corona\main\plugins\build-core\network\android</JarDirectories>
     </AntBuild>
     <AntBuild>
       <JarDependencies>JNLua.jar;org.apache.http.legacy.jar;android-support-multidex.jar;classes.jar;network.jar</JarDependencies>
@@ -163,7 +163,6 @@
     <JCompile Include="src\com\ansca\corona\CoronaSensorManager.java" />
     <JCompile Include="src\com\ansca\corona\CoronaService.java" />
     <JCompile Include="src\com\ansca\corona\CoronaShowApiHandler.java" />
-    <JCompile Include="src\com\ansca\corona\CoronaStoreApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaSystemApiHandler.java" />
     <JCompile Include="src\com\ansca\corona\CoronaWebView.java" /> 
     <JCompile Include="src\com\ansca\corona\Crypto.java" />

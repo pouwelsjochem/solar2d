@@ -19,8 +19,6 @@
 namespace Rtt
 {
 
-class AppleStoreProvider;
-
 // ----------------------------------------------------------------------------
 
 class TVOSPlatform : public IPhonePlatformBase
@@ -38,8 +36,6 @@ class TVOSPlatform : public IPhonePlatformBase
 		virtual MPlatformDevice& GetDevice() const;
 
 	public:
-		virtual PlatformStoreProvider* GetStoreProvider( const ResourceHandle<lua_State>& handle ) const;
-
 		virtual bool CanShowPopup( const char *name ) const;
 		virtual bool ShowPopup( lua_State *L, const char *name, int optionsIndex ) const;
 		virtual bool HidePopup( const char *name ) const;
@@ -51,7 +47,6 @@ class TVOSPlatform : public IPhonePlatformBase
 
 	private:
 		TVOSDevice fDevice;
-		mutable AppleStoreProvider *fInAppStoreProvider;
 		UIView *fActivityView;
 		id fPopupControllerDelegate;
 };

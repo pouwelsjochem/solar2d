@@ -38,7 +38,6 @@ settings =
 		installLocation = "",
 
 		versionCode = "",
-		usesExpansionFile = true,
 		supportsTV = true,
 		isGame = true,
 		allowAppsReadOnlyAccessToFiles = false,

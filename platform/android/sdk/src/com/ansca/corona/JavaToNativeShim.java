@@ -32,7 +32,7 @@ public class JavaToNativeShim {
     private static native long nativeInit(CoronaRuntime runtime);
     private static native void nativeResize(
     			long bridgeAddress, String signature, String documentsDir, String applicationSupportDir, String temporaryDir, String cachesDir,
-    			String systemCachesDir, String expansionFileDir, int w, int h, boolean isCoronaKit);
+    			String systemCachesDir, int w, int h, boolean isCoronaKit);
     private static native void nativeRender(long bridgeAddress);
     private static native String nativeGetKeyNameFromKeyCode(int keyCode);
     private static native int nativeGetMaxTextureSize(long bridgeAddress);
@@ -350,7 +350,6 @@ public class JavaToNativeShim {
 				CoronaEnvironment.getTemporaryDirectory(context).getAbsolutePath(),
 				CoronaEnvironment.getCachesDirectory(context).getAbsolutePath(),
 				CoronaEnvironment.getInternalCachesDirectory(context).getAbsolutePath(),
-				fileServices.getExpansionFileDirectory().getAbsolutePath(),
 				width, height, isCoronaKit);
 	}
 	

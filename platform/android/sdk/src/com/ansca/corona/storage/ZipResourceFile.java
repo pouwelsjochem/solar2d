@@ -50,8 +50,6 @@ import java.util.zip.ZipFile;
  * the following functionality:
  * <ul>
  *  <li> Added another constructor for accepting File objects.
- *  <li> Added a close() method to close the expansion file. Needed so that the application
- *         can reload a newly downloaded expansion file, which is typical during testing.
  * </ul>
  */
 public class ZipResourceFile {

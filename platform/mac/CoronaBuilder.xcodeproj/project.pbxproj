@@ -27,7 +27,6 @@
 		03D1C5871D70D21B00DB02EE /* Rtt_Preference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5811D70D21B00DB02EE /* Rtt_Preference.cpp */; };
 		03D1C5881D70D21B00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5831D70D21B00DB02EE /* Rtt_PreferenceCollection.cpp */; };
 		03D1C5891D70D21B00DB02EE /* Rtt_PreferenceValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5851D70D21B00DB02EE /* Rtt_PreferenceValue.cpp */; };
-		0793BD9116EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0793BD8F16EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.cpp */; };
 		1F23C320211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23C31E211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp */; };
 		1F23C322211ABCE40003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23C321211ABCE30003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp */; };
 		A4543F4C15265DE700486F8A /* Rtt_Car.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4543F4A15265DE700486F8A /* Rtt_Car.cpp */; };
@@ -356,8 +355,6 @@
 		03D1C5841D70D21B00DB02EE /* Rtt_PreferenceCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceCollection.h; path = ../../librtt/Rtt_PreferenceCollection.h; sourceTree = "<group>"; };
 		03D1C5851D70D21B00DB02EE /* Rtt_PreferenceValue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PreferenceValue.cpp; path = ../../librtt/Rtt_PreferenceValue.cpp; sourceTree = "<group>"; };
 		03D1C5861D70D21B00DB02EE /* Rtt_PreferenceValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceValue.h; path = ../../librtt/Rtt_PreferenceValue.h; sourceTree = "<group>"; };
-		0793BD8F16EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TargetAndroidAppStore.cpp; path = ../shared/Rtt_TargetAndroidAppStore.cpp; sourceTree = "<group>"; };
-		0793BD9016EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TargetAndroidAppStore.h; path = ../shared/Rtt_TargetAndroidAppStore.h; sourceTree = "<group>"; };
 		1F23C31E211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LinuxAppPackager.cpp; path = ../shared/Rtt_LinuxAppPackager.cpp; sourceTree = "<group>"; };
 		1F23C31F211ABC410003EBF0 /* Rtt_LinuxAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LinuxAppPackager.h; path = ../shared/Rtt_LinuxAppPackager.h; sourceTree = "<group>"; };
 		1F23C321211ABCE30003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AppPackagerLinuxFactory.cpp; path = ../../tools/CoronaBuilder/Rtt_AppPackagerLinuxFactory.cpp; sourceTree = "<group>"; };
@@ -796,8 +793,6 @@
 				A4BABBFA14CF44D500696484 /* Rtt_PlatformDictionaryWrapper.h */,
 				A4BABBFB14CF44D500696484 /* Rtt_PlatformObjectWrapper.cpp */,
 				A4BABBFC14CF44D500696484 /* Rtt_PlatformObjectWrapper.h */,
-				0793BD8F16EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.cpp */,
-				0793BD9016EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.h */,
 				A4BABCD614CF4AD100696484 /* Rtt_TargetDevice.cpp */,
 				A4BABCD714CF4AD200696484 /* Rtt_TargetDevice.h */,
 			);
@@ -1267,7 +1262,6 @@
 				03D1C5891D70D21B00DB02EE /* Rtt_PreferenceValue.cpp in Sources */,
 				03D1C57C1D70D1C400DB02EE /* Rtt_UseCount.cpp in Sources */,
 				A4F2AE7A16E676B300814C7B /* Rtt_DeviceBuildData.cpp in Sources */,
-				0793BD9116EA5FF40060DD74 /* Rtt_TargetAndroidAppStore.cpp in Sources */,
 				C22BAF721C1B8D9800EF1795 /* Rtt_OSXAppPackager.mm in Sources */,
 				0304FEA5178E3E380047CC04 /* Rtt_InputDeviceCollection.cpp in Sources */,
 				0304FEA6178E3E380047CC04 /* Rtt_InputDeviceDescriptor.cpp in Sources */,

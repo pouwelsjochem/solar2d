@@ -200,7 +200,6 @@ TargetDevice::ReleaseAllSkins()
 
 static const char kAndroidPlatformString[] = "Android";
 static const char kIOSPlatformString[] = "iOS";
-static const char kKindlePlatformString[] = "Amazon/Kindle";
 static const char kLinuxPlatformString[] = "LINUX";
 static const char kWin32PlatformString[] = "Win32";
 static const char kOSXPlatformString[] = "OSX";
@@ -219,9 +218,6 @@ TargetDevice::StringForPlatform( TargetDevice::Platform platform )
 			break;
 		case kAndroidPlatform:
 			result = kAndroidPlatformString;
-			break;
-		case kKindlePlatform:
-			result = kKindlePlatformString;
 			break;
 		case kLinuxPlatform:
 			result = kLinuxPlatformString;
@@ -254,10 +250,6 @@ TargetDevice::PlatformForString( const char *str )
 		{
 			result = kAndroidPlatform;
 		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kKindlePlatformString ) )
-		{
-			result = kKindlePlatform;
-		}
 		else if ( 0 == Rtt_StringCompareNoCase( str, kLinuxPlatformString ) )
 		{
 			result = kLinuxPlatform;
@@ -285,7 +277,6 @@ TargetDevice::PlatformForString( const char *str )
 
 static const char kAndroidPlatformTag[] = "android";
 static const char kIOSPlatformTag[] = "ios";
-static const char kKindlePlatformTag[] = "kindle";
 static const char kLinuxPlatformTag[] = "linux";
 static const char kWin32PlatformTag[] = "win32";
 static const char kOSXPlatformTag1[] = "osx";
@@ -305,9 +296,6 @@ TargetDevice::TagForPlatform( TargetDevice::Platform platform )
 			break;
 		case kAndroidPlatform:
 			result = kAndroidPlatformTag;
-			break;
-		case kKindlePlatform:
-			result = kKindlePlatformTag;
 			break;
 		case kLinuxPlatform:
 			result = kLinuxPlatformTag;
@@ -341,10 +329,6 @@ TargetDevice::PlatformForTag( const char *str )
 		if ( 0 == Rtt_StringCompareNoCase( str, kAndroidPlatformTag ) )
 		{
 			result = kAndroidPlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kKindlePlatformTag ) )
-		{
-			result = kKindlePlatform;
 		}
 		else if ( 0 == Rtt_StringCompareNoCase( str, kLinuxPlatformTag ) )
 		{
@@ -385,7 +369,6 @@ TargetDevice::VersionForPlatform( Platform platform )
 	switch ( platform )
 	{
 		case kAndroidPlatform:
-		case kKindlePlatform:
 			result = kAndroidOS4_0_3;
 			break;
 		case kOSXPlatform:

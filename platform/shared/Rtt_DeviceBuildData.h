@@ -31,7 +31,6 @@ class DeviceBuildData
 			S32 targetDevice,
 			TargetDevice::Platform targetPlatform,
 			S32 targetPlatformVersion,
-			const char *targetAppStoreName,
 			const char *targetCertType, // bool isDistribution
 			const char *clientDeviceId,
 			const char *clientProductId,
@@ -64,7 +63,6 @@ class DeviceBuildData
 		S32 fTargetDevice;
 		S32 fTargetPlatform;
 		S32 fTargetPlatformVersion;
-		String fTargetAppStoreName;
 		String fTargetCertType;
 		String fClientDeviceId;
 		String fClientProductId;

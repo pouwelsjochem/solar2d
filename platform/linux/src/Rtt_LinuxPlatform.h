@@ -94,7 +94,6 @@ namespace Rtt
 		virtual void SaveBitmap(PlatformBitmap *bitmap, Rtt::Data<const char> & pngBytes) const;
 		virtual bool OpenURL(const char *url) const;
 		virtual int CanOpenURL(const char *url) const;
-		virtual PlatformStoreProvider *GetStoreProvider(const ResourceHandle<lua_State> &handle) const;
 
 		virtual NativeAlertRef ShowNativeAlert(
 		    const char *title,
@@ -140,7 +139,6 @@ namespace Rtt
 		String fInstallDir;
 		String fSkinDir;
 		LinuxCrypto fCrypto;
-		mutable PlatformStoreProvider *fStoreProvider;
 		mutable LinuxScreenSurface *fScreenSurface;
 
 	public:

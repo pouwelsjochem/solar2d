@@ -10,7 +10,6 @@
             <connections>
                 <outlet property="fAndroidKeystore" destination="271" id="323"/>
                 <outlet property="fSigningIdentitiesAndroid" destination="273" id="324"/>
-                <outlet property="fTargetStore" destination="278" id="358"/>
                 <outlet property="postBuildRadioGroup" destination="365" id="374"/>
                 <outlet property="window" destination="266" id="364"/>
             </connections>

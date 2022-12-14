@@ -8,8 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 /**
- * Provides classes used to easily work with external packages, files, asset files contained with an APK,
- * and Google Play expansion files.
+ * Provides classes used to easily work with external packages, files, asset files contained with an APK.
  * @author Corona Labs Inc.
  */
 package com.ansca.corona.storage;

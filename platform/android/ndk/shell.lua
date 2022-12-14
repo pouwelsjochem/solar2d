@@ -53,27 +53,15 @@ local function isModuleAvailable(name)
 	end
 end
 
-
-
-local function checkLicense()
-	if system.getInfo("targetAppStore") == "google" then
-		pcall( function()
-			local licensing = require("licensing")
-			licensing.init("google")
-		end )
-	end
-	callOnShellComplete(nil)
-end
-
 local usingGooglePlayServices = isModuleAvailable("shared.google.play.services.base")
 if usingGooglePlayServices then
 	local gps = require("shared.google.play.services.base")
 	local function googlePlayServicesAvailabileListener( event )
 		gps.clearAvailabilityListener()
-		checkLicense()
+		callOnShellComplete()
 	end
 	gps.setAvailabilityListener(googlePlayServicesAvailabileListener)
 	gps.handleGooglePlayServicesAvailability()
 else
-	checkLicense()
+	callOnShellComplete()
 end

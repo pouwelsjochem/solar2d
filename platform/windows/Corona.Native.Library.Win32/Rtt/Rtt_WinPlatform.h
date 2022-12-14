@@ -65,7 +65,6 @@ class WinPlatform : public MPlatform
 		virtual OperationResult DeletePreferences(const char* categoryName, const char** keyNameArray, U32 keyNameCount) const;
 		virtual bool OpenURL(const char* url) const;
 		virtual int CanOpenURL(const char* url) const;
-		virtual PlatformStoreProvider* GetStoreProvider(const ResourceHandle<lua_State> & handle) const;
 		virtual NativeAlertRef ShowNativeAlert(
 					const char *title, const char *message, const char **buttonLabels,
 					U32 buttonCount, LuaResource *resourcePointer) const;
