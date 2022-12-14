@@ -135,7 +135,7 @@ JNIEXPORT jint JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeGetContentHe
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;III)V
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeResize
-  (JNIEnv *, jclass, jlong, jstring, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jboolean);
+  (JNIEnv *, jclass, jlong, jstring, jstring, jstring, jstring, jstring, jstring, jint, jint, jboolean);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
