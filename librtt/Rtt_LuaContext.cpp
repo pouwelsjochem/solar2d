@@ -679,7 +679,6 @@ LuaContext::InitializeLuaCore( lua_State* L )
 #if defined( Rtt_SQLITE )
 		{ "sqlite3", LuaLibSQLite::Open },
 #endif
-		{ "store", LuaLibStore::Open },
 		{ "easing", Lua::Open< luaload_easing> },
 		{ "dkjson", Lua::Open< luaload_dkjson > },
 		{ "json", Lua::Open< luaload_json > },
