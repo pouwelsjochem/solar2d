@@ -26,7 +26,6 @@ val configureCoronaPlugins: String? by project
 val coronaBuild: String? by project
 val (dailyBuildYear, dailyBuildRevision) = coronaBuild?.split('.') ?: listOf(null, null)
 val coronaBuildData: String? by project
-val coronaExpansionFileName: "dummyExpansionFile.obb"
 val coronaSrcDir = project.findProperty("coronaSrcDir") as? String
         ?: if (file("$rootDir/../test/assets2").exists()) {
             "$rootDir/../test/assets2"
@@ -314,6 +313,32 @@ fun processPluginGradleScripts() {
     }
 }
 processPluginGradleScripts()
+
+fun coronaAssetsCopySpec(spec: CopySpec) {
+    with(spec) {
+        file("$coronaTmpDir/excludesfile.properties").takeIf { it.exists() }?.readLines()?.forEach {
+            exclude(it)
+        }
+        parsedBuildProperties.lookup<JsonArray<JsonObject>>("buildSettings.android.onDemandResources").firstOrNull()?.forEach {
+            it["resource"].let { res ->
+                exclude("$res")
+                exclude("$res/**")
+            }
+        }
+        if (!isSimulatorBuild) {
+            // use build.settings properties only if this is not simulator build
+            parsedBuildProperties.lookup<JsonArray<String>>("buildSettings.excludeFiles.all").firstOrNull()?.forEach {
+                exclude("**/$it")
+            }
+            parsedBuildProperties.lookup<JsonArray<String>>("buildSettings.excludeFiles.android").firstOrNull()?.forEach {
+                exclude("**/$it")
+            }
+        }
+        exclude("**/Icon\r")
+        exclude("AndroidResources/**")
+        exclude("**/*.lua", "build.settings")
+    }
+}
 
 android.applicationVariants.all {
     val baseName = this.baseName.toLowerCase()
@@ -843,7 +868,7 @@ tasks.create("buildCoronaApp") {
                     throw ex
                 }
             }
-            delete("$it/$coronaExpansionFileName")
+            delete("$it/dummyExpansionFile.obb")
         }
     }
 }
@@ -973,7 +998,7 @@ tasks.create<Copy>("copyDefaultNotificationIcons") {
 
 tasks.register<Zip>("createExpansionFile") {   
     destinationDirectory.set(file("$buildDir/outputs"))
-    archiveFileName.set(coronaExpansionFileName)
+    archiveFileName.set("dummyExpansionFile.obb")
 
     from(coronaSrcDir) {
         coronaAssetsCopySpec(this)
