@@ -49,7 +49,7 @@ class OSXAppPackagerParams : public AppPackagerParams
 							 )
 		: AppPackagerParams(
 							appName, version, identity, provisionFile, srcDir, dstDir, sdkRoot,
-							targetPlatform, (char*)"apple", targetVersion, targetDevice, customBuildId, productId,
+							targetPlatform, targetVersion, targetDevice, customBuildId, productId,
 							appPackage, isDistributionBuild ),
 		fAppSigningIdentity(appSigningIdentity),
 		fInstallerSigningIdentity(installerSigningIdentity)
@@ -65,7 +65,7 @@ class OSXAppPackagerParams : public AppPackagerParams
 							 )
 		: AppPackagerParams(
 							appName, version, "", "", srcDir, dstDir, "",
-							TargetDevice::kOSXPlatform, (char*)"apple", -1, -1, "", "",
+							TargetDevice::kOSXPlatform, -1, -1, "", "",
 							"", false )
 		{
 		}

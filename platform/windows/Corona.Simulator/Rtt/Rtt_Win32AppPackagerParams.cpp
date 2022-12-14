@@ -28,7 +28,6 @@ Win32AppPackagerParams::Win32AppPackagerParams(const Win32AppPackagerParams::Cor
 		settings.DestinationDirectoryPath,
 		"",
 		TargetDevice::kWin32Platform,
-		"",
 		TargetDevice::kUnknownVersion,
 		0,
 		nullptr,

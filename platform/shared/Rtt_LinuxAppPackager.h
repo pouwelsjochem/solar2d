@@ -45,7 +45,7 @@ namespace Rtt
 		)
 			: AppPackagerParams(
 			      appName, version, identity, provisionFile, srcDir, dstDir, sdkRoot,
-			      targetPlatform, (char*)"linux", targetVersion, targetDevice, customBuildId, productId,
+			      targetPlatform, targetVersion, targetDevice, customBuildId, productId,
 			      appPackage, isDistributionBuild )
 			, fDebTemplate(debtemplate)
 			, fUseWidgetResources(useWidgetResources)

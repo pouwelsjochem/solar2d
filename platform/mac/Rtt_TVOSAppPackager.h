@@ -48,7 +48,7 @@ class TVOSAppPackagerParams : public AppPackagerParams
 			)
 		: AppPackagerParams( 
 			appName, version, identity, provisionFile, srcDir, dstDir, sdkRoot,
-			targetPlatform, (char*)"apple", targetVersion, targetDevice, customBuildId, productId,
+			targetPlatform, targetVersion, targetDevice, customBuildId, productId,
 			appPackage, isDistributionBuild )
 		{
 		}

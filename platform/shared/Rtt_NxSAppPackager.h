@@ -48,7 +48,7 @@ class NxSAppPackagerParams : public AppPackagerParams
 			)
 		: AppPackagerParams( 
 			appName, version, identity, provisionFile, srcDir, dstDir, sdkRoot,
-			targetPlatform, (char*)"nx", targetVersion, targetDevice, customBuildId, productId,
+			targetPlatform, targetVersion, targetDevice, customBuildId, productId,
 			appPackage, isDistributionBuild )
 		, fNXTemplate(nxTemplate)
 		, fNmetaPath(nmetaPath)
