@@ -102,7 +102,7 @@ namespace Rtt
 		const char* tmpDir = lua_tostring(L, 4);
 
 		// Package build settings parameters.
-		Rtt::AppPackagerParams params(p->GetAppName(), p->GetVersion(), p->GetIdentity(), NULL, srcDir, dstDir, NULL, p->GetTargetPlatform(), NULL, 0, 0, NULL, NULL, NULL, true);
+		Rtt::AppPackagerParams params(p->GetAppName(), p->GetVersion(), p->GetIdentity(), NULL, srcDir, dstDir, NULL, p->GetTargetPlatform(), 0, 0, NULL, NULL, NULL, true);
 		params.SetStripDebug(p->IsStripDebug());
 
 		bool rc = CompileScriptsInDirectory(L, params, dstDir, srcDir);
