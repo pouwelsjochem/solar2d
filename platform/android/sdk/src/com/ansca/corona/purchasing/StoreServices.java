@@ -183,9 +183,21 @@ public class StoreServices {
 	 * @return Returns true if the application is installed on the device. Returns false if not or given an invalid argument.
 	 */
 	private static boolean isPackageNameInstalled(String packageName) {
-		// Invoke PackageServices for this
-		com.ansca.corona.storage.PackageServices packageServices = 
-			new com.ansca.corona.storage.PackageServices(com.ansca.corona.CoronaEnvironment.getApplicationContext());
-		return packageServices.isPackageNameInstalled(packageName);
+		// Validate.
+		if ((packageName == null) || (packageName.length() <= 0)) {
+			return false;
+		}
+
+		// Check if the given package is installed on the device.
+		boolean isInstalled = false;
+		try {
+			android.content.Context context = new com.ansca.corona.CoronaEnvironment.getApplicationContext();
+			context.getPackageManager().getPackageInfo(packageName, android.content.pm.PackageManager.GET_ACTIVITIES);
+			isInstalled = true;
+		}
+		catch (Exception ex) { }
+
+		// Return the result.
+		return isInstalled;
 	}
 }
