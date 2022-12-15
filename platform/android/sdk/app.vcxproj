@@ -286,6 +286,7 @@
     <JCompile Include="src\com\ansca\corona\permissions\PermissionState.java" />
     <JCompile Include="src\com\ansca\corona\permissions\PermissionUrgency.java" />
     <JCompile Include="src\com\ansca\corona\permissions\RequestPermissionsResultData.java" />
+    <JCompile Include="src\com\ansca\corona\purchasing\StoreName.java" />
     <JCompile Include="src\com\ansca\corona\purchasing\StoreServices.java" />
     <JCompile Include="src\com\ansca\corona\SmsSettings.java" />
     <JCompile Include="src\com\ansca\corona\storage\AssetFileLocationInfo.java" />
