@@ -191,7 +191,7 @@ public class StoreServices {
 		// Check if the given package is installed on the device.
 		boolean isInstalled = false;
 		try {
-			android.content.Context context = new com.ansca.corona.CoronaEnvironment.getApplicationContext();
+			android.content.Context context = com.ansca.corona.CoronaEnvironment.getApplicationContext();
 			context.getPackageManager().getPackageInfo(packageName, android.content.pm.PackageManager.GET_ACTIVITIES);
 			isInstalled = true;
 		}
