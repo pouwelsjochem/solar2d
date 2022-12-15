@@ -596,6 +596,9 @@
     <JCompile Include="src\com\ansca\corona\storage\FileContentProvider.java">
       <Filter>src\com\ansca\corona\storage</Filter>
     </JCompile>
+    <JCompile Include="src\com\ansca\corona\purchasing\StoreServices.java">
+      <Filter>src\com\ansca\corona\purchasing</Filter>
+    </JCompile>
     <JCompile Include="src\com\ansca\corona\permissions\PermissionsSettings.java">
       <Filter>src\com\ansca\corona\permissions</Filter>
     </JCompile>
