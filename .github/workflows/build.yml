@@ -231,6 +231,12 @@ jobs:
         run: |
           7z x SourceCode/corona.tgz
           7z x corona.tar
+      - name: Checkout Switch specific source code (under NDA)
+        uses: actions/checkout@v3
+        with:
+          repository: pouwelsjochem/platform-switch
+          token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
+          path: platform\switch
       - run: ./tools/GHAction/daily_env.sh
         shell: bash
       - run: mkdir -f docs
@@ -262,6 +268,11 @@ jobs:
         run: |
           curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/redist.win32.7z -o redist.win32.7z
           7z x redist.win32.7z -o"platform/windows/Bin/redist" -y
+      - name: Put nxtemplate in place
+        shell: cmd
+        run: |
+          call platform\switch\build_release_template.bat
+          mv platform\switch\nxtemplate platform\windows\Bin\Corona\Resources
       - name: Build Corona Simulator
         shell: cmd
         run: |
@@ -277,7 +288,7 @@ jobs:
           mkdir output
           cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
         shell: bash
-      - name: Upload Widnows Corona artifact
+      - name: Upload Windows Corona artifact
         uses: actions/upload-artifact@v3
         with:
           name: Simulator-Windows
