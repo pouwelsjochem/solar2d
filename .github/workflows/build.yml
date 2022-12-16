@@ -21,14 +21,14 @@ jobs:
     runs-on: macos-12
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
       - run: ./tools/GHAction/daily_env.sh
       - name: Set daily build
         run: ./tools/GHAction/process_sources.sh
       - name: Upload Source bundle
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: SourceCode
           path: ./output
@@ -69,7 +69,7 @@ jobs:
       - name: Build templates JSON spec
         run: ./tools/GHAction/generate_xcode_jsons.py
       - name: Upload templates
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: Templates-${{ matrix.platform }}-${{ matrix.xcode }}-${{ matrix.target }}
           path: ./output
@@ -80,8 +80,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
       - name: Collect templates together
         run: |
           mkdir -p output/iostemplate
@@ -92,7 +92,7 @@ jobs:
       - name: Generate template JSON
         run: find Templates-* -name '*_*-SDKs.json' -exec ./tools/GHAction/aggregate_xcode_jsons.py output {} \+
       - name: Upload templates
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: Collected-ios-templates
           path: ./output
@@ -114,7 +114,7 @@ jobs:
         env:
           CERT_PASSWORD: ${{ secrets.CertPassword }}
       - name: Upload Corona Native
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: Native
           path: ./output
@@ -160,7 +160,7 @@ jobs:
         env:
           CERT_PASSWORD: ${{ secrets.CertPassword }}
       - name: Upload macOS Daily build artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: Simulator-macOS
           path: ./output
@@ -278,7 +278,7 @@ jobs:
           cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
         shell: bash
       - name: Upload Widnows Corona artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: Simulator-Windows
           path: ./output
@@ -292,7 +292,7 @@ jobs:
       - macOS-Simulator
       - native
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: ./tools/GHAction/daily_env.sh
       - name: Generate Change Log
         run: |
