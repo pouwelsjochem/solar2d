@@ -533,7 +533,9 @@ int Win32AppPackager::DoLocalBuild(const Win32AppPackager::BuildSettings& buildS
 #endif
 
 		zipFilePath.append(L"\\Resources\\AppTemplates\\Win32\\Template.zip");
-		buildSettings.ParamsPointer->SetBuildMessage(zipFilePath.c_str());
+
+		std::string zipFilePathString( zipFilePath.begin(), zipFilePath.end() );
+		buildSettings.ParamsPointer->SetBuildMessage(zipFilePathString.c_str());
 
 		// Unzip the app template.
 		bool wasUnzipped = UnzipFile(zipFilePath.c_str(), binDirectoryPath.GetUTF16());
