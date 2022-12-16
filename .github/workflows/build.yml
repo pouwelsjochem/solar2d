@@ -1,5 +1,5 @@
 name: Build
-run-name: "${{ contains(github.ref, 'refs/tags/') && 'Release' || 'Build' }} (${{ github.event.workflow_run.head_commit.message || github.event.head_commit.message }})"
+run-name: "${{ contains(github.ref, 'refs/tags/') && 'Release' || 'Build' }} (${{ github.event.workflow_run.id }} ${{ github.event.workflow_run.head_commit }} ${{ github.event.workflow_run.head_commit.id }})"
 
 on:
   push:
@@ -234,7 +234,7 @@ jobs:
       - name: Checkout Switch specific source code (under NDA)
         uses: actions/checkout@v3
         with:
-          repository: pouwelsjochem/platform-switch
+          repository: pouwelsjochem/solar2d-platform-switch
           token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
           path: platform\switch
       - run: ./tools/GHAction/daily_env.sh
