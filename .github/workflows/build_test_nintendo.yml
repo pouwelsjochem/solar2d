@@ -113,10 +113,14 @@ jobs:
         shell: pwsh
         run: |
           ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
+
+          Invoke-WebRequest -Uri "https://drive.google.com/file/d/1_BpemIqooNtfdgFsrh6N-sWSijN_Ghc3" -OutFile "platform\switch\ci\solar2d_environment.megazarf"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.Username" "${{ secrets.NINTENDO_DEVELOPER_ID }}"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.NonInteractivePassword" "${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}"
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.RootDir" "C:\Nintendo"
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.Name" "Solar2D"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx -name NintendoSDK -root C:\Nintendo -platform NX -version 14.3.0
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "platform\switch\ci\solar2d_environment.megazarf"
       - name: Put nxtemplate in place
         shell: cmd
         run: |
