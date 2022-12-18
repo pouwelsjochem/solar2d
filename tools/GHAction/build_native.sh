@@ -43,8 +43,3 @@ fi
 
 mkdir -p "$WORKSPACE/output/"
 mv build/CoronaEnterprise.tgz "$WORKSPACE/output/CoronaNative.tar.gz"
-
-(
-    cd "$WORKSPACE/platform/android/sdk/build/intermediates/cmake/release/obj/"
-    zip -9 "$WORKSPACE/output/AndroidDebugSymbols.zip" -r .
-)
