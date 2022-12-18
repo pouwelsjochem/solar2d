@@ -107,37 +107,12 @@ checkError
 ## Corona/mac/bin
 DST_BIN_MAC_DIR=$CORONA_DIR/mac/bin
 
-BUILD_CORONABUILDER=YES
-# If coronabuilder already exists in the build dir and we're on jenkins, then assume it was prebuilt by a different job.
-# (this is important because Xcode will try to build it for the wrong OS or CPU arch unless things are lined up just right)
-if [[ -d "$PLATFORM_DIR/mac/build/Release/CoronaBuilder.app" && -n "${WORKSPACE}" ]]
-then
-	BUILD_CORONABUILDER=NO
-fi
-
 # Build lua and luac first because Xcode seem to disregard dependency for code generation
 xcodebuild -project "$PLATFORM_DIR/mac/ratatouille.xcodeproj" -scheme lua -configuration "$CONFIG"
 checkError
 
 xcodebuild -project "$PLATFORM_DIR/mac/ratatouille.xcodeproj" -scheme luac -configuration "$CONFIG"
 checkError
-
-if [[ "$BUILD_CORONABUILDER" == "YES" ]]
-then
-    xcodebuild -project "$PLATFORM_DIR/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG" clean
-    checkError
-
-	# Make the external CoronaCards dependency
-    xcodebuild -project "$PLATFORM_DIR/mac/ratatouille.xcodeproj" -target CoronaCards -configuration "$CONFIG"
-    checkError
-
-    xcodebuild -project "$PLATFORM_DIR/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG"
-    checkError
-fi
-
-mv -v "$PLATFORM_DIR/mac/build/Release/CoronaBuilder.app" "$DST_BIN_MAC_DIR"
-checkError
-
 
 # Record the version of CoronaSDK build this corresponds to in an easily accessible place
 "$DST_BIN_MAC_DIR/CoronaBuilder.app/Contents/MacOS/CoronaBuilder" version > "$CORONA_DIR/BUILD" && chmod -w "$CORONA_DIR/BUILD"
@@ -218,44 +193,6 @@ checkError
 cp -v "$ROOT_DIR/platform/resources/dkjson.lua" "$CORONA_SHARED_RESOURCE_DIR"
 checkError
 cp -v "$ROOT_DIR/platform/resources/CoronaPListSupport.lua" "$CORONA_SHARED_RESOURCE_DIR"
-checkError
-
-# 
-# TVOS
-#
-
-if [ -z "${JOB_NAME}" ]
-then
-    export JOB_NAME=Enterprise
-fi
-
-"$PLATFORM_DIR/tvos/build_templates.sh"
-checkError
-
-
-# 
-# iOS
-#
-
-"$PLATFORM_DIR/iphone/enterprise/build.sh" "$USER" "$PASSWORD" "$OUTPUT_DIR" "$TARGET"
-checkError
-
-
-# 
-# Android
-# 
-(
-    set -e
-    if [ ! -f "$PLATFORM_DIR/android/gradlew" ]
-    then
-        exit 0
-    fi
-    echo Building Gradle artifacts!
-
-    cd "$PLATFORM_DIR/android"
-    ./gradlew clean
-    ./gradlew installAppTemplateAndAARToSim -PcoronaNativeOutputDir="$CORONA_DIR"
-)
 checkError
 
 # 
