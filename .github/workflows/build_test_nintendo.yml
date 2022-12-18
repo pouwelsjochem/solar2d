@@ -120,7 +120,7 @@ jobs:
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.RootDir" "C:\Nintendo"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.Name" "Solar2D"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "platform\switch\ci\solar2d_environment.megazarf"
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "$env:WORKSPACE\platform\switch\ci\solar2d_environment.megazarf"
       - name: Put nxtemplate in place
         shell: cmd
         run: |
