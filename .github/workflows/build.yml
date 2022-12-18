@@ -1,5 +1,5 @@
 name: Build
-run-name: "${{ contains(github.ref, 'refs/tags/') && 'Release' || 'Build' }} (${{ github.event.workflow_run.id }} ${{ github.event.workflow_run.head_commit }} ${{ github.event.workflow_run.head_commit.id }})"
+run-name: "${{ contains(github.ref, 'refs/tags/') && 'Release' || 'Build' }} (${{ github.run_number }})"
 
 on:
   push:
@@ -237,6 +237,13 @@ jobs:
           repository: pouwelsjochem/solar2d-platform-switch
           token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
           path: platform\switch
+      - name: Checkout Switch CI (under NDA)
+        uses: actions/checkout@v3
+        with:
+          repository: pouwelsjochem/nintendo-setup-ci
+          ref: "2.5.5"
+          token: ${{ secrets.NINTENDO_SETUP_CI_REPO_PAT }}
+          path: platform\switch\ci
       - run: ./tools/GHAction/daily_env.sh
         shell: bash
       - run: mkdir -f docs
@@ -268,6 +275,11 @@ jobs:
         run: |
           curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/redist.win32.7z -o redist.win32.7z
           7z x redist.win32.7z -o"platform/windows/Bin/redist" -y
+      - name: Configure Nintendo SDK
+        shell: pwsh
+        run: |
+          .platform\switch\ci\ndi_setup-2.5.5.exe /SILENT
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx -name NintendoSDK -root c:\Nintendo -platform NX -version 14.3.0
       - name: Put nxtemplate in place
         shell: cmd
         run: |
