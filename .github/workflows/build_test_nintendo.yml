@@ -113,6 +113,8 @@ jobs:
         shell: pwsh
         run: |
           ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.Username" "${{ secrets.NINTENDO_DEVELOPER_ID }}"
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.NonInteractivePassword" "${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx -name NintendoSDK -root C:\Nintendo -platform NX -version 14.3.0
       - name: Put nxtemplate in place
