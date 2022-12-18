@@ -107,12 +107,37 @@ checkError
 ## Corona/mac/bin
 DST_BIN_MAC_DIR=$CORONA_DIR/mac/bin
 
+BUILD_CORONABUILDER=YES
+# If coronabuilder already exists in the build dir and we're on jenkins, then assume it was prebuilt by a different job.
+# (this is important because Xcode will try to build it for the wrong OS or CPU arch unless things are lined up just right)
+if [[ -d "$PLATFORM_DIR/mac/build/Release/CoronaBuilder.app" && -n "${WORKSPACE}" ]]
+then
+	BUILD_CORONABUILDER=NO
+fi
+
 # Build lua and luac first because Xcode seem to disregard dependency for code generation
 xcodebuild -project "$PLATFORM_DIR/mac/ratatouille.xcodeproj" -scheme lua -configuration "$CONFIG"
 checkError
 
 xcodebuild -project "$PLATFORM_DIR/mac/ratatouille.xcodeproj" -scheme luac -configuration "$CONFIG"
 checkError
+
+if [[ "$BUILD_CORONABUILDER" == "YES" ]]
+then
+    xcodebuild -project "$PLATFORM_DIR/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG" clean
+    checkError
+
+	# Make the external CoronaCards dependency
+    xcodebuild -project "$PLATFORM_DIR/mac/ratatouille.xcodeproj" -target CoronaCards -configuration "$CONFIG"
+    checkError
+
+    xcodebuild -project "$PLATFORM_DIR/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG"
+    checkError
+fi
+
+mv -v "$PLATFORM_DIR/mac/build/Release/CoronaBuilder.app" "$DST_BIN_MAC_DIR"
+checkError
+
 
 # Record the version of CoronaSDK build this corresponds to in an easily accessible place
 "$DST_BIN_MAC_DIR/CoronaBuilder.app/Contents/MacOS/CoronaBuilder" version > "$CORONA_DIR/BUILD" && chmod -w "$CORONA_DIR/BUILD"
