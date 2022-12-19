@@ -119,7 +119,7 @@ jobs:
           (Get-Content "$GS_FILE").Replace("`"UserName`": null", "`"UserName`": `"${{ secrets.NINTENDO_DEVELOPER_ID }}`"") | Set-Content "$GS_FILE"
           (Get-Content "$GS_FILE").Replace("`"NonInteractivePassword`": `"`"", "`"NonInteractivePassword`": `"${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}`"") | Set-Content "$GS_FILE"
           (Get-Content "$GS_FILE").Replace("`"Name`": null", "`"Name`": `"Solar2D`"") | Set-Content "$GS_FILE"
-          (Get-Content "$GS_FILE").Replace("`"RootDir`": null", "`"RootDir`": `"C:\Nintendo`"") | Set-Content "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"RootDir`": null", "`"RootDir`": `"C:\\Nintendo`"") | Set-Content "$GS_FILE"
 
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx `
                 -name Solar2D -root "C:\Nintendo" -platform NX -toolset Standard -version 14.3.0 `
