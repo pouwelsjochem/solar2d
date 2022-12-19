@@ -58,7 +58,7 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Get drive information 1
-      - run: Get-PSDrive
+        run: Get-PSDrive
 
       - name: Get processed code
         uses: actions/download-artifact@v1
@@ -83,7 +83,7 @@ jobs:
           path: platform\switch\ci
 
       - name: Get drive information 2
-      - run: Get-PSDrive
+        run: Get-PSDrive
 
       - run: ./tools/GHAction/daily_env.sh
         shell: bash
@@ -118,4 +118,4 @@ jobs:
           7z x redist.win32.7z -o"platform/windows/Bin/redist" -y
       
       - name: Get drive information 3
-      - run: Get-PSDrive
+        run: Get-PSDrive
