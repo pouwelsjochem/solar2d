@@ -119,16 +119,12 @@ jobs:
                 Login.ServerID "Nintendo Developer Portal (NO-POPUP)" `
                 Login.Username "${{ secrets.NINTENDO_DEVELOPER_ID }}" `
                 Login.NonInteractivePassword "${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}" `
-                DefaultEnvironment.RootDir "C:\" `
+                DefaultEnvironment.RootDir "C:\Nintendo" `
                 DefaultEnvironment.Name "Solar2D" `
             THEN `
             CreateEx `
-                -name 14.3.0 -root "C:\Nintendo" -platform NX -toolset Standard -version 14.3.0 `
+                -name Solar2D -root "C:\Nintendo" -platform NX -toolset Standard -version 14.3.0 `
                 -family NintendoWare
-      - name: Import downloaded Nintendo SDK
-        shell: pwsh
-        run: |
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "$env:WORKSPACE\platform\switch\ci\solar2d_environment.megazarf"
       - name: Put nxtemplate in place
         shell: cmd
         run: |
