@@ -120,11 +120,12 @@ jobs:
           mega-login "${{ secrets.MEGA_NZ_USERNAME }}" "${{ secrets.MEGA_NZ_PASSWORD }}"
           mega-get -m "solar2d_environment.megazarf" "platform\switch\ci\solar2d_environment.megazarf"
 
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.Username" "${{ secrets.NINTENDO_DEVELOPER_ID }}"
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.NonInteractivePassword" "${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}"
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.RootDir" "C:\Nintendo"
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.Name" "Solar2D"
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
+          $GS_FILE = "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"UserName`": null", "`"UserName`": `"${{ secrets.NINTENDO_DEVELOPER_ID }}`"") | Set-Content "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"NonInteractivePassword`": null", "`"UserName`": `"${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}`"") | Set-Content "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"Name`": null", "`"UserName`": `"Solar2D`"") | Set-Content "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"RootDir`": null", "`"UserName`": `"C:\Nintendo`"") | Set-Content "$GS_FILE"
       - name: Import downloaded Nintendo SDK
         shell: pwsh
         run: |
