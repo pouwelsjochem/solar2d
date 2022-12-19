@@ -118,7 +118,7 @@ jobs:
           .".\megacmd_setup.exe" /S | Write-Verbose
           $env:PATH += ";$env:LOCALAPPDATA\MEGAcmd"
           mega-login "${{ secrets.MEGA_NZ_USERNAME }}" "${{ secrets.MEGA_NZ_PASSWORD }}"
-          mega-get -m "solar2d_environment.megazarf" "platform\switch\ci\solar2d_environment.megazarf"
+          mega-get -m "solar2d_environment.megazarf" "C:\solar2d_environment.megazarf"
 
           $GS_FILE = "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$GS_FILE"
@@ -129,7 +129,7 @@ jobs:
       - name: Import downloaded Nintendo SDK
         shell: pwsh
         run: |
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "$env:WORKSPACE\platform\switch\ci\solar2d_environment.megazarf"
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "C:\solar2d_environment.megazarf"
       - name: Put nxtemplate in place
         shell: cmd
         run: |
