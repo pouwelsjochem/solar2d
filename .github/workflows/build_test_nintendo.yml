@@ -114,13 +114,11 @@ jobs:
         run: |
           ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
 
-          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-          Invoke-WebRequest -Uri "https://drive.google.com/uc?export=download&id=1_BpemIqooNtfdgFsrh6N-sWSijN_Ghc3" -OutFile "_tmp.txt" -SessionVariable googleDriveSession
-          $searchString = Select-String -Path "_tmp.txt" -Pattern "confirm="
-          $searchString -match "confirm=(?<content>.*)&amp;id="
-          $confirmCode = $matches['content']
-          Remove-Item "_tmp.txt"
-          Invoke-WebRequest -Uri "https://drive.google.com/uc?export=download&confirm=${confirmCode}&id=1_BpemIqooNtfdgFsrh6N-sWSijN_Ghc3" -OutFile "platform\switch\ci\solar2d_environment.megazarf" -WebSession $googleDriveSession
+          Invoke-WebRequest -Uri "https://mega.nz/MEGAcmdSetup64.exe" -OutFile "megacmd_setup.exe"
+          ."\megacmd_setup.exe" /S | Write-Verbose
+          $env:PATH += ";$env:LOCALAPPDATA\MEGAcmd"
+          mega-login "$env:MEGA_NZ_USERNAME" "$env:MEGA_NZ_PASSWORD"
+          mega-get -m "solar2d_environment.megazarf" "platform\switch\ci\solar2d_environment.megazarf"
 
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.Username" "${{ secrets.NINTENDO_DEVELOPER_ID }}"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.NonInteractivePassword" "${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}"
