@@ -114,7 +114,7 @@ jobs:
         run: |
           ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
           
-          NDICmd.exe /i `
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" /i `
             SetGS `
                 Login.ServerID "Nintendo Developer Portal (NO-POPUP)" `
                 Login.Username "${{ secrets.NINTENDO_DEVELOPER_ID }}" `
