@@ -109,17 +109,27 @@ jobs:
         run: |
           curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/redist.win32.7z -o redist.win32.7z
           7z x redist.win32.7z -o"platform/windows/Bin/redist" -y
-      - name: Configure Nintendo SDK
+      - name: Configure Nintendo Dev Environment
         shell: pwsh
         run: |
           ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
 
-          Invoke-WebRequest -Uri "https://drive.google.com/file/d/1_BpemIqooNtfdgFsrh6N-sWSijN_Ghc3" -OutFile "platform\switch\ci\solar2d_environment.megazarf"
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          Invoke-WebRequest -Uri "https://drive.google.com/uc?export=download&id=1_BpemIqooNtfdgFsrh6N-sWSijN_Ghc3" -OutFile "_tmp.txt" -SessionVariable googleDriveSession
+          $searchString = Select-String -Path "_tmp.txt" -Pattern "confirm="
+          $searchString -match "confirm=(?<content>.*)&amp;id="
+          $confirmCode = $matches['content']
+          Remove-Item "_tmp.txt"
+          Invoke-WebRequest -Uri "https://drive.google.com/uc?export=download&confirm=${confirmCode}&id=1_BpemIqooNtfdgFsrh6N-sWSijN_Ghc3" -OutFile "platform\switch\ci\solar2d_environment.megazarf" -WebSession $googleDriveSession
+
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.Username" "${{ secrets.NINTENDO_DEVELOPER_ID }}"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.NonInteractivePassword" "${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.RootDir" "C:\Nintendo"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "DefaultEnvironment.Name" "Solar2D"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
+      - name: Import downloaded Nintendo SDK
+        shell: pwsh
+        run: |
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "$env:WORKSPACE\platform\switch\ci\solar2d_environment.megazarf"
       - name: Put nxtemplate in place
         shell: cmd
