@@ -117,7 +117,7 @@ jobs:
           Invoke-WebRequest -Uri "https://mega.nz/MEGAcmdSetup64.exe" -OutFile "megacmd_setup.exe"
           .".\megacmd_setup.exe" /S | Write-Verbose
           $env:PATH += ";$env:LOCALAPPDATA\MEGAcmd"
-          mega-login "$env:MEGA_NZ_USERNAME" "$env:MEGA_NZ_PASSWORD"
+          mega-login "${{ secrets.MEGA_NZ_USERNAME }}" "${{ secrets.MEGA_NZ_PASSWORD }}"
           mega-get -m "solar2d_environment.megazarf" "platform\switch\ci\solar2d_environment.megazarf"
 
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SetGS "Login.Username" "${{ secrets.NINTENDO_DEVELOPER_ID }}"
