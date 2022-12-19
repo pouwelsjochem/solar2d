@@ -113,16 +113,15 @@ jobs:
         shell: pwsh
         run: |
           ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
-          
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" /i `
-            SetGS `
-                Login.ServerID "Nintendo Developer Portal (NO-POPUP)" `
-                Login.Username "${{ secrets.NINTENDO_DEVELOPER_ID }}" `
-                Login.NonInteractivePassword "${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}" `
-                DefaultEnvironment.RootDir "C:\Nintendo" `
-                DefaultEnvironment.Name "Solar2D" `
-            THEN `
-            CreateEx `
+
+          $GS_FILE = "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"UserName`": null", "`"UserName`": `"${{ secrets.NINTENDO_DEVELOPER_ID }}`"") | Set-Content "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"NonInteractivePassword`": `"`"", "`"NonInteractivePassword`": `"${{ secrets.NINTENDO_DEVELOPER_PASSWORD }}`"") | Set-Content "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"Name`": null", "`"Name`": `"Solar2D`"") | Set-Content "$GS_FILE"
+          (Get-Content "$GS_FILE").Replace("`"RootDir`": null", "`"RootDir`": `"C:\Nintendo`"") | Set-Content "$GS_FILE"
+
+          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx `
                 -name Solar2D -root "C:\Nintendo" -platform NX -toolset Standard -version 14.3.0 `
                 -family NintendoWare
       - name: Put nxtemplate in place
