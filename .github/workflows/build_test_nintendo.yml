@@ -135,7 +135,7 @@ jobs:
           $env:NINTENDO_SDK_ROOT = "C:\Nintendo\Solar2D\NintendoSDK"
           Write-Host $env:NINTENDO_SDK_ROOT
 
-          msiexec.exe /i "$env:NINTENDO_SDK_ROOT\Installers\vsi\VsiForNX_VSBuildTools2019.15.1.1.0.msi" /qn /norestart
+          msiexec.exe /i "$env:NINTENDO_SDK_ROOT\Installers\vsi\VsiForNX_VSBuildTools2019.15.1.1.0.msi" /qn /norestart | Write-Verbose
       - name: Put nxtemplate in place
         shell: cmd
         run: |
