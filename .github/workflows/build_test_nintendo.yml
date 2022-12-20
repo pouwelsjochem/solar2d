@@ -131,9 +131,11 @@ jobs:
 
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "C:\solar2d_environment.megazarf"
 
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" List Environments
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" /gs InstallAll "Solar2D"
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" List Environments
+          Write-Host $env:NINTENDO_SDK_ROOT
+          $env:NINTENDO_SDK_ROOT = "C:\Nintendo\Solar2D\NintendoSDK"
+          Write-Host $env:NINTENDO_SDK_ROOT
+
+          msiexec.exe /i %NINTENDO_SDK_ROOT%\Installers\vsi\VsiForNX_VSBuildTools2019.15.1.1.0.msi /qn /norestart
       - name: Put nxtemplate in place
         shell: cmd
         run: |
