@@ -139,7 +139,7 @@ jobs:
       - name: Put nxtemplate in place
         shell: cmd
         run: |
-          set NINTENDO_SDK_ROOT="C:\Nintendo\Solar2D\NintendoSDK"
+          set NINTENDO_SDK_ROOT=C:\Nintendo\Solar2D\NintendoSDK
 
           call platform\switch\build_release_template.bat
           mv platform\switch\nxtemplate platform\windows\Bin\Corona\Resources
