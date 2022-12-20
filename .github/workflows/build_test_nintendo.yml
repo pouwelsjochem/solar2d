@@ -130,12 +130,6 @@ jobs:
           (Get-Content "$GS_FILE").Replace("`"RootDir`": null", "`"RootDir`": `"C:\\Nintendo`"") | Set-Content "$GS_FILE"
 
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" mz Install "C:\solar2d_environment.megazarf"
-
-          Write-Host $env:NINTENDO_SDK_ROOT
-          $env:NINTENDO_SDK_ROOT = "C:\Nintendo\Solar2D\NintendoSDK"
-          Write-Host $env:NINTENDO_SDK_ROOT
-
-          $env:PATH += ";$env:NINTENDO_SDK_ROOT\Tools\CommandLineTools"
       - name: Put nxtemplate in place
         shell: cmd
         run: |
