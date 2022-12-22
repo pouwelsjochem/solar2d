@@ -71,13 +71,6 @@ jobs:
           repository: pouwelsjochem/solar2d-platform-switch
           token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
           path: platform\switch
-      - name: Checkout Switch CI (under NDA)
-        uses: actions/checkout@v3
-        with:
-          repository: pouwelsjochem/nintendo-setup-ci
-          ref: "2.5.5"
-          token: ${{ secrets.NINTENDO_SETUP_CI_REPO_PAT }}
-          path: platform\switch\ci
       - run: ./tools/GHAction/daily_env.sh
         shell: bash
       - run: mkdir -f docs
@@ -117,10 +110,11 @@ jobs:
           $env:PATH += ";$env:LOCALAPPDATA\MEGAcmd"
           mega-login "${{ secrets.MEGA_NZ_USERNAME }}" "${{ secrets.MEGA_NZ_PASSWORD }}"
           mega-get -m "solar2d_environment.megazarf" "C:\solar2d_environment.megazarf"
+          mega-get -m "ndi_setup-2.5.5.exe" "C:\ndi_setup-2.5.5.exe"
       - name: Install Solar2D Nintendo Dev Environment
         shell: pwsh
         run: |
-          ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
+          ."C:\ndi_setup-2.5.5.exe" /SILENT | Write-Verbose
 
           $GS_FILE = "$env:LocalAppData\Nintendo\NDI\NDICmdGS.json"
           ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" SaveGS "$GS_FILE"
