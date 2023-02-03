@@ -162,16 +162,9 @@ TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngByt
 	size_t hDst = h;
 
 	size_t bytesPerPixel = PlatformBitmap::BytesPerPixel( bitmap->GetFormat() );
-//	size_t bitsPerPixel = (bytesPerPixel << 3);
 	size_t bytesPerRow = w*bytesPerPixel;
 	NSInteger numBytes = h*bytesPerRow;
-//	const size_t kBitsPerComponent = 8;
 
-#if 0
-	NSData* data = [NSData dataWithBytesNoCopy:& buffer length:numBytes freeWhenDone:NO];
-	UIImage* image = [UIImage imageWithData:data];
-	UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-#else
 	CGBitmapInfo srcBitmapInfo = CGBitmapInfo(kCGBitmapByteOrderDefault | kCGImageAlphaLast);
 	CGBitmapInfo dstBitmapInfo = kCGImageAlphaPremultipliedLast;
 
@@ -185,16 +178,8 @@ TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngByt
 	Rtt_ASSERT( w == CGImageGetWidth( imageRef ) );
 	Rtt_ASSERT( h == CGImageGetHeight( imageRef ) );
 
-
-	//void* pixels = calloc( bytesPerRow, h );
 	CGContextRef context = CGBitmapContextCreate(NULL, wDst, hDst, 8, wDst*bytesPerPixel, colorspace, dstBitmapInfo);
-
-	// On iPhone, when the image is sideways, we have to rotate the bits b/c when
-	// we read them in using glReadPixels, the window buffer is physically oriented
-	// as upright, so glReadPixels returns them assuming the buffer is physically
-	// oriented upright, rather than sideways.
     CGContextTranslateCTM( context, wDst, hDst );
-    CGContextRotateCTM( context, DegreesToRadians( 180 ) );
 
 	CGContextDrawImage( context, CGRectMake( 0.0, 0.0, w, h ), imageRef );
 	CGImageRef bitmapImageRef = CGBitmapContextCreateImage(context);
@@ -207,7 +192,6 @@ TVOSPlatform::SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngByt
 	CGContextRelease( context );
 	CGImageRelease( imageRef );
 	CGDataProviderRelease( dataProvider );
-#endif
 
 	bitmap->FreeBits();
     pngBytes.Set((const char *)bitmapImageRepData.bytes, bitmapImageRepData.length);
