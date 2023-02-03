@@ -47,6 +47,7 @@
 	#include "CoronaLuaObjCHelper.h"
 	#include "CoronaEvent.h"
 	#include "Corona/CoronaGraphics.h"
+	#include "Corona/CoronaMemory.h"
 
 	volatile void* fakeVariableToPreventSymbolStripping[] __attribute__((used)) = {
 		(void*)CoronaEventNameKey,
@@ -66,6 +67,12 @@
 		(void*)CoronaExternalPushTexture,
 		(void*)CoronaExternalGetUserData,
 		(void*)CoronaExternalFormatBPP,
+
+		(void*)CoronaMemoryCreateInterface,
+		(void*)CoronaMemoryBindLookupSlot,
+		(void*)CoronaMemoryReleaseLookupSlot,
+		(void*)CoronaMemoryPushLookupEncoding,
+		(void*)CoronaMemoryAcquireInterface
 	};
 
 #endif

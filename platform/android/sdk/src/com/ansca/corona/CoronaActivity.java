@@ -1706,4 +1706,62 @@ public class CoronaActivity extends Activity {
 			}
 		}
 	}
+
+
+	/**
+	 * Provides access to API Level 16 (Jelly Bean) features.
+	 * Should only be accessed if running on an operating system matching this API Level.
+	 * <p>
+	 * You cannot create instances of this class.
+	 * You are expected to call its static methods instead.
+	 */
+	private static class ApiLevel16 {
+		/** Constructor made private to prevent instances from being made. */
+		private ApiLevel16() {}
+
+		/**
+		 * Removes the given listener from the ViewTreeObserver.
+		 * @param viewTreeObserver The object to remove the listener from. Can be null.
+		 * @param listener The listener reference to be removed. Can be null.
+		 */
+		public static void removeOnGlobalLayoutListener(
+				ViewTreeObserver viewTreeObserver,
+				ViewTreeObserver.OnGlobalLayoutListener listener)
+		{
+			// Validate.
+			if ((viewTreeObserver == null) || (listener == null)) {
+				return;
+			}
+
+			// Remove the listener.
+			try {
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					viewTreeObserver.removeOnGlobalLayoutListener(listener);
+				}
+			}
+			catch (Exception ex) {}
+		}
+	}
+
+	@Override
+	public void onTrimMemory(int level) {
+		super.onTrimMemory(level);
+		if( level == android.content.ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL
+			|| level == android.content.ComponentCallbacks2.TRIM_MEMORY_COMPLETE)
+		{
+			if (fCoronaRuntime != null) {
+				com.ansca.corona.events.EventManager eventManager = fCoronaRuntime.getController().getEventManager();
+				if (eventManager != null) {
+					eventManager.addEvent(new com.ansca.corona.events.RunnableEvent(new java.lang.Runnable() {
+						@Override
+						public void run() {
+							if (fCoronaRuntime.getController() != null) {
+								JavaToNativeShim.memoryWarningEvent(fCoronaRuntime);
+							}
+						}
+					}));
+				}
+			}
+		}
+	}
 }

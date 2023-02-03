@@ -93,7 +93,6 @@ class AppPackagerParams
 		void SetStripDebug( bool newValue ) { fIsStripDebug = newValue; }
 		void SetBuildMessage( const char * newValue ) { fBuildMessage.Set( newValue ); }
 		const char * GetBuildMessage( ) { return fBuildMessage.GetString(); }
-
 		const char * GetCoronaUser() const { return fCoronaUser.GetString(); }
 		void SetCoronaUser(const char* user) { fCoronaUser.Set(user); }
 

@@ -235,7 +235,6 @@ static NSString *kValueNone = @"None";
 - (IBAction)build:(id)sender
 {
     Rtt_ASSERT(appDelegate);
-
     BOOL shouldSendToDevice = ([postBuildRadioGroup selectedRow] == 0); // first item in radio group
     BOOL shouldOpenInXcodeSimulator = ([postBuildRadioGroup selectedRow] == 1);
     BOOL shouldSendToAppStore = ([postBuildRadioGroup selectedRow] == 2);

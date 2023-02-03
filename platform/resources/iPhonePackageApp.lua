@@ -692,8 +692,6 @@ export PATH="$DEVELOPER_BASE/Platforms/iPhoneOS.platform/Developer/usr/bin:$DEVE
   return nil
 end
 
-
-
 --
 -- prePackageApp
 --
@@ -865,6 +863,12 @@ local function packageApp( options )
 
 	runScript( "chmod 755 " .. appBundleFile )
 
+	--remove standard resources(Corona Resources Bundle) if users selects
+
+	if options.includeStandardResources == false then
+		runScript("rm -rf "..quoteString(makepath(appBundleFileUnquoted, "CoronaResources.bundle")))
+	end
+
 	-- If building with a distribution identity, create an IPA of the .app which can be used by Application Loader
 	local appBundleFileIPA = quoteString(makepath(options.dstDir, options.dstFile) .. ".ipa")
 	-- remove old IPA for extra cleanliness, even if we are not building a new IPA for distribution (it's stale so let's remove it)
@@ -888,12 +892,12 @@ local function packageApp( options )
 			setStatus("Creating IPA for store submission...")
 			-- note we move the app to the "Payload" directory to preserve permissions and for speed which means the .app doesn't exist anymore
 			runScript( "mv " .. quoteString(makepath(options.dstDir, options.dstFile..".app")) .." ".. quoteString(makepath(ipaTmpDir, "Payload")) )
-			
+
 			--move odr resources to "Payload" folder
 			if odrOutputDir then
 				runScript( "mv " .. quoteString(makepath(odrOutputDir)) .." ".. quoteString(makepath(ipaTmpDir, "Payload")) )
 			end
-			
+
 			if bundleSwiftSupportDir then
 				runScript( "mv " .. bundleSwiftSupportDir .." ".. quoteString(ipaTmpDir) )
 			end
