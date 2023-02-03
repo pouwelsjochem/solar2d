@@ -28,7 +28,6 @@ namespace Rtt
 		char fSaveToFolderInput[1024];
 		char fProjectPathInput[1024];
 		char fVersionNameInput[32];
-		bool fIncludeStandardResources;
 	};
 
 	struct DlgAndroidBuild : public DlgBuild

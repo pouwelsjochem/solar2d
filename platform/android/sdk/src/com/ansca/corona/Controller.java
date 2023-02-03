@@ -318,7 +318,6 @@ public class Controller {
     
     public void requestRender() {
     	if (myContext != null) {
-    		mySystemMonitor.update();
 			if (myGLView != null) {
 				myGLView.requestRender();
 			}
@@ -327,7 +326,6 @@ public class Controller {
 
     public void requestEventRender() {
     	if (myTimerTask == null) {
-    		mySystemMonitor.update();
 			if (myGLView != null) {
 				myGLView.requestRender();
 			}

@@ -27,7 +27,6 @@ namespace Rtt
 		: Window(title, w, h)
 		, fBuildResult(NULL)
 		, fBuildSuccessed(false)
-		, fIncludeStandardResources(true)
 	{
 		app->Pause();
 
@@ -888,9 +887,6 @@ namespace Rtt
 			ImGui::InputText("##fSaveToFolderInput", fSaveToFolderInput, sizeof(fSaveToFolderInput), 0);
 			ImGui::PopItemWidth();
 
-			ImGui::Dummy(ImVec2(10, 20));
-			ImGui::Checkbox("Include Standard Resources", &fIncludeStandardResources);
-
 			// ok + cancel
 			s = "Build";
 			int ok_width = 100;
@@ -995,7 +991,7 @@ namespace Rtt
 			appName.c_str(), appVersion.c_str(), identity, NULL, sourceDir.c_str(),
 			outputDir.c_str(), NULL, targetPlatform, targetVersion,
 			Rtt::TargetDevice::kLinux, customBuildId, NULL, bundleId, isDistribution,
-			NULL, fIncludeStandardResources, runAfterBuild, onlyGetPlugins);
+			NULL, runAfterBuild, onlyGetPlugins);
 
 		// select build template
 		app->GetContext()->GetPlatform()->PathForFile(kBuildSettings, Rtt::MPlatform::kResourceDir, Rtt::MPlatform::kTestFileExists, buildSettingsPath);

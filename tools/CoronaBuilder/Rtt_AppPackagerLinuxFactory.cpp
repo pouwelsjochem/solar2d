@@ -44,14 +44,6 @@ namespace Rtt
 			return NULL;
 		}
 
-		bool includeStandardResources = true;
-		lua_getfield(L, index, "includeWidgetResources");
-		if(lua_type(L, -1) == LUA_TBOOLEAN)
-		{
-			includeStandardResources = lua_toboolean(L, -1);
-		}
-		lua_pop(L, 1);
-
 		String linuxtemplate;
 		lua_getfield(L, index, "linuxtemplate");
 		if(lua_type(L, -1) == LUA_TSTRING)
@@ -75,7 +67,7 @@ namespace Rtt
 		                                    "bundleId",
 		                                    true,
 		                                    linuxtemplate.GetString(),
-		                                    includeStandardResources, false, false);
+		                                    false, false);
 
 
 		if ( ! result )

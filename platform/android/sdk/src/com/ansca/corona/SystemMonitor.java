@@ -22,9 +22,6 @@ public class SystemMonitor {
 	
 	/** Set true if the screen is on. Set false if the screen is off. */
 	private boolean fIsScreenOn;
-	
-	/** Set true if the system is low on memory. Set false if not. */
-	private boolean fIsLowOnMemory;
 
 	/** Set true if the ringer's silent mode is currently enabled. */
 	private boolean fIsSilentModeEnabled;
@@ -50,7 +47,6 @@ public class SystemMonitor {
 		fContext = context;
 		fSystemEventHandler = null;
 		fIsScreenOn = true;
-		fIsLowOnMemory = false;
 		fIsSilentModeEnabled = false;
 		fCoronaRuntime = runtime;
 		fListener = null;
@@ -95,13 +91,6 @@ public class SystemMonitor {
 //		audioManager = (android.media.AudioManager)fActivity.getSystemService(android.content.Context.AUDIO_SERVICE);
 //		audioManager.setStreamMute(android.media.AudioManager.STREAM_MUSIC, false);
 		fIsSilentModeEnabled = false;
-	}
-	
-	/**
-	 * Forces this object to check the status of the system now and sends events to Corona Lua listeners.
-	 */
-	public void update() {
-//		isLowOnMemory();
 	}
 	
 	/**
@@ -153,41 +142,6 @@ public class SystemMonitor {
 	 */
 	public boolean isScreenUnlocked() {
 		return !isScreenLocked();
-	}
-	
-	/**
-	 * Determines if the system is currently low on memory.
-	 * Automatically sends a "memoryWarning" event to a Corona Lua listener if low memory was detected.
-	 * @return Returns true if system is low on memory. Returns false if not.
-	 */
-	public boolean isLowOnMemory() {
-		// Fetch system memory status.
-		// Note: We have to poll for this warning because the activity's onLowMemory() method never gets called based on my testing.
-		android.app.ActivityManager activityManager;
-		android.app.ActivityManager.MemoryInfo memoryInfo = new android.app.ActivityManager.MemoryInfo();
-		activityManager = (android.app.ActivityManager)fContext.getSystemService(android.content.Context.ACTIVITY_SERVICE);
-		activityManager.getMemoryInfo(memoryInfo);
-		
-		// Send an event to a Lua listener if the state has changed.
-		if (fIsLowOnMemory != memoryInfo.lowMemory) {
-			fIsLowOnMemory = memoryInfo.lowMemory;
-			if (fCoronaRuntime != null) {
-				com.ansca.corona.events.EventManager eventManager = fCoronaRuntime.getController().getEventManager();
-				if (fIsLowOnMemory && (eventManager != null)) {
-					eventManager.addEvent(new com.ansca.corona.events.RunnableEvent(new java.lang.Runnable() {
-						@Override
-						public void run() {
-							if (fCoronaRuntime.getController() != null) {
-								JavaToNativeShim.memoryWarningEvent(fCoronaRuntime);
-							}
-						}
-					}));
-				}
-			}
-		}
-		
-		// Return the low memory state.
-		return fIsLowOnMemory;
 	}
 
 	/**

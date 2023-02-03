@@ -166,14 +166,6 @@ DQ
                             </binding>
                         </connections>
                     </textField>
-                    <button toolTip="Build with support for automatic syncing of project changes to test devices" misplaced="YES" id="E99-bV-BGF">
-                        <rect key="frame" x="177" y="95" width="370" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Include Standard Resources" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Lyp-3Z-JET">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="466.5" y="383.5"/>

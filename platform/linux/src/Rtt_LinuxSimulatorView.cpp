@@ -63,13 +63,12 @@ namespace Rtt
 		// Package build settings parameters.
 		bool onlyGetPlugins = true;
 		bool runAfterBuild = false;
-		bool useWidgetResources = false;
 		LinuxAppPackagerParams linuxBuilderParams(
 			appName, NULL, identity, NULL,
 			appPath, NULL, NULL,
 			targetPlatform, targetVersion,
 			Rtt::TargetDevice::kLinux, NULL,
-			NULL, NULL, false, NULL, useWidgetResources, runAfterBuild, onlyGetPlugins);
+			NULL, NULL, false, NULL, runAfterBuild, onlyGetPlugins);
 
 		const char kBuildSettings[] = "build.settings";
 		Rtt::String buildSettingsPath;
