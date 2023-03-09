@@ -1696,9 +1696,6 @@
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformExitCallback.h">
       <Filter>rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformFBConnect.h">
-      <Filter>rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Rtt_PlatformNotifier.h">
       <Filter>rtt</Filter>
     </ClInclude>

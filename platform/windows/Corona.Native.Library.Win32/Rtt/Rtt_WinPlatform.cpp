@@ -1076,6 +1076,21 @@ namespace Rtt
 				windowPointer->SetWindowMode(*windowModePointer);
 			}
 		}
+		else if (Rtt_StringCompare(key, "clipboard") == 0)
+		{
+			if(OpenClipboard(NULL))
+			{
+				if(EmptyClipboard())
+				{
+					auto clipboardValue = lua_tostring(L, valueIndex);
+					HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, lua_objlen(L, valueIndex) + 1);
+					memcpy(GlobalLock(hMem), clipboardValue, lua_objlen(L, valueIndex) + 1);
+					GlobalUnlock(hMem);
+					SetClipboardData(CF_TEXT, hMem);
+				}
+				CloseClipboard();
+			}
+		}
 		else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
 		{
 			if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
@@ -1216,6 +1231,25 @@ namespace Rtt
 			{
 				lua_pushstring(L, windowPointer->GetWindowMode().GetStringId());
 				pushedValues = 1;
+			}
+		}
+		else if (Rtt_StringCompare(key, "clipboard") == 0)
+		{
+			if (OpenClipboard(NULL))
+			{
+				HANDLE hMem = GetClipboardData(CF_TEXT);
+				if (hMem)
+				{
+					void * data = GlobalLock(hMem);
+					if (data)
+					{
+						lua_pushstring(L, (char *)data);
+						pushedValues = 1;
+
+						GlobalUnlock(hMem);
+					}
+				}
+				CloseClipboard();
 			}
 		}
 		else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)

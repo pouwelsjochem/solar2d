@@ -726,8 +726,8 @@ void CSimulatorView::OnFileClose()
 	// Configure the Win32 app packager's parameters.
 	Rtt::Win32AppPackagerParams::CoreSettings paramsSettings{};
 	paramsSettings.AppName = "Coromon";
-	paramsSettings.VersionString = "1.1.0.4";
-	paramsSettings.DestinationDirectoryPath = "E:\\Coromon local\\Build\\Win.32\\";
+	paramsSettings.VersionString = "1.1.1";
+	paramsSettings.DestinationDirectoryPath = "C:\\Users\\Gebruiker\\Desktop\\Build\\Win.32\\";
 	paramsSettings.SourceDirectoryPath = projectDirectoryPath.GetUTF8();
 	Rtt::Win32AppPackagerParams params(paramsSettings);
 	params.SetExeFileName("coromon.exe");
