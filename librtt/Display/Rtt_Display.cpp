@@ -573,7 +573,6 @@ Display::Capture( DisplayObject *object,
 										w_in_pixels,
 										h_in_pixels );
 		bitmap->UndoPremultipliedAlpha();
-
 		if( optional_output_color )
 		{
 			// We want the RGBA value of the first pixel.

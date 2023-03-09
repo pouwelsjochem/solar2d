@@ -89,7 +89,7 @@ namespace bitmapUtil
 		return im;
 	}
 
-	struct mem_encode
+	struct png_buffer_t
 	{
 		char* buffer;
 		size_t size;
@@ -97,22 +97,18 @@ namespace bitmapUtil
 
 	void pngWriteFunc(png_structp png_ptr, png_bytep data, png_size_t length)
 	{
-		/* with libpng15 next line causes pointer deference error; use libpng12 */
-		struct mem_encode* p = (struct mem_encode*)png_get_io_ptr(png_ptr); /* was png_ptr->io_ptr */
+		// with libpng15 next line causes pointer deference error; use libpng12 
+		struct png_buffer_t* p = (struct png_buffer_t*)png_get_io_ptr(png_ptr); // was png_ptr->io_ptr
+
 		size_t nsize = p->size + length;
-
-		/* allocate or grow buffer */
+		p->buffer = (char*)(p->buffer ? realloc(p->buffer, nsize) : malloc(nsize));
 		if (p->buffer)
-			p->buffer = (char*) realloc(p->buffer, nsize);
-		else
-			p->buffer = (char*) malloc(nsize);
-
-		if (!p->buffer)
-			png_error(png_ptr, "Write Error");
-
-		/* copy new bytes to end of buffer */
-		memcpy(p->buffer + p->size, data, length);
-		p->size += length;
+		{
+			memcpy(p->buffer + p->size, data, length);
+			p->size += length;
+			return;
+		}
+		Rtt_LogException("png writer: no memory\n");
 	}
 
 	char* savePNG(size_t &length, uint8_t* data, int width, int height, Rtt::PlatformBitmap::Format format)
@@ -122,14 +118,10 @@ namespace bitmapUtil
 		int bpp = Rtt::PlatformBitmap::BytesPerPixel(format);
 		if (bpp != 3 && bpp != 4)
 		{
+			Rtt_LogException("png writer: bpp must be 3 or 4\n");
 			length = 0;
 			return nullptr;
 		}
-
-		/* static */
-		struct mem_encode state;
-		state.buffer = NULL;
-		state.size = 0;
 
 		png_structp	png_ptr;
 		png_infop	info_ptr;
@@ -137,7 +129,7 @@ namespace bitmapUtil
 		png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 		if (png_ptr == NULL)
 		{
-			// @@ log error here!
+			Rtt_LogException("png writer: png_create_write_struct failed\n");
 			length = 0;
 			return nullptr;
 		}
@@ -145,22 +137,38 @@ namespace bitmapUtil
 		info_ptr = png_create_info_struct(png_ptr);
 		if (info_ptr == NULL)
 		{
-			// @@ log error here!
 			png_destroy_write_struct(&png_ptr, NULL);
+			Rtt_LogException("png writer: png_create_info_struct failed\n");
 			length = 0;
 			return nullptr;
 		}
 
-		png_set_write_fn(png_ptr, &state, pngWriteFunc, NULL);
-		png_set_IHDR(png_ptr, info_ptr, width, height, 8, bpp == 3 ? PNG_COLOR_TYPE_RGB : PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+		png_buffer_t png_buffer = {};
+		png_set_write_fn(png_ptr, &png_buffer, pngWriteFunc, NULL);
 
+		png_set_IHDR(png_ptr, info_ptr, width, height, 8, bpp == 3 ? PNG_COLOR_TYPE_RGB : PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+		png_write_info(png_ptr, info_ptr);
+
+		bool free_data = false;
 		if (format == Rtt::PlatformBitmap::Format::kBGRA)
 		{
-			png_set_swap_alpha(png_ptr);
+			// BGRA ==> RGBA
+			U8* rgba = (U8*)malloc(width * height * 4);
+			U8* src = data;
+			U8* dst = rgba;
+			for (int i = 0; i < width * height; i++)
+			{
+				dst[0] = src[2];
+				dst[1] = src[1];
+				dst[2] = src[0];
+				dst[3] = src[3];
+				dst += 4;
+				src += 4;
+			}
+			data = rgba;
+			free_data = true;
 		}
-		//	 png_set_bgr(png_ptr);
 
-		png_write_info(png_ptr, info_ptr);
 		for (int y = 0; y < height; y++)
 		{
 			png_write_row(png_ptr, data + (width * bpp) * y);
@@ -169,8 +177,13 @@ namespace bitmapUtil
 		png_write_end(png_ptr, info_ptr);
 		png_destroy_write_struct(&png_ptr, &info_ptr);
 
-		length = state.size;
-		return state.buffer;
+		if (free_data)
+		{
+			free(data);
+		}
+
+		length = png_buffer.size;
+		return png_buffer.buffer;
 	}
 }
 
