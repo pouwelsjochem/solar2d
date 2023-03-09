@@ -1095,8 +1095,7 @@ namespace Rtt
 		{
 			if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
 			{
-				WinInputDeviceManager& inputDeviceManager =
-					(WinInputDeviceManager&)const_cast<Rtt::WinDevice&>(fDevice).GetInputDeviceManager();
+				WinInputDeviceManager& inputDeviceManager = (WinInputDeviceManager&)const_cast<Rtt::WinDevice&>(fDevice).GetInputDeviceManager();
 				inputDeviceManager.SetCursorVisible(lua_toboolean(L, valueIndex) ? true : false);
 			}
 			else

@@ -394,11 +394,11 @@ void CSimulatorView::OnFileOpenInEditor() // TEMPORARY REPLACED WITH NX BUILD
 	CSimulatorView* pView = (CSimulatorView*)pFrameWnd->GetActiveView();
 	appNxSBuild(
 		pView->GetRuntimeEnvironment(), 
-		"C:\\Users\\Gebruiker\\Documents\\coromon",
-		"C:\\Users\\Gebruiker\\Documents\\coromon\\Coromon.nmeta",
+		"D:\\coromon",
+		"D:\\coromon\\Coromon.nmeta",
 		"Coromon",
-		"1.1.0.4",
-		"C:\\Users\\Gebruiker\\Desktop\\Build\\Coromon.NX64\\",
+		"1.1.2",
+		"D:\\Build\\Coromon.NX64\\",
 		Rtt::TargetDevice::kNxSPlatform,
 		"",
 		true,
