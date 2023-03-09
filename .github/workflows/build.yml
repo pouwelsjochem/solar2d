@@ -41,6 +41,7 @@ jobs:
         xcode:
           - Xcode_14.2
         target:
+          - template
           - template-angle
         platform:
           - iphone
