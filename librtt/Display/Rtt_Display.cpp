@@ -572,7 +572,11 @@ Display::Capture( DisplayObject *object,
 										y_in_pixels,
 										w_in_pixels,
 										h_in_pixels );
+		
+#if !defined(Rtt_NXS_ENV)
 		bitmap->UndoPremultipliedAlpha();
+#endif
+
 		if( optional_output_color )
 		{
 			// We want the RGBA value of the first pixel.
