@@ -4066,6 +4066,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 9ALGBA85N3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9ALGBA85N3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -4081,6 +4082,7 @@
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = ios;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = ios_Solar2D;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
@@ -4095,6 +4097,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 9ALGBA85N3;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9ALGBA85N3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
@@ -4110,6 +4113,7 @@
 				PRODUCT_NAME = template;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = ios;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = ios_Solar2D;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				SWIFT_VERSION = 3.0;
