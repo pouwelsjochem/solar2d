@@ -231,19 +231,19 @@ jobs:
         run: |
           7z x SourceCode/corona.tgz
           7z x corona.tar
-      - name: Checkout Switch specific source code (under NDA)
-        uses: actions/checkout@v3
-        with:
-          repository: pouwelsjochem/solar2d-platform-switch
-          token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
-          path: platform\switch
-      - name: Checkout Switch CI (under NDA)
-        uses: actions/checkout@v3
-        with:
-          repository: pouwelsjochem/nintendo-setup-ci
-          ref: "2.5.5"
-          token: ${{ secrets.NINTENDO_SETUP_CI_REPO_PAT }}
-          path: platform\switch\ci
+      # - name: Checkout Switch specific source code (under NDA)
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: pouwelsjochem/solar2d-platform-switch
+      #     token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
+      #     path: platform\switch
+      # - name: Checkout Switch CI (under NDA)
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: pouwelsjochem/nintendo-setup-ci
+      #     ref: "2.5.5"
+      #     token: ${{ secrets.NINTENDO_SETUP_CI_REPO_PAT }}
+      #     path: platform\switch\ci
       - run: ./tools/GHAction/daily_env.sh
         shell: bash
       - run: mkdir -f docs
@@ -280,11 +280,11 @@ jobs:
       #   run: |
       #     ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT
       #     ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx -name NintendoSDK -root C:\Nintendo -platform NX -version 14.3.0
-      - name: Put nxtemplate in place
-        shell: cmd
-        run: |
-          call platform\switch\build_release_template.bat
-          mv platform\switch\nxtemplate platform\windows\Bin\Corona\Resources
+      # - name: Put nxtemplate in place
+      #   shell: cmd
+      #   run: |
+      #     call platform\switch\build_release_template.bat
+      #     mv platform\switch\nxtemplate platform\windows\Bin\Corona\Resources
       - name: Build Corona Simulator
         shell: cmd
         run: |
