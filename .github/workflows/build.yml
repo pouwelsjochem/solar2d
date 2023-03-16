@@ -275,11 +275,11 @@ jobs:
         run: |
           curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/redist.win32.7z -o redist.win32.7z
           7z x redist.win32.7z -o"platform/windows/Bin/redist" -y
-      - name: Configure Nintendo SDK
-        shell: pwsh
-        run: |
-          ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT
-          ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx -name NintendoSDK -root C:\Nintendo -platform NX -version 14.3.0
+      # - name: Configure Nintendo SDK
+      #   shell: pwsh
+      #   run: |
+      #     ."platform\switch\ci\ndi_setup-2.5.5.exe" /SILENT
+      #     ."$env:ProgramFiles\Nintendo\Nintendo Dev Interface\NDICmd.exe" -gs CreateEx -name NintendoSDK -root C:\Nintendo -platform NX -version 14.3.0
       - name: Put nxtemplate in place
         shell: cmd
         run: |
