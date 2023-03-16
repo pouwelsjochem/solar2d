@@ -221,6 +221,44 @@ cp -v "$ROOT_DIR/platform/resources/CoronaPListSupport.lua" "$CORONA_SHARED_RESO
 checkError
 
 # 
+# TVOS
+#
+
+if [ -z "${JOB_NAME}" ]
+then
+    export JOB_NAME=Enterprise
+fi
+
+"$PLATFORM_DIR/tvos/build_templates.sh"
+checkError
+
+
+# 
+# iOS
+#
+
+"$PLATFORM_DIR/iphone/enterprise/build.sh" "$USER" "$PASSWORD" "$OUTPUT_DIR" "$TARGET"
+checkError
+
+
+# 
+# Android
+# 
+(
+    set -e
+    if [ ! -f "$PLATFORM_DIR/android/gradlew" ]
+    then
+        exit 0
+    fi
+    echo Building Gradle artifacts!
+
+    cd "$PLATFORM_DIR/android"
+    ./gradlew clean
+    ./gradlew installAppTemplateAndAARToSim -PcoronaNativeOutputDir="$CORONA_DIR"
+)
+checkError
+
+# 
 # docs
 # 
 #cp -v docs/style.css $OUTPUT_DIR/.
