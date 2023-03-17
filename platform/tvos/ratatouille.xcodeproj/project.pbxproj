@@ -5560,13 +5560,11 @@
 				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 9ALGBA85N3;
-				"DEVELOPMENT_TEAM[sdk=appletvos*]" = 9ALGBA85N3;
 				INFOPLIST_FILE = template/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = tvos;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=appletvos*]" = tvos_Solar2D;
+				PROVISIONING_PROFILE_SPECIFIER = tvos_Solar2D;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -5583,13 +5581,11 @@
 				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 9ALGBA85N3;
-				"DEVELOPMENT_TEAM[sdk=appletvos*]" = 9ALGBA85N3;
 				INFOPLIST_FILE = template/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = tvos;
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=appletvos*]" = tvos_Solar2D;
+				PROVISIONING_PROFILE_SPECIFIER = tvos_Solar2D;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -5920,7 +5916,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = template;
-				PROVISIONING_PROFILE_SPECIFIER = tvos;
+				PROVISIONING_PROFILE_SPECIFIER = tvos_Solar2D;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -5945,7 +5941,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronalabs.template;
 				PRODUCT_NAME = template;
-				PROVISIONING_PROFILE_SPECIFIER = tvos;
+				PROVISIONING_PROFILE_SPECIFIER = tvos_Solar2D;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
