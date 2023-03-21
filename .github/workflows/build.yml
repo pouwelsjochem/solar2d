@@ -193,7 +193,7 @@ jobs:
           done
         shell: bash
         env:
-          APPLE_AUTH: ${{ secrets.AppleAuth }} # --username apple@id.email --password secret-app-specific-pwd --asc-provider anscainc
+          APPLE_AUTH: ${{ secrets.AppleAuth }} # --username apple@id.email --password secret-app-specific-pwd --asc-provider teamname
 
   check-notarization:
     runs-on: macos-12
@@ -215,7 +215,7 @@ jobs:
           fi
         shell: bash
         env:
-          APPLE_AUTH: ${{ secrets.AppleAuth }} # --username apple@id.email --password secret-app-specific-pwd --asc-provider anscainc
+          APPLE_AUTH: ${{ secrets.AppleAuth }} # --username apple@id.email --password secret-app-specific-pwd --asc-provider teamname
 
   Windows-Simulator:
     needs:

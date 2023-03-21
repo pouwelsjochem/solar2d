@@ -233,7 +233,7 @@ using namespace Rtt;
 	
 	int targetVersion = Rtt::TargetDevice::kLinux;
 	const char * customBuildId = packager->GetCustomBuildId();
-	LinuxAppPackagerParams * params = new LinuxAppPackagerParams(name, versionname, identity, NULL, srcDir, dstDir,	NULL, TargetDevice::kLinuxPlatform, targetVersion, TargetDevice::kLinux, customBuildId, NULL, "bundleId", true, NULL, useStandartResources, false, false );
+	LinuxAppPackagerParams * params = new LinuxAppPackagerParams(name, versionname, identity, NULL, srcDir, dstDir,	NULL, TargetDevice::kLinuxPlatform, targetVersion, TargetDevice::kLinux, customBuildId, NULL, "bundleId", true, NULL, false, false );
 	
 	NSString *kBuildSettings = @"build.settings";
 	params->SetBuildSettingsPath( [[self.projectPath stringByAppendingPathComponent:kBuildSettings] UTF8String]);
