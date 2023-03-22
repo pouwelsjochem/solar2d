@@ -13,7 +13,7 @@ env:
 jobs:
   source-code:
     name: Check out and process source code
-    if: "!contains(github.ref, 'refs/tags/') || github.repository == 'pouwelsjochem/corona'"
+    if: "!contains(github.ref, 'refs/tags/') || github.repository == 'pouwelsjochem/solar2d'"
     runs-on: macos-12
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"

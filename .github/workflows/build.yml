@@ -17,7 +17,7 @@ env:
 jobs:
   source-code:
     name: Check out and process source code
-    if: "!contains(github.ref, 'refs/tags/') || github.repository == 'pouwelsjochem/corona'"
+    if: "!contains(github.ref, 'refs/tags/') || github.repository == 'pouwelsjochem/solar2d'"
     runs-on: macos-12
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
@@ -328,7 +328,7 @@ jobs:
           $GIT_LOG
           "
           else
-          GIT_LOG='See https://github.com/pouwelsjochem/corona for details
+          GIT_LOG='See https://github.com/pouwelsjochem/solar2d for details
           '
           fi
           echo 'GIT_LOG<<EOF' >> $GITHUB_ENV
