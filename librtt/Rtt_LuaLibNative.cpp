@@ -172,9 +172,11 @@ newWebView( lua_State *L )
 	return result;
 }
 
-// native.newWebView( left, top, width, height [,listener] )
+// native.newVideo( left, top, width, height )
+// IMPORTANT NOTE: native.newVideo is overridden in init.lua to do extra things to handle application suspend/resume correctly.
+// The overridden init.lua version calls into this version and then does additional things like saving the video handle in a weak list.
 static int
-newWebView( lua_State *L )
+newVideo( lua_State *L )
 {
 	int result = 0;
 
@@ -191,7 +193,7 @@ newWebView( lua_State *L )
 		Rect bounds;
 		bounds.Initialize( x, y, w, h );
 
-		PlatformDisplayObject *t = platform.CreateNativeWebView( bounds );
+		PlatformDisplayObject *t = platform.CreateNativeVideo( bounds );
 
 		if ( t )
 		{
@@ -200,7 +202,6 @@ newWebView( lua_State *L )
 			t->SetHandle( & platform.GetAllocator(), runtime.VMContext().LuaState() );
 
 			result = LuaLibDisplay::AssignParentAndPushResult( L, display, t, NULL );
-
 			t->Initialize();
 		}
 	}
@@ -384,6 +385,7 @@ LuaLibNative::Initialize( lua_State *L )
 		{ "showAlert", showAlert },
 		{ "cancelAlert", cancelAlert },
 		{ "newWebView", newWebView },
+		{ "newVideo", newVideo },
 		{ "requestExit", requestExitApplication },
 		{ "setProperty", setProperty },
 		{ "getProperty", getProperty },
