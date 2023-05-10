@@ -16,7 +16,6 @@
 
 #include "Rtt_Lua.h"
 #include "Rtt_LuaContext.h"
-#include "Rtt_LuaLibMedia.h"
 #include "Rtt_LuaProxy.h"
 #include "Rtt_LuaProxyVTable.h"
 #include "Rtt_LuaResource.h"
@@ -363,14 +362,12 @@ IPhoneVideoObject::Load( lua_State *L )
 	{
 		const MPlatform& platform = LuaContext::GetPlatform( L );
 
-		bool isRemote = false;
 		String filePath( & platform.GetAllocator() );
-		int nextArg = 2;
-		const char *path = LuaLibMedia::GetLocalOrRemotePath( L, nextArg, filePath, isRemote );
+		const char *filePathArgument = lua_tostring( L, 2 );
+		platform.PathForFile( filePathArgument, MPlatform::kResourceDir, MPlatform::kDefaultPathFlags, filePath );
+		const char *path = filePath.GetString()
 
-		NSURL *url = isRemote
-			? [[NSURL alloc] initWithString:[NSString stringWithUTF8String:path]]
-			: (NSURL*)CFURLCreateFromFileSystemRepresentation( NULL, (const UInt8*)path, strlen(path), false );
+		NSURL *url = (NSURL*)CFURLCreateFromFileSystemRepresentation( NULL, (const UInt8*)path, strlen(path), false );
 		Rtt_AVPlayerView *view = (Rtt_AVPlayerView*)o->GetView();
 		[view load:url];
 
