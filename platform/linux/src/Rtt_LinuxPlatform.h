@@ -62,6 +62,7 @@ namespace Rtt
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
 		virtual PlatformDisplayObject *CreateNativeWebView(const Rect &bounds) const;
+		virtual PlatformDisplayObject* CreateNativeVideo(const Rect& bounds) const { return nullptr; };
 		PlatformDisplayObject *GetNativeDisplayObjectById(const int objectId) const;
 
 	public:

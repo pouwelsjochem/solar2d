@@ -70,6 +70,7 @@ class IPhonePlatformBase : public ApplePlatform
 		virtual void SaveBitmap( PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
 				
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
+		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const;
 		virtual void ReleaseNotification( void *notificationId ) const;

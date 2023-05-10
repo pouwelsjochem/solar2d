@@ -51,6 +51,7 @@ class MacConsolePlatform : public ApplePlatform
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
+		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		virtual void RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const;
 

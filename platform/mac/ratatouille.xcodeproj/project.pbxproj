@@ -459,6 +459,7 @@
 		A4B71B9413F4BDC7009428CF /* Rtt_LuaResourceOwner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */; };
 		A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A4BED90D14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */; };
+		A4BEDC9B14BE81320028BE25 /* Rtt_MacVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */; };
 		A4C9CB2C17BAE2480071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */; };
 		A4C9CB3217BAE36E0071753E /* kernel_generator_checkerboard_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB3117BAE35A0071753E /* kernel_generator_checkerboard_gl.lua */; };
 		A4DF586A1BE44A3000B17862 /* codesign-framework.sh in Resources */ = {isa = PBXBuildFile; fileRef = A4DF58691BE44A3000B17862 /* codesign-framework.sh */; };
@@ -925,6 +926,7 @@
 		C2A377711B34BAB000BB5B88 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
 		C2A377771B34CA8800BB5B88 /* SPILDTopLayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B28145BB621002B69B6 /* SPILDTopLayerView.m */; };
 		C2A377781B34CABF00BB5B88 /* YRKSpinningProgressIndicatorLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 002D1B2A145BB621002B69B6 /* YRKSpinningProgressIndicatorLayer.m */; };
+		C2A3777D1B34D3A000BB5B88 /* Rtt_MacVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */; };
 		C2A377801B34D3BE00BB5B88 /* Rtt_MacWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */; };
 		C2A377811B34D50B00BB5B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B7375E12B706E00057F594 /* WebKit.framework */; };
 		C2ADB45A1B6C1C31008C9BF2 /* OSXAppPackageSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2ADB4591B6C1C31008C9BF2 /* OSXAppPackageSheet.xib */; };
@@ -2317,6 +2319,8 @@
 		A4B71B9213F4BDC2009428CF /* Rtt_LuaResourceOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaResourceOwner.h; sourceTree = "<group>"; };
 		A4BED90B14B65EAD0028BE25 /* Rtt_MacWebViewObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacWebViewObject.h; sourceTree = "<group>"; };
 		A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacWebViewObject.mm; sourceTree = "<group>"; };
+		A4BEDC9914BE81320028BE25 /* Rtt_MacVideoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_MacVideoObject.h; sourceTree = "<group>"; };
+		A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacVideoObject.mm; sourceTree = "<group>"; };
 		A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_marchingAnts_gl.lua; path = Display/Shader/kernel_generator_marchingAnts_gl.lua; sourceTree = "<group>"; };
 		A4C9CB3117BAE35A0071753E /* kernel_generator_checkerboard_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_generator_checkerboard_gl.lua; path = Display/Shader/kernel_generator_checkerboard_gl.lua; sourceTree = "<group>"; };
 		A4DF58691BE44A3000B17862 /* codesign-framework.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "codesign-framework.sh"; path = "../../bin/xcode/codesign-framework.sh"; sourceTree = "<group>"; };
@@ -3174,6 +3178,8 @@
 				00B73CFC12B720C90057F594 /* Rtt_MacServer.mm */,
 				00B73CFF12B720C90057F594 /* Rtt_MacSimulator.h */,
 				00B73CFE12B720C90057F594 /* Rtt_MacSimulator.mm */,
+				A4BEDC9914BE81320028BE25 /* Rtt_MacVideoObject.h */,
+				A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */,
 				A4BED90B14B65EAD0028BE25 /* Rtt_MacWebViewObject.h */,
 				A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */,
 				00B73CD812B720C90057F594 /* Rtt_Player.pch */,
@@ -5365,6 +5371,7 @@
 				00B73D9D12B720CA0057F594 /* Rtt_MacServer.mm in Sources */,
 				00B73D9E12B720CA0057F594 /* Rtt_MacSimulator.mm in Sources */,
 				1F34F5432111661E006EE117 /* LinuxAppBuildController.mm in Sources */,
+				A4BEDC9B14BE81320028BE25 /* Rtt_MacVideoObject.mm in Sources */,
 				A4BED90D14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm in Sources */,
 				C21733781B20F21A00F79CB8 /* Rtt_OSXAppPackager.mm in Sources */,
 				000CE8FE12B7404400D9B6A4 /* Rtt_PlatformAppPackager.cpp in Sources */,
@@ -5721,6 +5728,7 @@
 				C2A377711B34BAB000BB5B88 /* Rtt_MacDisplayObject.mm in Sources */,
 				C2E993541A6B3D3900E99F46 /* Rtt_MacExitCallback.mm in Sources */,
 				C2E9930A1A6B1A3100E99F46 /* Rtt_MacPlatform.mm in Sources */,
+				C2A3777D1B34D3A000BB5B88 /* Rtt_MacVideoObject.mm in Sources */,
 				F57D17771BE2713B00AABAC1 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
 				F57D17721BE25E1200AABAC1 /* Rtt_AppleInputDevice.mm in Sources */,
 				C2E9930B1A6B1A3100E99F46 /* Rtt_MacViewCallback.mm in Sources */,

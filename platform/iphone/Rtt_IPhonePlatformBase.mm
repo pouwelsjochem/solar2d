@@ -22,8 +22,10 @@
 
 #include "Rtt_IPhonePlatformBase.h"
 #include "Rtt_IPhoneTimer.h"
+#include "Rtt_IPhoneVideoObject.h"
 
 #include "Rtt_IPhoneScreenSurface.h"
+#include "Rtt_IPhoneVideoObject.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaLibNative.h"
 #include "Rtt_LuaResource.h"
@@ -306,6 +308,12 @@ IPhonePlatformBase::CancelNativeAlert( NativeAlertRef alert, S32 index ) const
 			[alertController dismissViewControllerAnimated:YES completion:nil];
 		}
 	}
+}
+
+PlatformDisplayObject*
+IPhonePlatformBase::CreateNativeVideo( const Rect& bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), IPhoneVideoObject( bounds ) );
 }
 
 // ----------------------------------------------------------------------------

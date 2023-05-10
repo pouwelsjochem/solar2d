@@ -172,6 +172,42 @@ newWebView( lua_State *L )
 	return result;
 }
 
+// native.newWebView( left, top, width, height [,listener] )
+static int
+newWebView( lua_State *L )
+{
+	int result = 0;
+
+	Runtime& runtime = * LuaContext::GetRuntime( L );
+	const MPlatform& platform = runtime.Platform();
+
+	Real x = luaL_toreal( L, 1 );
+	Real y = luaL_toreal( L, 2 );
+	Real w = luaL_toreal( L, 3 );
+	Real h = luaL_toreal( L, 4 );
+
+	if ( w > 0 && h > 0 )
+	{
+		Rect bounds;
+		bounds.Initialize( x, y, w, h );
+
+		PlatformDisplayObject *t = platform.CreateNativeWebView( bounds );
+
+		if ( t )
+		{
+			Display& display = runtime.GetDisplay();
+			t->Preinitialize( display );
+			t->SetHandle( & platform.GetAllocator(), runtime.VMContext().LuaState() );
+
+			result = LuaLibDisplay::AssignParentAndPushResult( L, display, t, NULL );
+
+			t->Initialize();
+		}
+	}
+
+	return result;
+}
+
 // native.requestExit()
 static int
 requestExitApplication( lua_State *L )

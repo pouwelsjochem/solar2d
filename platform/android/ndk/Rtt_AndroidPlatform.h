@@ -73,6 +73,7 @@ class AndroidPlatform : public MPlatform
 		virtual bool HidePopup( const char *name ) const;
 		
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
+		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		PlatformDisplayObject* GetNativeDisplayObjectById( const int objectId ) const;
 

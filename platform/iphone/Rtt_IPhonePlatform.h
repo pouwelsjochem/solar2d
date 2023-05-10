@@ -40,6 +40,7 @@ class IPhonePlatform : public IPhonePlatformCore
 		virtual bool HidePopup( const char *name ) const;
 
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
+		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 	public:
 		virtual void* CreateAndScheduleNotification( lua_State *L, int index ) const;

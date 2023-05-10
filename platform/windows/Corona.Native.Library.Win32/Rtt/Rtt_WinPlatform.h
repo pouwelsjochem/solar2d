@@ -73,6 +73,7 @@ class WinPlatform : public MPlatform
 		virtual bool ShowPopup(lua_State *L, const char *name, int optionsIndex) const;
 		virtual bool HidePopup(const char *name) const;
 		virtual PlatformDisplayObject* CreateNativeWebView(const Rect& bounds) const;
+		virtual PlatformDisplayObject* CreateNativeVideo(const Rect& bounds) const;
 		virtual void* CreateAndScheduleNotification(lua_State *L, int index) const;
 		virtual void ReleaseNotification(void *notificationId) const;
 		virtual void CancelNotification(void *notificationId) const;

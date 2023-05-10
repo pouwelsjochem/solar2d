@@ -33,6 +33,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 
 	public:
 		static const LuaProxyVTable& GetWebViewObjectProxyVTable();
+		static const LuaProxyVTable& GetVideoObjectProxyVTable();
 
 	public:
 		PlatformDisplayObject();

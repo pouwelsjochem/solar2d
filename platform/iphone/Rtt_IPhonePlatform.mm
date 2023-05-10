@@ -16,6 +16,7 @@
 
 #include "Rtt_IPhoneAudioSessionManager.h"
 #include "Rtt_IPhoneScreenSurface.h"
+#include "Rtt_IPhoneVideoObject.h"
 #include "Rtt_IPhoneWebViewObject.h"
 
 #include "Rtt_LuaLibNative.h"
@@ -415,6 +416,12 @@ PlatformDisplayObject*
 IPhonePlatform::CreateNativeWebView( const Rect& bounds ) const
 {
 	return Rtt_NEW( & GetAllocator(), IPhoneWebViewObject( bounds ) );
+}
+
+PlatformDisplayObject*
+IPhonePlatform::CreateNativeVideo( const Rect& bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), IPhoneVideoObject( bounds ) );
 }
 
 bool

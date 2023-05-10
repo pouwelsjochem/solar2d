@@ -28,6 +28,12 @@ PlatformDisplayObject::GetWebViewObjectProxyVTable()
 	return LuaPlatformWebViewObjectProxyVTable::Constant();
 }
 
+const LuaProxyVTable&
+PlatformDisplayObject::GetVideoObjectProxyVTable()
+{
+	return LuaPlatformVideoObjectProxyVTable::Constant();
+}
+
 // ----------------------------------------------------------------------------
 
 PlatformDisplayObject::PlatformDisplayObject()

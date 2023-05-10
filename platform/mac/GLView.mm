@@ -46,6 +46,7 @@
 #include "Rtt_MacPlatform.h"
 #include "Rtt_Display.h"
 #include "Rtt_MacDisplayObject.h"
+#include "Rtt_MacVideoObject.h"
 #import "SPILDTopLayerView.h"
 
 #include "Display/Rtt_Display.h"
@@ -516,6 +517,15 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 - (void) suspendNativeDisplayObjects:(bool) showOverlay
 {
 #if Rtt_AUTHORING_SIMULATOR
+	NSArray* subviews = [self subviews];
+	for( NSView* displayview in subviews )
+	{
+		if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
+		{
+			[(Rtt_VideoObjectView *)displayview setSuspended:YES];
+		}
+	}
+
     if (showOverlay && self.allowOverlay)
     {
         if ( nil == suspendedOverlay )
@@ -542,6 +552,15 @@ static U32 *sTouchId; // any arbitrary pointer value will do
         [suspendedOverlay release];
         suspendedOverlay = nil;
     }
+
+	NSArray* subviews = [self subviews];
+	for( NSView* displayview in subviews )
+	{
+		if ( [displayview isKindOfClass:[Rtt_VideoObjectView class]] )
+		{
+			[(Rtt_VideoObjectView *)displayview setSuspended:NO];
+		}
+	}
 #endif // Rtt_AUTHORING_SIMULATOR
 }
 

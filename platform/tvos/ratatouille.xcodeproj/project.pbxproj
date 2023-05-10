@@ -223,6 +223,7 @@
 		A4AD30F21BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */; };
 		A4AD30F31BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */; };
 		A4AD30F71BAA377C006A0C97 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */; };
+		A4AD30F81BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D41BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm */; };
 		A4AD30FD1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30DE1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm */; };
 		A4AD31051BAA38B0006A0C97 /* Rtt_TVOSDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31001BAA38B0006A0C97 /* Rtt_TVOSDevice.mm */; };
 		A4AD31061BAA38B0006A0C97 /* Rtt_TVOSPlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31021BAA38B0006A0C97 /* Rtt_TVOSPlatform.mm */; };
@@ -552,6 +553,7 @@
 		F5C5E17C251E115D00217C19 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A61BAA377C006A0C97 /* CoronaViewPrivate.mm */; };
 		F5C5E17F251E115D00217C19 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */; };
 		F5C5E180251E115D00217C19 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30651BAA2B80006A0C97 /* Rtt_AppleCallback.mm */; };
+		F5C5E181251E115D00217C19 /* Rtt_IPhoneVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30D41BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm */; };
 		F5C5E183251E115D00217C19 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30DE1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm */; };
 		F5C5E188251E115D00217C19 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */; };
 		F5C5E189251E115D00217C19 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B81BE294F40061E021 /* Rtt_AppleInputMFiDeviceListener.mm */; };
@@ -1891,6 +1893,8 @@
 		A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneScreenSurface.mm; path = ../iphone/Rtt_IPhoneScreenSurface.mm; sourceTree = "<group>"; };
 		A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTimer.h; path = ../iphone/Rtt_IPhoneTimer.h; sourceTree = "<group>"; };
 		A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneTimer.mm; path = ../iphone/Rtt_IPhoneTimer.mm; sourceTree = "<group>"; };
+		A4AD30D31BAA377C006A0C97 /* Rtt_IPhoneVideoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneVideoObject.h; path = ../iphone/Rtt_IPhoneVideoObject.h; sourceTree = "<group>"; };
+		A4AD30D41BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneVideoObject.mm; path = ../iphone/Rtt_IPhoneVideoObject.mm; sourceTree = "<group>"; };
 		A4AD30DD1BAA377C006A0C97 /* Rtt_TouchInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TouchInhibitor.h; path = ../iphone/Rtt_TouchInhibitor.h; sourceTree = "<group>"; };
 		A4AD30DE1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_TouchInhibitor.mm; path = ../iphone/Rtt_TouchInhibitor.mm; sourceTree = "<group>"; };
 		A4AD30FF1BAA38B0006A0C97 /* Rtt_TVOSDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_TVOSDevice.h; sourceTree = "<group>"; };
@@ -3019,6 +3023,8 @@
 				A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */,
 				A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */,
 				A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */,
+				A4AD30D31BAA377C006A0C97 /* Rtt_IPhoneVideoObject.h */,
+				A4AD30D41BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm */,
 				A4AD30DD1BAA377C006A0C97 /* Rtt_TouchInhibitor.h */,
 				A4AD30DE1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm */,
 			);
@@ -5003,6 +5009,7 @@
 				A4AD30E21BAA377C006A0C97 /* CoronaViewPrivate.mm in Sources */,
 				A4AD30F21BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				A4AD30861BAA2B80006A0C97 /* Rtt_AppleCallback.mm in Sources */,
+				A4AD30F81BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm in Sources */,
 				A4AD30FD1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm in Sources */,
 				A4AD308E1BAA2B80006A0C97 /* Rtt_AppleReachability.mm in Sources */,
 				F58011C31BE295070061E021 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
@@ -5157,6 +5164,7 @@
 				F5C5E17C251E115D00217C19 /* CoronaViewPrivate.mm in Sources */,
 				F5C5E17F251E115D00217C19 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				F5C5E180251E115D00217C19 /* Rtt_AppleCallback.mm in Sources */,
+				F5C5E181251E115D00217C19 /* Rtt_IPhoneVideoObject.mm in Sources */,
 				F5C5E183251E115D00217C19 /* Rtt_TouchInhibitor.mm in Sources */,
 				F5C5E188251E115D00217C19 /* Rtt_AppleReachability.mm in Sources */,
 				F5C5E189251E115D00217C19 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,

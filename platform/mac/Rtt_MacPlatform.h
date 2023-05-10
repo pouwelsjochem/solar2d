@@ -93,6 +93,7 @@ class MacPlatform : public ApplePlatform
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
+		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
 
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 

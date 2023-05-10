@@ -16,6 +16,7 @@
 #include "Rtt_LuaResource.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_MacViewSurface.h"
+#include "Rtt_MacVideoObject.h"
 #include "Rtt_MacWebViewObject.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
@@ -794,6 +795,12 @@ PlatformDisplayObject *
 MacPlatform::CreateNativeWebView( const Rect& bounds ) const
 {
 	return Rtt_NEW( & GetAllocator(), MacWebViewObject( bounds ) );
+}
+
+PlatformDisplayObject*
+MacPlatform::CreateNativeVideo( const Rect& bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), MacVideoObject( bounds ) );
 }
 
 BOOL

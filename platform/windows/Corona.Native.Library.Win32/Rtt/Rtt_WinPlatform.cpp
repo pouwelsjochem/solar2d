@@ -1010,6 +1010,12 @@ namespace Rtt
 		return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
 	}
 
+	PlatformDisplayObject* WinPlatform::CreateNativeVideo(const Rect& bounds) const
+	{
+		Rtt_TRACE_SIM(("WARNING: Native video objects are not supported on Windows.\n"));
+		return nullptr;
+	}
+
 	void WinPlatform::SetNativeProperty(lua_State* L, const char* key, int valueIndex) const
 	{
 		// Validate.

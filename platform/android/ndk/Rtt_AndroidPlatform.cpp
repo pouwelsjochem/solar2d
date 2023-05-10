@@ -625,6 +625,12 @@ AndroidPlatform::CreateNativeWebView( const Rect& bounds ) const
 }
 
 PlatformDisplayObject *
+AndroidPlatform::CreateNativeVideo( const Rect& bounds ) const
+{
+	return NULL;
+}
+
+PlatformDisplayObject *
 AndroidPlatform::GetNativeDisplayObjectById( const int objectId ) const
 {
 	if (fDisplayObjectRegistry)

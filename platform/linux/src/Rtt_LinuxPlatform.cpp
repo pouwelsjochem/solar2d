@@ -463,6 +463,11 @@ namespace Rtt
 		return new LinuxWebView(bounds);
 	}
 
+	PlatformDisplayObject* LinuxPlatform::CreateNativeVideo(const Rect& bounds) const
+	{
+		return NULL;
+	}
+
 	PlatformDisplayObject* LinuxPlatform::GetNativeDisplayObjectById(const int objectId) const
 	{
 		return NULL;

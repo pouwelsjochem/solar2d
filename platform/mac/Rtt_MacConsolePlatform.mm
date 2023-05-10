@@ -116,6 +116,12 @@ MacConsolePlatform::CreateNativeWebView( const Rect& bounds ) const
 	return NULL;
 }
 
+PlatformDisplayObject *
+MacConsolePlatform::CreateNativeVideo( const Rect& bounds ) const
+{
+	return NULL;
+}
+
 void
 MacConsolePlatform::RuntimeErrorNotification( const char *errorType, const char *message, const char *stacktrace ) const
 {
