@@ -1937,6 +1937,63 @@ PopupClosedEvent::Push( lua_State *L ) const
 }
 
 // ----------------------------------------------------------------------------
+
+const char VideoEvent::kName[] = "video";
+
+const char*
+VideoEvent::StringForPhase( Phase type )
+{
+	const char* result = NULL;
+	static const char kReadyString[] = "ready";
+	static const char kEndedString[] = "ended";
+	static const char kFailedString[] = "failed";
+
+	switch( type )
+	{
+		case kReady:
+			result = kReadyString;
+			break;
+		case kEnded:
+			result = kEndedString;
+			break;
+		case kFailed:
+			result = kFailedString;
+			break;
+		default:
+			break;
+	}
+
+	return result;
+}
+
+VideoEvent::VideoEvent( Phase phase )
+:	fPhase( phase )
+{
+}
+
+const char*
+VideoEvent::Name() const
+{
+	return Self::kName;
+}
+
+int
+VideoEvent::Push( lua_State *L ) const
+{
+	if ( Rtt_VERIFY( Super::Push( L ) ) )
+	{
+		const char *phase = StringForPhase( fPhase );
+		if ( Rtt_VERIFY( phase ) )
+		{
+			lua_pushstring( L, phase );
+			lua_setfield( L, -2, kPhaseKey );
+		}
+	}
+
+	return 1;
+}
+
+// ----------------------------------------------------------------------------
 const char FinalizeEvent::kName[] = "finalize";
 
 FinalizeEvent::FinalizeEvent()

@@ -919,6 +919,43 @@ class PopupClosedEvent : public VirtualEvent
 // ----------------------------------------------------------------------------
 
 // Local event
+class VideoEvent : public VirtualEvent
+{
+	public:
+		typedef VirtualEvent Super;
+		typedef VideoEvent Self;
+
+	public:
+		typedef enum Phase
+		{
+			kReady = 0,
+			kEnded,
+			kFailed,
+
+			kNumPhases
+		}
+		Phase;
+
+	public:
+		static const char kName[];
+
+	public:
+		static const char* StringForPhase( Phase type );
+
+	public:
+		VideoEvent( Phase phase );
+
+	public:
+		virtual const char* Name() const;
+		virtual int Push( lua_State *L ) const;
+
+	private:
+		Phase fPhase;
+};
+
+// ----------------------------------------------------------------------------
+
+// Local event
 class FinalizeEvent : public VirtualEvent
 {
 	public:
