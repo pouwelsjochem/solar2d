@@ -365,7 +365,7 @@ IPhoneVideoObject::Load( lua_State *L )
 		String filePath( & platform.GetAllocator() );
 		const char *filePathArgument = lua_tostring( L, 2 );
 		platform.PathForFile( filePathArgument, MPlatform::kResourceDir, MPlatform::kDefaultPathFlags, filePath );
-		const char *path = filePath.GetString()
+		const char *path = filePath.GetString();
 
 		NSURL *url = (NSURL*)CFURLCreateFromFileSystemRepresentation( NULL, (const UInt8*)path, strlen(path), false );
 		Rtt_AVPlayerView *view = (Rtt_AVPlayerView*)o->GetView();
