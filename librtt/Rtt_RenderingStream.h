@@ -97,6 +97,7 @@ class RenderingStream
 
 		void ContentToScreen( S32& x, S32& y ) const;
 		void ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const;
+		void ContentToScreen( Rtt_Real& x, Rtt_Real& y, Rtt_Real& w, Rtt_Real& h ) const;
 		void ContentToPixels( S32& x, S32& y ) const;
 		void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 

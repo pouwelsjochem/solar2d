@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -40,7 +40,8 @@
 // TODO: Remove dependency on Runtime's MCachedResourceLibrary interface
 #include "Rtt_Runtime.h"
 
-#define ENABLE_DEBUG_PRINT	0
+#define ENABLE_DEBUG_PRINT    0
+
 
 // ----------------------------------------------------------------------------
 
@@ -85,7 +86,7 @@ Display::~Display()
 bool
 Display::Initialize( lua_State *L, int configIndex )
 {
-	bool result = false;
+    bool result = false;
 
 	// Only initialize once
 	if ( Rtt_VERIFY( ! fRenderer ) )
@@ -110,7 +111,7 @@ Display::Initialize( lua_State *L, int configIndex )
 		result = true;
 	}
 
-	return result;
+    return result;
 }
     
 void
@@ -125,33 +126,33 @@ Display::ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHea
 	Rtt_ASSERT( 1 == index );	
 	Rtt_ASSERT( lua_istable( L, index ) );
 
-	lua_getfield( L, index, "shaderPrecision" );
-	const char *shaderPrecision = lua_tostring( L, -1 );
-	if ( shaderPrecision )
-	{
-		// This is safer to do than strcpy( outShaderPrecision, shaderPrecision, );
-		ProgramHeader::Precision p = ProgramHeader::PrecisionForString( shaderPrecision );
-		programHeader.SetPrecision( p );
-	}
-	else if ( lua_type( L, -1 ) == LUA_TTABLE )
-	{
-		int index = lua_gettop( L );
+    lua_getfield( L, index, "shaderPrecision" );
+    const char *shaderPrecision = lua_tostring( L, -1 );
+    if ( shaderPrecision )
+    {
+        // This is safer to do than strcpy( outShaderPrecision, shaderPrecision, );
+        ProgramHeader::Precision p = ProgramHeader::PrecisionForString( shaderPrecision );
+        programHeader.SetPrecision( p );
+    }
+    else if ( lua_type( L, -1 ) == LUA_TTABLE )
+    {
+        int index = lua_gettop( L );
 
-		lua_pushnil( L );
-		while ( lua_next( L, index ) )
-		{
-			const char *key = lua_tostring( L, -2 );
-			ProgramHeader::Type t = ProgramHeader::TypeForString( key );
+        lua_pushnil( L );
+        while ( lua_next( L, index ) )
+        {
+            const char *key = lua_tostring( L, -2 );
+            ProgramHeader::Type t = ProgramHeader::TypeForString( key );
 
-			const char *value = lua_tostring( L, -1 );
-			ProgramHeader::Precision p = ProgramHeader::PrecisionForString( value );
+            const char *value = lua_tostring( L, -1 );
+            ProgramHeader::Precision p = ProgramHeader::PrecisionForString( value );
 
-			programHeader.SetPrecision( t, p );
+            programHeader.SetPrecision( t, p );
 
-			lua_pop( L, 1 );
-		}
-	}
-	lua_pop( L, 1 );
+            lua_pop( L, 1 );
+        }
+    }
+    lua_pop( L, 1 );
 
 	lua_getfield( L, index, "minContentWidth" );
 	int minContentWidth = (int) lua_tointeger( L, -1 );
@@ -177,9 +178,9 @@ Display::ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHea
 lua_State *
 Display::GetL() const
 {
-	const Runtime& runtime = GetRuntime();
-	lua_State *L = ( runtime.IsVMContextValid() ? runtime.VMContext().L() : NULL );
-	return L;
+    const Runtime& runtime = GetRuntime();
+    lua_State *L = ( runtime.IsVMContextValid() ? runtime.VMContext().L() : NULL );
+    return L;
 }
 
 void
@@ -206,9 +207,9 @@ Display::Restart()
 void
 Display::Update()
 {
-	Runtime& runtime = fOwner;
-	lua_State *L = fOwner.VMContext().L();
-	fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
+    Runtime& runtime = fOwner;
+    lua_State *L = fOwner.VMContext().L();
+    fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
 
 	const FrameEvent& fe = FrameEvent::Constant();
 	fe.Dispatch( L, runtime );
@@ -220,18 +221,18 @@ Display::Update()
 void
 Display::Render()
 {
-	{
-		Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
+    {
+        Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
 
-		const Rtt::Real kMillisecondsPerSecond = 1000.0f;
-		// NOT _USED: Rtt::Real totalTime = Rtt_AbsoluteToMilliseconds( elapsedTime ) / kMillisecondsPerSecond;
-		fDeltaTimeInSeconds = Rtt_AbsoluteToMilliseconds( elapsedTime - fPreviousTime ) / kMillisecondsPerSecond;
+        const Rtt::Real kMillisecondsPerSecond = 1000.0f;
+        // NOT _USED: Rtt::Real totalTime = Rtt_AbsoluteToMilliseconds( elapsedTime ) / kMillisecondsPerSecond;
+        fDeltaTimeInSeconds = Rtt_AbsoluteToMilliseconds( elapsedTime - fPreviousTime ) / kMillisecondsPerSecond;
 
-		fPreviousTime = elapsedTime;
+        fPreviousTime = elapsedTime;
 
-		// Use this when debugging:
-		//fDeltaTimeInSeconds = ( 1.0f / 30.0f );
-	}
+        // Use this when debugging:
+        //fDeltaTimeInSeconds = ( 1.0f / 30.0f );
+    }
 
 	GetScene().Render( * fRenderer, * fScreenSurface );
 }
@@ -239,19 +240,19 @@ Display::Render()
 void
 Display::Invalidate()
 {
-	GetScene().Invalidate();
+    GetScene().Invalidate();
 }
 
 StageObject *
 Display::GetStage()
 {
-	return & GetScene().CurrentStage();
+    return & GetScene().CurrentStage();
 }
 
 StageObject *
 Display::GetStageOffscreen()
 {
-	return & GetScene().OffscreenStage();
+    return & GetScene().OffscreenStage();
 }
 
 BitmapPaint *
@@ -302,11 +303,11 @@ Display::CaptureSave( DisplayObject *object,
 
 void
 Display::ColorSample( float pos_x,
-						float pos_y,
-						RGBA &output_color )
+                        float pos_y,
+                        RGBA &output_color )
 {
-	Rect screenBounds;
-	screenBounds.Initialize( pos_x, pos_y, 1.0f, 1.0f );
+    Rect screenBounds;
+    screenBounds.Initialize( pos_x, pos_y, 1.0f, 1.0f );
 
 	BitmapPaint *paint = Capture( NULL,
 									&screenBounds,
@@ -320,7 +321,7 @@ Display::ColorSample( float pos_x,
 		return;
 	}
 
-	Rtt_DELETE( paint );
+    Rtt_DELETE( paint );
 }
 
 BitmapPaint *
@@ -331,38 +332,38 @@ Display::Capture( DisplayObject *object,
 					const ColorUnion *optionalBackgroundColor,
 					RGBA *optional_output_color )
 {
-	// Do not continue if given invalid screen bounds.
-	if( screenBounds )
-	{
-		if ((screenBounds->xMin >= screenBounds->xMax) ||
-			(screenBounds->yMin >= screenBounds->yMax))
-		{
-			return NULL;
-		}
-	}
+    // Do not continue if given invalid screen bounds.
+    if( screenBounds )
+    {
+        if ((screenBounds->xMin >= screenBounds->xMax) ||
+            (screenBounds->yMin >= screenBounds->yMax))
+        {
+            return NULL;
+        }
+    }
 
 	fRenderer->BeginFrame( 0.1f, 0.1f, GetScreenToContentScale() );
 
-	////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
 
-	Runtime& runtime = GetRuntime();
-	Rtt_Allocator *allocator = runtime.GetAllocator();
+    Runtime& runtime = GetRuntime();
+    Rtt_Allocator *allocator = runtime.GetAllocator();
 
-	// Save current state so we can restore it later
-	FrameBufferObject *previous_fbo = fRenderer->GetFrameBufferObject();
-	FrameBufferObject *fbo = NULL;
+    // Save current state so we can restore it later
+    FrameBufferObject *previous_fbo = fRenderer->GetFrameBufferObject();
+    FrameBufferObject *fbo = NULL;
 
-	////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////
-	//FBO SETUP
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //FBO SETUP
 
-	// Calculate pixel dimensions for texture
-	// The source position to capture from.
-	Real x_in_content_units = 0.0f;
-	Real y_in_content_units = 0.0f;
-	Real w_in_content_units = 0.0f;
-	Real h_in_content_units = 0.0f;
+    // Calculate pixel dimensions for texture
+    // The source position to capture from.
+    Real x_in_content_units = 0.0f;
+    Real y_in_content_units = 0.0f;
+    Real w_in_content_units = 0.0f;
+    Real h_in_content_units = 0.0f;
 
 	Rtt::Real offscreenViewMatrix[16];
 	Rtt::CreateViewMatrix( 0.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, offscreenViewMatrix );
@@ -395,119 +396,121 @@ Display::Capture( DisplayObject *object,
 	{
 		Rect *full_screen = const_cast< Rect * >( &GetScreenContentBounds() );
 
-		Rect *bounds_to_use = NULL;
+        Rect *bounds_to_use = NULL;
 
-		if( screenBounds )
-		{
-			// Subregion of the screen.
-			screenBounds->Intersect( *full_screen );
-			bounds_to_use = screenBounds;
-		}
-		else
-		{
-			// Full screen.
-			bounds_to_use = full_screen;
-		}
+        if( screenBounds )
+        {
+            // Subregion of the screen.
+            screenBounds->Intersect( *full_screen );
+            bounds_to_use = screenBounds;
+        }
+        else
+        {
+            // Full screen.
+            bounds_to_use = full_screen;
+        }
 
-		x_in_content_units = bounds_to_use->xMin;
-		y_in_content_units = bounds_to_use->yMin;
-		w_in_content_units = ( bounds_to_use->xMax - x_in_content_units );
-		h_in_content_units = ( bounds_to_use->yMax - y_in_content_units );
+        x_in_content_units = bounds_to_use->xMin;
+        y_in_content_units = bounds_to_use->yMin;
+        w_in_content_units = ( bounds_to_use->xMax - x_in_content_units );
+        h_in_content_units = ( bounds_to_use->yMax - y_in_content_units );
 
 		Rtt::CreateOrthoMatrix( x_in_content_units, bounds_to_use->xMax, y_in_content_units, bounds_to_use->yMax, 0.0f, 1.0f, offscreenProjMatrix );
 	}
 
-	// The source position to capture from.
-	S32 x_in_pixels = 0;
-	S32 y_in_pixels = 0;
-	S32 w_in_pixels = ceilf(w_in_content_units);
-	S32 h_in_pixels = ceilf(h_in_content_units);
-	{
-		ContentToScreen( x_in_pixels,
-							y_in_pixels,
-							w_in_pixels,
-							h_in_pixels );
+    // The source position to capture from.
+    Rtt_Real x_in_pixels = 0;
+    Rtt_Real y_in_pixels = 0;
+    Rtt_Real w_in_pixels = w_in_content_units;
+    Rtt_Real h_in_pixels = h_in_content_units;
+    {
 
-		// We ONLY want the w_in_pixels and h_in_pixels.
-		// Using anything but 0 here breaks Android.
-		x_in_pixels = 0;
-		y_in_pixels = 0;
-	}
+        ContentToScreen( x_in_pixels,
+                            y_in_pixels,
+                            w_in_pixels,
+                            h_in_pixels );
 
-#	if defined( Rtt_OPENGLES )
-		const Texture::Format kFormat = Texture::kRGBA;
-#	else
-		const Texture::Format kFormat = Texture::kBGRA;
-#	endif
+        // We ONLY want the w_in_pixels and h_in_pixels.
+        // Using anything but 0 here breaks Android.
+        x_in_pixels = 0;
+        y_in_pixels = 0;
+    }
+    printf("run13/ %.6f \n", w_in_pixels);
+    printf("run13/ %.6f \n", h_in_pixels);
+#    if defined( Rtt_OPENGLES )
+        const Texture::Format kFormat = Texture::kRGBA;
+#    else
+        const Texture::Format kFormat = Texture::kBGRA;
+#    endif
 
-	// Using Texture::kNearest and Texture::kClampToEdge here is absolutely
-	// mandatory. See:
-	//
-	//	http://www.khronos.org/registry/gles/extensions/APPLE/APPLE_texture_2D_limited_npot.txt
-	//
-	//		"A NPOT 2D texture with a wrap mode that is not CLAMP_TO_EDGE or
-	//		a minfilter that is not NEAREST or LINEAR is considered incomplete."
-	TextureFactory &factory = GetTextureFactory();
-	SharedPtr< TextureResource > tex = factory.Create( w_in_pixels,
-														h_in_pixels,
-														kFormat,
-														Texture::kNearest,
-														Texture::kClampToEdge,
-														will_be_saved_to_file );
+    // Using Texture::kNearest and Texture::kClampToEdge here is absolutely
+    // mandatory. See:
+    //
+    //    http://www.khronos.org/registry/gles/extensions/APPLE/APPLE_texture_2D_limited_npot.txt
+    //
+    //        "A NPOT 2D texture with a wrap mode that is not CLAMP_TO_EDGE or
+    //        a minfilter that is not NEAREST or LINEAR is considered incomplete."
+    TextureFactory &factory = GetTextureFactory();
+    SharedPtr< TextureResource > tex = factory.Create( w_in_pixels,
+                                                        h_in_pixels,
+                                                        kFormat,
+                                                        Texture::kNearest,
+                                                        Texture::kClampToEdge,
+                                                        will_be_saved_to_file );
 
-	BitmapPaint *paint = Rtt_NEW( allocator,
-									BitmapPaint( tex ) );
+    BitmapPaint *paint = Rtt_NEW( allocator,
+                                    BitmapPaint( tex ) );
 
-	fbo = Rtt_NEW( allocator,
-					FrameBufferObject( allocator,
-										paint->GetTexture() ) );
+    fbo = Rtt_NEW( allocator,
+                    FrameBufferObject( allocator,
+                                        paint->GetTexture() ) );
 
-	////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////
-	//FROM SnapshotObject::Draw()
-	//PREPARE TO DRAW!!!!!
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //FROM SnapshotObject::Draw()
+    //PREPARE TO DRAW!!!!!
 
-	//// Save these so we can restore them later.
-	//
-	Rtt::Real previous_viewMatrix[16];
-	Rtt::Real previous_projMatrix[16];
-	fRenderer->GetFrustum( previous_viewMatrix, previous_projMatrix );
+    //// Save these so we can restore them later.
+    //
+    Rtt::Real previous_viewMatrix[16];
+    Rtt::Real previous_projMatrix[16];
+    fRenderer->GetFrustum( previous_viewMatrix, previous_projMatrix );
 
-	S32 previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height;
-	fRenderer->GetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
-	//
-	////
+    S32 previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height;
+    fRenderer->GetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
+    //
+    ////
 
-	////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////
-	//SCENE RENDER
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //SCENE RENDER
 
-	Scene& scene = GetScene();
+    Scene& scene = GetScene();
 
-	////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////
-	//FROM SnapshotObject::Draw()
-	//PREPARE TO DRAW!!!!!
-	Real texW = Rtt_IntToReal( fbo->GetTexture()->GetWidth() );
-	Real texH = Rtt_IntToReal( fbo->GetTexture()->GetHeight() );
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //FROM SnapshotObject::Draw()
+    //PREPARE TO DRAW!!!!!
+    Real texW = Rtt_IntToReal( fbo->GetTexture()->GetWidth() );
+    Real texH = Rtt_IntToReal( fbo->GetTexture()->GetHeight() );
 
-	fRenderer->SetFrameBufferObject( fbo );
-	fRenderer->PushMaskCount();
-	fRenderer->SetViewport( 0, 0, texW, texH );
-	fRenderer->Clear( 0.0f, 0.0f, 0.0f, 0.0f );
+    fRenderer->SetFrameBufferObject( fbo );
+    fRenderer->PushMaskCount();
+    fRenderer->SetViewport( 0, 0, texW, texH );
+    fRenderer->Clear( 0.0f, 0.0f, 0.0f, 0.0f );
 
-	////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////
-	//FROM THIS ORIGINAL FUNCTION MADE BUILDABLE!!!!!!!
-	//DRAW!!!!!
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //FROM THIS ORIGINAL FUNCTION MADE BUILDABLE!!!!!!!
+    //DRAW!!!!!
 
-	// Fetch the bounds of the portion of the screen that we are
-	// going to capture and re-render that part of the screen.
-	if ( object )
-	{
-		// Set the background color to transparent.
-		ColorUnion previousClearColor;
-		ColorUnion transparentClearColor;
+    // Fetch the bounds of the portion of the screen that we are
+    // going to capture and re-render that part of the screen.
+    if ( object )
+    {
+        // Set the background color to transparent.
+        ColorUnion previousClearColor;
+        ColorUnion transparentClearColor;
 
 		if( optionalBackgroundColor )
 		{
@@ -521,10 +524,10 @@ Display::Capture( DisplayObject *object,
 			transparentClearColor.rgba.a = 0;
 		}
 
-		previousClearColor.pixel = GetDefaults().GetClearColor();
-		GetDefaults().SetClearColor( transparentClearColor.pixel );
+        previousClearColor.pixel = GetDefaults().GetClearColor();
+        GetDefaults().SetClearColor( transparentClearColor.pixel );
 
-		fRenderer->SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
+        fRenderer->SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
 
 		const Rect* snb = GetStage()->GetSnapshotBounds();
 		Rect empty;
@@ -540,31 +543,31 @@ Display::Capture( DisplayObject *object,
 			GetStage()->SetSnapshotBounds(snb);
 		}
 
-		// Restore background back to its previous color.
-		GetDefaults().SetClearColor( previousClearColor.pixel );
-	}
-	else // Full screen or screenBounds.
-	{
-		fRenderer->SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
+        // Restore background back to its previous color.
+        GetDefaults().SetClearColor( previousClearColor.pixel );
+    }
+    else // Full screen or screenBounds.
+    {
+        fRenderer->SetFrustum( offscreenViewMatrix, offscreenProjMatrix );
 
 		scene.Render( *fRenderer, *fScreenSurface, scene.CurrentStage() );
 	}
 
-	fRenderer->PopMaskCount();
+    fRenderer->PopMaskCount();
 
-	////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////
-	//FBO CLEANUP
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    //FBO CLEANUP
 
-	fRenderer->EndFrame();
-	fRenderer->Swap();
-	fRenderer->Render();
+    fRenderer->EndFrame();
+    fRenderer->Swap();
+    fRenderer->Render();
 
-	if( will_be_saved_to_file ||
-		optional_output_color )
-	{
-		// Create screen capture.
-		BufferBitmap *bitmap = static_cast< BufferBitmap * >( tex->GetBitmap() );
+    if( will_be_saved_to_file ||
+        optional_output_color )
+    {
+        // Create screen capture.
+        BufferBitmap *bitmap = static_cast< BufferBitmap * >( tex->GetBitmap() );
 
 		// This function requires coordinates in pixels.
 		fStream->CaptureFrameBuffer( *bitmap,
@@ -577,58 +580,58 @@ Display::Capture( DisplayObject *object,
 		bitmap->UndoPremultipliedAlpha();
 #endif
 
-		if( optional_output_color )
-		{
-			// We want the RGBA value of the first pixel.
+        if( optional_output_color )
+        {
+            // We want the RGBA value of the first pixel.
 
-			const unsigned char *bytes = static_cast< const unsigned char * >( bitmap->ReadAccess() );
+            const unsigned char *bytes = static_cast< const unsigned char * >( bitmap->ReadAccess() );
 
-#			ifdef Rtt_OPENGLES
+#            ifdef Rtt_OPENGLES
 
-				// IMPORTANT: We're assuming the format is GL_RGBA and GL_UNSIGNED_BYTE.
-				optional_output_color->r = bytes[ 0 ];
-				optional_output_color->g = bytes[ 1 ];
-				optional_output_color->b = bytes[ 2 ];
-				optional_output_color->a = bytes[ 3 ];
+                // IMPORTANT: We're assuming the format is GL_RGBA and GL_UNSIGNED_BYTE.
+                optional_output_color->r = bytes[ 0 ];
+                optional_output_color->g = bytes[ 1 ];
+                optional_output_color->b = bytes[ 2 ];
+                optional_output_color->a = bytes[ 3 ];
 
-#			else // Not Rtt_OPENGLES
+#            else // Not Rtt_OPENGLES
 
-				// IMPORTANT: We're assuming the format is GL_ARGB and GL_UNSIGNED_BYTE.
-				optional_output_color->r = bytes[ 1 ];
-				optional_output_color->g = bytes[ 2 ];
-				optional_output_color->b = bytes[ 3 ];
-				optional_output_color->a = bytes[ 0 ];
+                // IMPORTANT: We're assuming the format is GL_ARGB and GL_UNSIGNED_BYTE.
+                optional_output_color->r = bytes[ 1 ];
+                optional_output_color->g = bytes[ 2 ];
+                optional_output_color->b = bytes[ 3 ];
+                optional_output_color->a = bytes[ 0 ];
 
-#			endif // Rtt_OPENGLES
-		}
-	}
+#            endif // Rtt_OPENGLES
+        }
+    }
 
-	// Restore state so further rendering is unaffected
-	fRenderer->SetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
-	fRenderer->SetFrustum( previous_viewMatrix, previous_projMatrix );
-	fRenderer->SetFrameBufferObject( previous_fbo );
+    // Restore state so further rendering is unaffected
+    fRenderer->SetViewport( previous_viewport_x, previous_viewport_y, previous_viewport_width, previous_viewport_height );
+    fRenderer->SetFrustum( previous_viewMatrix, previous_projMatrix );
+    fRenderer->SetFrameBufferObject( previous_fbo );
 
-#	if ENABLE_DEBUG_PRINT 
+#    if ENABLE_DEBUG_PRINT
 
-		printf( "capture bounds in content units: x: %d y: %d w: %d h: %d\n",
-				x_in_content_units,
-				y_in_content_units,
-				w_in_content_units,
-				h_in_content_units );
-		printf( "capture bounds in pixels: x: %d y: %d w: %d h: %d\n",
-				x_in_pixels,
-				y_in_pixels,
-				w_in_pixels,
-				h_in_pixels );
+        printf( "capture bounds in content units: x: %d y: %d w: %d h: %d\n",
+                x_in_content_units,
+                y_in_content_units,
+                w_in_content_units,
+                h_in_content_units );
+        printf( "capture bounds in pixels: x: %d y: %d w: %d h: %d\n",
+                x_in_pixels,
+                y_in_pixels,
+                w_in_pixels,
+                h_in_pixels );
 
-#	endif // ENABLE_DEBUG_PRINT
+#    endif // ENABLE_DEBUG_PRINT
 
-	Rtt_DELETE( fbo );
+    Rtt_DELETE( fbo );
 
-	// If object was just created this will draw it to main scene as well, not only to FBO
-	scene.Invalidate();
+    // If object was just created this will draw it to main scene as well, not only to FBO
+    scene.Invalidate();
 
-	return paint;
+    return paint;
 }
 
 void
@@ -647,13 +650,13 @@ Display::ReloadResources()
 GroupObject *
 Display::Orphanage()
 {
-	return & GetScene().Orphanage();
+    return & GetScene().Orphanage();
 }
 
 GroupObject *
 Display::HitTestOrphanage()
 {
-	return & GetScene().SnapshotOrphanage();
+    return & GetScene().SnapshotOrphanage();
 }
 
 S32
@@ -745,36 +748,42 @@ Display::GetYScreenOffset() const
 void
 Display::ContentToScreen( S32& x, S32& y ) const
 {
-	S32 w = 0;
-	S32 h = 0;
-	ContentToScreen( x, y, w, h );
+    S32 w = 0;
+    S32 h = 0;
+    fStream->ContentToScreen( x, y, w, h );
 }
 
 void
-Display::ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const
+Display::ContentToScreen( Rtt_Real& x, Rtt_Real& y, Rtt_Real& w, Rtt_Real& h ) const
 {
-	fStream->ContentToScreen( x, y, w, h );
+    fStream->ContentToScreen( x, y, w, h );
+}
+
+void
+Display::ContentToScreen(S32& x, S32& y, S32& w, S32& h ) const
+{
+    fStream->ContentToScreen( x, y, w, h );
 }
 
 void
 Display::ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const
 {
-	fStream->ContentToPixels( x, y, w, h );
+    fStream->ContentToPixels( x, y, w, h );
 }
 
 void
 Display::GetContentRect( Rect& outRect ) const
 {
-	const Vertex2 minCorner = { Rtt_REAL_0, Rtt_REAL_0 };
-	const Vertex2 maxCorner = { Rtt_IntToReal( ContentWidth() ), Rtt_IntToReal( ContentHeight() ) };
-	const Rect windowRect( minCorner, maxCorner );
-	outRect = windowRect;
+    const Vertex2 minCorner = { Rtt_REAL_0, Rtt_REAL_0 };
+    const Vertex2 maxCorner = { Rtt_IntToReal( ContentWidth() ), Rtt_IntToReal( ContentHeight() ) };
+    const Rect windowRect( minCorner, maxCorner );
+    outRect = windowRect;
 }
 
 const Rect&
 Display::GetScreenContentBounds() const
 {
-	return ((const RenderingStream *)fStream)->GetScreenContentBounds();
+    return ((const RenderingStream *)fStream)->GetScreenContentBounds();
 }
 
 void
@@ -805,52 +814,52 @@ Display::HasWindowSizeChanged() const
 Rtt_Allocator *
 Display::GetAllocator() const
 {
-	return fOwner.GetAllocator();
+    return fOwner.GetAllocator();
 }
 
 Rtt_AbsoluteTime
 Display::GetElapsedTime() const
 {
-	return fOwner.GetElapsedTime();
+    return fOwner.GetElapsedTime();
 }
 
 U32
 Display::GetMaxTextureSize()
 {
-	U32 result = 1024;
-	result = Renderer::GetMaxTextureSize();
-	Rtt_ASSERT( result > 0 );
-	return result;
+    U32 result = 1024;
+    result = Renderer::GetMaxTextureSize();
+    Rtt_ASSERT( result > 0 );
+    return result;
 }
 
 const char *
 Display::GetGlString( const char *s )
 {
-	return Renderer::GetGlString( s );
+    return Renderer::GetGlString( s );
 }
 
 bool
 Display::GetGpuSupportsHighPrecisionFragmentShaders()
 {
-	return Renderer::GetGpuSupportsHighPrecisionFragmentShaders();
+    return Renderer::GetGpuSupportsHighPrecisionFragmentShaders();
 }
 
 size_t
 Display::GetMaxVertexTextureUnits()
 {
-	return Renderer::GetMaxVertexTextureUnits();
+    return Renderer::GetMaxVertexTextureUnits();
 }
 
 void
 Display::Collect( lua_State *L )
 {
-	// Protect against re-entrancy (not thread safe)
-	if ( ! fIsCollecting )
-	{
-		fIsCollecting = true;
-		GroupObject::CollectUnreachables( L, GetScene(), * Orphanage() );
-		fIsCollecting = false;
-	}
+    // Protect against re-entrancy (not thread safe)
+    if ( ! fIsCollecting )
+    {
+        fIsCollecting = true;
+        GroupObject::CollectUnreachables( L, GetScene(), * Orphanage() );
+        fIsCollecting = false;
+    }
 }
 
 

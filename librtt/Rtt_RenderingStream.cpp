@@ -7,6 +7,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+
 #include "Core/Rtt_Build.h"
 
 #include "Rtt_RenderingStream.h"
@@ -285,6 +286,17 @@ RenderingStream::ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const
 	w = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(w), screenToContentScale) + Rtt_REAL_HALF);
 	y = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(y), screenToContentScale) + GetYScreenOffset() + Rtt_REAL_HALF);
 	h = Rtt_RealToInt(Rtt_RealDiv(Rtt_IntToReal(h), screenToContentScale) + Rtt_REAL_HALF);
+}
+
+void
+RenderingStream::ContentToScreen( Rtt_Real& x, Rtt_Real& y, Rtt_Real& w, Rtt_Real& h ) const
+{
+	Rtt_Real screenToContentScale = GetScreenToContentScale();
+	x = Rtt_RealToInt(Rtt_RealDiv(GetXScreenOffset() + Rtt_IntToReal(x), screenToContentScale));
+	w = Rtt_RealToInt(Rtt_RealDiv(Rtt_RealToFloat(w), screenToContentScale));
+	y = Rtt_RealToInt(Rtt_RealDiv(GetYScreenOffset() + Rtt_IntToReal(y), screenToContentScale));
+	h = Rtt_RealToInt(Rtt_RealDiv(Rtt_RealToFloat(h), screenToContentScale));
+
 }
 
 void

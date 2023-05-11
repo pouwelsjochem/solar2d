@@ -242,8 +242,10 @@
 	{
 		fRuntime->Render();
 	}
+    if([self openGLContext]){
+        [[self openGLContext] flushBuffer];
+    }
     
-    [[self openGLContext] flushBuffer];
 }
 
 - (void)setDelegate:(id< GLViewDelegate >)delegate
