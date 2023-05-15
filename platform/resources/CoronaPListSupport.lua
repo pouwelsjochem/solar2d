@@ -460,9 +460,12 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 			if ppEnt then
 				ppEnt = ppEnt["Entitlements"]
 			end
+			print("TEST 1", ppEnt)
+
 			local appId = nil
 			if ppEnt then
 				appId = ppEnt["application-identifier"] or ppEnt["com.apple.application-identifier"] or "*"
+				print("TEST 2", appId)
 				if string.match(appId, "*") then
 					print("ERROR: iCloud is enabled but signing with '*' provisioning profile. To use iCloud select provisioning profile with iCloud entitlements.")
 					appId = nil
@@ -471,7 +474,7 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 			if ppEnt and appId then
 				local t = { ["com.apple.application-identifier"] = platform == 'osx' and appId or nil }
 				local kvsContainer = ppEnt["com.apple.developer.ubiquity-kvstore-identifier"]
-				if kvsContainer then
+				if kvsContainer and false then
 					if "table" == type(platformSettings.iCloud) and platformSettings.iCloud["kvstore-identifier"] then
 						local kvsId = platformSettings.iCloud["kvstore-identifier"]
 						kvsContainer = string.gsub(kvsContainer, "*", kvsId)
@@ -487,7 +490,7 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 				end
 				local iCloudServices = nil
 				local docContainers = ppEnt["com.apple.developer.ubiquity-container-identifiers"]
-				if docContainers and #docContainers>0 then
+				if docContainers and #docContainers>0 and false then
 					t["com.apple.developer.ubiquity-container-identifiers"] = docContainers
 					for i=1,#docContainers do
 						if string.match(docContainers[i], "*") then
@@ -503,7 +506,7 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 					end
 				end
 				local cloudKitContainers = ppEnt["com.apple.developer.icloud-container-identifiers"]
-				if cloudKitContainers and #cloudKitContainers>0 then
+				if cloudKitContainers and #cloudKitContainers>0 and false then
 					if not iCloudServices then iCloudServices = {} end
 					iCloudServices[#iCloudServices+1] = "CloudKit"
 					t["com.apple.developer.icloud-container-identifiers"] = cloudKitContainers
@@ -515,10 +518,11 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 					iCloudEnabled = true
 				end
 				t["com.apple.developer.icloud-services"] = iCloudServices
-				if iCloudEnabled and ppEnt['com.apple.developer.team-identifier'] then
+				if (iCloudEnabled or true) and ppEnt['com.apple.developer.team-identifier'] then
 					t['com.apple.developer.team-identifier'] = ppEnt['com.apple.developer.team-identifier']
+					print("TEST 3", t['com.apple.developer.team-identifier'])
 				end
-				if iCloudEnabled then
+				if (iCloudEnabled or true) then
 					includeProvisioning = true
 					ret = ret .. CoronaPListSupport.valueToPlistEntry(t)
 				end
