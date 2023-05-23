@@ -754,10 +754,12 @@ PrintTouches( NSSet *touches, const char *header )
 	// Rtt_TRACE(  ( "touch(%p)\n\tphase(%d)\n", touch, touch.phase ) );
 	
 #ifdef Rtt_TVOS_ENV
-		// On tvOS, we provide a key event for the tap rather than a true tap event.
-		// The tap count can still be obtained from ended-phase "RelativeTouchEvent" events.
+	// If the touch moved, the tapCount is zero
+	if ( touch.tapCount > 0 )
+	{
 		Rtt::KeyEvent e( NULL, Rtt::KeyEvent::kDown, Rtt::KeyName::kButtonZ, 0, false, false, false, false );
 		[self dispatchEvent:(&e)];
+	}
 #endif
 }
 

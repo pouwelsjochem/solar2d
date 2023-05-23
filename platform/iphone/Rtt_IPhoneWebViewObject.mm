@@ -552,10 +552,6 @@ IPhoneWebViewObject::Initialize()
 	Rect screenBounds;
 	GetScreenBounds( screenBounds );
 	CGRect r = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
-    NSLog(@"WebViewObject Initialize screenBounds.xMin %f\n", screenBounds.xMin );
-    NSLog(@"WebViewObject Initialize screenBounds.yMin %f\n", screenBounds.yMin );
-    NSLog(@"WebViewObject Initialize screenBounds.Width() %f\n", screenBounds.Width() );
-    NSLog(@"WebViewObject Initialize screenBounds.Height() %f\n", screenBounds.Height() );
 	Rtt_iOSWebViewContainer *v = [[Rtt_iOSWebViewContainer alloc] initWithFrame:r];
 	v.owner = this;
 

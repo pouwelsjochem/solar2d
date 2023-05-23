@@ -460,12 +460,10 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 			if ppEnt then
 				ppEnt = ppEnt["Entitlements"]
 			end
-			print("TEST 1", ppEnt)
 
 			local appId = nil
 			if ppEnt then
 				appId = ppEnt["application-identifier"] or ppEnt["com.apple.application-identifier"] or "*"
-				print("TEST 2", appId)
 				if string.match(appId, "*") then
 					print("ERROR: iCloud is enabled but signing with '*' provisioning profile. To use iCloud select provisioning profile with iCloud entitlements.")
 					appId = nil
@@ -520,7 +518,6 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 				t["com.apple.developer.icloud-services"] = iCloudServices
 				if (iCloudEnabled or true) and ppEnt['com.apple.developer.team-identifier'] then
 					t['com.apple.developer.team-identifier'] = ppEnt['com.apple.developer.team-identifier']
-					print("TEST 3", t['com.apple.developer.team-identifier'])
 				end
 				if (iCloudEnabled or true) then
 					includeProvisioning = true
