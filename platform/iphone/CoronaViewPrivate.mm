@@ -759,6 +759,8 @@ PrintTouches( NSSet *touches, const char *header )
 	{
 		Rtt::KeyEvent e( NULL, Rtt::KeyEvent::kDown, Rtt::KeyName::kButtonZ, 0, false, false, false, false );
 		[self dispatchEvent:(&e)];
+		Rtt::KeyEvent e( NULL, Rtt::KeyEvent::kUp, Rtt::KeyName::kButtonZ, 0, false, false, false, false );
+		[self dispatchEvent:(&e)];
 	}
 #endif
 }
