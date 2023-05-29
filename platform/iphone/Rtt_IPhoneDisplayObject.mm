@@ -128,7 +128,7 @@ IPhoneDisplayObject::Prepare( const Display& display )
 	// Take into account content-scaling.
 	float content_offset_x = 0.0f;
 	float content_offset_y = 0.0f;
-	GetContentOffsets( content_offset_x,
+	GetScreenOffsets( content_offset_x,
 						content_offset_y );
 
 	CGPoint c;
