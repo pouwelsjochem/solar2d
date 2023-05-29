@@ -38,7 +38,7 @@ PlatformDisplayObject::GetVideoObjectProxyVTable()
 
 PlatformDisplayObject::PlatformDisplayObject()
 :	fHandle( NULL ),
-	fContentToScreenScale( Rtt_REAL_1 )
+	fContentToScreenScale( 1 )
 {
 }
 

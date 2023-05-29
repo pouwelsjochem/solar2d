@@ -108,8 +108,7 @@ void
 IPhoneDisplayObject::Prepare( const Display& display )
 {
 	Super::Prepare( display );
-	if (ShouldPrepare())
-	{
+
 	const Matrix &transf = GetSrcToDstMatrix();
 
 	CGAffineTransform xfm = CGAffineTransformIdentity;
@@ -137,7 +136,6 @@ IPhoneDisplayObject::Prepare( const Display& display )
 	fView.center = c;
 
 	fView.transform = xfm;
-	}
 }
 
 void

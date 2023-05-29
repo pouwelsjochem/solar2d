@@ -73,8 +73,8 @@
 	CoronaView *view = (CoronaView *)fOwner.view;
 	const Display& display = view.runtime->GetDisplay();
 
-	Rtt_Real contentToScreenScale = display.GetContentToScreenScale();
-	if ( !Rtt_RealIsOne(contentToScreenScale) )
+	S32 contentToScreenScale = display.GetContentToScreenScale();
+	if ( contentToScreenScale != 1 )
 	{
 		PlatformDisplayObject::CalculateScreenBounds( display, contentToScreenScale, bounds );
 	}

@@ -80,7 +80,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 
 	protected:
 		ResourceHandle< lua_State > *fHandle;
-		Real fContentToScreenScale;
+		S32 fContentToScreenScale;
 };
 
 // ----------------------------------------------------------------------------
