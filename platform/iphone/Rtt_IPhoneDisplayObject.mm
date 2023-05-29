@@ -110,7 +110,33 @@ IPhoneDisplayObject::Prepare( const Display& display )
 	Super::Prepare( display );
 	if (ShouldPrepare())
 	{
-		
+	const Matrix &transf = GetSrcToDstMatrix();
+
+	CGAffineTransform xfm = CGAffineTransformIdentity;
+
+	const Real *x_row = transf.Row0();
+	const Real *y_row = transf.Row1();
+
+	// We have to invert "b" and "c" because our rotation
+	// direction is opposite of the one in a UIView.
+	xfm.a = x_row[0]; // x.
+	xfm.b = ( - x_row[1] ); // y.
+
+	xfm.c = ( - y_row[0] ); // x.
+	xfm.d = y_row[1]; // y.
+
+	// Take into account content-scaling.
+	float content_offset_x = 0.0f;
+	float content_offset_y = 0.0f;
+	GetContentOffsets( content_offset_x,
+						content_offset_y );
+
+	CGPoint c;
+	c.x = ( GetContentToScreenScale() * ( transf.Tx() + content_offset_x ) );
+	c.y = ( GetContentToScreenScale() * ( transf.Ty() + content_offset_y ) );
+	fView.center = c;
+
+	fView.transform = xfm;
 	}
 }
 

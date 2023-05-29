@@ -65,7 +65,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		void GetScreenBounds( Rect& outBounds ) const;
 
 	public:
-		void SetContentToScreenScale( Real newValue ) { fContentToScreenScale = newValue; }
+		void SetContentToScreenScale( S32 newValue ) { fContentToScreenScale = newValue; }
 		S32 GetContentToScreenScale() const { return fContentToScreenScale; }
 
 		void GetScreenOffsets( Real& outX, Real& outY ) const;
