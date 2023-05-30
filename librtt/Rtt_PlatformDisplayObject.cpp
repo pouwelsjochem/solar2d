@@ -89,10 +89,10 @@ PlatformDisplayObject::GetL() const
 
 // TODO: Is this duplication of code in RenderingStream/GPUStream which was used by screen capture
 void
-PlatformDisplayObject::CalculateScreenBounds(const Display& display, Real contentToScreenScale, Rect& inOutBounds)
+PlatformDisplayObject::CalculateScreenBounds(const Display& display, S32 contentToScreenScale, Rect& inOutBounds)
 {
 	inOutBounds.Translate( display.GetXScreenOffset(), display.GetYScreenOffset() );
-	inOutBounds.Scale( contentToScreenScale, contentToScreenScale );
+	inOutBounds.Scale( Rtt_IntToReal(contentToScreenScale), Rtt_IntToReal(contentToScreenScale) );
 }
 
 void
@@ -104,7 +104,7 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 	GetScreenOffsets( offsetX, offsetY );
 
 	outBounds.Translate( offsetX, offsetY );
-	outBounds.Scale( GetContentToScreenScale(), GetContentToScreenScale() );
+	outBounds.Scale( Rtt_IntToReal(GetContentToScreenScale()), Rtt_IntToReal(GetContentToScreenScale()) );
 }
 
 void

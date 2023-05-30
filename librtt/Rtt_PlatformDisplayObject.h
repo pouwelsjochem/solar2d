@@ -61,7 +61,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		lua_State* GetL() const;
 
 	public:
-		static void CalculateScreenBounds(const Display& display, Real contentToScreenScale, Rect& inOutBounds );
+		static void CalculateScreenBounds(const Display& display, S32 contentToScreenScale, Rect& inOutBounds );
 		void GetScreenBounds( Rect& outBounds ) const;
 
 	public:
