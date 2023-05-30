@@ -91,9 +91,8 @@ PlatformDisplayObject::GetL() const
 void
 PlatformDisplayObject::CalculateScreenBounds(const Display& display, S32 contentToScreenScale, Rect& inOutBounds)
 {
-	Real screenToContentScale = Rtt_RealDiv( Rtt_REAL_1, Rtt_IntToReal(contentToScreenScale) );
 	inOutBounds.Translate( display.GetXScreenOffset(), display.GetYScreenOffset() );
-	inOutBounds.Scale( screenToContentScale, screenToContentScale );
+	inOutBounds.Scale( Rtt_IntToReal(contentToScreenScale), Rtt_IntToReal(contentToScreenScale) );
 }
 
 void
@@ -104,9 +103,8 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 	Real offsetX, offsetY;
 	GetScreenOffsets( offsetX, offsetY );
 
-	Real screenToContentScale = Rtt_RealDiv( Rtt_REAL_1, Rtt_IntToReal(GetContentToScreenScale()) );
 	outBounds.Translate( offsetX, offsetY );
-	outBounds.Scale( screenToContentScale, screenToContentScale );
+	outBounds.Scale( Rtt_IntToReal(GetContentToScreenScale()), Rtt_IntToReal(GetContentToScreenScale()) );
 }
 
 void
