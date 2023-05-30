@@ -91,8 +91,10 @@ PlatformDisplayObject::GetL() const
 void
 PlatformDisplayObject::CalculateScreenBounds(const Display& display, S32 contentToScreenScale, Rect& inOutBounds)
 {
-	inOutBounds.Translate( display.GetXScreenOffset(), display.GetYScreenOffset() );
+	inOutBounds.Translate( Rtt_IntToReal(display.GetXScreenOffset()), Rtt_IntToReal(display.GetYScreenOffset()) );
 	inOutBounds.Scale( Rtt_IntToReal(contentToScreenScale), Rtt_IntToReal(contentToScreenScale) );
+	Rtt_TRACE( ( "CalculateScreenBounds screenOffset %d %d\n", display.GetXScreenOffset(), display.GetYScreenOffset()) );
+	Rtt_TRACE( ( "CalculateScreenBounds contentToScreenScale %d\n", contentToScreenScale) );
 }
 
 void
@@ -100,15 +102,18 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 {
 	outBounds = StageBounds();
 
-	Real offsetX, offsetY;
+	S32 offsetX, offsetY;
 	GetScreenOffsets( offsetX, offsetY );
 
-	outBounds.Translate( offsetX, offsetY );
+	outBounds.Translate( Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY) );
 	outBounds.Scale( Rtt_IntToReal(GetContentToScreenScale()), Rtt_IntToReal(GetContentToScreenScale()) );
+
+	Rtt_TRACE( ( "CalculateScreenBounds screenOffset %f %f\n", Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY)) );
+	Rtt_TRACE( ( "CalculateScreenBounds contentToScreenScale %d\n", GetContentToScreenScale()) );
 }
 
 void
-PlatformDisplayObject::GetScreenOffsets( Real& outX, Real& outY ) const
+PlatformDisplayObject::GetScreenOffsets( S32& outX, S32& outY ) const
 {
 	const StageObject *stage = GetStage();
 	if ( Rtt_VERIFY( stage ) )
@@ -119,8 +124,8 @@ PlatformDisplayObject::GetScreenOffsets( Real& outX, Real& outY ) const
 	}
 	else
 	{
-		outX = Rtt_REAL_0;
-		outY = Rtt_REAL_0;
+		outX = 0;
+		outY = 0;
 	}
 }
 bool
