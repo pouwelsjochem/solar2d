@@ -125,14 +125,14 @@ IPhoneDisplayObject::Prepare( const Display& display )
 	xfm.d = y_row[1]; // y.
 
 	// Take into account content-scaling.
-	float screen_offset_x = 0.0f;
-	float screen_offset_y = 0.0f;
-	GetScreenOffsets( screen_offset_x,
-						screen_offset_y );
+	float content_offset_x = 0.0f;
+	float content_offset_y = 0.0f;
+	GetScreenOffsets( content_offset_x,
+						content_offset_y );
 
 	CGPoint c;
-	c.x = ( transf.Tx() + screen_offset_x ) / Rtt_IntToReal( GetContentToScreenScale() );
-	c.y = ( transf.Ty() + screen_offset_y ) / Rtt_IntToReal( GetContentToScreenScale() );
+	c.x = ( Rtt_IntToReal( GetContentToScreenScale() ) * ( transf.Tx() + content_offset_x ) );
+	c.y = ( Rtt_IntToReal( GetContentToScreenScale() ) * ( transf.Ty() + content_offset_y ) );
 	fView.center = c;
 
 	fView.transform = xfm;
@@ -166,9 +166,9 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		//SelfBounds needs to represent Corona coordinates
 		//whereas the newFrame size is in content units, so we calculate
 		//both to keep everything in sync
-		float newPointWidth = width / Rtt_IntToReal( GetContentToScreenScale() );
+		float newPointWidth = width * Rtt_IntToReal( GetContentToScreenScale() );
 		float coronaWidth	= width;
-		float coronaHeight	= newFrame.size.height * Rtt_IntToReal( GetContentToScreenScale() );
+		float coronaHeight	= newFrame.size.height / Rtt_IntToReal( GetContentToScreenScale() );
 		
 		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
@@ -181,8 +181,8 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		//SelfBounds needs to represent Corona coordinates
 		//whereas the newFrame size is in content units, so we calculate
 		//both to keep everything in sync
-		float newPointHeight	= height / Rtt_IntToReal( GetContentToScreenScale() );
-		float coronaWidth		= newFrame.size.width * Rtt_IntToReal( GetContentToScreenScale() );
+		float newPointHeight	= height * Rtt_IntToReal( GetContentToScreenScale() );
+		float coronaWidth		= newFrame.size.width / Rtt_IntToReal( GetContentToScreenScale() );
 		float coronaHeight		= height;
 		
 		fSelfBounds.Initialize(coronaWidth/2.0f, coronaHeight/2.0f);
