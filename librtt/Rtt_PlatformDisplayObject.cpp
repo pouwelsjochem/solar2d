@@ -50,7 +50,7 @@ PlatformDisplayObject::~PlatformDisplayObject()
 void
 PlatformDisplayObject::Preinitialize( const Display& display )
 {
-	SetContentToScreenScale( 1 );
+	SetContentToScreenScale( display.GetContentToScreenScale() );
 }
 
 int
