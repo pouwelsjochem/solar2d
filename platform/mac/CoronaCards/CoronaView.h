@@ -25,6 +25,7 @@ typedef enum {
 - (void)resume;
 - (void)terminate;
 - (void) handleOpenURL:(NSString *)urlStr;
+- (void) setScaleFactor:(CGFloat)scaleFactor;
 - (void) restoreWindowProperties;
 
 - (BOOL) settingsIsWindowCloseButtonEnabled;

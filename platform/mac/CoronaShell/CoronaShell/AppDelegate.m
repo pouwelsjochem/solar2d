@@ -367,6 +367,26 @@
 	[_coronaView restoreWindowProperties];
 }
 
+// Called when the window moves to a screen with different "backing properties" (i.e. retina to non-retina and vice versa)
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification
+{
+	NSDEBUG(@"+++ windowDidChangeBackingProperties: %@; screen %@: %g", NSStringFromRect([_window frame]), [[[_window screen] deviceDescription] objectForKey:@"NSDeviceSize"], [_window backingScaleFactor]);
+
+	[_coronaView setScaleFactor:[_window backingScaleFactor]];
+}
+
+// This notification serves as a way to tell that the window is on a screen and
+// that we can reliably query the screen's backingScaleFactor
+- (void)windowDidChangeOcclusionState:(NSNotification *)notification
+{
+	if (_window.occlusionState & NSWindowOcclusionStateVisible)
+	{
+		[_coronaView setScaleFactor:[_window backingScaleFactor]];
+
+		[_coronaView restoreWindowProperties];
+	}
+}
+
 -(BOOL)hideHelpMenuItem
 {
 	return ![[NSBundle mainBundle] objectForInfoDictionaryKey:@"DeveloperURL"];

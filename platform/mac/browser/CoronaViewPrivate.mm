@@ -460,6 +460,11 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 #pragma mark GLView Helpers
 
+- (void) setScaleFactor:(CGFloat)scaleFactor
+{
+	_GLView.scaleFactor = scaleFactor;
+}
+
 - (void) restoreWindowProperties
 {
 	[_GLView restoreWindowProperties];

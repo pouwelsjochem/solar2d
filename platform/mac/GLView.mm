@@ -96,6 +96,7 @@
 @implementation GLView
 
 @synthesize fRuntime;
+@synthesize scaleFactor;
 @synthesize isReady;
 @synthesize sendAllMouseEvents;
 @synthesize inFullScreenTransition;
@@ -151,6 +152,8 @@
 		{
 			[self setWantsLayer:YES];
 		}
+
+		scaleFactor = 1.0;
 
 		// We're looking for a 10.9 API call to determine if we need to invalidate
 		shouldInvalidate = [[NSApplication sharedApplication] respondsToSelector:@selector(occlusionState)];
@@ -499,6 +502,18 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	[self invalidate];
 }
 
+- (CGFloat) viewportWidth
+{
+	// Rtt_TRACE(("viewportWidth: %g\n", nativeFrameRect.size.width * scaleFactor));
+    return nativeFrameRect.size.width * scaleFactor;
+}
+
+- (CGFloat) viewportHeight
+{
+	// Rtt_TRACE(("viewportHeight: %g\n", nativeFrameRect.size.height * scaleFactor));
+	return nativeFrameRect.size.height * scaleFactor;
+}
+
 - (CGFloat)deviceWidth
 {
 	// Rtt_TRACE(("deviceWidth: %g\n", nativeFrameRect.size.width ));
@@ -631,6 +646,8 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	// Limit mouse events to the view's bounds
 	NSRect r = [self bounds];
 	trackingRectTag = [self addTrackingRect:r owner:self userData:nil assumeInside:NO];
+
+	scaleFactor = [[self window] backingScaleFactor];
 }
 
 - (void)mouseMoved:(NSEvent *)event

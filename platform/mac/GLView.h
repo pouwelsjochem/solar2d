@@ -40,6 +40,7 @@ namespace Rtt
 }
 
 @property (nonatomic, readwrite, getter=runtime, setter=setRuntime:) Rtt::Runtime *fRuntime;
+@property (nonatomic, assign) CGFloat scaleFactor;
 @property (nonatomic, assign) BOOL isReady;
 @property (nonatomic, assign) BOOL sendAllMouseEvents;
 @property (nonatomic, assign) BOOL inFullScreenTransition;
@@ -57,6 +58,9 @@ namespace Rtt
 
 - (void)adjustPoint:(NSPoint*)p;
 - (NSPoint)pointForEvent:(NSEvent*)event;
+
+- (CGFloat) viewportWidth;
+- (CGFloat) viewportHeight;
 
 - (CGFloat)deviceWidth;
 - (CGFloat)deviceHeight;
