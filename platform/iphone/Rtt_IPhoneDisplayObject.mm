@@ -113,16 +113,16 @@ IPhoneDisplayObject::Prepare( const Display& display )
 
 	CGAffineTransform xfm = CGAffineTransformIdentity;
 
-	// const Real *x_row = transf.Row0();
-	// const Real *y_row = transf.Row1();
+	const Real *x_row = transf.Row0();
+	const Real *y_row = transf.Row1();
 
 	// // We have to invert "b" and "c" because our rotation
 	// // direction is opposite of the one in a UIView.
-	// xfm.a = x_row[0]; // x.
-	// xfm.b = ( - x_row[1] ); // y.
+	xfm.a = x_row[0]; // x.
+	xfm.b = ( - x_row[1] ); // y.
 
-	// xfm.c = ( - y_row[0] ); // x.
-	// xfm.d = y_row[1]; // y.
+	xfm.c = ( - y_row[0] ); // x.
+	xfm.d = y_row[1]; // y.
 
 	// Take into account content-scaling.
 	S32 screen_offset_x = 0;
