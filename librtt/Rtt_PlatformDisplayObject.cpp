@@ -93,8 +93,8 @@ PlatformDisplayObject::CalculateScreenBounds(const Display& display, S32 content
 {
 	inOutBounds.Translate( Rtt_IntToReal(display.GetXScreenOffset()), Rtt_IntToReal(display.GetYScreenOffset()) );
 	inOutBounds.Scale( Rtt_IntToReal(contentToScreenScale), Rtt_IntToReal(contentToScreenScale) );
-	Rtt_TRACE( ( "CalculateScreenBounds screenOffset %d %d\n", display.GetXScreenOffset(), display.GetYScreenOffset()) );
-	Rtt_TRACE( ( "CalculateScreenBounds contentToScreenScale %d\n", contentToScreenScale) );
+	Rtt_PRINT( ( "CalculateScreenBounds screenOffset %d %d\n", display.GetXScreenOffset(), display.GetYScreenOffset()) );
+	Rtt_PRINT( ( "CalculateScreenBounds contentToScreenScale %d\n", contentToScreenScale) );
 }
 
 void
@@ -108,8 +108,8 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 	outBounds.Translate( Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY) );
 	outBounds.Scale( Rtt_IntToReal(GetContentToScreenScale()), Rtt_IntToReal(GetContentToScreenScale()) );
 
-	Rtt_TRACE( ( "CalculateScreenBounds screenOffset %f %f\n", Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY)) );
-	Rtt_TRACE( ( "CalculateScreenBounds contentToScreenScale %d\n", GetContentToScreenScale()) );
+	Rtt_PRINT( ( "CalculateScreenBounds screenOffset %f %f\n", Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY)) );
+	Rtt_PRINT( ( "CalculateScreenBounds contentToScreenScale %d\n", GetContentToScreenScale()) );
 }
 
 void

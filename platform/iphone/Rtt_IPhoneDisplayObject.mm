@@ -42,8 +42,6 @@ IPhoneDisplayObject::IPhoneDisplayObject( const Rect& bounds )
 	Real h = bounds.Height();
 	Real halfW = Rtt_RealDiv2( w );
 	Real halfH = Rtt_RealDiv2( h );
-	NSLog(@"DisplayObject constructor w %f\n", w);
-	NSLog(@"DisplayObject constructor h %f\n", h);
 
 	// The UIView's self transform is relative to it's center, but the DisplayObject's
 	// transform included that translation, so we need to factor this out during Build()
@@ -51,13 +49,6 @@ IPhoneDisplayObject::IPhoneDisplayObject( const Rect& bounds )
 	// so we must record these separately instead of relying on the values of [fView center]
 	float fViewCenterX = bounds.xMin + halfW;
 	float fViewCenterY = bounds.yMin + halfH;
-
-	NSLog(@"DisplayObject constructor bounds.xMin %f\n", bounds.xMin);
-	NSLog(@"DisplayObject constructor bounds.xMax %f\n", bounds.xMax);
-	NSLog(@"DisplayObject constructor bounds.yMin %f\n", bounds.xMin);
-	NSLog(@"DisplayObject constructor bounds.yMax %f\n", bounds.yMax);
-	NSLog(@"DisplayObject constructor fViewCenterX %f\n", fViewCenterX);
-	NSLog(@"DisplayObject constructor fViewCenterY %f\n", fViewCenterY);
 
 	// Update DisplayObject so that it corresponds to the actual position of the UIView
 	// where DisplayObject's self bounds will be centered around its local origin.
@@ -122,16 +113,16 @@ IPhoneDisplayObject::Prepare( const Display& display )
 
 	CGAffineTransform xfm = CGAffineTransformIdentity;
 
-	const Real *x_row = transf.Row0();
-	const Real *y_row = transf.Row1();
+	// const Real *x_row = transf.Row0();
+	// const Real *y_row = transf.Row1();
 
-	// We have to invert "b" and "c" because our rotation
-	// direction is opposite of the one in a UIView.
-	xfm.a = x_row[0]; // x.
-	xfm.b = ( - x_row[1] ); // y.
+	// // We have to invert "b" and "c" because our rotation
+	// // direction is opposite of the one in a UIView.
+	// xfm.a = x_row[0]; // x.
+	// xfm.b = ( - x_row[1] ); // y.
 
-	xfm.c = ( - y_row[0] ); // x.
-	xfm.d = y_row[1]; // y.
+	// xfm.c = ( - y_row[0] ); // x.
+	// xfm.d = y_row[1]; // y.
 
 	// Take into account content-scaling.
 	S32 screen_offset_x = 0;
