@@ -65,8 +65,8 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 		void GetScreenBounds( Rect& outBounds ) const;
 
 	public:
-		void SetContentToScreenScale( S32 newValue ) { fContentToScreenScale = newValue; }
-		S32 GetContentToScreenScale() const { return fContentToScreenScale; }
+		void SetContentToScreenScale( Real newValue ) { fContentToScreenScale = newValue; }
+		Real GetContentToScreenScale() const { return fContentToScreenScale; }
 
 		void GetScreenOffsets( S32& outX, S32& outY ) const;
 
@@ -80,7 +80,7 @@ class PlatformDisplayObject : public DisplayObject, public MLuaTableBridge
 
 	protected:
 		ResourceHandle< lua_State > *fHandle;
-		S32 fContentToScreenScale;
+		Real fContentToScreenScale;
 };
 
 // ----------------------------------------------------------------------------

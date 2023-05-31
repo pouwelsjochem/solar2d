@@ -111,7 +111,7 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 	GetScreenOffsets( offsetX, offsetY );
 
 	outBounds.Translate( Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY) );
-	outBounds.Scale( Rtt_IntToReal(GetContentToScreenScale()), Rtt_IntToReal(GetContentToScreenScale()) );
+	outBounds.Scale( GetContentToScreenScale(), GetContentToScreenScale() );
 
 	fprintf(stderr, "PlatformDisplayObject GetScreenBounds screenOffset %f %f\n", Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY));
 	fprintf(stderr, "PlatformDisplayObject GetScreenBounds contentToScreenScale %d\n", GetContentToScreenScale());
