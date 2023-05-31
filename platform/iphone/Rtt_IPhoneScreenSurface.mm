@@ -67,6 +67,18 @@ IPhoneScreenSurface::Height() const
 	return fScale * fView.bounds.size.height;
 }
 
+S32
+IPhoneScreenSurface::PointsWidth() const
+{
+	return fView.bounds.size.width;
+}
+
+S32
+IPhoneScreenSurface::PointsHeight() const
+{
+	return fView.bounds.size.height;
+}
+
 Rtt_EAGLContext*
 IPhoneScreenSurface::GetContext() const
 {
