@@ -117,6 +117,44 @@ IPhonePlatform::IPhonePlatform( CoronaView *view )
 :	Super( view ),
 	fPopupControllerDelegate( [[PopupControllerDelegate alloc] init] )
 {
+	UIScreen *screen = [UIScreen mainScreen];
+	CGRect frame = [screen bounds]; // want fullscreen dimensions
+	fActivityView = [[UIView alloc] initWithFrame:frame];
+	fActivityView.backgroundColor = [UIColor blackColor];
+	fActivityView.alpha = 0.7;
+	[fActivityView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
+
+	UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	[fActivityView addSubview:indicator];
+	CGPoint center = { (CGFloat)(frame.origin.x + 0.5f*CGRectGetWidth( frame )), (CGFloat)(frame.origin.y + 0.5f*CGRectGetHeight( frame )) };
+	indicator.center = center;
+	[indicator setAutoresizingMask:
+		UIViewAutoresizingFlexibleLeftMargin
+		| UIViewAutoresizingFlexibleRightMargin
+		| UIViewAutoresizingFlexibleTopMargin
+		| UIViewAutoresizingFlexibleBottomMargin];
+	[indicator release];
+
+	if( NSClassFromString( @"UIAlertController" ) )
+	{
+		// IOS 8 and after
+
+		// Always force activity view to be the top-most child of CoronaView
+		fActivityView.layer.zPosition = MAXFLOAT;
+		[view addSubview:fActivityView];
+
+		// Prevent touches from bleeding through the activity view
+		[fActivityView addGestureRecognizer:[[CoronaNullGestureRecognizer alloc] init]];
+	}
+	else
+	{
+		// Legacy: Pre-IOS8
+		AppDelegate *delegate = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+		UIWindow *window = delegate.window;
+		[window insertSubview:fActivityView aboveSubview:delegate.view];
+	}
+
+	fActivityView.hidden = YES;
 }
 
 IPhonePlatform::~IPhonePlatform()
