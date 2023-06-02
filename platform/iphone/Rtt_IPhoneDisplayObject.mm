@@ -109,41 +109,35 @@ IPhoneDisplayObject::Prepare( const Display& display )
 {
 	Super::Prepare( display );
 
-	const Matrix &transf = GetSrcToDstMatrix();
+    NSLog(@"DisplayObject Prepare\n");
+	if ( ShouldPrepare() )
+	{
+		Preinitialize( display );
+        
+		Rect screenBounds;
+		GetScreenBounds( screenBounds );
 
-	CGAffineTransform xfm = CGAffineTransformIdentity;
+        CGRect newFrame = CGRectMake( screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
+        NSLog(@"DisplayObject Prepare newFrame  %f %f %f %f\n", screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
 
-	const Real *x_row = transf.Row0();
-	const Real *y_row = transf.Row1();
+		CGFloat backingScaleFactor = [[fCoronaView window] contentScaleFactor];
+        NSLog(@"DisplayObject Prepare Preinitialize backingScaleFactor %f\n", backingScaleFactor);
+		if (backingScaleFactor > 1.0)
+		{
+			newFrame.origin.x /= backingScaleFactor;
+			newFrame.origin.y /= backingScaleFactor;
+			newFrame.size.width /= backingScaleFactor;
+			newFrame.size.height /= backingScaleFactor;
+		}
 
-	// // We have to invert "b" and "c" because our rotation
-	// // direction is opposite of the one in a UIView.
-	xfm.a = x_row[0]; // x.
-	xfm.b = ( - x_row[1] ); // y.
+		[fView setFrame:newFrame];
 
-	xfm.c = ( - y_row[0] ); // x.
-	xfm.d = y_row[1]; // y.
-
-	// Take into account content-scaling.
-	S32 screen_offset_x = 0;
-    S32 screen_offset_y = 0;
-	GetScreenOffsets( screen_offset_x,
-						screen_offset_y );
-    NSLog(@"DisplayObject Prepare screen_offset_x %d\n", screen_offset_x);
-    NSLog(@"DisplayObject Prepare screen_offset_y %d\n", screen_offset_y);
-    
-	CGPoint c;
-	c.x = ( GetContentToScreenScale() * ( transf.Tx() + screen_offset_x ) );
-	c.y = ( GetContentToScreenScale() * ( transf.Ty() + screen_offset_y ) );
-    NSLog(@"DisplayObject Prepare c.x %f\n", c.x);
-    NSLog(@"DisplayObject Prepare c.y %f\n", c.y);
-	fView.center = c;
-
-    NSLog(@"DisplayObject Prepare xfm.a %f\n", xfm.a);
-    NSLog(@"DisplayObject Prepare xfm.b %f\n", xfm.b);
-    NSLog(@"DisplayObject Prepare xfm.c %f\n", xfm.c);
-    NSLog(@"DisplayObject Prepare xfm.d %f\n", xfm.d);
-	fView.transform = xfm;
+        if ( ! fHidden )
+		{
+			// Only restore the object if the user hasn't requested it hidden
+			[fView setHidden:NO];
+		}
+	}
 }
 
 void
