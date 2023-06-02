@@ -146,12 +146,6 @@ class Display
 		virtual void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 
 	public:
-		static void UpdateContentScale(
-						Rtt_Real screenWidth, Rtt_Real screenHeight,
-						S32 contentWidth, S32 contentHeight,
-						Rtt_Real& outSx, Rtt_Real& outSy );
-
-		virtual void CalculateContentToScreenScale( Real& outSx, Real& outSy ) const;
 		virtual void GetContentRect( Rect& outRect ) const;
 		virtual const Rect& GetScreenContentBounds() const;
 

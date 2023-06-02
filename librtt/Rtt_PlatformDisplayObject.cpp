@@ -50,12 +50,8 @@ PlatformDisplayObject::~PlatformDisplayObject()
 void
 PlatformDisplayObject::Preinitialize( const Display& display )
 {
-	Real sx, sy;
-	display.CalculateContentToScreenScale( sx, sy );
-
-	fprintf(stderr, "PlatformDisplayObject Preinitialize sx %f\n", Rtt_RealDiv( Rtt_REAL_1, sx ) );
-	fprintf(stderr, "PlatformDisplayObject Preinitialize contentToScreenScale %f\n", display.GetContentToScreenScale() );
-	SetContentToScreenScale( Rtt_RealDiv( Rtt_REAL_1, sx ) );
+	Real calculatedContentToScreenScale = Rtt_RealDiv( Rtt_IntToReal( display.ContentWidth() ), display.PointsWidth() );
+	SetContentToScreenScale( Rtt_RealDiv( Rtt_REAL_1, calculatedContentToScreenScale ) );
 }
 
 int
@@ -98,8 +94,6 @@ PlatformDisplayObject::CalculateScreenBounds(const Display& display, S32 content
 {
 	inOutBounds.Translate( Rtt_IntToReal(display.GetXScreenOffset()), Rtt_IntToReal(display.GetYScreenOffset()) );
 	inOutBounds.Scale( Rtt_IntToReal(contentToScreenScale), Rtt_IntToReal(contentToScreenScale) );
-	fprintf(stderr, "PlatformDisplayObject CalculateScreenBounds screenOffset %d %d\n", display.GetXScreenOffset(), display.GetYScreenOffset());
-	fprintf(stderr, "PlatformDisplayObject CalculateScreenBounds contentToScreenScale %d\n", contentToScreenScale);
 }
 
 void
@@ -112,9 +106,6 @@ PlatformDisplayObject::GetScreenBounds( Rect& outBounds ) const
 
 	outBounds.Translate( Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY) );
 	outBounds.Scale( GetContentToScreenScale(), GetContentToScreenScale() );
-
-	fprintf(stderr, "PlatformDisplayObject GetScreenBounds screenOffset %f %f\n", Rtt_IntToReal(offsetX), Rtt_IntToReal(offsetY));
-	fprintf(stderr, "PlatformDisplayObject GetScreenBounds contentToScreenScale %d\n", GetContentToScreenScale());
 }
 
 void

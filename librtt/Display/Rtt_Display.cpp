@@ -784,47 +784,6 @@ Display::ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const
 }
 
 void
-Display::UpdateContentScale(
-                    Rtt_Real screenWidth, Rtt_Real screenHeight,
-                    S32 contentW, S32 contentH, Rtt_Real& outSx, Rtt_Real& outSy )
-{
-    Rtt_ASSERT( contentW > 0 && contentH > 0 );
-
-    // We used to skip this if the scaleMode was kNone. However, on some platforms,
-    // the screen dimensions are virtual (i.e. 'points' on iOS/Mac retina displays)
-    // whereas the content pixels are the physical pixels when the mode is kNone.
-    const Rtt_Real contentWidth = Rtt_IntToReal( contentW );
-    const Rtt_Real contentHeight = Rtt_IntToReal( contentH );
-
-    const Rtt_Real screenAspect = Rtt_RealDiv( screenWidth, screenHeight );
-    const Rtt_Real contentAspect = Rtt_RealDiv( contentWidth, contentHeight );
-
-    Rtt_Real scaleX = Rtt_RealDiv( contentWidth, screenWidth );
-    Rtt_Real scaleY = Rtt_RealDiv( contentHeight, screenHeight );
-
-    outSx = scaleX;
-    outSy = scaleY;
-}
-
-void
-Display::CalculateContentToScreenScale( Real& outSx, Real& outSy ) const
-{
-    S32 contentW = ContentWidth();
-    S32 contentH = ContentHeight();
-
-    // We need to grab the OS width and height in points
-    S32 screenW = PointsWidth();
-    S32 screenH = PointsHeight();
-
-    outSx = Rtt_REAL_1;
-    outSy = Rtt_REAL_1;
-    Display::UpdateContentScale(
-        screenW, screenH,
-        contentW, contentH,
-        outSx, outSy );
-}
-
-void
 Display::GetContentRect( Rect& outRect ) const
 {
     const Vertex2 minCorner = { Rtt_REAL_0, Rtt_REAL_0 };

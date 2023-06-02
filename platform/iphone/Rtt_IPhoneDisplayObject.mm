@@ -125,24 +125,11 @@ IPhoneDisplayObject::Prepare( const Display& display )
 	xfm.d = y_row[1]; // y.
 
 	// Take into account content-scaling.
-	S32 screen_offset_x = 0;
-    S32 screen_offset_y = 0;
-	GetScreenOffsets( screen_offset_x,
-						screen_offset_y );
-    NSLog(@"DisplayObject Prepare screen_offset_x %d\n", screen_offset_x);
-    NSLog(@"DisplayObject Prepare screen_offset_y %d\n", screen_offset_y);
-    
 	CGPoint c;
-	c.x = ( GetContentToScreenScale() * ( transf.Tx() + screen_offset_x ) );
-	c.y = ( GetContentToScreenScale() * ( transf.Ty() + screen_offset_y ) );
-    NSLog(@"DisplayObject Prepare c.x %f\n", c.x);
-    NSLog(@"DisplayObject Prepare c.y %f\n", c.y);
+	c.x = GetContentToScreenScale() * transf.Tx();
+	c.y = GetContentToScreenScale() * transf.Ty();
 	fView.center = c;
 
-    NSLog(@"DisplayObject Prepare xfm.a %f\n", xfm.a);
-    NSLog(@"DisplayObject Prepare xfm.b %f\n", xfm.b);
-    NSLog(@"DisplayObject Prepare xfm.c %f\n", xfm.c);
-    NSLog(@"DisplayObject Prepare xfm.d %f\n", xfm.d);
 	fView.transform = xfm;
 }
 
@@ -167,7 +154,6 @@ IPhoneDisplayObject::GetSelfBounds( Rect& rect ) const
 void
 IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 {
-    NSLog(@"DisplayObject SetSelfBounds\n");
 	CGRect newFrame = fView.frame;
 	
 	if ( !( width < Rtt_REAL_0 ) ) // (width >= 0)
@@ -183,10 +169,6 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
 		newFrame.size.width = newPointWidth;
-		NSLog(@"DisplayObject SetSelfBounds 1 coronaWidth %f\n", coronaWidth);
-        NSLog(@"DisplayObject SetSelfBounds 1 coronaHeight %f\n", coronaHeight);
-        NSLog(@"DisplayObject SetSelfBounds 1 newFrame.size.width %f\n", newFrame.size.width);
-        NSLog(@"DisplayObject SetSelfBounds 1 newFrame.size.height %f\n", newFrame.size.height);
 	}
 	if ( !( height < Rtt_REAL_0 ) ) // (height >= 0)
 	{
@@ -202,10 +184,6 @@ IPhoneDisplayObject::SetSelfBounds( Real width, Real height )
 		Invalidate( kGeometryFlag | kStageBoundsFlag | kTransformFlag );
 		
 		newFrame.size.height = newPointHeight;
-        NSLog(@"DisplayObject SetSelfBounds 2 coronaWidth %f\n", coronaWidth);
-        NSLog(@"DisplayObject SetSelfBounds 2 coronaHeight %f\n", coronaHeight);
-        NSLog(@"DisplayObject SetSelfBounds 2 newFrame.size.width %f\n", newFrame.size.width);
-        NSLog(@"DisplayObject SetSelfBounds 2 newFrame.size.height %f\n", newFrame.size.height);
 	}
 
 	[fView setFrame:newFrame];
