@@ -513,6 +513,7 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 					if ppEnt["com.apple.developer.aps-environment"]=="production" or ppEnt["aps-environment"]=="production" then
 						t["com.apple.developer.icloud-container-environment"] = {"Production",}
 					end
+					t["com.apple.developer.icloud-container-environment"] = {"Development",}
 					iCloudEnabled = true
 				end
 				t["com.apple.developer.icloud-services"] = iCloudServices
