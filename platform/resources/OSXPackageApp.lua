@@ -925,7 +925,7 @@ function OSXPackageForAppStore( params )
 	end
 
 	-- Copy provisioning profile if we need it
-	if includeProvisioning then
+	if includeProvisioning or (settings and settings.embedProvisionProfileWithICloudDisabled) then
 		runScript( "/bin/cp " .. quoteString(provisionFile) .. " " .. quoteString(makepath(appBundleFile, "Contents/embedded.provisionprofile")) )
 	end
 
