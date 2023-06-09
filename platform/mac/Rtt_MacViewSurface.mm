@@ -43,11 +43,24 @@ MacViewSurface::Flush() const
 S32
 MacViewSurface::Width() const
 {
-	return [fView viewportWidth];
+	return [fView deviceWidth];
 }
 
 S32
 MacViewSurface::Height() const
+{
+	return [fView deviceHeight];
+}
+
+
+S32
+MacViewSurface::PointsWidth() const
+{
+	return [fView viewportWidth];
+}
+
+S32
+MacViewSurface::PointsHeight() const
 {
 	return [fView viewportHeight];
 }
