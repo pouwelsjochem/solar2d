@@ -621,7 +621,7 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
                 [newItem setEnabled:YES];
                 [newItem setRepresentedObject:[signingIdentities objectForKey:certName]];
                 [[appStoreAppSigningIdentityPopup menu] addItem:newItem];
-                if ([certName hasPrefix:@"3rd Party Mac Developer Application: "])
+                if ([certName hasPrefix:@"3rd Party Mac Developer Application: "] || [certName hasPrefix:@"Apple Development: "])
                 {
                     [appStoreAppSigningIdentityPopup selectItem:newItem];
                 }
@@ -635,7 +635,7 @@ static NSString *kDeveloperIDIdentityTag = @"Developer ID ";
                 [newItem setEnabled:YES];
                 [newItem setRepresentedObject:[signingIdentities objectForKey:certName]];
                 [[appStoreInstallerSigningIdentityPopup menu] addItem:newItem];
-                if ([certName hasPrefix:@"3rd Party Mac Developer Installer: "])
+                if ([certName hasPrefix:@"3rd Party Mac Developer Installer: "] || [certName hasPrefix:@"Apple Development: "])
                 {
                     [appStoreInstallerSigningIdentityPopup selectItem:newItem];
                 }
