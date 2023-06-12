@@ -34,9 +34,9 @@ static unsigned int s_playerFrequency = 0;
 #ifdef __APPLE__
 #include <unistd.h>
 #include <TargetConditionals.h>
-	#if (TARGET_OS_IOS == 1)
+	#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	#include "Rtt_IPhoneAudioSessionManager.h"
-	#endif // #if (TARGET_OS_IOS == 1)
+	#endif // #if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 #endif /* __APPLE__ */
 
 // Warning: ALmixer callbacks may occur on a background thread.
@@ -218,7 +218,7 @@ PlatformOpenALPlayer::InitializeOpenALPlayer()
 	
 	/* AudioSession stuff is only for iOS.
 	 */
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	PlatformAudioSessionManager* audioSessionMananger = PlatformAudioSessionManager::SharedInstance();
 	// On iOS, the OpenAL way of setting the frequency has no effect and we must set a special setting via AudioSession Services
 	((IPhoneAudioSessionManager*)(audioSessionMananger))->SetProperty(kAudioSessionProperty_PreferredHardwareSampleRate, (Float64)s_playerFrequency);
@@ -997,7 +997,7 @@ PlatformOpenALPlayer::BeginInterruption()
 
 	ALmixer_BeginInterruption();
 
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	// In a real interruption, the audio session is automatically set inactive,
 	// but we use this for non-real interruptions and our manager needs to get explicitly set
 	// to shadow the state correctly.
@@ -1013,7 +1013,7 @@ PlatformOpenALPlayer::EndInterruption()
 		return;
 	}
 	
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	bool is_success = PlatformAudioSessionManager::SharedInstance()->SetAudioSessionActive(true);
 	
 	// iOS 4/5 bug: A user leaving an app via notification center triggers a unnecessary resume/suspend event in Cocoa.

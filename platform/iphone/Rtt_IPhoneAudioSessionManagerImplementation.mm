@@ -17,7 +17,7 @@
 #include <TargetConditionals.h>
 #import <objc/runtime.h>
 
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	#include <AudioToolbox/AudioToolbox.h>
 	#include <arpa/inet.h> /* htonl */
 	#include "Rtt_IPhoneAudioSessionManager.h"
@@ -103,7 +103,7 @@ static void Internal_InterruptionCallback(void* user_data, UInt32 interruption_s
 	}
 }
 
-#endif // (TARGET_OS_IOS == 1)
+#endif // (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 
 @implementation Rtt_IPhoneAudioSessionManagerImplementation
 
@@ -128,7 +128,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
     self = [super init];
     if(nil != self)
 	{
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 
         // Initialization code here.
 		audioSessionActive = NO;
@@ -188,7 +188,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 		return true;
 	}
 	
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus the_error;
 	if(is_active)
 	{
@@ -226,7 +226,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (void) setManualAudioSessionCategory:(UInt32)category
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	
 	usingManualSessionManagment = YES;
@@ -242,7 +242,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (BOOL) supportsBackgroundAudio
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	// UIBackgroundModes is an array containing keys. We want to find the key 'audio'.
 	NSArray* modes = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIBackgroundModes"];
 	return [modes containsObject:@"audio"];
@@ -255,7 +255,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (BOOL) allowsAudioDuringScreenLock
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	UInt32 category;
 	UInt32 size = sizeof(category);
@@ -290,7 +290,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
  */
 - (char) propertyType:(AudioSessionPropertyID)the_property
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	switch ( the_property )
 	{
 		// I made up 'wxyz' to represent AudioSessionSetActive
@@ -323,7 +323,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (UInt32) propertyUInt32:(AudioSessionPropertyID)the_property
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	UInt32 value = 0;
 	UInt32 size = sizeof(value);
@@ -340,7 +340,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (Float32) propertyFloat32:(AudioSessionPropertyID)the_property
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	Float32 value = 0;
 	UInt32 size = sizeof(value);
@@ -358,7 +358,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (Float64) propertyFloat64:(AudioSessionPropertyID)the_property
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	Float64 value = 0;
 	UInt32 size = sizeof(value);
@@ -375,7 +375,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (BOOL) propertyBool:(AudioSessionPropertyID)the_property
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	switch ( the_property )
 	{
@@ -405,7 +405,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (void) setProperty:(AudioSessionPropertyID)the_property valueUInt32:(UInt32)value
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	switch ( the_property )
 	{
@@ -430,7 +430,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (void) setProperty:(AudioSessionPropertyID)the_property valueFloat32:(Float32)value
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	error = AudioSessionSetProperty(the_property, sizeof(value), &value);
 	if(noErr != error)
@@ -443,7 +443,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (void) setProperty:(AudioSessionPropertyID)the_property valueFloat64:(Float64)value
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	error = AudioSessionSetProperty(the_property, sizeof(value), &value);
 	if(noErr != error)
@@ -455,7 +455,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 
 - (void) setProperty:(AudioSessionPropertyID)the_property valueBool:(BOOL)value
 {
-#if (TARGET_OS_IOS == 1)
+#if (TARGET_OS_IOS == 1 || TARGET_OS_TV == 1)
 	OSStatus error;
 	switch ( the_property )
 	{
