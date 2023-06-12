@@ -22,7 +22,7 @@
 #include "Rtt_PlatformOpenALPlayer.h"
 #include "luaal.h"
 
-	#ifdef Rtt_IPHONE_ENV
+	#ifdef Rtt_AUDIO_SESSION_PROPERTY
 		#include "Rtt_IPhoneAudioSessionManager.h"
 	#endif
 
@@ -1926,7 +1926,7 @@ reservedChannels( lua_State *L )
 static int
 supportsSessionProperty( lua_State *L )
 {
-#ifdef Rtt_IPHONE_ENV
+#ifdef Rtt_AUDIO_SESSION_PROPERTY
 	lua_pushboolean( L, true);
 #else
 	lua_pushboolean( L, false);
@@ -1940,7 +1940,7 @@ setSessionProperty( lua_State *L )
 {
 	
 	// audio.setSessionProperty( audio.kSomeCategory, some_value, optional_type )
-#ifdef Rtt_IPHONE_ENV
+#ifdef Rtt_AUDIO_SESSION_PROPERTY
 	int number_of_args = lua_gettop( L );
 	if ( (number_of_args < 2) || (number_of_args > 3) )
 	{
@@ -2012,7 +2012,7 @@ setSessionProperty( lua_State *L )
 static int
 getSessionProperty( lua_State *L )
 {
-#ifdef Rtt_IPHONE_ENV
+#ifdef Rtt_AUDIO_SESSION_PROPERTY
 	// Ugh, the type can be UInt32, Float64, Float32, and possibly even boolean or even other things.
 	// I've attempted to deal with different size types for different architectures, but the the solution may be imperfect. I'm trying to not bring the entire Apple #include stack and Obj-C runtime into this file.
 	AudioSessionPropertyID the_property = (AudioSessionPropertyID)luaL_checkinteger( L, 1 );
@@ -2096,7 +2096,7 @@ valueForKey( lua_State *L )
 }
 
 
-#ifdef Rtt_IPHONE_ENV
+#ifdef Rtt_AUDIO_SESSION_PROPERTY
 
 typedef struct audio_Enum  
 {
@@ -2133,7 +2133,7 @@ static const audio_Enum s_audioEnum[] = {
 	{ 0, 0 }
 };
 
-#endif // Rtt_IPHONE_ENV
+#endif // Rtt_AUDIO_SESSION_PROPERTY
 	
 #endif // Rtt_USE_ALMIXER
 
@@ -2212,7 +2212,7 @@ LuaLibOpenAL::Initialize( lua_State *L )
 	lua_setmetatable( L, -2 );
 
 #ifdef Rtt_USE_ALMIXER
-	#ifdef Rtt_IPHONE_ENV
+	#ifdef Rtt_AUDIO_SESSION_PROPERTY
 		audio_initenum( L, s_audioEnum );
 	#endif
 #endif	

@@ -13,7 +13,7 @@
 #include "Core/Rtt_Build.h"
 #include "Rtt_PlatformAudioSessionManager.h"
 
-#ifdef Rtt_IPHONE_ENV
+#ifdef Rtt_AUDIO_SESSION_PROPERTY
 	#include "Rtt_IPhoneAudioSessionManager.h"
 #endif
 
@@ -36,7 +36,7 @@ PlatformAudioSessionManager::SharedInstance()
 {
 	if(NULL == s_PlatformAudioSessionMananger)
 	{
-#ifdef Rtt_IPHONE_ENV
+#ifdef Rtt_AUDIO_SESSION_PROPERTY
 //		s_PlatformAudioSessionMananger = Rtt_NEW( NULL, PlatformAudioSessionManager);
 		s_PlatformAudioSessionMananger = IPhoneAudioSessionManager::GetInstance();
 #else
@@ -51,7 +51,7 @@ PlatformAudioSessionManager::Destroy()
 {
 	if(NULL != s_PlatformAudioSessionMananger)
 	{
-#ifdef Rtt_IPHONE_ENV
+#ifdef Rtt_AUDIO_SESSION_PROPERTY
 		IPhoneAudioSessionManager::DestroyInstance();
 #else
 		Rtt_DELETE( s_PlatformAudioSessionMananger );
