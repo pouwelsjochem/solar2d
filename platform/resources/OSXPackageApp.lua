@@ -214,7 +214,7 @@ end
 
 --------------------------------------------------------------------------------
 
-local function getCodesignScript( entitlements, path, appIdentity, codesign )
+local function getCodesignScript( entitlements, path, appIdentity, codesign, isAppBundle )
 
 	local quotedpath = quoteString( path )
 
@@ -228,7 +228,12 @@ local function getCodesignScript( entitlements, path, appIdentity, codesign )
 	end
 	local verboseParam = "-".. string.rep("v", 5) .." "
 
-	local cmd = removeXattrs .. codesign.." --options runtime --deep -f -s "..quoteString(appIdentity).." "..entitlementsParam..verboseParam..quotedpath
+	local cmd
+	if (isAppBundle) then
+		cmd = removeXattrs .. codesign.." --options runtime -f -s "..quoteString(appIdentity).." "..entitlementsParam..verboseParam..quotedpath
+	else
+		cmd = removeXattrs .. codesign.." --options runtime --deep -f -s "..quoteString(appIdentity).." "..entitlementsParam..verboseParam..quotedpath
+	end
 
 	return cmd
 end
@@ -845,7 +850,7 @@ function OSXPostPackage( params )
 			end
 
 			setStatus("Signing application with "..tostring(options.signingIdentityName))
-			local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFileUnquoted, options.signingIdentity, options.xcodetoolhelper.codesign ) )
+			local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFileUnquoted, options.signingIdentity, options.xcodetoolhelper.codesign, true ) )
 			runScript( "/bin/rm -f " .. entitlements_filename )
 
 			if result ~= 0 then
@@ -963,7 +968,7 @@ function OSXPackageForAppStore( params )
 	end
 
 	setStatus("Signing application with "..tostring(appSigningIdentityName))
-	local result, errMsg = runScript( getCodesignScript( entitlements_filename, appBundleFile, appSigningIdentity, codesign ) )
+	local result, errMsg = runScript( getCodesignScript( entitlements_filename, appBundleFile, appSigningIdentity, codesign, true ) )
 
 	runScript( "/bin/rm -f " .. entitlements_filename )
 
@@ -1068,7 +1073,7 @@ function OSXPackageForSelfDistribution( params )
 
 		local entitlements = "" -- quoteString( osxAppEntitlementsFile )
 		setStatus("Signing application with "..tostring(appSigningIdentityName))
-		local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFile, appSigningIdentity, codesign ) )
+		local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFile, appSigningIdentity, codesign, true ) )
 
 		if result ~= 0 then
 			errMsg = "ERROR: code signing failed: "..tostring(errMsg)
