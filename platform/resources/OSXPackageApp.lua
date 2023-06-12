@@ -362,6 +362,10 @@ local function generateOSXEntitlements(filename, settings, provisionFile)
 	print( "Created entitlements file: " .. filename );
 	runScript("/bin/cat "..filename)
 
+	if not settings and (settings and settings.embedProvisionProfileWithICloudDisabled) then
+		includeProvisioning = true
+	end
+
 	return "", includeProvisioning
 end
 
@@ -558,7 +562,29 @@ table.indexOf = function( t, object )
 	return result
 end
 
+function signFramework(pluginsDir, frameworkPath)
+	local frameworkDir = string.gsub(pluginsDir, "Plugins.*", frameworkPath)
+	if lfs.attributes( frameworkDir ) == nil then
+		return "ERROR: framework code signing " + frameworkDir -- no framework dir
+	end
+
+	local result, errMsg = runScript( getCodesignScript( nil, frameworkDir, signingIdentity, codesign ) )
+
+	if result ~= 0 then
+		errMsg = "ERROR: framework code signing for '"..frameworkDir.."' failed: "..tostring(errMsg)
+		return errMsg
+	end
+end
+
 function signAllPlugins(pluginsDir, signingIdentity, codesign)
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/CoronaCards")
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ads.dylib")
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/gameNetwork.dylib")
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/licensing.dylib")
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/analytics.dylib")
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ALmixer.framework/Versions/A/ALmixer")
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/network.dylib")
+
 	local entitlements = ""
 
 	if lfs.attributes( pluginsDir ) == nil then
@@ -925,7 +951,7 @@ function OSXPackageForAppStore( params )
 	end
 
 	-- Copy provisioning profile if we need it
-	if includeProvisioning or (settings and settings.embedProvisionProfileWithICloudDisabled) then
+	if includeProvisioning then
 		runScript( "/bin/cp " .. quoteString(provisionFile) .. " " .. quoteString(makepath(appBundleFile, "Contents/embedded.provisionprofile")) )
 	end
 
