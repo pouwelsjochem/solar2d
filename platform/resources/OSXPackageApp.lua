@@ -562,7 +562,7 @@ table.indexOf = function( t, object )
 	return result
 end
 
-function signFramework(pluginsDir, frameworkPath)
+function signFramework(pluginsDir, frameworkPath, signingIdentity, codesign)
 	local frameworkDir = string.gsub(pluginsDir, "Plugins.*", frameworkPath)
 	if lfs.attributes( frameworkDir ) == nil then
 		return "ERROR: framework code signing " + frameworkDir -- no framework dir
@@ -577,13 +577,13 @@ function signFramework(pluginsDir, frameworkPath)
 end
 
 function signAllPlugins(pluginsDir, signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/CoronaCards")
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ads.dylib")
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/gameNetwork.dylib")
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/licensing.dylib")
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/analytics.dylib")
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ALmixer.framework/Versions/A/ALmixer")
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/network.dylib")
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/CoronaCards", signingIdentity, codesign)
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ads.dylib", signingIdentity, codesign)
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/gameNetwork.dylib", signingIdentity, codesign)
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/licensing.dylib", signingIdentity, codesign)
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/analytics.dylib", signingIdentity, codesign)
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ALmixer.framework/Versions/A/ALmixer", signingIdentity, codesign)
+	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/network.dylib", signingIdentity, codesign)
 
 	local entitlements = ""
 
