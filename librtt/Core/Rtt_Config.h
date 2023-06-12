@@ -117,8 +117,6 @@
 		#define Rtt_DEVICE_SIMULATOR
 	#endif
 
-	#define Rtt_AUDIO_SESSION_PROPERTY
-
 #endif
 
 // Shared config
