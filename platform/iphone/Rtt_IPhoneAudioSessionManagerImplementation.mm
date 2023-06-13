@@ -17,12 +17,14 @@
 #include <TargetConditionals.h>
 #import <objc/runtime.h>
 
+#if (TARGET_OS_TV == 1)
+    #import <AVFoundation/AVFoundation.h>
+#endif
+
 #if (TARGET_OS_IOS == 1)
 	#include <AudioToolbox/AudioToolbox.h>
 	#include <arpa/inet.h> /* htonl */
 	#include "Rtt_IPhoneAudioSessionManager.h"
-#elif (TARGET_OS_TVOS == 1)
-    #import <AVFoundation/AVFoundation.h>
 
 #import <UIKit/UIDevice.h>
 
@@ -160,7 +162,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 			}
 		}
 
-#elif (TARGET_OS_TVOS == 1)
+#elif (TARGET_OS_TV == 1)
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         NSError *error = nil;
         BOOL success = [audioSession setCategory:AVAudioSessionCategoryAmbient
