@@ -21,6 +21,8 @@
 	#include <AudioToolbox/AudioToolbox.h>
 	#include <arpa/inet.h> /* htonl */
 	#include "Rtt_IPhoneAudioSessionManager.h"
+#elif (TARGET_OS_TVOS == 1)
+    #import <AVFoundation/AVFoundation.h>
 
 #import <UIKit/UIDevice.h>
 
@@ -158,7 +160,17 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 			}
 		}
 
-#endif		
+#elif (TARGET_OS_TVOS == 1)
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        NSError *error = nil;
+        BOOL success = [audioSession setCategory:AVAudioSessionCategoryAmbient
+                                      withOptions:AVAudioSessionCategoryOptionMixWithOthers
+                                            error:&error];
+        if (!success) {
+            NSLog(@"Error setting ambient mix mode: %@", error);
+        }
+#endif
+        
     }
     return self;
 }
