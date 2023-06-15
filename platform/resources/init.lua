@@ -406,6 +406,78 @@ network._dispatchStatus = function( address, event )
 end
 --]]
 
+------------------------------------------------------------------------------------
+	-- Start: native.VideoView section
+------------------------------------------------------------------------------------
+
+-- VideoViews need to be paused on suspend and resumed on application resume.
+-- Note: These variables are also used by native.newVideo override section.
+local _weakTableOfAllVideos = {}
+local _weakTableOfAllSuspendedVideos = {}
+do
+	local s_weakmetatable = {}
+	s_weakmetatable.__mode = "kv"
+	setmetatable(_weakTableOfAllVideos, s_weakmetatable)
+	setmetatable(_weakTableOfAllSuspendedVideos, s_weakmetatable)
+end
+
+local function ClearSuspendedVideoList()
+	-- Do not set the table to {} because I want to reuse the existing table.
+	-- Otherwise, I will lose the metatable that specifies the weak-property
+	for k, _ in pairs(_weakTableOfAllSuspendedVideos) do
+		_weakTableOfAllSuspendedVideos[k] = nil
+	end
+end
+
+local function SuspendAllPlayingVideos()
+	-- erase all entries from the suspended video list to clean it up from possible previous usage
+	ClearSuspendedVideoList()
+
+	for k, _ in pairs(_weakTableOfAllVideos) do
+		if not k.isPaused then
+			-- when object:removeSelf() is called, all we have is a plain Lua table
+			-- so check "pause" property to make sure it's a function
+			if type( k.pause ) == "function" then
+				_weakTableOfAllSuspendedVideos[k] = k
+				k:pause()
+			else
+				-- remove reference to native video object that no longer exists
+				_weakTableOfAllVideos[k] = nil
+			end
+		end
+	end
+end
+
+local function ResumeAllSuspendedVideos()
+	for  k, _ in pairs(_weakTableOfAllSuspendedVideos) do
+		if type( k.play ) == "function" then
+			k:play()
+		end
+	end
+
+	-- List is now stale. Clean up
+	ClearSuspendedVideoList()
+end
+
+------------------------------------------------------------------------------------
+	-- End: native.VideoView section
+------------------------------------------------------------------------------------
+
+-- luacheck: push
+-- luacheck: ignore 542 -- An empty if branch.
+
+local function onInternalSystemEvent( event )
+	if "applicationSuspend" == event.type then
+		SuspendAllPlayingVideos()
+	elseif "applicationResume" == event.type then
+		ResumeAllSuspendedVideos()
+	end
+end
+
+-- luacheck: pop
+
+Runtime:addEventListener( "system", onInternalSystemEvent )
+
 --------------------------------------------------------------------------------
 -- Override/modify standard Lua functions
 --------------------------------------------------------------------------------
