@@ -170,6 +170,8 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
                                             error:&error];
         if (!success) {
             NSLog(@"Error setting ambient mix mode: %@", error);
+        } else {
+            NSLog(@"Successfully set ambient mix mode");
         }
 #endif
         
@@ -227,7 +229,17 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
 		// And since there is no GetActive() API, we can't know the state since Apple may change it for us on audio interruptions or 3rd party API calls may change the state behind our back. So relying on this flag too much will also cause problems. But in a single isolated case of an EndInterruption, this might just work.
 		ret_flag = false;
 	}
+#elif (TARGET_OS_TV == 1)
+    NSError *error = nil;
+
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    BOOL success = [audioSession setActive:is_active error:&error];
+    if (!success) {
+        NSLog(@"Error setting audio session active to %d: %@", is_active, error);
+    }
 #endif
+    
+    
 	// Setting after call in case operation failed
 	audioSessionActive = is_active;
 	return ret_flag;
