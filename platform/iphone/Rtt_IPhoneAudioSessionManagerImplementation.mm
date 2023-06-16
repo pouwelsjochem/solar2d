@@ -236,6 +236,7 @@ static Rtt_IPhoneAudioSessionManagerImplementation* s_AudioSessionManagerInstanc
     BOOL success = [audioSession setActive:is_active error:&error];
     if (!success) {
         NSLog(@"Error setting audio session active to %d: %@", is_active, error);
+        ret_flag = false;
     }
 #endif
     
