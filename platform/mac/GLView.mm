@@ -239,16 +239,16 @@
 
 	[[self openGLContext] makeCurrentContext];
 
+    
+    
 	// This should be called by the layer, not NSTimer!!!
 	// That's b/c the OGL context is valid and ready for new OGL commands
 	if ( isReady && fRuntime != NULL && fRuntime->IsProperty(Rtt::Runtime::kIsApplicationLoaded))
 	{
 		fRuntime->Render();
 	}
-    if([self openGLContext]){
-        [[self openGLContext] flushBuffer];
-    }
     
+    [[self openGLContext] flushBuffer];
 }
 
 - (void)setDelegate:(id< GLViewDelegate >)delegate

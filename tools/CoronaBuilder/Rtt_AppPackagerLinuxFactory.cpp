@@ -43,7 +43,6 @@ namespace Rtt
 			Rtt_ASSERT_NOT_REACHED();
 			return NULL;
 		}
-
 		String linuxtemplate;
 		lua_getfield(L, index, "linuxtemplate");
 		if(lua_type(L, -1) == LUA_TSTRING)

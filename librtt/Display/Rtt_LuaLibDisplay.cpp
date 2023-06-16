@@ -1118,6 +1118,11 @@ DisplayLibrary::capture( lua_State *L )
 
 	// Do a screenshot of the given display object.
 	BitmapPaint *paint = display.CaptureDisplayObject( displayObject, cropObjectToScreenBounds );
+    
+    //Rerender and Invalidate to prevent errors on start up
+    display.Invalidate();
+    display.Render();
+    
 	if( ! paint )
 	{
 		CoronaLuaError(L, "display.capture() unable to capture screen. The platform or device might not be supported" );
