@@ -39,9 +39,9 @@
 				   title:(NSString*)title
 {
 	// Need to make window size larger than the view rect (e.g. large enough to hold it with the titlebar).
-	NSRect frameRect = [NSWindow frameRectForContentRect:screenRect styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable];
+	NSRect frameRect = [NSWindow frameRectForContentRect:screenRect styleMask:NSWindowStyleMaskBorderless];
 	self = [super initWithContentRect:frameRect
-							styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable
+							styleMask:NSWindowStyleMaskBorderless
 							  backing:NSBackingStoreBuffered
 							 	defer:NO];
 	if ( self )
