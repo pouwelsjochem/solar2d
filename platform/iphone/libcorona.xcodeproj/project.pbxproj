@@ -1172,6 +1172,8 @@
 		AA2C69B429147B3A0093B0BE /* kernel_filter_blurLinearVertical_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_blurLinearVertical_gl.lua; path = Display/Shader/kernel_filter_blurLinearVertical_gl.lua; sourceTree = "<group>"; };
 		AA2C69B529147B3B0093B0BE /* kernel_filter_blurGaussianLinear_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_blurGaussianLinear_gl.lua; path = Display/Shader/kernel_filter_blurGaussianLinear_gl.lua; sourceTree = "<group>"; };
 		AA2C69B629147B3B0093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_filter_blurLinearHorizontal_gl.lua; path = Display/Shader/kernel_filter_blurLinearHorizontal_gl.lua; sourceTree = "<group>"; };
+		AAF349A929EFC53300076706 /* Rtt_Profiling.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Profiling.cpp; sourceTree = "<group>"; };
+		AAF349AA29EFC53300076706 /* Rtt_Profiling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Profiling.h; sourceTree = "<group>"; };
 		C2756C241C57220300BE3194 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../platform/apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C2756C251C57220300BE3194 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../platform/apple/NSString+Extensions.m"; sourceTree = "<group>"; };
 		C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_FileSystem.cpp; sourceTree = "<group>"; };
@@ -2249,6 +2251,7 @@
 				03D1C51F1D70C12800DB02EE /* Rtt_OperationResult.h in Headers */,
 				000DCC0C12B05F3E00042A5E /* Rtt_PlatformData.h in Headers */,
 				000DCC0E12B05F3E00042A5E /* Rtt_PlatformDisplayObject.h in Headers */,
+				AAF349AC29EFC53300076706 /* Rtt_Profiling.h in Headers */,
 				000DCC1E12B05F3E00042A5E /* Rtt_PlatformNotifier.h in Headers */,
 				000DCC2012B05F3E00042A5E /* Rtt_PlatformOpenALPlayer.h in Headers */,
 				000DCC2212B05F3E00042A5E /* Rtt_PlatformSurface.h in Headers */,
