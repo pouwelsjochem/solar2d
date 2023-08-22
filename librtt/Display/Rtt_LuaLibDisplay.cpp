@@ -1135,8 +1135,8 @@ DisplayLibrary::capture( lua_State *L )
 	Display& display = library->GetDisplay();
 
 	// Do a screenshot of the given display object.
-    //Rerender and Invalidate to prevent errors on start up
-    display.Invalidate();
+    BitmapPaint *paint = display.CaptureDisplayObject( displayObject, cropObjectToScreenBounds );
+	display.Invalidate();
     display.Render();
     
 	if( ! paint )
