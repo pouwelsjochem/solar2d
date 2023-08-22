@@ -15,6 +15,8 @@
 #include "Renderer/Rtt_Texture.h"
 #include "Core/Rtt_Assert.h"
 
+#include "Rtt_Profiling.h"
+
 // ----------------------------------------------------------------------------
 
 #define ENABLE_DEBUG_PRINT	0
@@ -99,6 +101,8 @@ GLTexture::Create( CPUResource* resource )
 	Rtt_ASSERT( CPUResource::kTexture == resource->GetType() );
 	Texture* texture = static_cast<Texture*>( resource );
 
+	SUMMED_TIMING( gltc, "Texture GPU Resource: Create" );
+
 	GLuint name = 0;
 	glGenTextures( 1, &name );
 	fHandle = NameToHandle( name );
@@ -149,6 +153,8 @@ GLTexture::Update( CPUResource* resource )
 {
 	Rtt_ASSERT( CPUResource::kTexture == resource->GetType() );
 	Texture* texture = static_cast<Texture*>( resource );
+
+	SUMMED_TIMING( gltu, "Texture GPU Resource: Update" );
 
 	const U8* data = texture->GetData();		
 	if( data )

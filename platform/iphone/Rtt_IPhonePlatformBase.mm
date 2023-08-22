@@ -377,7 +377,7 @@ IPhonePlatformBase::PushSystemInfo( lua_State *L, const char *key ) const
         lua_pushboolean(L, res);
         pushedValues = 1;
     }
-    else if ( Rtt_StringCompare( key, "reduceTransparancy" ) == 0 )
+    else if ( Rtt_StringCompare( key, "reduceTransparency" ) == 0 )
     {
         BOOL res = UIAccessibilityIsReduceTransparencyEnabled();
         lua_pushboolean(L, res);

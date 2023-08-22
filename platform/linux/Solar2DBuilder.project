@@ -556,6 +556,7 @@
         <File Name="../../librtt/Core/Rtt_Assert.h"/>
         <File Name="../../librtt/Core/Rtt_Array.h"/>
         <File Name="../../librtt/Rtt_Archive.h"/>
+        <File Name="../../librtt/Rtt_Profiling.h"/>
         <File Name="../../librtt/Core/Rtt_Allocator.h"/>
         <File Name="../../external/LuaHashMap/LuaHashMap.h"/>
         <File Name="../../external/ALmixer/luaal.h"/>
@@ -843,6 +844,7 @@
       <File Name="../../librtt/Rtt_EllipsePath.cpp"/>
       <File Name="../../librtt/Rtt_CachedPath.cpp"/>
       <File Name="../../librtt/Rtt_Archive.cpp"/>
+      <File Name="../../librtt/Rtt_Profiling.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="renderer">
       <VirtualDirectory Name="include">

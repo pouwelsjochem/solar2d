@@ -210,7 +210,6 @@ public class ViewManager {
 		// Back key event was not overridden.
 		return false;
 	}
-
 	public void setGLView(View glView)
 	{
 		// Set up the root content view that will contain all other views.

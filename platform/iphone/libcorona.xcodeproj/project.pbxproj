@@ -494,11 +494,13 @@
 		A4C9CB2E17BAE2950071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2D17BAE2840071753E /* kernel_generator_marchingAnts_gl.lua */; };
 		A4C9CB3017BAE2F50071753E /* kernel_generator_checkerboard_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2F17BAE2E80071753E /* kernel_generator_checkerboard_gl.lua */; };
 		A4E76F5313A935CC00AFB095 /* json.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F5213A935CC00AFB095 /* json.lua */; };
-		AA2C6AB6291C37320093B0BE /* CoronaMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = AA2C6AB4291C37320093B0BE /* CoronaMemory.h */; };
-		AA2C6AB7291C37320093B0BE /* CoronaMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA2C6AB5291C37320093B0BE /* CoronaMemory.cpp */; };
 		AA2C69B729147BC40093B0BE /* kernel_filter_blurGaussianLinear_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = AA2C69B529147B3B0093B0BE /* kernel_filter_blurGaussianLinear_gl.lua */; };
 		AA2C69B829147BC40093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = AA2C69B629147B3B0093B0BE /* kernel_filter_blurLinearHorizontal_gl.lua */; };
 		AA2C69B929147BC40093B0BE /* kernel_filter_blurLinearVertical_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = AA2C69B429147B3A0093B0BE /* kernel_filter_blurLinearVertical_gl.lua */; };
+		AA2C6AB6291C37320093B0BE /* CoronaMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = AA2C6AB4291C37320093B0BE /* CoronaMemory.h */; };
+		AA2C6AB7291C37320093B0BE /* CoronaMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA2C6AB5291C37320093B0BE /* CoronaMemory.cpp */; };
+		AAF349AB29EFC53300076706 /* Rtt_Profiling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAF349A929EFC53300076706 /* Rtt_Profiling.cpp */; };
+		AAF349AC29EFC53300076706 /* Rtt_Profiling.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF349AA29EFC53300076706 /* Rtt_Profiling.h */; };
 		C2756C261C57220300BE3194 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C241C57220300BE3194 /* NSString+Extensions.h */; };
 		C2756C271C57220300BE3194 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C251C57220300BE3194 /* NSString+Extensions.m */; };
 		C2A8710D1D4BE48000AF3326 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */; };
@@ -1491,6 +1493,8 @@
 				03D1C5271D70C15E00DB02EE /* Rtt_PreferenceCollection.h */,
 				03D1C5281D70C15E00DB02EE /* Rtt_PreferenceValue.cpp */,
 				03D1C5291D70C15E00DB02EE /* Rtt_PreferenceValue.h */,
+				AAF349A929EFC53300076706 /* Rtt_Profiling.cpp */,
+				AAF349AA29EFC53300076706 /* Rtt_Profiling.h */,
 				000DCB5212B05F3E00042A5E /* Rtt_RenderingStream.cpp */,
 				000DCB5312B05F3E00042A5E /* Rtt_RenderingStream.h */,
 				000DCB5412B05F3E00042A5E /* Rtt_Resource.cpp */,
@@ -2770,6 +2774,7 @@
 				00622ED113AA927700886E28 /* Rtt_PlatformAudioSessionManager.cpp in Sources */,
 				A4B71B8F13F4A8A1009428CF /* Rtt_LuaResourceOwner.cpp in Sources */,
 				A43FE9D014F2DD1B0042FA41 /* Rtt_ArrayTuple.cpp in Sources */,
+				AAF349AB29EFC53300076706 /* Rtt_Profiling.cpp in Sources */,
 				F5EEB6E41B74027F00D34C41 /* Rtt_TextureResourceCanvasAdapter.cpp in Sources */,
 				A43FE9D214F2DD1B0042FA41 /* Rtt_ArrayTupleStruct.cpp in Sources */,
 				A43FE95514E25D440042FA41 /* Rtt_LuaAux.cpp in Sources */,

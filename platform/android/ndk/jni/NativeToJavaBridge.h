@@ -149,7 +149,7 @@ class NativeToJavaBridge
 		bool DisplayObjectGetBackground( int id );
 		void DisplayObjectSetFocus( int id, bool focus );
 		void DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height );
-	
+
 	public:
 		void WebViewCreate( int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled );
 		void WebViewRequestLoadUrl( int id, const char * url, const char * header );

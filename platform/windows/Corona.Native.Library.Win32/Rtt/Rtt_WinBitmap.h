@@ -54,10 +54,10 @@ class WinBitmap : public PlatformBitmap
 
 	protected:
 		Gdiplus::Bitmap *	fBitmap;
-		Gdiplus::BitmapData * fLockedBitmapData;
+		U32 fWidth;
+		U32 fHeight;
 
-		virtual void Lock();
-		virtual void Unlock();
+		virtual void Lock( Rtt_Allocator* context ) {}
 };
 
 class WinFileBitmap : public WinBitmap
@@ -88,10 +88,25 @@ class WinFileBitmap : public WinBitmap
 		virtual bool IsProperty( PropertyMask mask ) const;
 		virtual void SetProperty( PropertyMask mask, bool newValue );
 
+	protected:
+		virtual void Lock( Rtt_Allocator* context );
+
+	public:
+		struct FileView {
+			FileView();
+			
+			bool Map( HANDLE hFile );
+			void Close();
+
+			HANDLE fMapping;
+			void* fData;
+		};
+
 	private:
 		float fScale;
 		U8 fProperties;
 		S16 fAngle; // [0, +-90, +-180]
+		FileView fView; // n.b. takes ownership
 
 	protected:
 #ifdef Rtt_DEBUG

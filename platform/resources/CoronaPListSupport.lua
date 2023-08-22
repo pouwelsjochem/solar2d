@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 --
 -- This file is part of the Corona game engine.
--- For overview and more information on licensing please refer to README.md 
+-- For overview and more information on licensing please refer to README.md
 -- Home page: https://github.com/coronalabs/corona
 -- Contact: support@coronalabs.com
 --
@@ -79,7 +79,7 @@ local function getDelegates(tmpDir)
 	if attributes == "directory" then
 		pluginManifests = findPlugins(pluginsDir)
 	end
-	
+
 	local delegatesSet = {}
 	local delegates = {}
 	-- Put the delegate classes into a set first to remove dups
@@ -91,7 +91,7 @@ local function getDelegates(tmpDir)
 			end
 		end
 	end
-	
+
 	-- Reformat the table because this is the way that the json->plist stuff expects it
 	for k, v in pairs(delegatesSet) do
 		print("Delegate class: ", k)
@@ -126,7 +126,7 @@ function CoronaPListSupport.modifyPlist( options )
 	if options.tmpDir then
 		delegates = getDelegates(options.tmpDir)
 	end
-	
+
 	print("CoronaPListSupport.modifyPlist: options: "..json.prettify(options))
 
 	local infoPlistFile
@@ -163,7 +163,7 @@ function CoronaPListSupport.modifyPlist( options )
 	else
 		error("failed to open modifyPlist input file '"..tmpJSONFile.."': "..errorMsg)
 	end
-    
+
     os.remove(tmpJSONFile)
 
 	-- infoPlist now contains a Lua table representing the Info.plist
@@ -223,7 +223,7 @@ function CoronaPListSupport.modifyPlist( options )
 		if infoPlist.UIDeviceFamily == nil or options.targetDevice ~= nil then
 			-- iOS case
 			-- The behavior here needs to work for both Xcode Enterprise builds and server Simulator builds
-			
+
 			-- If the user specified iPhone or iPad only, modify the plist to not do Universal
 			local isolatedTargetDevice = options.targetDevice
 
@@ -480,7 +480,7 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 						-- this code tries to separate App Id from team ID
 						local kvsId = string.sub(appId, string.find(appId,"%.")+1 )
 						kvsContainer = string.gsub(kvsContainer, "*", kvsId)
-					end					
+					end
 					t["com.apple.developer.ubiquity-kvstore-identifier"] = kvsContainer
 					print("Using iCloud KVStore identifier: " .. kvsContainer)
 					iCloudEnabled = true
@@ -529,13 +529,13 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 			print("ERROR: setting." .. platform .. ".iCloud is enabled, but provisioning profile does not have iCloud entitlements." )
 		end
 	end
-	
+
 	if platformSettings and platformSettings.entitlements then
 		ret = ret .. CoronaPListSupport.valueToPlistEntry(platformSettings.entitlements)
 	end
 
 	return ret, includeProvisioning
-	
+
 end
 
 -- compiles xcassets thing into the icons and lanuch images
@@ -563,6 +563,19 @@ function CoronaPListSupport.compileXcassets(options, tmpDir, srcAssets, xcassetP
 		local actoolCMD = "xcrun actool"
 		actoolCMD = actoolCMD .. ' --output-format human-readable-text --warnings'
 		actoolCMD = actoolCMD .. ' --notices'
+		--Sticker Packaging (Note App Template still needs to updates to include extention)
+		if(settingsEntry.stickerPackIdentifierPrefix)then
+			actoolCMD = actoolCMD .. ' --include-sticker-content --stickers-icon-role host-app --sticker-pack-identifier-prefix '..settingsEntry.stickerPackIdentifierPrefix
+		end
+		if(settingsEntry.localizedStickerPackFile)then
+			actoolCMD = actoolCMD .. ' --sticker-pack-strings-file ' .. settingsEntry.localizedStickerPackFile
+		end
+		--Set Alternate Icons
+		if(settingsEntry.alternateIcons)then
+			for i=1,#settingsEntry.alternateIcons do
+					actoolCMD = actoolCMD .. ' --alternate-app-icon '..settingsEntry.alternateIcons[i]
+			end
+		end
 		actoolCMD = actoolCMD .. ' --export-dependency-info ' .. quoteString(tmpDir .. '/assetcatalog_dependencies')
 		actoolCMD = actoolCMD .. ' --output-partial-info-plist ' .. quoteString(iconPlistFile)
 		actoolCMD = actoolCMD .. ' --compress-pngs'

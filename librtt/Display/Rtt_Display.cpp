@@ -26,6 +26,7 @@
 #include "Rtt_Lua.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_PlatformSurface.h"
+#include "Rtt_Profiling.h"
 #include "CoronaLua.h"
 
 #include "Renderer/Rtt_GLRenderer.h"
@@ -207,22 +208,38 @@ Display::Restart()
 void
 Display::Update()
 {
-    Runtime& runtime = fOwner;
-    lua_State *L = fOwner.VMContext().L();
-    fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
+    Profiling::EntryRAII up( GetAllocator(), "update" );
+
+    up.Add( "Display::Update Begin" );
+    
+	Runtime& runtime = fOwner;
+	lua_State *L = fOwner.VMContext().L();
+	fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
+
+	up.Add( "Prepare for frame event" );
 
 	const FrameEvent& fe = FrameEvent::Constant();
 	fe.Dispatch( L, runtime );
 	
+    up.Add( "FrameEvent" );
+    
 	const RenderEvent& re = RenderEvent::Constant();
 	re.Dispatch( L, runtime );
+    
+	Profiling::ResetSums();
+
+    up.Add( "Display::Update End" );
 }
 
 void
 Display::Render()
 {
-    {
-        Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
+    Profiling::EntryRAII rp( GetAllocator(), "render" );
+
+    rp.Add( "Display::Render Begin" );
+
+	{
+		Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
 
         const Rtt::Real kMillisecondsPerSecond = 1000.0f;
         // NOT _USED: Rtt::Real totalTime = Rtt_AbsoluteToMilliseconds( elapsedTime ) / kMillisecondsPerSecond;
@@ -234,7 +251,9 @@ Display::Render()
         //fDeltaTimeInSeconds = ( 1.0f / 30.0f );
     }
 
-	GetScene().Render( * fRenderer, * fScreenSurface );
+	GetScene().Render( * fRenderer, * fTarget, rp.GetProfiling() );
+
+    rp.Add( "Display::Render End" );
 }
 
 void

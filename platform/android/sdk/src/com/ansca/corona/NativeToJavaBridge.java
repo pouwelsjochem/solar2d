@@ -1616,7 +1616,6 @@ public class NativeToJavaBridge {
 	{
 		runtime.getController().vibrate(hapticType, hapticStyle);
 	}
-	
 	protected static void callDisplayObjectDestroy( CoronaRuntime runtime, int id )
 	{
 		runtime.getViewManager().destroyDisplayObject(id);

@@ -844,6 +844,12 @@ local function packageApp( options )
 		end
 	end
 
+	--remove standard resources(Corona Resources Bundle) if users selects
+
+	if options.includeStandardResources == false then
+		runScript("rm -rf "..quoteString(makepath(appBundleFileUnquoted, "CoronaResources.bundle")))
+	end
+
 	-- bundle is now ready to be signed (don't sign if we don't have a signingIdentity, e.g. Xcode Simulator)
 	if options.signingIdentity then
 		-- codesign embedded frameworks before signing the .app

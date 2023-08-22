@@ -222,18 +222,15 @@ local function getCodesignScript( entitlements, path, appIdentity, codesign, isA
 	-- codesign doesn't like them
 	local removeXattrs = "/usr/bin/xattr -cr "..quoteString(path) .." && "
 
-	local entitlementsParam = ""
+	local entitlementsParam
 	if entitlements ~= nil and entitlements ~= "" then
-		entitlementsParam = " --entitlements ".. entitlements .." "
+		entitlementsParam = " --entitlements ".. entitlements .. " "
+	else
+		entitlementsParam = " --deep "
 	end
 	local verboseParam = "-".. string.rep("v", 5) .." "
 
-	local cmd
-	if (isAppBundle) then
-		cmd = removeXattrs .. codesign.." --options runtime -f -s "..quoteString(appIdentity).." "..entitlementsParam..verboseParam..quotedpath
-	else
-		cmd = removeXattrs .. codesign.." --options runtime --deep -f -s "..quoteString(appIdentity).." "..entitlementsParam..verboseParam..quotedpath
-	end
+	local cmd = removeXattrs .. codesign.." --options runtime -f -s "..quoteString(appIdentity).." "..entitlementsParam..verboseParam..quotedpath
 
 	return cmd
 end
@@ -255,7 +252,7 @@ local function getProductValidateScript( path, itunesConnectUsername, itunesConn
 	-- Apple tells us to use this buried utility to automate Application Loader tasks in
 	-- https://itunesconnect.apple.com/docs/UsingApplicationLoader.pdf
 	local altool = makepath(applicationLoader, "Contents/Frameworks/ITunesSoftwareService.framework/Support/altool")
-	
+
 	-- If the "cmd" generated below fails because it's the wrong path that's very hard to detect amongst all the XML parsing so we do it here
 	if lfs.attributes( altool ) == nil then
 		print("ERROR: cannot find 'altool' utility in "..altool)
@@ -582,14 +579,6 @@ function signFramework(pluginsDir, frameworkPath, signingIdentity, codesign)
 end
 
 function signAllPlugins(pluginsDir, signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/CoronaCards", signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ads.dylib", signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/gameNetwork.dylib", signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/licensing.dylib", signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/analytics.dylib", signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/ALmixer.framework/Versions/A/ALmixer", signingIdentity, codesign)
-	signFramework(pluginsDir, "Frameworks/CoronaCards.framework/Versions/A/Frameworks/network.dylib", signingIdentity, codesign)
-
 	local entitlements = ""
 
 	if lfs.attributes( pluginsDir ) == nil then
@@ -601,7 +590,7 @@ function signAllPlugins(pluginsDir, signingIdentity, codesign)
 		local pluginFile = makepath(pluginsDir, file)
 		if lfs.attributes( pluginFile ).mode ~= "directory" then
 
-			local result, errMsg = runScript( getCodesignScript( entitlements, pluginFile, signingIdentity, codesign ) )
+			local result, errMsg = runScript( getCodesignScript( nil, pluginFile, signingIdentity, codesign ) )
 
 			if result ~= 0 then
 				errMsg = "ERROR: plugin code signing for '"..pluginFile.."' failed: "..tostring(errMsg)
@@ -841,7 +830,7 @@ function OSXPostPackage( params )
 			local entitlements = entitlements_filename
 			local result, includeProvisioning = generateOSXEntitlements( entitlements_filename, settings, provisionFile )
 			if result ~= "" then
-				entitlements = ""
+				entitlements = nil
 			end
 
 			-- Copy provisioning profile if we need it
@@ -849,6 +838,10 @@ function OSXPostPackage( params )
 				runScript( "/bin/cp " .. quoteString(provisionFile) .. " " .. quoteString(makepath(appBundleFileUnquoted, "Contents/embedded.provisionprofile")) )
 			end
 
+			if entitlements ~= nil then
+				setStatus("Sign application plugins")
+			    runScript( getCodesignScript( nil, appBundleFileUnquoted, options.signingIdentity, options.xcodetoolhelper.codesign ) )
+			end
 			setStatus("Signing application with "..tostring(options.signingIdentityName))
 			local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFileUnquoted, options.signingIdentity, options.xcodetoolhelper.codesign, true ) )
 			runScript( "/bin/rm -f " .. entitlements_filename )
@@ -967,6 +960,8 @@ function OSXPackageForAppStore( params )
 		return tostring(result)
 	end
 
+	setStatus("Sign application deep")
+	runScript( getCodesignScript( nil, appBundleFile, appSigningIdentity, codesign ) )
 	setStatus("Signing application with "..tostring(appSigningIdentityName))
 	local result, errMsg = runScript( getCodesignScript( entitlements_filename, appBundleFile, appSigningIdentity, codesign, true ) )
 
@@ -1071,9 +1066,8 @@ function OSXPackageForSelfDistribution( params )
 			return tostring(result)
 		end
 
-		local entitlements = "" -- quoteString( osxAppEntitlementsFile )
 		setStatus("Signing application with "..tostring(appSigningIdentityName))
-		local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFile, appSigningIdentity, codesign, true ) )
+		local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFile, appSigningIdentity, codesign ) )
 
 		if result ~= 0 then
 			errMsg = "ERROR: code signing failed: "..tostring(errMsg)
