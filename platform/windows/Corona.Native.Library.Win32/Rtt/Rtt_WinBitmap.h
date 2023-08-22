@@ -124,15 +124,10 @@ class WinFileGrayscaleBitmap : public WinFileBitmap
 
 		virtual void FreeBits() const;
 		virtual PlatformBitmap::Format GetFormat() const;
-		virtual U32 Width() const;
-		virtual U32 Height() const;
 
 	protected:
-		virtual void Lock();
-		virtual void Unlock();
-
-		U32 fWidth;
-		U32 fHeight;
+		virtual U32 Width() const;
+		virtual U32 Height() const;
 };
 
 } // namespace Rtt
