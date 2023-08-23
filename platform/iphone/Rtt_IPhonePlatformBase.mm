@@ -18,6 +18,7 @@
 #import <UIKit/UIAlertView.h>
 #import <UIKit/UIAlertController.h>
 #import <UIKit/UIAccessibility.h>
+#import <GameKit/GameKit.h>
 #import <GameController/GameController.h>
 
 #include "Rtt_IPhonePlatformBase.h"
@@ -390,6 +391,20 @@ IPhonePlatformBase::PushSystemInfo( lua_State *L, const char *key ) const
             res = UIAccessibilityShouldDifferentiateWithoutColor();
         }
         lua_pushboolean(L, res);
+        pushedValues = 1;
+    }
+    else if ( Rtt_StringCompare( key, "teamPlayerID" ) == 0 )
+    {
+        const char *teamPlayerID = "";
+        
+        if (@available(iOS 12.4, tvOS 12.4, *)) {
+            GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+            if (localPlayer.isAuthenticated) {
+                teamPlayerID = [localPlayer.teamPlayerID UTF8String];
+            }
+        }
+        
+        lua_pushstring(L, teamPlayerID);
         pushedValues = 1;
     }
 	else
