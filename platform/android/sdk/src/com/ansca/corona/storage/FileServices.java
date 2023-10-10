@@ -180,7 +180,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 		}
 
 		// If asset not found, then attempt to fetch it from the APK's "raw" resource directory.
-		if (zipEntry == null) {
+		if ((zipEntry == null) && (sApkZipEntryReader != null)) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("res/raw/");
 			builder.append(createRawResourceNameForAsset(filePath));
@@ -194,7 +194,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 		}
 
 		// If asset not found, then attempt to fetch it from the APK's "drawable" resource directory.
-		if (zipEntry == null) {
+		if ((zipEntry == null) && (sApkZipEntryReader != null)) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("res/drawable/");
 			builder.append(filePath);

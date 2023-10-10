@@ -35,6 +35,11 @@
 @synthesize suspendWhenMinimized = _suspendWhenMinimized;
 @synthesize lastSentWindowStateForeground;
 
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
+{
+	return NO;
+}
+
 - (void)sentWindowForegroundEvent:(BOOL)foreground
 {
 	if(foreground!=self.lastSentWindowStateForeground) {

@@ -196,7 +196,7 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 		public void onSurfaceCreated(
 			javax.microedition.khronos.opengles.GL10 gl, javax.microedition.khronos.egl.EGLConfig config)
 		{
-			// Re-draw what was last renderered if the last surface has been replaced by a new surface.
+			// Re-draw what was last rendered if the last surface has been replaced by a new surface.
 			// This can happen when the end user leaves and returns back to the activity window.
 			if (!sFirstSurface) {
 				fView.setNeedsSwap();

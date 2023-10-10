@@ -9,7 +9,7 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_14.3.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_15.0.app/Contents/Developer
   BUILD_NUMBER: 3695
   YEAR: 2023
   FORK_BUILD_NAME: a
@@ -39,7 +39,7 @@ jobs:
         runner:
           - macos-13
         xcode:
-          - Xcode_14.3
+          - Xcode_15.0
         target:
           - template
           - template-angle

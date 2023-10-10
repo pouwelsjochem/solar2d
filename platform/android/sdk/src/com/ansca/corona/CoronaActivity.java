@@ -1078,7 +1078,7 @@ public class CoronaActivity extends Activity {
 		// Store the given intent.
 		setIntent(intent);
 
-		// Raise an "applicationOpen" event to be recevied by the Corona runtime.
+		// Raise an "applicationOpen" event to be received by the Corona runtime.
 		EventManager eventManager = fCoronaRuntime.getController().getEventManager();
 		if (eventManager != null) {
 			eventManager.addEvent(new com.ansca.corona.events.RunnableEvent(new Runnable() {
