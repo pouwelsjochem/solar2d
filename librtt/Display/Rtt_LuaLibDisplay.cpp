@@ -1136,8 +1136,6 @@ DisplayLibrary::capture( lua_State *L )
 
 	// Do a screenshot of the given display object.
     BitmapPaint *paint = display.CaptureDisplayObject( displayObject, cropObjectToScreenBounds );
-	display.Invalidate();
-    display.Render();
     
 	if( ! paint )
 	{
