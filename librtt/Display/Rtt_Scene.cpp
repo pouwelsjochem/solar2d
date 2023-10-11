@@ -180,11 +180,12 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, Profiling* profilin
 		
 		ADD_ENTRY( "Scene: Begin Render" );
 		
+		renderer.SetViewport( fOwner.GetXScreenOffset(), fOwner.GetYScreenOffset(), fOwner.ScaledContentWidth(), fOwner.ScaledContentHeight() );
 		fOwner.GetTextureFactory().Preload( renderer );
 		ADD_ENTRY( "Scene: Preload" );
 		fOwner.GetTextureFactory().UpdateTextures(renderer);
 		ADD_ENTRY( "Scene: UpdateTextures" );
-		
+
 		// Invert top/bottom to make (0, 0) be the upper left corner of the window
 		glm::mat4 projMatrix = glm::ortho( 0.0f, static_cast<Rtt::Real>(fOwner.ContentWidth()), static_cast<Rtt::Real>(fOwner.ContentHeight()), 0.0f, 0.0f, 1.0f);
 		glm::mat4 viewMatrix = glm::lookAt( glm::vec3( 0.0, 0.0, 0.5 ), glm::vec3( 0.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ) );
