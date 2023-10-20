@@ -225,6 +225,8 @@ Display::Update()
     
 	const RenderEvent& re = RenderEvent::Constant();
 	re.Dispatch( L, runtime );
+
+    up.Add( "LateUpdate" );
     
 	Profiling::ResetSums();
 
