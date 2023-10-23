@@ -292,7 +292,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = F5567DBC2ADC76CF008CD550 /* NetworkPlugin.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = A49186331641DDB800A39286;
+			remoteGlobalIDString = A49186401641DDB800A39286;
 			remoteInfo = network;
 		};
 		F5FBD1DC206961A9009A9D32 /* PBXContainerItemProxy */ = {
