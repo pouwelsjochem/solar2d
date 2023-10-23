@@ -1650,7 +1650,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */,
-				F5567D492ADC73BC008CD550 /* network.dylib in Copy Frameworks and dylibs */,
 				C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */,
 				C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */,
 			);
