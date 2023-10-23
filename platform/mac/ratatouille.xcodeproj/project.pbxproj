@@ -1147,6 +1147,10 @@
 		F55407F61C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F55407F31C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.cpp */; };
 		F55407F71C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F55407F41C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h */; };
 		F55407F81C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F55407F41C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h */; };
+		F5567D482ADC73BC008CD550 /* network.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; };
+		F5567D492ADC73BC008CD550 /* network.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		F5567D4A2ADC73CB008CD550 /* network.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; };
+		F5567D4B2ADC73CB008CD550 /* network.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F57469D7240291FA00CA5949 /* iostemplate in Resources */ = {isa = PBXBuildFile; fileRef = F57469D6240291FA00CA5949 /* iostemplate */; };
 		F57D17671BE25B1C00AABAC1 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F57D17661BE25B1C00AABAC1 /* Rtt_AppleInputDeviceManager.mm */; };
 		F57D17681BE25B2800AABAC1 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F57D17661BE25B1C00AABAC1 /* Rtt_AppleInputDeviceManager.mm */; };
@@ -1330,13 +1334,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 8DD76FB20486AB0100D96B5E;
 			remoteInfo = car;
-		};
-		1B0A7A6A2AE2D440007CD9C6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F583ABD82ADAF4F2002799CB /* NetworkPlugin.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A49186401641DDB800A39286;
-			remoteInfo = network;
 		};
 		A44308D9164C74BE00B9117B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1621,6 +1618,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				0052EBF412B73ADD006ED5BC /* ALmixer.framework in Copy Frameworks */,
+				F5567D4B2ADC73CB008CD550 /* network.dylib in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1652,6 +1650,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */,
+				F5567D492ADC73BC008CD550 /* network.dylib in Copy Frameworks and dylibs */,
 				C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */,
 				C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */,
 			);
@@ -2522,6 +2521,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2C59B2C1E2812FF001DF51E /* CoreMedia.framework in Frameworks */,
+				F5567D4A2ADC73CB008CD550 /* network.dylib in Frameworks */,
 				C2C59B2A1E2812F9001DF51E /* AVFoundation.framework in Frameworks */,
 				C2C59B2B1E2812F9001DF51E /* AVKit.framework in Frameworks */,
 				C2F911111CDBFA19004A5564 /* libluasocket.a in Frameworks */,
@@ -2568,6 +2568,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5567D482ADC73BC008CD550 /* network.dylib in Frameworks */,
 				F5FED0972512248E00AE2911 /* StoreKit.framework in Frameworks */,
 				C2C59B291E2812D6001DF51E /* CoreMedia.framework in Frameworks */,
 				C2C59B271E2812CE001DF51E /* AVFoundation.framework in Frameworks */,
@@ -3949,7 +3950,7 @@
 		F5567D3D2ADC7394008CD550 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1B0A7A6B2AE2D440007CD9C6 /* network.dylib */,
+				F5567D442ADC7394008CD550 /* network.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -4741,13 +4742,6 @@
 			remoteRef = 00FD0C091330445800716D46 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		1B0A7A6B2AE2D440007CD9C6 /* network.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = network.dylib;
-			remoteRef = 1B0A7A6A2AE2D440007CD9C6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		A44308DA164C74BE00B9117B /* libplugins.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -4809,6 +4803,13 @@
 			fileType = wrapper.application;
 			path = CoronaShell.app;
 			remoteRef = C2EF85051B336B6300731A45 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F5567D442ADC7394008CD550 /* network.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = network.dylib;
+			remoteRef = F5567D432ADC7394008CD550 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
