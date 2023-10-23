@@ -1147,6 +1147,10 @@
 		F55407F61C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F55407F31C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.cpp */; };
 		F55407F71C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F55407F41C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h */; };
 		F55407F81C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = F55407F41C74ECDE007F53C9 /* Rtt_TextureResourceExternalAdapter.h */; };
+		F5567D482ADC73BC008CD550 /* network.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; };
+		F5567D492ADC73BC008CD550 /* network.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		F5567D4A2ADC73CB008CD550 /* network.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; };
+		F5567D4B2ADC73CB008CD550 /* network.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = F5567D442ADC7394008CD550 /* network.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F57469D7240291FA00CA5949 /* iostemplate in Resources */ = {isa = PBXBuildFile; fileRef = F57469D6240291FA00CA5949 /* iostemplate */; };
 		F57D17671BE25B1C00AABAC1 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F57D17661BE25B1C00AABAC1 /* Rtt_AppleInputDeviceManager.mm */; };
 		F57D17681BE25B2800AABAC1 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F57D17661BE25B1C00AABAC1 /* Rtt_AppleInputDeviceManager.mm */; };
