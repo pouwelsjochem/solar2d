@@ -5978,10 +5978,10 @@
 			name = network;
 			targetProxy = F5567D4C2ADC73E1008CD550 /* PBXContainerItemProxy */;
 		};
-		F5567D4D2ADC73E1008CD550 /* PBXTargetDependency */ = {
+		F5567D4F2ADC740E008CD550 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = network;
-			targetProxy = F5567D4C2ADC73E1008CD550 /* PBXContainerItemProxy */;
+			targetProxy = F5567D4E2ADC740E008CD550 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
