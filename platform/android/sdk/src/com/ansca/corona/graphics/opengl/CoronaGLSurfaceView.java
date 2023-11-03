@@ -218,6 +218,11 @@ public class CoronaGLSurfaceView extends GLSurfaceView {
 		 */
 		@Override
 		public void onSurfaceChanged(javax.microedition.khronos.opengles.GL10 gl, int width, int height) {
+			if (!fIsCoronaKit && width < height) {
+				fCanRender = false;
+				return;
+			}
+
 			// Update the OpenGL view port on the C++ side of Corona. This also happens to initialize Corona too.
 			// It is okay to call the C++ side directly since we're on the OpenGL thread here.
 			com.ansca.corona.JavaToNativeShim.resize(fCoronaRuntime, fView.getContext(), width, height, fIsCoronaKit);

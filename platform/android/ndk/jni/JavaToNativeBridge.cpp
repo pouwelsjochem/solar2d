@@ -89,7 +89,7 @@ JavaToNativeBridge::Init(
 		fView->Resize(width, height);
 
 		Rtt::Display& display = fRuntime->GetDisplay();
-		display.Restart();
+		fRuntime->RestartRenderer();
 		display.GetScene().Invalidate();
 		display.GetStage()->Invalidate( Rtt::DisplayObject::kRenderDirty );
 		ReloadResources();

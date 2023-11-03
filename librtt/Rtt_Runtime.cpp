@@ -1242,6 +1242,13 @@ Runtime::ReloadResources()
 #endif
 }
 
+// TODO: Remove this wrapper
+void
+Runtime::RestartRenderer()
+{
+	fDisplay->Restart();
+}
+
 CachedResource*
 Runtime::LookupResource( const char key[] )
 {

@@ -176,6 +176,8 @@ class Runtime : public MCallback,
 		// Inits VM and then loads script file.
 		LoadApplicationReturnCodes LoadApplication( U32 launchOptions );
 
+		// Call when the gl context was destroyed and recreated, e.g. when device wakes from sleep
+		void RestartRenderer();
 	public:
 		// Inits renderer and then begins timer
 		void BeginRunLoop();
