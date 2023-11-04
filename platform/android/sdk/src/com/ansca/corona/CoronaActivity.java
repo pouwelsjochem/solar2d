@@ -28,6 +28,8 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.util.Log;
 import android.widget.*;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import com.ansca.corona.events.EventManager;
 import com.ansca.corona.permissions.PermissionsSettings;
 import com.ansca.corona.permissions.PermissionsServices;
@@ -156,6 +158,12 @@ public class CoronaActivity extends Activity {
 	private void setSystemUiVisibility() {
 		if (android.os.Build.VERSION.SDK_INT < 19) {
 			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE); // On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
+		} else if (android.os.Build.VERSION.SDK_INT >= 30) {
+			myGLView.setDecorFitsSystemWindows(false);
+
+			WindowInsetsControllerCompat controller = WindowInsetsControllerCompat(myGLView, myGLView.getDecorView());
+			controller.hide(WindowInsetsCompat.Type.systemBars());
+			controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
 		} else {
 			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 					| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
