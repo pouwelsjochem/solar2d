@@ -28,9 +28,6 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.util.Log;
 import android.widget.*;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import com.ansca.corona.events.EventManager;
 import com.ansca.corona.permissions.PermissionsSettings;
 import com.ansca.corona.permissions.PermissionsServices;
@@ -157,10 +154,20 @@ public class CoronaActivity extends Activity {
 	}
 
 	private void setSystemUiVisibility() {
-		WindowCompat.setDecorFitsSystemWindows(myGLView, false);
-		WindowInsetsControllerCompat controller = WindowInsetsControllerCompat(myGLView, myGLView.getDecorView());
-		controller.hide(WindowInsetsCompat.Type.systemBars());
-		controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+		if (android.os.Build.VERSION.SDK_INT < 19) {
+			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE); // On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
+		} else if (android.os.Build.VERSION.SDK_INT >= 30) {
+			myGLView.setDecorFitsSystemWindows(false);
+			myGLView.getInsetController().hide(WindowInsetsCompat.Type.systemBars());
+			myGLView.getInsetController().setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+		} else {
+			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+					| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+					| View.SYSTEM_UI_FLAG_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+		}
 	}
 
 	/**
