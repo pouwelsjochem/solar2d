@@ -233,6 +233,12 @@ public class Controller {
 		JavaToNativeShim.destroy(myRuntime);
 	}
 	
+	private boolean mHangOnGlThreadAndRecover = false;
+
+    public void hangAndRecover() {
+        mHangOnGlThreadAndRecover = true;
+    }
+
 	/*
 	 * Warning: This method should always be called on the OpenGL thread
 	 */
@@ -241,6 +247,14 @@ public class Controller {
 		EventManager eventManager = controller.getEventManager();
 		if ((controller != null) && (eventManager != null)) {
 			synchronized (controller) {
+				if(mHangOnGlThreadAndRecover) {
+					mHangOnGlThreadAndRecover = false;
+					try {
+						Thread.sleep(20000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 
 				// We do this so as a way to ensure that the runtime is started/stopped before any events happen.
 				// The renderer still might not be ready

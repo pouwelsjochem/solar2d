@@ -187,6 +187,11 @@ public class CoronaActivity extends Activity {
 			android.os.StrictMode.setVmPolicy(builder.build());
 		}
 
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+					.detectAll()
+					.penaltyLog()
+					.build());
+
 		// Store the intent that initially launched this activity. To be passed to Lua as launch argument later.
 		// Note: The getIntent() method will return a different intent object if this activity gets resumed
 		//       externally such as by a notification.
@@ -1177,6 +1182,7 @@ public class CoronaActivity extends Activity {
 	private void requestSuspendCoronaRuntime() {
 		// Suspend the Corona runtime.
 		if (fController != null) {
+			fController.hangAndRecover();
 			fController.stop();
 		}
 		else {
