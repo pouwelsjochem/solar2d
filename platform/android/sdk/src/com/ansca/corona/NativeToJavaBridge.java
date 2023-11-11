@@ -1407,6 +1407,10 @@ public class NativeToJavaBridge {
 			luaState.pushBoolean(CoronaEnvironment.getCoronaActivity().HasSoftwareKeys());
 			valuesPushed = 1;
 		}
+		else if (key.equals("hasRuntimeDispatcher")) {
+			luaState.pushBoolean(CoronaEnvironment.getCoronaActivity().getRuntimeTaskDispatcher() != null);
+			valuesPushed = 1;
+		}
 
 		// Push nil if failed to fetch the requested value.
 		if (valuesPushed <= 0) {
