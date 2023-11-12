@@ -154,6 +154,8 @@ jobs:
         shell: bash
         run: |
           curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.macos.tgz -o jre.macos.tgz
+      - name: install python3 as possible fix for appdmg not installing
+        run: python3 -m pip install packaging
       - name: install appdmg
         run: npm install -g appdmg
       - name: install imagemagick
