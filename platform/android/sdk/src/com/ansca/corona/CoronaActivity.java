@@ -187,11 +187,6 @@ public class CoronaActivity extends Activity {
 			android.os.StrictMode.setVmPolicy(builder.build());
 		}
 
-		android.os.StrictMode.setThreadPolicy(new android.os.StrictMode.ThreadPolicy.Builder()
-					.detectAll()
-					.penaltyLog()
-					.build());
-
 		// Store the intent that initially launched this activity. To be passed to Lua as launch argument later.
 		// Note: The getIntent() method will return a different intent object if this activity gets resumed
 		//       externally such as by a notification.
