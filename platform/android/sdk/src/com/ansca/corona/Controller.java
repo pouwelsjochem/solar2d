@@ -235,6 +235,10 @@ public class Controller {
 		JavaToNativeShim.destroy(myRuntime);
 	}
 
+    public void shouldHangAndRecover() {
+        mHangOnGlThreadAndRecover = true;
+    }
+
     public void hangAndRecover() {
         mHangOnGlThreadAndRecover = true;
     }
@@ -251,8 +255,8 @@ public class Controller {
 		EventManager eventManager = controller.getEventManager();
 		if ((controller != null) && (eventManager != null)) {
 			synchronized (controller) {
-				if(controller.mHangOnGlThreadAndRecover) {
-					controller.stopHangingAndRecover()
+				if(controller.shouldHangAndRecover()) {
+					controller.stopHangingAndRecover();
 					try {
 						Thread.sleep(20000);
 					} catch (InterruptedException e) {
