@@ -187,7 +187,7 @@ public class CoronaActivity extends Activity {
 			android.os.StrictMode.setVmPolicy(builder.build());
 		}
 
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+		android.os.StrictMode.setThreadPolicy(new android.os.StrictMode.ThreadPolicy.Builder()
 					.detectAll()
 					.penaltyLog()
 					.build());
