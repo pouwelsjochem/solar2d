@@ -236,7 +236,7 @@ public class Controller {
 	}
 
     public void shouldHangAndRecover() {
-        mHangOnGlThreadAndRecover = true;
+        return mHangOnGlThreadAndRecover;
     }
 
     public void hangAndRecover() {
