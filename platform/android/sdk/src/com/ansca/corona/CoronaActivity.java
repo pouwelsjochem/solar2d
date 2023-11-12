@@ -1177,7 +1177,6 @@ public class CoronaActivity extends Activity {
 	private void requestSuspendCoronaRuntime() {
 		// Suspend the Corona runtime.
 		if (fController != null) {
-			fController.hangAndRecover();
 			fController.stop();
 		}
 		else {
