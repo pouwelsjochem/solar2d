@@ -86,6 +86,8 @@ public class Controller {
 
 	private RuntimeState myRuntimeState;
 
+	private boolean mHangOnGlThreadAndRecover = false;
+
 	// These are the listeners for actions that should be handled by the activity and not the view
 	private CoronaApiListener myCoronaApiListener;
 	// All the show* functions eg. showSmsWindow or showEmailWindow
@@ -232,12 +234,14 @@ public class Controller {
 		myEventManager.removeAllEvents();
 		JavaToNativeShim.destroy(myRuntime);
 	}
-	
-	private boolean mHangOnGlThreadAndRecover = false;
 
     public void hangAndRecover() {
         mHangOnGlThreadAndRecover = true;
     }
+
+	public void stopHangingAndRecover() {
+		mHangOnGlThreadAndRecover = false;
+	}
 
 	/*
 	 * Warning: This method should always be called on the OpenGL thread
@@ -247,8 +251,8 @@ public class Controller {
 		EventManager eventManager = controller.getEventManager();
 		if ((controller != null) && (eventManager != null)) {
 			synchronized (controller) {
-				if(mHangOnGlThreadAndRecover) {
-					mHangOnGlThreadAndRecover = false;
+				if(controller.mHangOnGlThreadAndRecover) {
+					controller.stopHangingAndRecover()
 					try {
 						Thread.sleep(20000);
 					} catch (InterruptedException e) {
