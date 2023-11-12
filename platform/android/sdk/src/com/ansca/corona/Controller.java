@@ -235,7 +235,7 @@ public class Controller {
 		JavaToNativeShim.destroy(myRuntime);
 	}
 
-    public void shouldHangAndRecover() {
+    public boolean shouldHangAndRecover() {
         return mHangOnGlThreadAndRecover;
     }
 
