@@ -214,18 +214,25 @@ public class Controller {
 	}
 	
 	public synchronized void stop() {
-		stopTimer();
-		mySensorManager.pause();
-		if (myRuntimeState == RuntimeState.Starting || myRuntimeState == RuntimeState.Stopped) {
-			myRuntimeState = RuntimeState.Stopped;
-		} else {
- 			myRuntimeState = RuntimeState.Stopping;
- 		}
-
-		// If we don't do this then there won't be one last onDrawFrame call which means the runtime won't be stopped!
-		requestEventRender();
-	}
-	
+		Handler handler = getHandler();
+		if(handler != null) {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					stopTimer();
+					mySensorManager.pause();
+					if (myRuntimeState == RuntimeState.Starting || myRuntimeState == RuntimeState.Stopped) {
+						myRuntimeState = RuntimeState.Stopped;
+					} else {
+						myRuntimeState = RuntimeState.Stopping;
+					}
+					// If we don't do this then there won't be one last onDrawFrame call which means the runtime won't be stopped!
+					requestEventRender();
+				}
+			});
+		}
+    }
+    
 	public synchronized void destroy() {
 		cancelNativeAlert(-1);
 		stopTimer();
@@ -233,18 +240,6 @@ public class Controller {
 		mySystemMonitor.stop();
 		myEventManager.removeAllEvents();
 		JavaToNativeShim.destroy(myRuntime);
-	}
-
-    public boolean shouldHangAndRecover() {
-        return mHangOnGlThreadAndRecover;
-    }
-
-    public void hangAndRecover() {
-        mHangOnGlThreadAndRecover = true;
-    }
-
-	public void stopHangingAndRecover() {
-		mHangOnGlThreadAndRecover = false;
 	}
 
 	/*
@@ -255,15 +250,7 @@ public class Controller {
 		EventManager eventManager = controller.getEventManager();
 		if ((controller != null) && (eventManager != null)) {
 			synchronized (controller) {
-				if(controller.shouldHangAndRecover()) {
-					controller.stopHangingAndRecover();
-					try {
-						Thread.sleep(20000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-
+				
 				// We do this so as a way to ensure that the runtime is started/stopped before any events happen.
 				// The renderer still might not be ready
 				if (RuntimeState.Starting == controller.myRuntimeState && render) {
