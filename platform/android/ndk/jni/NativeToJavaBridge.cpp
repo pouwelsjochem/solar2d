@@ -915,6 +915,47 @@ NativeToJavaBridge::OpenUrl( const char * url )
 }
 
 void
+NativeToJavaBridge::SetIdleTimer( bool enabled )
+{
+	NativeTrace trace( "NativeToJavaBridge::SetIdleTimer" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+	
+	if ( bridge.isValid() )
+	{
+		jmethodID mid;
+		
+		mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), "callSetIdleTimer", "(Lcom/ansca/corona/CoronaRuntime;Z)V" );
+		if ( mid != NULL )
+		{
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, (jboolean)enabled );
+			HandleJavaException();
+		}
+	}
+}
+
+bool
+NativeToJavaBridge::GetIdleTimer() const
+{
+	NativeTrace trace( "NativeToJavaBridge::GetIdleTimer" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+	jboolean result = true;
+	if ( bridge.isValid() )
+	{
+		jmethodID mid;
+		
+		mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(), "callGetIdleTimer", "(Lcom/ansca/corona/CoronaRuntime;)Z" );
+		if ( mid != NULL )
+		{
+			result = bridge.getEnv()->CallStaticBooleanMethod( bridge.getClass(), mid, fCoronaRuntime );
+			HandleJavaException();
+		}
+	}
+	return result;
+}
+
+void
 NativeToJavaBridge::ShowNativeAlert( const char * title, const char * msg, const char ** labels, int numLabels, Rtt::LuaResource * resource )
 {
 	NativeTrace trace( "NativeToJavaBridge::ShowNativeAlert" );

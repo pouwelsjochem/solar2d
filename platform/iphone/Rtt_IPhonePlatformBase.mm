@@ -200,6 +200,20 @@ IPhonePlatformBase::CanOpenURL( const char* url ) const
 	
 	return result;
 }
+	
+// ----------------------------------------------------------------------------
+
+void
+IPhonePlatformBase::SetIdleTimer( bool enabled ) const
+{
+	[UIApplication sharedApplication].idleTimerDisabled = ! enabled;
+}
+	
+bool
+IPhonePlatformBase::GetIdleTimer() const
+{
+	return (bool)( ! [UIApplication sharedApplication].idleTimerDisabled);
+}
 
 // ----------------------------------------------------------------------------
 

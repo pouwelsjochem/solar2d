@@ -94,6 +94,17 @@ MacConsolePlatform::CanOpenURL( const char* url ) const
 	return -1;
 }
 
+void
+MacConsolePlatform::SetIdleTimer( bool enabled ) const
+{
+}
+	
+bool
+MacConsolePlatform::GetIdleTimer() const
+{
+	return true;
+}
+
 NativeAlertRef
 MacConsolePlatform::ShowNativeAlert(
 	const char *title,

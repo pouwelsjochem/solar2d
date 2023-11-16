@@ -18,6 +18,7 @@
 #import <AppKit/NSOpenGLView.h>
 
 #include <sys/types.h>
+#import <IOKit/pwr_mgt/IOPMLib.h>
 
 // ----------------------------------------------------------------------------
 
@@ -84,6 +85,9 @@ class MacPlatform : public ApplePlatform
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
+		virtual void SetIdleTimer( bool enabled ) const;
+		virtual bool GetIdleTimer() const;
+
 		virtual NativeAlertRef ShowNativeAlert(
 			const char *title,
 			const char *msg,
@@ -140,6 +144,7 @@ class MacPlatform : public ApplePlatform
 		mutable int fMutexCount;
 		AlertDelegate *fDelegate;
 		PlatformExitCallback* fExitCallback;
+		mutable IOPMAssertionID fAssertionID;
 };
 
 // TODO: Move this to a separate file

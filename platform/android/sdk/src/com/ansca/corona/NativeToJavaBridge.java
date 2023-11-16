@@ -985,6 +985,16 @@ public class NativeToJavaBridge {
 		return runtime.getController().openUrl( url );
 	}
 
+	protected static void callSetIdleTimer( CoronaRuntime runtime, boolean enabled )
+	{
+		runtime.getController().setIdleTimer( enabled );
+	}
+
+	protected static boolean callGetIdleTimer(CoronaRuntime runtime)
+	{
+		return runtime.getController().getIdleTimer();
+	}
+
 	protected static float[] callGetSafeAreaInsetPixels(CoronaRuntime runtime)
 	{
 		float[] result = new float[4];

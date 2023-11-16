@@ -134,6 +134,19 @@ AndroidPlatform::CanOpenURL( const char* url ) const
 	return fNativeToJavaBridge->CanOpenUrl( url ) ? 1 : 0;
 }
 
+void
+AndroidPlatform::SetIdleTimer( bool enabled ) const
+{
+	fNativeToJavaBridge->SetIdleTimer( enabled );
+}
+
+bool
+AndroidPlatform::GetIdleTimer() const
+{
+	return fNativeToJavaBridge->GetIdleTimer();
+}
+
+
 NativeAlertRef
 AndroidPlatform::ShowNativeAlert(
 	const char *title,

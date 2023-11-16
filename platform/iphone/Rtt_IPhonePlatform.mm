@@ -127,6 +127,24 @@ IPhonePlatform::~IPhonePlatform()
 
 // =====================================================================
 
+#if 0 
+
+void
+IPhonePlatform::SetIdleTimer( bool enabled ) const
+{
+	[UIApplication sharedApplication].idleTimerDisabled = ! enabled;
+}
+	
+bool
+IPhonePlatform::GetIdleTimer() const
+{
+	return (bool)( ! [UIApplication sharedApplication].idleTimerDisabled);
+}
+
+#endif // 0
+
+// =====================================================================
+
 //NativeAlertRef
 //IPhonePlatform::ShowNativeAlert(
 //	const char *title,

@@ -59,7 +59,8 @@ namespace Rtt
 	WinPlatform::WinPlatform(Interop::RuntimeEnvironment& environment)
 		: fEnvironment(environment),
 		fDevice(environment),
-		fExitCallback(environment)
+		fExitCallback(environment),
+		fIsIdleTimerEnabled(true)
 	{
 		// Set up a plugin DLL lookup path if one was provided and it doesn't reference the EXE's directory.
 		auto pluginsDirectoryPath = fEnvironment.GetUtf16PathFor(kPluginsDir);
@@ -111,6 +112,11 @@ namespace Rtt
 
 	WinPlatform::~WinPlatform()
 	{
+		// If the idle timer was disabled then re-enable it to allow Windows to sleep when idle.
+		if (GetIdleTimer() == false)
+		{
+			SetIdleTimer(true);
+		}
 	}
 
 	MPlatformDevice& WinPlatform::GetDevice() const
@@ -276,6 +282,23 @@ namespace Rtt
 		}
 		catch (...) {}
 		return wasOpened;
+	}
+
+	void WinPlatform::SetIdleTimer(bool enabled) const
+	{
+		EXECUTION_STATE state = ES_CONTINUOUS;
+		if (!enabled)
+		{
+			// States used to inform the system to not idle to sleep.
+			state = ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED | ES_DISPLAY_REQUIRED;
+		}
+		fIsIdleTimerEnabled = enabled;
+		::SetThreadExecutionState(state);
+	}
+
+	bool WinPlatform::GetIdleTimer() const
+	{
+		return fIsIdleTimerEnabled;
 	}
 
 	NativeAlertRef WinPlatform::ShowNativeAlert(

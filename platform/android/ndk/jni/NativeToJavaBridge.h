@@ -102,6 +102,9 @@ class NativeToJavaBridge
 	
 		bool CanOpenUrl( const char* url );
 		bool OpenUrl( const char * url );
+		
+		void SetIdleTimer( bool enabled );
+		bool GetIdleTimer() const;
 	
 		void GetSafeAreaInsetsPixels(Rtt::Real &top, Rtt::Real &left, Rtt::Real &bottom, Rtt::Real &right);
 		

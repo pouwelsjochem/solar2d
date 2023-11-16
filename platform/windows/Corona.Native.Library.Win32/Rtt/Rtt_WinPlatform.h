@@ -65,6 +65,8 @@ class WinPlatform : public MPlatform
 		virtual OperationResult DeletePreferences(const char* categoryName, const char** keyNameArray, U32 keyNameCount) const;
 		virtual bool OpenURL(const char* url) const;
 		virtual int CanOpenURL(const char* url) const;
+		virtual void SetIdleTimer(bool enabled) const;
+		virtual bool GetIdleTimer() const;
 		virtual NativeAlertRef ShowNativeAlert(
 					const char *title, const char *message, const char **buttonLabels,
 					U32 buttonCount, LuaResource *resourcePointer) const;
@@ -110,6 +112,7 @@ class WinPlatform : public MPlatform
 		WinDevice fDevice;
 		WinCrypto fCrypto;
 		WinExitCallback fExitCallback;
+		mutable bool fIsIdleTimerEnabled;
 };
 
 }	// namespace Rtt

@@ -54,6 +54,9 @@ class IPhonePlatformBase : public ApplePlatform
 		virtual bool OpenURL( const char* url ) const;
 		virtual int CanOpenURL( const char* url ) const;
 
+		virtual void SetIdleTimer( bool enabled ) const;
+		virtual bool GetIdleTimer() const;
+
 		virtual NativeAlertRef ShowNativeAlert(
 			const char *title,
 			const char *msg,
