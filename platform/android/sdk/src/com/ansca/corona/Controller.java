@@ -298,10 +298,10 @@ public class Controller {
 			}
 
 			if (localStarting) {
-				Log.i("JavaToNativeShim.resume(runtime)");
+				Log.i("Corona", "JavaToNativeShim.resume(runtime)");
 				JavaToNativeShim.resume(runtime);
 				synchronized (controller) {
-					Log.i("controller.requestRender()");
+					Log.i("Corona", "controller.requestRender()");
 					controller.requestRender();
 				}
 			}
@@ -312,7 +312,7 @@ public class Controller {
 			}
 
 			if (localStopping) {
-				Log.i("JavaToNativeShim.pause(runtime)");
+				Log.i("Corona", "JavaToNativeShim.pause(runtime)");
 				JavaToNativeShim.pause(runtime);
 
 				synchronized (controller) {
@@ -327,7 +327,7 @@ public class Controller {
 							// happening back to back, which is possible on Android 2.3.x devices.
 							if (RuntimeState.Stopped == controller.myRuntimeState) {
 								// Pause the OpenGL view's thread. This stops its rendering loop.
-								Log.i("controller.getGLView().onPause()");
+								Log.i("Corona", "controller.getGLView().onPause()");
 								controller.getGLView().onPause();
 							}
 						}
