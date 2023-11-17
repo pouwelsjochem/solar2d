@@ -244,12 +244,12 @@ public class Controller {
 		});
 		internalSetIdleTimer(true);
 
-		while (RuntimeState.Stopping) {
+		while (myRuntimeState == RuntimeState.Stopping) {
 			try {
 				// Android ANR time is 5 seconds, so wait up to 4 seconds before assuming
 				// deadlock and killing process.
 				this.wait(4000);
-				if (RuntimeState.Stopping) {
+				if (myRuntimeState == RuntimeState.Stopping) {
 					// pause will never go false if onDrawFrame is never called by the GLThread
 					// when entering this method, we MUST enforce continuous rendering
 					android.os.Process.killProcess(android.os.Process.myPid());
@@ -276,26 +276,46 @@ public class Controller {
 		final Controller controller = runtime.getController();
 		EventManager eventManager = controller.getEventManager();
 		if ((controller != null) && (eventManager != null)) {
+			
+			boolean localStarting = false;
+			boolean localRunning = false;
+			boolean localStopping = false;
+			boolean localStopped = false;
+
 			synchronized (controller) {
-				
-				// We do this so as a way to ensure that the runtime is started/stopped before any events happen.
-				// The renderer still might not be ready
-				if (RuntimeState.Starting == controller.myRuntimeState && render) {
-					JavaToNativeShim.resume(runtime);
-					controller.requestRender();
+				localStarting = RuntimeState.Starting == controller.myRuntimeState;
+				localRunning = RuntimeState.Running == controller.myRuntimeState;
+				localStopping = RuntimeState.Stopping == controller.myRuntimeState;
+				localStopped = RuntimeState.Stopped == controller.myRuntimeState;
+	
+				if (RuntimeState.Starting == controller.myRuntimeState) {
 					controller.myRuntimeState = RuntimeState.Running;
-				} 
-
-				if (render) {
-					// Send queued events to the native side of Corona.
-					eventManager.sendEvents();
 				}
-				
-				// We want to finish going through the events before we stop the runtime so its down here.
 				if (RuntimeState.Stopping == controller.myRuntimeState) {
-					JavaToNativeShim.pause(runtime);
 					controller.myRuntimeState = RuntimeState.Stopped;
+					controller.notifyAll();
+				}
+			}
 
+			if (localStarting) {
+				Log.i("JavaToNativeShim.resume(runtime)");
+				JavaToNativeShim.resume(runtime);
+				synchronized (controller) {
+					Log.i("controller.requestRender()");
+					controller.requestRender();
+				}
+			}
+
+			if (render) {
+				// Send queued events to the native side of Corona.
+				eventManager.sendEvents();
+			}
+
+			if (localStopping) {
+				Log.i("JavaToNativeShim.pause(runtime)");
+				JavaToNativeShim.pause(runtime);
+
+				synchronized (controller) {
 					// Now we can pause the GLView on the UI thread if needed since we've 
 					// guarenteed that the Corona Runtime has stopped.
 					Handler handler = controller.getHandler();
@@ -307,20 +327,21 @@ public class Controller {
 							// happening back to back, which is possible on Android 2.3.x devices.
 							if (RuntimeState.Stopped == controller.myRuntimeState) {
 								// Pause the OpenGL view's thread. This stops its rendering loop.
+								Log.i("controller.getGLView().onPause()");
 								controller.getGLView().onPause();
 							}
 						}
 					});
 				}
-
-				// Render the next frame, but only if the Corona runtime is currently running.
-				// We must check the running state "after" sending the above events because a suspend/resume event
-				// will change the running state after the event has been dispatched.
-				if (RuntimeState.Running == controller.myRuntimeState && render) {
-					// Render the frame.
-					JavaToNativeShim.render(runtime);
-				} 
 			}
+
+			// Render the next frame, but only if the Corona runtime is currently running.
+			// We must check the running state "after" sending the above events because a suspend/resume event
+			// will change the running state after the event has been dispatched.
+			if (localRunning && render) {
+				// Render the frame.
+				JavaToNativeShim.render(runtime);
+			} 
 		}
 	}
 
