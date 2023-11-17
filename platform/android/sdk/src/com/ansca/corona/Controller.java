@@ -220,24 +220,43 @@ public class Controller {
 	}
 	
 	public synchronized void stop() {
-		Handler handler = getHandler();
-		if(handler != null) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					stopTimer();
-					mySensorManager.pause();
-					if (myRuntimeState == RuntimeState.Starting || myRuntimeState == RuntimeState.Stopped) {
-						myRuntimeState = RuntimeState.Stopped;
-					} else {
-						myRuntimeState = RuntimeState.Stopping;
-					}
-					// If we don't do this then there won't be one last onDrawFrame call which means the runtime won't be stopped!
-					requestEventRender();
+		stopTimer();
+		mySensorManager.pause();
+		if (myRuntimeState == RuntimeState.Starting || myRuntimeState == RuntimeState.Stopped) {
+			myRuntimeState = RuntimeState.Stopped;
+		} else {
+			myRuntimeState = RuntimeState.Stopping;
+		}
 
-		            internalSetIdleTimer(true);
+		myGLView.queueEvent(new Runnable() {
+			@Override
+			public void run() {
+				if (myRuntimeState == RuntimeState.Stopped) {
+					// pause event already picked up by updateRuntimeState
+					return;
 				}
-			});
+
+				// If we don't do this then there won't be one last onDrawFrame call which means the runtime won't be stopped!
+				// it's ok to call ApplicationListener's events
+				// from onDrawFrame because it's executing in GL thread
+				requestEventRender();
+			}
+		});
+		internalSetIdleTimer(true);
+
+		while (RuntimeState.Stopping) {
+			try {
+				// Android ANR time is 5 seconds, so wait up to 4 seconds before assuming
+				// deadlock and killing process.
+				this.wait(4000);
+				if (RuntimeState.Stopping) {
+					// pause will never go false if onDrawFrame is never called by the GLThread
+					// when entering this method, we MUST enforce continuous rendering
+					android.os.Process.killProcess(android.os.Process.myPid());
+				}
+			} catch (InterruptedException ignored) {
+				// Nothing to do here, intent can't be handled.
+			}
 		}
     }
     
