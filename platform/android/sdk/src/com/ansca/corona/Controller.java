@@ -277,27 +277,27 @@ public class Controller {
 		EventManager eventManager = controller.getEventManager();
 		if ((controller != null) && (eventManager != null)) {
 			
-			boolean localStarting = false;
-			boolean localRunning = false;
-			boolean localStopping = false;
-			boolean localStopped = false;
+			boolean localShouldStart = false;
+			boolean localShouldRender = false;
+			boolean localShouldStop = false;
 
 			synchronized (controller) {
-				localStarting = RuntimeState.Starting == controller.myRuntimeState;
-				localRunning = RuntimeState.Running == controller.myRuntimeState;
-				localStopping = RuntimeState.Stopping == controller.myRuntimeState;
-				localStopped = RuntimeState.Stopped == controller.myRuntimeState;
-	
-				if (RuntimeState.Starting == controller.myRuntimeState) {
+				if (RuntimeState.Starting == controller.myRuntimeState && render) {
+					localShouldStart = true;
+					localShouldRender = true;
 					controller.myRuntimeState = RuntimeState.Running;
-				}
-				if (RuntimeState.Stopping == controller.myRuntimeState) {
+				}  else if (RuntimeState.Running == controller.myRuntimeState) {
+					localShouldRender = render;
+				} else if (RuntimeState.Stopping == controller.myRuntimeState) {
+					localShouldStop = true;
 					controller.myRuntimeState = RuntimeState.Stopped;
 					controller.notifyAll();
+				} else if (RuntimeState.Stopped == controller.myRuntimeState) {
+					// all local boolean are false
 				}
 			}
 
-			if (localStarting) {
+			if (localShouldStart) {
 				Log.i("Corona", "JavaToNativeShim.resume(runtime)");
 				JavaToNativeShim.resume(runtime);
 				synchronized (controller) {
@@ -311,7 +311,7 @@ public class Controller {
 				eventManager.sendEvents();
 			}
 
-			if (localStopping) {
+			if (localShouldStop) {
 				Log.i("Corona", "JavaToNativeShim.pause(runtime)");
 				JavaToNativeShim.pause(runtime);
 
@@ -338,7 +338,7 @@ public class Controller {
 			// Render the next frame, but only if the Corona runtime is currently running.
 			// We must check the running state "after" sending the above events because a suspend/resume event
 			// will change the running state after the event has been dispatched.
-			if (localRunning && render) {
+			if (localShouldRender) {
 				// Render the frame.
 				JavaToNativeShim.render(runtime);
 			} 
