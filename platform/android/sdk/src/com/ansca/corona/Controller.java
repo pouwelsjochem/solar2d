@@ -231,7 +231,7 @@ public class Controller {
 		myGLView.queueEvent(new Runnable() {
 			@Override
 			public void run() {
-				if (myRuntimeState == RuntimeState.Stopped) {
+				if (myRuntimeState != RuntimeState.Stopping) {
 					// pause event already picked up by updateRuntimeState
 					return;
 				}
