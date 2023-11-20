@@ -23,6 +23,14 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 	private static ZipResourceFile sApkZipEntryReader = null;
 
 	/**
+	 * For more efficient I/O throughput, BUFFER_SIZE at least 4KB is needed.
+	 * For copy size 1MB and above, 64KB is recommended.
+	 */
+	private final static int BUFFER_SIZE_NORMAL = 4096;			// 4KB
+	private final static int BUFFER_SIZE_LARGE_IO = 65536;		// 64KB
+	private final static int BUFFER_SIZE_THRESHOLD = 1048576;	// 1MB
+
+	/**
 	 * Creates an object that provides easy access to the file system and this application's
 	 * internal files in the APK's asset files.
 	 * @param context Reference to an Android created context used to access the system's directories.
@@ -704,7 +712,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 				if (outputStream != null) {
 					int byteCount = inputStream.available();
 					if (byteCount > 0) {
-						final int BUFFER_SIZE = 1024;
+						final int BUFFER_SIZE = byteCount > BUFFER_SIZE_THRESHOLD ? BUFFER_SIZE_LARGE_IO : BUFFER_SIZE_NORMAL;
 						byte[] byteBuffer = new byte[BUFFER_SIZE];
 						while (byteCount > 0) {
 							int bytesToCopy = BUFFER_SIZE;
@@ -766,7 +774,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 		try {
 			outputStream = new java.io.FileOutputStream(destinationFile);
 			if (outputStream != null) {
-				final int BUFFER_SIZE = 1024;
+				final int BUFFER_SIZE = inputStream.available() > BUFFER_SIZE_THRESHOLD ? BUFFER_SIZE_LARGE_IO : BUFFER_SIZE_NORMAL;
 				byte[] byteBuffer = new byte[BUFFER_SIZE];
 				while (true) {
 					int bytesToCopy = BUFFER_SIZE;
@@ -858,13 +866,15 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 		try {
 			inputStream = openFile(filePath);
 			if (inputStream != null) {
-				int byteCount = inputStream.available();
+				final int byteCount = inputStream.available();
 				if (byteCount > 0) {
 					bytes = new byte[byteCount];
+					final int BUFFER_SIZE = byteCount > BUFFER_SIZE_THRESHOLD ? BUFFER_SIZE_LARGE_IO : BUFFER_SIZE_NORMAL;
+
 					for (int bytesCopied = 0; bytesCopied < byteCount;) {
 						int bytesToRead = byteCount - bytesCopied;
-						if (bytesToRead > 1024) {
-							bytesToRead = 1024;
+						if (bytesToRead > BUFFER_SIZE) {
+							bytesToRead = BUFFER_SIZE;
 						}
 						int readBytes = inputStream.read(bytes, bytesCopied, bytesToRead);
 						bytesCopied += readBytes;
