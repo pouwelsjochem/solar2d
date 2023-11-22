@@ -681,9 +681,9 @@ function OSXPostPackage( params )
 			-- Special case for no provision profile (e.g. Xcode simulator)
 			if not provisionFile then -- TODO: This is currently just a quick fix for Coromon
 				-- options.bundleid = "com.example." .. sanitizeBundleString(bundledisplayname)
-				options.appid = "com.freedom.coromon.Coromon"
-				options.bundleid = "com.freedom.coromon"
-				print("Building com.freedom.coromon")
+				options.appid = "gg.freedom.coromon.Coromon"
+				options.bundleid = "gg.freedom.coromon"
+				print("Building gg.freedom.coromon")
 			else
 				err = getIDs( provisionFile, options )
 				print("Building without static bundleid", provisionFile)
