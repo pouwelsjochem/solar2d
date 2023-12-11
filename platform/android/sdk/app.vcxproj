@@ -293,6 +293,8 @@
     <JCompile Include="src\com\ansca\corona\storage\FileContentProvider.java" />
     <JCompile Include="src\com\ansca\corona\storage\FileServices.java" />
     <JCompile Include="src\com\ansca\corona\storage\package-info.java" />
+    <JCompile Include="src\com\ansca\corona\storage\PackageServices.java" />
+    <JCompile Include="src\com\ansca\corona\storage\PackageState.java" />
     <JCompile Include="src\com\ansca\corona\storage\ResourceServices.java" />
     <JCompile Include="src\com\ansca\corona\storage\ZipFileEntryInputStream.java" />
     <JCompile Include="src\com\ansca\corona\storage\ZipResourceFile.java" />

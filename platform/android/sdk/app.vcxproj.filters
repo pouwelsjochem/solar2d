@@ -581,6 +581,12 @@
     <JCompile Include="src\com\ansca\corona\storage\package-info.java">
       <Filter>src\com\ansca\corona\storage</Filter>
     </JCompile>
+    <JCompile Include="src\com\ansca\corona\storage\PackageServices.java">
+      <Filter>src\com\ansca\corona\storage</Filter>
+    </JCompile>
+    <JCompile Include="src\com\ansca\corona\storage\PackageState.java">
+      <Filter>src\com\ansca\corona\storage</Filter>
+    </JCompile>
     <JCompile Include="src\com\ansca\corona\storage\ResourceServices.java">
       <Filter>src\com\ansca\corona\storage</Filter>
     </JCompile>
