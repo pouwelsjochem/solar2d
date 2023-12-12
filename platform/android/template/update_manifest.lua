@@ -534,6 +534,8 @@ manifestKeys.USER_MIN_SDK_VERSION = tostring(minSdkVersion)
 manifestKeys.USER_FILE_CONTENT_PROVIDER_EXPORTED = tostring(allowAppsReadOnlyAccessToFiles)
 
 -- Create a meta-data tag for the targeted app store if provided.
+manifestKeys.USER_TARGETED_APP_STORE = '<meta-data android:name="targetedAppStore" android:value="google" />'
+
 stringBuffer = ""
 if googlePlayGamesAppId then
 	stringBuffer = '<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/corona_app_gsm_id" />'
