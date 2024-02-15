@@ -858,6 +858,7 @@ Runtime::LoadApplication( U32 launchOptions )
 		// Now that the config.lua has been read, startup any libraries that depend on those values
 #if defined ( Rtt_USE_ALMIXER )
 		fOpenALPlayer = PlatformOpenALPlayer::RetainInstance();
+		fOpenALPlayer->AttachNotifier( Rtt_NEW( GetAllocator(), PlatformNotifier( VMContext().LuaState() ) ) );
 #endif
 		bool connectToDebugger = ( launchOptions & kConnectToDebugger );
 		SetProperty( kIsDebuggerConnected, connectToDebugger );

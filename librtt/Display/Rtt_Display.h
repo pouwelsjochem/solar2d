@@ -50,6 +50,7 @@ class String;
 class TextureFactory;
 class PlatformSurface;
 class RenderingStream;
+class ProfilingState;
 
 // ----------------------------------------------------------------------------
 
@@ -184,6 +185,9 @@ class Display
 		static size_t GetMaxVertexTextureUnits();
 
 	public:
+		ProfilingState* GetProfilingState() const { return fProfilingState; }
+
+	public:
 		Scene& GetScene() { return *fScene; }
 		const Scene& GetScene() const { return *fScene; }
 
@@ -204,6 +208,7 @@ class Display
 		SpritePlayer *fSpritePlayer;
 		TextureFactory *fTextureFactory;
 		Scene *fScene;
+		ProfilingState *fProfilingState;
 
 		// TODO: Refactor data structure portions out
 		// We temporarily use RenderingStream b/c it contains key data

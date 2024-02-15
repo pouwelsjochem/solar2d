@@ -9,7 +9,7 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_15.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
   BUILD_NUMBER: 3699
   YEAR: 2023
   FORK_BUILD_NAME: s
@@ -39,7 +39,7 @@ jobs:
         runner:
           - macos-13
         xcode:
-          - Xcode_15.1
+          - Xcode_15.2
         target:
           - template
           - template-angle
@@ -203,7 +203,6 @@ jobs:
           APPLE_KEY: ${{ secrets.AppleKey }}
           APPLE_KEY_ID: ${{ secrets.AppleKeyId }}
           APPLE_ISSUER: ${{ secrets.AppleIssuer }}
-          
 
   Windows-Simulator:
     needs:

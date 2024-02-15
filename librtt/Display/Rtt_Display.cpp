@@ -61,6 +61,7 @@ Display::Display( Runtime& owner )
 	fSpritePlayer( Rtt_NEW( owner.Allocator(), SpritePlayer( owner.Allocator() ) ) ),
 	fTextureFactory( Rtt_NEW( owner.Allocator(), TextureFactory( * this ) ) ),
 	fScene( Rtt_NEW( & owner.GetAllocator(), Scene( owner.Allocator(), * this ) ) ),
+    fProfilingState( Rtt_NEW( owner.GetAllocator(), ProfilingState( owner.GetAllocator() ) ) ),
 	fStream( Rtt_NEW( owner.GetAllocator(), RenderingStream( owner.GetAllocator() ) ) ),
 	fScreenSurface( owner.Platform().CreateScreenSurface() ),
 	fIsCollecting( false )
@@ -77,6 +78,7 @@ Display::~Display()
 	Rtt_DELETE( fScreenSurface );
 	Rtt_DELETE( fStream );
 	Rtt_DELETE( fScene );
+    Rtt_DELETE( fProfilingState );
 	Rtt_DELETE( fTextureFactory );
 	Rtt_DELETE( fSpritePlayer );
 	Rtt_DELETE( fShaderFactory );
@@ -208,7 +210,7 @@ Display::Restart()
 void
 Display::Update()
 {
-    Profiling::EntryRAII up( GetAllocator(), "update" );
+    PROFILING_BEGIN( *GetProfilingState(), up, Update );
 
     up.Add( "Display::Update Begin" );
     
@@ -236,7 +238,7 @@ Display::Update()
 void
 Display::Render()
 {
-    Profiling::EntryRAII rp( GetAllocator(), "render" );
+    PROFILING_BEGIN( *GetProfilingState(), rp, Render );
 
     rp.Add( "Display::Render Begin" );
 
@@ -253,7 +255,7 @@ Display::Render()
         //fDeltaTimeInSeconds = ( 1.0f / 30.0f );
     }
 
-	GetScene().Render( * fRenderer, * fScreenSurface, rp.GetProfiling() );
+	GetScene().Render( * fRenderer, * fTarget, &rp );
 
     rp.Add( "Display::Render End" );
 }

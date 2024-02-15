@@ -316,8 +316,8 @@ public class Controller {
 				JavaToNativeShim.pause(runtime);
 
 				synchronized (controller) {
-					// Now we can pause the GLView on the UI thread if needed since we've 
-					// guarenteed that the Corona Runtime has stopped.
+					// Now we can pause the GLView on the UI thread if needed since we've
+					// guaranteed that the Corona Runtime has stopped.
 					Handler handler = controller.getHandler();
 					handler.post (new Runnable() {
 						@Override
