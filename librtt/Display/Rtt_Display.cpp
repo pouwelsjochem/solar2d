@@ -255,7 +255,7 @@ Display::Render()
         //fDeltaTimeInSeconds = ( 1.0f / 30.0f );
     }
 
-	GetScene().Render( * fRenderer, * fTarget, &rp );
+	GetScene().Render( * fRenderer, * fScreenSurface, &rp );
 
     rp.Add( "Display::Render End" );
 }
