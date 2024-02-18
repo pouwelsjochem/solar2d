@@ -1049,6 +1049,13 @@ function OSXPackageForSelfDistribution( params )
 
 	-- We get the appSigningIdentity as a cert fingerprint but we also need the plaintext name (unless it's "None")
 	if appSigningIdentity and appSigningIdentity ~= "None" then
+		local entitlements_filename = os.tmpname() .. "_entitlements.xcent"
+		local entitlements = entitlements_filename
+		local result, includeProvisioning = generateOSXEntitlements( entitlements_filename, settings, provisionFile )
+		if result ~= "" then
+			entitlements = nil
+		end
+
 		appSigningIdentityName = captureCommandOutput("security find-identity -p codesigning -v | grep '".. appSigningIdentity .."' | sed -e 's/.*\\(\".*\"\\).*/\\1/'")
 		if not appSigningIdentityName or appSigningIdentityName == "" then
 			print("WARNING: application identity '"..appSigningIdentity.."' does not appear to be valid for codesigning.  You should open Keychain Access and verify that your signing identities are valid")
@@ -1059,15 +1066,22 @@ function OSXPackageForSelfDistribution( params )
 		--
 		-- Sign application with production identity
 		--
-		-- sign all the plugins
-		local appPluginsDirUnquoted = makepath(appBundleFile, "Contents/Plugins")
-		local result = signAllPlugins(appPluginsDirUnquoted, appSigningIdentity, codesign)
-		if result ~= "" then
-			return tostring(result)
+
+		if entitlements ~= nil then
+			setStatus("Sign application plugins")
+			runScript( getCodesignScript( nil, appBundleFileUnquoted, options.signingIdentity, options.xcodetoolhelper.codesign ) )
 		end
 
+		-- sign all the plugins
+		-- local appPluginsDirUnquoted = makepath(appBundleFile, "Contents/Plugins")
+		-- local result = signAllPlugins(appPluginsDirUnquoted, appSigningIdentity, codesign)
+		-- if result ~= "" then
+		-- 	return tostring(result)
+		-- end
+
 		setStatus("Signing application with "..tostring(appSigningIdentityName))
-		local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFile, appSigningIdentity, codesign ) )
+		local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFile, appSigningIdentity, codesign, true ) )
+		runScript( "/bin/rm -f " .. entitlements_filename )
 
 		if result ~= 0 then
 			errMsg = "ERROR: code signing failed: "..tostring(errMsg)
