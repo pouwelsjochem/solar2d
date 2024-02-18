@@ -1069,7 +1069,7 @@ function OSXPackageForSelfDistribution( params )
 
 		if entitlements ~= nil then
 			setStatus("Sign application plugins")
-			runScript( getCodesignScript( nil, appBundleFileUnquoted, options.signingIdentity, options.xcodetoolhelper.codesign ) )
+			runScript( getCodesignScript( nil, appBundleFile, appSigningIdentity, codesign ) )
 		end
 
 		-- sign all the plugins
