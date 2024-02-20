@@ -363,7 +363,6 @@
 		03D1C5841D70D21B00DB02EE /* Rtt_PreferenceCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceCollection.h; path = ../../librtt/Rtt_PreferenceCollection.h; sourceTree = "<group>"; };
 		03D1C5851D70D21B00DB02EE /* Rtt_PreferenceValue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PreferenceValue.cpp; path = ../../librtt/Rtt_PreferenceValue.cpp; sourceTree = "<group>"; };
 		03D1C5861D70D21B00DB02EE /* Rtt_PreferenceValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceValue.h; path = ../../librtt/Rtt_PreferenceValue.h; sourceTree = "<group>"; };
-		1B5EBCAF2B84CEE00037626D /* CoronaMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaMacros.h; path = ../../librtt/Corona/CoronaMacros.h; sourceTree = "<group>"; };
 		1B5EBC8F2B84CE320037626D /* CoronaLuaObjCHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaLuaObjCHelper.mm; path = ../iphone/Corona/CoronaLuaObjCHelper.mm; sourceTree = "<group>"; };
 		1B5EBC9E2B84CE320037626D /* CoronaLuaObjCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaObjCHelper.h; path = ../iphone/Corona/CoronaLuaObjCHelper.h; sourceTree = "<group>"; };
 		1F23C31E211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LinuxAppPackager.cpp; path = ../shared/Rtt_LinuxAppPackager.cpp; sourceTree = "<group>"; };
@@ -733,7 +732,6 @@
 		A4BAC00914CF7D7200696484 /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				1B5EBCAF2B84CEE00037626D /* CoronaMacros.h */,
 				1B5EBC9E2B84CE320037626D /* CoronaLuaObjCHelper.h */,
 				1B5EBC8F2B84CE320037626D /* CoronaLuaObjCHelper.mm */,
 				A4BABBF014CF446E00696484 /* Rtt_IOSAppPackager.h */,
