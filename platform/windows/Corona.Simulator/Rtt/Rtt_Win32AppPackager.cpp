@@ -384,6 +384,7 @@ int Win32AppPackager::DoLocalBuild(const Win32AppPackager::BuildSettings& buildS
 	WinString binDirectoryPath;
 	binDirectoryPath.SetUTF8(buildSettings.BinDirectoryPath);
 
+#if !defined( Rtt_NO_GUI )
 	// Extract the project's plugins to the "bin" directory.
 	// This must be done before extracting the Win32 app template so that plugins can't overwrite Corona's DLLs.
 	auto runtimePointer = buildSettings.ParamsPointer->GetRuntime();
@@ -518,6 +519,7 @@ int Win32AppPackager::DoLocalBuild(const Win32AppPackager::BuildSettings& buildS
 			} while (::FindNextFileW(searchHandle, &findData));
 		}
 	}
+#endif // ! Rtt_NO_GUI
 
 	// Unzip the Win32 app template to the "bin" directory.
 	// This app template contains the pre-compiled exe, libraries, etc.
