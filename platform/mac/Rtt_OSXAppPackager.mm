@@ -275,9 +275,6 @@ OSXAppPackager::PrepackagePlugins(OSXAppPackagerParams *params, String& pluginsD
 {
 	int result = PlatformAppPackager::kNoError;
 
-#if !defined( Rtt_NO_GUI )
-	// We don't currently support plugins for CoronaBuilder macOS desktop builds
-
 	Runtime *runtime = params->GetRuntime();
 
 	Rtt_TRACE(("OSXAppPackager::PrepackagePlugins: pluginsDir %s", pluginsDir.GetString()));
@@ -314,7 +311,6 @@ OSXAppPackager::PrepackagePlugins(OSXAppPackagerParams *params, String& pluginsD
 			return PlatformAppPackager::kBuildError;
 		}
 	}
-#endif
 
 	return result;
 }
