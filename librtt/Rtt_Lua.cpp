@@ -16,9 +16,7 @@
 #include "Core/Rtt_Build.h"
 
 #include "Rtt_Lua.h"
-#if !defined( Rtt_NO_GUI )
 #include "Rtt_LuaContext.h"
-#endif
 #include "Rtt_MCriticalSection.h"
 #include "Core/Rtt_String.h"
 #include "Corona/CoronaLog.h"
@@ -570,45 +568,8 @@ LuaTraceback( lua_State* L )
 {
 	int result = 1;
 
-#if !defined( Rtt_NO_GUI )
 	// Call the LuaContext version to ensure the same behavior in all circumstances
 	LuaContext::traceback( L );
-#else
-	// In CoronaBuilder we don't care about unhandledError listeners so do it the old way
-
-	if (!lua_isstring(L, 1))  /* 'message' not a string? */
-	{
-		return 1;  /* keep it intact */
-	}
-
-	lua_getfield(L, LUA_GLOBALSINDEX, "debug");
-	if (!lua_istable(L, -1))
-	{
-		lua_pop(L, 1);
-		return 1;
-	}
-	lua_getfield(L, -1, "traceback");
-	if (!lua_isfunction(L, -1))
-	{
-		lua_pop(L, 2);
-		return 1;
-	}
-
-	lua_remove( L, -2 ); // pop debug
-
-	lua_pushvalue(L, 1);  /* pass error message */
-	lua_pushinteger(L, 1);  /* skip this function and traceback */
-	lua_call(L, 2, 1);  /* call debug.traceback */
-
-	if ( ! lua_gethook( L ) )
-	{
-		CORONA_LOG_ERROR( "Runtime error\n%s", lua_tostring( L, -1 ) );
-
-		// Pop message as we have already printed it to console.
-		lua_pop( L, 1 );
-		result = 0;
-	}
-#endif
 
 	return result;
 }
