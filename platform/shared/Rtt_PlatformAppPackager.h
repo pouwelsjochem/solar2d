@@ -25,7 +25,9 @@ class DeviceBuildData;
 class LuaContext;
 class MPlatform;
 class MPlatformServices;
-class Runtime;
+#if !defined( Rtt_NO_GUI )
+	class Runtime;
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -147,6 +149,7 @@ class PlatformAppPackager
 		static void EscapeStringForAndroid( const char *sourceString, String &targetString );
 		static void EscapeFileName( const char *sourceString, String &targetString, bool unicodeAllowed = false );
 
+#if !defined( Rtt_NO_GUI )
 		/**
 		 * Determines if the system has acquired all plugins required for the given Corona runtime's project.
 		 * @param runtime Pointer to the Corona runtime to be queried.
@@ -158,6 +161,7 @@ class PlatformAppPackager
 		 *         Returns false if not all plugins have been downloaded/found or if given an invalid argument.
 		 */
 		static bool AreAllPluginsAvailable( Runtime *runtime, String *missingPluginsString = NULL );
+#endif
 
 	protected:
 		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
@@ -214,6 +218,7 @@ class PlatformAppPackager
 		 */
 		bool CopyDirectoryTree( const CopyDirectoryTreeSettings &settings );
 
+#if !defined( Rtt_NO_GUI )
 		/**
 		 * Unzips the given Corona runtime's downloaded plugins to the destination path.
 		 * @param params Pointer to the build's package parameters. Cannot be null.
@@ -229,6 +234,7 @@ class PlatformAppPackager
 		 *         The "params" argument's GetBuildMessage() will provide a reason why it failed.
 		 */
 		bool UnzipPlugins( AppPackagerParams *params, Runtime *runtime, const char *destinationDirectoryPath );
+#endif
 
 		int OpenBuildSettings( const char * srcDir );
 		virtual void OnReadingBuildSettings( lua_State *L, int index );

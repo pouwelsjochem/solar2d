@@ -35,9 +35,9 @@
 #	include <fnmatch.h>
 #endif
 
-#include "Rtt_Runtime.h"
 #if !defined( Rtt_NO_GUI )
 #	include "Rtt_LuaContext.h"
+#	include "Rtt_Runtime.h"
 #else
 #   ifdef Rtt_WIN_ENV
 #	    include "Rtt_WinConsolePlatform.h"
@@ -1056,6 +1056,7 @@ PlatformAppPackager::CopyDirectoryTree( const PlatformAppPackager::CopyDirectory
 	return wasSuccessful;
 }
 
+#if !defined( Rtt_NO_GUI )
 bool
 PlatformAppPackager::UnzipPlugins( AppPackagerParams *params, Runtime *runtime, const char *destinationDirectoryPath )
 {
@@ -1131,6 +1132,7 @@ PlatformAppPackager::UnzipPlugins( AppPackagerParams *params, Runtime *runtime, 
 	// Returns true if all plugins were unzipped successfully. Returns false if not.
 	return wasSuccessful;
 }
+#endif
 
 int
 PlatformAppPackager::OpenBuildSettings( const char * srcDir )
@@ -1566,6 +1568,7 @@ PlatformAppPackager::EscapeFileName( const char *sourceString, String &targetStr
 	}
 }
 
+#if !defined( Rtt_NO_GUI )
 bool
 PlatformAppPackager::AreAllPluginsAvailable( Runtime *runtime, String *missingPluginsString /*=NULL*/ )
 {
@@ -1607,6 +1610,7 @@ PlatformAppPackager::AreAllPluginsAvailable( Runtime *runtime, String *missingPl
 	lua_pop( luaStatePointer, 1 );
 	return hasAcquiredAllPlugins;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 
