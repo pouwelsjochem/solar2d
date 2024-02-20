@@ -36,8 +36,9 @@
 #endif
 
 #include "Rtt_Runtime.h"
-#include "Rtt_LuaContext.h"
-#if defined( Rtt_NO_GUI )
+#if !defined( Rtt_NO_GUI )
+#	include "Rtt_LuaContext.h"
+#else
 #   ifdef Rtt_WIN_ENV
 #	    include "Rtt_WinConsolePlatform.h"
 #   endif

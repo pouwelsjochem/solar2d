@@ -39,40 +39,43 @@
 
 #include <string.h>
 
-// This is a hack to hold on to symbols required for running plugins
-// Because some plugins are dynamically linked, linker wouldn't know which symbols app uses
-// and will strip this plugin interfaces as unused
+#if !defined( Rtt_NO_GUI )
+	// This is a hack to hold on to symbols required for running plugins
+	// Because some plugins are dynamically linked, linker wouldn't know which symbols app uses
+	// and will strip this plugin interfaces as unused
 
-#include "CoronaLuaObjCHelper.h"
-#include "CoronaEvent.h"
-#include "Corona/CoronaGraphics.h"
-#include "Corona/CoronaMemory.h"
+	#include "CoronaLuaObjCHelper.h"
+	#include "CoronaEvent.h"
+	#include "Corona/CoronaGraphics.h"
+	#include "Corona/CoronaMemory.h"
 
-volatile void* fakeVariableToPreventSymbolStripping[] __attribute__((used)) = {
-	(void*)CoronaEventNameKey,
-	(void*)CoronaEventProviderKey,
-	(void*)CoronaEventPhaseKey,
-	(void*)CoronaEventTypeKey,
-	(void*)CoronaEventResponseKey,
-	(void*)CoronaEventIsErrorKey,
-	(void*)CoronaEventErrorCodeKey,
-	(void*)CoronaEventDataKey,
-	(void*)CoronaEventAdsRequestName,
-	(void*)CoronaEventPopupName,
-	
-	(void*)CoronaLuaCreateDictionary,
-	(void*)CoronaLuaPushValue,
-	
-	(void*)CoronaExternalPushTexture,
-	(void*)CoronaExternalGetUserData,
-	(void*)CoronaExternalFormatBPP,
+	volatile void* fakeVariableToPreventSymbolStripping[] __attribute__((used)) = {
+		(void*)CoronaEventNameKey,
+		(void*)CoronaEventProviderKey,
+		(void*)CoronaEventPhaseKey,
+		(void*)CoronaEventTypeKey,
+		(void*)CoronaEventResponseKey,
+		(void*)CoronaEventIsErrorKey,
+		(void*)CoronaEventErrorCodeKey,
+		(void*)CoronaEventDataKey,
+		(void*)CoronaEventAdsRequestName,
+		(void*)CoronaEventPopupName,
+		
+		(void*)CoronaLuaCreateDictionary,
+		(void*)CoronaLuaPushValue,
+		
+		(void*)CoronaExternalPushTexture,
+		(void*)CoronaExternalGetUserData,
+		(void*)CoronaExternalFormatBPP,
 
-	(void*)CoronaMemoryCreateInterface,
-	(void*)CoronaMemoryBindLookupSlot,
-	(void*)CoronaMemoryReleaseLookupSlot,
-	(void*)CoronaMemoryPushLookupEncoding,
-	(void*)CoronaMemoryAcquireInterface
-};
+		(void*)CoronaMemoryCreateInterface,
+		(void*)CoronaMemoryBindLookupSlot,
+		(void*)CoronaMemoryReleaseLookupSlot,
+		(void*)CoronaMemoryPushLookupEncoding,
+		(void*)CoronaMemoryAcquireInterface
+	};
+
+#endif
 
 // ----------------------------------------------------------------------------
 
