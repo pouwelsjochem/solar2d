@@ -21,14 +21,14 @@ jobs:
     runs-on: macos-13
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - run: ./tools/GHAction/daily_env.sh
       - name: Set daily build
         run: ./tools/GHAction/process_sources.sh
       - name: Upload Source bundle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SourceCode
           path: ./output
@@ -39,7 +39,7 @@ jobs:
         runner:
           - macos-13
         xcode:
-          - Xcode_15.2
+          - Xcode_15.3
         target:
           - template
           - template-angle
@@ -58,9 +58,10 @@ jobs:
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: SourceCode
+          path: SourceCode
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
@@ -72,7 +73,7 @@ jobs:
       - name: Build templates JSON spec
         run: ./tools/GHAction/generate_xcode_jsons.py
       - name: Upload templates
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Templates-${{ matrix.platform }}-${{ matrix.xcode }}-${{ matrix.target }}
           path: ./output
@@ -83,8 +84,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
       - name: Collect templates together
         run: |
           mkdir -p output/iostemplate
@@ -95,7 +96,7 @@ jobs:
       - name: Generate template JSON
         run: find Templates-* -name '*_*-SDKs.json' -exec ./tools/GHAction/aggregate_xcode_jsons.py output {} \+
       - name: Upload templates
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Collected-ios-templates
           path: ./output
@@ -106,9 +107,10 @@ jobs:
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: SourceCode
+          path: SourceCode
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
@@ -117,7 +119,7 @@ jobs:
         env:
           CERT_PASSWORD: ${{ secrets.CertPassword }}
       - name: Upload Corona Native
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Native
           path: ./output
@@ -131,25 +133,28 @@ jobs:
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: SourceCode
+          path: SourceCode
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
       - name: Check for macOS min supported version
         run: exit $( echo  $(cat platform/mac/AppDelegate.mm |  perl -ne 'print for /kosVersionCurrent = @"([0-9.]+)"/') ' < '  $(/usr/bin/xcrun --sdk macosx --show-sdk-version)  | bc )
       - name: Get collected templates
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: Collected-ios-templates
+          path: Collected-ios-templates
       - name: Put collected iOS templates in place
         run: cp -Rv Collected-ios-templates/* platform/resources/
       - run: mkdir docs
       - name: Get Native
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: Native
+          path: Native
       - name: Put JRE in place
         shell: bash
         run: |
@@ -160,6 +165,8 @@ jobs:
         run: npm install -g appdmg
       - name: install imagemagick
         run: brew install imagemagick gs || true
+      - name: freshen icu4c for node
+        run: brew upgrade icu4c || brew install icu4c
       - name: Build DMG
         run: ./tools/GHAction/build_dmg.sh
         env:
@@ -177,7 +184,7 @@ jobs:
           APPLE_KEY_ID: ${{ secrets.AppleKeyId }}
           APPLE_ISSUER: ${{ secrets.AppleIssuer }}
       - name: Upload macOS Daily build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Simulator-macOS
           path: ./output
@@ -211,21 +218,22 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Get processed code
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: SourceCode
+          path: SourceCode
       - name: Unpack source code
         run: |
           7z x SourceCode/corona.tgz
           7z x corona.tar
       # - name: Checkout Switch specific source code (under NDA)
-      #   uses: actions/checkout@v3
+      #   uses: actions/checkout@v4
       #   with:
       #     repository: pouwelsjochem/solar2d-platform-switch
       #     token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
       #     path: platform\switch
       # - name: Checkout Switch CI (under NDA)
-      #   uses: actions/checkout@v3
+      #   uses: actions/checkout@v4
       #   with:
       #     repository: pouwelsjochem/nintendo-setup-ci
       #     ref: "2.5.5"
@@ -237,9 +245,10 @@ jobs:
       - name: Move docs outside the directory
         run: mv docs ../docs
       - name: Get Corona Native
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: Native
+          path: Native
       - name: Put native in place
         shell: cmd
         run: |
@@ -288,7 +297,7 @@ jobs:
           cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
         shell: bash
       - name: Upload Windows Corona artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Simulator-Windows
           path: ./output
@@ -302,7 +311,7 @@ jobs:
       - macOS-Simulator
       - native
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: ./tools/GHAction/daily_env.sh
       - name: Generate Change Log
         run: |
@@ -322,13 +331,15 @@ jobs:
           echo "$GIT_LOG" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           echo "$GIT_LOG"
-      - uses: actions/download-artifact@v1
+      - uses: actions/download-artifact@v4
         with:
           name: Simulator-macOS
-      - uses: actions/download-artifact@v1
+          path: Simulator-macOS
+      - uses: actions/download-artifact@v4
         with:
           name: Simulator-Windows
-      - uses: actions/download-artifact@v1
+          path: Simulator-Windows
+      - uses: actions/download-artifact@v4
         with:
           name: Native
       - name: Create Release

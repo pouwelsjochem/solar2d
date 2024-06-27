@@ -261,7 +261,6 @@ GraphicsLibrary::listEffects( lua_State *L )
 	factory.PushList( L, c );
 	return 1;
 }
-
 //helper funciton to parse lua table to create bitmap resource
 SharedPtr<TextureResource> CreateResourceBitmapFromTable(Rtt::TextureFactory &factory, lua_State *L, int index)
 {

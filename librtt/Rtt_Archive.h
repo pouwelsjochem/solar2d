@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// This file is part of the Corona game engine.
+// This file is part of the Solar2D game engine.
+// With contributions from Dianchu Technology
 // For overview and more information on licensing please refer to README.md 
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
@@ -12,9 +13,6 @@
 
 #if !defined( Rtt_NO_ARCHIVE )
 	#include "Rtt_Lua.h"
-	#if defined( Rtt_ANDROID_ENV )
-		#define Rtt_ARCHIVE_COPY_DATA 1
-	#endif
 #endif
 
 #ifdef Rtt_ARCHIVE_COPY_DATA

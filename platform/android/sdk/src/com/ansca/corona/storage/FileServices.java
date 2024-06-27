@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// This file is part of the Corona game engine.
+// This file is part of the Solar2D game engine.
+// With contributions from Dianchu Technology
 // For overview and more information on licensing please refer to README.md 
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
@@ -18,7 +19,6 @@ package com.ansca.corona.storage;
  * All methods in this class are thread safe and can be called from any thread.
  */
 public class FileServices extends com.ansca.corona.ApplicationContextProvider {
-
 	/** Provides fast access to file entries within an APK file, which is really a zip file. */
 	private static ZipResourceFile sApkZipEntryReader = null;
 
@@ -525,7 +525,9 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 
 		// Extract the asset file and copy it to an external directory.
 		boolean wasCopied = copyFile(assetFile, destinationFile);
-		if (wasCopied == false) {
+		// There is a 0.3% chance of the file fails to be copied (AssetInputStream#read() returns -1 early),
+		// we need a reliable extracted, so try again here.
+		if (!wasCopied && !copyFile(assetFile, destinationFile)) {
 			return null;
 		}
 
@@ -689,6 +691,7 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 	public boolean copyFile(java.io.File sourceFile, java.io.File destinationFile) {
 		java.io.InputStream inputStream = null;
 		java.io.FileOutputStream outputStream = null;
+		java.io.File tmpFile = null;
 		boolean hasSucceeded = false;
 		
 		// Validate arguments.
@@ -708,23 +711,33 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 			if (inputStream != null) {
 				// Create the destination directory tree, if it does not already exist.  Only create it if its actually a resource file.
 				destinationFile.getParentFile().mkdirs();
-				outputStream = new java.io.FileOutputStream(destinationFile);
+
+				// Writes and renames temporary files to prevent incomplete copies.
+				tmpFile = java.io.File.createTempFile("copy-" + destinationFile.getName() + "-", null, destinationFile.getParentFile());
+				outputStream = new java.io.FileOutputStream(tmpFile);
 				if (outputStream != null) {
-					int byteCount = inputStream.available();
+					// openFile() returns AssetInputStream, ZipFileEntryInputStream, and so on,
+					// overrides available() to use ZipEntry to provide length.
+					final int byteCount = inputStream.available();
+
+					// Used for comparison to check if AssetInputStream#read() returns -1 early.
+					int readTotal = 0;
+
 					if (byteCount > 0) {
-						final int BUFFER_SIZE = byteCount > BUFFER_SIZE_THRESHOLD ? BUFFER_SIZE_LARGE_IO : BUFFER_SIZE_NORMAL;
-						byte[] byteBuffer = new byte[BUFFER_SIZE];
-						while (byteCount > 0) {
-							int bytesToCopy = BUFFER_SIZE;
-							if (bytesToCopy > byteCount) {
-								bytesToCopy = byteCount;
-							}
-							bytesToCopy = inputStream.read(byteBuffer, 0, bytesToCopy);
-							outputStream.write(byteBuffer, 0, bytesToCopy);
-							byteCount -= bytesToCopy;
+						// 64KB has better throughput but is *suspected* to increase the probability
+						// of AssetInputStream#read() returns -1 early. Use general page size 4KB.
+						byte[] byteBuffer = new byte[BUFFER_SIZE_NORMAL];
+						int readCount;
+						while ((readCount = inputStream.read(byteBuffer)) != -1) {
+							outputStream.write(byteBuffer, 0, readCount);
+							readTotal += readCount;
 						}
+						// We need the file to be available immediately.
+						// The flush method inherited from OutputStream MAY do nothing, but sync does!
+						outputStream.flush();
+						outputStream.getFD().sync();
 					}
-					hasSucceeded = true;
+					hasSucceeded = (byteCount == readTotal);
 				}
 			}
 		}
@@ -741,8 +754,14 @@ public class FileServices extends com.ansca.corona.ApplicationContextProvider {
 				try { outputStream.close(); }
 				catch (Exception ex) { }
 			}
-			if (!hasSucceeded) {
-				destinationFile.delete();
+			if (tmpFile != null) {
+				if (hasSucceeded) {
+					hasSucceeded = false;
+					// Success if and only if it is successfully copied and renamed.
+					try { hasSucceeded = tmpFile.renameTo(destinationFile); }
+					catch (Exception ex) { }
+				}
+				if (!hasSucceeded) tmpFile.delete();
 			}
 		}
 		return hasSucceeded;
