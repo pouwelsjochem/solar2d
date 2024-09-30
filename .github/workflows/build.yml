@@ -9,7 +9,7 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_16.app/Contents/Developer
   BUILD_NUMBER: 3704
   YEAR: 2024
   FORK_BUILD_NAME: c
@@ -37,9 +37,10 @@ jobs:
     strategy:
       matrix:
         runner:
-          - macos-13
+          - macos-14
         xcode:
-          - Xcode_15.3
+          - Xcode_16
+          - Xcode_15.4
         target:
           - template
           - template-angle
@@ -82,6 +83,7 @@ jobs:
     needs:
       - Xcode-template-matrix
     runs-on: ubuntu-20.04
+    if: (! failure() && ! cancelled())
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - uses: actions/checkout@v4
@@ -104,6 +106,8 @@ jobs:
   native:
     needs: source-code
     runs-on: macos-13
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
@@ -129,7 +133,7 @@ jobs:
       - source-code
       - collect-ios-templates
       - native
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
@@ -160,7 +164,7 @@ jobs:
         run: |
           curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.macos.tgz -o jre.macos.tgz
       - name: required for appdmg
-        run: python3 -m pip install setuptools
+        run: brew install python-setuptools
       - name: install appdmg
         run: npm install -g appdmg
       - name: install imagemagick
@@ -190,7 +194,7 @@ jobs:
           path: ./output
 
   check-notarization:
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Check notarization credentials
         run: |
