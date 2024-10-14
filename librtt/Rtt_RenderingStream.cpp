@@ -130,7 +130,8 @@ RenderingStream::SetOptimalContentSize( S32 deviceWidth, S32 deviceHeight )
 		S32 xOffset = ceil(Rtt_RealDiv2(Rtt_IntToReal(fDeviceWidth - (clampedContentWidth * contentToScreenScale))));
 		S32 yOffset = ceil(Rtt_RealDiv2(Rtt_IntToReal(fDeviceHeight - (clampedContentHeight * contentToScreenScale))));
 
-		if (contentToScreenScale == 1 || (xOffset + yOffset) < (fXScreenOffset + fYScreenOffset)) {
+		// We allow offset of 4 pixels as that allows much more devices to be more zoomed out
+		if (contentToScreenScale == 1 || ((fXScreenOffset + fYScreenOffset) > 4 && (xOffset + yOffset) < (fXScreenOffset + fYScreenOffset))) {
 			fXScreenOffset = xOffset;
 			fYScreenOffset = yOffset;
 			fContentWidth = clampedContentWidth;
