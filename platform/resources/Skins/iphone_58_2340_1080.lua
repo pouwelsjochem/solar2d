@@ -9,8 +9,8 @@
 
 simulator =
 {
-	category = "default-resolutions",
-	deviceWidth = 480 * 3,
-	deviceHeight = 270 * 3,
-	deviceName = "1080p @3x",
+	category = "apple",
+	deviceWidth = 2340,
+	deviceHeight = 1080,
+	deviceName = "5.8\" iPhone 13 mini",
 }

@@ -9,8 +9,8 @@
 
 simulator =
 {
-	category = "default-resolutions",
-	deviceWidth = 480 * 3,
-	deviceHeight = 270 * 3,
-	deviceName = "1080p @3x",
+	category = "mid-supported",
+	deviceWidth = 410,
+	deviceHeight = 230,
+	deviceName = "Medium (410x230 @1x)",
 }

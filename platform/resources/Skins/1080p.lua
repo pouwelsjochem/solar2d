@@ -10,7 +10,7 @@
 simulator =
 {
 	category = "default-resolutions",
-	deviceWidth = 384 * 5,
-	deviceHeight = 216 * 5,
-	deviceName = "1080p @5x (original)",
+	deviceWidth = 1920,
+	deviceHeight = 1080,
+	deviceName = "1080p @4x (original)",
 }

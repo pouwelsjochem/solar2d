@@ -9,8 +9,8 @@
 
 simulator =
 {
-	category = "default-resolutions",
-	deviceWidth = 480 * 3,
-	deviceHeight = 270 * 3,
-	deviceName = "1080p @3x",
+	category = "apple",
+	deviceWidth = 2208,
+	deviceHeight = 1242,
+	deviceName = "5.5\" iPhone 8 plus",
 }

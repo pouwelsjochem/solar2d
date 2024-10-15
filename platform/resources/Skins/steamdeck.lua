@@ -10,7 +10,7 @@
 simulator =
 {
 	category = "default-resolutions",
-	deviceWidth = 480 * 3,
-	deviceHeight = 270 * 3,
-	deviceName = "1080p @3x",
+	deviceWidth = 1280,
+	deviceHeight = 800,
+	deviceName = "Steamdeck",
 }

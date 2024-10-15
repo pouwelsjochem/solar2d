@@ -9,8 +9,8 @@
 
 simulator =
 {
-	category = "default-resolutions",
-	deviceWidth = 384 * 4,
-	deviceHeight = 216 * 4,
-	deviceName = "1080p @4x",
+	category = "apple",
+	deviceWidth = 2778,
+	deviceHeight = 1284,
+	deviceName = "6.5\" iPhone 12 Pro Max",
 }

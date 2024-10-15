@@ -10,7 +10,7 @@
 simulator =
 {
 	category = "min-supported",
-	deviceWidth = 240 * 2,
-	deviceHeight = 160 * 2,
-	deviceName = "Minimum (240x160 @2x)",
+	deviceWidth = 300 * 2,
+	deviceHeight = 180 * 2,
+	deviceName = "Minimum (300x180 @2x)",
 }
