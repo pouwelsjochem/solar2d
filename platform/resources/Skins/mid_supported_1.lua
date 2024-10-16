@@ -10,7 +10,7 @@
 simulator =
 {
 	category = "mid-supported",
-	deviceWidth = 410,
+	deviceWidth = 450,
 	deviceHeight = 230,
-	deviceName = "Medium (410x230 @1x)",
+	deviceName = "Medium (450x230 @1x)",
 }
