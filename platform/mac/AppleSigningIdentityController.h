@@ -35,6 +35,7 @@
 {
 	@private
 		NSString *fPath;
+        NSString *fNewPath;
 }
 
 + (NSString*)defaultProvisionPath;
