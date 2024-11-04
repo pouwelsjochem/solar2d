@@ -9,7 +9,7 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_16_1_Release_Candidate.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_16.1.app/Contents/Developer
   BUILD_NUMBER: 3710
   YEAR: 2024
   FORK_BUILD_NAME: b
