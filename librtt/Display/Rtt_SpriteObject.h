@@ -21,6 +21,8 @@
 
 // ----------------------------------------------------------------------------
 
+struct lua_State;
+
 namespace Rtt
 {
 
@@ -47,9 +49,9 @@ class SpriteObject : public RectObject
 		typedef Properties U8;
 
 	public:
-		static SpriteObject* Create(Rtt_Allocator *pAllocator, SpritePlayer& player, Real width, Real height);
+		static SpriteObject* Create(lua_State * L, Rtt_Allocator *pAllocator, SpritePlayer& player, Display& display, Real width, Real height);
 
-	protected:
+    public:
 		SpriteObject(Rtt_Allocator *pAllocator, SpritePlayer& player, Real width, Real height);
 
 	public:

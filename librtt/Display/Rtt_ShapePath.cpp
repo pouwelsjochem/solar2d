@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -48,7 +48,7 @@ ShapePath::ShapePath( Rtt_Allocator *pAllocator, TesselatorShape *tesselator )
 	fTesselator( tesselator ),
 	fDelegate( NULL )
 {
-	Rtt_ASSERT( fTesselator );
+    Rtt_ASSERT( fTesselator );
 }
 
 ShapePath::~ShapePath()
@@ -59,13 +59,24 @@ ShapePath::~ShapePath()
 		observer->QueueRelease( fFillGeometry );
 	}
 
-	Rtt_DELETE( fTesselator );
+        Geometry::ExtensionBlock* fillBlock = fFillGeometry->GetExtensionBlock();
+        
+        if (fillBlock && fillBlock->fProxy)
+        {
+            ReleaseProxy( fillBlock->fProxy );
+        }
+
+        observer->QueueRelease( fStrokeGeometry );
+        observer->QueueRelease( fFillGeometry );
+    }
+
+    Rtt_DELETE( fTesselator );
 }
 
 void
 ShapePath::CalculateUV( ArrayVertex2& texVertices, Paint *paint, bool canTransformTexture )
 {
-	Transform t;
+    Transform t;
 
 	if ( canTransformTexture
 			|| ! paint->IsValid( Paint::kTextureTransformFlag ) )
@@ -81,66 +92,66 @@ ShapePath::CalculateUV( ArrayVertex2& texVertices, Paint *paint, bool canTransfo
 		}
 	}
 
-	texVertices.Clear();
-	fTesselator->GenerateFillTexture( texVertices, t );
-	paint->ApplyPaintUVTransformations( texVertices );
+    texVertices.Clear();
+    fTesselator->GenerateFillTexture( texVertices, t );
+    paint->ApplyPaintUVTransformations( texVertices );
 }
 
 void
 ShapePath::TesselateFill()
 {
-	Rtt_ASSERT( HasFill() );
+    Rtt_ASSERT( HasFill() );
 
-	Paint *paint = GetFill();
+    Paint *paint = GetFill();
 
-	bool canTransformTexture = paint->CanTransform();
-	
-	if ( ! IsValid( kFillSource ) )
-	{
-		fFillSource.Vertices().Clear();
-		fTesselator->GenerateFill( fFillSource.Vertices() );
-		SetValid( kFillSource );
+    bool canTransformTexture = paint->CanTransform();
+    
+    if ( ! IsValid( kFillSource ) )
+    {
+        fFillSource.Vertices().Clear();
+        fTesselator->GenerateFill( fFillSource.Vertices() );
+        SetValid( kFillSource );
 
-		if ( canTransformTexture )
-		{
-			Invalidate( kFillSourceTexture );
-		}
+        if ( canTransformTexture )
+        {
+            Invalidate( kFillSourceTexture );
+        }
 
-		// Force renderdata update
-		Invalidate( kFill );
+        // Force renderdata update
+        Invalidate( kFill );
 
-		// Force per-vertex color data update
-		GetObserver()->Invalidate( DisplayObject::kColorFlag );
-	}
-	
-	if ( !IsValid(kFillSourceIndices) )
-	{
-		fIndexSource.Clear();
-		fTesselator->GenerateFillIndices(fIndexSource);
-		SetValid( kFillSourceIndices );
-		
-		Invalidate( kFillIndices );
-	}
+        // Force per-vertex color data update
+        GetObserver()->Invalidate( DisplayObject::kColorFlag );
+    }
+    
+    if ( !IsValid(kFillSourceIndices) )
+    {
+        fIndexSource.Clear();
+        fTesselator->GenerateFillIndices(fIndexSource);
+        SetValid( kFillSourceIndices );
+        
+        Invalidate( kFillIndices );
+    }
 
-	if ( ! IsValid( kFillSourceTexture ) )
-	{
-		CalculateUV( fFillSource.TexVertices(), paint, canTransformTexture );
+    if ( ! IsValid( kFillSourceTexture ) )
+    {
+        CalculateUV( fFillSource.TexVertices(), paint, canTransformTexture );
 
-		SetValid( kFillSourceTexture );
+        SetValid( kFillSourceTexture );
 
-		// Force renderdata update
-		Invalidate( kFillTexture );
+        // Force renderdata update
+        Invalidate( kFillTexture );
 
-		Rtt_ASSERT( fFillSource.Vertices().Length() == fFillSource.TexVertices().Length() );
-	}
+        Rtt_ASSERT( fFillSource.Vertices().Length() == fFillSource.TexVertices().Length() );
+    }
 }
 
 void
 ShapePath::UpdateFill( RenderData& data, const Matrix& srcToDstSpace )
 {
-	if ( HasFill() )
-	{
-		TesselateFill();
+    if ( HasFill() )
+    {
+        TesselateFill();
 
 		// The flags here are for a common helper (UpdateGeometry)
 		// which is agnostic to fill, so we have to map
@@ -159,24 +170,24 @@ ShapePath::UpdateFill( RenderData& data, const Matrix& srcToDstSpace )
 			flags |= kIndicesMask;
 		}
 
-		if ( ! fDelegate )
-		{
-			UpdateGeometry( *fFillGeometry, fFillSource, srcToDstSpace, flags, &fIndexSource );
-		}
-		else
-		{
-			fDelegate->UpdateGeometry( * fFillGeometry, fFillSource, srcToDstSpace, flags );
-		}
-		data.fGeometry = fFillGeometry;
+        if ( ! fDelegate )
+        {
+            UpdateGeometry( *fFillGeometry, fFillSource, srcToDstSpace, flags, &fIndexSource );
+        }
+        else
+        {
+            fDelegate->UpdateGeometry( * fFillGeometry, fFillSource, srcToDstSpace, flags );
+        }
+        data.fGeometry = fFillGeometry;
 
-		SetValid( kFill | kFillTexture | kFillIndices );
-	}
+        SetValid( kFill | kFillTexture | kFillIndices );
+    }
 }
 
 void
 ShapePath::Update( RenderData& data, const Matrix& srcToDstSpace )
 {
-	Super::Update( data, srcToDstSpace );
+    Super::Update( data, srcToDstSpace );
 
 	UpdateFill( data, srcToDstSpace );
 }
@@ -193,7 +204,7 @@ ShapePath::UpdateResources( Renderer& renderer ) const
 void
 ShapePath::Translate( Real dx, Real dy )
 {
-	Super::Translate( dx, dy );
+    Super::Translate( dx, dy );
 
 	Geometry::Vertex *fillVertices = fFillGeometry->GetVertexData();
 	for ( int i = 0, iMax = fFillGeometry->GetVerticesUsed(); i < iMax; i++ )
@@ -213,37 +224,37 @@ ShapePath::GetSelfBounds( Rect& rect ) const
 bool
 ShapePath::SetSelfBounds( Real width, Real height )
 {
-	bool result = fTesselator->SetSelfBounds( width, height );
+    bool result = fTesselator->SetSelfBounds( width, height );
 
 	if ( result )
 	{
 		Invalidate( kFillSource );
 	}
 
-	return result;
+    return result;
 }
 
 void
 ShapePath::GetTextureVertices( ArrayVertex2& texVertices )
 {
-	Rtt_ASSERT( HasFill() );
+    Rtt_ASSERT( HasFill() );
 
-	Paint *paint = GetFill();
+    Paint *paint = GetFill();
 
-	CalculateUV( texVertices, paint, paint->CanTransform() );
+    CalculateUV( texVertices, paint, paint->CanTransform() );
 }
 
 Rect
 ShapePath::GetTextureExtents( const ArrayVertex2& texVertices ) const
 {
-	Rect extents;
+    Rect extents;
 
-	for (S32 i = 0, iMax = texVertices.Length(); i < iMax; ++i)
-	{
-		extents.Union(texVertices[i]);
-	}
+    for (S32 i = 0, iMax = texVertices.Length(); i < iMax; ++i)
+    {
+        extents.Union(texVertices[i]);
+    }
 
-	return extents;
+    return extents;
 }
 
 // ----------------------------------------------------------------------------

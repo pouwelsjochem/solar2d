@@ -248,6 +248,11 @@ class Runtime : public MCallback,
 		lua_State* PushResourceRegistry();
 
 	public:
+		void SetBackend( const char * backend, void * backendState) { fBackend = backend; fBackendState = backendState; }
+
+		const char * GetBackend() const { return fBackend; }
+
+	public:
 		// MCallback
 		virtual void operator()();
 
@@ -281,6 +286,8 @@ class Runtime : public MCallback,
 		PlatformTimer* fTimer;
 		Scheduler* fScheduler;
 		Archive* fArchive;
+		const char * fBackend;
+		void * fBackendState;
 	
 #ifdef Rtt_USE_ALMIXER
 		PlatformOpenALPlayer* fOpenALPlayer;

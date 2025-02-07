@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -10,6 +10,7 @@
 #include "Core/Rtt_Build.h"
 
 #include "Display/Rtt_DisplayDefaults.h"
+#include "Display/Rtt_ShaderResource.h"
 
 // ----------------------------------------------------------------------------
 
@@ -22,10 +23,10 @@ static const Color kBlack = 0xFF000000;
 static const Color kWhite = 0xFFFFFFFF;
 
 #ifdef Rtt_AUTHORING_SIMULATOR
-	// Simulator should always show errors
-	static bool kShaderCompilerVerboseDefault = true;
+    // Simulator should always show errors
+    static bool kShaderCompilerVerboseDefault = true;
 #else
-	static bool kShaderCompilerVerboseDefault = false;
+    static bool kShaderCompilerVerboseDefault = false;
 #endif
 
 
@@ -43,6 +44,29 @@ DisplayDefaults::DisplayDefaults()
 	fIsImageSheetSampledInsideFrame( false ),
 	fIsExternalTextureRetina( true )
 {
+	static TimeTransform sTransform;
+
+	fTimeTransform = &sTransform;
+
+	SetTimeTransform( NULL );
+}
+
+const TimeTransform* DisplayDefaults::GetTimeTransform() const
+{
+	return fTimeTransform;
+}
+
+void DisplayDefaults::SetTimeTransform( const TimeTransform *transform )
+{
+	if ( transform )
+	{
+		*fTimeTransform = *transform;
+	}
+
+	else
+	{
+		fTimeTransform->SetDefault();
+	}
 }
 
 // ----------------------------------------------------------------------------

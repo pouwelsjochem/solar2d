@@ -55,6 +55,14 @@
 -(void)didPrepareOpenGLContext:(id)sender
 {
 	fGLView = sender;
+
+	if ([_coronaView settingsIsTransparent])
+	{
+		NSOpenGLContext* context = [fGLView openGLContext];
+		GLint opacity = 0;
+
+		[context setValues: &opacity forParameter: NSOpenGLCPSurfaceOpacity];
+	}
 }
 - (id) layerHostView
 {
@@ -109,9 +117,6 @@
 		[launchArgs setValue:[argv objectsAtIndexes:indices] forKey:@"args"];
 	}
 
-	// Make the default window background black which helps in full screen
-	[_window setBackgroundColor:NSColor.blackColor];
-
 	// Start the Corona app
 	[_coronaView runWithPath:_appPath parameters:launchArgs];
 
@@ -125,6 +130,17 @@
 		  forEventClass:kInternetEventClass
 		     andEventID:kAEGetURL];
 
+	// Make the default window background black which helps in full screen
+	if (![_coronaView settingsIsTransparent])
+	{
+		[_window setBackgroundColor:NSColor.blackColor];
+	}
+	
+	else
+	{
+		[_window setBackgroundColor:NSColor.clearColor];
+	}
+	
     _suspendWhenMinimized = [_coronaView settingsSuspendWhenMinimized];
     
     // Make the window full screen capable (this is always done because the

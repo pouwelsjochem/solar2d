@@ -118,6 +118,12 @@ class PlatformSimulator
 		void EndNotifications( MPlatformDevice::EventType type ) const;
 
 	public:
+
+	protected:
+		void SetIsTransparent( bool newValue ) { fIsTransparent = newValue; }
+		bool GetIsTransparent() const { return fIsTransparent; }
+	
+	public:
 		const PlatformPlayer* GetPlayer() const { return fPlayer; }
 		PlatformPlayer* GetPlayer() { return fPlayer; }
 
@@ -137,6 +143,7 @@ class PlatformSimulator
 		PlatformPlayer* fPlayer;
 		PlatformFinalizer fPlatformFinalizer;
 		mutable U32 fProperties;
+		bool fIsTransparent;
 };
 
 // ----------------------------------------------------------------------------

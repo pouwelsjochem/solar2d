@@ -30,6 +30,7 @@
 #include "CoronaLua.h"
 
 #include "Renderer/Rtt_GLRenderer.h"
+#include "Renderer/Rtt_VulkanExports.h"
 #include "Renderer/Rtt_FrameBufferObject.h"
 #include "Renderer/Rtt_Matrix_Renderer.h"
 #include "Renderer/Rtt_Program.h"
@@ -84,6 +85,12 @@ Display::~Display()
 	Rtt_DELETE( fShaderFactory );
 	Rtt_DELETE( fRenderer );
 	Rtt_DELETE( fDefaults );
+}
+
+static void
+InvalidateDisplay( void * display )
+{
+	static_cast< Display * >( display )->GetScene().Invalidate();
 }
 
 bool
@@ -214,15 +221,15 @@ Display::Update()
 
     up.Add( "Display::Update Begin" );
     
-	Runtime& runtime = fOwner;
-	lua_State *L = fOwner.VMContext().L();
-	fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
+    Runtime& runtime = fOwner;
+    lua_State *L = fOwner.VMContext().L();
+    fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
 
 	up.Add( "Prepare for frame event" );
 
-	const FrameEvent& fe = FrameEvent::Constant();
-	fe.Dispatch( L, runtime );
-	
+    const FrameEvent& fe = FrameEvent::Constant();
+    fe.Dispatch( L, runtime );
+    
     up.Add( "FrameEvent" );
     
 	const RenderEvent& re = RenderEvent::Constant();
@@ -242,8 +249,8 @@ Display::Render()
 
     rp.Add( "Display::Render Begin" );
 
-	{
-		Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
+    {
+        Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
 
         const Rtt::Real kMillisecondsPerSecond = 1000.0f;
         // NOT _USED: Rtt::Real totalTime = Rtt_AbsoluteToMilliseconds( elapsedTime ) / kMillisecondsPerSecond;
@@ -449,9 +456,9 @@ Display::Capture( DisplayObject *object,
     if(!optional_output_color){
 
         ContentToScreen( x_in_pixels,
-                        y_in_pixels,
-                        w_in_pixels,
-                        h_in_pixels);
+                            y_in_pixels,
+                            w_in_pixels,
+                            h_in_pixels );
 
         // We ONLY want the w_in_pixels and h_in_pixels.
         // Using anything but 0 here breaks Android.
@@ -518,7 +525,15 @@ Display::Capture( DisplayObject *object,
     fRenderer->SetFrameBufferObject( fbo );
     fRenderer->PushMaskCount();
     fRenderer->SetViewport( 0, 0, texW, texH );
-    fRenderer->Clear( 0.0f, 0.0f, 0.0f, 0.0f );
+
+    Renderer::ExtraClearOptions extra;
+    
+    extra.clearDepth = GetDefaults().GetEnableDepthInScene();
+    extra.clearStencil = GetDefaults().GetEnableStencilInScene();
+    extra.depthClearValue = GetDefaults().GetSceneDepthClearValue();
+    extra.stencilClearValue = GetDefaults().GetSceneStencilClearValue();
+
+    fRenderer->Clear( 0.0f, 0.0f, 0.0f, 0.0f, &extra );
 
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
@@ -645,9 +660,11 @@ Display::Capture( DisplayObject *object,
                 w_in_pixels,
                 h_in_pixels );
 
-#    endif // ENABLE_DEBUG_PRINT
+#	endif // ENABLE_DEBUG_PRINT
+		
+	fRenderer->EndCapture();
 
-    Rtt_DELETE( fbo );
+	Rtt_DELETE( fbo );
 
     // If object was just created this will draw it to main scene as well, not only to FBO
     scene.Invalidate();
@@ -793,7 +810,7 @@ Display::ContentToScreen( Rtt_Real& x, Rtt_Real& y, Rtt_Real& w, Rtt_Real& h ) c
 }
 
 void
-Display::ContentToScreen(S32& x, S32& y, S32& w, S32& h ) const
+Display::ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const
 {
     fStream->ContentToScreen( x, y, w, h );
 }
@@ -877,10 +894,22 @@ Display::GetGpuSupportsHighPrecisionFragmentShaders()
     return Renderer::GetGpuSupportsHighPrecisionFragmentShaders();
 }
 
-size_t
+U32
+Display::GetMaxUniformVectorsCount()
+{
+    return Renderer::GetMaxUniformVectorsCount();
+}
+
+U32
 Display::GetMaxVertexTextureUnits()
 {
     return Renderer::GetMaxVertexTextureUnits();
+}
+
+bool
+Display::HasFramebufferBlit( bool * canScale ) const
+{
+    return fRenderer->HasFramebufferBlit( canScale );
 }
 
 void

@@ -1,21 +1,30 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
 //////////////////////////////////////////////////////////////////////////////
 
 #include "Renderer/Rtt_GLProgram.h"
+#include "Renderer/Rtt_GLGeometry.h"
 
 #include "Renderer/Rtt_CommandBuffer.h"
-#include "Renderer/Rtt_Geometry_Renderer.h"
+#include "Renderer/Rtt_FormatExtensionList.h"
+//#include "Renderer/Rtt_Geometry_Renderer.h"
 #include "Renderer/Rtt_Texture.h"
 #include "Core/Rtt_Assert.h"
+#include "Core/Rtt_Traits.h"
 #include <cstdio>
 #include <string.h> // memset.
 
+#include "Display/Rtt_ShaderResource.h"
+#include "Corona/CoronaLog.h"
+#include "Corona/CoronaGraphics.h"
+
+#include <string>
+#include <vector>
 #include "Rtt_Profiling.h"
 
 
@@ -28,46 +37,46 @@
 
 namespace /*anonymous*/
 {
-	using namespace Rtt;
+    using namespace Rtt;
 
-	// Check that the given shader compiled and log any errors
-	void CheckShaderCompilationStatus( GLuint name, bool isVerbose, const char *label, int startLine )
-	{
-		GLint result;
-		glGetShaderiv( name, GL_COMPILE_STATUS, &result );
-		if( result == GL_FALSE )
-		{
-			GLint length;
-			glGetShaderiv( name, GL_INFO_LOG_LENGTH, &length );
+    // Check that the given shader compiled and log any errors
+    void CheckShaderCompilationStatus( GLuint name, bool isVerbose, const char *label, int startLine )
+    {
+        GLint result;
+        glGetShaderiv( name, GL_COMPILE_STATUS, &result );
+        if( result == GL_FALSE )
+        {
+            GLint length;
+            glGetShaderiv( name, GL_INFO_LOG_LENGTH, &length );
 
-			GLchar* infoLog = new GLchar[length];
-			glGetShaderInfoLog( name, length, NULL, infoLog );
+            GLchar* infoLog = new GLchar[length];
+            glGetShaderInfoLog( name, length, NULL, infoLog );
 
-			if ( isVerbose )
-			{
-				if ( label )
-				{
-					Rtt_LogException( "ERROR: An error occurred in the %s kernel.\n", label );
-				}
-				Rtt_LogException( "%s", infoLog );
-				Rtt_LogException( "\tNOTE: Kernel starts at line number (%d), so subtract that from the line numbers above.\n", startLine );
-			}
-			delete[] infoLog;
-		}
-	}
+            if ( isVerbose )
+            {
+                if ( label )
+                {
+                    Rtt_LogException( "ERROR: An error occurred in the %s kernel.\n", label );
+                }
+                Rtt_LogException( "%s", infoLog );
+                Rtt_LogException( "\tNOTE: Kernel starts at line number (%d), so subtract that from the line numbers above.\n", startLine );
+            }
+            delete[] infoLog;
+        }
+    }
 
-	// Check that the given program linked and log any errors
-	void CheckProgramLinkStatus( GLuint name, bool isVerbose )
-	{
-		GLint result;
-		glGetProgramiv( name, GL_LINK_STATUS, &result );
-		if( result == GL_FALSE )
-		{
-			GLint length;
-			glGetProgramiv( name, GL_INFO_LOG_LENGTH, &length );
+    // Check that the given program linked and log any errors
+    void CheckProgramLinkStatus( GLuint name, bool isVerbose )
+    {
+        GLint result;
+        glGetProgramiv( name, GL_LINK_STATUS, &result );
+        if( result == GL_FALSE )
+        {
+            GLint length;
+            glGetProgramiv( name, GL_INFO_LOG_LENGTH, &length );
 
-			GLchar* infoLog = new GLchar[length];
-			glGetProgramInfoLog( name, length, NULL, infoLog );
+            GLchar* infoLog = new GLchar[length];
+            glGetProgramInfoLog( name, length, NULL, infoLog );
 
 			if ( isVerbose )
 			{
@@ -91,15 +100,36 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
+struct GLProgramUniformInfo {
+    GLProgramUniformInfo()
+    {
+        for (int i = 0; i < Program::kNumVersions; ++i)
+        {
+            fLocations[i] = -1;
+        }
+    }
+    
+    GLint fLocations[Program::kNumVersions];
+    GLint size;
+    GLenum type;
+    std::string fName;
+};
+
+struct GLProgramUniformsCache {
+    std::vector< GLProgramUniformInfo > fInfo;
+};
+
 GLProgram::GLProgram()
+:   fCleanupShellTransform( NULL ),
+    fUniformsCache( NULL )
 {
-	for( U32 i = 0; i < Program::kNumVersions; ++i )
-	{
-		Reset( fData[i] );
-	}
+    for( U32 i = 0; i < Program::kNumVersions; ++i )
+    {
+        Reset( fData[i] );
+    }
 }
 
-void 
+void
 GLProgram::Create( CPUResource* resource )
 {
 	SUMMED_TIMING( glpc, "Program GPU Resource: Create" );
@@ -113,6 +143,17 @@ GLProgram::Create( CPUResource* resource )
 			Create( fData[i], i );
 		}
 	#endif
+
+    Rtt_STATIC_ASSERT( ( Traits::IsSame< decltype(fCleanupShellTransform),  CoronaShellTransformStateCleanup >::Value ) );
+    
+    Program* program = static_cast<Program*>( fResource );
+    ShaderResource* shaderResource = program->GetShaderResource();
+    const CoronaShellTransform * transform = shaderResource->GetShellTransform();
+
+    if (transform && transform->cleanup)
+    {
+        fCleanupShellTransform = transform->cleanup;
+    }
 }
 
 void
@@ -127,7 +168,7 @@ GLProgram::Update( CPUResource* resource )
 	if( fData[Program::kMaskCount3].fProgram ) Update( Program::kMaskCount3, fData[Program::kMaskCount3] );
 }
 
-void 
+void
 GLProgram::Destroy()
 {
 	for( U32 i = 0; i < Program::kNumVersions; ++i )
@@ -147,32 +188,36 @@ GLProgram::Destroy()
 void
 GLProgram::Bind( Program::Version version )
 {
-	VersionData& data = fData[version];
-	
-	#if DEFER_CREATION
-		if( !data.fProgram )
-		{
-			Create( version, data );
-		}
-	#endif
-	
-	glUseProgram( data.fProgram );
-	GL_CHECK_ERROR();
+    VersionData& data = fData[version];
+    
+    #if DEFER_CREATION
+        if( !data.fProgram )
+        {
+            Create( version, data );
+        }
+    #endif
+    
+    glUseProgram( data.fProgram );
+    GL_CHECK_ERROR();
 }
 
 void
 GLProgram::Create( Program::Version version, VersionData& data )
 {
+#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	data.fVertexShader = glCreateShader( GL_VERTEX_SHADER );
 	data.fFragmentShader = glCreateShader( GL_FRAGMENT_SHADER );
 	GL_CHECK_ERROR();
+#endif
 
-	data.fProgram = glCreateProgram();
-	GL_CHECK_ERROR();
+    data.fProgram = glCreateProgram();
+    GL_CHECK_ERROR();
 
+#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	glAttachShader( data.fProgram, data.fVertexShader );
 	glAttachShader( data.fProgram, data.fFragmentShader );
 	GL_CHECK_ERROR();
+#endif
 	
 	Update( version, data );
 }
@@ -180,14 +225,102 @@ GLProgram::Create( Program::Version version, VersionData& data )
 static int
 CountLines( const char **segments, int numSegments )
 {
-	int result = 0;
+    int result = 0;
 
-	for ( int i = 0; i < numSegments; i++ )
-	{
-		result += Program::CountLines( segments[i] );
-	}
+    for ( int i = 0; i < numSegments; i++ )
+    {
+        result += Program::CountLines( segments[i] );
+    }
 
-	return result;
+    return result;
+}
+
+static void
+SetShaderSource( GLuint shader, CoronaShellTransformParams & params, const CoronaShellTransform * xform, void * userData, void * key )
+{
+    const char ** strings = params.sources, ** old = strings;
+
+    if (xform)
+    {
+        Rtt_ASSERT( xform->begin );
+        
+        strings = xform->begin( &params, userData, key );
+
+        if (!strings)
+        {
+            strings = old;
+        }
+    }
+
+    glShaderSource( shader, params.nsources, strings, NULL );
+
+    if (xform && xform->finish)
+    {
+        xform->finish( userData, key );
+    }
+
+    GL_CHECK_ERROR();
+}
+
+static bool
+IsDoubleType( CoronaVertexExtensionAttributeType )
+{
+    return false; // NYI
+}
+
+static void
+AppendMacroName( const char* name, std::string& extensionAttributes )
+{
+    char buf[BUFSIZ];
+    const char * rest = name + 1;
+    
+    sprintf( buf, "#define Corona%c%s a_%s\n", toupper( *name ), *rest ? rest : "", name );
+
+    extensionAttributes += buf;
+}
+
+static void
+GatherAttributeExtensions( const FormatExtensionList* extensionList, std::string& extensionAttributes )
+{
+    extensionList->SortNames();
+    
+    for (int i = 0; i < extensionList->GetAttributeCount(); ++i)
+    {
+        const FormatExtensionList::Attribute& attribute = extensionList->GetAttributes()[i];
+        char buf[64], count[2] = {};
+        
+        if (attribute.components > 1)
+        {
+            count[0] = '0' + attribute.components;
+        }
+        
+        const char * prim = "float", * vec = "vec";
+
+        CoronaVertexExtensionAttributeType type = (CoronaVertexExtensionAttributeType)attribute.type;
+
+        if (IsDoubleType( type ))
+        {
+            prim = "double";
+            vec = "dvec";
+        }
+ 
+        else if (!attribute.IsFloat())
+        {
+            prim = "int";
+            vec = "ivec";
+        }
+            
+        sprintf( buf, "attribute %s%s a_%s;\n", *count ? vec : prim, count, extensionList->FindNameByAttribute( i ) );
+        
+        extensionAttributes += buf;
+    }
+    
+    extensionAttributes += "\n";
+    
+    for (int i = 0; i < extensionList->GetAttributeCount(); ++i)
+    {
+        AppendMacroName( extensionList->FindNameByAttribute( i ), extensionAttributes );
+    }
 }
 
 void
@@ -202,39 +335,42 @@ GLProgram::UpdateShaderSource( Program* program, Program::Version version, Versi
 		default: break;
 	}
 
-	char highp_support[] = "#define FRAGMENT_SHADER_SUPPORTS_HIGHP 0\n";
-	highp_support[ sizeof( highp_support ) - 3 ] = ( CommandBuffer::GetGpuSupportsHighPrecisionFragmentShaders() ? '1' : '0' );
+    char highp_support[] = "#define FRAGMENT_SHADER_SUPPORTS_HIGHP 0\n";
+    highp_support[ sizeof( highp_support ) - 3 ] = ( CommandBuffer::GetGpuSupportsHighPrecisionFragmentShaders() ? '1' : '0' );
 
-	//! \TODO Make the definition of "TEX_COORD_Z" conditional.
-	char texCoordZBuffer[] = "";//#define TEX_COORD_Z 1\n";
+    //! \TODO Make the definition of "TEX_COORD_Z" conditional.
+    char texCoordZBuffer[] = "";//#define TEX_COORD_Z 1\n";
 
-	const char *program_header_source = program->GetHeaderSource();
-	const char *header = ( program_header_source ? program_header_source : "" );
+    const char *program_header_source = program->GetHeaderSource();
+    const char *header = ( program_header_source ? program_header_source : "" );
 
-	const char* shader_source[5];
-	memset( shader_source, 0, sizeof( shader_source ) );
-	shader_source[0] = header;
-	shader_source[1] = highp_support;
-	shader_source[2] = maskBuffer;
-	shader_source[3] = texCoordZBuffer;
+    const char* shader_source[5];
+    memset( shader_source, 0, sizeof( shader_source ) );
+    shader_source[0] = header;
+    shader_source[1] = highp_support;
+    shader_source[2] = maskBuffer;
+    shader_source[3] = texCoordZBuffer;
 
-	if ( program->IsCompilerVerbose() )
-	{
-		// All the segments except the last one
-		int numSegments = sizeof( shader_source ) / sizeof( shader_source[0] ) - 1;
-		data.fHeaderNumLines = CountLines( shader_source, numSegments );
-	}
+    if ( program->IsCompilerVerbose() )
+    {
+        // All the segments except the last one
+        int numSegments = sizeof( shader_source ) / sizeof( shader_source[0] ) - 1;
+        data.fHeaderNumLines = CountLines( shader_source, numSegments );
+    }
+    
+    ShaderResource * shaderResource = program->GetShaderResource();
+    const CoronaShellTransform * shellTransform = shaderResource->GetShellTransform();
+    CoronaShellTransformParams params = {};
+    const char * hints[] = { "header", "highpSupport", "mask", "texCoordZ", NULL };
+    void * shellTransformKey = &fCleanupShellTransform; // n.b. done to make cleanup robust
 
-	// Vertex shader.
-	{
-		shader_source[4] = program->GetVertexShaderSource();
+    std::vector< CoronaEffectDetail > details;
+    CoronaEffectDetail detail;
 
-		glShaderSource( data.fVertexShader,
-						( sizeof(shader_source) / sizeof(shader_source[0]) ),
-						shader_source,
-						NULL );
-		GL_CHECK_ERROR();
-	}
+    for (int i = 0; shaderResource->GetEffectDetail( i, detail ); ++i)
+    {
+        details.push_back( detail );
+    }
 
 	// Fragment shader.
 	{
@@ -250,7 +386,7 @@ GLProgram::UpdateShaderSource( Program* program, Program::Version version, Versi
 void
 GLProgram::Update( Program::Version version, VersionData& data )
 {
-	Program* program = static_cast<Program*>( fResource );
+    Program* program = static_cast<Program*>( fResource );
 
 	glBindAttribLocation( data.fProgram, Geometry::kVertexPositionAttribute, "a_Position" );
 	glBindAttribLocation( data.fProgram, Geometry::kVertexTexCoordAttribute, "a_TexCoord" );
@@ -258,88 +394,251 @@ GLProgram::Update( Program::Version version, VersionData& data )
 	glBindAttribLocation( data.fProgram, Geometry::kVertexUserDataAttribute, "a_UserData" );
 	GL_CHECK_ERROR();
 
-	UpdateShaderSource( program,
-						version,
-						data );
+    UpdateShaderSource( program,
+                        version,
+                        data );
 
 
 	bool isVerbose = program->IsCompilerVerbose();
 	int kernelStartLine = 0;
 
-	glCompileShader( data.fVertexShader );
-	if ( isVerbose )
-	{
-		kernelStartLine = data.fHeaderNumLines + program->GetVertexShellNumLines();
-	}
-	CheckShaderCompilationStatus( data.fVertexShader, isVerbose, "vertex", kernelStartLine );
-	GL_CHECK_ERROR();
+    glCompileShader( data.fVertexShader );
+    if ( isVerbose )
+    {
+        kernelStartLine = data.fHeaderNumLines + program->GetVertexShellNumLines();
+    }
+    CheckShaderCompilationStatus( data.fVertexShader, isVerbose, "vertex", kernelStartLine );
+    GL_CHECK_ERROR();
 
-	glCompileShader( data.fFragmentShader );
-	if ( isVerbose )
-	{
-		kernelStartLine = data.fHeaderNumLines + program->GetFragmentShellNumLines();
-	}
-	CheckShaderCompilationStatus( data.fFragmentShader, isVerbose, "fragment", kernelStartLine );
-	GL_CHECK_ERROR();
+    glCompileShader( data.fFragmentShader );
+    if ( isVerbose )
+    {
+        kernelStartLine = data.fHeaderNumLines + program->GetFragmentShellNumLines();
+    }
+    CheckShaderCompilationStatus( data.fFragmentShader, isVerbose, "fragment", kernelStartLine );
+    GL_CHECK_ERROR();
 
 	glLinkProgram( data.fProgram );
 	CheckProgramLinkStatus( data.fProgram, isVerbose );
 	GL_CHECK_ERROR();
 
-	data.fUniformLocations[Uniform::kViewProjectionMatrix] = glGetUniformLocation( data.fProgram, "u_ViewProjectionMatrix" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kMaskMatrix0] = glGetUniformLocation( data.fProgram, "u_MaskMatrix0" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kMaskMatrix1] = glGetUniformLocation( data.fProgram, "u_MaskMatrix1" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kMaskMatrix2] = glGetUniformLocation( data.fProgram, "u_MaskMatrix2" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kTotalTime] = glGetUniformLocation( data.fProgram, "u_TotalTime" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kDeltaTime] = glGetUniformLocation( data.fProgram, "u_DeltaTime" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kTexelSize] = glGetUniformLocation( data.fProgram, "u_TexelSize" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kContentScale] = glGetUniformLocation( data.fProgram, "u_ContentScale" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kUserData0] = glGetUniformLocation( data.fProgram, "u_UserData0" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kUserData1] = glGetUniformLocation( data.fProgram, "u_UserData1" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kUserData2] = glGetUniformLocation( data.fProgram, "u_UserData2" );
-	GL_CHECK_ERROR();
-	data.fUniformLocations[Uniform::kUserData3] = glGetUniformLocation( data.fProgram, "u_UserData3" );
-	GL_CHECK_ERROR();
-
-	glUseProgram( data.fProgram );
-	glUniform1i( glGetUniformLocation( data.fProgram, "u_FillSampler0" ), Texture::kFill0 );
-	glUniform1i( glGetUniformLocation( data.fProgram, "u_FillSampler1" ), Texture::kFill1 );
-	glUniform1i( glGetUniformLocation( data.fProgram, "u_MaskSampler0" ), Texture::kMask0 );
-	glUniform1i( glGetUniformLocation( data.fProgram, "u_MaskSampler1" ), Texture::kMask1 );
-	glUniform1i( glGetUniformLocation( data.fProgram, "u_MaskSampler2" ), Texture::kMask2 );
-	glUseProgram( 0 );
-	GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kViewProjectionMatrix] = glGetUniformLocation( data.fProgram, "u_ViewProjectionMatrix" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kMaskMatrix0] = glGetUniformLocation( data.fProgram, "u_MaskMatrix0" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kMaskMatrix1] = glGetUniformLocation( data.fProgram, "u_MaskMatrix1" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kMaskMatrix2] = glGetUniformLocation( data.fProgram, "u_MaskMatrix2" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kTotalTime] = glGetUniformLocation( data.fProgram, "u_TotalTime" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kDeltaTime] = glGetUniformLocation( data.fProgram, "u_DeltaTime" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kTexelSize] = glGetUniformLocation( data.fProgram, "u_TexelSize" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kContentScale] = glGetUniformLocation( data.fProgram, "u_ContentScale" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kUserData0] = glGetUniformLocation( data.fProgram, "u_UserData0" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kUserData1] = glGetUniformLocation( data.fProgram, "u_UserData1" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kUserData2] = glGetUniformLocation( data.fProgram, "u_UserData2" );
+    GL_CHECK_ERROR();
+    data.fUniformLocations[Uniform::kUserData3] = glGetUniformLocation( data.fProgram, "u_UserData3" );
+    GL_CHECK_ERROR();
+    
+    glUseProgram( data.fProgram );
+    glUniform1i( glGetUniformLocation( data.fProgram, "u_FillSampler0" ), Texture::kFill0 );
+    glUniform1i( glGetUniformLocation( data.fProgram, "u_FillSampler1" ), Texture::kFill1 );
+    glUniform1i( glGetUniformLocation( data.fProgram, "u_MaskSampler0" ), Texture::kMask0 );
+    glUniform1i( glGetUniformLocation( data.fProgram, "u_MaskSampler1" ), Texture::kMask1 );
+    glUniform1i( glGetUniformLocation( data.fProgram, "u_MaskSampler2" ), Texture::kMask2 );
+    glUseProgram( 0 );
+    GL_CHECK_ERROR();
 }
 
 void
 GLProgram::Reset( VersionData& data )
 {
-	data.fProgram = 0;
-	data.fVertexShader = 0;
-	data.fFragmentShader = 0;
+    data.fProgram = 0;
+    data.fVertexShader = 0;
+    data.fFragmentShader = 0;
 
-	for( U32 i = 0; i < Uniform::kNumBuiltInVariables; ++i )
-	{
-		// OpenGL uses the location -1 for inactive uniforms
-		const GLint kInactiveLocation = -1;
-		data.fUniformLocations[ i ] = kInactiveLocation;
-		
-		// CommandBuffer also initializes timestamp to zero
-		const U32 kTimestamp = 0;
-		data.fTimestamps[ i ] = kTimestamp;
-	}
-	
-	data.fHeaderNumLines = 0;
+    for( U32 i = 0; i < Uniform::kNumBuiltInVariables; ++i )
+    {
+        // OpenGL uses the location -1 for inactive uniforms
+        const GLint kInactiveLocation = -1;
+        data.fUniformLocations[ i ] = kInactiveLocation;
+
+        // CommandBuffer also initializes timestamp to zero
+        const U32 kTimestamp = 0;
+        data.fTimestamps[ i ] = kTimestamp;
+    }
+    
+    data.fHeaderNumLines = 0;
+}
+
+GLExtraUniforms::GLExtraUniforms()
+:   fVersion( Program::kNumVersions ),
+    fVersionData( NULL ),
+    fCache( NULL )
+{
+}
+
+GLExtraUniforms::GLExtraUniforms( Program::Version version, const GLProgram::VersionData * versionData, GLProgramUniformsCache ** cache )
+:   fVersion( version ),
+    fVersionData( versionData ),
+    fCache( cache )
+{
+}
+
+GLint
+GLExtraUniforms::Find( const char * name, GLint & size, GLenum & type )
+{
+    if (!fCache)
+    {
+        Rtt_LogException( "Extra uniforms cache not yet initialized" );
+        
+        return -1;
+    }
+    
+    // Has this name ever been found?
+    int entryIndex = -1;
+    
+    if (*fCache)
+    {
+        for (int i = 0; i < (*fCache)->fInfo.size(); ++i)
+        {
+            const auto & pos = (*fCache)->fInfo[i];
+            
+            if (0 == strcmp( pos.fName.c_str(), name ))
+            {
+                entryIndex = i;
+                
+                if (pos.fLocations[fVersion] >= 0) // version as well?
+                {
+                    size = pos.size;
+                    type = pos.type;
+                    
+                    return pos.fLocations[fVersion];
+                }
+                
+                break;
+            }
+        }
+    }
+
+    // Does the uniform even exist?
+    const GLProgram::VersionData & versionData = fVersionData[fVersion];
+    GLint location = glGetUniformLocation( versionData.fProgram, reinterpret_cast< const GLchar * >( name ) );
+
+    if (-1 == location)
+    {
+        Rtt_LogException( "WARNING: uniform `%s` not found in effect", name );
+        
+        return -1;
+    }
+    
+    // No entry yet?
+    if (-1 == entryIndex)
+    {
+        // Not a built-in?
+        if (name[0] && name[1] && 'u' == name[0] && '_' == name[1])
+        {
+            for (int i = 0; i < Uniform::kNumBuiltInVariables; ++i)
+            {
+                if (versionData.fUniformLocations[i] == location)
+                {
+                    Rtt_LogException( "WARNING: `%s` is a built-in uniform", name );
+                    
+                    return -1;
+                }
+            }
+        }
+        
+        // Gather details.
+        GLint count;
+        
+        glGetProgramiv( versionData.fProgram, GL_ACTIVE_UNIFORMS, &count );
+        
+        GLchar nameBuf[GLProgram::kUniformNameBufferSize];
+        GLsizei length;
+        GLint uniformIndex;
+        
+        for (uniformIndex = 0; uniformIndex < count; ++uniformIndex)
+        {
+            glGetActiveUniform( versionData.fProgram, (GLuint)uniformIndex, GLProgram::kUniformNameBufferSize - 1, &length, &size, &type, nameBuf );
+
+            const char * bracket = strchr( nameBuf, '[' );
+            
+            if (bracket)
+            {
+                length = bracket - nameBuf;
+            }
+            
+            if (0 == strncmp( name, nameBuf, length ))
+            {
+                break;
+            }
+        }
+        
+        if (uniformIndex == count)
+        {
+            Rtt_LogException( "Location of uniform `%s` found, but no active info: name too long?", name );
+            
+            return -1;
+        }
+        
+        switch (type)
+        {
+        case GL_FLOAT:
+        case GL_FLOAT_VEC2:
+        case GL_FLOAT_VEC3:
+        case GL_FLOAT_VEC4:
+        case GL_FLOAT_MAT2:
+        case GL_FLOAT_MAT3:
+        case GL_FLOAT_MAT4:
+            break;
+        default:
+            Rtt_LogException( "Location of uniform `%s` found, but type unsupported", name );
+                
+            return -1;
+        }
+          
+        // No cache yet?
+        if (!*fCache)
+        {
+            *fCache = Rtt_NEW( NULL, GLProgramUniformsCache );
+        }
+    
+        // Install the details.
+        entryIndex = (int)(*fCache)->fInfo.size();
+        
+        (*fCache)->fInfo.push_back( GLProgramUniformInfo{} );
+        
+        GLProgramUniformInfo & newInfo = (*fCache)->fInfo.back();
+        
+        newInfo.size = size;
+        newInfo.type = type;
+        newInfo.fName = name;
+    }
+    
+    else
+    {
+        size = (*fCache)->fInfo[entryIndex].size;
+        type = (*fCache)->fInfo[entryIndex].type;
+    }
+    
+    // Register the location and return it.
+    (*fCache)->fInfo[entryIndex].fLocations[fVersion] = location;
+    
+    return location;
+}
+
+void
+GLProgram::GetExtraUniformsInfo( Program::Version version, GLExtraUniforms& extraUniforms )
+{
+    extraUniforms = GLExtraUniforms( version, fData, &fUniformsCache );
 }
 
 // ----------------------------------------------------------------------------

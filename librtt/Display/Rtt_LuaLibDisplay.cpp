@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -76,31 +76,49 @@ namespace Rtt
 
 class DisplayLibrary
 {
-	public:
-		typedef DisplayLibrary Self;
+    public:
+        typedef DisplayLibrary Self;
 
-	public:
-		static const char kName[];
+    public:
+        static const char kName[];
 
 	protected:
 		DisplayLibrary( Display& display );
 		~DisplayLibrary();
 
-	public:
-		Display& GetDisplay() { return fDisplay; }
+    public:
+        Display& GetDisplay() { return fDisplay; }
 
-	public:
-		static int Open( lua_State *L );
+    public:
+        static int Open( lua_State *L );
 
-	protected:
-		static int Initialize( lua_State *L );
-		static int Finalizer( lua_State *L );
+    protected:
+        static int Initialize( lua_State *L );
+        static int Finalizer( lua_State *L );
 
-	public:
-		static Self *ToLibrary( lua_State *L );
+    public:
+        static Self *ToLibrary( lua_State *L );
+	
+    protected:
+        static int ValueForKey( lua_State *L );
 
-	protected:
-		static int ValueForKey( lua_State *L );
+    public:
+        static ShapeObject* PushImage(
+            lua_State *L,
+            Vertex2* topLeft,
+            BitmapPaint* paint,
+            Display& display,
+            GroupObject *parent,
+            Real w,
+            Real h,
+			LuaLibDisplay::FactoryReplacement rectFactory = NULL );
+        static ShapeObject* PushImage(
+            lua_State *L,
+            Vertex2* topLeft,
+            BitmapPaint* paint,
+            Display& display,
+            GroupObject *parent,
+			LuaLibDisplay::FactoryReplacement rectFactory = NULL );
 
 	public:
 		static ShapeObject* PushImage(
@@ -154,10 +172,10 @@ class DisplayLibrary
 		static int _addProfileEntry( lua_State *L );
 		static int _endProfile( lua_State *L );
 
-	private:
-		static void GetRect( lua_State *L, Rect &bounds );
+    private:
+        static void GetRect( lua_State *L, Rect &bounds );
 
-		Display& fDisplay;
+        Display& fDisplay;
 };
 
 // ----------------------------------------------------------------------------
@@ -167,7 +185,7 @@ const char DisplayLibrary::kName[] = "display";
 // ----------------------------------------------------------------------------
 
 DisplayLibrary::DisplayLibrary( Display& display )
-:	fDisplay( display )
+:    fDisplay( display )
 {
 }
 
@@ -178,12 +196,12 @@ DisplayLibrary::~DisplayLibrary()
 int
 DisplayLibrary::Open( lua_State *L )
 {
-	Display *display = (Display *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-	Rtt_ASSERT( display );
+    Display *display = (Display *)lua_touserdata( L, lua_upvalueindex( 1 ) );
+    Rtt_ASSERT( display );
 
-	// Register __gc callback
-	const char kMetatableName[] = __FILE__; // Globally unique string to prevent collision
-	CoronaLuaInitializeGCMetatable( L, kMetatableName, Finalizer );
+    // Register __gc callback
+    const char kMetatableName[] = __FILE__; // Globally unique string to prevent collision
+    CoronaLuaInitializeGCMetatable( L, kMetatableName, Finalizer );
 
 	// Functions in library
 	const luaL_Reg kVTable[] =
@@ -223,11 +241,13 @@ DisplayLibrary::Open( lua_State *L )
 		{ "_addProfileEntry", _addProfileEntry },
 		{ "_endProfile", _endProfile },
 
-		{ NULL, NULL }
-	};
+        { NULL, NULL }
+    };
 
-	// Set library as upvalue for each library function
-	Self *library = Rtt_NEW( & display->GetRuntime().GetAllocator(), Self( * display ) );
+    // Set library as upvalue for each library function
+    Self *library = Rtt_NEW( & display->GetRuntime().GetAllocator(), Self( * display ) );
+
+    display->GatherObjectFactories( kVTable, library );
 
 	// Store the library singleton in the registry so it persists
 	// using kMetatableName as the unique key.
@@ -244,36 +264,36 @@ DisplayLibrary::Open( lua_State *L )
 		CoronaLibrarySetExtension( L, -2 ); // pop closure
 	}
 
-	return result;
+    return result;
 }
 
 int
 DisplayLibrary::Finalizer( lua_State *L )
 {
-	Self *library = (Self *)CoronaLuaToUserdata( L, 1 );
+    Self *library = (Self *)CoronaLuaToUserdata( L, 1 );
 
-	delete library;
+	  delete library;
 	
-	return 0;
+    return 0;
 }
 
 DisplayLibrary *
 DisplayLibrary::ToLibrary( lua_State *L )
 {
-	// library is pushed as part of the closure
-	Self *library = (Self *)lua_touserdata( L, lua_upvalueindex( 1 ) );
-	return library;
+    // library is pushed as part of the closure
+    Self *library = (Self *)lua_touserdata( L, lua_upvalueindex( 1 ) );
+    return library;
 }
 
 int
 DisplayLibrary::ValueForKey( lua_State *L )
 {
-	int result = 1;
+    int result = 1;
 
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
 
-	const char *key = lua_tostring( L, 2 ); Rtt_ASSERT( key );
+    const char *key = lua_tostring( L, 2 ); Rtt_ASSERT( key );
 
 	static const char * keys[] = 
 	{
@@ -376,55 +396,57 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		break;
 	}
 
-	return result;
+    return result;
 }
 
 // ----------------------------------------------------------------------------
 
-static GroupObject*
-GetParent( lua_State *L, int& nextArg )
+GroupObject*
+LuaLibDisplay::GetParent( lua_State *L, int& nextArg )
 {
-	GroupObject* parent = NULL;
+    GroupObject* parent = NULL;
 
-	if ( lua_istable( L, nextArg ) )
-	{
-		Rtt_WARN_SIM_PROXY_TYPE( L, nextArg, GroupObject );
+    if ( lua_istable( L, nextArg ) )
+    {
+        Rtt_WARN_SIM_PROXY_TYPE( L, nextArg, GroupObject );
 
-		DisplayObject *object = (DisplayObject*)LuaProxy::GetProxyableObject( L, nextArg );
-		parent = object ? object->AsGroupObject() : NULL;
-		if ( parent )
-		{
-			++nextArg;
-		}
-	}
+        DisplayObject *object = (DisplayObject*)LuaProxy::GetProxyableObject( L, nextArg );
+        parent = object ? object->AsGroupObject() : NULL;
+        if ( parent )
+        {
+            ++nextArg;
+        }
+    }
 
-	return parent;
+    return parent;
 }
 
 static void
 AssignDefaultFillColor( const Display& display, ShapeObject& o )
 {
 
-	SharedPtr< TextureResource > resource = display.GetTextureFactory().GetDefault();
+    SharedPtr< TextureResource > resource = display.GetTextureFactory().GetDefault();
 
-	Rtt_ASSERT( ! o.GetPath().GetFill() );
-	Paint *p = Paint::NewColor(
-						display.GetAllocator(),
-						resource, display.GetDefaults().GetFillColor() );
-	o.SetFill( p );
+    Rtt_ASSERT( ! o.GetPath().GetFill() );
+    Paint *p = Paint::NewColor(
+                        display.GetAllocator(),
+                        resource, display.GetDefaults().GetFillColor() );
+    o.SetFill( p );
 }
 
 ShapeObject*
 DisplayLibrary::PushImage(
-	lua_State *L,
-	Vertex2* topLeft,
-	BitmapPaint* paint,
-	Display& display,
-	GroupObject *parent,
-	Real w,
-	Real h )
+    lua_State *L,
+    Vertex2* topLeft,
+    BitmapPaint* paint,
+    Display& display,
+    GroupObject *parent,
+    Real w,
+    Real h,
+	LuaLibDisplay::FactoryReplacement  replacement )
 {
-	ShapeObject* v = RectObject::NewRect( display.GetAllocator(), w, h );
+    auto * rectFactory = ChooseObjectFactory( replacement, &RectObject::NewRect );
+    ShapeObject* v = rectFactory( display.GetAllocator(), w, h );
 
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
 	if ( Rtt_VERIFY( result ) )
@@ -447,72 +469,83 @@ DisplayLibrary::PushImage(
 
 ShapeObject*
 DisplayLibrary::PushImage(
-	lua_State *L,
-	Vertex2* topLeft,
-	BitmapPaint* paint,
-	Display& display,
-	GroupObject *parent )
+    lua_State *L,
+    Vertex2* topLeft,
+    BitmapPaint* paint,
+    Display& display,
+    GroupObject *parent,
+	LuaLibDisplay::FactoryReplacement  replacement )
 {
-	// Fetch image's width and height. (Might be auto-downscaled here due to texture size limitations.)
-	PlatformBitmap *bitmap = paint->GetBitmap();
-	Texture *texture = paint->GetTexture(); Rtt_ASSERT( texture );
+    // Fetch image's width and height. (Might be auto-downscaled here due to texture size limitations.)
+    PlatformBitmap *bitmap = paint->GetBitmap();
+    Texture *texture = paint->GetTexture(); Rtt_ASSERT( texture );
 
 	// bitmap may be NULL when FBO's are involved
 	Real width = Rtt_IntToReal( bitmap ? bitmap->Width() : texture->GetWidth() );
 	Real height = Rtt_IntToReal( bitmap ? bitmap->Height() : texture->GetHeight() );
 
-	// Create the image object with the above dimensions.
-	ShapeObject* v = PushImage( L, topLeft, paint, display, parent, width, height );
+    // Create the image object with the above dimensions.
+    ShapeObject* v = PushImage( L, topLeft, paint, display, parent, width, height, replacement );
 
     v->SetObjectDesc("ImageObject");
 	
 	return v;
 }
 
+static ShapeObject *
+NewShape( Rtt_Allocator * allocator, ClosedPath * path )
+{
+    return Rtt_NEW( allocator, ShapeObject( path ) );
+}
+
 int
 DisplayLibrary::newCircle( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
+    auto * circleFactory = GetObjectFactory( L, &NewShape, display ); // n.b. done early to ensure factory is consumed
 
 	int nextArg = 1;
-	GroupObject *parent = GetParent( L, nextArg );
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
 
-	Real x = luaL_checkreal( L, nextArg++ );
-	Real y = luaL_checkreal( L, nextArg++ );
-	Real r = luaL_checkreal( L, nextArg++ );
+    Real x = luaL_checkreal( L, nextArg++ );
+    Real y = luaL_checkreal( L, nextArg++ );
+    Real r = luaL_checkreal( L, nextArg++ );
 
 	ShapePath *path = ShapePath::NewCircle( display.GetAllocator(), r );
-	ShapeObject *v = Rtt_NEW( display.GetAllocator(), ShapeObject( path ) );
+
+    ShapeObject *v = circleFactory( display.GetAllocator(), path );
 
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
 	AssignDefaultFillColor( display, * v );
 	v->Translate( x, y );
 
-	return result;
+    return result;
 }
 	
 int
 DisplayLibrary::newRect( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
+    auto * rectFactory = GetObjectFactory( L, &RectObject::NewRect, display ); // n.b. done early to ensure factory is consumed
 
 	int nextArg = 1;
-	GroupObject *parent = GetParent( L, nextArg );
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
 
-	Real x = luaL_checkreal( L, nextArg++ );
-	Real y = luaL_checkreal( L, nextArg++ );
-	Real w = luaL_checkreal( L, nextArg++ );
-	Real h = luaL_checkreal( L, nextArg++ );
+    Real x = luaL_checkreal( L, nextArg++ );
+    Real y = luaL_checkreal( L, nextArg++ );
+    Real w = luaL_checkreal( L, nextArg++ );
+    Real h = luaL_checkreal( L, nextArg++ );
 
-	ShapeObject* v = RectObject::NewRect( display.GetAllocator(), w, h );
+    ShapeObject* v = rectFactory( display.GetAllocator(), w, h );
+
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
 
 	v->Translate( x, y );
 	AssignDefaultFillColor( display, * v );
 
-	return result;
+    return result;
 }
 
 // display.newImage( [parentGroup,] filename [, baseDirectory] [, x, y] )
@@ -520,112 +553,113 @@ DisplayLibrary::newRect( lua_State *L )
 int
 DisplayLibrary::newImage( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
+    auto * replacement = LuaLibDisplay::GetFactoryReplacement( L, display ); // n.b. done early to ensure factory is consumed
 
-	int result = 0;
+    int result = 0;
 #ifdef Rtt_DEBUG
-	int top = lua_gettop( L );
+    int top = lua_gettop( L );
 #endif
 	// [parentGroup,]
 	int nextArg = 1;
-	GroupObject *parent = GetParent( L, nextArg );
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
 
-	// Only required param is "filename"
-	// filename [, baseDirectory]
-	if ( lua_isstring( L, nextArg ) )
-	{
-		const char *imageName = lua_tostring( L, nextArg++ );
+    // Only required param is "filename"
+    // filename [, baseDirectory]
+    if ( lua_isstring( L, nextArg ) )
+    {
+        const char *imageName = lua_tostring( L, nextArg++ );
 
-		MPlatform::Directory baseDir = MPlatform::kResourceDir;
-		if ( lua_islightuserdata( L, nextArg ) )
-		{
-			void* p = lua_touserdata( L, nextArg );
-			baseDir = (MPlatform::Directory)EnumForUserdata( LuaLibSystem::Directories(),
-															 p,
-															 MPlatform::kNumDirs,
-															 MPlatform::kResourceDir );
-			++nextArg;
-		}
+        MPlatform::Directory baseDir = MPlatform::kResourceDir;
+        if ( lua_islightuserdata( L, nextArg ) )
+        {
+            void* p = lua_touserdata( L, nextArg );
+            baseDir = (MPlatform::Directory)EnumForUserdata( LuaLibSystem::Directories(),
+                                                             p,
+                                                             MPlatform::kNumDirs,
+                                                             MPlatform::kResourceDir );
+            ++nextArg;
+        }
 
-		// [, x, y]
-		Vertex2* p = NULL;
-		Vertex2 topLeft = { Rtt_REAL_0, Rtt_REAL_0 }; // default to (0,0) if not supplied
-		if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
-		{
-			topLeft.x = luaL_toreal( L, nextArg++ );
-			topLeft.y = luaL_toreal( L, nextArg++ );
-		}
-		p = & topLeft;
+        // [, x, y]
+        Vertex2* p = NULL;
+        Vertex2 topLeft = { Rtt_REAL_0, Rtt_REAL_0 }; // default to (0,0) if not supplied
+        if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
+        {
+            topLeft.x = luaL_toreal( L, nextArg++ );
+            topLeft.y = luaL_toreal( L, nextArg++ );
+        }
+        p = & topLeft;
 
 		Runtime& runtime = library->GetDisplay().GetRuntime();
 		BitmapPaint *paint = BitmapPaint::NewBitmap( runtime, imageName, baseDir, 0x0 );
 
-		if ( paint && paint->GetBitmap() && paint->GetBitmap()->NumBytes() == 0 )
-		{
-			CoronaLuaWarning(L, "file '%s' does not contain a valid image", imageName);
-		}
+        if ( paint && paint->GetBitmap() && paint->GetBitmap()->NumBytes() == 0 )
+        {
+            CoronaLuaWarning(L, "file '%s' does not contain a valid image", imageName);
+        }
 
-		if ( paint )
-		{
-			result = NULL != PushImage( L, p, paint, display, parent );
-		}
-	}
-	else if ( lua_isuserdata( L, nextArg ) )
-	{
-		ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, nextArg );
-		if ( ud )
-		{
-			nextArg++;
-			const AutoPtr< ImageSheet >& sheet = ud->GetSheet();
+        if ( paint )
+        {
+            result = NULL != PushImage( L, p, paint, display, parent, replacement );
+        }
+    }
+    else if ( lua_isuserdata( L, nextArg ) )
+    {
+        ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, nextArg );
+        if ( ud )
+        {
+            nextArg++;
+            const AutoPtr< ImageSheet >& sheet = ud->GetSheet();
 
-			int frameIndex = (int) lua_tointeger( L, nextArg );
-			if ( frameIndex <= 0 )
-			{
-				CoronaLuaWarning( L, "display.newImage( imageGroup, frameIndex ) given an invalid frameIndex (%d). Defaulting to 1", frameIndex );
-				frameIndex = 1;
-			}
+            int frameIndex = (int) lua_tointeger( L, nextArg );
+            if ( frameIndex <= 0 )
+            {
+                CoronaLuaWarning( L, "display.newImage( imageGroup, frameIndex ) given an invalid frameIndex (%d). Defaulting to 1", frameIndex );
+                frameIndex = 1;
+            }
 
-			// Map 1-based Lua indices to 0-based C indices
-			--frameIndex;
-			++nextArg;
+            // Map 1-based Lua indices to 0-based C indices
+            --frameIndex;
+            ++nextArg;
 
-			// [, x, y]
-			Vertex2* p = NULL;
-			Vertex2 topLeft = { Rtt_REAL_0, Rtt_REAL_0 }; // default to (0,0) if not supplied
-			if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
-			{
-				topLeft.x = luaL_toreal( L, nextArg++ );
-				topLeft.y = luaL_toreal( L, nextArg++ );
-			}
-			p = & topLeft;
+            // [, x, y]
+            Vertex2* p = NULL;
+            Vertex2 topLeft = { Rtt_REAL_0, Rtt_REAL_0 }; // default to (0,0) if not supplied
+            if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
+            {
+                topLeft.x = luaL_toreal( L, nextArg++ );
+                topLeft.y = luaL_toreal( L, nextArg++ );
+            }
+            p = & topLeft;
             
             if( sheet->GetNumFrames() <= frameIndex )
             {
                 CoronaLuaWarning( L, "display.newImage( imageGroup, frameIndex ) given an invalid frameIndex (%d). Defaulting to max frame", frameIndex+1 );
                 frameIndex = sheet->GetNumFrames()-1;
             }
-			const ImageFrame *frame = sheet->GetFrame( frameIndex );
-			Real w = Rtt_IntToReal( frame->GetWidth() );
-			Real h = Rtt_IntToReal( frame->GetHeight() );
+            const ImageFrame *frame = sheet->GetFrame( frameIndex );
+            Real w = Rtt_IntToReal( frame->GetWidth() );
+            Real h = Rtt_IntToReal( frame->GetHeight() );
 
-			ImageSheetPaint *paint = ImageSheetPaint::NewBitmap( display.GetAllocator(), sheet, frameIndex );
+            ImageSheetPaint *paint = ImageSheetPaint::NewBitmap( display.GetAllocator(), sheet, frameIndex );
 
-			if ( paint )
-			{
-				result = NULL != PushImage( L, p, paint, display, parent, w, h );
-			}
-		}
-	}
-	else
-	{
-		CoronaLuaError( L, "display.newImage() bad argument #%d: filename or image sheet expected, but got %s",
-				nextArg, lua_typename( L, lua_type( L, nextArg ) ) );
-	}
+            if ( paint )
+            {
+                result = NULL != PushImage( L, p, paint, display, parent, w, h, replacement );
+            }
+        }
+    }
+    else
+    {
+        CoronaLuaError( L, "display.newImage() bad argument #%d: filename or image sheet expected, but got %s",
+                nextArg, lua_typename( L, lua_type( L, nextArg ) ) );
+    }
 
-	Rtt_ASSERT( lua_gettop( L ) == (top + result) );
+    Rtt_ASSERT( lua_gettop( L ) == (top + result) );
 
-	return result;
+    return result;
 }
 
 
@@ -634,121 +668,122 @@ DisplayLibrary::newImage( lua_State *L )
 int
 DisplayLibrary::newImageRect( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
+    auto * replacement = LuaLibDisplay::GetFactoryReplacement( L, display ); // n.b. done early to ensure factory is consumed
 
-	int result = 0;
+    int result = 0;
 
-	// [parentGroup,]
-	int nextArg = 1;
+    // [parentGroup,]
+    int nextArg = 1;
 
 	// NOTE: GetParent() increments nextArg if parent found
-	GroupObject *parent = GetParent( L, nextArg );
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
 
-	// Only required param is "filename"
-	// filename [, baseDirectory]
-	if ( LUA_TSTRING == lua_type( L, nextArg ) )
-	{
-		const char *imageName = lua_tostring( L, nextArg++ );
-		
-		MPlatform::Directory baseDir = MPlatform::kResourceDir;
-		if ( lua_islightuserdata( L, nextArg ) )
-		{
-			void* p = lua_touserdata( L, nextArg );
-			baseDir = (MPlatform::Directory)EnumForUserdata( LuaLibSystem::Directories(),
-															 p,
-															 MPlatform::kNumDirs,
-															 MPlatform::kResourceDir );
-			++nextArg;
-		}
+    // Only required param is "filename"
+    // filename [, baseDirectory]
+    if ( LUA_TSTRING == lua_type( L, nextArg ) )
+    {
+        const char *imageName = lua_tostring( L, nextArg++ );
+        
+        MPlatform::Directory baseDir = MPlatform::kResourceDir;
+        if ( lua_islightuserdata( L, nextArg ) )
+        {
+            void* p = lua_touserdata( L, nextArg );
+            baseDir = (MPlatform::Directory)EnumForUserdata( LuaLibSystem::Directories(),
+                                                             p,
+                                                             MPlatform::kNumDirs,
+                                                             MPlatform::kResourceDir );
+            ++nextArg;
+        }
 
-		// w, h
-		// These are required arguments, so only create a new image rect if they are present
-		if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
-		{
-			Real w = luaL_toreal( L, nextArg++ );
-			Real h = luaL_toreal( L, nextArg++ );
+        // w, h
+        // These are required arguments, so only create a new image rect if they are present
+        if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
+        {
+            Real w = luaL_toreal( L, nextArg++ );
+            Real h = luaL_toreal( L, nextArg++ );
 
 			Runtime& runtime = library->GetDisplay().GetRuntime();
 			BitmapPaint *paint = BitmapPaint::NewBitmap( runtime, imageName, baseDir, PlatformBitmap::kIsBitsFullResolution );
 
-			if ( paint && paint->GetBitmap() && paint->GetBitmap()->NumBytes() == 0 )
-			{
-				CoronaLuaWarning(L, "file '%s' does not contain a valid image", imageName);
-			}
-			if ( Rtt_VERIFY( paint ) )
-			{
-				result = NULL != PushImage( L, NULL, paint, display, parent, w, h );
-			}
-		}
-		else
-		{
-			bool isWidthValid = lua_isnumber( L, nextArg );
-			int narg = ( isWidthValid ? nextArg+1 : nextArg );
-			const char *tname = ( isWidthValid ? "height" : "width" );
+            if ( paint && paint->GetBitmap() && paint->GetBitmap()->NumBytes() == 0 )
+            {
+                CoronaLuaWarning(L, "file '%s' does not contain a valid image", imageName);
+            }
+            if ( Rtt_VERIFY( paint ) )
+            {
+                result = NULL != PushImage( L, NULL, paint, display, parent, w, h, replacement );
+            }
+        }
+        else
+        {
+            bool isWidthValid = lua_isnumber( L, nextArg );
+            int narg = ( isWidthValid ? nextArg+1 : nextArg );
+            const char *tname = ( isWidthValid ? "height" : "width" );
 
-			CoronaLuaError( L, "display.newImageRect() bad argument #%d: %s expected, but got %s",
-					narg, tname, lua_typename( L, lua_type( L, nextArg ) ) );
-		}
-	}
-	else if ( lua_isuserdata( L, nextArg ) )
-	{
-		ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, nextArg );
-		if ( ud )
-		{
-			nextArg++;
-			const AutoPtr< ImageSheet >& sheet = ud->GetSheet();
+            CoronaLuaError( L, "display.newImageRect() bad argument #%d: %s expected, but got %s",
+                    narg, tname, lua_typename( L, lua_type( L, nextArg ) ) );
+        }
+    }
+    else if ( lua_isuserdata( L, nextArg ) )
+    {
+        ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, nextArg );
+        if ( ud )
+        {
+            nextArg++;
+            const AutoPtr< ImageSheet >& sheet = ud->GetSheet();
 
-			int frameIndex = (int) lua_tointeger( L, nextArg );
-			if ( frameIndex <= 0 )
-			{
-				CoronaLuaWarning( L, "display.newImage( imageGroup, frameIndex ) given an invalid frameIndex (%d). Defaulting to 1", frameIndex );
-				frameIndex = 1;
-			}
+            int frameIndex = (int) lua_tointeger( L, nextArg );
+            if ( frameIndex <= 0 )
+            {
+                CoronaLuaWarning( L, "display.newImage( imageGroup, frameIndex ) given an invalid frameIndex (%d). Defaulting to 1", frameIndex );
+                frameIndex = 1;
+            }
 
-			// Map 1-based Lua indices to 0-based C indices
-			--frameIndex;
-			++nextArg;
+            // Map 1-based Lua indices to 0-based C indices
+            --frameIndex;
+            ++nextArg;
 
-			// w, h
-			// These are required arguments, so only create a new image rect if they are present
-			if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
-			{
-				Real w = luaL_toreal( L, nextArg++ );
-				Real h = luaL_toreal( L, nextArg++ );
+            // w, h
+            // These are required arguments, so only create a new image rect if they are present
+            if ( lua_isnumber( L, nextArg ) && lua_isnumber( L, nextArg + 1 ) )
+            {
+                Real w = luaL_toreal( L, nextArg++ );
+                Real h = luaL_toreal( L, nextArg++ );
 
-				ImageSheetPaint *paint = ImageSheetPaint::NewBitmap( display.GetAllocator(), sheet, frameIndex );
+                ImageSheetPaint *paint = ImageSheetPaint::NewBitmap( display.GetAllocator(), sheet, frameIndex );
 
-				if ( Rtt_VERIFY( paint ) )
-				{
-					result = NULL != PushImage( L, NULL, paint, display, parent, w, h );
-				}
-			}
-			else
-			{
-				bool isWidthValid = lua_isnumber( L, nextArg );
-				int narg = ( isWidthValid ? nextArg+1 : nextArg );
-				const char *tname = ( isWidthValid ? "height" : "width" );
+                if ( Rtt_VERIFY( paint ) )
+                {
+                    result = NULL != PushImage( L, NULL, paint, display, parent, w, h, replacement );
+                }
+            }
+            else
+            {
+                bool isWidthValid = lua_isnumber( L, nextArg );
+                int narg = ( isWidthValid ? nextArg+1 : nextArg );
+                const char *tname = ( isWidthValid ? "height" : "width" );
 
-				CoronaLuaError( L, "display.newImageRect() bad argument #%d: %s expected, but got %s",
-						narg, tname, lua_typename( L, lua_type( L, nextArg ) ) );
-			}
-		}
-	}
-	else
-	{
-		CoronaLuaError( L, "display.newImageRect() bad argument #%d: filename or image sheet expected, but got %s",
-				nextArg, lua_typename( L, lua_type( L, nextArg ) ) );
-	}
+                CoronaLuaError( L, "display.newImageRect() bad argument #%d: %s expected, but got %s",
+                        narg, tname, lua_typename( L, lua_type( L, nextArg ) ) );
+            }
+        }
+    }
+    else
+    {
+        CoronaLuaError( L, "display.newImageRect() bad argument #%d: filename or image sheet expected, but got %s",
+                nextArg, lua_typename( L, lua_type( L, nextArg ) ) );
+    }
 
-	return result;
+    return result;
 }
 
 // display.newGroup( [child1 [, child2 [, child3 ... ]]] )
 // With no args, create an empty group and set parent to root
-// 
+//
 // The following is EXPERIMENTAL and undocumented:
-// When a child is passed, create a new group whose parent is the child's, 
+// When a child is passed, create a new group whose parent is the child's,
 // set the (x,y) to be the child's, insert the child into the new group, and
 // reset the child's transform.  For subsequent child arguments, only
 // insert into new group if each of those children has the same parent as the
@@ -757,58 +792,59 @@ DisplayLibrary::newImageRect( lua_State *L )
 int
 DisplayLibrary::newGroup( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-	Rtt_Allocator* context = display.GetAllocator();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
+    auto * groupFactory = GetObjectFactory( L, &NewGroup, display ); // n.b. done early to ensure factory is consumed
+    Rtt_Allocator* context = display.GetAllocator();
 
-	GroupObject *o = Rtt_NEW( context, GroupObject( context, NULL ) );
+    GroupObject *o = groupFactory( context );
 	GroupObject *parent = NULL; // Default parent is root
 
-	DisplayObject *child = NULL;
-	if ( ! lua_isnone( L, 1 ) )
-	{
-		child = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
+    DisplayObject *child = NULL;
+    if ( ! lua_isnone( L, 1 ) )
+    {
+        child = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
 
-		// First child determines the parent and origin of group
-		parent = child->GetParent();
-	}
+        // First child determines the parent and origin of group
+        parent = child->GetParent();
+    }
 
-	// Fetch num arguments *before* pushing result
+    // Fetch num arguments *before* pushing result
 
-	int numArgs = lua_gettop( L );
-	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
+    int numArgs = lua_gettop( L );
+    int result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
 
-	if ( child )
-	{
-		// If there are child arguments, then add them to the group "o"
-		// Note that these must be done after o's parent is assigned.  
-		// This ensures that o's stage is properly set before the children get
-		// re-parented; otherwise the children's stage will be NULL.
+    if ( child )
+    {
+        // If there are child arguments, then add them to the group "o"
+        // Note that these must be done after o's parent is assigned.
+        // This ensures that o's stage is properly set before the children get
+        // re-parented; otherwise the children's stage will be NULL.
 
-		Real x = child->GetGeometricProperty( kOriginX );
-		Real y = child->GetGeometricProperty( kOriginY );
+        Real x = child->GetGeometricProperty( kOriginX );
+        Real y = child->GetGeometricProperty( kOriginY );
 
-		for ( int i = 1; i <= numArgs; i++ )
-		{
-			child = (DisplayObject*)LuaProxy::GetProxyableObject( L, i );
+        for ( int i = 1; i <= numArgs; i++ )
+        {
+            child = (DisplayObject*)LuaProxy::GetProxyableObject( L, i );
 
-			if ( child && child->GetParent() == parent )
-			{
-				Rtt_WARN_SIM_PROXY_TYPE( L, i, DisplayObject );
-				o->Insert( -1, child, false );
-				child->Translate( -x, -y );
-			}
-			else
-			{
-				CoronaLuaWarning( L, "display.newGroup() argument #%d not added to group because "
-								 "its parent differs from the first argument's original parent", i );
-			}
-		}
+            if ( child && child->GetParent() == parent )
+            {
+                Rtt_WARN_SIM_PROXY_TYPE( L, i, DisplayObject );
+                o->Insert( -1, child, false );
+                child->Translate( -x, -y );
+            }
+            else
+            {
+                CoronaLuaWarning( L, "display.newGroup() argument #%d not added to group because "
+                                 "its parent differs from the first argument's original parent", i );
+            }
+        }
 
-		o->Translate( x, y );
-	}
+        o->Translate( x, y );
+    }
 
-	return result;
+    return result;
 }
 
 int
@@ -818,55 +854,63 @@ DisplayLibrary::newContainer( lua_State *L )
 	Display& display = library->GetDisplay();
 	Rtt_Allocator* context = display.GetAllocator();
 
-	// [parentGroup,]
-	int nextArg = 1;
+    // [parentGroup,]
+    int nextArg = 1;
 
 	// NOTE: GetParent() increments nextArg if parent found
-	GroupObject *parent = GetParent( L, nextArg );
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
 
-	Real w = luaL_checkreal( L, nextArg++ );
-	Real h = luaL_checkreal( L, nextArg++ );
+    Real w = luaL_checkreal( L, nextArg++ );
+    Real h = luaL_checkreal( L, nextArg++ );
 
-	ContainerObject *o = Rtt_NEW( context, ContainerObject( context, NULL, w, h ) );
+    ContainerObject *o = containerFactory( context, NULL, w, h );
+    
 	o->Initialize( display );
 
-	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
+    int result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
 
-	return result;
+    return result;
+}
+
+static SnapshotObject *
+NewSnapshot( Rtt_Allocator * context, Display & display, Real w, Real h )
+{
+    return Rtt_NEW( context, SnapshotObject( context, display, w, h ) );
 }
 
 // display.newSnapshot( [parent, ] w, h )
 int
 DisplayLibrary::newSnapshot( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
+    auto * snapshotFactory = GetObjectFactory( L, &NewSnapshot, display ); // n.b. done early to ensure factory is consumed
 
 	Rtt_Allocator* context = display.GetAllocator();
 
-	// [parentGroup,]
-	int nextArg = 1;
+    // [parentGroup,]
+    int nextArg = 1;
 
 	// NOTE: GetParent() increments nextArg if parent found
-	GroupObject *parent = GetParent( L, nextArg );
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
 
-	Real w = luaL_checkreal( L, nextArg++ );
-	Real h = luaL_checkreal( L, nextArg++ );
+    Real w = luaL_checkreal( L, nextArg++ );
+    Real h = luaL_checkreal( L, nextArg++ );
 
-	SnapshotObject *o = Rtt_NEW( context, SnapshotObject( context, display, w, h ) );
+    SnapshotObject *o = snapshotFactory( context, display, w, h );
 
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
 	
 	o->Initialize( L, display, w, h );
 
-	return result;
+    return result;
 }
 
 // display.newSprite( [parent, ] sheet, width, height, sequenceData )
 int
 DisplayLibrary::newSprite( lua_State *L )
 {
-	int result = 0;
+    int result = 0;
 
 	int nextArg = 1;
 	GroupObject *parent = GetParent( L, nextArg );
@@ -913,7 +957,7 @@ DisplayLibrary::newSprite( lua_State *L )
 		CoronaLuaError( L, "display.newSprite() requires argument #%d to a table containing sequence data", nextArg );
 	}
 
-	return result;
+    return result;
 }
 
 static int
@@ -926,20 +970,20 @@ PushColor( lua_State *L, Color c )
 	lua_pushnumber( L, kInv255 * color.rgba.b );
 	lua_pushnumber( L, kInv255 * color.rgba.a );
 
-	return 4;
+    return 4;
 }
 
 int
 DisplayLibrary::getDefault( lua_State *L )
 {
-	int result = 1;
+    int result = 1;
 
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
 
-	const char *key = lua_tostring( L, 1 );
+    const char *key = lua_tostring( L, 1 );
 
-	DisplayDefaults& defaults = display.GetDefaults();
+    DisplayDefaults& defaults = display.GetDefaults();
 
 	if ( Rtt_StringCompare( key, "anchorX" ) == 0 )
 	{
@@ -999,23 +1043,74 @@ DisplayLibrary::getDefault( lua_State *L )
 		bool value = defaults.IsExternalTextureRetina();
 		lua_pushboolean( L, value ? 1 : 0 );
 	}
-	else if ( key )
-	{
-		luaL_error( L, "ERROR: display.getDefault() given invalid key (%s)", key );
-		result = 0;
-	}
+    else if ( ( Rtt_StringCompare( key, "timeTransform" ) == 0 ) )
+    {
+        const TimeTransform* transform = defaults.GetTimeTransform();
+        result = transform->Push( L );
+    }
+    else if ( ( Rtt_StringCompare( key, "skipsCulling" ) == 0 ) )
+    {
+        bool value = defaults.GetSkipsCull();
+        lua_pushboolean( L, value ? 1 : 0 );
+    }
+    else if ( ( Rtt_StringCompare( key, "skipsHitTesting" ) == 0 ) )
+    {
+        bool value = defaults.GetSkipsHitTest();
+        lua_pushboolean( L, value ? 1 : 0 );
+    }
+    else if ( ( Rtt_StringCompare( key, "enableDepth" ) == 0 ) )
+    {
+        bool value = defaults.GetEnableDepthInScene();
+        lua_pushboolean( L, value ? 1 : 0 );
+    }
+    else if ( ( Rtt_StringCompare( key, "enableStencil" ) == 0 ) )
+    {
+        bool value = defaults.GetEnableStencilInScene();
+        lua_pushboolean( L, value ? 1 : 0 );
+    }
+    else if ( ( Rtt_StringCompare( key, "addDepthComponent" ) == 0 ) )
+    {
+        bool value = defaults.GetAddDepthToResource();
+        lua_pushboolean( L, value ? 1 : 0 );
+    }
+    else if ( ( Rtt_StringCompare( key, "addStencilComponent" ) == 0 ) )
+    {
+        bool value = defaults.GetAddStencilToResource();
+        lua_pushboolean( L, value ? 1 : 0 );
+    }
+    else if ( ( Rtt_StringCompare( key, "depthClearValue" ) == 0 ) )
+    {
+        lua_pushnumber( L, defaults.GetSceneDepthClearValue() );
+    }
+    else if ( ( Rtt_StringCompare( key, "depthComponentClearValue" ) == 0 ) )
+    {
+        lua_pushnumber( L, defaults.GetAddedDepthClearValue() );
+    }
+    else if ( ( Rtt_StringCompare( key, "stencilClearValue" ) == 0 ) )
+    {
+        lua_pushinteger( L, defaults.GetSceneStencilClearValue() );
+    }
+    else if ( ( Rtt_StringCompare( key, "stencilComponentClearValue" ) == 0 ) )
+    {
+        lua_pushinteger( L, defaults.GetAddedStencilClearValue() );
+    }
+    else if ( key )
+    {
+        luaL_error( L, "ERROR: display.getDefault() given invalid key (%s)", key );
+        result = 0;
+    }
 
-	return result;
+    return result;
 }
 
 int
 DisplayLibrary::setDefault( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
 
-	int index = 1;
-	const char *key = lua_tostring( L, index++ );
+    int index = 1;
+    const char *key = lua_tostring( L, index++ );
 
 	DisplayDefaults& defaults = display.GetDefaults();
 	Color c = LuaLibDisplay::toColor( L, index );
@@ -1091,33 +1186,118 @@ DisplayLibrary::setDefault( lua_State *L )
 		bool value = lua_toboolean( L, index ) ? true : false;
 		defaults.SetExternalTextureRetina( value );
 	}
-	else if ( key )
-	{
-		luaL_error( L, "ERROR: display.setDefault() given invalid key (%s)", key );
-	}
+    else if ( ( Rtt_StringCompare( key, "timeTransform" ) == 0 ) )
+    {
+        if ( lua_isstring( L, index ) )
+        {
+            const char* str = lua_tostring( L, index );
+            if ( Rtt_StringCompare( str, "none" ) == 0 )
+            {
+                TimeTransform dummy; // n.b. leave func NULL
+
+                defaults.SetTimeTransform( &dummy );
+            }
+            else if ( Rtt_StringCompare( str, "default" ) == 0 )
+            {
+                defaults.SetTimeTransform( NULL );
+            }
+        }
+        else
+        {
+            const char* fname = TimeTransform::FindFunc( L, index, "display.setDefault()" );
+            if (fname)
+            {
+                TimeTransform transform;
+
+                transform.SetFunc( L, index, "display.setDefault()", fname );
+                        
+                defaults.SetTimeTransform( &transform );
+            }
+        }
+    }
+    else if ( ( Rtt_StringCompare( key, "skipsCulling" ) == 0 ) )
+    {
+        bool value = lua_toboolean( L, index ) ? true : false;
+        defaults.SetSkipsCull( value );
+    }
+    else if ( ( Rtt_StringCompare( key, "skipsHitTesting" ) == 0 ) )
+    {
+        bool value = lua_toboolean( L, index ) ? true : false;
+        defaults.SetSkipsHitTest( value );
+    }
+    else if ( ( Rtt_StringCompare( key, "enableDepth" ) == 0 ) )
+    {
+        bool value = lua_toboolean( L, index ) ? true : false;
+        defaults.SetEnableDepthInScene( value );
+    }
+    else if ( ( Rtt_StringCompare( key, "enableStencil" ) == 0 ) )
+    {
+        bool value = lua_toboolean( L, index ) ? true : false;
+        defaults.SetEnableStencilInScene( value );
+    }
+    else if ( ( Rtt_StringCompare( key, "addDepthComponent" ) == 0 ) )
+    {
+        bool value = lua_toboolean( L, index ) ? true : false;
+        defaults.SetAddDepthToResource( value );
+    }
+    else if ( ( Rtt_StringCompare( key, "addStencilComponent" ) == 0 ) )
+    {
+        bool value = lua_toboolean( L, index ) ? true : false;
+        defaults.SetAddStencilToResource( value );
+    }
+    else if ( ( Rtt_StringCompare( key, "depthClearValue" ) == 0 ) )
+    {
+        float depth = lua_tonumber( L, index );
+        if (depth >= 0.0 && depth <= 1.0)
+        {
+            defaults.SetSceneDepthClearValue( depth );
+        }
+    }
+    else if ( ( Rtt_StringCompare( key, "depthComponentClearValue" ) == 0 ) )
+    {
+        float depth = lua_tonumber( L, index );
+        if (depth >= 0.0 && depth <= 1.0)
+        {
+            defaults.SetAddedDepthClearValue( depth );
+        }
+    }
+    else if ( ( Rtt_StringCompare( key, "stencilClearValue" ) == 0 ) )
+    {
+        U32 stencil = lua_tointeger( L, index );
+        defaults.SetSceneStencilClearValue( stencil );
+    }
+    else if ( ( Rtt_StringCompare( key, "stencilComponentClearValue" ) == 0 ) )
+    {
+        U32 stencil = lua_tointeger( L, index );
+        defaults.SetAddedStencilClearValue( stencil );
+    }
+    else if ( key )
+    {
+        luaL_error( L, "ERROR: display.setDefault() given invalid key (%s)", key );
+    }
 
 
-	return 0;
+    return 0;
 }
 
 int
 DisplayLibrary::getCurrentStage( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
 
-	return display.GetStage()->GetProxy()->PushTable( L );
+    return display.GetStage()->GetProxy()->PushTable( L );
 }
 
 int
 DisplayLibrary::collectOrphans( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
 
-	GroupObject *orphanage = display.Orphanage(); Rtt_ASSERT( orphanage );
-	GroupObject::CollectUnreachables( L, display.GetScene(), * orphanage );
-	return 0;
+    GroupObject *orphanage = display.Orphanage(); Rtt_ASSERT( orphanage );
+    GroupObject::CollectUnreachables( L, display.GetScene(), * orphanage );
+    return 0;
 }
 
 int
@@ -1135,7 +1315,7 @@ DisplayLibrary::capture( lua_State *L )
 		return 0;
 	}
 
-	DisplayObject* displayObject = (DisplayObject*)(proxy->Object());
+    DisplayObject* displayObject = (DisplayObject*)(proxy->Object());
 
 	// Default values for options.
 	bool cropObjectToScreenBounds = true;
@@ -1171,23 +1351,23 @@ DisplayLibrary::capture( lua_State *L )
 		return 0;
 	}
 
-	// Resize the screenshot to match the size of object that it captured.
-	// We have to do this because the screenshot's size is in pixels which
-	// will likely be bigger than the display object itself onscreen in
-	// content coordinates.
-	const Rtt_Real bitmapWidth = Rtt_IntToReal(paint->GetTexture()->GetWidth());
-	const Rtt_Real bitmapHeight = Rtt_IntToReal(paint->GetTexture()->GetHeight());
+    // Resize the screenshot to match the size of object that it captured.
+    // We have to do this because the screenshot's size is in pixels which
+    // will likely be bigger than the display object itself onscreen in
+    // content coordinates.
+    const Rtt_Real bitmapWidth = Rtt_IntToReal(paint->GetTexture()->GetWidth());
+    const Rtt_Real bitmapHeight = Rtt_IntToReal(paint->GetTexture()->GetHeight());
 
-	Rect bounds = displayObject->StageBounds();
-	if ( cropObjectToScreenBounds )
-	{
-		bounds.Intersect(display.GetScreenContentBounds());
-	}
+    Rect bounds = displayObject->StageBounds();
+    if ( cropObjectToScreenBounds )
+    {
+        bounds.Intersect(display.GetScreenContentBounds());
+    }
 
-	// Scale.
-	Rtt_Real xScale = ( (float)( bounds.xMax - bounds.xMin ) / bitmapWidth );
-	Rtt_Real yScale = ( (float)( bounds.yMax - bounds.yMin ) / bitmapHeight );
-	v->Scale(xScale, yScale, true);
+    // Scale.
+    Rtt_Real xScale = ( (float)( bounds.xMax - bounds.xMin ) / bitmapWidth );
+    Rtt_Real yScale = ( (float)( bounds.yMax - bounds.yMin ) / bitmapHeight );
+    v->Scale(xScale, yScale, true);
 
 	return 1;
 }
@@ -1227,92 +1407,92 @@ DisplayLibrary::captureScreen( lua_State *L )
 
 void DisplayLibrary::GetRect( lua_State *L, Rect &bounds )
 {
-	// Self *library = ToLibrary( L );
+    // Self *library = ToLibrary( L );
 
-	// Do not continue if not given any arguments.
-	if (lua_gettop(L) <= 0)
-	{
-		luaL_error(L, "display.captureBounds() expects a bounds table");
-	}
+    // Do not continue if not given any arguments.
+    if (lua_gettop(L) <= 0)
+    {
+        luaL_error(L, "display.captureBounds() expects a bounds table");
+    }
 
-	// Verify that the first argument is a Lua table.
-	if (!lua_istable(L, 1))
-	{
-		luaL_error(L, "ERROR: display.captureBounds() given an invalid argument. Was expecting a bounds table but got a %s",
+    // Verify that the first argument is a Lua table.
+    if (!lua_istable(L, 1))
+    {
+        luaL_error(L, "ERROR: display.captureBounds() given an invalid argument. Was expecting a bounds table but got a %s",
                    lua_typename( L, lua_type( L, 1 ) ) );
-	}
+    }
 
-	// Fetch the bounds table's xMin value.
-	lua_getfield(L, 1, "xMin");
-	if (lua_type(L, -1) == LUA_TNUMBER)
-	{
-		bounds.xMin = lua_tonumber(L, -1);
-	}
-	else
-	{
-		luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'xMin' entry");
-	}
-	lua_pop(L, 1);
-	
-	// Fetch the bounds table's yMin value.
-	lua_getfield(L, 1, "yMin");
-	if (lua_type(L, -1) == LUA_TNUMBER)
-	{
-		bounds.yMin = lua_tonumber(L, -1);
-	}
-	else
-	{
-		luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'yMin' entry");
-	}
-	lua_pop(L, 1);
-	
-	// Fetch the bounds table's xMax value.
-	lua_getfield(L, 1, "xMax");
-	if (lua_type(L, -1) == LUA_TNUMBER)
-	{
-		bounds.xMax = lua_tonumber(L, -1);
-	}
-	else
-	{
-		luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'xMax' entry");
-	}
-	lua_pop(L, 1);
-	
-	// Fetch the bounds table's yMax value.
-	lua_getfield(L, 1, "yMax");
-	if (lua_type(L, -1) == LUA_TNUMBER)
-	{
-		bounds.yMax = lua_tonumber(L, -1);
-	}
-	else
-	{
-		luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'yMax' entry");
-	}
-	lua_pop(L, 1);
+    // Fetch the bounds table's xMin value.
+    lua_getfield(L, 1, "xMin");
+    if (lua_type(L, -1) == LUA_TNUMBER)
+    {
+        bounds.xMin = lua_tonumber(L, -1);
+    }
+    else
+    {
+        luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'xMin' entry");
+    }
+    lua_pop(L, 1);
+    
+    // Fetch the bounds table's yMin value.
+    lua_getfield(L, 1, "yMin");
+    if (lua_type(L, -1) == LUA_TNUMBER)
+    {
+        bounds.yMin = lua_tonumber(L, -1);
+    }
+    else
+    {
+        luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'yMin' entry");
+    }
+    lua_pop(L, 1);
+    
+    // Fetch the bounds table's xMax value.
+    lua_getfield(L, 1, "xMax");
+    if (lua_type(L, -1) == LUA_TNUMBER)
+    {
+        bounds.xMax = lua_tonumber(L, -1);
+    }
+    else
+    {
+        luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'xMax' entry");
+    }
+    lua_pop(L, 1);
+    
+    // Fetch the bounds table's yMax value.
+    lua_getfield(L, 1, "yMax");
+    if (lua_type(L, -1) == LUA_TNUMBER)
+    {
+        bounds.yMax = lua_tonumber(L, -1);
+    }
+    else
+    {
+        luaL_error(L, "ERROR: display.captureBounds() given a bounds table with an invalid or missing 'yMax' entry");
+    }
+    lua_pop(L, 1);
 
-	// If the min bounds is greater than the max bounds, then swap them.
-	if (bounds.xMin > bounds.xMax)
-	{
-		Swap(bounds.xMin, bounds.xMax);
-	}
-	if (bounds.yMin > bounds.yMax)
-	{
-		Swap(bounds.yMin, bounds.yMax);
-	}
+    // If the min bounds is greater than the max bounds, then swap them.
+    if (bounds.xMin > bounds.xMax)
+    {
+        Swap(bounds.xMin, bounds.xMax);
+    }
+    if (bounds.yMin > bounds.yMax)
+    {
+        Swap(bounds.yMin, bounds.yMax);
+    }
 }
 
 int
 DisplayLibrary::captureBounds( lua_State *L )
 {
-	Rect bounds;
-	GetRect( L, bounds );
+    Rect bounds;
+    GetRect( L, bounds );
 
 	// Capture the specified bounds of the screen.
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
 	Runtime *runtime = & display.GetRuntime();
 
-	bounds.Intersect(display.GetScreenContentBounds());
+    bounds.Intersect(display.GetScreenContentBounds());
 
 	// Do a screenshot.
 	BitmapPaint *paint = display.CaptureBounds( &bounds );
@@ -1333,21 +1513,21 @@ DisplayLibrary::captureBounds( lua_State *L )
 		return 0;
 	}
 
-	// Resize the screenshot to match the size of the region that it captured in content coordinates.
-	// We have to do this because the screenshot's size is in pixels which will likely be larger than
-	// the captured region in content coordinates on high resolution displays.
-	const Rtt_Real width = Rtt_IntToReal(paint->GetTexture()->GetWidth());
-	const Rtt_Real height = Rtt_IntToReal(paint->GetTexture()->GetHeight());
-	Rtt_Real xScale = Rtt_RealDiv(Rtt_IntToReal(bounds.xMax - bounds.xMin), width);
-	Rtt_Real yScale = Rtt_RealDiv(Rtt_IntToReal(bounds.yMax - bounds.yMin), height);
-	v->Scale(xScale, yScale, true);
+    // Resize the screenshot to match the size of the region that it captured in content coordinates.
+    // We have to do this because the screenshot's size is in pixels which will likely be larger than
+    // the captured region in content coordinates on high resolution displays.
+    const Rtt_Real width = Rtt_IntToReal(paint->GetTexture()->GetWidth());
+    const Rtt_Real height = Rtt_IntToReal(paint->GetTexture()->GetHeight());
+    Rtt_Real xScale = Rtt_RealDiv(Rtt_IntToReal(bounds.xMax - bounds.xMin), width);
+    Rtt_Real yScale = Rtt_RealDiv(Rtt_IntToReal(bounds.yMax - bounds.yMin), height);
+    v->Scale(xScale, yScale, true);
 // TODO: Fix halfW.halfH correction????
-	Rtt_Real xOffset = Rtt_RealDiv(Rtt_RealMul(width, xScale) - width, Rtt_REAL_2);
-	Rtt_Real yOffset = Rtt_RealDiv(Rtt_RealMul(height, yScale) - height, Rtt_REAL_2);
-	v->Translate(xOffset, yOffset);
-	
-	// Return a display object showing the captured region.
-	return 1;
+    Rtt_Real xOffset = Rtt_RealDiv(Rtt_RealMul(width, xScale) - width, Rtt_REAL_2);
+    Rtt_Real yOffset = Rtt_RealDiv(Rtt_RealMul(height, yScale) - height, Rtt_REAL_2);
+    v->Translate(xOffset, yOffset);
+    
+    // Return a display object showing the captured region.
+    return 1;
 }
 
 int
@@ -1385,11 +1565,11 @@ DisplayLibrary::save( lua_State *L )
 	}
 	lua_pop( L, 1 );
 
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
-	Runtime *runtime = & display.GetRuntime();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
+    Runtime *runtime = & display.GetRuntime();
 
-	DisplayObject* displayObject = (DisplayObject*)(proxy->Object());
+    DisplayObject* displayObject = (DisplayObject*)(proxy->Object());
 
 	// Do a screenshot of the given display object.
 	BitmapPaint *paint = display.CaptureSave( displayObject,
@@ -1399,9 +1579,9 @@ DisplayLibrary::save( lua_State *L )
 	{
 		CoronaLuaError(L, "display.save() unable to capture screen. The platform or device might not be supported" );
 
-		// Nothing to do.
-		return 0;
-	}
+        // Nothing to do.
+        return 0;
+    }
 
 	const MPlatform& platform = runtime->Platform();
 
@@ -1409,7 +1589,7 @@ DisplayLibrary::save( lua_State *L )
 	platform.SaveBitmap( paint->GetBitmap(), pngBytes );
 	lua_pushlstring(L, pngBytes.GetData(), pngBytes.GetLength());
 
-	Rtt_DELETE( paint );
+    Rtt_DELETE( paint );
 
 	return 1;
 }
@@ -1417,8 +1597,8 @@ DisplayLibrary::save( lua_State *L )
 int
 DisplayLibrary::colorSample( lua_State *L )
 {
-	Self *library = ToLibrary( L );
-	Display& display = library->GetDisplay();
+    Self *library = ToLibrary( L );
+    Display& display = library->GetDisplay();
 
 	float pos_x = lua_tonumber( L, 1 );
 	float pos_y = lua_tonumber( L, 2 );
@@ -1433,37 +1613,37 @@ DisplayLibrary::colorSample( lua_State *L )
 		return 0;
 	}
 
-	// Result callback.
-	LuaResource *resource = Rtt_NEW( LuaContext::GetAllocator( L ),
-										LuaResource( LuaContext::GetContext( L )->LuaState(),
-														3 /*!< Callback index. */ ) );
-	RGBA color;
-	color.Clear();
-    
-	display.ColorSample( pos_x,
-							pos_y,
-							color );
+    // Result callback.
+    LuaResource *resource = Rtt_NEW( LuaContext::GetAllocator( L ),
+                                        LuaResource( LuaContext::GetContext( L )->LuaState(),
+                                                        3 /*!< Callback index. */ ) );
+    RGBA color;
+    color.Clear();
+
+    display.ColorSample( pos_x,
+                            pos_y,
+                            color );
     display.Render(); // rerender if no texture has been created
-    
-	ColorSampleEvent e( pos_x,
-							pos_y,
-							color );
 
-	resource->DispatchEvent( e );
+    ColorSampleEvent e( pos_x,
+                            pos_y,
+                            color );
 
-	Rtt_DELETE( resource );
+    resource->DispatchEvent( e );
 
-	return 0;
+    Rtt_DELETE( resource );
+
+    return 0;
 }
 
 int
 DisplayLibrary::getSafeAreaInsets( lua_State *L )
 {
-	Runtime& runtime = * LuaContext::GetRuntime( L );
-	Display &display = runtime.GetDisplay();
+    Runtime& runtime = * LuaContext::GetRuntime( L );
+    Display &display = runtime.GetDisplay();
 
-	Rtt_Real top, left, bottom, right;
-	runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
+    Rtt_Real top, left, bottom, right;
+    runtime.Platform().GetSafeAreaInsetsPixels(top, left, bottom, right);
 
 	lua_pushnumber( L, top * display.GetScreenToContentScale() );
 	lua_pushnumber( L, left * display.GetScreenToContentScale() );
@@ -1724,38 +1904,58 @@ DisplayLibrary::_endProfile( lua_State *L )
 
 ShapeObject*
 LuaLibDisplay::PushImage(
-	lua_State *L,
-	Vertex2* topLeft,
-	BitmapPaint* paint,
-	Display& display,
-	GroupObject *parent,
-	Real w,
-	Real h )
+    lua_State *L,
+    Vertex2* topLeft,
+    BitmapPaint* paint,
+    Display& display,
+    GroupObject *parent,
+    Real w,
+    Real h,
+	FactoryReplacement replacement )
 {
-	return DisplayLibrary::PushImage( L, topLeft, paint, display, parent, w, h );
+    return DisplayLibrary::PushImage( L, topLeft, paint, display, parent, w, h, replacement );
 }
 
 ShapeObject*
 LuaLibDisplay::PushImage(
-	lua_State *L,
-	Vertex2* topLeft,
-	BitmapPaint* paint,
-	Display& display,
-	GroupObject *parent )
+    lua_State *L,
+    Vertex2* topLeft,
+    BitmapPaint* paint,
+    Display& display,
+    GroupObject *parent,
+	FactoryReplacement replacement )
 {
-	return DisplayLibrary::PushImage( L, topLeft, paint, display, parent );
+    return DisplayLibrary::PushImage( L, topLeft, paint, display, parent, replacement );
 }
 
 void
 LuaLibDisplay::Initialize( lua_State *L, Display& display )
 {
-	Rtt_LUA_STACK_GUARD( L );
+    Rtt_LUA_STACK_GUARD( L );
 
-	lua_pushlightuserdata( L, & display );
-	CoronaLuaRegisterModuleLoader( L, DisplayLibrary::kName, DisplayLibrary::Open, 1 );
+    lua_pushlightuserdata( L, & display );
+    CoronaLuaRegisterModuleLoader( L, DisplayLibrary::kName, DisplayLibrary::Open, 1 );
 
-	CoronaLuaPushModule( L, DisplayLibrary::kName );
-	lua_setglobal( L, DisplayLibrary::kName ); // display = library
+    CoronaLuaPushModule( L, DisplayLibrary::kName );
+    lua_setglobal( L, DisplayLibrary::kName ); // display = library
+}
+
+LuaLibDisplay::FactoryReplacement
+LuaLibDisplay::GetFactoryReplacement( lua_State * L, Display& display )
+{
+    void* funcBox = display.GetFactoryFunc();
+
+    if (funcBox)
+    {
+        display.SetFactoryFunc( NULL );
+
+        return *(FactoryReplacement *)&funcBox; // https://stackoverflow.com/a/16682718
+    }
+
+    else
+    {
+        return NULL;
+    }
 }
 
 // NOTE: All transformations should be applied AFTER this call.
@@ -1764,15 +1964,15 @@ LuaLibDisplay::Initialize( lua_State *L, Display& display )
 int
 LuaLibDisplay::AssignParentAndPushResult( lua_State *L, Display& display, DisplayObject* o, GroupObject *pParent )
 {
-	if ( ! pParent )
-	{
-		pParent = display.GetStage();
-	}
-	pParent->Insert( -1, o, false );
+    if ( ! pParent )
+    {
+        pParent = display.GetStage();
+    }
+    pParent->Insert( -1, o, false );
 
-	o->AddedToParent( L, pParent );
+    o->AddedToParent( L, pParent );
 
-	o->InitProxy( L );
+    o->InitProxy( L );
 
 	// NOTE: V1 compatibility on an object can only be set on creation.
 	const DisplayDefaults& defaults = display.GetDefaults();
@@ -1786,58 +1986,58 @@ LuaLibDisplay::AssignParentAndPushResult( lua_State *L, Display& display, Displa
 Color
 LuaLibDisplay::toColorFloat( lua_State *L, int index )
 {
-	int numArgs = lua_gettop( L ) - index + 1; // add 1 b/c index is 1-based
+    int numArgs = lua_gettop( L ) - index + 1; // add 1 b/c index is 1-based
 
-	ColorUnion c;
+    ColorUnion c;
 
-	if ( numArgs >= 3 )
-	{
-		float r = Clamp( lua_tonumber( L, index++ ), 0., 1. );
-		float g = Clamp( lua_tonumber( L, index++ ), 0., 1. );
-		float b = Clamp( lua_tonumber( L, index++ ), 0., 1. );
-		float a = Clamp( (lua_isnone( L, index ) ? 1.0 : lua_tonumber( L, index )), 0., 1. );
+    if ( numArgs >= 3 )
+    {
+        float r = Clamp( lua_tonumber( L, index++ ), 0., 1. );
+        float g = Clamp( lua_tonumber( L, index++ ), 0., 1. );
+        float b = Clamp( lua_tonumber( L, index++ ), 0., 1. );
+        float a = Clamp( (lua_isnone( L, index ) ? 1.0 : lua_tonumber( L, index )), 0., 1. );
 
-		RGBA rgba = { U8(r*255.0f), U8(g*255.0f), U8(b*255.0f), U8(a*255.0f) };
-		c.rgba = rgba;
-	}
-	else
-	{
-		// Treat first value as a grayscale param
-		float value = Clamp( lua_tonumber( L, index++ ), 0., 1. );
-		float a = Clamp( (lua_isnone( L, index ) ? 1.0 : lua_tonumber( L, index )), 0., 1. );
-		RGBA rgba = { U8(value*255.0f), U8(value*255.0f), U8(value*255.0f), U8(a*255.0f) };
-		c.rgba = rgba;
-	}
+        RGBA rgba = { U8(r*255.0f), U8(g*255.0f), U8(b*255.0f), U8(a*255.0f) };
+        c.rgba = rgba;
+    }
+    else
+    {
+        // Treat first value as a grayscale param
+        float value = Clamp( lua_tonumber( L, index++ ), 0., 1. );
+        float a = Clamp( (lua_isnone( L, index ) ? 1.0 : lua_tonumber( L, index )), 0., 1. );
+        RGBA rgba = { U8(value*255.0f), U8(value*255.0f), U8(value*255.0f), U8(a*255.0f) };
+        c.rgba = rgba;
+    }
 
-	return c.pixel;
+    return c.pixel;
 }
 
 Color
 LuaLibDisplay::toColorByte( lua_State *L, int index )
 {
-	int numArgs = lua_gettop( L ) - index + 1; // add 1 b/c index is 1-based
+    int numArgs = lua_gettop( L ) - index + 1; // add 1 b/c index is 1-based
 
-	ColorUnion c;
+    ColorUnion c;
 
-	if ( numArgs >= 3 )
-	{
-		int r = (int) lua_tointeger( L, index++ );
-		int g = (int) lua_tointeger( L, index++ );
-		int b = (int) lua_tointeger( L, index++ );
-		int a = (int) ( lua_isnone( L, index ) ? 255 : lua_tointeger( L, index ) );
-		RGBA rgba = { (U8)r, (U8)g, (U8)b, (U8)a };
-		c.rgba = rgba;
-	}
-	else
-	{
-		// Treat first value as a grayscale param
-		int value = (int) lua_tointeger( L, index++ );
-		int a = (int) ( lua_isnone( L, index ) ? 255 : lua_tointeger( L, index ) );
-		RGBA rgba = { (U8)value, (U8)value, (U8)value, (U8)a };
-		c.rgba = rgba;
-	}
+    if ( numArgs >= 3 )
+    {
+        int r = (int) lua_tointeger( L, index++ );
+        int g = (int) lua_tointeger( L, index++ );
+        int b = (int) lua_tointeger( L, index++ );
+        int a = (int) ( lua_isnone( L, index ) ? 255 : lua_tointeger( L, index ) );
+        RGBA rgba = { (U8)r, (U8)g, (U8)b, (U8)a };
+        c.rgba = rgba;
+    }
+    else
+    {
+        // Treat first value as a grayscale param
+        int value = (int) lua_tointeger( L, index++ );
+        int a = (int) ( lua_isnone( L, index ) ? 255 : lua_tointeger( L, index ) );
+        RGBA rgba = { (U8)value, (U8)value, (U8)value, (U8)a };
+        c.rgba = rgba;
+    }
 
-	return c.pixel;
+    return c.pixel;
 }
 
 int
@@ -1865,16 +2065,16 @@ LuaLibDisplay::LuaNewColor( lua_State *L, int index )
 static BitmapPaint *
 NewBitmapPaintFromFile( lua_State *L, int paramsIndex )
 {
-	BitmapPaint *paint = NULL;
+    BitmapPaint *paint = NULL;
 
-	lua_getfield( L, paramsIndex, "filename" );
-	const char *imageName = lua_tostring( L, -1 );
-	if ( imageName )
-	{
-		lua_getfield( L, paramsIndex, "baseDir" );
-		MPlatform::Directory baseDir =
-			LuaLibSystem::ToDirectory( L, -1 );
-		lua_pop( L, 1 );
+    lua_getfield( L, paramsIndex, "filename" );
+    const char *imageName = lua_tostring( L, -1 );
+    if ( imageName )
+    {
+        lua_getfield( L, paramsIndex, "baseDir" );
+        MPlatform::Directory baseDir =
+            LuaLibSystem::ToDirectory( L, -1 );
+        lua_pop( L, 1 );
 
 		Runtime *runtime = LuaContext::GetRuntime( L );
 		paint = BitmapPaint::NewBitmap( *runtime, imageName, baseDir, 0x0 );
@@ -1885,96 +2085,96 @@ NewBitmapPaintFromFile( lua_State *L, int paramsIndex )
 	}
 	lua_pop( L, 1 );
 
-	return paint;
+    return paint;
 }
 
 // { type="image", sheet=, frame= }
 static BitmapPaint *
 NewBitmapPaintFromSheet( lua_State *L, int paramsIndex )
 {
-	BitmapPaint *result = NULL;
+    BitmapPaint *result = NULL;
 
-	lua_getfield( L, paramsIndex, "sheet" );
-	if ( lua_isuserdata( L, -1 ) )
-	{
-		ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, -1 );
-		if ( ud )
-		{
-			const AutoPtr< ImageSheet >& sheet = ud->GetSheet();
+    lua_getfield( L, paramsIndex, "sheet" );
+    if ( lua_isuserdata( L, -1 ) )
+    {
+        ImageSheetUserdata *ud = ImageSheet::ToUserdata( L, -1 );
+        if ( ud )
+        {
+            const AutoPtr< ImageSheet >& sheet = ud->GetSheet();
 
-			lua_getfield( L, paramsIndex, "frame" );
-			int frameIndex = (int) lua_tointeger( L, -1 );
-			lua_pop( L, 1 );
+            lua_getfield( L, paramsIndex, "frame" );
+            int frameIndex = (int) lua_tointeger( L, -1 );
+            lua_pop( L, 1 );
 
-			if ( frameIndex <= 0 )
-			{
-				CoronaLuaWarning( L, "image paint given an invalid frameIndex (%d). Defaulting to 1", frameIndex );
-				frameIndex = 1;
-			}
+            if ( frameIndex <= 0 )
+            {
+                CoronaLuaWarning( L, "image paint given an invalid frameIndex (%d). Defaulting to 1", frameIndex );
+                frameIndex = 1;
+            }
 
-			// Map 1-based Lua indices to 0-based C indices
-			--frameIndex;
+            // Map 1-based Lua indices to 0-based C indices
+            --frameIndex;
 
-			ImageSheetPaint *paint = ImageSheetPaint::NewBitmap(
-				LuaContext::GetAllocator( L ), sheet, frameIndex );
+            ImageSheetPaint *paint = ImageSheetPaint::NewBitmap(
+                LuaContext::GetAllocator( L ), sheet, frameIndex );
 
-			result = paint;
-		}
-	}
-	lua_pop( L, 1 );
+            result = paint;
+        }
+    }
+    lua_pop( L, 1 );
 
-	return result;
+    return result;
 }
 
 BitmapPaint *
 LuaLibDisplay::LuaNewBitmapPaint( lua_State *L, int paramsIndex )
 {
-	BitmapPaint *result = NULL;
+    BitmapPaint *result = NULL;
 
-	if ( ! result )
-	{
-		result = NewBitmapPaintFromFile( L, paramsIndex );
-	}
+    if ( ! result )
+    {
+        result = NewBitmapPaintFromFile( L, paramsIndex );
+    }
 
-	if ( ! result )
-	{
-		result = NewBitmapPaintFromSheet( L, paramsIndex );
-	}
+    if ( ! result )
+    {
+        result = NewBitmapPaintFromSheet( L, paramsIndex );
+    }
 
-	return result;
+    return result;
 }
 
 void
 LuaLibDisplay::ArrayToColor( lua_State *L, int index, Color& outColor )
 {
-	int top = lua_gettop( L );
+    int top = lua_gettop( L );
 
-	index = Lua::Normalize( L, index );
+    index = Lua::Normalize( L, index );
 
-	int numArgs = Min( (int)lua_objlen( L, index ), 4 );
-	for ( int i = 0; i < numArgs; i++ )
-	{
-		lua_rawgeti( L, index, (i+1) ); // 1-based
-	}
+    int numArgs = Min( (int)lua_objlen( L, index ), 4 );
+    for ( int i = 0; i < numArgs; i++ )
+    {
+        lua_rawgeti( L, index, (i+1) ); // 1-based
+    }
 
 	if ( numArgs > 0 )
 	{
 		outColor = LuaLibDisplay::toColor( L, top+1 );
 	}
 
-	lua_pop( L, numArgs );
+    lua_pop( L, numArgs );
 }
 
 // { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, direction= }
 GradientPaint *
 LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 {
-	GradientPaint *result = NULL;
+    GradientPaint *result = NULL;
 
-	const RGBA kDefault = { 0, 0, 0, 255 };
-	ColorUnion color1, color2;
-	color1.rgba = kDefault;
-	color2.rgba = kDefault;
+    const RGBA kDefault = { 0, 0, 0, 255 };
+    ColorUnion color1, color2;
+    color1.rgba = kDefault;
+    color2.rgba = kDefault;
 
 	lua_getfield( L, paramsIndex, "color1" );
 	if ( lua_istable( L, -1 ) )
@@ -1990,53 +2190,53 @@ LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 	}
 	lua_pop( L, 1 );
 
-	GradientPaint::Direction direction = GradientPaint::kDefaultDirection;
-	Rtt_Real angle = Rtt_REAL_0;
-	lua_getfield( L, paramsIndex, "direction" );
-	if ( lua_type( L, -1 ) == LUA_TSTRING )
-	{
-		direction = GradientPaint::StringToDirection( lua_tostring( L, -1 ) );
-	}
-	else if ( lua_type( L, -1 ) == LUA_TNUMBER )
-	{
-		angle = Rtt_FloatToReal(lua_tonumber(L, -1));
-	}
-	lua_pop( L, 1 );
+    GradientPaint::Direction direction = GradientPaint::kDefaultDirection;
+    Rtt_Real angle = Rtt_REAL_0;
+    lua_getfield( L, paramsIndex, "direction" );
+    if ( lua_type( L, -1 ) == LUA_TSTRING )
+    {
+        direction = GradientPaint::StringToDirection( lua_tostring( L, -1 ) );
+    }
+    else if ( lua_type( L, -1 ) == LUA_TNUMBER )
+    {
+        angle = Rtt_FloatToReal(lua_tonumber(L, -1));
+    }
+    lua_pop( L, 1 );
 
-	Runtime *runtime = LuaContext::GetRuntime( L );
-	Display& display = runtime->GetDisplay();
-	result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, direction, angle );
+    Runtime *runtime = LuaContext::GetRuntime( L );
+    Display& display = runtime->GetDisplay();
+    result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, direction, angle );
 
-	return result;
+    return result;
 }
 
 CompositePaint *
 LuaLibDisplay::LuaNewCompositePaint( lua_State *L, int paramsIndex )
 {
-	CompositePaint *result = NULL;
-	Paint *paint0 = NULL;
-	Paint *paint1 = NULL;
+    CompositePaint *result = NULL;
+    Paint *paint0 = NULL;
+    Paint *paint1 = NULL;
 
-	lua_getfield( L, paramsIndex, "paint1" );
-	if ( lua_istable( L, -1 ) )
-	{
-		paint0 = LuaNewPaint( L, -1 );
-	}
-	lua_pop( L, 1 );
+    lua_getfield( L, paramsIndex, "paint1" );
+    if ( lua_istable( L, -1 ) )
+    {
+        paint0 = LuaNewPaint( L, -1 );
+    }
+    lua_pop( L, 1 );
 
-	lua_getfield( L, paramsIndex, "paint2" );
-	if ( lua_istable( L, -1 ) )
-	{
-		paint1 = LuaNewPaint( L, -1 );
-	}
-	lua_pop( L, 1 );
+    lua_getfield( L, paramsIndex, "paint2" );
+    if ( lua_istable( L, -1 ) )
+    {
+        paint1 = LuaNewPaint( L, -1 );
+    }
+    lua_pop( L, 1 );
 
-	if ( paint0 && paint1 )
-	{
-		result = Rtt_NEW( LuaContext::GetAllocator( L ), CompositePaint( paint0, paint1 ) );
-	}
+    if ( paint0 && paint1 )
+    {
+        result = Rtt_NEW( LuaContext::GetAllocator( L ), CompositePaint( paint0, paint1 ) );
+    }
 
-	return result;
+    return result;
 }
 
 // object.fill = { r, g, b, a }
@@ -2049,9 +2249,9 @@ LuaLibDisplay::LuaNewCompositePaint( lua_State *L, int paramsIndex )
 Paint *
 LuaLibDisplay::LuaNewPaint( lua_State *L, int index )
 {
-	Paint *result = NULL;
+    Paint *result = NULL;
 
-	index = Lua::Normalize( L, index );
+    index = Lua::Normalize( L, index );
 
 	if ( lua_istable( L, index ) )
 	{
@@ -2088,7 +2288,7 @@ LuaLibDisplay::LuaNewPaint( lua_State *L, int index )
 		result = LuaLibDisplay::LuaNewColor( L, index );
 	}
 
-	return result;
+    return result;
 }
 
 // ----------------------------------------------------------------------------

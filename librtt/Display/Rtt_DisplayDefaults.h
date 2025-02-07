@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -18,13 +18,15 @@
 
 namespace Rtt
 {
+    
+struct TimeTransform;
 
 // ----------------------------------------------------------------------------
 
 class DisplayDefaults
 {
-	public:
-		DisplayDefaults();
+    public:
+        DisplayDefaults();
 
 	public:
 		Color GetClearColor() const { return fClearColor; }
@@ -43,14 +45,14 @@ class DisplayDefaults
 		RenderTypes::TextureFilter GetMagTextureFilter() const { return (RenderTypes::TextureFilter)fMagTextureFilter; }
 		void SetMagTextureFilter( RenderTypes::TextureFilter newValue ) { fMagTextureFilter = newValue; }
 
-		RenderTypes::TextureFilter GetMinTextureFilter() const { return (RenderTypes::TextureFilter)fMinTextureFilter; }
-		void SetMinTextureFilter( RenderTypes::TextureFilter newValue ) { fMinTextureFilter = newValue; }
+        RenderTypes::TextureFilter GetMinTextureFilter() const { return (RenderTypes::TextureFilter)fMinTextureFilter; }
+        void SetMinTextureFilter( RenderTypes::TextureFilter newValue ) { fMinTextureFilter = newValue; }
 
-		RenderTypes::TextureWrap GetTextureWrapX() const { return (RenderTypes::TextureWrap)fWrapX; }
-		void SetTextureWrapX( RenderTypes::TextureWrap newValue ) { fWrapX = newValue; }
+        RenderTypes::TextureWrap GetTextureWrapX() const { return (RenderTypes::TextureWrap)fWrapX; }
+        void SetTextureWrapX( RenderTypes::TextureWrap newValue ) { fWrapX = newValue; }
 
-		RenderTypes::TextureWrap GetTextureWrapY() const { return (RenderTypes::TextureWrap)fWrapY; }
-		void SetTextureWrapY( RenderTypes::TextureWrap newValue ) { fWrapY = newValue; }
+        RenderTypes::TextureWrap GetTextureWrapY() const { return (RenderTypes::TextureWrap)fWrapY; }
+        void SetTextureWrapY( RenderTypes::TextureWrap newValue ) { fWrapY = newValue; }
 
 		bool IsImageSheetSampledInsideFrame() const { return fIsImageSheetSampledInsideFrame;}
 		void SetImageSheetSampledInsideFrame( bool newValue ) { fIsImageSheetSampledInsideFrame = newValue; }
@@ -75,6 +77,17 @@ class DisplayDefaults
 		bool fIsAnchorClamped;
 		bool fIsImageSheetSampledInsideFrame;
 		bool fIsExternalTextureRetina;
+        bool fSkipsCull;
+        bool fSkipsHitTest;
+        bool fEnableDepthInScene;
+        bool fEnableStencilInScene;
+        bool fAddDepthToResource;
+        bool fAddStencilToResource;
+        float fSceneDepthClear;
+        float fAddedDepthClear;
+        U32 fSceneStencilClear;
+        U32 fAddedStencilClear;
+        TimeTransform *fTimeTransform;
 };
 
 // ----------------------------------------------------------------------------

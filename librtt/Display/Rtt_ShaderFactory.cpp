@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -11,6 +11,7 @@
 
 #include "Display/Rtt_ShaderFactory.h"
 
+#include "Corona/CoronaGraphics.h"
 #include "Corona/CoronaLua.h"
 #include "Display/Rtt_Display.h"
 #include "Display/Rtt_DisplayDefaults.h"
@@ -19,6 +20,8 @@
 #include "Display/Rtt_ShaderData.h"
 #include "Display/Rtt_ShaderName.h"
 #include "Display/Rtt_ShaderResource.h"
+
+#include "Renderer/Rtt_FormatExtensionList.h"
 #include "Renderer/Rtt_Program.h"
 #include "Renderer/Rtt_Uniform.h"
 #include "Rtt_Lua.h"
@@ -40,45 +43,45 @@ static const char kMetatableName[] = __FILE__; // Globally unique string to prev
 int
 ShaderFactory::ShaderFinalizer( lua_State *L )
 {
-	Shader *shader = (Shader *)CoronaLuaToUserdata( L, 1 );
+    Shader *shader = (Shader *)CoronaLuaToUserdata( L, 1 );
 
-	Rtt_DELETE( shader );
+    Rtt_DELETE( shader );
 
-	return 0;
+    return 0;
 }
 
 void
 ShaderFactory::PushTable( lua_State *L, const char *key )
 {
-	lua_pushstring( L, key );
-	lua_gettable( L, LUA_REGISTRYINDEX );
+    lua_pushstring( L, key );
+    lua_gettable( L, LUA_REGISTRYINDEX );
 
-	// Create table for key
-	if ( lua_isnil( L, -1 ) )
-	{
-		lua_pop( L, 1 ); // pop nil
+    // Create table for key
+    if ( lua_isnil( L, -1 ) )
+    {
+        lua_pop( L, 1 ); // pop nil
 
-		lua_newtable( L ); // t
+        lua_newtable( L ); // t
 
-		lua_pushstring( L, key );
-		lua_pushvalue( L, -2 );
-		lua_settable( L, LUA_REGISTRYINDEX ); // LUA_REGISTRY[key] = t
+        lua_pushstring( L, key );
+        lua_pushvalue( L, -2 );
+        lua_settable( L, LUA_REGISTRYINDEX ); // LUA_REGISTRY[key] = t
 
-		// Leave t at top of stack
-	}
+        // Leave t at top of stack
+    }
 }
 
 void
 ShaderFactory::RegisterBuiltin( lua_State *L, ShaderTypes::Category category )
 {
-	PushTable( L, ShaderBuiltin::KeyForCategory( category ) );
-	ShaderBuiltin::Register( L, category );
-	lua_pop( L, 1 );
+    PushTable( L, ShaderBuiltin::KeyForCategory( category ) );
+    ShaderBuiltin::Register( L, category );
+    lua_pop( L, 1 );
 }
 
 // ----------------------------------------------------------------------------
 
-ShaderFactory::ShaderFactory( Display& owner, const ProgramHeader& programHeader )
+ShaderFactory::ShaderFactory( Display& owner, const ProgramHeader& programHeader, const char * backend )
 :	fAllocator( owner.GetAllocator() ),
 	fDefaultColorShader( NULL ),
 	fDefaultShader( NULL ),
@@ -86,74 +89,75 @@ ShaderFactory::ShaderFactory( Display& owner, const ProgramHeader& programHeader
 	fOwner( owner ),
 	fDefaultShell( NULL ),
 	fDefaultKernel( NULL ),
-	fProgramHeader( Rtt_NEW( fAllocator, ProgramHeader( programHeader ) ) )
+	fProgramHeader( Rtt_NEW( fAllocator, ProgramHeader( programHeader ) ) ),
+	fBackend( backend )
 {
-	lua_State *L = fL;
+    lua_State *L = fL;
 
-	// Register __gc callback
-	CoronaLuaInitializeGCMetatable( L, kMetatableName, ShaderFinalizer );
+    // Register __gc callback
+    CoronaLuaInitializeGCMetatable( L, kMetatableName, ShaderFinalizer );
 
-	Initialize();
+    Initialize();
 }
 
 ShaderFactory::~ShaderFactory()
 {
-	Rtt_DELETE( fProgramHeader );
-	Rtt_DELETE( fDefaultKernel );
-	Rtt_DELETE( fDefaultShell );
-	CoronaLuaDelete( fL );
-	Rtt_DELETE( fDefaultColorShader );
-	Rtt_DELETE( fDefaultShader );
+    Rtt_DELETE( fProgramHeader );
+    Rtt_DELETE( fDefaultKernel );
+    Rtt_DELETE( fDefaultShell );
+    CoronaLuaDelete( fL );
+    Rtt_DELETE( fDefaultColorShader );
+    Rtt_DELETE( fDefaultShader );
 }
 
 bool
 ShaderFactory::Initialize()
 {
-	bool result = false;
+    bool result = false;
 
-	lua_State *L = fL;
+    lua_State *L = fL;
 
-	int top = lua_gettop( L );
+    int top = lua_gettop( L );
 
-	lua_checkstack( L, 6 );
+    lua_checkstack( L, 6 );
 
 	// Load the default shell and kernel shader source code to be dynamically compiled later.
-	if ( ShaderBuiltin::PushDefaultShell( L ) )
+	if ( ShaderBuiltin::PushDefaultShell( L, fBackend ) )
 	{
 		int tableIndex = lua_gettop( L );
 
-		lua_getfield( L, tableIndex, "vertex" );
-		const char *shellVert = lua_tostring( L, -1 );
+        lua_getfield( L, tableIndex, "vertex" );
+        const char *shellVert = lua_tostring( L, -1 );
 
-		lua_getfield( L, tableIndex, "fragment" );
-		const char *shellFrag = lua_tostring( L, -1 );
+        lua_getfield( L, tableIndex, "fragment" );
+        const char *shellFrag = lua_tostring( L, -1 );
 
-		if ( ShaderBuiltin::PushDefaultKernel( L ) )
-		{
-			tableIndex = lua_gettop( L );
+        if ( ShaderBuiltin::PushDefaultKernel( L ) )
+        {
+            tableIndex = lua_gettop( L );
 
-			lua_getfield( L, tableIndex, "vertex" );
-			const char *kernelVert = lua_tostring( L, -1 );
+            lua_getfield( L, tableIndex, "vertex" );
+            const char *kernelVert = lua_tostring( L, -1 );
 
-			lua_getfield( L, tableIndex, "fragment" );
-			const char *kernelFrag = lua_tostring( L, -1 );
+            lua_getfield( L, tableIndex, "fragment" );
+            const char *kernelFrag = lua_tostring( L, -1 );
 
-			
-			Program *program = NewProgram( shellVert, shellFrag, kernelVert, kernelFrag, ShaderResource::kDefault );
-			if ( program )
-			{
-				SharedPtr< ShaderResource > resource( Rtt_NEW( fAllocator, ShaderResource( program, ShaderTypes::kCategoryDefault ) ) );
-				
-				Program *program25D = NewProgram( shellVert, shellFrag, kernelVert, kernelFrag, ShaderResource::k25D );
-				resource->SetProgramMod(ShaderResource::k25D, program25D);
-				
-				fDefaultShader = Rtt_NEW( fAllocator, Shader(fAllocator, resource, NULL ) );
-				result = true;
+            
+            Program *program = NewProgram( shellVert, shellFrag, kernelVert, kernelFrag, ShaderResource::kDefault );
+            if ( program )
+            {
+                SharedPtr< ShaderResource > resource( Rtt_NEW( fAllocator, ShaderResource( program, ShaderTypes::kCategoryDefault ) ) );
+                
+                Program *program25D = NewProgram( shellVert, shellFrag, kernelVert, kernelFrag, ShaderResource::k25D );
+                resource->SetProgramMod(ShaderResource::k25D, program25D);
+                
+                fDefaultShader = Rtt_NEW( fAllocator, Shader(fAllocator, resource, NULL ) );
+                result = true;
 
-				Rtt_Allocator *allocator = fOwner.GetRuntime().Allocator();
-				fDefaultShell = Rtt_NEW( allocator, Program( allocator ) );
-				fDefaultShell->SetVertexShaderSource( shellVert );
-				fDefaultShell->SetFragmentShaderSource( shellFrag );
+                Rtt_Allocator *allocator = fOwner.GetRuntime().Allocator();
+                fDefaultShell = Rtt_NEW( allocator, Program( allocator ) );
+                fDefaultShell->SetVertexShaderSource( shellVert );
+                fDefaultShell->SetFragmentShaderSource( shellFrag );
 
 				fDefaultKernel = Rtt_NEW( allocator, Program( allocator ) );
 				fDefaultKernel->SetVertexShaderSource( kernelVert );
@@ -162,71 +166,85 @@ ShaderFactory::Initialize()
 		}
 	}
 
-	lua_settop( L, top );
+    lua_settop( L, top );
 
-	// Register built-ins
-	RegisterBuiltin( L, ShaderTypes::kCategoryFilter );
-	RegisterBuiltin( L, ShaderTypes::kCategoryComposite );
-	RegisterBuiltin( L, ShaderTypes::kCategoryGenerator );
+    // Register built-ins
+    RegisterBuiltin( L, ShaderTypes::kCategoryFilter );
+    RegisterBuiltin( L, ShaderTypes::kCategoryComposite );
+    RegisterBuiltin( L, ShaderTypes::kCategoryGenerator );
 
-	return result;
+    return result;
 }
 
 Program *
 ShaderFactory::NewProgram(
-		const char *shellVert,
-		const char *shellFrag,
-		const char *kernelVert,
-		const char *kernelFrag,
-		ShaderResource::ProgramMod mod ) const
+        const char *shellVert,
+        const char *shellFrag,
+        const char *kernelVert,
+        const char *kernelFrag,
+        ShaderResource::ProgramMod mod ) const
 {
-	Rtt_ASSERT( shellVert );
-	Rtt_ASSERT( shellFrag );
-	Rtt_ASSERT( kernelVert );
-	Rtt_ASSERT( kernelFrag );
+    Rtt_ASSERT( shellVert );
+    Rtt_ASSERT( shellFrag );
+    Rtt_ASSERT( kernelVert );
+    Rtt_ASSERT( kernelFrag );
 
-	lua_State *L = fL;
+    lua_State *L = fL;
 
-	Rtt_Allocator *allocator = fOwner.GetRuntime().Allocator();
+    Rtt_Allocator *allocator = fOwner.GetRuntime().Allocator();
 
-	Program *program = Rtt_NEW( allocator, Program( allocator ) );
-	
-	bool isCompilerVerbose = fOwner.GetDefaults().IsShaderCompilerVerbose();
-	program->SetCompilerVerbose( isCompilerVerbose );
+    Program *program = Rtt_NEW( allocator, Program( allocator ) );
+    
+    bool isCompilerVerbose = fOwner.GetDefaults().IsShaderCompilerVerbose();
+    program->SetCompilerVerbose( isCompilerVerbose );
 
-	if ( isCompilerVerbose )
-	{
-		program->SetVertexShellNumLines( Program::CountLines( shellVert ) );
-	}
+    if ( isCompilerVerbose )
+    {
+        program->SetVertexShellNumLines( Program::CountLines( shellVert ) );
+    }
 
 	const char *sourceVert = lua_pushfstring( L, "%s%s", shellVert, kernelVert );
 
-	program->SetVertexShaderSource( sourceVert );
-//	Rtt_TRACE( ( "Vertex source:\n%s\n", program->GetVertexShaderSource() ) );
-	lua_pop( L, 1 );
+    program->SetVertexShaderSource( sourceVert );
+//    Rtt_TRACE( ( "Vertex source:\n%s\n", program->GetVertexShaderSource() ) );
+    lua_pop( L, 1 );
 
-	if ( isCompilerVerbose )
-	{
-		program->SetFragmentShellNumLines( Program::CountLines( shellFrag ) );
-	}
+    if ( isCompilerVerbose )
+    {
+        program->SetFragmentShellNumLines( Program::CountLines( shellFrag ) );
+    }
 
+#if defined( Rtt_EMSCRIPTEN_ENV )
+	const char *sourceFrag = lua_pushfstring( L, shellFrag, kernelFrag );
+#else
 	const char *sourceFrag = lua_pushfstring( L, "%s%s", shellFrag, kernelFrag );
+#endif
 
-	program->SetFragmentShaderSource( sourceFrag );
-//	Rtt_TRACE( ( "Fragment source:\n%s\n", program->GetFragmentShaderSource() ) );
-	lua_pop( L, 1 );
+    program->SetFragmentShaderSource( sourceFrag );
+//    Rtt_TRACE( ( "Fragment source:\n%s\n", program->GetFragmentShaderSource() ) );
+    lua_pop( L, 1 );
 
 	//TODO - move this into a delegate block, rather than extending this
 	{
+		Program::Language language;
+
+		if (strcmp( fBackend, "vulkanBackend" ) == 0)
+		{
+			language = Program::kVulkanGLSL;
+		}
+
+		else
+		{
 		#if defined( Rtt_OPENGLES )
 			// We are using OpenGL ES, so assume it's v.2.0
 			// We could also look at GL_ES_VERSION_2_0 and GL_ES_VERSION_3_0.
-			Program::Language language = Program::kOpenGL_ES_2;
+			language = Program::kOpenGL_ES_2;
 		#else // NOT Rtt_OPENGLES
 			// We are using Desktop OpenGL, so assume it's OpenGL 2.1
 			// We could also look at GL_VERSION_2_0 and GL_VERSION_2_1.
-			Program::Language language = Program::kOpenGL_2_1;
+			language = Program::kOpenGL_2_1;
 		#endif
+		}
 		
 		std::string header = Program::HeaderForLanguage( language, * fProgramHeader );
 		
@@ -234,6 +252,10 @@ ShaderFactory::NewProgram(
 		{
 			header = header + std::string("#define TEX_COORD_Z 1\n");
 		}
+
+#if defined( Rtt_EMSCRIPTEN_ENV )
+		header = header +  "#define Rtt_WEBGL_ENV\n";
+#endif
 		
 		if (header.length() != 0)
 		{
@@ -241,7 +263,7 @@ ShaderFactory::NewProgram(
 		}
 	}
 
-	return program;
+    return program;
 }
 
 SharedPtr< ShaderResource >
@@ -252,40 +274,40 @@ ShaderFactory::NewShaderResource(
 	const char *kernelFrag,
     int localStubsIndex )
 {
-	// Cannot create default
-	if ( ShaderTypes::kCategoryDefault == category )
-	{
-		return SharedPtr< ShaderResource >();
-	}
+    // Cannot create default
+    if ( ShaderTypes::kCategoryDefault == category )
+    {
+        return SharedPtr< ShaderResource >();
+    }
 
 	// Caller should check for existence
 	Rtt_ASSERT( NULL == FindPrototype( category, name, localStubsIndex ) );
 
-	if ( ! kernelVert )
-	{
-		// Fallback to default
-		kernelVert = fDefaultKernel->GetVertexShaderSource();
-	}
+    if ( ! kernelVert )
+    {
+        // Fallback to default
+        kernelVert = fDefaultKernel->GetVertexShaderSource();
+    }
 
-	if ( ! kernelFrag )
-	{
-		// Fallback to default
-		kernelFrag = fDefaultKernel->GetFragmentShaderSource();
-	}
+    if ( ! kernelFrag )
+    {
+        // Fallback to default
+        kernelFrag = fDefaultKernel->GetFragmentShaderSource();
+    }
 
-	Program *program = NewProgram(
-		fDefaultShell->GetVertexShaderSource(),
-		fDefaultShell->GetFragmentShaderSource(),
-		kernelVert,
-		kernelFrag,
-		ShaderResource::kDefault );
+    Program *program = NewProgram(
+        fDefaultShell->GetVertexShaderSource(),
+        fDefaultShell->GetFragmentShaderSource(),
+        kernelVert,
+        kernelFrag,
+        ShaderResource::kDefault );
 
-	SharedPtr< ShaderResource > result( Rtt_NEW( fAllocator, ShaderResource( program, category, name ) ) );
-	
-	Program *program25D = NewProgram( fDefaultShell->GetVertexShaderSource(), fDefaultShell->GetFragmentShaderSource(), kernelVert, kernelFrag, ShaderResource::k25D );
-	result->SetProgramMod( ShaderResource::k25D, program25D );
+    SharedPtr< ShaderResource > result( Rtt_NEW( fAllocator, ShaderResource( program, category, name ) ) );
+    
+    Program *program25D = NewProgram( fDefaultShell->GetVertexShaderSource(), fDefaultShell->GetFragmentShaderSource(), kernelVert, kernelFrag, ShaderResource::k25D );
+    result->SetProgramMod( ShaderResource::k25D, program25D );
 
-	return result;
+    return result;
 }
 
 // This is an internal factory method:
@@ -294,318 +316,414 @@ ShaderFactory::NewShaderResource(
 Shader *
 ShaderFactory::NewShaderPrototype( lua_State *L, int index, const SharedPtr< ShaderResource >& resource )
 {
-	// index for table that defines the shader
-	// This also inits the resource's defaultData, so need to do this before we create the Shader
-	InitializeBindings( L, index, resource );
+    // index for table that defines the shader
+    // This also inits the resource's defaultData, so need to do this before we create the Shader
+    InitializeBindings( L, index, resource );
 
-	ShaderData *data = resource->GetDefaultData()->Clone( fAllocator );
-	//Shader *result = Rtt_NEW( fAllocator, Shader(fAllocator, resource, data ) );
+    ShaderData *data = resource->GetDefaultData()->Clone( fAllocator );
+    //Shader *result = Rtt_NEW( fAllocator, Shader(fAllocator, resource, data ) );
 
-	Shader *result = NULL;
-	//Create composite
-	ShaderComposite *comp = Rtt_NEW( fAllocator, ShaderComposite(fAllocator, resource, data ) );
-	result = comp;
-	
-	AddShader( result, resource->GetName().c_str() );
+    Shader *result = NULL;
+    //Create composite
+    ShaderComposite *comp = Rtt_NEW( fAllocator, ShaderComposite(fAllocator, resource, data ) );
+    result = comp;
+    
+    AddShader( result, resource->GetName().c_str() );
 
-	return result;
+    return result;
 }
 
 bool
 ShaderFactory::BindVertexDataMap( lua_State *L, int index, const SharedPtr< ShaderResource >& resource )
 {
-	Rtt_LUA_STACK_GUARD( L );
+    Rtt_LUA_STACK_GUARD( L );
 
-	lua_getfield( L, index, "vertexData" );
+    lua_getfield( L, index, "vertexData" );
 
-	bool result = false;
+    bool result = false;
 
-	if ( lua_istable( L, -1 ) )
-	{
-		int t = lua_gettop( L );
-		
-		ShaderResource::VertexDataMap& map = resource->GetVertexDataMap();
-		
-		// NOTE: Lua is 1-based
-		for ( int i = 1, iMax = (int) lua_objlen( L, t ); i <= iMax; i++ )
-		{
-			Rtt_LUA_STACK_GUARD( L );
-			
-			lua_rawgeti( L, t, i );
-			{
-				int valueIndex = lua_gettop( L );
-				if ( lua_istable( L, valueIndex )  )
-				{
-					// Get index position into vec4 (userData)
-					lua_getfield( L, valueIndex, "index" );
-					int index = (int) lua_tointeger( L, -1 );
-					index = Min( Max( 0, index ), (int)ShaderData::kDataMax );
-					lua_pop( L, 1 );
-					
-					// Store mapping between effect property (Lua)
-					// and underlying vec4 position
-					lua_getfield( L, valueIndex, "name" );
-					const char *key = lua_tostring( L, -1 );
-					if( NULL != key )
-					{
-						map[key] = index;
-					}
-					lua_pop( L, 1 );
-					
-					lua_getfield( L, valueIndex, "default" );
-					Real value = Rtt_FloatToReal( (float) lua_tonumber( L, -1 ) );
-					ShaderData *defaultData = resource->GetDefaultData();
-					Rtt_ASSERT( defaultData ); // Caller should init
-					defaultData->SetVertexData( (ShaderData::DataIndex)index, value );
-					lua_pop( L, 1 );
-				}
-			}
-			lua_pop( L, 1 );
-		}
-		result = true;
-	}
+    if ( lua_istable( L, -1 ) )
+    {
+        int t = lua_gettop( L );
+        
+        ShaderResource::VertexDataMap& map = resource->GetVertexDataMap();
+        
+        // NOTE: Lua is 1-based
+        for ( int i = 1, iMax = (int) lua_objlen( L, t ); i <= iMax; i++ )
+        {
+            Rtt_LUA_STACK_GUARD( L );
+            
+            lua_rawgeti( L, t, i );
+            {
+                int valueIndex = lua_gettop( L );
+                if ( lua_istable( L, valueIndex )  )
+                {
+                    // Get index position into vec4 (userData)
+                    lua_getfield( L, valueIndex, "index" );
+                    int index = (int) lua_tointeger( L, -1 );
+                    index = Min( Max( 0, index ), (int)ShaderData::kDataMax );
+                    lua_pop( L, 1 );
+                    
+                    // Store mapping between effect property (Lua)
+                    // and underlying vec4 position
+                    lua_getfield( L, valueIndex, "name" );
+                    const char *key = lua_tostring( L, -1 );
+                    if( NULL != key )
+                    {
+                        map[key] = index;
+                    }
+                    lua_pop( L, 1 );
+                    
+                    lua_getfield( L, valueIndex, "default" );
+                    Real value = Rtt_FloatToReal( (float) lua_tonumber( L, -1 ) );
+                    ShaderData *defaultData = resource->GetDefaultData();
+                    Rtt_ASSERT( defaultData ); // Caller should init
+                    defaultData->SetVertexData( (ShaderData::DataIndex)index, value );
+                    lua_pop( L, 1 );
+                }
+            }
+            lua_pop( L, 1 );
+        }
+        result = true;
+    }
 
-	lua_pop( L, 1 );
+    lua_pop( L, 1 );
 
-	return result;
+    return result;
 }
 
 bool
 ShaderFactory::BindUniformDataMap( lua_State *L, int index, const SharedPtr< ShaderResource >& resource )
 {
-	Rtt_LUA_STACK_GUARD( L );
+    Rtt_LUA_STACK_GUARD( L );
 
-	lua_getfield( L, index, "uniformData" );
-	
-	bool result = false;
-	if ( lua_istable( L, -1 ) )
-	{
-		int t = lua_gettop( L );
-		
-		ShaderResource::UniformDataMap& map = resource->GetUniformDataMap();
-		
-		ShaderData *defaultData = resource->GetDefaultData();
-		Rtt_ASSERT( defaultData ); // Caller should init
-		
-		// NOTE: Lua is 1-based
-		for ( int i = 1, iMax = (int) lua_objlen( L, t ); i <= iMax; i++ )
-		{
-			lua_rawgeti( L, t, i );
-			{
-				int valueIndex = lua_gettop( L );
-				if ( lua_istable( L, valueIndex )  )
-				{
-					lua_getfield( L, valueIndex, "index" );
-					int idx = (int) lua_tointeger( L, -1 );
-					idx = Min( Max( 0, idx ), (int)ShaderData::kDataMax );
-					lua_pop( L, 1 );
-					
-					lua_getfield( L, valueIndex, "type" );
-					const char *value = lua_tostring( L, -1 );
-					Uniform::DataType dataType = Uniform::DataTypeForString( value );
-					lua_pop( L, 1 );
-					
-					lua_getfield( L, valueIndex, "name" );
-					const char *key = lua_tostring( L, -1 );
-					ShaderResource::UniformData data = { idx, dataType };
-					if( NULL != key)
-					{
-						map[key] = data;
-					}
-					lua_pop( L, 1 );
-					
-					lua_getfield( L, valueIndex, "default" );
-					ShaderData::DataIndex dataIndex = (ShaderData::DataIndex)idx;
-					defaultData->InitializeUniform( fOwner.GetAllocator(), dataIndex, dataType );
-					defaultData->SetUniform( L, -1, dataIndex );
-					lua_pop( L, 1 );
-				}
-			}
-			lua_pop( L, 1 );
-		}
-		result = true;
-	}
-	lua_pop( L, 1 );
-	
-	return result;
+    lua_getfield( L, index, "uniformData" );
+    
+    bool result = false;
+    if ( lua_istable( L, -1 ) )
+    {
+        int t = lua_gettop( L );
+        
+        ShaderResource::UniformDataMap& map = resource->GetUniformDataMap();
+        
+        ShaderData *defaultData = resource->GetDefaultData();
+        Rtt_ASSERT( defaultData ); // Caller should init
+        
+        // NOTE: Lua is 1-based
+        for ( int i = 1, iMax = (int) lua_objlen( L, t ); i <= iMax; i++ )
+        {
+            lua_rawgeti( L, t, i );
+            {
+                int valueIndex = lua_gettop( L );
+                if ( lua_istable( L, valueIndex )  )
+                {
+                    lua_getfield( L, valueIndex, "index" );
+                    int idx = (int) lua_tointeger( L, -1 );
+                    idx = Min( Max( 0, idx ), (int)ShaderData::kDataMax );
+                    lua_pop( L, 1 );
+                    
+                    lua_getfield( L, valueIndex, "type" );
+                    const char *value = lua_tostring( L, -1 );
+                    Uniform::DataType dataType = Uniform::DataTypeForString( value );
+                    lua_pop( L, 1 );
+                    
+                    lua_getfield( L, valueIndex, "name" );
+                    const char *key = lua_tostring( L, -1 );
+                    ShaderResource::UniformData data = { idx, dataType };
+                    if( NULL != key)
+                    {
+                        map[key] = data;
+                    }
+                    lua_pop( L, 1 );
+                    
+                    lua_getfield( L, valueIndex, "default" );
+                    ShaderData::DataIndex dataIndex = (ShaderData::DataIndex)idx;
+                    defaultData->InitializeUniform( fOwner.GetAllocator(), dataIndex, dataType );
+                    defaultData->SetUniform( L, -1, dataIndex );
+                    lua_pop( L, 1 );
+                }
+            }
+            lua_pop( L, 1 );
+        }
+        result = true;
+    }
+    lua_pop( L, 1 );
+    
+    return result;
 }
 
-static void
-Modulo( Real *x, Real range, Real, Real )
+static int sDataTypeCookie;
+
+void
+ShaderFactory::BindDataType( lua_State * L, int index, const SharedPtr< ShaderResource >& resource )
 {
-	*x = fmod( *x, range ); // TODO?: Rtt_RealFmod
+    Rtt_LUA_STACK_GUARD(L);
+
+    lua_getfield( L, index, "dataType" ); // ..., name?
+
+    if (lua_isstring( L, -1 ))
+    {
+        lua_pushlightuserdata( L, &sDataTypeCookie ); // ..., name, cookie
+        lua_rawget( L, LUA_REGISTRYINDEX ); // ..., name, dataTypes?
+
+        if (!lua_istable( L, -1 ))
+        {
+            CoronaLuaWarning( L, "No data types registered" );
+
+            lua_pop( L, 1 ); // ..., name
+        }
+
+        else
+        {
+            const char * name = lua_tostring( L, -2 );
+
+            lua_insert( L, -2 ); // ..., dataTypes, name
+            lua_rawget( L, -2 ); // ..., dataTypes, dataType?
+            lua_remove( L, -2 ); // ..., dataType?
+
+            if (!lua_isnil( L, -1 ))
+            {
+                resource->SetEffectCallbacks( (CoronaEffectCallbacks *)lua_touserdata( L, -1 ) );
+            }
+            
+            else
+            {
+                CoronaLuaWarning( L, "No data type registered under '%s'", name );
+            }
+        }
+    }
+
+    else if (!lua_isnil( L, -1 ))
+    {
+        CoronaLuaWarning( L, "`dataType` expected to be a string, got %s", luaL_typename( L, -1 ) );
+    }
+
+    lua_pop( L, 1 ); // ...
 }
 
-static void
-PingPong( Real *x, Real range, Real, Real )
+
+void
+ShaderFactory::BindDetails( lua_State * L, int index, const SharedPtr< ShaderResource >& resource )
 {
-	Real pos = fmod( *x, Rtt_REAL_2 * range ); // TODO?: Rtt_RealFmod
+    Rtt_LUA_STACK_GUARD(L);
+    
+    lua_getfield( L, index, "details" ); // ..., details?
 
-	if (pos > range)
-	{
-		pos = Rtt_REAL_2 * range - pos;
-	}
+    if (lua_istable( L, -1 ))
+    {
+        for (lua_pushnil( L ); lua_next( L, -2 ); lua_pop( L, 1 )) // ..., details[, key, value]
+        {
+            bool isKeyString = lua_isstring( L, -2 ), isValueString = lua_isstring( L, -1 ) || lua_isnumber( L, -1 );
 
-	*x = pos;
+            if (isKeyString && isValueString)
+            {
+                resource->AddEffectDetail( lua_tostring( L, -2 ), lua_tostring( L, -1 ) );    // ..., details, key, value (might now be string)
+            }
+
+            else if (isKeyString)
+            {
+                CoronaLuaWarning( L, "Invalid effect details: expected string, but got '%s' value (key = %s)", luaL_typename( L, -1 ), lua_tostring( L, -2) );
+            }
+
+            else if (isValueString)
+            {
+                CoronaLuaWarning( L, "Invalid effect details: expected string, but got '%s' key (value = %s)", luaL_typename( L, -2 ), lua_tostring( L, -1 ) );
+            }
+
+            else
+            {
+                CoronaLuaWarning( L, "Invalid effect details: expected strings, got '%s' key and '%s' value", luaL_typename( L, -2 ), luaL_typename( L, -1 ) );
+            }
+        }
+    }
+
+    else if (!lua_isnil( L, -1 ))
+    {
+        CoronaLuaWarning( L, "Expected details table, got %s", luaL_typename( L, -1 ) );
+    }
+        
+    lua_pop( L, 1 ); // ...
 }
 
-static void
-Sine( Real *x, Real amplitude, Real speed, Real shift )
+static int sShellTransformCookie;
+
+void
+ShaderFactory::BindShellTransform( lua_State * L, int index, const SharedPtr< ShaderResource >& resource )
 {
-	Real t = *x;
+    Rtt_LUA_STACK_GUARD(L);
 
-	*x = amplitude * Rtt_RealSin( speed * t + shift );
-}
+    lua_getfield( L, index, "shellTransform" ); // ..., name?
 
-static void
-GetNumberArg( lua_State * L, Real * value, const char * func, const char * name )
-{
-	lua_getfield( L, -2, name ); // ..., xform, func, value?
-		
-	if (!lua_isnil( L, -1 ))
-	{
-		if (lua_isnumber( L, -1 ))
-		{
-			*value = (Real)lua_tonumber( L, -1 );
-		}
+    if (lua_isstring( L, -1 ))
+    {
+        lua_pushlightuserdata( L, &sShellTransformCookie ); // ..., name, cookie
+        lua_rawget( L, LUA_REGISTRYINDEX ); // ..., name, transforms?
 
-		else
-		{
-			CoronaLuaWarning( L, "graphics.defineEffect() ignoring invalid '%s' parameter for %s time transform (expected number but got %s)",
-						name, func, lua_typename( L, lua_type( L, -1 ) ) );
-		}
-	}
+        if (!lua_istable( L, -1 ))
+        {
+            CoronaLuaWarning( L, "No shell transforms registered" );
 
-	lua_pop( L, 1 ); // ..., xform, func
-}
+            lua_pop( L, 1 ); // ..., name
+        }
 
-static void
-GetPositiveNumberArg( lua_State * L, Real * value, const char * func, const char * name )
-{
-	Real old = *value;
+        else
+        {
+            const char * name = lua_tostring( L, -2 );
 
-	GetNumberArg( L, value, func, name );
+            lua_insert( L, -2 ); // ..., transforms, name
+            lua_rawget( L, -2 ); // ..., transforms, xform?
+            lua_remove( L, -2 ); // ..., xform?
 
-	if (*value <= Rtt_REAL_0)
-	{
-		*value = old;
+            if (!lua_isnil( L, -1 ))
+            {
+                resource->SetShellTransform( (CoronaShellTransform *)lua_touserdata( L, -1 ) );
+            }
 
-		CoronaLuaWarning( L, "graphics.defineEffect() ignoring invalid '%s' parameter for %s time transform (must be positive number)",
-			name, func );
-	}
+            else
+            {
+                CoronaLuaWarning( L, "No shell transform registered under '%s'", name );
+            }
+        }
+    }
+
+    else if (!lua_isnil( L, -1 ))
+    {
+        CoronaLuaWarning( L, "`shellTransform` expected to be a string, got %s", luaL_typename( L, -1 ) );
+    }
+
+    lua_pop( L, 1 ); // ...
 }
 
 void
 ShaderFactory::BindTimeTransform(lua_State *L, int index, const SharedPtr< ShaderResource >& resource)
 {
-	Rtt_LUA_STACK_GUARD(L);
+    Rtt_LUA_STACK_GUARD(L);
 
-	lua_getfield( L, index, "timeTransform" ); // ..., xform?
+    lua_getfield( L, index, "timeTransform" ); // ..., xform?
 
-	if (lua_istable( L, -1 ))
-	{
-		lua_getfield( L, -1, "func" );	// ..., xform, func
+    if (lua_istable( L, -1 ))
+    {
+        const char *func = TimeTransform::FindFunc( L, -1, "graphics.defineEffect()" );
 
-		if (lua_isstring( L, -1 ))
-		{
-			const char *func = lua_tostring( L, -1 );
-			TimeTransform *transform = NULL;
-			bool isModulo = strcmp(func, "modulo") == 0;
+        if (lua_isstring( L, -1 ))
+        {
+            TimeTransform *transform = Rtt_NEW( fAllocator, TimeTransform );
+ 
+            transform->SetFunc( L, -1, "graphics.defineEffect()", func );
+             
+            resource->SetTimeTransform( transform );
+        }
+    }
 
-			if (isModulo || strcmp( func, "pingpong" ) == 0)
-			{
-				Real range = Rtt_REAL_1;
-				
-				GetPositiveNumberArg( L, &range, func, "range" );
+    lua_pop( L, 1 ); // ...
+}
 
-				transform = Rtt_NEW( fAllocator, TimeTransform );
+static int sVertexExtensionCookie;
 
-				transform->func = isModulo ? &Modulo : &PingPong;
-				transform->arg1 = range;
-			}
+void
+ShaderFactory::BindVertexExtension( lua_State *L, int index, const SharedPtr< ShaderResource >& resource )
+{
+    Rtt_LUA_STACK_GUARD(L);
 
-			else if (strcmp( func, "sine" ) == 0)
-			{
-				Real amplitude = Rtt_REAL_1, period = Rtt_REAL_2 * M_PI, shift = Rtt_REAL_0;
+    lua_getfield( L, index, "vertexExtension" ); // ..., name?
 
-				GetNumberArg( L, &amplitude, func, "amplitude" );
-				GetPositiveNumberArg( L, &period, func, "period" );
-				GetNumberArg( L, &shift, func, "shift" );
+    if (lua_isstring( L, -1 ))
+    {
+        lua_pushlightuserdata( L, &sVertexExtensionCookie ); // ..., name, cookie
+        lua_rawget( L, LUA_REGISTRYINDEX ); // ..., name, extensions?
 
-				transform = Rtt_NEW( fAllocator, TimeTransform );
+        if (!lua_istable( L, -1 ))
+        {
+            CoronaLuaWarning( L, "No vertex extensions registered" );
 
-				transform->func = &Sine;
-				transform->arg1 = amplitude;
-				transform->arg2 = (Rtt_REAL_2 * M_PI) / period;
-				transform->arg3 = shift;
-			}
+            lua_pop( L, 1 ); // ..., name
+        }
 
-			else
-			{
-				CoronaLuaWarning( L, "graphics.defineEffect() ignoring unknown %s time transform", func );
-			}
+        else
+        {
+            const char * name = lua_tostring( L, -2 );
 
-			resource->SetTimeTransform( transform );
-		}
+            lua_insert( L, -2 ); // ..., extensions, name
+            lua_rawget( L, -2 ); // ..., extensions, extension?
+            lua_remove( L, -2 ); // ..., extension?
 
-		lua_pop( L, 1 ); // ..., xform
-	}
+            if (!lua_isnil( L, -1 ))
+            {
+                resource->SetExtensionList( *(SharedPtr<FormatExtensionList>*)lua_touserdata( L, -1 ) );
+            }
 
-	lua_pop( L, 1 ); // ...
+            else
+            {
+                CoronaLuaWarning( L, "No vertex extension registered under '%s'", name );
+            }
+        }
+    }
+
+    else if (!lua_isnil( L, -1 ))
+    {
+        CoronaLuaWarning( L, "`vertexExtension` expected to be a string, got %s", luaL_typename( L, -1 ) );
+    }
+
+    lua_pop( L, 1 ); // ...
 }
 
 // shaderIndex is the index into the Lua table that defines the shader
 void
 ShaderFactory::InitializeBindings( lua_State *L, int shaderIndex, const SharedPtr< ShaderResource >& resource )
 {
-	bool usesUniforms = false;
+    bool usesUniforms = false;
 
-	ShaderName name( resource->GetCategory(), resource->GetName().c_str() );
-	ShaderData *defaultData = Rtt_NEW( fOwner.GetAllocator(), ShaderData( resource ) );
-	resource->SetDefaultData( defaultData );
+    ShaderName name( resource->GetCategory(), resource->GetName().c_str() );
+    ShaderData *defaultData = Rtt_NEW( fOwner.GetAllocator(), ShaderData( resource ) );
+    resource->SetDefaultData( defaultData );
 
-	if (resource->UsesTime())
-	{
-		BindTimeTransform( L, shaderIndex, resource );
-	}
+    BindDataType( L, shaderIndex, resource );
+    BindDetails( L, shaderIndex, resource );
+    BindShellTransform( L, shaderIndex, resource );
+    BindVertexExtension( L, shaderIndex, resource );
 
-	bool has_vertex_data = BindVertexDataMap( L, shaderIndex, resource );
-	if( has_vertex_data )
-	{
-		// We've arbitrarily decided that we want vertex data and uniform
-		// data to be mutually exclusive. Therefore, we want to verify that
-		// uniform HASN'T been provided here.
-		Rtt_LUA_STACK_GUARD( L );
+    if (resource->UsesTime())
+    {
+        BindTimeTransform( L, shaderIndex, resource );
+    }
 
-		lua_getfield( L, shaderIndex, "uniformData" );
-		if( lua_istable( L, -1 ) )
-		{
-			CORONA_LOG_ERROR( "Shader (%s) for category (%s) has BOTH vertexData and uniformData, which are mutually exclusive.",
-								resource->GetName().c_str(), ShaderTypes::StringForCategory( resource->GetCategory() ) );
-		}
-		lua_pop( L, 1 );
-	}
-	else
-	{
-		BindUniformDataMap( L, shaderIndex, resource );
-		usesUniforms = true;
-	}
+    bool has_vertex_data = BindVertexDataMap( L, shaderIndex, resource );
+    if( has_vertex_data )
+    {
+        // We've arbitrarily decided that we want vertex data and uniform
+        // data to be mutually exclusive. Therefore, we want to verify that
+        // uniform HASN'T been provided here.
+        Rtt_LUA_STACK_GUARD( L );
 
-	resource->SetUsesUniforms( usesUniforms );
+        lua_getfield( L, shaderIndex, "uniformData" );
+        if( lua_istable( L, -1 ) )
+        {
+            CORONA_LOG_ERROR( "Shader (%s) for category (%s) has BOTH vertexData and uniformData, which are mutually exclusive.",
+                                resource->GetName().c_str(), ShaderTypes::StringForCategory( resource->GetCategory() ) );
+        }
+        lua_pop( L, 1 );
+    }
+    else
+    {
+        BindUniformDataMap( L, shaderIndex, resource );
+        usesUniforms = true;
+    }
+
+    resource->SetUsesUniforms( usesUniforms );
 }
 
 ShaderComposite *
 ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *name, int localStubsIndex )
 {
-	ShaderComposite *result = NULL;
+    ShaderComposite *result = NULL;
 
-	// Lazily load built-ins
-	const char *key = ShaderBuiltin::KeyForCategory( category );
-	if ( key )
-	{
-		lua_State *L = fL;
+    // Lazily load built-ins
+    const char *key = ShaderBuiltin::KeyForCategory( category );
+    if ( key )
+    {
+        lua_State *L = fL;
 
-		Rtt_LUA_STACK_GUARD(L);
+        Rtt_LUA_STACK_GUARD(L);
 
 		PushTable( L, key ); // push loaders ( = registry[key] )
 		{
@@ -653,27 +771,27 @@ ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *nam
                     {
 						Rtt_LUA_STACK_GUARD( L );
 
-						if ( ! lua_istable( L, -1 ) )
-						{
-							Rtt_LUA_STACK_GUARD( L );
+                        if ( ! lua_istable( L, -1 ) )
+                        {
+                            Rtt_LUA_STACK_GUARD( L );
 
 							SharedPtr< ShaderResource > resource;
 
 							lua_getfield( L, tableIndex, "vertex" );
 							const char *kernelVert = lua_tostring( L, -1 );
 
-							lua_getfield( L, tableIndex, "fragment" );
-							const char *kernelFrag = lua_tostring( L, -1 );
+                            lua_getfield( L, tableIndex, "fragment" );
+                            const char *kernelFrag = lua_tostring( L, -1 );
 
 							resource = NewShaderResource( category, name, kernelVert, kernelFrag, localStubsIndex );
 							lua_pop( L, 2 ); // pop 2 strings
 
-							if (resource.NotNull())
-							{
-								lua_getfield( L, tableIndex, "isTimeDependent" );
-								bool usesTime = lua_toboolean( L, -1 ) ? true : false;
-								resource->SetUsesTime( usesTime );
-								lua_pop( L, 1 );
+                            if (resource.NotNull())
+                            {
+                                lua_getfield( L, tableIndex, "isTimeDependent" );
+                                bool usesTime = lua_toboolean( L, -1 ) ? true : false;
+                                resource->SetUsesTime( usesTime );
+                                lua_pop( L, 1 );
 
 								Shader *prototype = NULL;
 								prototype = NewShaderPrototype( L, tableIndex, resource );
@@ -708,23 +826,23 @@ ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *nam
 		lua_pop( L, 1 );
 	}
 
-	return result;	
+    return result;
 }
 
 void
 ShaderFactory::AddShader( Shader *shader, const char *name )
 {
-	const char *categoryName = ShaderTypes::StringForCategory( shader->GetCategory() );
+    const char *categoryName = ShaderTypes::StringForCategory( shader->GetCategory() );
 
-	// Store shader in Lua registry
-	// NOTE: Lua will own the shader instance
-	lua_State *L = fL;
-	PushTable( L, categoryName ); // push registry[categoryName]
-	{
-		CoronaLuaPushUserdata( L, shader, kMetatableName ); // push shader
-		lua_setfield( L, -2, name ); // registry[categoryName][name] = shader
-	}
-	lua_pop( L, 1 );
+    // Store shader in Lua registry
+    // NOTE: Lua will own the shader instance
+    lua_State *L = fL;
+    PushTable( L, categoryName ); // push registry[categoryName]
+    {
+        CoronaLuaPushUserdata( L, shader, kMetatableName ); // push shader
+        lua_setfield( L, -2, name ); // registry[categoryName][name] = shader
+    }
+    lua_pop( L, 1 );
 }
 
 // Closure (the function part)
@@ -842,22 +960,22 @@ ShaderFactory::GatherEffectStubs( lua_State *L )
 bool
 ShaderFactory::DefineEffect( lua_State *L, int index )
 {
-	Rtt_LUA_STACK_GUARD( L );
+    Rtt_LUA_STACK_GUARD( L );
 
-	Rtt_ASSERT( index > 0 );
+    Rtt_ASSERT( index > 0 );
 
-	Shader *shader = NULL;
+    Shader *shader = NULL;
 
-	lua_getfield( L, index, "category" );
-	ShaderTypes::Category category = ShaderTypes::CategoryForString( lua_tostring( L, -1 ) );
-	lua_pop( L, 1 );
+    lua_getfield( L, index, "category" );
+    ShaderTypes::Category category = ShaderTypes::CategoryForString( lua_tostring( L, -1 ) );
+    lua_pop( L, 1 );
 
-	if ( ShaderTypes::kCategoryDefault != category )
-	{
-		int top = lua_gettop( L );
+    if ( ShaderTypes::kCategoryDefault != category )
+    {
+        int top = lua_gettop( L );
 
-		lua_getfield( L, index, "name" );
-		const char *name = lua_tostring( L, -1 );
+        lua_getfield( L, index, "name" );
+        const char *name = lua_tostring( L, -1 );
 
 		lua_getfield( L, index, "group" );
 		const char *group = lua_tostring( L, -1 );
@@ -913,14 +1031,14 @@ ShaderFactory::DefineEffect( lua_State *L, int index )
 				fullName, ShaderTypes::StringForCategory( category ) );
 		}
 
-		lua_settop( L, top );
-	}
-	else
-	{
-		CORONA_LOG_ERROR( "Could not create custom effect. The 'category' property is missing" );
-	}
+        lua_settop( L, top );
+    }
+    else
+    {
+        CORONA_LOG_ERROR( "Could not create custom effect. The 'category' property is missing" );
+    }
 
-	return ( NULL != shader );
+    return ( NULL != shader );
 }
 
 ShaderFactory::EffectInfo ShaderFactory::GetEffectInfo( const char * fullName )
@@ -1067,50 +1185,50 @@ void ShaderFactory::LoadDependency(LuaMap *nodeGraph, std::string nodeKey, Shade
 
 void ShaderFactory::ConnectLocalNodes(ShaderMap &inputNodes, LuaMap *nodeGraph, std::string terminalNodeKey, ShaderComposite *terminalNode)
 {
-	if (inputNodes.size() == 0)
-		return;
-	
-	std::vector<std::string> keys = nodeGraph->GetKeys();
-	for (int i = 0; i < (int)keys.size(); i++)
-	{
-		std::string curKey = keys[i];
-		
-		if (inputNodes.find(curKey) != inputNodes.end() || curKey == terminalNodeKey)
-		{
-			ShaderComposite* outputNode = terminalNode;
-			if (curKey != terminalNodeKey)
-			{
-				SharedPtr<Shader> outputShader = inputNodes[curKey];
-				outputNode = (ShaderComposite*)(&(*outputShader));
-			}
-			
-			LuaMap *keyedEffectInfoCur = static_cast<LuaMap*>(nodeGraph->GetData(curKey));
-			LuaString *input1NodeName = static_cast<LuaString*>(keyedEffectInfoCur->GetData("input1"));
-			
-			if ( input1NodeName )
-			{
-				std::string inputEffect = input1NodeName->GetString();
-				SharedPtr<Shader> inputShader = inputNodes[inputEffect];
-				Shader* inputNode = (Shader*)(&(*inputShader));
-				outputNode->SetInput( 0, inputShader);
-				
-				terminalNode->SetNamedShader(inputEffect, inputNode);
-			}
-			
-			LuaString *input2NodeName = static_cast<LuaString*>(keyedEffectInfoCur->GetData("input2"));
-			if ( input2NodeName )
-			{
-				std::string inputEffect = input2NodeName->GetString();
-				SharedPtr<Shader> inputShader = inputNodes[inputEffect];
-				Shader* inputNode = (Shader*)(&(*inputShader));
-				outputNode->SetInput( 1, inputShader );
-				
-				terminalNode->SetNamedShader(inputEffect, inputNode);
-			}
-		}
-	}
-	
-	terminalNode->SetNamedShader(terminalNodeKey, terminalNode);
+    if (inputNodes.size() == 0)
+        return;
+    
+    std::vector<std::string> keys = nodeGraph->GetKeys();
+    for (int i = 0; i < (int)keys.size(); i++)
+    {
+        std::string curKey = keys[i];
+        
+        if (inputNodes.find(curKey) != inputNodes.end() || curKey == terminalNodeKey)
+        {
+            ShaderComposite* outputNode = terminalNode;
+            if (curKey != terminalNodeKey)
+            {
+                SharedPtr<Shader> outputShader = inputNodes[curKey];
+                outputNode = (ShaderComposite*)(&(*outputShader));
+            }
+            
+            LuaMap *keyedEffectInfoCur = static_cast<LuaMap*>(nodeGraph->GetData(curKey));
+            LuaString *input1NodeName = static_cast<LuaString*>(keyedEffectInfoCur->GetData("input1"));
+            
+            if ( input1NodeName )
+            {
+                std::string inputEffect = input1NodeName->GetString();
+                SharedPtr<Shader> inputShader = inputNodes[inputEffect];
+                Shader* inputNode = (Shader*)(&(*inputShader));
+                outputNode->SetInput( 0, inputShader);
+                
+                terminalNode->SetNamedShader(inputEffect, inputNode);
+            }
+            
+            LuaString *input2NodeName = static_cast<LuaString*>(keyedEffectInfoCur->GetData("input2"));
+            if ( input2NodeName )
+            {
+                std::string inputEffect = input2NodeName->GetString();
+                SharedPtr<Shader> inputShader = inputNodes[inputEffect];
+                Shader* inputNode = (Shader*)(&(*inputShader));
+                outputNode->SetInput( 1, inputShader );
+                
+                terminalNode->SetNamedShader(inputEffect, inputNode);
+            }
+        }
+    }
+    
+    terminalNode->SetNamedShader(terminalNodeKey, terminalNode);
 }
 
 Shader*
@@ -1139,10 +1257,333 @@ ShaderFactory::NewShaderGraph( lua_State *L, int index, int localStubsIndex )
 	return terminalNode;
 }
 
+bool
+ShaderFactory::RegisterDataType( const char * name, const CoronaEffectCallbacks & callbacks )
+{
+    lua_State *L = fL;
+
+    if (callbacks.size != sizeof( CoronaEffectCallbacks ))
+    {
+        CoronaLuaError(L, "Data Type - invalid binary version for callback structure; size value isn't valid");
+
+        return false;
+    }
+
+    lua_pushlightuserdata( L, &sDataTypeCookie ); // ..., cookie
+    lua_rawget( L, LUA_REGISTRYINDEX ); // ..., dataTypes?
+
+    if (lua_isnil( L, -1 ))
+    {
+        lua_pop( L, 1 ); // ...
+        lua_newtable( L ); // ..., dataTypes
+        lua_pushlightuserdata( L, &sDataTypeCookie ); // ..., dataTypes, cookie
+        lua_pushvalue( L, -2 ); // ..., dataTypes, cookie, dataTypes
+        lua_rawset( L, LUA_REGISTRYINDEX ); // ..., dataTypes; registry = { ..., [cookie] = dataTypes }
+    }
+
+    lua_getfield( L, -1, name ); // ..., dataTypes, dataType?
+
+    if (!lua_isnil( L, -1 ))
+    {
+        lua_pop( L, 2 ); // ...
+
+        return false;
+    }
+
+    else
+    {
+        void * out = lua_newuserdata( L, sizeof( CoronaEffectCallbacks ) ); // ..., dataTypes, nil, callbacks
+
+        memcpy( out, &callbacks, sizeof( CoronaEffectCallbacks ) );
+
+        lua_setfield( L, -3, name ); // ..., dataTypes = { ..., [name] = callbacks }, nil
+        lua_pop( L, 2 ); // ...
+
+        return true;
+    }
+}
+
+bool
+ShaderFactory::RegisterShellTransform( const char * name, const CoronaShellTransform & transform )
+{
+    lua_State *L = fL;
+    
+    if (transform.size != sizeof( CoronaShellTransform ))
+    {
+        CoronaLuaError(L, "Shell transform - invalid binary version for callback structure; size value isn't valid");
+
+        return false;
+    }
+
+    lua_pushlightuserdata( L, &sShellTransformCookie ); // ..., cookie
+    lua_rawget( L, LUA_REGISTRYINDEX ); // ..., transforms?
+
+    if (lua_isnil( L, -1 ))
+    {
+        lua_pop( L, 1 ); // ...
+        lua_newtable( L ); // ..., transforms
+        lua_pushlightuserdata( L, &sShellTransformCookie ); // ..., transforms, cookie
+        lua_pushvalue( L, -2 ); // ..., transforms, cookie, transforms
+        lua_rawset( L, LUA_REGISTRYINDEX ); // ..., transforms; registry = { ..., [cookie] = transforms }
+    }
+
+    lua_getfield( L, -1, name ); // ..., transforms, xform?
+
+    if (!lua_isnil( L, -1 ))
+    {
+        lua_pop( L, 2 ); // ...
+
+        return false;
+    }
+
+    else
+    {
+        void * out = lua_newuserdata( L, sizeof( CoronaShellTransform ) ); // ..., transforms, nil, xform
+
+        memcpy( out, &transform, sizeof( CoronaShellTransform ) );
+
+        lua_setfield( L, -3, name ); // ..., transforms = { ..., [name] = xform }, nil
+        lua_pop( L, 2 ); // ...
+
+        return true;
+    }
+}
+
+bool
+ShaderFactory::RegisterVertexExtension( const char * name, const CoronaVertexExtension & extension )
+{
+    lua_State *L = fL;
+
+    if (extension.size != sizeof( CoronaVertexExtension ))
+    {
+        CoronaLuaError(L, "Data Type - invalid binary version for extension structure; size value isn't valid");
+
+        return false;
+    }
+
+    lua_pushlightuserdata( L, &sVertexExtensionCookie ); // ..., cookie
+    lua_rawget( L, LUA_REGISTRYINDEX ); // ..., vertexExtensions?
+
+    if (lua_isnil( L, -1 ))
+    {
+        lua_pop( L, 1 ); // ...
+        lua_newtable( L ); // ..., vertexExtensions
+        lua_pushlightuserdata( L, &sVertexExtensionCookie ); // ..., vertexExtensions, cookie
+        lua_pushvalue( L, -2 ); // ..., vertexExtensions, cookie, vertexExtensions
+        lua_rawset( L, LUA_REGISTRYINDEX ); // ..., vertexExtensions; registry = { ..., [cookie] = vertexExtensions }
+        lua_pushlightuserdata( L, &sVertexExtensionCookie ); // ..., vertexExtensions, cookie
+        lua_createtable( L, 0, 1 ); // ..., vertexExtensions, cookie, extensionMT
+        lua_pushcfunction( L, []( lua_State * L ) {
+            using SharedExtensionListPtr = SharedPtr<FormatExtensionList>;
+            
+            SharedExtensionListPtr * sharedList = (SharedExtensionListPtr*)lua_touserdata( L, 1 );
+            
+            sharedList->~SharedExtensionListPtr();
+            
+            return 0;
+        } ); // ..., vertexExtensions, cookie, sharedListMT, sharedListGC
+        lua_setfield( L, -2, "__gc" ); // ..., vertexExtensions, cookie, sharedListMT = { __gc = sharedListGC }
+        lua_rawset( L, -3 ); // ..., vertexExtensions = { ..., [cookie] = sharedListMT }
+    }
+
+    lua_getfield( L, -1, name ); // ..., vertexExtensions, vertexExtension?
+
+    if (!lua_isnil( L, -1 ))
+    {
+        lua_pop( L, 2 ); // ...
+
+        return false;
+    }
+    
+    else
+    {
+        VertexAttributeSupport support;
+        
+        fOwner.GetVertexAttributes( support );
+
+        U32 n = extension.count, count = n;
+        bool ok = true;
+        
+		if (extension.instanceByID && NULL == support.suffix)
+		{
+			ok = false;
+			n = 0;
+		}
+		
+        for (unsigned int i = 0; i < n; ++i)
+        {
+            const CoronaVertexExtensionAttribute & attribute = extension.attributes[i];
+            
+            if (0 == attribute.components || attribute.components > 4)
+            {
+                ok = false;
+                
+                break;
+            }
+            
+            else if (attribute.instancesToReplicate || attribute.windowSize)
+            {
+                if (!support.hasPerInstance)
+                {
+                    ok = false;
+                    
+                    break;
+                }
+
+                else if (attribute.instancesToReplicate > 1 && !support.hasDivisors)
+                {
+                    ok = false;
+                    
+                    break;
+                }
+            }
+                    
+            else if (attribute.windowSize)
+            {
+                count += attribute.windowSize - 1;
+            }
+        }
+        
+        if (0 == count || count > support.maxCount)
+        {
+            ok = false;
+        }
+        
+        if (ok)
+        {
+            using SharedExtensionListPtr = SharedPtr<FormatExtensionList>;
+            
+            SharedExtensionListPtr * sharedList = (SharedExtensionListPtr*)lua_newuserdata( L, sizeof(SharedExtensionListPtr) ); // ..., vertexExtensions, nil, sharedList
+            FormatExtensionList* list = Rtt_NEW( fAllocator, FormatExtensionList );
+            
+            new (sharedList) SharedExtensionListPtr( list );
+            
+            list->Build( fAllocator, &extension );
+            
+            lua_pushlightuserdata( L, &sVertexExtensionCookie ); // ..., vertexExtensions, nil, sharedList, cookie
+            lua_rawget( L, -4 ); // ..., vertexExtensions, nil, sharedList, sharedListMT
+            lua_setmetatable( L, -2 ); // ..., vertexExtensions, nil, sharedList; sharedList.metatable = sharedListMT
+            lua_setfield( L, -3, name ); // ..., vertexExtensions = { ..., [name] = sharedList, nil }, nil
+        }
+        
+        lua_pop( L, 2 ); // ...
+        
+        return ok;
+    }
+}
+
+SharedPtr<FormatExtensionList> *
+ShaderFactory::GetExtensionList( const char * name ) const
+{
+    lua_State *L = fL;
+
+    lua_pushlightuserdata( L, &sVertexExtensionCookie ); // ..., cookie
+    lua_rawget( L, LUA_REGISTRYINDEX ); // ..., vertexExtensions?
+    
+    SharedPtr<FormatExtensionList> * sharedList = NULL;
+    
+    if (!lua_isnil( L, -1 ))
+    {
+        lua_getfield( L, -1, name ); // ..., vertexExtensions, extension?
+        lua_replace( L, -2 ); // ..., extension?
+        
+        if (!lua_isnil( L, -1 ))
+        {
+            sharedList = (SharedPtr<FormatExtensionList>*)lua_touserdata( L, -1 );
+            
+            Rtt_ASSERT( sharedList );
+        }
+    }
+    
+    lua_pop( L, -1 ); // ...
+    
+    return sharedList;
+}
+
+static bool Unregister( lua_State *L, void * cookie, const char *name )
+{
+    lua_pushlightuserdata( L, cookie ); // ..., cookie
+    lua_rawget( L, LUA_REGISTRYINDEX ); // ..., set?
+
+    bool found = false;
+
+    if (!lua_isnil( L, -1 ))
+    {
+        lua_getfield( L, -1, name ); // ..., set, item?
+        
+        found = !lua_isnil( L, -1 );
+        
+        lua_pushnil( L ); // ..., set, item?, nil
+        lua_setfield( L, -3, name ); // ..., set = { ..., [name] = nil }, item?
+        lua_pop( L, 1 ); // ..., set
+    }
+
+    lua_pop( L, 1 ); // ...
+
+    return found;
+}
+
+bool
+ShaderFactory::UnregisterDataType( const char * name )
+{
+    return Unregister( fL, &sDataTypeCookie, name );
+}
+
+bool
+ShaderFactory::UnregisterShellTransform( const char * name )
+{
+    return Unregister( fL, &sShellTransformCookie, name );
+}
+
+bool
+ShaderFactory::UnregisterVertexExtension( const char * name )
+{
+    return Unregister( fL, &sVertexExtensionCookie, name );
+}
+
+static void
+SetExternalInfo( lua_State * L, const char * name, const char * type )
+{
+	static int sExternalInfoRef = LUA_NOREF;
+
+	lua_getref( L, sExternalInfoRef ); // ..., object, ei?
+
+	if (lua_isnil( L, -1 ))
+	{
+		lua_pop( L, 1 ); // ..., object
+		lua_newtable( L ); // ..., object, ei
+		lua_pushvalue( L, -1 ); // ..., object, ei, ei
+	
+		sExternalInfoRef = lua_ref( L, 1 ); // ..., object, ei; registry.ref = ei
+	}
+	
+	char key[BUFSIZ];
+	
+	sprintf( key, "coronashaderexternalinfo:%s:%s", type, name );
+	
+	lua_insert( L, -2 ); // ..., ei, object
+	lua_setfield( L, -2, key ); // ..., ei = { ..., key = object }
+	lua_pop( L, 1 ); // ...
+}
+
+void
+ShaderFactory::AddExternalInfo( lua_State * L, const char * name, const char * type )
+{
+	SetExternalInfo( L, name, type ); // ...
+}
+
+void
+ShaderFactory::RemoveExternalInfo( lua_State * L, const char * name, const char * type )
+{
+	lua_pushnil( L ); // ..., nil
+	
+	SetExternalInfo( L, name, type ); // ...
+}
+
 const Shader *
 ShaderFactory::FindPrototype( ShaderTypes::Category category, const char *name, int localStubsIndex ) const
 {
-	const Shader *result = NULL;
+    const Shader *result = NULL;
 
 	if ( ShaderTypes::kCategoryDefault == category )
 	{
@@ -1200,33 +1641,33 @@ ShaderFactory::FindPrototype( ShaderTypes::Category category, const char *name, 
 		lua_pop( L, 1 );
 	}
 
-	return result;
+    return result;
 }
 
 Shader *
 ShaderFactory::FindOrLoad( const ShaderName& shaderName )
 {
-	return FindOrLoad( shaderName.GetCategory(), shaderName.GetName() );
+    return FindOrLoad( shaderName.GetCategory(), shaderName.GetName() );
 }
 
 Shader&
 ShaderFactory::GetDefaultColorShader() const
 {
-	if ( !fDefaultColorShader )
-	{
-		const char *name = "color";
-		
-		ShaderFactory *factory = const_cast<ShaderFactory*>(this);
-		
-		fDefaultColorShader = factory->FindOrLoad(ShaderTypes::kCategoryFilter,name);
-	}
-	return *fDefaultColorShader;
+    if ( !fDefaultColorShader )
+    {
+        const char *name = "color";
+        
+        ShaderFactory *factory = const_cast<ShaderFactory*>(this);
+        
+        fDefaultColorShader = factory->FindOrLoad(ShaderTypes::kCategoryFilter,name);
+    }
+    return *fDefaultColorShader;
 }
-		
+        
 ShaderComposite *
 ShaderFactory::FindOrLoadGraph( ShaderTypes::Category category, const char *name, bool shouldFallback, int localStubsIndex )
 {
-	ShaderComposite *result = NULL;
+    ShaderComposite *result = NULL;
 
 	const ShaderComposite *prototype = (ShaderComposite*)FindPrototype( category, name, localStubsIndex );
 	if ( prototype )
@@ -1240,16 +1681,16 @@ ShaderFactory::FindOrLoadGraph( ShaderTypes::Category category, const char *name
 		result = NewShaderBuiltin( category, name, localStubsIndex );
 	}
 
-	// Fallback to default if nothing found
-	if ( ! result && shouldFallback )
-	{
-		Rtt_TRACE_SIM( ( "ERROR: Could not find or load shader (%s.%s). Falling back to default shader.\n", ShaderTypes::StringForCategory( category ), name ? name : "(unknown)" ) );
-		result = (ShaderComposite*)fDefaultShader->Clone( fAllocator );
-	}
+    // Fallback to default if nothing found
+    if ( ! result && shouldFallback )
+    {
+        Rtt_TRACE_SIM( ( "ERROR: Could not find or load shader (%s.%s). Falling back to default shader.\n", ShaderTypes::StringForCategory( category ), name ? name : "(unknown)" ) );
+        result = (ShaderComposite*)fDefaultShader->Clone( fAllocator );
+    }
 
-	Rtt_WARN_SIM( result, ( "ERROR: Could not find or load shader (%s.%s).\n", ShaderTypes::StringForCategory( category ), name ? name : "(unknown)" ) );
+    Rtt_WARN_SIM( result, ( "ERROR: Could not find or load shader (%s.%s).\n", ShaderTypes::StringForCategory( category ), name ? name : "(unknown)" ) );
 
-	return result;
+    return result;
 }
 
 Shader *
@@ -1261,37 +1702,37 @@ ShaderFactory::FindOrLoad( ShaderTypes::Category category, const char *name )
 void
 ShaderFactory::PushList( lua_State *L, ShaderTypes::Category category ) const
 {
-	lua_createtable( L, 0, 0 );
-	int index = lua_gettop( L );
+    lua_createtable( L, 0, 0 );
+    int index = lua_gettop( L );
 
-	int base = ShaderBuiltin::Append( L, index, category ) + 1;
+    int base = ShaderBuiltin::Append( L, index, category ) + 1;
 
-	const char *categoryName = ShaderTypes::StringForCategory( category );
+    const char *categoryName = ShaderTypes::StringForCategory( category );
 
-	// Store shader in Lua registry
-	// NOTE: Lua will own the shader instance
-	lua_State *factoryL = fL; // ShaderFactory's Lua state is different from L!!!
-	PushTable( factoryL, categoryName ); // push registry[categoryName]
-	{
-		int t = lua_gettop( factoryL );
-		lua_pushnil( factoryL );  // first key
-		while ( lua_next( factoryL, t ) != 0 )
-		{
-			if ( lua_type( factoryL, -2 ) == LUA_TSTRING )
-			{
-//				const Shader *shader =
-//					(const Shader *)CoronaLuaToUserdata( L, -1 );
+    // Store shader in Lua registry
+    // NOTE: Lua will own the shader instance
+    lua_State *factoryL = fL; // ShaderFactory's Lua state is different from L!!!
+    PushTable( factoryL, categoryName ); // push registry[categoryName]
+    {
+        int t = lua_gettop( factoryL );
+        lua_pushnil( factoryL );  // first key
+        while ( lua_next( factoryL, t ) != 0 )
+        {
+            if ( lua_type( factoryL, -2 ) == LUA_TSTRING )
+            {
+//                const Shader *shader =
+//                    (const Shader *)CoronaLuaToUserdata( L, -1 );
 
-				const char *name = lua_tostring( factoryL, -2 );
-				lua_pushstring( L, name );
-				lua_rawseti( L, index, base++ );
-			}
+                const char *name = lua_tostring( factoryL, -2 );
+                lua_pushstring( L, name );
+                lua_rawseti( L, index, base++ );
+            }
 
-			// removes 'value'; keeps 'key' for next iteration
-			lua_pop( factoryL, 1 );
-		}
-	}
-	lua_pop( factoryL, 1 );
+            // removes 'value'; keeps 'key' for next iteration
+            lua_pop( factoryL, 1 );
+        }
+    }
+    lua_pop( factoryL, 1 );
 }
 
 // ----------------------------------------------------------------------------
@@ -1299,4 +1740,3 @@ ShaderFactory::PushList( lua_State *L, ShaderTypes::Category category ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

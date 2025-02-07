@@ -18,6 +18,9 @@ display.pixelWidth = 320
 stoplist = {"shaderPrecision"}
 
 application = {
+	isTransparent = false,
+	backend = "gl",
+
 	content = {
 		minContentWidth = 1,
 		minContentHeight = 1,

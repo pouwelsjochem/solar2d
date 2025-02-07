@@ -21,6 +21,8 @@
 #include "Rtt_LuaProxyVTable.h"
 #include "Core/Rtt_Array.h"
 
+#include "Display/Rtt_LuaLibDisplay.h"
+
 // ----------------------------------------------------------------------------
 
 namespace Rtt {

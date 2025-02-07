@@ -185,6 +185,14 @@ class ProjectSettings
 		int GetMinContentHeight() const;
 		int GetMaxContentHeight() const;
 
+	
+		/**
+		 * Get a string describing the backend status.
+		 * @return
+		 * Returns one of "gl", "vulkanWanted", "vulkanRequired".
+		 */
+		const std::string & Backend() const;
+
 	protected:
 		/**
 		 * Called after the LoadFromDirectory() method has successfully loaded information from the
@@ -264,6 +272,9 @@ class ProjectSettings
 		 * if it did not provide any localized title text.
 		 */
 		std::map<std::string, std::string> fLocalizedWindowTitleTextMap;
+
+		/** One of the following: "gl", "wantVulkan", "requireVulkan".*/
+		std::string fBackend;
 };
 
 } // namespace Rtt

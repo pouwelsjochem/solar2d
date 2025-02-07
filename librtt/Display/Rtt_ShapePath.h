@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -24,18 +24,18 @@ namespace Rtt
 
 class MShapePathDelegate
 {
-	public:
-		virtual void UpdateGeometry(
-			Geometry& dst,
-			const VertexCache& src,
-			const Matrix& srcToDstSpace,
-			U32 flags ) const = 0;
+    public:
+        virtual void UpdateGeometry(
+            Geometry& dst,
+            const VertexCache& src,
+            const Matrix& srcToDstSpace,
+            U32 flags ) const = 0;
 };
 
 class ShapePath : public ClosedPath
 {
-	public:
-		typedef ClosedPath Super;
+    public:
+        typedef ClosedPath Super;
 
 	public:
 		static ShapePath *NewCircle( Rtt_Allocator *pAllocator, Real radius );
@@ -43,6 +43,9 @@ class ShapePath : public ClosedPath
 	public:
 		ShapePath( Rtt_Allocator *pAllocator, TesselatorShape *tesselator );
 		virtual ~ShapePath();
+
+        VertexCache & GetFillSource() { return fFillSource; }
+        VertexCache & GetStrokeSource() { return fStrokeSource; }
 
 	protected:
 		void TesselateFill();
@@ -56,17 +59,17 @@ class ShapePath : public ClosedPath
 		virtual void Translate( Real dx, Real dy );
 		virtual void GetSelfBounds( Rect& rect ) const;
 
-		void GetTextureVertices( ArrayVertex2& texVertices);
-		Rect GetTextureExtents( const ArrayVertex2& texVertices ) const;
-	public:
-		virtual bool SetSelfBounds( Real width, Real height );
+        void GetTextureVertices( ArrayVertex2& texVertices);
+        Rect GetTextureExtents( const ArrayVertex2& texVertices ) const;
+    public:
+        virtual bool SetSelfBounds( Real width, Real height );
 
-	public:
-		TesselatorShape *GetTesselator() { return fTesselator; }
-		const TesselatorShape *GetTesselator() const { return fTesselator; }
+    public:
+        TesselatorShape *GetTesselator() { return fTesselator; }
+        const TesselatorShape *GetTesselator() const { return fTesselator; }
 
-		const MShapePathDelegate *GetDelegate() const { return fDelegate; }
-		void SetDelegate( const MShapePathDelegate *delegate ) { fDelegate = delegate; }
+        const MShapePathDelegate *GetDelegate() const { return fDelegate; }
+        void SetDelegate( const MShapePathDelegate *delegate ) { fDelegate = delegate; }
 
 	protected:
 		Geometry *fFillGeometry;

@@ -95,6 +95,9 @@ class RenderingStream
 		S32 GetXScreenOffset() const { return fXScreenOffset; }
 		S32 GetYScreenOffset() const { return fYScreenOffset; }
 
+		void ContentToScreenUnrounded( float& x, float& y ) const;
+		void ContentToScreenUnrounded( float& x, float& y, float& w, float& h ) const;
+
 		void ContentToScreen( S32& x, S32& y ) const;
 		void ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const;
 		void ContentToScreen( Rtt_Real& x, Rtt_Real& y, Rtt_Real& w, Rtt_Real& h ) const;

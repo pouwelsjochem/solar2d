@@ -253,6 +253,26 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 		fHasConfigLua = true;
 		wasConfigLuaFound = true;
 
+		// Fetch the project's transparency setting.
+		lua_getfield(luaStatePointer, -1, "isTransparent");
+		if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)
+		{
+			fIsWindowTransparent = lua_toboolean(luaStatePointer, -1) ? true : false;
+		}
+		lua_pop(luaStatePointer, 1);
+		
+		lua_getfield(luaStatePointer, -1, "backend");
+		if (lua_isstring(luaStatePointer, -1))
+		{
+			const char * backend = lua_tostring(luaStatePointer, -1);
+
+			if (strcmp(backend, "wantVulkan") == 0 || strcmp(backend, "requireVulkan") == 0)
+			{
+				fBackend = backend;
+			}
+		}
+		lua_pop(luaStatePointer, 1);
+
 		// Fetch the project's content scaling settings.
 		lua_getfield(luaStatePointer, -1, "content");
 		if (lua_istable(luaStatePointer, -1))
@@ -317,6 +337,7 @@ void ProjectSettings::ResetBuildSettings()
 	fIsWindowCloseButtonEnabled = true;
 	fIsWindowMinimizeButtonEnabled = true;
 	fLocalizedWindowTitleTextMap.clear();
+	fBackend = "gl";
 }
 
 void ProjectSettings::ResetConfigLuaSettings()
@@ -443,6 +464,11 @@ int ProjectSettings::GetMinContentHeight() const
 int ProjectSettings::GetMaxContentHeight() const
 {
 	return fMaxContentHeight;
+}
+
+const std::string & ProjectSettings::Backend() const
+{
+	return fBackend;
 }
 
 void ProjectSettings::OnLoadedFrom(lua_State* luaStatePointer)

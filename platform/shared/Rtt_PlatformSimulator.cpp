@@ -76,7 +76,8 @@ PlatformSimulator::PlatformSimulator( PlatformFinalizer finalizer )
 :	fPlatform( NULL ),
 	fPlayer( NULL ),
 	fPlatformFinalizer( finalizer ),
-	fProperties( 0 )
+	fProperties( 0 ),
+	fIsTransparent(false)
 {
 }
 
@@ -229,6 +230,29 @@ PlatformSimulator::LoadBuildSettings( const MPlatform& platform )
 	// Warn about logical errors in build.settings and config.lua
 	ValidateSettings(platform);
 
+	const char kConfigLua[] = "config.lua";
+	
+	String filePath( & platform.GetAllocator() );
+	platform.PathForFile( kConfigLua, MPlatform::kResourceDir, MPlatform::kTestFileExists, filePath );
+
+	p = filePath.GetString();
+	if ( p != NULL ) // config.lua is optional
+	{
+		if ( 0 == luaL_loadfile( L, p )
+		  && 0 == lua_pcall( L, 0, 0, 0 ) )
+		{
+			lua_getglobal( L, "application" );
+			if ( lua_istable( L, -1 ) )
+			{
+				lua_getfield( L, -1, "isTransparent" );
+				
+				SetIsTransparent( lua_toboolean( L, -1 ) );
+			}
+			
+			lua_pop( L, 1 ); // pop application
+		}
+	}
+	
 	lua_close( L );
 }
 

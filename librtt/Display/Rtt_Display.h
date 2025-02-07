@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -29,11 +29,13 @@
 // ----------------------------------------------------------------------------
 
 struct lua_State;
+struct luaL_Reg;
 
 namespace Rtt
 {
 
 struct Rect;
+struct VertexAttributeSupport;
 
 class BitmapPaint;
 class DisplayDefaults;
@@ -65,16 +67,16 @@ class Display
 		virtual bool Initialize( lua_State *L, int configIndex );
 		virtual void Teardown();
 
-	protected:
-		void ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHeader );
+    protected:
+        void ReadRenderingConfig( lua_State *L, int index, ProgramHeader& programHeader );
 
 	public:
 		virtual void Start();
 		virtual void Restart();
 
-	public:
-		// Call on a timer tick
-		void Update();
+    public:
+        // Call on a timer tick
+        void Update();
         lua_State *GetL() const;
 
 	public:
@@ -96,9 +98,9 @@ class Display
 									bool crop_object_to_screen_bounds,
 									const ColorUnion *optionalBackgroundColor );
 
-		void ColorSample( float pos_x,
-							float pos_y,
-							RGBA &output_color );
+        void ColorSample( float pos_x,
+                            float pos_y,
+                            RGBA &output_color );
 
 	private:
 		virtual BitmapPaint *Capture( DisplayObject *object,
@@ -108,9 +110,9 @@ class Display
 										const ColorUnion *optionalBackgroundColor,
 										RGBA *optional_output_color );
 
-	public:
-		virtual void UnloadResources();
-		virtual void ReloadResources();
+    public:
+        virtual void UnloadResources();
+        virtual void ReloadResources();
 
 	public:
 		virtual GroupObject *Orphanage();
@@ -143,7 +145,7 @@ class Display
 
 		virtual void ContentToScreen( S32& x, S32& y ) const;
         virtual void ContentToScreen( Rtt_Real& x, Rtt_Real& y, Rtt_Real& w, Rtt_Real& h ) const;
-        virtual void ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const;
+		virtual void ContentToScreen( S32& x, S32& y, S32& w, S32& h ) const;
 		virtual void ContentToPixels( S32& x, S32& y, S32& w, S32& h ) const;
 
 	public:
@@ -153,29 +155,29 @@ class Display
 		// Call when window size changes so viewport of RenderingStream can be updated.
 		virtual void WindowSizeChanged();
 
-		// Detects if the device width/height of the surface has changed compared to the stream's device width/height.
-		// Returns true if they defer, meaning that the caller should then call WindowSizeChanged() to update content scales.
-		virtual bool HasWindowSizeChanged() const;
+        // Detects if the device width/height of the surface has changed compared to the stream's device width/height.
+        // Returns true if they defer, meaning that the caller should then call WindowSizeChanged() to update content scales.
+        virtual bool HasWindowSizeChanged() const;
 
 	public:
 		Rtt_Allocator *GetAllocator() const;
 
-		Runtime& GetRuntime() { return fOwner; }
-		const Runtime& GetRuntime() const { return fOwner; }
+        Runtime& GetRuntime() { return fOwner; }
+        const Runtime& GetRuntime() const { return fOwner; }
 
 		DisplayDefaults& GetDefaults() { return * fDefaults; }
 		const DisplayDefaults& GetDefaults() const { return * fDefaults; }
 
-		Rtt_AbsoluteTime GetElapsedTime() const;
-		float GetDeltaTimeInSeconds() const { return fDeltaTimeInSeconds; }
-		Rtt_AbsoluteTime GetPreviousTime() const { return fPreviousTime; }
+        Rtt_AbsoluteTime GetElapsedTime() const;
+        float GetDeltaTimeInSeconds() const { return fDeltaTimeInSeconds; }
+        Rtt_AbsoluteTime GetPreviousTime() const { return fPreviousTime; }
 
-		Renderer& GetRenderer() { return *fRenderer; }
-		const Renderer& GetRenderer() const { return *fRenderer; }
+        Renderer& GetRenderer() { return *fRenderer; }
+        const Renderer& GetRenderer() const { return *fRenderer; }
 
-		ShaderFactory& GetShaderFactory() const { return * fShaderFactory; }
+        ShaderFactory& GetShaderFactory() const { return * fShaderFactory; }
 
-		SpritePlayer& GetSpritePlayer() const { return * fSpritePlayer; }
+        SpritePlayer& GetSpritePlayer() const { return * fSpritePlayer; }
 
 		TextureFactory& GetTextureFactory() const { return * fTextureFactory; }
 				
@@ -184,19 +186,22 @@ class Display
 		static bool GetGpuSupportsHighPrecisionFragmentShaders();
 		static size_t GetMaxVertexTextureUnits();
 
-	public:
-		ProfilingState* GetProfilingState() const { return fProfilingState; }
+        bool HasFramebufferBlit( bool * canScale ) const;
+        void GetVertexAttributes( VertexAttributeSupport & support ) const;
 
-	public:
-		Scene& GetScene() { return *fScene; }
-		const Scene& GetScene() const { return *fScene; }
+	  public:
+		    ProfilingState* GetProfilingState() const { return fProfilingState; }
 
 #if defined( Rtt_ANDROID_ENV ) && TEMPORARY_HACK
     // TODO: Remove this once TEMPORARY_HACK is removed in JavaToNativeBridge.cpp
-		RenderingStream& GetStream() { return * fStream; }
+        RenderingStream& GetStream() { return * fStream; }
 #endif
 
-		void Collect( lua_State *L );
+        void Collect( lua_State *L );
+ 
+    public:
+        void* GetFactoryFunc() const { return fFactoryFunc; }
+        void SetFactoryFunc( void* func ) { fFactoryFunc = func; }
 
 	private:
 		Runtime& fOwner;

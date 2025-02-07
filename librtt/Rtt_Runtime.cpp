@@ -147,6 +147,8 @@ Runtime::Runtime( const MPlatform& platform, MCallback *viewCallback )
 	fTimer( platform.CreateTimerWithCallback( viewCallback ? * viewCallback : * this ) ),
 	fScheduler( Rtt_NEW( & fAllocator, Scheduler( * this ) ) ),
 	fArchive( NULL ),
+	fBackend("glBackend"),
+	fBackendState(nullptr),
 #ifdef Rtt_USE_ALMIXER
 	fOpenALPlayer(NULL),
 #endif
@@ -848,7 +850,7 @@ Runtime::LoadApplication( U32 launchOptions )
 		RuntimeGuard guard( * this );
 
 		int configIndex = lua_gettop( L );
-		fDisplay->Initialize( L, configIndex );
+		fDisplay->Initialize( L, configIndex, orientation, fBackend, fBackendState );
 
 		if ( fDelegate )
 		{

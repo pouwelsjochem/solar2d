@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 //
 // This file is part of the Corona game engine.
-// For overview and more information on licensing please refer to README.md 
+// For overview and more information on licensing please refer to README.md
 // Home page: https://github.com/coronalabs/corona
 // Contact: support@coronalabs.com
 //
@@ -60,84 +60,84 @@ Scene::~Scene()
 	Rtt_DELETE( fSnapshotOrphanage );
 	fSnapshotOrphanage = NULL;
 
-	Rtt_DELETE( fOrphanage );
-	fOrphanage = NULL;
-	
-	// this order is differen than in the constructor because sometimes (TextureResourceCanvas) we want to put
-	// things in offscreen stage for deleting. So we want to have it valid when deleting stage.
-	Rtt_DELETE( fCurrentStage );
-	fCurrentStage = NULL;
-	
-	Rtt_DELETE( fOffscreenStage );
-	fOffscreenStage = NULL;
+    Rtt_DELETE( fOrphanage );
+    fOrphanage = NULL;
+    
+    // this order is differen than in the constructor because sometimes (TextureResourceCanvas) we want to put
+    // things in offscreen stage for deleting. So we want to have it valid when deleting stage.
+    Rtt_DELETE( fCurrentStage );
+    fCurrentStage = NULL;
+    
+    Rtt_DELETE( fOffscreenStage );
+    fOffscreenStage = NULL;
 
-	Rtt_DELETE( fBackResourceOrphanage );
-	fBackResourceOrphanage = NULL;
+    Rtt_DELETE( fBackResourceOrphanage );
+    fBackResourceOrphanage = NULL;
 
-	Rtt_DELETE( fFrontResourceOrphanage );
-	fFrontResourceOrphanage = NULL;
+    Rtt_DELETE( fFrontResourceOrphanage );
+    fFrontResourceOrphanage = NULL;
 }
 
 void
 Scene::Collect()
 {
-	++fCounter;
+    ++fCounter;
 
-	Rtt_STATIC_ASSERT( sizeof( fCounter ) == sizeof( U8 ) );
+    Rtt_STATIC_ASSERT( sizeof( fCounter ) == sizeof( U8 ) );
 
-	// Every 3 frames, free CPUResources
-	if ( ( (0x3) & fCounter ) == 0 )
-	{
-		// CPUResources are queued on the front queue, so to defer deletion
-		// by (at least) 1 frame, empty the back queue. Then, swap the queues.
-		fBackResourceOrphanage->Empty();
-		Swap( fFrontResourceOrphanage, fBackResourceOrphanage );
-	}
+    // Every 3 frames, free CPUResources
+    if ( ( (0x3) & fCounter ) == 0 )
+    {
+        // CPUResources are queued on the front queue, so to defer deletion
+        // by (at least) 1 frame, empty the back queue. Then, swap the queues.
+        fBackResourceOrphanage->Empty();
+        Swap( fFrontResourceOrphanage, fBackResourceOrphanage );
+    }
 
-	// Every 32 frames, we collect
-	if ( ( (0x1F) & fCounter ) == 0 )
-	{
-		OnCollectUnreachables();
-	}
+    // Every 32 frames, we collect
+    if ( ( (0x1F) & fCounter ) == 0 )
+    {
+        OnCollectUnreachables();
+    }
 }
 
 void
 Scene::ForceCollect()
 {
-	fBackResourceOrphanage->Empty();
-	fFrontResourceOrphanage->Empty();
-	OnCollectUnreachables();
+    fBackResourceOrphanage->Empty();
+    fFrontResourceOrphanage->Empty();
+    OnCollectUnreachables();
 }
 
 void
 Scene::OnCollectUnreachables()
 {
-	lua_State *L = fOwner.GetRuntime().VMContext().L();
+    lua_State *L = fOwner.GetRuntime().VMContext().L();
 
-	// Delete GPU resources.
-	if ( fOrphanage )
-	{
-		GroupObject::CollectUnreachables( L, * this, * fOrphanage );
-	}
+    // Delete GPU resources.
+    if ( fOrphanage )
+    {
+        GroupObject::CollectUnreachables( L, * this, * fOrphanage );
+    }
 
-	// Release native references to Lua user data.
-	for ( int i = 0, iMax = fProxyOrphanage.Length(); i < iMax; i++ )
-	{
-		fProxyOrphanage[i]->ReleaseRef( L );
-	}
-	fProxyOrphanage.Clear();
+    // Release native references to Lua user data.
+    for ( int i = 0, iMax = fProxyOrphanage.Length(); i < iMax; i++ )
+    {
+        fProxyOrphanage[i]->ReleaseRef( L );
+    }
+    fProxyOrphanage.Clear();
 }
 
 void
 Scene::QueueRelease( CPUResource *resource )
 {
-	fFrontResourceOrphanage->Append( resource );
+    fFrontResourceOrphanage->Append( resource );
 }
 
 void
 Scene::QueueRelease( LuaUserdataProxy *proxy )
 {
-	fProxyOrphanage.Append( proxy );
+    fProxyOrphanage.Append( proxy );
 }
 
 bool
@@ -149,18 +149,26 @@ Scene::IsValid() const
 void
 Scene::Invalidate()
 {
-	fIsValid = false;
+    fIsValid = false;
 }
 
 void
 Scene::Clear( Renderer& renderer )
 {
-	DisplayDefaults& defaults = fOwner.GetDefaults();
-	ColorUnion c;
-	c.pixel = defaults.GetClearColor();
-	
-	Real inv255 = 1.f / 255.f;
-	renderer.Clear( c.rgba.r * inv255, c.rgba.g * inv255, c.rgba.b * inv255, c.rgba.a * inv255 );
+    DisplayDefaults& defaults = fOwner.GetDefaults();
+    ColorUnion c;
+    c.pixel = defaults.GetClearColor();
+
+    Renderer::ExtraClearOptions extra;
+    
+    extra.clearDepth = defaults.GetEnableDepthInScene();
+    extra.clearStencil = defaults.GetEnableStencilInScene();
+    extra.depthClearValue = defaults.GetSceneDepthClearValue();
+    extra.stencilClearValue = defaults.GetSceneStencilClearValue();
+
+    Real inv255 = 1.f / 255.f;
+    renderer.Clear( c.rgba.r * inv255, c.rgba.g * inv255, c.rgba.b * inv255, c.rgba.a * inv255, &extra );
+    renderer.BeginDrawing();
 }
 
 #define ADD_ENTRY( what ) if ( profiling ) PROFILING_ADD( *profiling, what )
@@ -194,48 +202,48 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 
 		ADD_ENTRY( "Scene: Setup" );
 		
-		Clear( renderer );
+        Clear( renderer );
 
-		Matrix identity;
-		StageObject *canvas = fCurrentStage;
+        Matrix identity;
+        StageObject *canvas = fCurrentStage;
 
 		ENABLE_SUMMED_TIMING( true );
 
-		canvas->UpdateTransform( identity );
-		canvas->Prepare( fOwner );
-		
+        canvas->UpdateTransform( identity );
+        canvas->Prepare( fOwner );
+
 		ADD_ENTRY( "Scene: Issue Clear Command" );
 		
 		canvas->Draw( renderer );
 		ENABLE_SUMMED_TIMING( false );
 		renderer.EndFrame();
 
-		// When shader code depends on time, then frame is time-dependent.
-		// So only set valid when frame is *in*dependent of time.
-		if ( ! renderer.IsFrameTimeDependent() )
-		{
-			fIsValid = true;
-		}
-		
+        // When shader code depends on time, then frame is time-dependent.
+        // So only set valid when frame is *in*dependent of time.
+        if ( ! renderer.IsFrameTimeDependent() )
+        {
+            fIsValid = true;
+        }
+        
 		ADD_ENTRY( "Scene: Issue Draw Commands" );
 		
-		renderer.Swap(); // Swap back and front command buffers
+        renderer.Swap(); // Swap back and front command buffers
 		
 		ADD_ENTRY( "Scene: Swap" );
 		
-		renderer.Render(); // Render front command buffer
-		
-//		renderer.GetFrameStatistics().Log();
-		
+        renderer.Render(); // Render front command buffer
+        
+//        renderer.GetFrameStatistics().Log();
+        
 		ADD_ENTRY( "Scene: Process Render Commands" );
 
-		rTarget.Flush();
+        rTarget.Flush();
 
 		ADD_ENTRY( "Scene: Flush" );
-	}
-	
-	// This needs to be done at the sync point (DMZ)
-	Collect();
+    }
+    
+    // This needs to be done at the sync point (DMZ)
+    Collect();
 	
 	ADD_ENTRY( "Scene: Collect" );
 }
@@ -243,10 +251,10 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 void
 Scene::Render( Renderer& renderer, PlatformSurface& rTarget, DisplayObject& object )
 {
-	const StageObject* stage = object.GetStage();
-	if ( Rtt_VERIFY( stage == fCurrentStage ) )
-	{
-		Clear( renderer );
+    const StageObject* stage = object.GetStage();
+    if ( Rtt_VERIFY( stage == fCurrentStage ) )
+    {
+        Clear( renderer );
 
 		// This function is used to render a specific object in a scene.
 		// This is used in the context of rendering to a texture.
@@ -260,10 +268,10 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, DisplayObject& obje
 		object.Prepare( fOwner );
 		object.Draw( renderer );
 
-		rTarget.Flush();
+        rTarget.Flush();
 
-		fIsValid = true;
-	}
+        fIsValid = true;
+    }
 }
 
 #undef ADD_ENTRY
@@ -271,25 +279,25 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, DisplayObject& obje
 StageObject*
 Scene::PushStage()
 {
-	Rtt_Allocator* pAllocator = fOwner.GetRuntime().Allocator();
-	StageObject* oldHead = fCurrentStage;
-	StageObject* newHead = Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) );
-	fCurrentStage = newHead;
-	newHead->SetNext( oldHead );
+    Rtt_Allocator* pAllocator = fOwner.GetRuntime().Allocator();
+    StageObject* oldHead = fCurrentStage;
+    StageObject* newHead = Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) );
+    fCurrentStage = newHead;
+    newHead->SetNext( oldHead );
 
-	fOwner.GetRuntime().VMContext().UpdateStage( * newHead );
+    fOwner.GetRuntime().VMContext().UpdateStage( * newHead );
 
-	return newHead;
+    return newHead;
 }
 
 void
 Scene::PopStage()
 {
-	StageObject* oldHead = fCurrentStage;
-	StageObject* newHead = oldHead->GetNext();
-	fCurrentStage = newHead;
-	oldHead->SetNext( NULL );
-	Rtt_DELETE( oldHead );
+    StageObject* oldHead = fCurrentStage;
+    StageObject* newHead = oldHead->GetNext();
+    fCurrentStage = newHead;
+    oldHead->SetNext( NULL );
+    Rtt_DELETE( oldHead );
 }
 
 // ----------------------------------------------------------------------------
