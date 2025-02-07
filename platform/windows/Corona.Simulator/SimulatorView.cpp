@@ -111,7 +111,7 @@ END_MESSAGE_MAP()
 /// Creates a new Corona Simulator CView.
 CSimulatorView::CSimulatorView()
 :	mScopedComInitializer(Interop::ScopedComInitializer::ApartmentType::kSingleThreaded),
-:	mMessageDlgPointer(nullptr),
+	mMessageDlgPointer(nullptr),
 	mDeviceConfig(*Rtt_AllocatorCreate()),
 	mRuntimeLoadedEventHandler(this, &CSimulatorView::OnRuntimeLoaded)
 {
