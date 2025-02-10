@@ -125,11 +125,6 @@
 	// Make the default window background black which helps in full screen
 	[_window setBackgroundColor:NSColor.blackColor];
 	
-	else
-	{
-		[_window setBackgroundColor:NSColor.clearColor];
-	}
-	
     _suspendWhenMinimized = [_coronaView settingsSuspendWhenMinimized];
     
     // Make the window full screen capable (this is always done because the
