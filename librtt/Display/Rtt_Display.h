@@ -199,6 +199,10 @@ class Display
 	  public:
 		    ProfilingState* GetProfilingState() const { return fProfilingState; }
 
+	  public:
+		    Scene& GetScene() { return *fScene; }
+		    const Scene& GetScene() const { return *fScene; }
+
 #if defined( Rtt_ANDROID_ENV ) && TEMPORARY_HACK
     // TODO: Remove this once TEMPORARY_HACK is removed in JavaToNativeBridge.cpp
         RenderingStream& GetStream() { return * fStream; }
