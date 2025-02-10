@@ -252,14 +252,6 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 		ResetConfigLuaSettings();
 		fHasConfigLua = true;
 		wasConfigLuaFound = true;
-
-		// Fetch the project's transparency setting.
-		lua_getfield(luaStatePointer, -1, "isTransparent");
-		if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)
-		{
-			fIsWindowTransparent = lua_toboolean(luaStatePointer, -1) ? true : false;
-		}
-		lua_pop(luaStatePointer, 1);
 		
 		lua_getfield(luaStatePointer, -1, "backend");
 		if (lua_isstring(luaStatePointer, -1))

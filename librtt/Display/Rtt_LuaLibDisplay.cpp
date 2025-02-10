@@ -763,6 +763,11 @@ DisplayLibrary::newImageRect( lua_State *L )
     return result;
 }
 
+static GroupObject *
+NewGroup( Rtt_Allocator * context )
+{
+    return Rtt_NEW( context, GroupObject( context, NULL ) );
+}
 // display.newGroup( [child1 [, child2 [, child3 ... ]]] )
 // With no args, create an empty group and set parent to root
 //
@@ -831,11 +836,19 @@ DisplayLibrary::newGroup( lua_State *L )
     return result;
 }
 
+static ContainerObject *
+NewContainer( Rtt_Allocator * context, Rtt::StageObject * stageObject, Real w, Real h )
+{
+    return Rtt_NEW( context, ContainerObject( context, stageObject, w, h ) );
+}
+
+// display.newContainer( [parent, ] w, h )
 int
 DisplayLibrary::newContainer( lua_State *L )
 {
 	Self *library = ToLibrary( L );
 	Display& display = library->GetDisplay();
+    auto * containerFactory = GetObjectFactory( L, &NewContainer, display ); // n.b. done early to ensure factory is consumed
 	Rtt_Allocator* context = display.GetAllocator();
 
     // [parentGroup,]

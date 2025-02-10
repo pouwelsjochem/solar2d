@@ -56,9 +56,6 @@ ShapePath::~ShapePath()
 	DisplayObject *observer = GetObserver();
 	if ( observer )
 	{
-		observer->QueueRelease( fFillGeometry );
-	}
-
         Geometry::ExtensionBlock* fillBlock = fFillGeometry->GetExtensionBlock();
         
         if (fillBlock && fillBlock->fProxy)

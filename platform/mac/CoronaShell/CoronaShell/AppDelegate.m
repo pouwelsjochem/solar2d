@@ -55,14 +55,6 @@
 -(void)didPrepareOpenGLContext:(id)sender
 {
 	fGLView = sender;
-
-	if ([_coronaView settingsIsTransparent])
-	{
-		NSOpenGLContext* context = [fGLView openGLContext];
-		GLint opacity = 0;
-
-		[context setValues: &opacity forParameter: NSOpenGLCPSurfaceOpacity];
-	}
 }
 - (id) layerHostView
 {
@@ -131,10 +123,7 @@
 		     andEventID:kAEGetURL];
 
 	// Make the default window background black which helps in full screen
-	if (![_coronaView settingsIsTransparent])
-	{
-		[_window setBackgroundColor:NSColor.blackColor];
-	}
+	[_window setBackgroundColor:NSColor.blackColor];
 	
 	else
 	{

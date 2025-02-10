@@ -280,13 +280,11 @@ RenderingStream::ContentToScreenUnrounded( float& x, float& y ) const
 void
 RenderingStream::ContentToScreenUnrounded( float& x, float& y, float& w, float& h ) const
 {
-	Rtt_Real xScreen = GetSx();
-	x = Rtt_RealDiv(GetXOriginOffset() + x, xScreen);
-	w = Rtt_RealDiv(w, xScreen);
-
-	Rtt_Real yScreen = GetSy();
-	y = Rtt_RealDiv(GetYOriginOffset() + y, yScreen);
-	h = Rtt_RealDiv(h, yScreen);
+	Rtt_Real screenToContentScale = GetScreenToContentScale();
+	x = Rtt_RealDiv(Rtt_IntToReal(x), screenToContentScale) + GetXScreenOffset();
+	w = Rtt_RealDiv(Rtt_IntToReal(w), screenToContentScale);
+	y = Rtt_RealDiv(Rtt_IntToReal(y), screenToContentScale) + GetYScreenOffset();
+	h = Rtt_RealDiv(Rtt_IntToReal(h), screenToContentScale);
 }
 
 // Converts the given content coordinates to pixel coordinates.

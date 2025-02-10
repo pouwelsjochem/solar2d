@@ -850,7 +850,7 @@ Runtime::LoadApplication( U32 launchOptions )
 		RuntimeGuard guard( * this );
 
 		int configIndex = lua_gettop( L );
-		fDisplay->Initialize( L, configIndex, orientation, fBackend, fBackendState );
+		fDisplay->Initialize( L, configIndex, fBackend, fBackendState );
 
 		if ( fDelegate )
 		{

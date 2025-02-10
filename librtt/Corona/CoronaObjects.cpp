@@ -1269,7 +1269,7 @@ typedef CoronaObjectsInterface<
     Rtt::SpriteObject,
     Proxy2VTable< class Sprite2, Rtt::LuaSpriteObjectProxyVTable >,
 
-    Rtt::RectPath *, Rtt_Allocator *, const Rtt::AutoPtr< Rtt::ImageSheet > &, Rtt::SpritePlayer &
+    Rtt_Allocator *, Rtt::SpritePlayer &, Rtt::Real, Rtt::Real
 > SpriteInterface;
 
 class Sprite2 : public SpriteInterface {
@@ -1277,14 +1277,14 @@ class Sprite2 : public SpriteInterface {
 
 public:
     static Super::Super *
-    New( Rtt_Allocator * allocator, Rtt::RectPath * path, const Rtt::AutoPtr< Rtt::ImageSheet > & sheet, Rtt::SpritePlayer & player )
+    New( Rtt_Allocator * allocator,  Rtt::SpritePlayer & player, Rtt::Real width, Rtt::Real height )
     {
-        return Rtt_NEW( allocator, Sprite2( path, allocator, sheet, player ) );
+        return Rtt_NEW( allocator, Sprite2( allocator, player, width, height ) );
     }
 
 protected:
-    Sprite2( Rtt::RectPath * path, Rtt_Allocator * allocator, const Rtt::AutoPtr< Rtt::ImageSheet > & sheet, Rtt::SpritePlayer & player )
-        : Super( path, allocator, sheet, player )
+    Sprite2( Rtt_Allocator * allocator, Rtt::SpritePlayer & player, Rtt::Real width, Rtt::Real height )
+        : Super( allocator, player, width, height )
     {
     }
 };
