@@ -89,23 +89,20 @@ class CommandBuffer
 		virtual void BindTexture( Texture* texture, U32 unit ) = 0;
 		virtual void BindUniform( Uniform* uniform, U32 unit ) = 0;
 		virtual void BindProgram( Program* program, Program::Version version ) = 0;
+        virtual void BindInstancing( U32 count, Geometry::Vertex* instanceData ) = 0;
+        virtual void BindVertexFormat( FormatExtensionList* extensionList, U16 fullCount, U16 vertexSize, U32 offset ) = 0;
 		virtual void SetBlendEnabled( bool enabled ) = 0;
 		virtual void SetBlendFunction( const BlendMode& mode ) = 0;
 		virtual void SetBlendEquation( RenderTypes::BlendEquation equation ) = 0;
 		virtual void SetViewport( int x, int y, int width, int height ) = 0;
 		virtual void SetScissorEnabled( bool enabled ) = 0;
 		virtual void SetScissorRegion( int x, int y, int width, int height ) = 0;
-		virtual void Clear( Real r, Real g, Real b, Real a ) = 0;
+        virtual void ClearDepth( Real depth ) = 0;
+        virtual void ClearStencil( U32 stencil ) = 0;
+        virtual void Clear( Real r, Real g, Real b, Real a ) = 0;
 		virtual void Draw( U32 offset, U32 count, Geometry::PrimitiveType type ) = 0;
 		virtual void DrawIndexed( U32 offset, U32 count, Geometry::PrimitiveType type ) = 0;
 		virtual S32 GetCachedParam( CommandBuffer::QueryableParams param ) = 0;
-		
-		// Execute the generated command buffer. This function should only be
-		// called from a thread with an active rendering context. If requested
-		// (and the platform supports it), this function should return the time
-		// in ms taken to execute the commands on the GPU. To minimize latency,
-		// it is valid if the time returned is actually for a previous frame.
-		virtual Real Execute( bool measureGPU ) = 0;
 
         virtual void AddCommand( const CoronaCommand * command ) = 0;
         virtual void IssueCommand( U16 id, const void * data, U32 size ) = 0;

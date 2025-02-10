@@ -394,55 +394,103 @@ LuaLibSystem::getInfo( lua_State *L )
 		Runtime *runtime = LuaContext::GetRuntime( L );
 		lua_pushinteger( L, runtime->GetDisplay().GetMaxTextureSize() );
 	}
-	else if ( Rtt_StringCompare( key, "supportsScreenCapture" ) == 0 )
-	{
-		Rtt_ASSERT_NOT_IMPLEMENTED();
-		bool supportsScreenCapture = false;
-		lua_pushboolean( L, supportsScreenCapture );
-	}
-	else if ( Rtt_StringCompare( key, "version" ) == 0 )
-	{
-		lua_pushstring( L,  Rtt_STRING_VERSION );
-	}
-	else if ( Rtt_StringCompare( key, "build" ) == 0 )
-	{
-		lua_pushstring( L,  Rtt_STRING_BUILD );
-	}
-	else if ( Rtt_StringCompare( key, "credits" ) == 0 )
-	{
-		lua_pushstring( L,  Rtt_STRING_CREDITS );
-	}
-	else if ( Rtt_StringCompare( key, "copyright" ) == 0 )
-	{
-		lua_pushstring( L, "Portions " Rtt_STRING_COPYRIGHT );
-	}
-	else if( ( Rtt_StringCompare( key, "GL_VENDOR" ) == 0 ) ||
-				( Rtt_StringCompare( key, "GL_RENDERER" ) == 0 ) ||
-				( Rtt_StringCompare( key, "GL_VERSION" ) == 0 ) ||
-				( Rtt_StringCompare( key, "GL_SHADING_LANGUAGE_VERSION" ) == 0 ) ||
-				( Rtt_StringCompare( key, "GL_EXTENSIONS" ) == 0 ) )
+    else if ( Rtt_StringCompare( key, "supportsScreenCapture" ) == 0 )
+    {
+        Rtt_ASSERT_NOT_IMPLEMENTED();
+        bool supportsScreenCapture = false;
+        lua_pushboolean( L, supportsScreenCapture );
+    }
+    else if ( Rtt_StringCompare( key, "version" ) == 0 )
+    {
+        lua_pushstring( L,  Rtt_STRING_VERSION );
+    }
+    else if ( Rtt_StringCompare( key, "build" ) == 0 )
+    {
+        lua_pushstring( L,  Rtt_STRING_BUILD );
+    }
+    else if ( Rtt_StringCompare( key, "credits" ) == 0 )
+    {
+        lua_pushstring( L,  Rtt_STRING_CREDITS );
+    }
+    else if ( Rtt_StringCompare( key, "copyright" ) == 0 )
+    {
+        lua_pushstring( L, "Portions " Rtt_STRING_COPYRIGHT );
+    }
+    else if( ( Rtt_StringCompare( key, "GL_VENDOR" ) == 0 ) ||
+                ( Rtt_StringCompare( key, "GL_RENDERER" ) == 0 ) ||
+                ( Rtt_StringCompare( key, "GL_VERSION" ) == 0 ) ||
+                ( Rtt_StringCompare( key, "GL_SHADING_LANGUAGE_VERSION" ) == 0 ) ||
+                ( Rtt_StringCompare( key, "GL_EXTENSIONS" ) == 0 ) )
+    {
+        Runtime *runtime = LuaContext::GetRuntime( L );
+        lua_pushstring( L, runtime->GetDisplay().GetGlString( key ) );
+    }
+    else if ( Rtt_StringCompare( key, "gpuSupportsHighPrecisionFragmentShaders" ) == 0 )
+    {
+        Runtime *runtime = LuaContext::GetRuntime( L );
+        lua_pushboolean( L, runtime->GetDisplay().GetGpuSupportsHighPrecisionFragmentShaders() );
+    }
+	else if ( Rtt_StringCompare( key, "gpuSupportsScaledCaptures" ) == 0 )
 	{
 		Runtime *runtime = LuaContext::GetRuntime( L );
-		lua_pushstring( L, runtime->GetDisplay().GetGlString( key ) );
+		bool canScale = false;
+		lua_pushboolean( L, runtime->GetDisplay().HasFramebufferBlit( &canScale ) && canScale );
 	}
-	else if ( Rtt_StringCompare( key, "gpuSupportsHighPrecisionFragmentShaders" ) == 0 )
-	{
-		Runtime *runtime = LuaContext::GetRuntime( L );
-		lua_pushboolean( L, runtime->GetDisplay().GetGpuSupportsHighPrecisionFragmentShaders() );
-	}
-	else if ( Rtt_StringCompare( key, "maxVertexTextureUnits" ) == 0 )
-	{
-		Runtime *runtime = LuaContext::GetRuntime( L );
-		size_t n = runtime->GetDisplay().GetMaxVertexTextureUnits();
-		lua_pushnumber( L, n > 2U ? 2U : 0U ); // more than 2 requires new paint types
-	}
-	else
-	{
-		// This is a place where we can add system.getInfo() categories that return arbitrary types
-		result = platform.PushSystemInfo( L, key );
-	}
-	
-	return result;
+    else if ( Rtt_StringCompare( key, "maxUniformVectorsCount" ) == 0 )
+    {
+        Runtime *runtime = LuaContext::GetRuntime( L );
+        lua_pushnumber( L, runtime->GetDisplay().GetMaxUniformVectorsCount() );
+    }
+    else if ( Rtt_StringCompare( key, "maxVertexTextureUnits" ) == 0 )
+    {
+        Runtime *runtime = LuaContext::GetRuntime( L );
+        size_t n = runtime->GetDisplay().GetMaxVertexTextureUnits();
+        lua_pushnumber( L, n > 2U ? 2U : 0U ); // more than 2 requires new paint types
+    }
+    else if ( Rtt_StringCompare( key, "maxVertexAttributes" ) == 0 || Rtt_StringCompare( key, "instancingSupport" ) == 0 )
+    {
+        VertexAttributeSupport support;
+        Runtime *runtime = LuaContext::GetRuntime( L );
+        runtime->GetDisplay().GetVertexAttributes( support );
+        if (Rtt_StringCompare( key, "maxVertexAttributes" ) == 0)
+        {
+            lua_pushnumber( L, support.maxCount );
+        }
+        else
+        {
+            if (!support.hasInstancing)
+            {
+                lua_pushboolean( L, 0 );
+            }
+            
+            else
+            {
+                lua_createtable( L, 0, 2 );
+                if (support.hasDivisors)
+                {
+                    lua_pushliteral( L, "multiInstance" );
+                }
+                else if (support.hasPerInstance)
+                {
+                    lua_pushliteral( L, "singleInstance" );
+                }
+                else
+                {
+                    lua_pushliteral( L, "none" );
+                }
+                lua_setfield( L, -2, "vertexReplication" );
+                lua_pushboolean( L, NULL != support.suffix );
+                lua_setfield( L, -2, "hasInstanceID" );
+            }
+        }
+    }
+    else
+    {
+        // This is a place where we can add system.getInfo() categories that return arbitrary types
+        result = platform.PushSystemInfo( L, key );
+    }
+    
+    return result;
 }
 
     
@@ -1383,32 +1431,32 @@ EventTypeForName( const char *eventName )
 {
     MPlatformDevice::EventType result = MPlatformDevice::kUnknownEvent;
 
-	if ( strcmp( kAccelerometerName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kAccelerometerEvent;
-	}
-	else if ( strcmp( kGyroscopeName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kGyroscopeEvent;
-	}
-	else if ( strcmp( kMultitouchName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kMultitouchEvent;
-	}
-	else if ( strcmp( kKeyName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kKeyEvent;
-	}
-	else if ( strcmp( kInputDeviceStatusName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kInputDeviceStatusEvent;
-	}
-	else if ( strcmp( kMouseName, eventName ) == 0 )
-	{
-		result = MPlatformDevice::kMouseEvent;
-	}
-	
-	return result;
+    if ( strcmp( kAccelerometerName, eventName ) == 0 )
+    {
+        result = MPlatformDevice::kAccelerometerEvent;
+    }
+    else if ( strcmp( kGyroscopeName, eventName ) == 0 )
+    {
+        result = MPlatformDevice::kGyroscopeEvent;
+    }
+    else if ( strcmp( kMultitouchName, eventName ) == 0 )
+    {
+        result = MPlatformDevice::kMultitouchEvent;
+    }
+    else if ( strcmp( kKeyName, eventName ) == 0 )
+    {
+        result = MPlatformDevice::kKeyEvent;
+    }
+    else if ( strcmp( kInputDeviceStatusName, eventName ) == 0 )
+    {
+        result = MPlatformDevice::kInputDeviceStatusEvent;
+    }
+    else if ( strcmp( kMouseName, eventName ) == 0 )
+    {
+        result = MPlatformDevice::kMouseEvent;
+    }
+    
+    return result;
 }
     
 static const char kControllerUserInteraction[] = "controllerUserInteraction";
@@ -1429,18 +1477,18 @@ ActivationTypeForName( const char* name )
 int
 LuaLibSystem::BeginListener( lua_State *L )
 {
-	const char* eventName = lua_tostring( L, -1 );
-	if ( eventName )
-	{
-		MPlatformDevice::EventType t = EventTypeForName( eventName );
-		if ( t > MPlatformDevice::kUnknownEvent )
-		{
-			Runtime *runtime = LuaContext::GetRuntime( L );
-			{
-				runtime->Platform().GetDevice().BeginNotifications( t );
-			}
-		}
-	}
+    const char* eventName = lua_tostring( L, -1 );
+    if ( eventName )
+    {
+        MPlatformDevice::EventType t = EventTypeForName( eventName );
+        if ( t > MPlatformDevice::kUnknownEvent )
+        {
+            Runtime *runtime = LuaContext::GetRuntime( L );
+            {
+                runtime->Platform().GetDevice().BeginNotifications( t );
+            }
+        }
+    }
 
     return 0;
 }
@@ -1448,18 +1496,18 @@ LuaLibSystem::BeginListener( lua_State *L )
 int
 LuaLibSystem::EndListener( lua_State *L )
 {
-	const char* eventName = lua_tostring( L, -1 );
-	if ( eventName )
-	{
-		MPlatformDevice::EventType t = EventTypeForName( eventName );
-		if ( t > MPlatformDevice::kUnknownEvent )
-		{
-			Runtime *runtime = LuaContext::GetRuntime( L );
-			{
-				runtime->Platform().GetDevice().EndNotifications( t );
-			}
-		}
-	}
+    const char* eventName = lua_tostring( L, -1 );
+    if ( eventName )
+    {
+        MPlatformDevice::EventType t = EventTypeForName( eventName );
+        if ( t > MPlatformDevice::kUnknownEvent )
+        {
+            Runtime *runtime = LuaContext::GetRuntime( L );
+            {
+                runtime->Platform().GetDevice().EndNotifications( t );
+            }
+        }
+    }
 
     return 0;
 }
@@ -1577,41 +1625,41 @@ LuaLibSystem::Initialize( lua_State *L )
 {
 	b64setup(b64unbase);
 
-	static const luaL_Reg kVTable[] =
-	{
-		{ "__proxyindex", LuaProxy::__proxyindex },
-		{ "__proxynewindex", LuaProxy::__proxynewindex },
-		{ "__proxyregister", LuaProxy::__proxyregister },
-		{ "pathForFile", LuaLibSystem::PathForFile },
-		{ "pathForTable", LuaLibSystem::PathForTable }, // private
-		{ "beginListener", LuaLibSystem::BeginListener }, // private; use system.activate() publicly
-		{ "endListener", LuaLibSystem::EndListener }, // private; use system.activate() publicly
-		{ "hasEventSource", LuaLibSystem::HasEventSource }, // private
-		{ "getInfo", getInfo },
-		{ "getTimer", getTimer },
-		{ "openURL", openURL },
-		{ "canOpenURL", canOpenURL },
-		{ "vibrate", vibrate },
-		{ "setIdleTimer", setIdleTimer },
-		{ "getIdleTimer", getIdleTimer },
-		{ "getPreference", getPreference },
-		{ "setPreferences", setPreferences },
-		{ "deletePreference", deletePreference },
-		{ "deletePreferences", deletePreferences },
-		{ "scheduleNotification", scheduleNotification },
-		{ "cancelNotification", cancelNotification },
-		{ "request", request },
+    static const luaL_Reg kVTable[] =
+    {
+        { "__proxyindex", LuaProxy::__proxyindex },
+        { "__proxynewindex", LuaProxy::__proxynewindex },
+        { "__proxyregister", LuaProxy::__proxyregister },
+        { "pathForFile", LuaLibSystem::PathForFile },
+        { "pathForTable", LuaLibSystem::PathForTable }, // private
+        { "beginListener", LuaLibSystem::BeginListener }, // private; use system.activate() publicly
+        { "endListener", LuaLibSystem::EndListener }, // private; use system.activate() publicly
+        { "hasEventSource", LuaLibSystem::HasEventSource }, // private
+        { "getInfo", getInfo },
+        { "getTimer", getTimer },
+        { "openURL", openURL },
+        { "canOpenURL", canOpenURL },
+        { "vibrate", vibrate },
+        { "setIdleTimer", setIdleTimer },
+        { "getIdleTimer", getIdleTimer },
+        { "getPreference", getPreference },
+        { "setPreferences", setPreferences },
+        { "deletePreference", deletePreference },
+        { "deletePreferences", deletePreferences },
+        { "scheduleNotification", scheduleNotification },
+        { "cancelNotification", cancelNotification },
+        { "request", request },
 
 		{ "b64", mime_global_b64 },
 		{ "unb64", mime_global_unb64 },
 		{ "xor_crypt", xor_crypt },
 
-		// TODO: Move this into a Lua "device" library
-		{ "getInputDevices", getInputDevices },
-		{ "setAccelerometerInterval", setAccelerometerInterval },
-		{ "setGyroscopeInterval", setGyroscopeInterval },
-		{ "activate", LuaLibSystem::Activate }, // public use
-		{ "deactivate", LuaLibSystem::Deactivate }, // public use
+        // TODO: Move this into a Lua "device" library
+        { "getInputDevices", getInputDevices },
+        { "setAccelerometerInterval", setAccelerometerInterval },
+        { "setGyroscopeInterval", setGyroscopeInterval },
+        { "activate", LuaLibSystem::Activate }, // public use
+        { "deactivate", LuaLibSystem::Deactivate }, // public use
 
         { NULL, NULL }
     };
@@ -1626,8 +1674,8 @@ LuaLibSystem::Initialize( lua_State *L )
         LuaLibSystem::PushDirectory( L, MPlatform::kResourceDir );
         lua_setfield( L, -2, "ResourceDirectory" );
 #ifdef Rtt_AUTHORING_SIMULATOR
-		LuaLibSystem::PushDirectory( L, MPlatform::kSystemResourceDir );
-		lua_setfield( L, -2, "SystemResourceDirectory" );
+        LuaLibSystem::PushDirectory( L, MPlatform::kSystemResourceDir );
+        lua_setfield( L, -2, "SystemResourceDirectory" );
 #endif
         LuaLibSystem::PushDirectory( L, MPlatform::kCachesDir );
         lua_setfield( L, -2, "CachesDirectory" );
@@ -1654,10 +1702,10 @@ LuaLibSystem::Initialize( lua_State *L )
 }
 
 int
-LuaLibSystem::ValueForKey( lua_State *L, const MLuaProxyable&, const char key[] ) const
+LuaLibSystem::ValueForKey( lua_State *L, const MLuaProxyable&, const char key[]) const
 {
-	lua_pushnil( L );
-	return 1;
+        lua_pushnil( L );
+    return 1;
 }
 
 // ----------------------------------------------------------------------------

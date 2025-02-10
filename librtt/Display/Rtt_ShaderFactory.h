@@ -73,7 +73,12 @@ class ShaderFactory
 		// Helper methods to instantiate Shader
 		bool BindVertexDataMap( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
 		bool BindUniformDataMap( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
+		void BindDataType( lua_State * L, int index, const SharedPtr< ShaderResource >& resource );
+        void BindDetails( lua_State * L, int index, const SharedPtr< ShaderResource >& resource );
+        void BindShellTransform( lua_State * L, int index, const SharedPtr< ShaderResource >& resource );
 		void BindTimeTransform( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
+		void BindVertexExtension( lua_State *L, int index, const SharedPtr< ShaderResource >& resource );
+		
 		void InitializeBindings( lua_State *L, int shaderIndex, const SharedPtr< ShaderResource >& resource );
 
 	protected:

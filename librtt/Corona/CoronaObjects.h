@@ -567,34 +567,6 @@ CORONA_API
 int CoronaObjectsPushContainer( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
 
 /**
- This behaves like `display.newEmbossedText()` but allows method customization.
-
- The stack contents are used as the arguments.
- @param userData Arbitrary data supplied to the text object's methods. It is not owned by the
-                object and it is up to the user to keep it alive while any methods use it.
- @param params Method parameter chain.
- @return number of values pushed onto stack;
-         1 - means text object was successfully created and is on stack
-         0 - error occurred and nothing was pushed on stack
-*/
-CORONA_API
-int CoronaObjectsPushEmbossedText( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
-
-/**
- This behaves like `display.newEmitter()` but allows method customization.
-
- The stack contents are used as the arguments.
- @param userData Arbitrary data supplied to the emitter object's methods. It is not owned by
-                the object and it is up to the user to keep it alive while any methods use it.
- @param params Method parameter chain.
- @return number of values pushed onto stack;
-         1 - means emitter object was successfully created and is on stack
-         0 - error occurred and nothing was pushed on stack
-*/
-CORONA_API
-int CoronaObjectsPushEmitter( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
-
-/**
  This behaves like `display.newGroup()` but allows method customization.
 
  The stack contents are used as the arguments.
@@ -637,48 +609,6 @@ CORONA_API
 int CoronaObjectsPushImageRect( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
 
 /**
- This behaves like `display.newLine()` but allows method customization.
- 
- The stack contents are used as the arguments.
- @param userData Arbitrary data supplied to the line object's methods. It is not owned by the
-                object and it is up to the user to keep it alive while any methods use it.
- @param params Method parameter chain.
- @return number of values pushed onto stack;
-         1 - means line object was successfully created and is on stack
-         0 - error occurred and nothing was pushed on stack
-*/
-CORONA_API
-int CoronaObjectsPushLine( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
-
-/**
- This behaves like `display.newMesh()` but allows method customization.
- 
- The stack contents are used as the arguments.
- @param userData Arbitrary data supplied to the mesh object's methods. It is not owned by
-                the object and it is up to the user to keep it alive while any methods use it.
- @param params Method parameter chain.
- @return number of values pushed onto stack;
-         1 - means mesh object  was successfully created and is on stack
-         0 - error occurred and nothing was pushed on stack
-*/
-CORONA_API
-int CoronaObjectsPushMesh( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
-
-/**
- This behaves like `display.newPolygon()` but allows method customization.
- 
- The stack contents are used as the arguments.
- @param userData Arbitrary data supplied to the polygon object's methods. It is not owned by
-                the object and it is up to the user to keep it alive while any methods use it.
- @param params Method parameter chain.
- @return number of values pushed onto stack;
-         1 - means polygon object was successfully created and is on stack
-         0 - error occurred and nothing was pushed on stack
-*/
-CORONA_API
-int CoronaObjectsPushPolygon( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
-
-/**
  This behaves like `display.newRect()` but allows method customization.
  
  The stack contents are used as the arguments.
@@ -691,20 +621,6 @@ int CoronaObjectsPushPolygon( lua_State * L, void * userData, const CoronaObject
 */
 CORONA_API
 int CoronaObjectsPushRect( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
-
-/**
- This behaves like `display.newRoundedRect()` but allows method customization.
- 
- The stack contents are used as the arguments.
- @param userData Arbitrary data supplied to the rounded rect's methods. It is not owned by
-                the object and it is up to the user to keep it alive while any methods use it.
- @param params Method parameter chain.
- @return number of values pushed onto stack;
-         1 - means rounded rect object was successfully created and is on stack
-         0 - error occurred and nothing was pushed on stack
-*/
-CORONA_API
-int CoronaObjectsPushRoundedRect( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
 
 /**
  This behaves like `display.newSnapshot()` but allows method customization.
@@ -733,20 +649,6 @@ int CoronaObjectsPushSnapshot( lua_State * L, void * userData, const CoronaObjec
 */
 CORONA_API
 int CoronaObjectsPushSprite( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
-
-/**
- This behaves like `display.newText()` but allows method customization.
- 
- The stack contents are used as the arguments.
- @param userData Arbitrary data supplied to the text object's methods. It is not owned by
-                the object and it is up to the user to keep it alive while any methods use it.
- @param params Method parameter chain.
- @return number of values pushed onto stack;
-         1 - means text object was successfully created and is on stack
-         0 - error occurred and nothing was pushed on stack
-*/
-CORONA_API
-int CoronaObjectsPushText( lua_State * L, void * userData, const CoronaObjectParams * params ) CORONA_PUBLIC_SUFFIX;
 
 // ----------------------------------------------------------------------------
 

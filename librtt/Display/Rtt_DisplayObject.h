@@ -115,6 +115,8 @@ class DisplayObject : public MLuaProxyable
 			kIsOffScreen = 0x20,
 			kIsAnchorChildren = 0x200, // Group-specific property
 			kIsRenderedOffscreen = 0x400,
+            kSkipsCull = 0x1000,
+            kSkipsHitTest = 0x2000,
 
             // NOTE: Current maximum of 16 PropertyMasks!!!
         };

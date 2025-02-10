@@ -37,38 +37,43 @@
 
 namespace /*anonymous*/
 {
-	enum Command
-	{
-		kCommandBindFrameBufferObject,
-		kCommandUnBindFrameBufferObject,
-		kCommandBindGeometry,
-		kCommandBindTexture,
-		kCommandBindProgram,
-		kCommandApplyUniformScalar,
-		kCommandApplyUniformVec2,
-		kCommandApplyUniformVec3,
-		kCommandApplyUniformVec4,
-		kCommandApplyUniformMat3,
-		kCommandApplyUniformMat4,
-		kCommandApplyUniformFromPointerScalar,
-		kCommandApplyUniformFromPointerVec2,
-		kCommandApplyUniformFromPointerVec3,
-		kCommandApplyUniformFromPointerVec4,
-		kCommandApplyUniformFromPointerMat3,
-		kCommandApplyUniformFromPointerMat4,
-		kCommandEnableBlend,
-		kCommandDisableBlend,
-		kCommandSetBlendFunction,
-		kCommandSetBlendEquation,
-		kCommandSetViewport,
-		kCommandEnableScissor,
-		kCommandDisableScissor,
-		kCommandSetScissorRegion,
-		kCommandClear,
-		kCommandDraw,
-		kCommandDrawIndexed,
-		kNumCommands
-	};
+    enum Command
+    {
+        kCommandBindFrameBufferObject,
+        kCommandUnBindFrameBufferObject,
+		kCommandCaptureRect,
+        kCommandBindGeometry,
+        kCommandBindTexture,
+        kCommandBindProgram,
+        kCommandBindInstancing,
+        kCommandResolveVertexFormat,
+        kCommandApplyUniformScalar,
+        kCommandApplyUniformVec2,
+        kCommandApplyUniformVec3,
+        kCommandApplyUniformVec4,
+        kCommandApplyUniformMat3,
+        kCommandApplyUniformMat4,
+        kCommandApplyUniformFromPointerScalar,
+        kCommandApplyUniformFromPointerVec2,
+        kCommandApplyUniformFromPointerVec3,
+        kCommandApplyUniformFromPointerVec4,
+        kCommandApplyUniformFromPointerMat3,
+        kCommandApplyUniformFromPointerMat4,
+        kCommandEnableBlend,
+        kCommandDisableBlend,
+        kCommandSetBlendFunction,
+        kCommandSetBlendEquation,
+        kCommandSetViewport,
+        kCommandEnableScissor,
+        kCommandDisableScissor,
+        kCommandSetScissorRegion,
+        kCommandClearDepth,
+        kCommandClearStencil,
+        kCommandClear,
+        kCommandDraw,
+        kCommandDrawIndexed,
+        kNumCommands
+    };
 
     // To ease reading/writing of arrays
     struct Vec2 { Rtt::Real data[2]; };
@@ -218,7 +223,7 @@ CommandBuffer::GetGlString( const char *s )
 bool
 CommandBuffer::GetGpuSupportsHighPrecisionFragmentShaders()
 {
-#if defined( Rtt_MAC_ENV ) || defined( Rtt_WIN_DESKTOP_ENV ) || defined( Rtt_LINUX_ENV )
+#if defined( Rtt_MAC_ENV ) || defined( Rtt_WIN_DESKTOP_ENV )|| defined( Rtt_LINUX_ENV )
 
     // Assume desktops support HIGHP.
     return true;
@@ -372,20 +377,17 @@ GLCommandBuffer::Initialize()
     GL_CHECK_ERROR();
 #endif
 
-	// Initialize OpenGL state	
-	glDisable( GL_DEPTH_TEST );
-	glDisable( GL_STENCIL_TEST );
-	glDisable( GL_SCISSOR_TEST );
-	glDisable( GL_CULL_FACE );
-	glEnable( GL_BLEND );
-	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glEnableVertexAttribArray( Geometry::kVertexPositionAttribute );
-	glEnableVertexAttribArray( Geometry::kVertexTexCoordAttribute );
-	glEnableVertexAttribArray( Geometry::kVertexColorScaleAttribute );
-	glEnableVertexAttribArray( Geometry::kVertexUserDataAttribute );
-#if !defined( Rtt_OPENGLES )
-	glDisable( GL_MULTISAMPLE );
-#endif
+    // Initialize OpenGL state
+    glDisable( GL_DEPTH_TEST );
+    glDisable( GL_STENCIL_TEST );
+    glDisable( GL_SCISSOR_TEST );
+    glDisable( GL_CULL_FACE );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glEnableVertexAttribArray( Geometry::kVertexPositionAttribute );
+    glEnableVertexAttribArray( Geometry::kVertexTexCoordAttribute );
+    glEnableVertexAttribArray( Geometry::kVertexColorScaleAttribute );
+    glEnableVertexAttribArray( Geometry::kVertexUserDataAttribute );
 
     InitializeFBO();
     InitializeCachedParams();
@@ -698,7 +700,21 @@ GLCommandBuffer::SetScissorRegion(int x, int y, int width, int height)
     Write<GLsizei>(height);
 }
 
-void 
+void
+GLCommandBuffer::ClearDepth( Real depth )
+{
+    WRITE_COMMAND( kCommandClearDepth );
+    Write<GLfloat>(depth);
+}
+
+void
+GLCommandBuffer::ClearStencil( U32 stencil )
+{
+    WRITE_COMMAND( kCommandClearStencil );
+    Write<GLuint>(stencil);
+}
+
+void
 GLCommandBuffer::Clear(Real r, Real g, Real b, Real a)
 {
     WRITE_COMMAND( kCommandClear );
@@ -1005,85 +1021,27 @@ GLCommandBuffer::Execute( bool measureGPU )
  
                 program->GetExtraUniformsInfo( fCurrentDrawVersion, extraUniforms );
 
-				glBlendFuncSeparate( srcColor, dstColor, srcAlpha, dstAlpha );
-				DEBUG_PRINT(
-					"Set blend function: srcColor=%i, dstColor=%i, srcAlpha=%i, dstAlpha=%i",
-					srcColor, dstColor, srcAlpha, dstAlpha );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandSetBlendEquation:
-			{
-				GLenum mode = Read<GLenum>();
-				glBlendEquation( mode );
-				DEBUG_PRINT( "Set blend equation: mode=%i", mode );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandSetViewport:
-			{
-				GLint x = Read<GLint>();
-				GLint y = Read<GLint>();
-				GLsizei width = Read<GLsizei>();
-				GLsizei height = Read<GLsizei>();
-				glViewport( x, y, width, height );
-				DEBUG_PRINT( "Set viewport: x=%i, y=%i, width=%i, height=%i", x, y, width, height );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandEnableScissor:
-			{
-				glEnable( GL_SCISSOR_TEST );
-				DEBUG_PRINT( "Enable scissor test" );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandDisableScissor:
-			{
-				glDisable( GL_SCISSOR_TEST );
-				DEBUG_PRINT( "Disable scissor test" );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandSetScissorRegion:
-			{
-				GLint x = Read<GLint>();
-				GLint y = Read<GLint>();
-				GLsizei width = Read<GLsizei>();
-				GLsizei height = Read<GLsizei>();
-				glScissor( x, y, width, height );
-				DEBUG_PRINT( "Set scissor window x=%i, y=%i, width=%i, height=%i", x, y, width, height );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandClear:
-			{
-				GLfloat r = Read<GLfloat>();
-				GLfloat g = Read<GLfloat>();
-				GLfloat b = Read<GLfloat>();
-				GLfloat a = Read<GLfloat>();
-				glClearColor( r, g, b, a );
-				glClear( GL_COLOR_BUFFER_BIT );
-				DEBUG_PRINT( "Clear: r=%f, g=%f, b=%f, a=%f", r, g, b, a );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandDraw:
-			{
-				GLenum mode = Read<GLenum>();
-				GLint offset = Read<GLint>();
-				GLsizei count = Read<GLsizei>();
-				glDrawArrays( mode, offset, count );
-				DEBUG_PRINT( "Draw: mode=%i, offset=%i, count=%i", mode, offset, count );
-				CHECK_ERROR_AND_BREAK;
-			}
-			case kCommandDrawIndexed:
-			{
-				GLenum mode = Read<GLenum>();
-				GLsizei count = Read<GLsizei>();
-				glDrawElements( mode, count, GL_UNSIGNED_SHORT, NULL );
-				DEBUG_PRINT( "Draw indexed: mode=%i, count=%i", mode, count );
-				CHECK_ERROR_AND_BREAK;
-			}
-			default:
-				DEBUG_PRINT( "Unknown command(%d)", command );
-				Rtt_ASSERT_NOT_REACHED();
-				break;
-		}
-	}
+                DEBUG_PRINT( "Bind Program: program=%p version=%i", program, fCurrentDrawVersion );
+                CHECK_ERROR_AND_BREAK;
+            }
+            case kCommandBindInstancing:
+            {
+                instanceCount = Read<U32>();
+                instancingData = Read<Geometry::Vertex*>();
+                CHECK_ERROR_AND_BREAK;
+            }
+            case kCommandResolveVertexFormat:
+            {
+                Rtt_ASSERT( geometry );
+                
+                U16 fullCount = Read<U16>();
+                U16 vertexSize = Read<U16>();
+				U32 offset = Read<U32>();
+                
+                // Reconstitute any attribute attached to the geometry.
+                U16 attributeCount = Read<U16>();
+                
+                Array< FormatExtensionList::Attribute > attributeArr( fAllocator );
 
                 std::vector< FormatExtensionList::Attribute > attributes;
                 std::vector< FormatExtensionList::Group > groups;
@@ -1294,18 +1252,6 @@ GLCommandBuffer::Execute( bool measureGPU )
                 GLsizei height = Read<GLsizei>();
                 glScissor( x, y, width, height );
                 DEBUG_PRINT( "Set scissor window x=%i, y=%i, width=%i, height=%i", x, y, width, height );
-                CHECK_ERROR_AND_BREAK;
-            }
-            case kCommandEnableMultisample:
-            {
-                Rtt_glEnableMultisample();
-                DEBUG_PRINT( "Enable multisample test" );
-                CHECK_ERROR_AND_BREAK;
-            }
-            case kCommandDisableMultisample:
-            {
-                Rtt_glDisableMultisample();
-                DEBUG_PRINT( "Disable multisample test" );
                 CHECK_ERROR_AND_BREAK;
             }
             case kCommandClearDepth:

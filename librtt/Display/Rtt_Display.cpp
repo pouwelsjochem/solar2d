@@ -65,6 +65,8 @@ Display::Display( Runtime& owner )
     fProfilingState( Rtt_NEW( owner.GetAllocator(), ProfilingState( owner.GetAllocator() ) ) ),
 	fStream( Rtt_NEW( owner.GetAllocator(), RenderingStream( owner.GetAllocator() ) ) ),
 	fScreenSurface( owner.Platform().CreateScreenSurface() ),
+    fObjectFactories( LUA_REFNIL ),
+    fFactoryFunc( NULL ),
 	fIsCollecting( false )
 {
 }
@@ -72,6 +74,12 @@ Display::Display( Runtime& owner )
 Display::~Display()
 {
 	Paint::Finalize();
+
+	lua_State *L = GetL();
+	if ( L )
+	{
+        luaL_unref( L, LUA_REGISTRYINDEX, fObjectFactories );
+	}
 
     //Needs to be done before deletes, because it uses scene etc
     fTextureFactory->ReleaseByType( TextureResource::kTextureResource_Any );
@@ -94,7 +102,7 @@ InvalidateDisplay( void * display )
 }
 
 bool
-Display::Initialize( lua_State *L, int configIndex )
+Display::Initialize( lua_State *L, int configIndex, const char * backend, void * backendContext )
 {
     bool result = false;
 
@@ -102,7 +110,25 @@ Display::Initialize( lua_State *L, int configIndex )
 	if ( Rtt_VERIFY( ! fRenderer ) )
 	{
 		Rtt_Allocator *allocator = GetRuntime().GetAllocator();
+
+#if defined( Rtt_WIN_ENV )
+		if (strcmp( backend, "glBackend" ) == 0)
+		{
+			fRenderer = Rtt_NEW( allocator, GLRenderer( allocator ) );
+		}
+
+		else if (strcmp( backend, "vulkanBackend" ) == 0)
+		{
+			fRenderer = VulkanExports::CreateVulkanRenderer( allocator, backendContext, &InvalidateDisplay, this );
+		}
+		else
+		{
+			Rtt_ASSERT_NOT_REACHED();
+		}
+#else
 		fRenderer = Rtt_NEW( allocator, GLRenderer( allocator ) );
+#endif
+
 		fRenderer->Initialize();
 		
 		CPUResourcePool *resourcePoolObserver = Rtt_NEW(allocator,CPUResourcePool());
@@ -116,9 +142,9 @@ Display::Initialize( lua_State *L, int configIndex )
 		}
 		fStream->SetOptimalContentSize( fScreenSurface->Width(), fScreenSurface->Height() );
 
-		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader ) );
-
 		result = true;
+
+		fShaderFactory = Rtt_NEW( allocator, ShaderFactory( *this, programHeader, backend ) );
 	}
 
     return result;
@@ -372,7 +398,7 @@ Display::Capture( DisplayObject *object,
         }
     }
 
-	fRenderer->BeginFrame( 0.1f, 0.1f, GetScreenToContentScale() );
+	fRenderer->BeginFrame( 0.1f, 0.1f, GetDefaults().GetTimeTransform(), GetScreenToContentScale(), true );
 
     ////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////
@@ -606,7 +632,7 @@ Display::Capture( DisplayObject *object,
         BufferBitmap *bitmap = static_cast< BufferBitmap * >( tex->GetBitmap() );
 
 		// This function requires coordinates in pixels.
-		fStream->CaptureFrameBuffer( *bitmap,
+		fRenderer->CaptureFrameBuffer( *fStream, *bitmap,
 										x_in_pixels,
 										y_in_pixels,
 										w_in_pixels,
@@ -683,6 +709,47 @@ Display::ReloadResources()
 {
 	GetRenderer().ReleaseGPUResources();
 	GetRenderer().Initialize();
+}
+
+
+void
+Display::GatherObjectFactories( const luaL_Reg funcs[], void * library )
+{
+    lua_State *L = GetL();
+
+    if ( L && LUA_REFNIL == fObjectFactories )
+    {
+        lua_newtable( L );
+
+        for (int i = 0; funcs[i].func; ++i)
+        {
+            if (strncmp(funcs[i].name, "new", 3U) == 0)
+            {
+                lua_pushlightuserdata( L, library );
+                lua_pushnil( L );
+                lua_pushcclosure( L, funcs[i].func, 2 );
+                lua_setfield( L, -2, funcs[i].name );
+            }
+        }
+
+        fObjectFactories = luaL_ref( L, LUA_REGISTRYINDEX );
+    }
+}
+
+bool
+Display::PushObjectFactories() const
+{
+    bool wasPushed = false;
+    if (LUA_REFNIL != fObjectFactories)
+    {
+        lua_State *L = GetL();
+        if (L)
+        {
+            lua_rawgeti(L, LUA_REGISTRYINDEX, fObjectFactories);
+            wasPushed = true;
+        }
+    }
+    return wasPushed;
 }
 
 GroupObject *
@@ -793,6 +860,20 @@ S32
 Display::GetYScreenOffset() const
 {
 	return fStream->GetYScreenOffset();
+}
+
+void
+Display::ContentToScreenUnrounded( float& x, float& y ) const
+{
+    float w = 0;
+    float h = 0;
+    ContentToScreenUnrounded( x, y, w, h );
+}
+
+void
+Display::ContentToScreenUnrounded( float& x, float& y, float& w, float& h ) const
+{
+    fStream->ContentToScreenUnrounded( x, y, w, h );
 }
 
 void
@@ -910,6 +991,12 @@ bool
 Display::HasFramebufferBlit( bool * canScale ) const
 {
     return fRenderer->HasFramebufferBlit( canScale );
+}
+
+void
+Display::GetVertexAttributes( VertexAttributeSupport & support ) const
+{
+    fRenderer->GetVertexAttributes( support );
 }
 
 void

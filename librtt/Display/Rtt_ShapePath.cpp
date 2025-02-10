@@ -66,7 +66,6 @@ ShapePath::~ShapePath()
             ReleaseProxy( fillBlock->fProxy );
         }
 
-        observer->QueueRelease( fStrokeGeometry );
         observer->QueueRelease( fFillGeometry );
     }
 

@@ -178,6 +178,7 @@ PaintAdapter::SetValueForKey(
 			case 4:
 				{
 					Shader *shader = NULL;
+                    Geometry *geometry = NULL;
 
                     // Ensure paint has a parent display object
                     DisplayObject *observer = paint->GetObserver();
@@ -203,9 +204,7 @@ PaintAdapter::SetValueForKey(
                                 ShaderFactory& factory = display.GetShaderFactory();
                                 shader = factory.FindOrLoad( namedShader );
 
-                                bool isFill = DisplayPath::ExtensionAdapter::IsFillPaint( observer, paint );
-                                
-                                geometry = DisplayPath::ExtensionAdapter::GetGeometry( observer, isFill );
+                                geometry = ClosedPath::ExtensionAdapter::GetGeometry( observer );
                             }
                         }
                     }
@@ -247,37 +246,18 @@ PaintAdapter::SetValueForKey(
                         BlendMode::Param dstColor = BlendMode::ParamForString( tmpStr );
                         lua_pop( L, 1 );
 
-						if ( BlendMode::kUnknown != srcColor
-							 && BlendMode::kUnknown != dstColor )
-						{
-							BlendMode blendMode( srcColor, dstColor, srcAlpha, dstAlpha );
-							paint->SetBlend( blendMode );
-						}
-						else
-						{
-							Rtt_TRACE_SIM( ( "ERROR: paint.blendMode could not be set b/c the provided table had invalid values for the 'srcColor' and/or 'dstColor' keys.\n" ) );
-						}
-					}
-				}
-				break;
-			case 6:
-				{
-					const char *v = lua_tostring( L, valueIndex );
-					RenderTypes::BlendEquation blendEquation = RenderTypes::BlendEquationForString( v );
-					paint->SetBlendEquation( blendEquation );
-				}
-				break;
-			default:
-				Rtt_ASSERT_NOT_REACHED();
-				break;
-		}
-	}
+						// Optional values
+						lua_getfield( L, valueIndex, "srcAlpha" );
+						tmpStr = lua_tostring( L, -1 );
+						BlendMode::Param srcAlpha = BlendMode::ParamForString( tmpStr );
+						if ( BlendMode::kUnknown == srcAlpha ) { srcAlpha = srcColor; }
+						lua_pop( L, 1 );
 
-                        lua_getfield( L, valueIndex, "dstAlpha" );
-                        tmpStr = lua_tostring( L, -1 );
-                        BlendMode::Param dstAlpha = BlendMode::ParamForString( tmpStr );
-                        if ( BlendMode::kUnknown == dstAlpha ) { dstAlpha = dstColor; }
-                        lua_pop( L, 1 );
+						lua_getfield( L, valueIndex, "dstAlpha" );
+						tmpStr = lua_tostring( L, -1 );
+						BlendMode::Param dstAlpha = BlendMode::ParamForString( tmpStr );
+						if ( BlendMode::kUnknown == dstAlpha ) { dstAlpha = dstColor; }
+						lua_pop( L, 1 );
 
                         if ( BlendMode::kUnknown != srcColor
                              && BlendMode::kUnknown != dstColor )

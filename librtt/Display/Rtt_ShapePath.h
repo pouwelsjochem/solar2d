@@ -45,7 +45,6 @@ class ShapePath : public ClosedPath
 		virtual ~ShapePath();
 
         VertexCache & GetFillSource() { return fFillSource; }
-        VertexCache & GetStrokeSource() { return fStrokeSource; }
 
 	protected:
 		void TesselateFill();
@@ -71,6 +70,9 @@ class ShapePath : public ClosedPath
         const MShapePathDelegate *GetDelegate() const { return fDelegate; }
         void SetDelegate( const MShapePathDelegate *delegate ) { fDelegate = delegate; }
 
+    public:
+        Geometry *GetFillGeometry() const { return fFillGeometry; }
+		
 	protected:
 		Geometry *fFillGeometry;
 		ArrayIndex fIndexSource;

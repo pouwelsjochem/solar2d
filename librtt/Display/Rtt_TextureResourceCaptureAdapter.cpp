@@ -183,14 +183,6 @@ CaptureObject::Draw( Renderer& renderer ) const
 	Display& display = GetStage()->GetDisplay();
 	TextureResourceCapture & capture = static_cast< TextureResourceCapture & >( *tex );
 	
-	S32 screenWidth = display.ScreenWidth();
-	S32 screenHeight = display.ScreenHeight();
-	S32 windowWidth = display.WindowWidth();
-	S32 windowHeight = display.WindowHeight();
-	
-	float screenToWindowX = (float)windowWidth / screenWidth;
-	float screenToWindowY = (float)windowHeight / screenHeight;
-	
 	Vertex2 center;
 	
 	StageBounds().GetCenter( center );
@@ -221,7 +213,7 @@ I'm just going to disable the feature.
 	texBounds.xMax = +width / 2;
 	texBounds.yMax = +height / 2;
 	
-	texBounds.Translate( center.x * screenToWindowX, center.y * screenToWindowY );
+	texBounds.Translate( center.x * display.GetContentToScreenScale(), center.y * display.GetContentToScreenScale() );
 					
 	texBounds.xMin = floorf( texBounds.xMin );
 	texBounds.yMin = floorf( texBounds.yMin );
@@ -231,8 +223,8 @@ I'm just going to disable the feature.
 	Rect rawRect = texBounds, bounds;
 	
 	bounds.xMin = bounds.yMin = 0;
-	bounds.xMax = windowWidth;
-	bounds.yMax = windowHeight;
+	bounds.xMax = display.DeviceWidth();
+	bounds.yMax = display.DeviceHeight();
 	
 	texBounds.Intersect( bounds );
 
@@ -267,12 +259,6 @@ TextureResourceCaptureAdapter::newCaptureEvent( lua_State *L )
 			ShapeObject* v = CaptureObject::NewCapture( display.GetAllocator(), entry );
 
 			int result = LuaLibDisplay::AssignParentAndPushResult( L, display, v, parent );
-
-			if ( display.GetDefaults().IsV1Compatibility() )
-			{
-				x += Rtt_RealDiv2( 10 );
-				y += Rtt_RealDiv2( 10 );
-			}
 			v->Translate( x, y );
 			
 			return result;

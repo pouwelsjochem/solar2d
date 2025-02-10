@@ -41,7 +41,7 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 Scene::Scene( Rtt_Allocator* pAllocator, Display& owner)
-:	fOwner( owner ),
+:	 fOwner( owner ),
 	fFrontResourceOrphanage( Rtt_NEW( owner.GetAllocator(), PtrArray< CPUResource >( owner.GetAllocator() ) ) ),
 	fBackResourceOrphanage( Rtt_NEW( owner.GetAllocator(), PtrArray< CPUResource >( owner.GetAllocator() ) ) ),
 	fCurrentStage( Rtt_NEW( pAllocator, StageObject( pAllocator, * this ) ) ),
@@ -184,7 +184,7 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 		Rtt::Real totalTime = Rtt_AbsoluteToMilliseconds( elapsedTime ) / kMillisecondsPerSecond;
 		Rtt::Real deltaTime = Rtt_AbsoluteToMilliseconds( elapsedTime - fOwner.GetPreviousTime() ) / kMillisecondsPerSecond;
 
-		renderer.BeginFrame( totalTime, deltaTime, fOwner.GetScreenToContentScale() );
+		renderer.BeginFrame( totalTime, deltaTime, fOwner.GetDefaults().GetTimeTransform(), fOwner.GetScreenToContentScale() );
 		
 		ADD_ENTRY( "Scene: Begin Render" );
 		

@@ -42,7 +42,17 @@ DisplayDefaults::DisplayDefaults()
 	fShaderCompilerVerbose( kShaderCompilerVerboseDefault ),
 	fIsAnchorClamped( true ),
 	fIsImageSheetSampledInsideFrame( false ),
-	fIsExternalTextureRetina( true )
+	fIsExternalTextureRetina( true ),
+    fSkipsCull( false ),
+    fSkipsHitTest( false ),
+    fEnableDepthInScene( false ),
+    fEnableStencilInScene( false ),
+    fAddDepthToResource( false ),
+    fAddStencilToResource( false ),
+    fSceneDepthClear( 1.0 ),
+    fAddedDepthClear( 1.0 ),
+    fSceneStencilClear( 0 ),
+    fAddedStencilClear( 0 )
 {
 	static TimeTransform sTransform;
 

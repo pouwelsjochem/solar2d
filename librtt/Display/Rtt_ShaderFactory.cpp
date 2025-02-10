@@ -214,11 +214,7 @@ ShaderFactory::NewProgram(
         program->SetFragmentShellNumLines( Program::CountLines( shellFrag ) );
     }
 
-#if defined( Rtt_EMSCRIPTEN_ENV )
-	const char *sourceFrag = lua_pushfstring( L, shellFrag, kernelFrag );
-#else
-	const char *sourceFrag = lua_pushfstring( L, "%s%s", shellFrag, kernelFrag );
-#endif
+    const char *sourceFrag = lua_pushfstring( L, "%s%s", shellFrag, kernelFrag );
 
     program->SetFragmentShaderSource( sourceFrag );
 //    Rtt_TRACE( ( "Fragment source:\n%s\n", program->GetFragmentShaderSource() ) );
@@ -252,16 +248,12 @@ ShaderFactory::NewProgram(
 		{
 			header = header + std::string("#define TEX_COORD_Z 1\n");
 		}
-
-#if defined( Rtt_EMSCRIPTEN_ENV )
-		header = header +  "#define Rtt_WEBGL_ENV\n";
-#endif
-		
-		if (header.length() != 0)
-		{
-			program->SetHeaderSource( header.c_str() );
-		}
-	}
+        
+        if (header.length() != 0)
+        {
+            program->SetHeaderSource( header.c_str() );
+        }
+    }
 
     return program;
 }
@@ -775,10 +767,10 @@ ShaderFactory::NewShaderBuiltin( ShaderTypes::Category category, const char *nam
                         {
                             Rtt_LUA_STACK_GUARD( L );
 
-							SharedPtr< ShaderResource > resource;
+                            SharedPtr< ShaderResource > resource;
 
-							lua_getfield( L, tableIndex, "vertex" );
-							const char *kernelVert = lua_tostring( L, -1 );
+                            lua_getfield( L, tableIndex, "vertex" );
+                            const char *kernelVert = lua_tostring( L, -1 );
 
                             lua_getfield( L, tableIndex, "fragment" );
                             const char *kernelFrag = lua_tostring( L, -1 );

@@ -22,16 +22,12 @@
 
 #include "Display/Rtt_ContainerObject.h"
 #include "Display/Rtt_Display.h"
-#include "Display/Rtt_EmbossedTextObject.h"
-#include "Display/Rtt_EmitterObject.h"
 #include "Display/Rtt_GroupObject.h"
-#include "Display/Rtt_LineObject.h"
 #include "Display/Rtt_RectObject.h"
 #include "Display/Rtt_RectPath.h"
 #include "Display/Rtt_SnapshotObject.h"
 #include "Display/Rtt_SpriteObject.h"
 #include "Display/Rtt_StageObject.h"
-#include "Display/Rtt_TextObject.h"
 
 #include <vector>
 #include <stddef.h>
@@ -212,7 +208,7 @@ protected:
     Proxy2VTable() {}
 
 public:
-    virtual int ValueForKey( lua_State *L, const Rtt::MLuaProxyable& object, const char key[], bool overrideRestriction = false ) const
+    virtual int ValueForKey( lua_State *L, const Rtt::MLuaProxyable& object, const char key[] ) const
     {
         const Proxy2 & resolved = static_cast< const Proxy2 & >( object );
         const auto params = FindParams< CoronaObjectValueParams >( resolved.fStream, kAugmentedMethod_Value, AFTER_HEADER_OFFSET( Value ) );
@@ -226,7 +222,7 @@ public:
 
         else if (!params.ignoreOriginal)
         {
-            result += Super::Constant().ValueForKey( L, object, key, overrideRestriction );
+            result += Super::Constant().ValueForKey( L, object, key );
         }
 
         return ValueEpilogue( L, object, key, userData, params, result );
@@ -1075,70 +1071,6 @@ int CoronaObjectsPushContainer( lua_State * L, void * userData, const CoronaObje
 // ----------------------------------------------------------------------------
 
 typedef CoronaObjectsInterface<
-    Rtt::EmbossedTextObject,
-    Proxy2VTable< class EmbossedText2, Rtt::LuaEmbossedTextObjectProxyVTable >,
-
-    Rtt::Display &, const char[], Rtt::PlatformFont *, Rtt::Real, Rtt::Real, const char[]
-> EmbossedTextInterface;
-
-class EmbossedText2 : public EmbossedTextInterface {
-    CORONA_OBJECTS_CLASS_INTERFACE( EmbossedText );
-
-public:
-    static Super::Super *
-    New( Rtt_Allocator * allocator, Rtt::Display& display, const char text[], Rtt::PlatformFont *font, Rtt::Real w, Rtt::Real h, const char alignment[] )
-    {
-        return Rtt_NEW( allocator, EmbossedText2( display, text, font, w, h, alignment ) );
-    }
-
-protected:
-    EmbossedText2( Rtt::Display& display, const char text[], Rtt::PlatformFont *font, Rtt::Real w, Rtt::Real h, const char alignment[] )
-        : Super( display, text, font, w, h, alignment )
-    {
-    }
-};
-
-CORONA_API
-int CoronaObjectsPushEmbossedText( lua_State * L, void * userData, const CoronaObjectParams * params )
-{
-    CORONA_OBJECTS_PUSH( EmbossedText );
-}
-
-// ----------------------------------------------------------------------------
-
-typedef CoronaObjectsInterface<
-    Rtt::EmitterObject,
-    Proxy2VTable< class Emitter2, Rtt::LuaEmitterObjectProxyVTable >
-
-    /* no args */
-> EmitterInterface;
-
-class Emitter2 : public EmitterInterface {
-    CORONA_OBJECTS_CLASS_INTERFACE( Emitter );
-
-public:
-    static Super::Super *
-    New( Rtt_Allocator* allocator )
-    {
-        return Rtt_NEW( allocator, Emitter2 );
-    }
-
-protected:
-    Emitter2()
-        : Super()
-    {
-    }
-};
-
-CORONA_API
-int CoronaObjectsPushEmitter( lua_State * L, void * userData, const CoronaObjectParams * params )
-{
-    CORONA_OBJECTS_PUSH( Emitter );
-}
-
-// ----------------------------------------------------------------------------
-
-typedef CoronaObjectsInterface<
     Rtt::GroupObject,
     Proxy2VTable< class Group2, Rtt::LuaGroupObjectProxyVTable >,
     
@@ -1268,102 +1200,6 @@ int CoronaObjectsPushImageRect( lua_State * L, void * userData, const CoronaObje
 // ----------------------------------------------------------------------------
 
 typedef CoronaObjectsInterface<
-    Rtt::LineObject,
-    Proxy2VTable< class Line2, Rtt::LuaShapeObjectProxyVTable >,
-    
-    Rtt::OpenPath *
-> LineInterface;
-
-class Line2 : public LineInterface {
-    CORONA_OBJECTS_CLASS_INTERFACE( Line );
-
-public:
-    static Super::Super *
-    New( Rtt_Allocator* allocator, Rtt::OpenPath * path )
-    {
-        return Rtt_NEW( allocator, Line2( path ) );
-    }
-
-protected:
-    Line2( Rtt::OpenPath * path )
-        : Super( path )
-    {
-    }
-};
-
-CORONA_API
-int CoronaObjectsPushLine( lua_State * L, void * userData, const CoronaObjectParams * params )
-{
-    CORONA_OBJECTS_PUSH( Line );
-}
-
-// ----------------------------------------------------------------------------
-
-typedef CoronaObjectsInterface<
-    Rtt::ShapeObject,
-    Proxy2VTable< class Mesh2, Rtt::LuaShapeObjectProxyVTable >,
-    
-    Rtt::ClosedPath *
-> MeshInterface;
-
-class Mesh2 : public MeshInterface {
-    CORONA_OBJECTS_CLASS_INTERFACE( Mesh );
-
-public:
-    static Super::Super *
-    New( Rtt_Allocator * allocator, Rtt::ClosedPath * path )
-    {
-        return Rtt_NEW( allocator, Self( path ) );
-    }
-
-protected:
-    Mesh2( Rtt::ClosedPath * path )
-        : Super( path )
-    {
-    }
-};
-
-CORONA_API
-int CoronaObjectsPushMesh( lua_State * L, void * userData, const CoronaObjectParams * params )
-{
-    CORONA_OBJECTS_PUSH( Mesh );
-}
-
-// ----------------------------------------------------------------------------
-
-typedef CoronaObjectsInterface<
-    Rtt::ShapeObject,
-    Proxy2VTable< class Polygon2, Rtt::LuaShapeObjectProxyVTable >,
-    
-    Rtt::ClosedPath *
-> PolygonInterface;
-
-class Polygon2 : public PolygonInterface {
-    CORONA_OBJECTS_CLASS_INTERFACE( Polygon );
-
-public:
-    static Super::Super *
-    New( Rtt_Allocator * allocator, Rtt::ClosedPath * path )
-    {
-        return Rtt_NEW( allocator, Self( path ) );
-    }
-
-protected:
-    Polygon2( Rtt::ClosedPath * path )
-        : Super( path )
-    {
-    }
-};
-
-CORONA_API
-int CoronaObjectsPushPolygon( lua_State * L, void * userData, const CoronaObjectParams * params )
-{
-    CORONA_OBJECTS_PUSH( Polygon );
-}
-
-// ----------------------------------------------------------------------------
-
-typedef CoronaObjectsInterface<
     Rtt::ShapeObject,
     Proxy2VTable< class Rect2, Rtt::LuaShapeObjectProxyVTable >,
     
@@ -1393,38 +1229,6 @@ CORONA_API
 int CoronaObjectsPushRect( lua_State * L, void * userData, const CoronaObjectParams * params )
 {
     CORONA_OBJECTS_PUSH( Rect );
-}
-
-// ----------------------------------------------------------------------------
-
-typedef CoronaObjectsInterface<
-    Rtt::ShapeObject,
-    Proxy2VTable< class RoundedRect2, Rtt::LuaShapeObjectProxyVTable >,
-    
-    Rtt::ClosedPath *
-> RoundedRectInterface;
-
-class RoundedRect2 : public RoundedRectInterface {
-    CORONA_OBJECTS_CLASS_INTERFACE( RoundedRect );
-
-public:
-    static Super::Super *
-    New( Rtt_Allocator * allocator, Rtt::ClosedPath * path )
-    {
-        return Rtt_NEW( allocator, Self( path ) );
-    }
-
-protected:
-    RoundedRect2( Rtt::ClosedPath * path )
-        : Super( path )
-    {
-    }
-};
-
-CORONA_API
-int CoronaObjectsPushRoundedRect( lua_State * L, void * userData, const CoronaObjectParams * params )
-{
-    CORONA_OBJECTS_PUSH( RoundedRect );
 }
 
 // ----------------------------------------------------------------------------
@@ -1489,40 +1293,6 @@ CORONA_API
 int CoronaObjectsPushSprite( lua_State * L, void * userData, const CoronaObjectParams * params )
 {
     CORONA_OBJECTS_PUSH( Sprite );
-}
-
-// ----------------------------------------------------------------------------
-
-typedef CoronaObjectsInterface<
-    Rtt::TextObject,
-    Proxy2VTable< class Text2, Rtt::LuaTextObjectProxyVTable >,
-
-    Rtt::Display &, const char[], Rtt::PlatformFont *, Rtt::Real, Rtt::Real, const char[]
-> TextInterface;
-
-class Text2 : public TextInterface {
-    CORONA_OBJECTS_CLASS_INTERFACE( Text );
-
-public:
-    static Super::Super *
-    New( Rtt_Allocator * allocator, Rtt::Display& display, const char text[], Rtt::PlatformFont *font, Rtt::Real w, Rtt::Real h, const char alignment[] )
-    {
-        return Rtt_NEW( allocator, Text2( display, text, font, w, h, alignment ) );
-    }
-
-protected:
-    Text2( Rtt::Display& display, const char text[], Rtt::PlatformFont *font, Rtt::Real w, Rtt::Real h, const char alignment[] )
-        : Super( display, text, font, w, h, alignment )
-    {
-    }
-};
-
-// ----------------------------------------------------------------------------
-
-CORONA_API
-int CoronaObjectsPushText( lua_State * L, void * userData, const CoronaObjectParams * params )
-{
-    CORONA_OBJECTS_PUSH( Text );
 }
 
 // ----------------------------------------------------------------------------

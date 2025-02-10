@@ -133,11 +133,28 @@ class Geometry : public CPUResource
 
         typedef U16 Index;
 
-		// Generic vertex attribute indices
-		static const U32 kVertexPositionAttribute = 0;
-		static const U32 kVertexTexCoordAttribute = 1;
-		static const U32 kVertexColorScaleAttribute = 2;
-		static const U32 kVertexUserDataAttribute = 3;
+        struct ExtensionBlock {
+            ExtensionBlock( Rtt_Allocator* allocator );
+            ExtensionBlock( ExtensionBlock & block );
+            ~ExtensionBlock();
+            
+            void SetExtensionList( SharedPtr<FormatExtensionList>& list );
+            void UpdateData( bool storedOnGPU, U32 count );
+            
+            SharedPtr<FormatExtensionList> fList;
+            Array<Vertex> fVertexData;
+            Array<U8>** fInstanceData;
+            U32 fCount;
+            mutable LuaUserdataProxy *fProxy;
+        };
+    
+        // Generic vertex attribute indices
+        static const U32 kVertexPositionAttribute = 0;
+        static const U32 kVertexTexCoordAttribute = 1;
+        static const U32 kVertexColorScaleAttribute = 2;
+        static const U32 kVertexUserDataAttribute = 3;
+	
+        static U32 FirstExtraAttribute() { return kVertexUserDataAttribute + 1; }
 
     public:
         // If storeOnGPU is true, a copy of the vertex data will be stored
@@ -161,10 +178,25 @@ class Geometry : public CPUResource
         U32 GetIndicesAllocated() const;
         bool GetStoredOnGPU() const;
 
-		// More space may be allocated than is initially needed. By default,
-		// the use count is zero and must be set for Geometry to be useful.
-		U32 GetVerticesUsed() const;
-		U32 GetIndicesUsed() const;
+        void AttachPerVertexColors( ArrayU32* colors, U32 size );
+
+		const U32* GetPerVertexColorData() const;
+		U32* GetWriteablePerVertexColorData();
+		bool SetVertexColor( U32 index, U32 color );
+
+        const FormatExtensionList * GetExtensionList() const;
+        const Vertex* GetExtendedVertexData() const;
+        Vertex* GetWritableExtendedVertexData( S32 * length = NULL );
+ 
+        ExtensionBlock * GetExtensionBlock() const { return fExtension; }
+        ExtensionBlock * EnsureExtension();
+     
+        static bool UsesInstancing( const ExtensionBlock* block, const FormatExtensionList* list );
+    
+        // More space may be allocated than is initially needed. By default,
+        // the use count is zero and must be set for Geometry to be useful.
+        U32 GetVerticesUsed() const;
+        U32 GetIndicesUsed() const;
 
         void SetVerticesUsed( U32 count );
         void SetIndicesUsed( U32 count );
@@ -192,14 +224,16 @@ class Geometry : public CPUResource
         // Assignment operator made private until we add copy support.
         void operator=( const Geometry& geometry ) { };
 
-		PrimitiveType fPrimitiveType;
-		U32 fVerticesAllocated;
-		U32 fIndicesAllocated;
-		bool fStoredOnGPU;
-		Vertex* fVertexData;
-		Index* fIndexData;
-		U32 fVerticesUsed;
-		U32 fIndicesUsed;
+        PrimitiveType fPrimitiveType;
+        U32 fVerticesAllocated;
+        U32 fIndicesAllocated;
+        bool fStoredOnGPU;
+        ArrayU32* fPerVertexColors;
+        Vertex* fVertexData;
+        Index* fIndexData;
+        U32 fVerticesUsed;
+        U32 fIndicesUsed;
+        ExtensionBlock* fExtension;
 };
 
 // ----------------------------------------------------------------------------

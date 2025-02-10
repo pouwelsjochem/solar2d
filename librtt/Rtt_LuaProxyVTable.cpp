@@ -107,7 +107,7 @@ LuaProxyVTable::DumpObjectProperties( lua_State *L, const MLuaProxyable& object,
             continue;
         }
 
-		int res = ValueForKey(L, object, keys[k]);
+        int res = ValueForKey(L, object, keys[k]);
         if (res > 0)
         {
             buf[0] = '\0';
@@ -416,119 +416,119 @@ setHasListener( lua_State *L )
 int
 LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[]) const
 {
-	if ( ! key ) { return 0; }
-	
-	int result = 1;
+    if ( ! key ) { return 0; }
+    
+    int result = 1;
 
     // deprecated properties have a trailing '#'
-	static const char * keys[] = 
-	{
-		"translate",			// 0
-		"scale",				// 1
-		"rotate",				// 2
-		"getParent",			// 3
-		"setReferencePoint",	// 4
-		"removeSelf",			// 5
-		"localToContent",		// 6
-		"contentToLocal",		// 7
-		"isVisible",			// 8
-		"isHitTestable",		// 9
-		"alpha",				// 10
-		"parent",				// 11
-		"stage",				// 12
-		"x",					// 13
-		"y",					// 14
-		"anchorX",				// 15
-		"anchorY",				// 16
-		"contentBounds",		// 17
-		"contentWidth",         // 18
-		"contentHeight",		// 19
-		"toFront",				// 20
-		"toBack",				// 21
-		"setMask",				// 22
-		"maskX",				// 23
-		"maskY",				// 24
-		"maskScaleX",			// 25
-		"maskScaleY",			// 26
-		"maskRotation",         // 27
-		"isHitTestMasked",		// 28
-		"_setHasListener",		// 29
-	};
+    static const char * keys[] = 
+    {
+        "translate",            // 0
+        "scale",                // 1
+        "rotate",                // 2
+        "getParent",            // 3
+        "setReferencePoint",    // 4
+        "removeSelf",            // 5
+        "localToContent",        // 6
+        "contentToLocal",        // 7
+        "isVisible",            // 8
+        "isHitTestable",        // 9
+        "alpha",                // 10
+        "parent",                // 11
+        "stage",                // 12
+        "x",                    // 13
+        "y",                    // 14
+        "anchorX",                // 15
+        "anchorY",                // 16
+        "contentBounds",        // 17
+        "contentWidth",         // 18
+        "contentHeight",        // 19
+        "toFront",                // 20
+        "toBack",                // 21
+        "setMask",                // 22
+        "maskX",                // 23
+        "maskY",                // 24
+        "maskScaleX",            // 25
+        "maskScaleY",            // 26
+        "maskRotation",         // 27
+        "isHitTestMasked",        // 28
+        "_setHasListener",        // 29
+    };
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 30, 29, 6, __FILE__, __LINE__ );
-	StringHash *hash = &sHash;
+    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 30, 29, 6, __FILE__, __LINE__ );
+    StringHash *hash = &sHash;
 
-	int index = hash->Lookup( key );
-	switch ( index )
-	{
-	case 0:
-		{
-			Lua::PushCachedFunction( L, Self::translate );
-		}
-		break;
-	case 1:
-		{
-			Lua::PushCachedFunction( L, Self::scale );
-		}
-		break;
-	case 2:
-		{
-			Lua::PushCachedFunction( L, Self::rotate );
-		}
-		break;
-	case 3:
-		{
-			Lua::PushCachedFunction( L, getParent );
-		}
-		break;
-	case 5:
-		{
-			Lua::PushCachedFunction( L, removeSelf );
-		}
-		break;
-	case 6:
-		{
-			Lua::PushCachedFunction( L, localToContent );
-		}
-		break;
-	case 7:
-		{
-			Lua::PushCachedFunction( L, contentToLocal );
-		}
-		break;
-	case 20:
-		{
-			Lua::PushCachedFunction( L, toFront );
-		}
-		break;
-	case 21:
-		{
-			Lua::PushCachedFunction( L, toBack );
-		}
-		break;
-	case 22:
-		{
-			Lua::PushCachedFunction( L, setMask );
-		}
-		break;
-	case 29:
-		{
-			Lua::PushCachedFunction( L, setHasListener );
-		}
-		break;
-	default:
-		{
-			// DisplayObject* o = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-			const DisplayObject& o = static_cast< const DisplayObject& >( object );
-			Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
+    int index = hash->Lookup( key );
+    switch ( index )
+    {
+    case 0:
+        {
+            Lua::PushCachedFunction( L, Self::translate );
+        }
+        break;
+    case 1:
+        {
+            Lua::PushCachedFunction( L, Self::scale );
+        }
+        break;
+    case 2:
+        {
+            Lua::PushCachedFunction( L, Self::rotate );
+        }
+        break;
+    case 3:
+        {
+            Lua::PushCachedFunction( L, getParent );
+        }
+        break;
+    case 5:
+        {
+            Lua::PushCachedFunction( L, removeSelf );
+        }
+        break;
+    case 6:
+        {
+            Lua::PushCachedFunction( L, localToContent );
+        }
+        break;
+    case 7:
+        {
+            Lua::PushCachedFunction( L, contentToLocal );
+        }
+        break;
+    case 20:
+        {
+            Lua::PushCachedFunction( L, toFront );
+        }
+        break;
+    case 21:
+        {
+            Lua::PushCachedFunction( L, toBack );
+        }
+        break;
+    case 22:
+        {
+            Lua::PushCachedFunction( L, setMask );
+        }
+        break;
+    case 29:
+        {
+            Lua::PushCachedFunction( L, setHasListener );
+        }
+        break;
+    default:
+        {
+            // DisplayObject* o = (DisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
+            const DisplayObject& o = static_cast< const DisplayObject& >( object );
+            Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
 
-			switch ( index )
-			{
-			case 17:
-				{
-					const Rect& r = o.StageBounds();
+            switch ( index )
+            {
+            case 17:
+                {
+                    const Rect& r = o.StageBounds();
 
-					lua_createtable( L, 0, 4 );
+                    lua_createtable( L, 0, 4 );
 
                     const char xMin[] = "xMin";
                     const char yMin[] = "yMin";
@@ -551,134 +551,134 @@ LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& obj
                         xMinRect = yMinRect = xMaxRect = yMaxRect = Rtt_REAL_0;
                     }
 
-					setProperty( L, xMin, kLen, xMinRect );
-					setProperty( L, yMin, kLen, yMinRect );
-					setProperty( L, xMax, kLen, xMaxRect );
-					setProperty( L, yMax, kLen, yMaxRect );
-				}
-				break;
-			case 18:
-				{
-					const Rect& r = o.StageBounds();
-					lua_pushinteger( L, Rtt_RealToInt( r.xMax - r.xMin ) );
-				}
-				break;
-			case 19:
-				{
-					const Rect& r = o.StageBounds();
-					lua_pushinteger( L, Rtt_RealToInt( r.yMax - r.yMin ) );
-				}
-				break;
-			case 8:
-				{
-					lua_pushboolean( L, o.IsVisible() );
-				}
-				break;
-			case 9:
-				{
-					lua_pushboolean( L, o.IsHitTestable() );
-				}
-				break;
-			case 10:
-				{
-					lua_Number alpha = (float)o.Alpha() / 255.0;
-					lua_pushnumber( L, alpha );
-				}
-				break;
-			case 11:
-				{
-					const StageObject *stage = o.GetStage();
+                    setProperty( L, xMin, kLen, xMinRect );
+                    setProperty( L, yMin, kLen, yMinRect );
+                    setProperty( L, xMax, kLen, xMaxRect );
+                    setProperty( L, yMax, kLen, yMaxRect );
+                }
+                break;
+            case 18:
+                {
+                    const Rect& r = o.StageBounds();
+                    lua_pushinteger( L, Rtt_RealToInt( r.xMax - r.xMin ) );
+                }
+                break;
+            case 19:
+                {
+                    const Rect& r = o.StageBounds();
+                    lua_pushinteger( L, Rtt_RealToInt( r.yMax - r.yMin ) );
+                }
+                break;
+            case 8:
+                {
+                    lua_pushboolean( L, o.IsVisible() );
+                }
+                break;
+            case 9:
+                {
+                    lua_pushboolean( L, o.IsHitTestable() );
+                }
+                break;
+            case 10:
+                {
+                    lua_Number alpha = (float)o.Alpha() / 255.0;
+                    lua_pushnumber( L, alpha );
+                }
+                break;
+            case 11:
+                {
+                    const StageObject *stage = o.GetStage();
 
-					// Only onscreen objects have a parent
-					if ( stage
-						 && ( stage->IsOnscreen() || stage->IsRenderedOffScreen() ) )
-					{
-						GroupObject* parent = o.GetParent();
-						if ( parent )
-						{
-							parent->GetProxy()->PushTable( L );
-						}
-						else
-						{
-							// Stage objects and objects rendered offscreen have no parent,
-							// so push nil
-							Rtt_ASSERT( o.IsRenderedOffScreen() || o.GetStage() == & o );
-							lua_pushnil( L );
-						}
-					}
-					else
-					{
-						// Objects that have been removed effectively have no parent,
-						// so push nil. Do NOT push the offscreen parent.
-						lua_pushnil( L );
-					}
-				}
-				break;
-			case 12:
-				{
-					const StageObject* stage = o.GetStage();
-					if ( stage && stage->IsOnscreen() )
-					{
-						stage->GetProxy()->PushTable( L );
-					}
-					else
-					{
-						lua_pushnil( L );
-					}
-				}
-				break;
-			case 13:
-				{
-					lua_pushnumber( L, o.GetGeometricProperty( kOriginX ) );
-				}
-				break;
-			case 14:
-				{
-					lua_pushnumber( L, o.GetGeometricProperty( kOriginY ) );
-				}
-				break;
-			case 15:
-				{
-					Real anchorX = o.GetAnchorX();
-					lua_pushnumber( L, anchorX );
-				}
-				break;
-			case 16:
-				{
-					Real anchorY = o.GetAnchorY();
-					lua_pushnumber( L, anchorY );
-				}
-				break;
-			case 23:
-				{
-					Rtt_Real value = o.GetMaskGeometricProperty( kOriginX );
-					lua_pushnumber( L, value );
-				}
-				break;
-			case 24:
-				{
-					Rtt_Real value = o.GetMaskGeometricProperty( kOriginY );
-					lua_pushnumber( L, value );
-				}
-				break;
-			case 25:
-				{
-					Rtt_Real value = o.GetMaskGeometricProperty( kScaleX );
-					lua_pushnumber( L, value );
-				}
-				break;
-			case 26:
-				{
-					Rtt_Real value = o.GetMaskGeometricProperty( kScaleY );
-					lua_pushnumber( L, value );
-				}
-				break;
-			case 27:
-				{
-					Rtt_Real value = o.GetMaskGeometricProperty( kRotation );
-					lua_pushnumber( L, value );
-				}
-				break;
+                    // Only onscreen objects have a parent
+                    if ( stage
+                         && ( stage->IsOnscreen() || stage->IsRenderedOffScreen() ) )
+                    {
+                        GroupObject* parent = o.GetParent();
+                        if ( parent )
+                        {
+                            parent->GetProxy()->PushTable( L );
+                        }
+                        else
+                        {
+                            // Stage objects and objects rendered offscreen have no parent,
+                            // so push nil
+                            Rtt_ASSERT( o.IsRenderedOffScreen() || o.GetStage() == & o );
+                            lua_pushnil( L );
+                        }
+                    }
+                    else
+                    {
+                        // Objects that have been removed effectively have no parent,
+                        // so push nil. Do NOT push the offscreen parent.
+                        lua_pushnil( L );
+                    }
+                }
+                break;
+            case 12:
+                {
+                    const StageObject* stage = o.GetStage();
+                    if ( stage && stage->IsOnscreen() )
+                    {
+                        stage->GetProxy()->PushTable( L );
+                    }
+                    else
+                    {
+                        lua_pushnil( L );
+                    }
+                }
+                break;
+            case 13:
+                {
+                    lua_pushnumber( L, o.GetGeometricProperty( kOriginX ) );
+                }
+                break;
+            case 14:
+                {
+                    lua_pushnumber( L, o.GetGeometricProperty( kOriginY ) );
+                }
+                break;
+            case 15:
+                {
+                    Real anchorX = o.GetAnchorX();
+                    lua_pushnumber( L, anchorX );
+                }
+                break;
+            case 16:
+                {
+                    Real anchorY = o.GetAnchorY();
+                    lua_pushnumber( L, anchorY );
+                }
+                break;
+            case 23:
+                {
+                    Rtt_Real value = o.GetMaskGeometricProperty( kOriginX );
+                    lua_pushnumber( L, value );
+                }
+                break;
+            case 24:
+                {
+                    Rtt_Real value = o.GetMaskGeometricProperty( kOriginY );
+                    lua_pushnumber( L, value );
+                }
+                break;
+            case 25:
+                {
+                    Rtt_Real value = o.GetMaskGeometricProperty( kScaleX );
+                    lua_pushnumber( L, value );
+                }
+                break;
+            case 26:
+                {
+                    Rtt_Real value = o.GetMaskGeometricProperty( kScaleY );
+                    lua_pushnumber( L, value );
+                }
+                break;
+            case 27:
+                {
+                    Rtt_Real value = o.GetMaskGeometricProperty( kRotation );
+                    lua_pushnumber( L, value );
+                }
+                break;
             case 28:
                 {
                     lua_pushboolean( L, o.IsHitTestMasked() );
@@ -784,28 +784,28 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
 
     bool result = true;
 
-	static const char * keys[] =
-	{
-		"isVisible",			// 0
-		"isHitTestable",		// 1
-		"alpha",				// 2
-		"parent",				// 3
-		"stage",				// 4
-		"x",					// 5
-		"y",					// 6
-		"anchorX",				// 7
-		"anchorY",				// 8
-		"contentBounds",		// 9
-		"maskX",				// 10
-		"maskY",				// 11
-		"maskScaleX",			// 12
-		"maskScaleY",			// 13
-		"maskRotation",         // 14
-		"isHitTestMasked",		// 15
-	};
+    static const char * keys[] =
+    {
+        "isVisible",            // 0
+        "isHitTestable",        // 1
+        "alpha",                // 2
+        "parent",                // 3
+        "stage",                // 4
+        "x",                    // 5
+        "y",                    // 6
+        "anchorX",                // 7
+        "anchorY",                // 8
+        "contentBounds",        // 9
+        "maskX",                // 10
+        "maskY",                // 11
+        "maskScaleX",            // 12
+        "maskScaleY",            // 13
+        "maskRotation",         // 14
+        "isHitTestMasked",        // 15
+    };
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 16, 20, 6, __FILE__, __LINE__ );
-	StringHash *hash = &sHash;
+    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 16, 20, 6, __FILE__, __LINE__ );
+    StringHash *hash = &sHash;
 
     int index = hash->Lookup( key );
     switch ( index )
@@ -833,120 +833,120 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
             lua_Integer value = Min( (lua_Integer)255, alpha );
             U8 newValue = Max( (lua_Integer)0, value );
 
-			o.SetAlpha( newValue );
-		}
-		break;
-	case 3:
-		{
-			// No-op for read-only property
-		}
-		break;
-	case 4:
-		{
-			// No-op for read-only property
-		}
-		break;
-	case 5:
-		{
-			o.SetGeometricProperty( kOriginX, luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case 6:
-		{
-			o.SetGeometricProperty( kOriginY, luaL_toreal( L, valueIndex ) );
-		}
-		break;
-	case 7:
-		{
-			if ( lua_type( L, valueIndex ) == LUA_TNUMBER )
-			{
-				Real newValue = luaL_toreal( L, valueIndex );
-				if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
-				{
-					newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
-				}
-				o.SetAnchorX( newValue );
-			}
-			else
-			{
-				luaL_error( L, "ERROR: o.anchorX can only be set to a number.\n" );
-			}
-			
-		}
-		break;
-	case 8:
-		{
-			if ( lua_type( L, valueIndex) == LUA_TNUMBER )
-			{
-				Real newValue = luaL_toreal( L, valueIndex );
-				if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
-				{
-					newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
-				}
-				o.SetAnchorY( newValue );
-			}
-			else
-			{
-				luaL_error( L, "ERROR: o.anchorY can only be set to a number.\n" );
-			}
-			
-		}
-		break;
-	case 9:
-		{
-			// No-op for read-only keys
-		}
-		break;
-	case 10:
-		{
-			Real newValue = luaL_toreal( L, valueIndex );
-			o.SetMaskGeometricProperty( kOriginX, newValue );
-		}
-		break;
-	case 11:
-		{
-			Real newValue = luaL_toreal( L, valueIndex );
-			o.SetMaskGeometricProperty( kOriginY, newValue );
-		}
-		break;
-	case 12:
-		{
-			Real newValue = luaL_toreal( L, valueIndex );
-			o.SetMaskGeometricProperty( kScaleX, newValue );
-		}
-		break;
-	case 13:
-		{
-			Real newValue = luaL_toreal( L, valueIndex );
-			o.SetMaskGeometricProperty( kScaleY, newValue );
-		}
-		break;
-	case 14:
-		{
-			Real newValue = luaL_toreal( L, valueIndex );
-			o.SetMaskGeometricProperty( kRotation, newValue );
-		}
-		break;
-	case 15:
-		{
-			o.SetHitTestMasked( lua_toboolean( L, valueIndex ) != 0 );
-		}
-		break;
-	default:
-		{
-			GeometricProperty p = DisplayObject::PropertyForKey( LuaContext::GetAllocator( L ), key );
-			if ( p < kNumGeometricProperties )
-			{
-				Real newValue = luaL_toreal( L, valueIndex );
-				o.SetGeometricProperty( p, newValue );
-			}
-			else if ( ! lua_isnumber( L, 2 ) )
-			{
-				result = false;
-			}
-		}
-		break;
-	}
+            o.SetAlpha( newValue );
+        }
+        break;
+    case 3:
+        {
+            // No-op for read-only property
+        }
+        break;
+    case 4:
+        {
+            // No-op for read-only property
+        }
+        break;
+    case 5:
+        {
+            o.SetGeometricProperty( kOriginX, luaL_toreal( L, valueIndex ) );
+        }
+        break;
+    case 6:
+        {
+            o.SetGeometricProperty( kOriginY, luaL_toreal( L, valueIndex ) );
+        }
+        break;
+    case 7:
+        {
+            if ( lua_type( L, valueIndex ) == LUA_TNUMBER )
+            {
+                Real newValue = luaL_toreal( L, valueIndex );
+                if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
+                {
+                    newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
+                }
+                o.SetAnchorX( newValue );
+            }
+            else
+            {
+                luaL_error( L, "ERROR: o.anchorX can only be set to a number.\n" );
+            }
+            
+        }
+        break;
+    case 8:
+        {
+            if ( lua_type( L, valueIndex) == LUA_TNUMBER )
+            {
+                Real newValue = luaL_toreal( L, valueIndex );
+                if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
+                {
+                    newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
+                }
+                o.SetAnchorY( newValue );
+            }
+            else
+            {
+                luaL_error( L, "ERROR: o.anchorY can only be set to a number.\n" );
+            }
+            
+        }
+        break;
+    case 9:
+        {
+            // No-op for read-only keys
+        }
+        break;
+    case 10:
+        {
+            Real newValue = luaL_toreal( L, valueIndex );
+            o.SetMaskGeometricProperty( kOriginX, newValue );
+        }
+        break;
+    case 11:
+        {
+            Real newValue = luaL_toreal( L, valueIndex );
+            o.SetMaskGeometricProperty( kOriginY, newValue );
+        }
+        break;
+    case 12:
+        {
+            Real newValue = luaL_toreal( L, valueIndex );
+            o.SetMaskGeometricProperty( kScaleX, newValue );
+        }
+        break;
+    case 13:
+        {
+            Real newValue = luaL_toreal( L, valueIndex );
+            o.SetMaskGeometricProperty( kScaleY, newValue );
+        }
+        break;
+    case 14:
+        {
+            Real newValue = luaL_toreal( L, valueIndex );
+            o.SetMaskGeometricProperty( kRotation, newValue );
+        }
+        break;
+    case 15:
+        {
+            o.SetHitTestMasked( lua_toboolean( L, valueIndex ) != 0 );
+        }
+        break;
+    default:
+        {
+            GeometricProperty p = DisplayObject::PropertyForKey( LuaContext::GetAllocator( L ), key );
+            if ( p < kNumGeometricProperties )
+            {
+                Real newValue = luaL_toreal( L, valueIndex );
+                o.SetGeometricProperty( p, newValue );
+            }
+            else if ( ! lua_isnumber( L, 2 ) )
+            {
+                result = false;
+            }
+        }
+        break;
+    }
 
     // We changed a property so record where we are so that "_lastChange" will be available later to say where it happened
     // (this is a noop on non-debug builds because lua_where returns an empty string)
@@ -973,6 +973,35 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
 }
 
 // ----------------------------------------------------------------------------
+
+bool
+ClosedPath::ExtensionAdapter::IsFillPaint( const DisplayObject* object, const Paint* paint )
+{
+    return static_cast< const ShapeObject* >( object )->GetPath().GetFill() == paint;
+}
+
+Geometry*
+ClosedPath::ExtensionAdapter::GetGeometry( DisplayObject* object )
+{
+    ClosedPath& path = static_cast< ShapeObject* >( object )->GetPath();
+    ShapePath& shapePath = static_cast< ShapePath& >( path );
+    return shapePath.GetFillGeometry();
+}
+
+const Geometry *
+ClosedPath::ExtensionAdapter::GetGeometry( const DisplayObject* object )
+{
+    const ClosedPath& path = static_cast< const ShapeObject* >( object )->GetPath();
+    const ShapePath& shapePath = static_cast< const ShapePath& >( path );
+    return shapePath.GetFillGeometry();
+}
+
+static const ClosedPath::ExtensionAdapter&
+ExtensionAdapterFillConstant()
+{
+    static const ClosedPath::ExtensionAdapter kAdapter;
+    return kAdapter;
+}
 
 const LuaShapeObjectProxyVTable&
 LuaShapeObjectProxyVTable::Constant()
@@ -1002,17 +1031,17 @@ LuaShapeObjectProxyVTable::setFillColor( lua_State *L )
             }
         }
 
-		if ( ! o->GetPath().GetFill() )
-		{
-			Paint* p = LuaLibDisplay::LuaNewColor( L, 2 );
-			o->SetFill( p );
-		}
-		else
-		{
-			Color c = LuaLibDisplay::toColor( L, 2 );
-			o->SetFillColor( c );
-		}
-	}
+        if ( ! o->GetPath().GetFill() )
+        {
+            Paint* p = LuaLibDisplay::LuaNewColor( L, 2 );
+            o->SetFill( p );
+        }
+        else
+        {
+            Color c = LuaLibDisplay::toColor( L, 2 );
+            o->SetFillColor( c );
+        }
+    }
 
     return 0;
 }
@@ -1025,74 +1054,97 @@ LuaShapeObjectProxyVTable::setFill( lua_State *L, int valueIndex )
 
     Rtt_WARN_SIM_PROXY_TYPE( L, 1, ShapeObject );
 
-	if ( Rtt_VERIFY( o ) )
-	{
-		Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
-		o->SetFill( paint );
-	}
-	return 0;
+    if ( Rtt_VERIFY( o ) )
+    {
+        Paint *paint = LuaLibDisplay::LuaNewPaint( L, valueIndex );
+        o->SetFill( paint );
+    }
+    return 0;
 }
 
 int
 LuaShapeObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
-	if ( ! key ) { return 0; }
-	
-	int result = 1;
+    if ( ! key ) { return 0; }
+    
+    int result = 1;
 
-	static const char * keys[] =
-	{
-		"path",				// 0
-		"fill",				// 1
-		"blendMode",		// 2
-		"setFillColor",		// 3
-	};
+    static const char * keys[] =
+    {
+        "path",                // 0
+        "fill",                // 1
+        "blendMode",           // 2
+        "setFillColor",        // 3
+        // "fillExtendedData",    // 4
+    };
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 4, 1, 1, __FILE__, __LINE__ );
-	StringHash *hash = &sHash;
-	int index = hash->Lookup( key );
+    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 4, 1, 1, __FILE__, __LINE__ );
+    StringHash *hash = &sHash;
+    int index = hash->Lookup( key );
 
     // ShapeObject* o = (ShapeObject*)LuaProxy::GetProxyableObject( L, 1 );
     const ShapeObject& o = static_cast< const ShapeObject& >( object );
     Rtt_WARN_SIM_PROXY_TYPE( L, 1, ShapeObject );
 
-	switch ( index )
-	{
-	case 0:
-		{
+    switch ( index )
+    {
+    case 0:
+        {
             o.GetPath().PushProxy( L );
-		}
-		break;
-	case 1:
-		{
-			const Paint *paint = o.GetPath().GetFill();
-			if ( paint )
-			{
-				paint->PushProxy( L );
-			}
+        }
+        break;
+    case 1:
+        {
+            const Paint *paint = o.GetPath().GetFill();
+            if ( paint )
+            {
+                paint->PushProxy( L );
+            }
             else
             {
                 lua_pushnil( L );
             }
-		}
-		break;
-	case 2:
-		{
-			RenderTypes::BlendType blend = o.GetBlend();
-			lua_pushstring( L, RenderTypes::StringForBlendType( blend ) );
-		}
-		break;
-	case 3:
-		{
-			Lua::PushCachedFunction( L, Self::setFillColor );
-		}
-		break;
-	default:
-		{
+        }
+        break;
+    case 2:
+        {
+            RenderTypes::BlendType blend = o.GetBlend();
+            lua_pushstring( L, RenderTypes::StringForBlendType( blend ) );
+        }
+        break;
+    case 3:
+        {
+            Lua::PushCachedFunction( L, Self::setFillColor );
+        }
+        break;
+    case 4:
+        {
+            const ShapePath& path = static_cast< const ShapePath& >( o.GetPath() );
+            Geometry* geometry = path.GetFillGeometry();
+            Geometry::ExtensionBlock* block = geometry->GetExtensionBlock();
+                   
+            if ( block )
+            {
+                if (!block->fProxy)
+                {
+                    block->fProxy = LuaUserdataProxy::New( L, const_cast< ShapeObject* >( &o ) );
+                    block->fProxy->SetAdapter( &ExtensionAdapterFillConstant() );
+                }
+            
+                block->fProxy->Push( L );
+            }
+            else
+            {
+                lua_pushnil( L );
+            }
+        }
+        break;
+    default:
+        {
              result = Super::ValueForKey( L, object, key );
-		}
-		break;
-	}
+        }
+        break;
+    }
 
     // Because this is effectively a derived class, we will have successfully gotten a value
     // for the "_properties" key from the parent and we now need to combine that with the
@@ -1135,36 +1187,67 @@ LuaShapeObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, 
 
     bool result = true;
 
-	static const char * keys[] = 
-	{
-		"fill",				// 0
-		"blendMode",		// 1
-	};
+    static const char * keys[] = 
+    {
+        "fill",             // 0
+        "blendMode",        // 1
+        // "fillExtension"     // 2
+    };
     const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 2, 1, 1, __FILE__, __LINE__ );
-	StringHash *hash = &sHash;
+    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 2, 1, 1, __FILE__, __LINE__ );
+    StringHash *hash = &sHash;
 
-	int index = hash->Lookup( key );
-	switch ( index )
-	{
-	case 0:
-		{
-			setFill( L, valueIndex );
-		}
-		break;
-	case 1:
-		{
-			const char *v = lua_tostring( L, valueIndex );
-			RenderTypes::BlendType blend = RenderTypes::BlendTypeForString( v );
-			o.SetBlend( blend );
-		}
-		break;
-	default:
-		{
-			result = Super::SetValueForKey( L, object, key, valueIndex );
-		}
-		break;
-	}
+    int index = hash->Lookup( key );
+    switch ( index )
+    {
+    case 0:
+        {
+            setFill( L, valueIndex );
+        }
+        break;
+    case 1:
+        {
+            const char *v = lua_tostring( L, valueIndex );
+            RenderTypes::BlendType blend = RenderTypes::BlendTypeForString( v );
+            o.SetBlend( blend );
+        }
+        break;
+    case 2:
+        {
+            ShapePath& path = static_cast< ShapePath& >( o.GetPath() );
+            Geometry* geometry = path.GetFillGeometry();
+            const char* name = lua_tostring( L, valueIndex );
+            SharedPtr<FormatExtensionList>* extensionList = LuaContext::GetRuntime( L )->GetDisplay().GetShaderFactory().GetExtensionList( name );
+            
+            if (extensionList)
+            {
+                if (!geometry->GetExtensionList())
+                {
+                    Geometry::ExtensionBlock* block = geometry->EnsureExtension();
+                    
+                    block->SetExtensionList( *extensionList );
+                    block->UpdateData( geometry->GetStoredOnGPU(), 1 ); // TODO, return GetFillVertexCount when we want to use this?
+                    path.GetObserver()->Invalidate( DisplayObject::kGeometryFlag );
+                }
+                
+                else
+                {
+                    CoronaLuaWarning( L, "Shape object already has a %s extension.\n", "fill" );
+                }
+            }
+            
+            else
+            {
+                CoronaLuaWarning( L, "Unable to find attribute `%s`", name );
+            }
+        }
+        break;
+    default:
+        {
+            result = Super::SetValueForKey( L, object, key, valueIndex );
+        }
+        break;
+    }
 
     return result;
 }
@@ -1243,53 +1326,53 @@ LuaSnapshotObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& ob
         {
             o.GetGroup().GetProxy()->PushTable( L );
             result = 1;
-		}
-		break;
-	case 1:
-		{
-			Lua::PushCachedFunction( L, Self::Invalidate );
-		}
-		break;
-	case 2:
-		{
-			const char *str = RenderTypes::StringForTextureFilter( o.GetTextureFilter() );
-			lua_pushstring( L, str );
- 		}
-		break;
-	case 3:
-		{
-			const char *str = RenderTypes::StringForTextureWrap( o.GetTextureWrapX() );
-			lua_pushstring( L, str );
-		}
-		break;
-	case 4:
-		{
-			const char *str = RenderTypes::StringForTextureWrap( o.GetTextureWrapY() );
-			lua_pushstring( L, str );
-		}
-		break;
-	case 5:
-		{
-			result = LuaLibDisplay::PushColorChannels( L, o.GetClearColor() );
-		}
-		break;
-	case 6:
-		{
-			o.GetCanvas().GetProxy()->PushTable( L );
-		}
-		break;
-	case 7:
-		{
-			const char *str = SnapshotObject::StringForCanvasMode( o.GetCanvasMode() );
-			lua_pushstring( L, str );
-		}
-		break;
-	default:
-		{
-			result = Super::ValueForKey( L, object, key );
-		}
-		break;
-	}
+        }
+        break;
+    case 1:
+        {
+            Lua::PushCachedFunction( L, Self::Invalidate );
+        }
+        break;
+    case 2:
+        {
+            const char *str = RenderTypes::StringForTextureFilter( o.GetTextureFilter() );
+            lua_pushstring( L, str );
+         }
+        break;
+    case 3:
+        {
+            const char *str = RenderTypes::StringForTextureWrap( o.GetTextureWrapX() );
+            lua_pushstring( L, str );
+        }
+        break;
+    case 4:
+        {
+            const char *str = RenderTypes::StringForTextureWrap( o.GetTextureWrapY() );
+            lua_pushstring( L, str );
+        }
+        break;
+    case 5:
+        {
+            result = LuaLibDisplay::PushColorChannels( L, o.GetClearColor() );
+        }
+        break;
+    case 6:
+        {
+            o.GetCanvas().GetProxy()->PushTable( L );
+        }
+        break;
+    case 7:
+        {
+            const char *str = SnapshotObject::StringForCanvasMode( o.GetCanvasMode() );
+            lua_pushstring( L, str );
+        }
+        break;
+    default:
+        {
+            result = Super::ValueForKey( L, object, key );
+        }
+        break;
+    }
 
     // Because this is effectively a derived class, we will have successfully gotten a value
     // for the "_properties" key from the parent and we now need to combine that with the
@@ -1324,53 +1407,53 @@ LuaSnapshotObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& objec
 
     int index = sHash->Lookup( key );
 
-	switch ( index )
-	{
-	case 0:
-	case 1:
-	case 6:
-		{
-			// No-op for read-only property
-			CoronaLuaWarning(L, "the '%s' property of snapshot objects is read-only", key);
-		}
-		break;
-	case 2:
-		{
-			const char *str = lua_tostring( L, valueIndex );
-			o.SetTextureFilter( RenderTypes::TextureFilterForString( str ) );
-		}
-		break;
-	case 3:
-		{
-			const char *str = lua_tostring( L, valueIndex );
-			o.SetTextureWrapX( RenderTypes::TextureWrapForString( str ) );
-		}
-		break;
-	case 4:
-		{
-			const char *str = lua_tostring( L, valueIndex );
-			o.SetTextureWrapY( RenderTypes::TextureWrapForString( str ) );
-		}
-		break;
-	case 5:
-		{
-			Color c = ColorZero();
-			LuaLibDisplay::ArrayToColor( L, valueIndex, c );
-			o.SetClearColor( c );
-		}
-		break;
-	case 7:
-		{
-			const char *str = lua_tostring( L, valueIndex );
-			o.SetCanvasMode( SnapshotObject::CanvasModeForString( str ) );
-		}
-		break;
-	default:
-		{
-			result = Super::SetValueForKey( L, object, key, valueIndex );
-		}
-		break;
-	}
+    switch ( index )
+    {
+    case 0:
+    case 1:
+    case 6:
+        {
+            // No-op for read-only property
+            CoronaLuaWarning(L, "the '%s' property of snapshot objects is read-only", key);
+        }
+        break;
+    case 2:
+        {
+            const char *str = lua_tostring( L, valueIndex );
+            o.SetTextureFilter( RenderTypes::TextureFilterForString( str ) );
+        }
+        break;
+    case 3:
+        {
+            const char *str = lua_tostring( L, valueIndex );
+            o.SetTextureWrapX( RenderTypes::TextureWrapForString( str ) );
+        }
+        break;
+    case 4:
+        {
+            const char *str = lua_tostring( L, valueIndex );
+            o.SetTextureWrapY( RenderTypes::TextureWrapForString( str ) );
+        }
+        break;
+    case 5:
+        {
+            Color c = ColorZero();
+            LuaLibDisplay::ArrayToColor( L, valueIndex, c );
+            o.SetClearColor( c );
+        }
+        break;
+    case 7:
+        {
+            const char *str = lua_tostring( L, valueIndex );
+            o.SetCanvasMode( SnapshotObject::CanvasModeForString( str ) );
+        }
+        break;
+    default:
+        {
+            result = Super::SetValueForKey( L, object, key, valueIndex );
+        }
+        break;
+    }
 
     return result;
 }
@@ -1395,7 +1478,7 @@ LuaGroupObjectProxyVTable::Insert( lua_State *L, GroupObject *parent )
 {
     int index = (int) lua_tointeger( L, 2 );
 
-	ENABLE_SUMMED_TIMING( true );
+    ENABLE_SUMMED_TIMING( true );
 
     int childIndex = 3; // index of child object (table owned by proxy)
     if ( 0 == index )
@@ -1429,11 +1512,11 @@ LuaGroupObjectProxyVTable::Insert( lua_State *L, GroupObject *parent )
                 CoronaLuaWarning(L, "group index %d out of range (should be 1 to %d)", (index+1), maxIndex );
             }
             
-			SUMMED_TIMING( pi, "Group: Insert (into parent)" );
-			
+            SUMMED_TIMING( pi, "Group: Insert (into parent)" );
+            
             parent->Insert( index, child, resetTransform );
 
-			SUMMED_TIMING( ai, "Group: Insert (post-parent insert)" );
+            SUMMED_TIMING( ai, "Group: Insert (post-parent insert)" );
 
             // Detect re-insertion of a child back onto the display --- when a
             // child is placed into a new parent that has a canvas and the oldParent
@@ -1461,7 +1544,7 @@ LuaGroupObjectProxyVTable::Insert( lua_State *L, GroupObject *parent )
         luaL_error( L, "ERROR: attempt to insert display object into itself" );
     }
 
-	ENABLE_SUMMED_TIMING( false );
+    ENABLE_SUMMED_TIMING( false );
 
     return 0;
 }
@@ -1483,20 +1566,20 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
     {
         Rtt_ASSERT( parent );
 
-		// Offscreen objects (i.e. ones in the orphanage) do have a stage
-		StageObject *stage = parent->GetStage();
-		if ( stage )
-		{
-			Rtt_ASSERT( LuaContext::GetRuntime( L )->GetDisplay().HitTestOrphanage() != parent
-						&& LuaContext::GetRuntime( L )->GetDisplay().Orphanage() != parent );
+        // Offscreen objects (i.e. ones in the orphanage) do have a stage
+        StageObject *stage = parent->GetStage();
+        if ( stage )
+        {
+            Rtt_ASSERT( LuaContext::GetRuntime( L )->GetDisplay().HitTestOrphanage() != parent
+                        && LuaContext::GetRuntime( L )->GetDisplay().Orphanage() != parent );
 
-			SUMMED_TIMING( par1, "Object: PushAndRemove (release)" );
+            SUMMED_TIMING( par1, "Object: PushAndRemove (release)" );
 
             DisplayObject* child = parent->Release( index );
 
             if (child != NULL)
             {
-				SUMMED_TIMING( par2, "Object: PushAndRemove (rest)" );
+                SUMMED_TIMING( par2, "Object: PushAndRemove (rest)" );
 
                 // If child is the same as global focus, clear global focus
                 DisplayObject *globalFocus = stage->GetFocus();
@@ -1525,24 +1608,24 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
                 Display& display = LuaContext::GetRuntime( L )->GetDisplay();
 
 
-				// NOTE: Snapshot renamed to HitTest orphanage to clarify usage
-				// TODO: Remove snapshot orphanage --- or verify that we still need it?
-				// Note on the snapshot orphanage. We use this list to determine
-				// which proxy table refs need to be released the table ref once
-				// we're done with the snapshot. If the object is reinserted in
-				// LuaGroupObjectProxyVTable::Insert(), then it is implicitly
-				// removed from the snapshot orphanage --- thus, in that method,
-				// nothing special needs to be done, b/c the proxy table wasn't
-				// released yet.
-				GroupObject& offscreenGroup =
-				* ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
-				offscreenGroup.Insert( -1, child, false );
-				child->DidMoveOffscreen();
-			}
-		}
-		else
-		{
-			luaL_error( L, "ERROR: attempt to remove an object that's already been removed from the stage or whose parent/ancestor group has already been removed" );
+                // NOTE: Snapshot renamed to HitTest orphanage to clarify usage
+                // TODO: Remove snapshot orphanage --- or verify that we still need it?
+                // Note on the snapshot orphanage. We use this list to determine
+                // which proxy table refs need to be released the table ref once
+                // we're done with the snapshot. If the object is reinserted in
+                // LuaGroupObjectProxyVTable::Insert(), then it is implicitly
+                // removed from the snapshot orphanage --- thus, in that method,
+                // nothing special needs to be done, b/c the proxy table wasn't
+                // released yet.
+                GroupObject& offscreenGroup =
+                * ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
+                offscreenGroup.Insert( -1, child, false );
+                child->DidMoveOffscreen();
+            }
+        }
+        else
+        {
+            luaL_error( L, "ERROR: attempt to remove an object that's already been removed from the stage or whose parent/ancestor group has already been removed" );
 
             // Rtt_ASSERT( LuaContext::GetRuntime( L )->GetDisplay().HitTestOrphanage() == parent
             //             || LuaContext::GetRuntime( L )->GetDisplay().Orphanage() == parent );
@@ -1632,48 +1715,48 @@ LuaGroupObjectProxyVTable::PushMethod( lua_State *L, const GroupObject& o, const
 {
     int result = 1;
 
-	static const char * keys[] =
-	{
-		"insert",			// 0
-		"remove",			// 1
-		"numChildren",		// 2
-		"anchorChildren",	// 3
-	};
+    static const char * keys[] =
+    {
+        "insert",            // 0
+        "remove",            // 1
+        "numChildren",        // 2
+        "anchorChildren",    // 3
+    };
     static const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 4, 2, 1, __FILE__, __LINE__ );
-	StringHash *hash = &sHash;
+    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 4, 2, 1, __FILE__, __LINE__ );
+    StringHash *hash = &sHash;
 
-	int index = hash->Lookup( key );
-	switch ( index )
-	{
-	case 0:
-		{
-			Lua::PushCachedFunction( L, Self::insert );
-			result = 1;
-		}
-		break;
-	case 1:
-		{
-			Lua::PushCachedFunction( L, Self::Remove );
-			result = 1;
-		}
-		break;
-	case 2:
-		{
-			// GroupObject* o = (GroupObject*)LuaProxy::GetProxyableObject( L, 1 );
-			lua_pushinteger( L, o.NumChildren() );
-			result = 1;
-		}
-		break;
-	case 3:
-		{
-			lua_pushboolean( L, o.IsAnchorChildren() );
-			result = 1;
-		}
-		break;
+    int index = hash->Lookup( key );
+    switch ( index )
+    {
+    case 0:
+        {
+            Lua::PushCachedFunction( L, Self::insert );
+            result = 1;
+        }
+        break;
+    case 1:
+        {
+            Lua::PushCachedFunction( L, Self::Remove );
+            result = 1;
+        }
+        break;
+    case 2:
+        {
+            // GroupObject* o = (GroupObject*)LuaProxy::GetProxyableObject( L, 1 );
+            lua_pushinteger( L, o.NumChildren() );
+            result = 1;
+        }
+        break;
+    case 3:
+        {
+            lua_pushboolean( L, o.IsAnchorChildren() );
+            result = 1;
+        }
+        break;
 
-	default:
-		{
+    default:
+        {
             result = 0;
         }
         break;
@@ -1712,11 +1795,11 @@ LuaGroupObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& objec
     {
         result = PushMethod( L, o, key );
 
-		if ( 0 == result )
-		{
-			result = Super::ValueForKey( L, object, key );
-		}
-	}
+        if ( 0 == result )
+        {
+            result = Super::ValueForKey( L, object, key );
+        }
+    }
 
     return result;
 }
@@ -1730,15 +1813,15 @@ LuaGroupObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object, 
 
     Rtt_WARN_SIM_PROXY_TYPE( L, 1, GroupObject );
 
-	if ( 0 == strcmp( key, "anchorChildren" ) )
-	{
-		GroupObject& o = static_cast< GroupObject& >( object );
-		o.SetAnchorChildren( !! lua_toboolean( L, valueIndex ) );
-	}
-	else
-	{
-		result = Super::SetValueForKey( L, object, key, valueIndex );
-	}
+    if ( 0 == strcmp( key, "anchorChildren" ) )
+    {
+        GroupObject& o = static_cast< GroupObject& >( object );
+        o.SetAnchorChildren( !! lua_toboolean( L, valueIndex ) );
+    }
+    else
+    {
+        result = Super::SetValueForKey( L, object, key, valueIndex );
+    }
 
     return result;
 }
@@ -1874,13 +1957,13 @@ LuaStageObjectProxyVTable::Parent() const
 int
 LuaPlatformDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
-	if ( ! key ) { return 0; }
+    if ( ! key ) { return 0; }
 
-	// PlatformDisplayObject* o = (PlatformDisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
-	const PlatformDisplayObject& o = static_cast< const PlatformDisplayObject& >( object );
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, PlatformDisplayObject );
+    // PlatformDisplayObject* o = (PlatformDisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
+    const PlatformDisplayObject& o = static_cast< const PlatformDisplayObject& >( object );
+    Rtt_WARN_SIM_PROXY_TYPE( L, 1, PlatformDisplayObject );
 
-	int result = o.ValueForKey( L, key ) || Super::ValueForKey( L, object, key );
+    int result = o.ValueForKey( L, key ) || Super::ValueForKey( L, object, key );
 
     if ( 0 == result )
     {
@@ -2014,15 +2097,15 @@ LuaSpriteObjectProxyVTable::pause( lua_State *L )
 int
 LuaSpriteObjectProxyVTable::setSequence( lua_State *L )
 {
-	SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
-	
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
-	
-	if ( o )
-	{
-		const char *name = lua_tostring( L, 2 );
-		o->SetSequence( name, true );
-	}
+    SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
+    
+    Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
+    
+    if ( o )
+    {
+        const char *name = lua_tostring( L, 2 );
+        o->SetSequence( name, true );
+    }
 
     return 0;
 }
@@ -2030,32 +2113,32 @@ LuaSpriteObjectProxyVTable::setSequence( lua_State *L )
 int
 LuaSpriteObjectProxyVTable::setSequenceAndPlay( lua_State *L )
 {
-	SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
-	
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
-	
-	if ( o )
-	{
-		const char *name = lua_tostring( L, 2 );
-		o->SetSequence( name, true );
-		o->Play( L );
-	}
+    SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
+    
+    Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
+    
+    if ( o )
+    {
+        const char *name = lua_tostring( L, 2 );
+        o->SetSequence( name, true );
+        o->Play( L );
+    }
 
-	return 0;
+    return 0;
 }
 
 int
 LuaSpriteObjectProxyVTable::setSequenceWithoutReset( lua_State *L )
 {
-	SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
-	
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
-	
-	if ( o )
-	{
-		const char *name = lua_tostring( L, 2 );
-		o->SetSequence( name, false );
-	}
+    SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
+    
+    Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
+    
+    if ( o )
+    {
+        const char *name = lua_tostring( L, 2 );
+        o->SetSequence( name, false );
+    }
 
     return 0;
 }
@@ -2063,135 +2146,135 @@ LuaSpriteObjectProxyVTable::setSequenceWithoutReset( lua_State *L )
 int
 LuaSpriteObjectProxyVTable::setFrame( lua_State *L )
 {
-	SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
-	
-	Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
-	
-	if ( o )
-	{
-		int effectiveFrameIndex = (int) lua_tointeger( L, 2 );
-		o->SetEffectiveFrame( effectiveFrameIndex - 1 ); // Lua is 1-based
-	}
+    SpriteObject *o = (SpriteObject*)LuaProxy::GetProxyableObject( L, 1 );
+    
+    Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
+    
+    if ( o )
+    {
+        int effectiveFrameIndex = (int) lua_tointeger( L, 2 );
+        o->SetEffectiveFrame( effectiveFrameIndex - 1 ); // Lua is 1-based
+    }
 
-	return 0;
+    return 0;
 }
 
 int
 LuaSpriteObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[] ) const
 {
-	if ( ! key ) { return 0; }
-	
-	int result = 1;
+    if ( ! key ) { return 0; }
+    
+    int result = 1;
 
-	static const char * keys[] =
-	{
-		// Read-write properties
-		"timeScale",			// 0
+    static const char * keys[] =
+    {
+        // Read-write properties
+        "timeScale",            // 0
 
-		// Read-only properties
-		"frame",		            // 1
-		"frameInSequence",			// 2
-		"frameInSheet",				// 3
-		"loopIndex",				// 4
-		"sequence",					// 5
-		"numFrames",				// 6
-		"isPlaying",				// 7
+        // Read-only properties
+        "frame",                    // 1
+        "frameInSequence",            // 2
+        "frameInSheet",                // 3
+        "loopIndex",                // 4
+        "sequence",                    // 5
+        "numFrames",                // 6
+        "isPlaying",                // 7
 
-		// Methods	
-		"play",						// 8
-		"pause",					// 9
-		"setSequence",				// 10
-		"setSequenceAndPlay",		// 11
-		"setSequenceWithoutReset",	// 12
-		"setFrame"					// 13
-	};
-	static const int numKeys = sizeof( keys ) / sizeof( const char * );
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 14, 18, 2, __FILE__, __LINE__ );
-	StringHash *hash = &sHash;
+        // Methods    
+        "play",                        // 8
+        "pause",                    // 9
+        "setSequence",                // 10
+        "setSequenceAndPlay",        // 11
+        "setSequenceWithoutReset",    // 12
+        "setFrame"                    // 13
+    };
+    static const int numKeys = sizeof( keys ) / sizeof( const char * );
+    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 14, 18, 2, __FILE__, __LINE__ );
+    StringHash *hash = &sHash;
 
     int index = hash->Lookup( key );
 
     const SpriteObject& o = static_cast< const SpriteObject& >( object );
     Rtt_WARN_SIM_PROXY_TYPE( L, 1, SpriteObject );
 
-	switch ( index )
-	{
-	case 0:
-		{
-			lua_pushnumber( L, Rtt_RealToFloat( o.GetTimeScale() ) );
-		}
-		break;
-	case 1:
-		{
-			lua_pushinteger( L, o.GetCurrentEffectiveFrameIndex() + 1 ); // Lua is 1-based
-		}
-		break;
-	case 2:
-		{
-			lua_pushinteger( L, o.GetCurrentFrameIndex() + 1 ); // Lua is 1-based
-		}
-		break;
-	case 3:
-		{
-			lua_pushinteger( L, o.GetCurrentSequence()->GetSheetFrameIndexForFrameIndex(o.GetCurrentFrameIndex()) + 1 ); // Lua is 1-based
-		}
-		break;
-	case 4:
-		{
-			lua_pushinteger( L, o.GetCurrentLoopIndex() );
-		}
-		break;
-	case 5:
-		{
-			lua_pushstring( L, o.GetCurrentSequence()->GetName() );
-		}
-		break;
-	case 6:
-		{
-			lua_pushinteger( L, o.GetCurrentSequence()->GetNumFrames() );
-		}
-		break;
-	case 7:
-		{
-			lua_pushboolean( L, o.IsPlaying() );
-		}
-		break;
-	case 8:
-		{
-			Lua::PushCachedFunction( L, Self::play );
-		}
-		break;
-	case 9:
-		{
-			Lua::PushCachedFunction( L, Self::pause );
-		}
-		break;
-	case 10:
-		{
-			Lua::PushCachedFunction( L, Self::setSequence );
-		}
-		break;
-	case 11:
-		{
-			Lua::PushCachedFunction( L, Self::setSequenceAndPlay );
-		}
-		break;
-	case 12:
-		{
-			Lua::PushCachedFunction( L, Self::setSequenceWithoutReset );
-		}
-		break;
-	case 13:
-		{
-			Lua::PushCachedFunction( L, Self::setFrame );
-		}
-		break;
-	default:
-		{
-			result = Super::ValueForKey( L, object, key );
-		}
-		break;
-	}
+    switch ( index )
+    {
+    case 0:
+        {
+            lua_pushnumber( L, Rtt_RealToFloat( o.GetTimeScale() ) );
+        }
+        break;
+    case 1:
+        {
+            lua_pushinteger( L, o.GetCurrentEffectiveFrameIndex() + 1 ); // Lua is 1-based
+        }
+        break;
+    case 2:
+        {
+            lua_pushinteger( L, o.GetCurrentFrameIndex() + 1 ); // Lua is 1-based
+        }
+        break;
+    case 3:
+        {
+            lua_pushinteger( L, o.GetCurrentSequence()->GetSheetFrameIndexForFrameIndex(o.GetCurrentFrameIndex()) + 1 ); // Lua is 1-based
+        }
+        break;
+    case 4:
+        {
+            lua_pushinteger( L, o.GetCurrentLoopIndex() );
+        }
+        break;
+    case 5:
+        {
+            lua_pushstring( L, o.GetCurrentSequence()->GetName() );
+        }
+        break;
+    case 6:
+        {
+            lua_pushinteger( L, o.GetCurrentSequence()->GetNumFrames() );
+        }
+        break;
+    case 7:
+        {
+            lua_pushboolean( L, o.IsPlaying() );
+        }
+        break;
+    case 8:
+        {
+            Lua::PushCachedFunction( L, Self::play );
+        }
+        break;
+    case 9:
+        {
+            Lua::PushCachedFunction( L, Self::pause );
+        }
+        break;
+    case 10:
+        {
+            Lua::PushCachedFunction( L, Self::setSequence );
+        }
+        break;
+    case 11:
+        {
+            Lua::PushCachedFunction( L, Self::setSequenceAndPlay );
+        }
+        break;
+    case 12:
+        {
+            Lua::PushCachedFunction( L, Self::setSequenceWithoutReset );
+        }
+        break;
+    case 13:
+        {
+            Lua::PushCachedFunction( L, Self::setFrame );
+        }
+        break;
+    default:
+        {
+            result = Super::ValueForKey( L, object, key );
+        }
+        break;
+    }
 
     // If we retrieved the "_properties" key from the super, merge it with the local properties
     if ( result == 1 && strcmp( key, "_properties" ) == 0 )

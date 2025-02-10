@@ -18,14 +18,14 @@
 #include "Core/Rtt_FileSystem.h"
 
 #if !defined( Rtt_NO_GUI )
-	#include "Rtt_RenderingStream.h"
-	#include "Rtt_LuaContext.h"
-	#include "Rtt_LuaLibSystem.h"
-	#include "Rtt_LuaResource.h"
-	#include "Rtt_Runtime.h"
+#include "Rtt_RenderingStream.h"
+#include "Rtt_LuaContext.h"
+#include "Rtt_LuaLibSystem.h"
+#include "Rtt_LuaResource.h"
+#include "Rtt_Runtime.h"
 
-	#include "Rtt_AppleBitmap.h"
-	#include "Rtt_AppleReachability.h"
+#include "Rtt_AppleBitmap.h"
+#include "Rtt_AppleReachability.h"
 #endif
 
 #include "Rtt_Lua.h"
@@ -40,41 +40,41 @@
 #include <string.h>
 
 #if !defined( Rtt_NO_GUI )
-	// This is a hack to hold on to symbols required for running plugins
-	// Because some plugins are dynamically linked, linker wouldn't know which symbols app uses
-	// and will strip this plugin interfaces as unused
+// This is a hack to hold on to symbols required for running plugins
+// Because some plugins are dynamically linked, linker wouldn't know which symbols app uses
+// and will strip this plugin interfaces as unused
 
-	#include "CoronaLuaObjCHelper.h"
-	#include "CoronaEvent.h"
-	#include "Corona/CoronaGraphics.h"
-    #include "Corona/CoronaObjects.h"
-	#include "Corona/CoronaMemory.h"
+#include "CoronaLuaObjCHelper.h"
+#include "CoronaEvent.h"
+#include "Corona/CoronaGraphics.h"
+#include "Corona/CoronaObjects.h"
+#include "Corona/CoronaMemory.h"
 
-	volatile void* fakeVariableToPreventSymbolStripping[] __attribute__((used)) = {
-		(void*)CoronaEventNameKey,
-		(void*)CoronaEventProviderKey,
-		(void*)CoronaEventPhaseKey,
-		(void*)CoronaEventTypeKey,
-		(void*)CoronaEventResponseKey,
-		(void*)CoronaEventIsErrorKey,
-		(void*)CoronaEventErrorCodeKey,
-		(void*)CoronaEventDataKey,
-		(void*)CoronaEventAdsRequestName,
-		(void*)CoronaEventPopupName,
-		
-		(void*)CoronaLuaCreateDictionary,
-		(void*)CoronaLuaPushValue,
-		
-		(void*)CoronaExternalPushTexture,
-		(void*)CoronaExternalGetUserData,
-		(void*)CoronaExternalFormatBPP,
-
-		(void*)CoronaMemoryCreateInterface,
-		(void*)CoronaMemoryBindLookupSlot,
-		(void*)CoronaMemoryReleaseLookupSlot,
-		(void*)CoronaMemoryPushLookupEncoding,
-		(void*)CoronaMemoryAcquireInterface
-	};
+volatile void* fakeVariableToPreventSymbolStripping[] __attribute__((used)) = {
+    (void*)CoronaEventNameKey,
+    (void*)CoronaEventProviderKey,
+    (void*)CoronaEventPhaseKey,
+    (void*)CoronaEventTypeKey,
+    (void*)CoronaEventResponseKey,
+    (void*)CoronaEventIsErrorKey,
+    (void*)CoronaEventErrorCodeKey,
+    (void*)CoronaEventDataKey,
+    (void*)CoronaEventAdsRequestName,
+    (void*)CoronaEventPopupName,
+    
+    (void*)CoronaLuaCreateDictionary,
+    (void*)CoronaLuaPushValue,
+    
+    (void*)CoronaExternalPushTexture,
+    (void*)CoronaExternalGetUserData,
+    (void*)CoronaExternalFormatBPP,
+    
+    (void*)CoronaMemoryCreateInterface,
+    (void*)CoronaMemoryBindLookupSlot,
+    (void*)CoronaMemoryReleaseLookupSlot,
+    (void*)CoronaMemoryPushLookupEncoding,
+    (void*)CoronaMemoryAcquireInterface
+};
 
 #endif
 
@@ -178,7 +178,7 @@ typedef void (^ReceivedDataHandler)(NSData*);
 - (void)didTimeout:(id)delegate
 {
     [self cancel];
-
+    
     NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:-1001 userInfo:[NSDictionary dictionaryWithObject:@"The request timed out." forKey:NSLocalizedDescriptionKey]];
     [delegate connection:self didFailWithError:error];
 }
@@ -203,7 +203,7 @@ typedef void (^ReceivedDataHandler)(NSData*);
         fData = [[NSMutableData alloc] initWithCapacity:0];
         fFilePath = [path retain];
         fResponse = nil;
-// Workaround for Apple Radar: 10412199
+        // Workaround for Apple Radar: 10412199
 #ifdef Rtt_IPHONE_ENV
         fDelegate = delegate;
         [self setTimeoutForRequest:request delegate:delegate];
@@ -221,7 +221,7 @@ typedef void (^ReceivedDataHandler)(NSData*);
         fBlock = [block copy];
         fData = [[NSMutableData alloc] initWithCapacity:0];
         fFilePath = nil;
-// Workaround for Apple Radar: 10412199
+        // Workaround for Apple Radar: 10412199
 #ifdef Rtt_IPHONE_ENV
         fDelegate = delegate;
         [self setTimeoutForRequest:request delegate:delegate];
@@ -241,27 +241,27 @@ typedef void (^ReceivedDataHandler)(NSData*);
     else
     {
         Rtt::LuaResource *resource = fResource;
-
+        
         // Prevent deadlock by queue'ing on main thread
         dispatch_async( dispatch_get_main_queue(),
-            ^(void)
-            {
-                Rtt_DELETE( resource );
-            }
-        );
+                       ^(void)
+                       {
+            Rtt_DELETE( resource );
+        }
+                       );
     }
 #endif // Rtt_NO_GUI
-
+    
 #ifdef Rtt_IPHONE_ENV
     [self cancelTimeout];
 #endif
-
+    
     [fResponse release];
     [fBlock release];
     [fData release];
     [fFilePath release];
     [fUrl release];
-
+    
     [super dealloc];
 }
 
@@ -284,8 +284,8 @@ typedef void (^ReceivedDataHandler)(NSData*);
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError*)error
 {
     Rtt_TRACE( ( "ERROR: Connection failed. %s %s\n",
-          [[error localizedDescription] UTF8String],
-          [[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey] UTF8String] ) );
+                [[error localizedDescription] UTF8String],
+                [[[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey] UTF8String] ) );
     [connection release];
 }
 
@@ -296,9 +296,9 @@ typedef void (^ReceivedDataHandler)(NSData*);
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    #ifdef Rtt_DEBUG
-        NSLog( @"%@", response );
-    #endif
+#ifdef Rtt_DEBUG
+    NSLog( @"%@", response );
+#endif
 }
 
 @end
@@ -321,9 +321,9 @@ typedef void (^ReceivedDataHandler)(NSData*);
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     // This method is called incrementally as the server sends data; we must concatenate the data to assemble the response
-
+    
     CustomURLConnection *customConnection = (CustomURLConnection *)connection;
-        
+    
     [customConnection.data appendData:data];
 }
 
@@ -338,7 +338,7 @@ typedef void (^ReceivedDataHandler)(NSData*);
     ReceivedDataHandler block = customConnection.block;
     NSMutableData *data = customConnection.data;
     NSString *filePath = customConnection.filePath;
-
+    
     if ( resource )
     {
         const char *responseString = NULL;
@@ -353,24 +353,24 @@ typedef void (^ReceivedDataHandler)(NSData*);
             responseString = [responseNSString UTF8String];
             [responseNSString autorelease];
         }
-
+        
 #ifdef Rtt_NO_GUI
 #else
-		// Trap status codes
-		NSInteger statusCode = -1;
-		NSURLResponse *response = customConnection.response;
-		if ([response respondsToSelector:@selector(statusCode)])
-		{
-			statusCode = [((NSHTTPURLResponse *)response) statusCode];
-			
-			// Report the error response in the Simulator
-			if (statusCode >= 400)
-			{
-				// Report the unsuccessful response in the Simulator pour l'aidez le debugging
-				Rtt_TRACE_SIM( ( "Warning: Network request got %ld response: %s", statusCode, [customConnection.url UTF8String] ) );
-			}
-		}
-
+        // Trap status codes
+        NSInteger statusCode = -1;
+        NSURLResponse *response = customConnection.response;
+        if ([response respondsToSelector:@selector(statusCode)])
+        {
+            statusCode = [((NSHTTPURLResponse *)response) statusCode];
+            
+            // Report the error response in the Simulator
+            if (statusCode >= 400)
+            {
+                // Report the unsuccessful response in the Simulator pour l'aidez le debugging
+                Rtt_TRACE_SIM( ( "Warning: Network request got %ld response: %s", statusCode, [customConnection.url UTF8String] ) );
+            }
+        }
+        
         NetworkRequestEvent e( [customConnection.url UTF8String], responseString, (int) statusCode );
         e.DispatchEvent( * resource );
 #endif
@@ -389,15 +389,15 @@ typedef void (^ReceivedDataHandler)(NSData*);
 #ifndef Rtt_NO_GUI
     LuaResource *resource = customConnection.resource;
 #endif
-
+    
     const char *errorMessage = [s UTF8String];
-
-	// Report the error in the Simulator
-	if (errorMessage != NULL)
-	{
-		Rtt_TRACE_SIM( ( "Error on network request: %s: %s", [customConnection.url UTF8String], errorMessage ) );
-	}
-	
+    
+    // Report the error in the Simulator
+    if (errorMessage != NULL)
+    {
+        Rtt_TRACE_SIM( ( "Error on network request: %s: %s", [customConnection.url UTF8String], errorMessage ) );
+    }
+    
 #ifndef Rtt_NO_GUI
     if ( resource )
     {
@@ -410,16 +410,16 @@ typedef void (^ReceivedDataHandler)(NSData*);
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     CustomURLConnection *customConnection = (CustomURLConnection *)connection;
-
+    
 #ifdef Rtt_IPHONE_ENV
     // Workaround for Apple Radar: 10412199
     [customConnection cancelTimeout];
 #endif
-
+    
     // It can be called multiple times, for example in the case of a
     // redirect, so each time we reset the data.
     [customConnection.data setLength:0];
-
+    
     customConnection.response = response;
 }
 
@@ -427,11 +427,11 @@ typedef void (^ReceivedDataHandler)(NSData*);
 {
 #ifdef Rtt_IPHONE_ENV
     CustomURLConnection *customConnection = (CustomURLConnection *)connection;
-
+    
     // Workaround for Apple Radar: 10412199
     [customConnection cancelTimeout];
 #endif
-
+    
     NSString *s = [error localizedDescription];
     [self connection:connection dispatchError:s];
 }
@@ -485,20 +485,20 @@ ApplePlatform::Push( lua_State *L, id value )
 
 ApplePlatform::ApplePlatform()
 :	fAllocator( Rtt_AllocatorCreate() ),
-	fResourcePath( nil ),
-	fHttpPostDelegate( nil ),
-	fCustomConnectionDelegate( nil ),
-	fCrypto(),
-	fClass( NULL )
+fResourcePath( nil ),
+fHttpPostDelegate( nil ),
+fCustomConnectionDelegate( nil ),
+fCrypto(),
+fClass( NULL )
 {
 }
 
 ApplePlatform::~ApplePlatform()
 {
-	[fHttpPostDelegate release];
-	[fCustomConnectionDelegate release];
-	[fResourcePath release];
-	Rtt_AllocatorDestroy( fAllocator );
+    [fHttpPostDelegate release];
+    [fCustomConnectionDelegate release];
+    [fResourcePath release];
+    Rtt_AllocatorDestroy( fAllocator );
 }
 
 void
@@ -521,7 +521,7 @@ ApplePlatform::GetAllocator() const
 RenderingStream*
 ApplePlatform::CreateRenderingStream() const
 {
-	return NULL;
+    return NULL;
 }
 
 PlatformSurface*
@@ -531,13 +531,13 @@ ApplePlatform::CreateOffscreenSurface( const PlatformSurface& parent ) const
     return NULL;
 #else
     OffscreenGPUSurface *result = Rtt_NEW( Allocator(), OffscreenGPUSurface( parent ) );
-
+    
     if ( result && ! result->IsValid() )
     {
         Rtt_DELETE( result );
         result = NULL;
     }
-
+    
     return result;
 #endif
 }
@@ -554,7 +554,7 @@ ApplePlatform::CreateBitmap( const char *path, bool convertToGrayscale ) const
 #ifdef Rtt_NO_GUI
     return NULL;
 #else
-//    const char* path = PathForFile( filename, MPlatform::kResourceDir, false );
+    //    const char* path = PathForFile( filename, MPlatform::kResourceDir, false );
     return path ? Rtt_NEW( & GetAllocator(), AppleFileBitmap( path, convertToGrayscale ) ) : NULL;
 #endif
 }
@@ -569,7 +569,7 @@ void
 ApplePlatform::GetPreference( Category category, Rtt::String * value ) const
 {
     const char *result = NULL;
-
+    
     if ( kUILanguage == category )
     {
         NSUserDefaults* defs = [NSUserDefaults standardUserDefaults];
@@ -580,7 +580,7 @@ ApplePlatform::GetPreference( Category category, Rtt::String * value ) const
     else
     {
         NSLocale *locale = [NSLocale autoupdatingCurrentLocale];
-
+        
         NSString *key = nil;
         switch ( category )
         {
@@ -597,13 +597,13 @@ ApplePlatform::GetPreference( Category category, Rtt::String * value ) const
                 Rtt_ASSERT_NOT_REACHED();
                 break;
         }
-
+        
         if ( key )
         {
             result = [[locale objectForKey:key] UTF8String];
         }
     }
-
+    
     value->Set( result );
 }
 
@@ -616,7 +616,7 @@ CreateFailureResultForUnknownPreferenceCategory( const char* categoryName )
     message += "' is not supported on this platform.";
     return Rtt::OperationResult::FailedWith( message.c_str() );
 }
-    
+
 Preference::ReadValueResult
 ApplePlatform::GetPreference( const char* categoryName, const char* keyName ) const
 {
@@ -662,7 +662,7 @@ ApplePlatform::GetPreference( const char* categoryName, const char* keyName ) co
     else if ([objectValue isKindOfClass:[NSData class]])
     {
         Rtt::SharedConstStdStringPtr sharedStringPointer =
-                Rtt_MakeSharedConstStdStringPtr((const char*)[objectValue bytes], [objectValue length]);
+        Rtt_MakeSharedConstStdStringPtr((const char*)[objectValue bytes], [objectValue length]);
         return Preference::ReadValueResult::SucceededWith(sharedStringPointer);
     }
     else if ([objectValue isKindOfClass:[NSNumber class]])
@@ -1045,7 +1045,7 @@ ApplePlatform::PushSystemInfo( lua_State *L, const char *key ) const
     {
         return 0;
     }
-
+    
     // Push the requested system information to Lua.
     int pushedValues = 0;
     if ( Rtt_StringCompare( key, "isoCountryCode" ) == 0 )
@@ -1077,7 +1077,7 @@ ApplePlatform::PushSystemInfo( lua_State *L, const char *key ) const
         lua_pushnil( L );
         pushedValues = 1;
     }
-
+    
     // Return the number of values pushed into Lua.
     return pushedValues;
 }
@@ -1090,7 +1090,7 @@ ApplePlatform::HttpRequest( NSString *url, NSString *method, NSDictionary *param
     NSURL *nsUrl = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] initWithURL:nsUrl] autorelease];
     [request setHTTPMethod:method];
-
+    
     if ( params )
     {
         for ( id k in params )
@@ -1099,19 +1099,19 @@ ApplePlatform::HttpRequest( NSString *url, NSString *method, NSDictionary *param
             [request addValue:k forHTTPHeaderField:v];
         }
     }
-
+    
     if ( body )
     {
         [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
     }
-
+    
     if ( ! fCustomConnectionDelegate )
     {
         fCustomConnectionDelegate = [[CustomConnectionDelegate alloc] init];
     }
-
+    
     CustomURLConnection *customConnection =
-        [[CustomURLConnection alloc] initWithRequest:request delegate:fCustomConnectionDelegate block:block];
+    [[CustomURLConnection alloc] initWithRequest:request delegate:fCustomConnectionDelegate block:block];
     [customConnection start];
     [customConnection autorelease];
 }
@@ -1120,18 +1120,18 @@ void
 ApplePlatform::NetworkBaseRequest( lua_State *L, const char *url, const char *method, LuaResource *listener, int paramsIndex, NSString *path ) const
 {
     NSURL *nsUrl = [NSURL URLWithString:[NSString stringWithExternalString:url]];
-
+    
     CustomMutableURLRequest *request = [[[CustomMutableURLRequest alloc] initWithURL:nsUrl] autorelease];
-
+    
     NSString *methodString = [NSString stringWithExternalString:method];
     [request setHTTPMethod:methodString];
-
+    
     [request setTimeoutInterval:30]; // Default to 30 seconds
-
+    
     if ( paramsIndex > 0 )
     {
         Rtt_ASSERT( lua_istable( L, paramsIndex ) );
-
+        
         lua_getfield( L, paramsIndex, "headers" );
         if ( lua_istable( L, -1 ) )
         {
@@ -1158,27 +1158,27 @@ ApplePlatform::NetworkBaseRequest( lua_State *L, const char *url, const char *me
             [request setHTTPBody:[[NSString stringWithExternalString:body] dataUsingEncoding:NSUTF8StringEncoding]];
         }
         lua_pop( L, 1 );
-
+        
         lua_getfield( L, paramsIndex, "timeout" );
         if ( lua_isnumber( L, -1 ) )
         {
             NSTimeInterval timeoutInSeconds = lua_tonumber( L, -1 );
-
+            
             // Ensure timeout is non-negative
             timeoutInSeconds = Max( timeoutInSeconds, 0.0 );
-
+            
             [request setTimeoutInterval:timeoutInSeconds];
         }
         lua_pop( L, 1 );
     }
-
+    
     if ( ! fCustomConnectionDelegate )
     {
         fCustomConnectionDelegate = [[CustomConnectionDelegate alloc] init];
     }
-
+    
     CustomURLConnection *customConnection =
-        [[CustomURLConnection alloc] initWithRequest:request delegate:fCustomConnectionDelegate filePath:path resource:listener];
+    [[CustomURLConnection alloc] initWithRequest:request delegate:fCustomConnectionDelegate filePath:path resource:listener];
     [customConnection start];
     [customConnection autorelease];
 }
@@ -1210,10 +1210,10 @@ ApplePlatform::NewReachability( const ResourceHandle<lua_State>& handle, Platfor
     return NULL;
 #else
     PlatformReachability* result = NULL;
-
+    
     result = Rtt_NEW( fAllocator, AppleReachability( handle, type, address ) );
-//    result = new Rtt::AppleReachability( handle, type, address );
-
+    //    result = new Rtt::AppleReachability( handle, type, address );
+    
     return result;
 #endif
 }
@@ -1223,14 +1223,14 @@ ApplePlatform::SupportsNetworkStatus() const
 {
     return true;
 }
-    
+
 // ----------------------------------------------------------------------------
 
 void
 ApplePlatform::RaiseError( MPlatform::Error e, const char* reason ) const
 {
     const char kNull[] = "(null)";
-
+    
     if ( ! reason ) { reason = kNull; }
     Rtt_TRACE( ( "MPlatformFactory error(%d): %s\n", e, kNull ) );
 }
@@ -1239,7 +1239,7 @@ bool
 ApplePlatform::ValidateAssetFile(const char *assetFilename, const int assetSize) const
 {
     NSString *pathStr = PathForSystemResourceFile(assetFilename);
-
+    
     // For now we just check the size which is good enough for image files;
     // perhaps check an MD5 of the first 1KB in the future
     return (assetFilename != NULL &&
@@ -1258,7 +1258,7 @@ NSString*
 ApplePlatform::PathForDir( const char *folderName, NSString *baseDir, bool createIfNotExist ) const
 {
     NSString *result = nil;
-
+    
     NSFileManager *fileMgr = [NSFileManager defaultManager];
     if ( fileMgr )
     {
@@ -1292,7 +1292,7 @@ ApplePlatform::PathForDir( const char *folderName, NSString *baseDir, bool creat
             }
         }
     }
-
+    
     return result;
 }
 
@@ -1304,7 +1304,7 @@ VerifyFileExists( NSString *path )
     {
         path = nil;
     }
-
+    
     return path;
 }
 
@@ -1313,67 +1313,67 @@ ApplePlatform::PathForFile( const char* filename, Directory baseDir, U32 flags, 
 {
     NSString* path = nil;
     bool testExistence = flags & MPlatform::kTestFileExists;
-
-	result.Set( NULL );
-	
-	switch( baseDir )
-	{
-		case MPlatform::kResourceDir:
-			path = PathForResourceFile( filename );
-			path = VerifyFileExists( path );
-			if ( ! path )
-			{
-				// The file may be not be in the developer's project because it is
-				// a Corona resource file that will be available in the final device build.
-				path = PathForCoronaResourceFile( filename );
-				path = VerifyFileExists( path );
-			}
-			if ( ! path )
-			{
-				// Lastly, check if the file exists in a plugin that has been linked with the app
-				path = PathForPluginsFile( filename );
-				path = VerifyFileExists( path );
-			}
-			Rtt_WARN_SIM(
-				testExistence || ! filename || path,
-				( "WARNING: Cannot create path for resource file '%s'. File does not exist.\n", filename ) );
-			break;
-
+    
+    result.Set( NULL );
+    
+    switch( baseDir )
+    {
+        case MPlatform::kResourceDir:
+            path = PathForResourceFile( filename );
+            path = VerifyFileExists( path );
+            if ( ! path )
+            {
+                // The file may be not be in the developer's project because it is
+                // a Corona resource file that will be available in the final device build.
+                path = PathForCoronaResourceFile( filename );
+                path = VerifyFileExists( path );
+            }
+            if ( ! path )
+            {
+                // Lastly, check if the file exists in a plugin that has been linked with the app
+                path = PathForPluginsFile( filename );
+                path = VerifyFileExists( path );
+            }
+            Rtt_WARN_SIM(
+                         testExistence || ! filename || path,
+                         ( "WARNING: Cannot create path for resource file '%s'. File does not exist.\n", filename ) );
+            break;
+            
         case MPlatform::kSystemResourceDir:
             path = PathForSystemResourceFile( filename );
             break;
             
-		case MPlatform::kTmpDir:
-			path = PathForTmpFile( filename );
-			break;
-
+        case MPlatform::kTmpDir:
+            path = PathForTmpFile( filename );
+            break;
+            
         case MPlatform::kCachesDir:
             path = PathForCachesFile( filename );
             break;
-
+            
         case MPlatform::kSystemCachesDir:
             path = PathForSystemCachesFile( filename );
             break;
-
+            
         case MPlatform::kPluginsDir:
             path = PathForPluginsFile( filename );
             break;
-
+            
         case MPlatform::kApplicationSupportDir:
             path = PathForApplicationSupportFile( filename );
             break;
-
+            
         case MPlatform::kDocumentsDir:
         default:
             path = PathForDocumentsFile( filename );
             break;
     }
-
+    
     if ( testExistence && path && ! [[NSFileManager defaultManager] fileExistsAtPath:path] )
     {
         path = nil;
     }
-
+    
     result.SetSrc( [path UTF8String] );
 }
 
@@ -1381,24 +1381,24 @@ NSString*
 ApplePlatform::PathForResourceFile( const char* filename ) const
 {
     NSString* result = NULL;
-
+    
     if ( fResourcePath )
     {
         NSString* path = fResourcePath;
-
+        
         if ( filename )
         {
             path = [NSString stringWithFormat:@"%@/%@", path,
                     [[NSFileManager defaultManager] stringWithFileSystemRepresentation:filename length:strlen(filename)]];
         }
-
+        
         result = path;
     }
     else
     {
         result = PathForSystemResourceFile( filename );
     }
-
+    
     return result;
 }
 
@@ -1412,23 +1412,23 @@ ApplePlatform::PathForSystemResourceFile( const char* filename ) const
     {
         bundle = [NSBundle mainBundle];
     }
-
+    
 #ifdef Rtt_AUTHORING_SIMULATOR
     NSString* resourcePath = [bundle resourcePath];
 #else
     NSString* resourcePath = fResourcePath;
-
+    
     // Handle the case where fResourcePath hasn't been set yet with a sensible default
     if (resourcePath == nil)
     {
         resourcePath = [bundle resourcePath];
     }
 #endif
-
+    
     if ( filename )
     {
         NSString *nsFilename = [NSString stringWithExternalString:filename];
-
+        
         result = [resourcePath stringByAppendingPathComponent:nsFilename];
         // Since we hand-crafted the path, we might want to verify it actually exists.
         // This check is run by the caller so we could disable this check if we wanted.
@@ -1457,12 +1457,12 @@ NSString *
 ApplePlatform::PathForCoronaResourceFile( const char* filename ) const
 {
     NSString *result = nil;
-
+    
     if ( filename )
     {
 #if defined(Rtt_CORONA_CARDS_ENV) && defined(Rtt_MAC_ENV)
         NSString *coronaCardsResourceDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"../Frameworks/CoronaCards.framework/Resources/"];
-
+        
         result = [NSString stringWithFormat:@"%@/%@", coronaCardsResourceDir,
                   [[NSFileManager defaultManager] stringWithFileSystemRepresentation:filename length:strlen(filename)]];
 #elif defined( Rtt_TVOS_ENV )
@@ -1472,18 +1472,18 @@ ApplePlatform::PathForCoronaResourceFile( const char* filename ) const
         // On iOS/Mac, Corona resource files are located in the CoronaResources.bundle
         NSBundle *mainBundle = [NSBundle mainBundle];
         NSString *bundlePath = [mainBundle pathForResource:@"CoronaResources" ofType:@"bundle"];
-
+        
         NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
         NSString *baseDir = [bundle resourcePath];
-
+        
         if ( baseDir )
         {
             result = [NSString stringWithFormat:@"%@/%@", baseDir,
-                    [[NSFileManager defaultManager] stringWithFileSystemRepresentation:filename length:strlen(filename)]];
+                      [[NSFileManager defaultManager] stringWithFileSystemRepresentation:filename length:strlen(filename)]];
         }
 #endif // Rtt_CORONA_CARDS_ENV && Rtt_MAC_ENV
     }
-
+    
     return result;
 }
 
@@ -1506,7 +1506,7 @@ ApplePlatform::PathForApplicationSupportFile( const char* filename ) const
 {
     NSString *dir = GetDirectory( NSApplicationSupportDirectory );
     BOOL isDir = NO;
-
+    
     // Sometimes the default application support directory doesn't exist (on iOS, but ensuring
     // it exists everywhere is fine)
     if (! [[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDir])
@@ -1514,15 +1514,15 @@ ApplePlatform::PathForApplicationSupportFile( const char* filename ) const
         // Create folder
         NSError *error = nil;
         if (! [[NSFileManager defaultManager] createDirectoryAtPath:dir
-                withIntermediateDirectories:YES
-                                 attributes:nil
-                                      error:&error])
+                                        withIntermediateDirectories:YES
+                                                         attributes:nil
+                                                              error:&error])
         {
             Rtt_LogException("ERROR: failed to create application support directory: %s (%s)",
                              [dir UTF8String], [[error localizedDescription] UTF8String]);
         }
     }
-
+    
     return PathForFile( filename, dir );
 }
 
@@ -1536,7 +1536,7 @@ NSString*
 ApplePlatform::PathForCachesFile( const char* filename ) const
 {
     static const char kDirName[] = "Caches";
-
+    
     NSString *root = CachesParentDir();
     NSString *dir = PathForDir( kDirName, root, true );
     return PathForFile( filename, dir );
@@ -1546,7 +1546,7 @@ NSString*
 ApplePlatform::PathForSystemCachesFile( const char* filename ) const
 {
     static const char kDirName[] = ".system";
-
+    
     NSString *root = CachesParentDir();
     NSString *dir = PathForDir( kDirName, root, true );
     return PathForFile( filename, dir );
@@ -1568,7 +1568,7 @@ NSString*
 ApplePlatform::PathForFile( const char* filename, NSString* baseDir ) const
 {
     NSString* result;
-
+    
     if ( filename )
     {
         // Decomposing any Unicode characters makes the filename compatible with the APFS filesystem on iOS 10.3
@@ -1579,41 +1579,41 @@ ApplePlatform::PathForFile( const char* filename, NSString* baseDir ) const
     {
         result = baseDir;
     }
-
+    
     return result;
 }
 
-    
+
 // Not tested. Can't find documentation. Keys and values are guessed from Google searches and iTunes Music Library.xml.
 /*
-bool
-ApplePlatform::SetSyncTimeMachine( NSString* filepath, bool value, NSString** errorstr ) const
-{
-    if ( nil == filepath || [filepath length] == 0 )
-    {
-        return false;
-    }
-    int result;
-    
-    // This is a complete guess
-    if ( value )
-    {
-        const char* setvalue = "com.apple.backupd";
-        result = setxattr( [filepath fileSystemRepresentation], "com.apple.metadata:com_apple_backup_excludeItem", &value, sizeof(value), 0, 0);
-    }
-    else
-    {
-        const char* setvalue = "";
-        result = setxattr( [filepath fileSystemRepresentation], "com.apple.metadata:com_apple_backup_excludeItem", &value, sizeof(value), 0, 0);
-        
-    }
-    if ( 0 != result && nil != errorstr )
-    {
-        *errorstr = [NSString stringWithFormat:@"errno %d: %s", errno, strerror(errno)];
-    }
-    return ( 0 == result );
-}
-*/
+ bool
+ ApplePlatform::SetSyncTimeMachine( NSString* filepath, bool value, NSString** errorstr ) const
+ {
+ if ( nil == filepath || [filepath length] == 0 )
+ {
+ return false;
+ }
+ int result;
+ 
+ // This is a complete guess
+ if ( value )
+ {
+ const char* setvalue = "com.apple.backupd";
+ result = setxattr( [filepath fileSystemRepresentation], "com.apple.metadata:com_apple_backup_excludeItem", &value, sizeof(value), 0, 0);
+ }
+ else
+ {
+ const char* setvalue = "";
+ result = setxattr( [filepath fileSystemRepresentation], "com.apple.metadata:com_apple_backup_excludeItem", &value, sizeof(value), 0, 0);
+ 
+ }
+ if ( 0 != result && nil != errorstr )
+ {
+ *errorstr = [NSString stringWithFormat:@"errno %d: %s", errno, strerror(errno)];
+ }
+ return ( 0 == result );
+ }
+ */
 
 bool
 ApplePlatform::SetSynciCloud( NSString* filepath, bool value, NSString** errorstr ) const
@@ -1685,10 +1685,10 @@ ApplePlatform::SetSync( lua_State* L ) const
     {
         void* p = lua_touserdata( L, 2 );
         basedir = (MPlatform::Directory)EnumForUserdata(
-            LuaLibSystem::Directories(),
-            p,
-            MPlatform::kNumDirs,
-            MPlatform::kDocumentsDir );
+                                                        LuaLibSystem::Directories(),
+                                                        p,
+                                                        MPlatform::kNumDirs,
+                                                        MPlatform::kDocumentsDir );
         paramindex = 3;
     }
     
@@ -1723,7 +1723,7 @@ ApplePlatform::SetSync( lua_State* L ) const
         }
         
         // do other keys here
-
+        
     }
 #endif
     return numret;
@@ -1733,7 +1733,7 @@ int
 ApplePlatform::GetSync( lua_State* L ) const
 {
     int numret = 0;
-
+    
 #ifdef Rtt_NO_GUI
 #else
     const char* filename = luaL_checkstring( L, 1 );
@@ -1743,10 +1743,10 @@ ApplePlatform::GetSync( lua_State* L ) const
     {
         void* p = lua_touserdata( L, 2 );
         basedir = (MPlatform::Directory)EnumForUserdata(
-            LuaLibSystem::Directories(),
-            p,
-            MPlatform::kNumDirs,
-            MPlatform::kDocumentsDir );
+                                                        LuaLibSystem::Directories(),
+                                                        p,
+                                                        MPlatform::kNumDirs,
+                                                        MPlatform::kDocumentsDir );
         paramindex = 3;
     }
     
@@ -1781,10 +1781,10 @@ ApplePlatform::GetSync( lua_State* L ) const
         }
         
         // do other keys here
-
+        
     }
 #endif
-
+    
     return numret;
 }
 
@@ -1812,13 +1812,13 @@ ApplePlatform::RequestSystem( lua_State *L, const char *actionName, int optionsI
     {
         return false;
     }
-
+    
     // Execute the requested operation.
     if ( Rtt_StringCompare( actionName, "validateResourceFile" ) == 0 )
     {
         const char *assetFilename = NULL;
         int assetFileSize = -1;
-
+        
         if ( LUA_TTABLE == lua_type(L, optionsIndex) )
         {
             lua_getfield( L, -1, "filename" );
@@ -1827,7 +1827,7 @@ ApplePlatform::RequestSystem( lua_State *L, const char *actionName, int optionsI
                 return false;
             }
             lua_pop( L, 1 );
-
+            
             lua_getfield( L, -1, "size" );
             if (lua_type( L, -1 ) == LUA_TNUMBER)
             {
@@ -1835,7 +1835,7 @@ ApplePlatform::RequestSystem( lua_State *L, const char *actionName, int optionsI
             }
             lua_pop( L, 1 );
         }
-
+        
         if (assetFilename != NULL && assetFileSize >= 0)
         {
             return ValidateAssetFile(assetFilename, assetFileSize);
@@ -1845,7 +1845,7 @@ ApplePlatform::RequestSystem( lua_State *L, const char *actionName, int optionsI
             return false;
         }
     }
-
+    
     return false;
 }
 

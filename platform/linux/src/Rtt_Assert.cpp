@@ -70,28 +70,6 @@ Rtt_LogIsEnabled()
 	return fIsLoggingEnabled;
 }
 
-#ifdef Rtt_WIN_PHONE_ENV
-/// Optional callback to be invoked when the system wants to override logging in Rtt_Log() and Rtt_LogException().
-static Rtt_LogHandlerCallback fLogHandler = NULL;
-
-/// Set a callback used to override logging when Rtt_Log() or Rtt_LogException() gets called.
-/// @param callback Pointer to the function to be invoked. Set to null to not override logging.
-void
-Rtt_LogSetHandler(Rtt_LogHandlerCallback callback)
-{
-	fLogHandler = callback;
-}
-
-/// Gets the callback set via Rtt_LogSetHandler() used to override logging.
-/// @returns Returns a pointer to the function callback. Returns null if no callback has been assigned.
-Rtt_LogHandlerCallback
-Rtt_LogGetHandler(void)
-{
-	return fLogHandler;
-}
-
-#endif
-
 
 #if ! defined( Rtt_APPLE_ENV ) // Apple platforms need to use Obj-C for now so the implementation is done elsewhere.
 // This is duplicated because Rtt_Log is disabled in too many configurations and we need a function that is available everywhere.
@@ -192,11 +170,6 @@ Rtt_VLogException(const char* format, va_list ap)
 			// Output the string to stdout and the Visual Studio debugger.
 #if defined(Rtt_NXS_ENV)
 			fputs(stringPointer, stdout);
-#elif defined(Rtt_WIN_PHONE_ENV)
-			if (fLogHandler)
-			{
-				fLogHandler(stringPointer);
-			}
 #else
 			if (IsDebuggerPresent())
 			{

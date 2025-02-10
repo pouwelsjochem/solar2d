@@ -802,22 +802,6 @@ int CoronaObjectsPushContainer(lua_State* L, void* userData, const CoronaObjectP
 }
 
 CORONA_API
-int CoronaObjectsPushEmbossedText(lua_State* L, void* userData, const CoronaObjectParams* params)
-{
-	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke(L, userData, params);
-}
-
-CORONA_API
-int CoronaObjectsPushEmitter(lua_State* L, void* userData, const CoronaObjectParams* params)
-{
-	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke(L, userData, params);
-}
-
-CORONA_API
 int CoronaObjectsPushGroup(lua_State* L, void* userData, const CoronaObjectParams* params)
 {
 	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
@@ -842,39 +826,7 @@ int CoronaObjectsPushImageRect(lua_State* L, void* userData, const CoronaObjectP
 }
 
 CORONA_API
-int CoronaObjectsPushLine(lua_State* L, void* userData, const CoronaObjectParams* params)
-{
-	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke(L, userData, params);
-}
-
-CORONA_API
-int CoronaObjectsPushMesh(lua_State* L, void* userData, const CoronaObjectParams* params)
-{
-	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke(L, userData, params);
-}
-
-CORONA_API
-int CoronaObjectsPushPolygon(lua_State* L, void* userData, const CoronaObjectParams* params)
-{
-	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke(L, userData, params);
-}
-
-CORONA_API
 int CoronaObjectsPushRect(lua_State* L, void* userData, const CoronaObjectParams* params)
-{
-	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke(L, userData, params);
-}
-
-CORONA_API
-int CoronaObjectsPushRoundedRect(lua_State* L, void* userData, const CoronaObjectParams* params)
 {
 	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
 	CoronaCallbackLoad();
@@ -891,14 +843,6 @@ int CoronaObjectsPushSnapshot(lua_State* L, void* userData, const CoronaObjectPa
 
 CORONA_API
 int CoronaObjectsPushSprite(lua_State* L, void* userData, const CoronaObjectParams* params)
-{
-	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
-	CoronaCallbackLoad();
-	return CoronaCallbackInvoke(L, userData, params);
-}
-
-CORONA_API
-int CoronaObjectsPushText(lua_State* L, void* userData, const CoronaObjectParams* params)
 {
 	typedef int(*CoronaCallbackType)(lua_State*, void*, const CoronaObjectParams*);
 	CoronaCallbackLoad();

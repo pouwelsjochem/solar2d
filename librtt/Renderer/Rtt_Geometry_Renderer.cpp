@@ -240,10 +240,12 @@ Geometry::Geometry(Rtt_Allocator* allocator, PrimitiveType type, U32 vertexCount
 #else
     fStoredOnGPU(true), // Force this to be true if client side arrays are NOT supported
 #endif
-	fVertexData(NULL),
-	fIndexData(NULL),
-	fVerticesUsed(0),
-	fIndicesUsed(0)
+    fPerVertexColors(NULL),
+    fVertexData(NULL),
+    fIndexData(NULL),
+    fVerticesUsed(0),
+    fIndicesUsed(0),
+    fExtension(NULL)
 {
     // Indexed triangles are only supported for the VBO path
     Rtt_ASSERT(!(type == Geometry::kIndexedTriangles && storeOnGPU == false));
@@ -404,6 +406,13 @@ void
     Resize(vertexCount, 0, copyData);
 }
 
+static void SyncPerVertexColors(ArrayU32* perVertexColors, U32 size)
+{
+    Rtt_ASSERT(perVertexColors);
+
+    perVertexColors->PadToSize(size, ColorWhite());
+}
+
 void
     Geometry::Resize(U32 vertexCount, U32 indexCount, bool copyData)
 {
@@ -436,15 +445,20 @@ void
         delete[] existingVertexData;
     }
 
-	// Copy and free the old data.
-	if (existingIndexData)
-	{
-		if (copyData)
-		{
-			memcpy(fIndexData, existingIndexData, fIndicesUsed * sizeof(Index));
-		}
-		delete[] existingIndexData;
-	}
+    // Copy and free the old data.
+    if (existingIndexData)
+    {
+        if (copyData)
+        {
+            memcpy(fIndexData, existingIndexData, fIndicesUsed * sizeof(Index));
+        }
+        delete[] existingIndexData;
+    }
+
+    if (fPerVertexColors && fVerticesAllocated > 0)
+    {
+        SyncPerVertexColors(fPerVertexColors, fVerticesAllocated);
+    }
 }
 
 void
@@ -572,6 +586,108 @@ bool
 
     }
 
+}
+
+// ----------------------------------------------------------------------------
+
+void
+    Geometry::AttachPerVertexColors(ArrayU32* colors, U32 size)
+{
+    Rtt_ASSERT(!fPerVertexColors || fPerVertexColors == colors);
+
+    bool justBound = !fPerVertexColors;
+
+    fPerVertexColors = colors;
+
+    if (justBound)
+    {
+        SyncPerVertexColors(fPerVertexColors, size);
+    }
+}
+
+const U32*
+    Geometry::GetPerVertexColorData() const
+{
+    return fPerVertexColors ? fPerVertexColors->ReadAccess() : NULL;
+}
+
+U32*
+	Geometry::GetWriteablePerVertexColorData()
+{
+	return fPerVertexColors ? fPerVertexColors->WriteAccess() : NULL;
+}
+
+bool 
+	Geometry::SetVertexColor(U32 index, U32 color)
+{
+    if (!fPerVertexColors || index >= fPerVertexColors->Length())
+    {
+        return false;
+    }
+
+    U32& entry = fPerVertexColors->WriteAccess()[index];
+    bool changed = entry != color;
+        
+    entry = color;
+
+    return changed;
+}
+
+const FormatExtensionList*
+Geometry::GetExtensionList() const
+{
+    if (!fExtension)
+    {
+        return NULL;
+    }
+
+    return &*fExtension->fList;
+}
+
+const Geometry::Vertex*
+    Geometry::GetExtendedVertexData() const
+{
+    if (!fExtension)
+    {
+        return NULL;
+    }
+    
+    return fExtension->fVertexData.ReadAccess();
+}
+
+Geometry::Vertex*
+Geometry::GetWritableExtendedVertexData( S32 * length )
+{
+    if (!fExtension)
+    {
+        return NULL;
+    }
+    
+    if (NULL != length)
+    {
+        *length = fExtension->fVertexData.Length();
+    }
+    
+    return fExtension->fVertexData.WriteAccess();
+}
+
+Geometry::ExtensionBlock*
+Geometry::EnsureExtension()
+{
+    if (!fExtension)
+    {
+        fExtension = Rtt_NEW( GetAllocator(), ExtensionBlock( GetAllocator() ) );
+    }
+    
+    return fExtension;
+}
+ 
+bool
+Geometry::UsesInstancing( const ExtensionBlock* block, const FormatExtensionList* list )
+{
+    bool instancedByID = list && list->IsInstancedByID();
+
+    return block && (block->fInstanceData || instancedByID);
 }
 
 // ----------------------------------------------------------------------------

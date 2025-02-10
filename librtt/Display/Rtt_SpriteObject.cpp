@@ -28,10 +28,16 @@
 namespace Rtt {
 
 // ----------------------------------------------------------------------------
+static SpriteObject *
+NewSprite( lua_State * L, Rtt_Allocator *pAllocator, SpritePlayer &player, Display& display, Real width, Real height )
+{
+    return Rtt_NEW( pAllocator, SpriteObject( pAllocator, player, width, height ) );
+}
 
 SpriteObject *
-SpriteObject::Create(Rtt_Allocator *pAllocator, SpritePlayer &player, Real width, Real height) {
-	return Rtt_NEW(pAllocator, SpriteObject(pAllocator, player, width, height));
+SpriteObject::Create( lua_State * L, Rtt_Allocator *pAllocator, SpritePlayer &player, Display& display, Real width, Real height ) {
+	auto * spriteFactory = GetObjectFactory( L, &NewSprite, display ); // n.b. done first to ensure factory function is consumed
+	return spriteFactory( L, pAllocator, player, display, width, height );
 }
 
 SpriteObject::SpriteObject(Rtt_Allocator *pAllocator, SpritePlayer &player, Real width, Real height)

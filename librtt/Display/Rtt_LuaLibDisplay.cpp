@@ -121,22 +121,6 @@ class DisplayLibrary
 			LuaLibDisplay::FactoryReplacement rectFactory = NULL );
 
 	public:
-		static ShapeObject* PushImage(
-			lua_State *L,
-			Vertex2* topLeft,
-			BitmapPaint* paint,
-			Display& display,
-			GroupObject *parent,
-			Real w,
-			Real h );
-		static ShapeObject* PushImage(
-			lua_State *L,
-			Vertex2* topLeft,
-			BitmapPaint* paint,
-			Display& display,
-			GroupObject *parent );
-
-	public:
 		static int newCircle( lua_State *L );
 		static int newRect( lua_State *L );
 		static int newImage( lua_State *L );
@@ -913,7 +897,7 @@ DisplayLibrary::newSprite( lua_State *L )
     int result = 0;
 
 	int nextArg = 1;
-	GroupObject *parent = GetParent( L, nextArg );
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
 
 	ImageSheetUserdata *imageSheetUserdata = NULL;
 	if ( lua_isuserdata( L, nextArg ) )
@@ -935,7 +919,7 @@ DisplayLibrary::newSprite( lua_State *L )
 	Rtt_Allocator *context = display.GetAllocator();
 
 	SpritePlayer& player = display.GetSpritePlayer();
-	SpriteObject *spriteObject = SpriteObject::Create( context, player, width, height);
+	SpriteObject *spriteObject = SpriteObject::Create( L, context, player, display, width, height);
 
 	if ( lua_istable( L, nextArg ) )
 	{
@@ -1345,7 +1329,7 @@ DisplayLibrary::capture( lua_State *L )
 	// Note: This screenshot will be automatically rendered on top of the display. If the user does
 	//       not want to see it, then he/she should do a display.remove() the returned image object.
 	Vertex2 topLeft = { Rtt_REAL_0, Rtt_REAL_0 };
-	ShapeObject *v = PushImage( L, & topLeft, paint, display, NULL );
+	ShapeObject *v = PushImage( L, & topLeft, paint, display, NULL, NULL );
 	if( ! v )
 	{
 		return 0;
@@ -1389,7 +1373,7 @@ DisplayLibrary::captureScreen( lua_State *L )
 	// Note: This screenshot will be automatically rendered on top of the display. If the user does
 	//       not want to see it, then he/she should do a display.remove() the returned image object.
 	Vertex2 topLeft = { Rtt_REAL_0, Rtt_REAL_0 };
-	ShapeObject *v = PushImage( L, & topLeft, paint, display, NULL );
+	ShapeObject *v = PushImage( L, & topLeft, paint, display, NULL, NULL );
 	if( ! v )
 	{
 		// Nothing to do.
@@ -1506,7 +1490,7 @@ DisplayLibrary::captureBounds( lua_State *L )
 	// Note: This screenshot will be automatically rendered on top of the display. If the user does
 	//       not want to see it, then he/she should do a "display:remove()" on the returned object.
 	Vertex2 topLeft = { Rtt_REAL_0, Rtt_REAL_0 };
-	ShapeObject *v = PushImage( L, & topLeft, paint, runtime->GetDisplay(), NULL );
+	ShapeObject *v = PushImage( L, & topLeft, paint, runtime->GetDisplay(), NULL, NULL );
 	if( ! v )
 	{
 		Rtt_DELETE(paint);
@@ -1978,6 +1962,9 @@ LuaLibDisplay::AssignParentAndPushResult( lua_State *L, Display& display, Displa
 	const DisplayDefaults& defaults = display.GetDefaults();
 	o->SetAnchorX( defaults.GetAnchorX() );
 	o->SetAnchorY( defaults.GetAnchorY() );
+
+    o->SetSkipsCull( defaults.GetSkipsCull() );
+    o->SetSkipsHitTest( defaults.GetSkipsHitTest() );
 
 	LuaProxy* proxy = o->GetProxy(); Rtt_ASSERT( proxy );
 	return proxy->PushTable( L );

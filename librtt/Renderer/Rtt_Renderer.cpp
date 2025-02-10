@@ -31,7 +31,7 @@
 #include "Display/Rtt_ShaderData.h"
 #include "Display/Rtt_ShaderResource.h"
 
-#include "Rtt_GPUStream.h"
+#include "Rtt_RenderingStream.h"
 #include "Corona/CoronaGraphics.h"
 
 #include "Rtt_Profiling.h"
@@ -132,12 +132,13 @@ void Renderer::Statistics::Log() const
 }
 
 Renderer::Renderer( Rtt_Allocator* allocator )
-:	fAllocator( allocator ),
+:	 fAllocator( allocator ),
 	fCreateQueue( allocator ),
 	fUpdateQueue( allocator ),
 	fDestroyQueue( allocator ),
 	fCPUResourceObserver(NULL),
 	fGeometryPool( Rtt_NEW( fAllocator, GeometryPool( fAllocator ) ) ),
+    fInstancingGeometryPool( Rtt_NEW( fAllocator, GeometryPool( fAllocator ) ) ),
 	fFrontCommandBuffer( NULL ),
 	fBackCommandBuffer( NULL ),
 	fTotalTime( Rtt_NEW( fAllocator, Uniform( fAllocator, Uniform::kScalar ) ) ),
@@ -145,13 +146,27 @@ Renderer::Renderer( Rtt_Allocator* allocator )
 	fTexelSize( Rtt_NEW( fAllocator, Uniform( fAllocator, Uniform::kVec4 ) ) ),
 	fContentScale( Rtt_NEW( fAllocator, Uniform( fAllocator, Uniform::kVec2 ) ) ),
 	fViewProjectionMatrix( Rtt_NEW( fAllocator, Uniform( fAllocator, Uniform::kMat4 ) ) ),
+	fCaptureGroups( allocator ),
+	fCaptureRects( allocator ),
+    fDefaultState( allocator ),
+    fCurrentState( allocator ),
+    fWorkingState( allocator ),
+    fCustomInfo( Rtt_NEW( fAllocator, CustomGraphicsInfo( fAllocator ) ) ),
+    fSyncedCount( 0U ),
+    fMaybeDirty( false ),
+    fGeometryWriters( allocator ),
+    fCurrentGeometryWriterList( NULL ),
+    fCanAddGeometryWriters( false ),
 	fMaskCountIndex( 0 ),
 	fMaskCount( allocator ),
 	fCurrentProgramMaskCount( 0 ),
 	fStatisticsEnabled( false ),
 	fScissorEnabled( false ),
 	fFrameBufferObject( NULL ),
-	fInsertionLimit( std::numeric_limits<U32>::max() ),
+    fInsertionLimit( (std::numeric_limits<U32>::max)() ),
+    fRenderDataCount( 0 ),
+	fVertexOffset( 0 ),
+	fCurrentGeometry( NULL ),
 	fTimeDependencyCount( 0 )
 {
     // Always have at least 1 mask count.
@@ -190,9 +205,9 @@ Renderer::Initialize()
 }
 
 void 
-Renderer::BeginFrame( Real totalTime, Real deltaTime, const TimeTransform *defTimeTransform, Real contentScaleX )
+Renderer::BeginFrame( Real totalTime, Real deltaTime, const TimeTransform *defTimeTransform, Real contentScale, bool isCapture )
 {
-	fContentScaleX = contentScaleX;
+	fContentScaleX = contentScale;
 
     // NOTE: No nested calls allowed
 
@@ -221,7 +236,7 @@ Renderer::BeginFrame( Real totalTime, Real deltaTime, const TimeTransform *defTi
     fTotalTime->SetValue( totalTime );
     fBackCommandBuffer->BindUniform( fTotalTime, Uniform::kTotalTime );
 
-	fContentScale->SetValue( contentScaleX, fContentScaleX );
+	fContentScale->SetValue( contentScale, contentScale );
 	fBackCommandBuffer->BindUniform( fContentScale, Uniform::kContentScale );
 
     fDeltaTime->SetValue( deltaTime );
@@ -524,11 +539,14 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
 	Rtt_ASSERT( geometry );
 	fDegenerateVertexCount = 0;
 
-	// Geometry that is stored on the GPU does not need to be copied
-	// over each frame. As a consequence, they can not be batched.	
-	if( geometry->GetStoredOnGPU() )
-	{
-		FlushBatch();
+    const ShaderResource* shaderResource = data->fProgram->GetShaderResource();
+    const FormatExtensionList* programList = shaderResource->GetExtensionList();
+    const FormatExtensionList *previousGeometryList = NULL;
+    
+    if (NULL != fPrevious.fGeometry)
+    {
+        previousGeometryList = fPrevious.fGeometry->GetExtensionList();
+    }
 
     const FormatExtensionList* extensionList = geometry->GetExtensionList();
     const U32 vertexExtra = extensionList ? extensionList->ExtraVertexCount() : 0;
@@ -546,36 +564,13 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
         formatsDirty = !FormatExtensionList::Match( previousProgramList, programList );
     }
 
-		// Only triangle strips are batched. All other primitive types
-		// force the previous batch to draw and a new one to be started.
-		Geometry::PrimitiveType primitiveType = geometry->GetPrimitiveType();
-		if( primitiveType != fPreviousPrimitiveType || primitiveType != Geometry::kTriangleStrip )
-		{
-			batch = false;
-		}
-		
-		// If the previous RenderData had its Geometry stored on the GPU,
-		// then the current RenderData must begin a new batch.
-		bool storedOnGPU = fPrevious.fGeometry && fPrevious.fGeometry->GetStoredOnGPU();
-		if( storedOnGPU )
-		{
-			batch = false;
-		}
-		fPrevious.fGeometry = geometry;
-		
-		// Depending on batching, wireframe, etc, the amount of space
-		// needed may be more than what is used by the Geometry itself.
-		const U32 verticesRequired = ComputeRequiredVertices( geometry, fWireframeEnabled );
-//		bool enoughSpace = fCurrentGeometry;
-//		if ( enoughSpace )
-//		{
-//			U32 geometryLimit = Min( (U32)256, ( fCurrentGeometry->GetVerticesAllocated() - fCurrentGeometry->GetVerticesUsed() ) );
-//			enoughSpace = verticesRequired <= geometryLimit;
-//		}
+    const Geometry::ExtensionBlock* block = geometry->GetExtensionBlock();
+    bool isInstanced = Geometry::UsesInstancing( block, extensionList );
+	bool mustReconcileFormats = formatsDirty;
 
     // Geometry that is stored on the GPU does not need to be copied
     // over each frame. As a consequence, they can not be batched.
-    if( geometry->GetStoredOnGPU() && !fWireframeEnabled )
+    if( geometry->GetStoredOnGPU() )
     {
         FlushBatch();
 
@@ -597,23 +592,85 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
 			mustReconcileFormats = true; // geometry is new
         }
 
-		// Update previous batch
-		fPreviousPrimitiveType = primitiveType;
-		
-		if( fWireframeEnabled )
-		{
-			if( fPreviousPrimitiveType != Geometry::kLineLoop )
+        fCachedVertexOffset = fVertexOffset;
+        fCachedVertexCount = fVertexCount;
+        fCachedVertexExtra = fVertexExtra;
+        fVertexExtra = 0;
+        fVertexOffset = 0;
+        fVertexCount = geometry->GetVerticesUsed();
+        fIndexCount = geometry->GetIndicesUsed();
+        fPreviousPrimitiveType = geometry->GetPrimitiveType();
+    }
+    else
+    {
+        bool batch =
+            !( blendDirty
+                || blendEquationDirty
+                || fillDirty0
+                || fillDirty1
+                || maskTextureDirty
+                || maskUniformDirty
+                || programDirty
+                || userUniformDirty0
+                || userUniformDirty1
+                || userUniformDirty2
+                || userUniformDirty3
+                || formatsDirty
+				|| fCaptureGroups.Length() > 0 
+                || dirtyIndices.Length() > 0 );
+
+        // Only triangle strips are batched. All other primitive types
+        // force the previous batch to draw and a new one to be started.
+        Geometry::PrimitiveType primitiveType = geometry->GetPrimitiveType();
+        if( primitiveType != fPreviousPrimitiveType || primitiveType != Geometry::kTriangleStrip )
+        {
+            batch = false;
+        }
+
+        // Instanced draws will also break batching.
+        if (isInstanced)
+        {
+            batch = false;
+        }
+    
+        else if (fPrevious.fProgram)
+        {
+            const FormatExtensionList* previousProgramList = fPrevious.fProgram->GetShaderResource()->GetExtensionList();
+            
+            if (previousProgramList && previousProgramList->HasInstanceRateData())
+            {
+                batch = false;
+            }
+        }
+        
+        // If the previous RenderData had its Geometry stored on the GPU,
+        // then the current RenderData must begin a new batch.
+        bool storedOnGPU = fPrevious.fGeometry && fPrevious.fGeometry->GetStoredOnGPU();
+        if( storedOnGPU )
+        {
+            batch = false;
+            mustReconcileFormats = true; // pointers out of date
+        }
+        fPrevious.fGeometry = geometry;
+        
+        // Depending on batching, wireframe, etc, the amount of space
+        // needed may be more than what is used by the Geometry itself.
+        const U32 verticesComputed = ComputeRequiredVertices( geometry );
+        const U32 verticesRequired = verticesComputed * (1 + vertexExtra);
+
+        bool enoughSpace = fCurrentGeometry && verticesRequired <=
+         ( fCurrentGeometry->GetVerticesAllocated() - fCurrentGeometry->GetVerticesUsed() );
+        if( !batch || !enoughSpace )
+        {
+            UpdateBatch( batch, enoughSpace, storedOnGPU, verticesRequired );
+
+            if ( 0 == fVertexOffset )
 			{
-				fPreviousPrimitiveType = Geometry::kLines;
+				mustReconcileFormats = true; // geometry is new
 			}
-			
-			if( geometry->GetStoredOnGPU() && !geometry->fGPUResource )
-			{
-				QueueCreate( geometry );
-			}
-		}
-	}
-	fRenderDataCount++;
+        }
+        
+        fVertexExtra = vertexExtra;
 
         // Copy the the incoming vertex data into the current Geometry
         // pool instance, even if the data will not be batched.
@@ -634,19 +691,6 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
 
         // Update previous batch
         fPreviousPrimitiveType = primitiveType;
-        
-        if( fWireframeEnabled )
-        {
-            if( fPreviousPrimitiveType != Geometry::kLineLoop )
-            {
-                fPreviousPrimitiveType = Geometry::kLines;
-            }
-            
-            if( geometry->GetStoredOnGPU() && !geometry->fGPUResource )
-            {
-                QueueCreate( geometry );
-            }
-        }
     }
     fRenderDataCount++;
     
@@ -694,18 +738,18 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
         float f0 = 1.0f / (float)data->fFillTexture0->GetWidth();
         float f1 = 1.0f / (float)data->fFillTexture0->GetHeight();
 
-		float f2;
-		float f3;
-		if( data->fFillTexture0->IsRetina() )
-		{
-			f2 = ( f0 / fContentScaleX );
-			f3 = ( f1 / fContentScaleY );
-		}
-		else
-		{
-			f2 = f0;
-			f3 = f1;
-		}
+        float f2;
+        float f3;
+        if( data->fFillTexture0->IsRetina() )
+        {
+            f2 = ( f0 / fContentScaleX );
+            f3 = ( f1 / fContentScaleX );
+        }
+        else
+        {
+            f2 = f0;
+            f3 = f1;
+        }
 
         fTexelSize->SetValue( f0,
                                 f1,
@@ -728,22 +772,22 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
         fPrevious.fFillTexture1 = data->fFillTexture1;
         INCREMENT( fStatistics.fTextureBindCount );
 
-		// TODO: Eliminate duplication with above
-		// TODO: Need to use a different Uniform since fTexelSize is used for fFillTexture0
-		float f0 = 1.0f / (float)data->fFillTexture1->GetWidth();
-		float f1 = 1.0f / (float)data->fFillTexture1->GetHeight();
-		float f2;
-		float f3;
-		if( data->fFillTexture1->IsRetina() )
-		{
-			f2 = ( f0 / fContentScaleX );
-			f3 = ( f1 / fContentScaleY );
-		}
-		else
-		{
-			f2 = f0;
-			f3 = f1;
-		}
+        // TODO: Eliminate duplication with above
+        // TODO: Need to use a different Uniform since fTexelSize is used for fFillTexture0
+        float f0 = 1.0f / (float)data->fFillTexture1->GetWidth();
+        float f1 = 1.0f / (float)data->fFillTexture1->GetHeight();
+        float f2;
+        float f3;
+        if( data->fFillTexture1->IsRetina() )
+        {
+            f2 = ( f0 / fContentScaleX );
+            f3 = ( f1 / fContentScaleX );
+        }
+        else
+        {
+            f2 = f0;
+            f3 = f1;
+        }
 
         fTexelSize->SetValue( f0,
                                 f1,
@@ -769,12 +813,23 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
             QueueCreate( data->fProgram );
         }
 
-		Program::Version version = fWireframeEnabled ? Program::kWireframe : static_cast<Program::Version>( MaskCount() );
-		fBackCommandBuffer->BindProgram( data->fProgram, version );
-		fPrevious.fProgram = data->fProgram;
-		INCREMENT( fStatistics.fProgramBindCount );
-		fCurrentProgramMaskCount = MaskCount();
-	}
+        Program::Version version = static_cast<Program::Version>( MaskCount() );
+        fBackCommandBuffer->BindProgram( data->fProgram, version );
+        fPrevious.fProgram = data->fProgram;
+        INCREMENT( fStatistics.fProgramBindCount );
+        fCurrentProgramMaskCount = MaskCount();
+        
+        if (shaderData)
+        {
+            const CoronaEffectCallbacks * effectCallbacks = shaderResource->GetEffectCallbacks();
+        
+            if (effectCallbacks && effectCallbacks->shaderBind)
+            {
+                OBJECT_HANDLE_SCOPE();
+                
+                OBJECT_HANDLE_STORE( Renderer, renderer, this );
+                
+                effectCallbacks->shaderBind( renderer, shaderData->GetExtraSpace() );
 
                 if (fMaybeDirty)
                 {
@@ -1671,20 +1726,13 @@ Renderer::UpdateBatch( bool batch, bool enoughSpace, bool storedOnGPU, U32 verti
 {
     CheckAndInsertDrawCommand();
     
-    if( storedOnGPU && !fWireframeEnabled )
-    {
-        fVertexOffset = fCachedVertexOffset;
-        fVertexCount = fCachedVertexCount;
-        fVertexExtra = fCachedVertexExtra;
+    fVertexOffset = fCachedVertexOffset;
+    fVertexCount = fCachedVertexCount;
+    fVertexExtra = fCachedVertexExtra;
 
-	if( storedOnGPU )
+	if( enoughSpace )
 	{
-		fVertexOffset = fCachedVertexOffset;
-		fVertexCount = fCachedVertexCount;
-		if( enoughSpace )
-		{
-			fBackCommandBuffer->BindGeometry( fCurrentGeometry );
-		}
+		fBackCommandBuffer->BindGeometry( fCurrentGeometry );
 	}
 	
 	fVertexOffset += fVertexCount;
@@ -1871,22 +1919,14 @@ Renderer::CopyIndexedTrianglesAsLines( Geometry* geometry, Geometry::Vertex* des
 int
 Renderer::GetVersionCode( bool addingMask ) const
 {
-    if (fWireframeEnabled)
+    int count = fCurrentProgramMaskCount;
+    
+    if (addingMask)
     {
-        return Program::kWireframe;
+        ++count;
     }
     
-    else
-    {
-        int count = fCurrentProgramMaskCount;
-        
-        if (addingMask)
-        {
-            ++count;
-        }
-        
-        return count <= 3 ? static_cast<Program::Version>( count ) : -1;
-    }
+    return count <= 3 ? static_cast<Program::Version>( count ) : -1;
 }
 
 void
@@ -1921,51 +1961,23 @@ Renderer::CopyExtendedVertexData( Geometry* geometry, Geometry::Vertex* destinat
 {
     const U32 verticesUsed = geometry->GetVerticesUsed();
 
-    if( fWireframeEnabled )
+    if( geometry->GetPrimitiveType() == Geometry::kTriangleStrip )
     {
-        // Given the primitive type, convert the vertex data to lines
-        switch( geometry->GetPrimitiveType() )
-        {
-            case Geometry::kTriangleStrip:
-                CopyExtendedTriangleStripsAsLines( geometry, destination );
-                break;
-            case Geometry::kTriangleFan:
-                CopyExtendedTriangleFanAsLines( geometry, destination );
-                break;
-            case Geometry::kTriangles:
-                CopyExtendedTrianglesAsLines( geometry, destination );
-                break;
-            case Geometry::kIndexedTriangles:
-                CopyExtendedIndexedTrianglesAsLines( geometry, destination );
-                break;
-            case Geometry::kLineLoop:
-                MergeVertexDataRange( &destination, geometry, verticesUsed, fVertexExtra );
-                break;
-            case Geometry::kLines:
-                MergeVertexDataRange( &destination, geometry, verticesUsed, fVertexExtra );
-                break;
-        }
+        // Triangle strips are batched by adding degenerate triangles
+        // at the beginning and end of each strip.
+        MergeVertexData( &destination, geometry->GetVertexData(), geometry->GetExtendedVertexData(), 0, fVertexExtra );
+
+        MergeVertexDataRange( &destination, geometry, verticesUsed, fVertexExtra );
+
+        MergeVertexData( &destination, geometry->GetVertexData(), geometry->GetExtendedVertexData(), verticesUsed - 1, fVertexExtra );
+
+        fDegenerateVertexCount = 1;
     }
     else
     {
-        if( geometry->GetPrimitiveType() == Geometry::kTriangleStrip )
-        {
-            // Triangle strips are batched by adding degenerate triangles
-            // at the beginning and end of each strip.
-            MergeVertexData( &destination, geometry->GetVertexData(), geometry->GetExtendedVertexData(), 0, fVertexExtra );
-
-            MergeVertexDataRange( &destination, geometry, verticesUsed, fVertexExtra );
-
-            MergeVertexData( &destination, geometry->GetVertexData(), geometry->GetExtendedVertexData(), verticesUsed - 1, fVertexExtra );
-
-            fDegenerateVertexCount = 1;
-        }
-        else
-        {
-            // For data which does not exist on the GPU and is not batched,
-            // we still double buffer it to be threadsafe.
-            MergeVertexDataRange( &destination, geometry, verticesUsed, fVertexExtra );
-        }
+        // For data which does not exist on the GPU and is not batched,
+        // we still double buffer it to be threadsafe.
+        MergeVertexDataRange( &destination, geometry, verticesUsed, fVertexExtra );
     }
 }
 

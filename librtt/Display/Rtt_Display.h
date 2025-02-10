@@ -64,7 +64,7 @@ class Display
 
 	public:
 		//! \Return true for success. False for failure.
-		virtual bool Initialize( lua_State *L, int configIndex );
+		virtual bool Initialize( lua_State *L, int configIndex, const char * backend, void * backendContext );
 		virtual void Teardown();
 
     protected:
@@ -113,6 +113,9 @@ class Display
     public:
         virtual void UnloadResources();
         virtual void ReloadResources();
+    
+        void GatherObjectFactories( const luaL_Reg funcs[], void * library );
+        bool PushObjectFactories() const;
 
 	public:
 		virtual GroupObject *Orphanage();
@@ -142,6 +145,9 @@ class Display
 
 		virtual S32 PointsWidth() const;
 		virtual S32 PointsHeight() const;
+
+		void ContentToScreenUnrounded( float& x, float& y ) const;
+		void ContentToScreenUnrounded( float& x, float& y, float& w, float& h ) const;
 
 		virtual void ContentToScreen( S32& x, S32& y ) const;
         virtual void ContentToScreen( Rtt_Real& x, Rtt_Real& y, Rtt_Real& w, Rtt_Real& h ) const;
@@ -184,7 +190,8 @@ class Display
 		static U32 GetMaxTextureSize();
 		static const char *GetGlString( const char *s );
 		static bool GetGpuSupportsHighPrecisionFragmentShaders();
-		static size_t GetMaxVertexTextureUnits();
+        static U32 GetMaxUniformVectorsCount();
+        static U32 GetMaxVertexTextureUnits();
 
         bool HasFramebufferBlit( bool * canScale ) const;
         void GetVertexAttributes( VertexAttributeSupport & support ) const;
@@ -220,6 +227,9 @@ class Display
 		// about window size
 		RenderingStream *fStream;
 		PlatformSurface *fScreenSurface;
+
+        int fObjectFactories;
+        void * fFactoryFunc;
 
 		bool fIsCollecting; // guards against nested calls to Collect()
 };

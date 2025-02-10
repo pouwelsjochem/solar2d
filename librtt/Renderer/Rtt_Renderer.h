@@ -58,22 +58,22 @@ class Renderer
         // be called when a valid rendering context is active.
         virtual void Initialize();
 
-		// Perform any per-frame preparation. Total time is the time in seconds
-		// since the start of the application. Delta time is the amount of time
-		// in seconds it took to complete the previous frame.
-		virtual void BeginFrame( Real totalTime, Real deltaTime, const TimeTransform *defTimeTransform, Real contentScale );
+        // Perform any per-frame preparation. Total time is the time in seconds
+        // since the start of the application. Delta time is the amount of time
+        // in seconds it took to complete the previous frame.
+        virtual void BeginFrame( Real totalTime, Real deltaTime, const TimeTransform *defTimeTransform, Real contentScale, bool isCapture = false );
 
         // Perform any per-frame finalization.
         virtual void EndFrame();
 
-		void BeginDrawing();
+        void BeginDrawing();
 
-		virtual void CaptureFrameBuffer( RenderingStream & stream, BufferBitmap & bitmap, S32 x_in_pixels, S32 y_in_pixels, S32 w_in_pixels, S32 h_in_pixels );
-		virtual void EndCapture() {}
+        virtual void CaptureFrameBuffer( RenderingStream & stream, BufferBitmap & bitmap, S32 x_in_pixels, S32 y_in_pixels, S32 w_in_pixels, S32 h_in_pixels );
+        virtual void EndCapture() {}
 
-		// Get the current view and projection matrices. These 4x4 matrices are
-		// returned via the given pointers, which are assumed to be non-null.
-		void GetFrustum( Real* viewMatrix, Real* projectionMatrix ) const;
+        // Get the current view and projection matrices. These 4x4 matrices are
+        // returned via the given pointers, which are assumed to be non-null.
+        void GetFrustum( Real* viewMatrix, Real* projectionMatrix ) const;
 
         // Set the viewing frustum to use while rendering. This function may be
         // called multiple times per frame. Each call to Insert() will use the
@@ -105,8 +105,8 @@ class Renderer
         // will only be applied if scissor testing is explicitly enabled.
         void SetScissorEnabled( bool enabled );
 
-		// Get the active FrameBufferObject or NULL if one does not exist.
-		FrameBufferObject* GetFrameBufferObject() const;
+        // Get the active FrameBufferObject or NULL if one does not exist.
+        FrameBufferObject* GetFrameBufferObject() const;
 
         // Set the FrameBufferObject. All subsequently inserted RenderData will
         // be drawn to this FBO until SetFrameBufferObject() is called again.
@@ -139,9 +139,9 @@ class Renderer
         // operation, so that the mask count prior to the operation is restored.
         void PopMaskCount();
 
-		// Generate the minimum set of commands needed to ensure that the given
-		// RenderData is properly drawn on the next call to Render().
-		void Insert( const RenderData* data, const ShaderData * shaderData = NULL );
+        // Generate the minimum set of commands needed to ensure that the given
+        // RenderData is properly drawn on the next call to Render().
+        void Insert( const RenderData* data, const ShaderData * shaderData = NULL );
 
         // Render all data added since the last call to swap(). It is both safe
         // and expected that Render() is called while another thread is adding
@@ -171,17 +171,11 @@ class Renderer
         // the next time a valid rendering context is available.
         void QueueDestroy( GPUResource* resource );
 
-		// Return true if wireframe rendering is enabled. Disabled by default.
-		bool GetWireframeEnabled() const;
-
-		// Render triangles as outlines with no interior. Useful for debugging.
-		void SetWireframeEnabled( bool enabled );
-
-		static U32 GetMaxTextureSize();
-		static const char *GetGlString( const char *s );
-		static bool GetGpuSupportsHighPrecisionFragmentShaders();
+        static U32 GetMaxTextureSize();
+        static const char *GetGlString( const char *s );
+        static bool GetGpuSupportsHighPrecisionFragmentShaders();
         static U32 GetMaxUniformVectorsCount();
-		static U32 GetMaxVertexTextureUnits();
+        static U32 GetMaxVertexTextureUnits();
 
         bool HasFramebufferBlit(  bool * canScale ) const;
         void GetVertexAttributes( VertexAttributeSupport & support ) const;
@@ -224,7 +218,7 @@ class Renderer
         // This is primarily useful as a debugging tool. By increasing the count
         // over time, users can visualize render order, batching, etc.
         void SetMaximumRenderDataCount( U32 count );
-	
+    
         void SetCPUResourceObserver(MCPUResourceObserver *resourceObserver);
         void ReleaseGPUResources();
 
@@ -248,9 +242,9 @@ class Renderer
 
         bool IssueCustomCommand( U16 id, const void * data, U32 size );
     
-	public:
-		void InsertCaptureRect( FrameBufferObject * fbo, Texture * texture, const Rect & clipped, const Rect & unclipped );
-		void IssueCaptures( Texture * fill0 );
+    public:
+        void InsertCaptureRect( FrameBufferObject * fbo, Texture * texture, const Rect & clipped, const Rect & unclipped );
+        void IssueCaptures( Texture * fill0 );
 
     public:
         void SetGeometryWriters( const GeometryWriter* list, U32 n = 1 );
@@ -265,7 +259,7 @@ class Renderer
         };
         
     protected:
-	    void WriteGeometry ( void * dstGeomComp, const void* srcGeom, U32 stride, U32 index, U32 count = 1, GeometryWriter::MaskBits validBits = GeometryWriter::kMain );
+        void WriteGeometry ( void * dstGeomComp, const void* srcGeom, U32 stride, U32 index, U32 count = 1, GeometryWriter::MaskBits validBits = GeometryWriter::kMain );
 
     protected:
         // Destroys all queued GPU resources passed into the DestroyQueue() method.
@@ -315,18 +309,18 @@ class Renderer
     public:
         int GetVersionCode( bool addingMask ) const;
 
-	protected:
-		Rtt_Allocator* fAllocator;
-		
-		MCPUResourceObserver *fCPUResourceObserver;
-		
-		LightPtrArray<CPUResource> fCreateQueue;
-		LightPtrArray<CPUResource> fUpdateQueue;
-		Array<GPUResource*> fDestroyQueue;
+    protected:
+        Rtt_Allocator* fAllocator;
+        
+        MCPUResourceObserver *fCPUResourceObserver;
+        
+        LightPtrArray<CPUResource> fCreateQueue;
+        LightPtrArray<CPUResource> fUpdateQueue;
+        Array<GPUResource*> fDestroyQueue;
 
         GeometryPool* fGeometryPool;
         GeometryPool* fInstancingGeometryPool;
-	
+    
         CommandBuffer* fFrontCommandBuffer;
         CommandBuffer* fBackCommandBuffer;
         
@@ -340,16 +334,16 @@ class Renderer
         Array< U32 > fMaskCount; // "Stack" of mask counts
         U32 fCurrentProgramMaskCount;
 
-		bool fStatisticsEnabled;
-		Statistics fStatistics;
-		Rtt_AbsoluteTime fStartTime;
+        bool fStatisticsEnabled;
+        Statistics fStatistics;
+        Rtt_AbsoluteTime fStartTime;
 
-		Real fViewMatrix[16];
-		Real fProjMatrix[16];
-		S32 fViewport[4];
-		S32 fScissor[4];
-		bool fScissorEnabled;
-		FrameBufferObject* fFrameBufferObject;
+        Real fViewMatrix[16];
+        Real fProjMatrix[16];
+        S32 fViewport[4];
+        S32 fScissor[4];
+        bool fScissorEnabled;
+        FrameBufferObject* fFrameBufferObject;
 
         RenderData fPrevious;
         U32 fVertexOffset;
@@ -364,32 +358,32 @@ class Renderer
         U32 fCachedVertexOffset;
         U32 fCachedVertexCount;
         U32 fCachedVertexExtra;
-		U32 fOffsetCorrection;
+        U32 fOffsetCorrection;
         Geometry::PrimitiveType fPreviousPrimitiveType;
         Geometry::Vertex* fCurrentVertex;
         Geometry* fCurrentGeometry;
         Geometry::Vertex* fCurrentInstancingVertex;
         Geometry* fCurrentInstancingGeometry;
 
-		Real fContentScaleX; // Temporary holder.
+        Real fContentScaleX; // Temporary holder.
 
         U32 fTimeDependencyCount;
     
         struct RectPair {
-			Rect fClipped;
-			Rect fUnclipped;
-			RectPair * fNext;
-		};
-	
-		struct CaptureGroup {
-			FrameBufferObject * fFBO;
-			Texture * fTexture;
-			RectPair * fFirst;
-			RectPair * fLast;
-		};
-	
-		Array< CaptureGroup > fCaptureGroups;
-		Array< RectPair > fCaptureRects;
+            Rect fClipped;
+            Rect fUnclipped;
+            RectPair * fNext;
+        };
+    
+        struct CaptureGroup {
+            FrameBufferObject * fFBO;
+            Texture * fTexture;
+            RectPair * fFirst;
+            RectPair * fLast;
+        };
+    
+        Array< CaptureGroup > fCaptureGroups;
+        Array< RectPair > fCaptureRects;
 
         Array< U8 > fDefaultState;
         Array< U8 > fCurrentState;

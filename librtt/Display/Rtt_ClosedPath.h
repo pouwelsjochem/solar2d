@@ -15,6 +15,7 @@
 #include "Display/Rtt_DisplayTypes.h"
 #include "Display/Rtt_ClosedPath.h"
 #include "Renderer/Rtt_RenderData.h"
+#include "Rtt_LuaUserdataProxy.h"
 
 // ----------------------------------------------------------------------------
 struct lua_State;
@@ -30,6 +31,7 @@ class LuaUserdataProxy;
 class MLuaUserdataAdapter;
 class Matrix;
 class VertexCache;
+class Paint;
 struct Rect;
 struct RenderData;
 
@@ -81,6 +83,40 @@ class ClosedPath
 		ClosedPath( Rtt_Allocator* pAllocator );
 		virtual ~ClosedPath();
 
+	    class ExtensionAdapter : public MLuaUserdataAdapter
+        {
+        public:
+            ExtensionAdapter()
+            {
+            }
+            
+        public:
+            static bool IsFillPaint( const DisplayObject* object, const Paint* paint );
+            static Geometry *GetGeometry( DisplayObject* object );
+            static const Geometry *GetGeometry( const DisplayObject* object );
+        
+        public:
+            virtual int ValueForKey(
+                const LuaUserdataProxy& sender,
+                lua_State *L,
+                const char *key ) const;
+
+            virtual bool SetValueForKey(
+                LuaUserdataProxy& sender,
+                lua_State *L,
+                const char *key,
+                int valueIndex ) const;
+
+            virtual void WillFinalize( LuaUserdataProxy& sender ) const;
+
+            virtual StringHash *GetHash( lua_State *L ) const;
+        
+        private:
+            static int getAttributeDetails( lua_State *L );
+            static int setAttributeValue( lua_State *L );
+
+        };
+
 	public:
 		static void UpdateGeometry(
 			Geometry& dst, 
@@ -93,6 +129,9 @@ class ClosedPath
 		virtual void Translate( Real dx, Real dy );
 		virtual void Update( RenderData& data, const Matrix& srcToDstSpace );
 		virtual void UpdateResources( Renderer& renderer ) const = 0;
+    
+        static const void * ZKey();
+        static const void * IndicesKey();
 
 	public:
 		// Returns true if bounds was actually changed; returns false if no-op.
@@ -132,7 +171,8 @@ class ClosedPath
 		void SetAdapter( const MLuaUserdataAdapter *newValue ) { fAdapter = newValue; }
 		void PushProxy( lua_State *L ) const;
 		void DetachProxy() { fAdapter = NULL; fProxy = NULL; }
-	
+	    void ReleaseProxy( LuaUserdataProxy *proxy );
+
 	public:
 		// Use the PropertyMask constants
 		// Make properties only read-only to the public
