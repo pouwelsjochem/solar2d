@@ -1130,8 +1130,6 @@
 		C2FCD3E11B38CF4B00EF7B02 /* Rtt_IOSAppPackager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CE912B720C90057F594 /* Rtt_IOSAppPackager.mm */; };
 		C2FCD3E31B38D03C00EF7B02 /* AndroidAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F36554146C44200019808D /* AndroidAppBuildController.mm */; };
 		C2FCD3E41B38D06000EF7B02 /* AppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B00FA014565609008FB6E6 /* AppBuildController.mm */; };
-		DB0B8BDC299300D00039E6D3 /* CoronaMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AA2C6AA3291C35A90093B0BE /* CoronaMemory.cpp */; };
-		DB0B8BE3299300DF0039E6D3 /* CoronaMemory.h in Headers */ = {isa = PBXBuildFile; fileRef = AA2C6AAA291C35A90093B0BE /* CoronaMemory.h */; };
 		DB56B4CA284C2E7D00EC8B14 /* Rtt_AppleKeyServices.h in Headers */ = {isa = PBXBuildFile; fileRef = DB56B4C8284C2E7C00EC8B14 /* Rtt_AppleKeyServices.h */; };
 		DB56B4CB284C2E7D00EC8B14 /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B4C9284C2E7D00EC8B14 /* Rtt_AppleKeyServices.mm */; };
 		DB56B4CC284C2E7D00EC8B14 /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B4C9284C2E7D00EC8B14 /* Rtt_AppleKeyServices.mm */; };
@@ -2507,6 +2505,8 @@
 		F5C39D7C23EBCC280058DD5E /* CoronaSimulator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CoronaSimulator.entitlements; sourceTree = "<group>"; };
 		F5C757B01C7538A4004A3604 /* CoronaGraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaGraphics.cpp; path = Corona/CoronaGraphics.cpp; sourceTree = "<group>"; };
 		F5C757B11C7538A4004A3604 /* CoronaGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGraphics.h; path = Corona/CoronaGraphics.h; sourceTree = "<group>"; };
+		F5DE5C3729810B4000BE463F /* CoronaMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaMemory.cpp; path = Corona/CoronaMemory.cpp; sourceTree = "<group>"; };
+		F5DE5C3E29810B4100BE463F /* CoronaMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaMemory.h; path = Corona/CoronaMemory.h; sourceTree = "<group>"; };
 		F5F053F620374B99007E92B0 /* SimpleMutex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SimpleMutex.c; sourceTree = "<group>"; };
 		F5F053F720374B99007E92B0 /* SimpleMutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMutex.h; sourceTree = "<group>"; };
 		F5F053F820374B99007E92B0 /* ALmixer_RWops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALmixer_RWops.h; sourceTree = "<group>"; };
@@ -5535,7 +5535,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB0B8BDC299300D00039E6D3 /* CoronaMemory.cpp in Sources */,
 				F53C328D2404E2AB00BC2BED /* CoronaBuilderPluginCollector.lua in Sources */,
 				F5FFADBE23FFC80E004E61A9 /* CoronaOfflineiOSPackager.lua in Sources */,
 				F5DB5B1A21136F9D00EC5CBC /* linuxPackageApp.lua in Sources */,
