@@ -506,6 +506,10 @@
 		AAF349AC29EFC53300076706 /* Rtt_Profiling.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF349AA29EFC53300076706 /* Rtt_Profiling.h */; };
 		AAD3E2052B0BEC3A000A4D45 /* Rtt_ObjectHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD3E2032B0BEC3A000A4D45 /* Rtt_ObjectHandle.h */; };
 		AAD3E2062B0BEC3A000A4D45 /* Rtt_ObjectHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAD3E2042B0BEC3A000A4D45 /* Rtt_ObjectHandle.cpp */; };
+		AAF34A9229F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF34A8E29F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.h */; };
+		AAF34A9329F9DF3600076706 /* Rtt_TextureResourceCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAF34A8F29F9DF3600076706 /* Rtt_TextureResourceCapture.cpp */; };
+		AAF34A9429F9DF3600076706 /* Rtt_TextureResourceCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF34A9029F9DF3600076706 /* Rtt_TextureResourceCapture.h */; };
+		AAF34A9529F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAF34A9129F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.cpp */; };
 		C2756C261C57220300BE3194 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C241C57220300BE3194 /* NSString+Extensions.h */; };
 		C2756C271C57220300BE3194 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C251C57220300BE3194 /* NSString+Extensions.m */; };
 		C2A8710D1D4BE48000AF3326 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */; };
@@ -1183,6 +1187,10 @@
 		AA2ED7D52708264E00CEE021 /* CoronaObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaObjects.cpp; path = Corona/CoronaObjects.cpp; sourceTree = "<group>"; };
 		AAF349A929EFC53300076706 /* Rtt_Profiling.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Profiling.cpp; sourceTree = "<group>"; };
 		AAF349AA29EFC53300076706 /* Rtt_Profiling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Profiling.h; sourceTree = "<group>"; };
+		AAF34A8E29F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceCaptureAdapter.h; path = Display/Rtt_TextureResourceCaptureAdapter.h; sourceTree = "<group>"; };
+		AAF34A8F29F9DF3600076706 /* Rtt_TextureResourceCapture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceCapture.cpp; path = Display/Rtt_TextureResourceCapture.cpp; sourceTree = "<group>"; };
+		AAF34A9029F9DF3600076706 /* Rtt_TextureResourceCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TextureResourceCapture.h; path = Display/Rtt_TextureResourceCapture.h; sourceTree = "<group>"; };
+		AAF34A9129F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureResourceCaptureAdapter.cpp; path = Display/Rtt_TextureResourceCaptureAdapter.cpp; sourceTree = "<group>"; };
 		C2756C241C57220300BE3194 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../platform/apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C2756C251C57220300BE3194 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../platform/apple/NSString+Extensions.m"; sourceTree = "<group>"; };
 		C2A8710B1D4BE48000AF3326 /* Rtt_FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_FileSystem.cpp; sourceTree = "<group>"; };
@@ -2352,6 +2360,7 @@
 				03D1C52B1D70C15E00DB02EE /* Rtt_Preference.h in Headers */,
 				A47428F217694EB000C63853 /* Rtt_TesselatorShape.h in Headers */,
 				AA2ED7D72708264E00CEE021 /* CoronaObjects.h in Headers */,
+				AAF34A9229F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.h in Headers */,
 				A47428F617694EB000C63853 /* Rtt_VertexCache.h in Headers */,
 				A474292F176959FE00C63853 /* Rtt_FilePath.h in Headers */,
 				A474293317695A0700C63853 /* Rtt_HitTestObject.h in Headers */,
@@ -2834,6 +2843,7 @@
 				A47428A817694EB000C63853 /* Rtt_Display.cpp in Sources */,
 				A47428AA17694EB000C63853 /* Rtt_DisplayDefaults.cpp in Sources */,
 				A47428AC17694EB000C63853 /* Rtt_DisplayObject.cpp in Sources */,
+				AAF34A9529F9DF3600076706 /* Rtt_TextureResourceCaptureAdapter.cpp in Sources */,
 				A47428AE17694EB000C63853 /* Rtt_DisplayPath.cpp in Sources */,
 				A47428B117694EB000C63853 /* Rtt_DisplayV2.cpp in Sources */,
 				A47428B317694EB000C63853 /* Rtt_GroupObject.cpp in Sources */,

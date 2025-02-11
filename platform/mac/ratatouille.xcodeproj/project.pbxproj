@@ -4117,6 +4117,7 @@
 				000CE7BA12B73EE300D9B6A4 /* Rtt_MCallback.h in Headers */,
 				000CE7BB12B73EE300D9B6A4 /* Rtt_MCrypto.h in Headers */,
 				F5B248541B57123B0087FFBC /* Rtt_TextureResourceAdapter.h in Headers */,
+				AAF34A8429F9CAA800076706 /* Rtt_TextureResourceCapture.h in Headers */,
 				000CE7BF12B73EE300D9B6A4 /* Rtt_MIterable.h in Headers */,
 				000CE7C012B73EE300D9B6A4 /* Rtt_MKeyValueIterable.h in Headers */,
 				000CE7C112B73EE300D9B6A4 /* Rtt_MLuaProxyable.h in Headers */,
