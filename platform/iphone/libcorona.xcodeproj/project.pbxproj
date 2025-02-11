@@ -2774,7 +2774,6 @@
 				000DCBD912B05F3E00042A5E /* Rtt_LuaLibNative.cpp in Sources */,
 				000DCBDB12B05F3E00042A5E /* Rtt_LuaLibOpenAL.cpp in Sources */,
 				000DCBDF12B05F3E00042A5E /* Rtt_LuaLibPhysics.cpp in Sources */,
-				AA2C6AB7291C37320093B0BE /* CoronaMemory.cpp in Sources */,
 				000DCBE512B05F3E00042A5E /* Rtt_LuaLibSQLite.cpp in Sources */,
 				000DCBE712B05F3E00042A5E /* Rtt_LuaLibSystem.cpp in Sources */,
 				000DCBE912B05F3E00042A5E /* Rtt_LuaProxy.cpp in Sources */,
