@@ -193,6 +193,20 @@ public class CoronaActivity extends Activity {
 		//       externally such as by a notification.
 		myInitialIntent = getIntent();
 
+		boolean wantsDepthBuffer = false, wantsStencilBuffer = false;
+		try {
+			android.content.pm.ApplicationInfo applicationInfo;
+			applicationInfo = getPackageManager().getApplicationInfo(
+					getPackageName(), android.content.pm.PackageManager.GET_META_DATA);
+			if (applicationInfo != null && applicationInfo.metaData != null) {
+				wantsDepthBuffer = applicationInfo.metaData.getBoolean( "wantsDepthBuffer" );
+				wantsStencilBuffer = applicationInfo.metaData.getBoolean( "wantsStencilBuffer" );
+			}
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 		// Show the window fullscreen, if possible.
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -213,7 +227,7 @@ public class CoronaActivity extends Activity {
 		CoronaEnvironment.setCoronaActivity(this);
 
 		// Create our CoronaRuntime, which also initializes the native side of the CoronaRuntime.
-		fCoronaRuntime = new CoronaRuntime(this, false);
+		fCoronaRuntime = new CoronaRuntime(this, false, wantsDepthBuffer, wantsStencilBuffer);
 		fController = fCoronaRuntime.getController();
 		myGLView = fCoronaRuntime.getGLView();
 
