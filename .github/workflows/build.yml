@@ -344,27 +344,15 @@ jobs:
         with:
           name: Native
           path: Native
+      - name: Rename Artifacts
+        run: |
+          set -x
+          mkdir artifacts
+          mv Simulator-macOS/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.dmg artifacts/Solar2D-macOS-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
+          mv Simulator-Windows/Solar2D-${{ env.BUILD }}.msi artifacts/Solar2D-Windows-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
       - name: Create Release
         uses: softprops/action-gh-release@v2.1.0
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Solar2D ${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}
-          body: ${{ env.GIT_LOG }}
-      - name: Upload Release Asset for macOS Simulator
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Simulator-macOS/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
-          asset_name: Solar2D-macOS-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.dmg
-          asset_content_type: application/x-apple-diskimage
-      - name: Upload Release Asset for Windows Simulator
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Simulator-Windows/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
-          asset_name: Solar2D-Windows-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
-          asset_content_type: application/x-msi
+          files: artifacts/*
+          name: Solar2D ${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}
+          generate_release_notes: true
