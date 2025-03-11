@@ -183,6 +183,15 @@ GLProgram::Destroy()
 			Reset( data );
 		}
 	}
+         
+    if (fCleanupShellTransform) 
+    { 
+        fCleanupShellTransform( &fCleanupShellTransform ); // n.b. used as own key 
+    } 
+ 
+    Rtt_DELETE( fUniformsCache ); 
+     
+    fUniformsCache = NULL; 
 }
 
 void
@@ -204,20 +213,16 @@ GLProgram::Bind( Program::Version version )
 void
 GLProgram::Create( Program::Version version, VersionData& data )
 {
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	data.fVertexShader = glCreateShader( GL_VERTEX_SHADER );
 	data.fFragmentShader = glCreateShader( GL_FRAGMENT_SHADER );
 	GL_CHECK_ERROR();
-#endif
 
     data.fProgram = glCreateProgram();
     GL_CHECK_ERROR();
 
-#ifndef Rtt_USE_PRECOMPILED_SHADERS
 	glAttachShader( data.fProgram, data.fVertexShader );
 	glAttachShader( data.fProgram, data.fFragmentShader );
 	GL_CHECK_ERROR();
-#endif
 	
 	Update( version, data );
 }
@@ -329,9 +334,9 @@ GLProgram::UpdateShaderSource( Program* program, Program::Version version, Versi
 	char maskBuffer[] = "#define MASK_COUNT 0\n";
 	switch( version )
 	{
-		case Program::kMaskCount1:	maskBuffer[sizeof( maskBuffer ) - 3] = '1'; break;
-		case Program::kMaskCount2:	maskBuffer[sizeof( maskBuffer ) - 3] = '2'; break;
-		case Program::kMaskCount3:	maskBuffer[sizeof( maskBuffer ) - 3] = '3'; break;
+		case Program::kMaskCount1:    maskBuffer[sizeof( maskBuffer ) - 3] = '1'; break;
+		case Program::kMaskCount2:    maskBuffer[sizeof( maskBuffer ) - 3] = '2'; break;
+		case Program::kMaskCount3:    maskBuffer[sizeof( maskBuffer ) - 3] = '3'; break;
 		default: break;
 	}
 
@@ -372,15 +377,130 @@ GLProgram::UpdateShaderSource( Program* program, Program::Version version, Versi
         details.push_back( detail );
     }
 
-	// Fragment shader.
-	{
-		shader_source[4] = program->GetFragmentShaderSource();
-		glShaderSource( data.fFragmentShader,
-						( sizeof(shader_source) / sizeof(shader_source[0]) ),
-						shader_source,
-						NULL );
-		GL_CHECK_ERROR();
-	}
+    params.details = details.data(); 
+    params.ndetails = details.size(); 
+    params.userData = shellTransform ? shellTransform->userData : NULL; 
+ 
+    std::vector< U8 > space; 
+    U8 * spaceData = NULL; 
+ 
+    if (shellTransform && shellTransform->workSpace) 
+    { 
+        space.resize( shellTransform->workSpace ); 
+ 
+        spaceData = space.data(); 
+    } 
+ 
+    // Vertex shader. 
+    { 
+        const char * extendedSources[7] = {}, * extendedHints[8] = {}; 
+        std::string extensionAttributes, suffixStr, versionStr; 
+         
+        params.hints = hints; 
+        params.sources = shader_source; 
+        params.nsources = sizeof(shader_source) / sizeof(shader_source[0]); 
+        params.type = "vertex"; 
+         
+        shader_source[4] = program->GetVertexShaderSource(); 
+        hints[4] = "vertexSource"; 
+ 
+        // add any boilerplate for extended vertices and / or instancing 
+        const FormatExtensionList* extensionList = shaderResource->GetExtensionList(); 
+         
+        if (extensionList) 
+        { 
+            for (int i = 0; i < 4; ++i) 
+            { 
+                extendedSources[i] = shader_source[i]; 
+                extendedHints[i] = hints[i]; 
+            } 
+                         
+            GatherAttributeExtensions( extensionList, extensionAttributes ); 
+             
+            const char * originalSource = shader_source[4], * originalHint = hints[4]; 
+            U32 nsources = params.nsources + 1; 
+             
+            extendedSources[4] = extensionAttributes.c_str(); 
+            extendedHints[4] = "extensionAttributes"; 
+             
+            // enable instances and / or provide IDs for the same 
+            if (extensionList->IsInstanced()) 
+            { 
+                const char * idSuffix = GLGeometry::InstanceIDSuffix(); 
+                 
+                if (idSuffix) 
+                { 
+                    char buf[BUFSIZ]; 
+             
+                    if ('*' == *idSuffix) 
+                    { 
+                        ++idSuffix; 
+                         
+                        U32 offset = 0; 
+                         
+                        char version[64] = {}; 
+                         
+                        while ('\n' != shader_source[0][offset]) 
+                        { 
+                            Rtt_ASSERT( offset < 63 ); 
+                            Rtt_ASSERT( shader_source[0][offset] ); 
+                             
+                            version[offset++] = shader_source[0][offset]; 
+                        } 
+                         
+                        sprintf( buf, 
+                                "%s\n\n#extension GL_%s_draw_instanced : enable%s", 
+                                version, idSuffix, shader_source[0] + offset ); 
+                         
+                        versionStr = buf; 
+                         
+                        extendedSources[0] = versionStr.c_str(); 
+                    } 
+                     
+					sprintf( buf, 
+							"\n#define CoronaInstanceID int(gl_InstanceID%s)\n" 
+							"\n#define CoronaInstanceFloat float(gl_InstanceID%s)\n\n", 
+							idSuffix, idSuffix ); 
+                     
+                    suffixStr = buf; 
+                     
+                    extendedSources[nsources - 1] = suffixStr.c_str(); 
+                } 
+                 
+                else 
+                { 
+					extendedSources[nsources - 1] = "\n#define CoronaInstanceID 0\n" 
+												"\n#define CoronaInstanceFloat 0.\n\n"; 
+                } 
+                 
+                extendedHints[nsources - 1] = "instanceID"; 
+                 
+                ++nsources; 
+            } 
+ 
+            extendedSources[nsources - 1] = originalSource; 
+            extendedHints[nsources - 1] = originalHint; 
+ 
+            params.hints = extendedHints; 
+            params.sources = extendedSources; 
+            params.nsources = nsources; 
+        } 
+         
+        SetShaderSource( data.fVertexShader, params, shellTransform, spaceData, shellTransformKey ); 
+    } 
+ 
+    // Fragment shader. 
+    { 
+        shader_source[4] = program->GetFragmentShaderSource(); 
+ 
+        hints[4] = "fragmentSource"; 
+        params.type = "fragment"; 
+        params.hints = hints; 
+        params.sources = shader_source; 
+        params.nsources = sizeof(shader_source) / sizeof(shader_source[0]); 
+         
+        SetShaderSource( data.fFragmentShader, params, shellTransform, spaceData, shellTransformKey ); 
+    } 
 }
 
 void
@@ -394,13 +514,33 @@ GLProgram::Update( Program::Version version, VersionData& data )
 	glBindAttribLocation( data.fProgram, Geometry::kVertexUserDataAttribute, "a_UserData" );
 	GL_CHECK_ERROR();
 
+ 
+    const FormatExtensionList* extensionList = program->GetShaderResource()->GetExtensionList(); 
+ 
+    if (extensionList) 
+    { 
+        GLuint first = Geometry::FirstExtraAttribute(); 
+ 
+        for (U32 i = 0; i < extensionList->GetAttributeCount(); ++i) 
+        { 
+            S32 index; 
+            char buf[BUFSIZ]; 
+             
+            sprintf( buf, "a_%s", extensionList->FindNameByAttribute( i, &index ) ); 
+             
+            glBindAttribLocation( data.fProgram, first + index, buf ); 
+        } 
+ 
+        GL_CHECK_ERROR(); 
+    } 
+
     UpdateShaderSource( program,
                         version,
                         data );
 
 
-	bool isVerbose = program->IsCompilerVerbose();
-	int kernelStartLine = 0;
+    bool isVerbose = program->IsCompilerVerbose(); 
+    int kernelStartLine = 0; 
 
     glCompileShader( data.fVertexShader );
     if ( isVerbose )
