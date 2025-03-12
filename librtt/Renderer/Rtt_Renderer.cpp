@@ -1727,16 +1727,19 @@ Renderer::UpdateBatch( bool batch, bool enoughSpace, bool storedOnGPU, U32 verti
 {
     CheckAndInsertDrawCommand();
     
-    fVertexOffset = fCachedVertexOffset;
-    fVertexCount = fCachedVertexCount;
-    fVertexExtra = fCachedVertexExtra;
+    if (storedOnGPU)
+    {
+        fVertexOffset = fCachedVertexOffset;
+        fVertexCount = fCachedVertexCount;
+        fVertexExtra = fCachedVertexExtra;
 
-	if( enoughSpace )
-	{
-		fBackCommandBuffer->BindGeometry( fCurrentGeometry );
-	}
+        if( enoughSpace )
+        {
+            fBackCommandBuffer->BindGeometry( fCurrentGeometry );
+        }
+    }
 	
-	fVertexOffset += fVertexCount;
+	fVertexOffset += fVertexCount * (1 + fVertexExtra);
 	fVertexCount = 0;
 	fIndexCount = 0;
 
@@ -1760,24 +1763,41 @@ Renderer::CopyVertexData( Geometry* geometry, Geometry::Vertex* destination, boo
 {
 	const U32 verticesUsed = geometry->GetVerticesUsed();
 	const U32 vertexSize = sizeof(Geometry::Vertex);
-	if( geometry->GetPrimitiveType() == Geometry::kTriangleStrip )
-	{
-		// Triangle strips are batched by adding degenerate triangles
-		// at the beginning and end of each strip.
-		memcpy( destination++, geometry->GetVertexData(), vertexSize );
-		
-		memcpy( destination, geometry->GetVertexData(), verticesUsed * vertexSize );
-		destination += verticesUsed;
 
-		memcpy( destination++, geometry->GetVertexData() + verticesUsed - 1, vertexSize );
-		fDegenerateVertexCount = 1;
-	}
-	else
-	{
-		// For data which does not exist on the GPU and is not batched,
-		// we still double buffer it to be threadsafe.
-		memcpy( fCurrentVertex, geometry->GetVertexData(), verticesUsed * vertexSize );
-	}
+    if (0 != fVertexExtra)
+    {
+        CopyExtendedVertexData( geometry, destination, interior );
+    }
+    else {
+        if( geometry->GetPrimitiveType() == Geometry::kTriangleStrip )
+        {
+            // Triangle strips are batched by adding degenerate triangles
+            // at the beginning and end of each strip.
+            WriteGeometry( destination + 1, geometry->GetVertexData(), vertexSize, 0, verticesUsed );
+
+            memcpy( destination, destination + 1, vertexSize );
+
+            destination += verticesUsed;
+
+            memcpy( destination + 1, destination, vertexSize );
+        /*
+            memcpy( destination++, geometry->GetVertexData(), vertexSize );
+
+            memcpy( destination, geometry->GetVertexData(), verticesUsed * vertexSize );
+            destination += verticesUsed;
+
+            memcpy( destination++, geometry->GetVertexData() + verticesUsed - 1, vertexSize );
+         */
+            fDegenerateVertexCount = 1;
+        }
+        else
+        {
+            // For data which does not exist on the GPU and is not batched,
+            // we still double buffer it to be threadsafe.
+            WriteGeometry( fCurrentVertex, geometry->GetVertexData(), vertexSize, 0, verticesUsed );
+            /* memcpy( fCurrentVertex, geometry->GetVertexData(), verticesUsed * vertexSize ); */
+        }
+    }
 }
 
 void
