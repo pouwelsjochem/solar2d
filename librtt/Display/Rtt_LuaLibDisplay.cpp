@@ -898,7 +898,7 @@ DisplayLibrary::newSnapshot( lua_State *L )
 
 	int result = LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
 	
-	// o->Initialize( L, display, w, h );
+	o->Initialize( L, display, w, h );
 
     return result;
 }

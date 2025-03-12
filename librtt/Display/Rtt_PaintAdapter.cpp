@@ -273,8 +273,6 @@ PaintAdapter::SetValueForKey(
                 }
                 break;
             case 6:
-                // TODO: For extra protection, this should be protected by Display::ShouldRestrict()
-                // We get it for free right now b/c access to paint properties are restricted
                 {
                     const char *v = lua_tostring( L, valueIndex );
                     RenderTypes::BlendEquation blendEquation = RenderTypes::BlendEquationForString( v );
