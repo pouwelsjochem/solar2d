@@ -106,7 +106,7 @@ jobs:
           name: Collected-ios-templates
           path: ./output
 
-  webtemplate:
+  native:
     needs:
       - source-code
     runs-on: macos-13
