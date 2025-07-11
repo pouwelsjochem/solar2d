@@ -309,6 +309,17 @@ DisplayObject::CullOffscreen( const Rect& screenBounds )
     }
 }
 
+// ----------------------------------------------------------------------------
+// Returns true iff the two matrices differ only in translation terms.
+static inline bool
+__IsTranslateOnlyDifference( const Matrix& m1, const Matrix& m2 )
+{
+    return  Rtt_RealEqual( m1.Row0()[0], m2.Row0()[0] ) &&   // a
+            Rtt_RealEqual( m1.Row0()[1], m2.Row0()[1] ) &&   // b
+            Rtt_RealEqual( m1.Row1()[0], m2.Row1()[0] ) &&   // c
+            Rtt_RealEqual( m1.Row1()[1], m2.Row1()[1] );     // d
+}
+
 bool
 DisplayObject::UpdateTransform( const Matrix& parentToDstSpace )
 {
@@ -361,6 +372,8 @@ DisplayObject::UpdateTransform( const Matrix& parentToDstSpace )
 */
         if ( ! IsValid( kTransformFlag ) )
         {
+            const Matrix oldMatrix = fSrcToDst;
+            
             result = true;
 
             // Object's transform gets applied first, then parentToDstSpace
@@ -373,10 +386,40 @@ DisplayObject::UpdateTransform( const Matrix& parentToDstSpace )
 
             SetValid( kTransformFlag );
 
-            // If the child's matrix is changed,
-            // then retransform vertices, recalculate bounding rect, and retransform mask
-            Invalidate( kGeometryFlag | kMaskFlag );
-            SetDirty( kStageBoundsFlag );
+            // ----------------------------------------------------------
+            // Cheap path: did we only move in X/Y?
+            // ----------------------------------------------------------
+            if ( __IsTranslateOnlyDifference( oldMatrix, fSrcToDst ) )
+            {
+                // Δ in world space
+                const Real dx = fSrcToDst.Tx() - oldMatrix.Tx();
+                const Real dy = fSrcToDst.Ty() - oldMatrix.Ty();
+
+                // Shift our cached bounds if they were valid
+                if ( IsValid( kStageBoundsFlag ) )
+                {
+                    fStageBounds.Translate( dx, dy );
+                }
+
+                // Refresh mask uniform (same matrix columns, only translation changed)
+                if ( fMask && fMaskUniform )
+                {
+                    UpdateMaskUniform( *fMaskUniform, fSrcToDst, *fMask );
+                }
+
+                // We touched no vertex‑level data, so we only need
+                // the per‑frame colour/mask refresh — not geometry rebuild
+                SetDirty( kMaskFlag );
+            }
+            else
+            {
+                // Non‑pure translation → fall back to original behaviour
+
+                // If the child's matrix is changed,
+                // then retransform vertices, recalculate bounding rect, and retransform mask
+                Invalidate( kGeometryFlag | kMaskFlag );
+                SetDirty( kStageBoundsFlag );
+            }
         }
     }
 
