@@ -1,5 +1,4 @@
 @echo off
-setlocal enabledelayedexpansion
 
 echo Setup command line
 
@@ -42,4 +41,3 @@ if %errorlevel% neq 0 (
 )
 
 echo Environment setup complete.
-endlocal
