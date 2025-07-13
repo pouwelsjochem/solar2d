@@ -137,7 +137,7 @@ jobs:
           cd platform\windows
           call UpdateFileVersions.bat %BUILD_NUMBER%
           call Build.Tools\VSVars.bat
-          msbuild "Corona.SDK.sln" /rebuild "Release|x86"
+          msbuild "Corona.SDK.sln" /t:Rebuild /p:Configuration=Release /p:Platform=x86
         env:
           WIN_CERT_PASSWORD: ${{ secrets.WinCertPassword }}
       - name: Copy Simulator
