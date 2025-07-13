@@ -395,11 +395,16 @@ DisplayObject::UpdateTransform( const Matrix& parentToDstSpace )
                 const Real dx = fSrcToDst.Tx() - oldMatrix.Tx();
                 const Real dy = fSrcToDst.Ty() - oldMatrix.Ty();
 
+                Rtt_Log("DEBUG: __IsTranslateOnlyDifference");
                 // Shift our cached bounds if they were valid
                 if ( IsValid( kStageBoundsFlag ) )
                 {
-                    fStageBounds.Translate( dx, dy );
+                    Rtt_Log("DEBUG: kStageBoundsFlag was valid");
                 }
+
+                // Shift our cached bounds
+                fStageBounds.Translate( dx, dy );
+                SetValid( kStageBoundsFlag );
 
                 // Refresh mask uniform (same matrix columns, only translation changed)
                 if ( fMask && fMaskUniform )
