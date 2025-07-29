@@ -45,7 +45,7 @@ class StaticTargetDeviceFinalizer
 static StaticTargetDeviceFinalizer sTargetDeviceFinalizer;
 
 
-const char *kDefaultSkinName = "Minimum (240x160 @1x)";
+const char *kDefaultSkinName = "min_supported_2";
     
 TargetDevice::SkinSpec **TargetDevice::fSkins = NULL;
 int TargetDevice::fSkinCount = 0;
