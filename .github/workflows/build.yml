@@ -310,7 +310,7 @@ jobs:
           call UpdateFileVersions.bat %BUILD_NUMBER%
           call Build.Tools\VSVars.bat
           call "%VSINSTALLDIR%\Common7\Tools\VsDevCmd.bat"
-          msbuild "Corona.SDK.sln" /t:Rebuild /p:Configuration=Release /p:Platform=x86
+          msbuild "Corona.SDK.sln" /rebuild "Release|x86"
         env:
           WIN_CERT_PASSWORD: ${{ secrets.WinCertPassword }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
