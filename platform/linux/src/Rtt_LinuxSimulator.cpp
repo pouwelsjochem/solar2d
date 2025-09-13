@@ -290,6 +290,7 @@ namespace Rtt
 		{
 			const SkinProperties* skin = (const SkinProperties*)e.user.data1;
 			OnViewAsChanged(skin);
+			PushEvent(sdl::onCloseDialog);
 			break;
 		}
 
@@ -322,6 +323,7 @@ namespace Rtt
 			int w = skin->deviceWidth;
 			int h = skin->deviceHeight;
 			fContext->SetSize(w, h);
+			fContext->RestartRenderer();
 		}
 	}
 

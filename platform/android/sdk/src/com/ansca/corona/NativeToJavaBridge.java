@@ -40,6 +40,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Insets;
 import android.graphics.Paint;
 import android.media.MediaScannerConnection;
 import android.media.AudioManager;
@@ -48,6 +49,9 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.DisplayCutout;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowInsets;
 
 import dalvik.system.DexClassLoader;
 
