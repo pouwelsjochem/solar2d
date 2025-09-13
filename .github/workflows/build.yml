@@ -245,8 +245,8 @@ jobs:
           path: SourceCode
       - name: Unpack source code
         run: |
-          tar -xzf SourceCode/corona.tgz
-        shell: pwsh
+          7z x SourceCode/corona.tgz
+          7z x corona.tar
       # - name: Checkout Switch specific source code (under NDA)
       #   uses: actions/checkout@v4
       #   with:
