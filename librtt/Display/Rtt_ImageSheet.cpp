@@ -180,7 +180,17 @@ int ImageSheet::Initialize(lua_State *L, int optionsIndex) {
                 }
             }
         } else {
-            luaL_argerror(L, optionsIndex, "for single frame size, 'options' table must contain valid 'width' and 'height' values");
+            luaL_argerror(L, optionsIndex, lua_pushfstring(
+                L,
+                "for single frame size, 'options' table must contain valid 'width' and 'height' values. Got width=%d, height=%d, sheetContent=%dx%d, texture=%dx%d, numFrames=%d, border=%d",
+                frameW,
+                frameH,
+                textureContentW,
+                textureContentH,
+                textureW,
+                textureH,
+                numFrames,
+                border));
         }
     } else { // Complex case
         lua_getfield(L, optionsIndex, "frames");
