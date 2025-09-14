@@ -14,7 +14,7 @@ setlocal enabledelayedexpansion
 :: 9  = STEP 8c: heat file command failed
 
 echo === STEP 1: Moving redist files ===
-move /y "%~dp0..\Bin\redist\*" "%~dp0..\Bin\Corona\" || exit /b 1
+move /y "%~dp0..\Bin\redist\*" "%~dp0..\Bin\Corona\" || exit /b 3
 
 echo === STEP 2: Building Corona projects ===
 call "%DevEnvDir%devenv" "%~dp0..\Corona.Shell.sln" /rebuild "Release|Win32" || exit /b 2
