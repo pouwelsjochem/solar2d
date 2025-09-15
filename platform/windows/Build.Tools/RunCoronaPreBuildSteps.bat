@@ -1,65 +1,68 @@
-@echo off
+@echo on
 setlocal enabledelayedexpansion
 
-:: ===== EXIT CODE LEGEND =====
-:: 0  = Success
-:: 1  = STEP 1: Moving redist files failed
-:: 2  = STEP 2a: Corona.Shell rebuild failed
-:: 3  = STEP 2b: Corona.Simulator build failed
-:: 4  = STEP 2c: CoronaBuilder build failed
-:: 5  = STEP 3: Copying Simulator.pdb failed
-:: 6  = STEP 7: Restoring .pdb failed
-:: 7  = STEP 8a: heat.exe not found
-:: 8  = STEP 8b: heat dir command failed
-:: 9  = STEP 8c: heat file command failed
+:: === Only continue if this is a Release build ===
+if /I "$(Configuration)"=="Release" (
 
-echo === STEP 1: Moving redist files ===
-move /y "%~dp0..\Bin\redist\*" "%~dp0..\Bin\Corona\" || exit /b 3
+    echo === STEP 1: Clean target directories ===
+    rmdir /q /s "$(SolutionDir)Bin\$(ProjectName)" 2>nul
+    rmdir /q /s "$(SolutionDir)Bin\Corona" 2>nul
+    rmdir /q /s "$(SolutionDir)Bin\Corona.Enterprise" 2>nul
+    rmdir /q /s "$(SolutionDir)Bin\AppTemplates\Win32" 2>nul
 
-echo === STEP 2: Building Corona projects ===
-call "%DevEnvDir%devenv" "%~dp0..\Corona.Shell.sln" /rebuild "Release|Win32" || exit /b 2
-call "%DevEnvDir%devenv" "%~dp0..\Corona.Simulator.sln" /build "Release|Win32" || exit /b 3
-call "%DevEnvDir%devenv" "%~dp0..\CoronaBuilder.sln" /build "Release|Win32" || exit /b 4
+    echo === STEP 2: Create base directories ===
+    mkdir "$(SolutionDir)Bin\Corona"
 
-echo === STEP 3: Saving Corona Simulator.pdb ===
-copy "%~dp0..\Bin\Corona\Corona Simulator.pdb" "%TEMP%" || exit /b 5
+    echo === STEP 3: Move Native, JRE, and redist ===
+    move /y "$(SolutionDir)Bin\Native" "$(SolutionDir)Bin\Corona\" || exit /b 2
+    move /y "$(SolutionDir)Bin\jre" "$(SolutionDir)Bin\Corona\" || exit /b 2
+    move /y "$(SolutionDir)Bin\redist\*" "$(SolutionDir)Bin\Corona\" || exit /b 2
 
-echo === STEP 4: Cleaning up intermediate files ===
-del /q /s "%~dp0..\Bin\Corona\*.exp"
-del /q /s "%~dp0..\Bin\Corona\*.ilk"
-del /q /s "%~dp0..\Bin\Corona\*.lib"
-del /q /s "%~dp0..\Bin\Corona\*.pdb"
-del /q /s "%~dp0..\Bin\AppTemplates\Win32\*.exp"
-del /q /s "%~dp0..\Bin\AppTemplates\Win32\*.ilk"
-del /q /s "%~dp0..\Bin\AppTemplates\Win32\*.lib"
-del /q /s "%~dp0..\Bin\AppTemplates\Win32\*.pdb"
+    echo === STEP 4: Build Corona projects ===
+    "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /rebuild "Release|Win32" || exit /b 3
+    "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Simulator.sln" /build "Release|Win32" || exit /b 4
+    "$(DevEnvDir)devenv" "$(SolutionDir)CoronaBuilder.sln" /build "Release|Win32" || exit /b 5
 
-echo === STEP 5: Copying native libs ===
-xcopy /y "%~dp0..\Bin\Corona.Enterprise\lib" "%~dp0..\Bin\Corona\Native\Corona\win\lib\" >nul
+    echo === STEP 5: Save Corona Simulator.pdb ===
+    copy "$(SolutionDir)Bin\Corona\Corona Simulator.pdb" "%TEMP%" || exit /b 6
 
-echo === STEP 6: Copying CoronaBuilder files ===
-xcopy /y "%~dp0..\..\bin\win\CopyResources.bat" "%~dp0..\Bin\Corona\Native\Corona\win\bin\" >nul
-move /y "%~dp0..\Bin\Corona\lfs.dll" "%~dp0..\Bin\Corona\Native\Corona\win\bin\" >nul
-move /y "%~dp0..\Bin\Corona\CoronaBuilder.exe" "%~dp0..\Bin\Corona\Native\Corona\win\bin\" >nul
-xcopy /y "%~dp0..\..\bin\shared\Compile.lua" "%~dp0..\Bin\Corona\Native\Corona\shared\bin" >nul
-xcopy /y "%~dp0..\Bin\Lua\lua.exe" "%~dp0..\Bin\Corona\Native\Corona\win\bin\" >nul
-xcopy /y "%~dp0..\Bin\Lua\lua.dll" "%~dp0..\Bin\Corona\Native\Corona\win\bin\" >nul
-xcopy /y "%~dp0..\Bin\Lua\luac.exe" "%~dp0..\Bin\Corona\Native\Corona\win\bin\" >nul
+    echo === STEP 6: Clean intermediate files ===
+    del /q /s "$(SolutionDir)Bin\Corona\*.exp"
+    del /q /s "$(SolutionDir)Bin\Corona\*.ilk"
+    del /q /s "$(SolutionDir)Bin\Corona\*.lib"
+    del /q /s "$(SolutionDir)Bin\Corona\*.pdb"
+    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\*.exp"
+    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\*.ilk"
+    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\*.lib"
+    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\*.pdb"
 
-echo === STEP 7: Restoring Corona Simulator.pdb ===
-copy "%TEMP%\Corona Simulator.pdb" "%~dp0..\Bin\Corona\" || exit /b 6
+    echo === STEP 7: Copy native libs ===
+    xcopy /y "$(SolutionDir)Bin\Corona.Enterprise\lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib\" >nul
 
-echo === STEP 8: Generating WIX files ===
-if not exist "%WIX%\bin\heat.exe" (
-  echo ERROR: heat.exe not found in %WIX%\bin\
-  exit /b 7
+    echo === STEP 8: Copy CoronaBuilder files ===
+    xcopy /y "$(SolutionDir)..\..\bin\win\CopyResources.bat" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\" >nul
+    move /y "$(SolutionDir)Bin\Corona\lfs.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\" >nul
+    move /y "$(SolutionDir)Bin\Corona\CoronaBuilder.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\" >nul
+    xcopy /y "$(SolutionDir)..\..\bin\shared\Compile.lua" "$(SolutionDir)Bin\Corona\Native\Corona\shared\bin" >nul
+    xcopy /y "$(SolutionDir)Bin\Lua\lua.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\" >nul
+    xcopy /y "$(SolutionDir)Bin\Lua\lua.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\" >nul
+    xcopy /y "$(SolutionDir)Bin\Lua\luac.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\" >nul
+
+    echo === STEP 9: Restore Corona Simulator.pdb ===
+    copy "%TEMP%\Corona Simulator.pdb" "$(SolutionDir)Bin\Corona\" || exit /b 7
 )
 
-"%WIX%\bin\heat" dir "%~dp0..\Bin\Corona" -t "%~dp0ExcludePDB.xsl" -dr APP_INSTALL_FOLDER -cg ApplicationFiles -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "%~dp0Generated Files\ApplicationFiles.wxs"
-if errorlevel 1 exit /b 8
+echo === STEP 10: Generate WIX files ===
+if not exist "$(WIX)\bin\heat.exe" (
+  echo ERROR: heat.exe not found in $(WIX)\bin\
+  exit /b 8
+)
 
-"%WIX%\bin\heat" file "%~dp0..\Bin\Corona\Corona Simulator.pdb" -dr APP_INSTALL_FOLDER -cg PDBFile -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "%~dp0Generated Files\PDBFile.wxs"
+"$(WIX)\bin\heat" dir "$(SolutionDir)Bin\Corona" -t "$(ProjectDir)ExcludePDB.xsl" -dr APP_INSTALL_FOLDER -cg ApplicationFiles -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "$(ProjectDir)Generated Files\ApplicationFiles.wxs"
 if errorlevel 1 exit /b 9
+
+"$(WIX)\bin\heat" file "$(SolutionDir)Bin\Corona\Corona Simulator.pdb" -dr APP_INSTALL_FOLDER -cg PDBFile -ag -scom -sreg -sfrag -srd -var "var.CoronaSdkDir" -out "$(ProjectDir)Generated Files\PDBFile.wxs"
+if errorlevel 1 exit /b 10
 
 echo === All pre-build steps completed successfully ===
 exit /b 0
