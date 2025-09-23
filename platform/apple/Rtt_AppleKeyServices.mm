@@ -340,7 +340,8 @@ static NSDictionary *keyNameDictionary = nil;
 
 + (const char *)qwertyNameForKeyCode:(unsigned short)keyCode
 {
-	switch (keyCode)
+#if defined( Rtt_MAC_ENV )
+	switch ( keyCode )
 	{
 		case kVK_ANSI_A: return Rtt::KeyName::kA;
 		case kVK_ANSI_B: return Rtt::KeyName::kB;
@@ -370,6 +371,9 @@ static NSDictionary *keyNameDictionary = nil;
 		case kVK_ANSI_Z: return Rtt::KeyName::kZ;
 		default: return NULL;
 	}
+#else
+	return NULL;
+#endif
 }
 
 @end
