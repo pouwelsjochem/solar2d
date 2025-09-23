@@ -623,7 +623,8 @@ KeyEvent::StringForPhase( Phase type )
 
 KeyEvent::KeyEvent(
 	PlatformInputDevice *device, Phase phase, const char *keyName, S32 nativeKeyCode,
-	bool isShiftDown, bool isAltDown, bool isCtrlDown, bool isCommandDown)
+	bool isShiftDown, bool isAltDown, bool isCtrlDown, bool isCommandDown,
+	const char *qwertyKeyName)
 :	fDevice( device ),
 	fPhase( phase ),
 	fKeyName( keyName ),
@@ -631,7 +632,8 @@ KeyEvent::KeyEvent(
 	fIsShiftDown( isShiftDown ),
 	fIsAltDown( isAltDown ),
 	fIsCtrlDown( isCtrlDown ),
-    fIsCommandDown( isCommandDown )
+    fIsCommandDown( isCommandDown ),
+	fQwertyKeyName( qwertyKeyName )
 {
 }
 
@@ -675,6 +677,12 @@ KeyEvent::Push( lua_State *L ) const
 
 		lua_pushinteger( L, fNativeKeyCode );
 		lua_setfield( L, -2, "nativeKeyCode" );
+
+		if (fQwertyKeyName && fQwertyKeyName[0] != '\0')
+		{
+			lua_pushstring( L, fQwertyKeyName );
+			lua_setfield( L, -2, "qwertyKeyName" );
+		}
 
 		lua_pushboolean( L, fIsShiftDown );
 		lua_setfield( L, -2, "isShiftDown" );
@@ -2011,4 +2019,3 @@ FinalizeEvent::Name() const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

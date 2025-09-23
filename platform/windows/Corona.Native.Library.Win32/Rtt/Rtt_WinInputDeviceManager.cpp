@@ -22,7 +22,45 @@
 #include "Rtt_Runtime.h"
 #include "Rtt_WinInputDevice.h"
 #include "Rtt_WinPlatform.h"
+#include "Rtt_KeyName.h"
 #include <WindowsX.h>
+
+namespace
+{
+	const char* QwertyNameForScanCode(UINT scanCode)
+	{
+		switch (scanCode & 0xFFu)
+		{
+			case 0x10: return Rtt::KeyName::kQ;
+			case 0x11: return Rtt::KeyName::kW;
+			case 0x12: return Rtt::KeyName::kE;
+			case 0x13: return Rtt::KeyName::kR;
+			case 0x14: return Rtt::KeyName::kT;
+			case 0x15: return Rtt::KeyName::kY;
+			case 0x16: return Rtt::KeyName::kU;
+			case 0x17: return Rtt::KeyName::kI;
+			case 0x18: return Rtt::KeyName::kO;
+			case 0x19: return Rtt::KeyName::kP;
+			case 0x1E: return Rtt::KeyName::kA;
+			case 0x1F: return Rtt::KeyName::kS;
+			case 0x20: return Rtt::KeyName::kD;
+			case 0x21: return Rtt::KeyName::kF;
+			case 0x22: return Rtt::KeyName::kG;
+			case 0x23: return Rtt::KeyName::kH;
+			case 0x24: return Rtt::KeyName::kJ;
+			case 0x25: return Rtt::KeyName::kK;
+			case 0x26: return Rtt::KeyName::kL;
+			case 0x2C: return Rtt::KeyName::kZ;
+			case 0x2D: return Rtt::KeyName::kX;
+			case 0x2E: return Rtt::KeyName::kC;
+			case 0x2F: return Rtt::KeyName::kV;
+			case 0x30: return Rtt::KeyName::kB;
+			case 0x31: return Rtt::KeyName::kN;
+			case 0x32: return Rtt::KeyName::kM;
+			default: return NULL;
+		}
+	}
+}
 
 namespace Rtt
 {
@@ -738,14 +776,14 @@ void WinInputDeviceManager::OnReceivedMessage(
 				break;
 			}
 
-			// Fetch the key code that was pressed/released.
+			// Fetch the key code that was pressed/released and its scan code.
 			S32 keyCode = (S32)arguments.GetWParam();
+			UINT scanCode = (UINT)((arguments.GetLParam() >> 16) & 0xFF);
 
 			// If the key code for "shift", "alt", or "ctrl" has been received, then determine if
 			// the left/right version of that key was pressed/released by its scan code.
 			if ((VK_SHIFT == keyCode) || (VK_MENU == keyCode) || (VK_CONTROL == keyCode))
 			{
-				UINT scanCode = (arguments.GetLParam() >> 16) & 0xFF;
 				S32 result = (S32)MapVirtualKey(scanCode, MAPVK_VSC_TO_VK_EX);
 				if (result != 0)
 				{
@@ -758,11 +796,13 @@ void WinInputDeviceManager::OnReceivedMessage(
 
 			// Dispatch a "key" event to Lua.
 			auto keyInfo = Interop::Input::Key::FromNativeCode(keyCode);
+			const char* qwertyName = QwertyNameForScanCode(scanCode);
 			Rtt::KeyEvent keyEvent(
 					nullptr, isKeyDown ? Rtt::KeyEvent::kDown : Rtt::KeyEvent::kUp,
 					keyInfo.GetCoronaName(), keyCode,
 					modifierKeyStates.IsShiftDown(), modifierKeyStates.IsAltDown(),
-					modifierKeyStates.IsControlDown(), modifierKeyStates.IsCommandDown());
+					modifierKeyStates.IsControlDown(), modifierKeyStates.IsCommandDown(),
+					qwertyName);
 			fEnvironment.GetRuntime()->DispatchEvent(keyEvent);
 			if (keyEvent.GetResult())
 			{

@@ -879,6 +879,7 @@ PrintTouches( NSSet *touches, const char *header )
     NSUInteger modifierFlags = [event modifierFlags];
     unsigned short keyCode = [event keyCode];
     NSString *keyName = [AppleKeyServices getNameForKey:[NSNumber numberWithInt:keyCode]];
+    const char *qwertyKeyName = [AppleKeyServices qwertyNameForKeyCode:keyCode];
     
     KeyEvent e(
                NULL,
@@ -888,7 +889,8 @@ PrintTouches( NSSet *touches, const char *header )
                (modifierFlags & UIKeyModifierShift) || (modifierFlags & UIKeyModifierAlphaShift),
                (modifierFlags & UIKeyModifierAlternate),
                (modifierFlags & UIKeyModifierControl),
-               (modifierFlags & UIKeyModifierCommand) );
+               (modifierFlags & UIKeyModifierCommand),
+               qwertyKeyName );
     [self dispatchEvent: ( & e )];
 }
 

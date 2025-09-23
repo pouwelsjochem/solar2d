@@ -623,7 +623,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	NSUInteger modifierFlags = [event modifierFlags];
 	unsigned short keyCode = [event keyCode];
 	NSString *keyName = [AppleKeyServices getNameForKey:[NSNumber numberWithInt:keyCode]];
-	
+	const char *qwertyKeyName = [AppleKeyServices qwertyNameForKeyCode:keyCode];
 	KeyEvent e(
 			   NULL,
 			   phase,
@@ -632,7 +632,8 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 			   (modifierFlags & NSShiftKeyMask) || (modifierFlags & NSAlphaShiftKeyMask),
 			   (modifierFlags & NSAlternateKeyMask),
 			   (modifierFlags & NSControlKeyMask),
-			   (modifierFlags & NSCommandKeyMask) );
+			   (modifierFlags & NSCommandKeyMask),
+			   qwertyKeyName );
 	[self dispatchEvent: ( & e )];
 }
 

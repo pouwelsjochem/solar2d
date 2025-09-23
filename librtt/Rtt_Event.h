@@ -407,7 +407,8 @@ class KeyEvent : public VirtualEvent
 	public:
 		KeyEvent(
 			PlatformInputDevice *device, Phase phase, const char *keyName, S32 nativeKeyCode,
-			bool isShiftDown, bool isAltDown, bool isCtrlDown, bool isCommandDown );
+			bool isShiftDown, bool isAltDown, bool isCtrlDown, bool isCommandDown,
+			const char *qwertyKeyName = NULL );
 
 	public:
 		virtual const char* Name() const;
@@ -417,6 +418,7 @@ class KeyEvent : public VirtualEvent
 
 	public:
 		bool GetResult() const { return fResult; }
+		const char* GetQwertyKeyName() const { return fQwertyKeyName; }
 
 	protected:
 		PlatformInputDevice *fDevice;
@@ -427,6 +429,7 @@ class KeyEvent : public VirtualEvent
 		bool fIsAltDown;
         bool fIsCtrlDown;
         bool fIsCommandDown;
+		const char *fQwertyKeyName;
 		mutable bool fResult;
 };
 	
