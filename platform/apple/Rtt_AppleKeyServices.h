@@ -28,6 +28,4 @@ enum KeyCodes
 
 + (NSUInteger)getModifierMaskForKey:(unsigned short)keyCode;
 
-+ (const char *)qwertyNameForKeyCode:(unsigned short)keyCode;
-
 @end
