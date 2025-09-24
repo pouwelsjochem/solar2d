@@ -217,14 +217,7 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 		canvas->Draw( renderer );
 		ENABLE_SUMMED_TIMING( false );
 		renderer.EndFrame();
-
-        // When shader code depends on time, then frame is time-dependent.
-        // So only set valid when frame is *in*dependent of time.
-        if ( ! renderer.IsFrameTimeDependent() )
-        {
-            fIsValid = true;
-        }
-        
+		
 		ADD_ENTRY( "Scene: Issue Draw Commands" );
 		
         renderer.Swap(); // Swap back and front command buffers
@@ -242,8 +235,11 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 		ADD_ENTRY( "Scene: Flush" );
     }
     
-    // This needs to be done at the sync point (DMZ)
-    Collect();
+	// This needs to be done at the sync point (DMZ)
+	Collect();
+
+	// Always invalidate so the next frame renders even when nothing changed visually.
+	Invalidate();
 	
 	ADD_ENTRY( "Scene: Collect" );
 }
