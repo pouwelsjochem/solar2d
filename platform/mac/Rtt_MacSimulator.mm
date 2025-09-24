@@ -217,7 +217,6 @@ MacSimulator::Back()
 		// Simulate the pressing of a virtual "back" button
 		short keyCode = kVK_Back;
 		NSString *keyName = [AppleKeyServices getNameForKey:[NSNumber numberWithInt:keyCode]];
-		const char *qwertyKeyName = [AppleKeyServices qwertyNameForKeyCode:keyCode];
 
 		KeyEvent eDown(NULL,
 					   KeyEvent::kDown,
@@ -226,8 +225,7 @@ MacSimulator::Back()
 					   false,  // (modifierFlags & NSShiftKeyMask) || (modifierFlags & NSAlphaShiftKeyMask),
 					   false,  // (modifierFlags & NSAlternateKeyMask),
 					   false,  // (modifierFlags & NSControlKeyMask),
-					   false,
-					   qwertyKeyName ); // (modifierFlags & NSCommandKeyMask) );
+					   false);
 
 		runtime.DispatchEvent( eDown );
 
@@ -238,8 +236,7 @@ MacSimulator::Back()
 					 false,  // (modifierFlags & NSShiftKeyMask) || (modifierFlags & NSAlphaShiftKeyMask),
 					 false,  // (modifierFlags & NSAlternateKeyMask),
 					 false,  // (modifierFlags & NSControlKeyMask),
-					 false,
-					 qwertyKeyName ); // (modifierFlags & NSCommandKeyMask) );
+					 false);
 
 		runtime.DispatchEvent( eUp );
 

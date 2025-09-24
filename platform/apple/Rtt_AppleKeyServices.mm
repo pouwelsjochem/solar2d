@@ -338,42 +338,4 @@ static NSDictionary *keyNameDictionary = nil;
 	return 0;
 }
 
-+ (const char *)qwertyNameForKeyCode:(unsigned short)keyCode
-{
-#if defined( Rtt_MAC_ENV )
-	switch ( keyCode )
-	{
-		case kVK_ANSI_A: return Rtt::KeyName::kA;
-		case kVK_ANSI_B: return Rtt::KeyName::kB;
-		case kVK_ANSI_C: return Rtt::KeyName::kC;
-		case kVK_ANSI_D: return Rtt::KeyName::kD;
-		case kVK_ANSI_E: return Rtt::KeyName::kE;
-		case kVK_ANSI_F: return Rtt::KeyName::kF;
-		case kVK_ANSI_G: return Rtt::KeyName::kG;
-		case kVK_ANSI_H: return Rtt::KeyName::kH;
-		case kVK_ANSI_I: return Rtt::KeyName::kI;
-		case kVK_ANSI_J: return Rtt::KeyName::kJ;
-		case kVK_ANSI_K: return Rtt::KeyName::kK;
-		case kVK_ANSI_L: return Rtt::KeyName::kL;
-		case kVK_ANSI_M: return Rtt::KeyName::kM;
-		case kVK_ANSI_N: return Rtt::KeyName::kN;
-		case kVK_ANSI_O: return Rtt::KeyName::kO;
-		case kVK_ANSI_P: return Rtt::KeyName::kP;
-		case kVK_ANSI_Q: return Rtt::KeyName::kQ;
-		case kVK_ANSI_R: return Rtt::KeyName::kR;
-		case kVK_ANSI_S: return Rtt::KeyName::kS;
-		case kVK_ANSI_T: return Rtt::KeyName::kT;
-		case kVK_ANSI_U: return Rtt::KeyName::kU;
-		case kVK_ANSI_V: return Rtt::KeyName::kV;
-		case kVK_ANSI_W: return Rtt::KeyName::kW;
-		case kVK_ANSI_X: return Rtt::KeyName::kX;
-		case kVK_ANSI_Y: return Rtt::KeyName::kY;
-		case kVK_ANSI_Z: return Rtt::KeyName::kZ;
-		default: return NULL;
-	}
-#else
-	return NULL;
-#endif
-}
-
 @end

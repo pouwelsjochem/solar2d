@@ -31,6 +31,18 @@ namespace
 	{
 		switch (scanCode & 0xFFu)
 		{
+			case 0x02: return Rtt::KeyName::k1;
+			case 0x03: return Rtt::KeyName::k2;
+			case 0x04: return Rtt::KeyName::k3;
+			case 0x05: return Rtt::KeyName::k4;
+			case 0x06: return Rtt::KeyName::k5;
+			case 0x07: return Rtt::KeyName::k6;
+			case 0x08: return Rtt::KeyName::k7;
+			case 0x09: return Rtt::KeyName::k8;
+			case 0x0A: return Rtt::KeyName::k9;
+			case 0x0B: return Rtt::KeyName::k0;
+			case 0x0C: return Rtt::KeyName::kMinus;
+			case 0x0D: return Rtt::KeyName::kEquals;
 			case 0x10: return Rtt::KeyName::kQ;
 			case 0x11: return Rtt::KeyName::kW;
 			case 0x12: return Rtt::KeyName::kE;
@@ -50,6 +62,8 @@ namespace
 			case 0x24: return Rtt::KeyName::kJ;
 			case 0x25: return Rtt::KeyName::kK;
 			case 0x26: return Rtt::KeyName::kL;
+			case 0x27: return Rtt::KeyName::kSemicolon;
+			case 0x28: return Rtt::KeyName::kApostrophe;
 			case 0x2C: return Rtt::KeyName::kZ;
 			case 0x2D: return Rtt::KeyName::kX;
 			case 0x2E: return Rtt::KeyName::kC;
@@ -57,6 +71,13 @@ namespace
 			case 0x30: return Rtt::KeyName::kB;
 			case 0x31: return Rtt::KeyName::kN;
 			case 0x32: return Rtt::KeyName::kM;
+			case 0x33: return Rtt::KeyName::kComma;
+			case 0x34: return Rtt::KeyName::kPeriod;
+			case 0x35: return Rtt::KeyName::kForwardSlash;
+			case 0x1A: return Rtt::KeyName::kLeftBracket;
+			case 0x1B: return Rtt::KeyName::kRightBracket;
+			case 0x2B: return Rtt::KeyName::kBackSlash;
+			case 0x29: return Rtt::KeyName::kBackTick;
 			default: return NULL;
 		}
 	}
