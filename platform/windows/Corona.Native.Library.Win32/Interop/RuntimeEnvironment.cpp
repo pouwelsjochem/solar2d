@@ -1632,7 +1632,7 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 				preferenceCollection.Add("solar2D/lastWindowPosition/viewWidth", Rtt::PreferenceValue(clientSize.cx));
 				preferenceCollection.Add("solar2D/lastWindowPosition/viewHeight", Rtt::PreferenceValue(clientSize.cy));
 				preferenceCollection.Add("solar2D/lastWindowPosition/mode", Rtt::PreferenceValue(windowMode.GetStringId()));
-				preferenceCollection.Add("solar2D/lastWindowPosition/vsyncEnabled", Rtt::PreferenceValue(fIsVsyncEnabled));
+
 				fStoredPreferencesPointer->UpdateWith(preferenceCollection);
 			}
 

@@ -1112,7 +1112,7 @@ namespace Rtt
 				auto renderSurfacePointer = fEnvironment.GetRenderSurface();
 				if (renderSurfacePointer)
 				{
-					fRenderSurfacePointer->SetVSyncEnabled(lua_toboolean(L, valueIndex) ? true : false);
+					renderSurfacePointer->SetVSyncEnabled(lua_toboolean(L, valueIndex) ? true : false);
 				}
 			}
 			else
@@ -1281,7 +1281,7 @@ namespace Rtt
 			auto renderSurfacePointer = fEnvironment.GetRenderSurface();
 			if (renderSurfacePointer)
 			{
-				lua_pushboolean(L, fRenderSurfacePointer->IsVSyncEnabled() ? 1 : 0);
+				lua_pushboolean(L, renderSurfacePointer->IsVSyncEnabled() ? 1 : 0);
 				pushedValues = 1;
 			}
 		}
