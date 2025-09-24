@@ -1476,6 +1476,29 @@ MacPlatform::SetNativeProperty(lua_State *L, const char *key, int valueIndex) co
 		}
 #endif // Rtt_AUTHORING_SIMULATOR
     }
+	else if (Rtt_StringCompare(key, "vsyncEnabled") == 0)
+	{
+		if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
+		{
+			bool enabled = lua_toboolean(L, valueIndex) ? true : false;
+			if (fIsVsyncEnabled != enabled)
+			{
+				fIsVsyncEnabled = enabled;
+				if (fView)
+				{
+					[fView setVSyncEnabled:(fIsVsyncEnabled ? YES : NO)];
+				}
+				else
+				{
+					CoronaLuaWarning(L, "native.setProperty(\"%s\") fView is missing", key);
+				}
+			}
+		}
+		else
+		{
+			CoronaLuaWarning(L, "native.setProperty(\"%s\") expected a boolean parameter but got a %s", key, lua_typename(L, lua_type(L, valueIndex)));
+		}
+	}
     else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
 	{
 		if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
@@ -1587,6 +1610,11 @@ MacPlatform::PushNativeProperty( lua_State *L, const char *key ) const
 		}
 
 		lua_pushstring(L, result);
+		pushedValues = 1;
+	}
+	else if (Rtt_StringCompare(key, "vsyncEnabled") == 0)
+	{
+		lua_pushboolean(L, fIsVsyncEnabled ? 1 : 0);
 		pushedValues = 1;
 	}
 	else if (Rtt_StringCompare(key, "mouseCursorVisible") == 0)
@@ -1922,4 +1950,3 @@ MacPlatformServices::Sleep( int milliseconds ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -154,11 +154,11 @@ void RenderSurfaceControl::SetVSyncEnabled(bool value)
 
 	if (hasChanged || fIsSwapControlSupported)
 	{
-		ApplySwapInterval();
+		ApplySwapIntervalBasedOnVsyncEnabled();
 	}
 }
 
-void RenderSurfaceControl::ApplySwapInterval()
+void RenderSurfaceControl::ApplySwapIntervalBasedOnVsyncEnabled()
 {
 	if (fVulkanContext)
 	{
@@ -342,7 +342,7 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 		{
 			fIsSwapControlSupported = (WGLEW_EXT_swap_control != 0);
 			fHasLoggedMissingSwapControl = false;
-			ApplySwapInterval();
+			ApplySwapIntervalBasedOnVsyncEnabled();
 		}
 
 		// Fetch the OpenGL driver's version.

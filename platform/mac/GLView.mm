@@ -11,6 +11,7 @@
 
 #import "GLView.h"
 #include <OpenGL/gl.h>
+#include <OpenGL/OpenGL.h>
 
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSEvent.h>
@@ -137,6 +138,7 @@ static const char *RttCoronaKeyNameForLayoutCharacter(unichar character)
 
 @interface GLView ()
 - (void)dispatchEvent:(Rtt::MEvent*)event;
+- (void)applySwapIntervalBasedOnVsyncEnabled;
 @end
 
 @implementation GLView
@@ -206,6 +208,7 @@ static const char *RttCoronaKeyNameForLayoutCharacter(unichar character)
 
 		cursorHidden = NO;
 		numCursorHides = 0;
+		fIsVsyncEnabled = NO;
 	}
 	
 	return self;
@@ -232,6 +235,7 @@ static const char *RttCoronaKeyNameForLayoutCharacter(unichar character)
 	//[super prepareOpenGL];
 
 	[[self openGLContext] makeCurrentContext];
+	[self applySwapIntervalBasedOnVsyncEnabled];
 
 	Rtt::Display *display = NULL;
 
@@ -266,6 +270,30 @@ static const char *RttCoronaKeyNameForLayoutCharacter(unichar character)
 			[self invalidate];
 		}
 	}
+}
+
+- (void)applySwapIntervalBasedOnVsyncEnabled
+{
+	NSOpenGLContext *context = [self openGLContext];
+	if (!context)
+	{
+		return;
+	}
+
+	GLint interval = fIsVsyncEnabled ? 1 : 0;
+	[context makeCurrentContext];
+	[context setValues:&interval forParameter:NSOpenGLContextParameterSwapInterval];
+}
+
+- (void)setVSyncEnabled:(BOOL)enabled
+{
+	fIsVsyncEnabled = enabled ? YES : NO;
+	[self applySwapIntervalBasedOnVsyncEnabled];
+}
+
+- (BOOL)isVSyncEnabled
+{
+	return fIsVsyncEnabled ? YES : NO;
 }
 
 - (void)drawRect:(NSRect)rect

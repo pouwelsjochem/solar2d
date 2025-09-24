@@ -87,7 +87,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fIpcMessageOnlyWindowPointer(nullptr),
 	fMainWindowPointer(nullptr),
 	fRenderSurfacePointer(nullptr),
-	fIsVsyncEnabled(true),
 	fGdiPlusToken(0),
 	fDebuggerSemaphoreHandle(nullptr),
 	fLastActivatedSent(true),
@@ -233,14 +232,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	filePath += L"\\CoronaPreferences.sqlite";
 	fStoredPreferencesPointer = std::make_shared<Interop::Storage::SQLiteStoredPreferences>(filePath.c_str());
 
-	// Determine the initial VSync state from build settings and stored preferences.
-	fIsVsyncEnabled = fReadOnlyProjectSettings.IsDefaultVsyncEnabled();
-	bool storedVsyncValue = false;
-	if (FetchStoredVsyncPreference(storedVsyncValue))
-	{
-		fIsVsyncEnabled = storedVsyncValue;
-	}
-
 	// Copy the array of launch arguments strings, if any.
 	// These are to be delivered to the "main.lua" file via its "..." launch arguments table under the "args" field.
 	if (settings.LaunchArgumentsPointer)
@@ -288,7 +279,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 		fRenderSurfacePointer->SetRenderFrameHandler(&fRenderFrameEventHandler);
 		fRenderSurfacePointer->GetDestroyingEventHandlers().Add(&fDestroyingSurfaceEventHandler);
 		fRenderSurfacePointer->GetResizedEventHandlers().Add(&fSurfaceResizedEventHandler);
-		fRenderSurfacePointer->SetVSyncEnabled(fIsVsyncEnabled);
 	}
 
 	// If given access to the window hosting the render surface, wrap it with our UI object class.
@@ -401,20 +391,6 @@ UI::Window* RuntimeEnvironment::GetMainWindow() const
 Interop::UI::RenderSurfaceControl* RuntimeEnvironment::GetRenderSurface() const
 {
 	return fRenderSurfacePointer;
-}
-
-bool RuntimeEnvironment::IsVSyncEnabled() const
-{
-	return fIsVsyncEnabled;
-}
-
-void RuntimeEnvironment::SetVSyncEnabled(bool value)
-{
-	fIsVsyncEnabled = value ? true : false;
-	if (fRenderSurfacePointer)
-	{
-		fRenderSurfacePointer->SetVSyncEnabled(fIsVsyncEnabled);
-	}
 }
 
 const char* RuntimeEnvironment::GetUtf8PathFor(Rtt::MPlatform::Directory value) const
@@ -2134,47 +2110,7 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 		}
 	}
 
-	{
-		bool storedVsyncValue = false;
-		if (FetchStoredVsyncPreference(storedVsyncValue))
-		{
-			fIsVsyncEnabled = storedVsyncValue;
-		}
-		else
-		{
-			fIsVsyncEnabled = projectSettings.IsDefaultVsyncEnabled();
-		}
-
-		if (fRenderSurfacePointer)
-		{
-			fRenderSurfacePointer->SetVSyncEnabled(fIsVsyncEnabled);
-		}
-	}
-
 	fMainWindowPointer->SetWindowMode(*windowModePointer);
-}
-
-bool RuntimeEnvironment::FetchStoredVsyncPreference(bool& outValue) const
-{
-	if (!fStoredPreferencesPointer)
-	{
-		return false;
-	}
-
-	auto result = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/vsyncEnabled");
-	if (!result.HasSucceeded())
-	{
-		return false;
-	}
-
-	auto booleanResult = result.GetValue().ToBoolean();
-	if (!booleanResult.HasSucceeded())
-	{
-		return false;
-	}
-
-	outValue = booleanResult.GetValue();
-	return true;
 }
 
 int RuntimeEnvironment::OnLuaLoadPackage(lua_State* luaStatePointer)

@@ -204,7 +204,7 @@ class RenderSurfaceControl : public Control
 		virtual void OnRaisedDestroyingEvent();
 
 	private:
-		void ApplySwapInterval();
+		void ApplySwapIntervalBasedOnVsyncEnabled();
 		#pragma region FetchMultisampleFormatResult Struct
 		/// <summary>Provides multisample format information returned by the FetchMultisampleFormat() method.</summary>
 		struct FetchMultisampleFormatResult

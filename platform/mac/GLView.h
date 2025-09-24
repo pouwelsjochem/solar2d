@@ -37,6 +37,7 @@ namespace Rtt
     NSMutableArray *fCursorRects;
 	NSTrackingRectTag trackingRectTag;
 	int numCursorHides;
+	BOOL fIsVsyncEnabled;
 }
 
 @property (nonatomic, readwrite, getter=runtime, setter=setRuntime:) Rtt::Runtime *fRuntime;
@@ -71,4 +72,6 @@ namespace Rtt
 - (void) setCursor:(const char *) cursorName forRect:(NSRect) bounds;
 - (void) hideCursor;
 - (void) showCursor;
+- (void) setVSyncEnabled:(BOOL)enabled;
+- (BOOL) isVSyncEnabled;
 @end
