@@ -176,6 +176,12 @@ class RenderSurfaceControl : public Control
 		/// </summary>
 		void SwapBuffers();
 
+		/// <summary>Gets whether the rendering surface is requesting VSync.</summary>
+		bool IsVSyncEnabled() const;
+
+		/// <summary>Requests that VSync be enabled or disabled for this rendering surface.</summary>
+		void SetVSyncEnabled(bool value);
+
 		/// <summary>Requests this surface to render another frame.</summary>
 		/// <remarks>
 		///  Calling this method wil cause this surface to invoke the handler given to the SetRenderFramHandler()
@@ -198,6 +204,7 @@ class RenderSurfaceControl : public Control
 		virtual void OnRaisedDestroyingEvent();
 
 	private:
+		void ApplySwapInterval();
 		#pragma region FetchMultisampleFormatResult Struct
 		/// <summary>Provides multisample format information returned by the FetchMultisampleFormat() method.</summary>
 		struct FetchMultisampleFormatResult
@@ -271,6 +278,15 @@ class RenderSurfaceControl : public Control
 
 		/// <summary>Stores the major/minor version number of the OpenGL driver that is rendering to this surface.</summary>
 		RenderSurfaceControl::Version fRendererVersion;
+
+		/// <summary>Tracks whether VSync is requested.</summary>
+		bool fIsVsyncEnabled;
+
+		/// <summary>Set true if the swap control extension is available.</summary>
+		bool fIsSwapControlSupported;
+
+		/// <summary>Stops duplicate logging when swap control is unavailable.</summary>
+		bool fHasLoggedMissingSwapControl;
 
 		/// <summary>Vulkan analogue to the GL context, when chosen as the backend.</summary>
 		void * fVulkanContext;

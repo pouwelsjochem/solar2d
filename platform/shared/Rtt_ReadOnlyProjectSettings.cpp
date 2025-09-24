@@ -39,6 +39,11 @@ const Rtt::NativeWindowMode* ReadOnlyProjectSettings::GetDefaultWindowMode() con
 	return fSettings.GetDefaultWindowMode();
 }
 
+bool ReadOnlyProjectSettings::IsDefaultVsyncEnabled() const
+{
+	return fSettings.IsDefaultVsyncEnabled();
+}
+
 int ReadOnlyProjectSettings::GetDefaultWindowViewWidth() const
 {
 	return fSettings.GetDefaultWindowViewWidth();
