@@ -702,7 +702,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
     const char* charactersIgnoringModifiers = [[event charactersIgnoringModifiers] UTF8String]; // charactersIgnoringModifiers is keyboardlayout dependent
 	if (charactersIgnoringModifiers)
 	{
-		if (strlen(charactersIgnoringModifiers) > 1 && isprint(charactersIgnoringModifiers[0]))
+		if (strlen(charactersIgnoringModifiers) > 1 || isprint(charactersIgnoringModifiers[0]))
 		{
             keyName = charactersIgnoringModifiers;
 		}
