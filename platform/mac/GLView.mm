@@ -19,6 +19,9 @@
 #import <AppKit/AppKit.h>
 #import <Carbon/Carbon.h>
 
+#include <CoreFoundation/CFBundle.h>
+#include <ctype.h>
+
 #ifdef Rtt_DEBUG
 #define NSDEBUG(...) // NSLog(__VA_ARGS__)
 #else
@@ -57,8 +60,50 @@
 #include "Rtt_AppleKeyServices.h"
 #include "Rtt_KeyName.h"
 
+typedef TISInputSourceRef (*RttCopyKeyboardLayoutInputSourceProc)(void);
+typedef CFTypeRef (*RttGetInputSourcePropertyProc)(TISInputSourceRef, CFStringRef);
+typedef SInt16 (*RttLMGetKbdTypeProc)(void);
+
+static RttCopyKeyboardLayoutInputSourceProc sCopyCurrentKeyboardLayoutInputSource = NULL;
+static RttCopyKeyboardLayoutInputSourceProc sCopyCurrentASCIICapableKeyboardLayoutInputSource = NULL;
+static RttGetInputSourcePropertyProc sGetInputSourceProperty = NULL;
+static RttLMGetKbdTypeProc sLMGetKbdType = NULL;
+static CFStringRef sUnicodeKeyLayoutDataKey = NULL;
+
+static void RttInitializeKeyboardLayoutFunctions()
+{
+	static bool sAttemptedInitialization = false;
+	if (sAttemptedInitialization)
+	{
+		return;
+	}
+
+	sAttemptedInitialization = true;
+
+	CFBundleRef bundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.HIToolbox"));
+	if (!bundle)
+	{
+		return;
+	}
+
+	sCopyCurrentKeyboardLayoutInputSource = (RttCopyKeyboardLayoutInputSourceProc)CFBundleGetFunctionPointerForName(bundle, CFSTR("TISCopyCurrentKeyboardLayoutInputSource"));
+	sCopyCurrentASCIICapableKeyboardLayoutInputSource = (RttCopyKeyboardLayoutInputSourceProc)CFBundleGetFunctionPointerForName(bundle, CFSTR("TISCopyCurrentASCIICapableKeyboardLayoutInputSource"));
+	sGetInputSourceProperty = (RttGetInputSourcePropertyProc)CFBundleGetFunctionPointerForName(bundle, CFSTR("TISGetInputSourceProperty"));
+	sLMGetKbdType = (RttLMGetKbdTypeProc)CFBundleGetFunctionPointerForName(bundle, CFSTR("LMGetKbdType"));
+	const CFStringRef *propertyKeyPointer = (const CFStringRef *)CFBundleGetDataPointerForName(bundle, CFSTR("kTISPropertyUnicodeKeyLayoutData"));
+	if (propertyKeyPointer)
+	{
+		sUnicodeKeyLayoutDataKey = *propertyKeyPointer;
+	}
+}
+
 static const char *RttCoronaKeyNameForLayoutCharacter(unichar character)
 {
+	if (character <= 0xFF)
+	{
+		character = (unichar)tolower((unsigned char)character);
+	}
+
 	switch ( character )
 	{
 		case 'a': return Rtt::KeyName::kA;
@@ -97,9 +142,102 @@ static const char *RttCoronaKeyNameForLayoutCharacter(unichar character)
 		case '7': return Rtt::KeyName::k7;
 		case '8': return Rtt::KeyName::k8;
 		case '9': return Rtt::KeyName::k9;
+		case '-':
+		case '_': return Rtt::KeyName::kMinus;
+		case '=':
+		case '+': return Rtt::KeyName::kEquals;
+		case '[':
+		case '{': return Rtt::KeyName::kLeftBracket;
+		case ']':
+		case '}': return Rtt::KeyName::kRightBracket;
+		case '\\':
+		case '|': return Rtt::KeyName::kBackSlash;
+		case ';':
+		case ':': return Rtt::KeyName::kSemicolon;
+		case '\'':
+		case '"': return Rtt::KeyName::kApostrophe;
+		case ',':
+		case '<': return Rtt::KeyName::kComma;
+		case '.':
+		case '>': return Rtt::KeyName::kPeriod;
+		case '/':
+		case '?': return Rtt::KeyName::kForwardSlash;
+		case '`':
+		case '~': return Rtt::KeyName::kBackTick;
 		default:
 			return NULL;
 	}
+}
+
+static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
+{
+	RttInitializeKeyboardLayoutFunctions();
+	if (!sCopyCurrentKeyboardLayoutInputSource || !sGetInputSourceProperty)
+	{
+		return NULL;
+	}
+
+	TISInputSourceRef inputSource = sCopyCurrentKeyboardLayoutInputSource ? sCopyCurrentKeyboardLayoutInputSource() : NULL;
+	if (!inputSource && sCopyCurrentASCIICapableKeyboardLayoutInputSource)
+	{
+		inputSource = sCopyCurrentASCIICapableKeyboardLayoutInputSource();
+	}
+
+	if (!inputSource)
+	{
+		return NULL;
+	}
+
+	CFStringRef propertyKey = sUnicodeKeyLayoutDataKey ? sUnicodeKeyLayoutDataKey : CFSTR("TISPropertyUnicodeKeyLayoutData");
+	CFDataRef layoutData = (CFDataRef)sGetInputSourceProperty(inputSource, propertyKey);
+	if (!layoutData && sCopyCurrentASCIICapableKeyboardLayoutInputSource)
+	{
+		CFRelease(inputSource);
+		inputSource = sCopyCurrentASCIICapableKeyboardLayoutInputSource();
+		if (!inputSource)
+		{
+			return NULL;
+		}
+		layoutData = (CFDataRef)sGetInputSourceProperty(inputSource, propertyKey);
+	}
+
+	if (!layoutData)
+	{
+		CFRelease(inputSource);
+		return NULL;
+	}
+
+	const UCKeyboardLayout *keyboardLayout = (const UCKeyboardLayout *)CFDataGetBytePtr(layoutData);
+	if (!keyboardLayout)
+	{
+		CFRelease(inputSource);
+		return NULL;
+	}
+
+	UInt32 deadKeyState = 0;
+	UniChar unicodeString[4];
+	UniCharCount stringLength = 0;
+	UInt32 keyboardType = sLMGetKbdType ? (UInt32)sLMGetKbdType() : 0;
+	OSStatus status = UCKeyTranslate(
+		keyboardLayout,
+		keyCode,
+		kUCKeyActionDisplay,
+		0,
+		keyboardType,
+		kUCKeyTranslateNoDeadKeysBit,
+		&deadKeyState,
+		sizeof(unicodeString) / sizeof(unicodeString[0]),
+		&stringLength,
+		unicodeString);
+
+	CFRelease(inputSource);
+
+	if ((status != noErr) || (stringLength == 0))
+	{
+		return NULL;
+	}
+
+	return RttCoronaKeyNameForLayoutCharacter(unicodeString[0]);
 }
 
 // So we can build with Xcode 8.0
@@ -697,15 +835,12 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	NSUInteger modifierFlags = [event modifierFlags];
 	unsigned short keyCode = [event keyCode];
 	NSString *qwertyKeyName = [AppleKeyServices getNameForKey:[NSNumber numberWithInt:keyCode]];
-	
-    const char *keyName = [qwertyKeyName UTF8String];
-    const char* charactersIgnoringModifiers = [[event charactersIgnoringModifiers] UTF8String]; // charactersIgnoringModifiers is keyboardlayout dependent
-	if (charactersIgnoringModifiers)
+
+	const char *keyName = [qwertyKeyName UTF8String];
+	const char *layoutKeyName = RttCoronaKeyNameForKeyCode(keyCode);
+	if (layoutKeyName)
 	{
-		if (strlen(charactersIgnoringModifiers) > 1 || isprint(charactersIgnoringModifiers[0]))
-		{
-            keyName = charactersIgnoringModifiers;
-		}
+		keyName = layoutKeyName;
 	}
     
 	KeyEvent e(
