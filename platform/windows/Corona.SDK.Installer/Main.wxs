@@ -33,6 +33,11 @@
 		<!-- Set up the license agreement. -->
 		<WixVariable Id="WixUILicenseRtf" Value="..\Bin\Corona\Corona_License.rtf"/>
 		
+		<!-- Allow scripted overrides for install directory and version -->
+		<Property Id="SOLAR2D_INSTALL_PATH" Secure="yes" Value="[%SOLAR2D_INSTALL_PATH]"/>
+		<Property Id="SOLAR2D_VERSION_OVERRIDE" Secure="yes" Value="[%SOLAR2D_VERSION]"/>
+		<Property Id="SOLAR2D_ACTIVE_VERSION" Secure="yes"/>
+
 		<!-- Define the property that will receive the user selectable installation path. -->
 		<!-- Note: The "Value" attribute must be in all caps or else it will not receive the changed installation path. -->
 		<Property Id="APP_INSTALL_FOLDER">
@@ -45,6 +50,9 @@
 		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1"/>
 		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch the Corona Simulator"/>
 		<CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes"/>
+		<CustomAction Id="SetInstallDirFromEnvironment" Property="APP_INSTALL_FOLDER" Value="[SOLAR2D_INSTALL_PATH]"/>
+		<CustomAction Id="SetActiveVersionFromOverride" Property="SOLAR2D_ACTIVE_VERSION" Value="[SOLAR2D_VERSION_OVERRIDE]"/>
+		<CustomAction Id="SetActiveVersionDefault" Property="SOLAR2D_ACTIVE_VERSION" Value="[ProductVersion]"/>
 
 		<!-- Broadcast a WM_SETTINGCHANGE message at the end of the install. -->
 		<!-- Makes the added/removed "CORONA_PATH" environment variable take immediate effect without a reboot. -->
@@ -93,19 +101,19 @@
 			</Component>
 			
 			<!-- Writes the Corona installation path and version to the registry. -->
-			<Component Id="InstallRegistryEntries" Directory="TARGETDIR" Guid="*">
-				<RegistryKey Root="HKLM" Key="$(var.RegistryRootKey)">
-					<RegistryValue Name="Version" Type="string" Value="[ProductVersion]" KeyPath="yes"/>
-					<RegistryValue Name="Path" Type="string" Value="[APP_INSTALL_FOLDER]"/>
-				</RegistryKey>
-			</Component>
+				<Component Id="InstallRegistryEntries" Directory="TARGETDIR" Guid="*">
+					<RegistryKey Root="HKLM" Key="$(var.RegistryRootKey)">
+						<RegistryValue Name="Version" Type="string" Value="[SOLAR2D_ACTIVE_VERSION]" KeyPath="yes"/>
+						<RegistryValue Name="Path" Type="string" Value="[APP_INSTALL_FOLDER]"/>
+					</RegistryKey>
+				</Component>
 
 			<!-- Creates a CORONA_SDK_PATH (legacy) and CORONA_PATH environment variable providing the installation path. -->
-			<Component Id="EnvironmentVariables" Directory="TARGETDIR" Guid="*">
-        <Environment Id="CoronaSdkPathEnvironmentVariableLegacy" Name="CORONA_SDK_PATH" Value="[APP_INSTALL_FOLDER]" System="yes" Action="set" Part="all" Permanent="no"/>
-        <Environment Id="CoronaSdkPathEnvironmentVariable" Name="CORONA_PATH" Value="[APP_INSTALL_FOLDER]" System="yes" Action="set" Part="all" Permanent="no"/>
-        <Environment Id="CoronaRootPathEnvironmentVariable" Name="CORONA_ROOT" Value="[APP_INSTALL_FOLDER]Native" System="yes" Action="set" Part="all" Permanent="no"/>
-				<RegistryValue Root="HKCU" Key="$(var.RegistryRootKey)" Name="EnvironmentVariablesInstalled" Type="integer" Value="1" KeyPath="yes"/>
+				<Component Id="EnvironmentVariables" Directory="TARGETDIR" Guid="*">
+					<Environment Id="CoronaSdkPathEnvironmentVariableLegacy" Name="CORONA_SDK_PATH" Value="[APP_INSTALL_FOLDER]" System="yes" Action="set" Part="all" Permanent="no"/>
+					<Environment Id="CoronaSdkPathEnvironmentVariable" Name="CORONA_PATH" Value="[APP_INSTALL_FOLDER]" System="yes" Action="set" Part="all" Permanent="no"/>
+					<Environment Id="CoronaRootPathEnvironmentVariable" Name="CORONA_ROOT" Value="[APP_INSTALL_FOLDER]Native" System="yes" Action="set" Part="all" Permanent="no"/>
+					<RegistryValue Root="HKCU" Key="$(var.RegistryRootKey)" Name="EnvironmentVariablesInstalled" Type="integer" Value="1" KeyPath="yes"/>
 			</Component>
       
 			<!-- Adds to the firewall exception list. (Does not support automatic GUID generation for some reason.) -->
@@ -134,5 +142,15 @@
 		<util:CloseApplication Target="Corona.Debugger.exe" TerminateProcess="3" RebootPrompt="no" />
 		<util:CloseApplication Target="Corona.Console.exe" TerminateProcess="3" RebootPrompt="no" />
 		<SetProperty Id="ARPINSTALLLOCATION" Value="[APP_INSTALL_FOLDER]" After="CostFinalize" />
+		<InstallUISequence>
+			<Custom Action="SetInstallDirFromEnvironment" Before="CostFinalize">SOLAR2D_INSTALL_PATH AND NOT APP_INSTALL_FOLDER</Custom>
+			<Custom Action="SetActiveVersionFromOverride" Before="CostFinalize">SOLAR2D_VERSION_OVERRIDE</Custom>
+			<Custom Action="SetActiveVersionDefault" Before="CostFinalize">NOT SOLAR2D_ACTIVE_VERSION</Custom>
+		</InstallUISequence>
+		<InstallExecuteSequence>
+			<Custom Action="SetInstallDirFromEnvironment" Before="CostFinalize">SOLAR2D_INSTALL_PATH AND NOT APP_INSTALL_FOLDER</Custom>
+			<Custom Action="SetActiveVersionFromOverride" Before="CostFinalize">SOLAR2D_VERSION_OVERRIDE</Custom>
+			<Custom Action="SetActiveVersionDefault" Before="CostFinalize">NOT SOLAR2D_ACTIVE_VERSION</Custom>
+		</InstallExecuteSequence>
 	</Product>
 </Wix>

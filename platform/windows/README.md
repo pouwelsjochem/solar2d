@@ -18,3 +18,13 @@ You must install the following before building Corona Labs' Win32 software.
   - Outputs to:
 
         .\platform\windows\bin\Corona
+
+## Automating local installs
+
+- The Windows installer honours optional environment overrides when it launches:
+  - `SOLAR2D_INSTALL_PATH` pre-populates the destination folder.
+  - `SOLAR2D_VERSION` replaces the version registered under `Software\Corona Labs\Corona SDK\Install`.
+  Export these variables (or pass them to `msiexec`) to drive unattended installs in CI/CD flows.
+- To activate a locally built simulator without running the MSI, use `tools/activate-solar2d.ps1`:
+  - `pwsh tools/activate-solar2d.ps1 -InstallPath C:\Solar2D\nightly -CopyContent` mirrors `platform/windows/bin/Corona` to the target, updates `CORONA_PATH`, and refreshes the registry version (add `-Version 2024.9999` for a custom identifier).
+  - Append `-Scope Machine` when you need machine-wide environment variables; administrator rights are required for that option.
