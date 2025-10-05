@@ -270,51 +270,53 @@ OSXAppPackager::Prepackage( AppPackagerParams * params, const char* tmpDir )
 	return result;
 }
 
+
 int
 OSXAppPackager::PrepackagePlugins(OSXAppPackagerParams *params, String& pluginsDir, String&outputDir)
 {
 	int result = PlatformAppPackager::kNoError;
+	Runtime *runtime = params->GetRuntime();
+	bool hasPlugins = false;
 
 #if !defined( Rtt_NO_GUI )
-	// We don't currently support plugins for CoronaBuilder macOS desktop builds
-
-	Runtime *runtime = params->GetRuntime();
-
-	Rtt_TRACE(("OSXAppPackager::PrepackagePlugins: pluginsDir %s", pluginsDir.GetString()));
-
-	// Extract the project's plugins to the "bin" directory.
-	if (runtime != NULL && runtime->RequiresDownloadablePlugins())
+	if ( runtime && runtime->RequiresDownloadablePlugins() )
 	{
-		// Unzip the project's plugins to an intermediate directory.
-		bool wasUnzipped = UnzipPlugins(params, runtime, pluginsDir.GetString());
-		if (!wasUnzipped)
+		Rtt_TRACE(("OSXAppPackager::PrepackagePlugins: runtime-assisted for %s", pluginsDir.GetString()));
+		if ( ! UnzipPlugins( params, runtime, pluginsDir.GetString() ) )
 		{
 			return PlatformAppPackager::kLocalPackagingError;
 		}
+		hasPlugins = true;
+	}
+#endif
 
-		// Compile the Lua plugins to the intermediate directory.
-		// Note: Precompiled *.lu files are copied to the given directory by the below function.
-		// Note: Uncompiled .lua files are in the same directory, "OSXPostPackage" ignores them
-		// Note: Compiling already compiled Lua works fine, the result will be stripped
-		OSXAppPackagerParams pluginParamsSettings(params->GetAppName(), "", pluginsDir.GetString(), outputDir.GetString());
-
-		bool wasCompiled = CompileScripts(&pluginParamsSettings, outputDir.GetString());
-		
-		if (!wasCompiled)
+	if ( ! runtime )
+	{
+		bool collected = PrepareDesktopPlugins( params, pluginsDir.GetString(), "macos", &hasPlugins );
+		if ( ! collected )
 		{
-			if (Rtt_StringIsEmpty(pluginParamsSettings.GetBuildMessage()))
+			return PlatformAppPackager::kLocalPackagingError;
+		}
+	}
+
+	if ( hasPlugins )
+	{
+		OSXAppPackagerParams pluginParamsSettings( params->GetAppName(), "", pluginsDir.GetString(), outputDir.GetString() );
+		bool wasCompiled = CompileScripts( &pluginParamsSettings, outputDir.GetString() );
+		if ( ! wasCompiled )
+		{
+			if ( Rtt_StringIsEmpty( pluginParamsSettings.GetBuildMessage() ) )
 			{
-				params->SetBuildMessage("Failed to compile plugin Lua scripts.");
+				params->SetBuildMessage( "Failed to compile plugin Lua scripts." );
 			}
 			else
 			{
-				params->SetBuildMessage(pluginParamsSettings.GetBuildMessage());
+				params->SetBuildMessage( pluginParamsSettings.GetBuildMessage() );
 			}
-			
+
 			return PlatformAppPackager::kBuildError;
 		}
 	}
-#endif
 
 	return result;
 }
@@ -510,4 +512,3 @@ OSXAppPackager::PackageForSelfDistribution( OSXAppPackagerParams *osxParams, boo
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

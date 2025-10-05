@@ -236,6 +236,8 @@ class PlatformAppPackager
 		bool UnzipPlugins( AppPackagerParams *params, Runtime *runtime, const char *destinationDirectoryPath );
 #endif
 
+		bool PrepareDesktopPlugins( AppPackagerParams *params, const char *destinationDirectoryPath, const char *platformTag, bool *outHasPlugins );
+
 		int OpenBuildSettings( const char * srcDir );
 		virtual void OnReadingBuildSettings( lua_State *L, int index );
         void ReadGlobalCustomBuildId();

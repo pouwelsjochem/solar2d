@@ -38,14 +38,14 @@
 #if !defined( Rtt_NO_GUI )
 #	include "Rtt_LuaContext.h"
 #	include "Rtt_Runtime.h"
-#else
-#   ifdef Rtt_WIN_ENV
-#	    include "Rtt_WinConsolePlatform.h"
-#   endif
+#endif
+#if defined( Rtt_NO_GUI ) && defined( Rtt_WIN_ENV )
+#	include "Rtt_WinConsolePlatform.h"
 #endif
 
 #include "Rtt_MCrypto.h"
 #include "Rtt_FileSystem.h"
+#include "Rtt_HTTPClient.h"
 
 #include <string>
 #include <string.h>
@@ -72,6 +72,7 @@ static const char *kCustomId = "customBuildId";
 static const char *kAppSettingsLuaFile = "AppSettings.lua";
 	
 Rtt_EXPORT int Rtt_LuaCompile( lua_State *L, int numSources, const char** sources, const char* dstFile, int stripDebug );
+int luaload_BuilderPluginDownloader(lua_State *L);
 
 #if defined(Rtt_WIN_ENV) && ( _MSC_VER >= 1800 ) && !defined(Rtt_LINUX_ENV)
 /// <remarks>
@@ -1134,6 +1135,155 @@ PlatformAppPackager::UnzipPlugins( AppPackagerParams *params, Runtime *runtime, 
 }
 #endif
 
+bool
+PlatformAppPackager::PrepareDesktopPlugins( AppPackagerParams *params, const char *destinationDirectoryPath, const char *platformTag, bool *outHasPlugins )
+{
+	if ( outHasPlugins )
+	{
+		*outHasPlugins = false;
+	}
+
+	if ( !params || Rtt_StringIsEmpty( destinationDirectoryPath ) || Rtt_StringIsEmpty( platformTag ) )
+	{
+		return true;
+	}
+
+	const char *buildSettingsPath = params->GetBuildSettingsPath();
+	if ( Rtt_StringIsEmpty( buildSettingsPath ) )
+	{
+		return true;
+	}
+
+	if ( IsDirectory( destinationDirectoryPath ) )
+	{
+		if ( ! rmdir( destinationDirectoryPath ) )
+		{
+			if ( Rtt_StringIsEmpty( params->GetBuildMessage() ) )
+			{
+				String message( GetServices().Platform().GetAllocator() );
+				message.Set( "Failed to clear plugin staging directory:\n   " );
+				message.Append( destinationDirectoryPath );
+				params->SetBuildMessage( message.GetString() );
+			}
+			return false;
+		}
+	}
+
+	if ( ! mkdir( destinationDirectoryPath ) )
+	{
+		if ( Rtt_StringIsEmpty( params->GetBuildMessage() ) )
+		{
+			String message( GetServices().Platform().GetAllocator() );
+			message.Set( "Failed to create plugin staging directory:\n   " );
+			message.Append( destinationDirectoryPath );
+			params->SetBuildMessage( message.GetString() );
+		}
+		return false;
+	}
+
+	lua_State *L = fVM;
+	HTTPClient::registerFetcherModuleLoaders( L );
+
+	static bool sPluginDownloaderLoaded = false;
+	if ( ! sPluginDownloaderLoaded )
+	{
+		if ( Lua::DoBuffer( L, &luaload_BuilderPluginDownloader, NULL ) != 0 )
+		{
+			const char *errorMessage = lua_tostring( L, -1 );
+			if ( errorMessage && params )
+			{
+				params->SetBuildMessage( errorMessage );
+			}
+			lua_pop( L, 1 );
+			return false;
+		}
+		sPluginDownloaderLoaded = true;
+	}
+
+	lua_getglobal( L, "builder" );
+	if ( ! lua_istable( L, -1 ) )
+	{
+		lua_pop( L, 1 );
+		lua_newtable( L );
+		lua_pushcfunction( L, HTTPClient::fetch );
+		lua_setfield( L, -2, "fetch" );
+		lua_pushcfunction( L, HTTPClient::download );
+		lua_setfield( L, -2, "download" );
+		lua_setglobal( L, "builder" );
+	}
+	else
+	{
+		lua_pop( L, 1 );
+	}
+
+	lua_getglobal( L, "CollectDesktopPlugins" );
+	if ( ! lua_isfunction( L, -1 ) )
+	{
+		lua_pop( L, 1 );
+		return true;
+	}
+
+	lua_newtable( L );
+	lua_pushstring( L, platformTag );
+	lua_setfield( L, -2, "platform" );
+	lua_pushstring( L, buildSettingsPath );
+	lua_setfield( L, -2, "buildSettingsPath" );
+	lua_pushstring( L, destinationDirectoryPath );
+	lua_setfield( L, -2, "destinationDirectory" );
+	if ( ! Rtt_StringIsEmpty( Rtt_STRING_BUILD ) )
+	{
+		lua_pushstring( L, Rtt_STRING_BUILD );
+		lua_setfield( L, -2, "build" );
+	}
+	const char *projectDir = params->GetSrcDir();
+	if ( ! Rtt_StringIsEmpty( projectDir ) )
+	{
+		lua_pushstring( L, projectDir );
+		lua_setfield( L, -2, "projectDir" );
+	}
+
+	if ( Lua::DoCall( L, 1, 2 ) != 0 )
+	{
+		const char *errorMessage = lua_tostring( L, -1 );
+		if ( errorMessage && params )
+		{
+			params->SetBuildMessage( errorMessage );
+		}
+		lua_pop( L, 1 );
+		return false;
+	}
+
+	bool didSucceed = lua_toboolean( L, -2 ) ? true : false;
+	if ( ! didSucceed )
+	{
+		const char *errorMessage = lua_tostring( L, -1 );
+		if ( errorMessage && params )
+		{
+			params->SetBuildMessage( errorMessage );
+		}
+		lua_pop( L, 2 );
+		return false;
+	}
+
+	bool hasPlugins = false;
+	if ( lua_isnumber( L, -1 ) )
+	{
+		hasPlugins = ( lua_tointeger( L, -1 ) > 0 );
+	}
+	else if ( lua_isboolean( L, -1 ) )
+	{
+		hasPlugins = ( lua_toboolean( L, -1 ) != 0 );
+	}
+
+	if ( outHasPlugins )
+	{
+		*outHasPlugins = hasPlugins;
+	}
+
+	lua_pop( L, 2 );
+	return true;
+}
+
 int
 PlatformAppPackager::OpenBuildSettings( const char * srcDir )
 {
@@ -1617,4 +1767,3 @@ PlatformAppPackager::AreAllPluginsAvailable( Runtime *runtime, String *missingPl
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

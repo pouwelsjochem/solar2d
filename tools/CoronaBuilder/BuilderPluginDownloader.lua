@@ -10,20 +10,257 @@
 
 local json = require('json')
 local lfs = require('lfs')
-local builder = require('builder')
+
+local ok, builderModule = pcall(require, 'builder')
+local builder = builderModule or _G.builder or {}
+
+local function ensureBuilderFunction(name, fallbackGlobal)
+	if type(builder[name]) ~= 'function' then
+		local fallback = _G[fallbackGlobal]
+		if type(fallback) == 'function' then
+			builder[name] = fallback
+		end
+	end
+end
+
+ensureBuilderFunction('download', 'pluginCollector_download')
+ensureBuilderFunction('fetch', 'pluginCollector_fetch')
 
 local verbosity = 3
 local androidBuild = false
 local alwaysQuery = false
 
-local function quoteString( str )
-	str = str:gsub('\\', '\\\\')
-	str = str:gsub('"', '\\"')
-	return "\"" .. str .. "\""
-end
-
 local windows = (package.config:match("^.") == '\\')
 local dirSeparator = package.config:sub(1,1)
+local SEP = dirSeparator
+
+local function escapePattern(str)
+	return (str:gsub("([^%w])", "%%%1"))
+end
+
+local function quoteString(str)
+	if not windows then
+		str = str:gsub('\\', '\\\\')
+		str = str:gsub('"', '\\"')
+	end
+	return '"' .. str .. '"'
+end
+
+local function pathJoin(p1, p2, ...)
+	if not p1 or p1 == '' then
+		return pathJoin(p2, ...)
+	end
+	if not p2 or p2 == '' then
+		if select('#', ...) > 0 then
+			return pathJoin(p1, ...)
+		end
+		return p1
+	end
+
+	local p1EndsWithSep = p1:sub(-1) == SEP
+	local p2StartsWithSep = p2:sub(1, 1) == SEP
+	local result
+	if p1EndsWithSep and p2StartsWithSep then
+		result = p1 .. p2:sub(2)
+	elseif p1EndsWithSep or p2StartsWithSep or p1 == '' then
+		result = p1 .. p2
+	else
+		result = p1 .. SEP .. p2
+	end
+
+	if select('#', ...) > 0 then
+		return pathJoin(result, ...)
+	end
+	return result
+end
+
+local function isDir(path)
+	return lfs.attributes(path, 'mode') == 'directory'
+end
+
+local function isFile(path)
+	return lfs.attributes(path, 'mode') == 'file'
+end
+
+local function mkdirs(path)
+	if not path or path == '' or isDir(path) then
+		return
+	end
+
+	if windows then
+		os.execute('cmd /c mkdir ' .. quoteString(path))
+	else
+		os.execute('/bin/mkdir -p ' .. quoteString(path))
+	end
+end
+
+local function removeTree(path)
+	if isDir(path) then
+		for entry in lfs.dir(path) do
+			if entry ~= '.' and entry ~= '..' then
+				local child = pathJoin(path, entry)
+				local mode = lfs.attributes(child, 'mode')
+				if mode == 'directory' then
+					removeTree(child)
+				else
+					os.remove(child)
+				end
+			end
+		end
+		lfs.rmdir(path)
+	else
+		os.remove(path)
+	end
+end
+
+local function clearDirectory(path)
+	if not isDir(path) then
+		mkdirs(path)
+		return
+	end
+	for entry in lfs.dir(path) do
+		if entry ~= '.' and entry ~= '..' then
+			local child = pathJoin(path, entry)
+			local mode = lfs.attributes(child, 'mode')
+			if mode == 'directory' then
+				removeTree(child)
+			else
+				os.remove(child)
+			end
+		end
+	end
+end
+
+local function copyFileBinary(src, dst)
+	local source, readErr = io.open(src, 'rb')
+	if not source then
+		return false, readErr or ('Unable to open file for reading: ' .. tostring(src))
+	end
+
+	local parent = dst:match('^(.+)' .. escapePattern(SEP) .. '[^' .. escapePattern(SEP) .. ']+$')
+	if parent and parent ~= '' and not isDir(parent) then
+		mkdirs(parent)
+	end
+
+	local target, writeErr = io.open(dst, 'wb')
+	if not target then
+		source:close()
+		return false, writeErr or ('Unable to open file for writing: ' .. tostring(dst))
+	end
+
+	while true do
+		local chunk = source:read(1024 * 64)
+		if not chunk then
+			break
+		end
+		target:write(chunk)
+	end
+
+	source:close()
+	target:close()
+	return true
+end
+
+local function copyDirectory(src, dst)
+	if not isDir(src) then
+		return false, 'Source directory not found: ' .. tostring(src)
+	end
+	mkdirs(dst)
+	for entry in lfs.dir(src) do
+		if entry ~= '.' and entry ~= '..' then
+			local srcPath = pathJoin(src, entry)
+			local dstPath = pathJoin(dst, entry)
+			local mode = lfs.attributes(srcPath, 'mode')
+			if mode == 'directory' then
+				local ok, err = copyDirectory(srcPath, dstPath)
+				if not ok then
+					return false, err
+				end
+			else
+				local ok, err = copyFileBinary(srcPath, dstPath)
+				if not ok then
+					return false, err
+				end
+			end
+		end
+	end
+	return true
+end
+
+local function readBuildSettings(buildSettingsFile)
+	if type(buildSettingsFile) ~= 'string' or buildSettingsFile == '' then
+		return nil, "no build settings file specified"
+	end
+
+	local settings
+	if buildSettingsFile:sub(-#"build.properties") == "build.properties" then
+		local props, err = io.open(buildSettingsFile, 'r')
+		if not props then
+			return nil, "unable to open build.properties file, error: " .. tostring(err)
+		end
+		local decoded = json.decode(props:read('*a') or '{"buildSettings":{}}') or {}
+		props:close()
+		settings = decoded.buildSettings or {}
+	else
+		local previous = _G.settings
+		_G.settings = nil
+		local ok, loadErr = pcall(function()
+			dofile(buildSettingsFile)
+		end)
+		settings = _G.settings
+		_G.settings = previous
+		if not ok then
+			return nil, loadErr or "failed to execute build.settings"
+		end
+	end
+
+	if type(settings) ~= 'table' then
+		return nil, "Couldn't read 'build.settings' file at path: '" .. buildSettingsFile .. "'"
+	end
+
+	if type(settings.plugins) ~= 'table' then
+		settings.plugins = {}
+	end
+
+	return settings
+end
+
+local function buildPluginList(settingsPlugins, additionalPlugins)
+	local pluginsToDownload = {}
+	local seen = {}
+
+	if type(settingsPlugins) == 'table' then
+		for pluginName, pluginTable in pairs(settingsPlugins) do
+			if type(pluginTable) == 'table' then
+				local publisherId = pluginTable.publisherId
+				if publisherId then
+					local key = pluginName .. ' ' .. publisherId
+					pluginsToDownload[#pluginsToDownload + 1] = { pluginName, publisherId, pluginTable.supportedPlatforms, pluginTable.marketplaceId }
+					seen[key] = true
+				end
+			end
+		end
+	end
+
+	if type(additionalPlugins) == 'table' then
+		for pluginName, pluginTable in pairs(additionalPlugins) do
+			if type(pluginTable) == 'table' then
+				local publisherId = pluginTable.publisherId
+				if publisherId then
+					local key = pluginName .. ' ' .. publisherId
+					if not seen[key] then
+						pluginsToDownload[#pluginsToDownload + 1] = { pluginName, publisherId, pluginTable.supportedPlatforms, pluginTable.marketplaceId }
+						seen[key] = true
+					end
+				end
+			end
+		end
+	end
+
+	return pluginsToDownload
+end
+
+local function unpackPlugin( archive, dst )
 
 local function unpackPlugin( archive, dst )
 	if windows then
@@ -39,22 +276,12 @@ local function getPluginDirectories(platform, build, pluginsToDownload, buildSet
 	local pluginsDest
 	if windows then
 		-- %APPDATA%\Corona Labs\Corona Simulator\NativePlugins\
-		pluginsDest = os.getenv('APPDATA') .. '\\Corona Labs'
-		lfs.mkdir(pluginsDest)
-		pluginsDest = pluginsDest .. '\\Corona Simulator'
-		lfs.mkdir(pluginsDest)
-		pluginsDest = pluginsDest .. '\\NativePlugins\\'
-		lfs.mkdir(pluginsDest)
-		pluginsDest = pluginsDest .. platform .. '\\'
-		lfs.mkdir(pluginsDest)
+		pluginsDest = pathJoin(os.getenv('APPDATA') or '', 'Corona Labs', 'Corona Simulator', 'NativePlugins', platform)
 	else
-		pluginsDest = os.getenv('HOME') .. '/Library/Application Support/Corona'
-		lfs.mkdir(pluginsDest)
-		pluginsDest = pluginsDest .. '/Native Plugins/'
-		lfs.mkdir(pluginsDest)
-		pluginsDest = pluginsDest .. platform .. '/'
-		lfs.mkdir(pluginsDest)
+		pluginsDest = pathJoin(os.getenv('HOME') or '', 'Library', 'Application Support', 'Corona', 'Native Plugins', platform)
 	end
+
+	mkdirs(pluginsDest)
 
 	local pluginDirectories = {}
 
@@ -63,7 +290,7 @@ local function getPluginDirectories(platform, build, pluginsToDownload, buildSet
 	  pluginPlatform = platform,
 	  plugins = buildSettingsPlugins or {},
 	  destinationDirectory = pluginsDest,
-	  build = "9999",
+	  build = build,
 		download = builder.download,
 		fetch = builder.fetch
 	}
@@ -325,50 +552,13 @@ function DownloadPluginsMain(args, user, buildYear, buildRevision)
 		return 1;
 	end
 
-	local settings
-	if buildSettingsFile:sub(-#"build.properties") == "build.properties" then
-		local props, err = io.open( buildSettingsFile, "r" )
-		if not props then
-			print("ERROR: unable to open build.properties file, error: " .. tostring(err))
-			return 1
-		end
-		settings = json.decode(props:read("*a") or '{"buildSettings":{}}').buildSettings or {}
-
-		props:close()
-	else
-		local oldSettings = _G['settings']
-		_G['settings'] = nil
-		pcall( function(  )
-			dofile(buildSettingsFile)
-		end  )
-		settings = _G['settings']
-		_G['settings'] = oldSettings
-	end
-
-	if type(settings) ~= 'table' then
-		print("ERROR: Couldn't read 'build.settings' file at path: '" .. buildSettingsFile .. "'")
+	local settings, settingsError = readBuildSettings(buildSettingsFile)
+	if not settings then
+		print("ERROR: " .. tostring(settingsError))
 		return 1
 	end
 
-	if type(settings.plugins) ~= 'table' then
-		settings.plugins = {}
-	end
-
-	local pluginsToDownload = {}
-
-	for pluginName, pluginTable in pairs(settings.plugins) do
-		local publisherId = pluginTable['publisherId']
-		table.insert( pluginsToDownload, {pluginName, publisherId, pluginTable.supportedPlatforms} )
-	end
-
-	local addedPluginsToDownload = {}
-
-	for pluginName, pluginTable in pairs(buildDataPluginEntry) do
-		local publisherId = pluginTable['publisherId']
-		if not addedPluginsToDownload[pluginName .. " " .. publisherId] then
-			table.insert( pluginsToDownload, {pluginName, publisherId, pluginTable.supportedPlatforms, pluginTable.marketplaceId} )
-		end
-	end
+	local pluginsToDownload = buildPluginList(settings.plugins, buildDataPluginEntry)
 
 	local build = buildYear .. '.' .. buildRevision
 	if platform == 'ios' or platform == 'tvos' then
@@ -441,6 +631,68 @@ function DownloadPluginsMain(args, user, buildYear, buildRevision)
 
 
 	return 0
+end
+
+function CollectDesktopPlugins(params)
+	if type(params) ~= 'table' then
+		return false, "CollectDesktopPlugins requires a parameter table"
+	end
+
+	local platform = type(params.platform) == 'string' and params.platform:lower() or ''
+	if platform == '' then
+		return false, "platform parameter is required"
+	end
+
+	local buildSettingsFile = params.buildSettingsPath or ''
+	if buildSettingsFile == '' then
+		return true, 0
+	end
+
+	local destinationDir = params.destinationDirectory or ''
+	if destinationDir == '' then
+		return false, "destinationDirectory parameter is required"
+	end
+
+	local settings, settingsError = readBuildSettings(buildSettingsFile)
+	if not settings then
+		return false, settingsError
+	end
+
+	local additionalPlugins = params.additionalPlugins or {}
+	local pluginsToDownload = buildPluginList(settings.plugins, additionalPlugins)
+	if #pluginsToDownload == 0 then
+		clearDirectory(destinationDir)
+		return true, 0
+	end
+
+	local buildString = params.build
+	if type(buildString) ~= 'string' or buildString == '' then
+		buildString = tostring(os.date('%Y')) .. '.0'
+	end
+
+	local pluginDirectories = getPluginDirectories(platform, buildString, pluginsToDownload, settings.plugins)
+	if type(pluginDirectories) ~= 'table' then
+		return false, "failed to acquire plugins for platform '" .. platform .. "'"
+	end
+
+	clearDirectory(destinationDir)
+
+	local count = 0
+	local sepPattern = escapePattern(SEP)
+	for _, pluginDir in ipairs(pluginDirectories) do
+		if isDir(pluginDir) then
+			local pluginName = pluginDir:match('([^' .. sepPattern .. ']+)$') or ('plugin_' .. tostring(count + 1))
+			local targetDir = pathJoin(destinationDir, pluginName)
+			removeTree(targetDir)
+			local ok, err = copyDirectory(pluginDir, targetDir)
+			if not ok then
+				return false, err or ('failed to copy plugin directory: ' .. pluginDir)
+			end
+			count = count + 1
+		end
+	end
+
+	return true, count
 end
 
 function DownloadAndroidOfflinePlugins(args, user, buildYear, buildRevision)
