@@ -268,6 +268,7 @@
     <ClInclude Include="Rtt\Rtt_WinPlatform.h" />
     <ClInclude Include="Rtt\Rtt_WinProjectSettings.h" />
     <ClInclude Include="Rtt\Rtt_WinScreenSurface.h" />
+    <ClInclude Include="Rtt\Rtt_WinFramePacer.h" />
     <ClInclude Include="Rtt\Rtt_WinTimer.h" />
     <ClInclude Include="Rtt\Rtt_WinWebViewObject.h" />
     <ClInclude Include="stdafx.h" />
@@ -364,6 +365,7 @@
     <ClCompile Include="Rtt\Rtt_WinPlatform.cpp" />
     <ClCompile Include="Rtt\Rtt_WinProjectSettings.cpp" />
     <ClCompile Include="Rtt\Rtt_WinScreenSurface.cpp" />
+    <ClCompile Include="Rtt\Rtt_WinFramePacer.cpp" />
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp" />
     <ClCompile Include="Rtt\Rtt_WinWebViewObject.cpp" /> 
     <ClCompile Include="stdafx.cpp">

@@ -9,7 +9,15 @@
 
 #include "stdafx.h"
 #include "Rtt_WinTimer.h"
-#include <windows.h>
+
+#include "Rtt_Runtime.h"
+
+#include <chrono>
+#include <cstdlib>
+#include <Windows.h>
+#include <mmsystem.h>
+
+#pragma comment(lib, "winmm.lib")
 
 
 namespace Rtt
@@ -21,11 +29,23 @@ UINT_PTR WinTimer::sMostRecentTimerID;
 #pragma region Constructors/Destructors
 WinTimer::WinTimer(MCallback& callback, HWND windowHandle)
 :	PlatformTimer(callback)
+,	fWindowHandle(windowHandle)
+,	fTimerPointer(nullptr)
+, fTimerID(0)
+, fIntervalInMilliseconds(10)
+, fNextIntervalTimeInTicks(0)
+, fFramePacer()
+, fCallbackRef(&callback)
+, fTimerResolutionActive(false)
+, fUseFramePacer(true)
 {
-	fWindowHandle = windowHandle;
-	fTimerPointer = NULL;
-	fIntervalInMilliseconds = 10;
-	fNextIntervalTimeInTicks = 0;
+	const char* disableFramePacer = std::getenv("SOLAR2D_DISABLE_FRAMEPACER");
+	if (disableFramePacer && disableFramePacer[0] != '\0')
+	{
+		fUseFramePacer = false;
+	}
+
+	fFramePacer.ConfigureInterval(std::chrono::milliseconds(fIntervalInMilliseconds));
 }
 
 WinTimer::~WinTimer()
@@ -45,12 +65,28 @@ void WinTimer::Start()
 		return;
 	}
 
-	// Start the timer, but with an interval faster than the configured interval.
-	// We do this because Windows timers can invoke later than expected.
-	// To compensate, we'll schedule when to invoke the timer's callback using "fIntervalEndTimeInTicks".
+	if (fUseFramePacer && !fTimerResolutionActive)
+	{
+		if (timeBeginPeriod(1) == TIMERR_NOERROR)
+		{
+			fTimerResolutionActive = true;
+		}
+	}
+
+	UpdateFramePacerInterval();
+	if (fUseFramePacer)
+	{
+		fFramePacer.Reset();
+	}
+
 	fNextIntervalTimeInTicks = (S32)::GetTickCount() + (S32)fIntervalInMilliseconds;
 	fTimerID = ++sMostRecentTimerID; // ID should be non-0, so pre-increment for first time
-	fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 10, WinTimer::OnTimerElapsed);
+	UINT interval = fIntervalInMilliseconds;
+	if (interval < 1)
+	{
+		interval = 1;
+	}
+	fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, interval, WinTimer::OnTimerElapsed);
 
 	if (IsRunning())
 	{
@@ -73,11 +109,23 @@ void WinTimer::Stop()
 
 	fTimerPointer = NULL;
 	fTimerID = 0;
+	fFramePacer.Stop();
+
+	if (fTimerResolutionActive)
+	{
+		timeEndPeriod(1);
+		fTimerResolutionActive = false;
+	}
 }
 
 void WinTimer::SetInterval(U32 milliseconds)
 {
 	fIntervalInMilliseconds = milliseconds;
+
+	if (fUseFramePacer)
+	{
+		fFramePacer.ConfigureInterval(std::chrono::milliseconds(fIntervalInMilliseconds));
+	}
 }
 
 bool WinTimer::IsRunning() const
@@ -90,6 +138,13 @@ void WinTimer::Evaluate()
 	// Do not continue if the timer is not running.
 	if (IsRunning() == false)
 	{
+		return;
+	}
+
+	if (fUseFramePacer)
+	{
+		fFramePacer.WaitForNextFrame();
+		this->operator()();
 		return;
 	}
 
@@ -142,5 +197,30 @@ S32 WinTimer::CompareTicks(S32 x, S32 y)
 }
 
 #pragma endregion
+
+void WinTimer::UpdateFramePacerInterval()
+{
+	if (!fUseFramePacer)
+	{
+		return;
+	}
+
+	std::chrono::nanoseconds interval = std::chrono::milliseconds(fIntervalInMilliseconds);
+
+	if (fCallbackRef)
+	{
+		if (Runtime* runtime = dynamic_cast<Runtime*>(fCallbackRef))
+		{
+			double frameIntervalSeconds = runtime->GetFrameInterval();
+			if (frameIntervalSeconds > 0.0)
+			{
+				interval = std::chrono::duration_cast<std::chrono::nanoseconds>(
+					std::chrono::duration<double>(frameIntervalSeconds));
+			}
+		}
+	}
+
+	fFramePacer.ConfigureInterval(interval);
+}
 
 }	// namespace Rtt

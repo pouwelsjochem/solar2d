@@ -18,3 +18,8 @@ You must install the following before building Corona Labs' Win32 software.
   - Outputs to:
 
         .\platform\windows\bin\Corona
+
+## Frame pacing on Windows
+
+- The native Windows runtime now applies frame pacing to keep updates aligned with the active monitor's cadence.
+- Set the `SOLAR2D_DISABLE_FRAMEPACER` environment variable to any non-empty value before launching the simulator or a Win32 build to fall back to the legacy timer behaviour.

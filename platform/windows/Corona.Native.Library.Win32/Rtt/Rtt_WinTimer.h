@@ -11,6 +11,7 @@
 
 #include "Core\Rtt_Build.h"
 #include "Rtt_PlatformTimer.h"
+#include "Rtt_WinFramePacer.h"
 #include <Windows.h>
 #include <unordered_map>
 
@@ -40,7 +41,7 @@ class WinTimer : public PlatformTimer
 		/// <summary>Sets the timer's interval in milliseconds. This can be applied while the timer is running.</summary>
 		/// <param name="milliseconds">
 		///  <para>How often the timer will "elapse" and invoke its given callback when running.</para>
-		///  <para>Cannot be set less than 10 milliseconds.</para>
+		///  <para>Values smaller than 1 millisecond are clamped.</para>
 		/// </param>
 		virtual void SetInterval(U32 milliseconds) override;
 
@@ -78,11 +79,17 @@ class WinTimer : public PlatformTimer
 		/// </returns>
 		static S32 CompareTicks(S32 x, S32 y);
 
+		void UpdateFramePacerInterval();
+
 		HWND fWindowHandle;
 		UINT_PTR fTimerPointer;
 		UINT_PTR fTimerID;
 		U32 fIntervalInMilliseconds;
 		S32 fNextIntervalTimeInTicks;
+		WinFramePacer fFramePacer;
+		MCallback* fCallbackRef;
+		bool fTimerResolutionActive;
+		bool fUseFramePacer;
 
 		static std::unordered_map<UINT_PTR, WinTimer*> sTimerMap; // timer callback might be called after Stop(), so use this as a guard
 		static UINT_PTR sMostRecentTimerID; // use an incrementing index as key, to be robust against the rare case that a new timer is reallocated into the same memory
