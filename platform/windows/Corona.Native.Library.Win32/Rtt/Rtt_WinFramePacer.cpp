@@ -18,6 +18,7 @@ namespace Rtt
 {
 	namespace
 	{
+		static const auto kMaxCatchUp = 4;
 		static const auto kDefaultInterval = std::chrono::milliseconds(16);
 	}
 
@@ -93,7 +94,14 @@ namespace Rtt
 		}
 
 	auto next = target + fInterval;
-	if (now > target)
+	int catchUp = 0;
+	while (next <= now && catchUp < kMaxCatchUp)
+	{
+		next += fInterval;
+		catchUp++;
+	}
+
+	if (next <= now)
 	{
 		next = now + fInterval;
 	}
@@ -138,6 +146,23 @@ namespace Rtt
 
 			now = Clock::now();
 		}
+	}
+
+	std::chrono::nanoseconds WinFramePacer::TimeUntilNextFrame() const
+	{
+		if (!fIsActive)
+		{
+			return std::chrono::nanoseconds::zero();
+		}
+
+		auto now = Clock::now();
+		auto remaining = fNextWakeAt - now;
+		if (remaining.count() < 0)
+		{
+			return std::chrono::nanoseconds::zero();
+		}
+
+		return remaining;
 	}
 
 } // namespace Rtt

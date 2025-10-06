@@ -28,6 +28,7 @@ class WinFramePacer
 		void Stop();
 
 		std::chrono::nanoseconds WaitForNextFrame(bool blockIfEarly = false);
+		std::chrono::nanoseconds TimeUntilNextFrame() const;
 
 		std::chrono::nanoseconds GetLastFrameCost() const { return fLastFrameCost; }
 		std::chrono::nanoseconds GetLastOvershoot() const { return fLastOvershoot; }
