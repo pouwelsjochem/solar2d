@@ -14,7 +14,6 @@
 
 #include <chrono>
 #include <cstdlib>
-#include <limits>
 #include <Windows.h>
 #include <mmsystem.h>
 
@@ -26,36 +25,6 @@ namespace Rtt
 
 std::unordered_map<UINT_PTR, Rtt::WinTimer *> WinTimer::sTimerMap;
 UINT_PTR WinTimer::sMostRecentTimerID;
-
-namespace
-{
-	static UINT DurationToTimerInterval(std::chrono::nanoseconds duration)
-	{
-		if (duration.count() <= 0)
-		{
-			return 1;
-		}
-
-		auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
-		if (milliseconds.count() == 0)
-		{
-			return 1;
-		}
-
-		if (std::chrono::duration_cast<std::chrono::nanoseconds>(milliseconds) < duration)
-		{
-			milliseconds += std::chrono::milliseconds(1);
-		}
-
-		auto value = milliseconds.count();
-		if (value > std::numeric_limits<UINT>::max())
-		{
-			return std::numeric_limits<UINT>::max();
-		}
-
-		return (UINT)value;
-	}
-}
 
 #pragma region Constructors/Destructors
 WinTimer::WinTimer(MCallback& callback, HWND windowHandle)
@@ -115,7 +84,7 @@ void WinTimer::Start()
 
 	if (fUseFramePacer)
 	{
-		ScheduleFramePacedTimer(std::chrono::milliseconds(1));
+		fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 1, WinTimer::OnTimerElapsed);
 	}
 	else
 	{
@@ -185,19 +154,9 @@ void WinTimer::Evaluate()
 		auto wait = fFramePacer.WaitForNextFrame();
 		if (wait.count() > 0)
 		{
-			if (IsRunning())
-			{
-				ScheduleFramePacedTimer(wait);
-			}
 			return;
 		}
-
 		this->operator()();
-
-		if (IsRunning())
-		{
-			ScheduleFramePacedTimer(fFramePacer.TimeUntilNextFrame());
-		}
 		return;
 	}
 
@@ -250,12 +209,6 @@ S32 WinTimer::CompareTicks(S32 x, S32 y)
 }
 
 #pragma endregion
-
-void WinTimer::ScheduleFramePacedTimer(std::chrono::nanoseconds delay)
-{
-	UINT interval = DurationToTimerInterval(delay);
-	fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, interval, WinTimer::OnTimerElapsed);
-}
 
 void WinTimer::UpdateFramePacerInterval()
 {

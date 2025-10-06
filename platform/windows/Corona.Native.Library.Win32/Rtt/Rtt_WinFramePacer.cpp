@@ -100,23 +100,6 @@ namespace Rtt
 		fLastWakeAt = now;
 		fNextWakeAt = next;
 		return std::chrono::nanoseconds::zero();
-	}
-
-	std::chrono::nanoseconds WinFramePacer::TimeUntilNextFrame() const
-	{
-		if (!fIsActive)
-		{
-			return std::chrono::nanoseconds::zero();
-		}
-
-		auto now = Clock::now();
-		auto remaining = fNextWakeAt - now;
-		if (remaining.count() < 0)
-		{
-			return std::chrono::nanoseconds::zero();
-		}
-
-		return remaining;
-	}
+}
 
 } // namespace Rtt

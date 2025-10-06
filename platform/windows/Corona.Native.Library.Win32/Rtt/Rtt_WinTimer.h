@@ -13,7 +13,6 @@
 #include "Rtt_PlatformTimer.h"
 #include "Rtt_WinFramePacer.h"
 #include <Windows.h>
-#include <chrono>
 #include <unordered_map>
 
 
@@ -81,7 +80,6 @@ class WinTimer : public PlatformTimer
 		static S32 CompareTicks(S32 x, S32 y);
 
 		void UpdateFramePacerInterval();
-		void ScheduleFramePacedTimer(std::chrono::nanoseconds delay);
 
 		HWND fWindowHandle;
 		UINT_PTR fTimerPointer;
