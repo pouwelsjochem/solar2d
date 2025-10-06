@@ -14,6 +14,7 @@
 
 #include <chrono>
 #include <cstdlib>
+#include <limits>
 #include <Windows.h>
 #include <mmsystem.h>
 
@@ -26,11 +27,41 @@ namespace Rtt
 std::unordered_map<UINT_PTR, Rtt::WinTimer *> WinTimer::sTimerMap;
 UINT_PTR WinTimer::sMostRecentTimerID;
 
+namespace
+{
+	static UINT DurationToTimerInterval(std::chrono::nanoseconds duration)
+	{
+		if (duration.count() <= 0)
+		{
+			return 1;
+		}
+
+		auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+		if (milliseconds.count() == 0)
+		{
+			return 1;
+		}
+
+		if (std::chrono::duration_cast<std::chrono::nanoseconds>(milliseconds) < duration)
+		{
+			milliseconds += std::chrono::milliseconds(1);
+		}
+
+		auto value = milliseconds.count();
+		if (value > std::numeric_limits<UINT>::max())
+		{
+			return std::numeric_limits<UINT>::max();
+		}
+
+		return (UINT)value;
+	}
+}
+
 #pragma region Constructors/Destructors
 WinTimer::WinTimer(MCallback& callback, HWND windowHandle)
 :	PlatformTimer(callback)
 ,	fWindowHandle(windowHandle)
-,	fTimerPointer(nullptr)
+,	fTimerPointer(0)
 , fTimerID(0)
 , fIntervalInMilliseconds(10)
 , fNextIntervalTimeInTicks(0)
@@ -81,12 +112,20 @@ void WinTimer::Start()
 
 	fNextIntervalTimeInTicks = (S32)::GetTickCount() + (S32)fIntervalInMilliseconds;
 	fTimerID = ++sMostRecentTimerID; // ID should be non-0, so pre-increment for first time
-	UINT interval = fIntervalInMilliseconds;
-	if (interval < 1)
+
+	if (fUseFramePacer)
 	{
-		interval = 1;
+		ScheduleFramePacedTimer(std::chrono::milliseconds(1));
 	}
-	fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, interval, WinTimer::OnTimerElapsed);
+	else
+	{
+		UINT interval = fIntervalInMilliseconds;
+		if (interval < 1)
+		{
+			interval = 1;
+		}
+		fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, interval, WinTimer::OnTimerElapsed);
+	}
 
 	if (IsRunning())
 	{
@@ -107,7 +146,7 @@ void WinTimer::Stop()
 
 	sTimerMap.erase(fTimerID);
 
-	fTimerPointer = NULL;
+	fTimerPointer = 0;
 	fTimerID = 0;
 	fFramePacer.Stop();
 
@@ -130,7 +169,7 @@ void WinTimer::SetInterval(U32 milliseconds)
 
 bool WinTimer::IsRunning() const
 {
-	return (fTimerPointer != NULL);
+	return (fTimerPointer != 0);
 }
 
 void WinTimer::Evaluate()
@@ -143,8 +182,22 @@ void WinTimer::Evaluate()
 
 	if (fUseFramePacer)
 	{
-		fFramePacer.WaitForNextFrame();
+		auto wait = fFramePacer.WaitForNextFrame();
+		if (wait.count() > 0)
+		{
+			if (IsRunning())
+			{
+				ScheduleFramePacedTimer(wait);
+			}
+			return;
+		}
+
 		this->operator()();
+
+		if (IsRunning())
+		{
+			ScheduleFramePacedTimer(fFramePacer.TimeUntilNextFrame());
+		}
 		return;
 	}
 
@@ -197,6 +250,12 @@ S32 WinTimer::CompareTicks(S32 x, S32 y)
 }
 
 #pragma endregion
+
+void WinTimer::ScheduleFramePacedTimer(std::chrono::nanoseconds delay)
+{
+	UINT interval = DurationToTimerInterval(delay);
+	fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, interval, WinTimer::OnTimerElapsed);
+}
 
 void WinTimer::UpdateFramePacerInterval()
 {

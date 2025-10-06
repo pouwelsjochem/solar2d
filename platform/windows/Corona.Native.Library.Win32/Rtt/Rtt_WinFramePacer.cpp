@@ -10,8 +10,6 @@
 #include "stdafx.h"
 #include "Rtt_WinFramePacer.h"
 
-#include <thread>
-#include <Windows.h>
 
 namespace Rtt
 {
@@ -24,6 +22,7 @@ namespace Rtt
 	WinFramePacer::WinFramePacer()
 	: fInterval(kDefaultInterval)
 	, fNextWakeAt(Clock::now())
+	, fLastWakeAt(Clock::now())
 	, fIsActive(false)
 	, fLastFrameCost(std::chrono::nanoseconds::zero())
 	, fLastOvershoot(std::chrono::nanoseconds::zero())
@@ -48,7 +47,9 @@ namespace Rtt
 	void WinFramePacer::Reset()
 	{
 		fIsActive = true;
-		fNextWakeAt = Clock::now() + fInterval;
+		auto now = Clock::now();
+		fNextWakeAt = now;
+		fLastWakeAt = now;
 		fLastFrameCost = std::chrono::nanoseconds::zero();
 		fLastOvershoot = std::chrono::nanoseconds::zero();
 	}
@@ -65,17 +66,18 @@ namespace Rtt
 			Reset();
 		}
 
+		auto now = Clock::now();
 		auto target = fNextWakeAt;
-		auto beforeSleep = Clock::now();
 
-		if (beforeSleep < target)
+		if (now < target)
 		{
-			SleepUntil(target);
+			fLastOvershoot = std::chrono::nanoseconds::zero();
+			fLastFrameCost = std::chrono::nanoseconds::zero();
+			return target - now;
 		}
 
-		auto afterSleep = Clock::now();
-		fLastFrameCost = afterSleep - beforeSleep;
-		fLastOvershoot = afterSleep - target;
+		fLastFrameCost = now - fLastWakeAt;
+		fLastOvershoot = now - target;
 
 		if (fLastOvershoot.count() < 0)
 		{
@@ -83,62 +85,38 @@ namespace Rtt
 		}
 
 		auto next = target + fInterval;
-		auto now = afterSleep;
-
-		if (now > target)
+		int catchUp = 0;
+		while (next <= now && catchUp < kMaxCatchUp)
 		{
-			int catchUp = 0;
-			while (next <= now && catchUp < kMaxCatchUp)
-			{
-				next += fInterval;
-				catchUp++;
-			}
-
-			if (next <= now)
-			{
-				next = now + fInterval;
-			}
+			next += fInterval;
+			catchUp++;
 		}
 
+		if (next <= now)
+		{
+			next = now + fInterval;
+		}
+
+		fLastWakeAt = now;
 		fNextWakeAt = next;
-		return fLastOvershoot;
+		return std::chrono::nanoseconds::zero();
 	}
 
-	void WinFramePacer::SleepUntil(TimePoint target)
+	std::chrono::nanoseconds WinFramePacer::TimeUntilNextFrame() const
 	{
-		auto now = Clock::now();
-
-		while (now < target)
+		if (!fIsActive)
 		{
-			auto remaining = target - now;
-
-			if (remaining > std::chrono::milliseconds(2))
-			{
-				auto sleepFor = remaining - std::chrono::milliseconds(1);
-				if (sleepFor.count() > 0)
-				{
-					std::this_thread::sleep_for(sleepFor);
-				}
-			}
-			else if (remaining > std::chrono::microseconds(200))
-			{
-				auto sleepFor = remaining - std::chrono::microseconds(100);
-				if (sleepFor.count() > 0)
-				{
-					std::this_thread::sleep_for(sleepFor);
-				}
-			}
-			else
-			{
-				while ((now = Clock::now()) < target)
-				{
-					::Sleep(0);
-				}
-				return;
-			}
-
-			now = Clock::now();
+			return std::chrono::nanoseconds::zero();
 		}
+
+		auto now = Clock::now();
+		auto remaining = fNextWakeAt - now;
+		if (remaining.count() < 0)
+		{
+			return std::chrono::nanoseconds::zero();
+		}
+
+		return remaining;
 	}
 
 } // namespace Rtt

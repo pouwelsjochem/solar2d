@@ -28,6 +28,7 @@ class WinFramePacer
 		void Stop();
 
 		std::chrono::nanoseconds WaitForNextFrame();
+		std::chrono::nanoseconds TimeUntilNextFrame() const;
 
 		std::chrono::nanoseconds GetLastFrameCost() const { return fLastFrameCost; }
 		std::chrono::nanoseconds GetLastOvershoot() const { return fLastOvershoot; }
@@ -36,15 +37,13 @@ class WinFramePacer
 		using Clock = std::chrono::steady_clock;
 		using TimePoint = Clock::time_point;
 
-		void SleepUntil(TimePoint target);
-
 	private:
 		std::chrono::nanoseconds fInterval;
 		TimePoint fNextWakeAt;
+		TimePoint fLastWakeAt;
 		bool fIsActive;
 		std::chrono::nanoseconds fLastFrameCost;
 		std::chrono::nanoseconds fLastOvershoot;
 };
 
 } // namespace Rtt
-
