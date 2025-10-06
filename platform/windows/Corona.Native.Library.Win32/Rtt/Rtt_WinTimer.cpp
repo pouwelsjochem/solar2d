@@ -154,6 +154,16 @@ void WinTimer::Evaluate()
 		auto wait = fFramePacer.WaitForNextFrame();
 		if (wait.count() > 0)
 		{
+			auto threshold = std::chrono::milliseconds(2);
+			if (wait <= threshold)
+			{
+				if (fFramePacer.WaitForNextFrame(true).count() > 0)
+				{
+					return;
+				}
+				this->operator()();
+				return;
+			}
 			return;
 		}
 		this->operator()();

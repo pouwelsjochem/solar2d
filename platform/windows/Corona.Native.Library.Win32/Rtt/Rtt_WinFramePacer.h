@@ -27,7 +27,7 @@ class WinFramePacer
 		void Reset();
 		void Stop();
 
-		std::chrono::nanoseconds WaitForNextFrame();
+		std::chrono::nanoseconds WaitForNextFrame(bool blockIfEarly = false);
 
 		std::chrono::nanoseconds GetLastFrameCost() const { return fLastFrameCost; }
 		std::chrono::nanoseconds GetLastOvershoot() const { return fLastOvershoot; }
@@ -35,6 +35,8 @@ class WinFramePacer
 	private:
 		using Clock = std::chrono::steady_clock;
 		using TimePoint = Clock::time_point;
+
+		void SleepUntil(TimePoint target);
 
 	private:
 		std::chrono::nanoseconds fInterval;
