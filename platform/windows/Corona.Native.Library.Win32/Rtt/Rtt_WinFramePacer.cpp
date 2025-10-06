@@ -18,7 +18,6 @@ namespace Rtt
 {
 	namespace
 	{
-		static const auto kMaxCatchUp = 4;
 		static const auto kDefaultInterval = std::chrono::milliseconds(16);
 	}
 
@@ -93,18 +92,11 @@ namespace Rtt
 			fLastOvershoot = std::chrono::nanoseconds::zero();
 		}
 
-		auto next = target + fInterval;
-		int catchUp = 0;
-		while (next <= now && catchUp < kMaxCatchUp)
-		{
-			next += fInterval;
-			catchUp++;
-		}
-
-		if (next <= now)
-		{
-			next = now + fInterval;
-		}
+	auto next = target + fInterval;
+	if (now > target)
+	{
+		next = now + fInterval;
+	}
 
 		fLastWakeAt = now;
 		fNextWakeAt = next;
