@@ -13,6 +13,7 @@
 #include "Interop\UI\WebBrowser.h"
 #include "Rtt_MPlatform.h"
 #include "Rtt_WinDisplayObject.h"
+#include <memory>
 
 
 #pragma region Forward Declarations
@@ -89,8 +90,8 @@ class WinWebViewObject : public WinDisplayObject
 
 
 		#pragma region Private Member Variables
-		/// <summary>Pointer to the Win32 Web Browser control this Corona display object wraps.</summary>
-		Interop::UI::WebBrowser* fWebBrowserPointer;
+		/// <summary>Shared pointer to the platform WebView control powering this display object.</summary>
+		std::shared_ptr<Interop::UI::WebBrowser> fWebBrowserPointer;
 
 		/// <summary>Handler to be invoked when the "Navigating" event has been raised by the browser.</summary>
 		Interop::UI::WebBrowser::NavigatingEvent::MethodHandler<WinWebViewObject> fNavigatingEventHandler;

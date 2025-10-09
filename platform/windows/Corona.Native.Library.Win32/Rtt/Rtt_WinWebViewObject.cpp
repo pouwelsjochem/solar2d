@@ -30,7 +30,7 @@ namespace Rtt
 #pragma region Constructors/Destructors
 WinWebViewObject::WinWebViewObject(Interop::RuntimeEnvironment& environment, const Rect& bounds)
 :	Super(environment, bounds),
-	fWebBrowserPointer(nullptr),
+	fWebBrowserPointer(),
 	fNavigatingEventHandler(this, &WinWebViewObject::OnNavigating),
 	fNavigatedEventHandler(this, &WinWebViewObject::OnNavigated),
 	fNavigationFailedEventHandler(this, &WinWebViewObject::OnNavigationFailed)
@@ -39,11 +39,7 @@ WinWebViewObject::WinWebViewObject(Interop::RuntimeEnvironment& environment, con
 
 WinWebViewObject::~WinWebViewObject()
 {
-	if (fWebBrowserPointer)
-	{
-		delete fWebBrowserPointer;
-		fWebBrowserPointer = nullptr;
-	}
+
 }
 
 #pragma endregion
@@ -62,20 +58,15 @@ bool WinWebViewObject::Initialize()
 	Rect screenBounds;
 	GetScreenBounds(screenBounds);
 
-	// Set up a registry path used to store custom Internet Explorer settings exclusive to this app.
-	// This allows our WebBrowser control to override default IE settings.
-	std::wstring registryPath = GetRuntimeEnvironment().GetRegistryPathWithoutHive();
-	registryPath += L"\\corona\\Internet Explorer";
-
-	// Create and configure the native Win32 web browser control this object will manage.
+	// Create and configure the native WebView2 control this object will manage.
 	Interop::UI::WebBrowser::CreationSettings settings{};
 	settings.ParentWindowHandle = GetRuntimeEnvironment().GetRenderSurface()->GetWindowHandle();
 	settings.Bounds.left = (LONG)Rtt_RealToInt(screenBounds.xMin);
 	settings.Bounds.top = (LONG)Rtt_RealToInt(screenBounds.yMin);
 	settings.Bounds.right = (LONG)Rtt_RealToInt(screenBounds.xMax);
 	settings.Bounds.bottom = (LONG)Rtt_RealToInt(screenBounds.yMax);
-	settings.IEOverrideRegistryPath = registryPath.c_str();
-	fWebBrowserPointer = new Interop::UI::WebBrowser(settings);
+	settings.IEOverrideRegistryPath = nullptr;
+	fWebBrowserPointer = Interop::UI::WebBrowser::Create(settings);
 	if (!fWebBrowserPointer)
 	{
 		return false;
@@ -92,7 +83,7 @@ bool WinWebViewObject::Initialize()
 
 Interop::UI::Control* WinWebViewObject::GetControl() const
 {
-	return fWebBrowserPointer;
+	return fWebBrowserPointer.get();
 }
 
 const LuaProxyVTable& WinWebViewObject::ProxyVTable() const
@@ -271,7 +262,7 @@ int WinWebViewObject::OnRequest(lua_State *L)
 	}
 
 	// Navigate to the given URL.
-	auto webBrowserPointer = displayObjectPointer->fWebBrowserPointer;
+	auto webBrowserPointer = displayObjectPointer->fWebBrowserPointer.get();
 	if (webBrowserPointer)
 	{
 		if (lua_type(L, 4) == LUA_TSTRING)
