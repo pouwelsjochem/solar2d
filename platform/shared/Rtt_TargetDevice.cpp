@@ -45,7 +45,7 @@ class StaticTargetDeviceFinalizer
 static StaticTargetDeviceFinalizer sTargetDeviceFinalizer;
 
 
-const char *kDefaultSkinName = "min_supported_2";
+const char *kDefaultSkinLabel = "min_supported_2";
     
 TargetDevice::SkinSpec **TargetDevice::fSkins = NULL;
 int TargetDevice::fSkinCount = 0;
@@ -157,12 +157,17 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
 		// Rtt_TRACE_SIM(("TargetDevice::Initialize: skin: %d: %s = %s\n", i, fSkins[i]->GetCategory(), fSkins[i]->GetName()));
         
         // Remember the index of the platform's default skin in case we want a default later
-        if (strcmp(fSkins[i]->GetName(), kDefaultSkinName) == 0)
+        if (strcmp(fSkins[i]->GetLabel(), kDefaultSkinLabel) == 0)
         {
             fDefaultSkinID = (Skin) i;
             break;
         }
     }
+
+	if ((TargetDevice::kUnknownSkin == fDefaultSkinID) && (fSkinCount > 0))
+	{
+		fDefaultSkinID = (Skin)0;
+	}
 #endif // Rtt_AUTHORING_SIMULATOR
     
     return true;
