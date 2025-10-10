@@ -30,6 +30,10 @@ class WebBrowser : public Control, public std::enable_shared_from_this<WebBrowse
 	Rtt_CLASS_NO_COPIES(WebBrowser)
 
 	public:
+		#pragma region Public Static Helpers
+		static bool IsRuntimeAvailable();
+		#pragma endregion
+
 		#pragma region Public Event Types
 		typedef Event<WebBrowser&, WebBrowserNavigatingEventArgs&> NavigatingEvent;
 		typedef Event<WebBrowser&, const WebBrowserNavigatedEventArgs&> NavigatedEvent;
@@ -107,6 +111,7 @@ class WebBrowser : public Control, public std::enable_shared_from_this<WebBrowse
 
 		PendingRequest fPendingRequest;
 		bool fIsWebViewReady;
+		std::wstring fBrowserExecutableFolder;
 		std::wstring fIEOverrideRegistryPath;
 
 		UIComponent::ReceivedMessageEvent::MethodHandler<WebBrowser> fReceivedMessageEventHandler;

@@ -12,6 +12,7 @@
 #include "Core\Rtt_Assert.h"
 #include <algorithm>
 #include <iomanip>
+#include <cwctype>
 #include <sstream>
 #include <wrl.h>
 
@@ -20,6 +21,206 @@ namespace Interop { namespace UI {
 namespace
 {
 	const wchar_t kWebViewHostWindowClass[] = L"CoronaWebViewHost";
+
+	std::wstring TrimWhitespace(const std::wstring& value)
+	{
+		size_t start = 0;
+		while (start < value.size() && iswspace(value[start]))
+		{
+			++start;
+		}
+		if (start == value.size())
+		{
+			return std::wstring();
+		}
+		size_t end = value.size();
+		while (end > start && iswspace(value[end - 1]))
+		{
+			--end;
+		}
+		return value.substr(start, end - start);
+	}
+
+	std::wstring CleanPath(const std::wstring& value)
+	{
+		std::wstring trimmed = TrimWhitespace(value);
+		if (trimmed.size() >= 2 && trimmed.front() == L'"' && trimmed.back() == L'"')
+		{
+			trimmed = trimmed.substr(1, trimmed.size() - 2);
+			trimmed = TrimWhitespace(trimmed);
+		}
+		return trimmed;
+	}
+
+	std::wstring FetchEnvironmentPath(const wchar_t* name)
+	{
+		DWORD required = ::GetEnvironmentVariableW(name, nullptr, 0);
+		if (required == 0)
+		{
+			return std::wstring();
+		}
+		std::wstring buffer(required, L'\0');
+		DWORD written = ::GetEnvironmentVariableW(name, buffer.data(), required);
+		if (written == 0)
+		{
+			return std::wstring();
+		}
+		buffer.resize(written);
+		return CleanPath(buffer);
+	}
+
+	std::wstring AppendPath(const std::wstring& base, const wchar_t* component)
+	{
+		if (!component || (component[0] == L'\0'))
+		{
+			return base;
+		}
+		std::wstring result = base;
+		if (!result.empty() && result.back() != L'\' && result.back() != L'/')
+		{
+			result.append(1, L'\');
+		}
+		result.append(component);
+		return result;
+	}
+
+	bool DirectoryExists(const std::wstring& path)
+	{
+		if (path.empty())
+		{
+			return false;
+		}
+		DWORD attributes = ::GetFileAttributesW(path.c_str());
+		return (attributes != INVALID_FILE_ATTRIBUTES) && ((attributes & FILE_ATTRIBUTE_DIRECTORY) != 0);
+	}
+
+	bool FileExists(const std::wstring& path)
+	{
+		if (path.empty())
+		{
+			return false;
+		}
+		DWORD attributes = ::GetFileAttributesW(path.c_str());
+		return (attributes != INVALID_FILE_ATTRIBUTES) && ((attributes & FILE_ATTRIBUTE_DIRECTORY) == 0);
+	}
+
+	bool IsValidRuntimeDirectory(const std::wstring& path)
+	{
+		if (!DirectoryExists(path))
+		{
+			return false;
+		}
+		if (FileExists(AppendPath(path, L"msedgewebview2.exe")))
+		{
+			return true;
+		}
+		if (FileExists(AppendPath(path, L"WebView2Loader.dll")))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	std::wstring FindRuntimeInDirectory(const std::wstring& root)
+	{
+		if (!DirectoryExists(root))
+		{
+			return std::wstring();
+		}
+		std::wstring pattern = AppendPath(root, L"*");
+		WIN32_FIND_DATAW findData{};
+		HANDLE handle = ::FindFirstFileW(pattern.c_str(), &findData);
+		if (handle == INVALID_HANDLE_VALUE)
+		{
+			return std::wstring();
+		}
+		std::wstring result;
+		do
+		{
+			if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
+			{
+				continue;
+			}
+			if (findData.cFileName[0] == L'.')
+			{
+				if (findData.cFileName[1] == L'\0' || (findData.cFileName[1] == L'.' && findData.cFileName[2] == L'\0'))
+				{
+					continue;
+				}
+			}
+			std::wstring candidate = AppendPath(root, findData.cFileName);
+			if (IsValidRuntimeDirectory(candidate))
+			{
+				result = candidate;
+				break;
+			}
+		} while (::FindNextFileW(handle, &findData));
+		::FindClose(handle);
+		return result;
+	}
+
+	std::wstring ResolveCandidatePath(const std::wstring& candidate)
+	{
+		if (candidate.empty())
+		{
+			return std::wstring();
+		}
+		if (IsValidRuntimeDirectory(candidate))
+		{
+			return candidate;
+		}
+		return FindRuntimeInDirectory(candidate);
+	}
+
+	std::wstring GetModuleDirectory()
+	{
+		DWORD size = MAX_PATH;
+		for (;;)
+		{
+			std::wstring buffer(size, L'\0');
+			DWORD length = ::GetModuleFileNameW(nullptr, buffer.data(), size);
+			if (length == 0)
+			{
+				return std::wstring();
+			}
+			if (length < size - 1)
+			{
+				buffer.resize(length);
+				size_t separator = buffer.find_last_of(L"\/");
+				if (separator != std::wstring::npos)
+				{
+					buffer.resize(separator);
+				}
+				return buffer;
+			}
+			size *= 2;
+		}
+	}
+
+	std::wstring ResolveRuntimeFolder()
+	{
+		if (auto resolved = ResolveCandidatePath(FetchEnvironmentPath(L"CORONA_WEBVIEW2_RUNTIME_DIR")); !resolved.empty())
+		{
+			return resolved;
+		}
+		if (auto resolved = ResolveCandidatePath(FetchEnvironmentPath(L"WEBVIEW2_BROWSER_EXECUTABLE_FOLDER")); !resolved.empty())
+		{
+			return resolved;
+		}
+		auto moduleDir = GetModuleDirectory();
+		if (!moduleDir.empty())
+		{
+			if (auto resolved = ResolveCandidatePath(moduleDir); !resolved.empty())
+			{
+				return resolved;
+			}
+			if (auto resolved = ResolveCandidatePath(AppendPath(moduleDir, L"WebView2Runtime")); !resolved.empty())
+			{
+				return resolved;
+			}
+		}
+		return std::wstring();
+	}
 
 	ATOM EnsureHostWindowClassRegistered()
 	{
@@ -54,6 +255,43 @@ namespace
 	}
 }
 
+
+bool WebBrowser::IsRuntimeAvailable()
+{
+	PWSTR versionInfo = nullptr;
+	if (SUCCEEDED(GetAvailableCoreWebView2BrowserVersionString(nullptr, &versionInfo)))
+	{
+		if (versionInfo)
+		{
+			::CoTaskMemFree(versionInfo);
+		}
+		return true;
+	}
+	if (versionInfo)
+	{
+		::CoTaskMemFree(versionInfo);
+		versionInfo = nullptr;
+	}
+
+	std::wstring fallback = ResolveRuntimeFolder();
+	if (!fallback.empty())
+	{
+		if (SUCCEEDED(GetAvailableCoreWebView2BrowserVersionString(fallback.c_str(), &versionInfo)))
+		{
+			if (versionInfo)
+			{
+				::CoTaskMemFree(versionInfo);
+			}
+			return true;
+		}
+	}
+	if (versionInfo)
+	{
+		::CoTaskMemFree(versionInfo);
+	}
+	return false;
+}
+
 std::shared_ptr<WebBrowser> WebBrowser::Create(const WebBrowser::CreationSettings& settings)
 {
 	auto webBrowser = std::shared_ptr<WebBrowser>(new WebBrowser(settings));
@@ -71,6 +309,7 @@ WebBrowser::WebBrowser(const WebBrowser::CreationSettings& settings)
 	fNavigationStartingToken{},
 	fNavigationCompletedToken{},
 	fIsWebViewReady(false),
+	fBrowserExecutableFolder(ResolveRuntimeFolder()),
 	fReceivedMessageEventHandler(this, &WebBrowser::OnReceivedMessage)
 {
 	if (settings.IEOverrideRegistryPath && settings.IEOverrideRegistryPath[0] != L'\0')
@@ -276,8 +515,9 @@ void WebBrowser::InitializeWebViewAsync()
 
 	auto weakSelf = std::weak_ptr<WebBrowser>(shared_from_this());
 
+	const wchar_t* browserExecutableFolder = fBrowserExecutableFolder.empty() ? nullptr : fBrowserExecutableFolder.c_str();
 	HRESULT result = CreateCoreWebView2EnvironmentWithOptions(
-			nullptr,
+			browserExecutableFolder,
 			nullptr,
 			nullptr,
 			Microsoft::WRL::Callback<ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler>(

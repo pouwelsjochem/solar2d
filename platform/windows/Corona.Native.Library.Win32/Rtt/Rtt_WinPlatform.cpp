@@ -1030,6 +1030,16 @@ namespace Rtt
 
 	PlatformDisplayObject* WinPlatform::CreateNativeWebView(const Rect& bounds) const
 	{
+		static bool sHasLoggedMissingRuntime = false;
+		if (!Interop::UI::WebBrowser::IsRuntimeAvailable())
+		{
+			if (!sHasLoggedMissingRuntime)
+			{
+				Rtt_TRACE_SIM(("WARNING: native.newWebView() requires the Microsoft Edge WebView2 runtime. Returning nil. Install the Evergreen runtime or set CORONA_WEBVIEW2_RUNTIME_DIR to a bundled fixed-runtime folder."));
+				sHasLoggedMissingRuntime = true;
+			}
+			return nullptr;
+		}
 		return Rtt_NEW(&GetAllocator(), WinWebViewObject(fEnvironment, bounds));
 	}
 
