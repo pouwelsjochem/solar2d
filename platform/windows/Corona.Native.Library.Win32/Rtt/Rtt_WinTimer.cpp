@@ -368,7 +368,7 @@ void WinTimer::Start_V2()
 void WinTimer::Stop_V2(LONG stopState)
 {
 	bool normalStop = LockFromExpectedStateTo(kRunning, kStopped);
-	if (normalStop || (kQuitting == stopState && LockFromExpectedState(kStopped, kQuitting)))
+	if (normalStop || (kQuitting == stopState && LockFromExpectedStateTo(kStopped, kQuitting)))
 	{
 		if (normalStop)
 		{
@@ -484,7 +484,7 @@ VOID CALLBACK WinTimer::OnTimerElapsed_V2(HWND hwnd, UINT uMsg, UINT_PTR idEvent
 {
 	WinTimer* timer = (WinTimer*)idEvent;
 
-	if (!fIntermediateStops && kRunning == timer->fState) // n.b. in WM_TIMER, so no contention
+	if (!timer->fIntermediateStops && kRunning == timer->fState) // n.b. in WM_TIMER, so no contention
 	{
 		timer->fEvaluateBeganTime = Rtt_GetAbsoluteTime(); // ditto
 		
