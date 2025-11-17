@@ -55,6 +55,10 @@ class WinTimer : public PlatformTimer
 		/// </summary>
 		void Evaluate();
 
+// STEVE CHANGE
+		void ThreadBody();
+// /STEVE CHANGE
+
 	private:
 		/// <summary>
 		///  <para>Called by Windows when the system timer has elapsed.</para>
@@ -86,6 +90,60 @@ class WinTimer : public PlatformTimer
 
 		static std::unordered_map<UINT_PTR, WinTimer*> sTimerMap; // timer callback might be called after Stop(), so use this as a guard
 		static UINT_PTR sMostRecentTimerID; // use an incrementing index as key, to be robust against the rare case that a new timer is reallocated into the same memory
+
+// STEVE CHANGE
+		void SetFPS(U32 fps);
+		void ClearHandles();
+		void CleanUpResources();
+
+		enum {
+			kRunning,
+			kStopped,
+			kLocked,
+			kQuitting, // timer has quit and is being destroyed (final state)
+		};
+
+		static VOID CALLBACK OnTimerElapsed_V2(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
+
+		bool UsingV2API() const { return NULL != fHandles[kThread]; }
+
+		bool Init_V2();
+
+		void Start_V2();
+		void Stop_V2(LONG stopState);
+		void Evaluate_V2();
+
+		typedef enum _EventID {
+			kThread,
+			kWaitableTimer,
+			kStartedEvent, // n.b. this and remaining ones are events
+			kStoppedEvent,
+			kEvaluateEvent,
+
+			kNumHandles,
+			kFirstEvent = kStartedEvent
+		} EventID;
+
+		bool LockFromExpectedStateTo(LONG from, LONG to);
+		bool TryToLockFromExpectedState(LONG from, LONG* actual = NULL);
+		DWORD WaitForEventOrStop(EventID eventID);
+		bool WaitWhileStopped();
+		void WaitForInterval();
+
+		INT64 fQpcPerSecond;
+		double fFPSInterval;
+		int fPeriodMin;
+
+		void PreciseSleep(double seconds);
+
+		U64 InvalidBeganTime() const { return ~0ULL; }
+
+		LONG fState;
+		U64 fEvaluateBeganTime;
+		HANDLE fHandles[kNumHandles];
+		bool fIntermediateStops;
+		bool fStartOrStopEventOK;
+// /STEVE CHANGE
 };
 
 }	// namespace Rtt
