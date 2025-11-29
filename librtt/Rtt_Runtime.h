@@ -237,6 +237,25 @@ class Runtime : public MCallback,
 		void UnloadResources();
 		void ReloadResources();
 
+// STEVE CHANGE
+		struct TimerGuard {
+			TimerGuard(const MPlatform& platform)
+			:	fPlatform(platform)
+			{
+				fPlatform.BeginMainThreadFunc();
+			}
+
+			~TimerGuard()
+			{
+				fPlatform.EndMainThreadFunc();
+			}
+
+			const MPlatform& fPlatform;
+		};
+
+		TimerGuard MakeTimerGuard() const { return TimerGuard( fPlatform ); }
+// /STEVE CHANGE
+
 	public:
 		// MCachedResourceLibrary
 		virtual CachedResource* LookupResource( const char key[] );

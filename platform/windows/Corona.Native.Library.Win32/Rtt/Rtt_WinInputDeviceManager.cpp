@@ -913,6 +913,8 @@ void WinInputDeviceManager::OnReceivedMouseEvent(
 		return;
 	}
 
+	auto guard = runtimePointer->MakeTimerGuard(); // <- STEVE CHANGE
+
 	// Determine which mouse buttons are primary and secondary.
 	// Typically, the left mouse button is the primary, unless it has been swapped in the Control Panel.
 	bool areMouseButtonsNotSwapped = ::GetSystemMetrics(SM_SWAPBUTTON) ? false : true;

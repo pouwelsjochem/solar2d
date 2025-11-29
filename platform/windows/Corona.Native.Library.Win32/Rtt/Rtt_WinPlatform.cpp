@@ -389,7 +389,7 @@ namespace Rtt
 				windowHandle = windowPointer->GetWindowHandle();
 			}
 		}
-		return Rtt_NEW(&GetAllocator(), WinTimer(callback, windowHandle));
+		return Rtt_NEW(&GetAllocator(), WinTimer(callback, windowHandle, &fEnvironment.fLock)); // <- STEVE CHANGE
 	}
 
 	PlatformBitmap* WinPlatform::CreateBitmap(const char* path, bool convertToGrayscale) const
@@ -860,6 +860,16 @@ namespace Rtt
 	const MCrypto& WinPlatform::GetCrypto() const
 	{
 		return fCrypto;
+	}
+
+	void WinPlatform::BeginMainThreadFunc() const
+	{
+		AcquireSRWLockExclusive(&fEnvironment.fLock);
+	}
+
+	void WinPlatform::EndMainThreadFunc() const
+	{
+		ReleaseSRWLockExclusive(&fEnvironment.fLock);
 	}
 
 	void WinPlatform::GetPreference(Category category, Rtt::String* value) const
