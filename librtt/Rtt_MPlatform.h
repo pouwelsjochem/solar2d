@@ -126,7 +126,10 @@ class MPlatform
 		// Return values of CanOpenURL: -1 Unknown; 0 No; 1 Yes
 		virtual int CanOpenURL( const char* url ) const = 0;
 		virtual const MCrypto& GetCrypto() const = 0;
-
+// STEVE CHANGE
+		virtual void BeginMainThreadFunc() const {}
+		virtual void EndMainThreadFunc() const {}
+// /STEVE CHANGE
 		virtual void GetPreference( Category category, Rtt::String * value ) const = 0;
 		virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const = 0;
 		virtual OperationResult SetPreferences( const char* categoryName, const PreferenceCollection& collection ) const = 0;

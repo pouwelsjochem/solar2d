@@ -97,6 +97,11 @@ class WinPlatform : public MPlatform
 		virtual void SetCursorForRect(const char *cursorName, int x, int y, int width, int height) const;
 #endif
 
+// STEVE CHANGE
+		virtual void BeginMainThreadFunc() const;
+		virtual void EndMainThreadFunc() const;
+// /STEVE CHANGE
+
 		virtual void Suspend( ) const;
 		virtual void Resume( ) const;
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const;
