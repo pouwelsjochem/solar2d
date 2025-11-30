@@ -298,8 +298,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	{
 		fLoadedEvent.GetHandlerManager().Add(settings.LoadedEventHandlerPointer);
 	}
-
-	InitializeSRWLock(&fLock); // <- STEVE CHANGE
 }
 
 RuntimeEnvironment::~RuntimeEnvironment()
@@ -1210,7 +1208,6 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 	// Load and run the Corona project.
 	fRuntimeState = RuntimeState::kStarting;
 	auto result = fRuntimePointer->LoadApplication(updatedLaunchOptions);
-	auto guard = fRuntimePointer->MakeTimerGuard(); // <- STEVE CHANGE
 	if (Rtt::Runtime::kSuccess == result)
 	{
 		// Load was successful. Start running the Corona application.

@@ -905,7 +905,6 @@ Runtime::BeginRunLoop()
 
 	// PlatformTimer
 	fTimer->SetInterval( kInterval );
-	fTimer->SetInterval( 0x8000 | kFps ); // <- STEVE CHANGE
 
 	// Initial call to main.lua can cause runtime to be suspended,
 	// Otherwise, it's < 0 (i.e. uninitialized)
@@ -1000,8 +999,6 @@ Runtime::CoronaCoreSuspend()
 void
 Runtime::Suspend(bool sendApplicationEvents /* = true */)
 {
-	TimerGuard guard = MakeTimerGuard(); // <- STEVE CHANGE
-
 	// Determine if the runtime is currently running.
 	// Note: -1 means not started. 0 means running. 1 means suspended.
 	bool wasRunning = (0 == fIsSuspended);
@@ -1122,8 +1119,6 @@ Runtime::CoronaResumeAll()
 void
 Runtime::Resume(bool sendApplicationEvents /* = true */)
 {
-	TimerGuard guard = MakeTimerGuard(); // <- STEVE CHANGE
-
 	CoronaResumeAll();
 	// reset for the next time
 	fSuspendOverrideProperties = kSuspendAll;

@@ -108,7 +108,6 @@ class RuntimeEnvironment
 
 		#pragma endregion
 
-		SRWLOCK fLock; // <- STEVE CHANGE
 
 		#pragma region CreationSettings Structure
 		/// <summary>Provides settings to be passed into the static CreateUsing() function.</summary>

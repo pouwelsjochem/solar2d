@@ -57,13 +57,11 @@ class WinPlatform : public MPlatform
 		virtual PlatformSurface* CreateOffscreenSurface(const PlatformSurface& parent) const;
 		virtual PlatformTimer* CreateTimerWithCallback(MCallback& callback) const;
 		virtual PlatformBitmap* CreateBitmap(const char* filename, bool convertToGrayscale) const;
-			virtual void SaveBitmap(PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
-			virtual const MCrypto& GetCrypto() const;
-			virtual void BeginMainThreadFunc() const override;
-			virtual void EndMainThreadFunc() const override;
-			virtual void GetPreference(Category category, Rtt::String * value) const;
-			virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const;
-			virtual OperationResult SetPreferences(const char* categoryName, const PreferenceCollection& collection) const;
+		virtual void SaveBitmap(PlatformBitmap* bitmap, Rtt::Data<const char> & pngBytes ) const;
+		virtual const MCrypto& GetCrypto() const;
+		virtual void GetPreference(Category category, Rtt::String * value) const;
+		virtual Preference::ReadValueResult GetPreference(const char* categoryName, const char* keyName) const;
+		virtual OperationResult SetPreferences(const char* categoryName, const PreferenceCollection& collection) const;
 		virtual OperationResult DeletePreferences(const char* categoryName, const char** keyNameArray, U32 keyNameCount) const;
 		virtual bool OpenURL(const char* url) const;
 		virtual int CanOpenURL(const char* url) const;
