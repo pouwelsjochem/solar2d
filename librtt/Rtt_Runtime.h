@@ -240,17 +240,32 @@ class Runtime : public MCallback,
 // STEVE CHANGE
 		struct TimerGuard {
 			TimerGuard(const MPlatform& platform)
-			:	fPlatform(platform)
+			:	fPlatform(platform),
+				fOwnsLock(true)
 			{
 				fPlatform.BeginMainThreadFunc();
 			}
 
+			TimerGuard(const TimerGuard&) = delete;
+			TimerGuard& operator=(const TimerGuard&) = delete;
+
+			TimerGuard(TimerGuard&& other) noexcept
+			:	fPlatform(other.fPlatform),
+				fOwnsLock(other.fOwnsLock)
+			{
+				other.fOwnsLock = false;
+			}
+
 			~TimerGuard()
 			{
-				fPlatform.EndMainThreadFunc();
+				if (fOwnsLock)
+				{
+					fPlatform.EndMainThreadFunc();
+				}
 			}
 
 			const MPlatform& fPlatform;
+			bool fOwnsLock;
 		};
 
 		TimerGuard MakeTimerGuard() const { return TimerGuard( fPlatform ); }
