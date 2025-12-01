@@ -1835,15 +1835,15 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 			break;
 		}
 	}
-}
-
-void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, HandledEventArgs &arguments)
-{
-	// Do not continue if the runtime is not currently running.
-	if (!fRuntimePointer || (fRuntimePointer->IsProperty(Rtt::Runtime::kIsApplicationLoaded) == false))
-	{
-		return;
 	}
+
+	void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, HandledEventArgs &arguments)
+	{
+		// Do not continue if the runtime is not currently running.
+		if (!fRuntimePointer || (fRuntimePointer->IsProperty(Rtt::Runtime::kIsApplicationLoaded) == false))
+		{
+			return;
+		}
 	switch (fRuntimeState)
 	{
 		case RuntimeState::kNotStarted:
@@ -1852,11 +1852,12 @@ void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, Handled
 			return;
 	}
 
-	// Have the runtime render a frame.
-	fRuntimePointer->GetDisplay().Invalidate();
-	fRuntimePointer->Render();
-	arguments.SetHandled();
-}
+		// Have the runtime render a frame.
+		auto guard = fRuntimePointer->MakeTimerGuard(); // synchronize render with timer thread
+		fRuntimePointer->GetDisplay().Invalidate();
+		fRuntimePointer->Render();
+		arguments.SetHandled();
+	}
 
 void RuntimeEnvironment::OnDestroyingSurface(UI::UIComponent &sender, const EventArgs &arguments)
 {
