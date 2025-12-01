@@ -44,6 +44,12 @@
 #include <Shlwapi.h>
 #include <WinInet.h>
 
+namespace
+{
+	// Track per-thread lock depth to allow re-entrant usage on the same thread.
+	thread_local int gMainThreadFuncLockDepth = 0;
+}
+
 
 #if !defined( Rtt_CUSTOM_CODE )
 Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
@@ -860,12 +866,20 @@ namespace Rtt
 // STEVE CHANGE
 	void WinPlatform::BeginMainThreadFunc() const
 	{
-		AcquireSRWLockExclusive(&fEnvironment.fLock);
+		if (0 == gMainThreadFuncLockDepth++)
+		{
+			AcquireSRWLockExclusive(&fEnvironment.fLock);
+		}
 	}
 
 	void WinPlatform::EndMainThreadFunc() const
 	{
-		ReleaseSRWLockExclusive(&fEnvironment.fLock);
+		Rtt_ASSERT(gMainThreadFuncLockDepth > 0);
+
+		if (0 == --gMainThreadFuncLockDepth)
+		{
+			ReleaseSRWLockExclusive(&fEnvironment.fLock);
+		}
 	}
 // /STEVE CHANGE
 
