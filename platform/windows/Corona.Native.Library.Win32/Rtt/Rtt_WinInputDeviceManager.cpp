@@ -408,11 +408,11 @@ void WinInputDeviceManager::OnDiscoveredDevice(
 void WinInputDeviceManager::OnReceivedMessage(
 	Interop::UI::UIComponent& sender, Interop::UI::HandleMessageEventArgs& arguments)
 {
-	// Do not continue if the message was already handled.
-	if (arguments.WasHandled())
-	{
-		return;
-	}
+		// Do not continue if the message was already handled.
+		if (arguments.WasHandled())
+		{
+			return;
+		}
 
 	// Do not continue if Corona is not currently running.
 	auto runtimePointer = fEnvironment.GetRuntime();
@@ -484,8 +484,9 @@ void WinInputDeviceManager::OnReceivedMessage(
 			fLastMouseMovePoint = point;
 			fIsLastMouseMovePointValid = true;
 
-		// Dispatch a "mouse" event to Corona.
-		auto guard = runtimePointer->MakeTimerGuard();
+		// Dispatch a "mouse" event to Corona. We intentionally avoid the timer guard here to
+		// prevent contention from spurious WM_MOUSEMOVE messages Windows can emit periodically.
+		Rtt_Log("MouseMove: guard acquired\n");
 		OnReceivedMouseEvent(Rtt::MouseEvent::kMove, point, 0, 0, arguments.GetWParam());
 
 			// Dispatch a "touch" event to Corona, but only if the left mouse button is down.
@@ -512,6 +513,7 @@ void WinInputDeviceManager::OnReceivedMessage(
 
 		// Dispatch a "mouse" event to Corona.
 		auto guard = runtimePointer->MakeTimerGuard();
+		Rtt_Log("MouseUp: guard acquired\n");
 		OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
 			// Only dispatch a "touch" event if:
@@ -540,6 +542,7 @@ void WinInputDeviceManager::OnReceivedMessage(
 		// Note: We do not treat middle and right mouse button drags as touch events.
 		POINT point = GetMousePointFrom(arguments.GetLParam());
 		auto guard = runtimePointer->MakeTimerGuard();
+		Rtt_Log("MouseUp (other): guard acquired\n");
 		OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
 			// Flag the message as handled.
