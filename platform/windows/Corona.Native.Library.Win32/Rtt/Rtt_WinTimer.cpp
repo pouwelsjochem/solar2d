@@ -328,7 +328,8 @@ bool WinTimer::Init_V2()
 
 	if (NULL != fHandles[kThread])
 	{
-		SetThreadPriority(fHandles[kThread], THREAD_PRIORITY_HIGHEST);
+		// Keep the timer responsive without starving the UI thread.
+		SetThreadPriority(fHandles[kThread], THREAD_PRIORITY_ABOVE_NORMAL);
 	}
 	else
 	{
