@@ -420,7 +420,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 	{
 		return;
 	}
-	auto guard = runtimePointer->MakeTimerGuard(); // synchronize with timer thread
 
 	// Handle the received message.
 	switch (arguments.GetMessageId())
@@ -458,10 +457,11 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_RBUTTONDOWN:
 		case WM_RBUTTONDBLCLK:
 		{
-			// Dispatch a "mouse" event to Corona.
-			// Note: We do not treat middle and right mouse button drags as touch events.
-			POINT point = GetMousePointFrom(arguments.GetLParam());
-			OnReceivedMouseEvent(Rtt::MouseEvent::kDown, point, 0, 0, arguments.GetWParam());
+		// Dispatch a "mouse" event to Corona.
+		// Note: We do not treat middle and right mouse button drags as touch events.
+		POINT point = GetMousePointFrom(arguments.GetLParam());
+		auto guard = runtimePointer->MakeTimerGuard();
+		OnReceivedMouseEvent(Rtt::MouseEvent::kDown, point, 0, 0, arguments.GetWParam());
 
 			// Flag the message as handled.
 			arguments.SetReturnResult(0);
@@ -484,8 +484,9 @@ void WinInputDeviceManager::OnReceivedMessage(
 			fLastMouseMovePoint = point;
 			fIsLastMouseMovePointValid = true;
 
-			// Dispatch a "mouse" event to Corona.
-			OnReceivedMouseEvent(Rtt::MouseEvent::kMove, point, 0, 0, arguments.GetWParam());
+		// Dispatch a "mouse" event to Corona.
+		auto guard = runtimePointer->MakeTimerGuard();
+		OnReceivedMouseEvent(Rtt::MouseEvent::kMove, point, 0, 0, arguments.GetWParam());
 
 			// Dispatch a "touch" event to Corona, but only if the left mouse button is down.
 			auto touchInputStatePointer = &fTouchPointStates[0];
@@ -509,8 +510,9 @@ void WinInputDeviceManager::OnReceivedMessage(
 			// Must be called after calling SetCapture() in OnLButtonDown().
 			::ReleaseCapture();
 
-			// Dispatch a "mouse" event to Corona.
-			OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
+		// Dispatch a "mouse" event to Corona.
+		auto guard = runtimePointer->MakeTimerGuard();
+		OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
 			// Only dispatch a "touch" event if:
 			// - Corona has dispatched a "began" touch event phase.
@@ -534,10 +536,11 @@ void WinInputDeviceManager::OnReceivedMessage(
 		case WM_MBUTTONUP:
 		case WM_RBUTTONUP:
 		{
-			// Dispatch a "mouse" event to Corona.
-			// Note: We do not treat middle and right mouse button drags as touch events.
-			POINT point = GetMousePointFrom(arguments.GetLParam());
-			OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
+		// Dispatch a "mouse" event to Corona.
+		// Note: We do not treat middle and right mouse button drags as touch events.
+		POINT point = GetMousePointFrom(arguments.GetLParam());
+		auto guard = runtimePointer->MakeTimerGuard();
+		OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
 			// Flag the message as handled.
 			arguments.SetReturnResult(0);

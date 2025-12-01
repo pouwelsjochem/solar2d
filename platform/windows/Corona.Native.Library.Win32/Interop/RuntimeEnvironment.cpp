@@ -1853,6 +1853,7 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 	}
 
 	// Have the runtime render a frame.
+	auto guard = fRuntimePointer->MakeTimerGuard(); // synchronize render with timer thread
 	fRuntimePointer->GetDisplay().Invalidate();
 	fRuntimePointer->Render();
 	arguments.SetHandled();
