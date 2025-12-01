@@ -1854,9 +1854,6 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 
 	// Have the runtime render a frame.
 	auto guard = fRuntimePointer->MakeTimerGuard(); // synchronize render with timer thread
-#if defined(_DEBUG)
-	Rtt_Log("RenderFrame: guard acquired\n");
-#endif
 	fRuntimePointer->GetDisplay().Invalidate();
 	fRuntimePointer->Render();
 	arguments.SetHandled();

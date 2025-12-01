@@ -481,13 +481,12 @@ void WinInputDeviceManager::OnReceivedMessage(
 			{
 				break;
 			}
-			fLastMouseMovePoint = point;
-			fIsLastMouseMovePointValid = true;
+		fLastMouseMovePoint = point;
+		fIsLastMouseMovePointValid = true;
 
-		// Dispatch a "mouse" event to Corona. We intentionally avoid the timer guard here to
-		// prevent contention from spurious WM_MOUSEMOVE messages Windows can emit periodically.
-		Rtt_Log("MouseMove: guard acquired\n");
-		OnReceivedMouseEvent(Rtt::MouseEvent::kMove, point, 0, 0, arguments.GetWParam());
+	// Dispatch a "mouse" event to Corona. We intentionally avoid the timer guard here to
+	// prevent contention from spurious WM_MOUSEMOVE messages Windows can emit periodically.
+	OnReceivedMouseEvent(Rtt::MouseEvent::kMove, point, 0, 0, arguments.GetWParam());
 
 			// Dispatch a "touch" event to Corona, but only if the left mouse button is down.
 			auto touchInputStatePointer = &fTouchPointStates[0];
