@@ -300,6 +300,7 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	}
 
 	InitializeSRWLock(&fLock); // <- STEVE CHANGE
+	InitializeSRWLock(&fTaskLock);
 }
 
 RuntimeEnvironment::~RuntimeEnvironment()
@@ -913,18 +914,43 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 }
 
 void RuntimeEnvironment::Destroy(RuntimeEnvironment* environmentPointer)
-{
-	if (environmentPointer)
 	{
-		delete environmentPointer;
+		if (environmentPointer)
+		{
+			delete environmentPointer;
+		}
 	}
-}
 
-RuntimeEnvironment::ValidateRenderSurfaceResult RuntimeEnvironment::ValidateRenderSurface(HWND windowHandle)
-{
-	// Initialize the result object with Corona's minimum OpenGL version requirements.
-	ValidateRenderSurfaceResult result;
-	result.MinVersionSupported.SetString("2.1");
+	void RuntimeEnvironment::EnqueueRuntimeTask(std::function<void(Rtt::Runtime&)> task)
+	{
+		AcquireSRWLockExclusive(&fTaskLock);
+		fDeferredRuntimeTasks.push(std::move(task));
+		ReleaseSRWLockExclusive(&fTaskLock);
+	}
+
+	void RuntimeEnvironment::DrainRuntimeTasks()
+	{
+		std::queue<std::function<void(Rtt::Runtime&)>> localQueue;
+		AcquireSRWLockExclusive(&fTaskLock);
+		std::swap(localQueue, fDeferredRuntimeTasks);
+		ReleaseSRWLockExclusive(&fTaskLock);
+
+		while (!localQueue.empty())
+		{
+			auto task = std::move(localQueue.front());
+			localQueue.pop();
+			if (fRuntimePointer)
+			{
+				task(*fRuntimePointer);
+			}
+		}
+	}
+
+	RuntimeEnvironment::ValidateRenderSurfaceResult RuntimeEnvironment::ValidateRenderSurface(HWND windowHandle)
+	{
+		// Initialize the result object with Corona's minimum OpenGL version requirements.
+		ValidateRenderSurfaceResult result;
+		result.MinVersionSupported.SetString("2.1");
 	result.MinVersionSupported.SetMajorNumber(2);
 	result.MinVersionSupported.SetMinorNumber(1);
 
@@ -1522,6 +1548,7 @@ void RuntimeEnvironment::OnRuntimeTimerElapsed()
 
 	// Update the runtime's scene such as sprites, etc.
 	// Note: This does not render the scene since the "kRenderAsync" property is set.
+	DrainRuntimeTasks();
 	fEnteringFrameEvent.Raise(*this, EventArgs::kEmpty);
 	(*fRuntimePointer)();
 	fEnteredFrameEvent.Raise(*this, EventArgs::kEmpty);

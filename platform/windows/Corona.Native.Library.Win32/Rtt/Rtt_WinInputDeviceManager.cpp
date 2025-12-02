@@ -397,11 +397,12 @@ void WinInputDeviceManager::OnDiscoveredDevice(
 	auto runtimePointer = fEnvironment.GetRuntime();
 	if (runtimePointer)
 	{
-		auto guard = runtimePointer->MakeTimerGuard(); // synchronize with timer thread
 		bool hasConnectionStateChanged = true;
 		bool wasReconfigured = false;
 		Rtt::InputDeviceStatusEvent event(coronaDevicePointer, hasConnectionStateChanged, wasReconfigured);
-		runtimePointer->DispatchEvent(event);
+		fEnvironment.EnqueueRuntimeTask([event](Rtt::Runtime& runtime) mutable {
+			runtime.DispatchEvent(event);
+		});
 	}
 }
 
@@ -512,7 +513,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 
 		// Dispatch a "mouse" event to Corona.
 		auto guard = runtimePointer->MakeTimerGuard();
-		Rtt_Log("MouseUp: guard acquired\n");
 		OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
 			// Only dispatch a "touch" event if:
@@ -541,7 +541,6 @@ void WinInputDeviceManager::OnReceivedMessage(
 		// Note: We do not treat middle and right mouse button drags as touch events.
 		POINT point = GetMousePointFrom(arguments.GetLParam());
 		auto guard = runtimePointer->MakeTimerGuard();
-		Rtt_Log("MouseUp (other): guard acquired\n");
 		OnReceivedMouseEvent(Rtt::MouseEvent::kUp, point, 0, 0, arguments.GetWParam());
 
 			// Flag the message as handled.
@@ -948,7 +947,9 @@ void WinInputDeviceManager::OnReceivedMouseEvent(
 			isPrimaryDown, isSecondaryDown, isMiddleDown,
 			modifierKeyStates.IsShiftDown(), modifierKeyStates.IsAltDown(),
 			modifierKeyStates.IsControlDown(), modifierKeyStates.IsCommandDown());
-	runtimePointer->DispatchEvent(mouseEvent);
+	fEnvironment.EnqueueRuntimeTask([mouseEvent](Rtt::Runtime& runtime) mutable {
+		runtime.DispatchEvent(mouseEvent);
+	});
 }
 
 void WinInputDeviceManager::OnReceivedTouchEvent(
@@ -971,11 +972,16 @@ void WinInputDeviceManager::OnReceivedTouchEvent(
 	event.SetId((const void*)(touchIndex + 1));
 	if (fEnvironment.GetPlatform()->GetDevice().DoesNotify(Rtt::MPlatformDevice::kMultitouchEvent))
 	{
-		runtimePointer->DispatchEvent(Rtt::MultitouchEvent(&event, 1));
+		Rtt::MultitouchEvent multi(&event, 1);
+		fEnvironment.EnqueueRuntimeTask([multi](Rtt::Runtime& runtime) mutable {
+			runtime.DispatchEvent(multi);
+		});
 	}
 	else if (0 == touchIndex)
 	{
-		runtimePointer->DispatchEvent(event);
+		fEnvironment.EnqueueRuntimeTask([event](Rtt::Runtime& runtime) mutable {
+			runtime.DispatchEvent(event);
+		});
 	}
 }
 

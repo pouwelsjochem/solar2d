@@ -24,10 +24,12 @@
 #include "Rtt_RuntimeDelegatePlayer.h"
 #include "Rtt_WinProjectSettings.h"
 #include "RuntimeState.h"
-#include "ScopedOleInitializer.h"
-#include "WinString.h"
-#include <list>
-#include <Windows.h>
+	#include "ScopedOleInitializer.h"
+	#include "WinString.h"
+	#include <list>
+	#include <queue>
+	#include <functional>
+	#include <Windows.h>
 extern "C"
 {
 #	include "lua.h"
@@ -104,15 +106,17 @@ class RuntimeEnvironment
 		/// <summary>
 		///  Defines the "Terminating" event type which is raised just before the Corona runtime gets destroyed.
 		/// </summary>
-		typedef Event<RuntimeEnvironment&, const EventArgs&> TerminatingEvent;
+			typedef Event<RuntimeEnvironment&, const EventArgs&> TerminatingEvent;
 
-		#pragma endregion
+			#pragma endregion
 
-		SRWLOCK fLock; // <- STEVE CHANGE
+			SRWLOCK fLock; // <- STEVE CHANGE
+			SRWLOCK fTaskLock; // protects deferred runtime tasks
+			std::queue<std::function<void(Rtt::Runtime&)>> fDeferredRuntimeTasks;
 
-		#pragma region CreationSettings Structure
-		/// <summary>Provides settings to be passed into the static CreateUsing() function.</summary>
-		struct CreationSettings
+			#pragma region CreationSettings Structure
+			/// <summary>Provides settings to be passed into the static CreateUsing() function.</summary>
+			struct CreationSettings
 		{
 			/// <summary>
 			///  <para>
@@ -519,11 +523,15 @@ class RuntimeEnvironment
 		/// </summary>
 		/// <param name="windowHandle">Handle to the window or control to be validated.</param>
 		/// <returns>Returns a result object determining if Corona can render to the given window successfully.</returns>
-		static ValidateRenderSurfaceResult ValidateRenderSurface(HWND windowHandle);
+			static ValidateRenderSurfaceResult ValidateRenderSurface(HWND windowHandle);
 
-		/// <summary>
-		///  <para>
-		///   Determines if there are no Corona apps currently connected to a debugger on the system, such as to
+			// Queue work to run on the runtime (timer) thread.
+			void EnqueueRuntimeTask(std::function<void(Rtt::Runtime&)> task);
+			void DrainRuntimeTasks();
+
+			/// <summary>
+			///  <para>
+			///   Determines if there are no Corona apps currently connected to a debugger on the system, such as to
 		///   the "Corona Debugger" or Sublime "Corona Editor.
 		///  </para>
 		///  <para>
