@@ -191,6 +191,8 @@ void WinInputDevice::OnDeviceStatusChanged(
 	auto runtimePointer = fEnvironment.GetRuntime();
 	if (runtimePointer)
 	{
+		auto guard = runtimePointer->MakeTimerGuard();
+
 		Rtt::InputDeviceStatusEvent event(this, arguments.HasConnectionStateChanged(), arguments.WasReconfigured());
 		runtimePointer->DispatchEvent(event);
 	}
@@ -213,6 +215,8 @@ void WinInputDevice::OnReceivedAxisInput(
 		return;
 	}
 
+	auto guard = runtimePointer->MakeTimerGuard();
+
 	// Dispatch an "axis" event to Lua.
 	Rtt::AxisEvent event(this, axisPointer, Rtt_IntToReal(arguments.GetRawValue()));
 	runtimePointer->DispatchEvent(event);
@@ -225,6 +229,8 @@ void WinInputDevice::OnReceivedKeyInput(
 	auto runtimePointer = fEnvironment.GetRuntime();
 	if (runtimePointer)
 	{
+		auto guard = runtimePointer->MakeTimerGuard();
+
 		auto keyInfo = arguments.GetKey();
 		auto modifierKeyStates = arguments.GetModifierKeyStates();
 		Rtt::KeyEvent keyEvent(

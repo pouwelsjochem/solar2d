@@ -1497,6 +1497,7 @@ void RuntimeEnvironment::Resume()
 	if (fRuntimePointer->IsSuspended())
 	{
 		fRuntimePointer->Resume();
+		auto guard = fRuntimePointer->MakeTimerGuard();
 		UpdateSurfaceSize();
 	}
 }
@@ -1549,6 +1550,7 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 				{
 					fLastActivatedSent = foreground;
 					Rtt::WindowStateEvent event(foreground);
+					auto guard = fRuntimePointer->MakeTimerGuard();
 					fRuntimePointer->DispatchEvent(event);
 				}
 			}
@@ -1825,6 +1827,7 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 					{
 						event.SetCommandLineDir(utf8WorkingDirectory.c_str());
 					}
+					auto guard = fRuntimePointer->MakeTimerGuard();
 					fRuntimePointer->DispatchEvent(event);
 				}
 
@@ -1839,8 +1842,10 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 
 void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, HandledEventArgs &arguments)
 {
+	auto runtimePointer = fRuntimePointer;
+
 	// Do not continue if the runtime is not currently running.
-	if (!fRuntimePointer || (fRuntimePointer->IsProperty(Rtt::Runtime::kIsApplicationLoaded) == false))
+	if (!runtimePointer || (runtimePointer->IsProperty(Rtt::Runtime::kIsApplicationLoaded) == false))
 	{
 		return;
 	}
@@ -1853,8 +1858,10 @@ void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, Handled
 	}
 
 	// Have the runtime render a frame.
-	fRuntimePointer->GetDisplay().Invalidate();
-	fRuntimePointer->Render();
+	auto guard = runtimePointer->MakeTimerGuard();
+
+	runtimePointer->GetDisplay().Invalidate();
+	runtimePointer->Render();
 	arguments.SetHandled();
 }
 
@@ -1864,6 +1871,8 @@ void RuntimeEnvironment::OnDestroyingSurface(UI::UIComponent &sender, const Even
 	// Note: Cannot delete the render surface yet since this method is being called by the surface. (Would cause a crash.)
 	if (fRuntimePointer)
 	{
+		auto guard = fRuntimePointer->MakeTimerGuard();
+
 		// We can't reliably select the OpenGL context of a window/control that is being destroyed.
 		// So, let Corona's OpenGL functions no-op and let the surface destroy the context itself.
 		::wglMakeCurrent(nullptr, nullptr);
@@ -1877,6 +1886,14 @@ void RuntimeEnvironment::OnDestroyingSurface(UI::UIComponent &sender, const Even
 
 void RuntimeEnvironment::OnSurfaceResized(UI::Control &sender, const EventArgs &arguments)
 {
+	auto runtimePointer = fRuntimePointer;
+	if (!runtimePointer)
+	{
+		return;
+	}
+
+	auto guard = runtimePointer->MakeTimerGuard();
+
 	// Update the runtime's cached surface size.
 	UpdateSurfaceSize();
 
@@ -1884,9 +1901,9 @@ void RuntimeEnvironment::OnSurfaceResized(UI::Control &sender, const EventArgs &
 	// This will trigger an "enterFrame" in the runtime, which provides a smoother resize animation.
 	// Note: Microsoft blocks the window's main message pump while that same window is being resized.
 	//       This prevents timers from elapsing since their queued WM_TIMER message will be blocked as well.
-	if (fRuntimePointer)
+	if (runtimePointer)
 	{
-		auto timerPointer = dynamic_cast<Rtt::WinTimer*>(fRuntimePointer->GetTimer());
+		auto timerPointer = dynamic_cast<Rtt::WinTimer*>(runtimePointer->GetTimer());
 		if (timerPointer)
 		{
 			timerPointer->Evaluate();

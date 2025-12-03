@@ -191,6 +191,14 @@ bool WinWebViewObject::SetValueForKey(lua_State *L, const char key[], int valueI
 void WinWebViewObject::OnNavigating(
 	Interop::UI::WebBrowser& sender, Interop::UI::WebBrowserNavigatingEventArgs& arguments)
 {
+	auto runtimePointer = GetRuntimeEnvironment().GetRuntime();
+	if (!runtimePointer)
+	{
+		return;
+	}
+
+	auto guard = runtimePointer->MakeTimerGuard();
+
 	// Dispatch a Lua "urlRequest" event indicating that we're about to load a new URL.
 	Rtt::UrlRequestEvent event(arguments.GetUrlAsUtf8(), Rtt::UrlRequestEvent::kOther);
 	DispatchEventWithTarget(event);
@@ -199,6 +207,14 @@ void WinWebViewObject::OnNavigating(
 void WinWebViewObject::OnNavigated(
 	Interop::UI::WebBrowser& sender, const Interop::UI::WebBrowserNavigatedEventArgs& arguments)
 {
+	auto runtimePointer = GetRuntimeEnvironment().GetRuntime();
+	if (!runtimePointer)
+	{
+		return;
+	}
+
+	auto guard = runtimePointer->MakeTimerGuard();
+
 	// Dispatch a Lua "urlRequest" event indicating that we've finished loading the main web pgae of a URL.
 	Rtt::UrlRequestEvent event(arguments.GetUrlAsUtf8(), Rtt::UrlRequestEvent::kLoaded);
 	DispatchEventWithTarget(event);
@@ -207,6 +223,14 @@ void WinWebViewObject::OnNavigated(
 void WinWebViewObject::OnNavigationFailed(
 	Interop::UI::WebBrowser& sender, const Interop::UI::WebBrowserNavigationFailedEventArgs& arguments)
 {
+	auto runtimePointer = GetRuntimeEnvironment().GetRuntime();
+	if (!runtimePointer)
+	{
+		return;
+	}
+
+	auto guard = runtimePointer->MakeTimerGuard();
+
 	// Dispatch a Lua "urlRequest" event indicating that we've failed to load a URL or web page.
 	Rtt::UrlRequestEvent event(arguments.GetUrlAsUtf8(), arguments.GetErrorMessageAsUtf8(), arguments.GetErrorCode());
 	DispatchEventWithTarget(event);

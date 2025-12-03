@@ -397,6 +397,8 @@ void WinInputDeviceManager::OnDiscoveredDevice(
 	auto runtimePointer = fEnvironment.GetRuntime();
 	if (runtimePointer)
 	{
+		auto guard = runtimePointer->MakeTimerGuard();
+
 		bool hasConnectionStateChanged = true;
 		bool wasReconfigured = false;
 		Rtt::InputDeviceStatusEvent event(coronaDevicePointer, hasConnectionStateChanged, wasReconfigured);
@@ -419,6 +421,8 @@ void WinInputDeviceManager::OnReceivedMessage(
 	{
 		return;
 	}
+
+	auto guard = runtimePointer->MakeTimerGuard();
 
 	// Handle the received message.
 	switch (arguments.GetMessageId())
@@ -912,8 +916,6 @@ void WinInputDeviceManager::OnReceivedMouseEvent(
 	{
 		return;
 	}
-
-	auto guard = runtimePointer->MakeTimerGuard(); // <- STEVE CHANGE
 
 	// Determine which mouse buttons are primary and secondary.
 	// Typically, the left mouse button is the primary, unless it has been swapped in the Control Panel.
