@@ -239,13 +239,18 @@ void CoronaTaskDialogHandler::DispatchCompletionEvent()
 	// Do not continue if the Corona runtime is not currently active.
 	RuntimeState runtimeState;
 	runtimeState = fEnvironment.GetRuntimeState();
+	auto runtimePointer = fEnvironment.GetRuntime();
 	if ((runtimeState != RuntimeState::kStarting) &&
 	    (runtimeState != RuntimeState::kRunning) &&
 	    (runtimeState != RuntimeState::kTerminating))
 	{
 		return;
 	}
-	if ((RuntimeState::kTerminating == runtimeState) && fEnvironment.GetRuntime()->IsSuspended())
+	if (!runtimePointer)
+	{
+		return;
+	}
+	if ((RuntimeState::kTerminating == runtimeState) && runtimePointer->IsSuspended())
 	{
 		return;
 	}
@@ -253,6 +258,8 @@ void CoronaTaskDialogHandler::DispatchCompletionEvent()
 	// Invoke the Lua listener.
 	if (fLuaResourcePointer)
 	{
+		auto guard = runtimePointer->MakeTimerGuard();
+
 		// Dispatch a Lua "completion" event.
 		Rtt::LuaLibNative::AlertComplete(*fLuaResourcePointer, fEventData.ButtonIndex, fEventData.WasCanceled);
 
