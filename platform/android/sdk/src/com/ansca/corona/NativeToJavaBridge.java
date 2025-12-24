@@ -53,7 +53,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 
-import dalvik.system.DexClassLoader;
 
 import com.ansca.corona.listeners.CoronaSystemApiListener;
 import com.ansca.corona.permissions.PermissionsSettings;
@@ -137,8 +136,6 @@ public class NativeToJavaBridge {
 
 		return result;
 	}
-
-	private static DexClassLoader sClassLoader = null;
 
 	protected static int callLoadClass(
 		CoronaRuntime runtime, long luaStateMemoryAddress, String libName, String className )

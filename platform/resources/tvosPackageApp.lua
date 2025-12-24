@@ -797,18 +797,11 @@ local function generateXcent( options )
 	local data = templateXcent
 
 	-- Set "get-task-allow" to the same value as in the provisioning profile
-	local get_task_allow_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'get-task-allow'")
+	local get_task_allow_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -extract Entitlements.get-task-allow raw -o - -")
 	print("get_task_allow_setting: ".. tostring(get_task_allow_setting))
-	
 	if get_task_allow_setting ~= "" then
-		-- set the value appropriately
-		if nil ~= string.find( get_task_allow_setting, "1", 1, true ) then
-			templateGetTaskAllow, numMatches = string.gsub( templateGetTaskAllow, "{{GET_TASK}}", "true" )
-			assert( numMatches == 1 )
-		else
-			templateGetTaskAllow, numMatches = string.gsub( templateGetTaskAllow, "{{GET_TASK}}", "false" )
-			assert( numMatches == 1 )
-		end
+		templateGetTaskAllow, numMatches = string.gsub( templateGetTaskAllow, "{{GET_TASK}}", get_task_allow_setting )
+		assert( numMatches == 1 )
 		data, numMatches = string.gsub( data, "{{GET_TASK_ALLOW}}", templateGetTaskAllow )
 		assert( numMatches == 1 )
 	else
@@ -822,7 +815,7 @@ local function generateXcent( options )
 	local beta_reports_active_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'beta-reports-active'")
 	print("beta_reports_active_setting: ".. tostring(beta_reports_active_setting))
 
-	if beta_reports_active_setting ~= "" then
+	if beta_reports_active_setting ~= "" and options.settings.tvos.betaReportsEnabled == true then
 		-- set the value appropriately
 		if nil ~= string.find( beta_reports_active_setting, "1", 1, true ) then
 			templateBetaReportsActive, numMatches = string.gsub( templateBetaReportsActive, "{{BETA_REPORTS}}", "true" )
