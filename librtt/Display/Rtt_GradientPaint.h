@@ -50,6 +50,13 @@ class GradientPaint : public BitmapPaint
 			Color end,
 			Direction direction,
 			Rtt_Real angle );
+		static GradientPaint *New(
+			TextureFactory& factory,
+			Color start,
+			Color end,
+			Rtt_Real colorMidPoint,
+			Direction direction,
+			Rtt_Real angle );
 
 	public:
 		GradientPaint( const SharedPtr< TextureResource >& resource, Rtt_Real angle );

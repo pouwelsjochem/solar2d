@@ -17,6 +17,8 @@
 #include "Display/Rtt_GradientPaintAdapter.h"
 #include "Display/Rtt_TextureFactory.h"
 #include "Display/Rtt_TextureResource.h"
+#include "Core/Rtt_Math.h"
+#include "Core/Rtt_Real.h"
 
 // ----------------------------------------------------------------------------
 
@@ -61,11 +63,46 @@ namespace { // anonymous
 }
 
 // Create an 1x2 bitmap
+struct PremultipliedColor
+{
+	float r;
+	float g;
+	float b;
+	float a;
+};
+
+static PremultipliedColor
+ToPremultiplied( Color color )
+{
+	ColorUnion c;
+	c.pixel = color;
+	float a = c.rgba.a;
+	float alpha = a / 255.f;
+	PremultipliedColor result;
+	result.r = c.rgba.r * alpha;
+	result.g = c.rgba.g * alpha;
+	result.b = c.rgba.b * alpha;
+	result.a = a;
+	return result;
+}
+
+static Color
+ToColor( const PremultipliedColor& color )
+{
+	ColorUnion c;
+	c.rgba.r = color.r;
+	c.rgba.g = color.g;
+	c.rgba.b = color.b;
+	c.rgba.a = color.a;
+	return c.pixel;
+}
+
 static BufferBitmap *
 NewBufferBitmap(
 	Rtt_Allocator *pAllocator,
 	Color start,
 	Color end,
+	Rtt_Real colorMidPoint,
 	GradientPaint::Direction direction )
 {
 	const PlatformBitmap::Format kFormat = PlatformBitmap::kRGBA;
@@ -76,52 +113,39 @@ NewBufferBitmap(
 
 	Color *pixels = (Color *)result->WriteAccess();
 
-	// Premultiply alpha
-	ColorUnion color0; color0.pixel = start;
-	float a0 = color0.rgba.a;
-	float alpha0 = a0 / 255.f;
-	float r0 = color0.rgba.r * alpha0;
-	float g0 = color0.rgba.g * alpha0;
-	float b0 = color0.rgba.b * alpha0;
+	PremultipliedColor color0 = ToPremultiplied( start );
+	PremultipliedColor color1 = ToPremultiplied( end );
 
-	ColorUnion color1; color1.pixel = end;
-	float a1 = color1.rgba.a;
-	float alpha1 = a1 / 255.f;
-	float r1 = color1.rgba.r * alpha1;
-	float g1 = color1.rgba.g * alpha1;
-	float b1 = color1.rgba.b * alpha1;
-
-	// Assign boundary pixels
-	color0.rgba.r = r0;
-	color0.rgba.g = g0;
-	color0.rgba.b = b0;
-	color0.rgba.a = a0;
-	pixels[kStart] = color0.pixel;
-
-	color1.rgba.r = r1;
-	color1.rgba.g = g1;
-	color1.rgba.b = b1;
-	color1.rgba.a = a1;
-	pixels[kEnd] = color1.pixel;
+	float midPoint = Clamp( colorMidPoint, Rtt_REAL_0, Rtt_REAL_1 );
+	bool hasMidPoint = ( midPoint > 0.f && midPoint < 1.f );
 
 	// Rtt_TRACE( ( "(r,g,b,a) = (%g, %g, %g, %g)\n", r1, g1, b1, a1 ) );
 
-	// Interpolate in between
-	for ( int i = 1, iMax = (int)kBufferHeight - 1; i < iMax; i++ )
+	// Interpolate across the gradient, biasing the midpoint if requested.
+	for ( int i = 0, iMax = (int)kBufferHeight - 1; i <= iMax; i++ )
 	{
-		float x0 = ((float)i) / iMax;
-		float x1 = 1.f - x0;
-		float r = r0*x0 + r1*x1;
-		float g = g0*x0 + g1*x1;
-		float b = b0*x0 + b1*x1;
-		float a = a0*x0 + a1*x1;
+		float t = ((float)i) / iMax;
+		float s = 1.f - t; // 0 at start, 1 at end
+		float factor = s;
+		if ( hasMidPoint )
+		{
+			if ( s <= midPoint )
+			{
+				factor = 0.5f * ( s / midPoint );
+			}
+			else
+			{
+				factor = 0.5f + 0.5f * ( ( s - midPoint ) / ( 1.f - midPoint ) );
+			}
+		}
+		float invFactor = 1.f - factor;
+		PremultipliedColor blended;
+		blended.r = color0.r * invFactor + color1.r * factor;
+		blended.g = color0.g * invFactor + color1.g * factor;
+		blended.b = color0.b * invFactor + color1.b * factor;
+		blended.a = color0.a * invFactor + color1.a * factor;
 
-		ColorUnion c;
-		c.rgba.r = r;
-		c.rgba.g = g;
-		c.rgba.b = b;
-		c.rgba.a = a;
-		pixels[i] = c.pixel;
+		pixels[i] = ToColor( blended );
 		// Rtt_TRACE( ( "[%d] (r,g,b,a) = (%g, %g, %g, %g)\n", i, r, g, b, a ) );
 	}
 
@@ -139,7 +163,21 @@ GradientPaint *
 GradientPaint::New( TextureFactory& factory, Color start, Color end, Direction direction, Rtt_Real angle )
 {
 	Rtt_Allocator *allocator = factory.GetDisplay().GetAllocator();
-	BufferBitmap *bitmap = NewBufferBitmap( allocator, start, end, direction );
+	BufferBitmap *bitmap = NewBufferBitmap( allocator, start, end, Rtt_REAL_HALF, direction );
+
+	SharedPtr< TextureResource > resource = factory.FindOrCreate( bitmap, true );
+	Rtt_ASSERT( resource.NotNull() );
+
+	GradientPaint *result = Rtt_NEW( allocator, GradientPaint( resource, angle ) );
+
+	return result;
+}
+
+GradientPaint *
+GradientPaint::New( TextureFactory& factory, Color start, Color end, Rtt_Real colorMidPoint, Direction direction, Rtt_Real angle )
+{
+	Rtt_Allocator *allocator = factory.GetDisplay().GetAllocator();
+	BufferBitmap *bitmap = NewBufferBitmap( allocator, start, end, colorMidPoint, direction );
 
 	SharedPtr< TextureResource > resource = factory.FindOrCreate( bitmap, true );
 	Rtt_ASSERT( resource.NotNull() );
@@ -229,4 +267,3 @@ GradientPaint::SetEnd( Color color )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

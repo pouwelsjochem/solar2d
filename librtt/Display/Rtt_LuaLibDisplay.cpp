@@ -2165,7 +2165,7 @@ LuaLibDisplay::ArrayToColor( lua_State *L, int index, Color& outColor )
     lua_pop( L, numArgs );
 }
 
-// { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, direction= }
+// { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, colorMidPoint=, direction= }
 GradientPaint *
 LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 {
@@ -2190,6 +2190,16 @@ LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 	}
 	lua_pop( L, 1 );
 
+	Rtt_Real colorMidPoint = Rtt_REAL_HALF;
+	bool hasMidPoint = false;
+	lua_getfield( L, paramsIndex, "colorMidPoint" );
+	if ( lua_type( L, -1 ) == LUA_TNUMBER )
+	{
+		colorMidPoint = Rtt_FloatToReal( lua_tonumber( L, -1 ) );
+		hasMidPoint = true;
+	}
+	lua_pop( L, 1 );
+
     GradientPaint::Direction direction = GradientPaint::kDefaultDirection;
     Rtt_Real angle = Rtt_REAL_0;
     lua_getfield( L, paramsIndex, "direction" );
@@ -2205,7 +2215,14 @@ LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 
     Runtime *runtime = LuaContext::GetRuntime( L );
     Display& display = runtime->GetDisplay();
-    result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, direction, angle );
+	if ( hasMidPoint )
+	{
+		result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, colorMidPoint, direction, angle );
+	}
+	else
+	{
+		result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, direction, angle );
+	}
 
     return result;
 }
@@ -2242,7 +2259,7 @@ LuaLibDisplay::LuaNewCompositePaint( lua_State *L, int paramsIndex )
 // object.fill = { r, g, b, a }
 // object.fill = { type="image", baseDir=, filename= }
 // object.fill = { type="image", sheet=, frame= }
-// object.fill = { type="gradient", color1={r,g,b,a}, color2={r,g,b,a} }
+// object.fill = { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, colorMidPoint= }
 // object.fill = { type="composite", paint1={}, paint2={} }
 // object.fill = { type="camera" }
 // TODO: object.fill = other.fill
@@ -2296,4 +2313,3 @@ LuaLibDisplay::LuaNewPaint( lua_State *L, int index )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-
