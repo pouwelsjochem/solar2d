@@ -41,7 +41,18 @@ class GradientPaint : public BitmapPaint
 		};
 
 	public:
+		enum Mode
+		{
+			kLinearMode = 0,
+			kSmoothMode,
+
+			kNumModes,
+			kDefaultMode = kLinearMode,
+		};
+
+	public:
 		static Direction StringToDirection( const char *str );
+		static Mode StringToMode( const char *str );
 
 	public:
 		static GradientPaint *New(
@@ -49,14 +60,16 @@ class GradientPaint : public BitmapPaint
 			Color start,
 			Color end,
 			Direction direction,
-			Rtt_Real angle );
+			Rtt_Real angle,
+			Mode mode = kDefaultMode );
 		static GradientPaint *New(
 			TextureFactory& factory,
 			Color start,
 			Color end,
 			Rtt_Real colorMidPoint,
 			Direction direction,
-			Rtt_Real angle );
+			Rtt_Real angle,
+			Mode mode = kDefaultMode );
 
 	public:
 		GradientPaint( const SharedPtr< TextureResource >& resource, Rtt_Real angle );

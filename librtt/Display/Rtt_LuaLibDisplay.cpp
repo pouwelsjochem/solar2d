@@ -2165,7 +2165,7 @@ LuaLibDisplay::ArrayToColor( lua_State *L, int index, Color& outColor )
     lua_pop( L, numArgs );
 }
 
-// { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, colorMidPoint=, direction= }
+// { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, colorMidPoint=, direction=, gradientMode= }
 GradientPaint *
 LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 {
@@ -2201,6 +2201,7 @@ LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
 	lua_pop( L, 1 );
 
     GradientPaint::Direction direction = GradientPaint::kDefaultDirection;
+    GradientPaint::Mode mode = GradientPaint::kDefaultMode;
     Rtt_Real angle = Rtt_REAL_0;
     lua_getfield( L, paramsIndex, "direction" );
     if ( lua_type( L, -1 ) == LUA_TSTRING )
@@ -2213,15 +2214,22 @@ LuaLibDisplay::LuaNewGradientPaint( lua_State *L, int paramsIndex )
     }
     lua_pop( L, 1 );
 
+    lua_getfield( L, paramsIndex, "gradientMode" );
+    if ( lua_type( L, -1 ) == LUA_TSTRING )
+    {
+        mode = GradientPaint::StringToMode( lua_tostring( L, -1 ) );
+    }
+    lua_pop( L, 1 );
+
     Runtime *runtime = LuaContext::GetRuntime( L );
     Display& display = runtime->GetDisplay();
 	if ( hasMidPoint )
 	{
-		result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, colorMidPoint, direction, angle );
+		result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, colorMidPoint, direction, angle, mode );
 	}
 	else
 	{
-		result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, direction, angle );
+		result = GradientPaint::New( display.GetTextureFactory(), color1.pixel, color2.pixel, direction, angle, mode );
 	}
 
     return result;
@@ -2259,7 +2267,7 @@ LuaLibDisplay::LuaNewCompositePaint( lua_State *L, int paramsIndex )
 // object.fill = { r, g, b, a }
 // object.fill = { type="image", baseDir=, filename= }
 // object.fill = { type="image", sheet=, frame= }
-// object.fill = { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, colorMidPoint= }
+// object.fill = { type="gradient", color1={r,g,b,a}, color2={r,g,b,a}, colorMidPoint=, gradientMode= }
 // object.fill = { type="composite", paint1={}, paint2={} }
 // object.fill = { type="camera" }
 // TODO: object.fill = other.fill
