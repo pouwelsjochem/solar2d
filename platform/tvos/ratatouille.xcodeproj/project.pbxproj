@@ -212,6 +212,8 @@
 		A4AD30881BAA2B80006A0C97 /* Rtt_AppleData.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */; };
 		A4AD308D1BAA2B80006A0C97 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */; };
 		A4AD308E1BAA2B80006A0C97 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */; };
+		A7F0B5C728CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5C428CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm */; };
+		A7F0B5C828CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5C628CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
 		A4AD309A1BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30981BAA3656006A0C97 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		A4AD30E11BAA377C006A0C97 /* CoronaAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A41BAA377C006A0C97 /* CoronaAppDelegate.mm */; };
 		A4AD30E21BAA377C006A0C97 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4AD30A61BAA377C006A0C97 /* CoronaViewPrivate.mm */; };
@@ -486,6 +488,8 @@
 		F58011C11BE295070061E021 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B41BE294F40061E021 /* Rtt_AppleInputDevice.mm */; };
 		F58011C21BE295070061E021 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B61BE294F40061E021 /* Rtt_AppleInputDeviceManager.mm */; };
 		F58011C31BE295070061E021 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = F58011B81BE294F40061E021 /* Rtt_AppleInputMFiDeviceListener.mm */; };
+		A7F0B5C928CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5C428CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm */; };
+		A7F0B5CA28CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5C628CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
 		F592971F255548860048AF8C /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F59296E3255548860048AF8C /* AVKit.framework */; };
 		F5A752361BFA41BF00CCDB94 /* CoronaLuaObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5A752351BFA41BF00CCDB94 /* CoronaLuaObjCHelper.mm */; };
 		F5A752371BFA41C600CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A752341BFA41BF00CCDB94 /* CoronaLuaObjCHelper.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -1872,6 +1876,10 @@
 		A4AD30671BAA2B80006A0C97 /* Rtt_AppleCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleCrypto.h; path = ../apple/Rtt_AppleCrypto.h; sourceTree = "<group>"; };
 		A4AD30681BAA2B80006A0C97 /* Rtt_AppleData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleData.h; path = ../apple/Rtt_AppleData.h; sourceTree = "<group>"; };
 		A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleData.mm; path = ../apple/Rtt_AppleData.mm; sourceTree = "<group>"; };
+		A7F0B5C328CFA10000A1B2C3 /* Rtt_AppleTextAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTextAlignment.h; path = ../apple/Rtt_AppleTextAlignment.h; sourceTree = "<group>"; };
+		A7F0B5C428CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleTextAlignment.mm; path = ../apple/Rtt_AppleTextAlignment.mm; sourceTree = "<group>"; };
+		A7F0B5C528CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleTextDelegateWrapperObjectHelper.h; path = ../apple/Rtt_AppleTextDelegateWrapperObjectHelper.h; sourceTree = "<group>"; };
+		A7F0B5C628CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Rtt_AppleTextDelegateWrapperObjectHelper.m; path = ../apple/Rtt_AppleTextDelegateWrapperObjectHelper.m; sourceTree = "<group>"; };
 		A4AD30731BAA2B80006A0C97 /* Rtt_ApplePlatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ApplePlatform.h; path = ../apple/Rtt_ApplePlatform.h; sourceTree = "<group>"; };
 		A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_ApplePlatform.mm; path = ../apple/Rtt_ApplePlatform.mm; sourceTree = "<group>"; };
 		A4AD30751BAA2B80006A0C97 /* Rtt_AppleReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleReachability.h; path = ../apple/Rtt_AppleReachability.h; sourceTree = "<group>"; };
@@ -2999,6 +3007,10 @@
 				A4AD30671BAA2B80006A0C97 /* Rtt_AppleCrypto.h */,
 				A4AD30681BAA2B80006A0C97 /* Rtt_AppleData.h */,
 				A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */,
+				A7F0B5C328CFA10000A1B2C3 /* Rtt_AppleTextAlignment.h */,
+				A7F0B5C428CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm */,
+				A7F0B5C528CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */,
+				A7F0B5C628CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */,
 				A4AD30731BAA2B80006A0C97 /* Rtt_ApplePlatform.h */,
 				A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */,
 				A4AD30751BAA2B80006A0C97 /* Rtt_AppleReachability.h */,
@@ -5055,6 +5067,8 @@
 				A4AD30E21BAA377C006A0C97 /* CoronaViewPrivate.mm in Sources */,
 				A4AD30F21BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				A7F0B5C128CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm in Sources */,
+				A7F0B5C728CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm in Sources */,
+				A7F0B5C828CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */,
 				A4AD30861BAA2B80006A0C97 /* Rtt_AppleCallback.mm in Sources */,
 				A4AD30F81BAA377C006A0C97 /* Rtt_IPhoneVideoObject.mm in Sources */,
 				A4AD30FD1BAA377C006A0C97 /* Rtt_TouchInhibitor.mm in Sources */,
@@ -5213,6 +5227,8 @@
 				F5C5E17C251E115D00217C19 /* CoronaViewPrivate.mm in Sources */,
 				F5C5E17F251E115D00217C19 /* Rtt_IPhonePlatformBase.mm in Sources */,
 				A7F0B5C228CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm in Sources */,
+				A7F0B5C928CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm in Sources */,
+				A7F0B5CA28CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */,
 				F5C5E180251E115D00217C19 /* Rtt_AppleCallback.mm in Sources */,
 				F5C5E181251E115D00217C19 /* Rtt_IPhoneVideoObject.mm in Sources */,
 				F5C5E183251E115D00217C19 /* Rtt_TouchInhibitor.mm in Sources */,
