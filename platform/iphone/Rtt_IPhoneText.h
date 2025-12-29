@@ -27,7 +27,7 @@ namespace Rtt
 class IPhoneText
 {
 	public:
-		static UIColor* GetTextColor( lua_State *L, int index, bool isByteColorRange );
+		static UIColor* GetTextColor( lua_State *L, int index );
 		static UIReturnKeyType GetUIReturnKeyTypeFromIMEType( const char* imeType );
 };
 

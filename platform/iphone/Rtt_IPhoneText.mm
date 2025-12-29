@@ -24,9 +24,9 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 UIColor*
-IPhoneText::GetTextColor( lua_State *L, int index, bool isByteColorRange )
+IPhoneText::GetTextColor( lua_State *L, int index )
 {
-	Color c = LuaLibDisplay::toColor( L, index, isByteColorRange );
+	Color c = LuaLibDisplay::toColor( L, index );
 	RGBA rgba = ( (ColorUnion*)(& c) )->rgba;
 
 	CGFloat r = (CGFloat)rgba.r / 255.0f;
