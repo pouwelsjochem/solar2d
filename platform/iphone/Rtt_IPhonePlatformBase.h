@@ -65,6 +65,11 @@ class IPhonePlatformBase : public ApplePlatform
 			LuaResource* resource ) const;
 		virtual void CancelNativeAlert( NativeAlertRef alert, S32 index ) const;
 
+		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
+
+		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
+		virtual Rtt_Real GetStandardFontSize() const;
+
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
 		virtual NSString *PathForPluginsFile( const char *filename ) const;

@@ -20,8 +20,10 @@
 
 #include "Rtt_AndroidPlatform.h"
 #include "Rtt_AndroidBitmap.h"
+#include "Rtt_AndroidDisplayObject.h"
 #include "Rtt_PlatformExitCallback.h"
 #include "Rtt_AndroidScreenSurface.h"
+#include "Rtt_AndroidTextFieldObject.h"
 #include "Rtt_AndroidTimer.h"
 #include "Rtt_AndroidWebViewObject.h"
 
@@ -643,6 +645,25 @@ AndroidPlatform::CreateNativeVideo( const Rect& bounds ) const
 	return NULL;
 }
 
+PlatformDisplayObject * 
+AndroidPlatform::CreateNativeTextField( const Rect & bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), AndroidTextFieldObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge, true ) );
+}
+
+void 
+AndroidPlatform::SetKeyboardFocus( PlatformDisplayObject * textObject ) const
+{
+	if ( textObject )
+	{
+		((AndroidDisplayObject*)textObject)->SetFocus();
+	}
+	else
+	{
+		fNativeToJavaBridge->DisplayObjectSetFocus(AndroidDisplayObjectRegistry::INVALID_ID, false);
+	}
+}
+
 PlatformDisplayObject *
 AndroidPlatform::GetNativeDisplayObjectById( const int objectId ) const
 {
@@ -770,4 +791,3 @@ void AndroidPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

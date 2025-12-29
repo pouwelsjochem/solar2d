@@ -152,6 +152,23 @@ class NativeToJavaBridge
 		bool DisplayObjectGetBackground( int id );
 		void DisplayObjectSetFocus( int id, bool focus );
 		void DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height );
+		int GetDefaultTextFieldPaddingInPixels();
+		int TextFieldCreate( int id, int left, int top, int width, int height, int isSingleLine );
+		void TextFieldSetReturnKey( int id, const char * imeType );
+		void TextFieldSetSelection( int id, int startPosition, int endPosition );
+		void TextFieldSetPlaceholder( int id, const char * placeholder );
+		void TextFieldSetColor( int id, int r, int g, int b, int a );
+		void TextFieldSetText( int id, const char * text );
+		void TextFieldSetAlign( int id, const char * align );
+		void TextFieldSetSecure( int id, bool isSecure );
+		void TextFieldSetInputType( int id, const char * inputType );
+		void TextFieldGetColor( int id, int * r, int * g, int * b, int * a );
+		void TextFieldGetText( int id, Rtt::String * text );
+		void TextFieldGetPlaceholder( int id, Rtt::String * placeholder );
+		void TextFieldGetAlign( int id, Rtt::String * align );
+		bool TextFieldGetSecure( int id );
+		void TextFieldGetInputType( int id, Rtt::String * inputType );
+		bool TextFieldIsSingleLine( int id );
 
 	public:
 		void WebViewCreate( int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled );

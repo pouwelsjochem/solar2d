@@ -1081,7 +1081,7 @@ public class NativeToJavaBridge {
 	{
 		runtime.getController().setEventNotification( eventType, enable );
 	}
-	
+
 	protected static String callGetModel(CoronaRuntime runtime)
 	{
 		return runtime.getController().getModel();
@@ -1110,6 +1110,11 @@ public class NativeToJavaBridge {
 	protected static String callGetProductName(CoronaRuntime runtime)
 	{
 		return runtime.getController().getProductName();
+	}
+
+	protected static int callGetDefaultTextFieldPaddingInPixels(CoronaRuntime runtime)
+	{
+		return runtime.getController().getDefaultTextFieldPaddingInPixels();
 	}
 
 	private static android.util.DisplayMetrics getDisplayMetrics()
@@ -1631,6 +1636,100 @@ public class NativeToJavaBridge {
 	{
 		runtime.getController().vibrate(hapticType, hapticStyle);
 	}
+	
+	protected static int callTextFieldCreate( CoronaRuntime runtime, int id, int left, int top, int width, int height, boolean isSingleLine )
+	{
+		runtime.getViewManager().addTextView(id, left, top, width, height, isSingleLine);
+
+		return 1;
+	}
+
+	protected static void callTextFieldSetSelection( CoronaRuntime runtime, int id, int startPosition, int endPosition)
+	{
+		runtime.getViewManager().setTextSelection( id, startPosition, endPosition );
+	}
+
+	protected static void callTextFieldSetReturnKey( CoronaRuntime runtime, int id, String imeType )
+	{
+		runtime.getViewManager().setTextReturnKey( id, imeType );
+	}
+
+	protected static void callTextFieldSetPlaceholder( CoronaRuntime runtime, int id, String placeholder)
+	{
+		runtime.getViewManager().setTextPlaceholder( id, placeholder );
+	}
+
+	protected static void callTextFieldSetColor( CoronaRuntime runtime, int id, int r, int g, int b, int a )
+	{
+		int color = Color.argb( a, r, g, b );
+		
+		runtime.getViewManager().setTextViewColor(id, color);
+	}
+	
+	protected static void callTextFieldSetText( CoronaRuntime runtime, int id, String text )
+	{
+		runtime.getViewManager().setTextViewText(id, text);
+	}
+	
+	protected static void callTextFieldSetAlign( CoronaRuntime runtime, int id, String align )
+	{
+		runtime.getViewManager().setTextViewAlign(id, align);
+	}
+	
+	protected static void callTextFieldSetSecure( CoronaRuntime runtime, int id, boolean isSecure )
+	{
+		runtime.getViewManager().setTextViewPassword(id, isSecure);
+	}
+	
+	protected static void callTextFieldSetInputType( CoronaRuntime runtime, int id, String inputType )
+	{
+		runtime.getViewManager().setTextViewInputType(id, inputType);
+	}
+
+	protected static int[] callTextFieldGetColor( CoronaRuntime runtime, int id )
+	{
+		int argb = runtime.getViewManager().getTextViewColor(id);
+
+		int[] result = new int[4];
+
+		result[0] = Color.red( argb );
+		result[1] = Color.green( argb );
+		result[2] = Color.blue( argb );
+		result[3] = Color.alpha( argb );
+
+		return result;
+	}
+	
+	protected static String callTextFieldGetText( int id, CoronaRuntime runtime )
+	{
+		return runtime.getViewManager().getTextViewText(id);
+	}
+	
+	protected static String callTextFieldGetPlaceholder( int id, CoronaRuntime runtime )
+	{
+		return runtime.getViewManager().getTextViewPlaceholder(id);
+	}
+
+	protected static String callTextFieldGetAlign( int id, CoronaRuntime runtime )
+	{
+		return runtime.getViewManager().getTextViewAlign(id);
+	}
+	
+	protected static boolean callTextFieldGetSecure( CoronaRuntime runtime, int id )
+	{
+		return runtime.getViewManager().getTextViewPassword(id);
+	}
+
+	protected static String callTextFieldGetInputType( int id, CoronaRuntime runtime )
+	{
+		return runtime.getViewManager().getTextViewInputType(id);
+	}
+
+	protected static boolean callTextFieldIsSingleLine( CoronaRuntime runtime, int id )
+	{
+		return runtime.getViewManager().isTextViewSingleLine(id);
+	}
+	
 	protected static void callDisplayObjectDestroy( CoronaRuntime runtime, int id )
 	{
 		runtime.getViewManager().destroyDisplayObject(id);
@@ -1673,7 +1772,7 @@ public class NativeToJavaBridge {
 
 	protected static void callDisplayObjectSetFocus( CoronaRuntime runtime, int id, boolean focus )
 	{
-		// runtime.getViewManager().setTextViewFocus(id, focus);
+		runtime.getViewManager().setTextViewFocus(id, focus);
 	}
 
 	protected static void callWebViewCreate(

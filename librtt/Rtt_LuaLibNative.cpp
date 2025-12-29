@@ -25,6 +25,9 @@
 #include "Rtt_Runtime.h"
 
 //#include <string.h>
+#ifdef Rtt_WIN_ENV
+#undef CreateFont
+#endif
 
 #include "CoronaLua.h"
 
@@ -36,8 +39,6 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 static const char kNativeAlert[] = "native.Alert";
-
-// ----------------------------------------------------------------------------
 
 // native.showAlert( title, message [, { buttonLabels } [, listener] ] )
 // returns an alertId
@@ -209,12 +210,83 @@ newVideo( lua_State *L )
 	return result;
 }
 
+// local t = native.newTextField( x, y, w, h )
+//
+// t.text
+// function listener( event )
+//   event.phase = "began" (always called), "ended" (always called), "submitted" (only if return key pressed)
+//   event.name = "userInput"
+// end
+// 
+// native.setKeyboardFocus( tf )
+// if tf is nil, then dismiss keyboard
+static int
+newTextField( lua_State *L )
+{
+	int result = 0;
+
+	Runtime& runtime = * LuaContext::GetRuntime( L );
+	const MPlatform& platform = runtime.Platform();
+
+	Real x = luaL_toreal( L, 1 );
+	Real y = luaL_toreal( L, 2 );
+	Real w = luaL_toreal( L, 3 );
+	Real h = luaL_toreal( L, 4 );
+
+	if ( w > 0 && h > 0 )
+	{
+		Rect bounds;
+		Display& display = runtime.GetDisplay();
+		bounds.Initialize( x, y, w, h );
+
+		PlatformDisplayObject *t = platform.CreateNativeTextField( bounds );
+
+		if ( t )
+		{
+			t->Preinitialize( display );
+			t->SetHandle( & platform.GetAllocator(), runtime.VMContext().LuaState() );
+
+			result = LuaLibDisplay::AssignParentAndPushResult( L, display, t, NULL );
+
+			if ( Lua::IsListener( L, 5, PlatformDisplayObject::kUserInputEvent ) )
+			{
+				CoronaLuaWarning( L, "The 'listener' argument to native.newTextField( left, top, width, height [, listener] ) is deprecated. Call the object method o:addEventListener( '%s', listener ) instead",
+					PlatformDisplayObject::kUserInputEvent );
+				t->AddEventListener( L, 5, PlatformDisplayObject::kUserInputEvent );
+			}
+
+			t->Initialize();
+		}
+	}
+
+	return result;
+}
+
 // native.requestExit()
 static int
 requestExitApplication( lua_State *L )
 {
 	const MPlatform& platform = LuaContext::GetPlatform( L );
 	platform.RequestSystem( L, "exitApplication", 0 );
+	return 0;
+}
+
+static int
+setKeyboardFocus( lua_State *L )
+{
+	PlatformDisplayObject *o = NULL;
+
+	if ( ! lua_isnil( L, 1 ) )
+	{
+		o = (PlatformDisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
+
+		Rtt_WARN_SIM_PROXY_TYPE( L, 1, PlatformDisplayObject );
+	}
+
+	const MPlatform& platform = LuaContext::GetPlatform( L );
+
+	platform.SetKeyboardFocus( o );
+
 	return 0;
 }
 
@@ -386,7 +458,9 @@ LuaLibNative::Initialize( lua_State *L )
 		{ "cancelAlert", cancelAlert },
 		{ "newWebView", newWebView },
 		{ "newVideo", newVideo },
+		{ "newTextField", newTextField },
 		{ "requestExit", requestExitApplication },
+		{ "setKeyboardFocus", setKeyboardFocus },
 		{ "setProperty", setProperty },
 		{ "getProperty", getProperty },
 		{ "canShowPopup", canShowPopup },
@@ -486,4 +560,3 @@ LuaLibNative::PopupClosed( LuaResource& resource, const char *popupName, bool wa
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

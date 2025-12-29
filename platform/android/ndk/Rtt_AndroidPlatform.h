@@ -74,6 +74,8 @@ class AndroidPlatform : public MPlatform
 		
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
+		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
+		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const;
 
 		PlatformDisplayObject* GetNativeDisplayObjectById( const int objectId ) const;
 

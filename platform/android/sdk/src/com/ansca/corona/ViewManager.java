@@ -188,6 +188,261 @@ public class ViewManager {
 
 	}
 
+	public void addTextView(
+		final int id, final int left, final int top, final int width, final int height, final boolean isSingleLine )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				// Do not continue if the view is no longer available.
+				if (myAbsoluteViewLayout == null) {
+					return;
+				}
+
+				// Create the text field with the given settings.
+				CoronaEditText editText = new CoronaEditText(myContext, myCoronaRuntime);
+				LayoutParams params = new AbsoluteLayout.LayoutParams(
+						width + editText.getBorderPaddingLeft() + editText.getBorderPaddingRight(),
+						height + editText.getBorderPaddingTop() + editText.getBorderPaddingBottom(),
+						left - editText.getBorderPaddingLeft(),
+						top - editText.getBorderPaddingTop());
+				myAbsoluteViewLayout.addView( editText, params );
+				editText.setId(id);
+				editText.setTag(new StringObjectHashMap());
+				editText.bringToFront();
+				editText.setTextColor( Color.BLACK );
+				editText.setSingleLine(isSingleLine);
+				editText.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_DONE);
+
+				// Set the vertical alignment to "center" for single line fields and "top" for multiline fields.
+				int gravity = editText.getGravity() & android.view.Gravity.HORIZONTAL_GRAVITY_MASK;
+				gravity |= (isSingleLine ? android.view.Gravity.CENTER_VERTICAL : android.view.Gravity.TOP);
+				editText.setGravity(gravity);
+
+				// Do not allow the text field to change focus to another field to match iOS behavior.
+				editText.setNextFocusDownId(editText.getId());
+				editText.setNextFocusUpId(editText.getId());
+				editText.setNextFocusLeftId(editText.getId());
+				editText.setNextFocusRightId(editText.getId());
+
+				// Add the text field to the display object collection to be made accessible to the native side of Corona.
+				synchronized (myDisplayObjects) {
+					myDisplayObjects.add(editText);
+				}
+			}
+		} );
+	}
+
+	public void setTextViewInputType( final int id, final String inputType )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+
+				view.setTextViewInputType(inputType);
+			}
+		} );
+	}
+
+	public String getTextViewInputType( int id )
+	{
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if ( view == null )
+			return "error";
+
+		return view.getTextViewInputType();
+	}
+
+	public void setTextViewSingleLine(final int id, final boolean isSingleLine)
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if (view != null) {
+					view.setSingleLine(isSingleLine);
+				}
+			}
+		} );
+	}
+
+	public boolean isTextViewSingleLine(int id) {
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if (view == null) {
+			return true;
+		}
+		return ((view.getInputType() & android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE) == 0);
+	}
+
+	public void setTextViewPassword( final int id, final boolean isPassword )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+				
+				view.setTextViewPassword(isPassword);
+			}
+		} );
+	}
+
+	public boolean getTextViewPassword( int id )
+	{
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if ( view == null )
+			return false;
+		
+		return view.getTextViewPassword();
+	}
+
+	public void setTextViewAlign( final int id, final String align )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+				
+				view.setTextViewAlign(align);
+			}
+		} );
+	}
+
+	public String getTextViewAlign( int id )
+	{
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if ( view == null )
+			return "error";
+		
+		return view.getTextViewAlign();
+	}
+
+	public void setTextViewColor( final int id, final int color )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+				
+				view.setTextViewColor( color );
+			}
+		} );
+	}
+
+	public int getTextViewColor( int id )
+	{
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if ( view == null )
+			return Color.BLACK;
+		
+		return view.getTextViewColor();
+	}
+
+	public void setTextViewFocus( final int id, final boolean focus )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = null;
+				if (id != 0) {
+					view = getDisplayObjectById(CoronaEditText.class, id);
+				}
+				if ((view != null) && focus) {
+					// This puts a focus ring around the text box.
+					view.requestFocus();
+
+					// We need the following to bring up the keyboard.
+					InputMethodManager inputManager =
+							(InputMethodManager) myContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+					// Not sure if we should call SHOW_FORCED or SHOW_IMPLICIT.
+					// I think the latter will only appear if there is no hardware keyboard.
+					// According to the docs, only SHOW_IMPLICIT is supported, but SHOW_FORCED works in testing.
+					inputManager.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+				}
+				else {
+					// Set the focus to the main window. This removes the focus ring from the last field.
+					myContentView.requestFocus();
+
+					// Hide the virtual keyboard, if displayed.
+					InputMethodManager imm =
+							(InputMethodManager)myContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(myContentView.getApplicationWindowToken(), 0);
+				}
+			}
+		} );
+	}
+
+	public void setTextViewText( final int id, final String text ) {
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+				
+				view.setTextViewText(text);
+			}
+		} );
+	}
+	
+	public String getTextViewText( int id )
+	{
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if ( view == null )
+			return "error";
+		
+		return view.getTextViewText();
+	}
+	
+	public String getTextViewPlaceholder( int id )
+	{
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if ( view == null )
+			return "error";
+		
+		return view.getTextViewPlaceholder();
+	}
+	
+	public void setTextSelection( final int id, final int startPosition, final int endPosition)
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+				
+				view.setTextSelection(startPosition, endPosition);
+			}
+		} );
+	}
+
+	public void setTextReturnKey( final int id, final String imeType )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+
+				view.setTextReturnKey(imeType);
+			}
+		} );
+	}
+
+	public void setTextPlaceholder( final int id, final String placeholder )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+
+				view.setTextViewPlaceholder(placeholder);
+			}
+		} );
+	}
+
 	public boolean goBack() {
 		// Validate.
 		if (myDisplayObjects == null) {

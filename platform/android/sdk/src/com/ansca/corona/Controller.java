@@ -106,6 +106,7 @@ public class Controller {
 	private Handler myHandler;
 
 	private ResourceServices myResourceServices;
+	private int myDefaultTextFieldPaddingInPixels;
 
 	enum RuntimeState {
 		Starting,
@@ -147,6 +148,12 @@ public class Controller {
 				myIsNaturalOrientationPortrait = true;
 				break;
 		}
+
+		// Fetch a text field's default padding in pixels.
+		CoronaEditText editText = new CoronaEditText(context, runtime);
+		int verticalPadding = editText.getPaddingTop() + editText.getPaddingBottom();
+		verticalPadding -= editText.getBorderPaddingTop() + editText.getBorderPaddingBottom();
+		myDefaultTextFieldPaddingInPixels = (int)(((double)verticalPadding / 2.0) + 0.5);
 	}
 	
 	synchronized void init() {
@@ -1615,6 +1622,10 @@ public class Controller {
     
     public String getProductName() {
         return android.os.Build.PRODUCT;
+    }
+
+    public int getDefaultTextFieldPaddingInPixels() {
+    	return myDefaultTextFieldPaddingInPixels;
     }
 
 	/** Provides easy access to Android 3.x APIs. */

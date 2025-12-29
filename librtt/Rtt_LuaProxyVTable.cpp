@@ -2015,6 +2015,27 @@ LuaPlatformDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable
 }
 
 // ----------------------------------------------------------------------------
+
+// Need explicit default constructor for const use by C++ spec
+LuaPlatformTextFieldObjectProxyVTable::LuaPlatformTextFieldObjectProxyVTable()
+	: LuaPlatformDisplayObjectProxyVTable()
+{
+}
+
+const LuaPlatformTextFieldObjectProxyVTable&
+LuaPlatformTextFieldObjectProxyVTable::Constant()
+{
+	static const Self kVTable;
+	return kVTable;
+}
+
+const LuaProxyVTable&
+LuaPlatformTextFieldObjectProxyVTable::Parent() const
+{
+	return Super::Constant();
+}
+
+// ----------------------------------------------------------------------------
 // Need explicit default constructor for const use by C++ spec
 LuaPlatformWebViewObjectProxyVTable::LuaPlatformWebViewObjectProxyVTable()
     : LuaPlatformDisplayObjectProxyVTable()

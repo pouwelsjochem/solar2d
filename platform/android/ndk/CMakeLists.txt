@@ -182,6 +182,7 @@ add_library( corona SHARED
 		Rtt_AndroidRuntimeDelegate.cpp
 		Rtt_AndroidScreenSurface.cpp
 		Rtt_AndroidSystemOpenEvent.cpp
+		Rtt_AndroidTextFieldObject.cpp
 		Rtt_AndroidTimer.cpp
 		Rtt_AndroidWebViewObject.cpp
 		AndroidBinaryReader.cpp

@@ -21,9 +21,10 @@
 #import <GameController/GameController.h>
 
 #include "Rtt_IPhonePlatformBase.h"
+#include "Rtt_IPhoneDisplayObject.h"
 #include "Rtt_IPhoneTimer.h"
-#include "Rtt_IPhoneVideoObject.h"
 
+#include "Rtt_IPhoneTextFieldObject.h"
 #include "Rtt_IPhoneScreenSurface.h"
 #include "Rtt_IPhoneVideoObject.h"
 #include "Rtt_Lua.h"
@@ -331,6 +332,43 @@ IPhonePlatformBase::CreateNativeVideo( const Rect& bounds ) const
 	return Rtt_NEW( & GetAllocator(), IPhoneVideoObject( bounds ) );
 }
 
+PlatformDisplayObject*
+IPhonePlatformBase::CreateNativeTextField( const Rect& bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), IPhoneTextFieldObject( bounds ) );
+}
+
+void
+IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
+{
+	if ( object )
+	{
+		const LuaProxyVTable *vtable = & object->ProxyVTable();
+
+		if ( & PlatformDisplayObject::GetTextFieldObjectProxyVTable() == vtable )
+		{
+			((IPhoneDisplayObject*)object)->SetFocus();
+		}
+	}
+	else
+	{
+		[GetView() endEditing:YES];
+	}
+}
+
+Rtt_Real
+IPhonePlatformBase::GetStandardFontSize() const
+{
+	Rtt_Real pointSize = 17.f;
+
+	if ( [UIFont respondsToSelector:@selector(preferredFontForTextStyle:)] )
+	{
+		pointSize = [UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize;
+	}
+
+	return pointSize * GetView().contentScaleFactor;
+}
+
 // ----------------------------------------------------------------------------
 
 // NOTE: If you have iOS-specific (i.e. not available on tvOS) code,
@@ -504,4 +542,3 @@ IPhonePlatformBase::RuntimeErrorNotification( const char *errorType, const char 
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

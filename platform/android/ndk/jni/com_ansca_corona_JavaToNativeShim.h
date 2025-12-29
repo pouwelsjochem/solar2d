@@ -285,6 +285,22 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeAlertCallbac
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
+ * Method:    nativeTextEvent
+ * Signature: (IZZ)V
+ */
+JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeTextEvent
+  (JNIEnv *, jclass, jlong, jint, jboolean, jboolean);
+
+/*
+ * Class:     com_ansca_corona_JavaToNativeShim
+ * Method:    nativeTextEditingEvent
+ * Signature: (IIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeTextEditingEvent
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jstring, jstring, jstring);
+
+/*
+ * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeMultitouchEventBegin
  * Signature: ()V
  */

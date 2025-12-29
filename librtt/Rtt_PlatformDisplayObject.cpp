@@ -21,6 +21,8 @@
 
 namespace Rtt
 {
+
+const char PlatformDisplayObject::kUserInputEvent[] = "userInput";
 	
 const LuaProxyVTable&
 PlatformDisplayObject::GetWebViewObjectProxyVTable()
@@ -32,6 +34,12 @@ const LuaProxyVTable&
 PlatformDisplayObject::GetVideoObjectProxyVTable()
 {
 	return LuaPlatformVideoObjectProxyVTable::Constant();
+}
+
+const LuaProxyVTable&
+PlatformDisplayObject::GetTextFieldObjectProxyVTable()
+{
+	return LuaPlatformTextFieldObjectProxyVTable::Constant();
 }
 
 // ----------------------------------------------------------------------------
@@ -254,4 +262,3 @@ PlatformDisplayObject::setNativeProperty( lua_State *L )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -156,6 +156,8 @@ class MPlatform
 		
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const = 0;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const = 0;
+		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const { return NULL; }
+		virtual void SetKeyboardFocus( PlatformDisplayObject *textObject ) const { (void)textObject; }
 
 	public:
 		// Creates notification based on table at 'index'. Returns notificationId

@@ -209,6 +209,19 @@ class LuaPlatformDisplayObjectProxyVTable : public LuaDisplayObjectProxyVTable
 		virtual bool SetValueForKey( lua_State *L, MLuaProxyable& object, const char key[], int valueIndex ) const;
 };
 
+class LuaPlatformTextFieldObjectProxyVTable : public LuaPlatformDisplayObjectProxyVTable
+{
+	public:
+		typedef LuaPlatformTextFieldObjectProxyVTable Self;
+
+	public:
+		LuaPlatformTextFieldObjectProxyVTable();
+		static const Self& Constant();
+
+	public:
+		virtual const LuaProxyVTable& Parent() const;
+};
+
 class LuaPlatformWebViewObjectProxyVTable : public LuaPlatformDisplayObjectProxyVTable
 {
 	public:

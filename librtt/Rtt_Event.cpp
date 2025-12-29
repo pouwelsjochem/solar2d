@@ -1718,6 +1718,101 @@ UrlRequestEvent::Push( lua_State *L ) const
 
 // ----------------------------------------------------------------------------
 
+const char UserInputEvent::kName[] = "userInput";
+
+const char*
+UserInputEvent::StringForPhase( Phase phase )
+{
+	const char* result = NULL;
+	static const char kBeganString[] = "began";
+	static const char kEditingString[] = "editing";
+	static const char kSubmittedString[] = "submitted";
+	static const char kEndedString[] = "ended";
+
+	switch( phase )
+	{
+		case kBegan:
+			result = kBeganString;
+			break;
+		case kEditing:
+			result = kEditingString;
+			break;
+		case kSubmitted:
+			result = kSubmittedString;
+			break;
+		case kEnded:
+			result = kEndedString;
+			break;
+		default:
+			break;
+	}
+
+	return result;
+}
+
+UserInputEvent::UserInputEvent( Phase phase )
+:	fPhase( phase ),
+	fStartPos( -1 ),
+	fNumDeleted( -1 ),
+	fNewChars( NULL ),
+	fOldString( NULL ),
+	fNewString( NULL )
+{
+}
+
+UserInputEvent::UserInputEvent(
+	int startpos,
+	int numdeleted,
+	const char *newchars,
+	const char *oldstring,
+	const char *newstring )
+:	fPhase( kEditing ),
+	fStartPos( startpos ),
+	fNumDeleted( numdeleted ),
+	fNewChars( newchars ),
+	fOldString( oldstring ),
+	fNewString( newstring )
+{
+}
+
+const char*
+UserInputEvent::Name() const
+{
+	return Self::kName;
+}
+
+int
+UserInputEvent::Push( lua_State *L ) const
+{
+	if ( Super::Push( L ) )
+	{
+		lua_pushstring( L, StringForPhase( fPhase ) );
+		lua_setfield( L, -2, kPhaseKey );
+		
+		if ( kEditing == fPhase )
+		{
+			lua_pushinteger( L, fStartPos );
+			lua_setfield( L, -2, "startPosition" );
+
+			lua_pushinteger( L, fNumDeleted );
+			lua_setfield( L, -2, "numDeleted" );
+			
+			lua_pushstring( L, fNewChars );
+			lua_setfield( L, -2, "newCharacters" );
+			
+			lua_pushstring( L, fOldString );
+			lua_setfield( L, -2, "oldText" );
+			
+			lua_pushstring( L, fNewString );
+			lua_setfield( L, -2, "text" );
+		}
+	}
+
+	return 1;
+}
+
+// ----------------------------------------------------------------------------
+
 const char*
 SpriteEvent::StringForPhase( Phase phase )
 {

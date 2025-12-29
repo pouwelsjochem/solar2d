@@ -1952,6 +1952,309 @@ NativeToJavaBridge::DisplayObjectUpdateScreenBounds( int id, int x, int y, int w
 	}
 }
 
+int
+NativeToJavaBridge::GetDefaultTextFieldPaddingInPixels()
+{
+	NativeTrace trace("NativeToJavaBridge::GetDefaultTextFieldPaddingInPixels");
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+	int result = 10;
+	if (bridge.isValid())
+	{
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID(bridge.getClass(),
+				"callGetDefaultTextFieldPaddingInPixels", "(Lcom/ansca/corona/CoronaRuntime;)I");
+		if (mid != NULL)
+		{
+			result = (int)bridge.getEnv()->CallStaticIntMethod(bridge.getClass(), mid, fCoronaRuntime);
+			HandleJavaException();
+		}
+	}
+	return result;
+}
+
+int
+NativeToJavaBridge::TextFieldCreate( int id, int left, int top, int width, int height, int isSingleLine )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldCreate" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+	int result = 0;
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldCreate", "(Lcom/ansca/corona/CoronaRuntime;IIIIIZ)I" );
+
+		if ( mid != NULL ) {
+			result = bridge.getEnv()->CallStaticIntMethod( bridge.getClass(), mid,
+				fCoronaRuntime, id, left, top, width, height, (jboolean) isSingleLine );
+			HandleJavaException();
+		}
+	}
+
+	return result;
+}
+
+void
+NativeToJavaBridge::TextFieldSetReturnKey( int id, const char * keyType )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetReturnKey" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetReturnKey", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;)V");
+
+		if ( mid != NULL ) {
+			jstringParam textJ( bridge.getEnv(), keyType );
+			if ( textJ.isValid() ) {
+				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, textJ.getValue() );
+				HandleJavaException();
+			}
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldSetSelection( int id, int startPosition, int endPosition )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetSelection" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetSelection", "(Lcom/ansca/corona/CoronaRuntime;III)V");
+
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, startPosition, endPosition );
+			HandleJavaException();
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldSetPlaceholder( int id, const char * placeholder )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetReturnKey" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetPlaceholder", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;)V");
+
+		if ( mid != NULL ) {
+			jstringParam textJ( bridge.getEnv(), placeholder );
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, textJ.getValue() );
+			HandleJavaException();
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldSetColor( int id, int r, int g, int b, int a )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetColor" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetColor", "(Lcom/ansca/corona/CoronaRuntime;IIIII)V" );
+
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, r, g, b, a );
+			HandleJavaException();
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldSetText( int id, const char * text )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetText" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetText", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;)V" );
+
+		if ( mid != NULL ) {
+			jstringParam textJ( bridge.getEnv(), text );
+
+			if ( textJ.isValid() ) {
+				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, textJ.getValue() );
+				HandleJavaException();
+			}
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldSetAlign( int id, const char * align )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetAlign" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetAlign", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;)V" );
+
+		if ( mid != NULL ) {
+			jstringParam alignJ( bridge.getEnv(), align );
+
+			if ( alignJ.isValid() ) {
+				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, alignJ.getValue() );
+				HandleJavaException();
+			}
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldSetSecure( int id, bool isSecure )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetSecure" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetSecure", "(Lcom/ansca/corona/CoronaRuntime;IZ)V" );
+
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, isSecure );
+			HandleJavaException();
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldSetInputType( int id, const char * inputType )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetInputType" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetInputType", "(Lcom/ansca/corona/CoronaRuntime;ILjava/lang/String;)V" );
+
+		if ( mid != NULL ) {
+			jstringParam inputTypeJ( bridge.getEnv(), inputType );
+
+			if ( inputTypeJ.isValid() ) {
+				bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, inputTypeJ.getValue() );
+				HandleJavaException();
+			}
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldGetColor( int id, int * r, int * g, int * b, int * a )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldGetColor" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	*r = *g = *b = *a = 0;
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldGetColor", "(Lcom/ansca/corona/CoronaRuntime;I)[I" );
+
+		if ( mid != NULL ) {
+			jobject jo = bridge.getEnv()->CallStaticObjectMethod( bridge.getClass(), mid, fCoronaRuntime, id );
+			HandleJavaException();
+			if (jo)
+			{
+				jintArrayResult array( bridge.getEnv(), (jintArray) jo );
+				if ( array.isValid() && array.getLength() == 4 ) {
+					const int * values = (const int *) array.getValues();
+					*r = values[0];
+					*g = values[1];
+					*b = values[2];
+					*a = values[3];
+				}
+				array.release();
+				bridge.getEnv()->DeleteLocalRef(jo);
+			}
+		}
+	}
+}
+
+void
+NativeToJavaBridge::TextFieldGetText( int id, Rtt::String * text )
+{
+	GetStringWithInt( "callTextFieldGetText", id, text );
+	HandleJavaException();
+}
+
+void
+NativeToJavaBridge::TextFieldGetPlaceholder( int id, Rtt::String * placeholder )
+{
+	GetStringWithInt( "callTextFieldGetPlaceholder", id, placeholder );
+	HandleJavaException();
+}
+
+void
+NativeToJavaBridge::TextFieldGetAlign( int id, Rtt::String * align )
+{
+	GetStringWithInt( "callTextFieldGetAlign", id, align );
+	HandleJavaException();
+}
+
+bool
+NativeToJavaBridge::TextFieldGetSecure( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldGetSecure" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldGetSecure", "(Lcom/ansca/corona/CoronaRuntime;I)Z" );
+
+		if ( mid != NULL ) {
+			jboolean result = bridge.getEnv()->CallStaticBooleanMethod( bridge.getClass(), mid, fCoronaRuntime, id );
+			HandleJavaException();
+			return result;
+		}
+	}
+
+	return false;
+}
+
+void
+NativeToJavaBridge::TextFieldGetInputType( int id, Rtt::String * inputType )
+{
+	GetStringWithInt( "callTextFieldGetInputType", id, inputType );
+	HandleJavaException();
+}
+
+bool
+NativeToJavaBridge::TextFieldIsSingleLine( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldIsSingleLine" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+														   "callTextFieldIsSingleLine", "(Lcom/ansca/corona/CoronaRuntime;I)Z" );
+		if ( mid != NULL ) {
+			jboolean result = bridge.getEnv()->CallStaticBooleanMethod( bridge.getClass(), mid, fCoronaRuntime, id );
+			HandleJavaException();
+			return result;
+		}
+	}
+	return true;
+}
+
 void
 NativeToJavaBridge::SaveBitmap( const Rtt::PlatformBitmap * bitmap, Rtt::Data<const char> & pngBytes )
 {

@@ -805,6 +805,55 @@ class UrlRequestEvent : public VirtualEvent
 // ----------------------------------------------------------------------------
 
 // Local event
+class UserInputEvent : public VirtualEvent
+{
+	public:
+		typedef VirtualEvent Super;
+		typedef UserInputEvent Self;
+
+	public:
+		static const char kName[];
+
+	public:
+		typedef enum Phase
+		{
+			kBegan = 0,
+			kEditing,
+			kSubmitted,
+			kEnded,
+
+			kNumPhases
+		}
+		Phase;
+
+	protected:
+		static const char* StringForPhase( Phase phase );
+
+	public:
+		UserInputEvent( Phase phase );
+		UserInputEvent(
+			int startpos,
+			int numdeleted,
+			const char *newchars,
+			const char *oldstring,
+			const char *newstring );
+
+	public:
+		virtual const char* Name() const;
+		virtual int Push( lua_State *L ) const;
+
+	private:
+		Phase fPhase;
+		int fStartPos;
+		int fNumDeleted;
+		const char *fNewChars;
+		const char *fOldString;
+		const char *fNewString;
+};
+
+// ----------------------------------------------------------------------------
+
+// Local event
 class SpriteEvent : public VirtualEvent
 {
 	public:
