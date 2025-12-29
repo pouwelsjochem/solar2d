@@ -7,10 +7,14 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+#include "Core/Rtt_Build.h"
+
 #include "Rtt_IPhoneText.h"
 
-#include "Display/Rtt_LuaLibDisplay.h"
 #include "Rtt_Lua.h"
+#include "Display/Rtt_LuaLibDisplay.h"
+
+#include <CoreGraphics/CGBase.h>
 
 // ----------------------------------------------------------------------------
 
@@ -20,72 +24,56 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 UIColor*
-IPhoneText::GetTextColor( lua_State *L, int index )
+IPhoneText::GetTextColor( lua_State *L, int index, bool isByteColorRange )
 {
-	if ( L && ( LUA_TNUMBER == lua_type( L, index ) ) )
-	{
-		Color c = LuaLibDisplay::toColor( L, index );
-		RGBA rgba = ( (ColorUnion*)(& c) )->rgba;
-		return [UIColor colorWithRed:rgba.r green:rgba.g blue:rgba.b alpha:rgba.a];
-	}
+	Color c = LuaLibDisplay::toColor( L, index, isByteColorRange );
+	RGBA rgba = ( (ColorUnion*)(& c) )->rgba;
 
-	return [UIColor blackColor];
+	CGFloat r = (CGFloat)rgba.r / 255.0f;
+	CGFloat g = (CGFloat)rgba.g / 255.0f;
+	CGFloat b = (CGFloat)rgba.b / 255.0f;
+	CGFloat a = (CGFloat)rgba.a / 255.0f;
+
+	return [UIColor colorWithRed:r green:g blue:b alpha:a];
 }
 
 UIReturnKeyType
-IPhoneText::GetUIReturnKeyTypeFromIMEType( const char *imeType )
+IPhoneText::GetUIReturnKeyTypeFromIMEType( const char* imeType)
 {
-	if ( ! imeType )
+	UIReturnKeyType type = UIReturnKeyDefault;
+	if ( strcmp( "go", imeType ) == 0)
 	{
-		return UIReturnKeyDefault;
+		type = UIReturnKeyGo;
 	}
-
-	if ( 0 == strcmp( imeType, "done" ) )
+	else if ( strcmp( "join", imeType) == 0)
 	{
-		return UIReturnKeyDone;
+		type = UIReturnKeyJoin;
 	}
-	else if ( 0 == strcmp( imeType, "go" ) )
+	else if ( strcmp( "next", imeType) == 0)
 	{
-		return UIReturnKeyGo;
+		type = UIReturnKeyNext;
 	}
-	else if ( 0 == strcmp( imeType, "next" ) )
+	else if ( strcmp( "route", imeType) == 0)
 	{
-		return UIReturnKeyNext;
+		type = UIReturnKeyRoute;
 	}
-	else if ( 0 == strcmp( imeType, "search" ) )
+	else if ( strcmp( "search", imeType) == 0)
 	{
-		return UIReturnKeySearch;
+		type = UIReturnKeySearch;
 	}
-	else if ( 0 == strcmp( imeType, "send" ) )
+	else if ( strcmp( "send", imeType) == 0)
 	{
-		return UIReturnKeySend;
+		type = UIReturnKeySend;
 	}
-	else if ( 0 == strcmp( imeType, "join" ) )
+	else if ( strcmp( "done", imeType) == 0)
 	{
-		return UIReturnKeyJoin;
+		type = UIReturnKeyDone;
 	}
-	else if ( 0 == strcmp( imeType, "route" ) )
+	else if ( strcmp( "emergencycall", imeType) == 0)
 	{
-		return UIReturnKeyRoute;
+		type = UIReturnKeyEmergencyCall;
 	}
-	else if ( 0 == strcmp( imeType, "continue" ) )
-	{
-		return UIReturnKeyContinue;
-	}
-	else if ( 0 == strcmp( imeType, "emergencycall" ) )
-	{
-		return UIReturnKeyEmergencyCall;
-	}
-	else if ( 0 == strcmp( imeType, "google" ) )
-	{
-		return UIReturnKeyGoogle;
-	}
-	else if ( 0 == strcmp( imeType, "yahoo" ) )
-	{
-		return UIReturnKeyYahoo;
-	}
-
-	return UIReturnKeyDefault;
+	return type;
 }
 
 // ----------------------------------------------------------------------------

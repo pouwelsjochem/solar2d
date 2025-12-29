@@ -408,7 +408,8 @@ IPhoneTextFieldObject::setTextColor( lua_State *L )
 	PlatformDisplayObject *o = (PlatformDisplayObject*)LuaProxy::GetProxyableObject( L, 1 );
 	if ( & o->ProxyVTable() == & PlatformDisplayObject::GetTextFieldObjectProxyVTable() )
 	{
-		UIColor *c = IPhoneText::GetTextColor( L, 2 );
+		bool isBytecolorRange = o->IsByteColorRange();
+		UIColor *c = IPhoneText::GetTextColor( L, 2, isBytecolorRange );
 		UIView *v = ((IPhoneTextFieldObject*)o)->GetView();
 		Rtt_UITextField *t = (Rtt_UITextField*)v;
 		t.textColor = c;

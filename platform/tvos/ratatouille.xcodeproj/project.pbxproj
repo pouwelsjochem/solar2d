@@ -1912,6 +1912,7 @@
 		A7F0B5BF28CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneTextFieldObject.mm; path = ../iphone/Rtt_IPhoneTextFieldObject.mm; sourceTree = "<group>"; };
 		A7F0B5E128CFA18000A1B2C3 /* Rtt_IPhoneText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneText.h; path = ../iphone/Rtt_IPhoneText.h; sourceTree = "<group>"; };
 		A7F0B5E228CFA18000A1B2C3 /* Rtt_IPhoneText.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneText.mm; path = ../iphone/Rtt_IPhoneText.mm; sourceTree = "<group>"; };
+		A7F0B5F428CFA31000A1B2C3 /* Rtt_IPhoneTextFieldObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTextFieldObject.h; path = ../iphone/Rtt_IPhoneTextFieldObject.h; sourceTree = "<group>"; };
 		A4AD30C91BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneScreenSurface.h; path = ../iphone/Rtt_IPhoneScreenSurface.h; sourceTree = "<group>"; };
 		A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneScreenSurface.mm; path = ../iphone/Rtt_IPhoneScreenSurface.mm; sourceTree = "<group>"; };
 		A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneTimer.h; path = ../iphone/Rtt_IPhoneTimer.h; sourceTree = "<group>"; };
@@ -3003,6 +3004,8 @@
 				A4AD30571BAA2B80006A0C97 /* CoronaLuaObjC+NSObject.m */,
 				C2756C281C5722A500BE3194 /* NSString+Extensions.h */,
 				C2756C291C5722A500BE3194 /* NSString+Extensions.m */,
+				A7F0B5C328CFA10000A1B2C3 /* Rtt_AppleTextAlignment.h */,
+				A7F0B5C428CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm */,
 				A4AD30621BAA2B80006A0C97 /* Rtt_AppleBitmap.h */,
 				A4AD30631BAA2B80006A0C97 /* Rtt_AppleBitmap.mm */,
 				A4AD30641BAA2B80006A0C97 /* Rtt_AppleCallback.h */,
@@ -3011,14 +3014,12 @@
 				A4AD30671BAA2B80006A0C97 /* Rtt_AppleCrypto.h */,
 				A4AD30681BAA2B80006A0C97 /* Rtt_AppleData.h */,
 				A4AD30691BAA2B80006A0C97 /* Rtt_AppleData.mm */,
-				A7F0B5C328CFA10000A1B2C3 /* Rtt_AppleTextAlignment.h */,
-				A7F0B5C428CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm */,
-				A7F0B5C528CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */,
-				A7F0B5C628CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */,
 				A4AD30731BAA2B80006A0C97 /* Rtt_ApplePlatform.h */,
 				A4AD30741BAA2B80006A0C97 /* Rtt_ApplePlatform.mm */,
 				A4AD30751BAA2B80006A0C97 /* Rtt_AppleReachability.h */,
 				A4AD30761BAA2B80006A0C97 /* Rtt_AppleReachability.mm */,
+				A7F0B5C528CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */,
+				A7F0B5C628CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */,
 				A4AD30791BAA2B80006A0C97 /* Rtt_AppleTimer.h */,
 				A4AD307A1BAA2B80006A0C97 /* Rtt_AppleTimer.mm */,
 				F58011B31BE294F40061E021 /* Rtt_AppleInputDevice.h */,
@@ -3072,13 +3073,14 @@
 				A4AD30B61BAA377C006A0C97 /* Rtt_IPhoneDisplayObject.mm */,
 				A4AD30C71BAA377C006A0C97 /* Rtt_IPhonePlatformBase.h */,
 				A4AD30C81BAA377C006A0C97 /* Rtt_IPhonePlatformBase.mm */,
-				A7F0B5E128CFA18000A1B2C3 /* Rtt_IPhoneText.h */,
-				A7F0B5E228CFA18000A1B2C3 /* Rtt_IPhoneText.mm */,
-				A7F0B5BF28CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm */,
 				A4DD48241BB2764900FD988E /* Rtt_IPhoneRuntimeDelegate.h */,
 				A4DD48251BB2764900FD988E /* Rtt_IPhoneRuntimeDelegate.mm */,
 				A4AD30C91BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.h */,
 				A4AD30CA1BAA377C006A0C97 /* Rtt_IPhoneScreenSurface.mm */,
+				A7F0B5E128CFA18000A1B2C3 /* Rtt_IPhoneText.h */,
+				A7F0B5E228CFA18000A1B2C3 /* Rtt_IPhoneText.mm */,
+				A7F0B5F428CFA31000A1B2C3 /* Rtt_IPhoneTextFieldObject.h */,
+				A7F0B5BF28CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm */,
 				A4AD30D11BAA377C006A0C97 /* Rtt_IPhoneTimer.h */,
 				A4AD30D21BAA377C006A0C97 /* Rtt_IPhoneTimer.mm */,
 				A4AD30D31BAA377C006A0C97 /* Rtt_IPhoneVideoObject.h */,

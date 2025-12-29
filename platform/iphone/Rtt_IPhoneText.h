@@ -10,21 +10,28 @@
 #ifndef _Rtt_IPhoneText_H__
 #define _Rtt_IPhoneText_H__
 
-#import <UIKit/UIKit.h>
-
-struct lua_State;
+#import <UIKit/UITextInputTraits.h>
 
 // ----------------------------------------------------------------------------
+
+@class UIColor;
+
+struct lua_State;
 
 namespace Rtt
 {
 
+// ----------------------------------------------------------------------------
+
+// Common functions between text objects
 class IPhoneText
 {
 	public:
-		static UIColor* GetTextColor( lua_State *L, int index );
-		static UIReturnKeyType GetUIReturnKeyTypeFromIMEType( const char *imeType );
+		static UIColor* GetTextColor( lua_State *L, int index, bool isByteColorRange );
+		static UIReturnKeyType GetUIReturnKeyTypeFromIMEType( const char* imeType );
 };
+
+// ----------------------------------------------------------------------------
 
 } // namespace Rtt
 
