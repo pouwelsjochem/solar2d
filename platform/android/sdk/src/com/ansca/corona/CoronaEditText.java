@@ -369,6 +369,76 @@ public class CoronaEditText extends EditText {
 	{
 		return myTextColor;
 	}
+
+	public void setTextViewText(String text)
+	{
+		if (text == null) {
+			text = "";
+		}
+		setText(text, TextView.BufferType.EDITABLE);
+	}
+
+	public String getTextViewText()
+	{
+		return getTextString();
+	}
+
+	public String getTextViewPlaceholder()
+	{
+		CharSequence hint = getHint();
+		return (hint != null) ? hint.toString() : "";
+	}
+
+	public void setTextViewPlaceholder(String placeholder)
+	{
+		setHint(placeholder);
+	}
+
+	public void setTextSelection(int startPositionFinal, int endPositionFinal)
+	{
+		int maxLength = getText().length();
+		int startPosition = startPositionFinal;
+		int endPosition = endPositionFinal;
+		if (startPosition > maxLength) {
+			startPosition = maxLength;
+			endPosition = maxLength;
+		}
+
+		if (endPosition > maxLength) {
+			endPosition = maxLength;
+		}
+
+		if (startPosition < 0) {
+			startPosition = 0;
+		}
+
+		if (endPosition < 0) {
+			endPosition = 0;
+		}
+
+		if (startPosition > endPosition) {
+			startPosition = endPosition;
+		}
+
+		setSelection(startPosition, endPosition);
+	}
+
+	public void setTextReturnKey(String imeType)
+	{
+		int ime = EditorInfo.IME_ACTION_DONE;
+		if ("go".equals(imeType)) {
+			ime = EditorInfo.IME_ACTION_GO;
+		} else if ("next".equals(imeType)) {
+			ime = EditorInfo.IME_ACTION_NEXT;
+		} else if ("none".equals(imeType)) {
+			ime = EditorInfo.IME_ACTION_NONE;
+		} else if ("search".equals(imeType)) {
+			ime = EditorInfo.IME_ACTION_SEARCH;
+		} else if ("send".equals(imeType)) {
+			ime = EditorInfo.IME_ACTION_SEND;
+		}
+		setImeOptions(ime);
+	}
 	
 	public void setText(CharSequence text, TextView.BufferType type) {
 		// Disable the text listener.
