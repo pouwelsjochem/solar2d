@@ -189,7 +189,7 @@ public class ViewManager {
 	}
 
 	public void addTextView(
-		final int id, final int left, final int top, final int width, final int height, final boolean isSingleLine )
+		final int id, final int left, final int top, final int width, final int height )
 	{
 		postOnUiThread( new Runnable() {
 			public void run() {
@@ -210,12 +210,12 @@ public class ViewManager {
 				editText.setTag(new StringObjectHashMap());
 				editText.bringToFront();
 				editText.setTextColor( Color.BLACK );
-				editText.setSingleLine(isSingleLine);
+				editText.setSingleLine(true);
 				editText.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_DONE);
 
 				// Set the vertical alignment to "center" for single line fields and "top" for multiline fields.
 				int gravity = editText.getGravity() & android.view.Gravity.HORIZONTAL_GRAVITY_MASK;
-				gravity |= (isSingleLine ? android.view.Gravity.CENTER_VERTICAL : android.view.Gravity.TOP);
+				gravity |= android.view.Gravity.CENTER_VERTICAL;
 				editText.setGravity(gravity);
 
 				// Do not allow the text field to change focus to another field to match iOS behavior.
@@ -252,26 +252,6 @@ public class ViewManager {
 			return "error";
 
 		return view.getTextViewInputType();
-	}
-
-	public void setTextViewSingleLine(final int id, final boolean isSingleLine)
-	{
-		postOnUiThread( new Runnable() {
-			public void run() {
-				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
-				if (view != null) {
-					view.setSingleLine(isSingleLine);
-				}
-			}
-		} );
-	}
-
-	public boolean isTextViewSingleLine(int id) {
-		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
-		if (view == null) {
-			return true;
-		}
-		return ((view.getInputType() & android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE) == 0);
 	}
 
 	public void setTextViewPassword( final int id, final boolean isPassword )
@@ -349,7 +329,7 @@ public class ViewManager {
 					view = getDisplayObjectById(CoronaEditText.class, id);
 				}
 				if ((view != null) && focus) {
-					// This puts a focus ring around the text box.
+					// This puts a focus ring around the text field.
 					view.requestFocus();
 
 					// We need the following to bring up the keyboard.

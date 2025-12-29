@@ -29,9 +29,8 @@ namespace Rtt
 // ----------------------------------------------------------------------------
 
 AndroidTextFieldObject::AndroidTextFieldObject(
-		const Rect& bounds, AndroidDisplayObjectRegistry *displayObjectRegistry, NativeToJavaBridge *ntjb, bool isSingleLine )
-:	Super( bounds, displayObjectRegistry, ntjb ),
-	fIsSingleLine( isSingleLine )
+		const Rect& bounds, AndroidDisplayObjectRegistry *displayObjectRegistry, NativeToJavaBridge *ntjb )
+:	Super( bounds, displayObjectRegistry, ntjb )
 {
 }
 
@@ -48,7 +47,7 @@ AndroidTextFieldObject::Initialize()
 	GetScreenBounds( screenBounds );
 
 	int result = fNativeToJavaBridge->TextFieldCreate(
-			GetId(), screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height(), fIsSingleLine );
+			GetId(), screenBounds.xMin, screenBounds.yMin, screenBounds.Width(), screenBounds.Height() );
 	Super::InitializeView( this );
 
 	return result != 0;
@@ -163,27 +162,17 @@ AndroidTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 	}
 	else if ( strcmp( "isSecure", key ) == 0 )
 	{
-		if ( fIsSingleLine )
-		{
-			bool secure = fNativeToJavaBridge->TextFieldGetSecure( GetId() );
-			lua_pushboolean( L, secure );
-		}
-		else
-			result = 0;
+		bool secure = fNativeToJavaBridge->TextFieldGetSecure( GetId() );
+		lua_pushboolean( L, secure );
 	}
 	else if ( strcmp( "inputType", key ) == 0 )
 	{
-		if ( fIsSingleLine )
-		{
-			Rtt_Allocator * allocator = LuaContext::GetAllocator( L );
-			String inputType( allocator );
-			
-			fNativeToJavaBridge->TextFieldGetInputType( GetId(), &inputType );
-		
-			lua_pushstring( L, inputType.GetString() );
-		}
-		else
-			result = 0;
+		Rtt_Allocator * allocator = LuaContext::GetAllocator( L );
+		String inputType( allocator );
+
+		fNativeToJavaBridge->TextFieldGetInputType( GetId(), &inputType );
+
+		lua_pushstring( L, inputType.GetString() );
 	}
 	else if ( strcmp( "placeholder", key ) == 0 )
 	{
@@ -203,12 +192,9 @@ AndroidTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 	else if ( strcmp( "margin", key ) == 0 )
 	{
 		// The margin/padding between the edge of this field and its text in content coordinates.
-		if (fIsSingleLine)
-		{
-			float value = (float)fNativeToJavaBridge->GetDefaultTextFieldPaddingInPixels();
-			value *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetScreenToContentScale();
-			lua_pushnumber( L, value );
-		}
+		float value = (float)fNativeToJavaBridge->GetDefaultTextFieldPaddingInPixels();
+		value *= fNativeToJavaBridge->GetRuntime()->GetDisplay().GetScreenToContentScale();
+		lua_pushnumber( L, value );
 	}
 	else
 	{
@@ -235,11 +221,8 @@ AndroidTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valu
 	}
 	else if ( strcmp( "isSecure", key ) == 0 )
 	{
-		if ( fIsSingleLine ) 
-		{
-			bool secure = lua_toboolean( L, valueIndex );
-			fNativeToJavaBridge->TextFieldSetSecure( GetId(), secure );
-		}
+		bool secure = lua_toboolean( L, valueIndex );
+		fNativeToJavaBridge->TextFieldSetSecure( GetId(), secure );
 	}
 	else if ( strcmp( "align", key ) == 0 )
 	{
@@ -248,14 +231,11 @@ AndroidTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valu
 	}
 	else if ( strcmp( "inputType", key ) == 0 )
 	{
-		if ( fIsSingleLine ) 
+		const char * inputType = lua_tostring( L, valueIndex );
+
+		if ( inputType ) 
 		{
-			const char * inputType = lua_tostring( L, valueIndex );
-			
-			if ( inputType ) 
-			{
-				fNativeToJavaBridge->TextFieldSetInputType( GetId(), inputType );
-			}
+			fNativeToJavaBridge->TextFieldSetInputType( GetId(), inputType );
 		}
 	}
 	else if ( strcmp( "placeholder", key ) == 0 )

@@ -29,7 +29,7 @@ class AndroidTextFieldObject : public AndroidDisplayObject
 		typedef AndroidDisplayObject Super;
 
 	public:
-		AndroidTextFieldObject( const Rect& bounds, AndroidDisplayObjectRegistry *displayObjectRegistry, NativeToJavaBridge *ntjb, bool isSingleLine );
+		AndroidTextFieldObject( const Rect& bounds, AndroidDisplayObjectRegistry *displayObjectRegistry, NativeToJavaBridge *ntjb );
 		virtual ~AndroidTextFieldObject();
 
 	public:
@@ -51,10 +51,6 @@ class AndroidTextFieldObject : public AndroidDisplayObject
 		virtual bool SetValueForKey( lua_State *L, const char key[], int valueIndex );
 
 	private:
-		/// Set TRUE if this is a single line text field. Set FALSE for a multiline text box.
-		/// This value is not expected to change after initialization.
-		bool fIsSingleLine;
-
 };
 
 // ----------------------------------------------------------------------------

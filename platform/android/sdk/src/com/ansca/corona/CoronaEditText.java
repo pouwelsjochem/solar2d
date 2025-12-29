@@ -79,7 +79,7 @@ public class CoronaEditText extends EditText {
 				// Determine if this text field is single line or multi-line.
 				boolean isSingleLine = ((getInputType() & android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE) == 0);
 
-				// If this is a multi-line text box, then do not let the return key end editing.
+				// If this is a multi-line text field, then do not let the return key end editing.
 				if (!isSingleLine && (actionId == android.view.inputmethod.EditorInfo.IME_NULL)) {
 					return false;
 				}

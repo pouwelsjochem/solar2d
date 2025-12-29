@@ -1973,7 +1973,7 @@ NativeToJavaBridge::GetDefaultTextFieldPaddingInPixels()
 }
 
 int
-NativeToJavaBridge::TextFieldCreate( int id, int left, int top, int width, int height, int isSingleLine )
+NativeToJavaBridge::TextFieldCreate( int id, int left, int top, int width, int height )
 {
 	NativeTrace trace( "NativeToJavaBridge::TextFieldCreate" );
 
@@ -1982,11 +1982,11 @@ NativeToJavaBridge::TextFieldCreate( int id, int left, int top, int width, int h
 
 	if ( bridge.isValid() ) {
 		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
-			"callTextFieldCreate", "(Lcom/ansca/corona/CoronaRuntime;IIIIIZ)I" );
+			"callTextFieldCreate", "(Lcom/ansca/corona/CoronaRuntime;IIIII)I" );
 
 		if ( mid != NULL ) {
 			result = bridge.getEnv()->CallStaticIntMethod( bridge.getClass(), mid,
-				fCoronaRuntime, id, left, top, width, height, (jboolean) isSingleLine );
+				fCoronaRuntime, id, left, top, width, height );
 			HandleJavaException();
 		}
 	}
@@ -2234,25 +2234,6 @@ NativeToJavaBridge::TextFieldGetInputType( int id, Rtt::String * inputType )
 {
 	GetStringWithInt( "callTextFieldGetInputType", id, inputType );
 	HandleJavaException();
-}
-
-bool
-NativeToJavaBridge::TextFieldIsSingleLine( int id )
-{
-	NativeTrace trace( "NativeToJavaBridge::TextFieldIsSingleLine" );
-
-	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
-
-	if ( bridge.isValid() ) {
-		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
-														   "callTextFieldIsSingleLine", "(Lcom/ansca/corona/CoronaRuntime;I)Z" );
-		if ( mid != NULL ) {
-			jboolean result = bridge.getEnv()->CallStaticBooleanMethod( bridge.getClass(), mid, fCoronaRuntime, id );
-			HandleJavaException();
-			return result;
-		}
-	}
-	return true;
 }
 
 void

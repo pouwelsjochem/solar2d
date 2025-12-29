@@ -1637,9 +1637,9 @@ public class NativeToJavaBridge {
 		runtime.getController().vibrate(hapticType, hapticStyle);
 	}
 	
-	protected static int callTextFieldCreate( CoronaRuntime runtime, int id, int left, int top, int width, int height, boolean isSingleLine )
+	protected static int callTextFieldCreate( CoronaRuntime runtime, int id, int left, int top, int width, int height )
 	{
-		runtime.getViewManager().addTextView(id, left, top, width, height, isSingleLine);
+		runtime.getViewManager().addTextView(id, left, top, width, height);
 
 		return 1;
 	}
@@ -1725,11 +1725,6 @@ public class NativeToJavaBridge {
 		return runtime.getViewManager().getTextViewInputType(id);
 	}
 
-	protected static boolean callTextFieldIsSingleLine( CoronaRuntime runtime, int id )
-	{
-		return runtime.getViewManager().isTextViewSingleLine(id);
-	}
-	
 	protected static void callDisplayObjectDestroy( CoronaRuntime runtime, int id )
 	{
 		runtime.getViewManager().destroyDisplayObject(id);

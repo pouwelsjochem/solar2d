@@ -648,7 +648,7 @@ AndroidPlatform::CreateNativeVideo( const Rect& bounds ) const
 PlatformDisplayObject * 
 AndroidPlatform::CreateNativeTextField( const Rect & bounds ) const
 {
-	return Rtt_NEW( & GetAllocator(), AndroidTextFieldObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge, true ) );
+	return Rtt_NEW( & GetAllocator(), AndroidTextFieldObject( bounds, fDisplayObjectRegistry, fNativeToJavaBridge ) );
 }
 
 void 

@@ -153,7 +153,7 @@ class NativeToJavaBridge
 		void DisplayObjectSetFocus( int id, bool focus );
 		void DisplayObjectUpdateScreenBounds( int id, int x, int y, int width, int height );
 		int GetDefaultTextFieldPaddingInPixels();
-		int TextFieldCreate( int id, int left, int top, int width, int height, int isSingleLine );
+		int TextFieldCreate( int id, int left, int top, int width, int height );
 		void TextFieldSetReturnKey( int id, const char * imeType );
 		void TextFieldSetSelection( int id, int startPosition, int endPosition );
 		void TextFieldSetPlaceholder( int id, const char * placeholder );
@@ -168,7 +168,6 @@ class NativeToJavaBridge
 		void TextFieldGetAlign( int id, Rtt::String * align );
 		bool TextFieldGetSecure( int id );
 		void TextFieldGetInputType( int id, Rtt::String * inputType );
-		bool TextFieldIsSingleLine( int id );
 
 	public:
 		void WebViewCreate( int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled );
