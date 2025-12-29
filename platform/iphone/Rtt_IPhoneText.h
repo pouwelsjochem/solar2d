@@ -1,0 +1,33 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// This file is part of the Solar2D game engine.
+// For overview and more information on licensing please refer to README.md 
+// Home page: https://github.com/coronalabs/corona
+// Contact: support@Solar2D.com
+//
+//////////////////////////////////////////////////////////////////////////////
+
+#ifndef _Rtt_IPhoneText_H__
+#define _Rtt_IPhoneText_H__
+
+#import <UIKit/UIKit.h>
+
+struct lua_State;
+
+// ----------------------------------------------------------------------------
+
+namespace Rtt
+{
+
+class IPhoneText
+{
+	public:
+		static UIColor* GetTextColor( lua_State *L, int index );
+		static UIReturnKeyType GetUIReturnKeyTypeFromIMEType( const char *imeType );
+};
+
+} // namespace Rtt
+
+// ----------------------------------------------------------------------------
+
+#endif // _Rtt_IPhoneText_H__
