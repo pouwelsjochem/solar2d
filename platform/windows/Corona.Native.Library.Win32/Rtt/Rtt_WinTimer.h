@@ -15,6 +15,8 @@
 #include <unordered_map>
 
 
+#define USING_WINDOW_RELAYS
+
 namespace Rtt
 {
 
@@ -26,7 +28,7 @@ class WinTimer : public PlatformTimer
 		/// <summary>Creates a new Win32 timer.</summary>
 		/// <param name="callback">The callback to be invoked every time the timer elapses.</param>
 		/// <param name="windowHandle">Handle to a window or control to attach the windows timer to. Can be null.</param>
-		WinTimer(MCallback& callback, HWND windowHandle);
+		WinTimer(MCallback& callback, HWND windowHandle, HWND messageOnlyWindowHandle); // <- STEVE CHANGE
 
 		/// <summary>Destroys the timer and its resources. Stops the timer if currently running.</summary>
 		virtual ~WinTimer();
@@ -54,6 +56,10 @@ class WinTimer : public PlatformTimer
 		///  <para>This method will not do anything if the timer is not running.</para>
 		/// </summary>
 		void Evaluate();
+
+// STEVE CHANGE
+		void ThreadBody();
+// /STEVE CHANGE
 
 	private:
 		/// <summary>
@@ -86,6 +92,59 @@ class WinTimer : public PlatformTimer
 
 		static std::unordered_map<UINT_PTR, WinTimer*> sTimerMap; // timer callback might be called after Stop(), so use this as a guard
 		static UINT_PTR sMostRecentTimerID; // use an incrementing index as key, to be robust against the rare case that a new timer is reallocated into the same memory
+
+// STEVE CHANGE
+		void SetFPS(U32 fps);
+		void ClearHandles();
+		void CleanUpResources();
+
+		enum {
+			kRunning,
+			kStopped,
+			kLocked,
+			kQuitting, // timer has quit and is being destroyed (final state)
+			kEvaluated
+		};
+
+		bool UsingV2API() const { return NULL != fHandles[kThread]; }
+
+		bool Init_V2();
+
+		void Start_V2();
+		void Stop_V2(LONG stopState);
+		void Evaluate_V2();
+
+		enum {
+			kThread,
+			kWaitableTimer,
+			kAddedMessageQueue,
+
+			kNumHandles
+		};
+
+		bool LockFromExpectedStateTo(LONG from, LONG to);
+		bool TransitionFromExpectedStateTo(LONG from, LONG to);
+		bool TryToLockFromExpectedState(LONG from, LONG* actual = NULL);
+		LONG WaitUntilNotInState(LONG state);
+		bool WaitWhileStopped();
+		void WaitForInterval(U64 beganWhen);
+		void UnlockTo(LONG state);
+
+		static VOID CALLBACK OnTimerElapsed_V2(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
+
+		void PreciseSleep(double seconds);
+
+		U64 InvalidBeganTime() const { return ~0ULL; }
+
+		LONG fState;
+		U64 fEvaluateBeganTime;
+		HANDLE fHandles[kNumHandles];
+		DWORD fThreadID;
+		INT64 fQpcPerSecond;
+		double fFPSInterval;
+		int fPeriodMin;
+		bool fRunning;
+// /STEVE CHANGE
 };
 
 }	// namespace Rtt

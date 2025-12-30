@@ -32,8 +32,12 @@ extern "C"
 {
 #	include "lua.h"
 }
-
-
+// STEVE CHANGE
+#define WM_USERMSG_KICK_FRAME WM_USER + 0x0F /* constant is arbitrary: change if necessary */
+#define WM_USERMSG_EVALUATED_FRAME WM_USER + 0x1F
+#define WM_USERMSG_START_TIMER WM_USER + 0x2F
+#define WM_USERMSG_STOP_TIMER WM_USER + 0x3F
+// /STEVE CHANGE
 #pragma region Forward Declarations
 namespace Interop
 {
@@ -107,7 +111,6 @@ class RuntimeEnvironment
 		typedef Event<RuntimeEnvironment&, const EventArgs&> TerminatingEvent;
 
 		#pragma endregion
-
 
 		#pragma region CreationSettings Structure
 		/// <summary>Provides settings to be passed into the static CreateUsing() function.</summary>
@@ -378,6 +381,8 @@ class RuntimeEnvironment
 		/// </summary>
 		/// <returns>Returns a Win32 "message-only window" used to post and receive private messages.</returns>
 		UI::MessageOnlyWindow& GetMessageOnlyWindow();
+
+		UI::MessageOnlyWindow& GetIpcMessageOnlyWindow(); // <- STEVE CHANGE
 
 		/// <summary>Gets a pointer to the main window that is hosting the rendering surface.</summary>
 		/// <returns>

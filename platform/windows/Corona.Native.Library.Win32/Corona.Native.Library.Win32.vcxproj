@@ -143,6 +143,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerOutput>NoListing</AssemblerOutput>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -364,7 +365,9 @@
     <ClCompile Include="Rtt\Rtt_WinPlatform.cpp" />
     <ClCompile Include="Rtt\Rtt_WinProjectSettings.cpp" />
     <ClCompile Include="Rtt\Rtt_WinScreenSurface.cpp" />
-    <ClCompile Include="Rtt\Rtt_WinTimer.cpp" />
+    <ClCompile Include="Rtt\Rtt_WinTimer.cpp">
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release.Simulator|Win32'">NoListing</AssemblerOutput>
+    </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinWebViewObject.cpp" /> 
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">Create</PrecompiledHeader>
