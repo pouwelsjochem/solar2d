@@ -905,6 +905,7 @@ Runtime::BeginRunLoop()
 
 	// PlatformTimer
 	fTimer->SetInterval( kInterval );
+	fTimer->SetInterval( 0x8000 | kFps ); // <- STEVE CHANGE
 
 	// Initial call to main.lua can cause runtime to be suspended,
 	// Otherwise, it's < 0 (i.e. uninitialized)
