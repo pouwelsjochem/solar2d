@@ -32,6 +32,7 @@
 #include "Rtt_WinBitmap.h"
 #include "Rtt_WinCrypto.h"
 #include "Rtt_WinScreenSurface.h"
+#include "Rtt_WinTextBoxObject.h"
 #include "Rtt_WinTimer.h"
 #include "Rtt_WinWebViewObject.h"
 #include "WinString.h"
@@ -1013,6 +1014,29 @@ namespace Rtt
 	bool WinPlatform::HidePopup(const char* name) const
 	{
 		return false;
+	}
+
+	PlatformDisplayObject* WinPlatform::CreateNativeTextField(const Rect& bounds) const
+	{
+		return Rtt_NEW(&GetAllocator(), WinTextBoxObject(fEnvironment, bounds));
+	}
+
+	void WinPlatform::SetKeyboardFocus(PlatformDisplayObject* displayObjectPointer) const
+	{
+		if (displayObjectPointer)
+		{
+			// Set the focus to the given native display object.
+			((WinDisplayObject*)displayObjectPointer)->SetFocus();
+		}
+		else
+		{
+			// Set the focus to the render surface control.
+			auto renderSurfacePointer = fEnvironment.GetRenderSurface();
+			if (renderSurfacePointer)
+			{
+				renderSurfacePointer->SetFocus();
+			}
+		}
 	}
 
 	void* WinPlatform::CreateAndScheduleNotification(lua_State* L, int index) const

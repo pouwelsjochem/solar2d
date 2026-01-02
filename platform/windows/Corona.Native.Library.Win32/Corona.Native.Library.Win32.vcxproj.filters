@@ -27,6 +27,9 @@
     <ClInclude Include="Rtt\Rtt_WinTimer.h">
       <Filter>Rtt</Filter>
     </ClInclude>
+    <ClInclude Include="Rtt\Rtt_WinTextBoxObject.h">
+      <Filter>Rtt</Filter>
+    </ClInclude>
     <ClInclude Include="Rtt\Rtt_WinWebViewObject.h"> 
       <Filter>Rtt</Filter> 
     </ClInclude>
@@ -106,6 +109,12 @@
       <Filter>Interop</Filter>
     </ClInclude>
     <ClInclude Include="Interop\UI\TaskDialogSettings.h">
+      <Filter>Interop\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\UI\TextBox.h">
+      <Filter>Interop\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Interop\UI\UITextChangedEventArgs.h">
       <Filter>Interop\UI</Filter>
     </ClInclude>
     <ClInclude Include="Interop\StaticFinalizer.h">
@@ -277,6 +286,9 @@
     <ClCompile Include="Rtt\Rtt_WinTimer.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
+    <ClCompile Include="Rtt\Rtt_WinTextBoxObject.cpp">
+      <Filter>Rtt</Filter>
+    </ClCompile>
     <ClCompile Include="Rtt\Rtt_WinWebViewObject.cpp"> 
       <Filter>Rtt</Filter> 
     </ClCompile> 
@@ -340,6 +352,12 @@
       <Filter>Interop\UI</Filter>
     </ClCompile>
     <ClCompile Include="Interop\UI\TaskDialogSettings.cpp">
+      <Filter>Interop\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\UI\TextBox.cpp">
+      <Filter>Interop\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\UI\UITextChangedEventArgs.cpp">
       <Filter>Interop\UI</Filter>
     </ClCompile>
     <ClCompile Include="Interop\StaticFinalizer.cpp">
