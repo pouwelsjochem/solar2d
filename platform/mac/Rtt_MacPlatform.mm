@@ -18,6 +18,7 @@
 #include "Rtt_MacViewSurface.h"
 #include "Rtt_MacVideoObject.h"
 #include "Rtt_MacWebViewObject.h"
+#include "Rtt_MacTextFieldObject.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_PreferenceCollection.h"
@@ -859,6 +860,31 @@ PlatformDisplayObject*
 MacPlatform::CreateNativeVideo( const Rect& bounds ) const
 {
 	return Rtt_NEW( & GetAllocator(), MacVideoObject( bounds ) );
+}
+
+PlatformDisplayObject*
+MacPlatform::CreateNativeTextField( const Rect& bounds ) const
+{
+	return Rtt_NEW( & GetAllocator(), MacTextFieldObject( bounds ) );
+}
+
+void
+MacPlatform::SetKeyboardFocus( PlatformDisplayObject *object ) const
+{
+	if ( object )
+	{
+		// Verify that this is actually a text field.
+		const LuaProxyVTable *vtable = & object->ProxyVTable();
+		if ( & PlatformDisplayObject::GetTextFieldObjectProxyVTable() == vtable )
+		{
+			((MacDisplayObject*)object)->SetFocus();
+		}
+	}
+	else
+	{
+		// There is no object specified. Return focus to the GLView.
+		[[fView window] performSelector:@selector(makeFirstResponder:) withObject:fView afterDelay:0.0];
+	}
 }
 
 BOOL

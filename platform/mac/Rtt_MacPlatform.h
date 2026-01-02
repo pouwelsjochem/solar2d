@@ -98,6 +98,8 @@ class MacPlatform : public ApplePlatform
 
 		virtual PlatformDisplayObject* CreateNativeWebView( const Rect& bounds ) const;
 		virtual PlatformDisplayObject* CreateNativeVideo( const Rect& bounds ) const;
+		virtual PlatformDisplayObject* CreateNativeTextField( const Rect& bounds ) const;
+		virtual void SetKeyboardFocus( PlatformDisplayObject *object ) const;
 
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
