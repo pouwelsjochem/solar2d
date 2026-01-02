@@ -500,7 +500,7 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 			if ( nil != [textfield superview] )
 			{
 				[textfield removeFromSuperview];
-				AddSubviewToLayerHostView();
+				AddSubviewToCoronaView();
 			}
 			
 			[new_field release];
