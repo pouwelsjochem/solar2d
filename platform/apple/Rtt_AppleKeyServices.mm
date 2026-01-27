@@ -14,8 +14,75 @@
 
 #ifdef Rtt_MAC_ENV
 #import <AppKit/AppKit.h>
+// Don't import Carbon - we'll dynamically load TIS functions at runtime
 #elif defined( Rtt_IPHONE_ENV ) || defined( Rtt_TVOS_ENV )
 #import <UIKit/UIKit.h>
+#endif
+
+#ifdef Rtt_MAC_ENV
+// Forward declarations for dynamically loaded types/functions
+typedef void* TISInputSourceRef;
+typedef const void* (*TISCopyInputSourceProc)(void);
+typedef void* (*TISGetPropertyProc)(TISInputSourceRef, CFStringRef);
+
+// UCKeyTranslate constants (from HIToolbox)
+enum {
+	kUCKeyActionDisplay = 3,
+	kUCKeyTranslateNoDeadKeysBit = 0
+};
+
+// UCKeyTranslate function type
+typedef SInt32 (*UCKeyTranslateProc)(
+	const void* keyLayoutPtr,
+	UInt16 virtualKeyCode,
+	UInt16 keyAction,
+	UInt32 modifierKeyState,
+	UInt32 keyboardType,
+	UInt32 keyTranslateOptions,
+	UInt32* deadKeyState,
+	UniCharCount maxStringLength,
+	UniCharCount* actualStringLength,
+	UniChar unicodeString[]);
+
+static UCKeyTranslateProc sUCKeyTranslate = NULL;
+
+// Function pointers for dynamic loading
+static TISCopyInputSourceProc sTISCopyCurrentKeyboardLayoutInputSource = NULL;
+static TISCopyInputSourceProc sTISCopyCurrentASCIICapableKeyboardLayoutInputSource = NULL;
+static TISGetPropertyProc sTISGetInputSourceProperty = NULL;
+static CFStringRef sPropertyUnicodeKeyLayoutDataKey = NULL;
+
+static void InitializeTISFunctions(void)
+{
+	static bool sInitialized = false;
+	if (sInitialized)
+	{
+		return;
+	}
+	sInitialized = true;
+
+	CFBundleRef bundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.HIToolbox"));
+	if (!bundle)
+	{
+		return;
+	}
+
+	sTISCopyCurrentKeyboardLayoutInputSource = (TISCopyInputSourceProc)
+		CFBundleGetFunctionPointerForName(bundle, CFSTR("TISCopyCurrentKeyboardLayoutInputSource"));
+	sTISCopyCurrentASCIICapableKeyboardLayoutInputSource = (TISCopyInputSourceProc)
+		CFBundleGetFunctionPointerForName(bundle, CFSTR("TISCopyCurrentASCIICapableKeyboardLayoutInputSource"));
+	sTISGetInputSourceProperty = (TISGetPropertyProc)
+		CFBundleGetFunctionPointerForName(bundle, CFSTR("TISGetInputSourceProperty"));
+	sUCKeyTranslate = (UCKeyTranslateProc)
+		CFBundleGetFunctionPointerForName(bundle, CFSTR("UCKeyTranslate"));
+
+	const CFStringRef *propertyKeyPointer = (const CFStringRef *)
+		CFBundleGetDataPointerForName(bundle, CFSTR("kTISPropertyUnicodeKeyLayoutData"));
+	if (propertyKeyPointer)
+	{
+		sPropertyUnicodeKeyLayoutDataKey = *propertyKeyPointer;
+	}
+}
 #endif
 
 @implementation AppleKeyServices
@@ -343,16 +410,112 @@ static NSDictionary *keyCodeDictionary = nil;
 #ifdef Rtt_MAC_ENV
 + (NSString*)getLayoutNameForQwertyKeyName:(NSString*)keyName
 {
-	// TODO: Implement keyboard layout translation for non-QWERTY keyboards
-	// This would require dynamically loading TIS* functions from HIToolbox.framework
-	// or linking against Carbon.framework. For now, return nil to use QWERTY key names.
-	//
-	// See GLView.mm's RttCoronaKeyNameForKeyCode() for a working implementation
-	// that is used for actual key events (but requires more dependencies).
-	//
-	// Simpler alternative: Just return the qwertyKeyName unchanged for a-z keys.
+	if (!keyName)
+	{
+		return nil;
+	}
 
-	return nil;
+	// Initialize TIS functions if needed
+	InitializeTISFunctions();
+	if (!sTISCopyCurrentKeyboardLayoutInputSource || !sTISGetInputSourceProperty)
+	{
+		return nil;
+	}
+
+	// Ensure keyNameDictionary is initialized.
+	if (!keyNameDictionary)
+	{
+		(void)[self getNameForKey:[NSNumber numberWithInt:kVK_ANSI_A]];
+	}
+
+	if (!keyNameDictionary)
+	{
+		return nil;
+	}
+
+	if (!keyCodeDictionary)
+	{
+		NSMutableDictionary *reverse = [NSMutableDictionary dictionaryWithCapacity:[keyNameDictionary count]];
+		[keyNameDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+			[reverse setObject:key forKey:obj];
+		}];
+		keyCodeDictionary = [reverse copy];
+	}
+
+	NSNumber *keyCode = [keyCodeDictionary objectForKey:keyName];
+	if (!keyCode)
+	{
+		NSString *lowerKeyName = [keyName lowercaseString];
+		keyCode = [keyCodeDictionary objectForKey:lowerKeyName];
+	}
+	if (!keyCode)
+	{
+		return nil;
+	}
+
+	TISInputSourceRef inputSource = sTISCopyCurrentKeyboardLayoutInputSource();
+	if (!inputSource && sTISCopyCurrentASCIICapableKeyboardLayoutInputSource)
+	{
+		inputSource = sTISCopyCurrentASCIICapableKeyboardLayoutInputSource();
+	}
+
+	if (!inputSource)
+	{
+		return nil;
+	}
+
+	CFStringRef propertyKey = sPropertyUnicodeKeyLayoutDataKey ? sPropertyUnicodeKeyLayoutDataKey : CFSTR("TISPropertyUnicodeKeyLayoutData");
+	CFDataRef layoutData = (CFDataRef)sTISGetInputSourceProperty(inputSource, propertyKey);
+	if (!layoutData)
+	{
+		CFRelease(inputSource);
+		return nil;
+	}
+
+	const void *keyboardLayout = (const void *)CFDataGetBytePtr(layoutData);
+	if (!keyboardLayout)
+	{
+		CFRelease(inputSource);
+		return nil;
+	}
+
+	if (!sUCKeyTranslate)
+	{
+		CFRelease(inputSource);
+		return nil;
+	}
+
+	UInt32 deadKeyState = 0;
+	UniChar unicodeString[4] = { 0 };
+	UniCharCount stringLength = 0;
+	// Use keyboard type 0 for generic keyboard (works for all modern Macs)
+	UInt32 keyboardType = 0;
+	OSStatus status = sUCKeyTranslate(
+		keyboardLayout,
+		(UInt16)[keyCode unsignedShortValue],
+		kUCKeyActionDisplay,
+		0,
+		keyboardType,
+		kUCKeyTranslateNoDeadKeysBit,
+		&deadKeyState,
+		sizeof(unicodeString) / sizeof(unicodeString[0]),
+		&stringLength,
+		unicodeString);
+
+	CFRelease(inputSource);
+
+	if ((status != 0) || (stringLength == 0))
+	{
+		return nil;
+	}
+
+	const char* coronaKeyName = Rtt::KeyName::FromCharacter(unicodeString[0]);
+	if (!coronaKeyName)
+	{
+		return nil;
+	}
+
+	return [NSString stringWithUTF8String:coronaKeyName];
 }
 #endif
 
