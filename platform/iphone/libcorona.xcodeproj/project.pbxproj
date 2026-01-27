@@ -223,6 +223,10 @@
 		0304FE93178E3AF80047CC04 /* Rtt_ReadOnlyInputDeviceCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 0304FE87178E3AF80047CC04 /* Rtt_ReadOnlyInputDeviceCollection.h */; };
 		0358A36E179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0358A36C179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.cpp */; };
 		0358A36F179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.h in Headers */ = {isa = PBXBuildFile; fileRef = 0358A36D179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.h */; };
+		CC30A1A017A3780900681DED /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC30A1D017A3780900681DED /* Rtt_ControllerTypeClassifier.cpp */; };
+		CC30A1A117A3780900681DED /* Rtt_ControllerTypeClassifier.h in Headers */ = {isa = PBXBuildFile; fileRef = CC30A1D117A3780900681DED /* Rtt_ControllerTypeClassifier.h */; };
+		CC30A1A217A3780900681DED /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC30A1D217A3780900681DED /* Rtt_GameControllerDB.cpp */; };
+		CC30A1A317A3780900681DED /* Rtt_GameControllerDB.h in Headers */ = {isa = PBXBuildFile; fileRef = CC30A1D317A3780900681DED /* Rtt_GameControllerDB.h */; };
 		0397046C17A3780900681DED /* Rtt_InputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397046217A3780900681DED /* Rtt_InputAxisCollection.cpp */; };
 		0397046D17A3780900681DED /* Rtt_InputAxisCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 0397046317A3780900681DED /* Rtt_InputAxisCollection.h */; };
 		0397046E17A3780900681DED /* Rtt_InputAxisDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397046417A3780900681DED /* Rtt_InputAxisDescriptor.cpp */; };
@@ -906,6 +910,10 @@
 		0304FE87178E3AF80047CC04 /* Rtt_ReadOnlyInputDeviceCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ReadOnlyInputDeviceCollection.h; path = Input/Rtt_ReadOnlyInputDeviceCollection.h; sourceTree = "<group>"; };
 		0358A36C179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputDeviceConnectionState.cpp; path = Input/Rtt_InputDeviceConnectionState.cpp; sourceTree = "<group>"; };
 		0358A36D179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_InputDeviceConnectionState.h; path = Input/Rtt_InputDeviceConnectionState.h; sourceTree = "<group>"; };
+		CC30A1D017A3780900681DED /* Rtt_ControllerTypeClassifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ControllerTypeClassifier.cpp; path = Input/Rtt_ControllerTypeClassifier.cpp; sourceTree = "<group>"; };
+		CC30A1D117A3780900681DED /* Rtt_ControllerTypeClassifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ControllerTypeClassifier.h; path = Input/Rtt_ControllerTypeClassifier.h; sourceTree = "<group>"; };
+		CC30A1D217A3780900681DED /* Rtt_GameControllerDB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GameControllerDB.cpp; path = Input/Rtt_GameControllerDB.cpp; sourceTree = "<group>"; };
+		CC30A1D317A3780900681DED /* Rtt_GameControllerDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GameControllerDB.h; path = Input/Rtt_GameControllerDB.h; sourceTree = "<group>"; };
 		0397046217A3780900681DED /* Rtt_InputAxisCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisCollection.cpp; path = Input/Rtt_InputAxisCollection.cpp; sourceTree = "<group>"; };
 		0397046317A3780900681DED /* Rtt_InputAxisCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_InputAxisCollection.h; path = Input/Rtt_InputAxisCollection.h; sourceTree = "<group>"; };
 		0397046417A3780900681DED /* Rtt_InputAxisDescriptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisDescriptor.cpp; path = Input/Rtt_InputAxisDescriptor.cpp; sourceTree = "<group>"; };
@@ -1803,6 +1811,10 @@
 		0304FE7B178E3AE90047CC04 /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				CC30A1D017A3780900681DED /* Rtt_ControllerTypeClassifier.cpp */,
+				CC30A1D117A3780900681DED /* Rtt_ControllerTypeClassifier.h */,
+				CC30A1D217A3780900681DED /* Rtt_GameControllerDB.cpp */,
+				CC30A1D317A3780900681DED /* Rtt_GameControllerDB.h */,
 				0397046217A3780900681DED /* Rtt_InputAxisCollection.cpp */,
 				0397046317A3780900681DED /* Rtt_InputAxisCollection.h */,
 				0397046417A3780900681DED /* Rtt_InputAxisDescriptor.cpp */,
@@ -2410,6 +2422,8 @@
 				0304FE93178E3AF80047CC04 /* Rtt_ReadOnlyInputDeviceCollection.h in Headers */,
 				1B10CFE4253893AA00F48B3A /* Rtt_SpriteSequence.h in Headers */,
 				0358A36F179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.h in Headers */,
+				CC30A1A117A3780900681DED /* Rtt_ControllerTypeClassifier.h in Headers */,
+				CC30A1A317A3780900681DED /* Rtt_GameControllerDB.h in Headers */,
 				0397046D17A3780900681DED /* Rtt_InputAxisCollection.h in Headers */,
 				0397046F17A3780900681DED /* Rtt_InputAxisDescriptor.h in Headers */,
 				0397047117A3780900681DED /* Rtt_InputAxisType.h in Headers */,
@@ -2921,6 +2935,8 @@
 				0304FE90178E3AF80047CC04 /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				0304FE92178E3AF80047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				0358A36E179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.cpp in Sources */,
+				CC30A1A017A3780900681DED /* Rtt_ControllerTypeClassifier.cpp in Sources */,
+				CC30A1A217A3780900681DED /* Rtt_GameControllerDB.cpp in Sources */,
 				0397046C17A3780900681DED /* Rtt_InputAxisCollection.cpp in Sources */,
 				0397046E17A3780900681DED /* Rtt_InputAxisDescriptor.cpp in Sources */,
 				0397047017A3780900681DED /* Rtt_InputAxisType.cpp in Sources */,

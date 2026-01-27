@@ -387,6 +387,8 @@
 		A4DD47DF1BB25D1C00FD988E /* CoronaProvider.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4551E911BAA180C00FB3BDF /* CoronaProvider.lua */; };
 		A4DD47E01BB25D1C00FD988E /* init.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4DD47DB1BB25CFA00FD988E /* init.lua */; };
 		A4DD47E31BB25D7B00FD988E /* shell.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4DD47E21BB25D6600FD988E /* shell.lua */; };
+		CC40A1A01BB260B200FD988E /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC40A1D01BB260B200FD988E /* Rtt_ControllerTypeClassifier.cpp */; };
+		CC40A1A11BB260B200FD988E /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC40A1D21BB260B200FD988E /* Rtt_GameControllerDB.cpp */; };
 		A4DD47FD1BB260B200FD988E /* Rtt_InputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4DD47E51BB260B200FD988E /* Rtt_InputAxisCollection.cpp */; };
 		A4DD47FE1BB260B200FD988E /* Rtt_InputAxisDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4DD47E71BB260B200FD988E /* Rtt_InputAxisDescriptor.cpp */; };
 		A4DD47FF1BB260B200FD988E /* Rtt_InputAxisType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4DD47E91BB260B200FD988E /* Rtt_InputAxisType.cpp */; };
@@ -2074,6 +2076,10 @@
 		A4DD47D71BB25C7D00FD988E /* re.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = re.lua; path = ../../external/lpeg/re.lua; sourceTree = SOURCE_ROOT; };
 		A4DD47DB1BB25CFA00FD988E /* init.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = init.lua; path = ../resources/init.lua; sourceTree = "<group>"; };
 		A4DD47E21BB25D6600FD988E /* shell.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shell.lua; path = ../iphone/shell.lua; sourceTree = "<group>"; };
+		CC40A1D01BB260B200FD988E /* Rtt_ControllerTypeClassifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ControllerTypeClassifier.cpp; path = ../../librtt/Input/Rtt_ControllerTypeClassifier.cpp; sourceTree = "<group>"; };
+		CC40A1D11BB260B200FD988E /* Rtt_ControllerTypeClassifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ControllerTypeClassifier.h; path = ../../librtt/Input/Rtt_ControllerTypeClassifier.h; sourceTree = "<group>"; };
+		CC40A1D21BB260B200FD988E /* Rtt_GameControllerDB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GameControllerDB.cpp; path = ../../librtt/Input/Rtt_GameControllerDB.cpp; sourceTree = "<group>"; };
+		CC40A1D31BB260B200FD988E /* Rtt_GameControllerDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GameControllerDB.h; path = ../../librtt/Input/Rtt_GameControllerDB.h; sourceTree = "<group>"; };
 		A4DD47E51BB260B200FD988E /* Rtt_InputAxisCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisCollection.cpp; path = ../../librtt/Input/Rtt_InputAxisCollection.cpp; sourceTree = "<group>"; };
 		A4DD47E61BB260B200FD988E /* Rtt_InputAxisCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_InputAxisCollection.h; path = ../../librtt/Input/Rtt_InputAxisCollection.h; sourceTree = "<group>"; };
 		A4DD47E71BB260B200FD988E /* Rtt_InputAxisDescriptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisDescriptor.cpp; path = ../../librtt/Input/Rtt_InputAxisDescriptor.cpp; sourceTree = "<group>"; };
@@ -3364,6 +3370,10 @@
 		A4DD47E41BB2609E00FD988E /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				CC40A1D01BB260B200FD988E /* Rtt_ControllerTypeClassifier.cpp */,
+				CC40A1D11BB260B200FD988E /* Rtt_ControllerTypeClassifier.h */,
+				CC40A1D21BB260B200FD988E /* Rtt_GameControllerDB.cpp */,
+				CC40A1D31BB260B200FD988E /* Rtt_GameControllerDB.h */,
 				A4DD47E51BB260B200FD988E /* Rtt_InputAxisCollection.cpp */,
 				A4DD47E61BB260B200FD988E /* Rtt_InputAxisCollection.h */,
 				A4DD47E71BB260B200FD988E /* Rtt_InputAxisDescriptor.cpp */,
@@ -4793,6 +4803,8 @@
 				A4DD47DD1BB25D1C00FD988E /* CoronaLibrary.lua in Sources */,
 				A4DD47DE1BB25D1C00FD988E /* CoronaPrototype.lua in Sources */,
 				A4DD47DF1BB25D1C00FD988E /* CoronaProvider.lua in Sources */,
+				CC40A1A01BB260B200FD988E /* Rtt_ControllerTypeClassifier.cpp in Sources */,
+				CC40A1A11BB260B200FD988E /* Rtt_GameControllerDB.cpp in Sources */,
 				A4DD47FD1BB260B200FD988E /* Rtt_InputAxisCollection.cpp in Sources */,
 				A4DD47E01BB25D1C00FD988E /* init.lua in Sources */,
 				A4DD47D91BB25C9600FD988E /* re.lua in Sources */,
