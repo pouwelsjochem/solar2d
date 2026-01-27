@@ -718,8 +718,6 @@
 		C229E0E71B32221B00D87A7C /* Rtt_ImageSheetPaint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328803176A621100ACB6FF /* Rtt_ImageSheetPaint.cpp */; };
 		C229E0E81B32221B00D87A7C /* Rtt_ImageSheetPaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5800DF61AE0320D00D11339 /* Rtt_ImageSheetPaintAdapter.cpp */; };
 		C229E0E91B32221B00D87A7C /* Rtt_ImageSheetUserdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4328805176A621100ACB6FF /* Rtt_ImageSheetUserdata.cpp */; };
-		CC10A1A01B32221B00D87A7C /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC10A1D01B32221B00D87A7C /* Rtt_ControllerTypeClassifier.cpp */; };
-		CC10A1A11B32221B00D87A7C /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC10A1D21B32221B00D87A7C /* Rtt_GameControllerDB.cpp */; };
 		C229E0EA1B32221B00D87A7C /* Rtt_InputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043717A3774E00681DED /* Rtt_InputAxisCollection.cpp */; };
 		C229E0EB1B32221B00D87A7C /* Rtt_InputAxisDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043917A3774E00681DED /* Rtt_InputAxisDescriptor.cpp */; };
 		C229E0EC1B32221B00D87A7C /* Rtt_InputAxisType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043B17A3774E00681DED /* Rtt_InputAxisType.cpp */; };
@@ -1106,8 +1104,6 @@
 		C2E993391A6B2FEC00E99F46 /* Rtt_ShaderProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0707FA4117FCBE3300303473 /* Rtt_ShaderProxy.cpp */; };
 		C2E9933A1A6B2FEC00E99F46 /* Rtt_ShaderResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 072020D917C58D5100B6D424 /* Rtt_ShaderResource.cpp */; };
 		C2E9933B1A6B2FEC00E99F46 /* Rtt_ShaderTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 072020F817C58EBB00B6D424 /* Rtt_ShaderTypes.cpp */; };
-		CC10A2A01A6B2FEC00E99F46 /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC10A1D01B32221B00D87A7C /* Rtt_ControllerTypeClassifier.cpp */; };
-		CC10A2A11A6B2FEC00E99F46 /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC10A1D21B32221B00D87A7C /* Rtt_GameControllerDB.cpp */; };
 		C2E9933C1A6B2FEC00E99F46 /* Rtt_InputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043717A3774E00681DED /* Rtt_InputAxisCollection.cpp */; };
 		C2E9933D1A6B2FEC00E99F46 /* Rtt_InputAxisDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043917A3774E00681DED /* Rtt_InputAxisDescriptor.cpp */; };
 		C2E9933E1A6B2FEC00E99F46 /* Rtt_InputAxisType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043B17A3774E00681DED /* Rtt_InputAxisType.cpp */; };
@@ -2060,10 +2056,6 @@
 		0304FE71178E18B00047CC04 /* Rtt_ReadOnlyInputDeviceCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ReadOnlyInputDeviceCollection.h; path = Input/Rtt_ReadOnlyInputDeviceCollection.h; sourceTree = "<group>"; };
 		0358A360179A35A30011B8E7 /* Rtt_InputDeviceConnectionState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputDeviceConnectionState.cpp; path = Input/Rtt_InputDeviceConnectionState.cpp; sourceTree = "<group>"; };
 		0358A361179A35A40011B8E7 /* Rtt_InputDeviceConnectionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_InputDeviceConnectionState.h; path = Input/Rtt_InputDeviceConnectionState.h; sourceTree = "<group>"; };
-		CC10A1D01B32221B00D87A7C /* Rtt_ControllerTypeClassifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ControllerTypeClassifier.cpp; path = Input/Rtt_ControllerTypeClassifier.cpp; sourceTree = "<group>"; };
-		CC10A1D11B32221B00D87A7C /* Rtt_ControllerTypeClassifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ControllerTypeClassifier.h; path = Input/Rtt_ControllerTypeClassifier.h; sourceTree = "<group>"; };
-		CC10A1D21B32221B00D87A7C /* Rtt_GameControllerDB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GameControllerDB.cpp; path = Input/Rtt_GameControllerDB.cpp; sourceTree = "<group>"; };
-		CC10A1D31B32221B00D87A7C /* Rtt_GameControllerDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GameControllerDB.h; path = Input/Rtt_GameControllerDB.h; sourceTree = "<group>"; };
 		0397043717A3774E00681DED /* Rtt_InputAxisCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisCollection.cpp; path = Input/Rtt_InputAxisCollection.cpp; sourceTree = "<group>"; };
 		0397043817A3774E00681DED /* Rtt_InputAxisCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_InputAxisCollection.h; path = Input/Rtt_InputAxisCollection.h; sourceTree = "<group>"; };
 		0397043917A3774E00681DED /* Rtt_InputAxisDescriptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisDescriptor.cpp; path = Input/Rtt_InputAxisDescriptor.cpp; sourceTree = "<group>"; };
@@ -3350,10 +3342,6 @@
 		0304FE5F178E189B0047CC04 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				CC10A1D01B32221B00D87A7C /* Rtt_ControllerTypeClassifier.cpp */,
-				CC10A1D11B32221B00D87A7C /* Rtt_ControllerTypeClassifier.h */,
-				CC10A1D21B32221B00D87A7C /* Rtt_GameControllerDB.cpp */,
-				CC10A1D31B32221B00D87A7C /* Rtt_GameControllerDB.h */,
 				0397043717A3774E00681DED /* Rtt_InputAxisCollection.cpp */,
 				0397043817A3774E00681DED /* Rtt_InputAxisCollection.h */,
 				0397043917A3774E00681DED /* Rtt_InputAxisDescriptor.cpp */,
@@ -5257,8 +5245,6 @@
 				A4328862176A621200ACB6FF /* Rtt_ImageSheetPaint.cpp in Sources */,
 				F5800DF81AE0320D00D11339 /* Rtt_ImageSheetPaintAdapter.cpp in Sources */,
 				A4328864176A621200ACB6FF /* Rtt_ImageSheetUserdata.cpp in Sources */,
-				CC10A2A01A6B2FEC00E99F46 /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				CC10A2A11A6B2FEC00E99F46 /* Rtt_GameControllerDB.cpp in Sources */,
 				C2E9933C1A6B2FEC00E99F46 /* Rtt_InputAxisCollection.cpp in Sources */,
 				C2E9933D1A6B2FEC00E99F46 /* Rtt_InputAxisDescriptor.cpp in Sources */,
 				F53594BB1B6185EA00C8CAAD /* Rtt_TextureResourceCanvasAdapter.cpp in Sources */,
@@ -5691,8 +5677,6 @@
 				C229E0E71B32221B00D87A7C /* Rtt_ImageSheetPaint.cpp in Sources */,
 				C229E0E81B32221B00D87A7C /* Rtt_ImageSheetPaintAdapter.cpp in Sources */,
 				C229E0E91B32221B00D87A7C /* Rtt_ImageSheetUserdata.cpp in Sources */,
-				CC10A1A01B32221B00D87A7C /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				CC10A1A11B32221B00D87A7C /* Rtt_GameControllerDB.cpp in Sources */,
 				C229E0EA1B32221B00D87A7C /* Rtt_InputAxisCollection.cpp in Sources */,
 				C229E0EB1B32221B00D87A7C /* Rtt_InputAxisDescriptor.cpp in Sources */,
 				F53594BC1B6185EA00C8CAAD /* Rtt_TextureResourceCanvasAdapter.cpp in Sources */,

@@ -15,8 +15,6 @@
 		0304FEA9178E3E380047CC04 /* Rtt_PlatformInputDeviceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FEA1178E3E380047CC04 /* Rtt_PlatformInputDeviceManager.cpp */; };
 		0304FEAA178E3E380047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FEA3178E3E380047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp */; };
 		036F9493179DACFA00BF0DEE /* Rtt_InputDeviceConnectionState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 036F9491179DACFA00BF0DEE /* Rtt_InputDeviceConnectionState.cpp */; };
-		CC20A1A017A377AD00681DED /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC20A1D017A377AD00681DED /* Rtt_ControllerTypeClassifier.cpp */; };
-		CC20A1A117A377AD00681DED /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC20A1D217A377AD00681DED /* Rtt_GameControllerDB.cpp */; };
 		0397045717A377AD00681DED /* Rtt_InputAxisCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397044D17A377AD00681DED /* Rtt_InputAxisCollection.cpp */; };
 		0397045817A377AD00681DED /* Rtt_InputAxisDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397044F17A377AD00681DED /* Rtt_InputAxisDescriptor.cpp */; };
 		0397045917A377AD00681DED /* Rtt_InputAxisType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397045117A377AD00681DED /* Rtt_InputAxisType.cpp */; };
@@ -335,10 +333,6 @@
 		0304FEA4178E3E380047CC04 /* Rtt_ReadOnlyInputDeviceCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ReadOnlyInputDeviceCollection.h; path = ../../librtt/Input/Rtt_ReadOnlyInputDeviceCollection.h; sourceTree = "<group>"; };
 		036F9491179DACFA00BF0DEE /* Rtt_InputDeviceConnectionState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputDeviceConnectionState.cpp; path = ../../librtt/Input/Rtt_InputDeviceConnectionState.cpp; sourceTree = "<group>"; };
 		036F9492179DACFA00BF0DEE /* Rtt_InputDeviceConnectionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_InputDeviceConnectionState.h; path = ../../librtt/Input/Rtt_InputDeviceConnectionState.h; sourceTree = "<group>"; };
-		CC20A1D017A377AD00681DED /* Rtt_ControllerTypeClassifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ControllerTypeClassifier.cpp; path = ../../librtt/Input/Rtt_ControllerTypeClassifier.cpp; sourceTree = "<group>"; };
-		CC20A1D117A377AD00681DED /* Rtt_ControllerTypeClassifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ControllerTypeClassifier.h; path = ../../librtt/Input/Rtt_ControllerTypeClassifier.h; sourceTree = "<group>"; };
-		CC20A1D217A377AD00681DED /* Rtt_GameControllerDB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GameControllerDB.cpp; path = ../../librtt/Input/Rtt_GameControllerDB.cpp; sourceTree = "<group>"; };
-		CC20A1D317A377AD00681DED /* Rtt_GameControllerDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GameControllerDB.h; path = ../../librtt/Input/Rtt_GameControllerDB.h; sourceTree = "<group>"; };
 		0397044D17A377AD00681DED /* Rtt_InputAxisCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisCollection.cpp; path = ../../librtt/Input/Rtt_InputAxisCollection.cpp; sourceTree = "<group>"; };
 		0397044E17A377AD00681DED /* Rtt_InputAxisCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_InputAxisCollection.h; path = ../../librtt/Input/Rtt_InputAxisCollection.h; sourceTree = "<group>"; };
 		0397044F17A377AD00681DED /* Rtt_InputAxisDescriptor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_InputAxisDescriptor.cpp; path = ../../librtt/Input/Rtt_InputAxisDescriptor.cpp; sourceTree = "<group>"; };
@@ -553,10 +547,6 @@
 		0304FE95178E3E210047CC04 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				CC20A1D017A377AD00681DED /* Rtt_ControllerTypeClassifier.cpp */,
-				CC20A1D117A377AD00681DED /* Rtt_ControllerTypeClassifier.h */,
-				CC20A1D217A377AD00681DED /* Rtt_GameControllerDB.cpp */,
-				CC20A1D317A377AD00681DED /* Rtt_GameControllerDB.h */,
 				0397044D17A377AD00681DED /* Rtt_InputAxisCollection.cpp */,
 				0397044E17A377AD00681DED /* Rtt_InputAxisCollection.h */,
 				0397044F17A377AD00681DED /* Rtt_InputAxisDescriptor.cpp */,
@@ -1336,8 +1326,6 @@
 				0304FEA9178E3E380047CC04 /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				0304FEAA178E3E380047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				036F9493179DACFA00BF0DEE /* Rtt_InputDeviceConnectionState.cpp in Sources */,
-				CC20A1A017A377AD00681DED /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				CC20A1A117A377AD00681DED /* Rtt_GameControllerDB.cpp in Sources */,
 				0397045717A377AD00681DED /* Rtt_InputAxisCollection.cpp in Sources */,
 				0397045817A377AD00681DED /* Rtt_InputAxisDescriptor.cpp in Sources */,
 				0397045917A377AD00681DED /* Rtt_InputAxisType.cpp in Sources */,
