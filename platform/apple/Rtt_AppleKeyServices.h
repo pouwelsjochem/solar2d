@@ -11,7 +11,7 @@
 
 #ifdef Rtt_MAC_ENV
 #import <AppKit/AppKit.h>
-// TIS* and UCKeyTranslate functions are dynamically loaded at runtime - no static imports needed
+#import <Carbon/Carbon.h>
 #endif
 enum KeyCodes
 {
