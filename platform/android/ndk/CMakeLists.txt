@@ -335,6 +335,8 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Input/Rtt_InputAxisCollection.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_InputAxisDescriptor.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_InputAxisType.cpp
+		${CORONA_ROOT}/librtt/Input/Rtt_ControllerTypeClassifier.cpp
+		${CORONA_ROOT}/librtt/Input/Rtt_GameControllerDB.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_InputDeviceCollection.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_InputDeviceConnectionState.cpp
 		${CORONA_ROOT}/librtt/Input/Rtt_InputDeviceDescriptor.cpp
