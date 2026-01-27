@@ -84,6 +84,7 @@ class WinPlatform : public MPlatform
 		virtual void SetNativeProperty(lua_State *L, const char *key, int valueIndex) const;
 		virtual int PushNativeProperty(lua_State *L, const char *key) const;
 		virtual int PushSystemInfo(lua_State *L, const char *key) const;
+		virtual const char* GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const;
 		virtual void RuntimeErrorNotification(const char *errorType, const char *message, const char *stacktrace) const;
 		virtual void RaiseError(MPlatform::Error e, const char* reason) const;
 		virtual void PathForFile(const char* filename, MPlatform::Directory baseDir, U32 flags, String & result) const;

@@ -490,7 +490,36 @@ LuaLibSystem::getInfo( lua_State *L )
         result = platform.PushSystemInfo( L, key );
     }
     
-    return result;
+	return result;
+}
+
+static int
+getKeyNameForQwertyKeyName( lua_State *L )
+{
+	const char* kApiName = "system.getKeyNameForQwertyKeyName()";
+	if ( !lua_isstring( L, 1 ) )
+	{
+		CoronaLuaError( L, "%s expects a string as argument #1 (got %s)",
+						kApiName, lua_typename( L, lua_type( L, 1 ) ) );
+	}
+
+	const char* qwertyKeyName = lua_tostring( L, 1 );
+	if ( Rtt_StringIsEmpty( qwertyKeyName ) )
+	{
+		lua_pushnil( L );
+		return 1;
+	}
+
+	const char* mappedKeyName = LuaContext::GetPlatform( L ).GetKeyNameForQwertyKeyName( qwertyKeyName );
+	if ( mappedKeyName )
+	{
+		lua_pushstring( L, mappedKeyName );
+	}
+	else
+	{
+		lua_pushnil( L );
+	}
+	return 1;
 }
 
     
@@ -1655,6 +1684,7 @@ LuaLibSystem::Initialize( lua_State *L )
         { "vibrate", vibrate },
         { "setIdleTimer", setIdleTimer },
         { "getIdleTimer", getIdleTimer },
+        { "getKeyNameForQwertyKeyName", getKeyNameForQwertyKeyName },
         { "getPreference", getPreference },
         { "setPreferences", setPreferences },
         { "deletePreference", deletePreference },
@@ -1726,4 +1756,3 @@ LuaLibSystem::ValueForKey( lua_State *L, const MLuaProxyable&, const char key[])
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -99,74 +99,7 @@ static void RttInitializeKeyboardLayoutFunctions()
 
 static const char *RttCoronaKeyNameForLayoutCharacter(unichar character)
 {
-	if (character <= 0xFF)
-	{
-		character = (unichar)tolower((unsigned char)character);
-	}
-
-	switch ( character )
-	{
-		case 'a': return Rtt::KeyName::kA;
-		case 'b': return Rtt::KeyName::kB;
-		case 'c': return Rtt::KeyName::kC;
-		case 'd': return Rtt::KeyName::kD;
-		case 'e': return Rtt::KeyName::kE;
-		case 'f': return Rtt::KeyName::kF;
-		case 'g': return Rtt::KeyName::kG;
-		case 'h': return Rtt::KeyName::kH;
-		case 'i': return Rtt::KeyName::kI;
-		case 'j': return Rtt::KeyName::kJ;
-		case 'k': return Rtt::KeyName::kK;
-		case 'l': return Rtt::KeyName::kL;
-		case 'm': return Rtt::KeyName::kM;
-		case 'n': return Rtt::KeyName::kN;
-		case 'o': return Rtt::KeyName::kO;
-		case 'p': return Rtt::KeyName::kP;
-		case 'q': return Rtt::KeyName::kQ;
-		case 'r': return Rtt::KeyName::kR;
-		case 's': return Rtt::KeyName::kS;
-		case 't': return Rtt::KeyName::kT;
-		case 'u': return Rtt::KeyName::kU;
-		case 'v': return Rtt::KeyName::kV;
-		case 'w': return Rtt::KeyName::kW;
-		case 'x': return Rtt::KeyName::kX;
-		case 'y': return Rtt::KeyName::kY;
-		case 'z': return Rtt::KeyName::kZ;
-		case '0': return Rtt::KeyName::k0;
-		case '1': return Rtt::KeyName::k1;
-		case '2': return Rtt::KeyName::k2;
-		case '3': return Rtt::KeyName::k3;
-		case '4': return Rtt::KeyName::k4;
-		case '5': return Rtt::KeyName::k5;
-		case '6': return Rtt::KeyName::k6;
-		case '7': return Rtt::KeyName::k7;
-		case '8': return Rtt::KeyName::k8;
-		case '9': return Rtt::KeyName::k9;
-		case '-':
-		case '_': return Rtt::KeyName::kMinus;
-		case '=':
-		case '+': return Rtt::KeyName::kEquals;
-		case '[':
-		case '{': return Rtt::KeyName::kLeftBracket;
-		case ']':
-		case '}': return Rtt::KeyName::kRightBracket;
-		case '\\':
-		case '|': return Rtt::KeyName::kBackSlash;
-		case ';':
-		case ':': return Rtt::KeyName::kSemicolon;
-		case '\'':
-		case '"': return Rtt::KeyName::kApostrophe;
-		case ',':
-		case '<': return Rtt::KeyName::kComma;
-		case '.':
-		case '>': return Rtt::KeyName::kPeriod;
-		case '/':
-		case '?': return Rtt::KeyName::kForwardSlash;
-		case '`':
-		case '~': return Rtt::KeyName::kBackTick;
-		default:
-			return NULL;
-	}
+	return Rtt::KeyName::FromCharacter(character);
 }
 
 static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)

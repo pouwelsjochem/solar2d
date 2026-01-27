@@ -19,6 +19,7 @@
 #include "Rtt_MacVideoObject.h"
 #include "Rtt_MacWebViewObject.h"
 #include "Rtt_MacTextFieldObject.h"
+#include "Rtt_AppleKeyServices.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_PreferenceCollection.h"
@@ -847,6 +848,23 @@ MacPlatform::PushSystemInfo( lua_State *L, const char *key ) const
 
 	// Return the number of values pushed into Lua.
 	return pushedValues;
+}
+
+const char*
+MacPlatform::GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const
+{
+	if ( !qwertyKeyName || ('\0' == qwertyKeyName[0]) )
+	{
+		return NULL;
+	}
+
+	NSString *layoutKeyName = [AppleKeyServices getLayoutNameForQwertyKeyName:[NSString stringWithUTF8String:qwertyKeyName]];
+	if ( !layoutKeyName )
+	{
+		return NULL;
+	}
+
+	return [layoutKeyName UTF8String];
 }
 
 // ----------------------------------------------------------------------------

@@ -22,6 +22,9 @@
 @implementation AppleKeyServices
 
 static NSDictionary *keyNameDictionary = nil;
+#ifdef Rtt_MAC_ENV
+static NSDictionary *keyCodeDictionary = nil;
+#endif
 
 + (NSString*)getNameForKey:(NSNumber*)keyCode
 {
@@ -335,7 +338,104 @@ static NSDictionary *keyNameDictionary = nil;
     #endif
 
 	}
-	return 0;
+    return 0;
 }
+
+#ifdef Rtt_MAC_ENV
++ (NSString*)getLayoutNameForQwertyKeyName:(NSString*)keyName
+{
+	if (!keyName)
+	{
+		return nil;
+	}
+
+	// Ensure keyNameDictionary is initialized.
+	if (!keyNameDictionary)
+	{
+		(void)[self getNameForKey:[NSNumber numberWithInt:kVK_ANSI_A]];
+	}
+
+	if (!keyNameDictionary)
+	{
+		return nil;
+	}
+
+	if (!keyCodeDictionary)
+	{
+		NSMutableDictionary *reverse = [NSMutableDictionary dictionaryWithCapacity:[keyNameDictionary count]];
+		[keyNameDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+			[reverse setObject:key forKey:obj];
+		}];
+		keyCodeDictionary = [reverse copy];
+	}
+
+	NSNumber *keyCode = [keyCodeDictionary objectForKey:keyName];
+	if (!keyCode)
+	{
+		NSString *lowerKeyName = [keyName lowercaseString];
+		keyCode = [keyCodeDictionary objectForKey:lowerKeyName];
+	}
+	if (!keyCode)
+	{
+		return nil;
+	}
+
+	TISInputSourceRef inputSource = TISCopyCurrentKeyboardLayoutInputSource();
+	if (!inputSource)
+	{
+		inputSource = TISCopyCurrentASCIICapableKeyboardLayoutInputSource();
+	}
+
+	if (!inputSource)
+	{
+		return nil;
+	}
+
+	CFDataRef layoutData = (CFDataRef)TISGetInputSourceProperty(inputSource, kTISPropertyUnicodeKeyLayoutData);
+	if (!layoutData)
+	{
+		CFRelease(inputSource);
+		return nil;
+	}
+
+	const UCKeyboardLayout *keyboardLayout = (const UCKeyboardLayout *)CFDataGetBytePtr(layoutData);
+	if (!keyboardLayout)
+	{
+		CFRelease(inputSource);
+		return nil;
+	}
+
+	UInt32 deadKeyState = 0;
+	UniChar unicodeString[4] = { 0 };
+	UniCharCount stringLength = 0;
+	UInt32 keyboardType = (UInt32)LMGetKbdType();
+	OSStatus status = UCKeyTranslate(
+		keyboardLayout,
+		(UInt16)[keyCode unsignedShortValue],
+		kUCKeyActionDisplay,
+		0,
+		keyboardType,
+		kUCKeyTranslateNoDeadKeysBit,
+		&deadKeyState,
+		sizeof(unicodeString) / sizeof(unicodeString[0]),
+		&stringLength,
+		unicodeString);
+
+	CFRelease(inputSource);
+
+	if ((status != noErr) || (stringLength == 0))
+	{
+		return nil;
+	}
+
+	const char* coronaKeyName = Rtt::KeyName::FromCharacter(unicodeString[0]);
+	if (!coronaKeyName)
+	{
+		return nil;
+	}
+
+	return [NSString stringWithUTF8String:coronaKeyName];
+}
+#endif
 
 @end

@@ -144,6 +144,10 @@ namespace Rtt
 
 		extern const char kRightCommand[];
 
+		// Maps a Unicode character to a Corona key name string.
+		// Returns NULL if the character is not supported.
+		const char* FromCharacter( unsigned int character );
+
 		extern const char kApostrophe[];
 
 		extern const char kAt[];

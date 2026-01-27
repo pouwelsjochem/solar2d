@@ -29,6 +29,7 @@
 #include "Rtt_NativeWindowMode.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_String.h"
+#include "Rtt_KeyName.h"
 #include "Rtt_WinBitmap.h"
 #include "Rtt_WinCrypto.h"
 #include "Rtt_WinScreenSurface.h"
@@ -39,8 +40,11 @@
 #include <algorithm>
 #include <Gdiplus.h>
 #include <Gdipluscolor.h>
+#include <cctype>
 #include <io.h>
 #include <shellapi.h>
+#include <string>
+#include <string.h>
 #include <Shlobj.h>
 #include <Shlwapi.h>
 #include <WinInet.h>
@@ -56,6 +60,80 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 namespace Rtt
 {
+	static UINT ScanCodeForQwertyKeyName(const char* qwertyKeyName)
+	{
+		if (!qwertyKeyName || ('\0' == qwertyKeyName[0]))
+		{
+			return 0;
+		}
+
+		struct Entry
+		{
+			const char* name;
+			UINT scanCode;
+		};
+
+		static const Entry kScanCodes[] =
+		{
+			{ Rtt::KeyName::k1, 0x02 },
+			{ Rtt::KeyName::k2, 0x03 },
+			{ Rtt::KeyName::k3, 0x04 },
+			{ Rtt::KeyName::k4, 0x05 },
+			{ Rtt::KeyName::k5, 0x06 },
+			{ Rtt::KeyName::k6, 0x07 },
+			{ Rtt::KeyName::k7, 0x08 },
+			{ Rtt::KeyName::k8, 0x09 },
+			{ Rtt::KeyName::k9, 0x0A },
+			{ Rtt::KeyName::k0, 0x0B },
+			{ Rtt::KeyName::kMinus, 0x0C },
+			{ Rtt::KeyName::kEquals, 0x0D },
+			{ Rtt::KeyName::kQ, 0x10 },
+			{ Rtt::KeyName::kW, 0x11 },
+			{ Rtt::KeyName::kE, 0x12 },
+			{ Rtt::KeyName::kR, 0x13 },
+			{ Rtt::KeyName::kT, 0x14 },
+			{ Rtt::KeyName::kY, 0x15 },
+			{ Rtt::KeyName::kU, 0x16 },
+			{ Rtt::KeyName::kI, 0x17 },
+			{ Rtt::KeyName::kO, 0x18 },
+			{ Rtt::KeyName::kP, 0x19 },
+			{ Rtt::KeyName::kLeftBracket, 0x1A },
+			{ Rtt::KeyName::kRightBracket, 0x1B },
+			{ Rtt::KeyName::kA, 0x1E },
+			{ Rtt::KeyName::kS, 0x1F },
+			{ Rtt::KeyName::kD, 0x20 },
+			{ Rtt::KeyName::kF, 0x21 },
+			{ Rtt::KeyName::kG, 0x22 },
+			{ Rtt::KeyName::kH, 0x23 },
+			{ Rtt::KeyName::kJ, 0x24 },
+			{ Rtt::KeyName::kK, 0x25 },
+			{ Rtt::KeyName::kL, 0x26 },
+			{ Rtt::KeyName::kSemicolon, 0x27 },
+			{ Rtt::KeyName::kApostrophe, 0x28 },
+			{ Rtt::KeyName::kBackTick, 0x29 },
+			{ Rtt::KeyName::kBackSlash, 0x2B },
+			{ Rtt::KeyName::kZ, 0x2C },
+			{ Rtt::KeyName::kX, 0x2D },
+			{ Rtt::KeyName::kC, 0x2E },
+			{ Rtt::KeyName::kV, 0x2F },
+			{ Rtt::KeyName::kB, 0x30 },
+			{ Rtt::KeyName::kN, 0x31 },
+			{ Rtt::KeyName::kM, 0x32 },
+			{ Rtt::KeyName::kComma, 0x33 },
+			{ Rtt::KeyName::kPeriod, 0x34 },
+			{ Rtt::KeyName::kForwardSlash, 0x35 },
+		};
+
+		for (const auto& entry : kScanCodes)
+		{
+			if (strcmp(qwertyKeyName, entry.name) == 0)
+			{
+				return entry.scanCode;
+			}
+		}
+
+		return 0;
+	}
 
 	WinPlatform::WinPlatform(Interop::RuntimeEnvironment& environment)
 		: fEnvironment(environment),
@@ -1454,6 +1532,45 @@ namespace Rtt
 
 		// Return the number of values pushed into Lua.
 		return pushedValues;
+	}
+
+	const char* WinPlatform::GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const
+	{
+		if (!qwertyKeyName || ('\0' == qwertyKeyName[0]))
+		{
+			return NULL;
+		}
+
+		UINT scanCode = ScanCodeForQwertyKeyName(qwertyKeyName);
+		if (scanCode == 0 && strlen(qwertyKeyName) == 1)
+		{
+			std::string lowerName(qwertyKeyName);
+			std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(),
+				[](unsigned char c) { return (unsigned char)std::tolower(c); });
+			scanCode = ScanCodeForQwertyKeyName(lowerName.c_str());
+		}
+		if (scanCode == 0)
+		{
+			return NULL;
+		}
+
+		HKL keyboardLayout = ::GetKeyboardLayout(0);
+		UINT virtualKey = ::MapVirtualKeyEx(scanCode, MAPVK_VSC_TO_VK_EX, keyboardLayout);
+		if (virtualKey == 0)
+		{
+			return NULL;
+		}
+
+		BYTE keyboardState[256] = { 0 };
+		const int kBufferLength = 8;
+		wchar_t chars[kBufferLength] = { 0 };
+		int result = ::ToUnicodeEx(virtualKey, scanCode, keyboardState, chars, kBufferLength - 1, 0, keyboardLayout);
+		if (result <= 0)
+		{
+			return NULL;
+		}
+
+		return Rtt::KeyName::FromCharacter(chars[0]);
 	}
 
 	void WinPlatform::RuntimeErrorNotification(const char* errorType, const char* message, const char* stacktrace) const

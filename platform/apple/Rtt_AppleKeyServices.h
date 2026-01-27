@@ -28,4 +28,10 @@ enum KeyCodes
 
 + (NSUInteger)getModifierMaskForKey:(unsigned short)keyCode;
 
+#ifdef Rtt_MAC_ENV
+// Returns a Corona key name string for the current keyboard layout using the given QWERTY key name.
+// Returns nil if the key is unknown or cannot be mapped.
++ (NSString*)getLayoutNameForQwertyKeyName:(NSString*)keyName;
+#endif
+
 @end

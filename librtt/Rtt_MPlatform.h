@@ -179,6 +179,7 @@ class MPlatform
 		virtual void SetNativeProperty( lua_State *L, const char *key, int valueIndex ) const = 0;
 		virtual int PushNativeProperty( lua_State *L, const char *key ) const = 0;
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const = 0;
+		virtual const char* GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const { return NULL; }
 
 	public:
 		virtual void RaiseError( Error e, const char* reason ) const = 0;
