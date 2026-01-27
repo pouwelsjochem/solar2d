@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2FA0C3BD289945A680240273 /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 211BE5B34B7D42F9AEA67F00 /* Rtt_ControllerTypeClassifier.cpp */; };
-		2505D1B8073F46A2955D43B8 /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 937CADBD6786487598348C98 /* Rtt_GameControllerDB.cpp */; };
-
 		0076A7EF16095ACC00A9757B /* Rtt_Assert.m in Sources */ = {isa = PBXBuildFile; fileRef = 0076A7EE16095ACC00A9757B /* Rtt_Assert.m */; };
 		0304FEA5178E3E380047CC04 /* Rtt_InputDeviceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE99178E3E380047CC04 /* Rtt_InputDeviceCollection.cpp */; };
 		0304FEA6178E3E380047CC04 /* Rtt_InputDeviceDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE9B178E3E380047CC04 /* Rtt_InputDeviceDescriptor.cpp */; };
@@ -1326,10 +1323,6 @@
 				1F23C322211ABCE40003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp in Sources */,
 				0304FEA7178E3E380047CC04 /* Rtt_InputDeviceType.cpp in Sources */,
 				0304FEA8178E3E380047CC04 /* Rtt_PlatformInputDevice.cpp in Sources */,
-				8EE571B724534D25B0B0AE9F /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				0BD7E1F3E592431AAA0FAE02 /* Rtt_GameControllerDB.cpp in Sources */,
-				2FA0C3BD289945A680240273 /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				2505D1B8073F46A2955D43B8 /* Rtt_GameControllerDB.cpp in Sources */,
 				0304FEA9178E3E380047CC04 /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				0304FEAA178E3E380047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				036F9493179DACFA00BF0DEE /* Rtt_InputDeviceConnectionState.cpp in Sources */,
