@@ -125,6 +125,14 @@ class WinInputDevice : public PlatformInputDevice
 		/// </summary>
 		virtual void Vibrate() override;
 
+		/// <summary>Gets the USB vendor ID of the device, if available.</summary>
+		/// <returns>Returns the vendor ID, or 0 if not available.</returns>
+		virtual U16 GetVendorId() override;
+
+		/// <summary>Gets the USB product ID of the device, if available.</summary>
+		/// <returns>Returns the product ID, or 0 if not available.</returns>
+		virtual U16 GetProductId() override;
+
 		#pragma endregion
 
 	private:

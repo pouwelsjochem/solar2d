@@ -22,6 +22,8 @@ InputDeviceSettings::InputDeviceSettings()
 	fProductName(L""),
 	fDisplayName(L""),
 	fPlayerNumber(0),
+	fVendorId(0),
+	fProductId(0),
 	fCanVibrate(false)
 {
 }
@@ -112,6 +114,26 @@ void InputDeviceSettings::SetPlayerNumber(unsigned int value)
 	fPlayerNumber = value;
 }
 
+unsigned short InputDeviceSettings::GetVendorId() const
+{
+	return fVendorId;
+}
+
+void InputDeviceSettings::SetVendorId(unsigned short value)
+{
+	fVendorId = value;
+}
+
+unsigned short InputDeviceSettings::GetProductId() const
+{
+	return fProductId;
+}
+
+void InputDeviceSettings::SetProductId(unsigned short value)
+{
+	fProductId = value;
+}
+
 bool InputDeviceSettings::CanVibrate() const
 {
 	return fCanVibrate;
@@ -150,6 +172,8 @@ void InputDeviceSettings::CopyFrom(const InputDeviceSettings& settings)
 	fProductName = settings.fProductName;
 	fDisplayName = settings.fDisplayName;
 	fPlayerNumber = settings.fPlayerNumber;
+	fVendorId = settings.fVendorId;
+	fProductId = settings.fProductId;
 	fCanVibrate = settings.fCanVibrate;
 	fKeyCollection = settings.fKeyCollection;
 

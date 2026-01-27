@@ -123,7 +123,45 @@ static void setUpDPadButtons(Rtt::AppleInputDevice *devicePointer, GCControllerD
 	{
 		devicePointer->fProductName = @"MFi Controller";
 	}
-	
+
+	// LIMITATION: GameController framework doesn't expose numeric vendor/product IDs
+	// We have to infer them from the vendorName string, which is NOT reliable
+	// This will work for well-known controllers but may fail for third-party/generic devices
+	// Note: IOKit HID path (AppleInputHIDDeviceListener) gets real IDs for non-MFi controllers
+	NSString *vendorName = controller.vendorName ? controller.vendorName : @"";
+	NSString *lowerVendorName = [vendorName lowercaseString];
+
+	// Reset to 0 first
+	devicePointer->fVendorId = 0;
+	devicePointer->fProductId = 0;
+
+	// Try to infer vendor/product IDs from common controller names
+	// These are heuristic-based and may not work for all controllers
+	if ([lowerVendorName containsString:@"sony"] ||
+		[lowerVendorName containsString:@"playstation"] ||
+		[lowerVendorName containsString:@"dualshock"] ||
+		[lowerVendorName containsString:@"dualsense"]) {
+		devicePointer->fVendorId = 0x054C; // Sony
+		devicePointer->fProductId = 0x09CC; // Generic PS4 controller ID
+	}
+	else if ([lowerVendorName containsString:@"microsoft"] ||
+			 [lowerVendorName containsString:@"xbox"]) {
+		devicePointer->fVendorId = 0x045E; // Microsoft
+		devicePointer->fProductId = 0x02EA; // Generic Xbox One controller ID
+	}
+	else if ([lowerVendorName containsString:@"nintendo"] ||
+			 [lowerVendorName containsString:@"switch"] ||
+			 [lowerVendorName containsString:@"joy-con"]) {
+		devicePointer->fVendorId = 0x057E; // Nintendo
+		devicePointer->fProductId = 0x2009; // Generic Switch Pro controller ID
+	}
+	else if ([lowerVendorName containsString:@"valve"] ||
+			 [lowerVendorName containsString:@"steam"]) {
+		devicePointer->fVendorId = 0x28DE; // Valve
+		devicePointer->fProductId = 0x1205; // Steam Deck
+	}
+	// For unknown controllers, IDs remain 0 and classification falls back to name patterns
+
 	devicePointer->RemoveAllAxes();
 	__block AppleInputMFiDeviceListener *weakSelf = self;
 	

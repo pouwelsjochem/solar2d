@@ -55,7 +55,8 @@ public class JavaToNativeShim {
     			long byteOffsetInPackage, long byteCountInPackage, boolean isCompressed);
     private static native void nativeUpdateInputDevice(
     			long bridgeAddress, int coronaDeviceId, int androidDeviceId, int deviceType, String permanentStringId,
-    			String productName, String displayName, boolean canVibrate, int playerNumber, int connectionStateId);
+    			String productName, String displayName, boolean canVibrate, int playerNumber, int connectionStateId,
+    			int vendorId, int productId);
     private static native void nativeClearInputDeviceAxes(long bridgeAddress, int coronaDeviceId);
     private static native void nativeAddInputDeviceAxis(
     			long bridgeAddress, int coronaDeviceId, int axisTypeId, float minValue, float maxValue,
@@ -310,7 +311,8 @@ public class JavaToNativeShim {
 					device.getDeviceInfo().getPermanentStringId(),
 					device.getDeviceInfo().getProductName(), device.getDeviceInfo().getDisplayName(),
 					device.getDeviceInfo().canVibrate(), device.getDeviceInfo().getPlayerNumber(),
-					device.getConnectionState().toCoronaIntegerId());
+					device.getConnectionState().toCoronaIntegerId(),
+					device.getDeviceInfo().getVendorId(), device.getDeviceInfo().getProductId());
 
 		// Update the input device's axis information.
 		nativeClearInputDeviceAxes(runtime.getJavaToNativeBridgeAddress(),device.getCoronaDeviceId());

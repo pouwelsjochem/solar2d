@@ -400,6 +400,22 @@ class InputDeviceSettings
 		/// </param>
 		void SetPlayerNumber(unsigned int value);
 
+		/// <summary>Gets the USB vendor ID of the device, if available.</summary>
+		/// <returns>Returns the vendor ID, or 0 if not available.</returns>
+		unsigned short GetVendorId() const;
+
+		/// <summary>Sets the USB vendor ID of the device.</summary>
+		/// <param name="value">The vendor ID, or 0 if not available.</param>
+		void SetVendorId(unsigned short value);
+
+		/// <summary>Gets the USB product ID of the device, if available.</summary>
+		/// <returns>Returns the product ID, or 0 if not available.</returns>
+		unsigned short GetProductId() const;
+
+		/// <summary>Sets the USB product ID of the device.</summary>
+		/// <param name="value">The product ID, or 0 if not available.</param>
+		void SetProductId(unsigned short value);
+
 		/// <summary>Determines if the input device supports vibrate/rumble functionality.</summary>
 		/// <returns>Returns true if the device support vibration feedback. Returns false if not.</returns>
 		bool CanVibrate() const;
@@ -474,6 +490,12 @@ class InputDeviceSettings
 		///  <para>Set to zero if a number was not assigned to the device.</para>
 		/// </summary>
 		unsigned int fPlayerNumber;
+
+		/// <summary>USB vendor ID of the device, or 0 if not available.</summary>
+		unsigned short fVendorId;
+
+		/// <summary>USB product ID of the device, or 0 if not available.</summary>
+		unsigned short fProductId;
 
 		/// <summary>Set true if the device supports vibrate/rumble functionality.</summary>
 		bool fCanVibrate;

@@ -335,6 +335,14 @@ class InputDeviceInfo
 		/// <returns>Returns true if the device support vibration feedback. Returns false if not.</returns>
 		bool CanVibrate() const;
 
+		/// <summary>Gets the USB vendor ID of the device, if available.</summary>
+		/// <returns>Returns the vendor ID, or 0 if not available.</returns>
+		unsigned short GetVendorId() const;
+
+		/// <summary>Gets the USB product ID of the device, if available.</summary>
+		/// <returns>Returns the product ID, or 0 if not available.</returns>
+		unsigned short GetProductId() const;
+
 		/// <summary>Gets read-only access to this input device's axis configuration collection.</summary>
 		/// <returns>Returns an object providing read-only access to the input device's axis collection.</returns>
 		InputDeviceInfo::AxisCollectionAdapter GetAxes() const;

@@ -41,8 +41,10 @@ namespace Rtt {
 	, fController(0)
 	, fMFIConfiguration(0)
 	, fMFiProfile(NULL)
+	, fVendorId(0)
+	, fProductId(0)
 	{
-		
+
 	}
 	
 	
@@ -171,6 +173,16 @@ namespace Rtt {
 			return fPlayerIndex+1;
 		}
 		return Super::GetPlayerNumber();
+	}
+
+	U16 AppleInputDevice::GetVendorId()
+	{
+		return fVendorId;
+	}
+
+	U16 AppleInputDevice::GetProductId()
+	{
+		return fProductId;
 	}
 	
 	unsigned AppleInputDevice::GetMFiConfiguration(GCController *controller)

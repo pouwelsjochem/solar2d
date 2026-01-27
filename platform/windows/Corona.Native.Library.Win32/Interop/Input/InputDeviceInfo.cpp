@@ -101,6 +101,16 @@ bool InputDeviceInfo::CanVibrate() const
 	return fSettings.CanVibrate();
 }
 
+unsigned short InputDeviceInfo::GetVendorId() const
+{
+	return fSettings.GetVendorId();
+}
+
+unsigned short InputDeviceInfo::GetProductId() const
+{
+	return fSettings.GetProductId();
+}
+
 InputDeviceInfo::AxisCollectionAdapter InputDeviceInfo::GetAxes() const
 {
 	return InputDeviceInfo::AxisCollectionAdapter(*this);

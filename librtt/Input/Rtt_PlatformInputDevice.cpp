@@ -12,6 +12,8 @@
 #include "Rtt_InputAxisDescriptor.h"
 #include "Rtt_PlatformInputAxis.h"
 #include "Rtt_PlatformInputDevice.h"
+#include "Rtt_ControllerTypeClassifier.h"
+#include "Rtt_GameControllerDB.h"
 #include "Rtt_Lua.h"
 #include "Rtt_LuaContext.h"
 #include <string.h>
@@ -112,7 +114,73 @@ const char* PlatformInputDevice::GetDriverName()
 {
 	return NULL;
 }
-	
+
+/// Gets the controller type/family (xbox, playstation, nintendo, etc.) for displaying appropriate button glyphs.
+/// This is automatically determined based on SDL_GameControllerDB, vendor/product IDs, or device name.
+/// @return Returns a string like "xbox", "playstation", "nintendo", "steam", "generic", or "unknown"
+const char* PlatformInputDevice::GetControllerType()
+{
+	// Try SDL_GameControllerDB lookup first (most reliable)
+	U16 vendorId = GetVendorId();
+	U16 productId = GetProductId();
+
+	if (vendorId != 0)
+	{
+		// Generate SDL GUID and look up in database
+		std::string guid = GameControllerDB::GenerateGUID(vendorId, productId);
+		GameControllerDB* db = GameControllerDB::GetInstance();
+		const GameControllerDB::ControllerMapping* mapping = db->FindByGUID(guid.c_str());
+
+		if (mapping)
+		{
+			// Classify by the controller name from the database
+			ControllerTypeClassifier::Type type = ControllerTypeClassifier::ClassifyByName(mapping->name.c_str());
+			if (type != ControllerTypeClassifier::kUnknown)
+			{
+				return ControllerTypeClassifier::GetTypeString(type);
+			}
+		}
+
+		// Fall back to vendor/product ID classification
+		ControllerTypeClassifier::Type type = ControllerTypeClassifier::ClassifyByVendorProduct(vendorId, productId);
+		if (type != ControllerTypeClassifier::kUnknown)
+		{
+			return ControllerTypeClassifier::GetTypeString(type);
+		}
+	}
+
+	// Fall back to name-based classification
+	const char* name = GetProductName();
+	if (!name)
+	{
+		name = GetDisplayName();
+	}
+
+	if (name)
+	{
+		ControllerTypeClassifier::Type type = ControllerTypeClassifier::ClassifyByName(name);
+		return ControllerTypeClassifier::GetTypeString(type);
+	}
+
+	return "unknown";
+}
+
+/// Gets the USB vendor ID of the device, if available.
+/// This is used for controller type classification.
+/// @return Returns the vendor ID, or 0 if not available.
+U16 PlatformInputDevice::GetVendorId()
+{
+	return 0;
+}
+
+/// Gets the USB product ID of the device, if available.
+/// This is used for controller type classification.
+/// @return Returns the product ID, or 0 if not available.
+U16 PlatformInputDevice::GetProductId()
+{
+	return 0;
+}
+
 /// Determines if a "player number" has been assigned to the input device by the system.
 /// If true, then the GetPlayerNumber() will return a valid value.
 /// <br>
@@ -321,6 +389,12 @@ int PlatformInputDevice::OnAccessingField(lua_State *L, const char fieldName[])
 		{
 			lua_pushnil(L);
 		}
+		result = 1;
+	}
+	else if (strcmp("controllerType", fieldName) == 0)
+	{
+		const char* controllerType = GetControllerType();
+		lua_pushstring(L, controllerType);
 		result = 1;
 	}
 	else if (strcmp("canVibrate", fieldName) == 0)

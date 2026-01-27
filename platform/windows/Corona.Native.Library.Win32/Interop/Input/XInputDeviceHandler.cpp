@@ -73,6 +73,12 @@ void XInputDeviceHandler::AttachTo(DWORD userIndex, const XINPUT_CAPABILITIES& d
 	fLastAttachedUserIndex = (int)userIndex;
 	deviceSettings.SetPlayerNumber(userIndex + 1);
 
+	// Set vendor/product IDs for XInput devices (all Microsoft Xbox controllers).
+	// Vendor ID 0x045E is Microsoft.
+	// Product ID 0x02EA is Xbox One S Controller (generic representative XInput ID).
+	deviceSettings.SetVendorId(0x045E);
+	deviceSettings.SetProductId(0x02EA);
+
 	// Make up a nice controller name for this device based on the player number.
 	// Note: Unlike DirectInput and RawInput, XInput does not provide names for devices.
 	UpdateDeviceNameUsing(userIndex, deviceCapabilities, deviceSettings);

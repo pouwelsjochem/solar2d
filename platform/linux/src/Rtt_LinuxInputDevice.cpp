@@ -80,6 +80,16 @@ namespace Rtt
 		return fDriverName.c_str();
 	}
 
+	U16 LinuxInputDevice::GetVendorId()
+	{
+		return fVendorId;
+	}
+
+	U16 LinuxInputDevice::GetProductId()
+	{
+		return fProductId;
+	}
+
 	void LinuxInputDevice::Vibrate()
 	{
 	}
@@ -123,7 +133,7 @@ namespace Rtt
 	};
 
 	LinuxInputDevice::LinuxInputDevice(const InputDeviceDescriptor &descriptor)
-		: Super(descriptor), fConnected(InputDeviceConnectionState::kConnected), fCanVibrate(false), fd(-1), fAxesCount(0)
+		: Super(descriptor), fConnected(InputDeviceConnectionState::kConnected), fCanVibrate(false), fd(-1), fAxesCount(0), fVendorId(0), fProductId(0)
 	{
 		fSerialNumber = "Unknown";
 		fConnected = InputDeviceConnectionState::kDisconnected;
@@ -187,6 +197,48 @@ namespace Rtt
 
 			fSerialNumber = name;
 			fCanVibrate = false; // fixme
+
+			// Read vendor and product IDs from sysfs
+			// Note: This works for USB devices but may fail for Bluetooth or other connection types
+			// The sysfs path structure: /sys/class/input/jsX/device/id/{vendor,product}
+			std::string devPath(dev);
+			size_t lastSlash = devPath.find_last_of('/');
+			if (lastSlash != std::string::npos)
+			{
+				std::string deviceName = devPath.substr(lastSlash + 1); // e.g., "js0"
+				std::string vendorPath = "/sys/class/input/" + deviceName + "/device/id/vendor";
+				std::string productPath = "/sys/class/input/" + deviceName + "/device/id/product";
+
+				// Try to read vendor ID
+				FILE* vendorFile = fopen(vendorPath.c_str(), "r");
+				if (vendorFile)
+				{
+					int vendor = 0;
+					if (fscanf(vendorFile, "%x", &vendor) == 1)
+					{
+						fVendorId = static_cast<U16>(vendor);
+					}
+					fclose(vendorFile);
+				}
+
+				// Try to read product ID
+				FILE* productFile = fopen(productPath.c_str(), "r");
+				if (productFile)
+				{
+					int product = 0;
+					if (fscanf(productFile, "%x", &product) == 1)
+					{
+						fProductId = static_cast<U16>(product);
+					}
+					fclose(productFile);
+				}
+
+				// If sysfs read failed, vendor/product IDs remain 0
+				// This can happen for:
+				// - Bluetooth controllers (different sysfs path structure)
+				// - Virtual/emulated devices
+				// - Devices with restricted sysfs permissions
+			}
 
 			//Set device properties
 			fConnected = InputDeviceConnectionState::kConnected;
@@ -352,6 +404,16 @@ namespace Rtt
 	const char *LinuxInputDevice::GetDriverName()
 	{
 		return fDriverName.c_str();
+	}
+
+	U16 LinuxInputDevice::GetVendorId()
+	{
+		return fVendorId;
+	}
+
+	U16 LinuxInputDevice::GetProductId()
+	{
+		return fProductId;
 	}
 
 	void LinuxInputDevice::Vibrate()

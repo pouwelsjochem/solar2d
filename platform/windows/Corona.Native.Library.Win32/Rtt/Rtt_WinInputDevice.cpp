@@ -140,6 +140,24 @@ void WinInputDevice::Vibrate()
 	}
 }
 
+U16 WinInputDevice::GetVendorId()
+{
+	if (!fDeviceInterfacePointer)
+	{
+		return 0;
+	}
+	return fDeviceInterfacePointer->GetDeviceInfo()->GetVendorId();
+}
+
+U16 WinInputDevice::GetProductId()
+{
+	if (!fDeviceInterfacePointer)
+	{
+		return 0;
+	}
+	return fDeviceInterfacePointer->GetDeviceInfo()->GetProductId();
+}
+
 #pragma endregion
 
 

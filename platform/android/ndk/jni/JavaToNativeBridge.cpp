@@ -513,7 +513,8 @@ JavaToNativeBridge::CopyBitmap(
 void
 JavaToNativeBridge::UpdateInputDevice(
 	JNIEnv * env, jint coronaDeviceId, jint androidDeviceId, jint deviceTypeId, jstring permanentStringId,
-	jstring productName, jstring displayName, jboolean canVibrate, jint playerNumber, jint connectionStateId)
+	jstring productName, jstring displayName, jboolean canVibrate, jint playerNumber, jint connectionStateId,
+	jint vendorId, jint productId)
 {
 	// Validate.
 	if (NULL == fPlatform)
@@ -557,6 +558,8 @@ JavaToNativeBridge::UpdateInputDevice(
 	devicePointer->SetDisplayName(displayNameConverter.getUTF8());
 	devicePointer->SetCanVibrate(canVibrate);
 	devicePointer->SetPlayerNumber((int)playerNumber);
+	devicePointer->SetVendorId((U16)vendorId);
+	devicePointer->SetProductId((U16)productId);
 	devicePointer->SetConnectionState(Rtt::InputDeviceConnectionState::FromIntegerId((int)connectionStateId));
 }
 

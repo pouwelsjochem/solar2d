@@ -190,10 +190,10 @@ JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeSetZipFileEn
 /*
  * Class:     com_ansca_corona_JavaToNativeShim
  * Method:    nativeUpdateInputDevice
- * Signature: (IIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;ZII)V
+ * Signature: (IIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;ZIIII)V
  */
 JNIEXPORT void JNICALL Java_com_ansca_corona_JavaToNativeShim_nativeUpdateInputDevice
-  (JNIEnv *, jclass, jlong, jint, jint, jint, jstring, jstring, jstring, jboolean, jint, jint);
+  (JNIEnv *, jclass, jlong, jint, jint, jint, jstring, jstring, jstring, jboolean, jint, jint, jint, jint);
 
 /*
  * Class:     com_ansca_corona_JavaToNativeShim

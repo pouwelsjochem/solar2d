@@ -37,11 +37,14 @@ namespace Rtt
 		NSString *fSerialNumber;
 		NSString *fProductName;
 		const char* fMFiProfile;
-		
+
 		bool fCanVibrate;
-		
+
 		GCController* fController;
 		unsigned int fMFIConfiguration; // For guessing reconnecting MFi devices
+
+		U16 fVendorId;
+		U16 fProductId;
 		
 	public:
 		AppleInputDevice(const InputDeviceDescriptor &descriptor);
@@ -55,6 +58,8 @@ namespace Rtt
 		virtual const char* GetDriverName() override;
 		PlatformInputAxis* OnCreateAxisUsing(const InputAxisDescriptor &descriptor) override;
 		virtual int GetPlayerNumber() override;
+		virtual U16 GetVendorId() override;
+		virtual U16 GetProductId() override;
 
 		virtual ~AppleInputDevice();
 		

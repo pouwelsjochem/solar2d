@@ -187,15 +187,25 @@ namespace Rtt {
 		
 		devicePointer->fCanVibrate = AppleInputDevice::CanVibrate(inIOHIDDeviceRef);
 		devicePointer->hidDeviceRef = inIOHIDDeviceRef;
-		
+
 		//Set device properties
 		devicePointer->fConnected = InputDeviceConnectionState::kConnected;
 		if(product && devicePointer->fProductName == NULL)
 		{
 			devicePointer->fProductName = [productName retain];
 		}
-		
-		
+
+		// Extract vendor and product IDs from IOKit properties
+		NSNumber* vendorIdNum = (NSNumber*)IOHIDDeviceGetProperty(inIOHIDDeviceRef, CFSTR(kIOHIDVendorIDKey));
+		NSNumber* productIdNum = (NSNumber*)IOHIDDeviceGetProperty(inIOHIDDeviceRef, CFSTR(kIOHIDProductIDKey));
+
+		if (vendorIdNum) {
+			devicePointer->fVendorId = [vendorIdNum unsignedShortValue];
+		}
+		if (productIdNum) {
+			devicePointer->fProductId = [productIdNum unsignedShortValue];
+		}
+
 		//Setting up axis
 		devicePointer->RemoveAllAxes();
 		deviceDescriptorId = devicePointer->GetDescriptor().GetIntegerId();

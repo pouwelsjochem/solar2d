@@ -35,6 +35,8 @@ AndroidInputDevice::AndroidInputDevice(const InputDeviceDescriptor &descriptor, 
 	fCanVibrate(false),
 	fPlayerNumber(0),
 	fConnectionState(InputDeviceConnectionState::kDisconnected),
+	fVendorId(0),
+	fProductId(0),
 	fNativeToJavaBridge(ntjb)
 {
 }
@@ -223,6 +225,34 @@ void AndroidInputDevice::SetCanVibrate(bool value)
 void AndroidInputDevice::Vibrate()
 {
 	fNativeToJavaBridge->VibrateInputDevice(fCoronaDeviceId);
+}
+
+/// Gets the USB vendor ID of the device.
+/// @return Returns the vendor ID, or 0 if not available.
+U16 AndroidInputDevice::GetVendorId()
+{
+	return fVendorId;
+}
+
+/// Sets the USB vendor ID of the device.
+/// @param value The vendor ID, or 0 if not available.
+void AndroidInputDevice::SetVendorId(U16 value)
+{
+	fVendorId = value;
+}
+
+/// Gets the USB product ID of the device.
+/// @return Returns the product ID, or 0 if not available.
+U16 AndroidInputDevice::GetProductId()
+{
+	return fProductId;
+}
+
+/// Sets the USB product ID of the device.
+/// @param value The product ID, or 0 if not available.
+void AndroidInputDevice::SetProductId(U16 value)
+{
+	fProductId = value;
 }
 
 

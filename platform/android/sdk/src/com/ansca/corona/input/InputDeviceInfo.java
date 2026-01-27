@@ -39,6 +39,12 @@ public class InputDeviceInfo implements Cloneable {
 	/** The player/controller number assigned to the device. Set to zero if not assigned a player number. */
 	private int fPlayerNumber;
 
+	/** USB vendor ID of the device. Set to zero if not available. */
+	private int fVendorId;
+
+	/** USB product ID of the device. Set to zero if not available. */
+	private int fProductId;
+
 	/** Stores a collection of input sources this device gets input events from. */
 	private InputDeviceTypeSet fInputSources;
 
@@ -61,6 +67,8 @@ public class InputDeviceInfo implements Cloneable {
 		fDisplayName = "";
 		fCanVibrate = false;
 		fPlayerNumber = 0;
+		fVendorId = 0;
+		fProductId = 0;
 		fInputSources = new InputDeviceTypeSet();
 		fReadOnlyInputSources = new ReadOnlyInputDeviceTypeSet(fInputSources);
 		fAxisCollection = new AxisInfoCollection();
@@ -203,6 +211,26 @@ public class InputDeviceInfo implements Cloneable {
 	 */
 	public int getPlayerNumber() {
 		return fPlayerNumber;
+	}
+
+	/**
+	 * Gets the USB vendor ID of the device.
+	 * <p>
+	 * Available on Android API 19 (KitKat) and higher.
+	 * @return Returns the vendor ID, or zero if not available.
+	 */
+	public int getVendorId() {
+		return fVendorId;
+	}
+
+	/**
+	 * Gets the USB product ID of the device.
+	 * <p>
+	 * Available on Android API 19 (KitKat) and higher.
+	 * @return Returns the product ID, or zero if not available.
+	 */
+	public int getProductId() {
+		return fProductId;
 	}
 
 	/**
@@ -523,6 +551,8 @@ public class InputDeviceInfo implements Cloneable {
 			}
 			if (android.os.Build.VERSION.SDK_INT >= 19) {
 				deviceInfo.fPlayerNumber = ApiLevel19.getControllerNumberFrom(inputDevice);
+				deviceInfo.fVendorId = ApiLevel19.getVendorIdFrom(inputDevice);
+				deviceInfo.fProductId = ApiLevel19.getProductIdFrom(inputDevice);
 			}
 
 			// Return the new device info object.
@@ -688,6 +718,30 @@ public class InputDeviceInfo implements Cloneable {
 				return 0;
 			}
 			return inputDevice.getControllerNumber();
+		}
+
+		/**
+		 * Fetches the USB vendor ID of the input device.
+		 * @param inputDevice Reference to the input device to fetch the vendor ID from.
+		 * @return Returns the vendor ID, or zero if not available or if given null.
+		 */
+		public static int getVendorIdFrom(android.view.InputDevice inputDevice) {
+			if (inputDevice == null) {
+				return 0;
+			}
+			return inputDevice.getVendorId();
+		}
+
+		/**
+		 * Fetches the USB product ID of the input device.
+		 * @param inputDevice Reference to the input device to fetch the product ID from.
+		 * @return Returns the product ID, or zero if not available or if given null.
+		 */
+		public static int getProductIdFrom(android.view.InputDevice inputDevice) {
+			if (inputDevice == null) {
+				return 0;
+			}
+			return inputDevice.getProductId();
 		}
 	}
 }

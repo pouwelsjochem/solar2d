@@ -38,6 +38,8 @@ namespace Rtt
 		virtual void Vibrate() override;
 		virtual bool CanVibrate() override;
 		virtual const char *GetDriverName() override;
+		virtual U16 GetVendorId() override;
+		virtual U16 GetProductId() override;
 		PlatformInputAxis *OnCreateAxisUsing(const InputAxisDescriptor &descriptor) override;
 		bool AddNamedAxis(const char *axis);
 		void init(const char *dev);
@@ -52,6 +54,8 @@ namespace Rtt
 		int fAxesCount;
 		std::string fDriverName;
 		uint8_t *fAxesMap;
+		U16 fVendorId;
+		U16 fProductId;
 	};
 
 	class LinuxInputAxis : public PlatformInputAxis

@@ -158,6 +158,30 @@ void DirectInputDeviceHandler::AttachTo(LPDIRECTINPUTDEVICE8W devicePointer)
 			break;
 	}
 
+	// Extract vendor/product IDs using the DIPROP_VIDPID property.
+	// This is more reliable than parsing guidProduct for all device types.
+	DIPROPDWORD vendorProductProperty;
+	vendorProductProperty.diph.dwSize = sizeof(DIPROPDWORD);
+	vendorProductProperty.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+	vendorProductProperty.diph.dwObj = 0;
+	vendorProductProperty.diph.dwHow = DIPH_DEVICE;
+
+	result = fDirectInputDevicePointer->GetProperty(DIPROP_VIDPID, &vendorProductProperty.diph);
+	if (SUCCEEDED(result))
+	{
+		// DIPROP_VIDPID packs vendor ID in high word and product ID in low word
+		unsigned short vendorId = HIWORD(vendorProductProperty.dwData);
+		unsigned short productId = LOWORD(vendorProductProperty.dwData);
+
+		if (vendorId != 0)
+		{
+			deviceSettings.SetVendorId(vendorId);
+			deviceSettings.SetProductId(productId);
+		}
+	}
+	// If DIPROP_VIDPID fails, leave vendor/product IDs as 0
+	// This happens for non-HID devices, virtual controllers, etc.
+
 	// Fetch the DirectInput device's axes, buttons, and hat switches.
 	DirectInputDeviceObjects deviceObjects{};
 	deviceObjects.DevicePointer = fDirectInputDevicePointer;

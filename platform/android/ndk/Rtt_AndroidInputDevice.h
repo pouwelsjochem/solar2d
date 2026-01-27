@@ -56,6 +56,10 @@ class AndroidInputDevice : public PlatformInputDevice
 		bool CanVibrate();
 		void SetCanVibrate(bool value);
 		void Vibrate();
+		U16 GetVendorId();
+		void SetVendorId(U16 value);
+		U16 GetProductId();
+		void SetProductId(U16 value);
 
 	protected:
 		int OnAccessingField(lua_State *L, const char fieldName[]);
@@ -92,6 +96,12 @@ class AndroidInputDevice : public PlatformInputDevice
 
 		/// The input device's current connection state such as kConnected, kDisconnected, etc.
 		InputDeviceConnectionState fConnectionState;
+
+		/// USB vendor ID, or 0 if not available
+		U16 fVendorId;
+
+		/// USB product ID, or 0 if not available
+		U16 fProductId;
 
 		NativeToJavaBridge *fNativeToJavaBridge;
 };

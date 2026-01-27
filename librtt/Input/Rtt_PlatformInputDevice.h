@@ -50,6 +50,9 @@ class PlatformInputDevice
 		virtual const char* GetDisplayName();
 		virtual const char* GetPermanentStringId();
 		virtual const char* GetDriverName();
+		virtual const char* GetControllerType();
+		virtual U16 GetVendorId();
+		virtual U16 GetProductId();
 		bool HasPlayerNumber();
 		virtual int GetPlayerNumber();
 		virtual InputDeviceConnectionState GetConnectionState();

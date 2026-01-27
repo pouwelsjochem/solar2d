@@ -247,12 +247,12 @@ JNIEXPORT void JNICALL
 Java_com_ansca_corona_JavaToNativeShim_nativeUpdateInputDevice(
 	JNIEnv * env, jclass c, jlong bridgeAddress, jint coronaDeviceId, jint androidDeviceId, jint deviceTypeId,
 	jstring permanentStringId, jstring productName, jstring displayName,
-	jboolean canVibrate, jint playerNumber, jint connectionStateId)
+	jboolean canVibrate, jint playerNumber, jint connectionStateId, jint vendorId, jint productId)
 {
 	// debugPrint( "> JavaToNativeShim.nativeUpdateInputDevice");
 	JavaToNativeBridgeFromMemoryAddress(bridgeAddress)->UpdateInputDevice(
 			env, coronaDeviceId, androidDeviceId, deviceTypeId, permanentStringId,
-			productName, displayName, canVibrate, playerNumber, connectionStateId);
+			productName, displayName, canVibrate, playerNumber, connectionStateId, vendorId, productId);
 	// debugPrint( "< JavaToNativeShim.nativeUpdateInputDevice");
 }
 

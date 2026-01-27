@@ -55,7 +55,7 @@ class JavaToNativeBridge
 		void UpdateInputDevice(
 					JNIEnv * env, jint coronaDeviceId, jint androidDeviceId, jint deviceTypeId,
 					jstring permanentStringId, jstring productName, jstring displayName,
-					jboolean canVibrate, jint playerNumber, jint connectionStateId);
+					jboolean canVibrate, jint playerNumber, jint connectionStateId, jint vendorId, jint productId);
 		void ClearInputDeviceAxes(int coronaDeviceId);
 		void AddInputDeviceAxis(
 					int coronaDeviceId, int axisTypeId, float minValue, float maxValue,
