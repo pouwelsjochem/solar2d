@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		13B0AC3107D34222AF70ED48 /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B0310EDA7F1452A8D2770B2 /* Rtt_ControllerTypeClassifier.cpp */; };
-		3C285E39ACBE4474808B0E20 /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7443D70ACE4D44778214FAAC /* Rtt_GameControllerDB.cpp */; };
-
 		000DC91612B04F3900042A5E /* lapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 000DC8DD12B04F3900042A5E /* lapi.c */; };
 		000DC91712B04F3900042A5E /* lapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 000DC8DE12B04F3900042A5E /* lapi.h */; };
 		000DC91812B04F3900042A5E /* lauxlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 000DC8DF12B04F3900042A5E /* lauxlib.c */; settings = {COMPILER_FLAGS = "-Wno-empty-body"; }; };
@@ -2914,10 +2911,6 @@
 				0304FE8A178E3AF80047CC04 /* Rtt_InputDeviceDescriptor.cpp in Sources */,
 				0304FE8C178E3AF80047CC04 /* Rtt_InputDeviceType.cpp in Sources */,
 				0304FE8E178E3AF80047CC04 /* Rtt_PlatformInputDevice.cpp in Sources */,
-				4633510B782C4973B3E6AF56 /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				65574F5237DF4D77B050FD99 /* Rtt_GameControllerDB.cpp in Sources */,
-				13B0AC3107D34222AF70ED48 /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				3C285E39ACBE4474808B0E20 /* Rtt_GameControllerDB.cpp in Sources */,
 				0304FE90178E3AF80047CC04 /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				0304FE92178E3AF80047CC04 /* Rtt_ReadOnlyInputDeviceCollection.cpp in Sources */,
 				0358A36E179A36CC0011B8E7 /* Rtt_InputDeviceConnectionState.cpp in Sources */,
