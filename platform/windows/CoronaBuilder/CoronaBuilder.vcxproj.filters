@@ -156,6 +156,12 @@
     <ClCompile Include="..\..\..\librtt\Input\Rtt_InputDeviceType.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Input\Rtt_ControllerTypeClassifier.cpp">
+      <Filter>Rtt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Input\Rtt_GameControllerDB.cpp">
+      <Filter>Rtt</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Input\Rtt_PlatformInputAxis.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
@@ -301,6 +307,12 @@
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Input\Rtt_InputDeviceType.h">
+      <Filter>Rtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\librtt\Input\Rtt_ControllerTypeClassifier.h">
+      <Filter>Rtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\librtt\Input\Rtt_GameControllerDB.h">
       <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Input\Rtt_PlatformInputAxis.h">

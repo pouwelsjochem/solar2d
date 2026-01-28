@@ -159,6 +159,8 @@
     <ClCompile Include="..\..\..\librtt\Input\Rtt_InputDeviceConnectionState.cpp" />
     <ClCompile Include="..\..\..\librtt\Input\Rtt_InputDeviceDescriptor.cpp" />
     <ClCompile Include="..\..\..\librtt\Input\Rtt_InputDeviceType.cpp" />
+    <ClCompile Include="..\..\..\librtt\Input\Rtt_ControllerTypeClassifier.cpp" />
+    <ClCompile Include="..\..\..\librtt\Input\Rtt_GameControllerDB.cpp" />
     <ClCompile Include="..\..\..\librtt\Input\Rtt_PlatformInputAxis.cpp" />
     <ClCompile Include="..\..\..\librtt\Input\Rtt_PlatformInputDevice.cpp" />
     <ClCompile Include="..\..\..\librtt\Input\Rtt_PlatformInputDeviceManager.cpp" />
@@ -249,6 +251,8 @@
     <ClInclude Include="..\..\..\librtt\Input\Rtt_InputDeviceConnectionState.h" />
     <ClInclude Include="..\..\..\librtt\Input\Rtt_InputDeviceDescriptor.h" />
     <ClInclude Include="..\..\..\librtt\Input\Rtt_InputDeviceType.h" />
+    <ClInclude Include="..\..\..\librtt\Input\Rtt_ControllerTypeClassifier.h" />
+    <ClInclude Include="..\..\..\librtt\Input\Rtt_GameControllerDB.h" />
     <ClInclude Include="..\..\..\librtt\Input\Rtt_PlatformInputAxis.h" />
     <ClInclude Include="..\..\..\librtt\Input\Rtt_PlatformInputDevice.h" />
     <ClInclude Include="..\..\..\librtt\Input\Rtt_PlatformInputDeviceManager.h" />
