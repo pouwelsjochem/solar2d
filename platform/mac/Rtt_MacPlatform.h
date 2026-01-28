@@ -102,7 +102,6 @@ class MacPlatform : public ApplePlatform
 		virtual void SetKeyboardFocus( PlatformDisplayObject *object ) const;
 
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
-		virtual const char* GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const;
 
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const;
 

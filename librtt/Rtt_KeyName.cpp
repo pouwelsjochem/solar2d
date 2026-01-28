@@ -493,7 +493,7 @@ namespace Rtt
 				case '`':
 				case '~': return Rtt::KeyName::kBackTick;
 				default:
-					return NULL;
+					return nullptr;
 			}
 		}
 	}
