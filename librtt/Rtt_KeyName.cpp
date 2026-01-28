@@ -9,6 +9,7 @@
 
 #include "Rtt_KeyName.h"
 #include <ctype.h>
+#include <stddef.h>
 
 
 namespace Rtt
