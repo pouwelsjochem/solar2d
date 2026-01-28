@@ -22,9 +22,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		EA9F036D9EED426AB1479C7F /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0E21C7518D064C768B22CEA5 /* Rtt_ControllerTypeClassifier.cpp */; };
-		71545E20776240309328D699 /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3599826C5BEF44A1A9A9B72C /* Rtt_GameControllerDB.cpp */; };
-
 		03D1C5371D70CB6400DB02EE /* Rtt_OperationResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5301D70CB1500DB02EE /* Rtt_OperationResult.cpp */; };
 		03D1C53E1D70CBBF00DB02EE /* Rtt_Preference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5381D70CBB400DB02EE /* Rtt_Preference.cpp */; };
 		03D1C53F1D70CBC200DB02EE /* Rtt_PreferenceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C53A1D70CBB400DB02EE /* Rtt_PreferenceCollection.cpp */; };
@@ -4954,10 +4951,6 @@
 				A4DD48011BB260B200FD988E /* Rtt_ReadOnlyInputAxisCollection.cpp in Sources */,
 				A4551E031BAA17CF00FB3BDF /* Rtt_ShaderBuiltin.cpp in Sources */,
 				A4DD48061BB260B200FD988E /* Rtt_PlatformInputDevice.cpp in Sources */,
-				C42CC0D3B37048B787ED44BF /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				E3922AF0B6B44BDCBFEED8C3 /* Rtt_GameControllerDB.cpp in Sources */,
-				EA9F036D9EED426AB1479C7F /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				71545E20776240309328D699 /* Rtt_GameControllerDB.cpp in Sources */,
 				A4551F561BAA182D00FB3BDF /* Rtt_LuaProxyVTable.cpp in Sources */,
 				A4551D2E1BAA17BE00FB3BDF /* Rtt_ArrayTupleStruct.cpp in Sources */,
 				A4551E291BAA17CF00FB3BDF /* Rtt_VertexCache.cpp in Sources */,

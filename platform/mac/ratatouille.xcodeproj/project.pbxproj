@@ -21,9 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		7C3CF04E277E4E8FB68C5D5D /* Rtt_ControllerTypeClassifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FD0027B1E994795A61A2468 /* Rtt_ControllerTypeClassifier.cpp */; };
-		5B43316A584D4FA2A9BE3643 /* Rtt_GameControllerDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A0C9A36610934055BE3A6C67 /* Rtt_GameControllerDB.cpp */; };
-
 		000CE76712B73EE300D9B6A4 /* Rtt_Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6BA12B73EE300D9B6A4 /* Rtt_Archive.cpp */; };
 		000CE78212B73EE300D9B6A4 /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D512B73EE300D9B6A4 /* Rtt_Event.cpp */; };
 		000CE78412B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D712B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp */; };
@@ -762,10 +759,6 @@
 		C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0397043D17A3774E00681DED /* Rtt_PlatformInputAxis.cpp */; };
 		C229E12A1B32221B00D87A7C /* Rtt_PlatformInputDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE6C178E18B00047CC04 /* Rtt_PlatformInputDevice.cpp */; };
 		C229E12B1B32221B00D87A7C /* Rtt_PlatformInputDeviceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0304FE6E178E18B00047CC04 /* Rtt_PlatformInputDeviceManager.cpp */; };
-		1FD0027B1E994795A61A2468 /* Rtt_ControllerTypeClassifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_ControllerTypeClassifier.cpp; path = Input/Rtt_ControllerTypeClassifier.cpp; sourceTree = "<group>"; };
-		EDE1CA6627C746EBA4576A6D /* Rtt_ControllerTypeClassifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_ControllerTypeClassifier.h; path = Input/Rtt_ControllerTypeClassifier.h; sourceTree = "<group>"; };
-		A0C9A36610934055BE3A6C67 /* Rtt_GameControllerDB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_GameControllerDB.cpp; path = Input/Rtt_GameControllerDB.cpp; sourceTree = "<group>"; };
-		29D4F8ABB6384DB3B56B90F9 /* Rtt_GameControllerDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_GameControllerDB.h; path = Input/Rtt_GameControllerDB.h; sourceTree = "<group>"; };
 		C229E12E1B32221B00D87A7C /* Rtt_PlatformNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73812B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp */; };
 		C229E12F1B32221B00D87A7C /* Rtt_PlatformOpenALPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE73A12B73EE300D9B6A4 /* Rtt_PlatformOpenALPlayer.cpp */; };
 		C229E1301B32221B00D87A7C /* Rtt_PlatformReachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DD13678AB5008DDB3D /* Rtt_PlatformReachability.cpp */; };
@@ -3365,10 +3358,6 @@
 				0304FE6B178E18B00047CC04 /* Rtt_InputDeviceType.h */,
 				0397043D17A3774E00681DED /* Rtt_PlatformInputAxis.cpp */,
 				0397043E17A3774E00681DED /* Rtt_PlatformInputAxis.h */,
-				1FD0027B1E994795A61A2468 /* Rtt_ControllerTypeClassifier.cpp */,
-				EDE1CA6627C746EBA4576A6D /* Rtt_ControllerTypeClassifier.h */,
-				A0C9A36610934055BE3A6C67 /* Rtt_GameControllerDB.cpp */,
-				29D4F8ABB6384DB3B56B90F9 /* Rtt_GameControllerDB.h */,
 				0304FE6C178E18B00047CC04 /* Rtt_PlatformInputDevice.cpp */,
 				0304FE6D178E18B00047CC04 /* Rtt_PlatformInputDevice.h */,
 				0304FE6E178E18B00047CC04 /* Rtt_PlatformInputDeviceManager.cpp */,
@@ -5300,10 +5289,6 @@
 				03D1C5571D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C2E993431A6B2FEC00E99F46 /* Rtt_PlatformInputAxis.cpp in Sources */,
 				C2E993441A6B2FEC00E99F46 /* Rtt_PlatformInputDevice.cpp in Sources */,
-				06661334D0E54C72923C8D4F /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				7D661ED80DD04BCAAA5CF410 /* Rtt_GameControllerDB.cpp in Sources */,
-				7707114B724A4D3F9D08C6F2 /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				177BFF615BD14DE9963A734C /* Rtt_GameControllerDB.cpp in Sources */,
 				C2E993451A6B2FEC00E99F46 /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				000CE7E412B73EE300D9B6A4 /* Rtt_PlatformNotifier.cpp in Sources */,
 				000CE7E612B73EE300D9B6A4 /* Rtt_PlatformOpenALPlayer.cpp in Sources */,
@@ -5736,10 +5721,6 @@
 				03D1C5581D70CC9A00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */,
 				C229E1291B32221B00D87A7C /* Rtt_PlatformInputAxis.cpp in Sources */,
 				C229E12A1B32221B00D87A7C /* Rtt_PlatformInputDevice.cpp in Sources */,
-				4C91632172164E5E8BBD7E5A /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				8715194C90A34D0E842739BD /* Rtt_GameControllerDB.cpp in Sources */,
-				7C3CF04E277E4E8FB68C5D5D /* Rtt_ControllerTypeClassifier.cpp in Sources */,
-				5B43316A584D4FA2A9BE3643 /* Rtt_GameControllerDB.cpp in Sources */,
 				C229E12B1B32221B00D87A7C /* Rtt_PlatformInputDeviceManager.cpp in Sources */,
 				C229E12E1B32221B00D87A7C /* Rtt_PlatformNotifier.cpp in Sources */,
 				C229E12F1B32221B00D87A7C /* Rtt_PlatformOpenALPlayer.cpp in Sources */,
