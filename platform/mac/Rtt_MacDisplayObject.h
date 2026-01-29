@@ -43,6 +43,7 @@ class MacDisplayObject : public PlatformDisplayObject
 		virtual void DidMoveOffscreen();
 		virtual void WillMoveOnscreen();
 		virtual bool CanCull() const;
+		static void NotifyBackingScaleChanged( float previousScale, float currentScale );
 
 	public:
 		// MDrawable
@@ -65,6 +66,9 @@ class MacDisplayObject : public PlatformDisplayObject
 		void AddSubviewToCoronaView();
 		void RecomputeNextKeyViews();
         static int setReturnKey( lua_State *L );
+		virtual void DidChangeBackingScale( float previousScale, float currentScale );
+		void RegisterBackingScaleListener();
+		void UnregisterBackingScaleListener();
 
 #if 0 // See TODO in .mm regarding Rtt_NATIVE_PROPERTIES_MAC
 	protected:

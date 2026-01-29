@@ -441,8 +441,11 @@ MacTextFieldObject::Prepare( const Display& display )
 {
 	Super::Prepare( display );
 
-	NSTextField *textfield = (NSTextField*)GetView();
-	AdjustFontToHeight( textfield );
+	if ( ShouldPrepare() )
+	{
+		NSTextField *textfield = (NSTextField*)GetView();
+		AdjustFontToHeight( textfield );
+	}
 }
 
 const LuaProxyVTable&
@@ -687,6 +690,27 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 
 	return result;
 
+}
+
+void
+MacTextFieldObject::DidChangeBackingScale( float previousScale, float currentScale )
+{
+	if ( ( previousScale <= 0.0f ) || ( currentScale <= 0.0f ) )
+	{
+		return;
+	}
+
+	NSTextField* textfield = (NSTextField*)GetView();
+	NSFont* currentFont = [textfield font];
+	if ( ! currentFont )
+	{
+		return;
+	}
+
+	float fontSize = [currentFont pointSize];
+	fontSize /= previousScale;
+	fontSize *= currentScale;
+	[textfield setFont:[currentFont fontWithSize:fontSize]];
 }
 
 bool

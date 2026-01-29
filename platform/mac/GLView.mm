@@ -21,6 +21,8 @@
 
 #include <CoreFoundation/CFBundle.h>
 #include <ctype.h>
+#include <float.h>
+#include <math.h>
 
 #ifdef Rtt_DEBUG
 #define NSDEBUG(...) // NSLog(__VA_ARGS__)
@@ -210,6 +212,7 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 @interface GLView ()
 - (void)dispatchEvent:(Rtt::MEvent*)event;
 - (void)applySwapIntervalBasedOnVsyncEnabled;
+- (void)handleWindowBackingPropertiesChanged:(NSNotification *)notification;
 @end
 
 @implementation GLView
@@ -241,6 +244,16 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 - (void) setRuntime:(Rtt::Runtime *)runtime
 {
 	fRuntime = runtime;
+}
+
+- (void) setScaleFactor:(CGFloat)newScale
+{
+	CGFloat previousScale = scaleFactor;
+	scaleFactor = newScale;
+	if ( fabs( previousScale - newScale ) > FLT_EPSILON )
+	{
+		Rtt::MacDisplayObject::NotifyBackingScaleChanged( previousScale, newScale );
+	}
 }
 
 - (id)initWithFrame:(NSRect)frameRect
@@ -287,6 +300,8 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidChangeBackingPropertiesNotification object:nil];
+
 	[self setLayer:nil];
 	
 	fRuntime = NULL; // Don't delete. We do not own this pointer
@@ -800,7 +815,24 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 	NSRect r = [self bounds];
 	trackingRectTag = [self addTrackingRect:r owner:self userData:nil assumeInside:NO];
 
-	scaleFactor = [[self window] backingScaleFactor];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSWindowDidChangeBackingPropertiesNotification object:nil];
+	if ( [self window] )
+	{
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(handleWindowBackingPropertiesChanged:)
+													 name:NSWindowDidChangeBackingPropertiesNotification
+												   object:[self window]];
+		self.scaleFactor = [[self window] backingScaleFactor];
+	}
+}
+
+- (void)handleWindowBackingPropertiesChanged:(NSNotification *)notification
+{
+	NSWindow *window = (NSWindow *)[notification object];
+	if ( window )
+	{
+		self.scaleFactor = [window backingScaleFactor];
+	}
 }
 
 - (void)mouseMoved:(NSEvent *)event

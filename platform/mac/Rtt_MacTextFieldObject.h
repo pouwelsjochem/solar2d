@@ -56,6 +56,7 @@ class MacTextFieldObject : public MacDisplayObject
 	protected:
 		static int setTextColor( lua_State *L );
 		static int setSelection( lua_State *L );
+		virtual void DidChangeBackingScale( float previousScale, float currentScale );
 
 	private:
 		bool fNoEmoji;

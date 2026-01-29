@@ -18,6 +18,9 @@
 #import "GLView.h"
 #include "Rtt_Display.h"
 
+#include <algorithm>
+#include <vector>
+
 #include "Rtt_Lua.h"
 #include "Rtt_Runtime.h"
 #include "Display/Rtt_LuaLibDisplay.h"
@@ -29,6 +32,8 @@ namespace Rtt
 {
 
 // ----------------------------------------------------------------------------
+
+static std::vector<MacDisplayObject*> sBackingScaleListeners;
 
 MacDisplayObject::MacDisplayObject( const Rect& bounds )
 :	fSelfBounds( bounds),
@@ -61,11 +66,17 @@ MacDisplayObject::MacDisplayObject( const Rect& bounds )
 	// The self bounds needs to be centered around DisplayObject's local origin
 	// even though UIView's bounds will not be.
 	fSelfBounds.MoveCenterToOrigin();
+
+	sBackingScaleListeners.push_back( this );
 	
 }
 
 MacDisplayObject::~MacDisplayObject()
 {
+	sBackingScaleListeners.erase(
+		std::remove( sBackingScaleListeners.begin(), sBackingScaleListeners.end(), this ),
+		sBackingScaleListeners.end() );
+
 	[fView removeFromSuperview];
 	[fView release];
 	// I don't think this is working quite right. Removing an element in the middle of the list seems to keep some intermediate focus.
@@ -106,6 +117,23 @@ MacDisplayObject::CanCull() const
 	// Note: This is needed so that the Build() function will get called when a native object
 	//       is being moved partially or completely offscreen.
 	return false;
+}
+
+void
+MacDisplayObject::NotifyBackingScaleChanged( float previousScale, float currentScale )
+{
+	if ( ( previousScale <= 0.0f ) || ( currentScale <= 0.0f ) )
+	{
+		return;
+	}
+
+	for ( MacDisplayObject* object : sBackingScaleListeners )
+	{
+		if ( object )
+		{
+			object->DidChangeBackingScale( previousScale, currentScale );
+		}
+	}
 }
 
 
@@ -260,6 +288,13 @@ MacDisplayObject::RecomputeNextKeyViews()
 	[lastview setNextKeyView:firstview];
 }
 
+void
+MacDisplayObject::DidChangeBackingScale( float previousScale, float currentScale )
+{
+	(void)previousScale;
+	(void)currentScale;
+}
+
 int
 MacDisplayObject::ValueForKey( lua_State *L, const char key[] ) const
 {
@@ -384,4 +419,3 @@ MacDisplayObject::SetNativeProperty( lua_State *L, const char key[], int valueIn
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-
