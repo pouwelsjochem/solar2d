@@ -22,6 +22,7 @@
 @implementation AppleKeyServices
 
 static NSDictionary *keyNameDictionary = nil;
+static NSDictionary *keyCodeDictionary = nil;
 
 + (NSString*)getNameForKey:(NSNumber*)keyCode
 {
@@ -296,6 +297,45 @@ static NSDictionary *keyNameDictionary = nil;
         ret = @"";
     }
     return ret;
+}
+
++ (NSNumber*)getKeyCodeForName:(NSString*)name
+{
+    if (!name)
+    {
+        return nil;
+    }
+
+    if (nil == keyNameDictionary)
+    {
+        // Ensure the key name map is initialized before building the reverse map.
+        (void)[self getNameForKey:@0];
+    }
+
+    if (nil == keyCodeDictionary)
+    {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:[keyNameDictionary count]];
+        for (NSNumber *key in keyNameDictionary)
+        {
+            NSString *value = [keyNameDictionary objectForKey:key];
+            if (value)
+            {
+                [dict setObject:key forKey:value];
+            }
+        }
+        keyCodeDictionary = [dict copy];
+    }
+
+    NSNumber *keyCode = [keyCodeDictionary objectForKey:name];
+    if (!keyCode && [name length] == 1)
+    {
+        NSString *lowerName = [name lowercaseString];
+        if (![lowerName isEqualToString:name])
+        {
+            keyCode = [keyCodeDictionary objectForKey:lowerName];
+        }
+    }
+    return keyCode;
 }
 
 

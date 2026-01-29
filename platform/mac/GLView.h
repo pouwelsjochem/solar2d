@@ -50,6 +50,7 @@ namespace Rtt
 @property (nonatomic, assign) NSPoint initialLocation;
 
 + (NSOpenGLPixelFormat*) basicPixelFormat;
++ (const char*)keyNameForKeyCodeInCurrentLayout:(unsigned short)keyCode;
 
 - (void)setDelegate:(id< GLViewDelegate >)delegate;
 

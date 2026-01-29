@@ -226,6 +226,11 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 @synthesize cursorHidden;
 @synthesize initialLocation;
 
++ (const char*)keyNameForKeyCodeInCurrentLayout:(unsigned short)keyCode
+{
+	return RttCoronaKeyNameForKeyCode(keyCode);
+}
+
 // pixel format definition
 + (NSOpenGLPixelFormat*) basicPixelFormat
 {

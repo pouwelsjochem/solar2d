@@ -26,6 +26,8 @@ enum KeyCodes
 
 + (NSString*)getNameForKey:(NSNumber*)keyCode;
 
++ (NSNumber*)getKeyCodeForName:(NSString*)name;
+
 + (NSUInteger)getModifierMaskForKey:(unsigned short)keyCode;
 
 @end

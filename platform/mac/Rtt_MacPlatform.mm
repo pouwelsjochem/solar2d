@@ -1670,6 +1670,31 @@ void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Rea
 	top = left = bottom = right = 0;
 }
 
+const char* MacPlatform::GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const
+{
+	if (!qwertyKeyName || ('\0' == qwertyKeyName[0]))
+	{
+		return NULL;
+	}
+
+	NSString *keyName = [NSString stringWithUTF8String:qwertyKeyName];
+	NSNumber *keyCode = [AppleKeyServices getKeyCodeForName:keyName];
+	if (!keyCode && ('\0' == qwertyKeyName[1]))
+	{
+		NSString *lowerName = [keyName lowercaseString];
+		if (![lowerName isEqualToString:keyName])
+		{
+			keyCode = [AppleKeyServices getKeyCodeForName:lowerName];
+		}
+	}
+	if (!keyCode)
+	{
+		return NULL;
+	}
+
+	return [GLView keyNameForKeyCodeInCurrentLayout:(unsigned short)[keyCode unsignedShortValue]];
+}
+
 // ----------------------------------------------------------------------------
 
 // TODO: Move this to a separate file
