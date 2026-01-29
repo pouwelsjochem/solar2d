@@ -20,6 +20,8 @@
 
 @class Rtt_NSTextField;
 @class Rtt_NSSecureTextField;
+@class Rtt_NSTextFieldCell;
+@class Rtt_NSSecureTextFieldCell;
 
 namespace Rtt
 {
@@ -39,6 +41,7 @@ class MacTextFieldObject : public MacDisplayObject
 	public:
 		// PlatformDisplayObject
 		virtual bool Initialize();
+		virtual void Prepare( const Display& display );
 
 	public:
 		// DisplayObject
@@ -75,6 +78,9 @@ class MacTextFieldObject : public MacDisplayObject
 
 @end
 
+@interface Rtt_NSTextFieldCell : NSTextFieldCell
+@end
+
 
 @interface Rtt_NSSecureTextField : NSSecureTextField
 {
@@ -83,6 +89,9 @@ class MacTextFieldObject : public MacDisplayObject
 
 @property(nonatomic, assign) Rtt::MacTextFieldObject *owner;
 
+@end
+
+@interface Rtt_NSSecureTextFieldCell : NSSecureTextFieldCell
 @end
 
 // ----------------------------------------------------------------------------

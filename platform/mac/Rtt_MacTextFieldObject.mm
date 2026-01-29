@@ -18,6 +18,7 @@
 
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSColor.h>
+#include <math.h>
 
 #include "Rtt_Lua.h"
 #include "CoronaLua.h"
@@ -100,6 +101,12 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 @implementation Rtt_NSTextField
 
 @synthesize owner;
+
+// Use a custom cell so we can control vertical alignment.
++ (Class)cellClass
+{
+	return [Rtt_NSTextFieldCell class];
+}
 
 // For some reason overriding drawRect: but merely calling super is enough to make displaying transparent
 // NSTextFields work (without this, fields with no background display a black rectangle)
@@ -184,6 +191,12 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 
 @synthesize owner;
 
+// Use a custom cell so we can control vertical alignment.
++ (Class)cellClass
+{
+	return [Rtt_NSSecureTextFieldCell class];
+}
+
 - (BOOL) becomeFirstResponder;
 {
 	BOOL did_become_first_responder = [super becomeFirstResponder];
@@ -255,6 +268,74 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 
 // ----------------------------------------------------------------------------
 
+@implementation Rtt_NSTextFieldCell
+
+- (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
+{
+	NSRect rect = [self drawingRectForBounds:aRect];
+	[super editWithFrame:rect inView:controlView editor:textObj delegate:anObject event:theEvent];
+}
+
+- (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
+{
+	NSRect rect = [self drawingRectForBounds:aRect];
+	[super selectWithFrame:rect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
+}
+
+- (NSRect)drawingRectForBounds:(NSRect)theRect
+{
+	NSRect rect = [super drawingRectForBounds:theRect];
+	NSFont *font = [self font];
+	if (font)
+	{
+		CGFloat textHeight = font.ascender - font.descender + font.leading;
+		CGFloat delta = rect.size.height - textHeight;
+		if (delta > 1.0)
+		{
+			rect.origin.y += floor(delta * 0.5f);
+			rect.size.height = textHeight;
+		}
+	}
+	return rect;
+}
+
+@end
+
+@implementation Rtt_NSSecureTextFieldCell
+
+- (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent
+{
+	NSRect rect = [self drawingRectForBounds:aRect];
+	[super editWithFrame:rect inView:controlView editor:textObj delegate:anObject event:theEvent];
+}
+
+- (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
+{
+	NSRect rect = [self drawingRectForBounds:aRect];
+	[super selectWithFrame:rect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
+}
+
+- (NSRect)drawingRectForBounds:(NSRect)theRect
+{
+	NSRect rect = [super drawingRectForBounds:theRect];
+	NSFont *font = [self font];
+	if (font)
+	{
+		CGFloat textHeight = font.ascender - font.descender + font.leading;
+		CGFloat delta = rect.size.height - textHeight;
+		if (delta > 1.0)
+		{
+			rect.origin.y += floor(delta * 0.5f);
+			rect.size.height = textHeight;
+		}
+	}
+	return rect;
+}
+
+@end
+
+// ----------------------------------------------------------------------------
+
 namespace Rtt
 {
 
@@ -306,6 +387,62 @@ MacTextFieldObject::Initialize()
 	[[(NSTextField*)GetView() cell] setScrollable:YES];
 	
 	return (t != nil);
+}
+
+static void
+AdjustFontToHeight( NSTextField *textfield )
+{
+	if ( ! textfield )
+	{
+		return;
+	}
+
+	CGFloat fieldHeight = textfield.frame.size.height;
+	if (fieldHeight <= 0.0f)
+	{
+		return;
+	}
+
+	NSFont *baseFont = [textfield font];
+	if ( ! baseFont )
+	{
+		baseFont = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]];
+	}
+
+	CGFloat targetTextHeight = fieldHeight * 0.75f;
+	CGFloat baseTextHeight = baseFont.ascender - baseFont.descender + baseFont.leading;
+	if (baseTextHeight <= 0.0f)
+	{
+		return;
+	}
+
+	CGFloat targetPointSize = baseFont.pointSize * (targetTextHeight / baseTextHeight);
+	if (targetPointSize < 1.0f)
+	{
+		targetPointSize = 1.0f;
+	}
+
+	if (fabs([baseFont pointSize] - targetPointSize) < 0.1f)
+	{
+		return;
+	}
+
+	NSFont *scaledFont = [NSFont fontWithName:[baseFont fontName] size:targetPointSize];
+	if ( ! scaledFont )
+	{
+		scaledFont = [NSFont systemFontOfSize:targetPointSize];
+	}
+
+	[textfield setFont:scaledFont];
+}
+
+void
+MacTextFieldObject::Prepare( const Display& display )
+{
+	Super::Prepare( display );
+
+	NSTextField *textfield = (NSTextField*)GetView();
+	AdjustFontToHeight( textfield );
 }
 
 const LuaProxyVTable&
