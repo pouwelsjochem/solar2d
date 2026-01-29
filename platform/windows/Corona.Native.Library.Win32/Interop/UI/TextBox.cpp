@@ -13,6 +13,7 @@
 #include <CommCtrl.h>
 #include <cwctype>
 #include <cstring>
+#include <cmath>
 #include <regex>
 
 
@@ -26,7 +27,9 @@ TextBox::TextBox(const TextBox::CreationSettings& settings)
 	fCustomTextColor(RGB(0, 0, 0)),
 	fLastUpdatedText(L""),
 	fIsDecimalNumericOnly(false),
-	fNoEmoji(false)
+	fNoEmoji(false),
+	fScaledFont(nullptr),
+	fLastAppliedHeight(0)
 {
 	// Set up the text box window styles. Always single line for native text fields.
 	DWORD styles = WS_TABSTOP | WS_VISIBLE | WS_CHILD | WS_BORDER | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
@@ -52,6 +55,7 @@ TextBox::TextBox(const TextBox::CreationSettings& settings)
 
 	// Store the window handle and start listening to its Windows message events.
 	OnSetWindowHandle(windowHandle);
+	UpdateScaledFont();
 
 	// Add event handlers.
 	GetReceivedMessageEventHandlers().Add(&fReceivedMessageEventHandler);
@@ -68,6 +72,17 @@ TextBox::~TextBox()
 
 	// Remove event handlers.
 	GetReceivedMessageEventHandlers().Remove(&fReceivedMessageEventHandler);
+
+	if (fScaledFont)
+	{
+		auto fontHandle = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
+		if (fontHandle)
+		{
+			::SendMessageW(windowHandle, WM_SETFONT, (WPARAM)fontHandle, 0);
+		}
+		::DeleteObject(fScaledFont);
+		fScaledFont = nullptr;
+	}
 
 	// Detach the WndProc callback from the window.
 	// Note: Must be done before destroying it.
@@ -440,6 +455,11 @@ void TextBox::OnReceivedMessage(UIComponent& sender, HandleMessageEventArgs& arg
 			SetSelection(0, -1);
 			break;
 		}
+		case WM_SIZE:
+		{
+			UpdateScaledFont();
+			break;
+		}
 		case WM_CHAR:
 		{
 			if (VK_RETURN == arguments.GetWParam())
@@ -539,6 +559,86 @@ void TextBox::OnReceivedMessage(UIComponent& sender, HandleMessageEventArgs& arg
 			break;
 		}
 	}
+}
+
+void TextBox::UpdateScaledFont()
+{
+	auto windowHandle = GetWindowHandle();
+	if (!windowHandle)
+	{
+		return;
+	}
+
+	RECT clientBounds{};
+	if (::GetClientRect(windowHandle, &clientBounds) == FALSE)
+	{
+		return;
+	}
+
+	int height = clientBounds.bottom - clientBounds.top;
+	if (height <= 0 || height == fLastAppliedHeight)
+	{
+		return;
+	}
+
+	auto baseFont = (HFONT)::SendMessageW(windowHandle, WM_GETFONT, 0, 0);
+	if (!baseFont)
+	{
+		baseFont = (HFONT)::GetStockObject(DEFAULT_GUI_FONT);
+	}
+	if (!baseFont)
+	{
+		return;
+	}
+
+	HDC dc = ::GetDC(windowHandle);
+	if (!dc)
+	{
+		return;
+	}
+	HGDIOBJ previousFont = ::SelectObject(dc, baseFont);
+	TEXTMETRIC textMetrics{};
+	BOOL hasMetrics = ::GetTextMetricsW(dc, &textMetrics);
+	::SelectObject(dc, previousFont);
+	::ReleaseDC(windowHandle, dc);
+	if (!hasMetrics || textMetrics.tmHeight <= 0)
+	{
+		return;
+	}
+
+	int targetHeight = (int)std::lround(height * 0.75f);
+	if (targetHeight < 1)
+	{
+		targetHeight = 1;
+	}
+
+	LOGFONT logFont{};
+	if (::GetObjectW(baseFont, sizeof(logFont), &logFont) == 0)
+	{
+		return;
+	}
+
+	float scale = (float)targetHeight / (float)textMetrics.tmHeight;
+	int newHeight = (int)std::lround((float)logFont.lfHeight * scale);
+	if (newHeight == 0)
+	{
+		newHeight = (logFont.lfHeight < 0) ? -1 : 1;
+	}
+	logFont.lfHeight = newHeight;
+
+	auto newFont = ::CreateFontIndirectW(&logFont);
+	if (!newFont)
+	{
+		return;
+	}
+
+	if (fScaledFont)
+	{
+		::DeleteObject(fScaledFont);
+	}
+	fScaledFont = newFont;
+	fLastAppliedHeight = height;
+	::SendMessageW(windowHandle, WM_SETFONT, (WPARAM)fScaledFont, (LPARAM)TRUE);
 }
 
 #pragma endregion

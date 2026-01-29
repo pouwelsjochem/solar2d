@@ -271,6 +271,9 @@ class TextBox : public Control
 		/// </param>
 		void OnReceivedMessage(UIComponent& sender, HandleMessageEventArgs& arguments);
 
+		/// <summary>Resizes the font to approximately match the control's current height.</summary>
+		void UpdateScaledFont();
+
 		#pragma endregion
 
 
@@ -310,6 +313,12 @@ class TextBox : public Control
 		///  <para>Set to true if text field rejects emoji characters.</para>
 		/// </summary>
 		bool fNoEmoji;
+
+		/// <summary>Font handle sized to fit the current control height.</summary>
+		HFONT fScaledFont;
+
+		/// <summary>Last client height used to size the font.</summary>
+		int fLastAppliedHeight;
 
 		#pragma endregion
 };
