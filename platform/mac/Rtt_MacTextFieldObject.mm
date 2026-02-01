@@ -18,6 +18,7 @@
 
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSColor.h>
+#import <Carbon/Carbon.h>
 #include <math.h>
 
 #include "Rtt_Lua.h"
@@ -145,6 +146,19 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 	}
 }
 
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector
+{
+	(void)control;
+	(void)textView;
+
+	if (commandSelector == @selector(cancelOperation:))
+	{
+		DispatchEvent( self, Rtt::UserInputEvent::kCancelled );
+		return YES;
+	}
+	return NO;
+}
+
 - (BOOL)textView:(NSTextView*)textView shouldChangeTextInRange:(NSRange)range replacementString:(NSString*)string
 {
 	// location (first number) is the start position of the string
@@ -228,6 +242,19 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 			DispatchEvent( self, Rtt::UserInputEvent::kEnded );
 		}
 	}
+}
+
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector
+{
+	(void)control;
+	(void)textView;
+
+	if (commandSelector == @selector(cancelOperation:))
+	{
+		DispatchEvent( self, Rtt::UserInputEvent::kCancelled );
+		return YES;
+	}
+	return NO;
 }
 
 - (BOOL)textView:(NSTextView*)textView shouldChangeTextInRange:(NSRange)range replacementString:(NSString*)string

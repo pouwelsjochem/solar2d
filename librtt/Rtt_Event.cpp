@@ -1727,6 +1727,7 @@ UserInputEvent::StringForPhase( Phase phase )
 	static const char kBeganString[] = "began";
 	static const char kEditingString[] = "editing";
 	static const char kSubmittedString[] = "submitted";
+	static const char kCancelledString[] = "cancelled";
 	static const char kEndedString[] = "ended";
 
 	switch( phase )
@@ -1739,6 +1740,9 @@ UserInputEvent::StringForPhase( Phase phase )
 			break;
 		case kSubmitted:
 			result = kSubmittedString;
+			break;
+		case kCancelled:
+			result = kCancelledString;
 			break;
 		case kEnded:
 			result = kEndedString;

@@ -41,7 +41,8 @@ WinTextBoxObject::WinTextBoxObject(Interop::RuntimeEnvironment& environment, con
 	fGainedFocusEventHandler(this, &WinTextBoxObject::OnGainedFocus),
 	fLostFocusEventHandler(this, &WinTextBoxObject::OnLostFocus),
 	fTextChangedEventHandler(this, &WinTextBoxObject::OnTextChanged),
-	fPressedEnterKeyEventHandler(this, &WinTextBoxObject::OnPressedEnterKey)
+	fPressedEnterKeyEventHandler(this, &WinTextBoxObject::OnPressedEnterKey),
+	fReceivedMessageEventHandler(this, &WinTextBoxObject::OnReceivedMessage)
 {
 }
 
@@ -90,6 +91,7 @@ bool WinTextBoxObject::Initialize()
 	fTextBoxPointer->GetLostFocusEventHandlers().Add(&fLostFocusEventHandler);
 	fTextBoxPointer->GetTextChangedEventHandlers().Add(&fTextChangedEventHandler);
 	fTextBoxPointer->GetPressedEnterKeyEventHandlers().Add(&fPressedEnterKeyEventHandler);
+	fTextBoxPointer->GetReceivedMessageEventHandlers().Add(&fReceivedMessageEventHandler);
 
 	// Let the base class finish initialization of this object.
 	return WinDisplayObject::Initialize();
@@ -389,6 +391,31 @@ void WinTextBoxObject::OnPressedEnterKey(Interop::UI::TextBox& sender, Interop::
 
 	// Flag the enter key as handled.
 	arguments.SetHandled();
+}
+
+void WinTextBoxObject::OnReceivedMessage(
+	Interop::UI::UIComponent& sender, Interop::UI::HandleMessageEventArgs& arguments)
+{
+	(void)sender;
+
+	if (arguments.WasHandled())
+	{
+		return;
+	}
+
+	UINT messageId = arguments.GetMessageId();
+	if (messageId != WM_KEYDOWN)
+	{
+		return;
+	}
+
+	if (arguments.GetWParam() != VK_ESCAPE)
+	{
+		return;
+	}
+
+	Rtt::UserInputEvent event(Rtt::UserInputEvent::kCancelled);
+	DispatchEventWithTarget(event);
 }
 
 #pragma endregion

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Core\Rtt_Build.h"
+#include "Interop\UI\UIComponent.h"
 #include "Interop\UI\TextBox.h"
 #include "Renderer\Rtt_RenderData.h"
 #include "Rtt_WinDisplayObject.h"
@@ -91,6 +92,11 @@ class WinTextBoxObject : public WinDisplayObject
 		/// </param>
 		void OnPressedEnterKey(Interop::UI::TextBox& sender, Interop::HandledEventArgs& arguments);
 
+		/// <summary>
+		///  <para>Called when the escape key has been pressed or released from a text field.</para>
+		/// </summary>
+		void OnReceivedMessage(Interop::UI::UIComponent& sender, Interop::UI::HandleMessageEventArgs& arguments);
+
 		#pragma endregion
 
 
@@ -137,6 +143,9 @@ class WinTextBoxObject : public WinDisplayObject
 
 		/// <summary>Handler to be invoked when the "PressedEnterKey" event has been raised.</summary>
 		Interop::UI::TextBox::PressedEnterKeyEvent::MethodHandler<WinTextBoxObject> fPressedEnterKeyEventHandler;
+
+		/// <summary>Handler to be invoked when the "ReceivedMessage" event has been raised.</summary>
+		Interop::UI::UIComponent::ReceivedMessageEvent::MethodHandler<WinTextBoxObject> fReceivedMessageEventHandler;
 
 		#pragma endregion
 };

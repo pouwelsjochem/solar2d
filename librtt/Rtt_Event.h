@@ -820,6 +820,7 @@ class UserInputEvent : public VirtualEvent
 			kBegan = 0,
 			kEditing,
 			kSubmitted,
+			kCancelled,
 			kEnded,
 
 			kNumPhases
