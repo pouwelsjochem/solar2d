@@ -24,7 +24,16 @@ copy "$(SolutionDir)Bin\Corona\CoronaLabs.Corona.Native.dll" "$(IntDir)AppTempla
 copy "$(SolutionDir)Bin\Corona\lua.dll" "$(IntDir)AppTemplate" /Y
 copy "$(SolutionDir)Bin\Corona\OpenAL32.dll" "$(IntDir)AppTemplate" /Y
 copy "$(SolutionDir)Bin\Corona\pthreads.dll" "$(IntDir)AppTemplate" /Y
-xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" "$(IntDir)AppTemplate" /Y /I
+set "crtRedistGlob=$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
+if not exist "%crtRedistGlob%" set "crtRedistGlob=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
+if /I "$(PlatformTarget)" == "Win32" (
+   if not exist "%crtRedistGlob%" set "crtRedistGlob=$(VCToolsRedistDir)x86\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
+)
+if exist "%crtRedistGlob%" (
+   xcopy "%crtRedistGlob%" "$(IntDir)AppTemplate" /Y /I
+) else (
+   echo VC CRT redist DLLs not found, checked "%crtRedistGlob%", skipping copy.
+)
 xcopy "$(SolutionDir)Bin\Corona\Resources\Corona" "$(IntDir)AppTemplate\Resources" /Y /I
 
 REM Zip up the app template and copy it into the Corona directory. Needed for local builds via the Corona Simulator.

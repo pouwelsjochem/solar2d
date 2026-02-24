@@ -25,7 +25,16 @@ REM Copy this library's dependencies to the "Bin\Corona" directory.
 if not exist "$(SolutionDir)Bin\Corona" (
    mkdir "$(SolutionDir)Bin\Corona"
 )
-xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" "$(SolutionDir)Bin\Corona" /Y /I
+set "crtRedistGlob=$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
+if not exist "%crtRedistGlob%" set "crtRedistGlob=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
+if /I "$(PlatformTarget)" == "Win32" (
+   if not exist "%crtRedistGlob%" set "crtRedistGlob=$(VCToolsRedistDir)x86\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
+)
+if exist "%crtRedistGlob%" (
+   xcopy "%crtRedistGlob%" "$(SolutionDir)Bin\Corona" /Y /I
+) else (
+   echo VC CRT redist DLLs not found, checked "%crtRedistGlob%", skipping copy.
+)
 
 REM Do the following for debug and release DLL builds. (Skipped for Corona Simulator builds.)
 if $(TargetExt) == .dll (

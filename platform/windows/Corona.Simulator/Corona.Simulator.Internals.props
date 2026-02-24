@@ -26,7 +26,16 @@ REM Build the Corona Shell and its app template to the "Bin\Corona" directory. T
 
 REM Copy all other Corona Simulator related files to the "Bin\Corona" directory.
 cd
-xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll" "$(OutDir)" /Y /I
+set "mfcRedistGlob=$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll"
+if not exist "%mfcRedistGlob%" set "mfcRedistGlob=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll"
+if /I "$(PlatformTarget)" == "Win32" (
+   if not exist "%mfcRedistGlob%" set "mfcRedistGlob=$(VCToolsRedistDir)x86\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll"
+)
+if exist "%mfcRedistGlob%" (
+   xcopy "%mfcRedistGlob%" "$(OutDir)" /Y /I
+) else (
+   echo VC MFC redist DLLs not found, checked "%mfcRedistGlob%", skipping copy.
+)
 xcopy "..\..\resources\Skins" "$(OutDir)Resources\Skins" /Y /I /E
 copy "..\Build.Tools\7za.exe" "$(OutDir)" /Y
 copy "..\Build.Tools\zipalign.exe" "$(OutDir)Resources" /Y
