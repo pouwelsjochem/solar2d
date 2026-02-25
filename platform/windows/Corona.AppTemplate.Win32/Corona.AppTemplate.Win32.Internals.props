@@ -5,8 +5,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <ResolvedSolutionDir Condition="'$(SolutionDir)' != ''">$(SolutionDir)</ResolvedSolutionDir>
-    <ResolvedSolutionDir Condition="'$(ResolvedSolutionDir)' == ''">$([MSBuild]::EnsureTrailingSlash('$(ProjectDir)..\'))</ResolvedSolutionDir>
+    <ResolvedSolutionDir Condition="'$(SolutionDir)' != ''">$([MSBuild]::EnsureTrailingSlash('$(SolutionDir)'))</ResolvedSolutionDir>
+    <ResolvedSolutionDir Condition="'$(ResolvedSolutionDir)' == '' or !Exists('$(ResolvedSolutionDir)Build.Tools\7za.exe')">$([MSBuild]::EnsureTrailingSlash('$(ProjectDir)..\'))</ResolvedSolutionDir>
     <OutDir>$(ResolvedSolutionDir)Bin\AppTemplates\Win32\</OutDir>
     <TargetName>Corona.App</TargetName>
     <AppTemplateStagingDir>$(IntDir)AppTemplate\</AppTemplateStagingDir>
@@ -26,6 +26,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <Target Name="StageWin32AppTemplate" AfterTargets="Build">
+    <Message Text="StageWin32AppTemplate: using ResolvedSolutionDir=$(ResolvedSolutionDir)" Importance="High" />
     <RemoveDir Directories="$(AppTemplateStagingDir)" Condition="Exists('$(AppTemplateStagingDir)')" />
     <MakeDir Directories="$(AppTemplateStagingDir)" />
     <MakeDir Directories="$(AppTemplateResourcesDir)" />
