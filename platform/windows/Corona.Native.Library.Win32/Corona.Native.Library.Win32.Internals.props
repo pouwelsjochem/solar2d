@@ -29,6 +29,8 @@
     <MakeDir Directories="$(CoronaBinDir)" />
     <ItemGroup>
       <_NativeCrtDll Include="$(VCToolsRedistDir)$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
+      <_NativeCrtDll Include="$(VCToolsInstallDir)..\..\..\Redist\MSVC\*\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
+      <_NativeCrtDll Include="$(VSInstallDir)VC\Redist\MSVC\*\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
       <_NativeCrtDll Include="$(VCInstallDir)redist\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
     </ItemGroup>
     <RemoveDuplicates Inputs="@(_NativeCrtDll)">

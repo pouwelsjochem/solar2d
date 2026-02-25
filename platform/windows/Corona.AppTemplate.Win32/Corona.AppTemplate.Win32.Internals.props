@@ -36,6 +36,8 @@
       <_TemplateRootFiles Include="$(TargetPath)" />
       <_TemplateRootFiles Include="@(_TemplateRequiredRuntimeDll)" />
       <_TemplateCrtDll Include="$(VCToolsRedistDir)$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
+      <_TemplateCrtDll Include="$(VCToolsInstallDir)..\..\..\Redist\MSVC\*\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
+      <_TemplateCrtDll Include="$(VSInstallDir)VC\Redist\MSVC\*\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
       <_TemplateCrtDll Include="$(VCInstallDir)redist\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
       <_TemplateResourceFiles Include="$(SolutionDir)Bin\Corona\Resources\Corona\**\*.*" />
     </ItemGroup>
