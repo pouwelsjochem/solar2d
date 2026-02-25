@@ -31,11 +31,12 @@ if errorlevel 1 (
 
 REM Copy all other Corona Simulator related files to the "Bin\Corona" directory.
 cd
-set "mfcRedistGlob=$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll"
-if not exist "%mfcRedistGlob%" set "mfcRedistGlob=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll"
-if /I "$(PlatformTarget)" == "Win32" (
-   if not exist "%mfcRedistGlob%" set "mfcRedistGlob=$(VCToolsRedistDir)x86\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll"
-)
+set "redistArch=$(PlatformTarget)"
+if /I "%redistArch%" == "Win32" set "redistArch=x86"
+set "mfcRedistGlob=$(VCToolsRedistDir)%redistArch%\Microsoft.VC*.MFC\*.dll"
+if not exist "%mfcRedistGlob%" set "mfcRedistGlob=$(VCToolsInstallDir)..\..\..\Redist\MSVC\*\%redistArch%\Microsoft.VC*.MFC\*.dll"
+if not exist "%mfcRedistGlob%" set "mfcRedistGlob=$(VSInstallDir)VC\Redist\MSVC\*\%redistArch%\Microsoft.VC*.MFC\*.dll"
+if not exist "%mfcRedistGlob%" set "mfcRedistGlob=$(VCInstallDir)redist\%redistArch%\Microsoft.VC*.MFC\*.dll"
 if exist "%mfcRedistGlob%" (
    xcopy "%mfcRedistGlob%" "$(OutDir)" /Y /I
 ) else (
