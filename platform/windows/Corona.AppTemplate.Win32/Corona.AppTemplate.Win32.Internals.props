@@ -5,11 +5,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>$(SolutionDir)Bin\AppTemplates\Win32\</OutDir>
+    <ResolvedSolutionDir Condition="'$(SolutionDir)' != ''">$(SolutionDir)</ResolvedSolutionDir>
+    <ResolvedSolutionDir Condition="'$(ResolvedSolutionDir)' == ''">$([MSBuild]::EnsureTrailingSlash('$(ProjectDir)..\'))</ResolvedSolutionDir>
+    <OutDir>$(ResolvedSolutionDir)Bin\AppTemplates\Win32\</OutDir>
     <TargetName>Corona.App</TargetName>
     <AppTemplateStagingDir>$(IntDir)AppTemplate\</AppTemplateStagingDir>
     <AppTemplateResourcesDir>$(AppTemplateStagingDir)Resources\</AppTemplateResourcesDir>
-    <CoronaSdkTemplateDir>$(SolutionDir)Bin\Corona\Resources\AppTemplates\Win32\</CoronaSdkTemplateDir>
+    <CoronaSdkTemplateDir>$(ResolvedSolutionDir)Bin\Corona\Resources\AppTemplates\Win32\</CoronaSdkTemplateDir>
     <CoronaSdkTemplateZipPath>$(CoronaSdkTemplateDir)Template.zip</CoronaSdkTemplateZipPath>
     <RedistArch>$(PlatformTarget)</RedistArch>
     <RedistArch Condition="'$(PlatformTarget)' == 'Win32'">x86</RedistArch>
@@ -28,18 +30,18 @@
     <MakeDir Directories="$(AppTemplateStagingDir)" />
     <MakeDir Directories="$(AppTemplateResourcesDir)" />
     <ItemGroup>
-      <_TemplateRequiredRuntimeDll Include="$(SolutionDir)Bin\Corona\ALmixer.dll" />
-      <_TemplateRequiredRuntimeDll Include="$(SolutionDir)Bin\Corona\CoronaLabs.Corona.Native.dll" />
-      <_TemplateRequiredRuntimeDll Include="$(SolutionDir)Bin\Corona\lua.dll" />
-      <_TemplateRequiredRuntimeDll Include="$(SolutionDir)Bin\Corona\OpenAL32.dll" />
-      <_TemplateRequiredRuntimeDll Include="$(SolutionDir)Bin\Corona\pthreads.dll" />
+      <_TemplateRequiredRuntimeDll Include="$(ResolvedSolutionDir)Bin\Corona\ALmixer.dll" />
+      <_TemplateRequiredRuntimeDll Include="$(ResolvedSolutionDir)Bin\Corona\CoronaLabs.Corona.Native.dll" />
+      <_TemplateRequiredRuntimeDll Include="$(ResolvedSolutionDir)Bin\Corona\lua.dll" />
+      <_TemplateRequiredRuntimeDll Include="$(ResolvedSolutionDir)Bin\Corona\OpenAL32.dll" />
+      <_TemplateRequiredRuntimeDll Include="$(ResolvedSolutionDir)Bin\Corona\pthreads.dll" />
       <_TemplateRootFiles Include="$(TargetPath)" />
       <_TemplateRootFiles Include="@(_TemplateRequiredRuntimeDll)" />
       <_TemplateCrtDll Include="$(VCToolsRedistDir)$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
       <_TemplateCrtDll Include="$(VCToolsInstallDir)..\..\..\Redist\MSVC\*\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
       <_TemplateCrtDll Include="$(VSInstallDir)VC\Redist\MSVC\*\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
       <_TemplateCrtDll Include="$(VCInstallDir)redist\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
-      <_TemplateResourceFiles Include="$(SolutionDir)Bin\Corona\Resources\Corona\**\*.*" />
+      <_TemplateResourceFiles Include="$(ResolvedSolutionDir)Bin\Corona\Resources\Corona\**\*.*" />
     </ItemGroup>
     <RemoveDuplicates Inputs="@(_TemplateCrtDll)">
       <Output TaskParameter="Filtered" ItemName="_TemplateCrtDllDistinct" />
@@ -61,8 +63,8 @@
     <Error Text="Missing required CRT family 'vcruntime*.dll' in $(AppTemplateStagingDir)." Condition="'$(ConfigurationName)' == 'Release' and '@(_TemplateVcruntimeDll)' == ''" />
     <RemoveDir Directories="$(CoronaSdkTemplateDir)" Condition="Exists('$(CoronaSdkTemplateDir)')" />
     <MakeDir Directories="$(CoronaSdkTemplateDir)" />
-    <Exec Command="&quot;$(SolutionDir)Build.Tools\7za&quot; a -tzip -r -y &quot;$(CoronaSdkTemplateZipPath)&quot; &quot;$(AppTemplateStagingDir)*.*&quot;" />
-    <Exec Command="&quot;$(SolutionDir)Build.Tools\7za&quot; x -y &quot;$(CoronaSdkTemplateZipPath)&quot; -o&quot;$(TargetDir).&quot;" />
+    <Exec Command="&quot;$(ResolvedSolutionDir)Build.Tools\7za&quot; a -tzip -r -y &quot;$(CoronaSdkTemplateZipPath)&quot; &quot;$(AppTemplateStagingDir)*.*&quot;" />
+    <Exec Command="&quot;$(ResolvedSolutionDir)Build.Tools\7za&quot; x -y &quot;$(CoronaSdkTemplateZipPath)&quot; -o&quot;$(TargetDir).&quot;" />
   </Target>
   <ItemGroup />
 </Project>

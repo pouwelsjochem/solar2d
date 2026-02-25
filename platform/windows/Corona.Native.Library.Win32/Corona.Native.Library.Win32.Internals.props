@@ -5,10 +5,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
+    <ResolvedSolutionDir Condition="'$(SolutionDir)' != ''">$(SolutionDir)</ResolvedSolutionDir>
+    <ResolvedSolutionDir Condition="'$(ResolvedSolutionDir)' == ''">$([MSBuild]::EnsureTrailingSlash('$(ProjectDir)..\'))</ResolvedSolutionDir>
     <OutDir>$(Configuration)\$(Platform)\$(ProjectName)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
     <TargetName>CoronaLabs.Corona.Native</TargetName>
-    <CoronaBinDir>$(SolutionDir)Bin\Corona\</CoronaBinDir>
+    <CoronaBinDir>$(ResolvedSolutionDir)Bin\Corona\</CoronaBinDir>
     <CoronaNativeLibDir>$(CoronaBinDir)Native\Corona\win\lib\</CoronaNativeLibDir>
     <RedistArch>$(PlatformTarget)</RedistArch>
     <RedistArch Condition="'$(PlatformTarget)' == 'Win32'">x86</RedistArch>
@@ -24,7 +26,7 @@
   </ItemDefinitionGroup>
   <Target Name="StageCoronaNativeLibraryDependencies" AfterTargets="Build">
     <Exec
-      Command="call &quot;$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat&quot; &quot;$(TargetPath)&quot;"
+      Command="call &quot;$(ResolvedSolutionDir)Build.Tools\CoronaLabsInc.Sign.bat&quot; &quot;$(TargetPath)&quot;"
       Condition="'$(ConfigurationName)' == 'Release.App'" />
     <MakeDir Directories="$(CoronaBinDir)" />
     <ItemGroup>
