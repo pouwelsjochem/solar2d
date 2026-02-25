@@ -24,6 +24,10 @@ if $(ConfigurationName) == Release (
 REM Build the Corona Shell and its app template to the "Bin\Corona" directory. The simulator depends on them.
 "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /build "$(ConfigurationName)|$(PlatformName)"
 "$(VSInstallDir)MSBuild\Current\Bin\MSBuild.exe" "$(SolutionDir)Corona.AppTemplate.Win32\Corona.AppTemplate.Win32.vcxproj" /t:StageWin32AppTemplate /p:Configuration=$(ConfigurationName);Platform=$(PlatformName);BuildProjectReferences=false
+if errorlevel 1 (
+   echo StageWin32AppTemplate failed, falling back to solution-context rebuild of Corona.AppTemplate.Win32.
+   "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /rebuild "$(ConfigurationName)|$(PlatformName)" /project "Corona.AppTemplate.Win32"
+)
 
 REM Copy all other Corona Simulator related files to the "Bin\Corona" directory.
 cd
