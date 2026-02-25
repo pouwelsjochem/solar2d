@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
     <Import Project="Corona.Native.Library.Static.Win32.Externals.props" />
@@ -8,52 +8,41 @@
     <OutDir>$(Configuration)\$(Platform)\$(ProjectName)\</OutDir>
     <IntDir>$(Configuration)\$(Platform)\$(ProjectName)\</IntDir>
     <TargetName>CoronaLabs.Corona.Native</TargetName>
+    <CoronaBinDir>$(SolutionDir)Bin\Corona\</CoronaBinDir>
+    <CoronaNativeLibDir>$(CoronaBinDir)Native\Corona\win\lib\</CoronaNativeLibDir>
+    <RedistArch>$(PlatformTarget)</RedistArch>
+    <RedistArch Condition="'$(PlatformTarget)' == 'Win32'">x86</RedistArch>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <PreprocessorDefinitions>WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\external\winutil;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link />
-    <PostBuildEvent>
-      <Command>REM Digitally sign this library if building a release DLL.
-if $(ConfigurationName) == Release.App (
-   call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)"
-)
-
-REM Copy this library's dependencies to the "Bin\Corona" directory.
-if not exist "$(SolutionDir)Bin\Corona" (
-   mkdir "$(SolutionDir)Bin\Corona"
-)
-set "crtRedistGlob=$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
-if not exist "%crtRedistGlob%" set "crtRedistGlob=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
-if /I "$(PlatformTarget)" == "Win32" (
-   if not exist "%crtRedistGlob%" set "crtRedistGlob=$(VCToolsRedistDir)x86\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll"
-)
-if exist "%crtRedistGlob%" (
-   xcopy "%crtRedistGlob%" "$(SolutionDir)Bin\Corona" /Y /I
-) else (
-   echo VC CRT redist DLLs not found, checked "%crtRedistGlob%", skipping copy.
-)
-
-REM Do the following for debug and release DLL builds. (Skipped for Corona Simulator builds.)
-if $(TargetExt) == .dll (
-   REM Copy this library's DLL to the "Bin\Corona" directory. Used by the Corona Shell app.
-   copy /y "$(TargetPath)" "$(SolutionDir)Bin\Corona"
-
-   REM Copy this library's LIB file to the Corona Native directory.
-   if $(ConfigurationName) == Release.App (
-      if not exist "$(SolutionDir)Bin\Corona\Native\Corona\win\lib" (
-         mkdir "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
-      )
-      copy /y "$(TargetDir)$(TargetName).lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
-   )
-)
-</Command>
-    </PostBuildEvent>
     <Link>
       <AdditionalDependencies>..\Corona.Rtt.Library\$(Configuration)\$(Platform)\Corona.Rtt.Library.Win32\*.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <Target Name="StageCoronaNativeLibraryDependencies" AfterTargets="Build">
+    <Exec
+      Command="call &quot;$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat&quot; &quot;$(TargetPath)&quot;"
+      Condition="'$(ConfigurationName)' == 'Release.App'" />
+    <MakeDir Directories="$(CoronaBinDir)" />
+    <ItemGroup>
+      <_NativeCrtDll Include="$(VCToolsRedistDir)$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
+      <_NativeCrtDll Include="$(VCInstallDir)redist\$(RedistArch)\Microsoft.VC*.CRT\*.dll" />
+    </ItemGroup>
+    <RemoveDuplicates Inputs="@(_NativeCrtDll)">
+      <Output TaskParameter="Filtered" ItemName="_NativeCrtDllDistinct" />
+    </RemoveDuplicates>
+    <Copy SourceFiles="@(_NativeCrtDllDistinct)" DestinationFolder="$(CoronaBinDir)" SkipUnchangedFiles="true" Condition="'@(_NativeCrtDllDistinct)' != ''" />
+    <Warning Text="VC CRT redist DLLs not found via VCToolsRedistDir/VCInstallDir. Bin\\Corona may miss runtime DLLs." Condition="'@(_NativeCrtDllDistinct)' == ''" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(CoronaBinDir)" Condition="'$(TargetExt)' == '.dll'" />
+    <MakeDir Directories="$(CoronaNativeLibDir)" Condition="'$(TargetExt)' == '.dll' and '$(ConfigurationName)' == 'Release.App'" />
+    <Error Text="Missing import library '$(TargetDir)$(TargetName).lib' for native runtime staging." Condition="'$(TargetExt)' == '.dll' and '$(ConfigurationName)' == 'Release.App' and !Exists('$(TargetDir)$(TargetName).lib')" />
+    <Copy
+      SourceFiles="$(TargetDir)$(TargetName).lib"
+      DestinationFolder="$(CoronaNativeLibDir)"
+      Condition="'$(TargetExt)' == '.dll' and '$(ConfigurationName)' == 'Release.App' and Exists('$(TargetDir)$(TargetName).lib')" />
+  </Target>
   <ItemGroup />
 </Project>

@@ -83,8 +83,20 @@
     <ClCompile Include="..\Corona.Shell\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ALmixer.Library\ALmixer.Library.Win32.vcxproj">
+      <Project>{48c7494a-3a17-4e45-a61e-b4f143119148}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Corona.Native.Library.Win32\Corona.Native.Library.Win32.vcxproj">
       <Project>{f9419803-1375-4f35-b198-272c89cca8f9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Lua.Library\Lua.Library.Win32.vcxproj">
+      <Project>{d0add46c-58ee-41af-8e62-bab080d7ce21}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenAL.Library.Win32\OpenAL.Library.Win32.vcxproj">
+      <Project>{5c72a2ce-e118-4821-8e9f-9db393119fb8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Pthreads.Library.Win32\Pthreads.Library.Win32.vcxproj">
+      <Project>{a2e5ad7e-de8d-486b-8d92-0f29b24397cc}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
