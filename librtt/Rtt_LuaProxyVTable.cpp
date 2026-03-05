@@ -413,10 +413,58 @@ setHasListener( lua_State *L )
     return 0;
 }
 
+static int
+PushTouchMargins( lua_State *L, const DisplayObject& o )
+{
+	Real left = Rtt_REAL_0;
+	Real right = Rtt_REAL_0;
+	Real top = Rtt_REAL_0;
+	Real bottom = Rtt_REAL_0;
+	o.GetTouchMargins( left, right, top, bottom );
+
+	lua_createtable( L, 0, 4 );
+	lua_pushnumber( L, left );
+	lua_setfield( L, -2, "left" );
+	lua_pushnumber( L, right );
+	lua_setfield( L, -2, "right" );
+	lua_pushnumber( L, top );
+	lua_setfield( L, -2, "top" );
+	lua_pushnumber( L, bottom );
+	lua_setfield( L, -2, "bottom" );
+
+	return 1;
+}
+
+static Real
+GetTouchMarginValueForKey( lua_State *L, int index, const char key[], Real defaultValue )
+{
+	Real result = defaultValue;
+
+	lua_getfield( L, index, key );
+	if ( lua_isnumber( L, -1 ) )
+	{
+		result = luaL_toreal( L, -1 );
+	}
+	else if ( ! lua_isnil( L, -1 ) )
+	{
+		luaL_error( L, "ERROR: o.touchMargins.%s can only be set to a number.\n", key );
+	}
+	lua_pop( L, 1 );
+
+	return result;
+}
+
 int
 LuaDisplayObjectProxyVTable::ValueForKey( lua_State *L, const MLuaProxyable& object, const char key[]) const
 {
     if ( ! key ) { return 0; }
+
+    if ( 0 == strcmp( key, "touchMargins" ) )
+    {
+        const DisplayObject& o = static_cast< const DisplayObject& >( object );
+        Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
+        return PushTouchMargins( L, o );
+    }
     
     int result = 1;
 
@@ -783,6 +831,41 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
     Rtt_WARN_SIM_PROXY_TYPE( L, 1, DisplayObject );
 
     bool result = true;
+    bool wasHandledBySpecialCase = false;
+
+    if ( 0 == strcmp( key, "touchMargins" ) )
+    {
+        wasHandledBySpecialCase = true;
+
+        if ( lua_isnil( L, valueIndex ) )
+        {
+            o.SetTouchMargins( Rtt_REAL_0, Rtt_REAL_0, Rtt_REAL_0, Rtt_REAL_0 );
+        }
+        else if ( lua_istable( L, valueIndex ) )
+        {
+            int tableIndex = valueIndex;
+            if ( tableIndex < 0 )
+            {
+                tableIndex = lua_gettop( L ) + tableIndex + 1;
+            }
+
+            Real left = Rtt_REAL_0;
+            Real right = Rtt_REAL_0;
+            Real top = Rtt_REAL_0;
+            Real bottom = Rtt_REAL_0;
+            o.GetTouchMargins( left, right, top, bottom );
+            left = GetTouchMarginValueForKey( L, tableIndex, "left", left );
+            right = GetTouchMarginValueForKey( L, tableIndex, "right", right );
+            top = GetTouchMarginValueForKey( L, tableIndex, "top", top );
+            bottom = GetTouchMarginValueForKey( L, tableIndex, "bottom", bottom );
+
+            o.SetTouchMargins( left, right, top, bottom );
+        }
+        else
+        {
+            luaL_error( L, "ERROR: o.touchMargins can only be set to a table or nil.\n" );
+        }
+    }
 
     static const char * keys[] =
     {
@@ -807,145 +890,148 @@ LuaDisplayObjectProxyVTable::SetValueForKey( lua_State *L, MLuaProxyable& object
     static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 16, 20, 6, __FILE__, __LINE__ );
     StringHash *hash = &sHash;
 
-    int index = hash->Lookup( key );
-    switch ( index )
+    if ( ! wasHandledBySpecialCase )
     {
-    case 0:
+        int index = hash->Lookup( key );
+        switch ( index )
         {
-            o.SetVisible( lua_toboolean( L, valueIndex ) != 0 );
-        }
-        break;
-    case 1:
-        {
-            o.SetHitTestable( lua_toboolean( L, valueIndex ) != 0 );
-        }
-        break;
-    case 2:
-        {
-            /* too verbose:
-            Rtt_WARN_SIM(
-                lua_tonumber( L, valueIndex ) >= 0. && lua_tonumber( L, valueIndex ) <= 1.0,
-                ( "WARNING: Attempt to set object.alpha to %g which is outside valid range. It will be clamped to the range [0,1]\n", lua_tonumber( L, valueIndex ) ) );
-             */
+        case 0:
+            {
+                o.SetVisible( lua_toboolean( L, valueIndex ) != 0 );
+            }
+            break;
+        case 1:
+            {
+                o.SetHitTestable( lua_toboolean( L, valueIndex ) != 0 );
+            }
+            break;
+        case 2:
+            {
+                /* too verbose:
+                Rtt_WARN_SIM(
+                    lua_tonumber( L, valueIndex ) >= 0. && lua_tonumber( L, valueIndex ) <= 1.0,
+                    ( "WARNING: Attempt to set object.alpha to %g which is outside valid range. It will be clamped to the range [0,1]\n", lua_tonumber( L, valueIndex ) ) );
+                 */
 
-            // Explicitly declare T b/c of crappy gcc compiler used by Symbian
-            lua_Integer alpha = (lua_Integer)(lua_tonumber( L, valueIndex ) * 255.0f);
-            lua_Integer value = Min( (lua_Integer)255, alpha );
-            U8 newValue = Max( (lua_Integer)0, value );
+                // Explicitly declare T b/c of crappy gcc compiler used by Symbian
+                lua_Integer alpha = (lua_Integer)(lua_tonumber( L, valueIndex ) * 255.0f);
+                lua_Integer value = Min( (lua_Integer)255, alpha );
+                U8 newValue = Max( (lua_Integer)0, value );
 
-            o.SetAlpha( newValue );
-        }
-        break;
-    case 3:
-        {
-            // No-op for read-only property
-        }
-        break;
-    case 4:
-        {
-            // No-op for read-only property
-        }
-        break;
-    case 5:
-        {
-            o.SetGeometricProperty( kOriginX, luaL_toreal( L, valueIndex ) );
-        }
-        break;
-    case 6:
-        {
-            o.SetGeometricProperty( kOriginY, luaL_toreal( L, valueIndex ) );
-        }
-        break;
-    case 7:
-        {
-            if ( lua_type( L, valueIndex ) == LUA_TNUMBER )
+                o.SetAlpha( newValue );
+            }
+            break;
+        case 3:
             {
-                Real newValue = luaL_toreal( L, valueIndex );
-                if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
+                // No-op for read-only property
+            }
+            break;
+        case 4:
+            {
+                // No-op for read-only property
+            }
+            break;
+        case 5:
+            {
+                o.SetGeometricProperty( kOriginX, luaL_toreal( L, valueIndex ) );
+            }
+            break;
+        case 6:
+            {
+                o.SetGeometricProperty( kOriginY, luaL_toreal( L, valueIndex ) );
+            }
+            break;
+        case 7:
+            {
+                if ( lua_type( L, valueIndex ) == LUA_TNUMBER )
                 {
-                    newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
+                    Real newValue = luaL_toreal( L, valueIndex );
+                    if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
+                    {
+                        newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
+                    }
+                    o.SetAnchorX( newValue );
                 }
-                o.SetAnchorX( newValue );
-            }
-            else
-            {
-                luaL_error( L, "ERROR: o.anchorX can only be set to a number.\n" );
-            }
-            
-        }
-        break;
-    case 8:
-        {
-            if ( lua_type( L, valueIndex) == LUA_TNUMBER )
-            {
-                Real newValue = luaL_toreal( L, valueIndex );
-                if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
+                else
                 {
-                    newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
+                    luaL_error( L, "ERROR: o.anchorX can only be set to a number.\n" );
                 }
-                o.SetAnchorY( newValue );
+
             }
-            else
+            break;
+        case 8:
             {
-                luaL_error( L, "ERROR: o.anchorY can only be set to a number.\n" );
+                if ( lua_type( L, valueIndex) == LUA_TNUMBER )
+                {
+                    Real newValue = luaL_toreal( L, valueIndex );
+                    if ( o.GetStage()->GetDisplay().GetDefaults().IsAnchorClamped() )
+                    {
+                        newValue = Clamp( newValue, Rtt_REAL_0, Rtt_REAL_1 );
+                    }
+                    o.SetAnchorY( newValue );
+                }
+                else
+                {
+                    luaL_error( L, "ERROR: o.anchorY can only be set to a number.\n" );
+                }
+
             }
-            
-        }
-        break;
-    case 9:
-        {
-            // No-op for read-only keys
-        }
-        break;
-    case 10:
-        {
-            Real newValue = luaL_toreal( L, valueIndex );
-            o.SetMaskGeometricProperty( kOriginX, newValue );
-        }
-        break;
-    case 11:
-        {
-            Real newValue = luaL_toreal( L, valueIndex );
-            o.SetMaskGeometricProperty( kOriginY, newValue );
-        }
-        break;
-    case 12:
-        {
-            Real newValue = luaL_toreal( L, valueIndex );
-            o.SetMaskGeometricProperty( kScaleX, newValue );
-        }
-        break;
-    case 13:
-        {
-            Real newValue = luaL_toreal( L, valueIndex );
-            o.SetMaskGeometricProperty( kScaleY, newValue );
-        }
-        break;
-    case 14:
-        {
-            Real newValue = luaL_toreal( L, valueIndex );
-            o.SetMaskGeometricProperty( kRotation, newValue );
-        }
-        break;
-    case 15:
-        {
-            o.SetHitTestMasked( lua_toboolean( L, valueIndex ) != 0 );
-        }
-        break;
-    default:
-        {
-            GeometricProperty p = DisplayObject::PropertyForKey( LuaContext::GetAllocator( L ), key );
-            if ( p < kNumGeometricProperties )
+            break;
+        case 9:
+            {
+                // No-op for read-only keys
+            }
+            break;
+        case 10:
             {
                 Real newValue = luaL_toreal( L, valueIndex );
-                o.SetGeometricProperty( p, newValue );
+                o.SetMaskGeometricProperty( kOriginX, newValue );
             }
-            else if ( ! lua_isnumber( L, 2 ) )
+            break;
+        case 11:
             {
-                result = false;
+                Real newValue = luaL_toreal( L, valueIndex );
+                o.SetMaskGeometricProperty( kOriginY, newValue );
             }
+            break;
+        case 12:
+            {
+                Real newValue = luaL_toreal( L, valueIndex );
+                o.SetMaskGeometricProperty( kScaleX, newValue );
+            }
+            break;
+        case 13:
+            {
+                Real newValue = luaL_toreal( L, valueIndex );
+                o.SetMaskGeometricProperty( kScaleY, newValue );
+            }
+            break;
+        case 14:
+            {
+                Real newValue = luaL_toreal( L, valueIndex );
+                o.SetMaskGeometricProperty( kRotation, newValue );
+            }
+            break;
+        case 15:
+            {
+                o.SetHitTestMasked( lua_toboolean( L, valueIndex ) != 0 );
+            }
+            break;
+        default:
+            {
+                GeometricProperty p = DisplayObject::PropertyForKey( LuaContext::GetAllocator( L ), key );
+                if ( p < kNumGeometricProperties )
+                {
+                    Real newValue = luaL_toreal( L, valueIndex );
+                    o.SetGeometricProperty( p, newValue );
+                }
+                else if ( ! lua_isnumber( L, 2 ) )
+                {
+                    result = false;
+                }
+            }
+            break;
         }
-        break;
     }
 
     // We changed a property so record where we are so that "_lastChange" will be available later to say where it happened

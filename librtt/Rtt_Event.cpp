@@ -991,36 +991,44 @@ HitEvent::Test( HitTestObject& hitParent, const Matrix& srcToDstSpace ) const
 			{
 //				Rtt_ASSERT( child.IsStageBoundsValid() || ! child.CanCull() );
 
-				// Only test if object is actually on-screen
-				// Test bounding box before doing more expensive testing
-				if ( ! child.IsOffScreen() && child.StageBounds().HitTest( fXContent, fYContent ) )
+				// Skip fully off-screen objects unless touch margins are set.
+				// Test bounding box before doing more expensive testing.
+				if ( ! child.IsOffScreen() || child.HasTouchMargins() )
 				{
-					Rtt_ASSERT( child.IsStageBoundsValid() );
-					child.Prepare( display );
-
-					// TODO: Should we only do SetForceDraw() if the object is hidden?
-					// Ensure Draw() is not a no-op for hidden objects
-					// as defined by DisplayObject::IsNotHidden()
-					bool oldValue = child.IsForceDraw();
-					child.SetForceDraw( true );
-
-					bool didHit = child.HitTest( x, y );
-
-					child.SetForceDraw( oldValue );
-
-					// Only do deeper testing if a mask exists and the "isHitTestMasked" property is true
-					if ( didHit && child.IsHitTestMasked() && child.GetMask() )
+					bool didHitBounds = child.HitTestStageBounds( fXContent, fYContent );
+					if ( didHitBounds )
 					{
-						Matrix childToDst( xform );
-						childToDst.Concat( child.GetMatrix() );
-						didHit = TestMask( allocator, child, childToDst, x, y );
-					}
+						Rtt_ASSERT( child.IsStageBoundsValid() );
+						child.Prepare( display );
 
-					if ( didHit )
-					{
-						// Only if we hit, do we add child to the snapshot
-						HitTestObject* hitChild = Rtt_NEW( object.Allocator(), HitTestObject( child, & hitParent ) );
-						hitParent.Prepend( hitChild );
+						// TODO: Should we only do SetForceDraw() if the object is hidden?
+						// Ensure Draw() is not a no-op for hidden objects
+						// as defined by DisplayObject::IsNotHidden()
+						bool oldValue = child.IsForceDraw();
+						child.SetForceDraw( true );
+
+						bool didHit = child.HitTest( x, y );
+						if ( ! didHit && child.HasTouchMargins() )
+						{
+							didHit = didHitBounds;
+						}
+
+						child.SetForceDraw( oldValue );
+
+						// Only do deeper testing if a mask exists and the "isHitTestMasked" property is true
+						if ( didHit && child.IsHitTestMasked() && child.GetMask() )
+						{
+							Matrix childToDst( xform );
+							childToDst.Concat( child.GetMatrix() );
+							didHit = TestMask( allocator, child, childToDst, x, y );
+						}
+
+						if ( didHit )
+						{
+							// Only if we hit, do we add child to the snapshot
+							HitTestObject* hitChild = Rtt_NEW( object.Allocator(), HitTestObject( child, & hitParent ) );
+							hitParent.Prepend( hitChild );
+						}
 					}
 				}
 			}
@@ -1030,11 +1038,15 @@ HitEvent::Test( HitTestObject& hitParent, const Matrix& srcToDstSpace ) const
 				// then we hit test the group's clipped bounding box before we attempt to
 				// hit test the group's children.
 				bool hitTestChildren = child.HitTest( x, y );
+				if ( ! hitTestChildren && child.HasTouchMargins() )
+				{
+					hitTestChildren = child.HitTestStageBounds( x, y );
+				}
 				if( hitTestChildren && child.IsHitTestMasked() )
 				{
 					// By default, stage bounds of composite objects are not built.
 					child.BuildStageBounds();
-					hitTestChildren = child.StageBounds().HitTest( x, y );
+					hitTestChildren = child.HitTestStageBounds( x, y );
 
 					// Only do deeper testing if a mask exists and the "isHitTestMasked" property is true
 					if ( hitTestChildren && child.GetMask() )

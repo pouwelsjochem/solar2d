@@ -159,6 +159,10 @@ DisplayObject::DisplayObject()
 	fMaskUniform( NULL ),
 	fAnchorX( Rtt_REAL_0 ),
 	fAnchorY( Rtt_REAL_0 ),
+	fTouchMarginLeft( Rtt_REAL_0 ),
+	fTouchMarginRight( Rtt_REAL_0 ),
+	fTouchMarginTop( Rtt_REAL_0 ),
+	fTouchMarginBottom( Rtt_REAL_0 ),
 	fDirtyFlags( kRenderDefault ),
 	fProperties( kIsVisible | kIsHitTestMasked ),
 	fAlpha( 0xFF ),
@@ -786,6 +790,20 @@ DisplayObject::StageBounds() const
 }
 
 bool
+DisplayObject::HitTestStageBounds( Real contentX, Real contentY ) const
+{
+	const Rect& bounds = StageBounds();
+	if ( ! HasTouchMargins() )
+	{
+		return bounds.HitTest( contentX, contentY );
+	}
+
+	Rect expanded( bounds );
+	ApplyTouchMargins( expanded );
+	return expanded.HitTest( contentX, contentY );
+}
+
+bool
 DisplayObject::Intersects( const DisplayObject& rhs ) const
 {
     return StageBounds().Intersects( rhs.StageBounds() );
@@ -1345,6 +1363,24 @@ DisplayObject::SetHitTestMasked( bool newValue )
 }
 
 void
+DisplayObject::SetTouchMargins( Real left, Real right, Real top, Real bottom )
+{
+	fTouchMarginLeft = left;
+	fTouchMarginRight = right;
+	fTouchMarginTop = top;
+	fTouchMarginBottom = bottom;
+}
+
+void
+DisplayObject::GetTouchMargins( Real& left, Real& right, Real& top, Real& bottom ) const
+{
+	left = fTouchMarginLeft;
+	right = fTouchMarginRight;
+	top = fTouchMarginTop;
+	bottom = fTouchMarginBottom;
+}
+
+void
 DisplayObject::SetAnchorChildren( bool newValue )
 {
 	SetProperty( kIsAnchorChildren, newValue );
@@ -1451,6 +1487,18 @@ DisplayObject::SetProperty( U32 mask, bool value )
     const Properties p = fProperties;
     fProperties = ( value ? p | mask : p & ~mask );
 }
+
+void
+DisplayObject::ApplyTouchMargins( Rect& bounds ) const
+{
+	if ( bounds.NotEmpty() )
+	{
+		bounds.xMin -= fTouchMarginLeft;
+		bounds.xMax += fTouchMarginRight;
+		bounds.yMin -= fTouchMarginTop;
+		bounds.yMax += fTouchMarginBottom;
+	}
+}
 	
 void
 DisplayObject::AddedToParent( lua_State * L, GroupObject * parent )
@@ -1467,4 +1515,3 @@ DisplayObject::RemovedFromParent( lua_State * L, GroupObject * parent )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-
