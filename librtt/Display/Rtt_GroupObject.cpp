@@ -85,9 +85,23 @@ GroupObject::ReleaseChildrenLuaReferences( lua_State *L )
 GroupObject::GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas )
 :    Super(),
     fStage( canvas ),
+    fWidth( Rtt_REAL_0 ),
+    fHeight( Rtt_REAL_0 ),
+    fHasFixedSelfBounds( false ),
     fChildren( pAllocator )
 {
     SetObjectDesc("GroupObject"); // for introspection
+}
+
+GroupObject::GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas, Real width, Real height )
+:    Super(),
+    fStage( canvas ),
+    fWidth( width > Rtt_REAL_0 ? width : Rtt_REAL_0 ),
+    fHeight( height > Rtt_REAL_0 ? height : Rtt_REAL_0 ),
+    fHasFixedSelfBounds( true ),
+    fChildren( pAllocator )
+{
+    SetObjectDesc( "GroupObject" ); // for introspection
 }
 
 GroupObject*
@@ -255,6 +269,12 @@ GroupObject::Draw( Renderer& renderer ) const
 void
 GroupObject::GetSelfBounds( Rect& rect ) const
 {
+    if ( fHasFixedSelfBounds )
+    {
+        rect.Initialize( Rtt_RealDiv2( fWidth ), Rtt_RealDiv2( fHeight ) );
+        return;
+    }
+
     rect.SetEmpty();
 
     for ( S32 i = 0, iMax = fChildren.Length(); i < iMax; i++ )
@@ -270,6 +290,18 @@ GroupObject::GetSelfBounds( Rect& rect ) const
 
         rect.Union( childRect );
     }
+}
+
+void
+GroupObject::SetSelfBounds( Real width, Real height )
+{
+    if ( fHasFixedSelfBounds )
+    {
+        // Sized groups keep the construction-time dimensions.
+        return;
+    }
+
+    Super::SetSelfBounds( width, height );
 }
 
 bool

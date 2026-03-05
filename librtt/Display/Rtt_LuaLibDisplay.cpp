@@ -126,6 +126,7 @@ class DisplayLibrary
 		static int newImage( lua_State *L );
 		static int newImageRect( lua_State *L );
 		static int newGroup( lua_State *L );
+		static int newSizedGroup( lua_State *L );
 		static int newContainer( lua_State *L );
 		static int newSnapshot( lua_State *L );
 		static int newSprite( lua_State *L );
@@ -195,6 +196,7 @@ DisplayLibrary::Open( lua_State *L )
 		{ "newImage", newImage },
 		{ "newImageRect", newImageRect },
 		{ "newGroup", newGroup },
+		{ "newSizedGroup", newSizedGroup },
 		{ "newContainer", newContainer },
 		{ "newSnapshot", newSnapshot },
 		{ "newSprite", newSprite },
@@ -768,6 +770,13 @@ NewGroup( Rtt_Allocator * context )
 {
     return Rtt_NEW( context, GroupObject( context, NULL ) );
 }
+
+
+static GroupObject *
+NewSizedGroup( Rtt_Allocator * context, Rtt::StageObject * stageObject, Real w, Real h )
+{
+    return Rtt_NEW( context, GroupObject( context, stageObject, w, h ) );
+}
 // display.newGroup( [child1 [, child2 [, child3 ... ]]] )
 // With no args, create an empty group and set parent to root
 //
@@ -835,6 +844,28 @@ DisplayLibrary::newGroup( lua_State *L )
 
     return result;
 }
+
+// display.newSizedGroup( [parent, ] w, h )
+int
+DisplayLibrary::newSizedGroup( lua_State *L )
+{
+	Self *library = ToLibrary( L );
+	Display& display = library->GetDisplay();
+    auto * groupFactory = GetObjectFactory( L, &NewSizedGroup, display ); // n.b. done early to ensure factory is consumed
+	Rtt_Allocator* context = display.GetAllocator();
+
+    int nextArg = 1;
+
+	GroupObject *parent = LuaLibDisplay::GetParent( L, nextArg );
+
+    Real w = luaL_checkreal( L, nextArg++ );
+    Real h = luaL_checkreal( L, nextArg++ );
+
+    GroupObject *o = groupFactory( context, NULL, w, h );
+
+    return LuaLibDisplay::AssignParentAndPushResult( L, display, o, parent );
+}
+
 
 static ContainerObject *
 NewContainer( Rtt_Allocator * context, Rtt::StageObject * stageObject, Real w, Real h )
