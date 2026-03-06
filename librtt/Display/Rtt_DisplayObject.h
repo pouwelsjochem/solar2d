@@ -235,6 +235,7 @@ class DisplayObject : public MLuaProxyable
 		// Returns GetSelfBounds() transformed in dst space
 		const Rect& StageBounds() const;
 		bool Intersects( const DisplayObject& rhs ) const;
+		virtual bool StageBoundsDependsOnChildren() const;
 
         //const String& StageName() const { return fStageName; }
 
