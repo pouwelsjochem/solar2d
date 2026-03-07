@@ -709,6 +709,7 @@ class MouseEvent : public HitEvent
             kDown,
             kDrag,
             kMove,
+            kExit,
             kScroll,
             
             kNumMouseEventTypes

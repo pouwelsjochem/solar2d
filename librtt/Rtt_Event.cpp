@@ -1495,6 +1495,7 @@ MouseEvent::StringForMouseEventType( MouseEventType eventType )
     static const char kDownString[] = "down";
     static const char kDragString[] = "drag";
     static const char kMoveString[] = "move";
+    static const char kExitString[] = "exit";
     static const char kScrollString[] = "scroll";
   
     switch( eventType )
@@ -1513,6 +1514,9 @@ MouseEvent::StringForMouseEventType( MouseEventType eventType )
             break;
         case kMove:
             result = kMoveString;
+            break;
+        case kExit:
+            result = kExitString;
             break;
         case kScroll:
             result = kScrollString;
