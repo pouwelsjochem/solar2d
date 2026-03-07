@@ -24,6 +24,7 @@
 #include "Rtt_WinPlatform.h"
 #include "Rtt_KeyName.h"
 #include <WindowsX.h>
+#include <WinUser.h>
 
 namespace
 {
@@ -468,6 +469,14 @@ void WinInputDeviceManager::OnReceivedMessage(
 		}
 		case WM_MOUSEMOVE:
 		{
+			// Request a WM_MOUSELEAVE message once the cursor exits the render surface.
+			TRACKMOUSEEVENT trackMouseEventSettings;
+			trackMouseEventSettings.cbSize = sizeof(trackMouseEventSettings);
+			trackMouseEventSettings.dwFlags = TME_LEAVE;
+			trackMouseEventSettings.hwndTrack = sender.GetWindowHandle();
+			trackMouseEventSettings.dwHoverTime = HOVER_DEFAULT;
+			::TrackMouseEvent(&trackMouseEventSettings);
+
 			// Fetch current mouse position.
 			POINT point = GetMousePointFrom(arguments.GetLParam());
 
@@ -493,6 +502,22 @@ void WinInputDeviceManager::OnReceivedMessage(
 				touchInputStatePointer->LastPoint = point;
 				OnReceivedTouchEvent(0, point, touchInputStatePointer->StartPoint, Rtt::TouchEvent::kMoved);
 			}
+
+			// Flag the message as handled.
+			arguments.SetReturnResult(0);
+			arguments.SetHandled();
+			break;
+		}
+		case WM_MOUSELEAVE:
+		{
+			// Dispatch a "mouse" event to Corona indicating the pointer left the window.
+			POINT point;
+			::GetCursorPos(&point);
+			::ScreenToClient(sender.GetWindowHandle(), &point);
+			OnReceivedMouseEvent(Rtt::MouseEvent::kExit, point, 0, 0, 0);
+
+			// Clear the last move point cache so the next WM_MOUSEMOVE is not filtered out.
+			fIsLastMouseMovePointValid = false;
 
 			// Flag the message as handled.
 			arguments.SetReturnResult(0);

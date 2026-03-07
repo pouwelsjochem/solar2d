@@ -146,6 +146,39 @@ namespace Rtt
 			break;
 		}
 
+
+		case SDL_WINDOWEVENT:
+		{
+			if (evt.window.event == SDL_WINDOWEVENT_LEAVE && evt.window.windowID == SDL_GetWindowID(window))
+			{
+				int x = 0;
+				int y = 0;
+				SDL_GetMouseState(&x, &y);
+				y -= app->GetMenuHeight();
+
+				float scrollWheelDeltaX = 0;
+				float scrollWheelDeltaY = 0;
+
+				// Fetch the mouse's current up/down buttons states.
+				bool isPrimaryDown = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT);
+				bool isSecondaryDown = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT);
+				bool isMiddleDown = SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+
+				// Fetch the current state of the "shift", "alt", and "ctrl" keys.
+				const Uint8* key = SDL_GetKeyboardState(NULL);
+				bool IsAltDown = key[SDL_SCANCODE_LALT] | key[SDL_SCANCODE_RALT];
+				bool IsShiftDown = key[SDL_SCANCODE_LSHIFT] | key[SDL_SCANCODE_RSHIFT];
+				bool IsControlDown = key[SDL_SCANCODE_LCTRL] | key[SDL_SCANCODE_RCTRL];
+				bool IsCommandDown = key[SDL_SCANCODE_LGUI] | key[SDL_SCANCODE_RGUI];
+
+				Rtt::MouseEvent::MouseEventType eventType = Rtt::MouseEvent::kExit;
+				Rtt::MouseEvent mouseEvent(eventType, x, y, Rtt_FloatToReal(scrollWheelDeltaX), Rtt_FloatToReal(scrollWheelDeltaY), 0,
+					isPrimaryDown, isSecondaryDown, isMiddleDown, IsShiftDown, IsAltDown, IsControlDown, IsCommandDown);
+				DispatchEvent(mouseEvent);
+			}
+			break;
+		}
+
 		case SDL_MOUSEBUTTONDOWN:
 		{
 			const SDL_MouseButtonEvent& b = evt.button;

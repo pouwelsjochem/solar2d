@@ -879,10 +879,21 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 
 - (void)mouseExited:(NSEvent *)event
 {
+	using namespace Rtt;
+
 	NSDEBUG(@"mouseExited: cursorHidden %s (%d)", (cursorHidden ? "YES" : "NO"), numCursorHides);
 	// Stop dispatching mouseMoved: events
 	// NSDEBUG( @"mouseExited: %@", event );
 	[[self window] setAcceptsMouseMovedEvents:NO];
+
+	NSPoint p = [self pointForEvent:event];
+	NSUInteger modifierFlags = [event modifierFlags];
+	MouseEvent e(MouseEvent::kExit, p.x, p.y, 0, 0, 0, false, false, false,
+				 (modifierFlags & NSShiftKeyMask),
+				 (modifierFlags & NSAlternateKeyMask),
+				 (modifierFlags & NSControlKeyMask),
+				 (modifierFlags & NSCommandKeyMask) );
+	[self dispatchEvent: ( & e )];
 
 	if (cursorHidden)
 	{
