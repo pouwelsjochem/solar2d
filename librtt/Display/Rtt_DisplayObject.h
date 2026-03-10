@@ -231,10 +231,11 @@ class DisplayObject : public MLuaProxyable
     protected:
         static void ApplyParentTransform( const DisplayObject& object, Rect& rect );
 
-	public:
-		// Returns GetSelfBounds() transformed in dst space
-		const Rect& StageBounds() const;
-		bool Intersects( const DisplayObject& rhs ) const;
+    public:
+        // Returns GetSelfBounds() transformed in dst space
+        const Rect& StageBounds() const;
+        bool HitTestStageBounds( Real contentX, Real contentY ) const;
+        bool Intersects( const DisplayObject& rhs ) const;
 
         //const String& StageName() const { return fStageName; }
 
@@ -337,6 +338,16 @@ class DisplayObject : public MLuaProxyable
         Rtt_INLINE bool IsHitTestMasked() const { return fMask && (fProperties & kIsHitTestMasked) != 0; }
         void SetHitTestMasked( bool newValue );
 
+        void SetTouchMargins( Real left, Real right, Real top, Real bottom );
+        void GetTouchMargins( Real& left, Real& right, Real& top, Real& bottom ) const;
+        Rtt_INLINE bool HasTouchMargins() const
+        {
+            return ! ( Rtt_RealIsZero( fTouchMarginLeft )
+                    && Rtt_RealIsZero( fTouchMarginRight )
+                    && Rtt_RealIsZero( fTouchMarginTop )
+                    && Rtt_RealIsZero( fTouchMarginBottom ) );
+        }
+
 		void SetAnchorChildren( bool newValue );
 		bool IsAnchorChildren() const { return IsProperty( kIsAnchorChildren ); }
 
@@ -391,6 +402,7 @@ class DisplayObject : public MLuaProxyable
         Rtt_INLINE bool IsProperty( U32 mask ) const { return (fProperties & mask) != 0; }
         Rtt_INLINE void ToggleProperty( U32 mask ) { fProperties ^= mask; }
         void SetProperty( U32 mask, bool value );
+        void ApplyTouchMargins( Rect& bounds ) const;
 
     public:
         bool HasListener( ListenerMask mask ) const { return ( !! ( fListenerSet & mask ) ); }
@@ -430,6 +442,10 @@ class DisplayObject : public MLuaProxyable
     private:
         Real fAnchorX;
         Real fAnchorY;
+        Real fTouchMarginLeft;
+        Real fTouchMarginRight;
+        Real fTouchMarginTop;
+        Real fTouchMarginBottom;
         DirtyFlags fDirtyFlags;
         Properties fProperties;
         U8 fAlpha;
