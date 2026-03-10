@@ -281,7 +281,6 @@
 		F5C36C4124FAB49F00775C6E /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4359164B1D5200CFE7B3 /* libluasocket.a */; };
 		F5C36C4224FAB49F00775C6E /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4353164B1D5200CFE7B3 /* librtt.a */; };
 		F5C36C4324FAB49F00775C6E /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A49186A91642195200A39286 /* libplugins.a */; };
-		F5C36C4524FAB49F00775C6E /* liblicensing.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4F12C2616D4379F002BCCFB /* liblicensing.a */; };
 		F5C36C4824FAB49F00775C6E /* LibPlayerPrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A484115115115CE20074BD57 /* LibPlayerPrefix.pch */; };
 		F5C36C4924FAB49F00775C6E /* CoronaApplicationMain.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7C151AA23A00486F8A /* CoronaApplicationMain.h */; };
 		F5C36C4A24FAB49F00775C6E /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7E151AA23A00486F8A /* CoronaDelegate.h */; };
@@ -1408,7 +1407,6 @@
 				C2F911791CDC15F4004A5564 /* libluasocket.a in Frameworks */,
 				A44D4404164B201300CFE7B3 /* librtt.a in Frameworks */,
 				A49186D416421AEC00A39286 /* libplugins.a in Frameworks */,
-				A4F12C2716D437A6002BCCFB /* liblicensing.a in Frameworks */,
 				F5E8ABD928134BF0004295B4 /* libNetworkPlugin.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1468,7 +1466,6 @@
 				F5C36C4124FAB49F00775C6E /* libluasocket.a in Frameworks */,
 				F5C36C4224FAB49F00775C6E /* librtt.a in Frameworks */,
 				F5C36C4324FAB49F00775C6E /* libplugins.a in Frameworks */,
-				F5C36C4524FAB49F00775C6E /* liblicensing.a in Frameworks */,
 				F5E8ABDA28134BF9004295B4 /* libNetworkPlugin.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
