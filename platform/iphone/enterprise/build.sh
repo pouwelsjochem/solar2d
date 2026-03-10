@@ -113,10 +113,14 @@ cp -v "$SYMROOT"/$CONFIG-iphoneos/${XCODE_TARGET}.a "$DST_LIB_DIR"/libplayer.a
 
 xcodebuild SYMROOT="$SYMROOT" -project "$PLATFORM_DIR"/iphone/ratatouille.xcodeproj -target ${XCODE_TARGET}-angle -configuration $CONFIG -sdk iphoneos 2>&1 | tee -a "$FULL_LOG_FILE" | grep -E -v "$XCODE_LOG_FILTERS"
 
-# Simulator (includes arm64 for M1 simulator support)
-xcodebuild SYMROOT="$SYMROOT" -project "$PLATFORM_DIR"/iphone/ratatouille.xcodeproj -target ${XCODE_TARGET}-angle -configuration $CONFIG -sdk iphonesimulator 2>&1 | tee -a "$FULL_LOG_FILE" | grep -E -v "$XCODE_LOG_FILTERS"
+# Simulator
+#
+# MetalANGLE still needs the simulator build pinned to x86_64 here. Under Xcode 26,
+# the unrestricted archive causes xcodebuild -create-xcframework to reject the
+# resulting .a as a mixed-platform binary.
+xcodebuild SYMROOT="$SYMROOT" EXCLUDED_ARCHS=arm64 -project "$PLATFORM_DIR"/iphone/ratatouille.xcodeproj -target ${XCODE_TARGET}-angle -configuration $CONFIG -sdk iphonesimulator 2>&1 | tee -a "$FULL_LOG_FILE" | grep -E -v "$XCODE_LOG_FILTERS"
 
-# create xcframework (supports both arm64 device and arm64 simulator)
+# create xcframework (supports arm64 device and x86_64 simulator)
 rm -rf "$DST_LIB_DIR"/libplayer-angle.xcframework
 xcodebuild -create-xcframework \
     -library "$SYMROOT"/$CONFIG-iphoneos/${XCODE_TARGET}-angle.a -headers "$PLATFORM_DIR/iphone/Corona" \
@@ -126,7 +130,7 @@ xcodebuild -create-xcframework \
 # Also copy device library as standard .a for backward compatibility
 cp -v "$SYMROOT"/$CONFIG-iphoneos/${XCODE_TARGET}-angle.a "$DST_LIB_DIR"/libplayer-angle.a
 
-# Create MetalANGLE xcframework (supports both arm64 device and arm64 simulator)
+# Create MetalANGLE xcframework (supports arm64 device and x86_64 simulator)
 rm -rf "$DST_LIB_DIR"/MetalANGLE.xcframework
 xcodebuild -create-xcframework \
     -framework "$SYMROOT"/$CONFIG-iphoneos/MetalANGLE.framework \
