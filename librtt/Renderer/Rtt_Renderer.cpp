@@ -570,7 +570,7 @@ Renderer::Insert( const RenderData* data, const ShaderData * shaderData )
     // Geometry that is stored on the GPU does not need to be copied
     // over each frame. As a consequence, they can not be batched.
     U32 previousVerticesUsed = 0;
-    if( geometry->GetStoredOnGPU() && !fWireframeEnabled )
+    if( geometry->GetStoredOnGPU() )
     {
         FlushBatch();
 
@@ -1722,7 +1722,7 @@ Renderer::UpdateBatch( bool batch, bool enoughSpace, bool storedOnGPU, U32 verti
 {
     CheckAndInsertDrawCommand();
      
-    if( storedOnGPU && !fWireframeEnabled )
+    if( storedOnGPU )
     {
         fVertexOffset = fCachedVertexOffset;
         fVertexCount = fCachedVertexCount;
@@ -1732,7 +1732,7 @@ Renderer::UpdateBatch( bool batch, bool enoughSpace, bool storedOnGPU, U32 verti
             fBackCommandBuffer->BindGeometry( fCurrentGeometry );
         }
     }
-    fVertexOffset += fVertexCount * (1 + fVertexExtra);
+    fVertexOffset += fVertexCount;
     fVertexCount = 0;
     fIndexCount = 0;
 
@@ -2020,12 +2020,6 @@ Renderer::CopyExtendedVertexData( Geometry* geometry, Geometry::Vertex* destinat
             // we still double buffer it to be threadsafe.
             MergeVertexDataRange( &destination, geometry, verticesUsed, extraCount );
         }
-    }
-    else
-    {
-        // For data which does not exist on the GPU and is not batched,
-        // we still double buffer it to be threadsafe.
-        MergeVertexDataRange( &destination, geometry, verticesUsed, fVertexExtra );
     }
 }
 
