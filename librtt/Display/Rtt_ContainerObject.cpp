@@ -178,6 +178,12 @@ ContainerObject::CanCull() const
 	return true;
 }
 
+bool
+ContainerObject::StageBoundsDependsOnChildren() const
+{
+	return false;
+}
+
 void
 ContainerObject::SetSelfBounds( Real width, Real height )
 {
@@ -215,4 +221,3 @@ ContainerObject::ShouldOffsetClip() const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

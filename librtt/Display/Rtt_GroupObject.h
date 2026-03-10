@@ -36,6 +36,7 @@ class GroupObject : public DisplayObject
 
 	public:
 		GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas );
+		GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas, Real width, Real height );
 
 	public:
 		// Super
@@ -47,10 +48,12 @@ class GroupObject : public DisplayObject
 		virtual void Prepare( const Display& display );
 		virtual void Draw( Renderer& renderer ) const;
 		virtual void GetSelfBounds( Rect& rect ) const;
+		virtual void SetSelfBounds( Real width, Real height );
 
 	public:
 		virtual bool HitTest( Real contentX, Real contentY );
 		virtual bool CanCull() const;
+		virtual bool StageBoundsDependsOnChildren() const;
 
 	public:
 		virtual const LuaProxyVTable& ProxyVTable() const;
@@ -85,6 +88,10 @@ class GroupObject : public DisplayObject
 
 	private:
 		StageObject* fStage;
+		Real fWidth;
+		Real fHeight;
+		bool fHasFixedSelfBounds;
+		bool fChildrenNeedTransformUpdate;
 
 	protected:
 		// Children are drawn in order, i.e. first child is drawn below the second

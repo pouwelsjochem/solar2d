@@ -236,6 +236,7 @@ class DisplayObject : public MLuaProxyable
         const Rect& StageBounds() const;
         bool HitTestStageBounds( Real contentX, Real contentY ) const;
         bool Intersects( const DisplayObject& rhs ) const;
+		virtual bool StageBoundsDependsOnChildren() const;
 
         //const String& StageName() const { return fStageName; }
 

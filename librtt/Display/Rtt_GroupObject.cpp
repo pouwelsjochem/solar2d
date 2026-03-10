@@ -85,9 +85,25 @@ GroupObject::ReleaseChildrenLuaReferences( lua_State *L )
 GroupObject::GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas )
 :    Super(),
     fStage( canvas ),
+    fWidth( Rtt_REAL_0 ),
+    fHeight( Rtt_REAL_0 ),
+    fHasFixedSelfBounds( false ),
+    fChildrenNeedTransformUpdate( false ),
     fChildren( pAllocator )
 {
     SetObjectDesc("GroupObject"); // for introspection
+}
+
+GroupObject::GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas, Real width, Real height )
+:    Super(),
+    fStage( canvas ),
+    fWidth( width > Rtt_REAL_0 ? width : Rtt_REAL_0 ),
+    fHeight( height > Rtt_REAL_0 ? height : Rtt_REAL_0 ),
+    fHasFixedSelfBounds( true ),
+    fChildrenNeedTransformUpdate( false ),
+    fChildren( pAllocator )
+{
+    SetObjectDesc( "GroupObject" ); // for introspection
 }
 
 GroupObject*
@@ -106,6 +122,7 @@ bool
 GroupObject::UpdateTransform( const Matrix& parentToDstSpace )
 {
     bool shouldUpdate = Super::UpdateTransform( parentToDstSpace );
+    bool shouldUpdateChildren = shouldUpdate || fChildrenNeedTransformUpdate;
 
     if ( ShouldHitTest() )
     {
@@ -129,6 +146,22 @@ GroupObject::UpdateTransform( const Matrix& parentToDstSpace )
                 : stage->GetDisplay().GetScreenContentBounds() );
         }
 
+        if ( stage && ! SkipsCull() && CanCull() )
+        {
+            BuildStageBounds();
+            CullOffscreen( screenBounds );
+        }
+
+        if ( IsOffScreen() )
+        {
+            if ( shouldUpdateChildren )
+            {
+                // Defer child transform invalidation until this group becomes visible again.
+                fChildrenNeedTransformUpdate = true;
+            }
+            return shouldUpdate;
+        }
+
         const Matrix& xform = GetSrcToDstMatrix();
 
         U8 alphaCumulativeFromAncestors = AlphaCumulative();
@@ -141,7 +174,7 @@ GroupObject::UpdateTransform( const Matrix& parentToDstSpace )
 
             child->UpdateAlphaCumulative( alphaCumulativeFromAncestors );
 
-            if ( shouldUpdate )
+            if ( shouldUpdateChildren )
             {
                 // If receiver's matrix is out of date, then so are the children's
                 child->Invalidate( kGeometryFlag | kTransformFlag );
@@ -150,7 +183,9 @@ GroupObject::UpdateTransform( const Matrix& parentToDstSpace )
             child->UpdateTransform( xform );
 
             // Only cull objects that are hit-testable and allow culling
-            if ( child->ShouldHitTest() && (!child->SkipsCull() && child->CanCull()) )
+            if ( NULL == child->AsGroupObject()
+                 && child->ShouldHitTest()
+                 && ( ! child->SkipsCull() && child->CanCull() ) )
             {
                 // Only leaf nodes are culled, so we only need to build stage bounds
                 // of leaf nodes to determine if they should be culled.
@@ -162,10 +197,12 @@ GroupObject::UpdateTransform( const Matrix& parentToDstSpace )
 				{
 					SUMMED_TIMING( co, "Group: Cull Offscreen" );
 				child->CullOffscreen( screenBounds );
+				}
             }
         }
+
+        fChildrenNeedTransformUpdate = false;
     }
-	}
 
     return shouldUpdate;
 }
@@ -255,6 +292,12 @@ GroupObject::Draw( Renderer& renderer ) const
 void
 GroupObject::GetSelfBounds( Rect& rect ) const
 {
+    if ( fHasFixedSelfBounds )
+    {
+        rect.Initialize( Rtt_RealDiv2( fWidth ), Rtt_RealDiv2( fHeight ) );
+        return;
+    }
+
     rect.SetEmpty();
 
     for ( S32 i = 0, iMax = fChildren.Length(); i < iMax; i++ )
@@ -272,6 +315,18 @@ GroupObject::GetSelfBounds( Rect& rect ) const
     }
 }
 
+void
+GroupObject::SetSelfBounds( Real width, Real height )
+{
+    if ( fHasFixedSelfBounds )
+    {
+        // Sized groups keep the construction-time dimensions.
+        return;
+    }
+
+    Super::SetSelfBounds( width, height );
+}
+
 bool
 GroupObject::HitTest( Real contentX, Real contentY )
 {
@@ -281,7 +336,13 @@ GroupObject::HitTest( Real contentX, Real contentY )
 bool
 GroupObject::CanCull() const
 {
-    return false;
+    return fHasFixedSelfBounds;
+}
+
+bool
+GroupObject::StageBoundsDependsOnChildren() const
+{
+    return ! fHasFixedSelfBounds;
 }
 
 const LuaProxyVTable&
@@ -299,7 +360,7 @@ GroupObject::ShouldOffsetWithAnchor() const
 void
 GroupObject::DidInsert( bool childParentChanged )
 {
-    if ( childParentChanged )
+    if ( childParentChanged && StageBoundsDependsOnChildren() )
     {
         Invalidate( kStageBoundsFlag );
     }
@@ -312,7 +373,14 @@ GroupObject::DidInsert( bool childParentChanged )
 void
 GroupObject::DidRemove()
 {
-    Invalidate( kStageBoundsFlag );
+    if ( StageBoundsDependsOnChildren() )
+    {
+        Invalidate( kStageBoundsFlag );
+    }
+    else
+    {
+        InvalidateDisplay();
+    }
 }
 
 // resetTransform only has an effect when newChild is moved to a different parent
@@ -434,4 +502,3 @@ GroupObject::Find( const DisplayObject& child ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

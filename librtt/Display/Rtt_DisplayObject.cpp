@@ -472,6 +472,12 @@ DisplayObject::CanHitTest() const
     return true;
 }
 
+bool
+DisplayObject::StageBoundsDependsOnChildren() const
+{
+	return false;
+}
+
 void
 DisplayObject::InitProxy( lua_State *L )
 {
@@ -975,6 +981,11 @@ DisplayObject::InvalidateStageBounds()
                 && ancestor != canvas;
               ancestor = ancestor->GetParent() )
         {
+            if ( ! ancestor->StageBoundsDependsOnChildren() )
+            {
+                break;
+            }
+
             ancestor->SetDirty( kStageBoundsFlag );
         }
     }

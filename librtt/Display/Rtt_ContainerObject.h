@@ -49,6 +49,7 @@ class ContainerObject : public GroupObject
 	public:
 		virtual bool HitTest( Real contentX, Real contentY );
 		virtual bool CanCull() const;
+		virtual bool StageBoundsDependsOnChildren() const;
 
 	public:
 		virtual void SetSelfBounds( Real width, Real height );
