@@ -1038,6 +1038,7 @@ HitEvent::Test( HitTestObject& hitParent, const Matrix& srcToDstSpace ) const
 				// then we hit test the group's clipped bounding box before we attempt to
 				// hit test the group's children.
 				bool hitTestChildren = child.HitTest( x, y );
+				bool didHitGroupDirectly = child.HasTouchMargins() && child.HitTestStageBounds( x, y );
 				if ( ! hitTestChildren && child.HasTouchMargins() )
 				{
 					hitTestChildren = child.HitTestStageBounds( x, y );
@@ -1047,6 +1048,7 @@ HitEvent::Test( HitTestObject& hitParent, const Matrix& srcToDstSpace ) const
 					// By default, stage bounds of composite objects are not built.
 					child.BuildStageBounds();
 					hitTestChildren = child.HitTestStageBounds( x, y );
+					didHitGroupDirectly = didHitGroupDirectly && child.HitTestStageBounds( x, y );
 
 					// Only do deeper testing if a mask exists and the "isHitTestMasked" property is true
 					if ( hitTestChildren && child.GetMask() )
@@ -1055,18 +1057,20 @@ HitEvent::Test( HitTestObject& hitParent, const Matrix& srcToDstSpace ) const
 						childToDst.Concat( child.GetMatrix() );
 
 						hitTestChildren = TestMask( allocator, child, childToDst, x, y );
+						didHitGroupDirectly = didHitGroupDirectly && hitTestChildren;
 					}
 				}
 
-				if ( hitTestChildren )
+				if ( hitTestChildren || didHitGroupDirectly )
 				{
 					HitTestObject* hitGroup = Rtt_NEW( object.Allocator(), HitTestObject( child, & hitParent ) );
 
 					// Recursively call on children
 					Test( * hitGroup, xform );
-					if ( hitGroup->NumChildren() > 0 )
+					if ( hitGroup->NumChildren() > 0 || didHitGroupDirectly )
 					{
-						// Only groups that contain children that were hit are added to the snapshot
+						// Groups that were directly hit via touch margins should also be added
+						// even when none of their children were hit.
 						hitParent.Prepend( hitGroup );
 					}
 					else
@@ -1201,10 +1205,8 @@ HitEvent::DispatchEvent( lua_State *L, HitTestObject& parent ) const
 	{
 		DisplayObject& target = o->Target();
 
-		// Either target is not a group, or if it is, then o has at least one child.
-		// We should never have added a HitTestObject whose target is a GroupObject
-		// unless that HitTestObject had child hit objects.
-		Rtt_ASSERT( ! target.AsGroupObject() || o->NumChildren() > 0 );
+		// Groups normally have child hits, but may also appear here as direct
+		// targets when expanded touch margins were hit on the group itself.
 
 		if ( o->NumChildren() == 0 )
 		{
