@@ -26,7 +26,19 @@ REM Build the Corona Shell and its app template to the "Bin\Corona" directory. T
 
 REM Copy all other Corona Simulator related files to the "Bin\Corona" directory.
 cd
-xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll" "$(OutDir)" /Y /I
+setlocal EnableDelayedExpansion
+set corona_mfc_source=
+if exist "$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll" set corona_mfc_source=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC
+if "!corona_mfc_source!"=="" for /d %%D in ("$(VCInstallDir)Redist\MSVC\14.29.*") do (
+   if exist "%%~fD\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll" set corona_mfc_source=%%~fD\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC
+)
+if "!corona_mfc_source!"=="" if exist "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC\*.dll" set corona_mfc_source=$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).MFC
+if "!corona_mfc_source!"=="" (
+   echo Failed to locate VC MFC redistributables for toolset $(PlatformToolsetVersion).
+   exit /b 1
+)
+xcopy "!corona_mfc_source!\*.dll" "$(OutDir)" /Y /I
+endlocal
 xcopy "..\..\resources\Skins" "$(OutDir)Resources\Skins" /Y /I /E
 copy "..\Build.Tools\7za.exe" "$(OutDir)" /Y
 copy "..\Build.Tools\zipalign.exe" "$(OutDir)Resources" /Y

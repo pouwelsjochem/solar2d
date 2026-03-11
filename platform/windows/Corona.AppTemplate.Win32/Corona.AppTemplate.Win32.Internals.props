@@ -24,7 +24,19 @@ copy "$(SolutionDir)Bin\Corona\CoronaLabs.Corona.Native.dll" "$(IntDir)AppTempla
 copy "$(SolutionDir)Bin\Corona\lua.dll" "$(IntDir)AppTemplate" /Y
 copy "$(SolutionDir)Bin\Corona\OpenAL32.dll" "$(IntDir)AppTemplate" /Y
 copy "$(SolutionDir)Bin\Corona\pthreads.dll" "$(IntDir)AppTemplate" /Y
-xcopy "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" "$(IntDir)AppTemplate" /Y /I
+setlocal EnableDelayedExpansion
+set corona_crt_source=
+if exist "$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" set corona_crt_source=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT
+if "!corona_crt_source!"=="" for /d %%D in ("$(VCInstallDir)Redist\MSVC\14.29.*") do (
+   if exist "%%~fD\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" set corona_crt_source=%%~fD\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT
+)
+if "!corona_crt_source!"=="" if exist "$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" set corona_crt_source=$(VCInstallDir)redist\$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT
+if "!corona_crt_source!"=="" (
+   echo Failed to locate VC CRT redistributables for toolset $(PlatformToolsetVersion).
+   exit /b 1
+)
+xcopy "!corona_crt_source!\*.dll" "$(IntDir)AppTemplate" /Y /I
+endlocal
 xcopy "$(SolutionDir)Bin\Corona\Resources\Corona" "$(IntDir)AppTemplate\Resources" /Y /I
 
 REM Zip up the app template and copy it into the Corona directory. Needed for local builds via the Corona Simulator.
