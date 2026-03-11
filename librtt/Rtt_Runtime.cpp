@@ -905,7 +905,9 @@ Runtime::BeginRunLoop()
 
 	// PlatformTimer
 	fTimer->SetInterval( kInterval );
-	fTimer->SetInterval( 0x8000 | kFps ); // <- STEVE CHANGE
+#if defined( Rtt_WIN_DESKTOP_ENV )
+	fTimer->SetInterval( 0x8000 | kFps );
+#endif
 
 	// Initial call to main.lua can cause runtime to be suspended,
 	// Otherwise, it's < 0 (i.e. uninitialized)
@@ -1444,4 +1446,3 @@ RuntimeGuard::~RuntimeGuard()
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-
