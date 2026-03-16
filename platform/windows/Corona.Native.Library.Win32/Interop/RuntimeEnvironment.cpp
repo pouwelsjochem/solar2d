@@ -1637,7 +1637,7 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 				preferenceCollection.Add("solar2D/lastWindowPosition/y", Rtt::PreferenceValue(windowBounds.top));
 				preferenceCollection.Add("solar2D/lastWindowPosition/viewWidth", Rtt::PreferenceValue(clientSize.cx));
 				preferenceCollection.Add("solar2D/lastWindowPosition/viewHeight", Rtt::PreferenceValue(clientSize.cy));
-				preferenceCollection.Add("solar2D/lastWindowPosition/mode", Rtt::PreferenceValue(windowMode.GetStringId()));
+				preferenceCollection.Add("solar2D/lastWindowPosition/windowMode", Rtt::PreferenceValue(windowMode.GetStringId()));
 
 				fStoredPreferencesPointer->UpdateWith(preferenceCollection);
 			}
@@ -2117,7 +2117,7 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 
 	if (fStoredPreferencesPointer)
 	{
-		auto lastModeResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/mode");
+		auto lastModeResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/windowMode");
 		if (lastModeResult.HasSucceeded())
 		{
 			auto lastModeString = lastModeResult.GetValue().ToString().GetValue();
