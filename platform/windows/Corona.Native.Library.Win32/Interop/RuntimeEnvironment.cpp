@@ -1633,10 +1633,10 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 
 				// Write the above window info to this app's stored preferences.
 				Rtt::PreferenceCollection preferenceCollection;
-				preferenceCollection.Add("solar2D/lastWindowPosition/x", Rtt::PreferenceValue(windowBounds.left));
-				preferenceCollection.Add("solar2D/lastWindowPosition/y", Rtt::PreferenceValue(windowBounds.top));
-				preferenceCollection.Add("solar2D/lastWindowPosition/viewWidth", Rtt::PreferenceValue(clientSize.cx));
-				preferenceCollection.Add("solar2D/lastWindowPosition/viewHeight", Rtt::PreferenceValue(clientSize.cy));
+				preferenceCollection.Add("solar2D/lastWindowPosition/windowBoundsLeftX", Rtt::PreferenceValue(windowBounds.left));
+				preferenceCollection.Add("solar2D/lastWindowPosition/windowBoundsTopY", Rtt::PreferenceValue(windowBounds.top));
+				preferenceCollection.Add("solar2D/lastWindowPosition/clientSizeWidth", Rtt::PreferenceValue(clientSize.cx));
+				preferenceCollection.Add("solar2D/lastWindowPosition/clientSizeHeight", Rtt::PreferenceValue(clientSize.cy));
 				preferenceCollection.Add("solar2D/lastWindowPosition/windowMode", Rtt::PreferenceValue(windowMode.GetStringId()));
 
 				fStoredPreferencesPointer->UpdateWith(preferenceCollection);
@@ -2030,8 +2030,8 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	{
 		POINT windowPosition{};
 		{
-			auto lastXResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/x");
-			auto lastYResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/y");
+			auto lastXResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/windowBoundsLeftX");
+			auto lastYResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/windowBoundsTopY");
 			if (lastXResult.HasSucceeded() && lastYResult.HasSucceeded())
 			{
 				auto intConversionResultForLastX = lastXResult.GetValue().ToSignedInt32();
@@ -2065,8 +2065,8 @@ void RuntimeEnvironment::UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSetting
 	clientSize.cy = projectSettings.GetDefaultWindowViewHeight();
 	if (fStoredPreferencesPointer)
 	{
-		auto lastWidthResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/viewWidth");
-		auto lastHeightResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/viewHeight");
+		auto lastWidthResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/clientSizeWidth");
+		auto lastHeightResult = fStoredPreferencesPointer->Fetch("solar2D/lastWindowPosition/clientSizeHeight");
 		if (lastWidthResult.HasSucceeded() && lastHeightResult.HasSucceeded())
 		{
 			auto intConversionResultForLastWidth = lastWidthResult.GetValue().ToSignedInt32();
