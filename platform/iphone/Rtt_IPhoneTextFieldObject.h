@@ -48,6 +48,7 @@ class IPhoneTextFieldObject : public IPhoneDisplayObject
 
 	public:
 		bool rejectEmoji(const char *str);
+		int GetMaxLength() const { return fMaxLength; }
 
 	public:
 		// MLuaTableBridge
@@ -56,6 +57,7 @@ class IPhoneTextFieldObject : public IPhoneDisplayObject
 	
 	private:
 		bool fNoEmoji;
+		int fMaxLength;
 };
 
 // ----------------------------------------------------------------------------

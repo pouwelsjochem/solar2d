@@ -162,12 +162,14 @@ class NativeToJavaBridge
 		void TextFieldSetAlign( int id, const char * align );
 		void TextFieldSetSecure( int id, bool isSecure );
 		void TextFieldSetInputType( int id, const char * inputType );
+		void TextFieldSetMaxLength( int id, int maxLength );
 		void TextFieldGetColor( int id, int * r, int * g, int * b, int * a );
 		void TextFieldGetText( int id, Rtt::String * text );
 		void TextFieldGetPlaceholder( int id, Rtt::String * placeholder );
 		void TextFieldGetAlign( int id, Rtt::String * align );
 		bool TextFieldGetSecure( int id );
 		void TextFieldGetInputType( int id, Rtt::String * inputType );
+		int TextFieldGetMaxLength( int id );
 
 	public:
 		void WebViewCreate( int id, int left, int top, int width, int height, bool isPopup, bool autoCancelEnabled );

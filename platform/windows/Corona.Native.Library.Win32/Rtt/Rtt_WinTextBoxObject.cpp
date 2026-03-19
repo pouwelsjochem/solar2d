@@ -170,6 +170,18 @@ int WinTextBoxObject::ValueForKey(lua_State *L, const char key[]) const
 			lua_pushstring(L, "default");
 		}
 	}
+	else if (strcmp("maxLength", key) == 0)
+	{
+		int maxLength = fTextBoxPointer->GetMaxLength();
+		if (maxLength > 0)
+		{
+			lua_pushinteger(L, maxLength);
+		}
+		else
+		{
+			lua_pushnil(L);
+		}
+	}
 	else if (strcmp("margin", key) == 0)
 	{
 		auto controlHeight = fTextBoxPointer->GetHeight();
@@ -290,6 +302,22 @@ bool WinTextBoxObject::SetValueForKey(lua_State *L, const char key[], int valueI
 			{
 				CoronaLuaWarning(L, "Native TextField.%s key \"%s\" is not supported on Windows.", key, inputTypeStringId);
 			}
+		}
+		else
+		{
+			CoronaLuaError(L, "Invalid value type was assigned to the native TextField.%s property.", key);
+		}
+	}
+	else if (strcmp("maxLength", key) == 0)
+	{
+		if (lua_type(L, valueIndex) == LUA_TNUMBER)
+		{
+			int maxLength = (int)lua_tointeger(L, valueIndex);
+			fTextBoxPointer->SetMaxLength((maxLength > 0) ? maxLength : 0);
+		}
+		else if (lua_isnil(L, valueIndex))
+		{
+			fTextBoxPointer->SetMaxLength(0);
 		}
 		else
 		{

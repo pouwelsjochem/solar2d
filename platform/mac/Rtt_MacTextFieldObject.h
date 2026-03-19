@@ -52,6 +52,7 @@ class MacTextFieldObject : public MacDisplayObject
 		virtual int ValueForKey( lua_State *L, const char key[] ) const;
 		virtual bool SetValueForKey( lua_State *L, const char key[], int valueIndex );
 		bool rejectDisallowedCharacters(const char *str);
+		int GetMaxLength() const { return fMaxLength; }
 
 	protected:
 		static int setTextColor( lua_State *L );
@@ -62,6 +63,7 @@ class MacTextFieldObject : public MacDisplayObject
 		bool fNoEmoji;
 		bool fNumbersOnly;
 		bool fDecimalNumbersOnly;
+		int fMaxLength;
 };
 
 // ----------------------------------------------------------------------------

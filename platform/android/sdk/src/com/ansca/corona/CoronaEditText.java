@@ -11,6 +11,7 @@ package com.ansca.corona;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.KeyListener;
 import android.text.method.PasswordTransformationMethod;
@@ -47,6 +48,7 @@ public class CoronaEditText extends EditText {
 	private int editingAfter = 0;
 	private boolean isEditing = false;
 	private boolean noEmoji = false;
+	private int myMaxLength = 0;
 	private TextKeyListener myKeyListener = null;
 	private CoronaRuntime myCoronaRuntime = null;
 
@@ -375,6 +377,9 @@ public class CoronaEditText extends EditText {
 		if (text == null) {
 			text = "";
 		}
+		if ((myMaxLength > 0) && (text.length() > myMaxLength)) {
+			text = text.substring(0, myMaxLength);
+		}
 		setText(text, TextView.BufferType.EDITABLE);
 	}
 
@@ -392,6 +397,31 @@ public class CoronaEditText extends EditText {
 	public void setTextViewPlaceholder(String placeholder)
 	{
 		setHint(placeholder);
+	}
+
+	public void setTextViewMaxLength(int maxLength)
+	{
+		if (maxLength < 0) {
+			maxLength = 0;
+		}
+
+		myMaxLength = maxLength;
+		if (myMaxLength > 0) {
+			setFilters(new InputFilter[] { new InputFilter.LengthFilter(myMaxLength) });
+		}
+		else {
+			setFilters(new InputFilter[0]);
+		}
+
+		String text = getTextString();
+		if ((myMaxLength > 0) && (text != null) && (text.length() > myMaxLength)) {
+			setTextViewText(text);
+		}
+	}
+
+	public int getTextViewMaxLength()
+	{
+		return myMaxLength;
 	}
 
 	public void setTextSelection(int startPositionFinal, int endPositionFinal)

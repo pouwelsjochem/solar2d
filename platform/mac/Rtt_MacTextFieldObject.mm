@@ -99,6 +99,19 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 	[destination.cell setScrollable:[source.cell isScrollable]];
 }
 
+static NSString* ClampTextFieldString( NSString *value, int maxLength )
+{
+	if ( ! value )
+	{
+		return @"";
+	}
+	if ( ( maxLength > 0 ) && ( [value length] > maxLength ) )
+	{
+		return [value substringToIndex:maxLength];
+	}
+	return value;
+}
+
 @implementation Rtt_NSTextField
 
 @synthesize owner;
@@ -168,6 +181,18 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 	if (owner->rejectDisallowedCharacters([string UTF8String]))
 	{
 		return NO;
+	}
+
+	int maxLength = owner->GetMaxLength();
+	if ( maxLength > 0 )
+	{
+		NSString *currentText = [textView string] ? [textView string] : @"";
+		NSString *replacementString = string ? string : @"";
+		NSInteger newLength = [currentText length] - (NSInteger)range.length + [replacementString length];
+		if ( newLength > maxLength )
+		{
+			return NO;
+		}
 	}
 
 	// Must release object on other side of performSelector
@@ -262,6 +287,18 @@ static void CopyNSTextFieldProperties(NSTextField* source, NSTextField* destinat
 	// location (first number) is the start position of the string
 	// length (second number) is the length or number of the characters replaced/deleted
 	//	NSLog(@"%@, %@, %@", NSStringFromSelector(_cmd), NSStringFromRange(range), string );
+
+	int maxLength = owner->GetMaxLength();
+	if ( maxLength > 0 )
+	{
+		NSString *currentText = [textView string] ? [textView string] : @"";
+		NSString *replacementString = string ? string : @"";
+		NSInteger newLength = [currentText length] - (NSInteger)range.length + [replacementString length];
+		if ( newLength > maxLength )
+		{
+			return NO;
+		}
+	}
 	
 	// Must release object on other side of performSelector
 	Rtt_AppleTextDelegateWrapperObjectHelper* eventData = [[Rtt_AppleTextDelegateWrapperObjectHelper alloc] init];
@@ -372,7 +409,8 @@ MacTextFieldObject::MacTextFieldObject( const Rect& bounds )
 :	Super( bounds ),
 	fNoEmoji( false ),
 	fNumbersOnly( false ),
-	fDecimalNumbersOnly( false )
+	fDecimalNumbersOnly( false ),
+	fMaxLength( 0 )
 {
 }
 
@@ -581,6 +619,17 @@ MacTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 		}
 		lua_pushstring( L, value );
 	}
+	else if ( strcmp( "maxLength", key ) == 0 )
+	{
+		if ( fMaxLength > 0 )
+		{
+			lua_pushinteger( L, fMaxLength );
+		}
+		else
+		{
+			lua_pushnil( L );
+		}
+	}
 	else if ( strcmp( "hasBackground", key ) == 0 )
 	{
 		lua_pushboolean( L, [textfield drawsBackground]);
@@ -614,7 +663,7 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 		if ( Rtt_VERIFY( s ) )
 		{
 			NSString *newValue = [[NSString alloc] initWithUTF8String:s];
-			[textfield setStringValue:newValue];
+			[textfield setStringValue:ClampTextFieldString( newValue, fMaxLength )];
 			[newValue release];
 		}
 	}
@@ -676,6 +725,24 @@ MacTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valueInd
 	else if ( strcmp( "align", key ) == 0 )
 	{
 		[textfield setAlignment:AppleAlignment::AlignmentForString( lua_tostring( L, valueIndex ) )];
+	}
+	else if ( strcmp( "maxLength", key ) == 0 )
+	{
+		if ( lua_isnil( L, valueIndex ) )
+		{
+			fMaxLength = 0;
+		}
+		else
+		{
+			int maxLength = (int)lua_tointeger( L, valueIndex );
+			fMaxLength = ( maxLength > 0 ) ? maxLength : 0;
+		}
+
+		NSString *currentText = ClampTextFieldString( [textfield stringValue], fMaxLength );
+		if ( ! [currentText isEqualToString:( [textfield stringValue] ? [textfield stringValue] : @"" )] )
+		{
+			[textfield setStringValue:currentText];
+		}
 	}
 	else if ( strcmp( "inputType", key ) == 0 )
 	{

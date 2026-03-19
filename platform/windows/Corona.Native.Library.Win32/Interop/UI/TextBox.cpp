@@ -29,7 +29,8 @@ TextBox::TextBox(const TextBox::CreationSettings& settings)
 	fIsDecimalNumericOnly(false),
 	fNoEmoji(false),
 	fScaledFont(nullptr),
-	fLastAppliedHeight(0)
+	fLastAppliedHeight(0),
+	fMaxLength(0)
 {
 	// Set up the text box window styles. Always single line for native text fields.
 	DWORD styles = WS_TABSTOP | WS_VISIBLE | WS_CHILD | WS_BORDER | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
@@ -220,11 +221,12 @@ void TextBox::SetText(const wchar_t* text)
 		return;
 	}
 
-	// If given null, then set the text to an empty string.
-	if (!text)
+	std::wstring clampedText = text ? text : L"";
+	if ((fMaxLength > 0) && ((int)clampedText.length() > fMaxLength))
 	{
-		text = L"";
+		clampedText.resize(fMaxLength);
 	}
+	text = clampedText.c_str();
 
 	// Fetch the current text selection positions.
 	DWORD startCursorIndex = 0;
@@ -261,6 +263,37 @@ void TextBox::SetText(const wchar_t* text)
 	// Scroll the current cursor position into view.
 	::SendMessageW(windowHandle, EM_SCROLLCARET, 0, 0);
 	::InvalidateRect(windowHandle, nullptr, FALSE);
+}
+
+void TextBox::SetMaxLength(int value)
+{
+	if (value < 0)
+	{
+		value = 0;
+	}
+	fMaxLength = value;
+
+	auto windowHandle = GetWindowHandle();
+	if (windowHandle)
+	{
+		DWORD nativeLimit = (fMaxLength > 0) ? (DWORD)fMaxLength : 0x7FFFFFFE;
+		::SendMessageW(windowHandle, EM_LIMITTEXT, (WPARAM)nativeLimit, 0);
+	}
+
+	if (fMaxLength > 0)
+	{
+		std::wstring text;
+		if (CopyTextTo(text) && ((int)text.length() > fMaxLength))
+		{
+			text.resize(fMaxLength);
+			SetText(text.c_str());
+		}
+	}
+}
+
+int TextBox::GetMaxLength() const
+{
+	return fMaxLength;
 }
 
 bool TextBox::CopyTextTo(std::wstring& text) const

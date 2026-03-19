@@ -179,6 +179,12 @@ class TextBox : public Control
 		/// </param>
 		void SetText(const wchar_t* text);
 
+		/// <summary>Sets the maximum number of UTF-16 code units accepted by this text box. Zero means unlimited.</summary>
+		void SetMaxLength(int value);
+
+		/// <summary>Gets the maximum number of UTF-16 code units accepted by this text box. Zero means unlimited.</summary>
+		int GetMaxLength() const;
+
 		/// <summary>Fetches text box control's current text and copies it to the given string.</summary>
 		/// <param name="text">The string to copy the control's text to.</param>
 		/// <returns>
@@ -319,6 +325,9 @@ class TextBox : public Control
 
 		/// <summary>Last client height used to size the font.</summary>
 		int fLastAppliedHeight;
+
+		/// <summary>Maximum number of UTF-16 code units accepted by this control. Zero means unlimited.</summary>
+		int fMaxLength;
 
 		#pragma endregion
 };

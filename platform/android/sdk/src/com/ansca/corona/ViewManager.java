@@ -254,6 +254,28 @@ public class ViewManager {
 		return view.getTextViewInputType();
 	}
 
+	public void setTextViewMaxLength( final int id, final int maxLength )
+	{
+		postOnUiThread( new Runnable() {
+			public void run() {
+				CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+				if ( view == null )
+					return;
+
+				view.setTextViewMaxLength(maxLength);
+			}
+		} );
+	}
+
+	public int getTextViewMaxLength( int id )
+	{
+		CoronaEditText view = getDisplayObjectById(CoronaEditText.class, id);
+		if ( view == null )
+			return 0;
+
+		return view.getTextViewMaxLength();
+	}
+
 	public void setTextViewPassword( final int id, final boolean isPassword )
 	{
 		postOnUiThread( new Runnable() {

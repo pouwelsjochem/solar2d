@@ -2155,6 +2155,24 @@ NativeToJavaBridge::TextFieldSetInputType( int id, const char * inputType )
 }
 
 void
+NativeToJavaBridge::TextFieldSetMaxLength( int id, int maxLength )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldSetMaxLength" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldSetMaxLength", "(Lcom/ansca/corona/CoronaRuntime;II)V" );
+
+		if ( mid != NULL ) {
+			bridge.getEnv()->CallStaticVoidMethod( bridge.getClass(), mid, fCoronaRuntime, id, maxLength );
+			HandleJavaException();
+		}
+	}
+}
+
+void
 NativeToJavaBridge::TextFieldGetColor( int id, int * r, int * g, int * b, int * a )
 {
 	NativeTrace trace( "NativeToJavaBridge::TextFieldGetColor" );
@@ -2234,6 +2252,27 @@ NativeToJavaBridge::TextFieldGetInputType( int id, Rtt::String * inputType )
 {
 	GetStringWithInt( "callTextFieldGetInputType", id, inputType );
 	HandleJavaException();
+}
+
+int
+NativeToJavaBridge::TextFieldGetMaxLength( int id )
+{
+	NativeTrace trace( "NativeToJavaBridge::TextFieldGetMaxLength" );
+
+	jclassInstance bridge( GetJNIEnv(), kNativeToJavaBridge );
+
+	if ( bridge.isValid() ) {
+		jmethodID mid = bridge.getEnv()->GetStaticMethodID( bridge.getClass(),
+			"callTextFieldGetMaxLength", "(ILcom/ansca/corona/CoronaRuntime;)I" );
+
+		if ( mid != NULL ) {
+			jint result = bridge.getEnv()->CallStaticIntMethod( bridge.getClass(), mid, id, fCoronaRuntime );
+			HandleJavaException();
+			return result;
+		}
+	}
+
+	return 0;
 }
 
 void

@@ -174,6 +174,18 @@ AndroidTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 
 		lua_pushstring( L, inputType.GetString() );
 	}
+	else if ( strcmp( "maxLength", key ) == 0 )
+	{
+		int maxLength = fNativeToJavaBridge->TextFieldGetMaxLength( GetId() );
+		if ( maxLength > 0 )
+		{
+			lua_pushinteger( L, maxLength );
+		}
+		else
+		{
+			lua_pushnil( L );
+		}
+	}
 	else if ( strcmp( "placeholder", key ) == 0 )
 	{
 		Rtt_Allocator * allocator = LuaContext::GetAllocator( L );
@@ -237,6 +249,19 @@ AndroidTextFieldObject::SetValueForKey( lua_State *L, const char key[], int valu
 		{
 			fNativeToJavaBridge->TextFieldSetInputType( GetId(), inputType );
 		}
+	}
+	else if ( strcmp( "maxLength", key ) == 0 )
+	{
+		int maxLength = 0;
+		if ( ! lua_isnil( L, valueIndex ) )
+		{
+			maxLength = (int)lua_tointeger( L, valueIndex );
+			if ( maxLength < 0 )
+			{
+				maxLength = 0;
+			}
+		}
+		fNativeToJavaBridge->TextFieldSetMaxLength( GetId(), maxLength );
 	}
 	else if ( strcmp( "placeholder", key ) == 0 )
 	{

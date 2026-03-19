@@ -1686,6 +1686,11 @@ public class NativeToJavaBridge {
 		runtime.getViewManager().setTextViewInputType(id, inputType);
 	}
 
+	protected static void callTextFieldSetMaxLength( CoronaRuntime runtime, int id, int maxLength )
+	{
+		runtime.getViewManager().setTextViewMaxLength(id, maxLength);
+	}
+
 	protected static int[] callTextFieldGetColor( CoronaRuntime runtime, int id )
 	{
 		int argb = runtime.getViewManager().getTextViewColor(id);
@@ -1723,6 +1728,11 @@ public class NativeToJavaBridge {
 	protected static String callTextFieldGetInputType( int id, CoronaRuntime runtime )
 	{
 		return runtime.getViewManager().getTextViewInputType(id);
+	}
+
+	protected static int callTextFieldGetMaxLength( int id, CoronaRuntime runtime )
+	{
+		return runtime.getViewManager().getTextViewMaxLength(id);
 	}
 
 	protected static void callDisplayObjectDestroy( CoronaRuntime runtime, int id )

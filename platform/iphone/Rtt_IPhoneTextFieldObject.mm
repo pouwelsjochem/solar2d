@@ -91,6 +91,18 @@ DispatchEvent( Rtt_UITextField *textField, int startpos, int numdeleted, const c
 		return NO;
 	}
 
+	int maxLength = ((Rtt_UITextField*)textField).owner->GetMaxLength();
+	if ( maxLength > 0 )
+	{
+		NSString *currentText = textField.text ? textField.text : @"";
+		NSString *replacementString = string ? string : @"";
+		NSInteger newLength = [currentText length] - (NSInteger)range.length + [replacementString length];
+		if ( newLength > maxLength )
+		{
+			return NO;
+		}
+	}
+
 	Rtt_AppleTextDelegateWrapperObjectHelper* eventData = [[Rtt_AppleTextDelegateWrapperObjectHelper alloc] init];
 	eventData.textWidget = textField;
 	eventData.theRange = range;
@@ -137,6 +149,20 @@ static const char kPhoneInputType[] = "phone";
 static const char kEmailInputType[] = "email";
 static const char kDecimalInputType[] = "decimal";
 static const char kNoEmojiInputType[] = "no-emoji";
+
+static NSString*
+ClampTextFieldString( NSString *value, int maxLength )
+{
+	if ( ! value )
+	{
+		return @"";
+	}
+	if ( ( maxLength > 0 ) && ( [value length] > maxLength ) )
+	{
+		return [value substringToIndex:maxLength];
+	}
+	return value;
+}
 
 // iOS-specific input types
 static const char kUIKeyboardTypeASCIICapableString[] = "UIKeyboardTypeASCIICapable";
@@ -342,7 +368,9 @@ StringForUITextSpellCheckingType( UITextSpellCheckingType value )
 // ----------------------------------------------------------------------------
 
 IPhoneTextFieldObject::IPhoneTextFieldObject( const Rect& bounds )
-:	Super( bounds )
+:	Super( bounds ),
+	fNoEmoji( false ),
+	fMaxLength( 0 )
 {
 }
 
@@ -543,6 +571,17 @@ IPhoneTextFieldObject::ValueForKey( lua_State *L, const char key[] ) const
 
 		lua_pushstring( L, value );
 	}
+	else if ( strcmp( "maxLength", key ) == 0 )
+	{
+		if ( fMaxLength > 0 )
+		{
+			lua_pushinteger( L, fMaxLength );
+		}
+		else
+		{
+			lua_pushnil( L );
+		}
+	}
 	else if ( strcmp( "autocorrectionType", key ) == 0 )
 	{
 		const char *value = StringForUITextAutocorrectionType( t.autocorrectionType );
@@ -583,7 +622,7 @@ IPhoneTextFieldObject::SetValueForKey( lua_State *L, const char key[], int value
 		if ( Rtt_VERIFY( s ) )
 		{
 			NSString *newValue = [[NSString alloc] initWithUTF8String:s];
-			t.text = newValue;
+			t.text = ClampTextFieldString( newValue, fMaxLength );
 			// Pressing undo will try to operate on the old text if this isn't called which can cause a crash
 			[t.undoManager removeAllActions];
 			[newValue release];
@@ -608,6 +647,25 @@ IPhoneTextFieldObject::SetValueForKey( lua_State *L, const char key[], int value
 	else if ( strcmp( "align", key ) == 0 )
 	{
 		t.textAlignment = AppleAlignment::AlignmentForString( lua_tostring( L, valueIndex ) );
+	}
+	else if ( strcmp( "maxLength", key ) == 0 )
+	{
+		if ( lua_isnil( L, valueIndex ) )
+		{
+			fMaxLength = 0;
+		}
+		else
+		{
+			int maxLength = (int)lua_tointeger( L, valueIndex );
+			fMaxLength = ( maxLength > 0 ) ? maxLength : 0;
+		}
+
+		NSString *currentText = ClampTextFieldString( t.text, fMaxLength );
+		if ( ! [currentText isEqualToString:( t.text ? t.text : @"" )] )
+		{
+			t.text = currentText;
+			[t.undoManager removeAllActions];
+		}
 	}
 	else if ( strcmp( "inputType", key ) == 0 )
 	{
