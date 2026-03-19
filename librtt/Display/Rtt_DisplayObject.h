@@ -391,8 +391,8 @@ class DisplayObject : public MLuaProxyable
         // (e.g. TouchEvent), we need to mark the objects
         // for deferred removal.
         // TODO: If we keep this, rename to IsUsedByHitTest
-        bool IsUsedByHitTest() const { return (fProperties & kIsUsedByHitTest) != 0; }
-        void SetUsedByHitTest( bool newValue ) { SetProperty( kIsUsedByHitTest, newValue ); }
+		bool IsUsedByHitTest() const { return (fProperties & kIsUsedByHitTest) != 0; }
+		void SetUsedByHitTest( bool newValue ) { SetProperty( kIsUsedByHitTest, newValue ); }
 
     public:
         void SetFocusId( const void *newValue ) { fFocusId = newValue; }
@@ -405,15 +405,15 @@ class DisplayObject : public MLuaProxyable
         void SetProperty( U32 mask, bool value );
         void ApplyTouchMargins( Rect& bounds ) const;
 
-    public:
-        bool HasListener( ListenerMask mask ) const { return ( !! ( fListenerSet & mask ) ); }
-        void SetHasListener( ListenerMask mask, bool value )
-        {
-            const ListenerSet p = fListenerSet;
-            fListenerSet = ( value ? p | mask : p & ~mask );
-        }
+	    public:
+	        bool HasListener( ListenerMask mask ) const { return ( !! ( fListenerSet & mask ) ); }
+	        void SetHasListener( ListenerMask mask, bool value );
+	        virtual S32 CountListenersInSubtree( ListenerMask mask ) const;
 
-    public:
+	protected:
+		const StageObject* GetListenerTrackingStage() const;
+
+	    public:
         void SetObjectDesc( const char *objectDesc ) { fObjectDesc = objectDesc; }
         const char *GetObjectDesc() const { return fObjectDesc; }
 

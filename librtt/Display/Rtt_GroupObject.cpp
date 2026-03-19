@@ -357,6 +357,19 @@ GroupObject::ShouldOffsetWithAnchor() const
     return IsProperty( kIsAnchorChildren );
 }
 
+S32
+GroupObject::CountListenersInSubtree( ListenerMask mask ) const
+{
+    S32 result = Super::CountListenersInSubtree( mask );
+
+    for ( S32 i = 0, iMax = NumChildren(); i < iMax; i++ )
+    {
+        result += ChildAt( i ).CountListenersInSubtree( mask );
+    }
+
+    return result;
+}
+
 void
 GroupObject::DidInsert( bool childParentChanged )
 {

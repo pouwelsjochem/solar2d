@@ -888,6 +888,8 @@ DisplayObject::GetStage() const
 void
 DisplayObject::SetParent( GroupObject* parent )
 {
+    const StageObject* oldStage = GetListenerTrackingStage();
+
     fParent = parent;
 
     // fStage = parent ? parent->fStage : NULL;
@@ -903,7 +905,79 @@ DisplayObject::SetParent( GroupObject* parent )
         }
     }
 
+    const StageObject* newStage = GetListenerTrackingStage();
+    if ( oldStage != newStage )
+    {
+        S32 mouseListenerCount = CountListenersInSubtree( kMouseListener );
+        if ( mouseListenerCount > 0 )
+        {
+            if ( oldStage )
+            {
+                oldStage->GetDisplay().RemoveObjectMouseListeners( mouseListenerCount );
+            }
+
+            if ( newStage )
+            {
+                newStage->GetDisplay().AddObjectMouseListeners( mouseListenerCount );
+            }
+        }
+    }
+
     Invalidate( kGeometryFlag | kTransformFlag | kStageBoundsFlag );
+}
+
+void
+DisplayObject::SetHasListener( ListenerMask mask, bool value )
+{
+    const bool hadListener = HasListener( mask );
+    if ( hadListener == value )
+    {
+        return;
+    }
+
+    if ( kMouseListener == mask )
+    {
+        const StageObject* stage = GetListenerTrackingStage();
+        if ( stage )
+        {
+            Display& display = stage->GetDisplay();
+            if ( value )
+            {
+                display.AddObjectMouseListeners( 1 );
+            }
+            else
+            {
+                display.RemoveObjectMouseListeners( 1 );
+            }
+        }
+    }
+
+    const ListenerSet p = fListenerSet;
+    fListenerSet = ( value ? p | mask : p & ~mask );
+}
+
+S32
+DisplayObject::CountListenersInSubtree( ListenerMask mask ) const
+{
+    return HasListener( mask ) ? 1 : 0;
+}
+
+const StageObject*
+DisplayObject::GetListenerTrackingStage() const
+{
+    const DisplayObject* root = this;
+    while ( root->GetParent() )
+    {
+        root = root->GetParent();
+    }
+
+    const GroupObject* group = root->AsGroupObject();
+    if ( group && group->GetStage() == root )
+    {
+        return group->GetStage();
+    }
+
+    return NULL;
 }
 
 void

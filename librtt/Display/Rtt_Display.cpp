@@ -67,6 +67,7 @@ Display::Display( Runtime& owner )
 	fScreenSurface( owner.Platform().CreateScreenSurface() ),
     fObjectFactories( LUA_REFNIL ),
     fFactoryFunc( NULL ),
+	fObjectMouseListenerCount( 0 ),
 	fIsCollecting( false )
 {
 }
@@ -764,6 +765,35 @@ Display::HitTestOrphanage()
     return & GetScene().SnapshotOrphanage();
 }
 
+bool
+Display::HasObjectMouseListeners() const
+{
+	return fObjectMouseListenerCount > 0;
+}
+
+void
+Display::AddObjectMouseListeners( S32 count )
+{
+	if ( count > 0 )
+	{
+		fObjectMouseListenerCount += count;
+	}
+}
+
+void
+Display::RemoveObjectMouseListeners( S32 count )
+{
+	if ( count > 0 )
+	{
+		fObjectMouseListenerCount -= count;
+		Rtt_ASSERT( fObjectMouseListenerCount >= 0 );
+		if ( fObjectMouseListenerCount < 0 )
+		{
+			fObjectMouseListenerCount = 0;
+		}
+	}
+}
+
 S32
 Display::DeviceWidth() const
 {
@@ -1017,4 +1047,3 @@ Display::Collect( lua_State *L )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -1146,11 +1146,18 @@ HitEvent::Dispatch( lua_State *L, Runtime& runtime ) const
 	// TODO: If receiver is called more than once, we need to restore fX, fY
 	// or alternatively set some flag so that we know that it's been mapped
 	Display& display = runtime.GetDisplay();
+	StageObject& stage = * display.GetStage();
+	DisplayObject* focus = stage.GetFocus();
+
+	if ( ! focus
+		 && DisplayObject::kMouseListener == (DisplayObject::ListenerMask)GetListenerMask()
+		 && ! display.HasObjectMouseListeners() )
+	{
+		return;
+	}
 
 	ScreenToContent( display, fXScreen, fYScreen, fXContent, fYContent );
 
-	StageObject& stage = * display.GetStage();
-	DisplayObject* focus = stage.GetFocus();
 	if ( focus )
 	{
 		DispatchFocused( L, runtime, stage, focus );

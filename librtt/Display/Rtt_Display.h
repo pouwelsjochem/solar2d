@@ -120,6 +120,9 @@ class Display
 	public:
 		virtual GroupObject *Orphanage();
 		virtual GroupObject *HitTestOrphanage();
+		bool HasObjectMouseListeners() const;
+		void AddObjectMouseListeners( S32 count );
+		void RemoveObjectMouseListeners( S32 count );
 
 	public:
 		// Size in physical pixels
@@ -232,8 +235,9 @@ class Display
 		RenderingStream *fStream;
 		PlatformSurface *fScreenSurface;
 
-        int fObjectFactories;
-        void * fFactoryFunc;
+		int fObjectFactories;
+		void * fFactoryFunc;
+		S32 fObjectMouseListenerCount;
 
 		bool fIsCollecting; // guards against nested calls to Collect()
 };
