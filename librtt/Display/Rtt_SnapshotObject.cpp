@@ -154,6 +154,8 @@ SnapshotObject::FinalizeSelf( lua_State *L )
 	Super::FinalizeSelf( L );
 
 	// Members have Lua resources that need to be released
+	fGroup->PreFinalizeSelf( L );
+	fCanvas->PreFinalizeSelf( L );
 	fGroup->FinalizeSelf( L );
 	fCanvas->FinalizeSelf( L );
 
@@ -526,4 +528,3 @@ SnapshotObject::SetTextureWrapY( RenderTypes::TextureWrap newValue )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

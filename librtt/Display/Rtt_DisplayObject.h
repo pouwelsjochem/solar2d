@@ -129,6 +129,7 @@ class DisplayObject : public MLuaProxyable
 			kTouchListener = 0x1,
 			kSpriteListener = 0x2,
 			kFinalizeListener = 0x4,
+			kPreFinalizeListener = 0x8,
 		};
 
         typedef U8 ListenerSet;
@@ -145,6 +146,7 @@ class DisplayObject : public MLuaProxyable
         virtual ~DisplayObject();
 
     public:
+        virtual void PreFinalizeSelf( lua_State *L );
         virtual void FinalizeSelf( lua_State *L );
 
     protected:

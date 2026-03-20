@@ -2129,6 +2129,19 @@ VideoEvent::Push( lua_State *L ) const
 }
 
 // ----------------------------------------------------------------------------
+const char PreFinalizeEvent::kName[] = "prefinalize";
+
+PreFinalizeEvent::PreFinalizeEvent()
+{
+}
+
+const char*
+PreFinalizeEvent::Name() const
+{
+	return Self::kName;
+}
+
+// ----------------------------------------------------------------------------
 const char FinalizeEvent::kName[] = "finalize";
 
 FinalizeEvent::FinalizeEvent()

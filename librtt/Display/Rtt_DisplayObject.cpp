@@ -54,6 +54,10 @@ DisplayObject::MaskForString( const char *name )
 		{
 			result = kFinalizeListener;
 		}
+		else if ( 0 == strcmp( name, PreFinalizeEvent::kName ) )
+		{
+			result = kPreFinalizeListener;
+		}
 	}
 
     return result;
@@ -202,6 +206,18 @@ DisplayObject::~DisplayObject()
 
     free((void *)fWhereDefined);
     free((void *)fWhereChanged);
+}
+
+void
+DisplayObject::PreFinalizeSelf( lua_State *L )
+{
+	Rtt_ASSERT( L );
+
+	if ( HasListener( kPreFinalizeListener ) && Rtt_VERIFY( fLuaProxy ) )
+	{
+		PreFinalizeEvent event;
+		DispatchEvent( L, event );
+	}
 }
 
 void

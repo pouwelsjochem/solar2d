@@ -1015,6 +1015,25 @@ class VideoEvent : public VirtualEvent
 // ----------------------------------------------------------------------------
 
 // Local event
+class PreFinalizeEvent : public VirtualEvent
+{
+	public:
+		typedef VirtualEvent Super;
+		typedef PreFinalizeEvent Self;
+
+	public:
+		static const char kName[];
+
+	public:
+		PreFinalizeEvent();
+
+	public:
+		virtual const char* Name() const;
+};
+
+// ----------------------------------------------------------------------------
+
+// Local event
 class FinalizeEvent : public VirtualEvent
 {
 	public:
