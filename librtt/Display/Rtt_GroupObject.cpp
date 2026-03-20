@@ -327,6 +327,25 @@ GroupObject::SetSelfBounds( Real width, Real height )
     Super::SetSelfBounds( width, height );
 }
 
+void
+GroupObject::SetAsSizedGroup( Real width, Real height )
+{
+	Real newWidth = ( width > Rtt_REAL_0 ? width : Rtt_REAL_0 );
+	Real newHeight = ( height > Rtt_REAL_0 ? height : Rtt_REAL_0 );
+
+	if ( ! fHasFixedSelfBounds
+		 || ! Rtt_RealEqual( newWidth, fWidth )
+		 || ! Rtt_RealEqual( newHeight, fHeight ) )
+	{
+		fWidth = newWidth;
+		fHeight = newHeight;
+		fHasFixedSelfBounds = true;
+
+		Invalidate( kTransformFlag | kStageBoundsFlag );
+		const_cast< Transform& >( GetTransform() ).Invalidate();
+	}
+}
+
 bool
 GroupObject::HitTest( Real contentX, Real contentY )
 {

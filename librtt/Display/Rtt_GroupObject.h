@@ -49,6 +49,7 @@ class GroupObject : public DisplayObject
 		virtual void Draw( Renderer& renderer ) const;
 		virtual void GetSelfBounds( Rect& rect ) const;
 		virtual void SetSelfBounds( Real width, Real height );
+		void SetAsSizedGroup( Real width, Real height );
 
 	public:
 		virtual bool HitTest( Real contentX, Real contentY );
