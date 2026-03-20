@@ -1666,6 +1666,26 @@ LuaGroupObjectProxyVTable::setAsSizedGroup( lua_State *L )
 	return 0;
 }
 
+int
+LuaGroupObjectProxyVTable::setAsSizedGroupWithCurrentSize( lua_State *L )
+{
+	Rtt_WARN_SIM_PROXY_TYPE( L, 1, GroupObject );
+	GroupObject *parent = (GroupObject*)LuaProxy::GetProxyableObject( L, 1 );
+
+	if ( parent )
+	{
+		if ( parent == parent->GetStage() )
+		{
+			CoronaLuaWarning( L, "stage:setAsSizedGroupWithCurrentSize() is not supported" );
+			return 0;
+		}
+
+		parent->SetAsSizedGroupWithCurrentSize();
+	}
+
+	return 0;
+}
+
 // Removes child at index from parent and pushes onto the stack. Pushes nil
 // if index is invalid.
 void
@@ -1829,11 +1849,12 @@ LuaGroupObjectProxyVTable::PushMethod( lua_State *L, const GroupObject& o, const
         "insert",            // 0
         "remove",            // 1
         "setAsSizedGroup",    // 2
-        "numChildren",        // 3
-        "anchorChildren",    // 4
+        "setAsSizedGroupWithCurrentSize",    // 3
+        "numChildren",        // 4
+        "anchorChildren",    // 5
     };
     static const int numKeys = sizeof( keys ) / sizeof( const char * );
-    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 5, 1, 1, __FILE__, __LINE__ );
+    static StringHash sHash( *LuaContext::GetAllocator( L ), keys, numKeys, 6, 1, 1, __FILE__, __LINE__ );
     StringHash *hash = &sHash;
 
     int index = hash->Lookup( key );
@@ -1859,12 +1880,18 @@ LuaGroupObjectProxyVTable::PushMethod( lua_State *L, const GroupObject& o, const
         break;
     case 3:
         {
+            Lua::PushCachedFunction( L, Self::setAsSizedGroupWithCurrentSize );
+            result = 1;
+        }
+        break;
+    case 4:
+        {
             // GroupObject* o = (GroupObject*)LuaProxy::GetProxyableObject( L, 1 );
             lua_pushinteger( L, o.NumChildren() );
             result = 1;
         }
         break;
-    case 4:
+    case 5:
         {
             lua_pushboolean( L, o.IsAnchorChildren() );
             result = 1;

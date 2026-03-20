@@ -85,8 +85,10 @@ GroupObject::ReleaseChildrenLuaReferences( lua_State *L )
 GroupObject::GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas )
 :    Super(),
     fStage( canvas ),
-    fWidth( Rtt_REAL_0 ),
-    fHeight( Rtt_REAL_0 ),
+    fSelfBoundsXMin( Rtt_REAL_0 ),
+    fSelfBoundsYMin( Rtt_REAL_0 ),
+    fSelfBoundsXMax( Rtt_REAL_0 ),
+    fSelfBoundsYMax( Rtt_REAL_0 ),
     fHasFixedSelfBounds( false ),
     fChildrenNeedTransformUpdate( false ),
     fChildren( pAllocator )
@@ -97,8 +99,10 @@ GroupObject::GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas )
 GroupObject::GroupObject( Rtt_Allocator* pAllocator, StageObject* canvas, Real width, Real height )
 :    Super(),
     fStage( canvas ),
-    fWidth( width > Rtt_REAL_0 ? width : Rtt_REAL_0 ),
-    fHeight( height > Rtt_REAL_0 ? height : Rtt_REAL_0 ),
+    fSelfBoundsXMin( -Rtt_RealDiv2( width > Rtt_REAL_0 ? width : Rtt_REAL_0 ) ),
+    fSelfBoundsYMin( -Rtt_RealDiv2( height > Rtt_REAL_0 ? height : Rtt_REAL_0 ) ),
+    fSelfBoundsXMax( Rtt_RealDiv2( width > Rtt_REAL_0 ? width : Rtt_REAL_0 ) ),
+    fSelfBoundsYMax( Rtt_RealDiv2( height > Rtt_REAL_0 ? height : Rtt_REAL_0 ) ),
     fHasFixedSelfBounds( true ),
     fChildrenNeedTransformUpdate( false ),
     fChildren( pAllocator )
@@ -294,7 +298,10 @@ GroupObject::GetSelfBounds( Rect& rect ) const
 {
     if ( fHasFixedSelfBounds )
     {
-        rect.Initialize( Rtt_RealDiv2( fWidth ), Rtt_RealDiv2( fHeight ) );
+        rect.xMin = fSelfBoundsXMin;
+        rect.yMin = fSelfBoundsYMin;
+        rect.xMax = fSelfBoundsXMax;
+        rect.yMax = fSelfBoundsYMax;
         return;
     }
 
@@ -316,6 +323,26 @@ GroupObject::GetSelfBounds( Rect& rect ) const
 }
 
 void
+GroupObject::SetFixedSelfBounds( const Rect& rect )
+{
+	if ( ! fHasFixedSelfBounds
+		 || ! Rtt_RealEqual( rect.xMin, fSelfBoundsXMin )
+		 || ! Rtt_RealEqual( rect.yMin, fSelfBoundsYMin )
+		 || ! Rtt_RealEqual( rect.xMax, fSelfBoundsXMax )
+		 || ! Rtt_RealEqual( rect.yMax, fSelfBoundsYMax ) )
+	{
+		fSelfBoundsXMin = rect.xMin;
+		fSelfBoundsYMin = rect.yMin;
+		fSelfBoundsXMax = rect.xMax;
+		fSelfBoundsYMax = rect.yMax;
+		fHasFixedSelfBounds = true;
+
+		Invalidate( kTransformFlag | kStageBoundsFlag );
+		const_cast< Transform& >( GetTransform() ).Invalidate();
+	}
+}
+
+void
 GroupObject::SetSelfBounds( Real width, Real height )
 {
     if ( fHasFixedSelfBounds )
@@ -332,17 +359,52 @@ GroupObject::SetAsSizedGroup( Real width, Real height )
 {
 	Real newWidth = ( width > Rtt_REAL_0 ? width : Rtt_REAL_0 );
 	Real newHeight = ( height > Rtt_REAL_0 ? height : Rtt_REAL_0 );
+	Rect currentBounds;
+	GetSelfBounds( currentBounds );
+	Rect newBounds;
 
-	if ( ! fHasFixedSelfBounds
-		 || ! Rtt_RealEqual( newWidth, fWidth )
-		 || ! Rtt_RealEqual( newHeight, fHeight ) )
+	if ( currentBounds.NotEmpty() )
 	{
-		fWidth = newWidth;
-		fHeight = newHeight;
-		fHasFixedSelfBounds = true;
+		if ( ShouldOffsetWithAnchor() )
+		{
+			Real anchorX = GetAnchorX();
+			Real anchorY = GetAnchorY();
+			Real xAnchor = currentBounds.xMin + Rtt_RealMul( anchorX, currentBounds.Width() );
+			Real yAnchor = currentBounds.yMin + Rtt_RealMul( anchorY, currentBounds.Height() );
 
-		Invalidate( kTransformFlag | kStageBoundsFlag );
-		const_cast< Transform& >( GetTransform() ).Invalidate();
+			newBounds.xMin = xAnchor - Rtt_RealMul( anchorX, newWidth );
+			newBounds.yMin = yAnchor - Rtt_RealMul( anchorY, newHeight );
+			newBounds.xMax = newBounds.xMin + newWidth;
+			newBounds.yMax = newBounds.yMin + newHeight;
+		}
+		else
+		{
+			Vertex2 center;
+			currentBounds.GetCenter( center );
+			newBounds.Initialize( center.x, center.y, newWidth, newHeight );
+		}
+	}
+	else
+	{
+		newBounds.Initialize( Rtt_REAL_0, Rtt_REAL_0, newWidth, newHeight );
+	}
+
+	SetFixedSelfBounds( newBounds );
+}
+
+void
+GroupObject::SetAsSizedGroupWithCurrentSize()
+{
+	Rect currentBounds;
+	GetSelfBounds( currentBounds );
+
+	if ( currentBounds.NotEmpty() )
+	{
+		SetFixedSelfBounds( currentBounds );
+	}
+	else
+	{
+		SetAsSizedGroup( Rtt_REAL_0, Rtt_REAL_0 );
 	}
 }
 

@@ -50,6 +50,7 @@ class GroupObject : public DisplayObject
 		virtual void GetSelfBounds( Rect& rect ) const;
 		virtual void SetSelfBounds( Real width, Real height );
 		void SetAsSizedGroup( Real width, Real height );
+		void SetAsSizedGroupWithCurrentSize();
 
 	public:
 		virtual bool HitTest( Real contentX, Real contentY );
@@ -88,9 +89,14 @@ class GroupObject : public DisplayObject
 		Rtt_Allocator* Allocator() const { return fChildren.Allocator(); }
 
 	private:
+		void SetFixedSelfBounds( const Rect& rect );
+
+	private:
 		StageObject* fStage;
-		Real fWidth;
-		Real fHeight;
+		Real fSelfBoundsXMin;
+		Real fSelfBoundsYMin;
+		Real fSelfBoundsXMax;
+		Real fSelfBoundsYMax;
 		bool fHasFixedSelfBounds;
 		bool fChildrenNeedTransformUpdate;
 
