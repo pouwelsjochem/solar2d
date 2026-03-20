@@ -74,7 +74,6 @@ class GroupObject : public DisplayObject
 		bool IsStage() const { return this == (GroupObject*)fStage; }
 
 	protected:
-		virtual S32 CountListenersInSubtree( ListenerMask mask ) const;
 		virtual void DidInsert( bool childParentChanged );
 		virtual void DidRemove();
 
