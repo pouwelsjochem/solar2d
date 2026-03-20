@@ -696,10 +696,10 @@ class DragEvent : public HitEvent
 
 // ----------------------------------------------------------------------------
 
-class MouseEvent : public HitEvent
+class MouseEvent : public VirtualEvent
 {
 	public:
-		typedef HitEvent Super;
+		typedef VirtualEvent Super;
 		static const char kName[];
 
         typedef enum MouseEventType
@@ -722,13 +722,18 @@ class MouseEvent : public HitEvent
 
 		virtual const char* Name() const;
 		virtual int Push( lua_State *L ) const;
-		virtual U32 GetListenerMask() const;
+
+	public:
+		void SetTime( double newValue ) const { fTime = newValue; }
 
     protected:
         static const char* StringForMouseEventType( MouseEventType eventType );
 
 	private:
         MouseEventType fEventType;
+		Real fX;
+		Real fY;
+		mutable double fTime;
 		bool fIsPrimaryButtonDown;
 		bool fIsSecondaryButtonDown;
 		bool fIsMiddleButtonDown;

@@ -1547,7 +1547,9 @@ MouseEvent::MouseEvent(MouseEventType eventType, Real x, Real y, Real scrollX, R
                        bool isPrimaryButtonDown, bool isSecondaryButtonDown, bool isMiddleButtonDown,
                        bool isShiftDown, bool isAltDown, bool isCtrlDown, bool isCommandDown)
 :	fEventType(eventType),
-    Super( x, y ),
+	fX( x ),
+	fY( y ),
+	fTime( -1. ),
     fScrollX(scrollX),
     fScrollY(scrollY),
     fClickCount(clickCount),
@@ -1567,12 +1569,26 @@ MouseEvent::Name() const
 	return kName;
 }
 
+
 int
 MouseEvent::Push( lua_State *L ) const
 {
 	if ( Rtt_VERIFY( Super::Push( L ) ) )
 	{
 		Rtt_ASSERT( lua_istable( L, -1 ) );
+
+		lua_pushnumber( L, Rtt_RealToFloat( fX ) );
+		lua_setfield( L, -2, "x" );
+		lua_pushnumber( L, Rtt_RealToFloat( fY ) );
+		lua_setfield( L, -2, "y" );
+
+		if ( fTime < 0. )
+		{
+			fTime = LuaContext::GetRuntime( L )->GetElapsedMS();
+		}
+
+		lua_pushnumber( L, fTime );
+		lua_setfield( L, -2, "time" );
 
 		lua_pushnumber( L, fScrollX );
 		lua_setfield( L, -2, "scrollX" );
@@ -1609,12 +1625,6 @@ MouseEvent::Push( lua_State *L ) const
 	}
 
 	return 1;
-}
-
-U32
-MouseEvent::GetListenerMask() const
-{
-	return DisplayObject::kMouseListener;
 }
 
 // ----------------------------------------------------------------------------

@@ -50,10 +50,6 @@ DisplayObject::MaskForString( const char *name )
 		{
 			result = kSpriteListener;
 		}
-		else if ( 0 == strcmp( name, MouseEvent::kName ) )
-		{
-			result = kMouseListener;
-		}
 		else if ( 0 == strcmp( name, FinalizeEvent::kName ) )
 		{
 			result = kFinalizeListener;

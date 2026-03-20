@@ -128,8 +128,7 @@ class DisplayObject : public MLuaProxyable
 			kUnknownListener = 0x0,
 			kTouchListener = 0x1,
 			kSpriteListener = 0x2,
-			kMouseListener = 0x4,
-			kFinalizeListener = 0x8,
+			kFinalizeListener = 0x4,
 		};
 
         typedef U8 ListenerSet;
