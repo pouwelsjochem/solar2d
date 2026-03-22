@@ -406,6 +406,7 @@ void
 GroupObject::SetAsSizedGroupWithCurrentSize()
 {
 	Rect currentBounds;
+	fHasFixedSelfBounds = false;
 	GetSelfBounds( currentBounds );
 
 	if ( currentBounds.NotEmpty() )
