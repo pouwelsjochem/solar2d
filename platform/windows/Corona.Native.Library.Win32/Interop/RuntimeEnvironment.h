@@ -379,8 +379,6 @@ class RuntimeEnvironment
 		/// <returns>Returns a Win32 "message-only window" used to post and receive private messages.</returns>
 		UI::MessageOnlyWindow& GetMessageOnlyWindow();
 
-		UI::MessageOnlyWindow& GetIpcMessageOnlyWindow(); // <- STEVE CHANGE
-
 		/// <summary>Gets a pointer to the main window that is hosting the rendering surface.</summary>
 		/// <returns>
 		///  <para>Returns a pointer to the main window.</para>
