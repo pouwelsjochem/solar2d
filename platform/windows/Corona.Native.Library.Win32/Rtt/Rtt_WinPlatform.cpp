@@ -471,7 +471,8 @@ namespace Rtt
 		}
 		Interop::UI::MessageOnlyWindow& messageOnlyWindow = fEnvironment.GetMessageOnlyWindow();
 		HWND messageOnlyWindowHandle = messageOnlyWindow.GetWindowHandle();
-		return Rtt_NEW(&GetAllocator(), WinTimer(callback, windowHandle, messageOnlyWindowHandle)); // <- STEVE CHANGE
+		UINT messageId = fEnvironment.GetRuntimeTimerMessageId();
+		return Rtt_NEW(&GetAllocator(), WinTimer(callback, windowHandle, messageOnlyWindowHandle, messageId)); // <- STEVE CHANGE
 	}
 
 	PlatformBitmap* WinPlatform::CreateBitmap(const char* path, bool convertToGrayscale) const

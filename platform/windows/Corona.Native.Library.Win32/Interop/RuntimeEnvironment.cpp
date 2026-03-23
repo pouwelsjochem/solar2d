@@ -84,6 +84,7 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fProjectSettings(),
 	fReadOnlyProjectSettings(fProjectSettings),
 	fMainMessageOnlyWindowPointer(nullptr),
+	fRuntimeTimerMessageId(0),
 	fIpcMessageOnlyWindowPointer(nullptr),
 	fMainWindowPointer(nullptr),
 	fRenderSurfacePointer(nullptr),
@@ -252,6 +253,7 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	{
 		throw std::runtime_error("Failed to create message-only window.");
 	}
+	fRuntimeTimerMessageId = fMainMessageOnlyWindowPointer->ReserveMessageId();
 	fMainMessageOnlyWindowPointer->GetReceivedMessageEventHandlers().Add(&fIpcWindowReceivedMessageEventHandler);
 
 	// If given a control to render to, wrap it with our own render surface object.
@@ -384,6 +386,11 @@ UI::MessageOnlyWindow& RuntimeEnvironment::GetMessageOnlyWindow()
 	return *fMainMessageOnlyWindowPointer;
 }
 
+UINT RuntimeEnvironment::GetRuntimeTimerMessageId() const
+{
+	return fRuntimeTimerMessageId;
+}
+
 UI::Window* RuntimeEnvironment::GetMainWindow() const
 {
 	return fMainWindowPointer;
@@ -502,6 +509,16 @@ void RuntimeEnvironment::Terminate()
 	{
 		delete fIpcMessageOnlyWindowPointer;
 		fIpcMessageOnlyWindowPointer = nullptr;
+	}
+
+	if (fMainMessageOnlyWindowPointer)
+	{
+		fMainMessageOnlyWindowPointer->GetReceivedMessageEventHandlers().Remove(&fIpcWindowReceivedMessageEventHandler);
+		if (fRuntimeTimerMessageId)
+		{
+			fMainMessageOnlyWindowPointer->UnreserveMessageId(fRuntimeTimerMessageId);
+			fRuntimeTimerMessageId = 0;
+		}
 	}
 
 	// Shutdown Microsoft GDI+.
@@ -1656,24 +1673,20 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 	const bool isIpcMessageWindow = fIpcMessageOnlyWindowPointer &&
 		(senderHandle == fIpcMessageOnlyWindowPointer->GetWindowHandle());
 
+	if (isPrivateMessageWindow && (arguments.GetMessageId() == fRuntimeTimerMessageId))
+	{
+		WNDPROC proc = (WNDPROC)arguments.GetLParam();
+
+		proc(NULL, 0, arguments.GetWParam(), 0);
+
+		arguments.SetReturnResult(1);
+		arguments.SetHandled();
+		return;
+	}
+
 	// Handle the received message.
 	switch (arguments.GetMessageId())
 	{
-		case WM_USERMSG_KICK_FRAME:
-		{
-			if (!isPrivateMessageWindow)
-			{
-				break;
-			}
-
-			WNDPROC proc = (WNDPROC)arguments.GetLParam();
-
-			proc(NULL, 0, arguments.GetWParam(), 0);
-
-			arguments.SetReturnResult(1);
-			arguments.SetHandled();
-			break;
-		}
 		case WM_COPYDATA:
 		{
 			if (!isIpcMessageWindow)

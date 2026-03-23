@@ -27,7 +27,7 @@ std::unordered_map<UINT_PTR, Rtt::WinTimer *> WinTimer::sTimerMap;
 UINT_PTR WinTimer::sMostRecentTimerID;
 
 #pragma region Constructors/Destructors
-WinTimer::WinTimer(MCallback& callback, HWND windowHandle, HWND messageOnlyWindowHandle) // <- STEVE CHANGE
+WinTimer::WinTimer(MCallback& callback, HWND windowHandle, HWND messageOnlyWindowHandle, UINT messageId) // <- STEVE CHANGE
 :	PlatformTimer(callback),
 // STEVE CHANGE
 	fQpcPerSecond(0),
@@ -39,6 +39,8 @@ WinTimer::WinTimer(MCallback& callback, HWND windowHandle, HWND messageOnlyWindo
 {
 	fWindowHandle = windowHandle;
 	fTimerPointer = NULL;
+	fMessageId = messageId;
+	Rtt_ASSERT(fMessageId != 0);
 	fIntervalInMilliseconds = 10;
 	fNextIntervalTimeInTicks = 0;
 // STEVE CHANGE
@@ -604,7 +606,7 @@ void WinTimer::ThreadBody()
 			fEvaluateBeganTime = Rtt_GetAbsoluteTime();
 
 			UnlockTo(kRunning);
-			PostMessage(fWindowHandle, WM_USERMSG_KICK_FRAME, (WPARAM)this, (LPARAM)&OnTimerElapsed_V2);
+			PostMessage(fWindowHandle, fMessageId, (WPARAM)this, (LPARAM)&OnTimerElapsed_V2);
 
 			// Wait for evaluation to finish, or an intervening stop.
 			SleepUntilNotInState(kRunning); // wait for "evaluated", "stopped", or "quitting"
