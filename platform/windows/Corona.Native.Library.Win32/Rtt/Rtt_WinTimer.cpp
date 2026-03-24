@@ -290,7 +290,6 @@ namespace Rtt
 	{
 		static const double kRefreshRateProbeIntervalInSeconds = 1.0;
 		static const double kRefreshRateChangeThresholdInHz = 0.5;
-		static const int kMaxConsecutivePostFailures = 30;
 
 		LARGE_INTEGER freq, now;
 		::QueryPerformanceFrequency(&freq);
@@ -316,7 +315,6 @@ namespace Rtt
 		double nextTick = 0.0;
 		double accumulator = 0.0;
 		double nextRefreshRateProbeTime = 0.0;
-		int consecutivePostFailures = 0;
 		bool hasLoggedPostFailure = false;
 
 		while (fRunning.load())
@@ -423,7 +421,6 @@ namespace Rtt
 						// tick can retry instead of deadlocking the frame pump permanently.
 						auto errorCode = ::GetLastError();
 						fTickPending.store(false);
-						consecutivePostFailures++;
 						if (!hasLoggedPostFailure)
 						{
 							Rtt_LogException(
@@ -431,38 +428,9 @@ namespace Rtt
 								errorCode);
 							hasLoggedPostFailure = true;
 						}
-						if (consecutivePostFailures >= kMaxConsecutivePostFailures)
-						{
-							Rtt_LogException(
-								"WinTimer: Repeated WM_CORONA_TIMER post failures; falling back to WM_TIMER.\r\n");
-							fNextIntervalTimeInTicks = (S32)::GetTickCount() + (S32)fIntervalInMilliseconds.load();
-							fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 10, WinTimer::OnTimerElapsed);
-							if (!fTimerPointer)
-							{
-								Rtt_LogException(
-									"WinTimer: Failed to start WM_TIMER fallback (error %lu).\r\n",
-									::GetLastError());
-								sTimerMap.erase(fTimerID);
-								fTimerID = 0;
-								fRunning.store(false);
-							}
-							else
-							{
-#ifdef Rtt_DEBUG
-								Rtt_Log("WinTimer: Using WM_TIMER fallback after repeated post failures.\n");
-#endif // Rtt_DEBUG
-							}
-							if (fHasRaisedTimerResolution.exchange(false))
-							{
-								::timeEndPeriod(1);
-							}
-							fUseDwmThread = false;
-							return;
-						}
 					}
 					else
 					{
-						consecutivePostFailures = 0;
 						hasLoggedPostFailure = false;
 					}
 				}
