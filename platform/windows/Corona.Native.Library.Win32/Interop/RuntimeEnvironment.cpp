@@ -1574,6 +1574,15 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 		case WM_SHOWWINDOW:
 		case WM_WINDOWPOSCHANGED:
 		{
+			if (fRuntimePointer)
+			{
+				auto timerPointer = dynamic_cast<Rtt::WinTimer*>(fRuntimePointer->GetTimer());
+				if (timerPointer)
+				{
+					timerPointer->RequestRefreshRateUpdate();
+				}
+			}
+
 			// Suspend the runtime if the window was minimized.
 			if (fProjectSettings.SuspendWhenMinimized())
 			{
@@ -1584,6 +1593,19 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 				else if (!fWasSuspendRequestedExternally)
 				{
 					Resume();
+				}
+			}
+			break;
+		}
+		case WM_DISPLAYCHANGE:
+		case WM_DPICHANGED:
+		{
+			if (fRuntimePointer)
+			{
+				auto timerPointer = dynamic_cast<Rtt::WinTimer*>(fRuntimePointer->GetTimer());
+				if (timerPointer)
+				{
+					timerPointer->RequestRefreshRateUpdate();
 				}
 			}
 			break;
@@ -2381,6 +2403,7 @@ void RuntimeEnvironment::RuntimeDelegate::DidResume(const Rtt::Runtime& sender) 
 	if (timerPointer)
 	{
 		timerPointer->fTickPending.store(false);
+		timerPointer->RequestRefreshRateUpdate();
 	}
 }
 

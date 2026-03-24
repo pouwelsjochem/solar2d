@@ -12,6 +12,7 @@
 #include <windows.h>
 #include <dwmapi.h>
 #include <timeapi.h>
+#include <cmath>
 
 // Required for DwmIsCompositionEnabled() used to detect whether the display-sync
 // thread path is available on this system.
@@ -34,12 +35,14 @@ namespace Rtt
 		fWindowHandle(windowHandle),
 		fThreadHandle(nullptr),
 		fStopEvent(nullptr),
+		fHasRaisedTimerResolution(false),
 		fRunning(false),
 		fUseDwmThread(false),
 		fTimerPointer(NULL),
 		fTimerID(0),
 		fIntervalInMilliseconds(10),
 		fNextIntervalTimeInTicks(0),
+		fRefreshRateUpdateRequested(true),
 		fTickPending(false)
 	{
 		// Determine if DWM composition is available and enabled on this system.
@@ -71,6 +74,7 @@ namespace Rtt
 
 		fRunning.store(true);
 		fTickPending.store(false);
+		fRefreshRateUpdateRequested.store(true);
 
 		// Assign a unique timer ID and register this instance in the map regardless
 		// of which timing path is used. The ID is posted as wParam in WM_CORONA_TIMER
@@ -94,6 +98,7 @@ namespace Rtt
 			// This is the only reliable reset point because the Simulator calls
 			// Rtt::Runtime::Resume() directly, bypassing RuntimeEnvironment::Resume().
 			::timeBeginPeriod(1);
+			fHasRaisedTimerResolution.store(true);
 
 			fStopEvent = ::CreateEvent(nullptr, TRUE, FALSE, nullptr);
 			if (fStopEvent)
@@ -117,7 +122,10 @@ namespace Rtt
 				::CloseHandle(fStopEvent);
 				fStopEvent = nullptr;
 			}
-			::timeEndPeriod(1);
+			if (fHasRaisedTimerResolution.exchange(false))
+			{
+				::timeEndPeriod(1);
+			}
 			fUseDwmThread = false;
 		}
 
@@ -156,30 +164,33 @@ namespace Rtt
 		sTimerMap.erase(timerId);
 		fTimerID = 0;
 
-		if (fUseDwmThread)
+		if (fStopEvent)
+		{
+			::SetEvent(fStopEvent);
+		}
+		if (fThreadHandle)
 		{
 			// Signal the background thread to exit its loop and wait for it to finish
-			// before releasing resources. ThreadLoop() now waits on fStopEvent during
+			// before releasing resources. ThreadLoop() waits on fStopEvent during
 			// both its sleep and spin phases, so shutdown should be prompt and
 			// deterministic instead of racing object destruction.
-			if (fStopEvent)
-			{
-				::SetEvent(fStopEvent);
-			}
-			if (fThreadHandle)
-			{
-				::WaitForSingleObject(fThreadHandle, INFINITE);
-				::CloseHandle(fThreadHandle);
-				fThreadHandle = nullptr;
-			}
-			if (fStopEvent)
-			{
-				::CloseHandle(fStopEvent);
-				fStopEvent = nullptr;
-			}
-
-			// Restore the system timer resolution we raised in Start().
+			::WaitForSingleObject(fThreadHandle, INFINITE);
+			::CloseHandle(fThreadHandle);
+			fThreadHandle = nullptr;
+		}
+		if (fStopEvent)
+		{
+			::CloseHandle(fStopEvent);
+			fStopEvent = nullptr;
+		}
+		if (fHasRaisedTimerResolution.exchange(false))
+		{
 			::timeEndPeriod(1);
+		}
+
+		if (fUseDwmThread)
+		{
+			fUseDwmThread = false;
 		}
 		else
 		{
@@ -194,7 +205,7 @@ namespace Rtt
 
 	void WinTimer::SetInterval(U32 milliseconds)
 	{
-		fIntervalInMilliseconds = milliseconds;
+		fIntervalInMilliseconds.store(milliseconds);
 	}
 
 	bool WinTimer::IsRunning() const
@@ -249,6 +260,11 @@ namespace Rtt
 		}
 	}
 
+	void WinTimer::RequestRefreshRateUpdate()
+	{
+		fRefreshRateUpdateRequested.store(true);
+	}
+
 #pragma endregion
 
 
@@ -262,6 +278,10 @@ namespace Rtt
 
 	void WinTimer::ThreadLoop()
 	{
+		static const double kRefreshRateProbeIntervalInSeconds = 1.0;
+		static const double kRefreshRateChangeThresholdInHz = 0.5;
+		static const int kMaxConsecutivePostFailures = 30;
+
 		LARGE_INTEGER freq, now;
 		::QueryPerformanceFrequency(&freq);
 
@@ -272,15 +292,13 @@ namespace Rtt
 		double refreshRate = GetRefreshRate();
 		double targetFrameTime = 1.0 / refreshRate;
 
-		// The Corona runtime's configured frame interval in seconds (e.g. 1/60 = 0.01667s).
-		// Set externally via SetInterval() based on the fps value in config.lua.
-		double intervalSeconds = static_cast<double>(fIntervalInMilliseconds) / 1000.0;
-
 		LARGE_INTEGER start;
 		::QueryPerformanceCounter(&start);
 
 		double nextTick = 0.0;
 		double accumulator = 0.0;
+		double nextRefreshRateProbeTime = 0.0;
+		int consecutivePostFailures = 0;
 
 		while (fRunning.load())
 		{
@@ -292,6 +310,20 @@ namespace Rtt
 			::QueryPerformanceCounter(&now);
 			double currentTime = (double)(now.QuadPart - start.QuadPart) / freq.QuadPart;
 			double delta = currentTime - nextTick;
+			double intervalSeconds = static_cast<double>(fIntervalInMilliseconds.load()) / 1000.0;
+
+			if (fRefreshRateUpdateRequested.exchange(false) || (currentTime >= nextRefreshRateProbeTime))
+			{
+				double updatedRefreshRate = GetRefreshRate();
+				nextRefreshRateProbeTime = currentTime + kRefreshRateProbeIntervalInSeconds;
+				if (std::fabs(updatedRefreshRate - refreshRate) >= kRefreshRateChangeThresholdInHz)
+				{
+					refreshRate = updatedRefreshRate;
+					targetFrameTime = 1.0 / refreshRate;
+					nextTick = currentTime + targetFrameTime;
+					accumulator = 0.0;
+				}
+			}
 
 			// ---- SLEEP PHASE ----
 			// If we are more than 1ms away from the next tick deadline, sleep for
@@ -366,6 +398,28 @@ namespace Rtt
 						// If the message could not be queued, release the gate so a future
 						// tick can retry instead of deadlocking the frame pump permanently.
 						fTickPending.store(false);
+						consecutivePostFailures++;
+						if (consecutivePostFailures >= kMaxConsecutivePostFailures)
+						{
+							fNextIntervalTimeInTicks = (S32)::GetTickCount() + (S32)fIntervalInMilliseconds.load();
+							fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 10, WinTimer::OnTimerElapsed);
+							if (!fTimerPointer)
+							{
+								sTimerMap.erase(fTimerID);
+								fTimerID = 0;
+								fRunning.store(false);
+							}
+							if (fHasRaisedTimerResolution.exchange(false))
+							{
+								::timeEndPeriod(1);
+							}
+							fUseDwmThread = false;
+							return;
+						}
+					}
+					else
+					{
+						consecutivePostFailures = 0;
 					}
 				}
 			}
@@ -379,11 +433,30 @@ namespace Rtt
 
 	double WinTimer::GetRefreshRate() const
 	{
-		// Query the current display settings to obtain the monitor refresh rate.
-		// This is used by ThreadLoop to determine the base tick interval so that
-		// frame delivery is phase-locked to the display regardless of refresh rate.
+		// Query the current display settings for the monitor that actually owns this
+		// window. This avoids pacing against the wrong refresh rate on multi-monitor
+		// systems where the primary display differs from the one hosting the game.
 		DEVMODE dm = {};
 		dm.dmSize = sizeof(dm);
+		if (fWindowHandle)
+		{
+			HMONITOR monitorHandle = ::MonitorFromWindow(fWindowHandle, MONITOR_DEFAULTTONEAREST);
+			if (monitorHandle)
+			{
+				MONITORINFOEX monitorInfo = {};
+				monitorInfo.cbSize = sizeof(monitorInfo);
+				if (::GetMonitorInfo(monitorHandle, &monitorInfo))
+				{
+					if (::EnumDisplaySettings(monitorInfo.szDevice, ENUM_CURRENT_SETTINGS, &dm))
+					{
+						if (dm.dmDisplayFrequency > 1)
+						{
+							return static_cast<double>(dm.dmDisplayFrequency);
+						}
+					}
+				}
+			}
+		}
 
 		if (::EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm))
 		{
