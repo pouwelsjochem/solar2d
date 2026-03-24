@@ -17,7 +17,6 @@
 #include "Interop\UI\CoronaTaskDialogHandler.h"
 #include "Interop\UI\RenderSurfaceControl.h"
 #include "Interop\UI\Window.h"
-#include "Interop\UI\MessageOnlyWindow.h" // <- STEVE CHANGE
 #include "Interop\ApplicationServices.h"
 #include "Interop\MDeviceSimulatorServices.h"
 #include "Interop\RuntimeEnvironment.h"
@@ -469,11 +468,7 @@ namespace Rtt
 				windowHandle = windowPointer->GetWindowHandle();
 			}
 		}
-		// STEVE CHANGE
-		Interop::UI::MessageOnlyWindow& messageOnlyWindow = fEnvironment.GetIpcMessageOnlyWindow();
-		HWND messageOnlyWindowHandle = messageOnlyWindow.GetWindowHandle();
-		// /STEVE CHANGE
-		return Rtt_NEW(&GetAllocator(), WinTimer(callback, windowHandle, messageOnlyWindowHandle)); // <- STEVE CHANGE
+		return Rtt_NEW(&GetAllocator(), WinTimer(callback, windowHandle));
 	}
 
 	PlatformBitmap* WinPlatform::CreateBitmap(const char* path, bool convertToGrayscale) const

@@ -383,13 +383,6 @@ UI::MessageOnlyWindow& RuntimeEnvironment::GetMessageOnlyWindow()
 	return *fMainMessageOnlyWindowPointer;
 }
 
-// STEVE CHANGE
-UI::MessageOnlyWindow& RuntimeEnvironment::GetIpcMessageOnlyWindow()
-{
-	return *fIpcMessageOnlyWindowPointer;
-}
-// /STEVE CHANGE
-
 UI::Window* RuntimeEnvironment::GetMainWindow() const
 {
 	return fMainWindowPointer;
@@ -1220,6 +1213,7 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 		// Load was successful. Start running the Corona application.
 		fRuntimePointer->BeginRunLoop();
 		OnRuntimeTimerElapsed();
+
 		// Force Corona to render immediately instead of waiting for the next Windows paint message.
 		if (fRenderSurfacePointer && fRenderSurfacePointer->GetWindowHandle())
 		{
@@ -1659,18 +1653,6 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 	// Handle the received message.
 	switch (arguments.GetMessageId())
 	{
-// STEVE CHANGE
-		case WM_USERMSG_KICK_FRAME:
-		{
-			WNDPROC proc = (WNDPROC)arguments.GetLParam();
-
-			proc(NULL, 0, arguments.GetWParam(), 0);
-
-			arguments.SetReturnResult(1);
-			arguments.SetHandled();
-			break;
-		}
-// /STEVE CHANGE
 		case WM_COPYDATA:
 		{
 			// Validate.

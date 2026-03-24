@@ -905,9 +905,6 @@ Runtime::BeginRunLoop()
 
 	// PlatformTimer
 	fTimer->SetInterval( kInterval );
-#if defined( Rtt_WIN_DESKTOP_ENV )
-	fTimer->SetInterval( 0x8000 | kFps );
-#endif
 
 	// Initial call to main.lua can cause runtime to be suspended,
 	// Otherwise, it's < 0 (i.e. uninitialized)
