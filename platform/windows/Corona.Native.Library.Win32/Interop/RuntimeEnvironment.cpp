@@ -252,7 +252,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	{
 		throw std::runtime_error("Failed to create message-only window.");
 	}
-	fMainMessageOnlyWindowPointer->GetReceivedMessageEventHandlers().Add(&fIpcWindowReceivedMessageEventHandler);
 
 	// If given a control to render to, wrap it with our own render surface object.
 	// This allows us to receive all Windows messages delivered to this control and tightly control rendering.
@@ -383,6 +382,13 @@ UI::MessageOnlyWindow& RuntimeEnvironment::GetMessageOnlyWindow()
 {
 	return *fMainMessageOnlyWindowPointer;
 }
+
+// STEVE CHANGE
+UI::MessageOnlyWindow& RuntimeEnvironment::GetIpcMessageOnlyWindow()
+{
+	return *fIpcMessageOnlyWindowPointer;
+}
+// /STEVE CHANGE
 
 UI::Window* RuntimeEnvironment::GetMainWindow() const
 {
@@ -1650,22 +1656,12 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 		return;
 	}
 
-	const HWND senderHandle = sender.GetWindowHandle();
-	const bool isPrivateMessageWindow = fMainMessageOnlyWindowPointer &&
-		(senderHandle == fMainMessageOnlyWindowPointer->GetWindowHandle());
-	const bool isIpcMessageWindow = fIpcMessageOnlyWindowPointer &&
-		(senderHandle == fIpcMessageOnlyWindowPointer->GetWindowHandle());
-
 	// Handle the received message.
 	switch (arguments.GetMessageId())
 	{
+// STEVE CHANGE
 		case WM_USERMSG_KICK_FRAME:
 		{
-			if (!isPrivateMessageWindow)
-			{
-				break;
-			}
-
 			WNDPROC proc = (WNDPROC)arguments.GetLParam();
 
 			proc(NULL, 0, arguments.GetWParam(), 0);
@@ -1674,13 +1670,9 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 			arguments.SetHandled();
 			break;
 		}
+// /STEVE CHANGE
 		case WM_COPYDATA:
 		{
-			if (!isIpcMessageWindow)
-			{
-				break;
-			}
-
 			// Validate.
 			auto dataPointer = (COPYDATASTRUCT*)arguments.GetLParam();
 			size_t characterLength = dataPointer->cbData / sizeof(wchar_t);

@@ -469,8 +469,10 @@ namespace Rtt
 				windowHandle = windowPointer->GetWindowHandle();
 			}
 		}
-		Interop::UI::MessageOnlyWindow& messageOnlyWindow = fEnvironment.GetMessageOnlyWindow();
+		// STEVE CHANGE
+		Interop::UI::MessageOnlyWindow& messageOnlyWindow = fEnvironment.GetIpcMessageOnlyWindow();
 		HWND messageOnlyWindowHandle = messageOnlyWindow.GetWindowHandle();
+		// /STEVE CHANGE
 		return Rtt_NEW(&GetAllocator(), WinTimer(callback, windowHandle, messageOnlyWindowHandle)); // <- STEVE CHANGE
 	}
 
