@@ -2369,6 +2369,19 @@ void RuntimeEnvironment::RuntimeDelegate::DidResume(const Rtt::Runtime& sender) 
 	// Notify the system that the runtime has just been resumed.
 	fEnvironmentPointer->fRuntimeState = RuntimeState::kRunning;
 	fEnvironmentPointer->fResumedEvent.Raise(*fEnvironmentPointer, EventArgs::kEmpty);
+
+	// Reset the display-sync timer's pending tick flag after resuming.
+	// This must be done here rather than in RuntimeEnvironment::Resume() because
+	// the Simulator calls Rtt::Runtime::Resume() directly via GetRuntime(), bypassing
+	// RuntimeEnvironment::Resume() entirely. DidResume() is always called by the
+	// runtime regardless of which code path triggered the resume, making it the
+	// only reliable place to reset fTickPending after any resume.
+	auto timerPointer = dynamic_cast<Rtt::WinTimer*>(
+		const_cast<Rtt::Runtime&>(sender).GetTimer());
+	if (timerPointer)
+	{
+		timerPointer->fTickPending.store(false);
+	}
 }
 
 void RuntimeEnvironment::RuntimeDelegate::WillDestroy(const Rtt::Runtime& sender) const

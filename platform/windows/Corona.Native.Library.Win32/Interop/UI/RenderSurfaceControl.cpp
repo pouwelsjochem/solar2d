@@ -10,12 +10,18 @@
 #include "stdafx.h"
 #include "RenderSurfaceControl.h"
 #include "Core\Rtt_Assert.h"
+// Required to access WinTimer::sTimerMap for WM_CORONA_TIMER dispatch.
+#include "Rtt\Rtt_WinTimer.h"
 #include "WinString.h"
 #include <exception>
 #include <GL\glew.h>
 #include <GL\wglew.h>
 #include <GL\gl.h>
 #include <GL\glu.h>
+
+// Required for DwmIsCompositionEnabled(), referenced in SwapBuffers comments.
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib")
 
 #include "CoronaLog.h"
 #include "Renderer/Rtt_VulkanExports.h"
@@ -124,9 +130,15 @@ void RenderSurfaceControl::SwapBuffers()
 	{
 		return;
 	}
-	
+
 	if (fMainDeviceContextHandle)
 	{
+		// Frame timing is now owned by WinTimer::ThreadLoop() which phase-locks
+		// delivery to the monitor refresh cycle via a high-resolution sleep/spin loop.
+		// DwmFlush() before SwapBuffers is therefore no longer needed — by the time
+		// we reach this call we are already correctly positioned within the compositor's
+		// present window. Vsync (wglSwapIntervalEXT(1), set in CreateContext) remains
+		// active as a safety net against tearing if a frame ever arrives slightly early.
 		::SwapBuffers(fMainDeviceContextHandle);
 	}
 }
@@ -267,7 +279,6 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 		fRendererVersion.SetMajorNumber(4);
 		fRendererVersion.SetMinorNumber(6);
 	}
-
 	else
 	{
 		// Fetch the control's device context.
@@ -343,6 +354,15 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 			fIsSwapControlSupported = (WGLEW_EXT_swap_control != 0);
 			fHasLoggedMissingSwapControl = false;
 			ApplySwapIntervalBasedOnVsyncEnabled();
+		}
+
+		// Enable vsync via the WGL swap interval extension.
+		// This acts as a safety net against tearing if a frame arrives slightly
+		// early relative to the display refresh. Primary frame pacing is handled
+		// by WinTimer::ThreadLoop() rather than relying on vsync alone.
+		if (wglewIsSupported("WGL_EXT_swap_control"))
+		{
+			::wglSwapIntervalEXT(1);
 		}
 
 		// Fetch the OpenGL driver's version.
@@ -557,11 +577,32 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 {
 	switch (arguments.GetMessageId())
 	{
+	case WM_CORONA_TIMER:
+	{
+		// Run the Lua/physics update and request a render.
+		// We deliberately do NOT call OnPaint() here — we let
+		// RequestRender() queue a WM_PAINT instead.
+		//
+		// This matches the original WM_TIMER behavior exactly:
+		// the timer callback returns immediately, and rendering
+		// happens asynchronously via WM_PAINT. This ensures
+		// SwapBuffers() never blocks the message loop, keeping
+		// input responsive under any load.
+		auto timerId = (UINT_PTR)arguments.GetWParam();
+		auto it = Rtt::WinTimer::sTimerMap.find(timerId);
+		if (it != Rtt::WinTimer::sTimerMap.end())
+		{
+			it->second->Evaluate();
+		}
+
+		arguments.SetHandled();
+		arguments.SetReturnResult(0);
+		break;
+	}
 		case WM_ERASEBKGND:
 		{
 			// As an optimization, always handle the "Erase Background" message so that the operating system
 			// won't automatically paint over the background. We'll just let OpenGL paint over the entire surface.
-			// Handle the 
 			arguments.SetHandled();
 			arguments.SetReturnResult(1);
 			break;
@@ -709,12 +750,12 @@ void RenderSurfaceControl::Params::SetVulkanWanted(bool required)
 	fWantVulkan = true;
 	fRequireVulkan = required;
 }
-			
+
 bool RenderSurfaceControl::Params::IsVulkanWanted() const
 {
 	return fWantVulkan;
 }
-			
+
 bool RenderSurfaceControl::Params::IsVulkanRequired() const
 {
 	return fRequireVulkan;

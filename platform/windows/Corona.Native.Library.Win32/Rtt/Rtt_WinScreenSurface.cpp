@@ -16,6 +16,11 @@
 #include "Interop\RuntimeEnvironment.h"
 #include "Rtt_NativeWindowMode.h"
 
+// Required for timeBeginPeriod()/timeEndPeriod() which set the system timer
+// resolution to 1ms for consistent frame pacing. Without this, Windows defaults
+// to ~15.6ms resolution which prevents accurate 60fps sleep granularity.
+#include <timeapi.h>
+#pragma comment(lib, "winmm.lib")
 
 namespace Rtt
 {
@@ -26,10 +31,19 @@ WinScreenSurface::WinScreenSurface(Interop::RuntimeEnvironment& environment)
 	fPreviousClientWidth(0),
 	fPreviousClientHeight(0)
 {
+	// Raise the system timer resolution to 1ms for the lifetime of this surface.
+	// Windows defaults to ~15.6ms timer resolution which makes accurate frame
+	// pacing impossible at 60fps (16.67ms budget). This call affects Sleep()
+	// granularity system-wide and is paired with timeEndPeriod() in the destructor.
+	::timeBeginPeriod(1);
 }
 
 WinScreenSurface::~WinScreenSurface()
 {
+	// Restore the system timer resolution raised in the constructor.
+	// Always paired with timeBeginPeriod() to avoid leaving the system
+	// locked to a higher resolution after the surface is destroyed.
+	::timeEndPeriod(1);
 }
 
 void WinScreenSurface::SetCurrent() const
