@@ -33,6 +33,8 @@ extern "C"
 #	include "lua.h"
 }
 
+#define WM_USERMSG_KICK_FRAME WM_USER + 0x0F /* constant is arbitrary: change if necessary */
+
 #pragma region Forward Declarations
 namespace Interop
 {
@@ -376,10 +378,6 @@ class RuntimeEnvironment
 		/// </summary>
 		/// <returns>Returns a Win32 "message-only window" used to post and receive private messages.</returns>
 		UI::MessageOnlyWindow& GetMessageOnlyWindow();
-
-		/// <summary>Gets the private message ID reserved for kicking the runtime timer.</summary>
-		/// <returns>Returns the reserved private message ID.</returns>
-		UINT GetRuntimeTimerMessageId() const;
 
 		/// <summary>Gets a pointer to the main window that is hosting the rendering surface.</summary>
 		/// <returns>
@@ -891,9 +889,6 @@ class RuntimeEnvironment
 		///  <para>Also prevents Corona's custom messages from reaching the app window, avoiding message ID collision.</para>
 		/// </summary>
 		UI::MessageOnlyWindow* fMainMessageOnlyWindowPointer;
-
-		/// <summary>Private message ID reserved on the shared message-only window for runtime timer callbacks.</summary>
-		UINT fRuntimeTimerMessageId;
 
 		/// <summary>
 		///  <para>A Win32 "message-only window" used for IPC (Inter-Process Communications).</para>

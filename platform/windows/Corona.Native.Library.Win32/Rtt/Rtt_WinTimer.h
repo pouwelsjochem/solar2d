@@ -26,7 +26,7 @@ class WinTimer : public PlatformTimer
 		/// <summary>Creates a new Win32 timer.</summary>
 		/// <param name="callback">The callback to be invoked every time the timer elapses.</param>
 		/// <param name="windowHandle">Handle to a window or control to attach the windows timer to. Can be null.</param>
-		WinTimer(MCallback& callback, HWND windowHandle, HWND messageOnlyWindowHandle, UINT messageId); // <- STEVE CHANGE
+		WinTimer(MCallback& callback, HWND windowHandle, HWND messageOnlyWindowHandle); // <- STEVE CHANGE
 
 		/// <summary>Destroys the timer and its resources. Stops the timer if currently running.</summary>
 		virtual ~WinTimer();
@@ -85,7 +85,6 @@ class WinTimer : public PlatformTimer
 		HWND fWindowHandle;
 		UINT_PTR fTimerPointer;
 		UINT_PTR fTimerID;
-		UINT fMessageId;
 		U32 fIntervalInMilliseconds;
 		S32 fNextIntervalTimeInTicks;
 
