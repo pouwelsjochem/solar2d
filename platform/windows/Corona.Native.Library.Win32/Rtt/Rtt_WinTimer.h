@@ -112,8 +112,6 @@ class WinTimer : public PlatformTimer
 		void Stop_V2(LONG stopState);
 		void Evaluate_V2();
 
-		bool TryRequestDeferredStop(LONG stopState);
-
 		enum {
 			kThread,
 			kWaitableTimer,
@@ -134,9 +132,6 @@ class WinTimer : public PlatformTimer
 		void PreciseSleep(double seconds);
 
 		U64 InvalidBeganTime() const { return ~0ULL; }
-		bool IsEvaluatingOnCurrentThread() const { return (0 != fEvaluatingThreadId) && (::GetCurrentThreadId() == fEvaluatingThreadId); }
-
-		enum { kNoDeferredStop = -1 };
 
 		SRWLOCK fLock;
 		CONDITION_VARIABLE fStartedOrStoppedCond;
@@ -146,8 +141,6 @@ class WinTimer : public PlatformTimer
 		INT64 fQpcPerSecond;
 		double fFPSInterval;
 		int fPeriodMin;
-		LONG fDeferredStopState;
-		DWORD fEvaluatingThreadId;
 // /STEVE CHANGE
 };
 

@@ -32,9 +32,7 @@ WinTimer::WinTimer(MCallback& callback, HWND windowHandle, HWND messageOnlyWindo
 // STEVE CHANGE
 	fQpcPerSecond(0),
 	fFPSInterval(0),
-	fPeriodMin(0),
-	fDeferredStopState(kNoDeferredStop),
-	fEvaluatingThreadId(0)
+	fPeriodMin(0)
 // /STEVE CHANGE
 {
 	fWindowHandle = windowHandle;
@@ -320,8 +318,6 @@ bool WinTimer::Init_V2()
 {
 	fState = kStopped;
 	fEvaluateBeganTime = InvalidBeganTime();
-	fDeferredStopState = kNoDeferredStop;
-	fEvaluatingThreadId = 0;
 
 	InitializeSRWLock(&fLock);
 	InitializeConditionVariable(&fStartedOrStoppedCond);
@@ -380,13 +376,6 @@ void WinTimer::Stop_V2(LONG stopState)
 	// See the comments in Start_V2(), which basically agree in purpose.
 	Rtt_ASSERT(kEvaluated != InterlockedOr(&fState, 0));
 
-	if (TryRequestDeferredStop(stopState))
-	{
-		// Stop() can be called reentrantly from the frame callback itself.
-		// Defer the state change until the callback unwinds to avoid self-deadlocking on kLocked.
-		return;
-	}
-
 	bool normalStop = LockFromExpectedStateTo(kRunning, kStopped);
 	if (normalStop || (kQuitting == stopState && LockFromExpectedStateTo(kStopped, kQuitting)))
 	{
@@ -408,22 +397,6 @@ void WinTimer::Stop_V2(LONG stopState)
 void WinTimer::Evaluate_V2()
 {
 	this->operator()();
-}
-
-bool WinTimer::TryRequestDeferredStop(LONG stopState)
-{
-	if (!IsEvaluatingOnCurrentThread())
-	{
-		return false;
-	}
-
-	LONG previous = InterlockedOr(&fDeferredStopState, 0);
-	while ((previous < stopState) && (previous != InterlockedCompareExchange(&fDeferredStopState, stopState, previous)))
-	{
-		previous = InterlockedOr(&fDeferredStopState, 0);
-	}
-
-	return true;
 }
 
 // spin and check:
@@ -483,7 +456,7 @@ LONG WinTimer::SleepUntilNotInState(LONG state)
 		{
 			ReleaseSRWLockExclusive(&fLock);
 
-			return actualState;
+			return state;
 		}
 
 		SleepConditionVariableSRW(&fStartedOrStoppedCond, &fLock, INFINITE, 0);
@@ -537,26 +510,8 @@ VOID CALLBACK WinTimer::OnTimerElapsed_V2(HWND hwnd, UINT uMsg, UINT_PTR idEvent
 	// Assuming we're still running, hold the lock until evaluated.
 	if (timer->TryToLockFromExpectedState(kRunning))
 	{
-		timer->fEvaluatingThreadId = ::GetCurrentThreadId();
 		timer->Evaluate_V2();
-		timer->fEvaluatingThreadId = 0;
-
-		LONG deferredStopState = InterlockedExchange(&timer->fDeferredStopState, kNoDeferredStop);
-		if (deferredStopState >= kStopped)
-		{
-			timer->fEvaluateBeganTime = timer->InvalidBeganTime();
-
-			if (0 != timer->fPeriodMin)
-			{
-				timeEndPeriod(timer->fPeriodMin);
-			}
-
-			timer->UnlockTo(deferredStopState);
-		}
-		else
-		{
-			timer->UnlockTo(kEvaluated);
-		}
+		timer->UnlockTo(kEvaluated);
 
 		WakeConditionVariable(&timer->fStartedOrStoppedCond);
 	}
