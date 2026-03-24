@@ -100,7 +100,7 @@ namespace Rtt
 		///   is invoked safely on the correct thread.
 		///  </para>
 		///  <para>
-		///   This approach is conceptually equivalent to requestAnimationFrame in browsers —
+		///   This approach is conceptually equivalent to requestAnimationFrame in browsers â€”
 		///   the callback fires once per display refresh cycle, phase-locked to the monitor.
 		///   A 60fps game on a 120Hz or 144Hz monitor fires every Nth refresh tick, ensuring
 		///   frames always land on a display boundary rather than between refreshes.
@@ -110,7 +110,7 @@ namespace Rtt
 		///   as a one-message gate. A new WM_CORONA_TIMER is only posted after the previous
 		///   one has been fully processed by the main thread (i.e. after Evaluate() clears
 		///   fTickPending). This prevents the message queue from accumulating timer messages
-		///   that would delay input handling — mirroring the natural idle-queue behavior of
+		///   that would delay input handling â€” mirroring the natural idle-queue behavior of
 		///   the legacy WM_TIMER approach without sacrificing frame timing precision.
 		///  </para>
 		/// </summary>
@@ -161,10 +161,10 @@ namespace Rtt
 
 		/// <summary>
 		///  Indicates whether the timer is currently running.
-		///  Declared volatile because it is written by the main thread (Stop())
+		///  Atomic because it is written by the main thread (Start()/Stop())
 		///  and read by the background thread (ThreadLoop()).
 		/// </summary>
-		volatile bool fRunning;
+		std::atomic<bool> fRunning;
 
 		/// <summary>
 		///  True if the display-sync thread path is active.
@@ -174,7 +174,7 @@ namespace Rtt
 		/// </summary>
 		bool fUseDwmThread;
 
-		// Legacy WM_TIMER fallback members — only used when fUseDwmThread is false.
+		// Legacy WM_TIMER fallback members â€” only used when fUseDwmThread is false.
 		UINT_PTR fTimerPointer;
 		UINT_PTR fTimerID;
 		U32 fIntervalInMilliseconds;
@@ -210,7 +210,7 @@ namespace Rtt
 		///  <para>
 		///   This prevents the message queue from accumulating timer ticks when the
 		///   main thread is busy (e.g. under heavy physics load), which would otherwise
-		///   starve input messages and make the window unresponsive — a regression from
+		///   starve input messages and make the window unresponsive â€” a regression from
 		///   the legacy WM_TIMER behavior where Windows naturally withheld timer messages
 		///   until the message queue was idle.
 		///  </para>

@@ -69,7 +69,8 @@ namespace Rtt
 			return;
 		}
 
-		fRunning = true;
+		fRunning.store(true);
+		fTickPending.store(false);
 
 		// Assign a unique timer ID and register this instance in the map regardless
 		// of which timing path is used. The ID is posted as wParam in WM_CORONA_TIMER
@@ -95,17 +96,32 @@ namespace Rtt
 			::timeBeginPeriod(1);
 
 			fStopEvent = ::CreateEvent(nullptr, TRUE, FALSE, nullptr);
-			fThreadHandle = ::CreateThread(
-				nullptr, 0, WinTimer::TimerThreadProc, this, 0, nullptr);
+			if (fStopEvent)
+			{
+				fThreadHandle = ::CreateThread(
+					nullptr, 0, WinTimer::TimerThreadProc, this, 0, nullptr);
+			}
 
 			if (fThreadHandle)
 			{
-				// Run at normal priority — the thread spends most of its time
+				// Run at normal priority â€“ the thread spends most of its time
 				// sleeping and only needs brief CPU access for the spin phase.
 				::SetThreadPriority(fThreadHandle, THREAD_PRIORITY_NORMAL);
+				return;
 			}
+
+			// If the display-sync thread could not be created, fall back to the
+			// legacy WM_TIMER path rather than leaving the runtime without ticks.
+			if (fStopEvent)
+			{
+				::CloseHandle(fStopEvent);
+				fStopEvent = nullptr;
+			}
+			::timeEndPeriod(1);
+			fUseDwmThread = false;
 		}
-		else
+
+		if (false == fUseDwmThread)
 		{
 			// Legacy WM_TIMER path.
 			// Start the timer, but with an interval faster than the configured interval.
@@ -115,8 +131,10 @@ namespace Rtt
 			fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 10, WinTimer::OnTimerElapsed);
 			if (!fTimerPointer)
 			{
-				// SetTimer failed — remove from map so we don't hold a dangling entry.
+				// SetTimer failed â€“ remove from map so we don't hold a dangling entry.
 				sTimerMap.erase(fTimerID);
+				fTimerID = 0;
+				fRunning.store(false);
 			}
 		}
 	}
@@ -129,25 +147,28 @@ namespace Rtt
 			return;
 		}
 
-		fRunning = false;
+		auto timerId = fTimerID;
+		fRunning.store(false);
+		fTickPending.store(false);
 
 		// Always remove from the timer map regardless of which path is active.
 		// This guards against message callbacks firing after Stop() has been called.
-		sTimerMap.erase(fTimerID);
+		sTimerMap.erase(timerId);
 		fTimerID = 0;
 
 		if (fUseDwmThread)
 		{
 			// Signal the background thread to exit its loop and wait for it to finish
-			// before releasing resources. 2000ms timeout prevents an indefinite hang
-			// if the thread is unresponsive.
+			// before releasing resources. ThreadLoop() now waits on fStopEvent during
+			// both its sleep and spin phases, so shutdown should be prompt and
+			// deterministic instead of racing object destruction.
 			if (fStopEvent)
 			{
 				::SetEvent(fStopEvent);
 			}
 			if (fThreadHandle)
 			{
-				::WaitForSingleObject(fThreadHandle, 2000);
+				::WaitForSingleObject(fThreadHandle, INFINITE);
 				::CloseHandle(fThreadHandle);
 				fThreadHandle = nullptr;
 			}
@@ -163,7 +184,10 @@ namespace Rtt
 		else
 		{
 			// Stop the legacy Windows timer.
-			::KillTimer(fWindowHandle, fTimerID);
+			if (timerId)
+			{
+				::KillTimer(fWindowHandle, timerId);
+			}
 			fTimerPointer = NULL;
 		}
 	}
@@ -177,10 +201,10 @@ namespace Rtt
 	{
 		if (fUseDwmThread)
 		{
-			// Display-sync path does not use fTimerPointer — use fRunning instead.
-			return fRunning;
+			// Display-sync path does not use fTimerPointer â€“ use fRunning instead.
+			return fRunning.load();
 		}
-		// Legacy path — timer is running if SetTimer() returned a valid handle.
+		// Legacy path â€” timer is running if SetTimer() returned a valid handle.
 		return (fTimerPointer != NULL);
 	}
 
@@ -244,7 +268,7 @@ namespace Rtt
 		// Query the monitor refresh rate to use as the base tick interval.
 		// On a 120Hz monitor this gives 8.33ms per tick. On 60Hz, 16.67ms.
 		// The game's configured FPS (e.g. 60fps on a 120Hz monitor) is enforced
-		// separately via the accumulator below — frames fire every Nth display tick.
+		// separately via the accumulator below â€” frames fire every Nth display tick.
 		double refreshRate = GetRefreshRate();
 		double targetFrameTime = 1.0 / refreshRate;
 
@@ -258,8 +282,13 @@ namespace Rtt
 		double nextTick = 0.0;
 		double accumulator = 0.0;
 
-		while (fRunning)
+		while (fRunning.load())
 		{
+			if (fStopEvent && (WAIT_OBJECT_0 == ::WaitForSingleObject(fStopEvent, 0)))
+			{
+				break;
+			}
+
 			::QueryPerformanceCounter(&now);
 			double currentTime = (double)(now.QuadPart - start.QuadPart) / freq.QuadPart;
 			double delta = currentTime - nextTick;
@@ -273,7 +302,12 @@ namespace Rtt
 			{
 				DWORD sleepMs = (DWORD)((-delta - 0.001) * 1000.0);
 				if (sleepMs > 0)
-					::Sleep(sleepMs);
+				{
+					if (fStopEvent && (WAIT_OBJECT_0 == ::WaitForSingleObject(fStopEvent, sleepMs)))
+					{
+						break;
+					}
+				}
 				continue;
 			}
 
@@ -285,6 +319,11 @@ namespace Rtt
 			// compared to a plain empty loop.
 			while (true)
 			{
+				if (!fRunning.load() || (fStopEvent && (WAIT_OBJECT_0 == ::WaitForSingleObject(fStopEvent, 0))))
+				{
+					return;
+				}
+
 				::QueryPerformanceCounter(&now);
 				currentTime = (double)(now.QuadPart - start.QuadPart) / freq.QuadPart;
 				if (currentTime >= nextTick)
@@ -295,13 +334,13 @@ namespace Rtt
 			// ---- FIRE ----
 			// Accumulate elapsed display ticks. When the accumulator reaches the
 			// game's configured frame interval, attempt to post WM_CORONA_TIMER.
-			// Frames are always delivered on a display refresh boundary — e.g. a
+			// Frames are always delivered on a display refresh boundary â€” e.g. a
 			// 60fps game on a 120Hz monitor fires every other tick.
 			accumulator += targetFrameTime;
 			if (accumulator >= intervalSeconds)
 			{
 				// Reset the accumulator to zero rather than carrying over the remainder.
-				// Carrying over causes occasional early ticks — for example, on a 120Hz
+				// Carrying over causes occasional early ticks â€” for example, on a 120Hz
 				// monitor running a 60fps game, carry-over produces a frame every ~13
 				// normal frames that arrives after only 8.3ms instead of 16.7ms. Although
 				// framedebug does not flag these as stutters, they are displayed for only
@@ -322,7 +361,12 @@ namespace Rtt
 				bool expected = false;
 				if (fTickPending.compare_exchange_strong(expected, true))
 				{
-					::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0);
+					if (!::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0))
+					{
+						// If the message could not be queued, release the gate so a future
+						// tick can retry instead of deadlocking the frame pump permanently.
+						fTickPending.store(false);
+					}
 				}
 			}
 
@@ -349,13 +393,13 @@ namespace Rtt
 			}
 		}
 
-		// Safe fallback — assumes 60Hz if the display settings cannot be queried.
+		// Safe fallback â€” assumes 60Hz if the display settings cannot be queried.
 		return 60.0;
 	}
 
 	VOID CALLBACK WinTimer::OnTimerElapsed(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 	{
-		// Legacy WM_TIMER callback — only active when fUseDwmThread is false.
+		// Legacy WM_TIMER callback â€” only active when fUseDwmThread is false.
 		// Look up the WinTimer instance by ID and ask it to evaluate whether
 		// the configured interval has elapsed. The map guard prevents crashes
 		// if this callback fires after Stop() has already removed the entry.
