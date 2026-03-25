@@ -50,7 +50,8 @@ namespace Rtt
 
 		/// <summary>Sets the timer's interval in milliseconds. This can be applied while the timer is running.</summary>
 		/// <param name="milliseconds">
-		///  <para>How often the timer will "elapse" and invoke its given callback when running.</para>
+		///  <para>How often the timer will "elapse" and invoke its given callback in the legacy WM_TIMER path.</para>
+		///  <para>The display-sync path instead runs at the current window monitor refresh rate, capped at 240Hz.</para>
 		///  <para>Cannot be set less than 10 milliseconds.</para>
 		/// </param>
 		virtual void SetInterval(U32 milliseconds) override;
@@ -107,10 +108,9 @@ namespace Rtt
 		///   is invoked safely on the correct thread.
 		///  </para>
 		///  <para>
-		///   This approach is conceptually equivalent to requestAnimationFrame in browsers —
-		///   the callback fires once per display refresh cycle, phase-locked to the monitor.
-		///   A 60fps game on a 120Hz or 144Hz monitor fires every Nth refresh tick, ensuring
-		///   frames always land on a display boundary rather than between refreshes.
+		///   This approach is conceptually equivalent to requestAnimationFrame in browsers:
+		///   the callback fires once per display refresh cycle, phase-locked to the monitor,
+		///   using the current window monitor's refresh rate as the runtime target up to 240Hz.
 		///  </para>
 		///  <para>
 		///   To preserve input responsiveness under heavy load, the loop uses fTickPending
@@ -125,7 +125,7 @@ namespace Rtt
 
 		/// <summary>
 		///  <para>Queries the current display refresh rate using EnumDisplaySettings.</para>
-		///  <para>Used by ThreadLoop to determine the base tick interval for frame scheduling.</para>
+		///  <para>Used by ThreadLoop to determine the monitor-synchronized frame cadence.</para>
 		///  <returns>Returns the refresh rate in Hz, or 60.0 as a safe fallback.</returns>
 		/// </summary>
 		double GetRefreshRate() const;
