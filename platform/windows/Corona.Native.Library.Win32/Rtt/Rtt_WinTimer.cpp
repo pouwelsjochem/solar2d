@@ -37,7 +37,7 @@ namespace Rtt
 				return kDefaultRefreshRateInHz;
 			}
 
-			refreshRate = std::min(refreshRate, kMaxRefreshRateInHz);
+			refreshRate = (std::min)(refreshRate, kMaxRefreshRateInHz);
 
 			// Common monitor refresh rates are typically reported as values such as
 			// 59.94, 119.88, 143.98, etc. Snap near-integer results to the integer
