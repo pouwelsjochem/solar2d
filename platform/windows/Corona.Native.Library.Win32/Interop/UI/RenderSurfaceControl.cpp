@@ -133,12 +133,10 @@ void RenderSurfaceControl::SwapBuffers()
 
 	if (fMainDeviceContextHandle)
 	{
-		// Frame timing is now owned by WinTimer::ThreadLoop() which phase-locks
-		// delivery to the monitor refresh cycle via a high-resolution sleep/spin loop.
-		// DwmFlush() before SwapBuffers is therefore no longer needed — by the time
-		// we reach this call we are already correctly positioned within the compositor's
-		// present window. Vsync (wglSwapIntervalEXT(1), set in CreateContext) remains
-		// active as a safety net against tearing if a frame ever arrives slightly early.
+		// In the display-sync timer path, pacing is handled before we get here.
+		// SwapBuffers() should hand the finished frame to the compositor without
+		// adding a second wait of its own; swap interval configuration is handled
+		// in ApplySwapIntervalBasedOnVsyncEnabled().
 		::SwapBuffers(fMainDeviceContextHandle);
 	}
 }
@@ -203,7 +201,9 @@ void RenderSurfaceControl::ApplySwapIntervalBasedOnVsyncEnabled()
 		return;
 	}
 
-	int interval = fIsVsyncEnabled ? 1 : 0;
+	BOOL compositionEnabled = FALSE;
+	bool usesDisplaySyncTimer = SUCCEEDED(::DwmIsCompositionEnabled(&compositionEnabled)) && compositionEnabled;
+	int interval = (!usesDisplaySyncTimer && fIsVsyncEnabled) ? 1 : 0;
 	if (!wglSwapIntervalEXT(interval))
 	{
 		auto errorCode = ::GetLastError();
@@ -354,15 +354,6 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 			fIsSwapControlSupported = (WGLEW_EXT_swap_control != 0);
 			fHasLoggedMissingSwapControl = false;
 			ApplySwapIntervalBasedOnVsyncEnabled();
-		}
-
-		// Enable vsync via the WGL swap interval extension.
-		// This acts as a safety net against tearing if a frame arrives slightly
-		// early relative to the display refresh. Primary frame pacing is handled
-		// by WinTimer::ThreadLoop() rather than relying on vsync alone.
-		if (wglewIsSupported("WGL_EXT_swap_control"))
-		{
-			::wglSwapIntervalEXT(1);
 		}
 
 		// Fetch the OpenGL driver's version.
@@ -579,20 +570,24 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 	{
 	case WM_CORONA_TIMER:
 	{
-		// Run the Lua/physics update and request a render.
-		// We deliberately do NOT call OnPaint() here — we let
-		// RequestRender() queue a WM_PAINT instead.
-		//
-		// This matches the original WM_TIMER behavior exactly:
-		// the timer callback returns immediately, and rendering
-		// happens asynchronously via WM_PAINT. This ensures
-		// SwapBuffers() never blocks the message loop, keeping
-		// input responsive under any load.
+		// In display-sync mode, this timer message is the frame boundary.
+		// Evaluate() advances the runtime update and RequestRender() marks the
+		// surface invalid if a new frame is needed. Consume that invalidation
+		// immediately so update, render, and present stay on the same message turn
+		// instead of being split across WM_CORONA_TIMER and a later WM_PAINT.
 		auto timerId = (UINT_PTR)arguments.GetWParam();
 		auto it = Rtt::WinTimer::sTimerMap.find(timerId);
 		if (it != Rtt::WinTimer::sTimerMap.end())
 		{
 			it->second->Evaluate();
+
+			auto windowHandle = GetWindowHandle();
+			RECT updateRect{};
+			if (windowHandle && ::GetUpdateRect(windowHandle, &updateRect, FALSE))
+			{
+				OnPaint();
+				ValidateRect(windowHandle, nullptr);
+			}
 		}
 
 		arguments.SetHandled();

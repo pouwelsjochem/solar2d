@@ -1556,9 +1556,19 @@ void RuntimeEnvironment::Resume()
 
 void RuntimeEnvironment::OnRuntimeTimerElapsed()
 {
+	auto timerPointer = fRuntimePointer ? dynamic_cast<Rtt::WinTimer*>(fRuntimePointer->GetTimer()) : nullptr;
+	auto releasePendingTick = [timerPointer]()
+	{
+		if (timerPointer)
+		{
+			timerPointer->fTickPending.store(false);
+		}
+	};
+
 	// Do not continue if the runtime has not been loaded.
 	if (!fRuntimePointer || (fRuntimePointer->IsProperty(Rtt::Runtime::kIsApplicationLoaded) == false))
 	{
+		releasePendingTick();
 		return;
 	}
 
@@ -1569,6 +1579,7 @@ void RuntimeEnvironment::OnRuntimeTimerElapsed()
 		if (windowHandle && ::IsIconic(windowHandle))
 		{
 			Suspend();
+			releasePendingTick();
 			return;
 		}
 	}
@@ -1599,12 +1610,21 @@ void RuntimeEnvironment::OnRuntimeTimerElapsed()
 	}
 
 	// Request the surface (if we have one) to render another frame, but only if the scene has changed.
+	bool didRequestRender = false;
 	if (fRenderSurfacePointer)
 	{
 		if (fRuntimePointer->GetDisplay().GetStage()->GetScene().IsValid() == false)
 		{
 			fRenderSurfacePointer->RequestRender();
+			didRequestRender = true;
 		}
+	}
+
+	// If this tick did not queue a render, release the frame gate now so the timer
+	// thread does not stall waiting for an OnRenderFrame() that will never happen.
+	if (!didRequestRender && timerPointer)
+	{
+		releasePendingTick();
 	}
 }
 
@@ -1939,9 +1959,19 @@ void RuntimeEnvironment::OnIpcWindowReceivedMessage(UI::UIComponent &sender, UI:
 
 void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, HandledEventArgs &arguments)
 {
+	auto timerPointer = fRuntimePointer ? dynamic_cast<Rtt::WinTimer*>(fRuntimePointer->GetTimer()) : nullptr;
+	auto releasePendingTick = [timerPointer]()
+	{
+		if (timerPointer)
+		{
+			timerPointer->fTickPending.store(false);
+		}
+	};
+
 	// Do not continue if the runtime is not currently running.
 	if (!fRuntimePointer || (fRuntimePointer->IsProperty(Rtt::Runtime::kIsApplicationLoaded) == false))
 	{
+		releasePendingTick();
 		return;
 	}
 	switch (fRuntimeState)
@@ -1949,6 +1979,7 @@ void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, Handled
 		case RuntimeState::kNotStarted:
 		case RuntimeState::kTerminating:
 		case RuntimeState::kTerminated:
+			releasePendingTick();
 			return;
 	}
 
@@ -1960,6 +1991,7 @@ void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, Handled
 	}
 	fRuntimePointer->GetDisplay().Invalidate();
 	fRuntimePointer->Render();
+	releasePendingTick();
 	if (fFrameDiagnosticsEnabled)
 	{
 		double renderTimeInMilliseconds =

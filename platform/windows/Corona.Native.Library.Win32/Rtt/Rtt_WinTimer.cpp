@@ -258,14 +258,7 @@ namespace Rtt
 		{
 			// Display-sync path: the frame interval was already enforced in ThreadLoop()
 			// before WM_CORONA_TIMER was posted. Invoke the callback directly.
-			//
-			// fTickPending is cleared AFTER the callback so the background thread can
-			// post the next WM_CORONA_TIMER as soon as the main thread is free.
-			// Clearing before operator()() would allow a new message to be posted while
-			// the callback is still executing, potentially re-introducing queue pressure
-			// under heavy load.
 			this->operator()();
-			fTickPending.store(false);
 		}
 		else
 		{
@@ -396,12 +389,11 @@ namespace Rtt
 					nextTick = currentTime;
 				}
 
-				// Only post if the previous WM_CORONA_TIMER has been fully processed
-				// by the main thread (i.e. Evaluate() has cleared fTickPending).
-				// This one-message gate prevents timer messages from accumulating in
-				// the queue under heavy load, which would starve input messages and
-				// make the window unresponsive. The timing loop continues advancing
-				// nextTick regardless, so no drift builds up when a tick is skipped.
+				// Only post if the previous frame has fully completed on the main
+				// thread. In the display-sync path this gate is released after the
+				// update/render/present sequence has finished, preventing the timer
+				// thread from queueing another frame while the previous SwapBuffers()
+				// call is still in flight.
 				bool expected = false;
 				if (fTickPending.compare_exchange_strong(expected, true))
 				{

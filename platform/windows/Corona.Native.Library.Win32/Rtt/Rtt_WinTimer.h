@@ -69,10 +69,9 @@ namespace Rtt
 		///   directly without re-checking the interval.
 		///  </para>
 		///  <para>
-		///   In the display-sync path, Evaluate() also clears fTickPending after invoking
-		///   the callback, signaling to the background thread that the main thread is ready
-		///   to receive the next WM_CORONA_TIMER message. This prevents the message queue
-		///   from being flooded under heavy load while preserving input responsiveness.
+		///   In the display-sync path, Evaluate() advances the runtime update only.
+		///   The pending-tick gate is released after rendering/presentation completes,
+		///   ensuring the timer does not outrun a blocked SwapBuffers() call.
 		///  </para>
 		///  <para>This method will not do anything if the timer is not running.</para>
 		/// </summary>
@@ -212,9 +211,10 @@ namespace Rtt
 		///  thread and the main thread.
 		///  <para>
 		///   Set to true by ThreadLoop() immediately before posting WM_CORONA_TIMER.
-		///   Cleared back to false by Evaluate() after the callback has been invoked.
+		///   Cleared back to false after the frame has either been presented or
+		///   determined not to need rendering.
 		///   ThreadLoop() only posts a new message when this flag is false, ensuring
-		///   at most one WM_CORONA_TIMER is in flight at any time.
+		///   at most one end-to-end frame is in flight at any time.
 		///  </para>
 		///  <para>
 		///   This prevents the message queue from accumulating timer ticks when the
