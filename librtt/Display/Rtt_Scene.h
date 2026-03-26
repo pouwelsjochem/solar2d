@@ -39,6 +39,39 @@ class Runtime;
 class Scene
 {
 	public:
+		struct FrameDiagnostics
+		{
+			FrameDiagnostics()
+			:	fPreloadTimeInMilliseconds(0.0),
+				fUpdateTexturesTimeInMilliseconds(0.0),
+				fPrepareDrawTimeInMilliseconds(0.0),
+				fCommandRenderTimeInMilliseconds(0.0),
+				fFlushTimeInMilliseconds(0.0),
+				fCollectTimeInMilliseconds(0.0),
+				fResourceReleasesQueued(0),
+				fDeferredResourceReleasesQueued(0),
+				fProxyReleasesQueued(0),
+				fOrphanedDisplayObjectsQueued(0),
+				fWillCollectResources(false),
+				fWillCollectUnreachables(false)
+			{
+			}
+
+			double fPreloadTimeInMilliseconds;
+			double fUpdateTexturesTimeInMilliseconds;
+			double fPrepareDrawTimeInMilliseconds;
+			double fCommandRenderTimeInMilliseconds;
+			double fFlushTimeInMilliseconds;
+			double fCollectTimeInMilliseconds;
+			S32 fResourceReleasesQueued;
+			S32 fDeferredResourceReleasesQueued;
+			S32 fProxyReleasesQueued;
+			S32 fOrphanedDisplayObjectsQueued;
+			bool fWillCollectResources;
+			bool fWillCollectUnreachables;
+		};
+
+	public:
 		Scene( Rtt_Allocator* pAllocator, Display& owner );
 		~Scene();
 
@@ -56,6 +89,7 @@ class Scene
 
 		GroupObject& Orphanage() { return *fOrphanage; }
 		GroupObject& SnapshotOrphanage() { return *fSnapshotOrphanage; }
+		const FrameDiagnostics& GetLastFrameDiagnostics() const { return fLastFrameDiagnostics; }
 
 		// Collects various resources passed into QueueRelease() after every 3rd and 32nd call.
 		void Collect();
@@ -93,6 +127,7 @@ class Scene
 		LightPtrArray< LuaUserdataProxy > fProxyOrphanage;
 		bool fIsValid;
 		U8 fCounter; // DO NOT change type --- must be U8
+		FrameDiagnostics fLastFrameDiagnostics;
 };
 
 // ----------------------------------------------------------------------------

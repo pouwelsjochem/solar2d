@@ -877,6 +877,12 @@ class RuntimeEnvironment
 		/// </summary>
 		bool fWasSuspendRequestedExternally;
 
+		/// <summary>Set true to log long update/render frames to help diagnose stutter on Windows.</summary>
+		bool fFrameDiagnosticsEnabled;
+
+		/// <summary>Minimum frame/update/render duration in milliseconds before a diagnostic line is logged.</summary>
+		double fFrameDiagnosticsThresholdInMilliseconds;
+
 		/// <summary>Stores "build.settings" and "config.lua" information.</summary>
 		Rtt::WinProjectSettings fProjectSettings;
 

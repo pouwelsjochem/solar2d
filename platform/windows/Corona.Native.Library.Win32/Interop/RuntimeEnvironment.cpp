@@ -31,6 +31,7 @@
 #include "Rtt_NativeWindowMode.h"
 #include "Rtt_Preference.h"
 #include "Rtt_Runtime.h"
+#include "Core\Rtt_Time.h"
 #include "Rtt_WinPlatform.h"
 #include "Rtt_WinTimer.h"
 #include <algorithm>
@@ -42,6 +43,59 @@
 
 
 namespace Interop {
+
+namespace
+{
+	bool IsFrameDiagnosticsEnabled()
+	{
+		wchar_t value[16] = {};
+		auto length = ::GetEnvironmentVariableW(L"CORONA_WIN_FRAME_DIAGNOSTICS", value, sizeof(value) / sizeof(value[0]));
+		if (length <= 0)
+		{
+			return false;
+		}
+
+		return ((0 == _wcsicmp(value, L"1")) || (0 == _wcsicmp(value, L"true")) || (0 == _wcsicmp(value, L"yes")));
+	}
+
+	double GetFrameDiagnosticsThresholdInMilliseconds()
+	{
+		wchar_t value[32] = {};
+		auto length = ::GetEnvironmentVariableW(
+				L"CORONA_WIN_FRAME_DIAGNOSTICS_MS", value, sizeof(value) / sizeof(value[0]));
+		if (length <= 0)
+		{
+			return 20.0;
+		}
+
+		double threshold = _wtof(value);
+		return (threshold > 0.0) ? threshold : 20.0;
+	}
+
+	void PumpPendingRuntimeTickFor(UI::RenderSurfaceControl* surfacePointer)
+	{
+		if (!surfacePointer)
+		{
+			return;
+		}
+
+		auto windowHandle = surfacePointer->GetWindowHandle();
+		if (!windowHandle)
+		{
+			return;
+		}
+
+		MSG message{};
+		if (::PeekMessageW(&message, windowHandle, WM_CORONA_TIMER, WM_CORONA_TIMER, PM_REMOVE | PM_NOYIELD))
+		{
+			if (message.message != WM_QUIT)
+			{
+				::DispatchMessageW(&message);
+				::UpdateWindow(windowHandle);
+			}
+		}
+	}
+}
 
 #pragma region Public Constants
 const RuntimeEnvironment::CreationResult RuntimeEnvironment::CreationResults::kSingleAppInstanceAlreadyExists
@@ -81,6 +135,8 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fDestroyingSurfaceEventHandler(this, &RuntimeEnvironment::OnDestroyingSurface),
 	fSurfaceResizedEventHandler(this, &RuntimeEnvironment::OnSurfaceResized),
 	fWasSuspendRequestedExternally(false),
+	fFrameDiagnosticsEnabled(IsFrameDiagnosticsEnabled()),
+	fFrameDiagnosticsThresholdInMilliseconds(GetFrameDiagnosticsThresholdInMilliseconds()),
 	fProjectSettings(),
 	fReadOnlyProjectSettings(fProjectSettings),
 	fMainMessageOnlyWindowPointer(nullptr),
@@ -1519,9 +1575,28 @@ void RuntimeEnvironment::OnRuntimeTimerElapsed()
 
 	// Update the runtime's scene such as sprites, etc.
 	// Note: This does not render the scene since the "kRenderAsync" property is set.
+	Rtt_AbsoluteTime updateStartTime = 0;
+	if (fFrameDiagnosticsEnabled)
+	{
+		updateStartTime = Rtt_GetAbsoluteTime();
+	}
 	fEnteringFrameEvent.Raise(*this, EventArgs::kEmpty);
 	(*fRuntimePointer)();
 	fEnteredFrameEvent.Raise(*this, EventArgs::kEmpty);
+	if (fFrameDiagnosticsEnabled)
+	{
+		double updateTimeInMilliseconds =
+				(double)Rtt_AbsoluteToMicroseconds(Rtt_GetAbsoluteTime() - updateStartTime) / 1000.0;
+		if (updateTimeInMilliseconds >= fFrameDiagnosticsThresholdInMilliseconds)
+		{
+			auto& scene = fRuntimePointer->GetDisplay().GetScene();
+			Rtt_Log(
+					"FrameDiag: slow update frame=%u update=%.2fms sceneValid=%d\n",
+					fRuntimePointer->GetFrame(),
+					updateTimeInMilliseconds,
+					scene.IsValid() ? 1 : 0);
+		}
+	}
 
 	// Request the surface (if we have one) to render another frame, but only if the scene has changed.
 	if (fRenderSurfacePointer)
@@ -1582,6 +1657,12 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 					timerPointer->RequestRefreshRateUpdate();
 				}
 			}
+
+			// While Windows is moving/resizing the top-level window, it can starve the
+			// render surface's posted WM_CORONA_TIMER message. Manually dispatch one
+			// pending tick here so dragging the window does not stall animation until
+			// the modal move/size loop yields back to the normal message pump.
+			PumpPendingRuntimeTickFor(fRenderSurfacePointer);
 
 			// Suspend the runtime if the window was minimized.
 			if (fProjectSettings.SuspendWhenMinimized())
@@ -1872,8 +1953,42 @@ void RuntimeEnvironment::OnRenderFrame(UI::RenderSurfaceControl &sender, Handled
 	}
 
 	// Have the runtime render a frame.
+	Rtt_AbsoluteTime renderStartTime = 0;
+	if (fFrameDiagnosticsEnabled)
+	{
+		renderStartTime = Rtt_GetAbsoluteTime();
+	}
 	fRuntimePointer->GetDisplay().Invalidate();
 	fRuntimePointer->Render();
+	if (fFrameDiagnosticsEnabled)
+	{
+		double renderTimeInMilliseconds =
+				(double)Rtt_AbsoluteToMicroseconds(Rtt_GetAbsoluteTime() - renderStartTime) / 1000.0;
+		if (renderTimeInMilliseconds >= fFrameDiagnosticsThresholdInMilliseconds)
+		{
+			auto& scene = fRuntimePointer->GetDisplay().GetScene();
+			const auto& diagnostics = scene.GetLastFrameDiagnostics();
+			Rtt_Log(
+					"FrameDiag: slow render frame=%u render=%.2fms preload=%.2fms updateTextures=%.2fms "
+					"prepareDraw=%.2fms commandRender=%.2fms flush=%.2fms collect=%.2fms "
+					"queuedResources=%d queuedDeferredResources=%d queuedProxies=%d queuedOrphans=%d "
+					"willCollectResources=%d willCollectUnreachables=%d\n",
+					fRuntimePointer->GetFrame(),
+					renderTimeInMilliseconds,
+					diagnostics.fPreloadTimeInMilliseconds,
+					diagnostics.fUpdateTexturesTimeInMilliseconds,
+					diagnostics.fPrepareDrawTimeInMilliseconds,
+					diagnostics.fCommandRenderTimeInMilliseconds,
+					diagnostics.fFlushTimeInMilliseconds,
+					diagnostics.fCollectTimeInMilliseconds,
+					diagnostics.fResourceReleasesQueued,
+					diagnostics.fDeferredResourceReleasesQueued,
+					diagnostics.fProxyReleasesQueued,
+					diagnostics.fOrphanedDisplayObjectsQueued,
+					diagnostics.fWillCollectResources ? 1 : 0,
+					diagnostics.fWillCollectUnreachables ? 1 : 0);
+		}
+	}
 	arguments.SetHandled();
 }
 

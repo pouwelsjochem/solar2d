@@ -177,6 +177,7 @@ void
 Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII* profiling )
 {
 	Rtt_ASSERT( fCurrentStage );
+	FrameDiagnostics diagnostics;
 	if ( ! IsValid() )
 	{
 		const Rtt::Real kMillisecondsPerSecond = 1000.0f;
@@ -188,11 +189,17 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 		
 		ADD_ENTRY( "Scene: Begin Render" );
 		
+		Rtt_AbsoluteTime phaseStart = Rtt_GetAbsoluteTime();
 		fOwner.GetTextureFactory().Preload( renderer );
+		diagnostics.fPreloadTimeInMilliseconds = (double)Rtt_AbsoluteToMicroseconds( Rtt_GetAbsoluteTime() - phaseStart ) / 1000.0;
 		ADD_ENTRY( "Scene: Preload" );
+
+		phaseStart = Rtt_GetAbsoluteTime();
 		fOwner.GetTextureFactory().UpdateTextures(renderer);
+		diagnostics.fUpdateTexturesTimeInMilliseconds = (double)Rtt_AbsoluteToMicroseconds( Rtt_GetAbsoluteTime() - phaseStart ) / 1000.0;
 		ADD_ENTRY( "Scene: UpdateTextures" );
 
+		phaseStart = Rtt_GetAbsoluteTime();
 		renderer.SetViewport( fOwner.GetXScreenOffset(), fOwner.GetYScreenOffset(), fOwner.ScaledContentWidth(), fOwner.ScaledContentHeight() );
 
 		// Invert top/bottom to make (0, 0) be the upper left corner of the window
@@ -217,26 +224,41 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 		canvas->Draw( renderer );
 		ENABLE_SUMMED_TIMING( false );
 		renderer.EndFrame();
+		diagnostics.fPrepareDrawTimeInMilliseconds = (double)Rtt_AbsoluteToMicroseconds( Rtt_GetAbsoluteTime() - phaseStart ) / 1000.0;
 		
 		ADD_ENTRY( "Scene: Issue Draw Commands" );
 		
+		phaseStart = Rtt_GetAbsoluteTime();
         renderer.Swap(); // Swap back and front command buffers
 		
 		ADD_ENTRY( "Scene: Swap" );
 		
         renderer.Render(); // Render front command buffer
+		diagnostics.fCommandRenderTimeInMilliseconds = (double)Rtt_AbsoluteToMicroseconds( Rtt_GetAbsoluteTime() - phaseStart ) / 1000.0;
         
 //        renderer.GetFrameStatistics().Log();
         
 		ADD_ENTRY( "Scene: Process Render Commands" );
 
+		phaseStart = Rtt_GetAbsoluteTime();
         rTarget.Flush();
+		diagnostics.fFlushTimeInMilliseconds = (double)Rtt_AbsoluteToMicroseconds( Rtt_GetAbsoluteTime() - phaseStart ) / 1000.0;
 
 		ADD_ENTRY( "Scene: Flush" );
     }
     
 	// This needs to be done at the sync point (DMZ)
+	diagnostics.fResourceReleasesQueued = fFrontResourceOrphanage->Length();
+	diagnostics.fDeferredResourceReleasesQueued = fBackResourceOrphanage->Length();
+	diagnostics.fProxyReleasesQueued = fProxyOrphanage.Length();
+	diagnostics.fOrphanedDisplayObjectsQueued = fOrphanage->NumChildren();
+	U8 nextCounter = static_cast< U8 >( fCounter + 1 );
+	diagnostics.fWillCollectResources = ( ( (0x3) & nextCounter ) == 0 );
+	diagnostics.fWillCollectUnreachables = ( ( (0x1F) & nextCounter ) == 0 );
+	Rtt_AbsoluteTime collectStart = Rtt_GetAbsoluteTime();
 	Collect();
+	diagnostics.fCollectTimeInMilliseconds = (double)Rtt_AbsoluteToMicroseconds( Rtt_GetAbsoluteTime() - collectStart ) / 1000.0;
+	fLastFrameDiagnostics = diagnostics;
 
 	// Always invalidate so the next frame renders even when nothing changed visually.
 	Invalidate();
