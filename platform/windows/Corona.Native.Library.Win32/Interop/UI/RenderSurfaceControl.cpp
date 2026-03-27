@@ -130,12 +130,10 @@ void RenderSurfaceControl::SwapBuffers()
 
 	if (fMainDeviceContextHandle)
 	{
-		// Frame timing is now owned by WinTimer::ThreadLoop() which phase-locks
-		// delivery to the monitor refresh cycle via a high-resolution sleep/spin loop.
-		// DwmFlush() before SwapBuffers is therefore no longer needed — by the time
-		// we reach this call we are already correctly positioned within the compositor's
-		// present window. Vsync (wglSwapIntervalEXT(1), set in CreateContext) remains
-		// active as a safety net against tearing if a frame ever arrives slightly early.
+		// Frame timing is owned by WinTimer::ThreadLoop(), which releases steady-state
+		// frames slightly ahead of the target present boundary so the main thread can
+		// finish work and enter SwapBuffers() in time. Vsync remains the final arbiter
+		// of presentation timing and a safety net against tearing.
 		::SwapBuffers(fMainDeviceContextHandle);
 	}
 }
@@ -494,15 +492,10 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 	{
 	case WM_CORONA_TIMER:
 	{
-		// Run the Lua/physics update and request a render.
-		// We deliberately do NOT call OnPaint() here — we let
-		// RequestRender() queue a WM_PAINT instead.
-		//
-		// This matches the original WM_TIMER behavior exactly:
-		// the timer callback returns immediately, and rendering
-		// happens asynchronously via WM_PAINT. This ensures
-		// SwapBuffers() never blocks the message loop, keeping
-		// input responsive under any load.
+		// Run one paced frame on the main thread. The Windows steady-state path now
+		// updates, renders, and presents inline inside Evaluate(), so the timer gate
+		// is only released after SwapBuffers() completes. WM_PAINT is reserved for
+		// OS-driven repaint/expose scenarios rather than steady-state animation.
 		auto timerId = (UINT_PTR)arguments.GetWParam();
 		auto it = Rtt::WinTimer::sTimerMap.find(timerId);
 		if (it != Rtt::WinTimer::sTimerMap.end())

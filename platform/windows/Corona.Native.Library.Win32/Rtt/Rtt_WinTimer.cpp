@@ -100,7 +100,7 @@ namespace Rtt
 
 			if (fThreadHandle)
 			{
-				// Run at normal priority — the thread spends most of its time
+				// Run at normal priority â€” the thread spends most of its time
 				// sleeping and only needs brief CPU access for the spin phase.
 				::SetThreadPriority(fThreadHandle, THREAD_PRIORITY_NORMAL);
 			}
@@ -115,7 +115,7 @@ namespace Rtt
 			fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 10, WinTimer::OnTimerElapsed);
 			if (!fTimerPointer)
 			{
-				// SetTimer failed — remove from map so we don't hold a dangling entry.
+				// SetTimer failed â€” remove from map so we don't hold a dangling entry.
 				sTimerMap.erase(fTimerID);
 			}
 		}
@@ -177,10 +177,10 @@ namespace Rtt
 	{
 		if (fUseDwmThread)
 		{
-			// Display-sync path does not use fTimerPointer — use fRunning instead.
+			// Display-sync path does not use fTimerPointer â€” use fRunning instead.
 			return fRunning;
 		}
-		// Legacy path — timer is running if SetTimer() returned a valid handle.
+		// Legacy path â€” timer is running if SetTimer() returned a valid handle.
 		return (fTimerPointer != NULL);
 	}
 
@@ -244,7 +244,7 @@ namespace Rtt
 		// Query the monitor refresh rate to use as the base tick interval.
 		// On a 120Hz monitor this gives 8.33ms per tick. On 60Hz, 16.67ms.
 		// The game's configured FPS (e.g. 60fps on a 120Hz monitor) is enforced
-		// separately via the accumulator below — frames fire every Nth display tick.
+		// separately via the accumulator below â€” frames fire every Nth display tick.
 		double refreshRate = GetRefreshRate();
 		double targetFrameTime = 1.0 / refreshRate;
 
@@ -255,6 +255,21 @@ namespace Rtt
 		LARGE_INTEGER start;
 		::QueryPerformanceCounter(&start);
 
+		// Start work a little before the intended present boundary so the main
+		// thread has time to process the posted message, update, render, and enter
+		// SwapBuffers() before the compositor latch point. The remaining time is
+		// then spent blocked in vsync rather than accidentally slipping a whole
+		// refresh because the frame started on the deadline.
+		double presentLeadTime = targetFrameTime * 0.25;
+		if (presentLeadTime < 0.002)
+		{
+			presentLeadTime = 0.002;
+		}
+		else if (presentLeadTime > 0.004)
+		{
+			presentLeadTime = 0.004;
+		}
+
 		double nextTick = 0.0;
 		double accumulator = 0.0;
 
@@ -262,46 +277,47 @@ namespace Rtt
 		{
 			::QueryPerformanceCounter(&now);
 			double currentTime = (double)(now.QuadPart - start.QuadPart) / freq.QuadPart;
-			double delta = currentTime - nextTick;
+			double wakeTime = nextTick - presentLeadTime;
+			double timeUntilWake = wakeTime - currentTime;
 
 			// ---- SLEEP PHASE ----
-			// If we are more than 1ms away from the next tick deadline, sleep for
-			// most of the remaining time. We leave 1ms unslept as a buffer to
-			// account for Sleep() waking up slightly late on a loaded system.
-			// This keeps CPU usage low for the majority of each frame interval.
-			if (delta < -0.001)
+			// If we are more than 1ms away from the wake point, sleep for most of
+			// the remaining time. We leave 1ms unslept as a buffer to account for
+			// Sleep() waking up slightly late on a loaded system.
+			if (timeUntilWake > 0.001)
 			{
-				DWORD sleepMs = (DWORD)((-delta - 0.001) * 1000.0);
+				DWORD sleepMs = (DWORD)((timeUntilWake - 0.001) * 1000.0);
 				if (sleepMs > 0)
+				{
 					::Sleep(sleepMs);
+				}
 				continue;
 			}
 
-			// ---- SPIN PHASE (last ~1ms before deadline) ----
+			// ---- SPIN PHASE (last ~1ms before wake point) ----
 			// Busy-wait with YieldProcessor() for sub-millisecond precision.
-			// YieldProcessor emits a CPU pause instruction (PAUSE on x86) which
-			// hints to the CPU that we are in a spin-wait loop, reducing power
-			// consumption and improving performance of the surrounding pipeline
-			// compared to a plain empty loop.
 			while (true)
 			{
 				::QueryPerformanceCounter(&now);
 				currentTime = (double)(now.QuadPart - start.QuadPart) / freq.QuadPart;
-				if (currentTime >= nextTick)
+				if (currentTime >= wakeTime)
+				{
 					break;
+				}
 				::YieldProcessor();
 			}
 
 			// ---- FIRE ----
 			// Accumulate elapsed display ticks. When the accumulator reaches the
 			// game's configured frame interval, attempt to post WM_CORONA_TIMER.
-			// Frames are always delivered on a display refresh boundary — e.g. a
-			// 60fps game on a 120Hz monitor fires every other tick.
+			// The message is posted slightly ahead of the intended present boundary
+			// so the main thread can finish the frame before vsync becomes the final
+			// arbiter of presentation timing.
 			accumulator += targetFrameTime;
 			if (accumulator >= intervalSeconds)
 			{
 				// Reset the accumulator to zero rather than carrying over the remainder.
-				// Carrying over causes occasional early ticks — for example, on a 120Hz
+				// Carrying over causes occasional early ticks â€” for example, on a 120Hz
 				// monitor running a 60fps game, carry-over produces a frame every ~13
 				// normal frames that arrives after only 8.3ms instead of 16.7ms. Although
 				// framedebug does not flag these as stutters, they are displayed for only
@@ -349,13 +365,13 @@ namespace Rtt
 			}
 		}
 
-		// Safe fallback — assumes 60Hz if the display settings cannot be queried.
+		// Safe fallback â€” assumes 60Hz if the display settings cannot be queried.
 		return 60.0;
 	}
 
 	VOID CALLBACK WinTimer::OnTimerElapsed(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 	{
-		// Legacy WM_TIMER callback — only active when fUseDwmThread is false.
+		// Legacy WM_TIMER callback â€” only active when fUseDwmThread is false.
 		// Look up the WinTimer instance by ID and ask it to evaluate whether
 		// the configured interval has elapsed. The map guard prevents crashes
 		// if this callback fires after Stop() has already removed the entry.
