@@ -166,11 +166,11 @@ void RenderSurfaceControl::SetVSyncEnabled(bool value)
 
 	if (hasChanged || fIsSwapControlSupported)
 	{
-		ApplySwapIntervalBasedOnVsyncEnabled();
+		ApplySwapInterval();
 	}
 }
 
-void RenderSurfaceControl::ApplySwapIntervalBasedOnVsyncEnabled()
+void RenderSurfaceControl::ApplySwapInterval()
 {
 	if (fVulkanContext)
 	{
@@ -353,7 +353,7 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 		{
 			fIsSwapControlSupported = (WGLEW_EXT_swap_control != 0);
 			fHasLoggedMissingSwapControl = false;
-			ApplySwapIntervalBasedOnVsyncEnabled();
+			ApplySwapInterval();
 		}
 
 		// Enable vsync via the WGL swap interval extension.

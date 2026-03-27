@@ -1211,11 +1211,7 @@ namespace Rtt
 		{
 			if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
 			{
-				auto renderSurfacePointer = fEnvironment.GetRenderSurface();
-				if (renderSurfacePointer)
-				{
-					renderSurfacePointer->SetVSyncEnabled(lua_toboolean(L, valueIndex) ? true : false);
-				}
+				fEnvironment.SetVSyncEnabled(lua_toboolean(L, valueIndex) ? true : false);
 			}
 			else
 			{
@@ -1380,12 +1376,8 @@ namespace Rtt
 		}
 		else if (Rtt_StringCompare(key, "vsyncEnabled") == 0)
 		{
-			auto renderSurfacePointer = fEnvironment.GetRenderSurface();
-			if (renderSurfacePointer)
-			{
-				lua_pushboolean(L, renderSurfacePointer->IsVSyncEnabled() ? 1 : 0);
-				pushedValues = 1;
-			}
+			lua_pushboolean(L, fEnvironment.IsVSyncEnabled() ? 1 : 0);
+			pushedValues = 1;
 		}
 		else if (Rtt_StringCompare(key, "clipboard") == 0)
 		{

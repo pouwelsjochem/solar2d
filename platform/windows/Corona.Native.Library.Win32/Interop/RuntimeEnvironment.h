@@ -393,6 +393,12 @@ class RuntimeEnvironment
 		/// </returns>
 		Interop::UI::RenderSurfaceControl* GetRenderSurface() const;
 
+		/// <summary>Determines if VSync is currently requested for the rendering surface.</summary>
+		bool IsVSyncEnabled() const;
+
+		/// <summary>Requests that VSync be enabled or disabled for the rendering surface.</summary>
+		void SetVSyncEnabled(bool value);
+
 		/// <summary>Gets the specified directory's path, without a trailing slash, in UTF-8 form.</summary>
 		/// <param name="value">The directory type to fetch a path for such as kResourceDir, kDocumentsDir, etc.</param>
 		/// <returns>
@@ -788,6 +794,9 @@ class RuntimeEnvironment
 		/// <param name="projectSettings">Provides the "build.settings" configuration used to modify the window.</param>
 		void UpdateMainWindowUsing(const Rtt::ReadOnlyProjectSettings& projectSettings);
 
+		/// <summary>Attempts to fetch the VSync preference from persistent storage.</summary>
+		bool FetchStoredVsyncPreference(bool& outValue) const;
+
 		/// <summary>
 		///  <para>Called by a Lua require() function.</para>
 		///  <para>Loads a plugin that may be in a special directory or compiled into this Corona library.</para>
@@ -910,6 +919,9 @@ class RuntimeEnvironment
 		///  <para>Set null if the runtime was not assigned a rendering surface.</para>
 		/// </summar>
 		Interop::UI::RenderSurfaceControl* fRenderSurfacePointer;
+
+		/// <summary>Tracks whether VSync is currently requested.</summary>
+		bool fIsVsyncEnabled;
 
 		/// <summary>
 		///  Array storing paths of all sandboxed dirctories supported by Corona such as
