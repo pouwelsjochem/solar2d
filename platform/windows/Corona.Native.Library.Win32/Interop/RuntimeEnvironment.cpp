@@ -1215,6 +1215,11 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 		// Load was successful. Start running the Corona application.
 		fRuntimePointer->BeginRunLoop();
 		OnRuntimeTimerElapsed();
+		auto timerPointer = dynamic_cast<Rtt::WinTimer*>(fRuntimePointer->GetTimer());
+		if (timerPointer)
+		{
+			timerPointer->SignalFrameBoundary();
+		}
 
 		// Force Corona to render immediately instead of waiting for the next Windows paint message.
 		if (fRenderSurfacePointer && fRenderSurfacePointer->GetWindowHandle())
@@ -2373,17 +2378,17 @@ void RuntimeEnvironment::RuntimeDelegate::DidResume(const Rtt::Runtime& sender) 
 	fEnvironmentPointer->fRuntimeState = RuntimeState::kRunning;
 	fEnvironmentPointer->fResumedEvent.Raise(*fEnvironmentPointer, EventArgs::kEmpty);
 
-	// Reset the display-sync timer's pending tick flag after resuming.
+	// Re-prime the Windows pacing timer after resuming.
 	// This must be done here rather than in RuntimeEnvironment::Resume() because
 	// the Simulator calls Rtt::Runtime::Resume() directly via GetRuntime(), bypassing
 	// RuntimeEnvironment::Resume() entirely. DidResume() is always called by the
 	// runtime regardless of which code path triggered the resume, making it the
-	// only reliable place to reset fTickPending after any resume.
+	// only reliable place to restart pacing after any resume.
 	auto timerPointer = dynamic_cast<Rtt::WinTimer*>(
 		const_cast<Rtt::Runtime&>(sender).GetTimer());
 	if (timerPointer)
 	{
-		timerPointer->fTickPending.store(false);
+		timerPointer->SignalFrameBoundary();
 	}
 }
 

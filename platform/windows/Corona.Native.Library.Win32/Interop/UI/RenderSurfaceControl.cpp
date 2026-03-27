@@ -19,10 +19,6 @@
 #include <GL\gl.h>
 #include <GL\glu.h>
 
-// Required for DwmIsCompositionEnabled(), referenced in SwapBuffers comments.
-#include <dwmapi.h>
-#pragma comment(lib, "dwmapi.lib")
-
 #include "CoronaLog.h"
 #include "Renderer/Rtt_VulkanExports.h"
 
@@ -130,10 +126,11 @@ void RenderSurfaceControl::SwapBuffers()
 
 	if (fMainDeviceContextHandle)
 	{
-		// Frame timing is owned by WinTimer::ThreadLoop(), which releases steady-state
-		// frames slightly ahead of the target present boundary so the main thread can
-		// finish work and enter SwapBuffers() in time. Vsync remains the final arbiter
-		// of presentation timing and a safety net against tearing.
+		// Frame pacing is owned by WinTimer::ThreadLoop(), which waits from the actual
+		// end of the previous frame and starts the next one a little early so the main
+		// thread can finish work and enter SwapBuffers() before the next refresh.
+		// Vsync remains the final arbiter of presentation timing and a safety net
+		// against tearing.
 		::SwapBuffers(fMainDeviceContextHandle);
 	}
 }
@@ -274,7 +271,8 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 		// Enable vsync via the WGL swap interval extension.
 		// This acts as a safety net against tearing if a frame arrives slightly
 		// early relative to the display refresh. Primary frame pacing is handled
-		// by WinTimer::ThreadLoop() rather than relying on vsync alone.
+		// by WinTimer::ThreadLoop() from the previous present boundary rather than
+		// by predicting refresh timing on a separate clock.
 		if (wglewIsSupported("WGL_EXT_swap_control"))
 		{
 			::wglSwapIntervalEXT(1);
@@ -493,9 +491,9 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 	case WM_CORONA_TIMER:
 	{
 		// Run one paced frame on the main thread. The Windows steady-state path now
-		// updates, renders, and presents inline inside Evaluate(), so the timer gate
-		// is only released after SwapBuffers() completes. WM_PAINT is reserved for
-		// OS-driven repaint/expose scenarios rather than steady-state animation.
+		// updates, renders, and presents inline inside Evaluate(), and WinTimer
+		// re-anchors the next frame from the point this one completes. WM_PAINT is
+		// reserved for OS-driven repaint/expose scenarios rather than steady-state animation.
 		auto timerId = (UINT_PTR)arguments.GetWParam();
 		auto it = Rtt::WinTimer::sTimerMap.find(timerId);
 		if (it != Rtt::WinTimer::sTimerMap.end())
