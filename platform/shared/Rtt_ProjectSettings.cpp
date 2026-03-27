@@ -148,14 +148,6 @@ bool ProjectSettings::LoadFromDirectory(const char* directoryPath)
 				fDefaultWindowModePointer = Rtt::NativeWindowMode::FromStringId(lua_tostring(luaStatePointer, -1));
 			}
 			lua_pop(luaStatePointer, 1);
-
-			// Fetch the default VSync flag.
-			lua_getfield(luaStatePointer, -1, "defaultVsyncEnabled");
-			if (lua_type(luaStatePointer, -1) == LUA_TBOOLEAN)
-			{
-				fDefaultVsyncEnabled = lua_toboolean(luaStatePointer, -1) ? true : false;
-			}
-			lua_pop(luaStatePointer, 1);
             
             // Fetch the window's suspend when minimized setting.
             lua_getfield(luaStatePointer, -1, "suspendWhenMinimized");
@@ -333,8 +325,7 @@ void ProjectSettings::ResetBuildSettings()
 {
 	fHasBuildSettings = false;
 	fDefaultWindowModePointer = NULL;
-	fDefaultVsyncEnabled = true;
-	fSuspendWhenMinimized = false;
+    fSuspendWhenMinimized = false;
 	fIsWindowCloseButtonEnabled = true;
 	fIsWindowMinimizeButtonEnabled = true;
 	fLocalizedWindowTitleTextMap.clear();
@@ -363,11 +354,6 @@ bool ProjectSettings::HasConfigLua() const
 const Rtt::NativeWindowMode* ProjectSettings::GetDefaultWindowMode() const
 {
 	return fDefaultWindowModePointer;
-}
-
-bool ProjectSettings::IsDefaultVsyncEnabled() const
-{
-	return fDefaultVsyncEnabled;
 }
 
 bool ProjectSettings::SuspendWhenMinimized() const

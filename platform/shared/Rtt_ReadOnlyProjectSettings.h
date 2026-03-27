@@ -66,12 +66,6 @@ class ReadOnlyProjectSettings
 		const Rtt::NativeWindowMode* GetDefaultWindowMode() const;
 
 		/**
-		 * Determines if VSync should be enabled by default when the window is created.
-		 * @return Returns true if VSync is requested on startup; false otherwise.
-		 */
-		bool IsDefaultVsyncEnabled() const;
-
-		/**
 		 * Gets the default width in pixels the window's client/view area should be on startup.
 		 * This is the region within the window's borders that Corona will render to.
 		 * @return

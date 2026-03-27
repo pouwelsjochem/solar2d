@@ -88,12 +88,6 @@ class ProjectSettings
 		 * Returns null if a default mode was not provided or if the "build.settings" file was not loaded.
 		 */
 		const Rtt::NativeWindowMode* GetDefaultWindowMode() const;
-
-		/**
-		 * Determines if VSync should be enabled by default when the window is created.
-		 * @return Returns true if VSync is requested on startup; false if it should be disabled.
-		 */
-		bool IsDefaultVsyncEnabled() const;
         
         /**
          * Determines if the Corona project should suspend when its window is minimized.
@@ -229,9 +223,6 @@ class ProjectSettings
 		 * Set to null if a default window mode was not provided.
 		 */
 		const Rtt::NativeWindowMode* fDefaultWindowModePointer;
-
-		/** Set to true if the window should start with VSync enabled. */
-		bool fDefaultVsyncEnabled;
         
         /**
          * Set to true if the Corona project should suspend when its window is minimzed.

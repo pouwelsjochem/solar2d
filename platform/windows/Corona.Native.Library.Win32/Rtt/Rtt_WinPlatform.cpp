@@ -1207,17 +1207,6 @@ namespace Rtt
 				windowPointer->SetWindowMode(*windowModePointer);
 			}
 		}
-		else if (Rtt_StringCompare(key, "vsyncEnabled") == 0)
-		{
-			if (lua_type(L, valueIndex) == LUA_TBOOLEAN)
-			{
-				fEnvironment.SetVSyncEnabled(lua_toboolean(L, valueIndex) ? true : false);
-			}
-			else
-			{
-				CoronaLuaWarning(L, "native.setProperty(\"%s\") was given an invalid value type.", key);
-			}
-		}
 		else if (Rtt_StringCompare(key, "clipboard") == 0)
 		{
 			if(OpenClipboard(NULL))
@@ -1373,11 +1362,6 @@ namespace Rtt
 				lua_pushstring(L, windowPointer->GetWindowMode().GetStringId());
 				pushedValues = 1;
 			}
-		}
-		else if (Rtt_StringCompare(key, "vsyncEnabled") == 0)
-		{
-			lua_pushboolean(L, fEnvironment.IsVSyncEnabled() ? 1 : 0);
-			pushedValues = 1;
 		}
 		else if (Rtt_StringCompare(key, "clipboard") == 0)
 		{

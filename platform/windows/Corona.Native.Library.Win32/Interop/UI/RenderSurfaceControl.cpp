@@ -35,9 +35,6 @@ RenderSurfaceControl::RenderSurfaceControl(HWND windowHandle, const Params & par
 	fRenderFrameEventHandlerPointer(nullptr),
 	fMainDeviceContextHandle(nullptr),
 	fRenderingContextHandle(nullptr),
-	fIsVsyncEnabled(true),
-	fIsSwapControlSupported(false),
-	fHasLoggedMissingSwapControl(false),
 	fVulkanContext(nullptr)
 {
 	// Add event handlers.
@@ -140,76 +137,6 @@ void RenderSurfaceControl::SwapBuffers()
 		// present window. Vsync (wglSwapIntervalEXT(1), set in CreateContext) remains
 		// active as a safety net against tearing if a frame ever arrives slightly early.
 		::SwapBuffers(fMainDeviceContextHandle);
-	}
-}
-
-bool RenderSurfaceControl::IsVSyncEnabled() const
-{
-	return fIsVsyncEnabled;
-}
-
-void RenderSurfaceControl::SetVSyncEnabled(bool value)
-{
-	bool requested = value ? true : false;
-	bool hasChanged = (fIsVsyncEnabled != requested);
-	fIsVsyncEnabled = requested;
-
-	if (fVulkanContext)
-	{
-		return;
-	}
-
-	if (!fRenderingContextHandle || !fMainDeviceContextHandle)
-	{
-		return;
-	}
-
-	if (hasChanged || fIsSwapControlSupported)
-	{
-		ApplySwapInterval();
-	}
-}
-
-void RenderSurfaceControl::ApplySwapInterval()
-{
-	if (fVulkanContext)
-	{
-		return;
-	}
-
-	if (!fIsSwapControlSupported)
-	{
-		fIsSwapControlSupported = (WGLEW_EXT_swap_control != 0);
-	}
-
-	if (!fIsSwapControlSupported)
-	{
-		if (!fHasLoggedMissingSwapControl)
-		{
-			Rtt_Log("RenderSurfaceControl: Swap control extension not available; continuing without VSync.\n");
-			fHasLoggedMissingSwapControl = true;
-		}
-		return;
-	}
-
-	if (!fRenderingContextHandle || !fMainDeviceContextHandle)
-	{
-		return;
-	}
-
-	SelectRenderingContext();
-	if (fRenderingContextHandle != ::wglGetCurrentContext())
-	{
-		return;
-	}
-
-	int interval = fIsVsyncEnabled ? 1 : 0;
-	if (!wglSwapIntervalEXT(interval))
-	{
-		auto errorCode = ::GetLastError();
-		Rtt_LogException(
-				"RenderSurfaceControl: Failed to set VSync interval %d (error %lu).\r\n",
-				interval, errorCode);
 	}
 }
 
@@ -344,17 +271,7 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 		::wglMakeCurrent(fMainDeviceContextHandle, fRenderingContextHandle);
 
 		// Load OpenGL extensions.
-		GLenum glewResult = glewInit();
-		if (GLEW_OK != glewResult)
-		{
-			Rtt_LogException("RenderSurfaceControl: Failed to initialize GLEW (error %u).\r\n", glewResult);
-		}
-		else
-		{
-			fIsSwapControlSupported = (WGLEW_EXT_swap_control != 0);
-			fHasLoggedMissingSwapControl = false;
-			ApplySwapInterval();
-		}
+		glewInit();
 
 		// Enable vsync via the WGL swap interval extension.
 		// This acts as a safety net against tearing if a frame arrives slightly
@@ -394,8 +311,6 @@ void RenderSurfaceControl::DestroyContext()
 
 	// Destroy the OpenGL context.
 	::wglMakeCurrent(nullptr, nullptr);
-	fIsSwapControlSupported = false;
-	fHasLoggedMissingSwapControl = false;
 	if (fRenderingContextHandle)
 	{
 		Rtt_ASSERT(!fVulkanContext);
