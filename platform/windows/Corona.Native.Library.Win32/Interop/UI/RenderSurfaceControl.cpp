@@ -126,11 +126,10 @@ void RenderSurfaceControl::SwapBuffers()
 
 	if (fMainDeviceContextHandle)
 	{
-		// Frame pacing is owned by WinTimer::ThreadLoop(), which waits from the actual
-		// end of the previous frame and starts the next one a little early so the main
-		// thread can finish work and enter SwapBuffers() before the next refresh.
-		// Vsync remains the final arbiter of presentation timing and a safety net
-		// against tearing.
+		// Frame pacing is owned by WinTimer, which either immediately queues the next
+		// frame from the last present boundary or uses a delayed wake-up for lower-rate
+		// modes. Vsync remains the final arbiter of presentation timing and a safety
+		// net against tearing.
 		::SwapBuffers(fMainDeviceContextHandle);
 	}
 }
@@ -271,8 +270,8 @@ void RenderSurfaceControl::CreateContext(const Params & params)
 		// Enable vsync via the WGL swap interval extension.
 		// This acts as a safety net against tearing if a frame arrives slightly
 		// early relative to the display refresh. Primary frame pacing is handled
-		// by WinTimer::ThreadLoop() from the previous present boundary rather than
-		// by predicting refresh timing on a separate clock.
+		// by WinTimer from the previous present boundary rather than by predicting
+		// refresh timing on a separate clock.
 		if (wglewIsSupported("WGL_EXT_swap_control"))
 		{
 			::wglSwapIntervalEXT(1);
