@@ -1780,7 +1780,7 @@ DisplayLibrary::getTimings( lua_State *L )
 int
 DisplayLibrary::setRenderSync(lua_State* L)
 {
-    // display.setRenderSync(bool)
+#ifdef Rtt_WIN_ENV
     // When true, the render loop syncs to the monitor refresh rate while
     // logic continues at the rate set by fps in config.lua.
     // When false (default), render runs at the same rate as logic �
@@ -1792,6 +1792,10 @@ DisplayLibrary::setRenderSync(lua_State* L)
     Runtime& runtime = *LuaContext::GetRuntime(L);
     runtime.SetProperty(Runtime::kFrameSync, enabled);
     runtime.GetTimer()->SetFrameSync(enabled);
+#else
+    // display.setRenderSync() is not supported on this platform.
+    CoronaLuaWarning(L, "display.setRenderSync() is only supported on Windows.");
+#endif
     return 0;
 }
 
