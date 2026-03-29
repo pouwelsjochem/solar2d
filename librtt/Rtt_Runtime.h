@@ -260,11 +260,6 @@ class Runtime : public MCallback,
 		void Step();    // advance logic one tick (scheduler, display update, frame counter)
 #endif
 		void Render();  // render current frame
-
-		void Render();
-
-	public:
-		void Blit();
 		
 	public:
 		// MCriticalSection

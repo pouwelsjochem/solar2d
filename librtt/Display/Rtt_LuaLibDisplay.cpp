@@ -380,6 +380,19 @@ DisplayLibrary::ValueForKey( lua_State *L )
 			lua_pushnumber( L, display.MaxContentHeight() );
 		}
 		break;
+	case 14:    // "refreshRate"
+		{
+#ifdef Rtt_WIN_ENV
+			// Returns the monitor's actual refresh rate in Hz.
+			Runtime& runtime = *LuaContext::GetRuntime(L);
+			lua_pushnumber(L, runtime.GetTimer()->GetRefreshRate());
+#else
+			// display.refreshRate is not supported on this platform.
+			// Returns nil to allow developers to detect availability.
+			lua_pushnil(L);
+#endif
+		}
+		break;
 	default:
 		{
 			result = 0;
@@ -387,20 +400,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		break;
 	}
 
-    case 14:    // "refreshRate"
-        {
-    #ifdef Rtt_WIN_ENV
-            // Returns the monitor's actual refresh rate in Hz.
-            Runtime& runtime = *LuaContext::GetRuntime(L);
-            lua_pushnumber(L, runtime.GetTimer()->GetRefreshRate());
-    #else
-            // display.refreshRate is not supported on this platform.
-            // Returns nil to allow developers to detect availability.
-            lua_pushnil(L);
-    #endif
-            break;
-        }
-    return result;
+	return result;
 }
 
 // ----------------------------------------------------------------------------

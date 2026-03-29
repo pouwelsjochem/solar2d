@@ -1390,7 +1390,6 @@ Runtime::PushResourceRegistry()
 	return L;
 }
 
-void
 #ifdef Rtt_WIN_ENV
 
 void
