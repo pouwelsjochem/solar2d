@@ -256,7 +256,9 @@ class Runtime : public MCallback,
 	public:
 		// MCallback
 		virtual void operator()();
+#ifdef Rtt_WIN_ENV
 		void Step();    // advance logic one tick (scheduler, display update, frame counter)
+#endif
 		void Render();  // render current frame
 
 		void Render();

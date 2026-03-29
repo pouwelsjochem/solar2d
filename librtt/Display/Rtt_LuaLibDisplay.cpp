@@ -389,8 +389,15 @@ DisplayLibrary::ValueForKey( lua_State *L )
 
     case 14:    // "refreshRate"
         {
+    #ifdef Rtt_WIN_ENV
+            // Returns the monitor's actual refresh rate in Hz.
             Runtime& runtime = *LuaContext::GetRuntime(L);
             lua_pushnumber(L, runtime.GetTimer()->GetRefreshRate());
+    #else
+            // display.refreshRate is not supported on this platform.
+            // Returns nil to allow developers to detect availability.
+            lua_pushnil(L);
+    #endif
             break;
         }
     return result;

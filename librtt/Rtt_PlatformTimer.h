@@ -34,8 +34,9 @@ class PlatformTimer
 		virtual bool IsRunning() const = 0;
 		// Returns the display refresh rate in Hz.
 		// Overridden by platform-specific subclasses (e.g. WinTimer).
-		// Defaults to 60 for platforms that do not provide a native query.
-		virtual double GetRefreshRate() const { return 60.0; }
+		// Defaults to 0 for platforms that do not provide a native query.
+		virtual double GetRefreshRate() const { return 0.0; }
+
 		/// <summary>
 		///  <para>Controls whether the render loop syncs to the monitor refresh rate.</para>
 		///  <para>
