@@ -252,63 +252,48 @@ namespace Rtt
 		LONGLONG fallbackRefreshPeriodQpc = (LONGLONG)(((double)freq.QuadPart / refreshRate) + 0.5);
 
 		LONGLONG scheduledPresentQpc = 0;
-		LONGLONG targetPresentQpc = 0;
-		LONGLONG targetRefreshPeriodQpc = fallbackRefreshPeriodQpc;
 		double accumulator = 0.0;
 
 		while (fRunning)
 		{
 			::QueryPerformanceCounter(&now);
 
-			if (targetPresentQpc <= 0)
+			DWM_TIMING_INFO timingInfo = {};
+			timingInfo.cbSize = sizeof(timingInfo);
+
+			LONGLONG refreshPeriodQpc = fallbackRefreshPeriodQpc;
+			LONGLONG nextPresentQpc = 0;
+			bool hasCompositionTiming =
+				SUCCEEDED(::DwmGetCompositionTimingInfo(NULL, &timingInfo)) &&
+				(timingInfo.qpcRefreshPeriod > 0) &&
+				(timingInfo.qpcVBlank > 0);
+
+			if (hasCompositionTiming)
 			{
-				DWM_TIMING_INFO timingInfo = {};
-				timingInfo.cbSize = sizeof(timingInfo);
-
-				LONGLONG refreshPeriodQpc = fallbackRefreshPeriodQpc;
-				LONGLONG nextPresentQpc = 0;
-				bool hasCompositionTiming =
-					SUCCEEDED(::DwmGetCompositionTimingInfo(NULL, &timingInfo)) &&
-					(timingInfo.qpcRefreshPeriod > 0) &&
-					(timingInfo.qpcVBlank > 0);
-
-				if (hasCompositionTiming)
-				{
-					refreshPeriodQpc = timingInfo.qpcRefreshPeriod;
-					nextPresentQpc = timingInfo.qpcVBlank + refreshPeriodQpc;
-				}
-				else if (scheduledPresentQpc > 0)
-				{
-					nextPresentQpc = scheduledPresentQpc + refreshPeriodQpc;
-				}
-				else
-				{
-					nextPresentQpc = now.QuadPart + refreshPeriodQpc;
-				}
-
-				// Once a compositor interval has been claimed, do not regress to an older
-				// one if the DWM timing query lags behind our last scheduled present.
-				if (scheduledPresentQpc > 0)
-				{
-					LONGLONG minimumNextPresentQpc = scheduledPresentQpc + refreshPeriodQpc;
-					if (nextPresentQpc < minimumNextPresentQpc)
-					{
-						nextPresentQpc = minimumNextPresentQpc;
-					}
-				}
-
-				// Make sure the claimed slot is still in the future.
-				if (nextPresentQpc <= now.QuadPart)
-				{
-					LONGLONG intervalsAhead = ((now.QuadPart - nextPresentQpc) / refreshPeriodQpc) + 1;
-					nextPresentQpc += intervalsAhead * refreshPeriodQpc;
-				}
-
-				targetRefreshPeriodQpc = refreshPeriodQpc;
-				targetPresentQpc = nextPresentQpc;
+				refreshPeriodQpc = timingInfo.qpcRefreshPeriod;
+				nextPresentQpc = timingInfo.qpcVBlank + refreshPeriodQpc;
+			}
+			else if (scheduledPresentQpc > 0)
+			{
+				nextPresentQpc = scheduledPresentQpc + refreshPeriodQpc;
+			}
+			else
+			{
+				nextPresentQpc = now.QuadPart + refreshPeriodQpc;
 			}
 
-			double refreshPeriodSeconds = (double)targetRefreshPeriodQpc / freq.QuadPart;
+			// Once a compositor interval has been claimed, do not regress to an older
+			// one if the DWM timing query lags behind our last scheduled present.
+			if (scheduledPresentQpc > 0)
+			{
+				LONGLONG minimumNextPresentQpc = scheduledPresentQpc + refreshPeriodQpc;
+				if (nextPresentQpc < minimumNextPresentQpc)
+				{
+					nextPresentQpc = minimumNextPresentQpc;
+				}
+			}
+
+			double refreshPeriodSeconds = (double)refreshPeriodQpc / freq.QuadPart;
 
 			// Start work a little before the intended present boundary so the main
 			// thread has time to process the posted message, update, render, and enter
@@ -326,7 +311,7 @@ namespace Rtt
 			}
 
 			LONGLONG leadTimeQpc = (LONGLONG)(presentLeadTime * freq.QuadPart);
-			LONGLONG wakeQpc = targetPresentQpc - leadTimeQpc;
+			LONGLONG wakeQpc = nextPresentQpc - leadTimeQpc;
 			LONGLONG timeUntilWakeQpc = wakeQpc - now.QuadPart;
 
 			// ---- SLEEP PHASE ----
@@ -357,14 +342,14 @@ namespace Rtt
 
 			// ---- FIRE ----
 			// Accumulate elapsed display ticks. When the accumulator reaches the
-				// game's configured frame interval, attempt to post WM_CORONA_TIMER.
+			// game's configured frame interval, attempt to post WM_CORONA_TIMER.
 				// The message is posted slightly ahead of the intended present boundary
 				// so the main thread can finish the frame before vsync becomes the final
 				// arbiter of presentation timing.
 				LONGLONG displayTicksElapsed = 1;
 				if (scheduledPresentQpc > 0)
 				{
-					displayTicksElapsed = (targetPresentQpc - scheduledPresentQpc) / targetRefreshPeriodQpc;
+					displayTicksElapsed = (nextPresentQpc - scheduledPresentQpc) / refreshPeriodQpc;
 					if (displayTicksElapsed < 1)
 					{
 						displayTicksElapsed = 1;
@@ -399,8 +384,7 @@ namespace Rtt
 					}
 				}
 
-				scheduledPresentQpc = targetPresentQpc;
-				targetPresentQpc = 0;
+				scheduledPresentQpc = nextPresentQpc;
 			}
 		}
 
