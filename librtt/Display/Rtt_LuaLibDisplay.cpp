@@ -55,6 +55,7 @@
 #include "Display/Rtt_SpriteObject.h"
 #include "Renderer/Rtt_Texture.h"
 #include "Renderer/Rtt_Renderer.h"
+#include "Rtt_PlatformTimer.h"
 
 #include "Rtt_Event.h"
 #include "Rtt_LuaResource.h"
@@ -145,6 +146,8 @@ class DisplayLibrary
 		static int getSums( lua_State *L );
 		static int getTimings( lua_State *L );
 
+        static int setRenderSync(lua_State* L);
+
 		static int _initProfiling( lua_State *L );
 		static int _allocateProfile( lua_State *L );
 	#ifdef Rtt_DEBUG
@@ -214,6 +217,7 @@ DisplayLibrary::Open( lua_State *L )
 		{ "getStatistics", getStatistics },
 		{ "getSums", getSums },
 		{ "getTimings", getTimings },
+        { "setRenderSync", setRenderSync },
 
 		{ "_initProfiling", _initProfiling },
 		{ "_allocateProfile", _allocateProfile },
@@ -297,9 +301,10 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		"minContentHeight",		// 11
 		"maxContentWidth",		// 12
 		"maxContentHeight",		// 13
+        "refreshRate",          // 14
 	};
 	
-	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 14, 25, 5, __FILE__, __LINE__ );
+	static StringHash sHash( *LuaContext::GetAllocator( L ), keys, sizeof( keys ) / sizeof(const char *), 15, 25, 5, __FILE__, __LINE__ );
 	StringHash *hash = &sHash;
 
 	int index = hash->Lookup( key );
@@ -382,6 +387,12 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		break;
 	}
 
+    case 14:    // "refreshRate"
+        {
+            Runtime& runtime = *LuaContext::GetRuntime(L);
+            lua_pushnumber(L, runtime.GetTimer()->GetRefreshRate());
+            break;
+        }
     return result;
 }
 
@@ -1757,6 +1768,24 @@ DisplayLibrary::getTimings( lua_State *L )
 	lua_pushinteger( L, 0 );
 
 	return 1;
+}
+
+int
+DisplayLibrary::setRenderSync(lua_State* L)
+{
+    // display.setRenderSync(bool)
+    // When true, the render loop syncs to the monitor refresh rate while
+    // logic continues at the rate set by fps in config.lua.
+    // When false (default), render runs at the same rate as logic �
+    // no duplicate frames are produced.
+    // Note: without engine-side interpolation, render-only frames are
+    // redraws of the same state. This is groundwork for a future
+    // interpolation feature.
+    bool enabled = lua_toboolean(L, 1);
+    Runtime& runtime = *LuaContext::GetRuntime(L);
+    runtime.SetProperty(Runtime::kFrameSync, enabled);
+    runtime.GetTimer()->SetFrameSync(enabled);
+    return 0;
 }
 
 int

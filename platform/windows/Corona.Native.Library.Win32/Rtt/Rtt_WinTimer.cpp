@@ -40,7 +40,9 @@ namespace Rtt
 		fTimerID(0),
 		fIntervalInMilliseconds(10),
 		fNextIntervalTimeInTicks(0),
-		fTickPending(false)
+		fTickPending(false),
+		fLastMessage(0),
+		fFrameSync(false)
 	{
 		// Determine if DWM composition is available and enabled on this system.
 		// If so, we use a display-sync background thread (fUseDwmThread = true)
@@ -194,15 +196,31 @@ namespace Rtt
 
 		if (fUseDwmThread)
 		{
-			// Display-sync path: the frame interval was already enforced in ThreadLoop()
-			// before WM_CORONA_TIMER was posted. Invoke the callback directly.
+			// Display-sync path: fLastMessage tells us what ThreadLoop posted.
 			//
-			// fTickPending is cleared AFTER the callback so the background thread can
-			// post the next WM_CORONA_TIMER as soon as the main thread is free.
-			// Clearing before operator()() would allow a new message to be posted while
-			// the callback is still executing, potentially re-introducing queue pressure
+			// WM_CORONA_TIMER — logic tick is due. Run the full Step() + Render()
+			//   via operator()() which acts as a shim for both.
+			//
+			// WM_CORONA_RENDER — VSYNC fired but no logic tick is due. Queue a
+			//   WM_PAINT so OnPaint() redraws the last frame with the correct GL
+			//   context. This keeps the display refreshing at monitor rate even
+			//   when logic runs at a lower rate (e.g. 60fps logic on 120Hz display).
+			//
+			// fTickPending is cleared AFTER dispatch so the background thread can
+			// post the next message as soon as the main thread is free. Clearing
+			// before dispatch would allow a new message to be posted while the
+			// callback is still executing, potentially re-introducing queue pressure
 			// under heavy load.
-			this->operator()();
+			if (fLastMessage == WM_CORONA_TIMER)
+			{
+				// Full tick — run logic step then render.
+				this->operator()();
+			}
+			else
+			{
+				// Queue a WM_PAINT — OnPaint() handles render with proper GL context.
+				::InvalidateRect(fWindowHandle, nullptr, FALSE);
+			}
 			fTickPending.store(false);
 		}
 		else
@@ -223,6 +241,11 @@ namespace Rtt
 			// Invoke this timer's callback.
 			this->operator()();
 		}
+	}
+
+	void WinTimer::SetFrameSync(bool enabled)
+	{
+		fFrameSync = enabled;
 	}
 
 #pragma endregion
@@ -293,12 +316,14 @@ namespace Rtt
 			}
 
 			// ---- FIRE ----
-			// Accumulate elapsed display ticks. When the accumulator reaches the
-			// game's configured frame interval, attempt to post WM_CORONA_TIMER.
-			// Frames are always delivered on a display refresh boundary — e.g. a
-			// 60fps game on a 120Hz monitor fires every other tick.
+			// Accumulate elapsed display ticks. Each VSYNC tick posts either
+			// WM_CORONA_TIMER (logic + render) or WM_CORONA_RENDER (render only)
+			// depending on whether the logic accumulator has reached the configured
+			// frame interval. This decouples logic rate (config.lua fps) from
+			// render rate (monitor refresh rate).
 			accumulator += targetFrameTime;
-			if (accumulator >= intervalSeconds)
+			bool doStep = (accumulator >= intervalSeconds);
+			if (doStep)
 			{
 				// Reset the accumulator to zero rather than carrying over the remainder.
 				// Carrying over causes occasional early ticks — for example, on a 120Hz
@@ -312,17 +337,35 @@ namespace Rtt
 				// readout. The tradeoff is a negligible long-term drift of a fraction of
 				// a millisecond per session, which is completely imperceptible.
 				accumulator = 0.0;
+			}
 
-				// Only post if the previous WM_CORONA_TIMER has been fully processed
-				// by the main thread (i.e. Evaluate() has cleared fTickPending).
-				// This one-message gate prevents timer messages from accumulating in
-				// the queue under heavy load, which would starve input messages and
-				// make the window unresponsive. The timing loop continues advancing
-				// nextTick regardless, so no drift builds up when a tick is skipped.
-				bool expected = false;
-				if (fTickPending.compare_exchange_strong(expected, true))
+			// Only post if the previous WM_CORONA_TIMER has been fully processed
+			// by the main thread (i.e. Evaluate() has cleared fTickPending).
+			// This one-message gate prevents timer messages from accumulating in
+			// the queue under heavy load, which would starve input messages and
+			// make the window unresponsive. The timing loop continues advancing
+			// nextTick regardless, so no drift builds up when a tick is skipped.
+			bool expected = false;
+			if (fTickPending.compare_exchange_strong(expected, true))
+			{
+				if (doStep)
 				{
+					// Logic tick due — post full update + render message.
 					::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0);
+				}
+				else if (fFrameSync)
+				{
+					// Render-only tick — only posted when frameSync is enabled.
+					// When disabled (default), render runs at the same rate as
+					// logic and no duplicate frames are produced.
+					::PostMessage(fWindowHandle, WM_CORONA_RENDER, (WPARAM)fTimerID, 0);
+				}
+				else
+				{
+					// frameSync disabled — release the gate immediately so the
+					// next logic tick is not blocked waiting for a render-only
+					// message that was never posted.
+					fTickPending.store(false);
 				}
 			}
 

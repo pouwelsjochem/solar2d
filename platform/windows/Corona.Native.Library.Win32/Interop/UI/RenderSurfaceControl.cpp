@@ -493,6 +493,7 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 	switch (arguments.GetMessageId())
 	{
 	case WM_CORONA_TIMER:
+	case WM_CORONA_RENDER:
 	{
 		// Run the Lua/physics update and request a render.
 		// We deliberately do NOT call OnPaint() here — we let
@@ -507,6 +508,7 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 		auto it = Rtt::WinTimer::sTimerMap.find(timerId);
 		if (it != Rtt::WinTimer::sTimerMap.end())
 		{
+			it->second->fLastMessage = (UINT)arguments.GetMessageId();
 			it->second->Evaluate();
 		}
 

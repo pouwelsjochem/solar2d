@@ -522,14 +522,21 @@ Runtime::ReadConfig( lua_State *L )
 	Rtt_ASSERT( 1 == lua_gettop( L ) );	
 	Rtt_ASSERT( lua_istable( L, -1 ) );
 
-	lua_getfield( L, -1, "fps" );
-	int fps = (int) lua_tointeger( L, -1 );
-	if ( 60 == fps )	// Besides default (30), only 60 fps is supported
+	lua_getfield( L, -1, "multisample" );
+	if ( lua_toboolean( L, -1 ) != 0 )
 	{
-		Rtt_ASSERT( ! IsProperty( kIsApplicationLoaded ) );
-		fFPS = 60;
+		fDisplay->SetAntialiased( true );
 	}
 	lua_pop( L, 1 );
+
+	lua_getfield( L, -1, "fps" );
+	int fps = (int) lua_tointeger( L, -1 );
+	if ( 60 == fps || 120 == fps )	// Besides default (30), 60 and 120 fps are supported
+	{
+		Rtt_ASSERT(!IsProperty(kIsApplicationLoaded));
+		fFPS = fps;
+	}
+	lua_pop(L, 1);
 
 	// Apparently this is used for automated testing (set application.content.exitOnError in config.lua)
 	lua_getfield( L, -1, "exitOnError" );
@@ -898,6 +905,26 @@ exit_gracefully:
 void
 Runtime::BeginRunLoop()
 {
+	// Cap configured fps to the display refresh rate if it exceeds it.
+	// Only applies downward � a configured fps lower than the refresh rate
+	// (e.g. 30fps on a 120Hz monitor) is always respected as-is.
+	double refreshRate = fTimer->GetRefreshRate();
+	if (fFPS > (U8)refreshRate)
+	{
+		Rtt_LogException("WARNING: config.lua fps (%d) exceeds display refresh rate (%.0fHz). Capping to %.0ffps.\n",
+			fFPS, refreshRate, refreshRate);
+		fFPS = (U8)refreshRate;
+	}
+
+
+	// Pass frameSync setting to the timer so ThreadLoop knows
+	// whether to post render-only VSYNC ticks.
+	// When false (default), render runs at the same rate as logic.
+	// When true, render syncs to monitor refresh rate � useful when
+	// engine-side interpolation is available or for developers who
+	// explicitly want VSYNC-rate rendering.
+	fTimer->SetFrameSync(IsProperty(kFrameSync));
+
 	const U32 kFps = fFPS;
 	const U32 kInterval = 1000 / kFps;
 
@@ -1360,8 +1387,13 @@ Runtime::PushResourceRegistry()
 }
 
 void
-Runtime::operator()()
+void
+Runtime::Step()
 {
+	// Advance the simulation by one fixed logic tick.
+	// Runs the scheduler, dispatches enterFrame to Lua, updates physics and
+	// display object state. Does NOT render � rendering is handled separately
+	// by Render() which fires at the monitor refresh rate via WM_CORONA_RENDER.
 	RuntimeGuard guard( * this );
 
 	if ( ! Rtt_VERIFY( fDisplay ) )
@@ -1377,25 +1409,33 @@ Runtime::operator()()
 		// This condition is written inverse for better understanding
 		// Sometimes scheduled tasks can suspend Runtime
 		// In that case (suspension state is changed and it is suspended), skip Display update
+		return;
 	}
-	else
-	{
+
 #if defined(Rtt_AUTHORING_SIMULATOR)
-		if (m_fAsyncResultStr.load()) {
-			FinalizeWorkingThreadWithEvent(this, fVMContext->L());
-		}
+	if (m_fAsyncResultStr.load()) {
+		FinalizeWorkingThreadWithEvent(this, fVMContext->L());
+	}
 #endif
-		fDisplay->Update();
 
-		++fFrame;
-	}
-
-	if ( ! IsProperty( kRenderAsync ) )
-	{
-		fDisplay->Render();
-	}
-	
+	fDisplay->Update();
+	++fFrame;	
 }
+
+void
+Runtime::operator()()
+{
+	// Legacy shim � keeps the Simulator and non-DWM path working unchanged.
+	// Calls Step() followed by Render() in a single synchronous tick,
+	// matching the original pre-decoupling behavior exactly.
+	Step();
+
+	if (!IsProperty(kRenderAsync))
+	{
+		Render();
+	}
+}
+
 void
 Runtime::Render()
 {
