@@ -241,86 +241,52 @@ namespace Rtt
 		LARGE_INTEGER freq, now;
 		::QueryPerformanceFrequency(&freq);
 
+		// Query the monitor refresh rate to use as the base tick interval.
+		// On a 120Hz monitor this gives 8.33ms per tick. On 60Hz, 16.67ms.
+		// The game's configured FPS (e.g. 60fps on a 120Hz monitor) is enforced
+		// separately via the accumulator below — frames fire every Nth display tick.
+		double refreshRate = GetRefreshRate();
+		double targetFrameTime = 1.0 / refreshRate;
+
 		// The Corona runtime's configured frame interval in seconds (e.g. 1/60 = 0.01667s).
 		// Set externally via SetInterval() based on the fps value in config.lua.
 		double intervalSeconds = static_cast<double>(fIntervalInMilliseconds) / 1000.0;
 
-		// Fallback refresh period used if DwmGetCompositionTimingInfo() temporarily
-		// fails. The DWM path below provides the real compositor phase; this fallback
-		// only supplies a reasonable period estimate so the loop can continue.
-		double refreshRate = GetRefreshRate();
-		LONGLONG fallbackRefreshPeriodQpc = (LONGLONG)(((double)freq.QuadPart / refreshRate) + 0.5);
+		LARGE_INTEGER start;
+		::QueryPerformanceCounter(&start);
 
-		LONGLONG scheduledPresentQpc = 0;
+		// Start work a little before the intended present boundary so the main
+		// thread has time to process the posted message, update, render, and enter
+		// SwapBuffers() before the compositor latch point. The remaining time is
+		// then spent blocked in vsync rather than accidentally slipping a whole
+		// refresh because the frame started on the deadline.
+		double presentLeadTime = targetFrameTime * 0.25;
+		if (presentLeadTime < 0.002)
+		{
+			presentLeadTime = 0.002;
+		}
+		else if (presentLeadTime > 0.004)
+		{
+			presentLeadTime = 0.004;
+		}
+
+		double nextTick = 0.0;
 		double accumulator = 0.0;
 
 		while (fRunning)
 		{
 			::QueryPerformanceCounter(&now);
-
-			DWM_TIMING_INFO timingInfo = {};
-			timingInfo.cbSize = sizeof(timingInfo);
-
-			LONGLONG refreshPeriodQpc = fallbackRefreshPeriodQpc;
-			LONGLONG nextPresentQpc = 0;
-			bool hasCompositionTiming =
-				SUCCEEDED(::DwmGetCompositionTimingInfo(NULL, &timingInfo)) &&
-				(timingInfo.qpcRefreshPeriod > 0) &&
-				(timingInfo.qpcVBlank > 0);
-
-			if (hasCompositionTiming)
-			{
-				refreshPeriodQpc = timingInfo.qpcRefreshPeriod;
-				nextPresentQpc = timingInfo.qpcVBlank + refreshPeriodQpc;
-			}
-			else if (scheduledPresentQpc > 0)
-			{
-				nextPresentQpc = scheduledPresentQpc + refreshPeriodQpc;
-			}
-			else
-			{
-				nextPresentQpc = now.QuadPart + refreshPeriodQpc;
-			}
-
-			// Once a compositor interval has been claimed, do not regress to an older
-			// one if the DWM timing query lags behind our last scheduled present.
-			if (scheduledPresentQpc > 0)
-			{
-				LONGLONG minimumNextPresentQpc = scheduledPresentQpc + refreshPeriodQpc;
-				if (nextPresentQpc < minimumNextPresentQpc)
-				{
-					nextPresentQpc = minimumNextPresentQpc;
-				}
-			}
-
-			double refreshPeriodSeconds = (double)refreshPeriodQpc / freq.QuadPart;
-
-			// Start work a little before the intended present boundary so the main
-			// thread has time to process the posted message, update, render, and enter
-			// SwapBuffers() before the compositor latch point. The remaining time is
-			// then spent blocked in vsync rather than accidentally slipping a whole
-			// refresh because the frame started on the deadline.
-			double presentLeadTime = refreshPeriodSeconds * 0.25;
-			if (presentLeadTime < 0.002)
-			{
-				presentLeadTime = 0.002;
-			}
-			else if (presentLeadTime > 0.004)
-			{
-				presentLeadTime = 0.004;
-			}
-
-			LONGLONG leadTimeQpc = (LONGLONG)(presentLeadTime * freq.QuadPart);
-			LONGLONG wakeQpc = nextPresentQpc - leadTimeQpc;
-			LONGLONG timeUntilWakeQpc = wakeQpc - now.QuadPart;
+			double currentTime = (double)(now.QuadPart - start.QuadPart) / freq.QuadPart;
+			double wakeTime = nextTick - presentLeadTime;
+			double timeUntilWake = wakeTime - currentTime;
 
 			// ---- SLEEP PHASE ----
 			// If we are more than 1ms away from the wake point, sleep for most of
 			// the remaining time. We leave 1ms unslept as a buffer to account for
 			// Sleep() waking up slightly late on a loaded system.
-			if (timeUntilWakeQpc > (freq.QuadPart / 1000))
+			if (timeUntilWake > 0.001)
 			{
-				DWORD sleepMs = (DWORD)(((timeUntilWakeQpc - (freq.QuadPart / 1000)) * 1000) / freq.QuadPart);
+				DWORD sleepMs = (DWORD)((timeUntilWake - 0.001) * 1000.0);
 				if (sleepMs > 0)
 				{
 					::Sleep(sleepMs);
@@ -333,7 +299,8 @@ namespace Rtt
 			while (true)
 			{
 				::QueryPerformanceCounter(&now);
-				if (now.QuadPart >= wakeQpc)
+				currentTime = (double)(now.QuadPart - start.QuadPart) / freq.QuadPart;
+				if (currentTime >= wakeTime)
 				{
 					break;
 				}
@@ -343,56 +310,50 @@ namespace Rtt
 			// ---- FIRE ----
 			// Accumulate elapsed display ticks. When the accumulator reaches the
 			// game's configured frame interval, attempt to post WM_CORONA_TIMER.
-				// The message is posted slightly ahead of the intended present boundary
-				// so the main thread can finish the frame before vsync becomes the final
-				// arbiter of presentation timing.
-				LONGLONG displayTicksElapsed = 1;
-				if (scheduledPresentQpc > 0)
-				{
-					displayTicksElapsed = (nextPresentQpc - scheduledPresentQpc) / refreshPeriodQpc;
-					if (displayTicksElapsed < 1)
-					{
-						displayTicksElapsed = 1;
-					}
-				}
-				accumulator += refreshPeriodSeconds * displayTicksElapsed;
-				if (accumulator >= intervalSeconds)
-				{
-					// Reset the accumulator to zero rather than carrying over the remainder.
-					// Carrying over causes occasional early ticks — for example, on a 120Hz
-					// monitor running a 60fps game, carry-over produces a frame every ~13
-					// normal frames that arrives after only 8.3ms instead of 16.7ms. Although
-					// framedebug does not flag these as stutters, they are displayed for only
-					// one refresh cycle instead of two, creating subtle but perceptible judder
-					// during smooth scrolling and camera movement.
-					// Resetting to zero eliminates these early ticks entirely, producing a
-					// consistent 16.67ms frame interval, ~1ms jitter, and a stable 60.0fps
-					// readout. The tradeoff is a negligible long-term drift of a fraction of
-					// a millisecond per session, which is completely imperceptible.
-					accumulator = 0.0;
+			// The message is posted slightly ahead of the intended present boundary
+			// so the main thread can finish the frame before vsync becomes the final
+			// arbiter of presentation timing.
+			accumulator += targetFrameTime;
+			if (accumulator >= intervalSeconds)
+			{
+				// Reset the accumulator to zero rather than carrying over the remainder.
+				// Carrying over causes occasional early ticks — for example, on a 120Hz
+				// monitor running a 60fps game, carry-over produces a frame every ~13
+				// normal frames that arrives after only 8.3ms instead of 16.7ms. Although
+				// framedebug does not flag these as stutters, they are displayed for only
+				// one refresh cycle instead of two, creating subtle but perceptible judder
+				// during smooth scrolling and camera movement.
+				// Resetting to zero eliminates these early ticks entirely, producing a
+				// consistent 16.67ms frame interval, ~1ms jitter, and a stable 60.0fps
+				// readout. The tradeoff is a negligible long-term drift of a fraction of
+				// a millisecond per session, which is completely imperceptible.
+				accumulator = 0.0;
 
-					// Only post if the previous WM_CORONA_TIMER has been fully processed
-					// by the main thread (i.e. Evaluate() has cleared fTickPending).
-					// This one-message gate prevents timer messages from accumulating in
-					// the queue under heavy load, which would starve input messages and
-					// make the window unresponsive. The compositor cadence continues
-					// advancing regardless, so no drift builds up when a tick is skipped.
-					bool expected = false;
-					if (fTickPending.compare_exchange_strong(expected, true))
-					{
-						::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0);
-					}
+				// Only post if the previous WM_CORONA_TIMER has been fully processed
+				// by the main thread (i.e. Evaluate() has cleared fTickPending).
+				// This one-message gate prevents timer messages from accumulating in
+				// the queue under heavy load, which would starve input messages and
+				// make the window unresponsive. The timing loop continues advancing
+				// nextTick regardless, so no drift builds up when a tick is skipped.
+				bool expected = false;
+				if (fTickPending.compare_exchange_strong(expected, true))
+				{
+					::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0);
 				}
-
-				scheduledPresentQpc = nextPresentQpc;
 			}
-		}
 
-		double WinTimer::GetRefreshRate() const
+			// Advance the deadline by exactly one display refresh interval.
+			// Using addition rather than re-querying the clock prevents timing
+			// drift from accumulating over many frames.
+			nextTick += targetFrameTime;
+		}
+	}
+
+	double WinTimer::GetRefreshRate() const
 	{
 		// Query the current display settings to obtain the monitor refresh rate.
-		// ThreadLoop uses this only as a fallback period estimate if DWM composition
-		// timing cannot be queried for a given iteration.
+		// This is used by ThreadLoop to determine the base tick interval so that
+		// frame delivery is phase-locked to the display regardless of refresh rate.
 		DEVMODE dm = {};
 		dm.dmSize = sizeof(dm);
 
