@@ -1198,9 +1198,7 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 	fRuntimePointer->SetProperty(Rtt::Runtime::kDeferUpdate, true);
 	fRuntimePointer->SetProperty(Rtt::Runtime::kIsApplicationNotArchived, hasMainLuaFile);
 	fRuntimePointer->SetProperty(Rtt::Runtime::kIsLuaParserAvailable, true);
-	// Keep steady-state Windows frames in one contiguous update/render/present path.
-	// This allows the timer gate to be released only after SwapBuffers() completes.
-	fRuntimePointer->SetProperty(Rtt::Runtime::kRenderAsync, false);
+	fRuntimePointer->SetProperty(Rtt::Runtime::kRenderAsync, true);
 
 	if (fRenderSurfacePointer->IsUsingVulkanBackend())
 	{
@@ -1520,15 +1518,13 @@ void RuntimeEnvironment::OnRuntimeTimerElapsed()
 	}
 
 	// Update the runtime's scene such as sprites, etc.
-	// On Windows steady-state pacing, rendering also happens inline here.
+	// Note: This does not render the scene since the "kRenderAsync" property is set.
 	fEnteringFrameEvent.Raise(*this, EventArgs::kEmpty);
 	(*fRuntimePointer)();
 	fEnteredFrameEvent.Raise(*this, EventArgs::kEmpty);
 
-	// Only use the WM_PAINT path when asynchronous rendering is explicitly enabled.
-	// The paced Windows path renders inline above; requesting a paint here would
-	// present the same frame twice and quantize the runtime to 30fps at 60Hz.
-	if (fRenderSurfacePointer && fRuntimePointer->IsProperty(Rtt::Runtime::kRenderAsync))
+	// Request the surface (if we have one) to render another frame, but only if the scene has changed.
+	if (fRenderSurfacePointer)
 	{
 		if (fRuntimePointer->GetDisplay().GetStage()->GetScene().IsValid() == false)
 		{
