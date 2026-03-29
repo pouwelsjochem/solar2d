@@ -32,7 +32,6 @@ namespace Rtt
 		fFrameBoundaryEvent(nullptr),
 		fRunning(false),
 		fUseThreadedScheduler(windowHandle != nullptr),
-		fUseImmediateScheduler(false),
 		fTimerPointer(NULL),
 		fTimerID(0),
 		fIntervalInMilliseconds(10),
@@ -63,7 +62,6 @@ namespace Rtt
 		fRunning = true;
 		fTickPending.store(false);
 		fLastFrameBoundaryQpc.store(0);
-		fUseImmediateScheduler = fUseThreadedScheduler && (fIntervalInMilliseconds <= 16);
 
 		// Assign a unique timer ID and register this instance in the map regardless
 		// of which timing path is used. The ID is posted as wParam in WM_CORONA_TIMER
@@ -73,7 +71,7 @@ namespace Rtt
 		fTimerID = ++sMostRecentTimerID;
 		sTimerMap[fTimerID] = this;
 
-		if (fUseThreadedScheduler && !fUseImmediateScheduler)
+		if (fUseThreadedScheduler)
 		{
 			// Present-driven threaded scheduler path.
 			// Force 1ms system timer resolution so Sleep() in the frame loop has
@@ -121,7 +119,7 @@ namespace Rtt
 			// CPU access for the final spin phase.
 			::SetThreadPriority(fThreadHandle, THREAD_PRIORITY_NORMAL);
 		}
-		else if (!fUseThreadedScheduler)
+		else
 		{
 			// Legacy WM_TIMER path.
 			// Start the timer with an interval faster than the configured interval
@@ -154,7 +152,7 @@ namespace Rtt
 		sTimerMap.erase(fTimerID);
 		fTimerID = 0;
 
-		if (fUseThreadedScheduler && !fUseImmediateScheduler)
+		if (fUseThreadedScheduler)
 		{
 			// Signal the background thread to exit its loop and wait for it to finish
 			// before releasing resources. 2000ms timeout prevents an indefinite hang
@@ -183,7 +181,7 @@ namespace Rtt
 			// Restore the system timer resolution we raised in Start().
 			::timeEndPeriod(1);
 		}
-		else if (!fUseThreadedScheduler)
+		else
 		{
 			// Stop the legacy Windows timer.
 			::KillTimer(fWindowHandle, timerId);
@@ -192,7 +190,6 @@ namespace Rtt
 
 		fTickPending.store(false);
 		fLastFrameBoundaryQpc.store(0);
-		fUseImmediateScheduler = false;
 	}
 
 	void WinTimer::SetInterval(U32 milliseconds)
@@ -204,7 +201,7 @@ namespace Rtt
 	{
 		if (fUseThreadedScheduler)
 		{
-			// Message-scheduler path does not use fTimerPointer — use fRunning instead.
+			// Threaded scheduler path does not use fTimerPointer — use fRunning instead.
 			return fRunning;
 		}
 		// Legacy path — timer is running if SetTimer() returned a valid handle.
@@ -258,18 +255,7 @@ namespace Rtt
 		fLastFrameBoundaryQpc.store(now.QuadPart);
 		fTickPending.store(false);
 
-		if (fUseImmediateScheduler)
-		{
-			if (fRunning)
-			{
-				fTickPending.store(true);
-				if (!::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0))
-				{
-					fTickPending.store(false);
-				}
-			}
-		}
-		else if (fFrameBoundaryEvent)
+		if (fFrameBoundaryEvent)
 		{
 			::SetEvent(fFrameBoundaryEvent);
 		}
