@@ -77,13 +77,6 @@ namespace Rtt
 		/// </summary>
 		void Evaluate();
 
-		/// <summary>
-		///  Requests that the display-sync thread re-query the window's monitor refresh
-		///  rate on its next iteration. Safe to call from the main thread when the
-		///  window moves or the display configuration changes.
-		/// </summary>
-		void RequestRefreshRateUpdate();
-
 	private:
 		/// <summary>
 		///  <para>Static entry point for the display-sync background thread.</para>
@@ -165,7 +158,6 @@ namespace Rtt
 		///  Event signaled by Stop() to request the background thread to exit cleanly.
 		/// </summary>
 		HANDLE fStopEvent;
-		std::atomic<bool> fHasRaisedTimerResolution;
 
 		/// <summary>
 		///  Indicates whether the timer is currently running.
@@ -185,9 +177,8 @@ namespace Rtt
 		// Legacy WM_TIMER fallback members — only used when fUseDwmThread is false.
 		UINT_PTR fTimerPointer;
 		UINT_PTR fTimerID;
-		std::atomic<U32> fIntervalInMilliseconds;
+		U32 fIntervalInMilliseconds;
 		S32 fNextIntervalTimeInTicks;
-		std::atomic<bool> fRefreshRateUpdateRequested;
 
 	public:
 		/// <summary>
