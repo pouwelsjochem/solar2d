@@ -9,7 +9,6 @@
 
 #include "stdafx.h"
 #include "Rtt_WinTimer.h"
-#include "CoronaLog.h"
 #include <windows.h>
 #include <dwmapi.h>
 #include <timeapi.h>
@@ -44,8 +43,6 @@ namespace Rtt
 		fIntervalInMilliseconds(10),
 		fNextIntervalTimeInTicks(0),
 		fRefreshRateUpdateRequested(true),
-		fHasLoggedTimingMode(false),
-		fLastLoggedRefreshRate(0.0),
 		fTickPending(false)
 	{
 		// Determine if DWM composition is available and enabled on this system.
@@ -147,13 +144,6 @@ namespace Rtt
 				fTimerID = 0;
 				fRunning.store(false);
 			}
-#ifdef Rtt_DEBUG
-			else if (!fHasLoggedTimingMode)
-			{
-				Rtt_Log("WinTimer: Using legacy WM_TIMER pacing.\n");
-				fHasLoggedTimingMode = true;
-			}
-#endif // Rtt_DEBUG
 		}
 	}
 
@@ -301,14 +291,6 @@ namespace Rtt
 		// separately via the accumulator below — frames fire every Nth display tick.
 		double refreshRate = GetRefreshRate();
 		double targetFrameTime = 1.0 / refreshRate;
-#ifdef Rtt_DEBUG
-		if (!fHasLoggedTimingMode || (std::fabs(fLastLoggedRefreshRate - refreshRate) >= kRefreshRateChangeThresholdInHz))
-		{
-			Rtt_Log("WinTimer: Using display-sync pacing on %.2f Hz monitor.\n", refreshRate);
-			fHasLoggedTimingMode = true;
-			fLastLoggedRefreshRate = refreshRate;
-		}
-#endif // Rtt_DEBUG
 
 		LARGE_INTEGER start;
 		::QueryPerformanceCounter(&start);
@@ -317,7 +299,6 @@ namespace Rtt
 		double accumulator = 0.0;
 		double nextRefreshRateProbeTime = 0.0;
 		int consecutivePostFailures = 0;
-		bool hasLoggedPostFailure = false;
 
 		while (fRunning.load())
 		{
@@ -341,11 +322,6 @@ namespace Rtt
 					targetFrameTime = 1.0 / refreshRate;
 					nextTick = currentTime + targetFrameTime;
 					accumulator = 0.0;
-#ifdef Rtt_DEBUG
-					Rtt_Log("WinTimer: Updated display-sync pacing to %.2f Hz.\n", refreshRate);
-					fHasLoggedTimingMode = true;
-					fLastLoggedRefreshRate = refreshRate;
-#endif // Rtt_DEBUG
 				}
 			}
 
@@ -421,36 +397,17 @@ namespace Rtt
 					{
 						// If the message could not be queued, release the gate so a future
 						// tick can retry instead of deadlocking the frame pump permanently.
-						auto errorCode = ::GetLastError();
 						fTickPending.store(false);
 						consecutivePostFailures++;
-						if (!hasLoggedPostFailure)
-						{
-							Rtt_LogException(
-								"WinTimer: Failed to post WM_CORONA_TIMER (error %lu); retrying.\r\n",
-								errorCode);
-							hasLoggedPostFailure = true;
-						}
 						if (consecutivePostFailures >= kMaxConsecutivePostFailures)
 						{
-							Rtt_LogException(
-								"WinTimer: Repeated WM_CORONA_TIMER post failures; falling back to WM_TIMER.\r\n");
 							fNextIntervalTimeInTicks = (S32)::GetTickCount() + (S32)fIntervalInMilliseconds.load();
 							fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 10, WinTimer::OnTimerElapsed);
 							if (!fTimerPointer)
 							{
-								Rtt_LogException(
-									"WinTimer: Failed to start WM_TIMER fallback (error %lu).\r\n",
-									::GetLastError());
 								sTimerMap.erase(fTimerID);
 								fTimerID = 0;
 								fRunning.store(false);
-							}
-							else
-							{
-#ifdef Rtt_DEBUG
-								Rtt_Log("WinTimer: Using WM_TIMER fallback after repeated post failures.\n");
-#endif // Rtt_DEBUG
 							}
 							if (fHasRaisedTimerResolution.exchange(false))
 							{
@@ -463,7 +420,6 @@ namespace Rtt
 					else
 					{
 						consecutivePostFailures = 0;
-						hasLoggedPostFailure = false;
 					}
 				}
 			}
