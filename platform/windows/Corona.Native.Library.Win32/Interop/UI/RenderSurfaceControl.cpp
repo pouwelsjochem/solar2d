@@ -579,23 +579,20 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 	{
 	case WM_CORONA_TIMER:
 	{
-		// Run the Lua/physics update for this tick.
-		// If that invalidates the surface, immediately flush the resulting WM_PAINT
-		// before returning so the simulation step and presented frame stay paired.
-		// Leaving the paint queued until the message loop goes idle allows invalidations
-		// to coalesce and can visibly wobble frame pacing even when the machine is
-		// easily sustaining the target FPS.
+		// Run the Lua/physics update and request a render.
+		// We deliberately do NOT call OnPaint() here — we let
+		// RequestRender() queue a WM_PAINT instead.
+		//
+		// This matches the original WM_TIMER behavior exactly:
+		// the timer callback returns immediately, and rendering
+		// happens asynchronously via WM_PAINT. This ensures
+		// SwapBuffers() never blocks the message loop, keeping
+		// input responsive under any load.
 		auto timerId = (UINT_PTR)arguments.GetWParam();
 		auto it = Rtt::WinTimer::sTimerMap.find(timerId);
 		if (it != Rtt::WinTimer::sTimerMap.end())
 		{
 			it->second->Evaluate();
-
-			auto windowHandle = GetWindowHandle();
-			if (windowHandle)
-			{
-				::UpdateWindow(windowHandle);
-			}
 		}
 
 		arguments.SetHandled();
