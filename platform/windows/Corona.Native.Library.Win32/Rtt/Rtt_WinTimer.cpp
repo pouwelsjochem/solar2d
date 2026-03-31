@@ -8,6 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+#include "Interop\ApplicationServices.h"
 #include "Rtt_WinTimer.h"
 #include <windows.h>
 #include <dwmapi.h>
@@ -23,65 +24,6 @@
 
 namespace Rtt
 {
-	namespace
-	{
-		bool HasEnvironmentVariable(const char* name)
-		{
-			return (::GetEnvironmentVariableA(name, nullptr, 0) > 0);
-		}
-
-		bool GetEnvironmentVariableValue(const char* name, char* buffer, DWORD bufferSize)
-		{
-			if (!buffer || bufferSize == 0)
-			{
-				return false;
-			}
-
-			DWORD length = ::GetEnvironmentVariableA(name, buffer, bufferSize);
-			return (length > 0 && length < bufferSize);
-		}
-
-		bool EnvironmentVariableEquals(const char* name, const char* expectedValue)
-		{
-			char value[128] = {};
-			if (!GetEnvironmentVariableValue(name, value, sizeof(value)))
-			{
-				return false;
-			}
-
-			return (::lstrcmpiA(value, expectedValue) == 0);
-		}
-
-		bool EnvironmentVariableContains(const char* name, const char* expectedSubstring)
-		{
-			char value[128] = {};
-			if (!GetEnvironmentVariableValue(name, value, sizeof(value)))
-			{
-				return false;
-			}
-
-			return (::StrStrIA(value, expectedSubstring) != nullptr);
-		}
-
-		bool IsGamescopeSession()
-		{
-			return HasEnvironmentVariable("GAMESCOPE_WAYLAND_DISPLAY") ||
-				EnvironmentVariableContains("WAYLAND_DISPLAY", "gamescope") ||
-				EnvironmentVariableContains("XDG_CURRENT_DESKTOP", "gamescope") ||
-				EnvironmentVariableContains("XDG_SESSION_DESKTOP", "gamescope");
-		}
-
-		bool IsSteamDeckHardware()
-		{
-			return EnvironmentVariableEquals("SteamDeck", "1");
-		}
-
-		bool IsSteamDeckGameModeSession()
-		{
-			return IsSteamDeckHardware() && IsGamescopeSession();
-		}
-	}
-
 	std::unordered_map<UINT_PTR, Rtt::WinTimer*> WinTimer::sTimerMap;
 	UINT_PTR WinTimer::sMostRecentTimerID;
 
@@ -109,7 +51,7 @@ namespace Rtt
 		// WM_TIMER approach which was the original behavior.
 		BOOL dwmEnabled = FALSE;
 		fUseDwmThread = SUCCEEDED(::DwmIsCompositionEnabled(&dwmEnabled)) && dwmEnabled;
-		if (fUseDwmThread && IsSteamDeckGameModeSession())
+		if (fUseDwmThread && Interop::ApplicationServices::IsSteamDeckGameModeSession())
 		{
 			// Steam Deck Game Mode under Proton behaves better with the original
 			// WM_TIMER path than with the DWM-synced background thread.

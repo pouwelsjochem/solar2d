@@ -1462,6 +1462,16 @@ namespace Rtt
 			lua_pushboolean(L, (timerPointer && timerPointer->UsesDwmThread()) ? 1 : 0);
 			pushedValues = 1;
 		}
+		else if (Rtt_StringCompare(key, "isSteamDeckHardware") == 0)
+		{
+			lua_pushboolean(L, Interop::ApplicationServices::IsSteamDeckHardware() ? 1 : 0);
+			pushedValues = 1;
+		}
+		else if (Rtt_StringCompare(key, "isSteamDeckGameModeSession") == 0)
+		{
+			lua_pushboolean(L, Interop::ApplicationServices::IsSteamDeckGameModeSession() ? 1 : 0);
+			pushedValues = 1;
+		}
 		else if (Rtt_StringCompare(key, "isoCountryCode") == 0)
 		{
 			// Fetch the ISO 3166-1 country code.

@@ -14,6 +14,55 @@
 
 namespace Interop {
 
+namespace
+{
+	bool HasEnvironmentVariable(const char* name)
+	{
+		return (::GetEnvironmentVariableA(name, nullptr, 0) > 0);
+	}
+
+	bool GetEnvironmentVariableValue(const char* name, char* buffer, DWORD bufferSize)
+	{
+		if (!buffer || bufferSize == 0)
+		{
+			return false;
+		}
+
+		DWORD length = ::GetEnvironmentVariableA(name, buffer, bufferSize);
+		return (length > 0 && length < bufferSize);
+	}
+
+	bool EnvironmentVariableEquals(const char* name, const char* expectedValue)
+	{
+		char value[128] = {};
+		if (!GetEnvironmentVariableValue(name, value, sizeof(value)))
+		{
+			return false;
+		}
+
+		return (::lstrcmpiA(value, expectedValue) == 0);
+	}
+
+	bool EnvironmentVariableContains(const char* name, const char* expectedSubstring)
+	{
+		char value[128] = {};
+		if (!GetEnvironmentVariableValue(name, value, sizeof(value)))
+		{
+			return false;
+		}
+
+		return (::StrStrIA(value, expectedSubstring) != nullptr);
+	}
+
+	bool IsGamescopeSession()
+	{
+		return HasEnvironmentVariable("GAMESCOPE_WAYLAND_DISPLAY") ||
+			EnvironmentVariableContains("WAYLAND_DISPLAY", "gamescope") ||
+			EnvironmentVariableContains("XDG_CURRENT_DESKTOP", "gamescope") ||
+			EnvironmentVariableContains("XDG_SESSION_DESKTOP", "gamescope");
+	}
+}
+
 #pragma region Static Member Variables
 std::wstring ApplicationServices::sProductName(L"");
 
@@ -53,6 +102,16 @@ bool ApplicationServices::IsCoronaSdkApp()
 	}
 	return false;
 #endif
+}
+
+bool ApplicationServices::IsSteamDeckHardware()
+{
+	return EnvironmentVariableEquals("SteamDeck", "1");
+}
+
+bool ApplicationServices::IsSteamDeckGameModeSession()
+{
+	return IsSteamDeckHardware() && IsGamescopeSession();
 }
 
 const wchar_t* ApplicationServices::GetExeFileName()

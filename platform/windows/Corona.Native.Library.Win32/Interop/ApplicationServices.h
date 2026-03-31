@@ -43,6 +43,16 @@ class ApplicationServices
 		static bool IsCoronaSdkApp();
 
 		/// <summary>
+		///  Determines if the current process is running on Steam Deck hardware.
+		/// </summary>
+		static bool IsSteamDeckHardware();
+
+		/// <summary>
+		///  Determines if the current process is running in Steam Deck Game Mode via gamescope.
+		/// </summary>
+		static bool IsSteamDeckGameModeSession();
+
+		/// <summary>
 		///  <para>Fetches the currently running application's EXE file name, including its *.exe extension.</para>
 		///  <para>The returned string does not include the directory path.</para>
 		/// </summary>
