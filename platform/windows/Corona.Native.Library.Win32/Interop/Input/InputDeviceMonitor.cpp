@@ -38,34 +38,6 @@
 
 namespace Interop { namespace Input {
 
-namespace
-{
-	bool ShouldExcludeDirectInputDevice(
-			LPDIRECTINPUTDEVICE8W devicePointer, const DirectInputEnumDevicesContext& enumDevicesContext)
-	{
-		if (!devicePointer)
-		{
-			return false;
-		}
-
-		DIPROPDWORD vendorProductProperty{};
-		vendorProductProperty.diph.dwSize = sizeof(DIPROPDWORD);
-		vendorProductProperty.diph.dwHeaderSize = sizeof(DIPROPHEADER);
-		vendorProductProperty.diph.dwObj = 0;
-		vendorProductProperty.diph.dwHow = DIPH_DEVICE;
-
-		// Re-check the device's VID/PID from DirectInput itself before creating a handler.
-		// This keeps devices that already have an XInput path from also surfacing as DirectInput.
-		auto result = devicePointer->GetProperty(DIPROP_VIDPID, &vendorProductProperty.diph);
-		if (SUCCEEDED(result) &&
-		    (enumDevicesContext.VidPidExclusionSet.find(vendorProductProperty.dwData) != enumDevicesContext.VidPidExclusionSet.end()))
-		{
-			return true;
-		}
-		return false;
-	}
-}
-
 #pragma region Private Structures
 /// <summary>
 ///  Private structure used to copy the worker thread's InputDeviceContext info to an InputDeviceMonitor
@@ -96,6 +68,34 @@ struct DirectInputEnumDevicesContext
 	/// </summary>
 	std::vector<GUID> DeviceInstanceGuids;
 };
+
+namespace
+{
+	bool ShouldExcludeDirectInputDevice(
+			LPDIRECTINPUTDEVICE8W devicePointer, const DirectInputEnumDevicesContext& enumDevicesContext)
+	{
+		if (!devicePointer)
+		{
+			return false;
+		}
+
+		DIPROPDWORD vendorProductProperty{};
+		vendorProductProperty.diph.dwSize = sizeof(DIPROPDWORD);
+		vendorProductProperty.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+		vendorProductProperty.diph.dwObj = 0;
+		vendorProductProperty.diph.dwHow = DIPH_DEVICE;
+
+		// Re-check the device's VID/PID from DirectInput itself before creating a handler.
+		// This keeps devices that already have an XInput path from also surfacing as DirectInput.
+		auto result = devicePointer->GetProperty(DIPROP_VIDPID, &vendorProductProperty.diph);
+		if (SUCCEEDED(result) &&
+		    (enumDevicesContext.VidPidExclusionSet.find(vendorProductProperty.dwData) != enumDevicesContext.VidPidExclusionSet.end()))
+		{
+			return true;
+		}
+		return false;
+	}
+}
 
 #pragma endregion
 
