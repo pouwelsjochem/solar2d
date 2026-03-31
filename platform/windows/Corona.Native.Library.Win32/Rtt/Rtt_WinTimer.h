@@ -188,6 +188,8 @@ namespace Rtt
 		std::atomic<U32> fIntervalInMilliseconds;
 		S32 fNextIntervalTimeInTicks;
 		std::atomic<bool> fRefreshRateUpdateRequested;
+		bool fHasLoggedTimingMode;
+		double fLastLoggedRefreshRate;
 
 	public:
 		/// <summary>
