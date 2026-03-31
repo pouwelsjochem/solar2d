@@ -98,6 +98,12 @@ namespace Rtt
 		/// </summary>
 		virtual void SetFrameSync(bool enabled) override;
 
+		/// <summary>
+		///  Returns true when the timer is using the DWM-synced background thread path.
+		///  Returns false when using the legacy WM_TIMER fallback path.
+		/// </summary>
+		bool UsesDwmThread() const { return fUseDwmThread; }
+
 	private:
 		/// <summary>
 		///  <para>Static entry point for the display-sync background thread.</para>

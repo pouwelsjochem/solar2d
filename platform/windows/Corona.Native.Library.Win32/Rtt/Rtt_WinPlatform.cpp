@@ -1455,6 +1455,13 @@ namespace Rtt
 			pushedValues = 1;
 			lua_pushboolean(L, ::GetModuleHandle(L"DiscordHook.dll") || ::GetModuleHandle(L"DiscordHook64.dll"));
 		}
+		else if (Rtt_StringCompare(key, "usesDwmThread") == 0)
+		{
+			auto runtimePointer = LuaContext::GetRuntime(L);
+			auto timerPointer = runtimePointer ? dynamic_cast<WinTimer*>(runtimePointer->GetTimer()) : nullptr;
+			lua_pushboolean(L, (timerPointer && timerPointer->UsesDwmThread()) ? 1 : 0);
+			pushedValues = 1;
+		}
 		else if (Rtt_StringCompare(key, "isoCountryCode") == 0)
 		{
 			// Fetch the ISO 3166-1 country code.
