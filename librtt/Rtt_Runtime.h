@@ -66,6 +66,7 @@ class Runtime : public MCallback,
 			kDeferUpdate              = 0x40,
 			kRenderAsync              = 0x80,
 			kIsApplicationNotArchived = 0x100,
+			kFrameSync                = 0x200,
 		}
 		Properties;
 
@@ -255,8 +256,10 @@ class Runtime : public MCallback,
 	public:
 		// MCallback
 		virtual void operator()();
-
-		void Render();
+#ifdef Rtt_WIN_ENV
+		void Step();    // advance logic one tick (scheduler, display update, frame counter)
+#endif
+		void Render();  // render current frame
 		
 	public:
 		// MCriticalSection

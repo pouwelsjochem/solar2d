@@ -1632,7 +1632,6 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 				preferenceCollection.Add("solar2D/lastWindowPosition/clientSizeWidth", Rtt::PreferenceValue(clientSize.cx));
 				preferenceCollection.Add("solar2D/lastWindowPosition/clientSizeHeight", Rtt::PreferenceValue(clientSize.cy));
 				preferenceCollection.Add("solar2D/lastWindowPosition/windowMode", Rtt::PreferenceValue(windowMode.GetStringId()));
-
 				fStoredPreferencesPointer->UpdateWith(preferenceCollection);
 			}
 

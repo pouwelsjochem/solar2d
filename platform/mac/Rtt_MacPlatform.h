@@ -148,7 +148,6 @@ class MacPlatform : public ApplePlatform
 		AlertDelegate *fDelegate;
 		PlatformExitCallback* fExitCallback;
 		mutable IOPMAssertionID fAssertionID;
-		mutable bool fIsVsyncEnabled;
 };
 
 // TODO: Move this to a separate file
