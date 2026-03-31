@@ -23,6 +23,38 @@
 
 namespace Rtt
 {
+	namespace
+	{
+		bool HasEnvironmentVariable(const char* name)
+		{
+			return (::GetEnvironmentVariableA(name, nullptr, 0) > 0);
+		}
+
+		bool EnvironmentVariableEquals(const char* name, const char* expectedValue)
+		{
+			char value[64] = {};
+			DWORD length = ::GetEnvironmentVariableA(name, value, sizeof(value));
+			if ((length == 0) || (length >= sizeof(value)))
+			{
+				return false;
+			}
+			return (::lstrcmpiA(value, expectedValue) == 0);
+		}
+
+		bool IsGamescopeSession()
+		{
+			return HasEnvironmentVariable("GAMESCOPE_WAYLAND_DISPLAY") ||
+				EnvironmentVariableEquals("XDG_CURRENT_DESKTOP", "gamescope") ||
+				EnvironmentVariableEquals("XDG_SESSION_DESKTOP", "gamescope");
+		}
+
+		bool IsSteamDeckGameModeSession()
+		{
+			// Under Proton, Steam Deck hardware is typically exposed via SteamDeck=1.
+			// Game Mode is approximated via gamescope session markers.
+			return EnvironmentVariableEquals("SteamDeck", "1") && IsGamescopeSession();
+		}
+	}
 
 	std::unordered_map<UINT_PTR, Rtt::WinTimer*> WinTimer::sTimerMap;
 	UINT_PTR WinTimer::sMostRecentTimerID;
@@ -51,6 +83,12 @@ namespace Rtt
 		// WM_TIMER approach which was the original behavior.
 		BOOL dwmEnabled = FALSE;
 		fUseDwmThread = SUCCEEDED(::DwmIsCompositionEnabled(&dwmEnabled)) && dwmEnabled;
+		if (fUseDwmThread && IsSteamDeckGameModeSession())
+		{
+			// Steam Deck Game Mode under Proton behaves better with the original
+			// WM_TIMER path than with the DWM-synced background thread.
+			fUseDwmThread = false;
+		}
 	}
 
 	WinTimer::~WinTimer()
