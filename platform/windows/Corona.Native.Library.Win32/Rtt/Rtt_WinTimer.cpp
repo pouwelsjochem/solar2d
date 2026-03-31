@@ -30,29 +30,55 @@ namespace Rtt
 			return (::GetEnvironmentVariableA(name, nullptr, 0) > 0);
 		}
 
-		bool EnvironmentVariableEquals(const char* name, const char* expectedValue)
+		bool GetEnvironmentVariableValue(const char* name, char* buffer, DWORD bufferSize)
 		{
-			char value[64] = {};
-			DWORD length = ::GetEnvironmentVariableA(name, value, sizeof(value));
-			if ((length == 0) || (length >= sizeof(value)))
+			if (!buffer || bufferSize == 0)
 			{
 				return false;
 			}
+
+			DWORD length = ::GetEnvironmentVariableA(name, buffer, bufferSize);
+			return (length > 0 && length < bufferSize);
+		}
+
+		bool EnvironmentVariableEquals(const char* name, const char* expectedValue)
+		{
+			char value[128] = {};
+			if (!GetEnvironmentVariableValue(name, value, sizeof(value)))
+			{
+				return false;
+			}
+
 			return (::lstrcmpiA(value, expectedValue) == 0);
+		}
+
+		bool EnvironmentVariableContains(const char* name, const char* expectedSubstring)
+		{
+			char value[128] = {};
+			if (!GetEnvironmentVariableValue(name, value, sizeof(value)))
+			{
+				return false;
+			}
+
+			return (::StrStrIA(value, expectedSubstring) != nullptr);
 		}
 
 		bool IsGamescopeSession()
 		{
 			return HasEnvironmentVariable("GAMESCOPE_WAYLAND_DISPLAY") ||
-				EnvironmentVariableEquals("XDG_CURRENT_DESKTOP", "gamescope") ||
-				EnvironmentVariableEquals("XDG_SESSION_DESKTOP", "gamescope");
+				EnvironmentVariableContains("WAYLAND_DISPLAY", "gamescope") ||
+				EnvironmentVariableContains("XDG_CURRENT_DESKTOP", "gamescope") ||
+				EnvironmentVariableContains("XDG_SESSION_DESKTOP", "gamescope");
+		}
+
+		bool IsSteamDeckHardware()
+		{
+			return EnvironmentVariableEquals("SteamDeck", "1");
 		}
 
 		bool IsSteamDeckGameModeSession()
 		{
-			// Under Proton, Steam Deck hardware is typically exposed via SteamDeck=1.
-			// Game Mode is approximated via gamescope session markers.
-			return EnvironmentVariableEquals("SteamDeck", "1") && IsGamescopeSession();
+			return IsSteamDeckHardware() && IsGamescopeSession();
 		}
 	}
 
@@ -140,7 +166,7 @@ namespace Rtt
 
 			if (fThreadHandle)
 			{
-				// Run at normal priority — the thread spends most of its time
+				// Run at normal priority ï¿½ the thread spends most of its time
 				// sleeping and only needs brief CPU access for the spin phase.
 				::SetThreadPriority(fThreadHandle, THREAD_PRIORITY_NORMAL);
 			}
@@ -155,7 +181,7 @@ namespace Rtt
 			fTimerPointer = ::SetTimer(fWindowHandle, fTimerID, 10, WinTimer::OnTimerElapsed);
 			if (!fTimerPointer)
 			{
-				// SetTimer failed — remove from map so we don't hold a dangling entry.
+				// SetTimer failed ï¿½ remove from map so we don't hold a dangling entry.
 				sTimerMap.erase(fTimerID);
 			}
 		}
@@ -217,10 +243,10 @@ namespace Rtt
 	{
 		if (fUseDwmThread)
 		{
-			// Display-sync path does not use fTimerPointer — use fRunning instead.
+			// Display-sync path does not use fTimerPointer ï¿½ use fRunning instead.
 			return fRunning;
 		}
-		// Legacy path — timer is running if SetTimer() returned a valid handle.
+		// Legacy path ï¿½ timer is running if SetTimer() returned a valid handle.
 		return (fTimerPointer != NULL);
 	}
 
@@ -236,10 +262,10 @@ namespace Rtt
 		{
 			// Display-sync path: fLastMessage tells us what ThreadLoop posted.
 			//
-			// WM_CORONA_TIMER — logic tick is due. Run the full Step() + Render()
+			// WM_CORONA_TIMER ï¿½ logic tick is due. Run the full Step() + Render()
 			//   via operator()() which acts as a shim for both.
 			//
-			// WM_CORONA_RENDER — VSYNC fired but no logic tick is due. Queue a
+			// WM_CORONA_RENDER ï¿½ VSYNC fired but no logic tick is due. Queue a
 			//   WM_PAINT so OnPaint() redraws the last frame with the correct GL
 			//   context. This keeps the display refreshing at monitor rate even
 			//   when logic runs at a lower rate (e.g. 60fps logic on 120Hz display).
@@ -251,12 +277,12 @@ namespace Rtt
 			// under heavy load.
 			if (fLastMessage == WM_CORONA_TIMER)
 			{
-				// Full tick — run logic step then render.
+				// Full tick ï¿½ run logic step then render.
 				this->operator()();
 			}
 			else
 			{
-				// Queue a WM_PAINT — OnPaint() handles render with proper GL context.
+				// Queue a WM_PAINT ï¿½ OnPaint() handles render with proper GL context.
 				::InvalidateRect(fWindowHandle, nullptr, FALSE);
 			}
 			fTickPending.store(false);
@@ -305,7 +331,7 @@ namespace Rtt
 		// Query the monitor refresh rate to use as the base tick interval.
 		// On a 120Hz monitor this gives 8.33ms per tick. On 60Hz, 16.67ms.
 		// The game's configured FPS (e.g. 60fps on a 120Hz monitor) is enforced
-		// separately via the accumulator below — frames fire every Nth display tick.
+		// separately via the accumulator below ï¿½ frames fire every Nth display tick.
 		double refreshRate = GetRefreshRate();
 		double targetFrameTime = 1.0 / refreshRate;
 
@@ -364,7 +390,7 @@ namespace Rtt
 			if (doStep)
 			{
 				// Reset the accumulator to zero rather than carrying over the remainder.
-				// Carrying over causes occasional early ticks — for example, on a 120Hz
+				// Carrying over causes occasional early ticks ï¿½ for example, on a 120Hz
 				// monitor running a 60fps game, carry-over produces a frame every ~13
 				// normal frames that arrives after only 8.3ms instead of 16.7ms. Although
 				// framedebug does not flag these as stutters, they are displayed for only
@@ -388,19 +414,19 @@ namespace Rtt
 			{
 				if (doStep)
 				{
-					// Logic tick due — post full update + render message.
+					// Logic tick due ï¿½ post full update + render message.
 					::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0);
 				}
 				else if (fFrameSync)
 				{
-					// Render-only tick — only posted when frameSync is enabled.
+					// Render-only tick ï¿½ only posted when frameSync is enabled.
 					// When disabled (default), render runs at the same rate as
 					// logic and no duplicate frames are produced.
 					::PostMessage(fWindowHandle, WM_CORONA_RENDER, (WPARAM)fTimerID, 0);
 				}
 				else
 				{
-					// frameSync disabled — release the gate immediately so the
+					// frameSync disabled ï¿½ release the gate immediately so the
 					// next logic tick is not blocked waiting for a render-only
 					// message that was never posted.
 					fTickPending.store(false);
@@ -430,13 +456,13 @@ namespace Rtt
 			}
 		}
 
-		// Safe fallback — assumes 60Hz if the display settings cannot be queried.
+		// Safe fallback ï¿½ assumes 60Hz if the display settings cannot be queried.
 		return 60.0;
 	}
 
 	VOID CALLBACK WinTimer::OnTimerElapsed(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 	{
-		// Legacy WM_TIMER callback — only active when fUseDwmThread is false.
+		// Legacy WM_TIMER callback ï¿½ only active when fUseDwmThread is false.
 		// Look up the WinTimer instance by ID and ask it to evaluate whether
 		// the configured interval has elapsed. The map guard prevents crashes
 		// if this callback fires after Stop() has already removed the entry.
