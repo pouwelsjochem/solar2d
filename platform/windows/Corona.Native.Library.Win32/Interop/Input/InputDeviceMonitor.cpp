@@ -820,7 +820,7 @@ void InputDeviceMonitor::AsyncUpdateAllDevicesUsing(LPDIRECTINPUT8W directInputP
 						{
 							swscanf_s(substringPointer, L"PID_%4X", &productId);
 						}
-						DWORD combinedId = MAKELONG(vendorId, productId);
+						DWORD combinedId = MAKELONG(productId, vendorId);
 						directInputEnumDevicesContext.VidPidExclusionSet.insert(combinedId);
 					}
 					delete[] rawDeviceName;
