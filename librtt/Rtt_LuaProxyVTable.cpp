@@ -1609,9 +1609,18 @@ LuaGroupObjectProxyVTable::Insert( lua_State *L, GroupObject *parent )
             // was the Orphanage(), then re-acquire a lua ref for the proxy
             if ( oldParent != parent )
             {
+                // If this simulator warning never fires in your codebase, you can remove
+                // this orphanage reinsertion compatibility path together with the
+                // ResetPreFinalizeTree() call and the AcquireTableRef()/WillMoveOnscreen()
+                // logic below.
+                child->ResetPreFinalizeTree();
+
                 StageObject* canvas = parent->GetStage();
                 if ( canvas && oldParent == canvas->GetDisplay().Orphanage() )
                 {
+#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
+                    CoronaLuaWarning( L, "Reinserting a previously removed display object from the orphanage. If this warning never appears in your projects, this compatibility path can likely be removed." );
+#endif
                     lua_pushvalue( L, childIndex ); // push table representing child
                     child->GetProxy()->AcquireTableRef( L ); // reacquire a ref for table
                     lua_pop( L, 1 );
@@ -1722,6 +1731,7 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
                 child->SetFocusId( NULL ); // Defer removal from the focus object array
 
                 child->RemovedFromParent( L, parent );
+                child->PreFinalizeTree( L );
 
                 // We need to return table, so push it on stack
                 Rtt_ASSERT( child->IsReachable() );
@@ -1746,10 +1756,16 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
                 // removed from the snapshot orphanage --- thus, in that method,
                 // nothing special needs to be done, b/c the proxy table wasn't
                 // released yet.
-                GroupObject& offscreenGroup =
-                * ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
-                offscreenGroup.Insert( -1, child, false );
-                child->DidMoveOffscreen();
+	                // PreFinalizeTree() can synchronously reinsert the object (for example,
+	                // pooling code may move it into another group). Only move the child into
+	                // the orphanage if it is still parentless after listener callbacks.
+	                if ( ! child->GetParent() )
+	                {
+	                    GroupObject& offscreenGroup =
+	                    * ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
+                    offscreenGroup.Insert( -1, child, false );
+                    child->DidMoveOffscreen();
+                }
             }
         }
         else

@@ -134,6 +134,12 @@ class DisplayObject : public MLuaProxyable
 
         typedef U8 ListenerSet;
 
+	protected:
+		enum LifecycleMask
+		{
+			kDidPreFinalize = 0x1,
+		};
+
         static ListenerMask MaskForString( const char *name );
 
     public:
@@ -148,6 +154,8 @@ class DisplayObject : public MLuaProxyable
     public:
         virtual void PreFinalizeSelf( lua_State *L );
         virtual void FinalizeSelf( lua_State *L );
+		void PreFinalizeTree( lua_State *L );
+		void ResetPreFinalizeTree();
 
     protected:
         // When hit test is masked, intersects rRect with fMask's self bounds and returns result in rRect.
@@ -453,7 +461,7 @@ class DisplayObject : public MLuaProxyable
         U8 fAlpha;
         U8 fAlphaCumulative;
         ListenerSet fListenerSet;
-        U8 fUnused; // Alignment
+        U8 fLifecycleState;
 
 		friend class DisplayObjectDrawGuard;
 		friend class GroupObject; // Access to CullOffscreen
