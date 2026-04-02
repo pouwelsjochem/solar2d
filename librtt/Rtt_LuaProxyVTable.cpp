@@ -1604,29 +1604,11 @@ LuaGroupObjectProxyVTable::Insert( lua_State *L, GroupObject *parent )
 
             SUMMED_TIMING( ai, "Group: Insert (post-parent insert)" );
 
-            // Detect re-insertion of a child back onto the display --- when a
-            // child is placed into a new parent that has a canvas and the oldParent
-            // was the Orphanage(), then re-acquire a lua ref for the proxy
             if ( oldParent != parent )
             {
-                // If this simulator warning never fires in your codebase, you can remove
-                // this orphanage reinsertion compatibility path together with the
-                // ResetPreFinalizeTree() call and the AcquireTableRef()/WillMoveOnscreen()
-                // logic below.
+                // A freshly inserted object starts a new removal lifecycle, so allow
+                // prefinalize to fire again on a later display.remove()/removeSelf().
                 child->ResetPreFinalizeTree();
-
-                StageObject* canvas = parent->GetStage();
-                if ( canvas && oldParent == canvas->GetDisplay().Orphanage() )
-                {
-#if defined( Rtt_DEBUG ) || defined( Rtt_AUTHORING_SIMULATOR )
-                    CoronaLuaWarning( L, "Reinserting a previously removed display object from the orphanage. If this warning never appears in your projects, this compatibility path can likely be removed." );
-#endif
-                    lua_pushvalue( L, childIndex ); // push table representing child
-                    child->GetProxy()->AcquireTableRef( L ); // reacquire a ref for table
-                    lua_pop( L, 1 );
-
-                    child->WillMoveOnscreen();
-                }
             }
         }
         else
@@ -1740,29 +1722,15 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
 
                 // Rtt_TRACE( ( "release table ref(%x)\n", lua_topointer( L, -1 ) ) );
 
-                // Anytime we add to the Orphanage, it means the DisplayObject is no
-                // longer on the display. Therefore, we should luaL_unref the
-                // DisplayObject's table. If it's later re-inserted, then we simply
-                // luaL_ref the incoming table.
                 Display& display = LuaContext::GetRuntime( L )->GetDisplay();
 
-
-                // NOTE: Snapshot renamed to HitTest orphanage to clarify usage
-                // TODO: Remove snapshot orphanage --- or verify that we still need it?
-                // Note on the snapshot orphanage. We use this list to determine
-                // which proxy table refs need to be released the table ref once
-                // we're done with the snapshot. If the object is reinserted in
-                // LuaGroupObjectProxyVTable::Insert(), then it is implicitly
-                // removed from the snapshot orphanage --- thus, in that method,
-                // nothing special needs to be done, b/c the proxy table wasn't
-                // released yet.
-	                // PreFinalizeTree() can synchronously reinsert the object (for example,
-	                // pooling code may move it into another group). Only move the child into
-	                // the orphanage if it is still parentless after listener callbacks.
-	                if ( ! child->GetParent() )
-	                {
-	                    GroupObject& offscreenGroup =
-	                    * ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
+                // PreFinalizeTree() can synchronously reinsert the object (for example,
+                // pooling code may move it into another group). Only actually move the child into
+                // the orphanage if it is still parentless after listener callbacks.
+                if ( ! child->GetParent() )
+                {
+                    GroupObject& offscreenGroup =
+                    * ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
                     offscreenGroup.Insert( -1, child, false );
                     child->DidMoveOffscreen();
                 }
