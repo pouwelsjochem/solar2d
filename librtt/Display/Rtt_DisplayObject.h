@@ -134,13 +134,13 @@ class DisplayObject : public MLuaProxyable
 
         typedef U8 ListenerSet;
 
+        static ListenerMask MaskForString( const char *name );
+
 	protected:
 		enum LifecycleMask
 		{
 			kDidPreFinalize = 0x1,
 		};
-
-        static ListenerMask MaskForString( const char *name );
 
     public:
         static int KeysForProperties( const char **&keys );
