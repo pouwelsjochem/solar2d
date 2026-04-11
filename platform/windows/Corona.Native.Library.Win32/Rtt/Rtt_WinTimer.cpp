@@ -51,13 +51,6 @@ namespace Rtt
 		// WM_TIMER approach which was the original behavior.
 		BOOL dwmEnabled = FALSE;
 		fUseDwmThread = SUCCEEDED(::DwmIsCompositionEnabled(&dwmEnabled)) && dwmEnabled;
-		if (fUseDwmThread && Interop::ApplicationServices::IsSteamDeckGameModeSession())
-		{
-			// Steam Deck Game Mode under Proton behaves better with the original
-			// WM_TIMER path than with the DWM-synced background thread.
-			fUseDwmThread = false;
-		}
-
 	}
 
 	WinTimer::~WinTimer()
