@@ -58,8 +58,6 @@ namespace Rtt
 			fUseDwmThread = false;
 		}
 
-		// Throwaway repro: force the legacy timer path on every machine.
-		fUseDwmThread = false;
 	}
 
 	WinTimer::~WinTimer()
@@ -140,11 +138,12 @@ namespace Rtt
 			return;
 		}
 
+		const auto timerId = fTimerID;
 		fRunning = false;
 
 		// Always remove from the timer map regardless of which path is active.
 		// This guards against message callbacks firing after Stop() has been called.
-		sTimerMap.erase(fTimerID);
+		sTimerMap.erase(timerId);
 		fTimerID = 0;
 
 		if (fUseDwmThread)
@@ -174,7 +173,7 @@ namespace Rtt
 		else
 		{
 			// Stop the legacy Windows timer.
-			::KillTimer(fWindowHandle, fTimerID);
+			::KillTimer(fWindowHandle, timerId);
 			fTimerPointer = NULL;
 		}
 	}
@@ -236,8 +235,6 @@ namespace Rtt
 		{
 			// Legacy path: WM_TIMER can fire late, so check the tick count manually
 			// to determine if we've actually reached the scheduled interval time.
-			static U32 sForcedRestartCounter = 0;
-
 			// Do not continue if we haven't reached the scheduled time yet.
 			if (CompareTicks((S32)::GetTickCount(), fNextIntervalTimeInTicks) < 0)
 			{
@@ -250,15 +247,6 @@ namespace Rtt
 
 			// Invoke this timer's callback.
 			this->operator()();
-
-			// Throwaway repro: restart the legacy timer about once per second so the
-			// broken Stop() path leaks one Win32 timer per second.
-			sForcedRestartCounter++;
-			if ((sForcedRestartCounter % 100) == 0)
-			{
-				Stop();
-				Start();
-			}
 		}
 	}
 
@@ -370,14 +358,22 @@ namespace Rtt
 				if (doStep)
 				{
 					// Logic tick due � post full update + render message.
-					::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0);
+					if (!::PostMessage(fWindowHandle, WM_CORONA_TIMER, (WPARAM)fTimerID, 0))
+					{
+						// Drop this tick and let the next loop iteration try again.
+						fTickPending.store(false);
+					}
 				}
 				else if (fFrameSync)
 				{
 					// Render-only tick � only posted when frameSync is enabled.
 					// When disabled (default), render runs at the same rate as
 					// logic and no duplicate frames are produced.
-					::PostMessage(fWindowHandle, WM_CORONA_RENDER, (WPARAM)fTimerID, 0);
+					if (!::PostMessage(fWindowHandle, WM_CORONA_RENDER, (WPARAM)fTimerID, 0))
+					{
+						// Drop this tick and let the next loop iteration try again.
+						fTickPending.store(false);
+					}
 				}
 				else
 				{

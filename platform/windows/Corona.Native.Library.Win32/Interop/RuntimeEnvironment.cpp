@@ -758,6 +758,8 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 	    environmentPointer->fMainWindowPointer &&
 	    environmentPointer->fProjectSettings.IsWin32SingleInstanceWindowEnabled())
 	{
+		static const DWORD kSingleInstanceIpcTimeoutInMilliseconds = 1000;
+
 		// Attempt to create a name semaphore on the system for this Corona runtime.
 		// If the semaphore alread exists, then we know another instance of this app already exists on the desktop.
 		bool doesInstanceAlreadyExist = false;
@@ -817,8 +819,16 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 					copyData.dwData = 1;
 					copyData.lpData = (LPVOID)L"corona:isSingleInstance";
 					copyData.cbData = wcslen((wchar_t*)copyData.lpData) * sizeof(wchar_t);
-					auto isSingleInstance = ::SendMessageW(windowHandle, WM_COPYDATA, 0, (LPARAM)&copyData);
-					if (isSingleInstance)
+					DWORD_PTR messageResult = 0;
+					auto wasMessageHandled = ::SendMessageTimeoutW(
+							windowHandle,
+							WM_COPYDATA,
+							0,
+							(LPARAM)&copyData,
+							SMTO_ABORTIFHUNG | SMTO_BLOCK,
+							kSingleInstanceIpcTimeoutInMilliseconds,
+							&messageResult);
+					if (wasMessageHandled && messageResult)
 					{
 						break;
 					}
@@ -873,7 +883,15 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 					copyData.dwData = 1;
 					copyData.lpData = (LPVOID)message.c_str();
 					copyData.cbData = message.length() * sizeof(wchar_t);
-					::SendMessageW(windowHandle, WM_COPYDATA, 0, (LPARAM)&copyData);
+					DWORD_PTR unusedMessageResult = 0;
+					::SendMessageTimeoutW(
+							windowHandle,
+							WM_COPYDATA,
+							0,
+							(LPARAM)&copyData,
+							SMTO_ABORTIFHUNG | SMTO_BLOCK,
+							kSingleInstanceIpcTimeoutInMilliseconds,
+							&unusedMessageResult);
 				}
 			}
 
