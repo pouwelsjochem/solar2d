@@ -239,11 +239,10 @@ class Event : public BaseEvent
 				/// </returns>
 				bool Remove(const Handler *handlerPointer)
 				{
-					// Synchronizes thread access to the handler collection below.
-					std::lock_guard<std::recursive_mutex> scopedMainMutexLock(fEventPointer->fMainMutex);
-
-					// Prevents a handler from being removed while it is being invoked between threads.
+					// Lock in the same order used by Raise() to avoid an AB/BA deadlock
+					// when one thread removes a handler while another thread is invoking it.
 					std::lock_guard<std::recursive_mutex> scopedInvocationMutexLock(fEventPointer->fInvocationMutex);
+					std::lock_guard<std::recursive_mutex> scopedMainMutexLock(fEventPointer->fMainMutex);
 
 					// Search for the given handler in the collection and remove it.
 					HandlerCollection::iterator iterator;
