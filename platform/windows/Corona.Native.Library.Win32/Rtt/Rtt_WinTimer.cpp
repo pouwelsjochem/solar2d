@@ -57,6 +57,9 @@ namespace Rtt
 			// WM_TIMER path than with the DWM-synced background thread.
 			fUseDwmThread = false;
 		}
+
+		// Throwaway repro: force the legacy timer path on every machine.
+		fUseDwmThread = false;
 	}
 
 	WinTimer::~WinTimer()
@@ -233,6 +236,7 @@ namespace Rtt
 		{
 			// Legacy path: WM_TIMER can fire late, so check the tick count manually
 			// to determine if we've actually reached the scheduled interval time.
+			static U32 sForcedRestartCounter = 0;
 
 			// Do not continue if we haven't reached the scheduled time yet.
 			if (CompareTicks((S32)::GetTickCount(), fNextIntervalTimeInTicks) < 0)
@@ -246,6 +250,15 @@ namespace Rtt
 
 			// Invoke this timer's callback.
 			this->operator()();
+
+			// Throwaway repro: restart the legacy timer about once per second so the
+			// broken Stop() path leaks one Win32 timer per second.
+			sForcedRestartCounter++;
+			if ((sForcedRestartCounter % 100) == 0)
+			{
+				Stop();
+				Start();
+			}
 		}
 	}
 
