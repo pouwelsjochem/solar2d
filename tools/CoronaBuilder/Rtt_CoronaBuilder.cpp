@@ -39,6 +39,10 @@
 #include <sys/types.h>
 #endif
 
+#if defined(CORONABUILDER_OSX)
+#include "Rtt_OSXAppPackager.h"
+#endif
+
 // ----------------------------------------------------------------------------
 
 namespace Rtt
@@ -415,7 +419,39 @@ CoronaBuilder::Build( const BuildParams& params ) const
 
 			appParams->Print();
 			packager->ReadBuildSettings(appParams->GetSrcDir());
-			int code = packager->Build( appParams, tmpDir.GetString() );
+
+			int code = PlatformAppPackager::kBuildError;
+#if defined(CORONABUILDER_OSX)
+			if ( targetPlatform == TargetDevice::kOSXPlatform )
+			{
+				OSXAppPackager *osxPackager = static_cast<OSXAppPackager*>(packager);
+				OSXAppPackagerParams *osxParams = static_cast<OSXAppPackagerParams*>(appParams);
+				const char *method = osxParams->GetDistributionMethod();
+
+				if ( Rtt_StringCompareNoCase(method, "app-store") == 0 )
+				{
+					// Build the Mac App Store .pkg without uploading.
+					// Upload manually using Transporter or xcrun altool/notarytool.
+					code = osxPackager->PackageForAppStore( osxParams, false, "", "" );
+				}
+				else if ( Rtt_StringCompareNoCase(method, "developer-id") == 0 )
+				{
+					code = osxPackager->PackageForSelfDistribution( osxParams, false );
+				}
+				else if ( Rtt_StringCompareNoCase(method, "developer-id-dmg") == 0 )
+				{
+					code = osxPackager->PackageForSelfDistribution( osxParams, true );
+				}
+				else // "developer" or unset — standard signed/unsigned .app
+				{
+					code = packager->Build( appParams, tmpDir.GetString() );
+				}
+			}
+			else
+#endif // CORONABUILDER_OSX
+			{
+				code = packager->Build( appParams, tmpDir.GetString() );
+			}
 
 			if ( 0 == code )
 			{
