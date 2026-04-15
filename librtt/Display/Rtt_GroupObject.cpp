@@ -28,8 +28,6 @@ namespace Rtt
 static void
 MakeUnreachable( lua_State *L, Scene& scene, DisplayObject& object )
 {
-    object.PreFinalizeSelf( L );
-
     // For objects that are groups, make the children unreachable
     GroupObject *group = object.AsGroupObject();
     if ( group )
@@ -73,14 +71,6 @@ GroupObject::ReleaseChildrenLuaReferences( lua_State *L )
     for ( int i = NumChildren(); --i >= 0; )
     {
         DisplayObject& child = ChildAt( i );
-
-        child.PreFinalizeSelf( L );
-
-        if ( child.GetParent() != this )
-        {
-            continue;
-        }
-
         GroupObject *group = child.AsGroupObject();
         if ( group )
         {
