@@ -1614,6 +1614,16 @@ void RuntimeEnvironment::OnMainWindowReceivedMessage(UI::UIComponent &sender, UI
 			if (fRenderSurfacePointer)
 			{
 				::InvalidateRect(fRenderSurfacePointer->GetWindowHandle(), nullptr, FALSE);
+
+				// Restore focus to the render surface after overlays or focus-stealing windows
+				// hand activation back to the app when no child control currently owns it.
+				HWND focusedWindowHandle = ::GetFocus();
+				if (arguments.GetWParam() &&
+				    !fRenderSurfacePointer->HasFocus() &&
+				    (!focusedWindowHandle || (focusedWindowHandle == arguments.GetWindowHandle())))
+				{
+					fRenderSurfacePointer->SetFocus();
+				}
 			}
 			break;
 		}

@@ -200,6 +200,9 @@ namespace Rtt
 		/// </param>
 		void OnReceivedMessage(Interop::UI::UIComponent& sender, Interop::UI::HandleMessageEventArgs& arguments);
 
+		/// <summary>Called when the rendering surface loses keyboard focus.</summary>
+		void OnRenderSurfaceLostFocus(Interop::UI::Control& sender, const Interop::EventArgs& arguments);
+
 		/// <summary>
 		///  <para>To be called when a mouse event has been received.</para>
 		///  <para>Dispatches the given data as a Corona "mouse" event to Lua.</para>
@@ -258,6 +261,11 @@ namespace Rtt
 		/// </returns>
 		bool WasMouseMessageGeneratedFromTouchInput();
 
+		/// <summary>
+		///  Cancels any in-progress mouse/touch interactions and releases mouse capture owned by the render surface.
+		/// </summary>
+		void CancelActiveTouches();
+
 		#pragma endregion
 
 
@@ -279,6 +287,9 @@ namespace Rtt
 
 		/// <summary>Handler to be invoked when the "ReceivedMessage" event has been raised.</summary>
 		Interop::UI::RenderSurfaceControl::ReceivedMessageEvent::MethodHandler<WinInputDeviceManager> fReceivedMessageEventHandler;
+
+		/// <summary>Handler to be invoked when the render surface loses keyboard focus.</summary>
+		Interop::UI::Control::LostFocusEvent::MethodHandler<WinInputDeviceManager> fRenderSurfaceLostFocusEventHandler;
 
 		/// <summary>Monitors input devices such as keyboards, mice, and game controllers.</summary>
 		Interop::Input::InputDeviceMonitor fDeviceMonitor;
