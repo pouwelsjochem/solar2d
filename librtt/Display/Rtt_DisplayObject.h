@@ -136,12 +136,6 @@ class DisplayObject : public MLuaProxyable
 
         static ListenerMask MaskForString( const char *name );
 
-	protected:
-		enum LifecycleMask
-		{
-			kDidPreFinalize = 0x1,
-		};
-
     public:
         static int KeysForProperties( const char **&keys );
         static GeometricProperty PropertyForKey( Rtt_Allocator *allocator, const char key[] );
@@ -154,8 +148,6 @@ class DisplayObject : public MLuaProxyable
     public:
         virtual void PreFinalizeSelf( lua_State *L );
         virtual void FinalizeSelf( lua_State *L );
-		void PreFinalizeTree( lua_State *L );
-		void ResetPreFinalizeTree();
 
     protected:
         // When hit test is masked, intersects rRect with fMask's self bounds and returns result in rRect.
@@ -461,7 +453,7 @@ class DisplayObject : public MLuaProxyable
         U8 fAlpha;
         U8 fAlphaCumulative;
         ListenerSet fListenerSet;
-        U8 fLifecycleState;
+        U8 fUnused; // Alignment
 
 		friend class DisplayObjectDrawGuard;
 		friend class GroupObject; // Access to CullOffscreen

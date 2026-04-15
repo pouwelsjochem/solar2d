@@ -11,7 +11,6 @@
 
 #include "Display/Rtt_DisplayObject.h"
 #include "Display/Rtt_Display.h"
-#include "Display/Rtt_GroupObject.h"
 
 #include "Display/Rtt_BitmapMask.h"
 #include "Display/Rtt_BitmapPaint.h"
@@ -156,9 +155,6 @@ DisplayObject::DisplayObject()
 	fStageBounds(),
 	fLuaProxy( NULL ),
 	fFocusId( NULL ),
-    fObjectDesc("DisplayObject"),
-    fWhereDefined(NULL),
-    fWhereChanged(NULL),
 	fMask( NULL ),
 	fMaskUniform( NULL ),
 	fAnchorX( Rtt_REAL_0 ),
@@ -171,7 +167,9 @@ DisplayObject::DisplayObject()
 	fProperties( kIsVisible | kIsHitTestMasked ),
 	fAlpha( 0xFF ),
 	fAlphaCumulative( fAlpha ),
-	fLifecycleState( 0 )
+    fObjectDesc("DisplayObject"),
+    fWhereDefined(NULL),
+    fWhereChanged(NULL)
 {
 }
 
@@ -215,33 +213,10 @@ DisplayObject::PreFinalizeSelf( lua_State *L )
 {
 	Rtt_ASSERT( L );
 
-	if ( fLifecycleState & kDidPreFinalize )
-	{
-		return;
-	}
-
-	fLifecycleState |= kDidPreFinalize;
-
 	if ( HasListener( kPreFinalizeListener ) && Rtt_VERIFY( fLuaProxy ) )
 	{
 		PreFinalizeEvent event;
 		DispatchEvent( L, event );
-	}
-}
-
-void
-DisplayObject::PreFinalizeTree( lua_State *L )
-{
-	PreFinalizeSelf( L );
-
-	GroupObject *group = AsGroupObject();
-	if ( group )
-	{
-		for ( int i = group->NumChildren(); --i >= 0; )
-		{
-			DisplayObject& child = group->ChildAt( i );
-			child.PreFinalizeTree( L );
-		}
 	}
 }
 
@@ -268,22 +243,6 @@ DisplayObject::FinalizeSelf( lua_State *L )
         proxy->RestoreTable( L );
         proxy->ReleaseTableRef( L );
     }
-}
-
-void
-DisplayObject::ResetPreFinalizeTree()
-{
-	fLifecycleState &= ~kDidPreFinalize;
-
-	GroupObject *group = AsGroupObject();
-	if ( group )
-	{
-		for ( int i = group->NumChildren(); --i >= 0; )
-		{
-			DisplayObject& child = group->ChildAt( i );
-			child.ResetPreFinalizeTree();
-		}
-	}
 }
 
 void

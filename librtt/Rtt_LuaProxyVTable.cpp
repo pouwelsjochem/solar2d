@@ -1606,9 +1606,15 @@ LuaGroupObjectProxyVTable::Insert( lua_State *L, GroupObject *parent )
 
             if ( oldParent != parent )
             {
-                // A freshly inserted object starts a new removal lifecycle, so allow
-                // prefinalize to fire again on a later display.remove()/removeSelf().
-                child->ResetPreFinalizeTree();
+                StageObject* canvas = parent->GetStage();
+                if ( canvas && oldParent == canvas->GetDisplay().Orphanage() )
+                {
+                    lua_pushvalue( L, childIndex ); // push table representing child
+                    child->GetProxy()->AcquireTableRef( L ); // reacquire a ref for table
+                    lua_pop( L, 1 );
+
+                    child->WillMoveOnscreen();
+                }
             }
         }
         else
@@ -1713,7 +1719,6 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
                 child->SetFocusId( NULL ); // Defer removal from the focus object array
 
                 child->RemovedFromParent( L, parent );
-                child->PreFinalizeTree( L );
 
                 // We need to return table, so push it on stack
                 Rtt_ASSERT( child->IsReachable() );
@@ -1724,16 +1729,20 @@ LuaDisplayObjectProxyVTable::PushAndRemove( lua_State *L, GroupObject* parent, S
 
                 Display& display = LuaContext::GetRuntime( L )->GetDisplay();
 
-                // PreFinalizeTree() can synchronously reinsert the object (for example,
-                // pooling code may move it into another group). Only actually move the child into
-                // the orphanage if it is still parentless after listener callbacks.
-                if ( ! child->GetParent() )
-                {
-                    GroupObject& offscreenGroup =
-                    * ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
-                    offscreenGroup.Insert( -1, child, false );
-                    child->DidMoveOffscreen();
-                }
+
+                // NOTE: Snapshot renamed to HitTest orphanage to clarify usage
+                // TODO: Remove snapshot orphanage --- or verify that we still need it?
+                // Note on the snapshot orphanage. We use this list to determine
+                // which proxy table refs need to be released the table ref once
+                // we're done with the snapshot. If the object is reinserted in
+                // LuaGroupObjectProxyVTable::Insert(), then it is implicitly
+                // removed from the snapshot orphanage --- thus, in that method,
+                // nothing special needs to be done, b/c the proxy table wasn't
+                // released yet.
+                GroupObject& offscreenGroup =
+                * ( child->IsUsedByHitTest() ? display.HitTestOrphanage() : display.Orphanage() );
+                offscreenGroup.Insert( -1, child, false );
+                child->DidMoveOffscreen();
             }
         }
         else
