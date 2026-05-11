@@ -35,6 +35,8 @@ RenderSurfaceControl::RenderSurfaceControl(HWND windowHandle, const Params & par
 	fRenderFrameEventHandlerPointer(nullptr),
 	fMainDeviceContextHandle(nullptr),
 	fRenderingContextHandle(nullptr),
+	fMonitorChangedEventHandlerPointer(nullptr),
+	fPendingMonitorRefreshRate(0),
 	fVulkanContext(nullptr)
 {
 	// Add event handlers.
@@ -70,6 +72,16 @@ RenderSurfaceControl::Version RenderSurfaceControl::GetRendererVersion() const
 void RenderSurfaceControl::SetRenderFrameHandler(RenderSurfaceControl::RenderFrameEvent::Handler *handlerPointer)
 {
 	fRenderFrameEventHandlerPointer = handlerPointer;
+}
+
+void RenderSurfaceControl::SetMonitorChangedHandler(MonitorChangedEvent::Handler* handlerPointer)
+{
+	fMonitorChangedEventHandlerPointer = handlerPointer;
+}
+
+double RenderSurfaceControl::GetPendingMonitorRefreshRate() const
+{
+	return (double)fPendingMonitorRefreshRate / 1000.0;
 }
 
 void RenderSurfaceControl::SelectRenderingContext()
@@ -492,30 +504,40 @@ void RenderSurfaceControl::OnReceivedMessage(UIComponent& sender, HandleMessageE
 {
 	switch (arguments.GetMessageId())
 	{
-	case WM_CORONA_TIMER:
-	case WM_CORONA_RENDER:
-	{
-		// Run the Lua/physics update and request a render.
-		// We deliberately do NOT call OnPaint() here — we let
-		// RequestRender() queue a WM_PAINT instead.
-		//
-		// This matches the original WM_TIMER behavior exactly:
-		// the timer callback returns immediately, and rendering
-		// happens asynchronously via WM_PAINT. This ensures
-		// SwapBuffers() never blocks the message loop, keeping
-		// input responsive under any load.
-		auto timerId = (UINT_PTR)arguments.GetWParam();
-		auto it = Rtt::WinTimer::sTimerMap.find(timerId);
-		if (it != Rtt::WinTimer::sTimerMap.end())
+		case WM_CORONA_TIMER:
 		{
-			it->second->fLastMessage = (UINT)arguments.GetMessageId();
-			it->second->Evaluate();
+			// Run the Lua/physics update and request a render.
+			// We deliberately do NOT call OnPaint() here — we let
+			// RequestRender() queue a WM_PAINT instead.
+			//
+			// This matches the original WM_TIMER behavior exactly:
+			// the timer callback returns immediately, and rendering
+			// happens asynchronously via WM_PAINT. This ensures
+			// SwapBuffers() never blocks the message loop, keeping
+			// input responsive under any load.
+			auto timerId = (UINT_PTR)arguments.GetWParam();
+			auto it = Rtt::WinTimer::sTimerMap.find(timerId);
+			if (it != Rtt::WinTimer::sTimerMap.end())
+			{
+				it->second->Evaluate();
+			}
+			arguments.SetHandled();
+			arguments.SetReturnResult(0);
+			break;
+		}
+		case WM_CORONA_MONITOR_CHANGED:
+		{
+			fPendingMonitorRefreshRate = (UINT)arguments.GetWParam();
+			if (fMonitorChangedEventHandlerPointer)
+			{
+				HandledEventArgs eventArgs;
+				fMonitorChangedEventHandlerPointer->Invoke(*this, eventArgs);
+			}
+			arguments.SetHandled();
+			arguments.SetReturnResult(0);
+			break;
 		}
 
-		arguments.SetHandled();
-		arguments.SetReturnResult(0);
-		break;
-	}
 		case WM_ERASEBKGND:
 		{
 			// As an optimization, always handle the "Erase Background" message so that the operating system

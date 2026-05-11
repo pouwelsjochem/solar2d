@@ -525,13 +525,15 @@ Runtime::ReadConfig( lua_State *L )
 	lua_getfield(L, -1, "fps");
 	int fps = (int)lua_tointeger(L, -1);
 #ifdef Rtt_WIN_ENV
-	if (60 == fps || 120 == fps)  // Besides default (30), 60 and 120 fps are supported on Windows
+	// Any positive integer fps value is accepted on Windows.
+	// The runtime caps the effective tick rate to the monitor refresh rate in BeginRunLoop().
+	if (fps > 0)
 #else
 	if (60 == fps)                // Besides default (30), only 60 fps is supported on other platforms
 #endif
 	{
 		Rtt_ASSERT(!IsProperty(kIsApplicationLoaded));
-		fFPS = fps;
+		fFPS = (U32)fps;
 	}
 	lua_pop(L, 1);
 
@@ -899,31 +901,44 @@ exit_gracefully:
 	return result;
 }
 
+#ifdef Rtt_WIN_ENV
+void
+Runtime::OnMonitorChanged(double newRefreshRate)
+{
+	if (newRefreshRate <= 0.0 || !IsProperty(kIsApplicationLoaded))
+	{
+		return;
+	}
+
+	double kFps = static_cast<double>(fFPS);
+	if (kFps > newRefreshRate)
+	{
+		kFps = newRefreshRate;
+	}
+
+	fTimer->SetInterval(1000.0 / kFps);
+
+	MonitorChangedEvent e(newRefreshRate, static_cast<U32>(kFps));
+	DispatchEvent(e);
+}
+#endif
+
 void
 Runtime::BeginRunLoop()
 {
-	// Cap configured fps to the display refresh rate if it exceeds it.
-	// Only applies downward � a configured fps lower than the refresh rate
-	// (e.g. 30fps on a 120Hz monitor) is always respected as-is.
 	double refreshRate = fTimer->GetRefreshRate();
-	if (refreshRate > 0.0 && fFPS > (U8)refreshRate)
+
+	// Calculate the effective fps - cap to monitor refresh rate if exceeded.
+	// fFPS is never modified so display.fps keeps reflecting config.lua.
+	double kFps = static_cast<double>(fFPS);
+	if (refreshRate > 0.0 && kFps > refreshRate)
 	{
-		Rtt_LogException("WARNING: config.lua fps (%d) exceeds display refresh rate (%.0fHz). Capping to %.0ffps.\n",
-			fFPS, refreshRate, refreshRate);
-		fFPS = (U8)refreshRate;
+		Rtt_LogException("WARNING: config.lua fps (%d) exceeds display refresh rate (%.4fHz). Capping to %.4ffps.\n",
+			(int)kFps, refreshRate, refreshRate);
+		kFps = refreshRate;
 	}
 
-
-	// Pass frameSync setting to the timer so ThreadLoop knows
-	// whether to post render-only VSYNC ticks.
-	// When false (default), render runs at the same rate as logic.
-	// When true, render syncs to monitor refresh rate � useful when
-	// engine-side interpolation is available or for developers who
-	// explicitly want VSYNC-rate rendering.
-	fTimer->SetFrameSync(IsProperty(kFrameSync));
-
-	const U32 kFps = fFPS;
-	const U32 kInterval = 1000 / kFps;
+	const double kInterval = 1000.0 / kFps;
 
 	fDisplay->Start();
 
@@ -1390,8 +1405,8 @@ Runtime::Step()
 {
 	// Advance the simulation by one fixed logic tick.
 	// Runs the scheduler, dispatches enterFrame to Lua, updates physics and
-	// display object state. Does NOT render � rendering is handled separately
-	// by Render() which fires at the monitor refresh rate via WM_CORONA_RENDER.
+	// display object state. Does NOT render; render-only refreshes are driven
+	// by WM_PAINT when renderSync is enabled.
 	RuntimeGuard guard( * this );
 
 	if ( ! Rtt_VERIFY( fDisplay ) )

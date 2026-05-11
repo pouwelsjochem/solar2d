@@ -31,6 +31,9 @@ class PlatformTimer
 		virtual void Start() = 0;
 		virtual void Stop() = 0;
 		virtual void SetInterval( U32 milliseconds ) = 0;
+#ifdef Rtt_WIN_ENV
+		virtual void SetInterval(double milliseconds) { SetInterval((U32)(milliseconds + 0.5)); }
+#endif
 		virtual bool IsRunning() const = 0;
 		// Returns the display refresh rate in Hz.
 		// Overridden by platform-specific subclasses (e.g. WinTimer).
@@ -38,20 +41,19 @@ class PlatformTimer
 		virtual double GetRefreshRate() const { return 0.0; }
 
 		/// <summary>
-		///  <para>Controls whether the render loop syncs to the monitor refresh rate.</para>
-		///  <para>
-		///   When false (default), render runs at the same rate as logic (config.lua fps)
-		///   and no duplicate frames are produced.
-		///  </para>
-		///  <para>
-		///   When true, render posts VSYNC-rate ticks independent of the logic rate.
-		///   Without engine-side interpolation, render-only frames are redraws of the
-		///   same state � this is groundwork for a future interpolation feature.
-		///  </para>
-		///  <para>Overridden by platform-specific subclasses (e.g. WinTimer).</para>
+		///  Returns whether render-sync mode is enabled.
+		/// </summary>
+		virtual bool GetFrameSync() const { return false; }
+
+		/// <summary>
+		///  Controls whether the render loop syncs to the monitor refresh rate.
 		/// </summary>
 		virtual void SetFrameSync(bool enabled) {}
 	
+		// Returns the wall-clock time in milliseconds spent executing the most recent
+		// full frame tick. Returns 0.0 on platforms that do not implement it.
+		virtual double GetLastFrameWorkMs() const { return 0.0; }
+
 	public:
 		// Allow manual invocation
 		Rtt_FORCE_INLINE void operator()() { fCallback(); }

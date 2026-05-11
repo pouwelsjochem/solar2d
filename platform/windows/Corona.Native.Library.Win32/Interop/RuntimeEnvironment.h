@@ -760,6 +760,15 @@ class RuntimeEnvironment
 		/// </param>
 		void OnRenderFrame(UI::RenderSurfaceControl &sender, HandledEventArgs &arguments);
 
+		/// <summary>
+		///  Called when the rendering surface's window has been moved to a monitor with a
+		///  different refresh rate. Forwards the new rate to the Corona runtime which updates
+		///  the timer interval and dispatches the "monitorChanged" event to Lua listeners.
+		/// </summary>
+		/// <param name="sender">The rendering surface that detected the monitor change.</param>
+		/// <param name="arguments">Provides SetHandled() to flag the message as processed.</param>
+		void OnMonitorChanged(UI::RenderSurfaceControl& sender, HandledEventArgs& arguments);
+
 		/// <summary>Called when the rendering surface control/window is about to be destroyed.</summary>
 		/// <param name="sender">The rendering surface's control/window that is about to be destroyed.</param>
 		/// <param name="arguments">Empty event arguments.</param>
@@ -866,6 +875,13 @@ class RuntimeEnvironment
 
 		/// <summary>Handler to be invoked when the "Resized" event has been raised by the rendering surface.</summary>
 		UI::RenderSurfaceControl::ResizedEvent::MethodHandler<RuntimeEnvironment> fSurfaceResizedEventHandler;
+
+		/// <summary>
+		///  Handler to be invoked when the render surface detects a monitor refresh rate change.
+		///  Forwards the new refresh rate to Rtt::Runtime::OnMonitorChanged() which updates the
+		///  timer interval and dispatches the "monitorChanged" event to Lua.
+		/// </summary>
+		UI::RenderSurfaceControl::MonitorChangedEvent::MethodHandler<RuntimeEnvironment> fMonitorChangedEventHandler;
 
 		/// <summary>
 		///  <para>Set true if RuntimeEnvironment::RequestSuspend() was called. Set false if not.</para>

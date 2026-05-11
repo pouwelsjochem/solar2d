@@ -255,6 +255,26 @@ class WindowStateEvent : public VirtualEvent
 // ----------------------------------------------------------------------------
 
 // Immediately broadcast to "Runtime"
+class MonitorChangedEvent : public VirtualEvent
+{
+public:
+	typedef VirtualEvent Super;
+
+public:
+	MonitorChangedEvent(double refreshRate, U32 actualFps);
+
+public:
+	virtual const char* Name() const;
+	virtual int Push(lua_State* L) const;
+
+private:
+	double fRefreshRate;
+	U32    fActualFps;
+};
+
+// ----------------------------------------------------------------------------
+
+// Immediately broadcast to "Runtime"
 class AccelerometerEvent : public VirtualEvent
 {
 	public:

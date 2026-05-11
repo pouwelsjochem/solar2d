@@ -39,6 +39,7 @@
 #include <Shlwapi.h>
 #include <sstream>
 #include <WinInet.h>
+#include "Rtt_PhysicsWorld.h"
 
 
 namespace Interop {
@@ -80,6 +81,7 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fRenderFrameEventHandler(this, &RuntimeEnvironment::OnRenderFrame),
 	fDestroyingSurfaceEventHandler(this, &RuntimeEnvironment::OnDestroyingSurface),
 	fSurfaceResizedEventHandler(this, &RuntimeEnvironment::OnSurfaceResized),
+	fMonitorChangedEventHandler(this, &RuntimeEnvironment::OnMonitorChanged),
 	fWasSuspendRequestedExternally(false),
 	fProjectSettings(),
 	fReadOnlyProjectSettings(fProjectSettings),
@@ -277,6 +279,7 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 
 		fRenderSurfacePointer = new Interop::UI::RenderSurfaceControl(settings.RenderSurfaceHandle, params);
 		fRenderSurfacePointer->SetRenderFrameHandler(&fRenderFrameEventHandler);
+		fRenderSurfacePointer->SetMonitorChangedHandler(&fMonitorChangedEventHandler);
 		fRenderSurfacePointer->GetDestroyingEventHandlers().Add(&fDestroyingSurfaceEventHandler);
 		fRenderSurfacePointer->GetResizedEventHandlers().Add(&fSurfaceResizedEventHandler);
 	}
@@ -1916,6 +1919,20 @@ void RuntimeEnvironment::OnSurfaceResized(UI::Control &sender, const EventArgs &
 			timerPointer->Evaluate();
 		}
 	}
+}
+
+void RuntimeEnvironment::OnMonitorChanged(
+	UI::RenderSurfaceControl& sender, HandledEventArgs& arguments)
+{
+	if (!fRuntimePointer)
+		return;
+
+	double newRefreshRate = sender.GetPendingMonitorRefreshRate();
+	if (newRefreshRate <= 0.0)
+		return;
+
+	fRuntimePointer->OnMonitorChanged(newRefreshRate);
+	arguments.SetHandled();
 }
 
 void RuntimeEnvironment::UpdateSurfaceSize()

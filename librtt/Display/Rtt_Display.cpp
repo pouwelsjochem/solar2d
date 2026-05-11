@@ -247,6 +247,31 @@ Display::Update()
 
     up.Add( "Display::Update Begin" );
     
+    // Calculate delta time per logic tick, not per render tick.
+    // Prior to render/logic decoupling, this lived in Render() because both
+    // fired together in the same tick — there was no distinction between them.
+    // With fFrameSync enabled on high-refresh displays, Render() now fires
+    // at the monitor refresh rate (e.g. 120Hz) while Update() fires at the
+    // configured logic rate (e.g. 60fps). Calculating delta time in Render()
+    // caused fDeltaTimeInSeconds to reflect the render interval (~8.33ms at
+    // 120Hz) rather than the logic interval (~16.67ms at 60fps), making
+    // emitter particles live and move at half speed on high-refresh displays.
+    // Moving it here ensures fDeltaTimeInSeconds always reflects the time
+    // between logic ticks regardless of render rate.
+    {
+        Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
+
+        const Rtt::Real kMillisecondsPerSecond = 1000.0f;
+        // NOT _USED: Rtt::Real totalTime = Rtt_AbsoluteToMilliseconds( elapsedTime ) / kMillisecondsPerSecond;
+        fDeltaTimeInSeconds = Rtt_AbsoluteToMilliseconds(elapsedTime - fPreviousTime) / kMillisecondsPerSecond;
+
+        fPreviousTime = elapsedTime;
+
+        // Use this when debugging:
+        //fDeltaTimeInSeconds = ( 1.0f / 30.0f );
+    }
+
+
     Runtime& runtime = fOwner;
     lua_State *L = fOwner.VMContext().L();
     fSpritePlayer->Run( L, Rtt_AbsoluteToMilliseconds(runtime.GetElapsedTime()) );
@@ -274,20 +299,7 @@ Display::Render()
     PROFILING_BEGIN( *GetProfilingState(), rp, Render );
 
     rp.Add( "Display::Render Begin" );
-
-    {
-        Rtt_AbsoluteTime elapsedTime = GetRuntime().GetElapsedTime();
-
-        const Rtt::Real kMillisecondsPerSecond = 1000.0f;
-        // NOT _USED: Rtt::Real totalTime = Rtt_AbsoluteToMilliseconds( elapsedTime ) / kMillisecondsPerSecond;
-        fDeltaTimeInSeconds = Rtt_AbsoluteToMilliseconds( elapsedTime - fPreviousTime ) / kMillisecondsPerSecond;
-
-        fPreviousTime = elapsedTime;
-
-        // Use this when debugging:
-        //fDeltaTimeInSeconds = ( 1.0f / 30.0f );
-    }
-
+    // fDeltaTimeInSeconds is now calculated in Update().
 	GetScene().Render( * fRenderer, * fScreenSurface, &rp );
 
     rp.Add( "Display::Render End" );

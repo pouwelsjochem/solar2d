@@ -67,6 +67,7 @@ class Runtime : public MCallback,
 			kRenderAsync              = 0x80,
 			kIsApplicationNotArchived = 0x100,
 			kFrameSync                = 0x200,
+
 		}
 		Properties;
 
@@ -210,7 +211,7 @@ class Runtime : public MCallback,
 //		void DispatchEvent( const MEvent& e, const char *errorMsg, S32 errorCode );
 
 		// Desired fps and interval
-		U8 GetFPS() const { return fFPS; }
+		U32 GetFPS() const { return fFPS; }
 		float GetFrameInterval() const { return 1.f / ((float)fFPS); }
 
 		U32 GetFrame() const { return fFrame; }
@@ -258,8 +259,10 @@ class Runtime : public MCallback,
 		virtual void operator()();
 #ifdef Rtt_WIN_ENV
 		void Step();    // advance logic one tick (scheduler, display update, frame counter)
+		void OnMonitorChanged(double newRefreshRate);
 #endif
 		void Render();  // render current frame
+
 		
 	public:
 		// MCriticalSection
@@ -296,7 +299,7 @@ class Runtime : public MCallback,
 		PlatformOpenALPlayer* fOpenALPlayer;
 #endif
 
-		U8 fFPS;
+		U32 fFPS;
 		S8 fIsSuspended;
 		U16 fProperties;
 		U32 fSuspendOverrideProperties;

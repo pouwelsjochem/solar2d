@@ -32,6 +32,8 @@ class RenderSurfaceControl : public Control
 		/// </summary>
 		typedef Event<RenderSurfaceControl&, HandledEventArgs&> RenderFrameEvent;
 
+		typedef Event<RenderSurfaceControl&, HandledEventArgs&> MonitorChangedEvent;
+
 		#pragma endregion
 
 
@@ -166,6 +168,15 @@ class RenderSurfaceControl : public Control
 		void SetRenderFrameHandler(RenderFrameEvent::Handler *handlerPointer);
 
 		/// <summary>
+		///  Sets a handler to be invoked when the window has moved to a monitor
+		///  with a different refresh rate. The new rate in Hz is passed via the
+		///  event args' return result (encoded as Hz * 1000).
+		/// </summary>
+		void SetMonitorChangedHandler(MonitorChangedEvent::Handler* handlerPointer);
+
+		double GetPendingMonitorRefreshRate() const;
+
+		/// <summary>
 		///  <para>Makes this surface's rendering context the calling thread's current context.</para>
 		///  <para>All subsequent rendering function calls will then be made to this surface's context.</para>
 		/// </summary>
@@ -262,6 +273,12 @@ class RenderSurfaceControl : public Control
 
 		/// <summary>Pointer to one "RenderFrame" event handler.</summary>
 		RenderFrameEvent::Handler* fRenderFrameEventHandlerPointer;
+
+		/// <summary>Pointer to one "MonitorChanged" event handler.</summary>
+		MonitorChangedEvent::Handler* fMonitorChangedEventHandlerPointer;
+
+		/// <summary>Stores the refresh rate (Hz * 1000) from the last WM_CORONA_MONITOR_CHANGED message.</summary>
+		UINT fPendingMonitorRefreshRate;
 
 		/// <summary>Handle to the control's main device context that OpenGL will render to.</summary>
 		HDC fMainDeviceContextHandle;

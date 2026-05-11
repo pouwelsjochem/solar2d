@@ -44,6 +44,7 @@ WinScreenSurface::~WinScreenSurface()
 	// Always paired with timeBeginPeriod() to avoid leaving the system
 	// locked to a higher resolution after the surface is destroyed.
 	::timeEndPeriod(1);
+
 }
 
 void WinScreenSurface::SetCurrent() const

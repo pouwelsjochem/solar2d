@@ -343,6 +343,34 @@ WindowStateEvent::Push( lua_State *L ) const
 	return 1;
 }
 
+// ----------------------------------------------------------------------------
+
+MonitorChangedEvent::MonitorChangedEvent(double refreshRate, U32 actualFps)
+	: fRefreshRate(refreshRate),
+	fActualFps(actualFps)
+{
+}
+
+const char*
+MonitorChangedEvent::Name() const
+{
+	static const char kName[] = "monitorChanged";
+	return kName;
+}
+
+int
+MonitorChangedEvent::Push(lua_State* L) const
+{
+	if (Rtt_VERIFY(Super::Push(L)))
+	{
+		lua_pushnumber(L, fRefreshRate);
+		lua_setfield(L, -2, "refreshRate");
+
+		lua_pushnumber(L, (lua_Number)fActualFps);
+		lua_setfield(L, -2, "actualFps");
+	}
+	return 1;
+}
 
 // ----------------------------------------------------------------------------
 

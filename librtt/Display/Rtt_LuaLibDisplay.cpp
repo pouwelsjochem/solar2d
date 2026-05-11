@@ -145,9 +145,6 @@ class DisplayLibrary
 		static int getStatistics( lua_State *L );
 		static int getSums( lua_State *L );
 		static int getTimings( lua_State *L );
-
-        static int setRenderSync(lua_State* L);
-
 		static int _initProfiling( lua_State *L );
 		static int _allocateProfile( lua_State *L );
 	#ifdef Rtt_DEBUG
@@ -217,8 +214,6 @@ DisplayLibrary::Open( lua_State *L )
 		{ "getStatistics", getStatistics },
 		{ "getSums", getSums },
 		{ "getTimings", getTimings },
-        { "setRenderSync", setRenderSync },
-
 		{ "_initProfiling", _initProfiling },
 		{ "_allocateProfile", _allocateProfile },
 	#ifdef Rtt_DEBUG
@@ -284,6 +279,22 @@ DisplayLibrary::ValueForKey( lua_State *L )
     Display& display = library->GetDisplay();
 
     const char *key = lua_tostring( L, 2 ); Rtt_ASSERT( key );
+
+	if ( Rtt_StringCompare( key, "actualFps" ) == 0 )
+	{
+		Runtime& runtime = * LuaContext::GetRuntime( L );
+		U32 configuredFps = runtime.GetFPS();
+#ifdef Rtt_WIN_ENV
+		double refreshRate = runtime.GetTimer()->GetRefreshRate();
+		U32 actualFps = ( refreshRate > 0.0 && configuredFps > (U32)refreshRate )
+			? (U32)refreshRate
+			: configuredFps;
+		lua_pushinteger( L, actualFps );
+#else
+		lua_pushinteger( L, configuredFps );
+#endif
+		return result;
+	}
 
 	static const char * keys[] = 
 	{
@@ -399,6 +410,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		}
 		break;
 	}
+
 
 	return result;
 }
@@ -1140,6 +1152,17 @@ DisplayLibrary::getDefault( lua_State *L )
     {
         lua_pushinteger( L, defaults.GetAddedStencilClearValue() );
     }
+#ifdef Rtt_WIN_ENV
+    else if (Rtt_StringCompare(key, "renderSync") == 0)
+    {
+        // Returns true if render-only vsync ticks are enabled.
+        // On Windows, this syncs the display to the monitor refresh rate
+        // even when no logic tick has fired — reducing compositor jitter
+        // on high-refresh displays. Returns nil on other platforms.
+        Runtime& runtime = *LuaContext::GetRuntime(L);
+        lua_pushboolean(L, runtime.GetTimer()->GetFrameSync() ? 1 : 0);
+    }
+#endif
     else if ( key )
     {
         luaL_error( L, "ERROR: display.getDefault() given invalid key (%s)", key );
@@ -1317,11 +1340,24 @@ DisplayLibrary::setDefault( lua_State *L )
         U32 stencil = lua_tointeger( L, index );
         defaults.SetAddedStencilClearValue( stencil );
     }
+#ifdef Rtt_WIN_ENV
+    else if (Rtt_StringCompare(key, "renderSync") == 0)
+    {
+        // When true, the render loop invalidates the display every vsync
+        // even when no logic tick has fired, syncing redraws to the monitor
+        // refresh rate. This reduces compositor jitter on high-refresh displays
+        // at the cost of ~1W additional GPU power draw.
+        // When false, the display redraws only when a logic tick fires.
+        // Defaults to true on Windows. No-op on other platforms.
+        bool value = lua_toboolean(L, index) ? true : false;
+        Runtime& runtime = *LuaContext::GetRuntime(L);
+        runtime.GetTimer()->SetFrameSync(value);
+    }
+#endif
     else if ( key )
     {
         luaL_error( L, "ERROR: display.setDefault() given invalid key (%s)", key );
     }
-
 
     return 0;
 }
@@ -1747,6 +1783,26 @@ DisplayLibrary::getStatistics( lua_State *L )
 		lua_setfield( L, 1, "textureBindCount" );
 		lua_pushinteger( L, stats.fTextureBindCount );
 		lua_setfield( L, 1, "textureBindCount" );
+#if defined( Rtt_WIN_ENV )
+        // On Windows, expose the total frame work time measured in WinTimer::Evaluate().
+        // This covers the full per-frame CPU cost: Lua logic, physics, scene traversal,
+        // command buffer preparation, and GL dispatch — everything operator()() executes.
+        // Unlike preparationTime and renderTimeCPU which only cover portions of the render
+        // path, this value reflects the complete frame budget usage as seen from the
+        // scheduling layer, making it suitable for "X.X / 16.6 ms" budget display.
+        // Only populated on the DWM display-sync path (fUseDwmThread == true).
+        {
+            Runtime* runtime = LuaContext::GetRuntime(L);
+            if (runtime)
+            {
+                // frameWorkTime reflects total per-frame CPU cost as measured at the
+                // scheduling layer — Lua logic, physics, scene traversal, and GL dispatch.
+                // Returns 0.0 on platforms that do not support this measurement.
+                lua_pushnumber(L, runtime->GetTimer()->GetLastFrameWorkMs());
+                lua_setfield(L, 1, "frameWorkTime");
+            }
+        }
+#endif
 	}
 
 	return 0;
@@ -1775,28 +1831,6 @@ DisplayLibrary::getTimings( lua_State *L )
 	lua_pushinteger( L, 0 );
 
 	return 1;
-}
-
-int
-DisplayLibrary::setRenderSync(lua_State* L)
-{
-#ifdef Rtt_WIN_ENV
-    // When true, the render loop syncs to the monitor refresh rate while
-    // logic continues at the rate set by fps in config.lua.
-    // When false (default), render runs at the same rate as logic ï¿½
-    // no duplicate frames are produced.
-    // Note: without engine-side interpolation, render-only frames are
-    // redraws of the same state. This is groundwork for a future
-    // interpolation feature.
-    bool enabled = lua_toboolean(L, 1);
-    Runtime& runtime = *LuaContext::GetRuntime(L);
-    runtime.SetProperty(Runtime::kFrameSync, enabled);
-    runtime.GetTimer()->SetFrameSync(enabled);
-#else
-    // display.setRenderSync() is not supported on this platform.
-    CoronaLuaWarning(L, "display.setRenderSync() is only supported on Windows.");
-#endif
-    return 0;
 }
 
 int
