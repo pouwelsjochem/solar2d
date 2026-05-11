@@ -39,7 +39,6 @@
 #include <Shlwapi.h>
 #include <sstream>
 #include <WinInet.h>
-#include "Rtt_PhysicsWorld.h"
 
 
 namespace Interop {
