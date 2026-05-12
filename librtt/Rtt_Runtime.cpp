@@ -152,7 +152,11 @@ Runtime::Runtime( const MPlatform& platform, MCallback *viewCallback )
 #ifdef Rtt_USE_ALMIXER
 	fOpenALPlayer(NULL),
 #endif
+#ifdef Rtt_WIN_ENV
 	fFPS(30),
+#else
+	fFPS(60),
+#endif
 	fIsSuspended(-1), // uninitialized
 	fProperties(0),
 	fSuspendOverrideProperties(kSuspendAll),
@@ -523,18 +527,18 @@ Runtime::ReadConfig( lua_State *L )
 	Rtt_ASSERT( lua_istable( L, -1 ) );
 
 	lua_getfield(L, -1, "fps");
-	int fps = (int)lua_tointeger(L, -1);
 #ifdef Rtt_WIN_ENV
+	int fps = (int)lua_tointeger(L, -1);
 	// Any positive integer fps value is accepted on Windows.
 	// The runtime caps the effective tick rate to the monitor refresh rate in BeginRunLoop().
 	if (fps > 0)
-#else
-	if (60 == fps)                // Besides default (30), only 60 fps is supported on other platforms
-#endif
 	{
 		Rtt_ASSERT(!IsProperty(kIsApplicationLoaded));
 		fFPS = (U32)fps;
 	}
+#else
+	// Non-Windows platforms do not support dynamic FPS yet; keep them fixed at 60 FPS.
+#endif
 	lua_pop(L, 1);
 
 	// Apparently this is used for automated testing (set application.content.exitOnError in config.lua)
@@ -929,7 +933,7 @@ Runtime::BeginRunLoop()
 	double refreshRate = fTimer->GetRefreshRate();
 
 	// Calculate the effective fps - cap to monitor refresh rate if exceeded.
-	// fFPS is never modified so display.fps keeps reflecting config.lua.
+	// fFPS is never modified here so display.fps keeps reflecting the configured runtime FPS.
 	double kFps = static_cast<double>(fFPS);
 	if (refreshRate > 0.0 && kFps > refreshRate)
 	{
