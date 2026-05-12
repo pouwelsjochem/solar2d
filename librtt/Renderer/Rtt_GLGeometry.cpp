@@ -57,6 +57,11 @@ namespace /*anonymous*/
         
         return sIsSupported;
     }
+#elif defined( Rtt_NXS_ENV )
+    bool isVertexArrayObjectSupported()
+    {
+        return false;
+    }
 #else
     bool isVertexArrayObjectSupported()
     {
@@ -261,8 +266,10 @@ static DrawElementsInstancedPtr sDrawElementsInstanced;
 static VertexAttribDivisorPtr sVertexAttribDivisor;
 static const char * sSuffix;
 
-#if defined( Rtt_EGL )
-	#define GL_GET_PROC(name, suffix) (name ## Ptr) eglGetProcAddress( "gl" #name #suffix )
+#if defined( Rtt_NXS_ENV )
+    #define GL_GET_PROC(name, suffix) gl ## name ## suffix
+#elif defined( Rtt_EGL )
+    #define GL_GET_PROC(name, suffix) (name ## Ptr) eglGetProcAddress( "gl" #name #suffix )
 #else
     #define GL_GET_PROC(name, suffix) gl ## name ## suffix
 #endif
@@ -286,7 +293,10 @@ GLGeometry::SupportsInstancing()
 
         GL_RESET();
         
-    #if !defined( Rtt_OPENGLES ) // GL_ARB_instanced_arrays
+    #if defined( Rtt_NXS_ENV )
+        // Nintendo Switch: instancing not supported via extensions
+        // Leave all pointers as NULL
+    #elif !defined( Rtt_OPENGLES ) // GL_ARB_instanced_arrays
         DrawArrays = GL_GET_PROC( DrawArraysInstanced, ARB );
         DrawElements = GL_GET_PROC( DrawElementsInstanced, ARB );
         AttribDivisor = GL_GET_PROC( VertexAttribDivisor, ARB );
@@ -296,6 +306,7 @@ GLGeometry::SupportsInstancing()
         #endif
     #endif
         
+    #if !defined( Rtt_NXS_ENV )
 		const char * extensions = (const char *)glGetString( GL_EXTENSIONS );
 		
     #if defined( GL_EXT_instanced_arrays )
@@ -335,6 +346,7 @@ GLGeometry::SupportsInstancing()
         #endif
         }
     #endif
+    #endif // !defined( Rtt_NXS_ENV )
 
         if (GL_HAS_SUPPORT())
         {

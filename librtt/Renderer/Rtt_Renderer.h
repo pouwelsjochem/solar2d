@@ -309,14 +309,17 @@ class Renderer
     public:
         int GetVersionCode( bool addingMask ) const;
 
-    protected:
-        Rtt_Allocator* fAllocator;
-        
-        MCPUResourceObserver *fCPUResourceObserver;
-        
-        LightPtrArray<CPUResource> fCreateQueue;
-        LightPtrArray<CPUResource> fUpdateQueue;
-        Array<GPUResource*> fDestroyQueue;
+	public:
+		bool AddedUsesTime();
+
+	protected:
+		Rtt_Allocator* fAllocator;
+		
+		MCPUResourceObserver *fCPUResourceObserver;
+		
+		LightPtrArray<CPUResource> fCreateQueue;
+		LightPtrArray<CPUResource> fUpdateQueue;
+		Array<GPUResource*> fDestroyQueue;
 
         GeometryPool* fGeometryPool;
         GeometryPool* fInstancingGeometryPool;

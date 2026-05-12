@@ -121,7 +121,7 @@ class CommandBuffer
         virtual Real Execute( bool measureGPU ) = 0;
 
     public:
-        void PrepareTimeTransforms( const TimeTransform* transform );
+        void PrepareTimeTransforms( float rawTime, const TimeTransform* transform );
 
     protected:
         void AcquireTimeTransform( ShaderResource* resource );
@@ -138,10 +138,8 @@ class CommandBuffer
         U32 fNumCommands;
         U32 fBytesAllocated;
         U32 fBytesUsed;
-        TimeTransform* fDefaultTimeTransform;
 		TimeTransform* fTimeTransform;
-        TimeTransform* fLastTimeTransform;
-        bool fUsesTime;
+        Real fDefaultTransformedTime;
 };
 
 // ----------------------------------------------------------------------------

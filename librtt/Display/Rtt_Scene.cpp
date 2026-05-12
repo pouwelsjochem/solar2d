@@ -216,19 +216,50 @@ Scene::Render( Renderer& renderer, PlatformSurface& rTarget, ProfilingEntryRAII*
 		
 		canvas->Draw( renderer );
 		ENABLE_SUMMED_TIMING( false );
-		renderer.EndFrame();
-		
+        renderer.EndFrame();
+        
+        // Some further analysis:
+
+        // If DEFER_CREATION / DEFER_VK_CREATION are disabled, a new program's
+        // GPUResource will come into being in renderer.Swap(), and the shader
+        // objects for every ShaderVersion are immediately Create()'d.
+
+        // Normally, however, we lazily create a given ProgramVersion's shader
+        // objects in its first Bind(), during renderer.Render().
+
+		// These operations, in either scenario, are strictly serial; the
+		// ShaderResource's flag may be set directly. (This would need rework
+		// if, say, a multithreaded renderer were adopted.)
+        
+        // The conventional logic will pick up the flag the next time around.
+        // However, the relevant time-dependent objects might be the only cause
+        // for the scene to be invalid. A compromise here is to give the scene
+        // a kick, explicitly invalidating it if ANY shader resource was just
+        // assigned the "uses time" flag.
+        
+        // The sanest CPU-side semantics--consistent with the isTimeDependent
+        // and ShaderResource flags--seems to be that if any ProgramVersion is
+        // time-dependent, all of them are interpreted this way. (This policy
+        // accounts for some corner cases, for instance only the fragment side
+        // might be time-dependent, but not be present in wireframe mode; this
+        // is cumbersome to convey precisely on the CPU side.)
+        
 		ADD_ENTRY( "Scene: Issue Draw Commands" );
 		
         renderer.Swap(); // Swap back and front command buffers
-		
+
 		ADD_ENTRY( "Scene: Swap" );
 		
         renderer.Render(); // Render front command buffer
         
 //        renderer.GetFrameStatistics().Log();
-        
+
 		ADD_ENTRY( "Scene: Process Render Commands" );
+
+		if ( renderer.AddedUsesTime() ) // n.b. clears the flag
+		{
+			Invalidate();
+		}
 
         rTarget.Flush();
 
