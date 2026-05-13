@@ -362,7 +362,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 - (void) initInternals
 {
-    _GLView = [[GLView alloc] initWithFrame:[self frame]];
+    _GLView = [[GLView alloc] initWithFrame:[self bounds]];
     [self addSubview:_GLView];
     [_GLView release];
 
@@ -421,8 +421,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	NSDEBUG(@"CoronaViewPrivate: setFrameSize: frame %@", NSStringFromRect([self frame]));
 	NSDEBUG(@"CoronaViewPrivate: setFrameSize: old %@, new %@", NSStringFromSize([self frame].size), NSStringFromSize(newSize));
 	
-	[_GLView setFrameSize:newSize];
 	[super setFrameSize:newSize];
+	[_GLView setFrame:[self bounds]];
 }
 
 - (void) setFrameOrigin:(NSPoint)newOrigin
@@ -437,6 +437,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	NSDEBUG(@"CoronaViewPrivate: setFrame: from %@ to %@", NSStringFromRect([self frame]), NSStringFromRect(newFrame));
 
 	[super setFrame:newFrame];
+	[_GLView setFrame:[self bounds]];
 }
 
 - (NSRect) frame
