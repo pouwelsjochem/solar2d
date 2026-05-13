@@ -5,48 +5,50 @@ on:
 
 env:
   WORKSPACE: ${{ github.workspace }}
-  DEVELOPER_DIR: /Applications/Xcode_14.1.app/Contents/Developer
-  BUILD_NUMBER: 3684
-  YEAR: 2022
+  DEVELOPER_DIR: /Applications/Xcode_26.4.app/Contents/Developer
+  BUILD_NUMBER: 3730
+  YEAR: 2026
   FORK_BUILD_NAME: a
 
 jobs:
   source-code:
     name: Check out and process source code
     if: "!contains(github.ref, 'refs/tags/') || github.repository == 'pouwelsjochem/solar2d'"
-    runs-on: macos-12
+    runs-on: macos-26
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - run: ./tools/GHAction/daily_env.sh
       - name: Set daily build
         run: ./tools/GHAction/process_sources.sh
       - name: Upload Source bundle
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SourceCode
           path: ./output
 
   native:
-    needs: source-code
-    runs-on: macos-12
+    needs:
+      - source-code
+    runs-on: macos-26
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
       - name: Get processed code
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: SourceCode
+          path: SourceCode
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
       - name: Build Native
-        run: ./tools/GHAction/build_native.sh
+        run: JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME_17_arm64}" ./tools/GHAction/build_native.sh
         env:
           CERT_PASSWORD: ${{ secrets.CertPassword }}
       - name: Upload Corona Native
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Native
           path: ./output
@@ -55,18 +57,21 @@ jobs:
     needs:
       - source-code
       - native
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: Get processed code
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: SourceCode
+          path: SourceCode
       - name: Unpack source code
+        shell: cmd
         run: |
-          7z x SourceCode/corona.tgz
-          7z x corona.tar
+          7z x -snld SourceCode/corona.tgz
+          7z x -snld corona.tar
+          ver > nul
       - name: Checkout Switch specific source code (under NDA)
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: pouwelsjochem/solar2d-platform-switch
           token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
@@ -77,9 +82,10 @@ jobs:
       - name: Move docs outside the directory
         run: mv docs ../docs
       - name: Get Corona Native
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: Native
+          path: Native
       - name: Put native in place
         shell: cmd
         run: |
@@ -91,7 +97,8 @@ jobs:
           mv CoronaEnterprise Native
           del /q /f Native\.*
           del /q /f Native\Icon?
-          del /q /f /s Native\Corona\tvos\frameworks\CoronaCards.framework
+          del /q /f /s Native\Corona\tvos\frameworks
+          del /q /f /s Native\Corona\mac\frameworks
       - name: Put JRE in place
         shell: bash
         run: |
@@ -137,7 +144,6 @@ jobs:
           cd platform\windows
           call UpdateFileVersions.bat %BUILD_NUMBER%
           call Build.Tools\VSVars.bat
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
           devenv "Corona.SDK.sln" /rebuild "Release|x86"
         env:
           WIN_CERT_PASSWORD: ${{ secrets.WinCertPassword }}
@@ -147,7 +153,7 @@ jobs:
           cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
         shell: bash
       - name: Upload Windows Corona artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Simulator-Windows
           path: ./output
