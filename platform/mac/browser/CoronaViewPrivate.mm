@@ -305,6 +305,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	U32 launchOptions = Rtt::Runtime::kCoronaCardsOption;
 #endif
 
+	[[_GLView openGLContext] makeCurrentContext];
+
 	if (  Rtt::Runtime::kSuccess == _runtime->LoadApplication( launchOptions ) )
 	{
 		_hasStartedApplication = YES;
