@@ -45,6 +45,9 @@ namespace Rtt
 		Rtt::ProjectSettings *_projectSettings;
         Rtt::AppleInputHIDDeviceListener *_macHIDInputDeviceListener;
 		AppleInputMFiDeviceListener *_macMFiDeviceListener;
+		BOOL _isApplicationStartDeferred;
+		BOOL _isOpenGLContextPrepared;
+		BOOL _hasStartedApplication;
 }
 
 @property (nonatomic, readwrite, getter=projectPath) NSString *_projectPath;
@@ -56,6 +59,7 @@ namespace Rtt
 @property (nonatomic, readwrite, copy) NSDictionary *_launchParams;
 
 - (id)initWithPath:(NSString *)path frame:(NSRect)frame;
+- (void)startApplicationIfReady;
 
 @end
 

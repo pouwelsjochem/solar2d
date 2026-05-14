@@ -109,7 +109,8 @@
 		[launchArgs setValue:[argv objectsAtIndexes:indices] forKey:@"args"];
 	}
 
-	// Start the Corona app
+	// Initialize the Corona app, but do not run Lua until the window has reached its launch mode.
+	[_coronaView setApplicationStartDeferred:YES];
 	[_coronaView runWithPath:_appPath parameters:launchArgs];
 
 	// Listen for "open URL" Apple Events (which will be sent to us if the Info.plist is
@@ -180,6 +181,7 @@
 	{
 		case kNormal:
 			[self setWindowStyles];
+			[_coronaView startDeferredApplication];
 			break;
 		
 		case kFullscreen:
@@ -308,6 +310,12 @@
 - (void)windowDidEnterFullScreen:(NSNotification *)notification
 {
 	[self setWindowStyles];
+	[_coronaView startDeferredApplication];
+}
+
+- (void)windowDidFailToEnterFullScreen:(NSWindow *)window
+{
+	[_coronaView startDeferredApplication];
 }
 
 - (void) notifyRuntimeError:(NSString *) mesg

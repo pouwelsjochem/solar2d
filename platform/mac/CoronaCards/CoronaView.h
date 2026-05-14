@@ -21,6 +21,8 @@ typedef enum {
 
 - (NSInteger)run;
 - (NSInteger)runWithPath:(NSString*)path parameters:(NSDictionary *)params;
+- (void)setApplicationStartDeferred:(BOOL)deferred;
+- (void)startDeferredApplication;
 - (void)suspend;
 - (void)resume;
 - (void)terminate;
@@ -45,4 +47,3 @@ typedef enum {
 @end
 
 // ----------------------------------------------------------------------------
-

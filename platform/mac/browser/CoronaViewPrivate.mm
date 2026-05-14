@@ -141,6 +141,17 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     return result;
 }
 
+- (void)setApplicationStartDeferred:(BOOL)deferred
+{
+	_isApplicationStartDeferred = deferred;
+}
+
+- (void)startDeferredApplication
+{
+	_isApplicationStartDeferred = NO;
+	[self startApplicationIfReady];
+}
+
 - (void)suspend
 {
 	if ( _runtime )
@@ -270,21 +281,33 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void)didPrepareOpenGLContext:(id)sender
 {
 	NSDEBUG(@"CoronaView: didPrepareOpenGLContext: %@", NSStringFromRect([self frame]));
-
-#ifdef Rtt_AUTHORING_SIMULATOR
-	U32 launchOptions = Rtt::Runtime::kCoronaViewOption;
-#else
-	U32 launchOptions = Rtt::Runtime::kCoronaCardsOption;
-#endif
     
     // FIXME: Bad things happen if the view gets too small, arbitrarily restrict it for now
     if ([[self window] minSize].width == 0 || [[self window] minSize].height == 0)
     {
         [[self window] setMinSize:NSMakeSize(50, 50)];
     }
-    	
+
+	_isOpenGLContextPrepared = YES;
+	[self startApplicationIfReady];
+}
+
+- (void)startApplicationIfReady
+{
+	if (_hasStartedApplication || _isApplicationStartDeferred || !_isOpenGLContextPrepared || _runtime == NULL)
+	{
+		return;
+	}
+
+#ifdef Rtt_AUTHORING_SIMULATOR
+	U32 launchOptions = Rtt::Runtime::kCoronaViewOption;
+#else
+	U32 launchOptions = Rtt::Runtime::kCoronaCardsOption;
+#endif
+
 	if (  Rtt::Runtime::kSuccess == _runtime->LoadApplication( launchOptions ) )
 	{
+		_hasStartedApplication = YES;
 		[self willBeginRunLoop:_launchParams];
 
 		_runtime->BeginRunLoop();
@@ -375,6 +398,9 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	fSuspendCount = 0;
     _macHIDInputDeviceListener = NULL;
 	_macMFiDeviceListener = nil;
+	_isApplicationStartDeferred = NO;
+	_isOpenGLContextPrepared = NO;
+	_hasStartedApplication = NO;
 
     _GLViewCallback = new Rtt::MacViewCallback( _GLView ); // This is what is on the Timer loop
 
