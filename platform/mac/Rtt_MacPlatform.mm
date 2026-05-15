@@ -1478,10 +1478,12 @@ MacPlatform::SetNativeProperty(lua_State *L, const char *key, int valueIndex) co
 			if (Rtt_StringCompareNoCase(modeName, "normal") == 0)
 			{
 				[[NSUserDefaults standardUserDefaults] setBool:false forKey:[NSString stringWithFormat:@"solar2D_storedFullscreenMode"]];
+				[[NSUserDefaults standardUserDefaults] synchronize];
 			}
 			else if (Rtt_StringCompareNoCase(modeName, "fullscreen") == 0)
 			{
 				[[NSUserDefaults standardUserDefaults] setBool:true forKey:[NSString stringWithFormat:@"solar2D_storedFullscreenMode"]];
+				[[NSUserDefaults standardUserDefaults] synchronize];
 			}
 			else
 			{
@@ -1974,4 +1976,3 @@ MacPlatformServices::Sleep( int milliseconds ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

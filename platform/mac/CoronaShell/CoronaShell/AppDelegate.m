@@ -171,10 +171,10 @@
 
 	CoronaViewWindowMode windowMode = [_coronaView settingsDefaultWindowMode];
 
-	BOOL storedFullscreenMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"solar2D_storedFullscreenMode"];
-	if (storedFullscreenMode)
+	NSNumber *storedFullscreenMode = [[NSUserDefaults standardUserDefaults] objectForKey:@"solar2D_storedFullscreenMode"];
+	if (storedFullscreenMode != nil)
 	{
-		windowMode = kFullscreen;
+		windowMode = [storedFullscreenMode boolValue] ? kFullscreen : kNormal;
 	}
 
 	switch (windowMode)
