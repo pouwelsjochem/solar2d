@@ -45,9 +45,9 @@ namespace Rtt
 		Rtt::ProjectSettings *_projectSettings;
         Rtt::AppleInputHIDDeviceListener *_macHIDInputDeviceListener;
 		AppleInputMFiDeviceListener *_macMFiDeviceListener;
-		BOOL _isApplicationStartDeferred;
-		BOOL _isOpenGLContextPrepared;
-		BOOL _hasStartedApplication;
+		BOOL _isRunLoopStartDeferred;
+		BOOL _hasLoadedApplication;
+		BOOL _hasStartedRunLoop;
 }
 
 @property (nonatomic, readwrite, getter=projectPath) NSString *_projectPath;

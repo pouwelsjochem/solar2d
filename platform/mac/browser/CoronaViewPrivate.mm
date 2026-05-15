@@ -143,12 +143,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 - (void)setApplicationStartDeferred:(BOOL)deferred
 {
-	_isApplicationStartDeferred = deferred;
+	_isRunLoopStartDeferred = deferred;
 }
 
 - (void)startDeferredApplication
 {
-	_isApplicationStartDeferred = NO;
+	_isRunLoopStartDeferred = NO;
 	[self startApplicationIfReady];
 }
 
@@ -288,17 +288,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         [[self window] setMinSize:NSMakeSize(50, 50)];
     }
 
-	_isOpenGLContextPrepared = YES;
-	[self startApplicationIfReady];
-}
-
-- (void)startApplicationIfReady
-{
-	if (_hasStartedApplication || _isApplicationStartDeferred || !_isOpenGLContextPrepared || _runtime == NULL)
-	{
-		return;
-	}
-
 #ifdef Rtt_AUTHORING_SIMULATOR
 	U32 launchOptions = Rtt::Runtime::kCoronaViewOption;
 #else
@@ -307,15 +296,30 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	[[_GLView openGLContext] makeCurrentContext];
 
-	if (  Rtt::Runtime::kSuccess == _runtime->LoadApplication( launchOptions ) )
+	if ( !_hasLoadedApplication && Rtt::Runtime::kSuccess == _runtime->LoadApplication( launchOptions ) )
 	{
-		_hasStartedApplication = YES;
+		_hasLoadedApplication = YES;
 		[self willBeginRunLoop:_launchParams];
-
-		_runtime->BeginRunLoop();
-        
 		_runtime->GetDisplay().WindowSizeChanged();
 	}
+
+	[self startApplicationIfReady];
+}
+
+- (void)startApplicationIfReady
+{
+	if (!_hasLoadedApplication || _hasStartedRunLoop || _isRunLoopStartDeferred || _runtime == NULL)
+	{
+		return;
+	}
+
+	_hasStartedRunLoop = YES;
+	[[_GLView openGLContext] makeCurrentContext];
+	if (_runtime->IsProperty(Rtt::Runtime::kIsApplicationLoaded))
+	{
+		_runtime->GetDisplay().WindowSizeChanged();
+	}
+	_runtime->BeginRunLoop();
 }
 
 - (void)willBeginRunLoop:(NSDictionary *)params
@@ -400,9 +404,9 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	fSuspendCount = 0;
     _macHIDInputDeviceListener = NULL;
 	_macMFiDeviceListener = nil;
-	_isApplicationStartDeferred = NO;
-	_isOpenGLContextPrepared = NO;
-	_hasStartedApplication = NO;
+	_isRunLoopStartDeferred = NO;
+	_hasLoadedApplication = NO;
+	_hasStartedRunLoop = NO;
 
     _GLViewCallback = new Rtt::MacViewCallback( _GLView ); // This is what is on the Timer loop
 
