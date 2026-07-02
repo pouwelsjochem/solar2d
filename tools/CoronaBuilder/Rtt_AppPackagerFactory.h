@@ -136,6 +136,22 @@ class AppPackagerFactory
 			   const char *templateType ) const;
 #endif
 
+#if defined(CORONABUILDER_NXS)
+		virtual AppPackagerParams* CreatePackagerParamsNxS(
+			lua_State *L,
+			int index,
+			TargetDevice::Platform targetPlatform,
+			TargetDevice::Version targetPlatformVersion,
+			const char *appName,
+			const char *version,
+			const char *certificatePath,
+			const char *projectPath,
+			const char *dstPath,
+			const char *sdkPath,
+			const char *customBuildId,
+			const char *templateType ) const;
+#endif
+
 	private:
 		const MPlatformServices& fServices;
 };

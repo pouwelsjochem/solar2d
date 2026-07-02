@@ -26,6 +26,9 @@
 #if defined(CORONABUILDER_OSX)
 #include "Rtt_OSXAppPackager.h"
 #endif
+#if defined(CORONABUILDER_NXS)
+#include "Rtt_NxSAppPackager.h"
+#endif
 #if defined(CORONABUILDER_LINUX)
 #include "Rtt_LinuxAppPackager.h"
 #endif
@@ -266,6 +269,24 @@ AppPackagerFactory::CreatePackagerParams( lua_State *L, int index, TargetDevice:
 	}
 	else
 #endif
+#if defined(CORONABUILDER_NXS)
+	if (targetPlatform == TargetDevice::kNxSPlatform)
+	{
+		result = CreatePackagerParamsNxS(L,
+										 index,
+										 targetPlatform,
+										 targetPlatformVersion,
+										 appName,
+										 version,
+										 certificatePath,
+										 projectPath,
+										 dstPath,
+										 sdkPath,
+										 customBuildId,
+										 templateType );
+	}
+	else
+#endif
 	{
 		fprintf(stderr, "CoronaBuilder: building for %s is not supported on this operating system\n", TargetDevice::StringForPlatform(targetPlatform));
 	}
@@ -330,10 +351,18 @@ AppPackagerFactory::CreatePackager( lua_State *L, int index, TargetDevice::Platf
 			break;
 #endif
 
+#if defined(CORONABUILDER_NXS)
+		case TargetDevice::kNxSPlatform:
+		{
+			result = new NxSAppPackager( fServices );
+		}
+			break;
+#endif
+
 		default:
 			break;
 	}
-	
+
 	return result;
 }
 

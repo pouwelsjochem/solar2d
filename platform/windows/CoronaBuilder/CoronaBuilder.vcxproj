@@ -62,7 +62,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CORONABUILDER_WIN32;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CORONABUILDER_WIN32;CORONABUILDER_NXS;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
@@ -90,7 +90,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CORONABUILDER_WIN32;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CORONABUILDER_WIN32;CORONABUILDER_NXS;WIN32;_CONSOLE;_LIB;Rtt_WIN_ENV;Rtt_WIN_DESKTOP_ENV;Rtt_NO_GUI;Rtt_NO_ARCHIVE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -172,7 +172,9 @@
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceCollection.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_PreferenceValue.cpp" />
     <ClCompile Include="..\..\..\tools\car\Rtt_Car.cpp" />
+    <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerNxSFactory.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerWin32Factory.cpp" />
+    <ClCompile Include="..\..\shared\Rtt_NxSAppPackager.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_DownloadPluginsMain.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_LuaLibBuilder.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_WinConsoleDevice.cpp" />
@@ -283,6 +285,7 @@
     <ClInclude Include="..\Corona.Native.Library.Win32\Rtt\Rtt_WinCrypto.h" />
     <ClInclude Include="..\Corona.Native.Library.Win32\WinFile.h" />
     <ClInclude Include="..\Corona.Native.Library.Win32\WinString.h" />
+    <ClInclude Include="..\..\shared\Rtt_NxSAppPackager.h" />
     <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackager.h" />
     <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackagerParams.h" />
     <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_WinPlatformServices.h" />
@@ -300,6 +303,7 @@
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua" />
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
     <LuaToCpp Include="..\..\resources\json.lua" />
+    <LuaToCpp Include="..\..\resources\nxsPackageApp.lua" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CryptoPP.Library\CryptoPP.Library.Win32.vcxproj">

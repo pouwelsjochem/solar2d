@@ -236,6 +236,9 @@ TargetDevice::StringForPlatform( TargetDevice::Platform platform )
 		case kTVOSPlatform:
 			result = kTVOSPlatformString;
 			break;
+		case kNxSPlatform:
+			result = "Nintendo Switch";
+			break;
 		default:
 			Rtt_ASSERT_NOT_IMPLEMENTED();
 			break;

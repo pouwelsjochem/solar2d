@@ -139,8 +139,19 @@ local function pathJoin(p1, p2, ... )
 end
 local function unzip( archive, dst, p )
     if windows then
-        local cmd = '""%CORONA_PATH%\\7za.exe" x -aoa "' .. archive .. '" -o"' ..  dst .. '" ' .. (p or "") .. '"'
-        return processExecute(cmd)
+        -- Resolve CORONA_PATH in Lua rather than relying on cmd.exe to expand
+        -- %CORONA_PATH% on its own. processExecute -> CommandLineRunner returns
+        -- -1 when the command starts with %VAR%-style expansion that cmd.exe
+        -- evaluates inside the wrapping CreateProcess call (the same command
+        -- works via `cmd /c` from a normal shell). Lua-resolved path avoids it.
+        local coronaPath = os.getenv("CORONA_PATH") or ""
+        local cmd = '""' .. coronaPath .. '\\7za.exe" x -aoa "' .. archive .. '" -o"' ..  dst .. '" ' .. (p or "") .. '"'
+        -- NOTE: must use os.execute, not processExecute. processExecute on
+        -- Windows wraps Interop::Ipc::CommandLineRunner which returns -1 for
+        -- commands of this shape (leading ""path"...) even though cmd.exe
+        -- accepts them just fine. os.execute -> C system() -> cmd /c works.
+        local osResult = os.execute(cmd)
+        return (osResult == 0 or osResult == true) and 0 or 1
     else
         return os.execute('/usr/bin/unzip -o -q ' .. quoteString(archive) .. ' -d ' ..  quoteString(dst))
     end
@@ -176,8 +187,14 @@ local function copyFile(src, dst)
 end
 local function copyDir( src, dst )
     if windows then
-        local cmd = 'robocopy "' .. src .. '" ' .. '"' .. dst.. '" /e 2> nul'
-        return processExecute(cmd)>7 and 1 or 0
+        -- See unzip() above: processExecute -> CommandLineRunner returns -1 for
+        -- commands of this shape, masking copy failures as success. os.execute
+        -- -> C system() -> cmd /c handles them correctly.
+        local cmd = 'robocopy "' .. src .. '" "' .. dst .. '" /e /nfl /ndl /njh /njs /nc /ns /np > nul 2> nul'
+        local rc = os.execute(cmd)
+        if type(rc) == 'boolean' then return rc and 0 or 1 end
+        -- robocopy exit codes 0-7 are success; >=8 is failure.
+        return (rc and rc < 8) and 0 or 1
     else
         local cmd = 'cp -R ' .. quoteString(src) .. '/. ' ..  quoteString(dst)
         return os.execute(cmd)
@@ -185,8 +202,8 @@ local function copyDir( src, dst )
 end
 local function removeDir( dir )
     if windows then
-        local cmd = 'rmdir /s/q "' .. dir .. '"'
-        return processExecute(cmd)
+        local cmd = 'rmdir /s/q "' .. dir .. '" > nul 2> nul'
+        return os.execute(cmd)
     else
         return os.execute("rm -f -r " .. quoteString(dir))
     end
@@ -615,7 +632,11 @@ function nxsPackageApp( args )
     log('Using metafile: ' .. metafile)
     local nspfile = pathJoin(nxsappFolder, args.applicationName .. '.nsp')
     local descfile = pathJoin(nxsRoot, 'Resources', 'SpecFiles', 'Application.desc')
-    -- Update .npdm file
+
+    -- Update .npdm file. All SDK tool invocations use os.execute for the same
+    -- reason as unzip/copyDir above: processExecute -> CommandLineRunner returns
+    -- -1 for these command shapes, masking success and failure alike.
+    -- os.execute -> C system() -> cmd /c accepts them just fine.
     local cmd = '"' .. nxsRoot .. '\\Tools\\CommandLineTools\\MakeMeta\\MakeMeta.exe'
     cmd = cmd .. ' --desc ' .. nxsRoot .. '\\Resources\\SpecFiles\\Application.desc'
     cmd = cmd .. ' --meta "' .. metafile .. '"'
@@ -623,34 +644,36 @@ function nxsPackageApp( args )
     cmd = cmd .. '"'
     log('Creating NPDM file...')
     logd('MakeMeta command: ' .. cmd)
-    rc, stdout = processExecute(cmd, true)
-    log('MakeMeta retcode: ' .. rc)
-    if type(stdout) == 'string' and #stdout > 0 then
-        log('MakeMeta output: ' .. stdout)
+    local osResult = os.execute(cmd)
+    local metaRc = (osResult == 0 or osResult == true) and 0 or 1
+    log('MakeMeta retcode: ' .. tostring(metaRc))
+    if metaRc ~= 0 then
+        return 'MakeMeta failed (rc=' .. tostring(metaRc) .. ')'
     end
-    -- Find .nss file in code folder (for informational purposes)
+
+    -- Find .nss file in code folder (informational; used only when publishable).
     local nssFile = findNssFile(codeFolder)
-    local nssIsValid = false
-    
     if nssFile then
         log('Found NSS file: ' .. nssFile)
-        local nssInfo
-        nssInfo, nssIsValid = checkNssFile(nssFile)
+        local nssInfo = checkNssFile(nssFile)
         log('NSS file info: ' .. nssInfo)
     else
         log('No NSS file found in code folder')
     end
     local hasNroFiles = nroCount > 0
     local hasNrsFiles = nrsCount > 0
-    local hasNrrFiles = nrrCount > 0
     log('Has NRO files: ' .. tostring(hasNroFiles) .. ' (' .. nroCount .. ')')
     log('Has NRS files: ' .. tostring(hasNrsFiles) .. ' (' .. nrsCount .. ')')
-    log('Has NRR files: ' .. tostring(hasNrrFiles) .. ' (' .. nrrCount .. ')')
+    log('Has NRR files: ' .. tostring(nrrCount > 0) .. ' (' .. nrrCount .. ')')
 
-    -- Build AuthoringTool command
+    -- Build AuthoringTool creatensp command
     -- -v emits [Info]/[Progress] lines so we can see how far the tool got when capturing output;
     -- --utf8 forces UTF-8 output so redirected logs don't get mangled.
-    cmd = '"' .. nxsRoot .. '\\Tools\\CommandLineTools\\AuthoringTool\\AuthoringTool.exe"'
+    -- Wrap the entire command in outer `"..."`. cmd /c strips the outer pair
+    -- when the very first and very last chars are both `"`, otherwise it uses
+    -- the "old" strategy of stripping only the leading quote and the last
+    -- inner quote -- which breaks apart the AuthoringTool arg list.
+    cmd = '""' .. nxsRoot .. '\\Tools\\CommandLineTools\\AuthoringTool\\AuthoringTool.exe"'
     cmd = cmd .. ' -v --utf8'
     cmd = cmd .. ' creatensp'
     cmd = cmd .. ' -o "' .. nspfile .. '"'
@@ -658,15 +681,12 @@ function nxsPackageApp( args )
     cmd = cmd .. ' --meta "' .. metafile .. '"'
     cmd = cmd .. ' --type Application'
     cmd = cmd .. ' --program "' .. codeFolder .. '" "' .. appFolder .. '"'
-    
-    -- --nro specifies directory with NRO files
+
     if hasNroFiles then
         cmd = cmd .. ' --nro "' .. appFolder .. '"'
         log('Added --nro: ' .. appFolder)
     end
-    
-    -- Build mode: settings.nxs.publishable selects the publishable path (--nss/--nrs, no
-    -- --ignore-nss-nrs-option, batch wrapper to dodge a child-process handle inheritance quirk).
+
     local publishable = (buildSettings and buildSettings.nxs and buildSettings.nxs.publishable) and true or false
     log('Build mode: ' .. (publishable and 'publishable' or 'dev (non-publishable)'))
 
@@ -699,52 +719,18 @@ function nxsPackageApp( args )
         cmd = cmd .. ' --ignore-nss-nrs-option'
         log('Added --ignore-nss-nrs-option (dev build, NSP will not be publishable)')
     end
+    cmd = cmd .. '"'  -- close the outer wrapping quote (see comment above)
 
     log('Building App...')
     logd('Command: ' .. cmd)
-
-    local osResult
-    local authLog
-    if publishable then
-        -- Run AuthoringTool through a batch wrapper with stdin redirected from NUL so its
-        -- llvm-nm child gets a clean stdin handle when the simulator (a GUI process) is the
-        -- ultimate parent. stdout/stderr are captured to authoring.log for echoing back.
-        local batchFile = pathJoin(tmpDir, 'run_authoring.bat')
-        authLog = pathJoin(tmpDir, 'authoring.log')
-        local f, ferr = io.open(batchFile, 'w')
-        if not f then
-            log('ERROR: failed to open batch file for writing: ' .. tostring(ferr))
-            return 'Failed to create AuthoringTool wrapper batch file: ' .. tostring(ferr)
-        end
-        f:write('@echo off\r\n')
-        f:write(cmd .. ' < NUL > "' .. authLog .. '" 2>&1\r\n')
-        f:write('exit /b %ERRORLEVEL%\r\n')
-        f:close()
-        logd('Wrote AuthoringTool batch wrapper: ' .. batchFile)
-        osResult = os.execute('"' .. batchFile .. '"')
-    else
-        osResult = os.execute(cmd)
-    end
-
-    -- Echo AuthoringTool output (publishable path only -- dev path inherits the simulator's stdout)
-    if authLog then
-        local lf = io.open(authLog, 'r')
-        if lf then
-            for line in lf:lines() do
-                log('AUTH | ' .. line)
-            end
-            lf:close()
-        end
-    end
-
-    -- os.execute returns the exit code on Windows Lua 5.1 (or true/false on 5.2+).
+    osResult = os.execute(cmd)
     local execSuccess = (osResult == 0) or (osResult == true)
-    rc = execSuccess and 0 or 1
+    local authRc = execSuccess and 0 or 1
 
-    -- Validate the produced NSP. The simulator's process tree can cause AuthoringTool to
-    -- return rc=1 even after a successful run (subprocess handle quirk; same bat returns 0
-    -- from a normal shell). So trust the file when it exists with correct magic bytes;
-    -- fail hard if it's missing, empty, or doesn't start with the PFS0 archive magic.
+    -- Validate the produced NSP. AuthoringTool can return non-zero yet leave a
+    -- valid NSP behind, and conversely can return 0 but delete the NSP when it
+    -- flags an unpublishable-error (SDK version mismatch, missing signatures,
+    -- etc.). Trust the file when it exists with PFS0 magic; fail hard otherwise.
     local nspSize = (isFile(nspfile) and (lfs.attributes(nspfile, 'size') or 0)) or 0
     local nspLooksValid = false
     if nspSize > 0 then
@@ -757,13 +743,13 @@ function nxsPackageApp( args )
     end
 
     if not isFile(nspfile) then
-        log('ERROR: AuthoringTool did not produce an NSP (rc=' .. tostring(rc) .. ')')
+        log('ERROR: AuthoringTool did not produce an NSP (rc=' .. tostring(authRc) .. ')')
         return 'Failed to build NX Switch App'
     elseif not nspLooksValid then
-        log('ERROR: NSP at ' .. nspfile .. ' is empty or missing PFS0 magic bytes (rc=' .. tostring(rc) .. ', size=' .. nspSize .. ')')
+        log('ERROR: NSP at ' .. nspfile .. ' is empty or missing PFS0 magic bytes (rc=' .. tostring(authRc) .. ', size=' .. nspSize .. ')')
         return 'Failed to build NX Switch App'
     elseif not execSuccess then
-        log('NOTE: AuthoringTool exited rc=' .. tostring(rc) .. ' but the NSP looks complete (PFS0, ' .. nspSize .. ' bytes); treating as success')
+        log('NOTE: AuthoringTool exited rc=' .. tostring(authRc) .. ' but the NSP looks complete (PFS0, ' .. nspSize .. ' bytes); treating as success')
     end
 
     log('Build succeeded: ' .. nspfile .. ' (' .. nspSize .. ' bytes)')
