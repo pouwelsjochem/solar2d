@@ -119,14 +119,12 @@ class CSimulatorView : public CView
 		afx_msg void OnShowProjectFiles();
 		afx_msg void OnShowProjectSandbox();
 		afx_msg void OnClearProjectSandbox();
-		afx_msg void OnFileClose();
 		afx_msg void OnClose();
 		afx_msg void OnUpdateViewSuspend(CCmdUI *pCmdUI);
 		afx_msg void OnWindowViewAs( UINT nID );
 		afx_msg void OnUpdateWindowViewAs( CCmdUI *pCmdUI );
 		afx_msg void OnUpdateViewNavigateBack(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateFileRelaunch(CCmdUI *pCmdUI);
-		afx_msg void OnUpdateFileClose(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateShowProjectFiles(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateShowProjectSandbox(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateFileOpenInEditor(CCmdUI *pCmdUI);

@@ -36,10 +36,6 @@
 #include "MessageDlg.h"   // Alert
 #include "CoronaInterface.h"
 
-#include "Rtt_Win32AppPackager.h"
-#include "Rtt_Win32AppPackagerParams.h"
-#include "Rtt_WinPlatformServices.h"
-
 // ----------------------------------------------------------------------------
 
 // Microsoft Visual C++ macro which allows us to easily do bitwise operations on the given enum like in C.
@@ -81,7 +77,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_COMMAND(ID_FILE_OPEN, &CSimulatorView::OnFileOpen)
 	ON_COMMAND(ID_FILE_OPENINEDITOR, &CSimulatorView::OnFileOpenInEditor)
 	ON_COMMAND(ID_FILE_RELAUNCH, &CSimulatorView::OnFileRelaunch)
-	ON_COMMAND(ID_FILE_CLOSE, &CSimulatorView::OnFileClose)
 	ON_COMMAND(ID_FILE_SHOW_PROJECT_FILES, &CSimulatorView::OnShowProjectFiles)
 	ON_COMMAND(ID_FILE_SHOWPROJECTSANDBOX, &CSimulatorView::OnShowProjectSandbox)
 	ON_COMMAND(ID_FILE_CLEARPROJECTSANDBOX, &CSimulatorView::OnClearProjectSandbox)
@@ -91,7 +86,6 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_VIEWAS, &CSimulatorView::OnUpdateWindowViewAs )
 	ON_UPDATE_COMMAND_UI(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnUpdateViewNavigateBack)
 	ON_UPDATE_COMMAND_UI(ID_FILE_RELAUNCH, &CSimulatorView::OnUpdateFileRelaunch)
-	ON_UPDATE_COMMAND_UI(ID_FILE_CLOSE, &CSimulatorView::OnUpdateFileClose)
 	ON_UPDATE_COMMAND_UI(ID_FILE_OPENINEDITOR, &CSimulatorView::OnUpdateFileOpenInEditor)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOW_PROJECT_FILES, &CSimulatorView::OnUpdateShowProjectFiles)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOWPROJECTSANDBOX, &CSimulatorView::OnUpdateShowProjectSandbox)
@@ -387,115 +381,103 @@ void CSimulatorView::OnFileOpen()
 
 // OnFileOpenInEditor - give project name to shell, if associated with an editor
 // Note TODO item below
-void CSimulatorView::OnFileOpenInEditor() // TEMPORARY REPLACED WITH NX BUILD
+void CSimulatorView::OnFileOpenInEditor()
 {
-	CFrameWnd *pFrameWnd = (CFrameWnd *)AfxGetMainWnd();
-	CSimulatorView* pView = (CSimulatorView*)pFrameWnd->GetActiveView();
-	appNxSBuild(
-		pView->GetRuntimeEnvironment(), 
-		"D:\\coromon",
-		"D:\\coromon\\Coromon.nmeta",
-		"Coromon",
-		"1.1.2",
-		"D:\\Build\\Coromon.NX64\\",
-		Rtt::TargetDevice::kNxSPlatform,
-		"",
-		true,
-		0
-	);
+	const int MAX_PATH_LENGTH = 512;
+	CString applicationFileName;
+	CString fileAssociation;
+	DWORD fileAssociationLength = MAX_PATH_LENGTH;
+	HRESULT result;
+	int length;
+	int index;
+	bool hasValidFileAssociation = false;
 
-	// const int MAX_PATH_LENGTH = 512;
-	// CString applicationFileName;
-	// CString fileAssociation;
-	// DWORD fileAssociationLength = MAX_PATH_LENGTH;
-	// HRESULT result;
-	// int length;
-	// int index;
-	// bool hasValidFileAssociation = false;
+	try
+	{
+		// Fetch this application's file name without the path.
+		length = ::GetModuleFileName(NULL, applicationFileName.GetBuffer(MAX_PATH_LENGTH), MAX_PATH_LENGTH);
+		applicationFileName.ReleaseBuffer(length);
+		if (length > 0)
+		{
+			index = applicationFileName.ReverseFind(_T('\\'));
+			if (index > 0)
+			{
+				applicationFileName.Delete(0, index + 1);
+			}
+		}
 
-	// try
-	// {
-	// 	// Fetch this application's file name without the path.
-	// 	length = ::GetModuleFileName(NULL, applicationFileName.GetBuffer(MAX_PATH_LENGTH), MAX_PATH_LENGTH);
-	// 	applicationFileName.ReleaseBuffer(length);
-	// 	if (length > 0)
-	// 	{
-	// 		index = applicationFileName.ReverseFind(_T('\\'));
-	// 		if (index > 0)
-	// 		{
-	// 			applicationFileName.Delete(0, index + 1);
-	// 		}
-	// 	}
+		// Fetch the file association in Windows for all Lua files, if assigned.
+		// ie: This is the default executable used to open a Lua file when double clicked on.
+		result = ::AssocQueryString(
+						ASSOCF_INIT_DEFAULTTOSTAR, ASSOCSTR_EXECUTABLE, _T(".lua"),
+						NULL, fileAssociation.GetBuffer(MAX_PATH_LENGTH), &fileAssociationLength);
+		fileAssociation.ReleaseBuffer();
+		CString fullAssociationPath(fileAssociation);
+		if (S_OK == result)
+		{
+			index = fileAssociation.ReverseFind(_T('\\'));
+			if (index > 0)
+			{
+				fileAssociation.Delete(0, index + 1);
+			}
+		}
 
-	// 	// Fetch the file association in Windows for all Lua files, if assigned.
-	// 	// ie: This is the default executable used to open a Lua file when double clicked on.
-	// 	result = ::AssocQueryString(
-	// 					ASSOCF_INIT_DEFAULTTOSTAR, ASSOCSTR_EXECUTABLE, _T(".lua"),
-	// 					NULL, fileAssociation.GetBuffer(MAX_PATH_LENGTH), &fileAssociationLength);
-	// 	fileAssociation.ReleaseBuffer();
-	// 	CString fullAssociationPath(fileAssociation);
-	// 	if (S_OK == result)
-	// 	{
-	// 		index = fileAssociation.ReverseFind(_T('\\'));
-	// 		if (index > 0)
-	// 		{
-	// 			fileAssociation.Delete(0, index + 1);
-	// 		}
-	// 	}
+		// Check if we have a valid file association in Windows to edit the "main.lua" file.
+		// Note: The default association on Windows XP or lower is an empty string.
+		if (fileAssociation.GetLength() > 0)
+		{
+			// A file association has been assigned.
+			// Make sure it is associated with an application that can open the file.
+			// Note: The default association on Windows Vista or higher is "shell32.dll".
+			CString extension = fileAssociation.Right(4);
+			if ((extension.CompareNoCase(_T(".exe")) == 0) ||
+			    (extension.CompareNoCase(_T(".com")) == 0) ||
+			    (extension.CompareNoCase(_T(".bat")) == 0))
+			{
+				// Also, don't allow the applications below since they won't edit the file.
+				if ((fileAssociation.CompareNoCase(applicationFileName) != 0) &&
+				    (fileAssociation.CompareNoCase(_T("Lightroom.exe")) != 0))     // Adobe Lightroom
+				{
+					// The application associated with the file is valid.
+					hasValidFileAssociation = true;
+				}
+			}
+		}
 
-	// 	// Check if we have a valid file association in Windows to edit the "main.lua" file.
-	// 	// Note: The default association on Windows XP or lower is an empty string.
-	// 	if (fileAssociation.GetLength() > 0)
-	// 	{
-	// 		// A file association has been assigned.
-	// 		// Make sure it is associated with an application that can open the file.
-	// 		// Note: The default association on Windows Vista or higher is "shell32.dll".
-	// 		CString extension = fileAssociation.Right(4);
-	// 		if ((extension.CompareNoCase(_T(".exe")) == 0) ||
-	// 		    (extension.CompareNoCase(_T(".com")) == 0) ||
-	// 		    (extension.CompareNoCase(_T(".bat")) == 0))
-	// 		{
-	// 			// Also, don't allow the applications below since they won't edit the file.
-	// 			if ((fileAssociation.CompareNoCase(applicationFileName) != 0) &&
-	// 			    (fileAssociation.CompareNoCase(_T("Lightroom.exe")) != 0))     // Adobe Lightroom
-	// 			{
-	// 				// The application associated with the file is valid.
-	// 				hasValidFileAssociation = true;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	// Open the Lua file for editing using the default application assigned in Windows.
-	// 	// If Windows doesn't have a valid file association, then open it with Notepad.
-	// 	if (hasValidFileAssociation)
-	// 	{
-	// 		if (fileAssociation == _T("sublime_text.exe") || fileAssociation == _T("Code.exe")) {
-	// 			CString fullPath(GetDocument()->GetPath());
-	// 			index = fullPath.ReverseFind(_T('\\'));
-	// 			if (index > 0)
-	// 			{
-	// 				CString dirPath(fullPath);
-	// 				dirPath.Delete(index, dirPath.GetLength() - index);
-	// 				fullPath.Insert(0, _T('"'));
-	// 				fullPath.Append(_T("\" --add \""));
-	// 				fullPath.Append(dirPath);
-	// 				fullPath.Append(_T("\""));
-	// 			}
-	// 			::ShellExecute(nullptr, nullptr, fullAssociationPath, fullPath, nullptr, SW_SHOWNORMAL);
-	// 		}
-	// 		else {
-	// 			::ShellExecute(nullptr, _T("open"), GetDocument()->GetPath(), nullptr, nullptr, SW_SHOWNORMAL);
-	// 		}
-	// 		WinString appName;
-	// 		appName.SetTCHAR(fileAssociation);
-	// 	}
-	// 	else
-	// 	{
-	// 		::ShellExecute(nullptr, nullptr, _T("notepad.exe"), GetDocument()->GetPath(), nullptr, SW_SHOWNORMAL);
-	// 	}
-	// }
-	// catch (...)
-	// { }
+		// Open the Lua file for editing using the default application assigned in Windows.
+		// If Windows doesn't have a valid file association, then open it with Notepad.
+		if (hasValidFileAssociation)
+		{
+			if (fileAssociation == _T("sublime_text.exe") || fileAssociation == _T("Code.exe"))
+			{
+				CString fullPath(GetDocument()->GetPath());
+				index = fullPath.ReverseFind(_T('\\'));
+				if (index > 0)
+				{
+					CString dirPath(fullPath);
+					dirPath.Delete(index, dirPath.GetLength() - index);
+					fullPath.Insert(0, _T('"'));
+					fullPath.Append(_T("\" --add \""));
+					fullPath.Append(dirPath);
+					fullPath.Append(_T("\""));
+				}
+				::ShellExecute(nullptr, nullptr, fullAssociationPath, fullPath, nullptr, SW_SHOWNORMAL);
+			}
+			else
+			{
+				::ShellExecute(nullptr, _T("open"), GetDocument()->GetPath(), nullptr, nullptr, SW_SHOWNORMAL);
+			}
+			WinString appName;
+			appName.SetTCHAR(fileAssociation);
+		}
+		else
+		{
+			::ShellExecute(nullptr, nullptr, _T("notepad.exe"), GetDocument()->GetPath(), nullptr, SW_SHOWNORMAL);
+		}
+	}
+	catch (...)
+	{
+	}
 }
 
 // OnUpdateFileOpenInEditor - enable menu item when project is open
@@ -686,120 +668,6 @@ void CSimulatorView::OnUpdateShowProjectSandbox(CCmdUI *pCmdUI)
 {
 	bool isSimulatingProject = (mRuntimeEnvironmentPointer && mRuntimeEnvironmentPointer->GetDeviceSimulatorServices());
 	pCmdUI->Enable(isSimulatingProject ? TRUE : FALSE);
-}
-
-// OnFileClose - close project
-void CSimulatorView::OnFileClose()
-{
-	CFrameWnd *pFrameWnd = (CFrameWnd *)AfxGetMainWnd();
-	CSimulatorView* simulatorViewPointer = (CSimulatorView*)pFrameWnd->GetActiveView();
-
-	auto fProjectPointer = GetDocument()->GetProject();
-
-	auto runtimeEnvironmentPointer = simulatorViewPointer->GetRuntimeEnvironment();
-	if (!runtimeEnvironmentPointer || !runtimeEnvironmentPointer->GetRuntime())
-	{
-		// A Corona project is not currently selected by the simulator.
-		// This should never happen, but if it does, attempt to restart the simulator with this dialog's selected project.
-		CString mainLuaFilePath = fProjectPointer->GetDir() + _T("\\main.lua");
-		simulatorViewPointer->GetDocument()->GetDocTemplate()->OpenDocumentFile(mainLuaFilePath);
-		return;
-	}
-
-	// Do not continue if not all plugins for this Corona project have been downloaded yet.
-	// We do this because local Win32 app builds require the plugins zips to be downloaded first.
-	if (simulatorViewPointer->VerifyAllPluginsAcquired() == false)
-	{
-		return;
-	}
-
-	// Create the packager used to build the app.
-	const auto platformServicesPointer = GetWinProperties()->GetServices();
-	Rtt::Win32AppPackager packager(*platformServicesPointer);
-
-	// Read and validate the project's "build.settings" file.
-	WinString projectDirectoryPath;
-	projectDirectoryPath.SetTCHAR(fProjectPointer->GetDir());
-	bool wasBuildSettingsFileRead = packager.ReadBuildSettings(projectDirectoryPath.GetUTF8());
-
-	// Configure the Win32 app packager's parameters.
-	Rtt::Win32AppPackagerParams::CoreSettings paramsSettings{};
-	paramsSettings.AppName = "Coromon";
-	paramsSettings.VersionString = "1.1.2";
-	paramsSettings.DestinationDirectoryPath = "D:\\Build\\Win.32\\";
-	paramsSettings.SourceDirectoryPath = projectDirectoryPath.GetUTF8();
-	Rtt::Win32AppPackagerParams params(paramsSettings);
-	params.SetExeFileName("coromon.exe");
-	params.SetCompanyName("TRAGsoft");
-	params.SetCopyrightString("TRAGsoft");
-	params.SetAppDescription("");
-	params.SetIncludeBuildSettings(true);
-	params.SetStripDebug(true);
-
-	params.SetRuntime(runtimeEnvironmentPointer->GetRuntime());
-	{
-		std::string utf8BuildSettingsPath(projectDirectoryPath.GetUTF8());
-		if (!projectDirectoryPath.EndsWith("\\") && !projectDirectoryPath.EndsWith("/"))
-		{
-			utf8BuildSettingsPath.append("\\");
-		}
-		utf8BuildSettingsPath.append("build.settings");
-		params.SetBuildSettingsPath(utf8BuildSettingsPath.c_str());
-	}
-
-	// Choose a good hidden temp directory path to be used by the build system.
-	// Will be used as an intermediate directory for compiled Lua files, app template extraction, and other purposes.
-	// The build system will automatically delete this directory once the build ends.
-	WinString tempDirectoryPath;
-	{
-		const size_t kBufferSize = 1024;
-		wchar_t utf16TempDirectoryPath[kBufferSize];
-		utf16TempDirectoryPath[0] = L'\0';
-		::GetTempPathW(kBufferSize, utf16TempDirectoryPath);
-		if (L'\0' == utf16TempDirectoryPath[0])
-		{
-			CStringW title;
-			title.LoadStringW(IDS_WARNING);
-			MessageBoxW(L"Failed to create temp directory for build.", title, MB_OK | MB_ICONWARNING);
-			return;
-		}
-		wcscat_s(utf16TempDirectoryPath, kBufferSize, L"Corona Labs\\Win32 Build XXXXXX");
-		_wmktemp_s(utf16TempDirectoryPath, wcslen(utf16TempDirectoryPath) + 1);
-		tempDirectoryPath.SetUTF16(utf16TempDirectoryPath);
-	}
-
-	// Build the Win32 desktop application.
-	BeginWaitCursor();
-	int buildResultCode = packager.Build(&params, tempDirectoryPath.GetUTF8());
-	EndWaitCursor();
-
-	// Display an error message if the build failed.
-	if (buildResultCode != 0)
-	{
-		// Display the error message reported by the build system.
-		CStringW title;
-		title.LoadStringW(IDS_WARNING);
-		WinString errorMessage;
-		errorMessage.SetUTF8(params.GetBuildMessage());
-		MessageBoxW(errorMessage.GetUTF16(), title, MB_OK | MB_ICONEXCLAMATION);
-
-		// Log the build failure.
-		CStringA logMesg;
-		logMesg.Format("[%ld] %s", buildResultCode, params.GetBuildMessage());
-		Rtt_LogException(params.GetBuildMessage());
-		return;
-	}
-
-	// Log that the build was successful.
-	Rtt_LogException("Win32 desktop app build succeeded");
-	// StopSimulation();
-}
-
-// OnUpdateFileClose - enable menu item if project is open
-void CSimulatorView::OnUpdateFileClose(CCmdUI *pCmdUI)
-{
-	bool enable = mRuntimeEnvironmentPointer && !GetDocument()->GetPath().IsEmpty();
-	pCmdUI->Enable(enable ? TRUE : FALSE);
 }
 
 /// Called when a device skin has been selected from the "View As" menu.

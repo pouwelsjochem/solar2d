@@ -148,7 +148,6 @@ BEGIN
         MENUITEM "Clear Project Sandbox",       ID_FILE_CLEARPROJECTSANDBOX
         MENUITEM SEPARATOR
         MENUITEM "&Relaunch\tCtrl+R",           ID_FILE_RELAUNCH
-        MENUITEM "&Close Project\tCtrl+W",      ID_FILE_CLOSE
         MENUITEM SEPARATOR
         MENUITEM "Recent File",                 ID_FILE_MRU_FILE1
         MENUITEM SEPARATOR
@@ -185,7 +184,6 @@ END
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
-    "W",            ID_FILE_CLOSE,          VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
     "O",            ID_FILE_OPENINEDITOR,   VIRTKEY, SHIFT, CONTROL, NOINVERT
     "R",            ID_FILE_RELAUNCH,       VIRTKEY, CONTROL, NOINVERT
@@ -489,7 +487,6 @@ END
 STRINGTABLE
 BEGIN
     ID_FILE_OPEN            "Open an existing app\nOpen"
-    ID_FILE_CLOSE           "Close the active app\nClose"
     ID_FILE_SAVE            "Save the active document\nSave"
     ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
 END
@@ -672,4 +669,3 @@ LANGUAGE 9, 1
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
-

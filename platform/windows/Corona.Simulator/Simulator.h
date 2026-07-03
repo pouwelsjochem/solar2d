@@ -40,8 +40,6 @@
 #define REGISTRY_CONSOLE_TOP _T("ConsoleTop")
 #define REGISTRY_CONSOLE_RIGHT _T("ConsoleRight")
 #define REGISTRY_CONSOLE_BOTTOM _T("ConsoleBottom")
-#define REGISTRY_SHOWNXSBUILD _T("ShowSwitchBuild")
-#define REGISTRY_SHOWWIN32BUILD _T("ShowWin32Build")
 #define REGISTRY_DM_FIRST_RUN_COMPLETE _T("dmFirstRunComplete")
 #define REGISTRY_LAST_RUN_SUCCEEDED _T("lastRunSucceeded")
 
@@ -50,7 +48,6 @@
 #define REGISTRY_XPOS_DEFAULT 0
 #define REGISTRY_YPOS_DEFAULT 0
 #define REGISTRY_AUTOOPEN_DEFAULT 0
-#define REGISTRY_SHOWNXSBUILD_DEFAULT 0
 #define REGISTRY_DM_FIRST_RUN_COMPLETE_DEFAULT 0
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +69,6 @@ public:
 	void PutDeviceName( CString sDevice )  { m_sDeviceName = sDevice; }
 	CRecentFileList* GetRecentFileList() { return m_pRecentFileList; }
 	void PutWP(const WINDOWPLACEMENT& newval);
-	bool ShouldShowNXBuildDlg();
 	int IsStopBuildRequested() { return m_isStopBuildRequested; }
 	void SetStopBuildRequested(int stopBuildRequested)  { m_isStopBuildRequested = stopBuildRequested; }
 

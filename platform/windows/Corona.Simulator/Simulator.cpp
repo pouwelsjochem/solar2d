@@ -210,9 +210,6 @@ BOOL CSimulatorApp::InitInstance()
 				{
 					// *** The app is currently displaying a modal dialog. ***
 
-					// Stop the app's currently running Solar2D project. Avoids file locking issues, like with fonts.
-					::PostMessage(windowHandle, WM_COMMAND, ID_FILE_CLOSE, 0);
-
 					// Send a quit message to exit the app. (Not a clean way to exit an app.)
 					// Note: Child dialogs and Doc/View will not receive close messages because of this.
 					::PostMessage(windowHandle, WM_QUIT, 0, 0);
@@ -460,12 +457,6 @@ CString CSimulatorApp::GetResourceDir()
 		m_sResourceDir += _T("\\Resources");
 	}
     return m_sResourceDir;
-}
-
-bool CSimulatorApp::ShouldShowNXBuildDlg()
-{
-	bool show = getenv("NINTENDO_SDK_ROOT") != NULL;
-	return show;
 }
 
 // CheckPathExists - return true if the file/directory exists.

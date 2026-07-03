@@ -330,21 +330,14 @@ void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RequestRestart()
 
 void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RequestTerminate()
 {
-	// Fetch the Corona Simulator view.
-	CSimulatorView *viewPointer = nullptr;
+	// Close the Corona Simulator window.
 	CFrameWnd *mainWindowPointer = dynamic_cast<CFrameWnd*>(::AfxGetMainWnd());
-	if (mainWindowPointer)
-	{
-		viewPointer = dynamic_cast<CSimulatorView*>(mainWindowPointer->GetActiveView());
-	}
-	if (nullptr == viewPointer)
+	if (!mainWindowPointer)
 	{
 		return;
 	}
 
-	// Terminate the runtime by invoking the "File\Close Project" menu item in the Corona Simulator window.
-	// Note: This assumes that only one Corona project can be simulated at a time.
-	::PostMessage(viewPointer->GetSafeHwnd(), WM_COMMAND, ID_FILE_CLOSE, 0);
+	::PostMessage(mainWindowPointer->GetSafeHwnd(), WM_CLOSE, 0, 0);
 }
 
 #pragma endregion
