@@ -53,14 +53,8 @@
     <ClInclude Include="..\..\..\external\winutil\dirent.h">
       <Filter>%28root%29\external\winutil</Filter>
     </ClInclude>
-    <ClInclude Include="Rtt\Rtt_Win32AppPackager.h">
-      <Filter>Rtt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\external\rcedit\Project\src\rescle.h">
       <Filter>%28root%29\external\rcedit\src</Filter>
-    </ClInclude>
-    <ClInclude Include="Rtt\Rtt_Win32AppPackagerParams.h">
-      <Filter>Rtt</Filter>
     </ClInclude>
     <ClInclude Include="SimulatorDocTemplate.h" />
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\markdown.h">
@@ -83,9 +77,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\external\sundown\Project\sundown\html_blocks.h">
       <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_NxSAppPackager.h">
-      <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -229,96 +220,6 @@
     </LuaToCpp>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\exampleAlert.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleAnimationTime.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleAudio.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleBalloon.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleBridge.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleButtonEvents.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleCamera.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleCan.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleChains.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleCompass.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleCrate.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleEggBreaker.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleFacebook.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleFishies.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleFruit.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleGlobe.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleGPS.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleInternet.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleJungleScene.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleMail.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleMicrophone.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleMovieClip.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleMultipuck.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleMultitouch.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleNativeInput.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\examplePlatform.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\examplePolyLines.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleSimplePool.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleSpotlight.ico">
-      <Filter>res</Filter>
-    </Image>
-    <Image Include="res\exampleTwitter.ico">
-      <Filter>res</Filter>
-    </Image>
     <Image Include="res\Simulator.ico">
       <Filter>res</Filter>
     </Image>

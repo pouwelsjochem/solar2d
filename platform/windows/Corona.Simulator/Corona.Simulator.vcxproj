@@ -160,7 +160,6 @@
     <ClInclude Include="..\..\..\external\winutil\dirent.h" />
     <ClInclude Include="..\..\shared\Rtt_DeviceBuildData.h" />
     <ClInclude Include="..\..\shared\Rtt_MPlatformServices.h" />
-    <ClInclude Include="..\..\shared\Rtt_NxSAppPackager.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformAppPackager.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformDictionaryWrapper.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h" />
@@ -174,8 +173,6 @@
     <ClInclude Include="LicenseDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Rtt\Rtt_Win32AppPackager.h" />
-    <ClInclude Include="Rtt\Rtt_Win32AppPackagerParams.h" />
     <ClInclude Include="Rtt\Rtt_WinPlatformServices.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="SimulatorDoc.h" />
@@ -198,7 +195,6 @@
     <ClCompile Include="..\..\..\external\winutil\BtnST.cpp" />
     <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp" />
     <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_NxSAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp" />
@@ -212,8 +208,6 @@
     <ClCompile Include="LicenseDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MessageDlg.cpp" />
-    <ClCompile Include="Rtt\Rtt_Win32AppPackager.cpp" />
-    <ClCompile Include="Rtt\Rtt_Win32AppPackagerParams.cpp" />
     <ClCompile Include="Rtt\Rtt_WinPlatformServices.cpp" />
     <ClCompile Include="Simulator.cpp" />
     <ClCompile Include="SimulatorDoc.cpp" />
@@ -248,36 +242,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\exampleAlert.ico" />
-    <Image Include="res\exampleAnimationTime.ico" />
-    <Image Include="res\exampleAudio.ico" />
-    <Image Include="res\exampleBalloon.ico" />
-    <Image Include="res\exampleBridge.ico" />
-    <Image Include="res\exampleButtonEvents.ico" />
-    <Image Include="res\exampleCamera.ico" />
-    <Image Include="res\exampleCan.ico" />
-    <Image Include="res\exampleChains.ico" />
-    <Image Include="res\exampleCompass.ico" />
-    <Image Include="res\exampleCrate.ico" />
-    <Image Include="res\exampleEggBreaker.ico" />
-    <Image Include="res\exampleFacebook.ico" />
-    <Image Include="res\exampleFishies.ico" />
-    <Image Include="res\exampleFruit.ico" />
-    <Image Include="res\exampleGlobe.ico" />
-    <Image Include="res\exampleGPS.ico" />
-    <Image Include="res\exampleInternet.ico" />
-    <Image Include="res\exampleJungleScene.ico" />
-    <Image Include="res\exampleMail.ico" />
-    <Image Include="res\exampleMicrophone.ico" />
-    <Image Include="res\exampleMovieClip.ico" />
-    <Image Include="res\exampleMultipuck.ico" />
-    <Image Include="res\exampleMultitouch.ico" />
-    <Image Include="res\exampleNativeInput.ico" />
-    <Image Include="res\examplePlatform.ico" />
-    <Image Include="res\examplePolyLines.ico" />
-    <Image Include="res\exampleSimplePool.ico" />
-    <Image Include="res\exampleSpotlight.ico" />
-    <Image Include="res\exampleTwitter.ico" />
     <Image Include="res\Simulator.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
