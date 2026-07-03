@@ -43,21 +43,23 @@ class NxSAppPackagerParams : public AppPackagerParams
 			const char * customBuildId,
 			const char * productId,
 			const char * appPackage,
-			bool isDistributionBuild,
+			bool publishable,
 			const char * nxTemplate
 			)
 		: AppPackagerParams( 
 			appName, version, identity, provisionFile, srcDir, dstDir, sdkRoot,
 			targetPlatform, targetVersion, targetDevice, customBuildId, productId,
-			appPackage, isDistributionBuild )
+			appPackage, publishable )
 		, fNXTemplate(nxTemplate)
 		, fNmetaPath(nmetaPath)
+		, fPublishable(publishable)
 		{
 		}
 
 	public:
 		const String fNXTemplate;
 		const String fNmetaPath;
+		const bool fPublishable;
 };
 
 class NxSAppPackager : public PlatformAppPackager

@@ -265,6 +265,9 @@ namespace Rtt
 			lua_pushstring(L, params->GetDstDir());
 			lua_setfield(L, -2, "dstDir");
 
+			lua_pushstring(L, params->GetSdkRoot());
+			lua_setfield(L, -2, "sdkRoot");
+
 			lua_pushstring(L, params->fNmetaPath);
 			lua_setfield(L, -2, "nmetaPath");
 
@@ -279,6 +282,9 @@ namespace Rtt
 
 			lua_pushstring(L, params->GetIdentity());
 			lua_setfield(L, -2, "user");
+
+			lua_pushboolean(L, params->fPublishable);
+			lua_setfield(L, -2, "publishable");
 
 			lua_pushinteger(L, Rtt_BUILD_YEAR);
 			lua_setfield(L, -2, "buildYear");
@@ -335,4 +341,3 @@ namespace Rtt
 	}
 
 } // namespace Rtt
-

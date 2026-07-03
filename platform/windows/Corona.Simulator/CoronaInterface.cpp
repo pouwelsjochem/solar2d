@@ -15,6 +15,7 @@
 #include "stdafx.h"
 #include <windows.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "Core\Rtt_Build.h"
 #include "Interop\SimulatorRuntimeEnvironment.h"
 #include "Rtt_WinPlatformServices.h"
@@ -87,12 +88,12 @@ void appNxSBuild(
 
 	// these are currently unused
 	const char* bundleId = "bundleId"; //TODO
-	const char* sdkRoot = "";
+	const char* sdkRoot = getenv("NINTENDO_SDK_ROOT");
 
 	// Package build settings parameters.
 	Rtt::NxSAppPackagerParams params(
 		applicationName, versionName, NULL, NULL,
-		srcDir, dstDir, nmetaPath, NULL,
+		srcDir, dstDir, nmetaPath, sdkRoot,
 		targetPlatform, targetVersion,
 		Rtt::TargetDevice::kNxS, customBuildId,
 		NULL, bundleId, isDistribution, NULL);

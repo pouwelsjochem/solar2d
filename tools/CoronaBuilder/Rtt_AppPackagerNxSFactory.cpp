@@ -35,18 +35,6 @@ GetLuaStringField( lua_State *L, int index, const char *key )
 	return result;
 }
 
-static bool
-GetLuaBoolField( lua_State *L, int index, const char *key, bool fallback )
-{
-	lua_getfield( L, index, key );
-	bool result = fallback;
-	if ( lua_isboolean( L, -1 ) )
-	{
-		result = lua_toboolean( L, -1 ) != 0;
-	}
-	return result;
-}
-
 AppPackagerParams*
 AppPackagerFactory::CreatePackagerParamsNxS(
 	lua_State *L,
@@ -81,23 +69,17 @@ AppPackagerFactory::CreatePackagerParamsNxS(
 	const char *nxTemplate   = GetLuaStringField( L, index, "nxTemplate" );
 	const char *productId    = GetLuaStringField( L, index, "productId" );
 	const char *appPackage   = GetLuaStringField( L, index, "appPackage" );
-	bool isDistributionBuild = GetLuaBoolField( L, index, "publishable", false );
-
-	// sdkRoot fallback: %NINTENDO_SDK_ROOT% env var if not in args.
-	String sdkRootEnv;
-	if ( ! sdkRoot || ! *sdkRoot )
+	lua_getfield( L, index, "publishable" );
+	if ( ! lua_isboolean( L, -1 ) )
 	{
-		const char *envSdkRoot = getenv( "NINTENDO_SDK_ROOT" );
-		if ( envSdkRoot && *envSdkRoot )
-		{
-			sdkRootEnv.Set( envSdkRoot );
-			sdkRoot = sdkRootEnv.GetString();
-		}
+		fprintf( stderr, "ERROR: Missing 'publishable' key in build arguments\n" );
+		return NULL;
 	}
+	bool publishable = lua_toboolean( L, -1 ) != 0;
 
 	// nxTemplate fallback: %CORONA_PATH%\Resources\nxtemplate
 	String nxTemplateDefault;
-	if ( ! nxTemplate || ! *nxTemplate )
+	if ( ! nxTemplate )
 	{
 		const char *coronaPath = getenv( "CORONA_PATH" );
 		if ( coronaPath && *coronaPath )
@@ -123,7 +105,12 @@ AppPackagerFactory::CreatePackagerParamsNxS(
 	}
 
 	CHECK_VALUE( nmetaPath, "nmetaPath" );
-	CHECK_VALUE( sdkRoot, "sdkRoot (set NINTENDO_SDK_ROOT or pass via lua args)" );
+	CHECK_VALUE( sdkRoot, "sdkRoot" );
+	if ( ! *sdkRoot )
+	{
+		fprintf( stderr, "ERROR: Empty 'sdkRoot' key in build arguments\n" );
+		return NULL;
+	}
 	CHECK_VALUE( nxTemplate, "nxTemplate (pass via lua args or set CORONA_PATH)" );
 	CHECK_VALUE( productId, "productId" );
 	CHECK_VALUE( appPackage, "appPackage" );
@@ -132,8 +119,7 @@ AppPackagerFactory::CreatePackagerParamsNxS(
 	const char *identity = "";
 	const char *provisionFile = "";
 
-	// targetDevice is a Nintendo-specific value; default to 0 (the lua side reads
-	// settings.nxs.* for any per-device behavior).
+	// targetDevice is a Nintendo-specific value; default to 0.
 	S32 targetDevice = 0;
 
 	result = new NxSAppPackagerParams(
@@ -151,7 +137,7 @@ AppPackagerFactory::CreatePackagerParamsNxS(
 		customBuildId,
 		productId,
 		appPackage,
-		isDistributionBuild,
+		publishable,
 		nxTemplate );
 
 	lua_settop( L, top );

@@ -420,9 +420,9 @@ end
 -- global script to call from C++
 --
 function nxsPackageApp( args )
-    local nxsRoot = os.getenv("NINTENDO_SDK_ROOT")
-    if not nxsRoot then
-        return "NX SDK not found"
+    local nxsRoot = args.sdkRoot
+    if not nxsRoot or nxsRoot == "" then
+        return "Missing sdkRoot packaging argument"
     end
     log('NX Switch App builder started')
     local nxInfo = args.nxInfo
@@ -687,7 +687,10 @@ function nxsPackageApp( args )
         log('Added --nro: ' .. appFolder)
     end
 
-    local publishable = (buildSettings and buildSettings.nxs and buildSettings.nxs.publishable) and true or false
+    if args.publishable == nil then
+        return 'Missing publishable packaging argument'
+    end
+    local publishable = args.publishable and true or false
     log('Build mode: ' .. (publishable and 'publishable' or 'dev (non-publishable)'))
 
     if publishable then
@@ -754,7 +757,7 @@ function nxsPackageApp( args )
 
     log('Build succeeded: ' .. nspfile .. ' (' .. nspSize .. ' bytes)')
     if not publishable then
-        log('NOTE: NSP is unpublishable (--ignore-nss-nrs-option). Set settings.nxs = { publishable = true } in build.settings for a publishable build.')
+        log('NOTE: NSP is unpublishable (--ignore-nss-nrs-option). Set publishable=true in the packaging args for a publishable build.')
     end
     removeDir(tmpDir)
     return nil
