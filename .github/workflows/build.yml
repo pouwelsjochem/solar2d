@@ -15,6 +15,7 @@ env:
   FORK_BUILD_NAME: n
   NX_BUNNY_STORAGE_SOLAR2D_MEGAZARF_FILE: solar2d_environment-NativeSDK22.2.0.megazarf
   NX_BUNNY_STORAGE_NNPM_INSTALLER_FILE: nnpm_setup-1.8.2.exe
+  NX_SOLAR2D_PLATFORM_SWITCH_COMMIT_SHA: 4bc51a9a910450cb1327055b2ee52a769bb71980
 
 jobs:
   source-code:
@@ -252,10 +253,10 @@ jobs:
           repository: TRAGsoft/solar2d-platform-switch
           token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
           path: platform\switch
-          # Explicit ref so actions/checkout skips the GET /repos REST call to
-          # discover the default branch. That call 404s for this repo from CI
-          # even though the PAT works fine at the git protocol level.
-          ref: main
+          # Pin the Switch source to this build. An explicit ref also skips the
+          # GET /repos call that 404s for this repo from CI even though the PAT
+          # works at the git protocol level.
+          ref: ${{ env.NX_SOLAR2D_PLATFORM_SWITCH_COMMIT_SHA }}
       - run: ./tools/GHAction/daily_env.sh
         shell: bash
       - run: mkdir -f docs
@@ -307,29 +308,15 @@ jobs:
           & $nnpm envs import --archive-file "D:\solar2d_environment.megazarf" --destination "D:\Nintendo\Solar2D" --accept-eula --accept-installation-warning --ignore-path-length
           if ($LASTEXITCODE -ne 0) { throw "nnpm envs import failed with exit code $LASTEXITCODE" }
           if (-not (Test-Path "D:\Nintendo\Solar2D\NintendoSDK")) { throw "Expected D:\Nintendo\Solar2D\NintendoSDK missing after import" }
-      - name: Configure git auth for platform-switch setup
-        shell: bash
-        env:
-          PAT: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
-        run: |
-          # setup.bat git-clones from github.com URLs without embedded auth.
-          # On a non-interactive runner that fails because git tries to prompt
-          # for username/password. Inject the PAT into github.com URLs so the
-          # clones authenticate. Public repos (e.g. coronalabs/corona) ignore
-          # the auth; private repos use it.
-          git config --global url."https://x-access-token:$PAT@github.com/".insteadOf "https://github.com/"
-          # setup.bat clones the upstream NDA repo at solar2d/platform-switch.
-          # That URL is dead; redirect to the TRAGsoft fork, which the PAT
-          # does have read access to.
-          git config --global url."https://x-access-token:$PAT@github.com/TRAGsoft/solar2d-platform-switch.git".insteadOf "https://github.com/solar2d/platform-switch.git"
-      - name: Run platform-switch setup (clones corona + switch)
+      - name: Validate platform-switch build environment
         shell: cmd
         working-directory: platform\switch
         run: |
           set NINTENDO_SDK_ROOT=D:\Nintendo\Solar2D\NintendoSDK
-          rem setup.bat ends in `pause` which hangs CI (no TTY). Redirect nul into
-          rem the script so pause reads EOF and exits immediately.
-          call setup.bat ^< nul
+          rem CI already checked out Solar2D and platform-switch in their final
+          rem layout, so retain the prerequisite checks without cloning either
+          rem repository again. Redirect nul so the final pause does not hang.
+          call setup.bat --skip-clone ^< nul
       - name: Download Switch plugin sources (utf8, memoryBitmap)
         shell: cmd
         working-directory: platform\switch\plugins
