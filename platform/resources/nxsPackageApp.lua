@@ -185,12 +185,21 @@ local function copyFile(src, dst)
     logd('copyFile: Failed to read ' .. src)
     return false
 end
-local function copyDir( src, dst )
+local function copyDir( src, dst, extraExcludeDirs )
     if windows then
         -- See unzip() above: processExecute -> CommandLineRunner returns -1 for
         -- commands of this shape, masking copy failures as success. os.execute
         -- -> C system() -> cmd /c handles them correctly.
-        local cmd = 'robocopy "' .. src .. '" "' .. dst .. '" /e /nfl /ndl /njh /njs /nc /ns /np > nul 2> nul'
+        -- /xd always excludes the destination itself: when dst nests inside src
+        -- (in-project build output dir), robocopy would otherwise recurse into
+        -- its own output forever. ".git" never belongs in a packaged build.
+        local excludes = ' /xd "' .. dst .. '" ".git"'
+        if extraExcludeDirs then
+            for i = 1, #extraExcludeDirs do
+                excludes = excludes .. ' "' .. extraExcludeDirs[i] .. '"'
+            end
+        end
+        local cmd = 'robocopy "' .. src .. '" "' .. dst .. '" /e /nfl /ndl /njh /njs /nc /ns /np' .. excludes .. ' > nul 2> nul'
         local rc = os.execute(cmd)
         if type(rc) == 'boolean' then return rc and 0 or 1 end
         -- robocopy exit codes 0-7 are success; >=8 is failure.
@@ -522,8 +531,15 @@ function nxsPackageApp( args )
     -- Define paths
     local codeFolder = pathJoin(templateFolder, 'code')
     log('Code folder: ' .. codeFolder)
-    -- gather files into appFolder (tmp folder)
-    ret = copyDir(args.srcDir, appFolder)
+    -- Fail fast on an unpublishable template BEFORE the expensive project copy
+    -- and .car compile: publishable builds need an .nss in the template's code
+    -- folder, and its absence cannot be fixed later in the build.
+    if args.publishable and not findNssFile(codeFolder) then
+        return 'Publishable build requires an .nss file in the template code folder, but template ' .. template .. ' does not ship one. Rebuild the Switch template via build_release_template.bat.'
+    end
+    -- gather files into appFolder (tmp folder); exclude the whole build output
+    -- root so a dstDir inside the project can never be re-copied into the app.
+    ret = copyDir(args.srcDir, appFolder, { args.dstDir })
     if ret ~= 0 then
         return "Failed to copy " .. args.srcDir .. ' to ' .. appFolder
     end
