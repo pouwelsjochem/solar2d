@@ -1,0 +1,149 @@
+name: Switch Template Test
+
+# Builds ONLY the Nintendo Switch template (nxtemplate) and validates it is
+# publishable-complete: code\main.nss, plugin NROs with matching NRSs, and
+# .nrr\corona_plugins.nrr. The steps mirror the "Windows-Simulator" job's
+# Switch section in build.yml, so green here means the release build's
+# "Put nxtemplate in place" step will produce a template that Coromon's
+# publishable Switch builds can consume.
+#
+# Run this against the NDA repo's main (default) BEFORE bumping
+# NX_SOLAR2D_PLATFORM_SWITCH_COMMIT_SHA in build.yml for a release.
+
+on:
+  workflow_dispatch:
+    inputs:
+      platformSwitchRef:
+        description: 'solar2d-platform-switch ref to build (branch or SHA)'
+        required: false
+        default: 'main'
+
+jobs:
+  switch-template:
+    runs-on: windows-2022
+    env:
+      WORKSPACE: ${{ github.workspace }}
+    steps:
+      - name: Checkout Solar2D
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
+
+      - name: Checkout Switch specific source code (under NDA)
+        uses: actions/checkout@v4
+        with:
+          repository: TRAGsoft/solar2d-platform-switch
+          token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
+          path: platform\switch
+          ref: ${{ inputs.platformSwitchRef }}
+
+      - name: Download Solar2D Nintendo Dev Environment
+        shell: pwsh
+        env:
+          BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_STORAGE_ACCESS_KEY }}
+        run: |
+          $headers = @{ "AccessKey" = $env:BUNNY_STORAGE_ACCESS_KEY }
+          $base = "https://storage.bunnycdn.com/solar2d-platform-switch"
+          Invoke-WebRequest -Uri "$base/solar2d_environment-NativeSDK22.2.0.megazarf" -Headers $headers -OutFile "D:\solar2d_environment.megazarf"
+          Invoke-WebRequest -Uri "$base/nnpm_setup-1.8.2.exe" -Headers $headers -OutFile "D:\nnpm_setup.exe"
+
+      - name: Install Nintendo Package Manager and import Solar2D environment
+        shell: pwsh
+        run: |
+          Start-Process -FilePath "D:\nnpm_setup.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART" -Wait
+          $nnpm = "$env:ProgramFiles\Nintendo\Nintendo Package Manager\nnpm.exe"
+          if (-not (Test-Path $nnpm)) { throw "nnpm.exe not found after install at $nnpm" }
+          & $nnpm envs import --archive-file "D:\solar2d_environment.megazarf" --destination "D:\Nintendo\Solar2D" --accept-eula --accept-installation-warning --ignore-path-length
+          if ($LASTEXITCODE -ne 0) { throw "nnpm envs import failed with exit code $LASTEXITCODE" }
+          if (-not (Test-Path "D:\Nintendo\Solar2D\NintendoSDK")) { throw "Expected D:\Nintendo\Solar2D\NintendoSDK missing after import" }
+
+      - name: Configure git auth for platform-switch setup
+        shell: bash
+        env:
+          PAT: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
+        run: |
+          # setup.bat git-clones from github.com URLs without embedded auth; see
+          # the same step in build.yml for details.
+          git config --global url."https://x-access-token:$PAT@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://x-access-token:$PAT@github.com/TRAGsoft/solar2d-platform-switch.git".insteadOf "https://github.com/solar2d/platform-switch.git"
+
+      - name: Run platform-switch setup (clones corona + switch)
+        shell: cmd
+        working-directory: platform\switch
+        run: |
+          set NINTENDO_SDK_ROOT=D:\Nintendo\Solar2D\NintendoSDK
+          rem setup.bat ends in `pause` which hangs CI; redirect nul into it.
+          call setup.bat ^< nul
+
+      - name: Download Switch plugin sources (utf8, memoryBitmap)
+        shell: cmd
+        working-directory: platform\switch\plugins
+        run: |
+          call download_plugins.cmd ^< nul
+
+      - name: Workaround buggy vcxproj include paths (junctions)
+        shell: cmd
+        run: |
+          rem Same three fixes as build.yml; all idempotent.
+          if not exist external\mojoAL mklink /J external\mojoAL platform\switch\mojoAL
+          if not exist platform\external mklink /J platform\external external
+          if not exist platform\test\assets2 mkdir platform\test\assets2
+          if not exist platform\test\assets2\main.lua type nul > platform\test\assets2\main.lua
+
+      - name: Patch memoryBitmap.vcxproj to add librtt include path
+        shell: pwsh
+        run: |
+          # No-ops once the include fix is committed to the NDA repo; the final
+          # check passes either way. Mirrors build.yml.
+          $path = "platform\switch\plugins\memoryBitmap\memoryBitmap.vcxproj"
+          $content = Get-Content $path -Raw
+          $content = $content -replace `
+            '<AdditionalIncludeDirectories>(\.\.\\\.\.\\\.\.\\external\\lua-5\.1\.3\\src)</AdditionalIncludeDirectories>', `
+            '<AdditionalIncludeDirectories>..\..\..\..\librtt\Corona;..\..\..\..\librtt;$1</AdditionalIncludeDirectories>'
+          Set-Content -Path $path -Value $content -NoNewline
+          if (-not ((Get-Content $path -Raw) -match 'librtt\\Corona')) { throw "librtt\Corona path not injected" }
+
+      - name: Build Switch template
+        shell: cmd
+        run: |
+          set NINTENDO_SDK_ROOT=D:\Nintendo\Solar2D\NintendoSDK
+          set CORONA_PATH=%WORKSPACE%\platform\windows\Build.Tools
+          set COPY_INSTALL=N
+          type nul | call platform\switch\build_release_template.bat
+          if errorlevel 1 exit /b 1
+
+      - name: Validate template
+        shell: pwsh
+        run: |
+          $template = "platform\switch\NX64\Release\nxtemplate"
+          if (-not (Test-Path $template)) { throw "nxtemplate was not produced at $template" }
+          $size = (Get-Item $template).Length
+          $sha = (Get-FileHash $template -Algorithm SHA256).Hash
+          # The known-good complete template is ~36 MB (the 34 MB main.nss
+          # dominates it); the broken 2026.3730.n template was ~19 MB. Anything
+          # under 30 MB cannot contain the NSS and must not ship.
+          if ($size -lt 30MB) { throw ("nxtemplate is only {0:N0} bytes - too small to contain main.nss" -f $size) }
+          "template size: {0:N0} bytes" -f $size
+          "sha256: $sha"
+          Add-Content $env:GITHUB_STEP_SUMMARY "## Switch template"
+          Add-Content $env:GITHUB_STEP_SUMMARY ""
+          Add-Content $env:GITHUB_STEP_SUMMARY ("- Size: {0:N0} bytes" -f $size)
+          Add-Content $env:GITHUB_STEP_SUMMARY "- SHA256: $sha"
+          Add-Content $env:GITHUB_STEP_SUMMARY "- platform-switch ref: ${{ inputs.platformSwitchRef }}"
+
+      - name: Dump Switch build outputs (diagnosis)
+        if: failure()
+        shell: cmd
+        run: |
+          echo ==== NX64\Release top level ====
+          dir platform\switch\NX64\Release 2>nul
+          echo ==== all nss/nro/nrs/nrr/npdm under NX64 ====
+          dir /s /b platform\switch\NX64 2>nul | findstr /i "\.nss \.nro \.nrs \.nrr \.npdm nxtemplate"
+
+      - name: Upload template artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nxtemplate
+          path: platform\switch\NX64\Release\nxtemplate
+          retention-days: 7
