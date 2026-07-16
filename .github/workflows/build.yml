@@ -12,7 +12,7 @@ env:
   DEVELOPER_DIR: /Applications/Xcode_26.4.app/Contents/Developer
   BUILD_NUMBER: 3730
   YEAR: 2026
-  FORK_BUILD_NAME: n
+  FORK_BUILD_NAME: o
   NX_BUNNY_STORAGE_SOLAR2D_MEGAZARF_FILE: solar2d_environment-NativeSDK22.2.0.megazarf
   NX_BUNNY_STORAGE_NNPM_INSTALLER_FILE: nnpm_setup-1.8.2.exe
   NX_SOLAR2D_PLATFORM_SWITCH_COMMIT_SHA: 5426262d83f639874da3ac69e4be86b1ba78fa38
@@ -375,11 +375,20 @@ jobs:
           type nul | call platform\switch\build_release_template.bat
           rem The bat leaves nxtemplate inside the build output at
           rem NX64\Release\Rtt.nspd\program0.ncd\nxtemplate and copies it
-          rem to NX64\Release\nxtemplate. Move the latter into the Corona
+          rem to NX64\Release\nxtemplate. Copy the latter into the Corona
           rem simulator's Resources dir (which we create here, since the
           rem simulator build hasn't run yet to materialize it).
           if not exist platform\windows\Bin\Corona\Resources mkdir platform\windows\Bin\Corona\Resources
-          mv platform\switch\NX64\Release\nxtemplate platform\windows\Bin\Corona\Resources\
+          copy /y /b platform\switch\NX64\Release\nxtemplate platform\windows\Bin\Corona\Resources\nxtemplate
+          rem The NDA repo tracks a stale nxtemplate at its root, and the
+          rem simulator build (Corona.Simulator.Internals.props) copies
+          rem ..\..\switch\nxtemplate over $(OutDir)Resources - which used to
+          rem clobber the freshly built template with the stale one. That is
+          rem how 2026.3730.n/.o shipped NSS-less templates even though their
+          rem template builds succeeded. Overwrite the copy SOURCE so every
+          rem later copy propagates the fresh template instead.
+          copy /y /b platform\switch\NX64\Release\nxtemplate platform\switch\nxtemplate
+          del platform\switch\NX64\Release\nxtemplate
       - name: Install Codesigning Tools
         shell: cmd
         run: |
@@ -445,6 +454,28 @@ jobs:
           mkdir output
           cp -v ./platform/windows/Bin/Corona.SDK.Installer/Corona.msi output/Solar2D-${{ env.YEAR }}.${{ env.BUILD }}.${{ env.FORK_BUILD_NAME }}.msi
         shell: bash
+      - name: Verify Switch template inside MSI
+        shell: pwsh
+        run: |
+          # Query the MSI File table directly: a publishable-complete template
+          # is ~33-36 MB (main.nss dominates it); the stale NSS-less one is
+          # ~19 MB. Refuse to ship a small one - this is the gate that would
+          # have caught 2026.3730.n/.o.
+          $msi = (Get-ChildItem "output/*.msi" | Select-Object -First 1).FullName
+          $wi = New-Object -ComObject WindowsInstaller.Installer
+          $db = $wi.GetType().InvokeMember('OpenDatabase','InvokeMethod',$null,$wi,@($msi,0))
+          $view = $db.GetType().InvokeMember('OpenView','InvokeMethod',$null,$db,@('SELECT FileName, FileSize FROM File'))
+          $view.GetType().InvokeMember('Execute','InvokeMethod',$null,$view,$null) | Out-Null
+          $size = -1
+          while ($true) {
+            $rec = $view.GetType().InvokeMember('Fetch','InvokeMethod',$null,$view,$null)
+            if ($null -eq $rec) { break }
+            $fn = $rec.GetType().InvokeMember('StringData','GetProperty',$null,$rec,@(1))
+            if ($fn -match 'nxtemplate') { $size = $rec.GetType().InvokeMember('IntegerData','GetProperty',$null,$rec,@(2)) }
+          }
+          if ($size -lt 0) { throw "nxtemplate is not packaged in the MSI at all" }
+          "nxtemplate inside MSI: {0:N0} bytes" -f $size
+          if ($size -lt 30MB) { throw ("MSI packs an incomplete nxtemplate ({0:N0} bytes) - a stale template clobbered the fresh one" -f $size) }
       - name: Upload Windows Corona artifact
         uses: actions/upload-artifact@v4
         with:
