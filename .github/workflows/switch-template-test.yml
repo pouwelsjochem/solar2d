@@ -18,17 +18,19 @@ on:
         required: false
         default: 'main'
 
+env:
+  WORKSPACE: ${{ github.workspace }}
+  NX_BUNNY_STORAGE_SOLAR2D_MEGAZARF_FILE: solar2d_environment-NativeSDK22.2.0.megazarf
+  NX_BUNNY_STORAGE_NNPM_INSTALLER_FILE: nnpm_setup-1.8.2.exe
+
 jobs:
   switch-template:
     runs-on: windows-2022
-    env:
-      WORKSPACE: ${{ github.workspace }}
     steps:
       - name: Checkout Solar2D
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
 
       - name: Checkout Switch specific source code (under NDA)
         uses: actions/checkout@v4
@@ -36,17 +38,22 @@ jobs:
           repository: TRAGsoft/solar2d-platform-switch
           token: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
           path: platform\switch
+          # Explicit ref also skips the GET /repos call that 404s for this
+          # repo from CI even though the PAT works at the git protocol level.
           ref: ${{ inputs.platformSwitchRef }}
 
       - name: Download Solar2D Nintendo Dev Environment
         shell: pwsh
         env:
-          BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.BUNNY_STORAGE_ACCESS_KEY }}
+          SOLAR2D_PLATFORM_SWITCH_BUNNY_STORAGE_ACCESS_KEY: ${{ secrets.SOLAR2D_PLATFORM_SWITCH_BUNNY_STORAGE_ACCESS_KEY }}
         run: |
-          $headers = @{ "AccessKey" = $env:BUNNY_STORAGE_ACCESS_KEY }
+          if ([string]::IsNullOrWhiteSpace($env:SOLAR2D_PLATFORM_SWITCH_BUNNY_STORAGE_ACCESS_KEY)) {
+            throw "SOLAR2D_PLATFORM_SWITCH_BUNNY_STORAGE_ACCESS_KEY secret is empty - set it in this repo's Actions secrets."
+          }
+          $headers = @{ "AccessKey" = $env:SOLAR2D_PLATFORM_SWITCH_BUNNY_STORAGE_ACCESS_KEY }
           $base = "https://storage.bunnycdn.com/solar2d-platform-switch"
-          Invoke-WebRequest -Uri "$base/solar2d_environment-NativeSDK22.2.0.megazarf" -Headers $headers -OutFile "D:\solar2d_environment.megazarf"
-          Invoke-WebRequest -Uri "$base/nnpm_setup-1.8.2.exe" -Headers $headers -OutFile "D:\nnpm_setup.exe"
+          Invoke-WebRequest -Uri "$base/$env:NX_BUNNY_STORAGE_SOLAR2D_MEGAZARF_FILE" -Headers $headers -OutFile "D:\solar2d_environment.megazarf"
+          Invoke-WebRequest -Uri "$base/$env:NX_BUNNY_STORAGE_NNPM_INSTALLER_FILE" -Headers $headers -OutFile "D:\nnpm_setup.exe"
 
       - name: Install Nintendo Package Manager and import Solar2D environment
         shell: pwsh
@@ -58,34 +65,30 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "nnpm envs import failed with exit code $LASTEXITCODE" }
           if (-not (Test-Path "D:\Nintendo\Solar2D\NintendoSDK")) { throw "Expected D:\Nintendo\Solar2D\NintendoSDK missing after import" }
 
-      - name: Configure git auth for platform-switch setup
-        shell: bash
-        env:
-          PAT: ${{ secrets.PLATFORM_SWITCH_REPO_PAT }}
-        run: |
-          # setup.bat git-clones from github.com URLs without embedded auth; see
-          # the same step in build.yml for details.
-          git config --global url."https://x-access-token:$PAT@github.com/".insteadOf "https://github.com/"
-          git config --global url."https://x-access-token:$PAT@github.com/TRAGsoft/solar2d-platform-switch.git".insteadOf "https://github.com/solar2d/platform-switch.git"
-
-      - name: Run platform-switch setup (clones corona + switch)
+      - name: Validate platform-switch build environment
         shell: cmd
         working-directory: platform\switch
         run: |
           set NINTENDO_SDK_ROOT=D:\Nintendo\Solar2D\NintendoSDK
-          rem setup.bat ends in `pause` which hangs CI; redirect nul into it.
-          call setup.bat ^< nul
+          rem CI already checked out Solar2D and platform-switch in their final
+          rem layout, so retain the prerequisite checks without cloning either
+          rem repository again. Redirect nul so the final pause does not hang.
+          call setup.bat --skip-clone ^< nul
 
       - name: Download Switch plugin sources (utf8, memoryBitmap)
         shell: cmd
         working-directory: platform\switch\plugins
         run: |
+          rem setup.bat does NOT call this; the plugin .vcxprojs expect
+          rem `plugins\utf8\plugin\` and `plugins\memoryBitmap\plugin\` to be
+          rem populated by these public-repo clones. download_plugins.cmd also
+          rem ends in `pause`, so redirect nul.
           call download_plugins.cmd ^< nul
 
       - name: Workaround buggy vcxproj include paths (junctions)
         shell: cmd
         run: |
-          rem Same three fixes as build.yml; all idempotent.
+          rem Same fixes as build.yml; all idempotent.
           if not exist external\mojoAL mklink /J external\mojoAL platform\switch\mojoAL
           if not exist platform\external mklink /J platform\external external
           if not exist platform\test\assets2 mkdir platform\test\assets2
