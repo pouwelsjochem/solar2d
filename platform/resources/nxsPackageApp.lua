@@ -321,7 +321,7 @@ local function getExcludePredecate()
     for i = 1, #excludes do
         excludes[i] = globToPattern(excludes[i])
     end
-    return function(fileName)
+    return function(fileName, relativePath)
         -- Always keep whitelisted items
         if whitelist[fileName] then
             return true
@@ -332,34 +332,37 @@ local function getExcludePredecate()
         end
         -- Check exclude patterns
         for i = 1, #excludes do
-            if fileName:find(excludes[i]) then
+            if fileName:find(excludes[i]) or relativePath:find(excludes[i]) then
                 return false
             end
         end
         return true
     end
 end
-local function deleteUnusedFiles(srcDir, excludePredicate)
+local function deleteUnusedFiles(srcDir, excludePredicate, relativeDir)
+    relativeDir = relativeDir or ""
     for file in lfs.dir(srcDir) do
         -- Always skip . and .. first
         if file == '.' or file == '..' then
             -- skip
-        elseif excludePredicate(file) then
-            local f = pathJoin(srcDir, file)
-            local attr = lfs.attributes(f)
-            if attr and attr.mode == "directory" then
-                deleteUnusedFiles(f, excludePredicate)
-            end
         else
             local f = pathJoin(srcDir, file)
-            local result
-            if isDir(f) then
-                result = removeDir(f)
+            local relativePath = relativeDir == "" and file or relativeDir.."/"..file
+            if excludePredicate(file, relativePath) then
+                local attr = lfs.attributes(f)
+                if attr and attr.mode == "directory" then
+                    deleteUnusedFiles(f, excludePredicate, relativePath)
+                end
             else
-                result = os.remove(f)
-            end
-            if not result then
-                logd("Failed to exclude " .. f)
+                local result
+                if isDir(f) then
+                    result = removeDir(f)
+                else
+                    result = os.remove(f)
+                end
+                if not result then
+                    logd("Failed to exclude " .. f)
+                end
             end
         end
     end
