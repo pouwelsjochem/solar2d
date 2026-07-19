@@ -14,6 +14,9 @@
 #include "Core/Rtt_String.h"
 #include "Rtt_TargetDevice.h"
 
+#include <string>
+#include <vector>
+
 // ----------------------------------------------------------------------------
 
 struct lua_State;
@@ -55,6 +58,8 @@ class AppPackagerParams
 		bool fIncludeBuildSettings;
 		mutable DeviceBuildData *fDeviceBuildData;
 		String fCoronaUser;
+		std::vector<std::string> fExcludeLuaFilePatterns;
+		std::vector<std::string> fExcludedLuaObjectFileNames;
 
 	public:
 		AppPackagerParams( const char* appName,
@@ -101,6 +106,11 @@ class AppPackagerParams
 		const char *GetBuildSettingsPath() { return fBuildSettingsPath.GetString(); }
 		void SetIncludeBuildSettings( bool value ) { fIncludeBuildSettings = value; }
 		bool IncludeBuildSettings() const { return fIncludeBuildSettings; }
+		void CopyExcludeLuaFilePatternsFrom( const AppPackagerParams& params ) { SetExcludeLuaFilePatterns( params.fExcludeLuaFilePatterns ); }
+		void SetExcludeLuaFilePatterns( const std::vector<std::string>& patterns ) { fExcludeLuaFilePatterns = patterns; fExcludedLuaObjectFileNames.clear(); }
+		const std::vector<std::string>& GetExcludeLuaFilePatterns() const { return fExcludeLuaFilePatterns; }
+		void RecordExcludedLuaFile( const char *sourcePath );
+		bool IsExcludedLuaObjectFile( const char *filePath ) const;
 		DeviceBuildData& GetDeviceBuildData( const MPlatform& platform, const MPlatformServices& services ) const;
 
 	public:
@@ -166,6 +176,7 @@ class PlatformAppPackager
 	protected:
 		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
 		bool CompileScripts( AppPackagerParams * params, const char* tmpDir );
+		void CopyExcludeLuaFilePatternsTo( AppPackagerParams& params ) const;
 
 		/**
 		 * Archives all files in a given directory tree to a "resource.car" file.
@@ -269,6 +280,7 @@ class PlatformAppPackager
 		String fErrorMesg;
         bool fNeverStripDebugInfo;
 		TargetDevice::Platform fTargetPlatform;
+		std::vector<std::string> fExcludeLuaFilePatterns;
 };
 
 Rtt_EXPORT int Rtt_LuaCompile( lua_State *L, int numSources, const char** sources, const char* dstFile, int stripDebug );

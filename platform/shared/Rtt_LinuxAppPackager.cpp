@@ -104,6 +104,7 @@ namespace Rtt
 		// Package build settings parameters.
 		Rtt::AppPackagerParams params(p->GetAppName(), p->GetVersion(), p->GetIdentity(), NULL, srcDir, dstDir, NULL, p->GetTargetPlatform(), 0, 0, NULL, NULL, NULL, true);
 		params.SetStripDebug(p->IsStripDebug());
+		params.CopyExcludeLuaFilePatternsFrom(*p);
 
 		bool rc = CompileScriptsInDirectory(L, params, dstDir, srcDir);
 
@@ -135,6 +136,15 @@ namespace Rtt
 
 					if (size > 3 && strcmp(fileToInclude + size - 3, ".lu") == 0)
 					{
+						if (params.IsExcludedLuaObjectFile(fileToInclude))
+						{
+							String tmpString;
+							tmpString.Set("An excluded Lua file was found in the resource.car staging directory: ");
+							tmpString.Append(fileToInclude);
+							params.SetBuildMessage(tmpString.GetString());
+							rc = false;
+							break;
+						}
 						sourceFilePathArray[fileToIncludeCount++] = fileToInclude;
 					}
 					else if (size > 9 && strcmp(fileToInclude + size - 9, ".settings") == 0)
@@ -144,13 +154,16 @@ namespace Rtt
 				}
 
 				// Create the "resource.car" archive file containing the files fetched up above.
-				Archive::Serialize(resourceCarPath.GetString(), fileToIncludeCount, sourceFilePathArray);
+				if (rc)
+				{
+					Archive::Serialize(resourceCarPath.GetString(), fileToIncludeCount, sourceFilePathArray);
+				}
 
 				// Clean up memory allocated up above.
 				delete[] sourceFilePathArray;
 
 				// Return true if the archive file was successfully created.
-				rc = Rtt_FileExists(resourceCarPath.GetString());
+				rc = rc && Rtt_FileExists(resourceCarPath.GetString());
 			}
 		}
 
@@ -206,6 +219,7 @@ namespace Rtt
 		time_t startTime = time(NULL);
 
 		ReadBuildSettings(_params->GetSrcDir());
+		CopyExcludeLuaFilePatternsTo(*_params);
 
 		if (fNeverStripDebugInfo && !onlyGetPlugins)
 		{

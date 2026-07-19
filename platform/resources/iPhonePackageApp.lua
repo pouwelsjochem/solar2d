@@ -207,7 +207,7 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 			-- we have actual files to exclude
 			print("Excluding specified files from build: ")
 			for platform,excludes in pairs(options.settings.excludeFiles) do
-				if platform == "all" or platform == "ios" or platform == "iphone" then
+				if platform == "all" or platform == "iphone" then
 					for index,pattern in ipairs(excludes) do
 						print("   excluding: "..pattern)
 						pattern = pattern:gsub("'", "'\\''") -- quote single quotes
@@ -898,9 +898,8 @@ local function prePackageApp( bundleDir, options )
 	end
 
 	-- warn if one of the necessary launch screen settings isn't present
-	local sectionName = (options.settings ~= nil and options.settings.ios ~= nil) and "ios" or "iphone"
 	if options.settings == nil or options.settings.iphone == nil or options.settings.iphone.plist == nil then
-		print("WARNING: missing "..sectionName.." / "..sectionName..".plist section in build.settings")
+		print("WARNING: missing iphone / iphone.plist section in build.settings")
 	elseif options.settings.iphone.plist.UILaunchStoryboardName == nil and options.settings.iphone.plist.UILaunchImages == nil then
 		print("WARNING: iOS builds require "..sectionName..".plist.UILaunchStoryboardName or "..sectionName..".plist.UILaunchImages in build.settings")
 	end
@@ -1365,13 +1364,6 @@ function iPhonePostPackage( params )
 			else
 				err = "Warning: Error found in build.settings file:\n\t".. msg
 				print(err)
-			end
-			-- forwards compatibility
-			if settings.ios ~= nil then
-				if settings.iphone ~= nil then
-					print( "WARNING: settings.ios overrides settings.iphone in "..customSettingsFile )
-				end
-				settings.iphone = settings.ios
 			end
 		else
 			err = "Warning: Could not load build.settings file:\n\t".. msg

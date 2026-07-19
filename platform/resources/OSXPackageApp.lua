@@ -191,7 +191,7 @@ local function getCopyResourcesScript( src, dst, options )
 			-- we have actual files to exclude
 			print("Excluding specified files from build: ")
 			for platform,excludes in pairs(options.settings.excludeFiles) do
-				if platform == "all" or platform == "osx" or platform == "macos" then
+				if platform == "all" or platform == "macos" then
 					for index,pattern in ipairs(excludes) do
 						print("   excluding: "..pattern)
 						pattern = pattern:gsub("'", "'\\''") -- quote single quotes
@@ -354,7 +354,7 @@ local function generateOSXEntitlements(filename, settings, provisionFile)
 	local data = templateXcent
 	local entitlementsStr = ""
 
-	local generatedEntitlements, includeProvisioning = CoronaPListSupport.generateEntitlements(settings, 'osx', provisionFile)
+	local generatedEntitlements, includeProvisioning = CoronaPListSupport.generateEntitlements(settings, 'macos', provisionFile)
 	data, numMatches = string.gsub( data, "{{CUSTOM_ENTITLEMENTS}}", generatedEntitlements )
 	assert( numMatches == 1 )
 
@@ -387,7 +387,7 @@ local function generateXcprivacy( options )
 
 	local data = templateXcprivacy
 
-	local generatedPrivacy = CoronaPListSupport.generateXcprivacy( options.settings, 'osx')
+	local generatedPrivacy = CoronaPListSupport.generateXcprivacy( options.settings, 'macos')
 	if(  generatedPrivacy and generatedPrivacy ~= "" ) then
 		data, numMatches = string.gsub( data, "{{CUSTOM_XCPRIVACY}}", generatedPrivacy )
 		assert( numMatches == 1 )
@@ -693,13 +693,6 @@ function OSXPostPackage( params )
 			local status, msg = pcall( customSettings )
 			if status then
 				print( "Using additional build settings from: " .. customSettingsFile )
-				-- forwards compatibility
-				if settings.macos ~= nil then
-					if settings.osx ~= nil then
-						print( "WARNING: settings.macos overrides settings.osx in "..customSettingsFile )
-					end
-					settings.osx = settings.macos
-				end
 				options.settings = settings
 			else
 				err = "Warning: Error found in build.settings file:\n\t".. msg
@@ -766,8 +759,8 @@ function OSXPostPackage( params )
 
 		-- If "bundleResourcesDirectory" is set, copy the contents of that directory to the
 		-- application's Resource directory
-		if options and options.settings and options.settings.osx and options.settings.osx.bundleResourcesDirectory then
-			local customBundleResources = makepath(srcAssets, options.settings.osx.bundleResourcesDirectory)
+		if options and options.settings and options.settings.macos and options.settings.macos.bundleResourcesDirectory then
+			local customBundleResources = makepath(srcAssets, options.settings.macos.bundleResourcesDirectory)
 			if ( fileExists( customBundleResources ) ) then
 				local resourceDir = makepath(options.appBundleFile, "/Contents/Resources/")
 				setStatus("Copying 'bundleResourcesDirectory' resources")
@@ -783,7 +776,7 @@ function OSXPostPackage( params )
 		runScript( "/bin/mkdir -p "..options.appBundleFile.."/Contents/Resources/Corona/" )
 
 		--add xcprivacy file to the bundle
-		if options.settings.osx and options.settings.osx.xcprivacy then
+		if options.settings.macos and options.settings.macos.xcprivacy then
 			runScript("cp -v " .. quoteString(options.tmpDir .. "/PrivacyInfo.xcprivacy") .. " " .. quoteString(makepath(appBundleFileUnquoted, "PrivacyInfo.xcprivacy")))
 		end
 
@@ -943,13 +936,6 @@ function OSXPackageForAppStore( params )
 			else
 				err = "Warning: Error found in build.settings file:\n\t".. msg
 				print(err)
-			end
-			-- forwards compatibility
-			if settings.macos ~= nil then
-				if settings.osx ~= nil then
-					print( "WARNING: settings.macos overrides settings.osx in "..customSettingsFile )
-				end
-				settings.osx = settings.macos
 			end
 		else
 			err = "Warning: Could not load build.settings file:\n\t".. msg
@@ -1161,5 +1147,4 @@ function OSXPackageForSelfDistribution( params )
 
 	return nil
 end
-
 

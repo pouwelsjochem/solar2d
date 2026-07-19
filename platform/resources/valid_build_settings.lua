@@ -97,12 +97,11 @@ settings =
 	excludeFiles =
 	{
 		iphone = { "", },
-		ios = { "", },
 		android = { "", },
-		osx = { "", },
 		macos = { "", },
 		win32 = { "", },
 		tvos = { "", },
+		nx = { "", },
 		web = { "", },
 		all = { "" },
 	},
@@ -187,7 +186,7 @@ settings =
 		},
 	},
 
-	osx = 
+	macos =
 	{
 		onDemandResources = { },
 		iCloud = {},
@@ -301,7 +300,3 @@ settings =
 		},
 	},
 }
-
--- forwards compatibility
-settings.ios = settings.iphone
-settings.macos = settings.osx

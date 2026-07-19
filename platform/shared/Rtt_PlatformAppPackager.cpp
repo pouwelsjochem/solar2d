@@ -133,6 +133,54 @@ AppPackagerParams::AppPackagerParams( const char* appName,
 	fCertType.Set( isDistributionBuild ? "distribution" : "developer" );
 }
 
+void
+AppPackagerParams::RecordExcludedLuaFile( const char *sourcePath )
+{
+	const size_t baseDirectoryLength = strlen( GetSrcDir() );
+	const char *relativePath = sourcePath + baseDirectoryLength;
+	while ( '/' == relativePath[0] || '\\' == relativePath[0] )
+	{
+		relativePath++;
+	}
+
+	std::string objectFileName( relativePath );
+	for ( size_t index = 0; index < objectFileName.length(); index++ )
+	{
+		if ( '/' == objectFileName[index] || '\\' == objectFileName[index] )
+		{
+			objectFileName[index] = '.';
+		}
+	}
+	if ( objectFileName.length() >= 4 && 0 == objectFileName.compare( objectFileName.length() - 4, 4, ".lua" ) )
+	{
+		objectFileName.erase( objectFileName.length() - 1 );
+	}
+	fExcludedLuaObjectFileNames.push_back( objectFileName );
+}
+
+bool
+AppPackagerParams::IsExcludedLuaObjectFile( const char *filePath ) const
+{
+	const char *fileName = filePath;
+	for ( const char *character = filePath; character[0]; character++ )
+	{
+		if ( '/' == character[0] || '\\' == character[0] )
+		{
+			fileName = character + 1;
+		}
+	}
+
+	for ( size_t index = 0; index < fExcludedLuaObjectFileNames.size(); index++ )
+	{
+		if ( fExcludedLuaObjectFileNames[index] == fileName )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 AppPackagerParams::~AppPackagerParams()
 {
 	delete fDeviceBuildData;
@@ -441,6 +489,119 @@ IsDirectory( const char *path )
 	return result;
 }
 
+static bool
+DoesPathMatchPattern( const char *pattern, const char *path )
+{
+	while ( pattern[0] )
+	{
+		if ( '*' == pattern[0] )
+		{
+			const bool matchesDirectorySeparators = ( '*' == pattern[1] );
+			while ( '*' == pattern[0] )
+			{
+				pattern++;
+			}
+			if ( matchesDirectorySeparators && '/' == pattern[0] )
+			{
+				pattern++;
+			}
+			if ( '\0' == pattern[0] )
+			{
+				return matchesDirectorySeparators || ( NULL == strchr( path, '/' ) );
+			}
+
+			do
+			{
+				if ( DoesPathMatchPattern( pattern, path ) )
+				{
+					return true;
+				}
+				if ( '\0' == path[0] || ( ! matchesDirectorySeparators && '/' == path[0] ) )
+				{
+					break;
+				}
+				path++;
+			}
+			while ( true );
+
+			return false;
+		}
+		if ( '?' == pattern[0] )
+		{
+			if ( '\0' == path[0] || '/' == path[0] )
+			{
+				return false;
+			}
+		}
+		else if ( pattern[0] != path[0] )
+		{
+			return false;
+		}
+		else if ( '\0' == path[0] )
+		{
+			return true;
+		}
+
+		pattern++;
+		path++;
+	}
+
+	return '\0' == path[0];
+}
+
+static bool
+IsLuaFileExcluded( const AppPackagerParams& params, const char *sourcePath )
+{
+	const char *baseDirectory = params.GetSrcDir();
+	const size_t baseDirectoryLength = strlen( baseDirectory );
+	const char *relativePath = sourcePath + baseDirectoryLength;
+	while ( '/' == relativePath[0] || '\\' == relativePath[0] )
+	{
+		relativePath++;
+	}
+
+	std::string normalizedRelativePath( relativePath );
+	for ( size_t index = 0; index < normalizedRelativePath.length(); index++ )
+	{
+		if ( '\\' == normalizedRelativePath[index] )
+		{
+			normalizedRelativePath[index] = '/';
+		}
+	}
+
+	const std::vector<std::string>& patterns = params.GetExcludeLuaFilePatterns();
+	for ( size_t index = 0; index < patterns.size(); index++ )
+	{
+		const char *pattern = patterns[index].c_str();
+		const size_t fileNameOffset = normalizedRelativePath.find_last_of( '/' );
+		const char *fileName = normalizedRelativePath.c_str();
+		if ( std::string::npos != fileNameOffset )
+		{
+			fileName += fileNameOffset + 1;
+		}
+
+		if ( DoesPathMatchPattern( pattern, normalizedRelativePath.c_str() )
+			|| DoesPathMatchPattern( pattern, fileName ) )
+		{
+			return true;
+		}
+
+		std::string parentPath( normalizedRelativePath );
+		size_t directorySeparatorOffset = parentPath.find_last_of( '/' );
+		while ( std::string::npos != directorySeparatorOffset )
+		{
+			parentPath.erase( directorySeparatorOffset );
+			if ( DoesPathMatchPattern( pattern, parentPath.c_str() ) )
+			{
+				return true;
+			}
+			directorySeparatorOffset = parentPath.find_last_of( '/' );
+		}
+	}
+
+	return false;
+}
+
 bool
 CompileScriptsInDirectory( lua_State *L, AppPackagerParams& params, const char *dstDir, const char *srcDir )
 {
@@ -541,6 +702,12 @@ CompileScriptsInDirectory( lua_State *L, AppPackagerParams& params, const char *
 					}
 					if ( isLuaFile || ( isBuildSettingsFile && params.IncludeBuildSettings() ) )
 					{
+						if ( isLuaFile && IsLuaFileExcluded( params, srcPath ) )
+						{
+							params.RecordExcludedLuaFile( srcPath );
+							continue;
+						}
+
 						// Create a destination file path for the resulting compiled file.
 						int dstPathLen = 0;
 						if ( subModulePath )
@@ -650,6 +817,8 @@ PlatformAppPackager::CompileScripts( AppPackagerParams * params, const char* tmp
 
 	const char* baseDir = params->GetSrcDir();
 	const char* dstDir = tmpDir;
+
+	CopyExcludeLuaFilePatternsTo( * params );
 
     // If "neverStripDebugInfo" is set in the build.settings, turn off stripping no matter what
     // upper levels of the Simulator might have decided
@@ -786,6 +955,15 @@ PlatformAppPackager::ArchiveDirectoryTree(
 	const char** sourceFilePathArray = new const char*[sourceFilePathCollection.size()];
 	for (int fileIndex = (int)sourceFilePathCollection.size() - 1; fileIndex >= 0; fileIndex--)
 	{
+		if ( params->IsExcludedLuaObjectFile( sourceFilePathCollection.at(fileIndex).c_str() ) )
+		{
+			String tmpString;
+			tmpString.Set( "An excluded Lua file was found in the resource.car staging directory: " );
+			tmpString.Append( sourceFilePathCollection.at(fileIndex).c_str() );
+			params->SetBuildMessage( tmpString.GetString() );
+			delete[] sourceFilePathArray;
+			return false;
+		}
 		sourceFilePathArray[fileIndex] = sourceFilePathCollection.at(fileIndex).c_str();
 	}
 
@@ -1264,10 +1442,70 @@ PlatformAppPackager::OpenBuildSettings( const char * srcDir )
 	return status;
 }
 
+static void
+AppendExcludeFilePatterns( lua_State *L, int tableIndex, std::vector<std::string>& patterns )
+{
+	if ( tableIndex < 0 )
+	{
+		tableIndex = lua_gettop( L ) + tableIndex + 1;
+	}
+
+	if ( lua_istable( L, tableIndex ) )
+	{
+		lua_pushnil( L );
+		while ( lua_next( L, tableIndex ) )
+		{
+			if ( lua_isstring( L, -1 ) )
+			{
+				patterns.push_back( lua_tostring( L, -1 ) );
+			}
+			lua_pop( L, 1 );
+		}
+	}
+}
+
+static const char *
+BuildSettingsKeyForPlatform( TargetDevice::Platform platform )
+{
+	const char *result = NULL;
+
+	switch ( platform )
+	{
+		case TargetDevice::kIPhonePlatform:
+			result = "iphone";
+			break;
+		case TargetDevice::kAndroidPlatform:
+			result = "android";
+			break;
+		case TargetDevice::kOSXPlatform:
+			result = "macos";
+			break;
+		case TargetDevice::kWin32Platform:
+			result = "win32";
+			break;
+		case TargetDevice::kTVOSPlatform:
+			result = "tvos";
+			break;
+		case TargetDevice::kLinuxPlatform:
+			result = "linux";
+			break;
+		case TargetDevice::kNxSPlatform:
+			result = "nx";
+			break;
+		default:
+			break;
+	}
+
+	return result;
+}
+
 bool
 PlatformAppPackager::ReadBuildSettings( const char * srcDir )
 {
 	lua_State *L = fVM;
+
+	fNeverStripDebugInfo = false;
+	fExcludeLuaFilePatterns.clear();
 	
 	int status = OpenBuildSettings( srcDir );
 	bool retflag = true;
@@ -1294,11 +1532,28 @@ PlatformAppPackager::ReadBuildSettings( const char * srcDir )
 				lua_getfield( L, -1, "neverStripDebugInfo" );
 				if ( lua_isboolean( L, -1 ) )
 				{
-					fNeverStripDebugInfo = lua_toboolean( L, 1 ) ? true : false;
+					fNeverStripDebugInfo = lua_toboolean( L, -1 ) ? true : false;
 				}
 				lua_pop( L, 1 );
 			}
 			lua_pop( L, 1 ); // pop settings.build
+
+			lua_getfield( L, -1, "excludeFiles" );
+			if ( lua_istable( L, -1 ) )
+			{
+				lua_getfield( L, -1, "all" );
+				AppendExcludeFilePatterns( L, -1, fExcludeLuaFilePatterns );
+				lua_pop( L, 1 );
+
+				const char *platformKey = BuildSettingsKeyForPlatform( fTargetPlatform );
+				if ( platformKey )
+				{
+					lua_getfield( L, -1, platformKey );
+					AppendExcludeFilePatterns( L, -1, fExcludeLuaFilePatterns );
+					lua_pop( L, 1 );
+				}
+			}
+			lua_pop( L, 1 ); // pop settings.excludeFiles
 		}
 		lua_pop( L, 1 ); // pop settings
 		
@@ -1316,6 +1571,12 @@ PlatformAppPackager::ReadBuildSettings( const char * srcDir )
 	Rtt_ASSERT( 0 == lua_gettop( L ) );
 
 	return retflag;
+}
+
+void
+PlatformAppPackager::CopyExcludeLuaFilePatternsTo( AppPackagerParams& params ) const
+{
+	params.SetExcludeLuaFilePatterns( fExcludeLuaFilePatterns );
 }
 
 /// Called when the "build.settings" file is being read.
@@ -1715,4 +1976,3 @@ PlatformAppPackager::AreAllPluginsAvailable( Runtime *runtime, String *missingPl
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

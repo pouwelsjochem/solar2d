@@ -476,7 +476,7 @@
 	[_coronaView handleOpenURL:url];
 }
 
-// Handle OS openfiles request.  The Corona app must specify the handled CFBundleDocumentTypes in settings.osx.plist
+// Handle OS openfiles request.  The Corona app must specify the handled CFBundleDocumentTypes in settings.macos.plist
 //
 // Like so:
 // CFBundleDocumentTypes = {

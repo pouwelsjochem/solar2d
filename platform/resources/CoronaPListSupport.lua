@@ -344,10 +344,7 @@ function CoronaPListSupport.modifyPlist( options )
 		local settings = options.settings or defaultSettings
 		if settings then
 			-- add'l custom plist settings specific to OS X
-			local buildSettingsPlist = settings.osx and settings.osx.plist
-			if(settings.macos) then 
-				buildSettingsPlist = settings.macos.plist
-			end
+			local buildSettingsPlist = settings.macos and settings.macos.plist
 			if buildSettingsPlist then
 				--print("Adding custom plist settings: ".. json.encode(buildSettingsPlist))
 				--print("buildSettingsPlist: "..json.encode(buildSettingsPlist))
@@ -493,7 +490,7 @@ function CoronaPListSupport.generateEntitlements( settings, platform, provisionP
 				end
 			end
 			if ppEnt and appId then
-				local t = { ["com.apple.application-identifier"] = platform == 'osx' and appId or nil }
+				local t = { ["com.apple.application-identifier"] = platform == 'macos' and appId or nil }
 				local kvsContainer = ppEnt["com.apple.developer.ubiquity-kvstore-identifier"]
 				if kvsContainer then
 					if "table" == type(platformSettings.iCloud) and platformSettings.iCloud["kvstore-identifier"] then
