@@ -402,6 +402,8 @@ namespace Rtt
 
 		const char kSearch[] = "search";
 
+		const char kSection[] = "§";
+
 		const char kSemicolon[] = ";";
 
 		const char kSpace[] = "space";
@@ -493,6 +495,7 @@ namespace Rtt
 				case '?': return Rtt::KeyName::kForwardSlash;
 				case '`':
 				case '~': return Rtt::KeyName::kBackTick;
+				case 0x00A7: return Rtt::KeyName::kSection;
 				default:
 					return nullptr;
 			}

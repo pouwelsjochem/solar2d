@@ -406,6 +406,8 @@ namespace Rtt
 
 		extern const char kSearch[];
 
+		extern const char kSection[];
+
 		extern const char kSemicolon[];
 
 		extern const char kSpace[];
