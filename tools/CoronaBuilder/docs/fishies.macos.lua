@@ -1,6 +1,6 @@
 local params =
 {
-	platform    = 'osx',
+	platform    = 'macos',
 	appName     = 'Fishies',
 	appVersion  = '1.0',
 	dstPath     = '/Users/XXXX/Desktop',

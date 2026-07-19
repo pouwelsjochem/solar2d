@@ -255,9 +255,9 @@ CoronaBuilder::Usage( const char *arg0 )
 			"'plugins' takes the following arguments:\n"
 			"\t%s plugins download platform buildSettings dest\n"
 			"\tdownload subcommand.\n"
-			"\tplatform can be 'iphone' or 'android' (not implemented yet).\n"
+			"\tplatform can be 'ios', 'tvos', 'win32', or 'macos'.\n"
 			"\tbuildSettings is full path to build.settings file.\n"
-			"\tdest is path to Corona.xcconfig for iphone platform.\n"
+			"\tdest is the Corona.xcconfig path for Apple mobile platforms or the plugin output directory for desktop platforms.\n"
 			"\n", progname.GetString());
 
 
@@ -495,4 +495,3 @@ CoronaBuilder::Build( const BuildParams& params ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

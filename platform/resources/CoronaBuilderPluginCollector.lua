@@ -20,6 +20,13 @@ platformFallbacks = {
     { "*", "lua" },
 }
 
+-- build.settings uses ios/ios-sim in supportedPlatforms, while published plugin archives
+-- still use the historical iphone/iphone-sim directory and filename identifiers.
+local supportedPlatformByPluginPlatform = {
+    ["iphone"] = "ios",
+    ["iphone-sim"] = "ios-sim",
+}
+
 if coronabaselib then print = coronabaselib.print end
 json = require "json"
 lfs = require "lfs"
@@ -455,6 +462,7 @@ local function pluginLocatorCustomURL(destination, plugin, pluginTable, pluginPl
     if type(pluginTable.supportedPlatforms) ~= 'table' then
         return "Custom URL: skipped because no table supportedPlatforms provided for " .. plugin
     end
+    local supportedPlatform = supportedPlatformByPluginPlatform[pluginPlatform] or pluginPlatform
     local canSkip = false
     if params.canSkip then
         canSkip = false
@@ -465,19 +473,19 @@ local function pluginLocatorCustomURL(destination, plugin, pluginTable, pluginPl
         end
     end
 
-    if type(pluginTable.supportedPlatforms[pluginPlatform]) ~= 'table' then
+    if type(pluginTable.supportedPlatforms[supportedPlatform]) ~= 'table' then
         if canSkip then
-            log("Custom URL: skipped because supportedPlatforms[" .. pluginPlatform .. "] is not a table. Plugin is not supported by the platform")
+            log("Custom URL: skipped because supportedPlatforms[" .. supportedPlatform .. "] is not a table. Plugin is not supported by the platform")
         end
-        return canSkip or "Custom URL: skipped because supportedPlatforms[" .. pluginPlatform .. "] is not a table. Plugin is not supported by the platform"
+        return canSkip or "Custom URL: skipped because supportedPlatforms[" .. supportedPlatform .. "] is not a table. Plugin is not supported by the platform"
     end
-    if type(pluginTable.supportedPlatforms[pluginPlatform].url) ~= 'string' then
+    if type(pluginTable.supportedPlatforms[supportedPlatform].url) ~= 'string' then
         if canSkip then
-            log("Custom URL: skipped because supportedPlatforms[" .. pluginPlatform .. "].url is not a string")
+            log("Custom URL: skipped because supportedPlatforms[" .. supportedPlatform .. "].url is not a string")
         end
-        return canSkip or "Custom URL: skipped because supportedPlatforms[" .. pluginPlatform .. "].url is not a string"
+        return canSkip or "Custom URL: skipped because supportedPlatforms[" .. supportedPlatform .. "].url is not a string"
     end
-    local downloadURL = pluginTable.supportedPlatforms[pluginPlatform].url
+    local downloadURL = pluginTable.supportedPlatforms[supportedPlatform].url
     mkdirs(destination)
     local file, err = download(downloadURL, pathJoin(destination, 'data.tgz'))
     if not file then
@@ -634,10 +642,11 @@ local function fetchSinglePlugin(dstDir, plugin, pluginTable, basePluginPlatform
         local skip = true
         local skipped = ""
         for i = 1, numFallbacks do
-            if pluginTable.supportedPlatforms[fallbackChain[i]] then
+            local supportedPlatform = supportedPlatformByPluginPlatform[fallbackChain[i]] or fallbackChain[i]
+            if pluginTable.supportedPlatforms[supportedPlatform] then
                 skip = false
             else
-                skipped = skipped .. " " .. fallbackChain[i]
+                skipped = skipped .. " " .. supportedPlatform
             end
         end
         if skip then

@@ -138,9 +138,7 @@ function CoronaPListSupport.modifyPlist( options )
     elseif options.targetPlatform == "iOS" or options.targetPlatform == "tvOS" then
         basePath = options.appBundleFile .. "/"
     else
-        print("modifyPlist: unknown platform '"..tostring(options.targetPlatform).."', defaulting to 'iOS'")
-        basePath = options.appBundleFile .. "/"
-        options.targetPlatform = "iOS"
+        error("modifyPlist: unknown platform '"..tostring(options.targetPlatform).."'")
     end
 
 	-- Check if Info.plist exists, if so use App-Info.plist instead
@@ -264,8 +262,8 @@ function CoronaPListSupport.modifyPlist( options )
 		local settings = options.settings
 		if settings then
 
-			-- add'l custom plist settings specific to iPhone
-			local buildSettingsPlist = settings.iphone and settings.iphone.plist
+			-- add'l custom plist settings specific to iOS
+			local buildSettingsPlist = settings.ios and settings.ios.plist
 			if buildSettingsPlist then
 				--print("Adding custom plist settings: ".. json.encode(buildSettingsPlist))
 				--print("buildSettingsPlist: "..json.encode(buildSettingsPlist))

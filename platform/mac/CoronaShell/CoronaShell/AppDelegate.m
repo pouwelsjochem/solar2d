@@ -91,7 +91,7 @@
 	[_window setFrameAutosaveName:_appPath];
 
 	// Set the application icon for the project if it has one
-	NSImage *appIcon = [[NSImage alloc] initWithContentsOfFile:[_appPath stringByAppendingPathComponent:@"Icon-osx.icns"]];
+	NSImage *appIcon = [[NSImage alloc] initWithContentsOfFile:[_appPath stringByAppendingPathComponent:@"Icon-macos.icns"]];
 	[NSApp setApplicationIconImage:appIcon];
 
 	// init launchargs

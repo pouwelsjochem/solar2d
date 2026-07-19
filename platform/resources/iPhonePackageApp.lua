@@ -207,7 +207,7 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 			-- we have actual files to exclude
 			print("Excluding specified files from build: ")
 			for platform,excludes in pairs(options.settings.excludeFiles) do
-				if platform == "all" or platform == "iphone" then
+				if platform == "all" or platform == "ios" then
 					for index,pattern in ipairs(excludes) do
 						print("   excluding: "..pattern)
 						pattern = pattern:gsub("'", "'\\''") -- quote single quotes
@@ -453,7 +453,7 @@ local function generateXcent( options )
 	local beta_reports_active_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'beta-reports-active'")
 	print("beta_reports_active_setting: ".. tostring(beta_reports_active_setting))
 
-	if beta_reports_active_setting ~= "" and options.settings.iphone.betaReportsEnabled == true then
+	if beta_reports_active_setting ~= "" and options.settings.ios.betaReportsEnabled == true then
 		-- set the value appropriately
 		if nil ~= string.find( beta_reports_active_setting, "1", 1, true ) then
 			templateBetaReportsActive, numMatches = string.gsub( templateBetaReportsActive, "{{BETA_REPORTS}}", "true" )
@@ -484,7 +484,7 @@ local function generateXcent( options )
 	assert( numMatches == 1 )
 
 
-	local generatedEntitlements = CoronaPListSupport.generateEntitlements(options.settings, 'iphone', options.mobileProvision)
+	local generatedEntitlements = CoronaPListSupport.generateEntitlements(options.settings, 'ios', options.mobileProvision)
 	data, numMatches = string.gsub( data, "{{CUSTOM_ENTITLEMENTS}}", generatedEntitlements )
 	assert( numMatches == 1 )
 
@@ -539,7 +539,7 @@ local function generateXcprivacy( options )
 
 	local data = templateXcprivacy
 
-	local generatedPrivacy = CoronaPListSupport.generateXcprivacy( options.settings, 'iphone')
+	local generatedPrivacy = CoronaPListSupport.generateXcprivacy( options.settings, 'ios')
 	if(  generatedPrivacy and generatedPrivacy ~= "" ) then
 		data, numMatches = string.gsub( data, "{{CUSTOM_XCPRIVACY}}", generatedPrivacy )
 		assert( numMatches == 1 )
@@ -712,7 +712,7 @@ export PATH="$DEVELOPER_BASE/Platforms/iPhoneOS.platform/Developer/usr/bin:$DEVE
                 -- Apply plist changes if defined
                 if config.plist and fileExists(infoPlist:gsub('["\']', "")) then
                     local plistResult = CoronaPListSupport.modifyPlist({
-                        settings = { iphone = { plist = config.plist } },
+                        settings = { ios = { plist = config.plist } },
                         appBundleFile = quoteString(appexPath),
                         targetPlatform = "iOS"
                     })
@@ -729,7 +729,7 @@ export PATH="$DEVELOPER_BASE/Platforms/iPhoneOS.platform/Developer/usr/bin:$DEVE
                     mobileProvision = selectedProvision,
                     tmpDir = entitlementsFilePath,
                     signingIdentity = identity,
-                    settings = { iphone = { entitlements = entitlementsAppx } }
+                    settings = { ios = { entitlements = entitlementsAppx } }
                 })
 
                 if result then
@@ -879,7 +879,7 @@ end
 local function prePackageApp( bundleDir, options )
 
 	-- If "skipPNGCrush" is specified in the build.settings then set "should_preserve" to its value by default
-	local should_preserve = (options.settings ~= nil and options.settings.iphone ~= nil and options.settings.iphone.skipPNGCrush) or false;
+	local should_preserve = (options.settings ~= nil and options.settings.ios ~= nil and options.settings.ios.skipPNGCrush) or false;
 
 	-- options.osPlatform will be nil or 0 for iOS, 2 for Mac
 	local deviceType = "iphone" -- iphone (meaning iOS) is default
@@ -898,10 +898,10 @@ local function prePackageApp( bundleDir, options )
 	end
 
 	-- warn if one of the necessary launch screen settings isn't present
-	if options.settings == nil or options.settings.iphone == nil or options.settings.iphone.plist == nil then
-		print("WARNING: missing iphone / iphone.plist section in build.settings")
-	elseif options.settings.iphone.plist.UILaunchStoryboardName == nil and options.settings.iphone.plist.UILaunchImages == nil then
-		print("WARNING: iOS builds require "..sectionName..".plist.UILaunchStoryboardName or "..sectionName..".plist.UILaunchImages in build.settings")
+	if options.settings == nil or options.settings.ios == nil or options.settings.ios.plist == nil then
+		print("WARNING: missing ios / ios.plist section in build.settings")
+	elseif options.settings.ios.plist.UILaunchStoryboardName == nil and options.settings.ios.plist.UILaunchImages == nil then
+		print("WARNING: iOS builds require ios.plist.UILaunchStoryboardName or ios.plist.UILaunchImages in build.settings")
 	end
 
 	setStatus("Copying app resources")
@@ -933,9 +933,9 @@ local function packageApp( options )
 
 	-- package on demand resources
 	local odrOutputDir = nil
-	if options.settings and options.settings.iphone and options.settings.iphone.onDemandResources and isBuildForAppStoreDistribution( options ) then
+	if options.settings and options.settings.ios and options.settings.ios.onDemandResources and isBuildForAppStoreDistribution( options ) then
 		setStatus("Generating On-Demand Resource bundles")
-		local odrData = options.settings.iphone.onDemandResources
+		local odrData = options.settings.ios.onDemandResources
 
 		-- step 1: move resources into appropriate folders
 		odrOutputDir = captureCommandOutput('mktemp -d -t CLtmpXXXXXX_ODR') .. "/OnDemandResources"
@@ -1021,7 +1021,7 @@ local function packageApp( options )
 	end
 
 	--add xcprivacy file to the bundle
-	if options.settings.iphone and options.settings.iphone.xcprivacy then
+	if options.settings.ios and options.settings.ios.xcprivacy then
 		runScript("cp -v " .. quoteString(options.tmpDir .. "/PrivacyInfo.xcprivacy") .. " " .. quoteString(makepath(appBundleFileUnquoted, "PrivacyInfo.xcprivacy")))
 	end
 	
@@ -1464,7 +1464,7 @@ function iPhonePostPackage( params )
 		end
 
 		-- compile Xcode assets for icon
-		if options.settings and options.settings.iphone then
+		if options.settings and options.settings.ios then
 			setStatus("Compiling Xcode assets catalog")
 			local xcassetPlatformOptions = {
 				{ "target-device", "iphone" },
@@ -1474,7 +1474,7 @@ function iPhonePostPackage( params )
 
 				 {"app-icon", "AppIcon"},
 			}
-			err = CoronaPListSupport.compileXcassets(options, tmpDir, srcAssets, xcassetPlatformOptions, options.settings.iphone)
+			err = CoronaPListSupport.compileXcassets(options, tmpDir, srcAssets, xcassetPlatformOptions, options.settings.ios)
 			if err then
 				return err
 			end

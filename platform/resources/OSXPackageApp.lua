@@ -472,6 +472,7 @@ local function packageApp( options )
 	return nil
 end
 
+
 --------------------------------------------------------------------------------
 
 local function getNames( name, result )
@@ -841,18 +842,14 @@ function OSXPostPackage( params )
 		-- Copy the resource.car to the app's Corona resource directory
 		runScript( "/bin/cp -v "..quoteString(options.compiledLuaArchive).." "..options.appBundleFile.."/Contents/Resources/Corona/resource.car" )
 
-		-- If we have a macOS icon with a new or old name ...
+		-- If we have a macOS icon ...
 		local iconPath = makepath(options.srcAssets, "Icon-macos.icns")
-		if lfs.attributes( iconPath ) == nil then
-			iconPath = makepath(options.srcAssets, "Icon-osx.icns")
-		end
 
 		if lfs.attributes( iconPath ) ~= nil then
 			-- Copy the macOS (if any) to the app's resource directory
-			-- calling it Icon-osx.icns for backwards compatibility
-			runScript( "/bin/cp -v "..quoteString(iconPath).." "..options.appBundleFile.."/Contents/Resources/Icon-osx.icns" )
+			runScript( "/bin/cp -v "..quoteString(iconPath).." "..options.appBundleFile.."/Contents/Resources/Icon-macos.icns" )
 		else
-			print("WARNING: no Icon-macos.icns / Icon-osx.icns file found, using default icon")
+			print("WARNING: no Icon-macos.icns file found, using default icon")
 		end
 
 		setStatus("Cleaning up")
@@ -1147,4 +1144,3 @@ function OSXPackageForSelfDistribution( params )
 
 	return nil
 end
-

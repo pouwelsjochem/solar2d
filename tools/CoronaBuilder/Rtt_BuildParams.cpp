@@ -125,12 +125,6 @@ BuildParams::GetTargetPlatform() const
 	{
 		targetPlatform = TargetDevice::PlatformForTag( platform );
 
-		// Try old-style platform names if the platform isn't a new-style platform tag
-		if (targetPlatform == TargetDevice::kUnknownPlatform)
-		{
-			targetPlatform = TargetDevice::PlatformForString( platform );
-		}
-
 		if (targetPlatform == TargetDevice::kUnknownPlatform)
 		{
 			fprintf( stderr, "ERROR: unknown platform '%s'\n", platform );
@@ -138,9 +132,7 @@ BuildParams::GetTargetPlatform() const
 	}
 	else
 	{
-		fprintf( stderr, "WARNING: missing 'platform' setting; defaulting to 'iOS'\n" );
-
-		targetPlatform = TargetDevice::kIPhonePlatform;
+		fprintf( stderr, "ERROR: missing 'platform' setting\n" );
 	}
 
 	lua_pop( L, 2 );
@@ -178,4 +170,3 @@ BuildParams::CreatePackager( const AppPackagerFactory& factory, TargetDevice::Pl
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

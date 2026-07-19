@@ -42,7 +42,6 @@ class TargetDevice
 		Platform;
 
 		static const char* StringForPlatform( TargetDevice::Platform platform );
-		static TargetDevice::Platform PlatformForString( const char *str );
 
 	static const char *TagForPlatform( TargetDevice::Platform platform );
 	static TargetDevice::Platform PlatformForTag( const char *str );

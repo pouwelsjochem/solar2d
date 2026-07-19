@@ -247,48 +247,11 @@ TargetDevice::StringForPlatform( TargetDevice::Platform platform )
 	return result;
 }
 
-TargetDevice::Platform
-TargetDevice::PlatformForString( const char *str )
-{
-	TargetDevice::Platform result = kUnknownPlatform;
-
-	if ( str )
-	{
-		if ( 0 == Rtt_StringCompareNoCase( str, kAndroidPlatformString ) )
-		{
-			result = kAndroidPlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kLinuxPlatformString ) )
-		{
-			result = kLinuxPlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kIOSPlatformString ) )
-		{
-			result = kIPhonePlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kWin32PlatformString ) )
-		{
-			result = kWin32Platform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kOSXPlatformString ) )
-		{
-			result = kOSXPlatform;
-		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kTVOSPlatformString ) )
-		{
-			result = kTVOSPlatform;
-		}
-	}
-
-	return result;
-}
-
 static const char kAndroidPlatformTag[] = "android";
 static const char kIOSPlatformTag[] = "ios";
 static const char kLinuxPlatformTag[] = "linux";
 static const char kWin32PlatformTag[] = "win32";
-static const char kOSXPlatformTag1[] = "osx";
-static const char kOSXPlatformTag2[] = "macos";
+static const char kOSXPlatformTag[] = "macos";
 static const char kTVOSPlatformTag[] = "tvos";
 static const char kNXSPlatformTag[] = "nx64";
 
@@ -312,7 +275,7 @@ TargetDevice::TagForPlatform( TargetDevice::Platform platform )
 			result = kWin32PlatformTag;
 			break;
 		case kOSXPlatform:
-			result = kOSXPlatformTag2;
+			result = kOSXPlatformTag;
 			break;
 		case kTVOSPlatform:
 			result = kTVOSPlatformTag;
@@ -350,8 +313,7 @@ TargetDevice::PlatformForTag( const char *str )
 		{
 			result = kWin32Platform;
 		}
-		else if ( 0 == Rtt_StringCompareNoCase( str, kOSXPlatformTag1 ) ||
-				  0 == Rtt_StringCompareNoCase( str, kOSXPlatformTag2 ) )
+		else if ( 0 == Rtt_StringCompareNoCase( str, kOSXPlatformTag ) )
 		{
 			result = kOSXPlatform;
 		}

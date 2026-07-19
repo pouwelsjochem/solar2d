@@ -381,10 +381,6 @@ if buildProperties then
 	buildSettings = buildProperties.buildSettings
 end
 if "table" == type(buildSettings) then
-	-- Fetch the old "androidPermissions" table first for backward compatibility.
-	-- Permissions set within the "android" table will be read later.
-	fetchUsesPermissionsFrom(buildSettings.androidPermissions)
-
 	-- Fetch settings within the Android table.
 	if "table" == type(buildSettings.android) then
 		-- Fetch the version code.
@@ -433,13 +429,7 @@ if "table" == type(buildSettings) then
 		end
 
 		-- Fetch Facebook App ID if included.
-		-- Note: We also support this field with a capitol 'F' and 'D' in case it was copied from iOS plist field.
-		stringValue = ""
-		if buildSettings.android.facebookAppId then
-			stringValue = buildSettings.android.facebookAppId
-		elseif buildSettings.android.FacebookAppID then
-			stringValue = buildSettings.android.FacebookAppID
-		end
+		stringValue = buildSettings.android.facebookAppId
 		if ("string" == type( stringValue )) and (string.len( stringValue ) > 0) then
 			facebookAppId = stringValue
 		elseif "number" == type( stringValue ) then

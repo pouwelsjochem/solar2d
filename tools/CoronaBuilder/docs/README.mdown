@@ -81,7 +81,7 @@ Here's an example for macOS (`fishies.macos.lua`):
 
 	local params =
 	{
-	    platform    = 'osx',
+	    platform    = 'macos',
 	    appName     = 'Fishies',
 	    appVersion  = '1.0',
 	    dstPath     = '/Users/JohnSmith/Desktop',

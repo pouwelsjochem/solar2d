@@ -253,7 +253,7 @@ class PlatformAppPackager
 		 * Uses BuilderPluginDownloader.lua + CoronaBuilderPluginCollector — the same infrastructure iOS/tvOS builds use.
 		 * All plugin files are extracted flat into destinationDirectoryPath (lua_51/ is merged to root automatically).
 		 * @param params Pointer to the build's package parameters. Cannot be null.
-		 * @param platform Plugin platform string, e.g. "win32" or "osx".
+		 * @param platform Plugin platform string, e.g. "win32" or "macos".
 		 * @param destinationDirectoryPath Directory where plugin files will be extracted. Created if it does not exist.
 		 * @return Returns true on success (including when the project has no plugins to download).
 		 *         Returns false on error; params->GetBuildMessage() will contain a reason.

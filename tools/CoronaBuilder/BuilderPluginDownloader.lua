@@ -312,10 +312,6 @@ function DownloadPluginsMain(args, user, buildYear, buildRevision)
 		return 1
 	end
 	platform = platform:lower()
-	if platform == 'iphone' then
-		platform = 'ios'
-		print("NOTICE: please, use modern 'ios' platform instead legacy 'iphone'.")
-	end
 
 
 	local buildSettingsFile = args[3]
@@ -433,7 +429,7 @@ function DownloadPluginsMain(args, user, buildYear, buildRevision)
 			config:write(simConfig)
 		end
 		config:close()
-	elseif platform == 'win32' or platform == 'osx' or platform == 'macos' then
+	elseif platform == 'win32' or platform == 'macos' then
 
 		local destDir = args[4]
 		if not destDir then

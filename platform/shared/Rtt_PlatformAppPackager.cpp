@@ -1360,7 +1360,7 @@ PlatformAppPackager::DownloadPluginsHeadless(
 	// Call DownloadPluginsMain(args, user, buildYear, buildRevision).
 	// args table layout (1-indexed in Lua):
 	//   [1] = "download"            (subcommand)
-	//   [2] = platform              ("win32" or "osx")
+	//   [2] = platform              ("win32" or "macos")
 	//   [3] = buildSettingsPath     (path to build.settings)
 	//   [4] = destinationPath       (where plugin files are extracted)
 	lua_getglobal( L, "DownloadPluginsMain" );
@@ -1472,7 +1472,7 @@ BuildSettingsKeyForPlatform( TargetDevice::Platform platform )
 	switch ( platform )
 	{
 		case TargetDevice::kIPhonePlatform:
-			result = "iphone";
+			result = "ios";
 			break;
 		case TargetDevice::kAndroidPlatform:
 			result = "android";

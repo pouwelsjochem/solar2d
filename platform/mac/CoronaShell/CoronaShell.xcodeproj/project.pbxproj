@@ -11,7 +11,7 @@
 		C22225351B4B28C300D84E64 /* CoronaCards.framework in Copy CoronaCards framework */ = {isa = PBXBuildFile; fileRef = C22039371B4B21E600942B73 /* CoronaCards.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C22607581B4B3CEB00172FB1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2D927321ACA098800B7F9AC /* MainMenu.xib */; };
 		C24B5CE81C57EF9500A8E813 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C24B5CE71C57EF9500A8E813 /* NSString+Extensions.m */; };
-		C2A3776D1B33C69F00BB5B88 /* Icon-osx.icns in Resources */ = {isa = PBXBuildFile; fileRef = C2A3776C1B33C69F00BB5B88 /* Icon-osx.icns */; };
+		C2A3776D1B33C69F00BB5B88 /* Icon-macos.icns in Resources */ = {isa = PBXBuildFile; fileRef = C2A3776C1B33C69F00BB5B88 /* Icon-macos.icns */; };
 		C2D9272D1ACA098800B7F9AC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C2D9272C1ACA098800B7F9AC /* AppDelegate.m */; };
 		C2D9272F1ACA098800B7F9AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C2D9272E1ACA098800B7F9AC /* main.m */; };
 		C2D927311ACA098800B7F9AC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2D927301ACA098800B7F9AC /* Images.xcassets */; };
@@ -36,7 +36,7 @@
 		C22039371B4B21E600942B73 /* CoronaCards.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoronaCards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C24B5CE61C57EF9500A8E813 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../../../apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C24B5CE71C57EF9500A8E813 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../../../apple/NSString+Extensions.m"; sourceTree = "<group>"; };
-		C2A3776C1B33C69F00BB5B88 /* Icon-osx.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Icon-osx.icns"; sourceTree = "<group>"; };
+		C2A3776C1B33C69F00BB5B88 /* Icon-macos.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Icon-macos.icns"; sourceTree = "<group>"; };
 		C2D927261ACA098800B7F9AC /* CoronaShell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoronaShell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D9272A1ACA098800B7F9AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C2D9272B1ACA098800B7F9AC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				C22039371B4B21E600942B73 /* CoronaCards.framework */,
-				C2A3776C1B33C69F00BB5B88 /* Icon-osx.icns */,
+				C2A3776C1B33C69F00BB5B88 /* Icon-macos.icns */,
 				C2D927521ACA1C3800B7F9AC /* CoronaShell.icns */,
 				C2D927281ACA098800B7F9AC /* CoronaShell */,
 				C2D927271ACA098800B7F9AC /* Products */,
@@ -160,7 +160,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2A3776D1B33C69F00BB5B88 /* Icon-osx.icns in Resources */,
+				C2A3776D1B33C69F00BB5B88 /* Icon-macos.icns in Resources */,
 				C2D927531ACA1C3800B7F9AC /* CoronaShell.icns in Resources */,
 				C2D927311ACA098800B7F9AC /* Images.xcassets in Resources */,
 				C22607581B4B3CEB00172FB1 /* MainMenu.xib in Resources */,

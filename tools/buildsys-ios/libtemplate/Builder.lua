@@ -426,9 +426,9 @@ local function getMinVersion( settings )
 	local result -- default is nil
 
 	if settings then
-		local iphone = settings.iphone
-		if iphone then
-			local buildSettingsPlist = iphone.plist
+		local ios = settings.ios
+		if ios then
+			local buildSettingsPlist = ios.plist
 			if buildSettingsPlist then
 				if "string" == type( buildSettingsPlist.MinimumOSVersion ) then
 					result = buildSettingsPlist.MinimumOSVersion
@@ -492,4 +492,3 @@ end
 M:initialize()
 
 return M
-

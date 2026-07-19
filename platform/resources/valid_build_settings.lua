@@ -74,8 +74,7 @@ settings =
 			compatibleWidthLimitDp = 1,
 			largestWidthLimitDp = 1,
 		},
-		facebookAppId = "",  -- Both camel case and pascal case are accepted.
-		FacebookAppID = "",
+		facebookAppId = "",
 
 		applicationChildElements = { "" },
 		manifestChildElements = { "" },
@@ -84,8 +83,6 @@ settings =
 		useGoogleServicesJson = true,
 		coronaActivityFlags = { },
 	},
-
-	androidPermissions = { "DEPRECATED" },
 
 	build = {
 		custom = "",
@@ -96,7 +93,7 @@ settings =
 
 	excludeFiles =
 	{
-		iphone = { "", },
+		ios = { "", },
 		android = { "", },
 		macos = { "", },
 		win32 = { "", },
@@ -106,7 +103,7 @@ settings =
 		all = { "" },
 	},
 
-	iphone =
+	ios =
 	{
 		onDemandResources = { },
 		iCloud = true,
