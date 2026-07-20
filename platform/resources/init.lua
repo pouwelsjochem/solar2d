@@ -13,6 +13,7 @@
 -- luacheck: globals native
 -- luacheck: globals network
 -- luacheck: globals Runtime
+-- luacheck: globals simulator
 
 local function getOrCreateTable( receiver, index )
 	local t = receiver[index]
@@ -736,6 +737,13 @@ system.getInfo = function( ... )
 	return _coronaPreservedLuaFunctions.system.getInfo( ... )
 end
 
+--------------------------------------------------------------------------------
+-- Simulator authoring controls
+--------------------------------------------------------------------------------
+
+if "simulator" == system.getInfo("environment") then
+	simulator = require("_simulator")
+end
 --------------------------------------------------------------------------------
 -- Startup Logging
 --------------------------------------------------------------------------------

@@ -28,6 +28,7 @@ namespace Rtt
 {
 
 class MacViewCallback;
+class MacGUIPlatform;
 
 // ----------------------------------------------------------------------------
 
@@ -44,6 +45,17 @@ class MacSimulator : public PlatformSimulator
 	public:
 		virtual void Initialize(
 			const char deviceConfigFile[],
+			bool roundedCorners,
+			const char resourcePath[] );
+		void Initialize(
+			const char deviceName[],
+			float deviceWidth,
+			float deviceHeight,
+			float safeAreaInsetTop,
+			float safeAreaInsetLeft,
+			float safeAreaInsetBottom,
+			float safeAreaInsetRight,
+			bool roundedCorners,
 			const char resourcePath[] );
 		virtual const char *GetPlatformName() const;
 		virtual const char *GetPlatform() const;
@@ -66,6 +78,11 @@ class MacSimulator : public PlatformSimulator
 	public:
 		virtual void WillSuspend();
 		virtual void DidResume();
+
+	private:
+		void Initialize(
+			MacGUIPlatform* platform, const Super::Config& config,
+			bool roundedCorners, const char resourcePath[] );
 
 	private:
 		NSWindow* fWindow;

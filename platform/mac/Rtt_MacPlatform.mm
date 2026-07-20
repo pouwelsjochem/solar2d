@@ -359,6 +359,10 @@ MacPlatform::MacPlatform(CoronaView *view)
 	fSandboxPath( nil ),
 	fDevice( GetAllocator(), view ),
 	fMutexCount( 0 ),
+	fSafeAreaInsetTop( Rtt_REAL_0 ),
+	fSafeAreaInsetLeft( Rtt_REAL_0 ),
+	fSafeAreaInsetBottom( Rtt_REAL_0 ),
+	fSafeAreaInsetRight( Rtt_REAL_0 ),
 	fDelegate( [[AlertDelegate alloc] init] ),
 	fExitCallback( NULL ),
 	fAssertionID(kIOPMNullAssertionID)
@@ -1641,7 +1645,18 @@ MacPlatform::PushNativeProperty( lua_State *L, const char *key ) const
 
 void MacPlatform::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {
-	top = left = bottom = right = 0;
+	top = fSafeAreaInsetTop;
+	left = fSafeAreaInsetLeft;
+	bottom = fSafeAreaInsetBottom;
+	right = fSafeAreaInsetRight;
+}
+
+void MacPlatform::SetSafeAreaInsetsPixels(Rtt_Real top, Rtt_Real left, Rtt_Real bottom, Rtt_Real right)
+{
+	fSafeAreaInsetTop = top;
+	fSafeAreaInsetLeft = left;
+	fSafeAreaInsetBottom = bottom;
+	fSafeAreaInsetRight = right;
 }
 
 const char* MacPlatform::GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const
@@ -1686,26 +1701,302 @@ MacGUIPlatform::GetDevice() const
 	return const_cast< MacDevice& >( fMacDevice );
 }
 
-bool
-MacGUIPlatform::RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const
+#ifdef Rtt_AUTHORING_SIMULATOR
+
+const MSimulatorHost*
+MacGUIPlatform::GetSimulatorHost() const
 {
-	// Validate.
-	if ( !actionName )
+	return this;
+}
+
+static void
+ReadSimulatorDevice( NSDictionary *deviceInfo, MSimulatorHost::Device& result )
+{
+	NSString *identifier = [deviceInfo objectForKey:@"id"];
+	NSString *name = [deviceInfo objectForKey:@"name"];
+	NSString *category = [deviceInfo objectForKey:@"category"];
+	NSNumber *roundedCorners = [deviceInfo objectForKey:@"roundedCorners"];
+	NSDictionary *safeAreaInsets = [deviceInfo objectForKey:@"safeAreaInsets"];
+
+	result.id = identifier ? [identifier UTF8String] : "";
+	result.name = name ? [name UTF8String] : "";
+	result.category = category ? [category UTF8String] : "";
+	result.width = (int)[[deviceInfo objectForKey:@"width"] integerValue];
+	result.height = (int)[[deviceInfo objectForKey:@"height"] integerValue];
+	result.isCustom = [[deviceInfo objectForKey:@"isCustom"] boolValue];
+	result.isProject = [[deviceInfo objectForKey:@"isProject"] boolValue];
+	result.hasRoundedCorners = roundedCorners != nil;
+	result.roundedCorners = [roundedCorners boolValue];
+	result.isCurrent = [[deviceInfo objectForKey:@"isCurrent"] boolValue];
+	result.safeAreaInsets.top = (int)[[safeAreaInsets objectForKey:@"top"] integerValue];
+	result.safeAreaInsets.left = (int)[[safeAreaInsets objectForKey:@"left"] integerValue];
+	result.safeAreaInsets.bottom = (int)[[safeAreaInsets objectForKey:@"bottom"] integerValue];
+	result.safeAreaInsets.right = (int)[[safeAreaInsets objectForKey:@"right"] integerValue];
+}
+
+bool
+MacGUIPlatform::GetCurrentDevice( MSimulatorHost::Device& result ) const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	NSDictionary *deviceInfo = [appDelegate simulatorDeviceInfo];
+	if ( ! deviceInfo )
 	{
 		return false;
 	}
-	
-	// Execute the requested operation.
-	if ( Rtt_StringCompare( actionName, "exitApplication" ) == 0 )
-	{
-		AppDelegate* appdelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-		CoronaLog("native.requestExit() called - application will close");
-		[appdelegate performSelectorOnMainThread:@selector(close:) withObject:nil waitUntilDone:NO];
 
+	ReadSimulatorDevice( deviceInfo, result );
+	return true;
+}
+
+bool
+MacGUIPlatform::GetState( MSimulatorHost::State& result ) const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	NSDictionary *state = [appDelegate simulatorStateInfo];
+	NSDictionary *deviceInfo = [state objectForKey:@"device"];
+	NSDictionary *window = [state objectForKey:@"window"];
+	if ( ! state || ! deviceInfo || ! window )
+	{
+		return false;
+	}
+
+	ReadSimulatorDevice( deviceInfo, result.device );
+	result.isSuspended = [[state objectForKey:@"isSuspended"] boolValue];
+	result.safeAreaGuidesVisible = [[state objectForKey:@"safeAreaGuidesVisible"] boolValue];
+	result.isRelaunchPending = [[state objectForKey:@"isRelaunchPending"] boolValue];
+	result.relaunchCount = [[state objectForKey:@"relaunchCount"] longValue];
+	result.window.x = [[window objectForKey:@"x"] doubleValue];
+	result.window.y = [[window objectForKey:@"y"] doubleValue];
+	result.window.width = [[window objectForKey:@"width"] doubleValue];
+	result.window.height = [[window objectForKey:@"height"] doubleValue];
+	result.window.backingScale = [[window objectForKey:@"backingScale"] doubleValue];
+	result.window.isFullscreen = [[window objectForKey:@"isFullscreen"] boolValue];
+	return true;
+}
+
+bool
+MacGUIPlatform::GetDevices( std::vector< MSimulatorHost::Device >& result ) const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	NSArray *devices = [appDelegate simulatorDevices];
+	if ( ! devices )
+	{
+		return false;
+	}
+
+	result.clear();
+	result.reserve( [devices count] );
+	for ( NSDictionary *deviceInfo in devices )
+	{
+		MSimulatorHost::Device device;
+		ReadSimulatorDevice( deviceInfo, device );
+		result.push_back( device );
+	}
+	return true;
+}
+
+MSimulatorHost::ConfigureResult
+MacGUIPlatform::ConfigureAndRelaunch( const MSimulatorHost::Configuration& configuration, bool onlyIfNeeded ) const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	NSMutableDictionary *options = [NSMutableDictionary dictionaryWithCapacity:8];
+
+	if ( MSimulatorHost::Configuration::kNamedDevice == configuration.deviceSelection )
+	{
+		[options setObject:[NSString stringWithExternalString:configuration.deviceId.c_str()] forKey:@"deviceId"];
+	}
+	else if ( MSimulatorHost::Configuration::kCustomDevice == configuration.deviceSelection )
+	{
+		[options setObject:[NSNumber numberWithInt:configuration.width] forKey:@"deviceWidth"];
+		[options setObject:[NSNumber numberWithInt:configuration.height] forKey:@"deviceHeight"];
+		[options setObject:[NSNumber numberWithInt:configuration.safeAreaInsets.top] forKey:@"safeAreaInsetTop"];
+		[options setObject:[NSNumber numberWithInt:configuration.safeAreaInsets.left] forKey:@"safeAreaInsetLeft"];
+		[options setObject:[NSNumber numberWithInt:configuration.safeAreaInsets.bottom] forKey:@"safeAreaInsetBottom"];
+		[options setObject:[NSNumber numberWithInt:configuration.safeAreaInsets.right] forKey:@"safeAreaInsetRight"];
+	}
+	if ( configuration.hasRoundedCorners )
+	{
+		[options setObject:[NSNumber numberWithBool:configuration.roundedCorners] forKey:@"roundedCorners"];
+	}
+	[options setObject:[NSNumber numberWithBool:configuration.temporary] forKey:@"temporary"];
+
+	BOOL didScheduleRelaunch = NO;
+	if ( ! [appDelegate configureSimulator:options relaunchIfNeeded:onlyIfNeeded didScheduleRelaunch:&didScheduleRelaunch] )
+	{
+		return MSimulatorHost::kConfigureFailed;
+	}
+	return didScheduleRelaunch ? MSimulatorHost::kConfigureApplied : MSimulatorHost::kConfigureAlreadyActive;
+}
+
+bool
+MacGUIPlatform::Relaunch() const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	return [appDelegate relaunchSimulator];
+}
+
+bool
+MacGUIPlatform::SetSafeAreaGuidesVisible( bool visible ) const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	return [appDelegate setSimulatorSafeAreaGuidesVisible:visible];
+}
+
+bool
+MacGUIPlatform::SetFullscreen( bool fullscreen ) const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	return [appDelegate setSimulatorFullscreen:fullscreen];
+}
+
+static NSString*
+SimulatorInputTypeName( MSimulatorHost::Input::Type type )
+{
+	switch ( type )
+	{
+		case MSimulatorHost::Input::kBackInput: return @"back";
+		case MSimulatorHost::Input::kKeyInput: return @"key";
+		case MSimulatorHost::Input::kTouchInput: return @"touch";
+		case MSimulatorHost::Input::kMouseInput: return @"mouse";
+	}
+	return nil;
+}
+
+static NSString*
+SimulatorInputPhaseName( MSimulatorHost::Input::Phase phase )
+{
+	switch ( phase )
+	{
+		case MSimulatorHost::Input::kDownPhase: return @"down";
+		case MSimulatorHost::Input::kUpPhase: return @"up";
+		case MSimulatorHost::Input::kPressedPhase: return @"pressed";
+		case MSimulatorHost::Input::kBeganPhase: return @"began";
+		case MSimulatorHost::Input::kMovedPhase: return @"moved";
+		case MSimulatorHost::Input::kEndedPhase: return @"ended";
+		case MSimulatorHost::Input::kCancelledPhase: return @"cancelled";
+		case MSimulatorHost::Input::kDragPhase: return @"drag";
+		case MSimulatorHost::Input::kMovePhase: return @"move";
+		case MSimulatorHost::Input::kExitPhase: return @"exit";
+		case MSimulatorHost::Input::kScrollPhase: return @"scroll";
+		case MSimulatorHost::Input::kNoPhase: break;
+	}
+	return nil;
+}
+
+bool
+MacGUIPlatform::SendInput( const MSimulatorHost::Input& value ) const
+{
+	NSMutableDictionary *input = [NSMutableDictionary dictionaryWithCapacity:20];
+	[input setObject:SimulatorInputTypeName( value.type ) forKey:@"type"];
+
+	NSString *phase = SimulatorInputPhaseName( value.phase );
+	if ( phase )
+	{
+		[input setObject:phase forKey:@"phase"];
+	}
+	if ( MSimulatorHost::Input::kKeyInput == value.type )
+	{
+		[input setObject:[NSString stringWithExternalString:value.keyName.c_str()] forKey:@"keyName"];
+		if ( value.hasQwertyKeyName )
+		{
+			[input setObject:[NSString stringWithExternalString:value.qwertyKeyName.c_str()] forKey:@"qwertyKeyName"];
+		}
+		if ( value.hasNativeKeyCode )
+		{
+			[input setObject:[NSNumber numberWithInt:value.nativeKeyCode] forKey:@"nativeKeyCode"];
+		}
+	}
+	else if ( MSimulatorHost::Input::kTouchInput == value.type )
+	{
+		[input setObject:[NSNumber numberWithDouble:value.x] forKey:@"x"];
+		[input setObject:[NSNumber numberWithDouble:value.y] forKey:@"y"];
+		[input setObject:[NSNumber numberWithDouble:value.xStart] forKey:@"xStart"];
+		[input setObject:[NSNumber numberWithDouble:value.yStart] forKey:@"yStart"];
+	}
+	else if ( MSimulatorHost::Input::kMouseInput == value.type )
+	{
+		[input setObject:[NSNumber numberWithDouble:value.x] forKey:@"x"];
+		[input setObject:[NSNumber numberWithDouble:value.y] forKey:@"y"];
+		[input setObject:[NSNumber numberWithDouble:value.scrollX] forKey:@"scrollX"];
+		[input setObject:[NSNumber numberWithDouble:value.scrollY] forKey:@"scrollY"];
+		[input setObject:[NSNumber numberWithInt:value.clickCount] forKey:@"clickCount"];
+	}
+
+	[input setObject:[NSNumber numberWithBool:value.isShiftDown] forKey:@"isShiftDown"];
+	[input setObject:[NSNumber numberWithBool:value.isAltDown] forKey:@"isAltDown"];
+	[input setObject:[NSNumber numberWithBool:value.isCtrlDown] forKey:@"isCtrlDown"];
+	[input setObject:[NSNumber numberWithBool:value.isCommandDown] forKey:@"isCommandDown"];
+	[input setObject:[NSNumber numberWithBool:value.isPrimaryButtonDown] forKey:@"isPrimaryButtonDown"];
+	[input setObject:[NSNumber numberWithBool:value.isSecondaryButtonDown] forKey:@"isSecondaryButtonDown"];
+	[input setObject:[NSNumber numberWithBool:value.isMiddleButtonDown] forKey:@"isMiddleButtonDown"];
+
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	return [appDelegate dispatchSimulatorInput:input];
+}
+
+bool
+MacGUIPlatform::Simulate( const MSimulatorHost::Event& value ) const
+{
+	NSMutableDictionary *event = [NSMutableDictionary dictionaryWithCapacity:16];
+	switch ( value.type )
+	{
+		case MSimulatorHost::Event::kMemoryWarningEvent:
+			[event setObject:@"memoryWarning" forKey:@"type"];
+			break;
+		case MSimulatorHost::Event::kBackgroundEvent:
+			[event setObject:@"background" forKey:@"type"];
+			[event setObject:[NSNumber numberWithDouble:value.duration] forKey:@"duration"];
+			break;
+		case MSimulatorHost::Event::kAccelerometerEvent:
+			[event setObject:@"accelerometer" forKey:@"type"];
+			[event setObject:[NSNumber numberWithDouble:value.deltaTime] forKey:@"deltaTime"];
+			[event setObject:[NSNumber numberWithBool:value.isShake] forKey:@"isShake"];
+			[event setObject:[NSNumber numberWithDouble:value.xGravity] forKey:@"xGravity"];
+			[event setObject:[NSNumber numberWithDouble:value.yGravity] forKey:@"yGravity"];
+			[event setObject:[NSNumber numberWithDouble:value.zGravity] forKey:@"zGravity"];
+			[event setObject:[NSNumber numberWithDouble:value.xInstant] forKey:@"xInstant"];
+			[event setObject:[NSNumber numberWithDouble:value.yInstant] forKey:@"yInstant"];
+			[event setObject:[NSNumber numberWithDouble:value.zInstant] forKey:@"zInstant"];
+			[event setObject:[NSNumber numberWithDouble:value.xRaw] forKey:@"xRaw"];
+			[event setObject:[NSNumber numberWithDouble:value.yRaw] forKey:@"yRaw"];
+			[event setObject:[NSNumber numberWithDouble:value.zRaw] forKey:@"zRaw"];
+			break;
+		case MSimulatorHost::Event::kGyroscopeEvent:
+			[event setObject:@"gyroscope" forKey:@"type"];
+			[event setObject:[NSNumber numberWithDouble:value.deltaTime] forKey:@"deltaTime"];
+			[event setObject:[NSNumber numberWithDouble:value.xRotation] forKey:@"xRotation"];
+			[event setObject:[NSNumber numberWithDouble:value.yRotation] forKey:@"yRotation"];
+			[event setObject:[NSNumber numberWithDouble:value.zRotation] forKey:@"zRotation"];
+			break;
+	}
+
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	return [appDelegate simulateSimulatorEvent:event];
+}
+
+bool
+MacGUIPlatform::Quit( int exitCode ) const
+{
+	// Automation needs an actual process exit status. This is the same direct
+	// behavior used by MacExitCallback after persisting Simulator preferences.
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	exit( exitCode );
+	return true;
+}
+
+#endif // Rtt_AUTHORING_SIMULATOR
+
+bool
+MacGUIPlatform::RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const
+{
+	if ( actionName && Rtt_StringCompare( actionName, "exitApplication" ) == 0 )
+	{
+		AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+		CoronaLog("native.requestExit() called - application will close");
+		[appDelegate performSelectorOnMainThread:@selector(close:) withObject:nil waitUntilDone:NO];
 		return true;
 	}
-	
-	// The given action is not exclusive to the Corona Simulator. Let the base code handle it.
+
 	return Super::RequestSystem( L, actionName, optionsIndex );
 }
 

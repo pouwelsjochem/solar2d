@@ -15,6 +15,7 @@
 #include "Rtt_String.h"
 #ifdef Rtt_AUTHORING_SIMULATOR
 #include "CoronaLua.h"
+#include <math.h>
 #endif
 #include <string.h>
 #include <stdlib.h>
@@ -45,13 +46,196 @@ class StaticTargetDeviceFinalizer
 static StaticTargetDeviceFinalizer sTargetDeviceFinalizer;
 
 
-const char *kDefaultSkinLabel = "min_supported_2";
+const char *kDefaultSkinLabel = "720p";
     
 TargetDevice::SkinSpec **TargetDevice::fSkins = NULL;
 int TargetDevice::fSkinCount = 0;
 TargetDevice::Skin TargetDevice::fDefaultSkinID = TargetDevice::kUnknownSkin;
 
 #ifdef Rtt_AUTHORING_SIMULATOR
+TargetDevice::DeviceDescriptor::DeviceDescriptor()
+:	width( 0 ),
+	height( 0 ),
+	safeAreaInsetTop( 0 ),
+	safeAreaInsetLeft( 0 ),
+	safeAreaInsetBottom( 0 ),
+	safeAreaInsetRight( 0 ),
+	isProjectDevice( false )
+{
+}
+
+static int
+AbsoluteLuaIndex( lua_State *L, int index )
+{
+	return index > 0 || index <= LUA_REGISTRYINDEX ? index : lua_gettop( L ) + index + 1;
+}
+
+static bool
+ReadDescriptorString(
+	lua_State *L, int tableIndex, const char *key, const char *defaultValue,
+	bool allowEmpty, std::string& result, std::string& errorMessage )
+{
+	tableIndex = AbsoluteLuaIndex( L, tableIndex );
+	lua_getfield( L, tableIndex, key );
+	if ( lua_isnil( L, -1 ) )
+	{
+		result = defaultValue ? defaultValue : "";
+		lua_pop( L, 1 );
+		return true;
+	}
+
+	if ( lua_type( L, -1 ) != LUA_TSTRING )
+	{
+		errorMessage = std::string( "'" ) + key + "' must be a string";
+		lua_pop( L, 1 );
+		return false;
+	}
+
+	size_t length = 0;
+	const char *value = lua_tolstring( L, -1, &length );
+	if ( ( !allowEmpty && 0 == length ) || strlen( value ) != length )
+	{
+		errorMessage = std::string( "'" ) + key + "' must be a non-empty string without null bytes";
+		lua_pop( L, 1 );
+		return false;
+	}
+
+	result.assign( value, length );
+	lua_pop( L, 1 );
+	return true;
+}
+
+static bool
+ReadDescriptorInteger(
+	lua_State *L, int tableIndex, const char *key, bool isRequired,
+	int defaultValue, int minimum, int maximum, int& result, std::string& errorMessage )
+{
+	tableIndex = AbsoluteLuaIndex( L, tableIndex );
+	lua_getfield( L, tableIndex, key );
+	if ( lua_isnil( L, -1 ) && !isRequired )
+	{
+		result = defaultValue;
+		lua_pop( L, 1 );
+		return true;
+	}
+
+	lua_Number value = lua_type( L, -1 ) == LUA_TNUMBER ? lua_tonumber( L, -1 ) : 0.5;
+	if ( value != value || floor( value ) != value || value < minimum || value > maximum )
+	{
+		char message[160];
+		snprintf(
+			message, sizeof( message ), "'%s' must be an integer between %d and %d",
+			key, minimum, maximum );
+		errorMessage = message;
+		lua_pop( L, 1 );
+		return false;
+	}
+
+	result = (int)value;
+	lua_pop( L, 1 );
+	return true;
+}
+
+bool
+TargetDevice::LoadDeviceDescriptor(
+	const char *path, DeviceDescriptor& result, std::string& errorMessage )
+{
+	lua_State *L = CoronaLuaNew( kCoronaLuaFlagNone );
+	if ( !L )
+	{
+		errorMessage = "could not create a Lua state";
+		return false;
+	}
+
+	int status = CoronaLuaDoFile( L, path, 0, false );
+	if ( 0 != status )
+	{
+		errorMessage = "contains invalid Lua";
+		CoronaLuaDelete( L );
+		return false;
+	}
+
+	DeviceDescriptor descriptor;
+	descriptor.isProjectDevice = lua_gettop( L ) > 0 && lua_istable( L, -1 );
+	if ( !descriptor.isProjectDevice )
+	{
+		lua_getglobal( L, "simulator" );
+	}
+	if ( !lua_istable( L, -1 ) )
+	{
+		errorMessage = "must return a table or assign one to the global 'simulator'";
+		CoronaLuaDelete( L );
+		return false;
+	}
+
+	int descriptorIndex = AbsoluteLuaIndex( L, -1 );
+	const char *defaultCategory = descriptor.isProjectDevice ? "Project" : "Untitled category";
+	bool isValid =
+		ReadDescriptorString(
+			L, descriptorIndex, "category", defaultCategory, true,
+			descriptor.category, errorMessage ) &&
+		ReadDescriptorString(
+			L, descriptorIndex, "deviceName", "Untitled Skin", false,
+			descriptor.name, errorMessage ) &&
+		ReadDescriptorString(
+			L, descriptorIndex, "deviceId", NULL, false,
+			descriptor.identifier, errorMessage ) &&
+		ReadDescriptorInteger(
+			L, descriptorIndex, "deviceWidth", true, 0, 1, 16384,
+			descriptor.width, errorMessage ) &&
+		ReadDescriptorInteger(
+			L, descriptorIndex, "deviceHeight", true, 0, 1, 16384,
+			descriptor.height, errorMessage );
+
+	if ( isValid )
+	{
+		lua_getfield( L, descriptorIndex, "safeAreaInsets" );
+		if ( lua_isnil( L, -1 ) )
+		{
+			lua_pop( L, 1 );
+		}
+		else if ( !lua_istable( L, -1 ) )
+		{
+			errorMessage = "'safeAreaInsets' must be a table";
+			lua_pop( L, 1 );
+			isValid = false;
+		}
+		else
+		{
+			int insetsIndex = AbsoluteLuaIndex( L, -1 );
+			isValid =
+				ReadDescriptorInteger(
+					L, insetsIndex, "top", false, 0, 0, 16384,
+					descriptor.safeAreaInsetTop, errorMessage ) &&
+				ReadDescriptorInteger(
+					L, insetsIndex, "left", false, 0, 0, 16384,
+					descriptor.safeAreaInsetLeft, errorMessage ) &&
+				ReadDescriptorInteger(
+					L, insetsIndex, "bottom", false, 0, 0, 16384,
+					descriptor.safeAreaInsetBottom, errorMessage ) &&
+				ReadDescriptorInteger(
+					L, insetsIndex, "right", false, 0, 0, 16384,
+					descriptor.safeAreaInsetRight, errorMessage );
+			lua_pop( L, 1 );
+		}
+	}
+
+	if ( isValid &&
+		( descriptor.safeAreaInsetTop + descriptor.safeAreaInsetBottom > descriptor.height ||
+		  descriptor.safeAreaInsetLeft + descriptor.safeAreaInsetRight > descriptor.width ) )
+	{
+		errorMessage = "'safeAreaInsets' cannot exceed the device dimensions";
+		isValid = false;
+	}
+
+	if ( isValid )
+	{
+		result = descriptor;
+	}
+	CoronaLuaDelete( L );
+	return isValid;
+}
+
 static int compar_SkinSpec(const void *item1, const void *item2)
 {
     TargetDevice::SkinSpec *skin1 = *(TargetDevice::SkinSpec **) item1;
@@ -108,46 +292,40 @@ TargetDevice::Initialize( char **skinFiles, const int skinFileCount )
     fSkinCount = 0;
     for (int i = 0; i < skinFileCount; i++ )
     {
-        int status = 0;
-        char *skinName = NULL;
-        char *skinCategory = NULL;
-        int skinWidth = 0;
-        int skinHeight = 0;
-        lua_State *L = CoronaLuaNew( kCoronaLuaFlagNone );
-        status = CoronaLuaDoFile( L, skinFiles[i], 0, false );
-        
-        if ( 0 == status )
+        DeviceDescriptor descriptor;
+        std::string errorMessage;
+        if ( !LoadDeviceDescriptor( skinFiles[i], descriptor, errorMessage ) )
         {
-            lua_getglobal( L, "simulator" );
-            
-            if ( lua_istable( L, -1 ) )
-            {
-                lua_getfield( L, -1, "category" );
-                skinCategory = (char *) luaL_optstring( L, -1, "Untitled category" );
-                lua_pop( L, 1 );
-
-                lua_getfield( L, -1, "deviceName" );
-                skinName = (char *) luaL_optstring( L, -1, "Untitled Skin" );
-                lua_pop( L, 1 );
-
-                lua_getfield( L, -1, "deviceWidth" );
-                skinWidth = luaL_optint( L, -1, 0 );
-                lua_pop( L, 1 );
-
-                lua_getfield( L, -1, "deviceHeight" );
-                skinHeight = luaL_optint( L, -1, 0 );
-                lua_pop( L, 1 );
-            }
-
-            fSkins[fSkinCount] = new SkinSpec(skinName, skinFiles[i], skinCategory, skinWidth, skinHeight);
-            ++fSkinCount;
-        }
-        else
-        {
-            CoronaLuaError(L, "invalid Lua in skin file '%s'", skinFiles[i]);
+            Rtt_LogException(
+                "ERROR: Device descriptor '%s' %s",
+                skinFiles[i], errorMessage.c_str() );
+            continue;
         }
 
-        CoronaLuaDelete( L );
+        TargetDevice::SkinSpec *skinSpec = new SkinSpec(
+            descriptor.name.c_str(), skinFiles[i], descriptor.category.c_str(),
+            descriptor.width, descriptor.height,
+            descriptor.safeAreaInsetTop, descriptor.safeAreaInsetLeft,
+            descriptor.safeAreaInsetBottom, descriptor.safeAreaInsetRight );
+        if ( descriptor.isProjectDevice )
+        {
+            std::string identifier = "project:";
+            identifier.append(
+                descriptor.identifier.empty() ? skinSpec->GetLabel() : descriptor.identifier );
+            skinSpec->SetLabel( identifier.c_str() );
+        }
+
+        if ( FindSkinForLabel( skinSpec->GetLabel() ) != kUnknownSkin )
+        {
+            Rtt_LogException(
+                "ERROR: Device descriptor '%s' has duplicate device identifier '%s'",
+                skinFiles[i], skinSpec->GetLabel() );
+            delete skinSpec;
+            continue;
+        }
+
+        fSkins[fSkinCount] = skinSpec;
+        ++fSkinCount;
     }
 
     qsort(fSkins, fSkinCount, sizeof(TargetDevice::SkinSpec *), compar_SkinSpec);
@@ -447,6 +625,30 @@ TargetDevice::HeightForSkin( int skinID )
 
     return fSkins[skinID]->GetHeight();
 }
+
+const int
+TargetDevice::SafeAreaInsetTopForSkin( int skinID )
+{
+	return skinID >= 0 && skinID < fSkinCount ? fSkins[skinID]->GetSafeAreaInsetTop() : 0;
+}
+
+const int
+TargetDevice::SafeAreaInsetLeftForSkin( int skinID )
+{
+	return skinID >= 0 && skinID < fSkinCount ? fSkins[skinID]->GetSafeAreaInsetLeft() : 0;
+}
+
+const int
+TargetDevice::SafeAreaInsetBottomForSkin( int skinID )
+{
+	return skinID >= 0 && skinID < fSkinCount ? fSkins[skinID]->GetSafeAreaInsetBottom() : 0;
+}
+
+const int
+TargetDevice::SafeAreaInsetRightForSkin( int skinID )
+{
+	return skinID >= 0 && skinID < fSkinCount ? fSkins[skinID]->GetSafeAreaInsetRight() : 0;
+}
     
 const char *
 TargetDevice::CategoryForSkin( int skinID )
@@ -460,7 +662,7 @@ TargetDevice::CategoryForSkin( int skinID )
 }
 
 TargetDevice::Skin
-TargetDevice::SkinForLabel( const char* skinLabel )
+TargetDevice::FindSkinForLabel( const char* skinLabel )
 {
     int result = kUnknownSkin;
 
@@ -480,6 +682,14 @@ TargetDevice::SkinForLabel( const char* skinLabel )
 		}
 	}
 
+	return (TargetDevice::Skin) result;
+}
+
+TargetDevice::Skin
+TargetDevice::SkinForLabel( const char* skinLabel )
+{
+	TargetDevice::Skin result = FindSkinForLabel( skinLabel );
+
     if (result == kUnknownSkin)
     {
         Rtt_TRACE_SIM(("Warning: unknown skin label '%s'\n", skinLabel));
@@ -487,7 +697,7 @@ TargetDevice::SkinForLabel( const char* skinLabel )
         result = fDefaultSkinID;
     }
     
-	return (TargetDevice::Skin) result;
+	return result;
 }
 
 const char *

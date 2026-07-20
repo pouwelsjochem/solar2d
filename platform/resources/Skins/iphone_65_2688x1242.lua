@@ -13,4 +13,11 @@ simulator =
 	deviceWidth = 2688,
 	deviceHeight = 1242,
 	deviceName = "6.5\" iPhone X Max",
+	safeAreaInsets =
+	{
+		top = 0,
+		left = 132,
+		bottom = 63,
+		right = 132,
+	},
 }

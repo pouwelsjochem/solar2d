@@ -24,6 +24,7 @@
 
 @class DialogController;
 @class GLView;
+@class NSDictionary;
 @class AndroidAppBuildController;
 @class IOSAppBuildController;
 @class OSXAppBuildController;
@@ -124,6 +125,11 @@ namespace Rtt
 
 	NSTask *consoleTask;
 	long fRelaunchCount;
+	BOOL fSimulatorRelaunchPending;
+	BOOL fLaunchSimulatorConfigurationHandled;
+	Rtt::Runtime *fBackgroundedRuntime;
+	NSDictionary *fActiveSimulatorDeviceInfo;
+	NSDictionary *fTemporarySimulatorDeviceInfo;
 }
 
 @property (nonatomic, readonly, getter=simulator) Rtt::MacSimulator *fSimulator;
@@ -175,6 +181,16 @@ namespace Rtt
 - (BOOL) setClearProjectSandboxTitle;
 
 -(BOOL)setSkinForTitle:(NSString*)title;
+-(BOOL)configureSimulator:(NSDictionary*)configuration relaunchIfNeeded:(BOOL)relaunchIfNeeded
+	didScheduleRelaunch:(BOOL*)didScheduleRelaunch;
+-(BOOL)relaunchSimulator;
+-(BOOL)setSimulatorSafeAreaGuidesVisible:(BOOL)visible;
+-(BOOL)setSimulatorFullscreen:(BOOL)fullscreen;
+-(NSDictionary*)simulatorDeviceInfo;
+-(NSDictionary*)simulatorStateInfo;
+-(NSArray*)simulatorDevices;
+-(BOOL)dispatchSimulatorInput:(NSDictionary*)input;
+-(BOOL)simulateSimulatorEvent:(NSDictionary*)event;
 
 -(IBAction)launchSimulator:(id)sender;
 -(IBAction)toggleSuspendResume:(id)sender;

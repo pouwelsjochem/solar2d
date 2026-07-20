@@ -336,6 +336,8 @@ namespace Rtt
 
 		const char kInfo[] = "info";
 
+		const char kIsoSection[] = "isoSection";
+
 		const char kInsert[] = "insert";
 
 		const char kLeftBracket[] = "[";

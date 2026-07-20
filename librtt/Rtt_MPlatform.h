@@ -33,6 +33,7 @@ class LuaResource;
 class MCallback;
 class MCrypto;
 class MPlatformDevice;
+class MSimulatorHost;
 class RenderingStream;
 class PlatformBitmap;
 class PlatformDisplayObject;
@@ -180,6 +181,9 @@ class MPlatform
 		virtual int PushNativeProperty( lua_State *L, const char *key ) const = 0;
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const = 0;
 		virtual const char* GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const { return NULL; }
+#ifdef Rtt_AUTHORING_SIMULATOR
+		virtual const MSimulatorHost* GetSimulatorHost() const { return NULL; }
+#endif
 
 	public:
 		virtual void RaiseError( Error e, const char* reason ) const = 0;

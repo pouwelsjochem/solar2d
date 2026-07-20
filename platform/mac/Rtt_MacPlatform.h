@@ -12,6 +12,7 @@
 
 #include "Rtt_ApplePlatform.h"
 #include "Rtt_MPlatformServices.h"
+#include "Rtt_MSimulatorHost.h"
 
 #include "Rtt_MacDevice.h"
 #import <AppKit/NSView.h>
@@ -104,6 +105,7 @@ class MacPlatform : public ApplePlatform
 		virtual int PushSystemInfo( lua_State *L, const char *key ) const;
 
 		virtual void GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const;
+		void SetSafeAreaInsetsPixels(Rtt_Real top, Rtt_Real left, Rtt_Real bottom, Rtt_Real right);
 		virtual const char* GetKeyNameForQwertyKeyName( const char* qwertyKeyName ) const;
 
 	public:
@@ -145,6 +147,10 @@ class MacPlatform : public ApplePlatform
 		MacConsoleDevice fDevice;
 		mutable pthread_mutex_t fMutex;
 		mutable int fMutexCount;
+		Rtt_Real fSafeAreaInsetTop;
+		Rtt_Real fSafeAreaInsetLeft;
+		Rtt_Real fSafeAreaInsetBottom;
+		Rtt_Real fSafeAreaInsetRight;
 		AlertDelegate *fDelegate;
 		PlatformExitCallback* fExitCallback;
 		mutable IOPMAssertionID fAssertionID;
@@ -154,6 +160,9 @@ class MacPlatform : public ApplePlatform
 #if !defined( Rtt_WEB_PLUGIN )
 
 class MacGUIPlatform : public MacPlatform
+#ifdef Rtt_AUTHORING_SIMULATOR
+	, public MSimulatorHost
+#endif
 {
 	public:
 		typedef MacPlatform Super;
@@ -167,6 +176,20 @@ class MacGUIPlatform : public MacPlatform
 
 	public:
 		virtual bool RequestSystem( lua_State *L, const char *actionName, int optionsIndex ) const;
+#ifdef Rtt_AUTHORING_SIMULATOR
+		virtual const MSimulatorHost* GetSimulatorHost() const;
+		virtual bool GetCurrentDevice( MSimulatorHost::Device& result ) const;
+		virtual bool GetState( MSimulatorHost::State& result ) const;
+		virtual bool GetDevices( std::vector< MSimulatorHost::Device >& result ) const;
+		virtual MSimulatorHost::ConfigureResult ConfigureAndRelaunch(
+			const MSimulatorHost::Configuration& configuration, bool onlyIfNeeded ) const;
+		virtual bool Relaunch() const;
+		virtual bool SetSafeAreaGuidesVisible( bool visible ) const;
+		virtual bool SetFullscreen( bool fullscreen ) const;
+		virtual bool SendInput( const MSimulatorHost::Input& input ) const;
+		virtual bool Simulate( const MSimulatorHost::Event& event ) const;
+		virtual bool Quit( int exitCode ) const;
+#endif
 
 	private:
 		MacDevice fMacDevice;

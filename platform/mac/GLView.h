@@ -17,7 +17,9 @@
 namespace Rtt
 {
 	class ApplePlatform;
+	class MEvent;
 	class Runtime;
+	class TouchEvent;
 } 
 
 @class NSImage;
@@ -59,6 +61,10 @@ namespace Rtt
 
 - (void)adjustPoint:(NSPoint*)p;
 - (NSPoint)pointForEvent:(NSEvent*)event;
+
+- (BOOL)canDispatchEvents;
+- (BOOL)dispatchEvent:(Rtt::MEvent*)event;
+- (BOOL)dispatchTouchEvent:(Rtt::TouchEvent*)event;
 
 - (CGFloat) viewportWidth;
 - (CGFloat) viewportHeight;

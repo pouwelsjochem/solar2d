@@ -687,6 +687,16 @@ CompileScriptsInDirectory( lua_State *L, AppPackagerParams& params, const char *
 					// If the next item is a directory, then recursively compile the files under that directory.
 					if ( IsDirectory( srcPath ) )
 					{
+						// Project-local device definitions are Simulator-only
+						// authoring metadata and must not be included in a
+						// device build.
+						if ( subModulePath &&
+							 ( Rtt_StringCompare( subModulePath, "simulator" ) == 0 ) &&
+							 ( Rtt_StringCompare( filename, "devices" ) == 0 ) )
+						{
+							continue;
+						}
+
 						result = CompileScriptsInDirectory( L, params, dstDir, srcPath );
 						continue;
 					}
@@ -1071,6 +1081,19 @@ PlatformAppPackager::CopyDirectoryTree( const PlatformAppPackager::CopyDirectory
 		// Fetch the path to the next file to be copied.
 		std::string& utf8SourceFilePath = (*iter);
 		if ( Rtt_StringIsEmpty( utf8SourceFilePath.c_str() ) )
+		{
+			continue;
+		}
+
+		// Do not copy project-local device definitions into a packaged
+		// application.
+		const char *relativeSourcePath = utf8SourceFilePath.c_str() + sourceDirectoryPathLength;
+		while ( *relativeSourcePath == '/' || *relativeSourcePath == '\\' )
+		{
+			relativeSourcePath++;
+		}
+		if ( ( strncmp( relativeSourcePath, "simulator/devices/", 18 ) == 0 ) ||
+			 ( strncmp( relativeSourcePath, "simulator\\devices\\", 18 ) == 0 ) )
 		{
 			continue;
 		}

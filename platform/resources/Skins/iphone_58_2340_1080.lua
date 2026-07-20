@@ -13,4 +13,11 @@ simulator =
 	deviceWidth = 2340,
 	deviceHeight = 1080,
 	deviceName = "5.8\" iPhone 13 mini",
+	safeAreaInsets =
+	{
+		top = 0,
+		left = 150,
+		bottom = 63,
+		right = 150,
+	},
 }

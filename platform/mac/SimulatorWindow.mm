@@ -36,16 +36,17 @@
 
 - (id)initWithScreenView:(GLView*)screenView
 				viewRect:(NSRect)screenRect
+		  roundedCorners:(BOOL)roundedCorners
 				   title:(NSString*)title
 {
 	// Need to make window size larger than the view rect (e.g. large enough to hold it with the titlebar).
-    NSWindowStyleMask windowStyleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"disableRoundedCorners"])
-    {
-        windowStyleMask = NSWindowStyleMaskBorderless;
-    }
-    
-    NSRect frameRect = [NSWindow frameRectForContentRect:screenRect styleMask:windowStyleMask];
+	NSWindowStyleMask windowStyleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
+	if (!roundedCorners)
+	{
+		windowStyleMask = NSWindowStyleMaskBorderless;
+	}
+
+	NSRect frameRect = [NSWindow frameRectForContentRect:screenRect styleMask:windowStyleMask];
 	self = [super initWithContentRect:frameRect
 							styleMask:windowStyleMask
 							  backing:NSBackingStoreBuffered

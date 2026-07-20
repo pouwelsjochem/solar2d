@@ -17,6 +17,9 @@
 
 #include "Core/Rtt_Build.h"
 #include "Core/Rtt_String.h"
+#ifdef Rtt_AUTHORING_SIMULATOR
+	#include <string>
+#endif
 
 namespace Rtt
 {
@@ -117,6 +120,27 @@ class TargetDevice
 		};
 
 	public:
+#ifdef Rtt_AUTHORING_SIMULATOR
+		struct DeviceDescriptor
+		{
+			DeviceDescriptor();
+
+			std::string identifier;
+			std::string name;
+			std::string category;
+			int width;
+			int height;
+			int safeAreaInsetTop;
+			int safeAreaInsetLeft;
+			int safeAreaInsetBottom;
+			int safeAreaInsetRight;
+			bool isProjectDevice;
+		};
+
+		static bool LoadDeviceDescriptor(
+			const char *path, DeviceDescriptor& result, std::string& errorMessage );
+#endif
+
         class SkinSpec
         {
             Rtt::String fLabel;
@@ -125,21 +149,44 @@ class TargetDevice
             Rtt::String fCategory;
             int fWidth;
             int fHeight;
+            int fSafeAreaInsetTop;
+            int fSafeAreaInsetLeft;
+            int fSafeAreaInsetBottom;
+            int fSafeAreaInsetRight;
             
         public:
 #ifdef Rtt_AUTHORING_SIMULATOR
 	// This works around some ugly interdependencies with app_sign
-            SkinSpec(const char *name, const char *path, const char *category, int width, int height) {
+            SkinSpec(
+                const char *name, const char *path, const char *category, int width, int height,
+                int safeAreaInsetTop, int safeAreaInsetLeft, int safeAreaInsetBottom, int safeAreaInsetRight)
+            {
                 fName.Set(name);
                 fPath.Set(path);
                 fCategory.Set(category);
                 fWidth = width;
                 fHeight = height;
+                fSafeAreaInsetTop = safeAreaInsetTop;
+                fSafeAreaInsetLeft = safeAreaInsetLeft;
+                fSafeAreaInsetBottom = safeAreaInsetBottom;
+                fSafeAreaInsetRight = safeAreaInsetRight;
 
                 fLabel.Set(GenerateLabel(fPath.GetString()));
             }
 #else
-            SkinSpec() : fLabel(NULL, NULL), fName(NULL, NULL), fPath(NULL, NULL), fCategory(NULL, NULL), fWidth(0), fHeight(0) {}
+            SkinSpec()
+            : fLabel(NULL, NULL),
+              fName(NULL, NULL),
+              fPath(NULL, NULL),
+              fCategory(NULL, NULL),
+              fWidth(0),
+              fHeight(0),
+              fSafeAreaInsetTop(0),
+              fSafeAreaInsetLeft(0),
+              fSafeAreaInsetBottom(0),
+              fSafeAreaInsetRight(0)
+            {
+            }
 #endif // Rtt_AUTHORING_SIMULATOR
 
             const char *GenerateLabel(const char *path);
@@ -156,6 +203,10 @@ class TargetDevice
             int GetWidth() { return fWidth; }
             void SetHeight(int height) { fHeight = height; }
             int GetHeight() { return fHeight; }
+            int GetSafeAreaInsetTop() { return fSafeAreaInsetTop; }
+            int GetSafeAreaInsetLeft() { return fSafeAreaInsetLeft; }
+            int GetSafeAreaInsetBottom() { return fSafeAreaInsetBottom; }
+            int GetSafeAreaInsetRight() { return fSafeAreaInsetRight; }
         };
     
         typedef enum
@@ -175,6 +226,11 @@ class TargetDevice
         static const char* NameForSkin( int skinID );
         static const int WidthForSkin( int skinID );
         static const int HeightForSkin( int skinID );
+        static const int SafeAreaInsetTopForSkin( int skinID );
+        static const int SafeAreaInsetLeftForSkin( int skinID );
+        static const int SafeAreaInsetBottomForSkin( int skinID );
+        static const int SafeAreaInsetRightForSkin( int skinID );
+        static Skin FindSkinForLabel( const char* skinname );
         static Skin SkinForLabel( const char* skinname );
         static const char *LabelForSkin( int skinID );
         static const char *CategoryForSkin( int skinID );

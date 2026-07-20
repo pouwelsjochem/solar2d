@@ -340,6 +340,8 @@ namespace Rtt
 
 		extern const char kInfo[];
 
+		extern const char kIsoSection[];
+
 		extern const char kInsert[];
 
 		extern const char kLeftBracket[];

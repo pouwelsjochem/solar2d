@@ -102,16 +102,54 @@ MacSimulator::~MacSimulator()
 void
 MacSimulator::Initialize(
 	const char deviceConfigFile[],
+	bool roundedCorners,
 	const char resourcePath[] )
 {
-	using namespace Rtt;
-
 	MacGUIPlatform* platform = new MacGUIPlatform( * this );
 	platform->SetResourcePath( resourcePath );
 	Super::Config config( platform->GetAllocator() );
 	Super::LoadConfig( deviceConfigFile, config );
 
+	Initialize( platform, config, roundedCorners, resourcePath );
+}
+
+void
+MacSimulator::Initialize(
+	const char deviceName[],
+	float deviceWidth,
+	float deviceHeight,
+	float safeAreaInsetTop,
+	float safeAreaInsetLeft,
+	float safeAreaInsetBottom,
+	float safeAreaInsetRight,
+	bool roundedCorners,
+	const char resourcePath[] )
+{
+	MacGUIPlatform* platform = new MacGUIPlatform( * this );
+	platform->SetResourcePath( resourcePath );
+	Super::Config config( platform->GetAllocator() );
+	config.deviceName.Set( deviceName );
+	config.deviceWidth = deviceWidth;
+	config.deviceHeight = deviceHeight;
+	config.safeAreaInsetTop = safeAreaInsetTop;
+	config.safeAreaInsetLeft = safeAreaInsetLeft;
+	config.safeAreaInsetBottom = safeAreaInsetBottom;
+	config.safeAreaInsetRight = safeAreaInsetRight;
+
+	Initialize( platform, config, roundedCorners, resourcePath );
+}
+
+void
+MacSimulator::Initialize(
+	MacGUIPlatform* platform, const Super::Config& config,
+	bool roundedCorners, const char resourcePath[] )
+{
 	LoadBuildSettings( *platform );
+	platform->SetSafeAreaInsetsPixels(
+		Rtt_FloatToReal( config.safeAreaInsetTop ),
+		Rtt_FloatToReal( config.safeAreaInsetLeft ),
+		Rtt_FloatToReal( config.safeAreaInsetBottom ),
+		Rtt_FloatToReal( config.safeAreaInsetRight ) );
 
 	fDeviceWidth = config.deviceWidth;
 	fDeviceHeight = config.deviceHeight;
@@ -150,7 +188,11 @@ MacSimulator::Initialize(
 	fDeviceName = [[NSString stringWithExternalString:config.deviceName] copy];
 	NSString* deviceNameWithResolution = [NSString stringWithFormat:@"%s - %.0fx%.0f", config.deviceName.GetString(), fDeviceWidth, fDeviceHeight];
 
-    instanceWindow = [[SimulatorWindow alloc] initWithScreenView:screenView viewRect:screenRect title:deviceNameWithResolution];
+    instanceWindow = [[SimulatorWindow alloc]
+		initWithScreenView:screenView
+		viewRect:screenRect
+		roundedCorners:roundedCorners
+		title:deviceNameWithResolution];
 	[instanceWindow setPerformCloseBlock:window_close_handler];
 
 	NSWindowController *windowController = [[NSWindowController alloc] initWithWindow:instanceWindow];

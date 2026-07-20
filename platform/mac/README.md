@@ -3,6 +3,36 @@
 To run and test Simulator open `ratatouille.xcodeproj` and select `rttplayer` target in Xcode. Press play.
 Sometimes Xcode doesn't follow dependency order for tools, so you may have to build `Lua` and `Luac` targets first.
 
+## Launching with a simulator device
+
+The Simulator accepts a temporary device configuration on the command line. It is applied after loading the project's
+`simulator/devices` directory and does not change the saved device preference.
+
+Select a built-in or project device by its stable identifier:
+
+```sh
+"/Applications/Corona Simulator.app/Contents/MacOS/Corona Simulator" \
+  -project "/path/to/project" \
+  -simulator-device "project:tablet"
+```
+
+Or provide a custom size, with optional safe area insets:
+
+```sh
+"/Applications/Corona Simulator.app/Contents/MacOS/Corona Simulator" \
+  -project "/path/to/project" \
+  -simulator-width 1920 \
+  -simulator-height 1080 \
+  -simulator-safe-area-top 24 \
+  -simulator-safe-area-left 0 \
+  -simulator-safe-area-bottom 24 \
+  -simulator-safe-area-right 0 \
+  -simulator-rounded-corners false
+```
+
+`-simulator-rounded-corners true|false` can also be used by itself with the saved device. Custom dimensions must be
+integers from 1 through 16384; omitted safe area insets default to zero.
+
 # Building your app with simulator
 
 Note, that updated code would only work in Simulator. Device builds (like iOS, Android) require special templates to be built first.

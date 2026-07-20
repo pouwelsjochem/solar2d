@@ -62,7 +62,11 @@ PlatformSimulator::Config::Config( Rtt_Allocator & allocator )
 :	platform( TargetDevice::kUnknownPlatform ),
 	deviceName( & allocator ),
 	deviceWidth(0.0f),
-	deviceHeight(0.0f)
+	deviceHeight(0.0f),
+	safeAreaInsetTop(0.0f),
+	safeAreaInsetLeft(0.0f),
+	safeAreaInsetBottom(0.0f),
+	safeAreaInsetRight(0.0f)
 {
 }
 
@@ -113,61 +117,34 @@ PlatformSimulator::GetPlatform() const
 	return NULL;
 }
 
-static lua_Number
-NumberForKey( lua_State *L, const char key[], lua_Number defaultValue )
-{
-    lua_Number result = defaultValue;
-    
-	lua_getfield( L, -1, key );
-    if (lua_isnumber( L, -1 ) )
-    {
-        result = lua_tonumber( L, -1 );
-    }
-	lua_pop( L, 1 );
-    
-	return result;
-}
-
-static const char*
-StringForKey( lua_State *L, const char key[], const char *defaultValue)
-{
-    const char *result = defaultValue;
-    
-	lua_getfield( L, -1, key );
-    
-    if ( lua_isstring( L, -1 ) )
-    {
-        result = lua_tostring( L, -1 );
-    }
-	lua_pop( L, 1 );
-
-	return result;
-}
-
-#include "CoronaLua.h"
-
 void
 PlatformSimulator::LoadConfig( const char deviceConfigFile[], Config& rConfig )
 {
-	lua_State *L = luaL_newstate();
-    String errorMesg;
-
-	if ( 0 == Lua::DoFile( L, deviceConfigFile, 0, false, &errorMesg ))
+	TargetDevice::DeviceDescriptor descriptor;
+	std::string errorMessage;
+	if ( TargetDevice::LoadDeviceDescriptor( deviceConfigFile, descriptor, errorMessage ) )
 	{
-		lua_getglobal( L, "simulator" );
-
-		rConfig.deviceName.Set( StringForKey( L, "deviceName", "Unknown" ) );
-		rConfig.deviceWidth = (float) NumberForKey( L, "deviceWidth", 400 );
-		rConfig.deviceHeight = (float) NumberForKey( L, "deviceHeight", 400 );
-
-		lua_pop( L, 1 );
+		rConfig.deviceName.Set( descriptor.name.c_str() );
+		rConfig.deviceWidth = (float)descriptor.width;
+		rConfig.deviceHeight = (float)descriptor.height;
+		rConfig.safeAreaInsetTop = (float)descriptor.safeAreaInsetTop;
+		rConfig.safeAreaInsetLeft = (float)descriptor.safeAreaInsetLeft;
+		rConfig.safeAreaInsetBottom = (float)descriptor.safeAreaInsetBottom;
+		rConfig.safeAreaInsetRight = (float)descriptor.safeAreaInsetRight;
 	}
 	else
 	{
-		Rtt_TRACE(("WARNING: Could not load device config file '%s': %s\n", deviceConfigFile, errorMesg.GetString()));
+		Rtt_TRACE((
+			"WARNING: Device config file '%s' %s\n",
+			deviceConfigFile, errorMessage.c_str() ));
+		rConfig.deviceName.Set( "Unknown" );
+		rConfig.deviceWidth = 400.0f;
+		rConfig.deviceHeight = 400.0f;
+		rConfig.safeAreaInsetTop = 0.0f;
+		rConfig.safeAreaInsetLeft = 0.0f;
+		rConfig.safeAreaInsetBottom = 0.0f;
+		rConfig.safeAreaInsetRight = 0.0f;
 	}
-
-	lua_close( L );
 }
 
 void
@@ -301,10 +278,10 @@ PlatformSimulator::BeginNotifications( MPlatformDevice::EventType type ) const
 	switch( mask )
 	{
 		case kAccelerometerEventMask:
-			Rtt_TRACE_SIM( ( "WARNING: Simulator does not support accelerometer events\n" ) );
+			Rtt_TRACE_SIM( ( "WARNING: Simulator only supports accelerometer events injected via simulator.simulate()\n" ) );
 			break;
 		case kGyroscopeEventMask:
-			Rtt_TRACE_SIM( ( "WARNING: Simulator does not support gyroscope events\n" ) );
+			Rtt_TRACE_SIM( ( "WARNING: Simulator only supports gyroscope events injected via simulator.simulate()\n" ) );
 			break;
 		case kMultitouchEventMask:
 			Rtt_TRACE_SIM( ( "WARNING: Simulator does not support multitouch events\n" ) );
@@ -397,4 +374,3 @@ PlatformSimulator::WillExit()
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

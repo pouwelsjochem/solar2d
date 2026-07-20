@@ -209,7 +209,6 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 
 
 @interface GLView ()
-- (void)dispatchEvent:(Rtt::MEvent*)event;
 - (void)handleWindowBackingPropertiesChanged:(NSNotification *)notification;
 @end
 
@@ -450,25 +449,44 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
     [self dispatchEvent: ( & mouseEvent )];
 }
 
-- (void)dispatchEvent:(Rtt::MEvent*)e
+- (BOOL)canDispatchEvents
+{
+	return fRuntime && fRuntime->IsProperty(Rtt::Runtime::kIsApplicationLoaded) &&
+		!fRuntime->IsSuspended();
+}
+
+- (BOOL)dispatchEvent:(Rtt::MEvent*)e
 {
 	using namespace Rtt;
 
 	// Since we defer the loading of the application in [self prepareOpenGL] we shouldn't dispatch
 	// any events until it really is loaded or when the runtime is suspended
-	if ( fRuntime == NULL || ! fRuntime->IsProperty(Rtt::Runtime::kIsApplicationLoaded) ||
-		 fRuntime->IsSuspended())
+	if ( ![self canDispatchEvents] || !e )
 	{
-		return;
+		return NO;
 	}
 
 	Runtime* runtime = self.runtime;
 	Rtt_ASSERT( runtime );
+	runtime->DispatchEvent( * e );
+	return YES;
+}
 
-	if ( Rtt_VERIFY( e ) )
+- (BOOL)dispatchTouchEvent:(Rtt::TouchEvent*)event
+{
+	using namespace Rtt;
+
+	if ( ![self canDispatchEvents] || !event )
 	{
-		runtime->DispatchEvent( * e );
+		return NO;
 	}
+
+	if ( fRuntime->Platform().GetDevice().DoesNotify( MPlatformDevice::kMultitouchEvent ) )
+	{
+		MultitouchEvent multitouchEvent( event, 1 );
+		return [self dispatchEvent:&multitouchEvent];
+	}
+	return [self dispatchEvent:event];
 }
 
 // TODO: This function needs to be kept in sync with PlatformSimulator::AdjustPoint(),
@@ -531,15 +549,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 
 	TouchEvent t( p.x, p.y, p.x, p.y, TouchEvent::kBegan );
 	t.SetId( sTouchId );
-	if ( fRuntime->Platform().GetDevice().DoesNotify( MPlatformDevice::kMultitouchEvent ) )
-	{
-		MultitouchEvent t2( &t, 1 );
-		[self dispatchEvent: (&t2)];
-	}
-	else
-	{
-		[self dispatchEvent: (&t)];
-	}
+	[self dispatchTouchEvent:&t];
 }
 
 - (void)mouseDragged:(NSEvent*)event
@@ -555,15 +565,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 
 	TouchEvent t( p.x, p.y, fStartPosition.x, fStartPosition.y, TouchEvent::kMoved );
 	t.SetId( sTouchId );
-	if ( fRuntime->Platform().GetDevice().DoesNotify( MPlatformDevice::kMultitouchEvent ) )
-	{
-		MultitouchEvent t2( &t, 1 );
-		[self dispatchEvent: (&t2)];
-	}
-	else
-	{
-		[self dispatchEvent: (&t)];
-	}
+	[self dispatchTouchEvent:&t];
 
 	DragEvent e( fStartPosition.x, fStartPosition.y, p.x, p.y );
 	[self dispatchEvent: (&e)];
@@ -582,15 +584,7 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 
 	TouchEvent t( p.x, p.y, fStartPosition.x, fStartPosition.y, TouchEvent::kEnded );
 	t.SetId( sTouchId++ );
-	if ( fRuntime->Platform().GetDevice().DoesNotify( MPlatformDevice::kMultitouchEvent ) )
-	{
-		MultitouchEvent t2( &t, 1 );
-		[self dispatchEvent: (&t2)];
-	}
-	else
-	{
-		[self dispatchEvent: (&t)];
-	}
+	[self dispatchTouchEvent:&t];
 
 //	NSDEBUG( @"mouseUp(%g,%g)", p.x, p.y );
 }

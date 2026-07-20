@@ -141,7 +141,7 @@ static NSDictionary *keyCodeDictionary = nil;
             [NSNumber numberWithInteger:(kVK_ANSI_Comma)] : [NSString stringWithUTF8String:Rtt::KeyName::kComma],
             [NSNumber numberWithInteger:(kVK_ANSI_Period)] : [NSString stringWithUTF8String:Rtt::KeyName::kPeriod],
             [NSNumber numberWithInteger:(kVK_ANSI_Grave)] : [NSString stringWithUTF8String:Rtt::KeyName::kBackTick],
-            [NSNumber numberWithInteger:(kVK_ISO_Section)] : [NSString stringWithUTF8String:Rtt::KeyName::kSection],
+            [NSNumber numberWithInteger:(kVK_ISO_Section)] : [NSString stringWithUTF8String:Rtt::KeyName::kIsoSection],
             [NSNumber numberWithInteger:(kVK_Escape)] : [NSString stringWithUTF8String:Rtt::KeyName::kEscape],
 
             [NSNumber numberWithInteger:(kVK_Return)] : [NSString stringWithUTF8String:Rtt::KeyName::kEnter],

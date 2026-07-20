@@ -153,11 +153,86 @@ static NSString* kSuppressUnsupportedOSWarning = @"suppressUnsupportedOSWarning"
 
 static NSString* kWindowMenuItemName = @"Window";
 static NSString* kViewAsMenuItemName = @"View As";
+static NSString* kRoundedCornersMenuItemName = @"Rounded Corners";
+static NSString* kShowSafeAreaGuidesMenuItemName = @"Show Safe Area Guides";
+static NSString* kCustomDevicePreferenceValue = @"__custom__";
+static NSString* kCustomDeviceWidthPreference = @"customDeviceWidth";
+static NSString* kCustomDeviceHeightPreference = @"customDeviceHeight";
+static NSString* kCustomDeviceSafeAreaInsetTopPreference = @"customDeviceSafeAreaInsetTop";
+static NSString* kCustomDeviceSafeAreaInsetLeftPreference = @"customDeviceSafeAreaInsetLeft";
+static NSString* kCustomDeviceSafeAreaInsetBottomPreference = @"customDeviceSafeAreaInsetBottom";
+static NSString* kCustomDeviceSafeAreaInsetRightPreference = @"customDeviceSafeAreaInsetRight";
+static NSString* kShowSafeAreaGuidesPreference = @"showSafeAreaGuides";
+static NSString* kSimulatorDeviceArgument = @"simulator-device";
+static NSString* kSimulatorWidthArgument = @"simulator-width";
+static NSString* kSimulatorHeightArgument = @"simulator-height";
+static NSString* kSimulatorSafeAreaTopArgument = @"simulator-safe-area-top";
+static NSString* kSimulatorSafeAreaLeftArgument = @"simulator-safe-area-left";
+static NSString* kSimulatorSafeAreaBottomArgument = @"simulator-safe-area-bottom";
+static NSString* kSimulatorSafeAreaRightArgument = @"simulator-safe-area-right";
+static NSString* kSimulatorRoundedCornersArgument = @"simulator-rounded-corners";
 
 // TODO: Remove once the Beta is over
 static NSString* kEnableLinuxBuild = @"enableLinuxBuild";
 
 static const int       kClearProjectSandboxMenuTag = 1001;
+static const int       kCustomDeviceMenuTag = -1000;
+static const int       kEditCustomDeviceMenuTag = -1001;
+static const NSInteger kDefaultCustomDeviceWidth = 800;
+static const NSInteger kDefaultCustomDeviceHeight = 600;
+static const NSInteger kMaximumCustomDeviceDimension = 16384;
+
+static BOOL
+ReadSimulatorIntegerArgument(id value, NSInteger *result)
+{
+	if (!value)
+	{
+		return NO;
+	}
+	if ([value isKindOfClass:[NSNumber class]])
+	{
+		*result = [value integerValue];
+		return YES;
+	}
+	if (![value isKindOfClass:[NSString class]])
+	{
+		return NO;
+	}
+
+	NSScanner *scanner = [NSScanner scannerWithString:value];
+	return [scanner scanInteger:result] && [scanner isAtEnd];
+}
+
+static BOOL
+ReadSimulatorBooleanArgument(id value, BOOL *result)
+{
+	if ([value isKindOfClass:[NSNumber class]])
+	{
+		*result = [value boolValue];
+		return YES;
+	}
+	if (![value isKindOfClass:[NSString class]])
+	{
+		return NO;
+	}
+
+	NSString *normalizedValue = [value lowercaseString];
+	if ([normalizedValue isEqualToString:@"true"] ||
+		[normalizedValue isEqualToString:@"yes"] ||
+		[normalizedValue isEqualToString:@"1"])
+	{
+		*result = YES;
+		return YES;
+	}
+	if ([normalizedValue isEqualToString:@"false"] ||
+		[normalizedValue isEqualToString:@"no"] ||
+		[normalizedValue isEqualToString:@"0"])
+	{
+		*result = NO;
+		return YES;
+	}
+	return NO;
+}
 
 NSString *kosVersionMinimum = @"10.9";   // we refuse to run on OSes older than this
 NSString *kosVersionPrevious = @"10.12";  // should be updated as Apple releases new OSes
@@ -457,6 +532,86 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 // ----------------------------------------------------------------------------
 
+@interface SimulatorSafeAreaGuideView : NSView
+{
+	CGFloat fInsetTop;
+	CGFloat fInsetLeft;
+	CGFloat fInsetBottom;
+	CGFloat fInsetRight;
+}
+
+- (id)initWithFrame:(NSRect)frame
+	insetTop:(CGFloat)top
+	insetLeft:(CGFloat)left
+	insetBottom:(CGFloat)bottom
+	insetRight:(CGFloat)right;
+
+@end
+
+@implementation SimulatorSafeAreaGuideView
+
+- (id)initWithFrame:(NSRect)frame
+	insetTop:(CGFloat)top
+	insetLeft:(CGFloat)left
+	insetBottom:(CGFloat)bottom
+	insetRight:(CGFloat)right
+{
+	self = [super initWithFrame:frame];
+	if (self)
+	{
+		fInsetTop = top;
+		fInsetLeft = left;
+		fInsetBottom = bottom;
+		fInsetRight = right;
+		[self setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+	}
+	return self;
+}
+
+- (BOOL)isOpaque
+{
+	return NO;
+}
+
+- (NSView*)hitTest:(NSPoint)point
+{
+	return nil;
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+	NSRect bounds = [self bounds];
+	CGFloat top = MIN(MAX(fInsetTop, 0), NSHeight(bounds));
+	CGFloat left = MIN(MAX(fInsetLeft, 0), NSWidth(bounds));
+	CGFloat bottom = MIN(MAX(fInsetBottom, 0), NSHeight(bounds) - top);
+	CGFloat right = MIN(MAX(fInsetRight, 0), NSWidth(bounds) - left);
+	NSRect safeRect = NSMakeRect(
+		NSMinX(bounds) + left,
+		NSMinY(bounds) + bottom,
+		MAX(0, NSWidth(bounds) - left - right),
+		MAX(0, NSHeight(bounds) - top - bottom));
+
+	[[NSColor colorWithCalibratedRed:1.0 green:0.45 blue:0.0 alpha:0.18] setFill];
+	NSRectFillUsingOperation(
+		NSMakeRect(NSMinX(bounds), NSMinY(bounds), left, NSHeight(bounds)), NSCompositingOperationSourceOver );
+	NSRectFillUsingOperation(
+		NSMakeRect(NSMaxX(bounds) - right, NSMinY(bounds), right, NSHeight(bounds)), NSCompositingOperationSourceOver );
+	NSRectFillUsingOperation(
+		NSMakeRect(NSMinX(safeRect), NSMinY(bounds), NSWidth(safeRect), bottom), NSCompositingOperationSourceOver );
+	NSRectFillUsingOperation(
+		NSMakeRect(NSMinX(safeRect), NSMaxY(bounds) - top, NSWidth(safeRect), top), NSCompositingOperationSourceOver );
+
+	if (NSWidth(safeRect) > 1.0 && NSHeight(safeRect) > 1.0)
+	{
+		NSBezierPath *outline = [NSBezierPath bezierPathWithRect:NSInsetRect(safeRect, 0.5, 0.5)];
+		[outline setLineWidth:1.0];
+		[[NSColor colorWithCalibratedRed:1.0 green:0.55 blue:0.0 alpha:0.95] setStroke];
+		[outline stroke];
+	}
+}
+
+@end
+
 @interface AppDelegate ()
 
 @property (nonatomic, readwrite, copy) NSString* fAppPath;
@@ -465,6 +620,46 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void) updateMenuForSkinChange;
 - (void) restoreUserSkinSetting;
 - (void) saveUserSkinSetting;
+- (void) reloadDeviceSkinsForProject:(NSString*)appPath;
+- (void) invalidateViewAsMenu;
+- (NSInteger) customDeviceWidth;
+- (NSInteger) customDeviceHeight;
+- (NSInteger) customDeviceSafeAreaInsetForPreference:(NSString*)preference;
+- (NSDictionary*) customDeviceSafeAreaInsets;
+- (Rtt::TargetDevice::Skin) skinForSimulatorDeviceIdentifier:(NSString*)identifier;
+- (NSDictionary*) simulatorDeviceInfoForSkin:(Rtt::TargetDevice::Skin)skin roundedCorners:(BOOL)roundedCorners;
+- (NSDictionary*) simulatorCustomDeviceInfoWithWidth:(NSInteger)width
+	height:(NSInteger)height
+	safeAreaInsetTop:(NSInteger)top
+	safeAreaInsetLeft:(NSInteger)left
+	safeAreaInsetBottom:(NSInteger)bottom
+	safeAreaInsetRight:(NSInteger)right
+	roundedCorners:(BOOL)roundedCorners;
+- (NSDictionary*) persistentSimulatorDeviceInfo;
+- (NSDictionary*) configuredSimulatorDeviceInfo;
+- (BOOL) configuredSimulatorRoundedCorners;
+- (void) clearTemporarySimulatorConfiguration;
+- (BOOL) refreshTemporarySimulatorConfiguration;
+- (void) persistSimulatorDeviceInfo:(NSDictionary*)deviceInfo;
+- (BOOL) applySimulatorConfiguration:(NSDictionary*)configuration
+	relaunchIfNeeded:(BOOL)relaunchIfNeeded
+	scheduleRelaunch:(BOOL)scheduleRelaunch
+	didScheduleRelaunch:(BOOL*)didScheduleRelaunch;
+- (BOOL) applyLaunchSimulatorConfiguration;
+- (void) scheduleSimulatorRelaunch;
+- (void) resumeSimulatorAfterBackground;
+-(BOOL)setSimulatorCustomWidth:(NSInteger)width
+	height:(NSInteger)height
+	safeAreaInsetTop:(NSInteger)top
+	safeAreaInsetLeft:(NSInteger)left
+	safeAreaInsetBottom:(NSInteger)bottom
+	safeAreaInsetRight:(NSInteger)right;
+- (void) updateSimulatorDisplayMenuItems:(NSMenu*)windowMenu;
+- (void) updateSafeAreaGuideOverlay;
+- (IBAction) selectCustomDeviceAction:(id)sender;
+- (IBAction) editCustomDeviceAction:(id)sender;
+- (IBAction) toggleRoundedCornersAction:(id)sender;
+- (IBAction) toggleSafeAreaGuidesAction:(id)sender;
 @end
 
 
@@ -523,6 +718,11 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		fLinuxAppBuildController = nil;
 
 		fServices = NULL;
+		fSimulatorRelaunchPending = NO;
+		fLaunchSimulatorConfigurationHandled = NO;
+		fBackgroundedRuntime = NULL;
+		fActiveSimulatorDeviceInfo = nil;
+		fTemporarySimulatorDeviceInfo = nil;
 
         fSimulatorWasSuspended = FALSE;
 		_stopRequested = NO;
@@ -565,51 +765,76 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 -(void)coronaInit:(NSNotification*)aNotification
 {
-    // The builtin Skins directory is in the Resource directory in the bundle
-    NSString *builtinSkinsDir = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Skins"];
-    NSFileManager *localFileManager = [NSFileManager defaultManager];
-    NSDirectoryEnumerator *dirEnum = [localFileManager enumeratorAtPath:builtinSkinsDir];
-    NSMutableArray *skinPathStrs = [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
-    NSString *file;
-    while ((file = [dirEnum nextObject]))
-    {
-        if ([[file pathExtension] isEqualToString: @"lu"] || [[file pathExtension] isEqualToString: @"lua"])
-        {
-            NSString *luaPath = [builtinSkinsDir stringByAppendingPathComponent:file];
-            
-            [skinPathStrs addObject:luaPath];
-        }
-    }
-    
-    // Put the skins into a data structure we can share with core code
-    char **skinPaths;
-    
-    skinPaths = (char **) calloc(sizeof(char *), [skinPathStrs count]);
-    
-    if (skinPaths == NULL && [skinPathStrs count] > 0)
-    {
-        NSLog(@"coronaInit: Problem processing skin files.  Please restart.");
-    }
-    else
-    {
-        int count = 0;
-        
-        for (file in skinPathStrs)
-        {
-            skinPaths[count] = (char *) strdup([file UTF8String]);
-            ++count;
-        }
-        
-        // Tell the core about the skins
-        Rtt::TargetDevice::Initialize(skinPaths, count);
-        
-        for (int i = 0; i < count; i++)
-        {
-            free(skinPaths[i]);
-        }
-        
-        free(skinPaths);
-    }
+	[self reloadDeviceSkinsForProject:nil];
+}
+
+- (void) reloadDeviceSkinsForProject:(NSString*)appPath
+{
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSMutableArray *devicePaths = [NSMutableArray arrayWithCapacity:32];
+	NSArray *deviceDirectories = @[
+		[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Skins"],
+		appPath ? [appPath stringByAppendingPathComponent:@"simulator/devices"] : @""
+	];
+
+	for (NSString *directory in deviceDirectories)
+	{
+		if ([directory length] == 0)
+		{
+			continue;
+		}
+
+		BOOL isDirectory = NO;
+		if (![fileManager fileExistsAtPath:directory isDirectory:&isDirectory] || !isDirectory)
+		{
+			continue;
+		}
+
+		NSDirectoryEnumerator *enumerator = [fileManager enumeratorAtPath:directory];
+		NSString *relativePath = nil;
+		while ((relativePath = [enumerator nextObject]))
+		{
+			NSString *extension = [[relativePath pathExtension] lowercaseString];
+			if ([extension isEqualToString:@"lua"] || [extension isEqualToString:@"lu"])
+			{
+				[devicePaths addObject:[directory stringByAppendingPathComponent:relativePath]];
+			}
+		}
+	}
+
+	char **paths = (char **)calloc(sizeof(char *), [devicePaths count]);
+	if (!paths && [devicePaths count] > 0)
+	{
+		Rtt_LogException("ERROR: Could not allocate the Simulator device list");
+		return;
+	}
+
+	int count = 0;
+	for (NSString *path in devicePaths)
+	{
+		paths[count++] = strdup([path UTF8String]);
+	}
+
+	Rtt::TargetDevice::Initialize(paths, count);
+
+	for (int index = 0; index < count; index++)
+	{
+		free(paths[index]);
+	}
+	free(paths);
+
+	// Skin identifiers are array indices and are invalid after rebuilding the
+	// list. restoreUserSkinSetting will choose the project-specific selection.
+	fSkin = Rtt::TargetDevice::kDefaultSkin;
+	[self invalidateViewAsMenu];
+}
+
+- (void) invalidateViewAsMenu
+{
+	NSMenu *appMenu = [[NSApplication sharedApplication] mainMenu];
+	NSMenuItem *windowMenuItem = [appMenu itemWithTitle:kWindowMenuItemName];
+	NSMenuItem *viewAsItem = [[windowMenuItem submenu] itemWithTitle:kViewAsMenuItemName];
+	[[viewAsItem submenu] removeAllItems];
 }
 
 // -----------------------------------------------------------------------------
@@ -718,8 +943,920 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     Rtt::TargetDevice::Skin skinID = (Rtt::TargetDevice::Skin) [menuItem tag];
 
     // NSLog(@"viewAsAction: %d: %s", skinID, Rtt::TargetDevice::LuaObjectFileFromSkin(skinID));
+	[self clearTemporarySimulatorConfiguration];
     [self setSkin:skinID];
     [self launchSimulator:sender];
+}
+
+- (NSInteger) customDeviceWidth
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *projectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceWidthPreference withProjectPath:fAppPath];
+	NSNumber *value = projectKey ? [defaults objectForKey:projectKey] : nil;
+	if (!value)
+	{
+		value = [defaults objectForKey:kCustomDeviceWidthPreference];
+	}
+	NSInteger width = value ? [value integerValue] : kDefaultCustomDeviceWidth;
+	return width > 0 && width <= kMaximumCustomDeviceDimension ? width : kDefaultCustomDeviceWidth;
+}
+
+- (NSInteger) customDeviceHeight
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *projectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceHeightPreference withProjectPath:fAppPath];
+	NSNumber *value = projectKey ? [defaults objectForKey:projectKey] : nil;
+	if (!value)
+	{
+		value = [defaults objectForKey:kCustomDeviceHeightPreference];
+	}
+	NSInteger height = value ? [value integerValue] : kDefaultCustomDeviceHeight;
+	return height > 0 && height <= kMaximumCustomDeviceDimension ? height : kDefaultCustomDeviceHeight;
+}
+
+- (NSInteger) customDeviceSafeAreaInsetForPreference:(NSString*)preference
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *projectKey = [self getAppSpecificPreferenceKeyName:preference withProjectPath:fAppPath];
+	NSNumber *value = projectKey ? [defaults objectForKey:projectKey] : nil;
+	if (!value)
+	{
+		value = [defaults objectForKey:preference];
+	}
+
+	NSInteger inset = value ? [value integerValue] : 0;
+	return (inset >= 0 && inset <= kMaximumCustomDeviceDimension) ? inset : 0;
+}
+
+- (NSDictionary*) customDeviceSafeAreaInsets
+{
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithInteger:[self customDeviceSafeAreaInsetForPreference:kCustomDeviceSafeAreaInsetTopPreference]], @"top",
+		[NSNumber numberWithInteger:[self customDeviceSafeAreaInsetForPreference:kCustomDeviceSafeAreaInsetLeftPreference]], @"left",
+		[NSNumber numberWithInteger:[self customDeviceSafeAreaInsetForPreference:kCustomDeviceSafeAreaInsetBottomPreference]], @"bottom",
+		[NSNumber numberWithInteger:[self customDeviceSafeAreaInsetForPreference:kCustomDeviceSafeAreaInsetRightPreference]], @"right",
+		nil];
+}
+
+- (void) scheduleSimulatorRelaunch
+{
+	if ([self isRelaunchable] && !fSimulatorRelaunchPending)
+	{
+		fSimulatorRelaunchPending = YES;
+		[self performSelectorOnMainThread:@selector(launchSimulator:) withObject:nil waitUntilDone:NO];
+	}
+}
+
+-(BOOL)relaunchSimulator
+{
+	if (![self isRelaunchable])
+	{
+		return NO;
+	}
+
+	[self scheduleSimulatorRelaunch];
+	return YES;
+}
+
+-(BOOL)setSimulatorSafeAreaGuidesVisible:(BOOL)visible
+{
+	if (!fSimulator)
+	{
+		return NO;
+	}
+
+	[[NSUserDefaults standardUserDefaults] setBool:visible forKey:kShowSafeAreaGuidesPreference];
+	[self updateSafeAreaGuideOverlay];
+	return YES;
+}
+
+-(BOOL)setSimulatorFullscreen:(BOOL)fullscreen
+{
+	NSWindow *window = [self currentWindow];
+	if (!window)
+	{
+		return NO;
+	}
+
+	BOOL isFullscreen =
+		([window styleMask] & NSWindowStyleMaskFullScreen) == NSWindowStyleMaskFullScreen;
+	if (isFullscreen != fullscreen)
+	{
+		[window toggleFullScreen:nil];
+	}
+	return YES;
+}
+
+-(BOOL)setSimulatorCustomWidth:(NSInteger)width
+	height:(NSInteger)height
+	safeAreaInsetTop:(NSInteger)top
+	safeAreaInsetLeft:(NSInteger)left
+	safeAreaInsetBottom:(NSInteger)bottom
+	safeAreaInsetRight:(NSInteger)right
+{
+	if (width <= 0 || height <= 0 ||
+		width > kMaximumCustomDeviceDimension || height > kMaximumCustomDeviceDimension ||
+		top < 0 || left < 0 || bottom < 0 || right < 0 ||
+		top + bottom > height || left + right > width)
+	{
+		Rtt_LogException(
+			"WARNING: Custom Simulator dimensions and safe area insets are invalid (maximum dimension %ld)",
+			(long)kMaximumCustomDeviceDimension);
+		return NO;
+	}
+
+	NSDictionary *currentSafeAreaInsets = [self customDeviceSafeAreaInsets];
+	BOOL didChange = (fSkin != kCustomDeviceMenuTag ||
+		[self customDeviceWidth] != width ||
+		[self customDeviceHeight] != height ||
+		[[currentSafeAreaInsets objectForKey:@"top"] integerValue] != top ||
+		[[currentSafeAreaInsets objectForKey:@"left"] integerValue] != left ||
+		[[currentSafeAreaInsets objectForKey:@"bottom"] integerValue] != bottom ||
+		[[currentSafeAreaInsets objectForKey:@"right"] integerValue] != right);
+
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setInteger:width forKey:kCustomDeviceWidthPreference];
+	[defaults setInteger:height forKey:kCustomDeviceHeightPreference];
+	[defaults setInteger:top forKey:kCustomDeviceSafeAreaInsetTopPreference];
+	[defaults setInteger:left forKey:kCustomDeviceSafeAreaInsetLeftPreference];
+	[defaults setInteger:bottom forKey:kCustomDeviceSafeAreaInsetBottomPreference];
+	[defaults setInteger:right forKey:kCustomDeviceSafeAreaInsetRightPreference];
+
+	NSString *widthProjectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceWidthPreference withProjectPath:fAppPath];
+	NSString *heightProjectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceHeightPreference withProjectPath:fAppPath];
+	NSString *topProjectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceSafeAreaInsetTopPreference withProjectPath:fAppPath];
+	NSString *leftProjectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceSafeAreaInsetLeftPreference withProjectPath:fAppPath];
+	NSString *bottomProjectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceSafeAreaInsetBottomPreference withProjectPath:fAppPath];
+	NSString *rightProjectKey = [self getAppSpecificPreferenceKeyName:kCustomDeviceSafeAreaInsetRightPreference withProjectPath:fAppPath];
+	if (widthProjectKey && heightProjectKey && topProjectKey && leftProjectKey &&
+		bottomProjectKey && rightProjectKey)
+	{
+		[defaults setInteger:width forKey:widthProjectKey];
+		[defaults setInteger:height forKey:heightProjectKey];
+		[defaults setInteger:top forKey:topProjectKey];
+		[defaults setInteger:left forKey:leftProjectKey];
+		[defaults setInteger:bottom forKey:bottomProjectKey];
+		[defaults setInteger:right forKey:rightProjectKey];
+	}
+
+	if (fSkin != kCustomDeviceMenuTag)
+	{
+		[self setSkin:(Rtt::TargetDevice::Skin)kCustomDeviceMenuTag];
+	}
+	else
+	{
+		[self saveUserSkinSetting];
+		[self updateMenuForSkinChange];
+	}
+
+	[self invalidateViewAsMenu];
+
+	if (didChange)
+	{
+		[self scheduleSimulatorRelaunch];
+	}
+	return didChange;
+}
+
+-(BOOL)configureSimulator:(NSDictionary*)configuration relaunchIfNeeded:(BOOL)relaunchIfNeeded
+		didScheduleRelaunch:(BOOL*)didScheduleRelaunch
+{
+	return [self applySimulatorConfiguration:configuration
+		relaunchIfNeeded:relaunchIfNeeded
+		scheduleRelaunch:YES
+		didScheduleRelaunch:didScheduleRelaunch];
+}
+
+-(BOOL)applySimulatorConfiguration:(NSDictionary*)configuration
+		relaunchIfNeeded:(BOOL)relaunchIfNeeded
+		scheduleRelaunch:(BOOL)scheduleRelaunch
+		didScheduleRelaunch:(BOOL*)didScheduleRelaunch
+{
+	if (didScheduleRelaunch)
+	{
+		*didScheduleRelaunch = NO;
+	}
+	if (![self isRelaunchable] || ![configuration count])
+	{
+		return NO;
+	}
+
+	NSString *deviceIdentifier = [configuration objectForKey:@"deviceId"];
+	NSNumber *deviceWidth = [configuration objectForKey:@"deviceWidth"];
+	NSNumber *deviceHeight = [configuration objectForKey:@"deviceHeight"];
+	NSNumber *safeAreaInsetTop = [configuration objectForKey:@"safeAreaInsetTop"];
+	NSNumber *safeAreaInsetLeft = [configuration objectForKey:@"safeAreaInsetLeft"];
+	NSNumber *safeAreaInsetBottom = [configuration objectForKey:@"safeAreaInsetBottom"];
+	NSNumber *safeAreaInsetRight = [configuration objectForKey:@"safeAreaInsetRight"];
+	NSNumber *roundedCorners = [configuration objectForKey:@"roundedCorners"];
+	NSNumber *temporary = [configuration objectForKey:@"temporary"];
+	if ((deviceIdentifier && ![deviceIdentifier isKindOfClass:[NSString class]]) ||
+		(deviceWidth && ![deviceWidth isKindOfClass:[NSNumber class]]) ||
+		(deviceHeight && ![deviceHeight isKindOfClass:[NSNumber class]]) ||
+		(safeAreaInsetTop && ![safeAreaInsetTop isKindOfClass:[NSNumber class]]) ||
+		(safeAreaInsetLeft && ![safeAreaInsetLeft isKindOfClass:[NSNumber class]]) ||
+		(safeAreaInsetBottom && ![safeAreaInsetBottom isKindOfClass:[NSNumber class]]) ||
+		(safeAreaInsetRight && ![safeAreaInsetRight isKindOfClass:[NSNumber class]]) ||
+		(roundedCorners && ![roundedCorners isKindOfClass:[NSNumber class]]) ||
+		(temporary && ![temporary isKindOfClass:[NSNumber class]]))
+	{
+		return NO;
+	}
+
+	BOOL hasCustomDimensions = (deviceWidth != nil || deviceHeight != nil);
+	BOOL hasDeviceIdentifier = [deviceIdentifier length] > 0;
+	BOOL hasAnySafeAreaInset = safeAreaInsetTop || safeAreaInsetLeft || safeAreaInsetBottom || safeAreaInsetRight;
+	BOOL hasAllSafeAreaInsets = safeAreaInsetTop && safeAreaInsetLeft && safeAreaInsetBottom && safeAreaInsetRight;
+
+	if ((hasCustomDimensions && hasDeviceIdentifier) ||
+		(hasCustomDimensions && (!deviceWidth || !deviceHeight)) ||
+		(hasAnySafeAreaInset && (!hasCustomDimensions || !hasAllSafeAreaInsets)) ||
+		(!hasCustomDimensions && !hasDeviceIdentifier && !roundedCorners))
+	{
+		return NO;
+	}
+
+	NSDictionary *currentDeviceInfo = [self configuredSimulatorDeviceInfo];
+	BOOL requestedRoundedCorners = roundedCorners ? [roundedCorners boolValue] :
+		[[currentDeviceInfo objectForKey:@"roundedCorners"] boolValue];
+	NSDictionary *requestedDeviceInfo = nil;
+	if (hasCustomDimensions)
+	{
+		NSInteger requestedWidth = [deviceWidth integerValue];
+		NSInteger requestedHeight = [deviceHeight integerValue];
+		if (requestedWidth <= 0 || requestedHeight <= 0 ||
+			requestedWidth > kMaximumCustomDeviceDimension ||
+			requestedHeight > kMaximumCustomDeviceDimension)
+		{
+			return NO;
+		}
+
+		NSInteger requestedSafeAreaInsetTop = safeAreaInsetTop ? [safeAreaInsetTop integerValue] : 0;
+		NSInteger requestedSafeAreaInsetLeft = safeAreaInsetLeft ? [safeAreaInsetLeft integerValue] : 0;
+		NSInteger requestedSafeAreaInsetBottom = safeAreaInsetBottom ? [safeAreaInsetBottom integerValue] : 0;
+		NSInteger requestedSafeAreaInsetRight = safeAreaInsetRight ? [safeAreaInsetRight integerValue] : 0;
+		if (requestedSafeAreaInsetTop < 0 || requestedSafeAreaInsetLeft < 0 ||
+			requestedSafeAreaInsetBottom < 0 || requestedSafeAreaInsetRight < 0 ||
+			requestedSafeAreaInsetTop + requestedSafeAreaInsetBottom > requestedHeight ||
+			requestedSafeAreaInsetLeft + requestedSafeAreaInsetRight > requestedWidth)
+		{
+			return NO;
+		}
+		requestedDeviceInfo = [self simulatorCustomDeviceInfoWithWidth:requestedWidth
+			height:requestedHeight
+			safeAreaInsetTop:requestedSafeAreaInsetTop
+			safeAreaInsetLeft:requestedSafeAreaInsetLeft
+			safeAreaInsetBottom:requestedSafeAreaInsetBottom
+			safeAreaInsetRight:requestedSafeAreaInsetRight
+			roundedCorners:requestedRoundedCorners];
+	}
+	else if (hasDeviceIdentifier)
+	{
+		Rtt::TargetDevice::Skin requestedSkin =
+			[self skinForSimulatorDeviceIdentifier:deviceIdentifier];
+		if (requestedSkin == Rtt::TargetDevice::kUnknownSkin)
+		{
+			return NO;
+		}
+		requestedDeviceInfo = [self simulatorDeviceInfoForSkin:requestedSkin
+			roundedCorners:requestedRoundedCorners];
+	}
+	else
+	{
+		NSMutableDictionary *deviceInfo = [[currentDeviceInfo mutableCopy] autorelease];
+		[deviceInfo setObject:[NSNumber numberWithBool:requestedRoundedCorners]
+			forKey:@"roundedCorners"];
+		requestedDeviceInfo = deviceInfo;
+	}
+
+	BOOL configurationChanged = ![requestedDeviceInfo isEqualToDictionary:currentDeviceInfo];
+	if ([temporary boolValue])
+	{
+		[fTemporarySimulatorDeviceInfo release];
+		fTemporarySimulatorDeviceInfo = [requestedDeviceInfo copy];
+		if (![self refreshTemporarySimulatorConfiguration])
+		{
+			[self clearTemporarySimulatorConfiguration];
+			return NO;
+		}
+	}
+	else
+	{
+		[self clearTemporarySimulatorConfiguration];
+		[self persistSimulatorDeviceInfo:requestedDeviceInfo];
+	}
+
+	if (relaunchIfNeeded && !configurationChanged)
+	{
+		if (didScheduleRelaunch)
+		{
+			*didScheduleRelaunch = fSimulatorRelaunchPending;
+		}
+		return YES;
+	}
+
+	if (scheduleRelaunch)
+	{
+		[self scheduleSimulatorRelaunch];
+	}
+	if (didScheduleRelaunch)
+	{
+		*didScheduleRelaunch = scheduleRelaunch && fSimulatorRelaunchPending;
+	}
+	return YES;
+}
+
+-(Rtt::TargetDevice::Skin)skinForSimulatorDeviceIdentifier:(NSString*)identifier
+{
+	if (!identifier)
+	{
+		return Rtt::TargetDevice::kUnknownSkin;
+	}
+	if ([identifier isEqualToString:kCustomDevicePreferenceValue] ||
+		[identifier caseInsensitiveCompare:@"custom"] == NSOrderedSame)
+	{
+		return (Rtt::TargetDevice::Skin)kCustomDeviceMenuTag;
+	}
+
+	Rtt::TargetDevice::Skin skin =
+		Rtt::TargetDevice::FindSkinForLabel([identifier UTF8String]);
+	if (skin == Rtt::TargetDevice::kUnknownSkin &&
+		![identifier hasPrefix:@"project:"])
+	{
+		NSString *projectIdentifier = [@"project:" stringByAppendingString:identifier];
+		skin = Rtt::TargetDevice::FindSkinForLabel([projectIdentifier UTF8String]);
+	}
+	return skin;
+}
+
+-(NSDictionary*)simulatorCustomDeviceInfoWithWidth:(NSInteger)width
+		height:(NSInteger)height
+		safeAreaInsetTop:(NSInteger)top
+		safeAreaInsetLeft:(NSInteger)left
+		safeAreaInsetBottom:(NSInteger)bottom
+		safeAreaInsetRight:(NSInteger)right
+		roundedCorners:(BOOL)roundedCorners
+{
+	NSDictionary *safeAreaInsets = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithInteger:top], @"top",
+		[NSNumber numberWithInteger:left], @"left",
+		[NSNumber numberWithInteger:bottom], @"bottom",
+		[NSNumber numberWithInteger:right], @"right",
+		nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+		@"custom", @"id",
+		@"Custom", @"name",
+		@"Custom", @"category",
+		[NSNumber numberWithInteger:width], @"width",
+		[NSNumber numberWithInteger:height], @"height",
+		[NSNumber numberWithBool:YES], @"isCustom",
+		[NSNumber numberWithBool:NO], @"isProject",
+		[NSNumber numberWithBool:roundedCorners], @"roundedCorners",
+		safeAreaInsets, @"safeAreaInsets",
+		nil];
+}
+
+-(NSDictionary*)simulatorDeviceInfoForSkin:(Rtt::TargetDevice::Skin)skin
+		roundedCorners:(BOOL)roundedCorners
+{
+	if (skin == kCustomDeviceMenuTag)
+	{
+		NSDictionary *safeAreaInsets = [self customDeviceSafeAreaInsets];
+		return [self simulatorCustomDeviceInfoWithWidth:[self customDeviceWidth]
+			height:[self customDeviceHeight]
+			safeAreaInsetTop:[[safeAreaInsets objectForKey:@"top"] integerValue]
+			safeAreaInsetLeft:[[safeAreaInsets objectForKey:@"left"] integerValue]
+			safeAreaInsetBottom:[[safeAreaInsets objectForKey:@"bottom"] integerValue]
+			safeAreaInsetRight:[[safeAreaInsets objectForKey:@"right"] integerValue]
+			roundedCorners:roundedCorners];
+	}
+
+	const char *skinIdentifier = Rtt::TargetDevice::LabelForSkin(skin);
+	const char *skinName = Rtt::TargetDevice::NameForSkin(skin);
+	const char *skinCategory = Rtt::TargetDevice::CategoryForSkin(skin);
+	BOOL isProject = skinIdentifier && 0 == strncmp(skinIdentifier, "project:", 8);
+	NSDictionary *safeAreaInsets = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetTopForSkin(skin)], @"top",
+		[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetLeftForSkin(skin)], @"left",
+		[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetBottomForSkin(skin)], @"bottom",
+		[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetRightForSkin(skin)], @"right",
+		nil];
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSString stringWithExternalString:skinIdentifier ? skinIdentifier : ""], @"id",
+		[NSString stringWithExternalString:skinName ? skinName : ""], @"name",
+		[NSString stringWithExternalString:skinCategory ? skinCategory : ""], @"category",
+		[NSNumber numberWithInt:Rtt::TargetDevice::WidthForSkin(skin)], @"width",
+		[NSNumber numberWithInt:Rtt::TargetDevice::HeightForSkin(skin)], @"height",
+		[NSNumber numberWithBool:NO], @"isCustom",
+		[NSNumber numberWithBool:isProject], @"isProject",
+		[NSNumber numberWithBool:roundedCorners], @"roundedCorners",
+		safeAreaInsets, @"safeAreaInsets",
+		nil];
+}
+
+-(NSDictionary*)persistentSimulatorDeviceInfo
+{
+	return [self simulatorDeviceInfoForSkin:(Rtt::TargetDevice::Skin)fSkin
+		roundedCorners:![[NSUserDefaults standardUserDefaults] boolForKey:@"disableRoundedCorners"]];
+}
+
+-(NSDictionary*)configuredSimulatorDeviceInfo
+{
+	return fTemporarySimulatorDeviceInfo ? fTemporarySimulatorDeviceInfo : [self persistentSimulatorDeviceInfo];
+}
+
+-(BOOL)configuredSimulatorRoundedCorners
+{
+	return [[[self configuredSimulatorDeviceInfo] objectForKey:@"roundedCorners"] boolValue];
+}
+
+-(void)clearTemporarySimulatorConfiguration
+{
+	[fTemporarySimulatorDeviceInfo release];
+	fTemporarySimulatorDeviceInfo = nil;
+}
+
+-(BOOL)refreshTemporarySimulatorConfiguration
+{
+	if (!fTemporarySimulatorDeviceInfo)
+	{
+		return YES;
+	}
+
+	NSString *identifier = [fTemporarySimulatorDeviceInfo objectForKey:@"id"];
+	if ([[fTemporarySimulatorDeviceInfo objectForKey:@"isCustom"] boolValue])
+	{
+		fSkin = kCustomDeviceMenuTag;
+	}
+	else
+	{
+		Rtt::TargetDevice::Skin skin = [self skinForSimulatorDeviceIdentifier:identifier];
+		if (skin == Rtt::TargetDevice::kUnknownSkin)
+		{
+			Rtt_LogException(
+				"ERROR: Temporary Simulator device '%s' no longer exists",
+				[identifier UTF8String]);
+			return NO;
+		}
+
+		BOOL roundedCorners = [[fTemporarySimulatorDeviceInfo objectForKey:@"roundedCorners"] boolValue];
+		NSDictionary *refreshedDeviceInfo = [self simulatorDeviceInfoForSkin:skin roundedCorners:roundedCorners];
+		[fTemporarySimulatorDeviceInfo release];
+		fTemporarySimulatorDeviceInfo = [refreshedDeviceInfo copy];
+		fSkin = skin;
+	}
+
+	[self invalidateViewAsMenu];
+	[self updateMenuForSkinChange];
+	return YES;
+}
+
+-(void)persistSimulatorDeviceInfo:(NSDictionary*)deviceInfo
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setBool:![[deviceInfo objectForKey:@"roundedCorners"] boolValue]
+		forKey:@"disableRoundedCorners"];
+
+	Rtt::TargetDevice::Skin skin = [self skinForSimulatorDeviceIdentifier:
+		[deviceInfo objectForKey:@"id"]];
+	if ([[deviceInfo objectForKey:@"isCustom"] boolValue])
+	{
+		NSDictionary *safeAreaInsets = [deviceInfo objectForKey:@"safeAreaInsets"];
+		NSDictionary *values = [NSDictionary dictionaryWithObjectsAndKeys:
+			[deviceInfo objectForKey:@"width"], kCustomDeviceWidthPreference,
+			[deviceInfo objectForKey:@"height"], kCustomDeviceHeightPreference,
+			[safeAreaInsets objectForKey:@"top"], kCustomDeviceSafeAreaInsetTopPreference,
+			[safeAreaInsets objectForKey:@"left"], kCustomDeviceSafeAreaInsetLeftPreference,
+			[safeAreaInsets objectForKey:@"bottom"], kCustomDeviceSafeAreaInsetBottomPreference,
+			[safeAreaInsets objectForKey:@"right"], kCustomDeviceSafeAreaInsetRightPreference,
+			nil];
+		for (NSString *preference in values)
+		{
+			[defaults setObject:[values objectForKey:preference] forKey:preference];
+			NSString *projectKey =
+				[self getAppSpecificPreferenceKeyName:preference withProjectPath:fAppPath];
+			if (projectKey)
+			{
+				[defaults setObject:[values objectForKey:preference] forKey:projectKey];
+			}
+		}
+		skin = (Rtt::TargetDevice::Skin)kCustomDeviceMenuTag;
+	}
+
+	if (skin != Rtt::TargetDevice::kUnknownSkin)
+	{
+		if (fSkin != skin)
+		{
+			[self setSkin:skin];
+		}
+		else
+		{
+			[self saveUserSkinSetting];
+			[self updateMenuForSkinChange];
+		}
+	}
+	[self invalidateViewAsMenu];
+}
+
+-(BOOL)applyLaunchSimulatorConfiguration
+{
+	if (fLaunchSimulatorConfigurationHandled)
+	{
+		return YES;
+	}
+
+	NSDictionary *arguments = [[NSUserDefaults standardUserDefaults]
+		volatileDomainForName:NSArgumentDomain];
+	id device = [arguments objectForKey:kSimulatorDeviceArgument];
+	id width = [arguments objectForKey:kSimulatorWidthArgument];
+	id height = [arguments objectForKey:kSimulatorHeightArgument];
+	id safeAreaTop = [arguments objectForKey:kSimulatorSafeAreaTopArgument];
+	id safeAreaLeft = [arguments objectForKey:kSimulatorSafeAreaLeftArgument];
+	id safeAreaBottom = [arguments objectForKey:kSimulatorSafeAreaBottomArgument];
+	id safeAreaRight = [arguments objectForKey:kSimulatorSafeAreaRightArgument];
+	id roundedCorners = [arguments objectForKey:kSimulatorRoundedCornersArgument];
+	BOOL hasCustomDimensions = width || height;
+	BOOL hasSafeAreaInsets =
+		safeAreaTop || safeAreaLeft || safeAreaBottom || safeAreaRight;
+
+	if (!device && !hasCustomDimensions && !hasSafeAreaInsets && !roundedCorners)
+	{
+		fLaunchSimulatorConfigurationHandled = YES;
+		return YES;
+	}
+	if ((device && hasCustomDimensions) ||
+		(hasCustomDimensions && (!width || !height)) ||
+		(hasSafeAreaInsets && !hasCustomDimensions))
+	{
+		Rtt_LogException(
+			"ERROR: Launch configuration must specify either -%s or both -%s and -%s; "
+			"safe area arguments require custom dimensions",
+			[kSimulatorDeviceArgument UTF8String],
+			[kSimulatorWidthArgument UTF8String],
+			[kSimulatorHeightArgument UTF8String]);
+		return NO;
+	}
+
+	NSMutableDictionary *configuration = [NSMutableDictionary dictionaryWithCapacity:9];
+	if (device)
+	{
+		if (![device isKindOfClass:[NSString class]] || ![device length])
+		{
+			Rtt_LogException(
+				"ERROR: -%s expects a non-empty device identifier",
+				[kSimulatorDeviceArgument UTF8String]);
+			return NO;
+		}
+		[configuration setObject:device forKey:@"deviceId"];
+	}
+	else if (hasCustomDimensions)
+	{
+		NSInteger parsedWidth = 0;
+		NSInteger parsedHeight = 0;
+		NSInteger parsedSafeAreaTop = 0;
+		NSInteger parsedSafeAreaLeft = 0;
+		NSInteger parsedSafeAreaBottom = 0;
+		NSInteger parsedSafeAreaRight = 0;
+		if (!ReadSimulatorIntegerArgument(width, &parsedWidth) ||
+			!ReadSimulatorIntegerArgument(height, &parsedHeight) ||
+			(safeAreaTop && !ReadSimulatorIntegerArgument(safeAreaTop, &parsedSafeAreaTop)) ||
+			(safeAreaLeft && !ReadSimulatorIntegerArgument(safeAreaLeft, &parsedSafeAreaLeft)) ||
+			(safeAreaBottom && !ReadSimulatorIntegerArgument(safeAreaBottom, &parsedSafeAreaBottom)) ||
+			(safeAreaRight && !ReadSimulatorIntegerArgument(safeAreaRight, &parsedSafeAreaRight)))
+		{
+			Rtt_LogException("ERROR: Simulator launch dimensions and safe area insets must be integers");
+			return NO;
+		}
+
+		[configuration setObject:[NSNumber numberWithInteger:parsedWidth] forKey:@"deviceWidth"];
+		[configuration setObject:[NSNumber numberWithInteger:parsedHeight] forKey:@"deviceHeight"];
+		[configuration setObject:[NSNumber numberWithInteger:parsedSafeAreaTop] forKey:@"safeAreaInsetTop"];
+		[configuration setObject:[NSNumber numberWithInteger:parsedSafeAreaLeft] forKey:@"safeAreaInsetLeft"];
+		[configuration setObject:[NSNumber numberWithInteger:parsedSafeAreaBottom] forKey:@"safeAreaInsetBottom"];
+		[configuration setObject:[NSNumber numberWithInteger:parsedSafeAreaRight] forKey:@"safeAreaInsetRight"];
+	}
+
+	if (roundedCorners)
+	{
+		BOOL parsedRoundedCorners = NO;
+		if (!ReadSimulatorBooleanArgument(roundedCorners, &parsedRoundedCorners))
+		{
+			Rtt_LogException(
+				"ERROR: -%s expects true or false",
+				[kSimulatorRoundedCornersArgument UTF8String]);
+			return NO;
+		}
+		[configuration setObject:[NSNumber numberWithBool:parsedRoundedCorners]
+			forKey:@"roundedCorners"];
+	}
+
+	[configuration setObject:[NSNumber numberWithBool:YES] forKey:@"temporary"];
+	if (![self applySimulatorConfiguration:configuration
+		relaunchIfNeeded:NO
+		scheduleRelaunch:NO
+		didScheduleRelaunch:NULL])
+	{
+		Rtt_LogException("ERROR: The Simulator could not apply its launch configuration");
+		return NO;
+	}
+	fLaunchSimulatorConfigurationHandled = YES;
+	return YES;
+}
+
+-(NSDictionary*)simulatorDeviceInfo
+{
+	return fSimulator && fActiveSimulatorDeviceInfo ? fActiveSimulatorDeviceInfo : [self configuredSimulatorDeviceInfo];
+}
+
+-(NSDictionary*)simulatorStateInfo
+{
+	BOOL isSuspended = fSimulator && fSimulator->GetPlayer() &&
+		fSimulator->GetPlayer()->GetRuntime().IsSuspended();
+	NSWindow *window = [self currentWindow];
+	NSRect frame = window ? [window frame] : NSZeroRect;
+	NSDictionary *windowInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithDouble:frame.origin.x], @"x",
+		[NSNumber numberWithDouble:frame.origin.y], @"y",
+		[NSNumber numberWithDouble:frame.size.width], @"width",
+		[NSNumber numberWithDouble:frame.size.height], @"height",
+		[NSNumber numberWithDouble:window ? [window backingScaleFactor] : 1.0], @"backingScale",
+		[NSNumber numberWithBool:window &&
+			(([window styleMask] & NSWindowStyleMaskFullScreen) == NSWindowStyleMaskFullScreen)], @"isFullscreen",
+		nil];
+
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+		[self simulatorDeviceInfo], @"device",
+		[NSNumber numberWithBool:isSuspended], @"isSuspended",
+		[NSNumber numberWithBool:[[NSUserDefaults standardUserDefaults]
+			boolForKey:kShowSafeAreaGuidesPreference]], @"safeAreaGuidesVisible",
+		[NSNumber numberWithBool:fSimulatorRelaunchPending], @"isRelaunchPending",
+		[NSNumber numberWithLong:fRelaunchCount], @"relaunchCount",
+		windowInfo, @"window",
+		nil];
+}
+
+-(NSArray*)simulatorDevices
+{
+	NSMutableArray *devices = [NSMutableArray arrayWithCapacity:Rtt::TargetDevice::fSkinCount + 1];
+	NSDictionary *currentDevice = [self simulatorDeviceInfo];
+	NSString *currentDeviceIdentifier = [currentDevice objectForKey:@"id"];
+	for (int skin = 0; skin < Rtt::TargetDevice::fSkinCount; skin++)
+	{
+		const char *identifier = Rtt::TargetDevice::LabelForSkin(skin);
+		NSString *identifierString = [NSString stringWithExternalString:identifier ? identifier : ""];
+		const char *name = Rtt::TargetDevice::NameForSkin(skin);
+		const char *category = Rtt::TargetDevice::CategoryForSkin(skin);
+		BOOL isProject = identifier && 0 == strncmp(identifier, "project:", 8);
+		NSDictionary *safeAreaInsets = [NSDictionary dictionaryWithObjectsAndKeys:
+			[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetTopForSkin(skin)], @"top",
+			[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetLeftForSkin(skin)], @"left",
+			[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetBottomForSkin(skin)], @"bottom",
+			[NSNumber numberWithInt:Rtt::TargetDevice::SafeAreaInsetRightForSkin(skin)], @"right",
+			nil];
+		[devices addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+			identifierString, @"id",
+			[NSString stringWithExternalString:name ? name : ""], @"name",
+			[NSString stringWithExternalString:category ? category : ""], @"category",
+			[NSNumber numberWithInt:Rtt::TargetDevice::WidthForSkin(skin)], @"width",
+			[NSNumber numberWithInt:Rtt::TargetDevice::HeightForSkin(skin)], @"height",
+			[NSNumber numberWithBool:NO], @"isCustom",
+			[NSNumber numberWithBool:isProject], @"isProject",
+			[NSNumber numberWithBool:[currentDeviceIdentifier isEqualToString:identifierString]], @"isCurrent",
+			safeAreaInsets, @"safeAreaInsets",
+			nil]];
+	}
+
+	BOOL isCustomCurrent = [currentDeviceIdentifier isEqualToString:@"custom"];
+	NSDictionary *customSafeAreaInsets = isCustomCurrent
+		? [currentDevice objectForKey:@"safeAreaInsets"]
+		: [self customDeviceSafeAreaInsets];
+	NSNumber *customWidth = isCustomCurrent
+		? [currentDevice objectForKey:@"width"]
+		: [NSNumber numberWithInteger:[self customDeviceWidth]];
+	NSNumber *customHeight = isCustomCurrent
+		? [currentDevice objectForKey:@"height"]
+		: [NSNumber numberWithInteger:[self customDeviceHeight]];
+	[devices addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+		@"custom", @"id",
+		@"Custom", @"name",
+		@"Custom", @"category",
+		customWidth, @"width",
+		customHeight, @"height",
+		[NSNumber numberWithBool:YES], @"isCustom",
+		[NSNumber numberWithBool:NO], @"isProject",
+		[NSNumber numberWithBool:isCustomCurrent], @"isCurrent",
+		customSafeAreaInsets, @"safeAreaInsets",
+		nil]];
+
+	return devices;
+}
+
+- (IBAction) selectCustomDeviceAction:(id)sender
+{
+	[self clearTemporarySimulatorConfiguration];
+	NSDictionary *safeAreaInsets = [self customDeviceSafeAreaInsets];
+	[self setSimulatorCustomWidth:[self customDeviceWidth]
+		height:[self customDeviceHeight]
+		safeAreaInsetTop:[[safeAreaInsets objectForKey:@"top"] integerValue]
+		safeAreaInsetLeft:[[safeAreaInsets objectForKey:@"left"] integerValue]
+		safeAreaInsetBottom:[[safeAreaInsets objectForKey:@"bottom"] integerValue]
+		safeAreaInsetRight:[[safeAreaInsets objectForKey:@"right"] integerValue]];
+}
+
+- (IBAction) editCustomDeviceAction:(id)sender
+{
+	NSAlert *alert = [[NSAlert alloc] init];
+	[alert setMessageText:@"Custom Device"];
+	[alert setInformativeText:@"Enter the simulated dimensions and safe area insets in pixels. The project will relaunch using this device."];
+	[alert addButtonWithTitle:@"Apply"];
+	[alert addButtonWithTitle:@"Cancel"];
+
+	NSView *accessory = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 360, 150)];
+	NSTextField *dimensionsLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 126, 160, 20)];
+	NSTextField *safeAreaLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 70, 180, 20)];
+	NSTextField *widthLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 98, 60, 20)];
+	NSTextField *heightLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 98, 60, 20)];
+	NSTextField *topLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 42, 60, 20)];
+	NSTextField *bottomLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 42, 60, 20)];
+	NSTextField *leftLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 10, 60, 20)];
+	NSTextField *rightLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(190, 10, 60, 20)];
+	NSTextField *widthField = [[NSTextField alloc] initWithFrame:NSMakeRect(65, 96, 105, 24)];
+	NSTextField *heightField = [[NSTextField alloc] initWithFrame:NSMakeRect(255, 96, 105, 24)];
+	NSTextField *topField = [[NSTextField alloc] initWithFrame:NSMakeRect(65, 40, 105, 24)];
+	NSTextField *bottomField = [[NSTextField alloc] initWithFrame:NSMakeRect(255, 40, 105, 24)];
+	NSTextField *leftField = [[NSTextField alloc] initWithFrame:NSMakeRect(65, 8, 105, 24)];
+	NSTextField *rightField = [[NSTextField alloc] initWithFrame:NSMakeRect(255, 8, 105, 24)];
+
+	NSArray *labels = @[
+		dimensionsLabel, safeAreaLabel,
+		widthLabel, heightLabel, topLabel, bottomLabel, leftLabel, rightLabel
+	];
+	for (NSTextField *label in labels)
+	{
+		[label setBezeled:NO];
+		[label setDrawsBackground:NO];
+		[label setEditable:NO];
+		[label setSelectable:NO];
+	}
+	[dimensionsLabel setFont:[NSFont boldSystemFontOfSize:[NSFont systemFontSize]]];
+	[safeAreaLabel setFont:[NSFont boldSystemFontOfSize:[NSFont systemFontSize]]];
+	[dimensionsLabel setStringValue:@"Dimensions"];
+	[safeAreaLabel setStringValue:@"Safe Area Insets"];
+	[widthLabel setStringValue:@"Width:"];
+	[heightLabel setStringValue:@"Height:"];
+	[topLabel setStringValue:@"Top:"];
+	[bottomLabel setStringValue:@"Bottom:"];
+	[leftLabel setStringValue:@"Left:"];
+	[rightLabel setStringValue:@"Right:"];
+
+	NSDictionary *safeAreaInsets = [self customDeviceSafeAreaInsets];
+	[widthField setIntegerValue:[self customDeviceWidth]];
+	[heightField setIntegerValue:[self customDeviceHeight]];
+	[topField setIntegerValue:[[safeAreaInsets objectForKey:@"top"] integerValue]];
+	[leftField setIntegerValue:[[safeAreaInsets objectForKey:@"left"] integerValue]];
+	[bottomField setIntegerValue:[[safeAreaInsets objectForKey:@"bottom"] integerValue]];
+	[rightField setIntegerValue:[[safeAreaInsets objectForKey:@"right"] integerValue]];
+
+	for (NSView *view in @[
+		dimensionsLabel, safeAreaLabel,
+		widthLabel, heightLabel, topLabel, bottomLabel, leftLabel, rightLabel,
+		widthField, heightField, topField, bottomField, leftField, rightField
+	])
+	{
+		[accessory addSubview:view];
+	}
+	[alert setAccessoryView:accessory];
+	[alert.window setInitialFirstResponder:widthField];
+
+	if ([alert runModal] == NSAlertFirstButtonReturn)
+	{
+		NSInteger width = [widthField integerValue];
+		NSInteger height = [heightField integerValue];
+		NSInteger top = [topField integerValue];
+		NSInteger left = [leftField integerValue];
+		NSInteger bottom = [bottomField integerValue];
+		NSInteger right = [rightField integerValue];
+		if (width <= 0 || height <= 0 ||
+			width > kMaximumCustomDeviceDimension || height > kMaximumCustomDeviceDimension ||
+			top < 0 || left < 0 || bottom < 0 || right < 0 ||
+			top + bottom > height || left + right > width)
+		{
+			NSBeep();
+			NSRunAlertPanel(
+				@"Invalid Custom Device",
+				[NSString stringWithFormat:
+					@"Width and height must be between 1 and %ld pixels. Insets must be non-negative and fit within those dimensions.",
+					(long)kMaximumCustomDeviceDimension],
+				@"OK", nil, nil);
+		}
+		else
+		{
+			[self clearTemporarySimulatorConfiguration];
+			[self setSimulatorCustomWidth:width
+				height:height
+				safeAreaInsetTop:top
+				safeAreaInsetLeft:left
+				safeAreaInsetBottom:bottom
+				safeAreaInsetRight:right];
+		}
+	}
+
+	for (NSView *view in @[
+		dimensionsLabel, safeAreaLabel,
+		widthLabel, heightLabel, topLabel, bottomLabel, leftLabel, rightLabel,
+		widthField, heightField, topField, bottomField, leftField, rightField
+	])
+	{
+		[view release];
+	}
+	[accessory release];
+	[alert release];
+}
+
+- (void) updateSimulatorDisplayMenuItems:(NSMenu*)windowMenu
+{
+	NSMenuItem *viewAsItem = [windowMenu itemWithTitle:kViewAsMenuItemName];
+	NSInteger insertionIndex = [windowMenu indexOfItem:viewAsItem] + 1;
+
+	NSMenuItem *roundedCornersItem = [windowMenu itemWithTitle:kRoundedCornersMenuItemName];
+	if (!roundedCornersItem)
+	{
+		roundedCornersItem = [windowMenu insertItemWithTitle:kRoundedCornersMenuItemName
+			action:@selector(toggleRoundedCornersAction:)
+			keyEquivalent:@""
+			atIndex:insertionIndex];
+		[roundedCornersItem setTarget:self];
+	}
+
+	NSMenuItem *safeAreaGuidesItem = [windowMenu itemWithTitle:kShowSafeAreaGuidesMenuItemName];
+	if (!safeAreaGuidesItem)
+	{
+		safeAreaGuidesItem = [windowMenu insertItemWithTitle:kShowSafeAreaGuidesMenuItemName
+			action:@selector(toggleSafeAreaGuidesAction:)
+			keyEquivalent:@""
+			atIndex:[windowMenu indexOfItem:roundedCornersItem] + 1];
+		[safeAreaGuidesItem setTarget:self];
+	}
+
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[roundedCornersItem setState:[self configuredSimulatorRoundedCorners] ? NSOnState : NSOffState];
+	[roundedCornersItem setEnabled:[self isRelaunchable]];
+	[safeAreaGuidesItem setState:[defaults boolForKey:kShowSafeAreaGuidesPreference] ? NSOnState : NSOffState];
+	[safeAreaGuidesItem setEnabled:[self isRunning]];
+}
+
+- (IBAction) toggleRoundedCornersAction:(id)sender
+{
+	NSDictionary *configuration = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithBool:![self configuredSimulatorRoundedCorners]], @"roundedCorners",
+		[NSNumber numberWithBool:fTemporarySimulatorDeviceInfo != nil], @"temporary",
+		nil];
+	[self applySimulatorConfiguration:configuration
+		relaunchIfNeeded:NO
+		scheduleRelaunch:YES
+		didScheduleRelaunch:NULL];
+}
+
+- (IBAction) toggleSafeAreaGuidesAction:(id)sender
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[self setSimulatorSafeAreaGuidesVisible:![defaults boolForKey:kShowSafeAreaGuidesPreference]];
+}
+
+- (void) updateSafeAreaGuideOverlay
+{
+	GLView *screenView = [self layerHostView];
+	NSView *container = [screenView superview];
+	NSArray *subviews = [[container subviews] copy];
+	for (NSView *subview in subviews)
+	{
+		if ([subview isKindOfClass:[SimulatorSafeAreaGuideView class]])
+		{
+			[subview removeFromSuperview];
+		}
+	}
+	[subviews release];
+
+	if (!screenView || ![[NSUserDefaults standardUserDefaults] boolForKey:kShowSafeAreaGuidesPreference])
+	{
+		return;
+	}
+
+	NSDictionary *device = [self simulatorDeviceInfo];
+	NSDictionary *insets = [device objectForKey:@"safeAreaInsets"];
+	CGFloat deviceWidth = [[device objectForKey:@"width"] doubleValue];
+	CGFloat deviceHeight = [[device objectForKey:@"height"] doubleValue];
+	CGFloat scaleX = deviceWidth > 0 ? NSWidth([screenView bounds]) / deviceWidth : 1.0;
+	CGFloat scaleY = deviceHeight > 0 ? NSHeight([screenView bounds]) / deviceHeight : 1.0;
+
+	SimulatorSafeAreaGuideView *guide = [[SimulatorSafeAreaGuideView alloc]
+		initWithFrame:[screenView frame]
+		insetTop:[[insets objectForKey:@"top"] doubleValue] * scaleY
+		insetLeft:[[insets objectForKey:@"left"] doubleValue] * scaleX
+		insetBottom:[[insets objectForKey:@"bottom"] doubleValue] * scaleY
+		insetRight:[[insets objectForKey:@"right"] doubleValue] * scaleX];
+	[container addSubview:guide positioned:NSWindowAbove relativeTo:screenView];
+	[guide release];
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu
@@ -736,6 +1873,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     NSMenu *viewAsMenu = [viewAsItem submenu];
     
     Rtt_ASSERT(viewAsMenu != nil);
+
+	[self updateSimulatorDisplayMenuItems:menu];
     
     // If we haven't added any menu items yet
     if ([viewAsMenu numberOfItems] > 0)
@@ -747,7 +1886,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     NSString *lastSkinCategory = nil;
     int skinCount = 0;
     long itemCount = 0;
-    long viewAsItemCount = 0;
     NSFont *font = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]];
     NSMenu *parentMenu = viewAsMenu;
 
@@ -792,9 +1930,20 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         ++itemCount;
     }
     
-	[viewAsMenu insertItem:[NSMenuItem separatorItem] atIndex:viewAsItemCount];
-	++viewAsItemCount;
-    
+	[viewAsMenu addItem:[NSMenuItem separatorItem]];
+
+	NSString *customTitle = [NSString stringWithFormat:@"Custom (%ld \u00d7 %ld)",
+		(long)[self customDeviceWidth], (long)[self customDeviceHeight]];
+	NSMenuItem *customItem = [viewAsMenu addItemWithTitle:customTitle
+		action:@selector(selectCustomDeviceAction:)
+		keyEquivalent:@""];
+	[customItem setTag:kCustomDeviceMenuTag];
+
+	NSMenuItem *editCustomItem = [viewAsMenu addItemWithTitle:@"Edit Custom Device\u2026"
+		action:@selector(editCustomDeviceAction:)
+		keyEquivalent:@""];
+	[editCustomItem setTag:kEditCustomDeviceMenuTag];
+
     // Make sure the current skin is checked
     [self updateMenuForSkinChange];
 }
@@ -1024,11 +2173,11 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			// Reset the preference in case the Simulator crashes, it gets set again on normal exit
 			[[NSUserDefaults standardUserDefaults] synchronize];
 			
-            [self openLastProject];
+			[self openLastProject];
 		}
-		else
+		else if (![self runApp:appPath])
 		{
-			[self runApp:appPath];
+			exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -1059,11 +2208,14 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	[appVersionCode release];
 	[appVersion release];
 	[appName release];
-	
+
 	[fAppPath release];
+	[self clearTemporarySimulatorConfiguration];
+	[fActiveSimulatorDeviceInfo release];
 	delete fSimulator;
 	
 	[self removeObserver:self forKeyPath:@"fSkin"];
+
 }
 
 - (void)applicationWillResignActive:(NSNotification *)aNotification
@@ -1267,12 +2419,17 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			// Update Recent Items only if appPath lies outside the bundle
 			NSString* mainScriptFile = [NSString stringWithExternalString:Rtt_LUA_SCRIPT_FILE( "main" )];
 			[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:[appPath stringByAppendingPathComponent:mainScriptFile]]];
-
-            [self restoreUserSkinSetting];
 		}
 
 		self.fAppPath = [appPath stringByStandardizingPath];
-				
+		[self clearTemporarySimulatorConfiguration];
+		[self reloadDeviceSkinsForProject:self.fAppPath];
+		[self restoreUserSkinSetting];
+		if (![self applyLaunchSimulatorConfiguration])
+		{
+			return NO;
+		}
+
 		// There is an inital state condition where we need to make sure the skin checkmarks have been checked.
 		// This is mostly hit the very first time Solar2D is run since there is no previous skin and
 		// the default skin was setup before KVO was setup (in init) so we need to force a menu update.
@@ -1450,6 +2607,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 						if( nil != skin )
 						{
 							// We could check for the return value and throw an error, but maybe that is more annoying than useful.
+							[self clearTemporarySimulatorConfiguration];
 							[self setSkinForTitle:skin];
 						}
 						// Reuse the drag-launch code to launch the app
@@ -1516,6 +2674,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			if( nil != skin )
 			{
 				// We could check for the return value and throw an error, but maybe that is more annoying than useful.
+				[self clearTemporarySimulatorConfiguration];
 				[self setSkinForTitle:skin];
 			}
 			[self launchSimulator:nil];
@@ -1553,6 +2712,13 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void) closeSimulator:(id)sender
 {
 	using namespace Rtt;
+
+	[NSObject cancelPreviousPerformRequestsWithTarget:self
+		selector:@selector(resumeSimulatorAfterBackground)
+		object:nil];
+	fBackgroundedRuntime = NULL;
+	[fActiveSimulatorDeviceInfo release];
+	fActiveSimulatorDeviceInfo = nil;
 
 	if ( fSimulator )
 	{
@@ -1697,47 +2863,83 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 {
 	using namespace Rtt;
 
-	BOOL result = YES;
-
-	TargetDevice::Skin skin = (TargetDevice::Skin)fSkin;
-
-	if ( nil != title )
+	if ([title isEqualToString:kCustomDevicePreferenceValue] ||
+		[title caseInsensitiveCompare:@"custom"] == NSOrderedSame)
 	{
-        skin = Rtt::TargetDevice::SkinForLabel( [title UTF8String] );
-	}
-	
-	if ( Rtt::TargetDevice::kUnknownSkin == skin )
-	{
-		result = NO;
+		[self setSkin:(TargetDevice::Skin)kCustomDeviceMenuTag];
+		return YES;
 	}
 
-	if ( result )
+	if (!title)
 	{
-		[self setSkin:skin];
+		return NO;
 	}
 
-	return result;
+	TargetDevice::Skin skin = Rtt::TargetDevice::FindSkinForLabel([title UTF8String]);
+	if (skin == TargetDevice::kUnknownSkin)
+	{
+		return NO;
+	}
+
+	[self setSkin:skin];
+	return YES;
 }
 
 - (void) restoreUserSkinSetting
 {
-	NSString* skinname = [[NSUserDefaults standardUserDefaults] stringForKey:kUserPreferenceUsersCurrentSelectedSkin];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *skinname = [defaults stringForKey:kUserPreferenceUsersCurrentSelectedSkin];
+	NSString *projectKey = [self getAppSpecificPreferenceKeyName:kUserPreferenceUsersCurrentSelectedSkin withProjectPath:fAppPath];
+	if (projectKey && [defaults stringForKey:projectKey])
+	{
+		skinname = [defaults stringForKey:projectKey];
+	}
+
 	if ( nil != skinname )
 	{
         if ( ! [self setSkinForTitle:skinname] )
         {
             Rtt_TRACE_SIM( ( "WARNING: Skin '%s' does not exist\n", [skinname UTF8String] ) );
+			[self setSkin:Rtt::TargetDevice::kDefaultSkin];
         }
 	}
 }
 
 - (void) saveUserSkinSetting
 {
-    const char* skinstring = Rtt::TargetDevice::LabelForSkin((Rtt::TargetDevice::Skin)self.fSkin);
-    if ( nil != skinstring )
-    {
-        [[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:[NSString stringWithExternalString:skinstring] forKey:kUserPreferenceUsersCurrentSelectedSkin];
-    }
+	NSString *skinName = nil;
+	if (self.fSkin == kCustomDeviceMenuTag)
+	{
+		skinName = kCustomDevicePreferenceValue;
+	}
+	else
+	{
+		const char *skinString = Rtt::TargetDevice::LabelForSkin((Rtt::TargetDevice::Skin)self.fSkin);
+		if (skinString)
+		{
+			skinName = [NSString stringWithExternalString:skinString];
+		}
+	}
+
+	if (!skinName)
+	{
+		return;
+	}
+
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSString *projectKey = [self getAppSpecificPreferenceKeyName:kUserPreferenceUsersCurrentSelectedSkin withProjectPath:fAppPath];
+	if (projectKey)
+	{
+		[defaults setObject:skinName forKey:projectKey];
+	}
+
+	// A project device does not exist until that project is loaded. Keeping it
+	// as the global fallback would cause a spurious "unknown skin" warning the
+	// next time the Simulator starts.
+	if (![skinName hasPrefix:@"project:"])
+	{
+		[defaults setObject:skinName forKey:kUserPreferenceUsersCurrentSelectedSkin];
+	}
 }
 
 - (void) updateMenuForSkinChange
@@ -1779,13 +2981,15 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 -(IBAction)launchSimulator:(id)sender
 {
 	using namespace Rtt;
+	fSimulatorRelaunchPending = NO;
+	BOOL isRelaunch = fSimulator != NULL;
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"clearConsoleOnRelaunch"])
 	{
 		[self clearConsole];
 	}
 
 	// Detect relaunch
-	if ( fSimulator )
+	if ( isRelaunch )
 	{
 		// Always close
 		[self closeSimulator:sender];
@@ -1802,22 +3006,61 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		return;
 	}
 
+	if (isRelaunch)
+	{
+		[self reloadDeviceSkinsForProject:self.fAppPath];
+		if (![self refreshTemporarySimulatorConfiguration])
+		{
+			[self clearTemporarySimulatorConfiguration];
+			[self restoreUserSkinSetting];
+		}
+		else if (!fTemporarySimulatorDeviceInfo)
+		{
+			[self restoreUserSkinSetting];
+		}
+	}
+
 	[self willChangeValueForKey:@"suspendResumeLabel"];
 
 	fSimulator = new Rtt::MacSimulator;
 
 	fBuildProblemNotified = false;
 	
-	const char *skinFile = skinFile = Rtt::TargetDevice::LuaObjectFileFromSkin( (Rtt::TargetDevice::Skin)fSkin );
-
-    // If all else fails, default to the default skin file
-    if (skinFile == NULL)
-    {
-        skinFile = Rtt::TargetDevice::LuaObjectFileFromSkin( Rtt::TargetDevice::kDefaultSkin );
-    }
-
 	// [1] Somewhere in Initialize (or its sub-calls), GLView's prepareOpenGL is invoked, and Runtime is instantiated
-	fSimulator->Initialize( skinFile, resourcePath );
+	NSDictionary *deviceInfo = [[self configuredSimulatorDeviceInfo] retain];
+	[fActiveSimulatorDeviceInfo release];
+	fActiveSimulatorDeviceInfo = deviceInfo;
+	BOOL roundedCorners = [[deviceInfo objectForKey:@"roundedCorners"] boolValue];
+	if ([[deviceInfo objectForKey:@"isCustom"] boolValue])
+	{
+		NSDictionary *safeAreaInsets = [deviceInfo objectForKey:@"safeAreaInsets"];
+		fSimulator->Initialize(
+			"Custom",
+			(float)[[deviceInfo objectForKey:@"width"] doubleValue],
+			(float)[[deviceInfo objectForKey:@"height"] doubleValue],
+			(float)[[safeAreaInsets objectForKey:@"top"] doubleValue],
+			(float)[[safeAreaInsets objectForKey:@"left"] doubleValue],
+			(float)[[safeAreaInsets objectForKey:@"bottom"] doubleValue],
+			(float)[[safeAreaInsets objectForKey:@"right"] doubleValue],
+			roundedCorners,
+			resourcePath );
+	}
+	else
+	{
+		Rtt::TargetDevice::Skin skin = [self skinForSimulatorDeviceIdentifier:
+			[deviceInfo objectForKey:@"id"]];
+		const char *skinFile = Rtt::TargetDevice::LuaObjectFileFromSkin(skin);
+
+		// If all else fails, default to the default skin file
+		if (skinFile == NULL)
+		{
+			skinFile = Rtt::TargetDevice::LuaObjectFileFromSkin( Rtt::TargetDevice::kDefaultSkin );
+		}
+
+		fSimulator->Initialize( skinFile, roundedCorners, resourcePath );
+	}
+
+	[self updateSafeAreaGuideOverlay];
 	
 	[self didChangeValueForKey:@"suspendResumeLabel"];
 }
@@ -1862,6 +3105,217 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			[self close:sender];
 		}
 	}
+}
+
+-(BOOL)dispatchSimulatorInput:(NSDictionary*)input
+{
+	using namespace Rtt;
+
+	GLView *screenView = [self layerHostView];
+	if (![screenView canDispatchEvents])
+	{
+		return NO;
+	}
+
+	NSString *type = [input objectForKey:@"type"];
+	if ([type isEqualToString:@"back"])
+	{
+		[self back:nil];
+		return YES;
+	}
+	else if ([type isEqualToString:@"key"])
+	{
+		NSString *phase = [input objectForKey:@"phase"];
+		NSString *keyName = [input objectForKey:@"keyName"];
+		NSString *qwertyKeyName = [input objectForKey:@"qwertyKeyName"];
+		S32 nativeKeyCode = (S32)[[input objectForKey:@"nativeKeyCode"] intValue];
+		bool isShiftDown = [[input objectForKey:@"isShiftDown"] boolValue];
+		bool isAltDown = [[input objectForKey:@"isAltDown"] boolValue];
+		bool isCtrlDown = [[input objectForKey:@"isCtrlDown"] boolValue];
+		bool isCommandDown = [[input objectForKey:@"isCommandDown"] boolValue];
+
+		BOOL wasDispatched = YES;
+		if ([phase isEqualToString:@"down"] || [phase isEqualToString:@"pressed"])
+		{
+			KeyEvent event(
+				NULL,
+				KeyEvent::kDown,
+				[keyName UTF8String],
+				nativeKeyCode,
+				isShiftDown,
+				isAltDown,
+				isCtrlDown,
+				isCommandDown,
+				[qwertyKeyName UTF8String] );
+			wasDispatched = [screenView dispatchEvent:&event];
+		}
+		if (wasDispatched && ([phase isEqualToString:@"up"] || [phase isEqualToString:@"pressed"]))
+		{
+			KeyEvent event(
+				NULL,
+				KeyEvent::kUp,
+				[keyName UTF8String],
+				nativeKeyCode,
+				isShiftDown,
+				isAltDown,
+				isCtrlDown,
+				isCommandDown,
+				[qwertyKeyName UTF8String] );
+			wasDispatched = [screenView dispatchEvent:&event];
+		}
+		return wasDispatched;
+	}
+	else if ([type isEqualToString:@"touch"])
+	{
+		NSString *phaseName = [input objectForKey:@"phase"];
+		TouchEvent::Phase phase = TouchEvent::kBegan;
+		if ([phaseName isEqualToString:@"moved"])
+		{
+			phase = TouchEvent::kMoved;
+		}
+		else if ([phaseName isEqualToString:@"ended"])
+		{
+			phase = TouchEvent::kEnded;
+		}
+		else if ([phaseName isEqualToString:@"cancelled"])
+		{
+			phase = TouchEvent::kCancelled;
+		}
+
+		TouchEvent event(
+			Rtt_FloatToReal([[input objectForKey:@"x"] doubleValue]),
+			Rtt_FloatToReal([[input objectForKey:@"y"] doubleValue]),
+			Rtt_FloatToReal([[input objectForKey:@"xStart"] doubleValue]),
+			Rtt_FloatToReal([[input objectForKey:@"yStart"] doubleValue]),
+			phase );
+		static U32 sSimulatorTouchId;
+		event.SetId(&sSimulatorTouchId);
+		return [screenView dispatchTouchEvent:&event];
+	}
+	else if ([type isEqualToString:@"mouse"])
+	{
+		NSString *phaseName = [input objectForKey:@"phase"];
+		MouseEvent::MouseEventType eventType = MouseEvent::kGeneric;
+		if ([phaseName isEqualToString:@"up"])
+		{
+			eventType = MouseEvent::kUp;
+		}
+		else if ([phaseName isEqualToString:@"down"])
+		{
+			eventType = MouseEvent::kDown;
+		}
+		else if ([phaseName isEqualToString:@"drag"])
+		{
+			eventType = MouseEvent::kDrag;
+		}
+		else if ([phaseName isEqualToString:@"move"])
+		{
+			eventType = MouseEvent::kMove;
+		}
+		else if ([phaseName isEqualToString:@"exit"])
+		{
+			eventType = MouseEvent::kExit;
+		}
+		else if ([phaseName isEqualToString:@"scroll"])
+		{
+			eventType = MouseEvent::kScroll;
+		}
+
+		MouseEvent event(
+			eventType,
+			Rtt_FloatToReal([[input objectForKey:@"x"] doubleValue]),
+			Rtt_FloatToReal([[input objectForKey:@"y"] doubleValue]),
+			Rtt_FloatToReal([[input objectForKey:@"scrollX"] doubleValue]),
+			Rtt_FloatToReal([[input objectForKey:@"scrollY"] doubleValue]),
+			[[input objectForKey:@"clickCount"] intValue],
+			[[input objectForKey:@"isPrimaryButtonDown"] boolValue],
+			[[input objectForKey:@"isSecondaryButtonDown"] boolValue],
+			[[input objectForKey:@"isMiddleButtonDown"] boolValue],
+			[[input objectForKey:@"isShiftDown"] boolValue],
+			[[input objectForKey:@"isAltDown"] boolValue],
+			[[input objectForKey:@"isCtrlDown"] boolValue],
+			[[input objectForKey:@"isCommandDown"] boolValue] );
+		return [screenView dispatchEvent:&event];
+	}
+	return NO;
+}
+
+-(void)resumeSimulatorAfterBackground
+{
+	Runtime *runtime = [self runtime];
+	if (runtime && runtime == fBackgroundedRuntime && runtime->IsSuspended())
+	{
+		fSimulator->ToggleSuspendResume(true);
+	}
+	fBackgroundedRuntime = NULL;
+}
+
+-(BOOL)simulateSimulatorEvent:(NSDictionary*)event
+{
+	using namespace Rtt;
+
+	Runtime *runtime = [self runtime];
+	GLView *screenView = [self layerHostView];
+	if (![screenView canDispatchEvents])
+	{
+		return NO;
+	}
+
+	NSString *type = [event objectForKey:@"type"];
+	if ([type isEqualToString:@"memoryWarning"])
+	{
+		MemoryWarningEvent memoryWarning;
+		return [screenView dispatchEvent:&memoryWarning];
+	}
+	else if ([type isEqualToString:@"background"])
+	{
+		[screenView setAllowOverlay:NO];
+		fSimulator->ToggleSuspendResume(true);
+		[screenView setAllowOverlay:YES];
+
+		[NSObject cancelPreviousPerformRequestsWithTarget:self
+			selector:@selector(resumeSimulatorAfterBackground)
+			object:nil];
+		fBackgroundedRuntime = runtime;
+		NSTimeInterval duration = [[event objectForKey:@"duration"] doubleValue] / 1000.0;
+		[self performSelector:@selector(resumeSimulatorAfterBackground) withObject:nil afterDelay:duration];
+		return YES;
+	}
+	else if ([type isEqualToString:@"accelerometer"])
+	{
+		double gravity[] = {
+			[[event objectForKey:@"xGravity"] doubleValue],
+			[[event objectForKey:@"yGravity"] doubleValue],
+			[[event objectForKey:@"zGravity"] doubleValue]
+		};
+		double instant[] = {
+			[[event objectForKey:@"xInstant"] doubleValue],
+			[[event objectForKey:@"yInstant"] doubleValue],
+			[[event objectForKey:@"zInstant"] doubleValue]
+		};
+		double raw[] = {
+			[[event objectForKey:@"xRaw"] doubleValue],
+			[[event objectForKey:@"yRaw"] doubleValue],
+			[[event objectForKey:@"zRaw"] doubleValue]
+		};
+		AccelerometerEvent accelerometer(
+			gravity,
+			instant,
+			raw,
+			[[event objectForKey:@"isShake"] boolValue],
+			[[event objectForKey:@"deltaTime"] doubleValue] );
+		return [screenView dispatchEvent:&accelerometer];
+	}
+	else if ([type isEqualToString:@"gyroscope"])
+	{
+		GyroscopeEvent gyroscope(
+			[[event objectForKey:@"xRotation"] doubleValue],
+			[[event objectForKey:@"yRotation"] doubleValue],
+			[[event objectForKey:@"zRotation"] doubleValue],
+			[[event objectForKey:@"deltaTime"] doubleValue] );
+		return [screenView dispatchEvent:&gyroscope];
+	}
+	return NO;
 }
 
 -(IBAction)toggleSuspendResume:(id)sender
@@ -2610,5 +4064,3 @@ static void BringToFrontCallback(CFNotificationCenterRef center, void *observer,
 
 
 @end
-
-

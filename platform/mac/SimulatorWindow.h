@@ -30,11 +30,11 @@
 
 - (id)initWithScreenView:(GLView*)screenView
 				viewRect:(NSRect)screenRect
+		  roundedCorners:(BOOL)roundedCorners
 				   title:(NSString*)title;
-				   
+
 - (void) setPerformCloseBlock:(void (^)(id sender))block;
 
 @end
 
 // ----------------------------------------------------------------------------
-

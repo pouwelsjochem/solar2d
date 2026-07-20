@@ -80,6 +80,10 @@ class PlatformSimulator
 			String deviceName;
 			float deviceWidth;
 			float deviceHeight;
+			float safeAreaInsetTop;
+			float safeAreaInsetLeft;
+			float safeAreaInsetBottom;
+			float safeAreaInsetRight;
 		};
 
 	public:
