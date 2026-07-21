@@ -389,7 +389,6 @@ LOCAL_C_INCLUDES := \
 	$(LUAFILESYSTEM_DIR)/src \
 	$(CORONA_ROOT)/librtt \
 	$(CORONA_ROOT)/librtt/Corona \
-	$(CORONA_ROOT)/plugins/shared \
 	$(CORONA_ROOT)/platform/android/ndk \
 	$(CORONA_ROOT)/platform/shared \
 	$(CORONA_ROOT) \
@@ -765,11 +764,6 @@ LIBRTT_FILES := \
 	$(TACHYON_DIR)/Rtt_TextureVolatile.cpp \
 	$(TACHYON_DIR)/Rtt_Uniform.cpp \
 
-LIBPLUGINS_DIR := $(CORONA_ROOT)/plugins/shared
-LIBPLUGINS_FILES := \
-	$(LIBPLUGINS_DIR)/CoronaLuaLibrary.cpp \
-	$(LIBPLUGINS_DIR)/CoronaLuaLibraryMetadata.cpp
-
 LIBSHARED_DIR := $(CORONA_ROOT)/platform/shared
 
 LIBPNG_FILES := \
@@ -809,7 +803,6 @@ LOCAL_SRC_FILES := \
 	NativeToJavaBridge.cpp \
     $(PLATFORM_FILES) \
     $(LIBRTT_FILES) \
-    $(LIBPLUGINS_FILES) \
     $(LIBLUASOCKET_FILES) \
 	$(LIBLPEG_FILES) \
 	$(LIBLUAFILESYSTEM_FILES) \
@@ -827,22 +820,4 @@ endif
 include $(BUILD_SHARED_LIBRARY)
 
 
-########################################################################################################
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := plugins
-
-LOCAL_ARM_MODE := arm
-
-LOCAL_SHARED_LIBRARIES := ads
-
-include $(BUILD_SHARED_LIBRARY)
-
-
-########################################################################################################
-
-$(call import-module,ads)
-
 $(call import-module,cpufeatures)
-

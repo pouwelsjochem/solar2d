@@ -32,8 +32,6 @@ Rtt_EXPORT_BEGIN
 Rtt_EXPORT_END
 
 
-#include "CoronaLuaLibrary.h"
-
 extern "C" {
 // #include "luasocket.h"
 	int luaopen_socket_core(lua_State *L);
@@ -975,7 +973,6 @@ RuntimeDelegatePlayer::PreloadLibraries( const Runtime& sender )
 
 	lua_pop( L, 2 );
 
-	Corona::LuaLibrary::InitializeMetatable( L );
 }
 
 // ----------------------------------------------------------------------------

@@ -72,7 +72,6 @@ include_directories (
 	${CORONA_ROOT}/librtt/Display
 	${CORONA_ROOT}/librtt/input
 	${CORONA_ROOT}/librtt/Renderer
-	${CORONA_ROOT}/plugins/shared
 	${CORONA_ROOT}/platform/shared
   ${CORONA_ROOT}/modules/simulator
   ${CORONA_ROOT}/platform
@@ -603,9 +602,6 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureBitmap.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureVolatile.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_Uniform.cpp
-
-		${CORONA_ROOT}/plugins/shared/CoronaLuaLibrary.cpp
-		${CORONA_ROOT}/plugins/shared/CoronaLuaLibraryMetadata.cpp
 
 		${CORONA_ROOT}/external/lpeg/lpeg.c
 		${Lua2CppOutputDir}/re.cpp

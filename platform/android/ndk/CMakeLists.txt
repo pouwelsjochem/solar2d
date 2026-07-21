@@ -29,7 +29,6 @@ include_directories (
 	${CORONA_ROOT}/external/luafilesystem/src
 	${CORONA_ROOT}/librtt
 	${CORONA_ROOT}/librtt/Corona
-	${CORONA_ROOT}/plugins/shared
 	${CORONA_ROOT}/platform/android/ndk
 	${CORONA_ROOT}/platform/shared
     ${ANDROID_NDK_ROOT}/sources/android/cpufeatures
@@ -511,9 +510,6 @@ add_library( corona SHARED
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureBitmap.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_TextureVolatile.cpp
 		${CORONA_ROOT}/librtt/Renderer/Rtt_Uniform.cpp
-
-		${CORONA_ROOT}/plugins/shared/CoronaLuaLibrary.cpp
-		${CORONA_ROOT}/plugins/shared/CoronaLuaLibraryMetadata.cpp
 
 		${CORONA_ROOT}/external/lpng1256/png.c
 		${CORONA_ROOT}/external/lpng1256/pngerror.c

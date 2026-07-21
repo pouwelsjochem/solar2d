@@ -518,8 +518,6 @@
         <File Name="../../librtt/Corona/CoronaVersion.c"/>
         <File Name="lua/CoronaProvider.cpp"/>
         <File Name="lua/CoronaPrototype.cpp"/>
-        <File Name="../../plugins/shared/CoronaLuaLibraryMetadata.cpp"/>
-        <File Name="../../plugins/shared/CoronaLuaLibrary.cpp"/>
         <File Name="../../librtt/Corona/CoronaLua.cpp"/>
         <File Name="../../librtt/Corona/CoronaLog.c"/>
         <File Name="../../librtt/Corona/CoronaLibrary.cpp"/>
@@ -529,8 +527,6 @@
         <VirtualDirectory Name="include">
           <File Name="../../librtt/Corona/CoronaVersion.h"/>
           <File Name="../../librtt/Corona/CoronaMacros.h"/>
-          <File Name="../../plugins/shared/CoronaLuaLibraryMetadata.h"/>
-          <File Name="../../plugins/shared/CoronaLuaLibrary.h"/>
           <File Name="../../librtt/Corona/CoronaLua.h"/>
           <File Name="../../librtt/Corona/CoronaLog.h"/>
           <File Name="../../librtt/Corona/CoronaLibrary.h"/>
@@ -859,7 +855,6 @@
         <IncludePath Value="../../tools/car"/>
         <IncludePath Value="../"/>
         <IncludePath Value="../../external/rsa"/>
-        <IncludePath Value="../../plugins/shared"/>
         <IncludePath Value="../../librtt/Corona"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
@@ -954,7 +949,6 @@
         <IncludePath Value="../../librtt"/>
         <IncludePath Value="../"/>
         <IncludePath Value="../../external/rsa"/>
-        <IncludePath Value="../../plugins/shared"/>
         <IncludePath Value="../../librtt/Corona"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>
@@ -1058,7 +1052,6 @@
         <IncludePath Value="../../librtt"/>
         <IncludePath Value="../"/>
         <IncludePath Value="../../external/rsa"/>
-        <IncludePath Value="../../plugins/shared"/>
         <IncludePath Value="../../librtt/Corona"/>
         <IncludePath Value="../../external/ALmixer"/>
         <IncludePath Value="../../external/ALmixer/Isolated"/>

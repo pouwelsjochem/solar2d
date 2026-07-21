@@ -33,4 +33,3 @@ add_subdirectory("${CORONA_ROOT}/external/lua-5.1.3" "${CMAKE_CURRENT_BINARY_DIR
 add_subdirectory("${CORONA_ROOT}/external/JNLua/src/main/c" "${CMAKE_CURRENT_BINARY_DIR}/libjnlua5.1_build/")
 add_subdirectory("${CORONA_ROOT}/external/mpg123-1.13.1/src/libmpg123" "${CMAKE_CURRENT_BINARY_DIR}/libmpg123_build/")
 add_subdirectory("${CORONA_ROOT}/external/ALmixer" "${CMAKE_CURRENT_BINARY_DIR}/libalmixer_build/")
-add_subdirectory("${CORONA_ROOT}/plugins/ads" "${CMAKE_CURRENT_BINARY_DIR}/libads_build/")

@@ -241,7 +241,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Scheduler.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Transform.cpp" />
-    <ClCompile Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.cpp" />
     <ClCompile Include="..\..\..\plugins\network\win32\CharsetTranscoder.cpp" />
     <ClCompile Include="..\..\..\plugins\network\win32\NetworkLibrary.cpp" />
     <ClCompile Include="..\..\..\plugins\network\win32\WindowsNetworkSupport.cpp" />
@@ -249,8 +248,6 @@
     <ClCompile Include="..\..\..\plugins\network\win32\WinHttpRequestOperation.cpp" />
     <ClCompile Include="..\..\..\plugins\network\win32\WinInetConnectivity.cpp" />
     <ClCompile Include="..\..\..\plugins\network\win32\WinTimer.cpp" />
-    <ClCompile Include="..\..\..\plugins\shared\CoronaLuaLibrary.cpp" />
-    <ClCompile Include="..\..\..\plugins\shared\CoronaLuaLibraryMetadata.cpp" />
     <ClCompile Include="..\..\shared\Rtt_NativeWindowMode.cpp" />
     <ClCompile Include="..\..\shared\Rtt_ProjectSettings.cpp" />
     <ClCompile Include="..\..\shared\Rtt_ReadOnlyProjectSettings.cpp" />
@@ -491,7 +488,6 @@
     <ClInclude Include="..\..\..\librtt\Rtt_Scheduler.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_SurfaceInfo.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Transform.h" />
-    <ClInclude Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.h" />
     <ClInclude Include="..\..\..\plugins\network\win32\CharsetTranscoder.h" />
     <ClInclude Include="..\..\..\plugins\network\win32\NetworkLibrary.h" />
     <ClInclude Include="..\..\..\plugins\network\win32\WindowsNetworkSupport.h" />
@@ -502,8 +498,6 @@
     <ClInclude Include="..\..\..\plugins\network\win32\WinHttpRequestResult.h" />
     <ClInclude Include="..\..\..\plugins\network\win32\WinInetConnectivity.h" />
     <ClInclude Include="..\..\..\plugins\network\win32\WinTimer.h" />
-    <ClInclude Include="..\..\..\plugins\shared\CoronaLuaLibrary.h" />
-    <ClInclude Include="..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h" />
     <ClInclude Include="..\..\shared\Rtt_NativeWindowMode.h" />
     <ClInclude Include="..\..\shared\Rtt_ProjectSettings.h" />
     <ClInclude Include="..\..\shared\Rtt_ReadOnlyProjectSettings.h" />
@@ -621,8 +615,6 @@
     <LuaToCpp Include="..\..\..\librtt\Display\Shader\kernel_generator_stripes_gl.lua" />
     <LuaToCpp Include="..\..\..\librtt\Display\Shader\kernel_generator_sunbeams_gl.lua" />
     <LuaToCpp Include="..\..\..\librtt\Display\Shader\shell_default_gl.lua" />
-    <LuaToCpp Include="..\..\..\plugins\ads\shared\ads.lua" />
-    <LuaToCpp Include="..\..\..\plugins\ads\shared\CoronaProvider.ads.lua" />
     <LuaToCpp Include="..\..\..\plugins\network\shared\network.lua" />
     <LuaToCpp Include="..\..\..\subrepos\easing\easing.lua" />
     <LuaToCpp Include="..\..\resources\dkjson.lua" />
@@ -787,7 +779,7 @@ if NOT EXIST %LIBRARY% (
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;..\..\..\plugins\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;WIN32;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -823,7 +815,7 @@ if NOT EXIST %LIBRARY% (
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;..\..\..\plugins\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;WIN32;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -849,7 +841,7 @@ if NOT EXIST %LIBRARY% (
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;..\..\..\plugins\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;WIN32;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -873,7 +865,7 @@ if NOT EXIST %LIBRARY% (
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;..\..\..\plugins\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\external\vulkan\Include;..\..\..\external\b2Separator-cpp;..\..\..\external\fft;..\..\..\external\LuaHashMap;..\..\..\external\smoothpolygon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VK_USE_PLATFORM_WIN32_KHR;WIN32;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

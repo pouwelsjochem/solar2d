@@ -381,7 +381,6 @@
 		A43288D0176A67E600ACB6FF /* kernel_filter_wobble_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A43288B8176A626B00ACB6FF /* kernel_filter_wobble_gl.lua */; };
 		A43FE9BD14F057DA0042FA41 /* Rtt_ArrayTupleStruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43FE9BB14F057D80042FA41 /* Rtt_ArrayTupleStruct.cpp */; };
 		A43FE9C314F068400042FA41 /* Rtt_ArrayTuple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A43FE9C114F0683F0042FA41 /* Rtt_ArrayTuple.cpp */; };
-		A44308DC164C755600B9117B /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44308DA164C74BE00B9117B /* libplugins.a */; };
 		A46AC88017820BEB00BE6805 /* Rtt_TesselatorRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC87E17820BD800BE6805 /* Rtt_TesselatorRect.cpp */; };
 		A46AC88C17820CA400BE6805 /* Rtt_ShapeAdapterRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC88A17820C9200BE6805 /* Rtt_ShapeAdapterRect.cpp */; };
 		A46AC8C5178A260300BE6805 /* Rtt_UseCount.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A46AC8BA178A25ED00BE6805 /* Rtt_UseCount.cpp */; };
@@ -443,7 +442,6 @@
 		A4B66B1D17727B620077B2BF /* Rtt_ShapeAdapterCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1B17727B4F0077B2BF /* Rtt_ShapeAdapterCircle.cpp */; };
 		A4B66B21177287450077B2BF /* Rtt_ShapeAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B66B1F177287350077B2BF /* Rtt_ShapeAdapter.cpp */; };
 		A4B71B9413F4BDC7009428CF /* Rtt_LuaResourceOwner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4B71B9113F4BDBF009428CF /* Rtt_LuaResourceOwner.cpp */; };
-		A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A4BED90D14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BED90C14B65EAD0028BE25 /* Rtt_MacWebViewObject.mm */; };
 		A4BEDC9B14BE81320028BE25 /* Rtt_MacVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4BEDC9A14BE81320028BE25 /* Rtt_MacVideoObject.mm */; };
 		A4C9CB2C17BAE2480071753E /* kernel_generator_marchingAnts_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4C9CB2517BAE2320071753E /* kernel_generator_marchingAnts_gl.lua */; };
@@ -514,7 +512,6 @@
 		C229DFE11B32221B00D87A7C /* CoronaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186141641DD6100A39286 /* CoronaLibrary.h */; };
 		C229DFE21B32221B00D87A7C /* CoronaLog.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186171641DD6100A39286 /* CoronaLog.h */; };
 		C229DFE31B32221B00D87A7C /* CoronaLua.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186191641DD6100A39286 /* CoronaLua.h */; };
-		C229DFE41B32221B00D87A7C /* CoronaLuaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A491867D1641F27400A39286 /* CoronaLuaLibrary.h */; };
 		C229DFE51B32221B00D87A7C /* CoronaMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = A491861A1641DD6100A39286 /* CoronaMacros.h */; };
 		C229DFE61B32221B00D87A7C /* CoronaVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = A40C523F16F847EA00AE2ECF /* CoronaVersion.h */; };
 		C229DFE71B32221B00D87A7C /* LuaHashMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 0054B969138205E300BC962A /* LuaHashMap.h */; };
@@ -915,7 +912,6 @@
 		C26E847F1A5DE1AE008950FB /* ALmixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; };
 		C26E84821A5DE1AE008950FB /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733FB12B6F6BC0057F594 /* liblua.a */; };
 		C26E84831A5DE1AE008950FB /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733F312B6F6740057F594 /* librtt.a */; };
-		C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A491860D1641DCFD00A39286 /* ads.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A4F12C2316D43662002BCCFB /* licensing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27E338D1A71748C00DDED18 /* CoronaCards.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992961A6B135500E99F46 /* CoronaCards.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C27E338E1A71748C00DDED18 /* CoronaView.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992971A6B135500E99F46 /* CoronaView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -969,7 +965,6 @@
 		C2D3DA6B1B179DA000137331 /* Rtt_NativeWindowMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2D3DA681B179DA000137331 /* Rtt_NativeWindowMode.cpp */; };
 		C2D3DA6C1B179DA000137331 /* Rtt_NativeWindowMode.h in Headers */ = {isa = PBXBuildFile; fileRef = C2D3DA691B179DA000137331 /* Rtt_NativeWindowMode.h */; };
 		C2D3DA6D1B179DA000137331 /* Rtt_NativeWindowMode.h in Headers */ = {isa = PBXBuildFile; fileRef = C2D3DA691B179DA000137331 /* Rtt_NativeWindowMode.h */; };
-		C2D495461B3A33FE0049DA4E /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44308DA164C74BE00B9117B /* libplugins.a */; };
 		C2DA95EC1B46460F00DAF684 /* librtt-simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C229E2071B32221B00D87A7C /* librtt-simulator.a */; };
 		C2DA960C1B46460F00DAF684 /* lundump_swap.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7348312B6F8C30057F594 /* lundump_swap.c */; };
 		C2DA960D1B46460F00DAF684 /* luac.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7343012B6F7530057F594 /* luac.c */; };
@@ -1005,7 +1000,6 @@
 		C2DA96371B46460F00DAF684 /* Rtt_LuaLibDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = A432880A176A621100ACB6FF /* Rtt_LuaLibDisplay.h */; };
 		C2DA963A1B46460F00DAF684 /* Rtt_LuaUserdataProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B66B1817726CB00077B2BF /* Rtt_LuaUserdataProxy.h */; };
 		C2DA963B1B46460F00DAF684 /* Rtt_PlatformAudioSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 006E5C4D13AC126E005A90EE /* Rtt_PlatformAudioSessionManager.h */; };
-		C2DA963C1B46460F00DAF684 /* CoronaLuaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A491867D1641F27400A39286 /* CoronaLuaLibrary.h */; };
 		C2DA963D1B46460F00DAF684 /* Rtt_Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = 000CE75D12B73EE300D9B6A4 /* Rtt_Transform.h */; };
 		C2DA963E1B46460F00DAF684 /* Rtt_UseCount.h in Headers */ = {isa = PBXBuildFile; fileRef = A46AC8BD178A25F800BE6805 /* Rtt_UseCount.h */; };
 		C2DA963F1B46460F00DAF684 /* Rtt_Version.h in Headers */ = {isa = PBXBuildFile; fileRef = 00B73BE412B71BF20057F594 /* Rtt_Version.h */; };
@@ -1344,33 +1338,12 @@
 			remoteGlobalIDString = 8DD76FB20486AB0100D96B5E;
 			remoteInfo = car;
 		};
-		A44308D9164C74BE00B9117B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A44308AD164C733E00B9117B;
-			remoteInfo = plugins;
-		};
-		A44308DD164C756400B9117B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A44308AC164C733E00B9117B;
-			remoteInfo = plugins;
-		};
 		A48B829916D59AFE00CA01A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A48B827C16D59A4000CA01A1;
 			remoteInfo = CoronaResources;
-		};
-		A491860C1641DCFD00A39286 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A47B5B6815F9BA95001D60AB;
-			remoteInfo = ads;
 		};
 		A4B66AB5176A7A370077B2BF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1448,13 +1421,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = C219959D1C189E0100E88FD0;
 			remoteInfo = "ios-syslog-helper";
-		};
-		C22607591B4B412F00172FB1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A44308AC164C733E00B9117B;
-			remoteInfo = plugins;
 		};
 		C226075B1B4B415D00172FB1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1625,7 +1591,6 @@
 			dstSubfolderSpec = 7;
 			files = (
 				A4F12C2516D43685002BCCFB /* licensing.dylib in CopyFiles */,
-				A4BCD6E61648D5EC00D8F41A /* ads.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1644,7 +1609,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C279452E1B585BD60046B6E8 /* ads.dylib in Copy Frameworks and dylibs */,
 				F5567D492ADC73BC008CD550 /* network.dylib in Copy Frameworks and dylibs */,
 				C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */,
 				C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */,
@@ -2263,7 +2227,6 @@
 		A48B827E16D59A4000CA01A1 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A48DA96A1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RuntimeDelegatePlayer.cpp; sourceTree = "<group>"; };
 		A48DA96B1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RuntimeDelegatePlayer.h; sourceTree = "<group>"; };
-		A49186021641DCFD00A39286 /* plugins.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = plugins.xcodeproj; sourceTree = "<group>"; };
 		A491860F1641DD6100A39286 /* CoronaAssert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CoronaAssert.c; path = Corona/CoronaAssert.c; sourceTree = "<group>"; };
 		A49186101641DD6100A39286 /* CoronaAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaAssert.h; path = Corona/CoronaAssert.h; sourceTree = "<group>"; };
 		A49186111641DD6100A39286 /* CoronaEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaEvent.cpp; path = Corona/CoronaEvent.cpp; sourceTree = "<group>"; };
@@ -2278,7 +2241,6 @@
 		A491861A1641DD6100A39286 /* CoronaMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaMacros.h; path = Corona/CoronaMacros.h; sourceTree = "<group>"; };
 		A491861B1641DD6100A39286 /* CoronaPrototype.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaPrototype.lua; path = Corona/CoronaPrototype.lua; sourceTree = "<group>"; };
 		A491861C1641DD6100A39286 /* CoronaProvider.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaProvider.lua; path = Corona/CoronaProvider.lua; sourceTree = "<group>"; };
-		A491867D1641F27400A39286 /* CoronaLuaLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaLibrary.h; path = ../plugins/shared/CoronaLuaLibrary.h; sourceTree = "<group>"; };
 		A492760A17B98BAE00DAD62A /* Rtt_CompositePaint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_CompositePaint.cpp; path = Display/Rtt_CompositePaint.cpp; sourceTree = "<group>"; };
 		A492760B17B98BAE00DAD62A /* Rtt_CompositePaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_CompositePaint.h; path = Display/Rtt_CompositePaint.h; sourceTree = "<group>"; };
 		A492763817BADA8800DAD62A /* kernel_composite_add_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_add_gl.lua; path = Display/Shader/kernel_composite_add_gl.lua; sourceTree = "<group>"; };
@@ -2536,7 +2498,6 @@
 				C2F911111CDBFA19004A5564 /* libluasocket.a in Frameworks */,
 				F57D177A1BE2752900AABAC1 /* GameController.framework in Frameworks */,
 				A4FBC5261A2D5623004D9A01 /* libCoronaCore.a in Frameworks */,
-				A44308DC164C755600B9117B /* libplugins.a in Frameworks */,
 				C287481D19F6EED0002D5B27 /* Cocoa.framework in Frameworks */,
 				00B7379A12B706FA0057F594 /* AudioToolbox.framework in Frameworks */,
 				00B7379B12B706FB0057F594 /* ApplicationServices.framework in Frameworks */,
@@ -2582,7 +2543,6 @@
 				C2C59B271E2812CE001DF51E /* AVFoundation.framework in Frameworks */,
 				C2C59B281E2812CE001DF51E /* AVKit.framework in Frameworks */,
 				C2F911101CDBF9F0004A5564 /* libluasocket.a in Frameworks */,
-				C2D495461B3A33FE0049DA4E /* libplugins.a in Frameworks */,
 				C2B5FEFC1B33708F00DD49E6 /* libluafilesystem.a in Frameworks */,
 				C2E993511A6B339F00E99F46 /* liblpeg.a in Frameworks */,
 				C2E9934E1A6B320200E99F46 /* libtachyon.a in Frameworks */,
@@ -2959,7 +2919,6 @@
 				00B73C1312B71C040057F594 /* external */,
 				0304FE5F178E189B0047CC04 /* Input */,
 				A41AC0E616A5DB1000AD331A /* Lua Frameworks */,
-				A49186791641F25900A39286 /* plugins */,
 				00B73BAF12B71BDA0057F594 /* Resources */,
 				000CE6BA12B73EE300D9B6A4 /* Rtt_Archive.cpp */,
 				000CE6BB12B73EE300D9B6A4 /* Rtt_Archive.h */,
@@ -3390,7 +3349,6 @@
 				00FD0C011330445800716D46 /* car.xcodeproj */,
 				0039BCEF132AF4570009B76B /* lua.xcodeproj */,
 				C2A08C221950DF2A002B7532 /* lpeg.xcodeproj */,
-				A49186021641DCFD00A39286 /* plugins.xcodeproj */,
 				F583ABD82ADAF4F2002799CB /* NetworkPlugin.xcodeproj */,
 				A4B66AB1176A7A370077B2BF /* libtachyon.xcodeproj */,
 				00B7340012B6F6E70057F594 /* external */,
@@ -3699,15 +3657,6 @@
 			name = Shader;
 			sourceTree = "<group>";
 		};
-		A49186031641DCFD00A39286 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A44308DA164C74BE00B9117B /* libplugins.a */,
-				A491860D1641DCFD00A39286 /* ads.dylib */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		A491860E1641DD2700A39286 /* Corona */ = {
 			isa = PBXGroup;
 			children = (
@@ -3738,15 +3687,6 @@
 				A40C523F16F847EA00AE2ECF /* CoronaVersion.h */,
 			);
 			name = Corona;
-			path = ../../librtt;
-			sourceTree = SOURCE_ROOT;
-		};
-		A49186791641F25900A39286 /* plugins */ = {
-			isa = PBXGroup;
-			children = (
-				A491867D1641F27400A39286 /* CoronaLuaLibrary.h */,
-			);
-			name = plugins;
 			path = ../../librtt;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -4003,7 +3943,6 @@
 				C2DA96651B46460F00DAF684 /* CoronaLibrary.h in Headers */,
 				C2DA966B1B46460F00DAF684 /* CoronaLog.h in Headers */,
 				C2DA96591B46460F00DAF684 /* CoronaLua.h in Headers */,
-				C2DA963C1B46460F00DAF684 /* CoronaLuaLibrary.h in Headers */,
 				C2DA96701B46460F00DAF684 /* CoronaMacros.h in Headers */,
 				C2DA96711B46460F00DAF684 /* CoronaVersion.h in Headers */,
 				C2DA96411B46460F00DAF684 /* LuaHashMap.h in Headers */,
@@ -4238,7 +4177,6 @@
 				C229DFE11B32221B00D87A7C /* CoronaLibrary.h in Headers */,
 				C229DFE21B32221B00D87A7C /* CoronaLog.h in Headers */,
 				C229DFE31B32221B00D87A7C /* CoronaLua.h in Headers */,
-				C229DFE41B32221B00D87A7C /* CoronaLuaLibrary.h in Headers */,
 				C229DFE51B32221B00D87A7C /* CoronaMacros.h in Headers */,
 				C229DFE61B32221B00D87A7C /* CoronaVersion.h in Headers */,
 				C229DFE71B32221B00D87A7C /* LuaHashMap.h in Headers */,
@@ -4522,7 +4460,6 @@
 				A48B829A16D59AFE00CA01A1 /* PBXTargetDependency */,
 				0039BD0A132AF46F0009B76B /* PBXTargetDependency */,
 				00B73DE212B725B40057F594 /* PBXTargetDependency */,
-				A44308DE164C756400B9117B /* PBXTargetDependency */,
 			);
 			name = rttplayer;
 			productInstallPath = "$(HOME)/Applications";
@@ -4610,7 +4547,6 @@
 				C2E9931C1A6B287500E99F46 /* PBXTargetDependency */,
 				C2E9931E1A6B287500E99F46 /* PBXTargetDependency */,
 				C2E993201A6B287500E99F46 /* PBXTargetDependency */,
-				C226075A1B4B412F00172FB1 /* PBXTargetDependency */,
 				C26E84871A5DE255008950FB /* PBXTargetDependency */,
 				C2F9110F1CDBF9D9004A5564 /* PBXTargetDependency */,
 				C26E84891A5DE255008950FB /* PBXTargetDependency */,
@@ -4682,10 +4618,6 @@
 					ProductGroup = F5567D3D2ADC7394008CD550 /* Products */;
 					ProjectRef = F583ABD82ADAF4F2002799CB /* NetworkPlugin.xcodeproj */;
 				},
-				{
-					ProductGroup = A49186031641DCFD00A39286 /* Products */;
-					ProjectRef = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -4750,20 +4682,6 @@
 			fileType = "compiled.mach-o.executable";
 			path = car;
 			remoteRef = 00FD0C091330445800716D46 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A44308DA164C74BE00B9117B /* libplugins.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libplugins.a;
-			remoteRef = A44308D9164C74BE00B9117B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A491860D1641DCFD00A39286 /* ads.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = ads.dylib;
-			remoteRef = A491860C1641DCFD00A39286 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A4B66AB6176A7A370077B2BF /* libtachyon.a */ = {
@@ -5803,11 +5721,6 @@
 			target = 00B737B912B707B40057F594 /* ALmixer */;
 			targetProxy = 00B73DE112B725B40057F594 /* PBXContainerItemProxy */;
 		};
-		A44308DE164C756400B9117B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = plugins;
-			targetProxy = A44308DD164C756400B9117B /* PBXContainerItemProxy */;
-		};
 		A48B829A16D59AFE00CA01A1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A48B827C16D59A4000CA01A1 /* CoronaResources */;
@@ -5857,11 +5770,6 @@
 			isa = PBXTargetDependency;
 			name = "ios-syslog-helper";
 			targetProxy = C21995AF1C18A2C000E88FD0 /* PBXContainerItemProxy */;
-		};
-		C226075A1B4B412F00172FB1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = plugins;
-			targetProxy = C22607591B4B412F00172FB1 /* PBXContainerItemProxy */;
 		};
 		C226075C1B4B415D00172FB1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

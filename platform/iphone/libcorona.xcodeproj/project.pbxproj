@@ -456,7 +456,6 @@
 		A49186FF16421CF900A39286 /* CoronaLog.c in Sources */ = {isa = PBXBuildFile; fileRef = A49186F416421CF900A39286 /* CoronaLog.c */; };
 		A491870016421CF900A39286 /* CoronaLog.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186F516421CF900A39286 /* CoronaLog.h */; };
 		A491870116421CF900A39286 /* CoronaMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186F616421CF900A39286 /* CoronaMacros.h */; };
-		A491870416421F4500A39286 /* CoronaLuaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A491870316421F4500A39286 /* CoronaLuaLibrary.h */; };
 		A491870D1642204A00A39286 /* CoronaLibrary.lua in Sources */ = {isa = PBXBuildFile; fileRef = A49186F316421CF900A39286 /* CoronaLibrary.lua */; };
 		A491870E1642204A00A39286 /* CoronaPrototype.lua in Sources */ = {isa = PBXBuildFile; fileRef = A49186F716421CF900A39286 /* CoronaPrototype.lua */; };
 		A491870F1642204A00A39286 /* CoronaProvider.lua in Sources */ = {isa = PBXBuildFile; fileRef = A49186F816421CF900A39286 /* CoronaProvider.lua */; };
@@ -1147,7 +1146,6 @@
 		A49186F616421CF900A39286 /* CoronaMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaMacros.h; path = Corona/CoronaMacros.h; sourceTree = "<group>"; };
 		A49186F716421CF900A39286 /* CoronaPrototype.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaPrototype.lua; path = Corona/CoronaPrototype.lua; sourceTree = "<group>"; };
 		A49186F816421CF900A39286 /* CoronaProvider.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaProvider.lua; path = Corona/CoronaProvider.lua; sourceTree = "<group>"; };
-		A491870316421F4500A39286 /* CoronaLuaLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaLibrary.h; path = ../plugins/shared/CoronaLuaLibrary.h; sourceTree = "<group>"; };
 		A492766217BADC3C00DAD62A /* kernel_composite_add_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_add_gl.lua; path = Display/Shader/kernel_composite_add_gl.lua; sourceTree = "<group>"; };
 		A492766317BADC3C00DAD62A /* kernel_composite_average_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_average_gl.lua; path = Display/Shader/kernel_composite_average_gl.lua; sourceTree = "<group>"; };
 		A492766417BADC3C00DAD62A /* kernel_composite_colorBurn_gl.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = kernel_composite_colorBurn_gl.lua; path = Display/Shader/kernel_composite_colorBurn_gl.lua; sourceTree = "<group>"; };
@@ -1433,7 +1431,6 @@
 				A474283C17694E2600C63853 /* Display */,
 				0304FE7B178E3AE90047CC04 /* Input */,
 				A41AC10D16A5DFB700AD331A /* Lua Frameworks */,
-				A491870216421F2800A39286 /* plugins */,
 				000DCCFC12B06E6800042A5E /* Resources */,
 				C2756C241C57220300BE3194 /* NSString+Extensions.h */,
 				C2756C251C57220300BE3194 /* NSString+Extensions.m */,
@@ -2150,15 +2147,6 @@
 			name = Shader;
 			sourceTree = "<group>";
 		};
-		A491870216421F2800A39286 /* plugins */ = {
-			isa = PBXGroup;
-			children = (
-				A491870316421F4500A39286 /* CoronaLuaLibrary.h */,
-			);
-			name = plugins;
-			path = ../../librtt;
-			sourceTree = SOURCE_ROOT;
-		};
 		A49BEF31151A9FBA004F2BBE /* Corona */ = {
 			isa = PBXGroup;
 			children = (
@@ -2328,7 +2316,6 @@
 				A49186FE16421CF900A39286 /* CoronaLibrary.h in Headers */,
 				A491870016421CF900A39286 /* CoronaLog.h in Headers */,
 				A491870116421CF900A39286 /* CoronaMacros.h in Headers */,
-				A491870416421F4500A39286 /* CoronaLuaLibrary.h in Headers */,
 				A41AC11616A5FD0000AD331A /* Rtt_LuaFrameworks.h in Headers */,
 				A40C523C16F847CD00AE2ECF /* CoronaVersion.h in Headers */,
 				A474289B17694EB000C63853 /* Rtt_BitmapMask.h in Headers */,

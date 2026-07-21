@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\ndk\generated\ads.c">
-      <Filter>generated</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ndk\generated\CoronaPrototype.cpp">
-      <Filter>generated</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ndk\generated\CoronaProvider.ads.c">
       <Filter>generated</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ndk\generated\CoronaProvider.cpp">
@@ -835,9 +829,6 @@
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_GL.cpp">
       <Filter>rtt\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.cpp">
-      <Filter>plugins-shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\external\lpng1256\pngerror.c">
       <Filter>png</Filter>
     </ClCompile>
@@ -961,9 +952,6 @@
     <ClCompile Include="..\..\..\..\external\luasocket\src\mime.c">
       <Filter>socket</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\plugins\shared\CoronaLuaLibraryShared.cpp">
-      <Filter>plugins-shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\librtt\Renderer\Rtt_GLGeometry.cpp">
       <Filter>rtt\Renderer</Filter>
     </ClCompile>
@@ -1080,12 +1068,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\ndk\generated\ads.lu">
-      <Filter>generated</Filter>
-    </None>
-    <None Include="..\..\ndk\generated\CoronaProvider.ads.lu">
-      <Filter>generated</Filter>
-    </None>
     <None Include="..\..\..\..\librtt\Core\Rtt_Assert.m">
       <Filter>rtt\Core</Filter>
     </None>
@@ -1765,9 +1747,6 @@
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_Uniform.h">
       <Filter>rtt\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h">
-      <Filter>plugins-shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\external\lpng1256\png.h">
       <Filter>png</Filter>
     </ClInclude>
@@ -1854,9 +1833,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\external\luasocket\src\mime.h">
       <Filter>socket</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\plugins\shared\CoronaLuaLibraryShared.h">
-      <Filter>plugins-shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\librtt\Renderer\Rtt_GLGeometry.h">
       <Filter>rtt\Renderer</Filter>

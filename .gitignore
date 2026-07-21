@@ -108,7 +108,6 @@ enterprise/*.zip
 tools/enterprise/CoronaEnterprise/*
 
 # Plugins
-plugins/ads/win32/*ads.c
 plugins/**/android/bin/*
 plugins/**/android/gen/*
 plugins/**/android/libs/*

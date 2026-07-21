@@ -9,85 +9,15 @@
 /* Begin PBXBuildFile section */
 		07071E0B18C0045400BC657C /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 07071E0918C0045400BC657C /* NSData+Base64.h */; };
 		07071E0C18C0045400BC657C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 07071E0A18C0045400BC657C /* NSData+Base64.m */; };
-		A45F9A6D15ED6C250093646B /* CoronaProvider.ads.lua in Sources */ = {isa = PBXBuildFile; fileRef = A45F9A6915EC35830093646B /* CoronaProvider.ads.lua */; };
-		A47B5C6415FAA980001D60AB /* CoronaLuaLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47B5C6015FAA97F001D60AB /* CoronaLuaLibrary.cpp */; };
-		A47B5C6515FAA980001D60AB /* CoronaLuaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A47B5C6115FAA980001D60AB /* CoronaLuaLibrary.h */; };
-		A47B5C6615FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47B5C6215FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp */; };
-		A47B5C6715FAA980001D60AB /* CoronaLuaLibraryMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = A47B5C6315FAA980001D60AB /* CoronaLuaLibraryMetadata.h */; };
-		A481B88015DDA6E6009FFE54 /* CoronaAdsLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A481B87E15DDA6E6009FFE54 /* CoronaAdsLibrary.cpp */; };
-		A481B88C15DDC5F8009FFE54 /* libads.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A481B86F15DDA6CC009FFE54 /* libads.a */; };
-		A484DB7A15EF470600BDE27A /* ads.lua in Sources */ = {isa = PBXBuildFile; fileRef = A484DB6D15EF37DE00BDE27A /* ads.lua */; };
 		A491870B1642201900A39286 /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A49187091642201900A39286 /* CoronaIOSLoader.h */; };
 		A491870C1642201900A39286 /* CoronaIOSLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = A491870A1642201900A39286 /* CoronaIOSLoader.mm */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildRule section */
-		A45F9A6E15ED70220093646B /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.lua";
-			fileType = pattern.proxy;
-			inputFiles = (
-			);
-			isEditable = 1;
-			outputFiles = (
-				"$TARGET_TEMP_DIR/$(INPUT_FILE_BASE).c",
-			);
-			runOncePerArchitecture = 0;
-			script = "# Location of toolchain\nTOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\n\necho \"Using lua from $TOOLCHAIN_DIR ...\"\n\necho $TOOLCHAIN_DIR/lua2c.sh \"$INPUT_FILE_PATH\" \"$TARGET_TEMP_DIR\" \"$CONFIGURATION\" \"$TOOLCHAIN_DIR\"\n$TOOLCHAIN_DIR/lua2c.sh \"$INPUT_FILE_PATH\" \"$TARGET_TEMP_DIR\" \"$CONFIGURATION\" \"$TOOLCHAIN_DIR\"\n";
-		};
-		A484DB8C15EF597E00BDE27A /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.lua";
-			fileType = pattern.proxy;
-			inputFiles = (
-			);
-			isEditable = 1;
-			outputFiles = (
-				"$TARGET_TEMP_DIR/$(INPUT_FILE_BASE).c",
-			);
-			runOncePerArchitecture = 0;
-			script = "# Location of toolchain\nTOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\n\necho \"Using lua from $TOOLCHAIN_DIR ...\"\n\necho $TOOLCHAIN_DIR/lua2c.sh \"$INPUT_FILE_PATH\" \"$TARGET_TEMP_DIR\" \"$CONFIGURATION\" \"$TOOLCHAIN_DIR\"\n$TOOLCHAIN_DIR/lua2c.sh \"$INPUT_FILE_PATH\" \"$TARGET_TEMP_DIR\" \"$CONFIGURATION\" \"$TOOLCHAIN_DIR\"\n";
-		};
-/* End PBXBuildRule section */
-
-/* Begin PBXContainerItemProxy section */
-		A481B88A15DDC5F3009FFE54 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A4FDBF2115DC232600E5001C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A481B86E15DDA6CC009FFE54;
-			remoteInfo = ads;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		A484DB7E15EF595500BDE27A /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/${PRODUCT_NAME}";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		07071E0918C0045400BC657C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "../../plugins/ios/NSData+Base64.h"; sourceTree = "<group>"; };
 		07071E0A18C0045400BC657C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "../../plugins/ios/NSData+Base64.m"; sourceTree = "<group>"; };
-		A45F9A6915EC35830093646B /* CoronaProvider.ads.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CoronaProvider.ads.lua; path = ../../plugins/ads/shared/CoronaProvider.ads.lua; sourceTree = "<group>"; };
-		A47B5C6015FAA97F001D60AB /* CoronaLuaLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaLuaLibrary.cpp; path = ../../plugins/shared/CoronaLuaLibrary.cpp; sourceTree = "<group>"; };
-		A47B5C6115FAA980001D60AB /* CoronaLuaLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaLibrary.h; path = ../../plugins/shared/CoronaLuaLibrary.h; sourceTree = "<group>"; };
-		A47B5C6215FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaLuaLibraryMetadata.cpp; path = ../../plugins/shared/CoronaLuaLibraryMetadata.cpp; sourceTree = "<group>"; };
-		A47B5C6315FAA980001D60AB /* CoronaLuaLibraryMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaLibraryMetadata.h; path = ../../plugins/shared/CoronaLuaLibraryMetadata.h; sourceTree = "<group>"; };
 		A481B82715DC6A79009FFE54 /* pluginsPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pluginsPrefix.pch; sourceTree = SOURCE_ROOT; };
 		A481B82815DC6F3F009FFE54 /* CoronaRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaRuntime.h; path = Corona/CoronaRuntime.h; sourceTree = "<group>"; };
-		A481B86F15DDA6CC009FFE54 /* libads.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libads.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A481B87E15DDA6E6009FFE54 /* CoronaAdsLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaAdsLibrary.cpp; path = ../../plugins/ads/shared/CoronaAdsLibrary.cpp; sourceTree = "<group>"; };
-		A481B87F15DDA6E6009FFE54 /* CoronaAdsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaAdsLibrary.h; path = ../../plugins/ads/shared/CoronaAdsLibrary.h; sourceTree = "<group>"; };
-		A484DB6D15EF37DE00BDE27A /* ads.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ads.lua; path = ../../plugins/ads/shared/ads.lua; sourceTree = "<group>"; };
 		A49187091642201900A39286 /* CoronaIOSLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaIOSLoader.h; path = ../../plugins/ios/CoronaIOSLoader.h; sourceTree = "<group>"; };
 		A491870A1642201900A39286 /* CoronaIOSLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaIOSLoader.mm; path = ../../plugins/ios/CoronaIOSLoader.mm; sourceTree = "<group>"; };
 		A4D876B715DEDC6B0067B06E /* CoronaEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaEvent.h; path = ../../librtt/Corona/CoronaEvent.h; sourceTree = "<group>"; };
@@ -100,25 +30,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A481B86C15DDA6CC009FFE54 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A484DB7D15EF595500BDE27A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4FDBF2715DC232600E5001C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A481B88C15DDC5F8009FFE54 /* libads.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +53,8 @@
 			children = (
 				A49187081642200200A39286 /* ios */,
 				A481B82715DC6A79009FFE54 /* pluginsPrefix.pch */,
-				A47B5C6015FAA97F001D60AB /* CoronaLuaLibrary.cpp */,
-				A47B5C6115FAA980001D60AB /* CoronaLuaLibrary.h */,
-				A47B5C6215FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp */,
-				A47B5C6315FAA980001D60AB /* CoronaLuaLibraryMetadata.h */,
 			);
 			name = plugins;
-			sourceTree = SOURCE_ROOT;
-		};
-		A481B86A15DDA6B4009FFE54 /* ads */ = {
-			isa = PBXGroup;
-			children = (
-				A484DB6D15EF37DE00BDE27A /* ads.lua */,
-				A45F9A6915EC35830093646B /* CoronaProvider.ads.lua */,
-				A481B87E15DDA6E6009FFE54 /* CoronaAdsLibrary.cpp */,
-				A481B87F15DDA6E6009FFE54 /* CoronaAdsLibrary.h */,
-			);
-			name = ads;
 			sourceTree = SOURCE_ROOT;
 		};
 		A49187081642200200A39286 /* ios */ = {
@@ -173,7 +73,6 @@
 			children = (
 				A4FDBF4815DC23C700E5001C /* Corona */,
 				A47B5B8F15F9BC17001D60AB /* plugins */,
-				A481B86A15DDA6B4009FFE54 /* ads */,
 				A4FDBF2C15DC232600E5001C /* Frameworks */,
 				A4FDBF2B15DC232600E5001C /* Products */,
 			);
@@ -183,7 +82,6 @@
 			isa = PBXGroup;
 			children = (
 				A4FDBF2A15DC232600E5001C /* libplugins.a */,
-				A481B86F15DDA6CC009FFE54 /* libads.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,19 +110,10 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		A481B86D15DDA6CC009FFE54 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4FDBF2815DC232600E5001C /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A47B5C6515FAA980001D60AB /* CoronaLuaLibrary.h in Headers */,
-				A47B5C6715FAA980001D60AB /* CoronaLuaLibraryMetadata.h in Headers */,
 				07071E0B18C0045400BC657C /* NSData+Base64.h in Headers */,
 				A491870B1642201900A39286 /* CoronaIOSLoader.h in Headers */,
 			);
@@ -233,24 +122,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		A481B86E15DDA6CC009FFE54 /* ads */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A481B87715DDA6CC009FFE54 /* Build configuration list for PBXNativeTarget "ads" */;
-			buildPhases = (
-				A481B86B15DDA6CC009FFE54 /* Sources */,
-				A481B86C15DDA6CC009FFE54 /* Frameworks */,
-				A481B86D15DDA6CC009FFE54 /* Headers */,
-			);
-			buildRules = (
-				A45F9A6E15ED70220093646B /* PBXBuildRule */,
-			);
-			dependencies = (
-			);
-			name = ads;
-			productName = ads;
-			productReference = A481B86F15DDA6CC009FFE54 /* libads.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		A4FDBF2915DC232600E5001C /* plugins */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A4FDBF3715DC232600E5001C /* Build configuration list for PBXNativeTarget "plugins" */;
@@ -262,8 +133,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				A481B88B15DDC5F3009FFE54 /* PBXTargetDependency */,
-				A484DB9615EF5B3400BDE27A /* PBXTargetDependency */,
 			);
 			name = plugins;
 			productName = plugins;
@@ -278,12 +147,6 @@
 			attributes = {
 				LastUpgradeCheck = 0730;
 				TargetAttributes = {
-					A481B86E15DDA6CC009FFE54 = {
-						LastSwiftMigration = 0820;
-					};
-					A484DB7F15EF595500BDE27A = {
-						LastSwiftMigration = 0820;
-					};
 					A4FDBF2915DC232600E5001C = {
 						LastSwiftMigration = 0820;
 					};
@@ -304,42 +167,21 @@
 			projectRoot = "";
 			targets = (
 				A4FDBF2915DC232600E5001C /* plugins */,
-				A481B86E15DDA6CC009FFE54 /* ads */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A481B86B15DDA6CC009FFE54 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A484DB7A15EF470600BDE27A /* ads.lua in Sources */,
-				A45F9A6D15ED6C250093646B /* CoronaProvider.ads.lua in Sources */,
-				A481B88015DDA6E6009FFE54 /* CoronaAdsLibrary.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4FDBF2615DC232600E5001C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A47B5C6415FAA980001D60AB /* CoronaLuaLibrary.cpp in Sources */,
 				07071E0C18C0045400BC657C /* NSData+Base64.m in Sources */,
-				A47B5C6615FAA980001D60AB /* CoronaLuaLibraryMetadata.cpp in Sources */,
 				A491870C1642201900A39286 /* CoronaIOSLoader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		A481B88B15DDC5F3009FFE54 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A481B86E15DDA6CC009FFE54 /* ads */;
-			targetProxy = A481B88A15DDC5F3009FFE54 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A44D4300164ACDCC00CFE7B3 /* Release-template */ = {
@@ -389,26 +231,6 @@
 				SWIFT_VERSION = 3.0;
 			};
 			name = "Release-template";
-		};
-		A481B87815DDA6CC009FFE54 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DSTROOT = /tmp/ads.dst;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		A481B87915DDA6CC009FFE54 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DSTROOT = /tmp/ads.dst;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
 		};
 		A4FDBF3515DC232600E5001C /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -520,16 +342,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A481B87715DDA6CC009FFE54 /* Build configuration list for PBXNativeTarget "ads" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A481B87815DDA6CC009FFE54 /* Debug */,
-				A481B87915DDA6CC009FFE54 /* Release */,
-				A44D4302164ACDCC00CFE7B3 /* Release-template */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A4FDBF2415DC232600E5001C /* Build configuration list for PBXProject "plugins" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -49,12 +49,6 @@
     <Filter Include="plugins">
       <UniqueIdentifier>{410e1cc3-8760-41b9-9baa-34d421d13d40}</UniqueIdentifier>
     </Filter>
-    <Filter Include="plugins\ads">
-      <UniqueIdentifier>{1c09f61b-46cd-4785-847f-2febbe22a127}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="plugins\ads\shared">
-      <UniqueIdentifier>{e798b05b-7a2f-4d6f-8aa9-d36b89f239bb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="plugins\network">
       <UniqueIdentifier>{2daa00ac-2d16-4e9f-90ef-b32a628d5d6f}</UniqueIdentifier>
     </Filter>
@@ -63,9 +57,6 @@
     </Filter>
     <Filter Include="plugins\network\win32">
       <UniqueIdentifier>{4fe90b65-43f5-4d5d-ad9d-e51d4ea5d747}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="plugins\shared">
-      <UniqueIdentifier>{93a0e157-8805-43a1-a5c5-18b34658e799}</UniqueIdentifier>
     </Filter>
     <Filter Include="subrepos">
       <UniqueIdentifier>{299b906e-7322-46b4-8765-0d2640d3aa70}</UniqueIdentifier>
@@ -624,20 +615,11 @@
     <ClCompile Include="..\..\..\plugins\network\win32\CharsetTranscoder.cpp">
       <Filter>plugins\network\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\plugins\shared\CoronaLuaLibrary.cpp">
-      <Filter>plugins\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\plugins\shared\CoronaLuaLibraryMetadata.cpp">
-      <Filter>plugins\shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\external\luafilesystem\src\lfs.c">
       <Filter>external\luafilesystem\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\librtt\Core\Rtt_FileSystem.cpp">
       <Filter>librtt\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.cpp">
-      <Filter>plugins\ads\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\plugins\network\win32\NetworkLibrary.cpp">
       <Filter>plugins\network\win32</Filter>
@@ -1355,17 +1337,8 @@
     <ClInclude Include="..\..\..\plugins\network\win32\CharsetTranscoder.h">
       <Filter>plugins\network\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\plugins\shared\CoronaLuaLibraryMetadata.h">
-      <Filter>plugins\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\plugins\shared\CoronaLuaLibrary.h">
-      <Filter>plugins\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\external\luafilesystem\src\lfs.h">
       <Filter>external\luafilesystem\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\plugins\ads\shared\CoronaAdsLibrary.h">
-      <Filter>plugins\ads\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\plugins\network\win32\WinTimer.h">
       <Filter>plugins\network\win32</Filter>
@@ -1773,12 +1746,6 @@
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\librtt\Display\Shader\kernel_filter_woodCut_gl.lua">
       <Filter>librtt\Display\Shader</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\plugins\ads\shared\CoronaProvider.ads.lua">
-      <Filter>plugins\ads\shared</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\plugins\ads\shared\ads.lua">
-      <Filter>plugins\ads\shared</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\plugins\network\shared\network.lua">
       <Filter>plugins\network\shared</Filter>
