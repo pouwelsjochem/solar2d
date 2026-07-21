@@ -94,7 +94,7 @@ bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}" "$SRCROOT/platform/resources/icons/Cor
 
 ditto -v -X "$TOOLSPATH/Corona Simulator.app" "$TMPPATH/${PRODUCT_DIR}/Corona Simulator.app"
 mkdir "${TMPPATH}/${PRODUCT_DIR}/${RESOURCE_DIR}"
-cp -v "$TOOLSPATH"/{debugger,"Corona Terminal"} "${TMPPATH}/${PRODUCT_DIR}/${RESOURCE_DIR}"
+cp -v "$TOOLSPATH/debugger" "${TMPPATH}/${PRODUCT_DIR}/${RESOURCE_DIR}"
 cp -v "$SRCROOT"/platform/resources/icons/Documentation.html "$TMPPATH"/${PRODUCT_DIR}/
 
 if [ -d "$2/${RESOURCE_DIR}" ]
@@ -118,7 +118,6 @@ fi
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/Documentation.html" "$SRCROOT/platform/resources/icons/CoronaIcon-Docs.png"
-#bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/Corona Terminal" "$SRCROOT/platform/resources/icons/CoronaIcon-Terminal.png"
 xcrun SetFile -a E "$TMPPATH/${PRODUCT_DIR}/Documentation.html" # hide extension
 
 
