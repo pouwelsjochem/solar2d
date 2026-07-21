@@ -123,7 +123,6 @@ namespace Rtt
 	// Used to synchronize the Open Project accessory view to pick the start skin
 	IBOutlet NSPopUpButton* popupButtonOpenAccessorySkinSelection;
 
-	NSTask *consoleTask;
 	long fRelaunchCount;
 	BOOL fSimulatorRelaunchPending;
 	BOOL fLaunchSimulatorConfigurationHandled;
@@ -230,7 +229,6 @@ namespace Rtt
 - (BOOL) alertShowHelp:(NSAlert *) alert;
 
 -(void)notifyWithTitle:(NSString*)title description:(NSString*)description iconData:(NSImage*)iconData;
-- (void) clearConsole;
 
 @end
 

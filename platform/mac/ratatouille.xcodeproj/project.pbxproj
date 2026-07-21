@@ -928,7 +928,6 @@
 		C2678C1F1B85753800864110 /* AppleAppBuildController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2678C1E1B85753800864110 /* AppleAppBuildController.mm */; };
 		C26D8DA4195104D7008DE65C /* re.lua in Resources */ = {isa = PBXBuildFile; fileRef = C26D8DA3195104D7008DE65C /* re.lua */; };
 		C26D8DA51951053F008DE65C /* re.lua in Sources */ = {isa = PBXBuildFile; fileRef = C26D8DA3195104D7008DE65C /* re.lua */; };
-		C26DD1141BD9516800EC4F44 /* CoronaConsole.app in Resources */ = {isa = PBXBuildFile; fileRef = C26DD10F1BD9508900EC4F44 /* CoronaConsole.app */; };
 		C26E847F1A5DE1AE008950FB /* ALmixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; };
 		C26E84821A5DE1AE008950FB /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733FB12B6F6BC0057F594 /* liblua.a */; };
 		C26E84831A5DE1AE008950FB /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733F312B6F6740057F594 /* librtt.a */; };
@@ -1514,20 +1513,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = C24216D71CCACB6600D8E4BE;
 			remoteInfo = libluasocket;
-		};
-		C26DD10E1BD9508900EC4F44 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C26DD10A1BD9508800EC4F44 /* CoronaConsole.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C26DD0D51BD6B94700EC4F44;
-			remoteInfo = CoronaConsole;
-		};
-		C26DD1121BD9514100EC4F44 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C26DD10A1BD9508800EC4F44 /* CoronaConsole.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C26DD0D41BD6B94700EC4F44;
-			remoteInfo = CoronaConsole;
 		};
 		C26E84841A5DE235008950FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2434,7 +2419,6 @@
 		C2678C1D1B85753800864110 /* AppleAppBuildController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleAppBuildController.h; sourceTree = "<group>"; };
 		C2678C1E1B85753800864110 /* AppleAppBuildController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppleAppBuildController.mm; sourceTree = "<group>"; };
 		C26D8DA3195104D7008DE65C /* re.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = re.lua; path = ../external/lpeg/re.lua; sourceTree = "<group>"; };
-		C26DD10A1BD9508800EC4F44 /* CoronaConsole.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CoronaConsole.xcodeproj; path = CoronaConsole/CoronaConsole.xcodeproj; sourceTree = "<group>"; };
 		C26E845E1A5DE0C1008950FB /* CoronaCards.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CoronaCards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C26E84611A5DE0C1008950FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C26E84621A5DE0C1008950FB /* CoronaCards.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoronaCards.h; sourceTree = "<group>"; };
@@ -3441,7 +3425,6 @@
 			isa = PBXGroup;
 			children = (
 				C21995A81C189E0100E88FD0 /* ios-syslog-helper.xcodeproj */,
-				C26DD10A1BD9508800EC4F44 /* CoronaConsole.xcodeproj */,
 				C2EF85011B336B6300731A45 /* CoronaShell.xcodeproj */,
 				00FD0C011330445800716D46 /* car.xcodeproj */,
 				0039BCEF132AF4570009B76B /* lua.xcodeproj */,
@@ -3950,14 +3933,6 @@
 				C242172C1CCAE3F400D8E4BE /* luasocket.h */,
 			);
 			name = libluasocket;
-			sourceTree = "<group>";
-		};
-		C26DD10B1BD9508800EC4F44 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C26DD10F1BD9508900EC4F44 /* CoronaConsole.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		C26E845F1A5DE0C1008950FB /* CoronaCards */ = {
@@ -4586,7 +4561,6 @@
 				F5567D4D2ADC73E1008CD550 /* PBXTargetDependency */,
 				C21995B01C18A2C000E88FD0 /* PBXTargetDependency */,
 				C2B5FEEE1B336C3D00DD49E6 /* PBXTargetDependency */,
-				C26DD1131BD9514100EC4F44 /* PBXTargetDependency */,
 				C2B5FEF01B336C4200DD49E6 /* PBXTargetDependency */,
 				A4FBC56C1A2D5A8A004D9A01 /* PBXTargetDependency */,
 				A48B829A16D59AFE00CA01A1 /* PBXTargetDependency */,
@@ -4730,10 +4704,6 @@
 					ProjectRef = 00FD0C011330445800716D46 /* car.xcodeproj */;
 				},
 				{
-					ProductGroup = C26DD10B1BD9508800EC4F44 /* Products */;
-					ProjectRef = C26DD10A1BD9508800EC4F44 /* CoronaConsole.xcodeproj */;
-				},
-				{
 					ProductGroup = C2EF85021B336B6300731A45 /* Products */;
 					ProjectRef = C2EF85011B336B6300731A45 /* CoronaShell.xcodeproj */;
 				},
@@ -4870,13 +4840,6 @@
 			remoteRef = C24217291CCAD44800D8E4BE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		C26DD10F1BD9508900EC4F44 /* CoronaConsole.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = CoronaConsole.app;
-			remoteRef = C26DD10E1BD9508900EC4F44 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		C2A08C2A1950DF2B002B7532 /* liblpeg.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -4913,7 +4876,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C21995AE1C18A29B00E88FD0 /* ios-syslog-helper in Resources */,
-				C26DD1141BD9516800EC4F44 /* CoronaConsole.app in Resources */,
 				C231262F1B8FC1B20061A232 /* android_sendapp.sh in Resources */,
 				C222F50E19DB22F6008ABD87 /* xcodesim_sendapp.sh in Resources */,
 				C2678C1B1B7EE9E900864110 /* IOSAppPackageSheet.xib in Resources */,
@@ -6060,11 +6022,6 @@
 			isa = PBXTargetDependency;
 			target = C229DFD71B32221B00D87A7C /* librtt-simulator */;
 			targetProxy = C229E20E1B32226600D87A7C /* PBXContainerItemProxy */;
-		};
-		C26DD1131BD9514100EC4F44 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = CoronaConsole;
-			targetProxy = C26DD1121BD9514100EC4F44 /* PBXContainerItemProxy */;
 		};
 		C26E84851A5DE235008950FB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

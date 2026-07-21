@@ -24,7 +24,6 @@ function upgradePlist {
 
 upgradePlist platform/mac/Info.plist
 upgradePlist tools/CoronaBuilder/CoronaBuilder-Info.plist
-upgradePlist platform/mac/CoronaConsole/CoronaConsole/Info.plist
 
 
 COPYFILE_DISABLE=1 tar -czf corona.tgz --exclude '.git' --exclude 'corona.tgz' ./

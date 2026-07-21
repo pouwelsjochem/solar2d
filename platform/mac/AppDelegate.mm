@@ -126,21 +126,6 @@ static void SigTERMHandler(int signal)
 
 extern int Rtt_VLogException_UseStdout;
 
-static void SigPIPEHandler(int signal)
-{
-	Rtt_VLogException_UseStdout = false;
-
-	// If we get a SIGPIPE that means the CoronaConsole process has gone AWOL and we'll
-	// hang if we continue writing to it so we reopen stdout and stderr so the Simulator keeps
-	// running (what actually seems to happen is output gets directed to the system console)
-	close(1);
-	open("/dev/tty", O_WRONLY);
-	close(2);
-	open("/dev/tty", O_WRONLY);
-
-	NSLog(@"CoronaConsole seems to have vanished ... switching to syslog");
-}
-
 // -----------------------------------------------------------------------------
 // BEGIN: Validation functions
 // -----------------------------------------------------------------------------
@@ -856,11 +841,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         struct sigaction termAction = { 0 };
 		termAction.sa_handler = SigTERMHandler;
 		sigaction(SIGTERM, &termAction, NULL);
-		// We get SIGPIPE if the CoronaConsole subprocess goes away
-		struct sigaction pipeAction = { 0 };
-		pipeAction.sa_handler = SigPIPEHandler;
-		sigaction(SIGPIPE, &pipeAction, NULL);
-
         // Migrate old prefs to new prefs, do it only once because we don't want to remove the old prefs in case
         // they subsequently downgrade
         NSDictionary *oldPrefs = [[NSUserDefaults standardUserDefaults]
@@ -1928,47 +1908,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     [self updateMenuForSkinChange];
 }
 
-// TODO: Clean this up.  Total mess
 -(void)applicationDidFinishLaunching:(NSNotification*)aNotification
 {
-    // If requested, don't display the window that shows the Simulator log.  Useful in IDE environments.
-    // (the double access is needed because one specifies the command line parameter to specify a negative)
-    // Also don't run the console if we are running as a debugger.
-	// If we don't run the console, debug output appears on stdout
-    if (([[NSUserDefaults standardUserDefaults] stringForKey:@"no-console"] == nil || ! [[NSUserDefaults standardUserDefaults] boolForKey:@"no-console"])
-        && ! [[NSUserDefaults standardUserDefaults] boolForKey:@"debug"])
-    {
-		// Start the CoronaConsole task and attach out stdout to its stdin
-
-		consoleTask = [[NSTask alloc] init];
-
-		// If we don't nil out consoleTask here, any attempt to access its attributes will crash after
-		// the CoronaConsole has exited/crashed
-		consoleTask.terminationHandler =  ^(NSTask *aTask){
-			consoleTask = nil;
-			Rtt_VLogException_UseStdout = false;
-			NSLog(@"CoronaConsole terminated");
-		};
-
-		[consoleTask setLaunchPath:[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"CoronaConsole.app/Contents/MacOS/CoronaConsole"]];
-
-		NSPipe *stdoutPipe = [[NSPipe pipe] retain];
-
-		dup2([[stdoutPipe fileHandleForWriting] fileDescriptor], fileno(stdout));
-		dup2([[stdoutPipe fileHandleForWriting] fileDescriptor], fileno(stderr)); // capture stderr
-
-		[consoleTask setStandardInput:stdoutPipe];
-
-		@try
-		{
-			[consoleTask launch];
-		}
-		@catch( NSException* exception )
-		{
-			NSLog( @"consoleTask: exception %@", exception );
-		}
-    }
-
     // If requested, make this the only running Simulator.  Useful in IDE-like environments where you
     // want to "relaunch" the Simulator but do it by rerunning the executable (e.g. Sublime Text)
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"singleton"])
@@ -2971,10 +2912,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	using namespace Rtt;
 	fSimulatorRelaunchPending = NO;
 	BOOL isRelaunch = fSimulator != NULL;
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"clearConsoleOnRelaunch"])
-	{
-		[self clearConsole];
-	}
 
 	// Detect relaunch
 	if ( isRelaunch )
@@ -3826,35 +3763,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 - (IBAction)bringAllToFront:(id)sender
 {
 	[NSApp arrangeInFront:sender];
-}
-
--(void) clearConsole
-{
-	if ([consoleTask isRunning])
-	{
-		CFNotificationCenterPostNotification( CFNotificationCenterGetDistributedCenter(), CFSTR("CoronaConsole.clearConsole"), NULL, NULL, YES);
-	}
-}
-
-- (IBAction)consoleMenuitem:(id)sender
-{
-	if ([consoleTask isRunning])
-	{
-		CFNotificationCenterPostNotification( CFNotificationCenterGetDistributedCenter(), CFSTR("CoronaConsole.bringToFront"), NULL, NULL, YES);
-	}
-}
-
-static void BringToFrontCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
-{
-	AppDelegate *appDelegate = (__bridge AppDelegate*)observer;
-	[appDelegate bringAllToFront:nil];
-	CFNotificationCenterRemoveObserver(center, observer, name, object);
-}
-
-- (void)applicationWillBecomeActive:(NSNotification *)aNotification
-{
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), (__bridge const void *)(self), BringToFrontCallback, CFSTR("CoronaSimulator.bringToFront"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-	[self consoleMenuitem:nil];
 }
 
 // -----------------------------------------------------------------------------

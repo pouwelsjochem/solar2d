@@ -436,7 +436,7 @@ static NSString *kChooseFromFollowing = @"Choose from the following…";
 
 		[self startTailDeviceSyslog:[XcodeToolHelper pathForAndroidDeviceSyslogUtility] appBundlePath:appBundlePath deviceID:@""];
 
-		NSString *message = [NSString stringWithFormat:@"*%@* is installed on the Android device and is ready to run\n\nThe Android device's syslog will appear in the Corona Console until this message is closed", self.appName];
+		NSString *message = [NSString stringWithFormat:@"*%@* is installed on the Android device and is ready to run\n\nThe Android device's syslog will be written to standard output until this message is closed", self.appName];
 
 		[self showMessage:@"Device Installation Complete" message:message helpURL:nil parentWindow:[self window]];
 
