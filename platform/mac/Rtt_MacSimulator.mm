@@ -83,7 +83,11 @@ MacSimulator::~MacSimulator()
     }
 
 
-    [fWindow saveFrameUsingName:fDeviceName];
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	if (![appDelegate agentMode])
+	{
+		[fWindow saveFrameUsingName:fDeviceName];
+	}
 	[fWindow close];
 	// Fix case 40335: Simulator crashes sometime after an app with a native textfield runs (http://bugs.coronalabs.com/default.asp?40335)
 	[fWindow makeFirstResponder:nil];
@@ -223,7 +227,21 @@ MacSimulator::Initialize(
 	
 	// -------------
 
-    [instanceWindow setFrameUsingName:fDeviceName];
+	if ([delegate agentMode])
+	{
+		[instanceWindow setAnimationBehavior:NSWindowAnimationBehaviorNone];
+		NSArray *screens = [NSScreen screens];
+		NSScreen *screen = [screens count] ? [screens objectAtIndex:0] : [NSScreen mainScreen];
+		NSRect visibleFrame = [screen visibleFrame];
+		NSRect windowFrame = [instanceWindow frame];
+		windowFrame.origin.x = NSMinX(visibleFrame) + MAX(0.0, (NSWidth(visibleFrame) - NSWidth(windowFrame)) * 0.5);
+		windowFrame.origin.y = NSMinY(visibleFrame) + MAX(0.0, (NSHeight(visibleFrame) - NSHeight(windowFrame)) * 0.5);
+		[instanceWindow setFrameOrigin:windowFrame.origin];
+	}
+	else
+	{
+		[instanceWindow setFrameUsingName:fDeviceName];
+	}
     [instanceWindow makeKeyAndOrderFront:nil];
 
 	Rtt_TRACE_SIM( ( "Loading project from:   %s\n", [[[NSString stringWithExternalString:resourcePath] stringByAbbreviatingWithTildeInPath] UTF8String] ) );

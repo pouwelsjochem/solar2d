@@ -1238,6 +1238,12 @@ MacPlatform::RuntimeErrorNotification( const char *errorType, const char *messag
 			{
 				[delegate notifyRuntimeError:nsMsg];
 			}
+#if Rtt_AUTHORING_SIMULATOR
+			if ([delegate agentMode])
+			{
+				return;
+			}
+#endif
 
 			if ([delegate respondsToSelector:@selector(toggleSuspendResume:)])
 			{

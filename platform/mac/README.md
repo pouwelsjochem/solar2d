@@ -33,6 +33,30 @@ Or provide a custom size, with optional safe area insets:
 `-simulator-rounded-corners true|false` can also be used by itself with the saved device. Custom dimensions must be
 integers from 1 through 16384; omitted safe area insets default to zero.
 
+## Agent mode
+
+Agent mode gives Codex a clean Simulator window while leaving visual inspection
+and interaction to Computer Use. A project path is required.
+
+```sh
+"/Applications/Corona Simulator.app/Contents/MacOS/Corona Simulator" \
+  -agent-mode YES \
+  -no-console YES \
+  -project "/path/to/project"
+```
+
+The Simulator remains attached to its launching terminal. Lua output and runtime
+errors are written to standard output and error. Keep that terminal session open
+while using Computer Use to inspect and interact with the rendered OpenGL
+surface. Applications should provide their own log message when they need a
+reliable, app-specific signal that initialization is complete.
+
+Agent sessions do not open Corona Console, update recent projects, or persist
+their window position. They start centered with rounded corners and safe-area
+guides disabled for an unobstructed surface. Pass
+`-simulator-rounded-corners YES` or other launch-time device configuration flags
+when device chrome or a specific geometry matters.
+
 # Building your app with simulator
 
 Note, that updated code would only work in Simulator. Device builds (like iOS, Android) require special templates to be built first.

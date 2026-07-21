@@ -149,7 +149,6 @@ static void SigPIPEHandler(int signal)
 //
 // Some of these are set from the command line. For example:
 static NSString* kDockIconBounceTime = @"dockIconBounceTime";
-static NSString* kSuppressUnsupportedOSWarning = @"suppressUnsupportedOSWarning";
 
 static NSString* kWindowMenuItemName = @"Window";
 static NSString* kViewAsMenuItemName = @"View As";
@@ -233,10 +232,6 @@ ReadSimulatorBooleanArgument(id value, BOOL *result)
 	}
 	return NO;
 }
-
-NSString *kosVersionMinimum = @"10.9";   // we refuse to run on OSes older than this
-NSString *kosVersionPrevious = @"10.12";  // should be updated as Apple releases new OSes
-NSString *kosVersionCurrent = @"26.99";  // should be updated as Apple releases new OSes; we will run on this one and the previous one
 
 // These tags are defined on the various DeviceBuild dialogs in Interface Builder
 enum {
@@ -676,6 +671,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @synthesize applicationHasBeenInitialized;
 @synthesize launchedWithFile;
 @synthesize allowLuaExit;
+@synthesize agentMode = fAgentMode;
 
 -(id)init
 {
@@ -686,9 +682,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		fSimulator = NULL;
 		fAppPath = nil;
 		memset( & fOptions, 0, sizeof( fOptions ) );
+		fAgentMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"agent-mode"];
 
-		// Be sure to call this early enough to catch calls to external libraries
-		[self checkOSVersionAndWarn];
+		if (fAgentMode)
+		{
+			Rtt_VLogException_UseStdout = true;
+		}
 
 		fConsolePlatform = new Rtt::MacConsolePlatform;
 		fRelaunchCount = 0;
@@ -709,7 +708,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         
 		fIsRemote = NO;
 
-		[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+		if (!fAgentMode)
+		{
+			[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
+		}
 		fBuildProblemNotified = FALSE;
 
         fAndroidAppBuildController = nil;
@@ -735,28 +737,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		 andEventID:kAEGetURL];
 	}
 	return self;
-}
-
-- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
-{
-	return NO;
-}
-
-- (void) checkOpenGLRequirements
-{
-	// Force the OpenGL context to be created now and make current and query OpenGL for extensions.
-	BOOL could_init = YES;//[CoronaMacGLLayer checkOpenGLRequirements];
-	if ( NO == could_init )
-	{
-		NSString* appname = [FoundationUtilities bundleApplicationName];
-		NSRunAlertPanel( 
-			[NSString stringWithFormat:NSLocalizedString( @"%@ cannot run", @"<AppName> cannot run"), appname],
-			NSLocalizedString( @"Your computer does not meet the minimum OpenGL requirements. Check the console for more details.", @"Your computer does not meet the minimum OpenGL requirements. Check the console for more details." ),
-			nil, nil, nil );
-
-		// Don't allow the program to continue.
-		[[NSApplication sharedApplication] terminate:self];
-	}
 }
 
 // -----------------------------------------------------------------------------
@@ -1357,7 +1337,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 -(NSDictionary*)persistentSimulatorDeviceInfo
 {
 	return [self simulatorDeviceInfoForSkin:(Rtt::TargetDevice::Skin)fSkin
-		roundedCorners:![[NSUserDefaults standardUserDefaults] boolForKey:@"disableRoundedCorners"]];
+		roundedCorners:fAgentMode ? NO : ![[NSUserDefaults standardUserDefaults] boolForKey:@"disableRoundedCorners"]];
 }
 
 -(NSDictionary*)configuredSimulatorDeviceInfo
@@ -1837,7 +1817,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	}
 	[subviews release];
 
-	if (!screenView || ![[NSUserDefaults standardUserDefaults] boolForKey:kShowSafeAreaGuidesPreference])
+	if (!screenView || fAgentMode || ![[NSUserDefaults standardUserDefaults] boolForKey:kShowSafeAreaGuidesPreference])
 	{
 		return;
 	}
@@ -2018,7 +1998,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsDefaults];
 	
 	// Arrange for "Relaunch" (Cmd-R) to work on startup if we have any Recent documents (this matches the behavior on Windows)
-    NSArray *recentDocuments = [[NSDocumentController sharedDocumentController] recentDocumentURLs];
+    NSArray *recentDocuments = fAgentMode ? nil : [[NSDocumentController sharedDocumentController] recentDocumentURLs];
 
     if ( [recentDocuments count] > 0 )
     {
@@ -2056,7 +2036,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	fServices = new Rtt::MacPlatformServices( *fConsolePlatform );
 	fNextUpsellTime = 0;
 
-	[self checkOpenGLRequirements];
 	[self coronaInit:aNotification];
 	
 #ifdef Rtt_AUTHORING_SIMULATOR
@@ -2170,6 +2149,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		if ( ! appPath )
 		{
 			Rtt_ASSERT( ! fSimulator );
+			if (fAgentMode)
+			{
+				NSString *message = @"Agent mode requires -project to reference a Solar2D project containing main.lua";
+				fprintf(stderr, "ERROR: %s\n", [message UTF8String]);
+				exit(EXIT_FAILURE);
+			}
 			// Reset the preference in case the Simulator crashes, it gets set again on normal exit
 			[[NSUserDefaults standardUserDefaults] synchronize];
 			
@@ -2417,8 +2402,11 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		else
 		{
 			// Update Recent Items only if appPath lies outside the bundle
-			NSString* mainScriptFile = [NSString stringWithExternalString:Rtt_LUA_SCRIPT_FILE( "main" )];
-			[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:[appPath stringByAppendingPathComponent:mainScriptFile]]];
+			if (!fAgentMode)
+			{
+				NSString* mainScriptFile = [NSString stringWithExternalString:Rtt_LUA_SCRIPT_FILE( "main" )];
+				[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:[appPath stringByAppendingPathComponent:mainScriptFile]]];
+			}
 		}
 
 		self.fAppPath = [appPath stringByStandardizingPath];
@@ -3001,6 +2989,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	if (resourcePath == NULL)
 	{
+		if (fAgentMode)
+		{
+			NSString *message = @"Agent mode cannot launch without a project";
+			fprintf(stderr, "ERROR: %s\n", [message UTF8String]);
+			return;
+		}
 		[self open:sender];
 
 		return;
@@ -3616,6 +3610,14 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 		   description:(NSString*)description
 			  iconData:(NSImage*)iconData
 {
+	if (fAgentMode)
+	{
+		fprintf(stderr, "%s%s%s\n",
+			[title length] ? [title UTF8String] : "",
+			[title length] && [description length] ? ": " : "",
+			[description length] ? [description UTF8String] : "");
+		return;
+	}
 	NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
 	notification.title = title;
 	notification.informativeText = description;
@@ -3696,6 +3698,12 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 
 -(void)notifyRuntimeError:(NSString *)message
 {
+	if (fAgentMode)
+	{
+		fprintf(stderr, "Runtime error: %s\n", message ? [message UTF8String] : "Unknown runtime error");
+		fBuildProblemNotified = true;
+		return;
+	}
 	if ( !fBuildProblemNotified )
 	{
 		[self notifyWithTitle:@"Solar2D Simulator" description:message iconData:nil];
@@ -3752,165 +3760,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	
 	// NSLog(@"changedPreference: %@", [sender description]);
     [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (NSComparisonResult) compareOSVersion:(NSString *) version with:(NSString *) otherVersion
-{
-    // typedef NS_ENUM(NSInteger, NSComparisonResult) {NSOrderedAscending = -1L, NSOrderedSame, NSOrderedDescending};
-    NSScanner *scanner = [NSScanner scannerWithString:version];
-    NSScanner *otherScanner = [NSScanner scannerWithString:otherVersion];
-    NSInteger versionMajor, versionMinor;
-    NSInteger otherVersionMajor, otherVersionMinor;
-
-    @try
-    {
-        [scanner scanInteger:&versionMajor];
-        [scanner setScanLocation:[scanner scanLocation] + 1]; // skip the period
-        [scanner scanInteger:&versionMinor];
-
-        [otherScanner scanInteger:&otherVersionMajor];
-        [otherScanner setScanLocation:[otherScanner scanLocation] + 1]; // skip the period
-        [otherScanner scanInteger:&otherVersionMinor];
-    }
-
-    @catch ( NSException *e )
-    {
-        Rtt_TRACE_SIM( ( "compareOSVersion: error scanning versions: version '%s', otherVersion '%s' (%s)", [version UTF8String], [otherVersion UTF8String], [[e reason] UTF8String] ) );
-
-        return NSOrderedSame; // seems the most benign
-    }
-
-    @finally
-    {
-        if (versionMajor > otherVersionMajor)
-            return NSOrderedDescending;
-        else if (versionMajor < otherVersionMajor)
-            return NSOrderedAscending;
-        else
-        {
-            // major versions are equal
-            if (versionMinor > otherVersionMinor)
-                return NSOrderedDescending;
-            else if (versionMinor < otherVersionMinor)
-                return NSOrderedAscending;
-            else
-                return NSOrderedSame;
-        }
-    }
-}
-
-- (NSString *) getOSVersion
-{
-    // OS version determination (ironically this is very OS version dependent)
-    typedef struct {
-        NSInteger majorVersion;
-        NSInteger minorVersion;
-        NSInteger patchVersion;
-    } OperatingSystemVersion;
-    OperatingSystemVersion osVersion = {0};
-    SEL operatingSystemVersionSelector = NSSelectorFromString(@"operatingSystemVersion");
-
-    if ([[NSProcessInfo processInfo] respondsToSelector:operatingSystemVersionSelector])
-    {
-        // this works on 10.10 and above (and, apparently, 10.9)
-        NSMethodSignature *signature = [NSProcessInfo instanceMethodSignatureForSelector:operatingSystemVersionSelector];
-        if(signature)
-        {
-            NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-            [invocation setTarget:[NSProcessInfo processInfo]];
-            [invocation setSelector:operatingSystemVersionSelector];
-            [invocation invoke];
-            [invocation getReturnValue:&osVersion];
-        }
-    }
-    else
-    {
-        // works on 10.8 and below but is now deprecated (actually it doesn't work correctly with "minorVersion" > 9)
-        SInt32 versMaj, versMin, versPatch;
-
-        Gestalt(gestaltSystemVersionMajor, &versMaj);
-        Gestalt(gestaltSystemVersionMinor, &versMin);
-        Gestalt(gestaltSystemVersionBugFix, &versPatch);
-
-        osVersion.majorVersion = versMaj;
-        osVersion.minorVersion = versMin;
-        osVersion.patchVersion = versPatch;
-    }
-
-    return [NSString stringWithFormat:@"%d.%d", (int) osVersion.majorVersion, (int) osVersion.minorVersion];
-}
-
-- (void) checkOSVersionAndWarn
-{
-    NSAlert* alert = [[[NSAlert alloc] init] autorelease];
-    NSString *suppressAlertOSVersion = [[NSUserDefaults standardUserDefaults] stringForKey:kSuppressUnsupportedOSWarning];
-    BOOL shouldSuppressAlert = NO;
-
-    NSString *currentOSVersion = [self getOSVersion];
-
-    if ([currentOSVersion isEqualToString:suppressAlertOSVersion])
-    {
-        // they've already seen a warning and elected not to see it again so we're done
-        // (if they install a new OS and still don't meet the criteria we'll show them
-        // another warning)
-
-        return;
-    }
-
-    if ([self compareOSVersion:currentOSVersion with:kosVersionMinimum] == NSOrderedAscending)
-    {
-        NSString *msg = [NSString stringWithFormat:@"This version of macOS (%@) is too old to run Solar2D.\n\nMinimum supported macOS version is %@", currentOSVersion, kosVersionPrevious];
-
-        [alert setMessageText:@"macOS Version Error"];
-        [alert setInformativeText:msg];
-        [alert setAlertStyle:NSCriticalAlertStyle];
-        [alert addButtonWithTitle:@"Exit"];
-
-        NSLog( @"Solar2D Simulator: %@", msg );
-
-        [alert runModal];  // we exit when they hit the button so run modally here
-        
-        [[NSApplication sharedApplication] terminate:self];
-    }
-    else if ([self compareOSVersion:currentOSVersion with:kosVersionCurrent] == NSOrderedDescending)
-    {
-        NSString *msg = [NSString stringWithFormat:@"This version of macOS (%@) is not supported. It is newer than the one this version of Solar2D was designed for (%@).\n\nProceed with caution, as some things might not work correctly.\n\nPlease report any issues you find with Solar2D and the new version of macOS to http://github.com/coronalabs/corona/issues", currentOSVersion, kosVersionCurrent];
-
-        [alert setMessageText:@"macOS Version Warning"];
-        [alert setInformativeText:msg];
-        [alert setAlertStyle:NSWarningAlertStyle];
-        [alert addButtonWithTitle:@"Continue"];
-        [alert setShowsSuppressionButton:YES];
-
-        NSLog( @"Solar2D Simulator: %@", msg );
-    }
-    else if ([self compareOSVersion:currentOSVersion with:kosVersionPrevious] == NSOrderedAscending)
-    {
-        NSString *msg = [NSString stringWithFormat:@"This version of macOS (%@) is not supported. It is older than the one this version of Solar2D was designed for (%@).\n\nProceed with caution, as some things might not work correctly.", currentOSVersion, kosVersionCurrent];
-
-        [alert setMessageText:@"macOS Version Warning"];
-        [alert setInformativeText:msg];
-        [alert setAlertStyle:NSWarningAlertStyle];
-        [alert addButtonWithTitle:@"Continue"];
-        [alert setShowsSuppressionButton:YES];
-
-        NSLog( @"Solar2D Simulator: %@", msg );
-    }
-    else
-    {
-        // we're good, just return and let the Simulator start
-
-        return;
-    }
-
-    [alert runModal];
-
-    shouldSuppressAlert = ([[alert suppressionButton] state] == NSOnState);
-
-    if (shouldSuppressAlert)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:currentOSVersion forKey:kSuppressUnsupportedOSWarning];
-    }
 }
 
 // This subverts the standard Cocoa alert help system a little in that it uses the "helpAnchor" to store

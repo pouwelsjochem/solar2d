@@ -130,6 +130,7 @@ namespace Rtt
 	Rtt::Runtime *fBackgroundedRuntime;
 	NSDictionary *fActiveSimulatorDeviceInfo;
 	NSDictionary *fTemporarySimulatorDeviceInfo;
+	BOOL fAgentMode;
 }
 
 @property (nonatomic, readonly, getter=simulator) Rtt::MacSimulator *fSimulator;
@@ -149,6 +150,7 @@ namespace Rtt
 @property (nonatomic, readonly, retain) GLView* layerHostView;
 @property (nonatomic, readwrite) BOOL stopRequested;
 @property (nonatomic, readwrite) float buildDownloadProgess;
+@property (nonatomic, readonly) BOOL agentMode;
 
 -(BOOL)isRunning;
 -(IBAction)showHelp:(id)sender;
@@ -206,7 +208,6 @@ namespace Rtt
 -(IBAction)openForBuildOSX:(id)sender;
 -(IBAction)openForBuildTVOS:(id)sender;
 -(void)notifyRuntimeError:(NSString *)message;
-- (NSString *) getOSVersion;
 
 //-(void)setRuntimeWithView:(GLView*)view;
 -(Rtt::Runtime*)runtime;
