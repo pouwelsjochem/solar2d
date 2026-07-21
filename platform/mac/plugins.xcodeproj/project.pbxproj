@@ -13,10 +13,6 @@
 		A47B5B8415F9BB7D001D60AB /* CoronaProvider.ads.lua in Sources */ = {isa = PBXBuildFile; fileRef = A47B5B7B15F9BAE2001D60AB /* CoronaProvider.ads.lua */; };
 		A47B5C6B15FAA9F6001D60AB /* CoronaAdsLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47B5C6915FAA9F5001D60AB /* CoronaAdsLibrary.cpp */; };
 		A47B5C6C15FAA9F6001D60AB /* CoronaAdsLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A47B5C6A15FAA9F5001D60AB /* CoronaAdsLibrary.h */; };
-		A47B5C7115FAAA05001D60AB /* CoronaLuaLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47B5C6D15FAAA05001D60AB /* CoronaLuaLibrary.cpp */; };
-		A47B5C7215FAAA05001D60AB /* CoronaLuaLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A47B5C6E15FAAA05001D60AB /* CoronaLuaLibrary.h */; };
-		A47B5C7315FAAA05001D60AB /* CoronaLuaLibraryMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A47B5C6F15FAAA05001D60AB /* CoronaLuaLibraryMetadata.cpp */; };
-		A47B5C7415FAAA05001D60AB /* CoronaLuaLibraryMetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = A47B5C7015FAAA05001D60AB /* CoronaLuaLibraryMetadata.h */; };
 		A491863B1641DDB800A39286 /* CoronaAdsLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = A47B5C6A15FAA9F5001D60AB /* CoronaAdsLibrary.h */; };
 /* End PBXBuildFile section */
 
@@ -35,21 +31,6 @@
 			);
 			runOncePerArchitecture = 0;
 			script = "if [ -e $BUILT_PRODUCTS_DIR/lua ]; then\n    LUA_DIR=\"$BUILT_PRODUCTS_DIR\"\nelse\n    echo \"Could not find proper 32-bit lua build\"\n    exit 1\nfi\n\necho $SRCROOT/../../bin/mac/lua2c.sh $INPUT_FILE_PATH $TARGET_TEMP_DIR $CONFIGURATION\n$SRCROOT/../../bin/mac/lua2c.sh $INPUT_FILE_PATH $TARGET_TEMP_DIR $CONFIGURATION $BUILT_PRODUCTS_DIR\n";
-		};
-		A47B5BA315F9BE38001D60AB /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.lua";
-			fileType = pattern.proxy;
-			inputFiles = (
-				"$(BUILT_PRODUCTS_DIR)/lua",
-			);
-			isEditable = 1;
-			outputFiles = (
-				"$(TARGET_TEMP_DIR)/$(INPUT_FILE_BASE).c",
-			);
-			runOncePerArchitecture = 0;
-			script = "if [ -e $BUILT_PRODUCTS_DIR/lua ]; then\n    LUA_DIR=\"$BUILT_PRODUCTS_DIR\"\nelse\n    echo \"Could not find proper 32-bit lua build\"\n    exit 1\nfi\n\necho $SRCROOT/../../bin/mac/lua2c.sh $INPUT_FILE_PATH $TARGET_TEMP_DIR $CONFIGURATION\n$SRCROOT/../../bin/mac/lua2c.sh $INPUT_FILE_PATH $TARGET_TEMP_DIR $CONFIGURATION\n";
 		};
 		A491863C1641DDB800A39286 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -70,13 +51,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		A44308B3164C744D00B9117B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A482DA7A15F9B7E70084DC42 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A47B5B6715F9BA95001D60AB;
-			remoteInfo = ads;
-		};
-		A47B5BA815F9BF33001D60AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A482DA7A15F9B7E70084DC42 /* Project object */;
 			proxyType = 1;
@@ -164,7 +138,6 @@
 		A47B5B8A15F9BBCA001D60AB /* CoronaLua.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaLua.h; path = ../../librtt/Corona/CoronaLua.h; sourceTree = "<group>"; };
 		A47B5B8B15F9BBCA001D60AB /* CoronaMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaMacros.h; path = ../../librtt/Corona/CoronaMacros.h; sourceTree = "<group>"; };
 		A47B5B8C15F9BBCA001D60AB /* CoronaRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaRuntime.h; path = ../iphone/Corona/CoronaRuntime.h; sourceTree = "<group>"; };
-		A47B5BA715F9BE38001D60AB /* plugins.old.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = plugins.old.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		A47B5C6915FAA9F5001D60AB /* CoronaAdsLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaAdsLibrary.cpp; path = ../../plugins/ads/shared/CoronaAdsLibrary.cpp; sourceTree = "<group>"; };
 		A47B5C6A15FAA9F5001D60AB /* CoronaAdsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaAdsLibrary.h; path = ../../plugins/ads/shared/CoronaAdsLibrary.h; sourceTree = "<group>"; };
 		A47B5C6D15FAAA05001D60AB /* CoronaLuaLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CoronaLuaLibrary.cpp; path = ../../plugins/shared/CoronaLuaLibrary.cpp; sourceTree = "<group>"; };
@@ -184,13 +157,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A47B5B6515F9BA95001D60AB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A47B5BA015F9BE38001D60AB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -279,7 +245,6 @@
 			isa = PBXGroup;
 			children = (
 				A47B5B6815F9BA95001D60AB /* ads.dylib */,
-				A47B5BA715F9BE38001D60AB /* plugins.old.dylib */,
 				A44308AD164C733E00B9117B /* libplugins.a */,
 			);
 			name = Products;
@@ -322,15 +287,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A47B5C6C15FAA9F6001D60AB /* CoronaAdsLibrary.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A47B5BA115F9BE38001D60AB /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A47B5C7215FAAA05001D60AB /* CoronaLuaLibrary.h in Headers */,
-				A47B5C7415FAAA05001D60AB /* CoronaLuaLibraryMetadata.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,26 +339,6 @@
 			productReference = A47B5B6815F9BA95001D60AB /* ads.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
-		A47B5B9B15F9BE38001D60AB /* plugins.old */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A47B5BA415F9BE38001D60AB /* Build configuration list for PBXNativeTarget "plugins.old" */;
-			buildPhases = (
-				A47B5B9C15F9BE38001D60AB /* Sources */,
-				A47B5BA015F9BE38001D60AB /* Frameworks */,
-				A47B5BA115F9BE38001D60AB /* Headers */,
-			);
-			buildRules = (
-				A47B5BA315F9BE38001D60AB /* PBXBuildRule */,
-			);
-			dependencies = (
-				A47B5BA915F9BF33001D60AB /* PBXTargetDependency */,
-				A491864A1641DE0100A39286 /* PBXTargetDependency */,
-			);
-			name = plugins.old;
-			productName = ads;
-			productReference = A47B5BA715F9BE38001D60AB /* plugins.old.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -431,7 +367,6 @@
 			projectRoot = "";
 			targets = (
 				A44308AC164C733E00B9117B /* plugins */,
-				A47B5B9B15F9BE38001D60AB /* plugins.old */,
 				A47B5B6715F9BA95001D60AB /* ads */,
 			);
 		};
@@ -509,15 +444,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A47B5B9C15F9BE38001D60AB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A47B5C7115FAAA05001D60AB /* CoronaLuaLibrary.cpp in Sources */,
-				A47B5C7315FAAA05001D60AB /* CoronaLuaLibraryMetadata.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -529,15 +455,6 @@
 		A44308B6164C744D00B9117B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			targetProxy = A44308B5164C744D00B9117B /* PBXContainerItemProxy */;
-		};
-		A47B5BA915F9BF33001D60AB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A47B5B6715F9BA95001D60AB /* ads */;
-			targetProxy = A47B5BA815F9BF33001D60AB /* PBXContainerItemProxy */;
-		};
-		A491864A1641DE0100A39286 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			targetProxy = A49186491641DE0100A39286 /* PBXContainerItemProxy */;
 		};
 		A4C243971683AF5300C395D1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -601,30 +518,6 @@
 				INSTALL_PATH = "@rpath";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		A47B5BA515F9BE38001D60AB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "plugins-Prefix.pch";
-				MACH_O_TYPE = mh_dylib;
-				PRODUCT_NAME = plugins.old;
-			};
-			name = Debug;
-		};
-		A47B5BA615F9BE38001D60AB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "plugins-Prefix.pch";
-				MACH_O_TYPE = mh_dylib;
-				PRODUCT_NAME = plugins.old;
 			};
 			name = Release;
 		};
@@ -727,15 +620,6 @@
 			buildConfigurations = (
 				A47B5B7215F9BA95001D60AB /* Debug */,
 				A47B5B7315F9BA95001D60AB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A47B5BA415F9BE38001D60AB /* Build configuration list for PBXNativeTarget "plugins.old" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A47B5BA515F9BE38001D60AB /* Debug */,
-				A47B5BA615F9BE38001D60AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -194,7 +194,6 @@ sdk/Corona**
 *.o.d
 */corona-root.lnk
 *.user
-platform/android/resources/FastFileCreate
 
 platform/linux/lua
 platform/linux/linux_rtt.txt

@@ -92,7 +92,6 @@
 		0054B975138205E400BC962A /* lua_hash_map.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 0054B967138205E300BC962A /* lua_hash_map.hpp */; };
 		0054B976138205E400BC962A /* LuaHashMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 0054B968138205E300BC962A /* LuaHashMap.c */; };
 		0054E59C147750990051B2CE /* FoundationUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 0054E59B147750990051B2CE /* FoundationUtilities.m */; };
-		005DB22D1410606400B1B0DD /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 005DB22C1410606400B1B0DD /* Quartz.framework */; };
 		00602C3D153F9EA400A82C43 /* NSAlert-OAExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 00602C3B153F9EA400A82C43 /* NSAlert-OAExtensions.m */; };
 		006DC6D913678511008DDB3D /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6D713678511008DDB3D /* Reachability.m */; };
 		006DC6DF13678AB5008DDB3D /* Rtt_PlatformReachability.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 006DC6DD13678AB5008DDB3D /* Rtt_PlatformReachability.cpp */; };
@@ -1366,13 +1365,6 @@
 			remoteGlobalIDString = A48B827C16D59A4000CA01A1;
 			remoteInfo = CoronaResources;
 		};
-		A491860A1641DCFD00A39286 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A47B5BA715F9BE38001D60AB;
-			remoteInfo = plugins;
-		};
 		A491860C1641DCFD00A39286 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A49186021641DCFD00A39286 /* plugins.xcodeproj */;
@@ -1776,7 +1768,6 @@
 		002D74A812FB438A006C7E9B /* Rtt_PlatformExitCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_PlatformExitCallback.h; sourceTree = "<group>"; };
 		002D74A912FB438A006C7E9B /* Rtt_PlatformExitCallback.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_PlatformExitCallback.cpp; sourceTree = "<group>"; };
 		0039BCEF132AF4570009B76B /* lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = lua.xcodeproj; path = ratatouille.xcodeproj/../lua.xcodeproj; sourceTree = "<group>"; };
-		003A5DA11339A02700A2561A /* libffi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffi.dylib; path = usr/lib/libffi.dylib; sourceTree = SDKROOT; };
 		003E585B153CC3C700483125 /* lobjectivec_exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lobjectivec_exceptions.h; sourceTree = "<group>"; };
 		003E585C153CC3C700483125 /* lobjectivec_exceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = lobjectivec_exceptions.m; sourceTree = "<group>"; };
 		004A5F361368DB08003BD9DA /* Corona3rdPartyLicenses.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = Corona3rdPartyLicenses.txt; path = ../../sdk/dmg/Corona3rdPartyLicenses.txt; sourceTree = "<group>"; };
@@ -1816,7 +1807,6 @@
 		A4F0B60328D0000000A1B2C3 /* Rtt_AppleTextAlignment.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_AppleTextAlignment.mm; sourceTree = "<group>"; };
 		A4F0B60428D0000000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_AppleTextDelegateWrapperObjectHelper.h; sourceTree = "<group>"; };
 		A4F0B60528D0000000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rtt_AppleTextDelegateWrapperObjectHelper.m; sourceTree = "<group>"; };
-		005DB22C1410606400B1B0DD /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		00602C3A153F9EA400A82C43 /* NSAlert-OAExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAlert-OAExtensions.h"; sourceTree = "<group>"; };
 		00602C3B153F9EA400A82C43 /* NSAlert-OAExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAlert-OAExtensions.m"; sourceTree = "<group>"; };
 		00602C3C153F9EA400A82C43 /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
@@ -1897,13 +1887,10 @@
 		00B7374E12B706E00057F594 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		00B7375212B706E00057F594 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		00B7375412B706E00057F594 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		00B7375612B706E00057F594 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		00B7375812B706E00057F594 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		00B7375A12B706E00057F594 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		00B7375C12B706E00057F594 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		00B7375E12B706E00057F594 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		00B7376012B706E00057F594 /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = usr/lib/libcrypto.dylib; sourceTree = SDKROOT; };
-		00B7376212B706E00057F594 /* libreadline.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.dylib; path = usr/lib/libreadline.dylib; sourceTree = SDKROOT; };
 		00B7376412B706E00057F594 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		00B737BA12B707B40057F594 /* ALmixer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ALmixer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B737BB12B707B40057F594 /* ALmixer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ALmixer-Info.plist"; path = "../../platform/mac/ALmixer-Info.plist"; sourceTree = "<group>"; };
@@ -2079,7 +2066,6 @@
 		0799601417EBC78000A632B9 /* Rtt_MacViewCallback.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_MacViewCallback.mm; sourceTree = "<group>"; };
 		07EB77BA178DD3200089B3C5 /* Rtt_SurfaceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SurfaceInfo.h; sourceTree = "<group>"; };
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = ../../../System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		1B10CF6B2538381000F48B3A /* Rtt_SpriteSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SpriteSequence.h; path = Display/Rtt_SpriteSequence.h; sourceTree = "<group>"; };
 		1B10CF712538381000F48B3A /* Rtt_SpriteSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_SpriteSequence.cpp; path = Display/Rtt_SpriteSequence.cpp; sourceTree = "<group>"; };
 		1F34F53321115FB1006EE117 /* Rtt_LinuxAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LinuxAppPackager.cpp; path = ../shared/Rtt_LinuxAppPackager.cpp; sourceTree = "<group>"; };
@@ -2552,7 +2538,6 @@
 				A4FBC5261A2D5623004D9A01 /* libCoronaCore.a in Frameworks */,
 				A44308DC164C755600B9117B /* libplugins.a in Frameworks */,
 				C287481D19F6EED0002D5B27 /* Cocoa.framework in Frameworks */,
-				005DB22D1410606400B1B0DD /* Quartz.framework in Frameworks */,
 				00B7379A12B706FA0057F594 /* AudioToolbox.framework in Frameworks */,
 				00B7379B12B706FB0057F594 /* ApplicationServices.framework in Frameworks */,
 				C2B5FEFB1B33705300DD49E6 /* libluafilesystem.a in Frameworks */,
@@ -3353,19 +3338,13 @@
 			children = (
 				00B7374A12B706E00057F594 /* ApplicationServices.framework */,
 				00B7374C12B706E00057F594 /* AudioToolbox.framework */,
-				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				00B7374E12B706E00057F594 /* IOKit.framework */,
 				00B7375212B706E00057F594 /* OpenAL.framework */,
 				00B7375412B706E00057F594 /* OpenGL.framework */,
-				00B7375612B706E00057F594 /* QTKit.framework */,
-				005DB22C1410606400B1B0DD /* Quartz.framework */,
 				00B7375812B706E00057F594 /* QuartzCore.framework */,
 				00B7375A12B706E00057F594 /* Security.framework */,
 				00B7375C12B706E00057F594 /* SystemConfiguration.framework */,
 				00B7375E12B706E00057F594 /* WebKit.framework */,
-				00B7376012B706E00057F594 /* libcrypto.dylib */,
-				003A5DA11339A02700A2561A /* libffi.dylib */,
-				00B7376212B706E00057F594 /* libreadline.dylib */,
 				00B7376412B706E00057F594 /* libsqlite3.dylib */,
 			);
 			name = "Apple Frameworks";
@@ -3724,7 +3703,6 @@
 			isa = PBXGroup;
 			children = (
 				A44308DA164C74BE00B9117B /* libplugins.a */,
-				A491860B1641DCFD00A39286 /* plugins.old.dylib */,
 				A491860D1641DCFD00A39286 /* ads.dylib */,
 			);
 			name = Products;
@@ -4779,13 +4757,6 @@
 			fileType = archive.ar;
 			path = libplugins.a;
 			remoteRef = A44308D9164C74BE00B9117B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A491860B1641DCFD00A39286 /* plugins.old.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = plugins.old.dylib;
-			remoteRef = A491860A1641DCFD00A39286 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A491860D1641DCFD00A39286 /* ads.dylib */ = {
