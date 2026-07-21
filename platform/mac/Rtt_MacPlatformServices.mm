@@ -34,7 +34,7 @@ MacPlatformServices::Platform() const
 	return fPlatform;
 }
 
-#define Rtt_CORONA_DOMAIN "com.coronalabs.Corona_Simulator" // "com.anscamobile.ratatouille"
+#define Rtt_CORONA_DOMAIN "com.coronalabs.Corona_Simulator"
 static const char kCoronaDomainUTF8[] = Rtt_CORONA_DOMAIN;
 #undef Rtt_CORONA_DOMAIN
 
@@ -266,4 +266,3 @@ MacPlatformServices::Sleep( int milliseconds ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

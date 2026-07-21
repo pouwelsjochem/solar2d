@@ -35,7 +35,6 @@ namespace Rtt
 	NSRect nativeFrameRect; // currently only settable via initWithFrame:
 	SPILDTopLayerView* suspendedOverlay;
     BOOL isReady;
-	BOOL shouldInvalidate;
     NSMutableArray *fCursorRects;
 	NSTrackingRectTag trackingRectTag;
 	int numCursorHides;

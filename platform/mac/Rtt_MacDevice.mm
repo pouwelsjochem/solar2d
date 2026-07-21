@@ -32,13 +32,8 @@
 #import "AppDelegate.h"
 #endif
 
-#include <CoreServices/CoreServices.h>
 #include <SystemConfiguration/SystemConfiguration.h>
-#include <objc/message.h>
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
-	#import <AudioToolbox/AudioServices.h>
-#endif
+#import <AudioToolbox/AudioServices.h>
 
 #include <CommonCrypto/CommonCrypto.h>
 
@@ -136,45 +131,7 @@ MacConsoleDevice::GetPlatformVersion() const
 {
 	if ( fSystemVersion == nil )
 	{
-		// OS version determination (ironically this is very OS version dependent)
-		typedef struct {
-			NSInteger majorVersion;
-			NSInteger minorVersion;
-			NSInteger patchVersion;
-		} OperatingSystemVersion;
-        OperatingSystemVersion osVersion = {0};
-		SEL operatingSystemVersionSelector = NSSelectorFromString(@"operatingSystemVersion");
-
-		if ([[NSProcessInfo processInfo] respondsToSelector:operatingSystemVersionSelector])
-		{
-			// this works on 10.10 and above (and, apparently, 10.9)
-            NSMethodSignature *signature = [NSProcessInfo instanceMethodSignatureForSelector:operatingSystemVersionSelector];
-            if(signature)
-            {
-                NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-                [invocation setTarget:[NSProcessInfo processInfo]];
-                [invocation setSelector:operatingSystemVersionSelector];
-                [invocation invoke];
-                [invocation getReturnValue:&osVersion];
-            }
-        }
-		else
-		{
-			// works on 10.8 and below but is now deprecated (actually it doesn't work correctly with "minorVersion" > 9)
-			SInt32 versMaj, versMin, versPatch;
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-			Gestalt(gestaltSystemVersionMajor, &versMaj);
-			Gestalt(gestaltSystemVersionMinor, &versMin);
-			Gestalt(gestaltSystemVersionBugFix, &versPatch);
-#pragma GCC diagnostic pop
-
-			osVersion.majorVersion = versMaj;
-			osVersion.minorVersion = versMin;
-			osVersion.patchVersion = versPatch;
-		}
-
+		NSOperatingSystemVersion osVersion = [[NSProcessInfo processInfo] operatingSystemVersion];
 		fSystemVersion = [[NSString stringWithFormat:@"%d.%d.%d", (int) osVersion.majorVersion, (int) osVersion.minorVersion,  (int) osVersion.patchVersion] retain];
 	}
 
@@ -373,9 +330,7 @@ MacDevice::MacDevice( Rtt_Allocator &allocator, PlatformSimulator& simulator )
 void
 MacDevice::Vibrate() const
 {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 	AudioServicesPlaySystemSound( kUserPreferredAlert );
-#endif
 }
 
 bool
@@ -468,4 +423,3 @@ MacAppDevice::MacAppDevice( Rtt_Allocator &allocator )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

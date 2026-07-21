@@ -49,13 +49,11 @@
 //#import <Security/Security.h>
 //#import <CoreServices/CoreServices.h>
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-	#import <Foundation/NSFileManager.h>
-	#import <Foundation/NSPathUtilities.h>
-	#import <Foundation/NSURL.h>
-	#include <CoreFoundation/CoreFoundation.h>
-	#include <ApplicationServices/ApplicationServices.h>
-#endif
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSURL.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <ApplicationServices/ApplicationServices.h>
 
 #include "Rtt_Lua.h"
 
@@ -70,7 +68,6 @@ NSString* const kBuildFolderPath = @"buildFolderPath";
 NSString* const kKeyStoreFolderPath = @"keyStoreFolderPath";
 NSString* const kKeyStoreFolderPathAndFile = @"keyStoreFolderPathAndFile";
 NSString* const kDstFolderPath = @"dstFolderPath";
-NSString* const kDidAgreeToLicense = @"didAgreeToLicense";
 NSString* const kUserPreferenceUsersCurrentSelectedSkin = @"skin";
 NSString* const kUserPreferenceCustomBuildID = @"userPreferenceCustomBuildID";
 NSString* const kUserPreferenceLastIOSCertificate = @"lastIOSCertificate";

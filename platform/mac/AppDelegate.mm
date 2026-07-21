@@ -17,24 +17,6 @@
 #import "AppDelegate.h"
 #include <stdlib.h>
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-	#import <Foundation/NSAutoreleasePool.h>
-	#import <Foundation/NSBundle.h>
-	#import <Foundation/NSData.h>
-	#import <Foundation/NSFileHandle.h>
-	#import <Foundation/NSFileManager.h>
-	#import <Foundation/NSPathUtilities.h>
-	#import <Foundation/NSProcessInfo.h>
-	#import <Foundation/NSString.h>
-	#import <Foundation/NSTask.h>
-	#import <Foundation/NSThread.h>
-	#if __LP64__
-		typedef long NSInteger;
-	#else
-		typedef int NSInteger;
-	#endif
-#endif
-
 #import <AppKit/NSAlert.h>
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSAttributedString.h>
@@ -841,44 +823,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
         struct sigaction termAction = { 0 };
 		termAction.sa_handler = SigTERMHandler;
 		sigaction(SIGTERM, &termAction, NULL);
-        // Migrate old prefs to new prefs, do it only once because we don't want to remove the old prefs in case
-        // they subsequently downgrade
-        NSDictionary *oldPrefs = [[NSUserDefaults standardUserDefaults]
-                                  persistentDomainForName:@"com.anscamobile.Corona_Simulator"];
-        NSDictionary *newPrefs = [[NSUserDefaults standardUserDefaults]
-                                  persistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
-        
-        if ( oldPrefs && ! [newPrefs valueForKey:@"prefsMigrated"])
-        {
-            NSMutableDictionary *convertedPrefs = [[[NSMutableDictionary alloc] initWithDictionary:oldPrefs] autorelease];
-            
-            // If we wanted to remove the old prefs we'd do this, not doing so allows people to go back to older versions
-            // [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:@"old.bundle.identifier"];
-            
-            // Now the old legacy build server stuff
-            NSDictionary *oldBuildPrefs = [[NSUserDefaults standardUserDefaults]
-                                           persistentDomainForName:@"com.anscamobile.ratatouille"];
-            
-            if (oldBuildPrefs)
-            {
-                [convertedPrefs addEntriesFromDictionary:oldBuildPrefs];
-            }
-            
-            [[NSUserDefaults standardUserDefaults] setPersistentDomain:convertedPrefs forName:[[NSBundle mainBundle] bundleIdentifier]];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"prefsMigrated"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            // Now the recent files
-            NSDictionary *oldRecentFiles = [[NSUserDefaults standardUserDefaults]
-                                            persistentDomainForName:@"com.anscamobile.Corona_Simulator.LSSharedFileList"];
-            if ( oldRecentFiles )
-            {
-                [[NSUserDefaults standardUserDefaults] setPersistentDomain:oldRecentFiles forName:@"com.coronalabs.Corona_Simulator.LSSharedFileList"];
-                
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-        }
-        
+
         [super initialize];
     }
 }

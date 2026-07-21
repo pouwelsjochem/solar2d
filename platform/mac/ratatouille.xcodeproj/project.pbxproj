@@ -232,7 +232,6 @@
 		00B73E1912B727240057F594 /* AndroidKeyAliasPassword.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73DFA12B727240057F594 /* AndroidKeyAliasPassword.xib */; };
 		00B73E1A12B727240057F594 /* AndroidKeyStorePassword.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73DFC12B727240057F594 /* AndroidKeyStorePassword.xib */; };
 		00B73E1C12B727240057F594 /* BuildProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73E0012B727240057F594 /* BuildProgress.xib */; };
-		00B73E1F12B727240057F594 /* License.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73E0612B727240057F594 /* License.xib */; };
 		00B73E6A12B72DA50057F594 /* ALmixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; };
 		00B73E9D12B72FD80057F594 /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7343B12B6F7530057F594 /* print.c */; };
 		00B73ECE12B730AA0057F594 /* ant-launcher.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8B12B720C90057F594 /* ant-launcher.jar */; };
@@ -2021,7 +2020,6 @@
 		00B73DFB12B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AndroidKeyAliasPassword.xib; sourceTree = "<group>"; };
 		00B73DFD12B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AndroidKeyStorePassword.xib; sourceTree = "<group>"; };
 		00B73E0112B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/BuildProgress.xib; sourceTree = "<group>"; };
-		00B73E0712B727240057F594 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/License.xib; sourceTree = "<group>"; };
 		00C8225C13452C80005D1EEB /* ValidationSupportMacUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValidationSupportMacUI.h; sourceTree = "<group>"; };
 		00C8225D13452C80005D1EEB /* ValidationSupportMacUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValidationSupportMacUI.m; sourceTree = "<group>"; };
 		00D3F20A1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Rtt_LuaCoronaBaseLib.c; sourceTree = "<group>"; };
@@ -3298,7 +3296,6 @@
 				00B73C8312B720C90057F594 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				C2DC53BE1ADF15540077A44A /* iOS-SDKs.json */,
-				00B73E0612B727240057F594 /* License.xib */,
 				00E14F6313428CBF0089C390 /* Localizable.strings */,
 				00B73DF312B726350057F594 /* MainMenu.nib */,
 				00B73C8612B720C90057F594 /* remdebug_engine.lua */,
@@ -4912,7 +4909,6 @@
 				00B73E1A12B727240057F594 /* AndroidKeyStorePassword.xib in Resources */,
 				00B73E1C12B727240057F594 /* BuildProgress.xib in Resources */,
 				F57469D7240291FA00CA5949 /* iostemplate in Resources */,
-				00B73E1F12B727240057F594 /* License.xib in Resources */,
 				00E14F6513428CBF0089C390 /* Localizable.strings in Resources */,
 				F545475321178F7400D5EDB7 /* linuxtemplate_x64.tgz in Resources */,
 				C21D9DBD1BF67C300042C5A9 /* android_syslog.sh in Resources */,
@@ -6124,14 +6120,6 @@
 				00B73E0112B727240057F594 /* English */,
 			);
 			name = BuildProgress.xib;
-			sourceTree = "<group>";
-		};
-		00B73E0612B727240057F594 /* License.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				00B73E0712B727240057F594 /* English */,
-			);
-			name = License.xib;
 			sourceTree = "<group>";
 		};
 		00E14F6313428CBF0089C390 /* Localizable.strings */ = {

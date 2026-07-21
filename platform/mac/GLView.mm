@@ -12,7 +12,6 @@
 #import "GLView.h"
 #include <OpenGL/gl.h>
 
-#import <AppKit/NSApplication.h>
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSOpenGL.h>
 #import <AppKit/AppKit.h>
@@ -27,20 +26,6 @@
 #define NSDEBUG(...) // NSLog(__VA_ARGS__)
 #else
 #define NSDEBUG(...)
-#endif
-
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-	// From <Foundation/NSRunLoop.h>
-	@interface NSObject (NSDelayedPerforming)
-
-	- (void)performSelector:(SEL)aSelector withObject:(id)anArgument afterDelay:(NSTimeInterval)delay inModes:(NSArray *)modes;
-	- (void)performSelector:(SEL)aSelector withObject:(id)anArgument afterDelay:(NSTimeInterval)delay;
-	+ (void)cancelPreviousPerformRequestsWithTarget:(id)aTarget selector:(SEL)aSelector object:(id)anArgument;
-	#if MAC_OS_X_VERSION_10_2 <= MAC_OS_X_VERSION_MAX_ALLOWED
-	+ (void)cancelPreviousPerformRequestsWithTarget:(id)aTarget;
-	#endif
-
-	@end
 #endif
 
 #include "Rtt_AppleBitmap.h"
@@ -174,11 +159,6 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 	return RttCoronaKeyNameForLayoutCharacter(unicodeString[0]);
 }
 
-// So we can build with Xcode 8.0
-#ifndef NSAppKitVersionNumber10_12
-#define NSAppKitVersionNumber10_12 1504
-#endif
-
 // Container for cursor rects
 @interface CursorRect : NSObject
 {
@@ -280,17 +260,10 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 		
 		nativeFrameRect = frameRect;
 
-		// It seems we need to set wantsLayer on macOS 10.12 or native display objects don't appear
-		// (we avoid it on earlier versions because it has performance issues with OpenGL views)
-		if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_12)
-		{
-			[self setWantsLayer:YES];
-		}
+		// Native display objects require the OpenGL view to be layer-backed.
+		[self setWantsLayer:YES];
 
 		scaleFactor = 1.0;
-
-		// We're looking for a 10.9 API call to determine if we need to invalidate
-		shouldInvalidate = [[NSApplication sharedApplication] respondsToSelector:@selector(occlusionState)];
 
 		cursorHidden = NO;
 		numCursorHides = 0;
@@ -365,7 +338,7 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
         // This fixes nasty OpenGL painting artifacts when live resizing
 		[self invalidate];
     }
-	else if (shouldInvalidate)
+	else
 	{
 		// This turns out to be lightweight b/c setNeedsDisplay is called by the timer *only*
 		// when the Scene has already been invalidated. We invalidate here b/c drawRect

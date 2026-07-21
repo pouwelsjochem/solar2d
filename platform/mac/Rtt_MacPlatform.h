@@ -31,7 +31,6 @@ extern NSString* const kBuildFolderPath;
 extern NSString* const kKeyStoreFolderPath;
 extern NSString* const kKeyStoreFolderPathAndFile;
 extern NSString* const kDstFolderPath;
-extern NSString* const kDidAgreeToLicense;
 extern NSString* const kUserPreferenceUsersCurrentSelectedSkin;
 extern NSString* const kUserPreferenceCustomBuildID;
 extern NSString* const kUserPreferenceLastIOSCertificate;

@@ -32,13 +32,6 @@
 #include "Rtt_AppleKeyServices.h"
 #import <Carbon/Carbon.h>
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-	//#import <Foundation/NSNumber.h>
-	#import <Foundation/NSDictionary.h>
-	#import <Foundation/NSKeyValueCoding.h>
-	#import <Foundation/NSString.h>
-#endif
-
 // ----------------------------------------------------------------------------
 
 namespace Rtt
