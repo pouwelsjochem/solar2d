@@ -75,12 +75,11 @@ mkdir -pv "${BUILD_DIR}/template-dSYM/${SDK_SIMULATOR}/${SDK_VERSION}"
 # -----------------------------------------------------------------------------
 
 # Environment vars used by internal scripts called within Xcode
-export SUPPRESS_APP_SIGN=1
 export SUPPRESS_GUI=1
 
 # template device
 
-xcodebuild SYMROOT="$path/build" OTHER_CFLAGS="-fembed-bitcode" -project "${path}"/ratatouille.xcodeproj -target ${TEMPLATE_TARGET} -configuration Release -sdk ${SDK_DEVICE} 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
+xcodebuild SYMROOT="$path/build" -project "${path}"/ratatouille.xcodeproj -target ${TEMPLATE_TARGET} -configuration Release -sdk ${SDK_DEVICE} 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
 checkError
 
 mv -v "${BUILD_DIR}/Release-${SDK_DEVICE}/template.app" "${BUILD_DIR}/template/${SDK_DEVICE}/${SDK_VERSION}/template.app"
@@ -106,7 +105,6 @@ then
 	# CoronaCards.framework
 	# NOTE: No need to do clean, since we already did a clean build in the above xcodebuild 
 	# invocations. This xcodebuild will finish nearly instantaneously.
-	xcodebuild SYMROOT="$path/build" OTHER_CFLAGS="-fembed-bitcode" -project "${path}"/ratatouille.xcodeproj -target CoronaCards.framework -configuration Release 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
+	xcodebuild SYMROOT="$path/build" -project "${path}"/ratatouille.xcodeproj -target CoronaCards.framework -configuration Release 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
 	checkError
 fi
-

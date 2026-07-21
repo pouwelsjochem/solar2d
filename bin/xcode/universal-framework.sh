@@ -72,9 +72,6 @@ UNIVERSAL_OUTPUTFOLDER=${OUTPUT_DIR}/${CONFIGURATION}-universal
 # make sure the output directory exists
 mkdir -p "${UNIVERSAL_OUTPUTFOLDER}"
 
-# passing through this setting will break bitcode generation
-unset TOOLCHAINS
-
 # STEP 1. Build Device and Simulator versions
 xcodebuild -project "${PROJECT_FILE_PATH}" -target "${TARGET_XCODE}" -configuration ${CONFIGURATION} -sdk $SDK_DEVICE ONLY_ACTIVE_ARCH=NO BUILD_DIR="${OUTPUT_DIR}" BUILD_ROOT="${OUTPUT_DIR}" OBJROOT="${OUTPUT_DIR}/DependentBuilds" build
 xcodebuild -project "${PROJECT_FILE_PATH}" -target "${TARGET_XCODE}" -configuration ${CONFIGURATION} -sdk $SDK_SIMULATOR ONLY_ACTIVE_ARCH=NO BUILD_DIR="${OUTPUT_DIR}" BUILD_ROOT="${OUTPUT_DIR}" OBJROOT="${OUTPUT_DIR}/DependentBuilds" build
