@@ -33,9 +33,6 @@
 
 #include <sys/types.h> // for sysctlbyname
 #include <sys/sysctl.h> // for sysctlbyname
-#include <sys/socket.h>
-#include <net/if.h>
-#include <net/if_dl.h>
 
 // ----------------------------------------------------------------------------
 
@@ -168,47 +165,11 @@ MD5Hash( NSString *value )
 	return output;
 }
 
-#define UUID_USER_DEFAULTS_KEY @"CoronaID"
-
 static NSString *
 GetApprovedIdentifier()
 {
-    if ([[UIDevice currentDevice] respondsToSelector:@selector(identifierForVendor)])
-    {
-        // Return the MD5 hash of the identifierForVendor (hashed to make it backwards compatible)
-        return MD5Hash([[[UIDevice currentDevice] identifierForVendor] UUIDString] );
-    }
-    else
-    {
-        // No "identifierForVendor", return remembered UUID or generate a new one
-        NSString *uuidString = nil;
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        
-        if ((uuidString = [defaults objectForKey:UUID_USER_DEFAULTS_KEY]) == nil)
-        {
-            // No saved UUID, generate one
-            CFUUIDRef uuid = CFUUIDCreate(NULL);
-            
-            if (uuid)
-            {
-                uuidString = (NSString *)CFUUIDCreateString(NULL, uuid);
-                CFRelease(uuid);
-                
-                [defaults setObject:uuidString forKey:UUID_USER_DEFAULTS_KEY];
-                [defaults synchronize];
-
-                [uuidString autorelease];
-            }
-            else
-            {
-                // Not much we can do
-                return nil;
-            }
-        }
-        
-        return MD5Hash(uuidString);
-    }
+    // Return the MD5 hash of the identifierForVendor (hashed to make it backwards compatible)
+    return MD5Hash([[[UIDevice currentDevice] identifierForVendor] UUIDString] );
 }
 
 	
@@ -224,16 +185,10 @@ IPhoneDevice::GetUniqueIdentifier( IdentifierType t ) const
             result = [GetApprovedIdentifier() UTF8String];
             break;
         case MPlatformDevice::kMacIdentifier:
-            // Apple doesn't allow this anymore 2013-08-22: result = [GetMacAddress() UTF8String];
-            break;
         case MPlatformDevice::kUdidIdentifier:
-            //result = "98765432109876543210";
             break;
         case MPlatformDevice::kIOSIdentifierForVendor:
-            if ([[UIDevice currentDevice] respondsToSelector:@selector(identifierForVendor)])
-            {
-                result = [[[[UIDevice currentDevice] identifierForVendor] UUIDString] UTF8String];
-            }
+            result = [[[[UIDevice currentDevice] identifierForVendor] UUIDString] UTF8String];
             break;
 		default:
 			break;
@@ -261,13 +216,9 @@ IPhoneDevice::Vibrate(const char * hapticType, const char* hapticStyle) const
            } else if ([style isEqualToString:@"heavy"]) {
                feedbackStyle = UIImpactFeedbackStyleHeavy;
            } else if ([style isEqualToString:@"rigid"]) {
-               if (@available(iOS 13.0, *)) {
-                feedbackStyle = UIImpactFeedbackStyleRigid;
-               }//else we use medium
+               feedbackStyle = UIImpactFeedbackStyleRigid;
            } else if ([style isEqualToString:@"soft"]) {
-               if (@available(iOS 13.0, *)) {
-                   feedbackStyle = UIImpactFeedbackStyleSoft;
-               }//else we use medium
+               feedbackStyle = UIImpactFeedbackStyleSoft;
            }
          }
        UIImpactFeedbackGenerator *feedback = [[UIImpactFeedbackGenerator alloc] initWithStyle:feedbackStyle];
@@ -425,4 +376,3 @@ IPhoneDevice::SetGyroscopeInterval( U32 frequency ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

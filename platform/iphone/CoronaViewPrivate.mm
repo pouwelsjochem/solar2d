@@ -106,15 +106,9 @@ CreatePlatform( CoronaView *view )
 
 	// This should be the only place in this file where we call locationInView:
 	CGPoint result = [self locationInView:view];
-	// Compiler macro is insufficient if you are building against the 4.0 SDK for new features, but
-	// also want to support older OS's. You need a runtime check as well.
-	if([view respondsToSelector:@selector(contentScaleFactor)])
-	{
-		CGFloat scale = view.contentScaleFactor;
-		
-		result.x *= scale;
-		result.y *= scale;
-	}
+	CGFloat scale = view.contentScaleFactor;
+	result.x *= scale;
+	result.y *= scale;
 	
 	return result;
 }
@@ -946,10 +940,7 @@ PrintTouches( NSSet *touches, const char *header )
 
 - (void)didMoveToWindow
 {
-	if ( [self.window.screen respondsToSelector:@selector(nativeScale)] )
-	{
-		self.contentScaleFactor = self.window.screen.nativeScale;
-	}
+	self.contentScaleFactor = self.window.screen.nativeScale;
 }
 
 - (void)drawRect:(CGRect)rect

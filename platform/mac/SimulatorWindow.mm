@@ -137,8 +137,7 @@
     BOOL result = NO;
     NSString *windowLocPref = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"NSWindow Frame %@", frameName]];
 
-    if (([windowLocPref length] > 0) &&
-        ([NSScreen respondsToSelector:@selector(screensHaveSeparateSpaces)] && [NSScreen screensHaveSeparateSpaces]))
+    if (([windowLocPref length] > 0) && [NSScreen screensHaveSeparateSpaces])
     {
         NSRect windowFrame;
         NSRect screenFrame;

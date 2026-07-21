@@ -30,11 +30,7 @@ namespace Rtt
 	Rtt::MCallback* callback;
 }
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 @property (nonatomic) Rtt::MCallback *callback;
-#else
-- (void)setCallback:(Rtt::MCallback*)newValue;
-#endif
 
 - (void)invoke:(id)sender;
 

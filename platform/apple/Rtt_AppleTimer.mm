@@ -46,18 +46,9 @@ AppleTimer::AppleTimer( MCallback& callback )
 	fDisplayLink( nil ),
 	fTimer( nil ),
 	fTarget( [[AppleCallback alloc] init] ),
-	fInterval( 0x8000000 ),
-	fDisplayLinkSupported( false )
+	fInterval( 0x8000000 )
 {
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 	fTarget.callback = & callback;
-#else
-	[fTarget setCallback: & callback];
-#endif
-
-#ifdef Rtt_IPHONE_ENV
-	fDisplayLinkSupported = ( NSClassFromString(@"CADisplayLink") != nil );
-#endif
 }
 
 AppleTimer::~AppleTimer()
@@ -74,46 +65,36 @@ AppleTimer::Start()
 	{
 		return;
 	}
-	NSTimeInterval interval = ((NSTimeInterval)fInterval) / 1000.0;
-
 #ifdef Rtt_IPHONE_ENV
-	if ( fDisplayLinkSupported )
-	{
-		// interval is number of screen refreshes. on iPhone the screen refresh rate is 60Hz
-		// fInterval is measured in milliseconds, so 33.3 is 30fps and 16.7 is 60 fps
-		NSInteger interval = ( fInterval < 33 ? 1 : 2 );
-
-		fDisplayLink = [CADisplayLink displayLinkWithTarget:fTarget selector:@selector(invoke:)];
-		[fDisplayLink setFrameInterval:interval];
-		[fDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	}
-	else
-#endif
-	{
-		fTimer = [NSTimer
-					scheduledTimerWithTimeInterval:interval
-					target:fTarget
-					selector:@selector(invoke:)
-					userInfo:nil
-					repeats:YES];
-		[fTimer retain];
+	fDisplayLink = [CADisplayLink displayLinkWithTarget:fTarget selector:@selector(invoke:)];
+	[fDisplayLink setPreferredFramesPerSecond:( fInterval < 33 ? 60 : 30 )];
+	[fDisplayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+#else
+	NSTimeInterval interval = ((NSTimeInterval)fInterval) / 1000.0;
+	fTimer = [NSTimer
+				scheduledTimerWithTimeInterval:interval
+				target:fTarget
+				selector:@selector(invoke:)
+				userInfo:nil
+				repeats:YES];
+	[fTimer retain];
 
 #ifdef Rtt_MAC_ENV
-		// For single threaded apps like this one,
-		// Cocoa seems to block timers or events sometimes. This can be seen
-		// when I'm animating (via a timer) and you open an popup box or move a slider.
-		// Apparently, sheets and dialogs can also block (try printing).
-		// To work around this, Cocoa provides different run-loop modes. I need to
-		// specify the modes to avoid the blockage.
-		// NSDefaultRunLoopMode seems to be the default. I don't think I need to explicitly
-		// set this one, but just in case, I will set it anyway.
-		[[NSRunLoop currentRunLoop] addTimer:fTimer forMode:NSDefaultRunLoopMode];
-		// This seems to be the one for preventing blocking on other events (popup box, slider, etc)
-		[[NSRunLoop currentRunLoop] addTimer:fTimer forMode:NSEventTrackingRunLoopMode];
-		// This seems to be the one for dialogs.
-		[[NSRunLoop currentRunLoop] addTimer:fTimer forMode:NSModalPanelRunLoopMode];
+	// For single threaded apps like this one,
+	// Cocoa seems to block timers or events sometimes. This can be seen
+	// when I'm animating (via a timer) and you open an popup box or move a slider.
+	// Apparently, sheets and dialogs can also block (try printing).
+	// To work around this, Cocoa provides different run-loop modes. I need to
+	// specify the modes to avoid the blockage.
+	// NSDefaultRunLoopMode seems to be the default. I don't think I need to explicitly
+	// set this one, but just in case, I will set it anyway.
+	[[NSRunLoop currentRunLoop] addTimer:fTimer forMode:NSDefaultRunLoopMode];
+	// This seems to be the one for preventing blocking on other events (popup box, slider, etc)
+	[[NSRunLoop currentRunLoop] addTimer:fTimer forMode:NSEventTrackingRunLoopMode];
+	// This seems to be the one for dialogs.
+	[[NSRunLoop currentRunLoop] addTimer:fTimer forMode:NSModalPanelRunLoopMode];
 #endif
-	}
+#endif
 }
 
 void
@@ -157,4 +138,3 @@ AppleTimer::IsRunning() const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

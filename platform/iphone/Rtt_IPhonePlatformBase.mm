@@ -359,13 +359,7 @@ IPhonePlatformBase::SetKeyboardFocus( PlatformDisplayObject *object ) const
 Rtt_Real
 IPhonePlatformBase::GetStandardFontSize() const
 {
-	Rtt_Real pointSize = 17.f;
-
-	if ( [UIFont respondsToSelector:@selector(preferredFontForTextStyle:)] )
-	{
-		pointSize = [UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize;
-	}
-
+	Rtt_Real pointSize = [UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize;
 	return pointSize * GetView().contentScaleFactor;
 }
 
@@ -417,10 +411,7 @@ IPhonePlatformBase::PushSystemInfo( lua_State *L, const char *key ) const
 	}
 	else if ( Rtt_StringCompare( key, "darkMode" ) == 0 )
 	{
-		BOOL res = NO;
-		if (@available(iOS 13.0, tvOS 13.0, *)) {
-			res = fView.viewController.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
-		}
+		BOOL res = fView.viewController.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
 		lua_pushboolean(L, res);
 		pushedValues = 1;
 	}
@@ -438,10 +429,7 @@ IPhonePlatformBase::PushSystemInfo( lua_State *L, const char *key ) const
     }
     else if ( Rtt_StringCompare( key, "differentiateWithoutColor" ) == 0 )
     {
-        BOOL res = NO;
-        if (@available(iOS 13.0, tvOS 13.0, *)) {
-            res = UIAccessibilityShouldDifferentiateWithoutColor();
-        }
+        BOOL res = UIAccessibilityShouldDifferentiateWithoutColor();
         lua_pushboolean(L, res);
         pushedValues = 1;
     }

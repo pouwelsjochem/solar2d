@@ -816,10 +816,7 @@ MacPlatform::PushSystemInfo( lua_State *L, const char *key ) const
 	}
 	else if ( Rtt_StringCompare( key, "darkMode" ) == 0 )
 	{
-		BOOL res = NO;
-		if (@available(macOS 10.14, *)) {
-			res = [fView.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua;
-		}
+		BOOL res = [fView.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua;
 		lua_pushboolean(L, res);
 		pushedValues = 1;
 	}

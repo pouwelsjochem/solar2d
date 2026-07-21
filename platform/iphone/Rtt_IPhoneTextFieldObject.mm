@@ -137,11 +137,6 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-static bool IsIOS_7_OrHigher()
-{
-	return (floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber_iOS_7_0);
-}
-
 static const char kDefaultInputType[] = "default";
 static const char kUrlInputType[] = "url";
 static const char kNumberInputType[] = "number";
@@ -208,10 +203,7 @@ StringForUIKeyboardType( UIKeyboardType keyboardType )
 			result = kUIKeyboardTypeTwitterString;
 			break;
 		case UIKeyboardTypeWebSearch:
-			if ( IsIOS_7_OrHigher() )
-			{
-				result = kUIKeyboardTypeWebSearchString;
-			}
+			result = kUIKeyboardTypeWebSearchString;
 			break;
 		default:
 			break;
@@ -268,10 +260,7 @@ UIKeyboardTypeForString( const char *keyboardType )
 			}
 			else if ( 0 == strcmp( keyboardType, kUIKeyboardTypeWebSearchString ) )
 			{
-				if ( IsIOS_7_OrHigher() )
-				{
-					result = UIKeyboardTypeWebSearch;
-				}
+				result = UIKeyboardTypeWebSearch;
 			}
 		}
 	}

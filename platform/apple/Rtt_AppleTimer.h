@@ -55,7 +55,6 @@ class AppleTimer : public PlatformTimer
 		NSTimer* fTimer;
 		AppleCallback* fTarget;
 		U32 fInterval;
-		bool fDisplayLinkSupported;
 };
 
 // ----------------------------------------------------------------------------

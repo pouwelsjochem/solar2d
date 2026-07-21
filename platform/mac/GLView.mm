@@ -1047,12 +1047,9 @@ static U32 *sTouchId; // any arbitrary pointer value will do
 
 	for (NSView* displayview in subviews)
 	{
-		if ([displayview respondsToSelector:@selector(setWantsLayer:)])
-		{
-			// Toggle wantsLayer off and on again
-			[displayview setWantsLayer:NO];
-			[displayview setWantsLayer:YES];
-		}
+		// Toggle wantsLayer off and on again
+		[displayview setWantsLayer:NO];
+		[displayview setWantsLayer:YES];
 	}
 }
 

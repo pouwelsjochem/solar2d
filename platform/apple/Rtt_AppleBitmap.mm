@@ -16,14 +16,6 @@
 #ifdef Rtt_MAC_ENV
 	#import <Cocoa/Cocoa.h>
 	#import <ApplicationServices/ApplicationServices.h>
-
-	#if (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5)
-		#if __LP64__
-			typedef double CGFloat;// 64-bit
-		#else
-			typedef float CGFloat;// 32-bit
-		#endif
-	#endif
 	// Apple is retarded about forcing you to include ridiculously large header
 	// files when these are the only ones I need:
 	// 
@@ -475,4 +467,3 @@ MacFileBitmap::MacFileBitmap( NSImage* image, bool isMask )
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

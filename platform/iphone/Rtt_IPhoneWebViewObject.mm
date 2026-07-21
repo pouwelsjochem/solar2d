@@ -274,7 +274,7 @@ static CGFloat kAnimationDuration = 0.3;
     
 	[fLoadingURL release];
 	fLoadingURL = [request.URL retain];
-	if([fLoadingURL isFileURL] && baseUrl && [self.webView respondsToSelector:@selector(loadFileURL:allowingReadAccessToURL:)]) {
+	if([fLoadingURL isFileURL] && baseUrl) {
 		[self.webView loadFileURL:request.URL allowingReadAccessToURL:baseUrl];
 	} else {
 		[self.webView loadRequest:request];

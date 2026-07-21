@@ -122,15 +122,11 @@ IPhonePlatformCore::RegisterUserNotificationSettings(int type) const
 	Rtt_ASSERT( Rtt_UIUserNotificationTypeAlert == UIUserNotificationTypeAlert );
 #endif
 	
-	// These functions were added in iOS 8 and have to be called or notifications won't work correctly.  Even though this part if just for setting notifications, we're asking for the other permissions because
+	// Even though this part is just for setting notifications, we're asking for the other permissions because
 	// once you call this function once it won't ask again when you call it again with new permissions.  In the alert dialog thats shown, it doesn't specify which permissions are asked for
 	// anyways.
-	Class cls = NSClassFromString(@"UIUserNotificationSettings");
-	if ( cls )
-	{
-		id settings = [cls settingsForTypes:type categories:nil];
-		[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-	}
+	UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:type categories:nil];
+	[[UIApplication sharedApplication] registerUserNotificationSettings:settings];
 }
 
 void

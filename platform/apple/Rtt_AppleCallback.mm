@@ -17,14 +17,7 @@
 
 @implementation AppleCallback
 
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5)
 @synthesize callback;
-#else
-- (void)setCallback:(Rtt::MCallback*)newValue
-{
-	callback = newValue;
-}
-#endif
 
 - (id)init
 {
@@ -46,4 +39,3 @@
 @end
 
 // ----------------------------------------------------------------------------
-

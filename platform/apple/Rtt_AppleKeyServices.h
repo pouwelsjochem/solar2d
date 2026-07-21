@@ -15,9 +15,6 @@
 #endif
 enum KeyCodes
 {
-    #if __MAC_OS_X_VERSION_MAX_ALLOWED < 101200
-        kVK_RightCommand = 0x36,
-    #endif
 	kVK_Menu = 0x6E,
 	kVK_Back = 0x7F,
 };
