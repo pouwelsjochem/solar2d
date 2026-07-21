@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B46D7C212D27B9A4A8C98698 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		C219959E1C189E0100E88FD0 /* ios-syslog-helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ios-syslog-helper"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C21995A11C189E0100E88FD0 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,6 +42,7 @@
 		C21995951C189E0100E88FD0 = {
 			isa = PBXGroup;
 			children = (
+				B46D7C212D27B9A4A8C98698 /* Solar2D.xcconfig */,
 				C21995A01C189E0100E88FD0 /* ios-syslog-helper */,
 				C219959F1C189E0100E88FD0 /* Products */,
 			);
@@ -128,6 +130,7 @@
 /* Begin XCBuildConfiguration section */
 		C21995A31C189E0100E88FD0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B46D7C212D27B9A4A8C98698 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -164,7 +167,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -173,6 +175,7 @@
 		};
 		C21995A41C189E0100E88FD0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B46D7C212D27B9A4A8C98698 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -203,7 +206,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};

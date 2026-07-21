@@ -1390,6 +1390,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CB698B436DC6D638FFFC1FC4 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		03D1C5301D70CB1500DB02EE /* Rtt_OperationResult.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_OperationResult.cpp; path = ../../librtt/Core/Rtt_OperationResult.cpp; sourceTree = "<group>"; };
 		03D1C5311D70CB1500DB02EE /* Rtt_OperationResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_OperationResult.h; path = ../../librtt/Core/Rtt_OperationResult.h; sourceTree = "<group>"; };
 		03D1C5331D70CB2200DB02EE /* Rtt_SharedStringPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_SharedStringPtr.h; path = ../../librtt/Core/Rtt_SharedStringPtr.h; sourceTree = "<group>"; };
@@ -2768,6 +2769,7 @@
 		A4AD17281BAA0D8F00BCF507 = {
 			isa = PBXGroup;
 			children = (
+				CB698B436DC6D638FFFC1FC4 /* Solar2D.xcconfig */,
 				F5C5E20C251E139A00217C19 /* OpenGLES.xcodeproj */,
 				A4DD46EB1BB2265400FD988E /* template */,
 				A4AD30511BAA2B69006A0C97 /* libplayer */,
@@ -5438,6 +5440,7 @@
 		};
 		A4AD174A1BAA0D8F00BCF507 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB698B436DC6D638FFFC1FC4 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -5481,12 +5484,12 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_TVOS:default=11.0)";
 			};
 			name = Debug;
 		};
 		A4AD174B1BAA0D8F00BCF507 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB698B436DC6D638FFFC1FC4 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -5524,7 +5527,6 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_TVOS:default=11.0)";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

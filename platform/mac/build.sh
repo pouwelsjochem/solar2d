@@ -23,10 +23,10 @@ xcodebuild -version >> "$FULL_LOG_FILE"
 
 if [ "$CUSTOM_ID" ]
 then
-	xcodebuild -project "$CWD"/ratatouille.xcodeproj -target rttplayer -configuration Release CUSTOM_BUILD_ID="$CUSTOM_ID" BUILD_BUCKET="$S3_BUCKET" 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
+	xcodebuild -project "$CWD"/ratatouille.xcodeproj -target rttplayer -configuration Release -xcconfig "$CWD"/../apple/Solar2D.xcconfig CUSTOM_BUILD_ID="$CUSTOM_ID" BUILD_BUCKET="$S3_BUCKET" 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
 else
     # xcodebuild -project "$CWD"/ratatouille.xcodeproj -target rttplayer -configuration Release clean
-	xcodebuild -project "$CWD"/ratatouille.xcodeproj -target rttplayer -configuration Release CUSTOM_BUILD_ID="$CUSTOM_ID" 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
+	xcodebuild -project "$CWD"/ratatouille.xcodeproj -target rttplayer -configuration Release -xcconfig "$CWD"/../apple/Solar2D.xcconfig CUSTOM_BUILD_ID="$CUSTOM_ID" 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
 fi
 
 if [ $? -ne 0 ]

@@ -1,0 +1,16 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// This file is part of the Solar2D game engine.
+// For overview and more information on licensing please refer to README.md
+// Home page: https://github.com/coronalabs/corona
+// Contact: support@Solar2D.com
+//
+//////////////////////////////////////////////////////////////////////////////
+
+S2D_MIN_VER_IOS = 13.0
+S2D_MIN_VER_TVOS = 13.0
+S2D_MIN_VER_MACOS = 10.15
+
+IPHONEOS_DEPLOYMENT_TARGET = $(S2D_MIN_VER_IOS)
+TVOS_DEPLOYMENT_TARGET = $(S2D_MIN_VER_TVOS)
+MACOSX_DEPLOYMENT_TARGET = $(S2D_MIN_VER_MACOS)

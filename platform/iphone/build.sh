@@ -14,10 +14,10 @@ fi
 echo "### Full xcodebuild output can be found in $FULL_LOG_FILE"
 
 # lua, luac, debugger, etc.
-xcodebuild -project "$path"/../mac/lua.xcodeproj -alltargets -configuration Release 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
+xcodebuild -project "$path"/../mac/lua.xcodeproj -alltargets -configuration Release -xcconfig "$path"/../apple/Solar2D.xcconfig 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
 
 # car
-xcodebuild -project "$path"/../mac/car.xcodeproj -target car -configuration Release 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
+xcodebuild -project "$path"/../mac/car.xcodeproj -target car -configuration Release -xcconfig "$path"/../apple/Solar2D.xcconfig 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
 
 # Corona Simulator
-xcodebuild -project "$path"/ratatouille.xcodeproj -target rttplayer -configuration Release-template -sdk iphoneos 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
+xcodebuild -project "$path"/ratatouille.xcodeproj -target rttplayer -configuration Release-template -sdk iphoneos -xcconfig "$path"/../apple/Solar2D.xcconfig 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"

@@ -41,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F2EDD2E0BDA8829A17670954 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../../../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		A4543E85151AA55500486F8A /* CoronaLua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLua.h; path = Libraries/Corona/CoronaLua.h; sourceTree = SOURCE_ROOT; };
 		A484111915114F700074BD57 /* CoronaSampleApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoronaSampleApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A484111D15114F700074BD57 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -124,6 +125,7 @@
 		A484110E15114F700074BD57 = {
 			isa = PBXGroup;
 			children = (
+				F2EDD2E0BDA8829A17670954 /* Solar2D.xcconfig */,
 				A484112715114F700074BD57 /* App */,
 				A4841153151161300074BD57 /* Libraries */,
 				A484111C15114F700074BD57 /* Frameworks */,
@@ -372,6 +374,7 @@
 /* Begin XCBuildConfiguration section */
 		A484114015114F700074BD57 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2EDD2E0BDA8829A17670954 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -388,7 +391,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -396,6 +398,7 @@
 		};
 		A484114115114F700074BD57 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2EDD2E0BDA8829A17670954 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -405,7 +408,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -422,7 +424,6 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = "App-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Libraries/Corona\"",
@@ -449,7 +450,6 @@
 				GCC_PREFIX_HEADER = Prefix.pch;
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				INFOPLIST_FILE = "App-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Libraries/Corona\"",

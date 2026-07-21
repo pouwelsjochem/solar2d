@@ -614,6 +614,7 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
+		D28AC19F64C67D4143565B61 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		000DC8D512B04E5400042A5E /* liblua.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblua.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		000DC8DD12B04F3900042A5E /* lapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lapi.c; sourceTree = "<group>"; };
 		000DC8DE12B04F3900042A5E /* lapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lapi.h; sourceTree = "<group>"; };
@@ -1856,6 +1857,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				D28AC19F64C67D4143565B61 /* Solar2D.xcconfig */,
 				F8B68E4716F8EFB100CF1EC4 /* shell.lua */,
 				000DC8D012B04E2D00042A5E /* external */,
 				000DCA9812B05F3D00042A5E /* librtt */,
@@ -2987,6 +2989,7 @@
 /* Begin XCBuildConfiguration section */
 		000DC8B212B046E800042A5E /* Release-template */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D28AC19F64C67D4143565B61 /* Solar2D.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -3031,7 +3034,6 @@
 					../../external/luasocket/src,
 					../../librtt/Corona/,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				SDKROOT = iphoneos;
@@ -3192,6 +3194,7 @@
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D28AC19F64C67D4143565B61 /* Solar2D.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -3238,7 +3241,6 @@
 					../../external/luasocket/src,
 					../../librtt/Corona/,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_CFLAGS[arch=arm64]" = "-fexceptions";
 				"OTHER_CFLAGS[sdk=iphonesimulator*]" = "-fexceptions";
@@ -3257,6 +3259,7 @@
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D28AC19F64C67D4143565B61 /* Solar2D.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -3301,7 +3304,6 @@
 					../../external/luasocket/src,
 					../../librtt/Corona/,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"OTHER_CFLAGS[arch=arm64]" = (
 					"-fexceptions",
@@ -3345,7 +3347,6 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -3370,7 +3371,6 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -3395,7 +3395,6 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

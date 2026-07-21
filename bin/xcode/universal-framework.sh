@@ -73,8 +73,8 @@ UNIVERSAL_OUTPUTFOLDER=${OUTPUT_DIR}/${CONFIGURATION}-universal
 mkdir -p "${UNIVERSAL_OUTPUTFOLDER}"
 
 # STEP 1. Build Device and Simulator versions
-xcodebuild -project "${PROJECT_FILE_PATH}" -target "${TARGET_XCODE}" -configuration ${CONFIGURATION} -sdk $SDK_DEVICE ONLY_ACTIVE_ARCH=NO BUILD_DIR="${OUTPUT_DIR}" BUILD_ROOT="${OUTPUT_DIR}" OBJROOT="${OUTPUT_DIR}/DependentBuilds" build
-xcodebuild -project "${PROJECT_FILE_PATH}" -target "${TARGET_XCODE}" -configuration ${CONFIGURATION} -sdk $SDK_SIMULATOR ONLY_ACTIVE_ARCH=NO BUILD_DIR="${OUTPUT_DIR}" BUILD_ROOT="${OUTPUT_DIR}" OBJROOT="${OUTPUT_DIR}/DependentBuilds" build
+xcodebuild -project "${PROJECT_FILE_PATH}" -target "${TARGET_XCODE}" -configuration ${CONFIGURATION} -sdk $SDK_DEVICE -xcconfig "${PROJECT_DIR}/../apple/Solar2D.xcconfig" ONLY_ACTIVE_ARCH=NO BUILD_DIR="${OUTPUT_DIR}" BUILD_ROOT="${OUTPUT_DIR}" OBJROOT="${OUTPUT_DIR}/DependentBuilds" build
+xcodebuild -project "${PROJECT_FILE_PATH}" -target "${TARGET_XCODE}" -configuration ${CONFIGURATION} -sdk $SDK_SIMULATOR -xcconfig "${PROJECT_DIR}/../apple/Solar2D.xcconfig" ONLY_ACTIVE_ARCH=NO BUILD_DIR="${OUTPUT_DIR}" BUILD_ROOT="${OUTPUT_DIR}" OBJROOT="${OUTPUT_DIR}/DependentBuilds" build
 
 # STEP 2. Copy the framework structure (from $SDK_DEVICE build) to the universal folder
 # cp -R "${OUTPUT_DIR}/${CONFIGURATION}-$SDK_DEVICE/${TARGET_XCODE}.framework" "${UNIVERSAL_OUTPUTFOLDER}/"

@@ -61,6 +61,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B30BEEAF10DFE9C9F79682A9 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../../../platform/apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		07CFCF8C17DAA95E0039EF04 /* Rtt_MCPUResourceObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_MCPUResourceObserver.h; path = ../Rtt_MCPUResourceObserver.h; sourceTree = "<group>"; };
 		A43287DA176A610100ACB6FF /* libtachyon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtachyon.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A48B91B0178A86A20072EAF7 /* Rtt_TextureVolatile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TextureVolatile.cpp; path = ../Rtt_TextureVolatile.cpp; sourceTree = "<group>"; };
@@ -129,6 +130,7 @@
 		A43287D1176A610100ACB6FF = {
 			isa = PBXGroup;
 			children = (
+				B30BEEAF10DFE9C9F79682A9 /* Solar2D.xcconfig */,
 				A4B669E6176A76E00077B2BF /* Renderer */,
 				A43287DB176A610100ACB6FF /* Products */,
 			);
@@ -321,6 +323,7 @@
 /* Begin XCBuildConfiguration section */
 		A43287DC176A610100ACB6FF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B30BEEAF10DFE9C9F79682A9 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -356,7 +359,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../..;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
@@ -366,6 +368,7 @@
 		};
 		A43287DD176A610100ACB6FF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B30BEEAF10DFE9C9F79682A9 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -397,7 +400,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = ../..;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = NO;
 				USER_HEADER_SEARCH_PATHS = ../..;

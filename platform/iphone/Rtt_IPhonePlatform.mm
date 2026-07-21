@@ -566,20 +566,14 @@ IPhonePlatform::SetNativeProperty( lua_State *L, const char *key, int valueIndex
 	if ( [k isEqualToString:@"prefersHomeIndicatorAutoHidden"] )
 	{
 		viewController.prefersHomeIndicatorAutoHidden = lua_toboolean( L, valueIndex );
-		if (@available(iOS 11.0, *))
-		{
-			[viewController setNeedsUpdateOfHomeIndicatorAutoHidden];
-		}
+		[viewController setNeedsUpdateOfHomeIndicatorAutoHidden];
 	}
-    else if ([k isEqualToString:@"preferredScreenEdgesDeferringSystemGestures"])
-    {
-        [viewController setSystemGestureDeferralEnabled:lua_toboolean(L, valueIndex)];
-        [viewController setSystemGestureDeferEdges:(UIRectEdgeTop | UIRectEdgeBottom)];
-        if (@available(iOS 11.0, *))
-        {
-            [viewController setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
-        }
-    }
+	else if ([k isEqualToString:@"preferredScreenEdgesDeferringSystemGestures"])
+	{
+		[viewController setSystemGestureDeferralEnabled:lua_toboolean(L, valueIndex)];
+		[viewController setSystemGestureDeferEdges:(UIRectEdgeTop | UIRectEdgeBottom)];
+		[viewController setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
+	}
 	else
 	{
 		Super::SetNativeProperty(L, key, valueIndex);
@@ -617,4 +611,3 @@ IPhonePlatform::PushNativeProperty( lua_State *L, const char *key ) const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

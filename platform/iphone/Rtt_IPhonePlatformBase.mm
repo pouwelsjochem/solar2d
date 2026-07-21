@@ -473,21 +473,12 @@ IPhonePlatformBase::PathForPluginsFile( const char *filename ) const
 
 void IPhonePlatformBase::GetSafeAreaInsetsPixels(Rtt_Real &top, Rtt_Real &left, Rtt_Real &bottom, Rtt_Real &right) const
 {
-#if __IPHONE_11_0
-	if (@available(iOS 11.0, tvOS 11.0, *))
-	{
-		UIEdgeInsets insets = [fView safeAreaInsets];
-		const CGFloat scaleFactor = fView.contentScaleFactor;
-		top = Rtt_FloatToReal(insets.top*scaleFactor);
-		left = Rtt_FloatToReal(insets.left*scaleFactor);
-		bottom = Rtt_FloatToReal(insets.bottom*scaleFactor);
-		right = Rtt_FloatToReal(insets.right*scaleFactor);
-	}
-	else
-#endif
-	{
-		top = left = bottom = right = 0;
-	}
+	UIEdgeInsets insets = [fView safeAreaInsets];
+	const CGFloat scaleFactor = fView.contentScaleFactor;
+	top = Rtt_FloatToReal(insets.top*scaleFactor);
+	left = Rtt_FloatToReal(insets.left*scaleFactor);
+	bottom = Rtt_FloatToReal(insets.bottom*scaleFactor);
+	right = Rtt_FloatToReal(insets.right*scaleFactor);
 }
 
 // ============================================================================

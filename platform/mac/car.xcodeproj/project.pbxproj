@@ -29,6 +29,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		58C927E37B2EB015754BBEEF /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		0076A7BF16094C7700A9757B /* Rtt_Assert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Rtt_Assert.m; path = ../../librtt/Core/Rtt_Assert.m; sourceTree = "<group>"; };
 		8DD76FB20486AB0100D96B5E /* car */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = car; sourceTree = BUILT_PRODUCTS_DIR; };
 		A492D92C108C5D840032243A /* Rtt_Assert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_Assert.h; path = ../../librtt/Core/Rtt_Assert.h; sourceTree = SOURCE_ROOT; };
@@ -65,6 +66,7 @@
 		08FB7794FE84155DC02AAC07 /* app_sign */ = {
 			isa = PBXGroup;
 			children = (
+				58C927E37B2EB015754BBEEF /* Solar2D.xcconfig */,
 				C2654D5B171621030022FD9A /* Rtt_Car.cpp */,
 				C2654D5C171621030022FD9A /* Rtt_Car.h */,
 				A492D986108C61570032243A /* main.cpp */,
@@ -223,6 +225,7 @@
 		};
 		1DEB928A08733DD80010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 58C927E37B2EB015754BBEEF /* Solar2D.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -256,7 +259,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DRtt_MAC_ENV";
 				OTHER_CPLUSPLUSFLAGS = (
@@ -271,6 +273,7 @@
 		};
 		1DEB928B08733DD80010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 58C927E37B2EB015754BBEEF /* Solar2D.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -304,7 +307,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				OTHER_CFLAGS = "-DRtt_MAC_ENV";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",

@@ -1132,6 +1132,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1504F3CCF8F69ACA939FC9B5 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		000DCD2B12B073A000042A5E /* Rtt_AppleBitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_AppleBitmap.h; sourceTree = "<group>"; };
 		000DCD2C12B073A000042A5E /* Rtt_AppleBitmap.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_AppleBitmap.mm; sourceTree = "<group>"; };
 		000DCD2D12B073A000042A5E /* Rtt_AppleCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_AppleCallback.h; sourceTree = "<group>"; };
@@ -1616,6 +1617,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				1504F3CCF8F69ACA939FC9B5 /* Solar2D.xcconfig */,
 				F5C36A3E24FA938100775C6E /* OpenGLES.xcodeproj */,
 				A4B93F9217596F60003466CC /* libtachyon.xcodeproj */,
 				A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */,
@@ -4514,7 +4516,6 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "CoronaCards/Test-Swift/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4563,7 +4564,6 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "CoronaCards/Test-Swift/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4622,6 +4622,7 @@
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1504F3CCF8F69ACA939FC9B5 /* Solar2D.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -4668,7 +4669,6 @@
 					../../external/luasocket/src,
 					"../../external/CoronaBeacon/Beacon-iOS/Release-universal/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_IOS:default=11.0)";
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_CFLAGS[arch=arm64]" = "-fexceptions";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
@@ -4687,6 +4687,7 @@
 		};
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1504F3CCF8F69ACA939FC9B5 /* Solar2D.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -4732,7 +4733,6 @@
 					../../external/luasocket/src,
 					"../../external/CoronaBeacon/Beacon-iOS/Release-universal/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_IOS:default=11.0)";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"OTHER_CFLAGS[arch=arm64]" = (
 					"-fexceptions",

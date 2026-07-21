@@ -14,6 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A7CE29B471B73442581EE9FA /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		07071E0918C0045400BC657C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "../../plugins/ios/NSData+Base64.h"; sourceTree = "<group>"; };
 		07071E0A18C0045400BC657C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "../../plugins/ios/NSData+Base64.m"; sourceTree = "<group>"; };
 		A481B82715DC6A79009FFE54 /* pluginsPrefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pluginsPrefix.pch; sourceTree = SOURCE_ROOT; };
@@ -71,6 +72,7 @@
 		A4FDBF1F15DC232600E5001C = {
 			isa = PBXGroup;
 			children = (
+				A7CE29B471B73442581EE9FA /* Solar2D.xcconfig */,
 				A4FDBF4815DC23C700E5001C /* Corona */,
 				A47B5B8F15F9BC17001D60AB /* plugins */,
 				A4FDBF2C15DC232600E5001C /* Frameworks */,
@@ -186,6 +188,7 @@
 /* Begin XCBuildConfiguration section */
 		A44D4300164ACDCC00CFE7B3 /* Release-template */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7CE29B471B73442581EE9FA /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
@@ -208,7 +211,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -234,6 +236,7 @@
 		};
 		A4FDBF3515DC232600E5001C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7CE29B471B73442581EE9FA /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
@@ -265,7 +268,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_CFLAGS[arch=arm64]" = "-fexceptions";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
@@ -277,6 +279,7 @@
 		};
 		A4FDBF3615DC232600E5001C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7CE29B471B73442581EE9FA /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
@@ -299,7 +302,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				"OTHER_CFLAGS[arch=arm64]" = "-fexceptions";
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				SDKROOT = iphoneos;

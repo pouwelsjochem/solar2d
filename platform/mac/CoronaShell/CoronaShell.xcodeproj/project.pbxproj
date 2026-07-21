@@ -33,6 +33,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		98B1A54AD8C8164ACA3BCF07 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		C22039371B4B21E600942B73 /* CoronaCards.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoronaCards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C24B5CE61C57EF9500A8E813 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../../../apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C24B5CE71C57EF9500A8E813 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../../../apple/NSString+Extensions.m"; sourceTree = "<group>"; };
@@ -62,6 +63,7 @@
 		C2D9271D1ACA098800B7F9AC = {
 			isa = PBXGroup;
 			children = (
+				98B1A54AD8C8164ACA3BCF07 /* Solar2D.xcconfig */,
 				C22039371B4B21E600942B73 /* CoronaCards.framework */,
 				C2A3776C1B33C69F00BB5B88 /* Icon-macos.icns */,
 				C2D927521ACA1C3800B7F9AC /* CoronaShell.icns */,
@@ -196,6 +198,7 @@
 /* Begin XCBuildConfiguration section */
 		C2D927411ACA098800B7F9AC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98B1A54AD8C8164ACA3BCF07 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -232,7 +235,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -241,6 +243,7 @@
 		};
 		C2D927421ACA098800B7F9AC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98B1A54AD8C8164ACA3BCF07 /* Solar2D.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -271,7 +274,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "$(S2D_MIN_VER_MACOS:default=10.13)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
