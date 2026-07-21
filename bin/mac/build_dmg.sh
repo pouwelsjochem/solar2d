@@ -22,18 +22,18 @@ CUSTOM_ID=""
 S3_BUCKET=""
 FULL_BUILD_NUM=""
 DAILY_BUILD='false'
-ENTERPRISE=""
+BUILD_TOOLS_ARCHIVE=""
 
 RESOURCE_DIR="Resource Library"
 NATIVE_DIR="Native"
 
-while getopts 'dfb:c:s:e:' flag; do
+while getopts 'dfb:c:s:t:' flag; do
   case "${flag}" in
     b) FULL_BUILD_NUM="${OPTARG}" ;;
     c) CUSTOM_ID="${OPTARG}" ;;
     d) DAILY_BUILD='true' ;;
     s) S3_BUCKET="${OPTARG}" ;;
-    e) ENTERPRISE="${OPTARG}" ;;
+    t) BUILD_TOOLS_ARCHIVE="${OPTARG}" ;;
 	f) FORCE_MOUNT='true' ;;
     *) error "Unexpected option ${flag}" ;;
   esac
@@ -47,7 +47,7 @@ DOCSRC="$2/SDK"
 
 if [ ! -d "$1" ] || [ ! -d "$2" ]
 then
-        echo "USAGE: $0 [-d] -b FULL_BUILD_NUM [-c CUSTOM_ID] [-s S3_BUCKET] [-e ENTERPRISE_TARBALL] destdir docsroot"
+        echo "USAGE: $0 [-d] -b FULL_BUILD_NUM [-c CUSTOM_ID] [-s S3_BUCKET] [-t BUILD_TOOLS_ARCHIVE] destdir docsroot"
         exit 1
 fi
 
@@ -108,15 +108,18 @@ cp -v -X "$SRCROOT"/platform/android/resources/debug.keystore "$TMPPATH/${PRODUC
 mkdir -p "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/iOS"
 ditto -v -X "$SRCROOT"/platform/iphone/Images.xcassets "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/iOS/Images.xcassets"
 
-if [ "$ENTERPRISE" != "" ]
+if [ "$BUILD_TOOLS_ARCHIVE" != "" ]
 then
-	(tar -C "$TMPPATH/${PRODUCT_DIR}/" -xf "$ENTERPRISE" && mv "$TMPPATH/${PRODUCT_DIR}/CoronaEnterprise" "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" && ls "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}") || (echo "ERROR: failed to extract Enterprise" && exit 1)
+	(tar -C "$TMPPATH/${PRODUCT_DIR}/" -xf "$BUILD_TOOLS_ARCHIVE" && ls "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}") || (echo "ERROR: failed to extract build tools" && exit 1)
 fi
 
 # unfortunately, since macOS 10.12 resource forks can not be signed, so removing some icons
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/debugger" "$SRCROOT/platform/resources/icons/CoronaIcon-Debugger.png"
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
-bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
+if [[ -d "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" ]]
+then
+	bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
+fi
 bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/Documentation.html" "$SRCROOT/platform/resources/icons/CoronaIcon-Docs.png"
 xcrun SetFile -a E "$TMPPATH/${PRODUCT_DIR}/Documentation.html" # hide extension
 

@@ -36,7 +36,7 @@ jobs:
           name: SourceCode
           path: ./output
 
-  native:
+  build-tools:
     needs:
       - source-code
     runs-on: macos-26
@@ -50,14 +50,12 @@ jobs:
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
-      - name: Build Native
-        run: JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME_17_arm64}" ./tools/GHAction/build_native.sh
-        env:
-          CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-      - name: Upload Corona Native
+      - name: Build tools
+        run: JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME_17_arm64}" ./tools/GHAction/build_tools.sh
+      - name: Upload build tools
         uses: actions/upload-artifact@v4
         with:
-          name: Native
+          name: BuildTools
           path: ./output
 
   Xcode-template-matrix:
@@ -131,7 +129,7 @@ jobs:
     needs:
       - source-code
       - collect-ios-templates
-      - native
+      - build-tools
     if: (! failure() && ! cancelled())
     runs-on: macos-26
     steps:
@@ -154,11 +152,11 @@ jobs:
       - name: Put collected iOS templates in place
         run: cp -Rv Collected-ios-templates/* platform/resources/
       - run: mkdir docs
-      - name: Get Native
+      - name: Get build tools
         uses: actions/download-artifact@v4
         with:
-          name: Native
-          path: Native
+          name: BuildTools
+          path: BuildTools
       - name: Put JRE in place
         shell: bash
         run: |
@@ -230,7 +228,7 @@ jobs:
   Windows-Simulator:
     needs:
       - source-code
-      - native
+      - build-tools
     runs-on: windows-2022
     steps:
       - name: Get processed code
@@ -259,24 +257,19 @@ jobs:
       - run: mkdir -f docs
       - name: Move docs outside the directory
         run: mv docs ../docs
-      - name: Get Corona Native
+      - name: Get build tools
         uses: actions/download-artifact@v4
         with:
-          name: Native
-          path: Native
-      - name: Put native in place
+          name: BuildTools
+          path: BuildTools
+      - name: Put build tools in place
         shell: cmd
         run: |
           mkdir "%WORKSPACE%\platform\windows\Bin"
           cd "%WORKSPACE%\platform\windows\Bin"
           rmdir /s /q "Native"
-          tar -xvzf "%WORKSPACE%\Native\CoronaNative.tar.gz"
-          rm ._CoronaEnterprise
-          mv CoronaEnterprise Native
-          del /q /f Native\.*
-          del /q /f Native\Icon?
-          del /q /f /s Native\Corona\tvos\frameworks
-          del /q /f /s Native\Corona\mac\frameworks
+          tar -xvzf "%WORKSPACE%\BuildTools\Native.tar.gz"
+          rmdir /s /q "Native\Corona\mac"
       - name: Put JRE in place
         shell: bash
         run: |
@@ -488,7 +481,6 @@ jobs:
     needs:
       - Windows-Simulator
       - macOS-Simulator
-      - native
     steps:
       - uses: actions/checkout@v4
       - run: ./tools/GHAction/daily_env.sh
@@ -500,10 +492,6 @@ jobs:
         with:
           name: Simulator-Windows
           path: Simulator-Windows
-      - uses: actions/download-artifact@v4
-        with:
-          name: Native
-          path: Native
       - name: Rename Artifacts
         run: |
           set -x

@@ -255,9 +255,9 @@ CoronaBuilder::Usage( const char *arg0 )
 			"'plugins' takes the following arguments:\n"
 			"\t%s plugins download platform buildSettings dest\n"
 			"\tdownload subcommand.\n"
-			"\tplatform can be 'ios', 'tvos', 'win32', or 'macos'.\n"
+			"\tplatform can be 'win32' or 'macos'.\n"
 			"\tbuildSettings is full path to build.settings file.\n"
-			"\tdest is the Corona.xcconfig path for Apple mobile platforms or the plugin output directory for desktop platforms.\n"
+			"\tdest is the plugin output directory.\n"
 			"\n", progname.GetString());
 
 

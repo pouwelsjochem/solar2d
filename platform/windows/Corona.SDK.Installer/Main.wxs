@@ -79,7 +79,6 @@
 				<Shortcut Id="CoronaSimulatorProgramMenuShortcut" Name="Corona Simulator" Description="Simulates Corona projects on the Windows desktop." Target="[APP_INSTALL_FOLDER]Corona Simulator.exe" WorkingDirectory="APP_INSTALL_FOLDER"/>
 				<Shortcut Id="CoronaDebuggerProgramMenuShortcut" Name="Corona Debugger" Description="Debugs a Corona project via the Corona Simulator." Target="[APP_INSTALL_FOLDER]Corona.Debugger.exe" WorkingDirectory="APP_INSTALL_FOLDER"/>
 				<Shortcut Id="CoronaConsoleProgramMenuShortcut" Name="Corona Console" Description="Runs a Corona made app and monitors its output." Target="[APP_INSTALL_FOLDER]Corona.Console.exe" WorkingDirectory="APP_INSTALL_FOLDER"/>
-				<Shortcut Id="CoronaNativeCodeProgramMenuShortcut" Name="Corona Native" Target="[NativeInstallFolder]" WorkingDirectory="NativeInstallFolder"/>
 				<util:InternetShortcut Id="CoronaOnlineDocumentationShortcut" Name="Corona Online Documentation" Target="https://docs.coronalabs.com/guide"/>
 				<RegistryValue Root="HKCU" Key="$(var.RegistryRootKey)" Name="MenuShortcutsInstalled" Type="integer" Value="1" KeyPath="yes"/>
 			</Component>
@@ -104,7 +103,6 @@
 			<Component Id="EnvironmentVariables" Directory="TARGETDIR" Guid="*">
         <Environment Id="CoronaSdkPathEnvironmentVariableLegacy" Name="CORONA_SDK_PATH" Value="[APP_INSTALL_FOLDER]" System="yes" Action="set" Part="all" Permanent="no"/>
         <Environment Id="CoronaSdkPathEnvironmentVariable" Name="CORONA_PATH" Value="[APP_INSTALL_FOLDER]" System="yes" Action="set" Part="all" Permanent="no"/>
-        <Environment Id="CoronaRootPathEnvironmentVariable" Name="CORONA_ROOT" Value="[APP_INSTALL_FOLDER]Native" System="yes" Action="set" Part="all" Permanent="no"/>
 				<RegistryValue Root="HKCU" Key="$(var.RegistryRootKey)" Name="EnvironmentVariablesInstalled" Type="integer" Value="1" KeyPath="yes"/>
 			</Component>
       
@@ -118,9 +116,7 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="CoronaLabsInstallFolder" Name="Corona Labs">
-					<Directory Id="APP_INSTALL_FOLDER" Name="Corona">
-						<Directory Id="NativeInstallFolder" Name="Native"/>
-					</Directory>
+					<Directory Id="APP_INSTALL_FOLDER" Name="Corona"/>
 				</Directory>
 			</Directory>
 			<Directory Id="ProgramMenuFolder">

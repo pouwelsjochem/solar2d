@@ -102,11 +102,6 @@ contents.xcworkspacedata
 *.log
 tools/CoronaBuilder/_CoronaSetup_*.lua
 
-# Enterprise
-enterprise/CoronaTemplateApp/Libraries/*
-enterprise/*.zip
-tools/enterprise/CoronaEnterprise/*
-
 # Plugins
 plugins/**/android/bin/*
 plugins/**/android/gen/*
@@ -236,7 +231,6 @@ platform/iphone/*.tar.bz
 platform/tvos/*.tar.bz
 /*_output.zip
 /corona.tar.gz
-/CoronaNative.tar.gz
 sdk/dmg/bgp.png
 sdk/dmg/bgp@2x.png
 sdk/dmg/processed_appdmg.json

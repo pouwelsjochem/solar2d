@@ -11,15 +11,30 @@ buildscript {
     }
 }
 
+val coronaResourcesDir = providers.gradleProperty("coronaResourcesDir").orNull
+val windows = System.getProperty("os.name").lowercase().contains("windows")
+val linux = System.getProperty("os.name").lowercase().contains("linux")
+val buildToolsDirCandidate = providers.gradleProperty("solar2DBuildToolsDir").orNull ?: run {
+    val candidates = when {
+        windows -> listOfNotNull(coronaResourcesDir?.let { "$it/../Native" }, System.getenv("CORONA_PATH")?.let { "$it/Native" })
+        linux -> listOfNotNull(coronaResourcesDir?.let { "$it/Native" })
+        else -> listOfNotNull(
+                coronaResourcesDir?.let { "$it/../../../Native" },
+                coronaResourcesDir?.let { "$it/../../../../../.." })
+    }
+    candidates.firstOrNull { file("$it/Corona").isDirectory } ?: candidates.firstOrNull() ?: "$rootDir/Native"
+}
+val solar2DBuildToolsDir = file(buildToolsDirCandidate).canonicalPath
+extra["solar2DBuildToolsDir"] = solar2DBuildToolsDir
+
 allprojects {
     repositories {
         google()
         jcenter()
         mavenCentral()
         // maven(url = "https:// some custom repo")
-        val nativeDir = "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
         flatDir {
-            dirs("$nativeDir/Corona/android/lib/gradle", "$nativeDir/Corona/android/lib/Corona/libs")
+            dirs("$solar2DBuildToolsDir/Corona/android/lib/gradle", "$solar2DBuildToolsDir/Corona/android/lib/Corona/libs")
         }
     }
 }

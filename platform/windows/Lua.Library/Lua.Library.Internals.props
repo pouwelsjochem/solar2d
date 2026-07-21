@@ -26,15 +26,6 @@
    mkdir "$(SolutionDir)Bin\Corona"
    copy /y "$(TargetPath)" "$(SolutionDir)Bin\Corona"
 
-   if $(ConfigurationName) == Release (
-      mkdir "$(SolutionDir)Bin\Corona.Enterprise\lib"
-      copy /y "$(TargetDir)$(TargetName).lib" "$(SolutionDir)Bin\Corona.Enterprise\lib"
-   )
-   if $(ConfigurationName) == Release (
-      mkdir "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
-      copy /y "$(TargetDir)$(TargetName).lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib"
-   )
-
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

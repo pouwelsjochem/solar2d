@@ -39,32 +39,29 @@
 		</fileset>
 	</sequential>
 
-	<condition property="corona.native.android" value="${BUNDLE_DIR}/../Native/Corona/android">
+	<condition property="solar2d.build.tools.android" value="${BUNDLE_DIR}/../Native/Corona/android">
 		<available file="${BUNDLE_DIR}/../Native/Corona/android" />
 	</condition>
-	<condition property="corona.native.android" value="${BUNDLE_DIR}/../../../Native/Corona/android">
+	<condition property="solar2d.build.tools.android" value="${BUNDLE_DIR}/../../../Native/Corona/android">
 		<available file="${BUNDLE_DIR}/../../../Native/Corona/android" />
 	</condition>
-	<condition property="corona.native.android" value="${BUNDLE_DIR}/../../../../../android">
+	<condition property="solar2d.build.tools.android" value="${BUNDLE_DIR}/../../../../../android">
 		<available file="${BUNDLE_DIR}/../../../../../android" />
 	</condition>
-	<condition property="corona.native.android" value="${user.home}/Library/Application Support/Corona/Native/Corona/android">
-		<available file="${user.home}/Library/Application Support/Corona/Native/Corona/android" />
-	</condition>	
-	<condition property="corona.native.android" value="${BUNDLE_DIR}/Native/Corona/android">
+	<condition property="solar2d.build.tools.android" value="${BUNDLE_DIR}/Native/Corona/android">
 		<available file="${BUNDLE_DIR}/Native/Corona/android" />
 	</condition>
 	<target name="check-gradle-bundle">
-		<available file="${corona.native.android}/resource/android-template.zip" property="gradle.bundle.exists"/>
+		<available file="${solar2d.build.tools.android}/resource/android-template.zip" property="gradle.bundle.exists"/>
 	</target>
 	<target name="setup-gradle-builds" depends="check-gradle-bundle">
 		<sequential>
 			<delete dir="${TEMP_DIR}/template"/>
-			<unzip src="${corona.native.android}/resource/android-template.zip" dest="${TEMP_DIR}" />
+			<unzip src="${solar2d.build.tools.android}/resource/android-template.zip" dest="${TEMP_DIR}" />
 			<chmod file="${TEMP_DIR}/template/gradlew" perm="a+x" />
 			<chmod file="${TEMP_DIR}/template/setup.sh" perm="a+x" />
 			<copy todir="${TEMP_DIR}/template/app/libs">
-				<fileset dir="${corona.native.android}/lib/gradle/"/>
+				<fileset dir="${solar2d.build.tools.android}/lib/gradle/"/>
 			</copy>
 		</sequential>
 	</target>

@@ -98,13 +98,3 @@ checkError
 
 mv -v "${BUILD_DIR}/Release-${SDK_SIMULATOR}/template.app.dSYM" "${BUILD_DIR}/template-dSYM/${SDK_SIMULATOR}/${SDK_VERSION}/template.app.dSYM"
 checkError
-
-# ${JOB_NAME} is a Jenkins environment var
-if [[ "${JOB_NAME}" =~ .*Enterprise.* ]]
-then
-	# CoronaCards.framework
-	# NOTE: No need to do clean, since we already did a clean build in the above xcodebuild 
-	# invocations. This xcodebuild will finish nearly instantaneously.
-	xcodebuild SYMROOT="$path/build" -xcconfig "$path"/../apple/Solar2D.xcconfig -project "${path}"/ratatouille.xcodeproj -target CoronaCards.framework -configuration Release 2>&1 | tee -a "$FULL_LOG_FILE" | egrep -v "$XCODE_LOG_FILTERS"
-	checkError
-fi

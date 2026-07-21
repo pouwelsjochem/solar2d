@@ -2369,7 +2369,6 @@
 		C2B5FEFA1B33705300DD49E6 /* libluafilesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libluafilesystem.a; sourceTree = "<group>"; };
 		C2B62D8D1BE9642000246515 /* GLViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLViewDelegate.h; sourceTree = "<group>"; };
 		C2BD465C1F60C44A00BB728E /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
-		C2BF38171AA7C19B00AC6ACE /* build-corona-project */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "build-corona-project"; sourceTree = "<group>"; };
 		C2C59B211E281181001DF51E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C2C59B231E28118C001DF51E /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		C2C59B251E281195001DF51E /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -3848,7 +3847,6 @@
 		C26E84601A5DE0C1008950FB /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				C2BF38171AA7C19B00AC6ACE /* build-corona-project */,
 				C26E84611A5DE0C1008950FB /* Info.plist */,
 			);
 			name = "Supporting Files";

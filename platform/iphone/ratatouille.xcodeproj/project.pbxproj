@@ -7,57 +7,16 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		A482FADF183D7B860005831B /* CoronaCards.framework */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = A482FAE0183D7B870005831B /* Build configuration list for PBXAggregateTarget "CoronaCards.framework" */;
-			buildPhases = (
-				A482FAE7183D7C220005831B /* Build Universal Binary */,
-				A45C4C61186AA3EA00FE59C2 /* Copy to /Users/Shared/CoronaLabs/Frameworks */,
-			);
-			dependencies = (
-				A482FAE6183D7B940005831B /* PBXTargetDependency */,
-			);
-			name = CoronaCards.framework;
-			productName = CoronaCards.framework;
-		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
 		0720731917CD2CC2004720D2 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0720731117CD2C93004720D2 /* Rtt_IPhoneTimer.mm */; };
-		0748724918C1C469004FB786 /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 0748724718C1C469004FB786 /* NSData+Base64.h */; };
-		0748724A18C1C469004FB786 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0748724818C1C469004FB786 /* NSData+Base64.m */; };
-		0795D25A18861C6600B3F4B7 /* Rtt_IPhoneDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C8169DED9200723568 /* Rtt_IPhoneDisplayObject.mm */; };
-		0795D2481886008F00B3F4B7 /* Rtt_IPhoneVideoObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E6169DED9200723568 /* Rtt_IPhoneVideoObject.mm */; };
 		A40D2F5D1887699100B4A354 /* CoronaViewPluginContext.h in Headers */ = {isa = PBXBuildFile; fileRef = A40D2F5B1887699100B4A354 /* CoronaViewPluginContext.h */; };
 		A40D2F5E1887699100B4A354 /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F5C1887699100B4A354 /* CoronaViewPluginContext.mm */; };
-		A40D2F6818876D5200B4A354 /* CoronaViewPluginContext.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F5C1887699100B4A354 /* CoronaViewPluginContext.mm */; };
-		A40D2F7B1889151F00B4A354 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A40D2F791889151E00B4A354 /* InfoPlist.strings */; };
-		A40D2F7D1889151F00B4A354 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F7C1889151F00B4A354 /* main.mm */; };
-		A40D2F811889151F00B4A354 /* AppDelegateTest-Ad.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F801889151F00B4A354 /* AppDelegateTest-Ad.mm */; };
-		A40D2F841889151F00B4A354 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A40D2F821889151F00B4A354 /* Main_iPhone.storyboard */; };
-		A40D2F871889151F00B4A354 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A40D2F851889151F00B4A354 /* Main_iPad.storyboard */; };
-		A40D2F8A1889151F00B4A354 /* ViewControllerTest-Ad.mm in Sources */ = {isa = PBXBuildFile; fileRef = A40D2F891889151F00B4A354 /* ViewControllerTest-Ad.mm */; };
-		A40D2F8C1889151F00B4A354 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A40D2F8B1889151F00B4A354 /* Images.xcassets */; };
-		A40D2FBF1889181F00B4A354 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 000DCED912B0824800042A5E /* libobjc.dylib */; };
-		A40D2FC11889182D00B4A354 /* libCoronaCards.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A482FAA0183D74950005831B /* libCoronaCards.a */; };
 		A415ECA81BD86132003E7114 /* Rtt_IPhoneRuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A415ECA41BD86132003E7114 /* Rtt_IPhoneRuntimeDelegate.h */; };
 		A415ECA91BD86132003E7114 /* Rtt_IPhoneRuntimeDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A415ECA51BD86132003E7114 /* Rtt_IPhoneRuntimeDelegate.mm */; };
 		A415ECAE1BD861A1003E7114 /* Rtt_IPhonePlatformCore.h in Headers */ = {isa = PBXBuildFile; fileRef = A415ECAC1BD861A1003E7114 /* Rtt_IPhonePlatformCore.h */; };
 		A415ECAF1BD861A1003E7114 /* Rtt_IPhonePlatformCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = A415ECAD1BD861A1003E7114 /* Rtt_IPhonePlatformCore.mm */; };
-		A415ECB11BD861D5003E7114 /* Rtt_IPhonePlatformCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = A415ECAD1BD861A1003E7114 /* Rtt_IPhonePlatformCore.mm */; };
-		A415ECB21BD861D5003E7114 /* Rtt_IPhoneRuntimeDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A415ECA51BD86132003E7114 /* Rtt_IPhoneRuntimeDelegate.mm */; };
-		A41AC4DB184DE09400313BF9 /* Rtt_IPhoneTemplate-CoronaCards.mm in Sources */ = {isa = PBXBuildFile; fileRef = A41AC4DA184DE09400313BF9 /* Rtt_IPhoneTemplate-CoronaCards.mm */; };
-		A438061E1858056D007E4E5D /* libCoronaCards.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A482FAA0183D74950005831B /* libCoronaCards.a */; };
-		A43806291858056D007E4E5D /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 000DCED912B0824800042A5E /* libobjc.dylib */; };
-		A43B957F15C78037003E6F9F /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 000DCED912B0824800042A5E /* libobjc.dylib */; };
-		A43B959115C78057003E6F9F /* TestApp-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A43B958B15C78057003E6F9F /* TestApp-Info.plist */; };
-		A43B959215C78057003E6F9F /* TestAppCoronaDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A43B958D15C78057003E6F9F /* TestAppCoronaDelegate.mm */; };
-		A43B959315C78057003E6F9F /* TestAppLibraryModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = A43B958F15C78057003E6F9F /* TestAppLibraryModule.mm */; };
-		A43B959415C78057003E6F9F /* TestAppMain.mm in Sources */ = {isa = PBXBuildFile; fileRef = A43B959015C78057003E6F9F /* TestAppMain.mm */; };
-		A43B959515C7807C003E6F9F /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000DCD9612B0759700042A5E /* MainWindow-iPad.xib */; };
-		A43B959615C7807C003E6F9F /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
-		A43B959E15C78721003E6F9F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A43B959C15C78721003E6F9F /* InfoPlist.strings */; };
-		A43E5D41185EE7C90055BC21 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A43E5D40185EE7C90055BC21 /* Images.xcassets */; };
 		A44D43FF164B201300CFE7B3 /* libalmixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D435D164B1D5200CFE7B3 /* libalmixer.a */; };
 		A44D4401164B201300CFE7B3 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4355164B1D5200CFE7B3 /* liblua.a */; };
 		A44D4402164B201300CFE7B3 /* libluafilesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4357164B1D5200CFE7B3 /* libluafilesystem.a */; };
@@ -66,8 +25,6 @@
 		A4543E81151AA23A00486F8A /* CoronaApplicationMain.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4543E7D151AA23A00486F8A /* CoronaApplicationMain.mm */; };
 		A4543E82151AA23A00486F8A /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7E151AA23A00486F8A /* CoronaDelegate.h */; };
 		A4543E83151AA23A00486F8A /* CoronaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7F151AA23A00486F8A /* CoronaRuntime.h */; };
-		A4586814183EE425004C260A /* CoronaView.h in Headers */ = {isa = PBXBuildFile; fileRef = A4586812183EE425004C260A /* CoronaView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A4586815183EE425004C260A /* CoronaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A4586813183EE425004C260A /* CoronaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A46885EA18062D4800381941 /* libtachyon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B93F9717596F60003466CC /* libtachyon.a */; };
 		A4693568169D62DA00723568 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		A4693569169D62DA00723568 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000DCD9612B0759700042A5E /* MainWindow-iPad.xib */; };
@@ -91,29 +48,18 @@
 		A47098AE169E9F2400D31091 /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7E151AA23A00486F8A /* CoronaDelegate.h */; };
 		A47098AF169E9F2400D31091 /* CoronaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7F151AA23A00486F8A /* CoronaRuntime.h */; };
 		A47098B0169E9F2400D31091 /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A491870616421FBE00A39286 /* CoronaIOSLoader.h */; };
-		A47098D8169EA0FE00D31091 /* libplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A47098D5169E9F2400D31091 /* libplayer.a */; };
 		A47098E4169EAB5C00D31091 /* libplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A47098D5169E9F2400D31091 /* libplayer.a */; };
 		A4728FE71AE7F77B00BC088D /* CoronaLuaObjC+NSObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4728FE51AE7F77B00BC088D /* CoronaLuaObjC+NSObject.h */; };
-		A4728FE81AE7F77B00BC088D /* CoronaLuaObjC+NSObject.h in Headers */ = {isa = PBXBuildFile; fileRef = A4728FE51AE7F77B00BC088D /* CoronaLuaObjC+NSObject.h */; };
 		A4728FE91AE7F77B00BC088D /* CoronaLuaObjC+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4728FE61AE7F77B00BC088D /* CoronaLuaObjC+NSObject.m */; };
-		A4728FEA1AE7F77B00BC088D /* CoronaLuaObjC+NSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4728FE61AE7F77B00BC088D /* CoronaLuaObjC+NSObject.m */; };
 		A4728FF01AE8176F00BC088D /* CoronaLuaObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = A4728FEE1AE8176F00BC088D /* CoronaLuaObjC.h */; };
-		A4728FF11AE8176F00BC088D /* CoronaLuaObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = A4728FEE1AE8176F00BC088D /* CoronaLuaObjC.h */; };
 		A4728FF21AE8176F00BC088D /* CoronaLuaObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4728FEF1AE8176F00BC088D /* CoronaLuaObjC.mm */; };
-		A4728FF31AE8176F00BC088D /* CoronaLuaObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4728FEF1AE8176F00BC088D /* CoronaLuaObjC.mm */; };
 		A480725C16CACD6E00960127 /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A480725D16CACD6E00960127 /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A480725F16CACD6E00960127 /* CoronaLuaIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */; };
-		A482FAA6183D74950005831B /* CoronaCards.h in Copy Files */ = {isa = PBXBuildFile; fileRef = A482FAA5183D74950005831B /* CoronaCards.h */; };
-		A482FACD183D75070005831B /* CoronaCards.h in Headers */ = {isa = PBXBuildFile; fileRef = A482FAA5183D74950005831B /* CoronaCards.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7F0B5F128CFA2D000A1B2C3 /* Rtt_IPhoneText.h in Headers */ = {isa = PBXBuildFile; fileRef = A7F0B5E928CFA1C000A1B2C3 /* Rtt_IPhoneText.h */; };
 		A482FAEA183D7F460005831B /* Rtt_IPhonePlatformBase.h in Headers */ = {isa = PBXBuildFile; fileRef = A482FAE8183D7F460005831B /* Rtt_IPhonePlatformBase.h */; };
 		A482FAEB183D7F460005831B /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A482FAE9183D7F460005831B /* Rtt_IPhonePlatformBase.mm */; };
 		A4F0B5C028CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F0B5BF28CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm */; };
-		A482FB06183EB7980005831B /* libalmixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D435D164B1D5200CFE7B3 /* libalmixer.a */; };
-		A482FB08183EB7980005831B /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4355164B1D5200CFE7B3 /* liblua.a */; };
-		A482FB0C183EB7980005831B /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4353164B1D5200CFE7B3 /* librtt.a */; };
-		A482FB0E183EB7AD0005831B /* libtachyon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B93F9717596F60003466CC /* libtachyon.a */; };
 		A48410E315114A260074BD57 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD2C12B073A000042A5E /* Rtt_AppleBitmap.mm */; };
 		A48410E415114A260074BD57 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD2E12B073A000042A5E /* Rtt_AppleCallback.mm */; };
 		A48410E615114A260074BD57 /* Rtt_AppleData.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD3412B073A000042A5E /* Rtt_AppleData.mm */; };
@@ -126,64 +72,21 @@
 		A7F0B5EC28CFA1C000A1B2C3 /* Rtt_IPhoneText.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5EA28CFA1C000A1B2C3 /* Rtt_IPhoneText.mm */; };
 		A484115215115CE20074BD57 /* LibPlayerPrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A484115115115CE20074BD57 /* LibPlayerPrefix.pch */; };
 		A48B827316D595B600CA01A1 /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
-		A48B827416D595C100CA01A1 /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
 		A48DA9621852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9601852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */; };
 		A48DA9631852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = A48DA9611852FFBC009D1F93 /* Rtt_RuntimeDelegatePlayer.h */; };
-		A48DA9791853094C009D1F93 /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A48DA9771853094C009D1F93 /* CoronaIOSLoader.h */; };
-		A48DA97A1853094C009D1F93 /* CoronaIOSLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9781853094C009D1F93 /* CoronaIOSLoader.mm */; };
-		A4F0B5C128CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F0B5BF28CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm */; };
-		A48DA9D318580416009D1F93 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A48DA9D118580416009D1F93 /* InfoPlist.strings */; };
-		A48DA9D518580416009D1F93 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9D418580416009D1F93 /* main.mm */; };
-		A48DA9D918580416009D1F93 /* AppDelegateTest-Tabs.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9D818580416009D1F93 /* AppDelegateTest-Tabs.mm */; };
-		A48DA9DC18580416009D1F93 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A48DA9DA18580416009D1F93 /* Main_iPhone.storyboard */; };
-		A48DA9DF18580416009D1F93 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A48DA9DD18580416009D1F93 /* Main_iPad.storyboard */; };
-		A48DA9E218580416009D1F93 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9E118580416009D1F93 /* FirstViewController.m */; };
-		A48DA9E518580416009D1F93 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A48DA9E418580416009D1F93 /* SecondViewController.m */; };
-		A48E9BDC183EF19600F67CB3 /* libCoronaCards.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A482FAA0183D74950005831B /* libCoronaCards.a */; };
-		A48E9BE4183EF22500F67CB3 /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 000DCED912B0824800042A5E /* libobjc.dylib */; };
 		A48E9BF7183EF42400F67CB3 /* CoronaViewControllerPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BF5183EF42400F67CB3 /* CoronaViewControllerPrivate.mm */; };
 		A48E9BF8183EF42400F67CB3 /* CoronaViewControllerPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = A48E9BF6183EF42400F67CB3 /* CoronaViewControllerPrivate.h */; };
-		A48E9BF9183EF42E00F67CB3 /* CoronaViewControllerPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BF5183EF42400F67CB3 /* CoronaViewControllerPrivate.mm */; };
 		A48E9BFC183EFFC500F67CB3 /* Rtt_TouchInhibitor.h in Headers */ = {isa = PBXBuildFile; fileRef = A48E9BFA183EFFC500F67CB3 /* Rtt_TouchInhibitor.h */; };
 		A48E9BFD183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BFB183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm */; };
-		A48E9BFE183F0B7800F67CB3 /* CoronaViewPrivate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936B9169DED6500723568 /* CoronaViewPrivate.mm */; };
-		A48E9BFF183F57B400F67CB3 /* Rtt_IPhoneAudioSessionManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936BF169DED9200723568 /* Rtt_IPhoneAudioSessionManager.mm */; };
-		A48E9C00183F57B400F67CB3 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C1169DED9200723568 /* Rtt_IPhoneAudioSessionManagerImplementation.mm */; };
-		A48E9C01183F57B400F67CB3 /* Rtt_IPhoneDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936C6169DED9200723568 /* Rtt_IPhoneDevice.mm */; };
-		A48E9C04183F57B400F67CB3 /* Rtt_IPhonePlatformBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = A482FAE9183D7F460005831B /* Rtt_IPhonePlatformBase.mm */; };
-		A48E9C05183F57B400F67CB3 /* Rtt_IPhoneScreenSurface.mm in Sources */ = {isa = PBXBuildFile; fileRef = A46936E0169DED9200723568 /* Rtt_IPhoneScreenSurface.mm */; };
-		A48E9C06183F57B400F67CB3 /* Rtt_IPhoneTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0720731117CD2C93004720D2 /* Rtt_IPhoneTimer.mm */; };
-		A48E9C07183F57B400F67CB3 /* Rtt_TouchInhibitor.mm in Sources */ = {isa = PBXBuildFile; fileRef = A48E9BFB183EFFC500F67CB3 /* Rtt_TouchInhibitor.mm */; };
 		A49186D416421AEC00A39286 /* libplugins.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A49186A91642195200A39286 /* libplugins.a */; };
 		A491870716421FBE00A39286 /* CoronaIOSLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = A491870616421FBE00A39286 /* CoronaIOSLoader.h */; };
-		A4B2D529184038AA001311C9 /* Rtt_AppleBitmap.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD2C12B073A000042A5E /* Rtt_AppleBitmap.mm */; };
-		A4B2D52A184038AA001311C9 /* Rtt_AppleCrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD3112B073A000042A5E /* Rtt_AppleCrypto.cpp */; };
-		A4B2D52C184038AA001311C9 /* Rtt_ApplePlatform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD3B12B073A000042A5E /* Rtt_ApplePlatform.mm */; };
-		A4B2D52D184038AA001311C9 /* Rtt_AppleReachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00E867DB1366435F00AAFA26 /* Rtt_AppleReachability.mm */; };
-		A4B2D52E184038AA001311C9 /* Rtt_AppleTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD3D12B073A000042A5E /* Rtt_AppleTimer.mm */; };
-		A4B2D530184039D1001311C9 /* Rtt_AppleCallback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 000DCD2E12B073A000042A5E /* Rtt_AppleCallback.mm */; };
-		A7F0B5D628CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5D128CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm */; };
-		A7F0B5D728CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5D328CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m */; };
-		A7F0B5ED28CFA1C000A1B2C3 /* Rtt_IPhoneText.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7F0B5EA28CFA1C000A1B2C3 /* Rtt_IPhoneText.mm */; };
 		A4B2D5381842DBE1001311C9 /* CoronaViewRuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B2D5361842DBE1001311C9 /* CoronaViewRuntimeDelegate.h */; };
-		A4B2D5391842DBE1001311C9 /* CoronaViewRuntimeDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4B2D5361842DBE1001311C9 /* CoronaViewRuntimeDelegate.h */; };
 		A4B2D53A1842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B2D5371842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm */; };
-		A4B2D53B1842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4B2D5371842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm */; };
 		A4C318521A67B65100F186DF /* CoronaSystemResourceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C318501A67B65100F186DF /* CoronaSystemResourceManager.h */; };
 		A4C318531A67B65100F186DF /* CoronaSystemResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C318511A67B65100F186DF /* CoronaSystemResourceManager.mm */; };
 		A4C318721A69A4E000F186DF /* CoronaGyroscopeObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C318711A69A4E000F186DF /* CoronaGyroscopeObserver.h */; };
-		A4C318761A69D3D000F186DF /* CoronaSystemResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C318511A67B65100F186DF /* CoronaSystemResourceManager.mm */; };
 		A4C3189B1A6EDD4400F186DF /* AppleWeakProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C318991A6EDD4400F186DF /* AppleWeakProxy.h */; };
-		A4C3189C1A6EDD4500F186DF /* AppleWeakProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4C318991A6EDD4400F186DF /* AppleWeakProxy.h */; };
 		A4C3189D1A6EDD4500F186DF /* AppleWeakProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C3189A1A6EDD4400F186DF /* AppleWeakProxy.mm */; };
-		A4C3189E1A6EDD4500F186DF /* AppleWeakProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C3189A1A6EDD4400F186DF /* AppleWeakProxy.mm */; };
-		A4EF77111A352B44002D3BEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EF77101A352B44002D3BEF /* AppDelegate.swift */; };
-		A4EF771E1A352B44002D3BEF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EF771D1A352B44002D3BEF /* ViewController.swift */; };
-		A4EF77211A352B44002D3BEF /* CPlusPlusLinkage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4EF77201A352B44002D3BEF /* CPlusPlusLinkage.cpp */; };
-		A4EF77251A352B44002D3BEF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4EF77231A352B44002D3BEF /* Main.storyboard */; };
-		A4EF77271A352B44002D3BEF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4EF77261A352B44002D3BEF /* Images.xcassets */; };
-		A4EF772A1A352B44002D3BEF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4EF77281A352B44002D3BEF /* LaunchScreen.xib */; };
-		A4EF77461A352B70002D3BEF /* libCoronaCards.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A482FAA0183D74950005831B /* libCoronaCards.a */; };
 		A4F2ADCB16E0AF2E00814C7B /* LibPlayerPrefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = A484115115115CE20074BD57 /* LibPlayerPrefix.pch */; };
 		A4F2ADCC16E0AF2E00814C7B /* CoronaApplicationMain.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7C151AA23A00486F8A /* CoronaApplicationMain.h */; };
 		A4F2ADCD16E0AF2E00814C7B /* CoronaDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A4543E7E151AA23A00486F8A /* CoronaDelegate.h */; };
@@ -192,39 +95,24 @@
 		A4F2ADEF16E0AF2E00814C7B /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A4F2ADF816E0AF5F00814C7B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
 		A4F2ADF916E0AF6F00814C7B /* libplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A47098D5169E9F2400D31091 /* libplayer.a */; };
-		A4F5C39F184536A000E5ED54 /* AppDelegateTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F5C39C184536A000E5ED54 /* AppDelegateTest.mm */; };
-		A4F5C3A0184536A000E5ED54 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F5C39E184536A000E5ED54 /* ViewController.mm */; };
-		A4F5C3A5184536D900E5ED54 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F5C3A4184536D900E5ED54 /* main.mm */; };
-		A4F5C3A71845377200E5ED54 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3A61845377200E5ED54 /* Images.xcassets */; };
-		A4F5C3C518456F1800E5ED54 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3B718456DBC00E5ED54 /* Main_iPad.storyboard */; };
-		A4F5C3C618456F1800E5ED54 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3B918456DBC00E5ED54 /* Main_iPhone.storyboard */; };
-		A4F5C3D2184574E200E5ED54 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A4F5C3D0184574E200E5ED54 /* InfoPlist.strings */; };
 		C2074EBA1E160FCF009FC33C /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */; };
 		C2F911791CDC15F4004A5564 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4359164B1D5200CFE7B3 /* libluasocket.a */; };
 		DB56B4A0284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */; };
 		DB56B4A1284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */; };
 		DB56B4A2284BEB6400EC8B14 /* Rtt_AppleKeyServices.h in Headers */ = {isa = PBXBuildFile; fileRef = DB56B49F284BEB6400EC8B14 /* Rtt_AppleKeyServices.h */; };
 		DB56B4A3284BEB6400EC8B14 /* Rtt_AppleKeyServices.h in Headers */ = {isa = PBXBuildFile; fileRef = DB56B49F284BEB6400EC8B14 /* Rtt_AppleKeyServices.h */; };
-		DB87234028CD7F0E00E1866A /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */; };
-		DB87237E28CD7F2900E1866A /* Rtt_AppleKeyServices.h in Headers */ = {isa = PBXBuildFile; fileRef = DB56B49F284BEB6400EC8B14 /* Rtt_AppleKeyServices.h */; };
 		F50E7EB324FA923B009F165B /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */; };
 		F50E7EB424FA923B009F165B /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		F50E7EB524FA923B009F165B /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000DCD9612B0759700042A5E /* MainWindow-iPad.xib */; };
 		F50E7EB624FA923B009F165B /* Corona3rdPartyLicenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = 004A5F321368DA41003BD9DA /* Corona3rdPartyLicenses.txt */; };
 		F50E7EB824FA923B009F165B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
 		F50E7EBA24FA923B009F165B /* libobjc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 000DCED912B0824800042A5E /* libobjc.dylib */; };
-		F522FE8824338E1500E64744 /* AutoLinkModules.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FD0AE02373933C0066F6A6 /* AutoLinkModules.m */; };
 		F52611732500144000671DFE /* libtachyon-angle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F52611332500142B00671DFE /* libtachyon-angle.a */; };
-		F53256051BFD1073009D4A07 /* CoronaLuaObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5A7520D1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm */; };
 		F564C3701BE430F900C241E6 /* Rtt_AppleInputDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = F564C3681BE430F900C241E6 /* Rtt_AppleInputDevice.h */; };
-		F564C3711BE430F900C241E6 /* Rtt_AppleInputDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = F564C3681BE430F900C241E6 /* Rtt_AppleInputDevice.h */; };
 		F564C3721BE430F900C241E6 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C3691BE430F900C241E6 /* Rtt_AppleInputDevice.mm */; };
 		A7F0B5F228CFA2D000A1B2C3 /* Rtt_IPhoneText.h in Headers */ = {isa = PBXBuildFile; fileRef = A7F0B5E928CFA1C000A1B2C3 /* Rtt_IPhoneText.h */; };
-		F564C3731BE430F900C241E6 /* Rtt_AppleInputDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C3691BE430F900C241E6 /* Rtt_AppleInputDevice.mm */; };
 		F564C3761BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36B1BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm */; };
-		F564C3771BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36B1BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm */; };
 		F564C37E1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36F1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm */; };
-		F564C37F1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = F564C36F1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm */; };
 		F5A7520E1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
 		F5A7520F1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5A7520D1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm */; };
 		F5A752151BFA401000CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
@@ -323,7 +211,6 @@
 		F5C36CDB24FAB5E500775C6E /* libplayer-angle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C36CBB24FAB4E900775C6E /* libplayer-angle.a */; };
 		F5E8ABD928134BF0004295B4 /* libNetworkPlugin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5E8AB9728134BB7004295B4 /* libNetworkPlugin.a */; };
 		F5E8ABDA28134BF9004295B4 /* libNetworkPlugin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5E8AB9728134BB7004295B4 /* libNetworkPlugin.a */; };
-		F5E8ABDD28134C36004295B4 /* libNetworkPlugin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5E8AB9728134BB7004295B4 /* libNetworkPlugin.a */; };
 		F5EC1D6424FCF2720041F6F8 /* Rtt_MetalAngleTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = F5EC1D2624FCF2720041F6F8 /* Rtt_MetalAngleTypes.h */; };
 		F5FD0AE32373933C0066F6A6 /* AutoLinkModules.m in Sources */ = {isa = PBXBuildFile; fileRef = F5FD0AE02373933C0066F6A6 /* AutoLinkModules.m */; };
 		F81D63B21A609F8B00C7ADAA /* CoronaAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F81D63B01A609F8B00C7ADAA /* CoronaAppDelegate.h */; };
@@ -362,20 +249,6 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		A40D2FAC1889176000B4A354 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A482FA9F183D74950005831B;
-			remoteInfo = CoronaCards;
-		};
-		A43806321858057B007E4E5D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A482FA9F183D74950005831B;
-			remoteInfo = CoronaCards;
-		};
 		A44D41D6164A1D9C00CFE7B3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A49186961642195200A39286 /* plugins.xcodeproj */;
@@ -460,26 +333,12 @@
 			remoteGlobalIDString = A4B93ED917596543003466CC;
 			remoteInfo = tachyon;
 		};
-		A47098D6169EA0F400D31091 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A47098A4169E9F2400D31091;
-			remoteInfo = libplayer;
-		};
 		A47098E2169EAB5400D31091 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A47098A4169E9F2400D31091;
 			remoteInfo = libplayer;
-		};
-		A482FAE5183D7B940005831B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A482FA9F183D74950005831B;
-			remoteInfo = CoronaCards;
 		};
 		A482FAF1183EB5330005831B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -488,47 +347,12 @@
 			remoteGlobalIDString = A4841094151147BE0074BD57;
 			remoteInfo = "libplayer-core";
 		};
-		A482FAF6183EB72F0005831B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A4B93F9217596F60003466CC /* libtachyon.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A4B93ED917596543003466CC;
-			remoteInfo = tachyon;
-		};
-		A482FAF8183EB72F0005831B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 000DCA7E12B05CE200042A5E;
-			remoteInfo = librtt;
-		};
-		A482FAFA183EB72F0005831B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 000DC8D412B04E5400042A5E;
-			remoteInfo = liblua;
-		};
-		A482FB02183EB72F0005831B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 000DCC5012B05FF200042A5E;
-			remoteInfo = libalmixer;
-		};
 		A48B827716D595DA00CA01A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A48B825B16D594AA00CA01A1;
 			remoteInfo = CoronaResources;
-		};
-		A48E9BDA183EF19100F67CB3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A482FA9F183D74950005831B;
-			remoteInfo = CoronaCards;
 		};
 		A49186A81642195200A39286 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -543,13 +367,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = A4B93EDA17596543003466CC;
 			remoteInfo = tachyon;
-		};
-		A4EF77441A352B67002D3BEF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A482FA9F183D74950005831B;
-			remoteInfo = CoronaCards;
 		};
 		A4F2ADF616E0AF4500814C7B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1097,27 +914,9 @@
 			remoteGlobalIDString = A4E253B5166D6FB300DCDC2C;
 			remoteInfo = NetworkPlugin;
 		};
-		F5E8ABDB28134C20004295B4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F5B0A6B42811F5B2007DE6F4 /* NetworkPlugin.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A4E253B5166D6FB300DCDC2C;
-			remoteInfo = NetworkPlugin;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A482FA9E183D74950005831B /* Copy Files */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-				A482FAA6183D74950005831B /* CoronaCards.h in Copy Files */,
-			);
-			name = "Copy Files";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F5C36AF524FA93A700775C6E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1173,18 +972,6 @@
 		32CA4F630368D1EE00C91783 /* Rtt_Player.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Player.pch; sourceTree = "<group>"; };
 		A40D2F5B1887699100B4A354 /* CoronaViewPluginContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaViewPluginContext.h; path = platform/iphone/CoronaViewPluginContext.h; sourceTree = "<group>"; };
 		A40D2F5C1887699100B4A354 /* CoronaViewPluginContext.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaViewPluginContext.mm; path = platform/iphone/CoronaViewPluginContext.mm; sourceTree = "<group>"; };
-		A40D2F721889151E00B4A354 /* CoronaCardsTest-Ad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoronaCardsTest-Ad.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A40D2F781889151E00B4A354 /* CoronaCardsTest-Ad-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "CoronaCardsTest-Ad-Info.plist"; path = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Info.plist"; sourceTree = SOURCE_ROOT; };
-		A40D2F7A1889151E00B4A354 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A40D2F7C1889151F00B4A354 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = main.mm; path = "CoronaCards/Test-Ad/main.mm"; sourceTree = SOURCE_ROOT; };
-		A40D2F7E1889151F00B4A354 /* CoronaCardsTest-Ad-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CoronaCardsTest-Ad-Prefix.pch"; path = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		A40D2F7F1889151F00B4A354 /* AppDelegateTest-Ad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppDelegateTest-Ad.h"; path = "CoronaCards/Test-Ad/AppDelegateTest-Ad.h"; sourceTree = SOURCE_ROOT; };
-		A40D2F801889151F00B4A354 /* AppDelegateTest-Ad.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "AppDelegateTest-Ad.mm"; path = "CoronaCards/Test-Ad/AppDelegateTest-Ad.mm"; sourceTree = SOURCE_ROOT; };
-		A40D2F831889151F00B4A354 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		A40D2F861889151F00B4A354 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		A40D2F881889151F00B4A354 /* ViewControllerTest-Ad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ViewControllerTest-Ad.h"; path = "CoronaCards/Test-Ad/ViewControllerTest-Ad.h"; sourceTree = SOURCE_ROOT; };
-		A40D2F891889151F00B4A354 /* ViewControllerTest-Ad.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "ViewControllerTest-Ad.mm"; path = "CoronaCards/Test-Ad/ViewControllerTest-Ad.mm"; sourceTree = SOURCE_ROOT; };
-		A40D2F8B1889151F00B4A354 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "CoronaCards/Test-Ad/Images.xcassets"; sourceTree = SOURCE_ROOT; };
 		A415ECA41BD86132003E7114 /* Rtt_IPhoneRuntimeDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhoneRuntimeDelegate.h; path = platform/iphone/Rtt_IPhoneRuntimeDelegate.h; sourceTree = "<group>"; };
 		A415ECA51BD86132003E7114 /* Rtt_IPhoneRuntimeDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneRuntimeDelegate.mm; path = platform/iphone/Rtt_IPhoneRuntimeDelegate.mm; sourceTree = "<group>"; };
 		A415ECAC1BD861A1003E7114 /* Rtt_IPhonePlatformCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhonePlatformCore.h; path = platform/iphone/Rtt_IPhonePlatformCore.h; sourceTree = "<group>"; };
@@ -1194,16 +981,6 @@
 		A41AC1D516A7735000AD331A /* CoronaLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLibrary.h; path = ../../librtt/Corona/CoronaLibrary.h; sourceTree = "<group>"; };
 		A41AC1D616A7735000AD331A /* CoronaLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLog.h; path = ../../librtt/Corona/CoronaLog.h; sourceTree = "<group>"; };
 		A41AC1D716A7735000AD331A /* CoronaMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaMacros.h; path = ../../librtt/Corona/CoronaMacros.h; sourceTree = "<group>"; };
-		A41AC4DA184DE09400313BF9 /* Rtt_IPhoneTemplate-CoronaCards.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "Rtt_IPhoneTemplate-CoronaCards.mm"; path = "libtemplate/Rtt_IPhoneTemplate-CoronaCards.mm"; sourceTree = "<group>"; };
-		A43B955C15C779EE003E6F9F /* testplayer-enterprise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "testplayer-enterprise.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A43B958B15C78057003E6F9F /* TestApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "TestApp-Info.plist"; path = "enterprise/TestApp/TestApp-Info.plist"; sourceTree = SOURCE_ROOT; };
-		A43B958C15C78057003E6F9F /* TestAppCoronaDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestAppCoronaDelegate.h; path = enterprise/TestApp/TestAppCoronaDelegate.h; sourceTree = SOURCE_ROOT; };
-		A43B958D15C78057003E6F9F /* TestAppCoronaDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestAppCoronaDelegate.mm; path = enterprise/TestApp/TestAppCoronaDelegate.mm; sourceTree = SOURCE_ROOT; };
-		A43B958E15C78057003E6F9F /* TestAppLibraryModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestAppLibraryModule.h; path = enterprise/TestApp/TestAppLibraryModule.h; sourceTree = SOURCE_ROOT; };
-		A43B958F15C78057003E6F9F /* TestAppLibraryModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestAppLibraryModule.mm; path = enterprise/TestApp/TestAppLibraryModule.mm; sourceTree = SOURCE_ROOT; };
-		A43B959015C78057003E6F9F /* TestAppMain.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TestAppMain.mm; path = enterprise/TestApp/TestAppMain.mm; sourceTree = SOURCE_ROOT; };
-		A43B959D15C78721003E6F9F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = enterprise/TestApp/en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
-		A43E5D40185EE7C90055BC21 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "CoronaCards/Test-Tabs/Images.xcassets"; sourceTree = SOURCE_ROOT; };
 		A44D4348164B1D5200CFE7B3 /* libcorona.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = libcorona.xcodeproj; sourceTree = "<group>"; };
 		A4543E7C151AA23A00486F8A /* CoronaApplicationMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaApplicationMain.h; path = Corona/CoronaApplicationMain.h; sourceTree = SOURCE_ROOT; };
 		A4543E7D151AA23A00486F8A /* CoronaApplicationMain.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaApplicationMain.mm; path = Corona/CoronaApplicationMain.mm; sourceTree = SOURCE_ROOT; };
@@ -1244,9 +1021,6 @@
 		A4728FEF1AE8176F00BC088D /* CoronaLuaObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoronaLuaObjC.mm; sourceTree = "<group>"; };
 		A480725A16CACD6D00960127 /* CoronaLuaIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaLuaIOS.h; path = Corona/CoronaLuaIOS.h; sourceTree = SOURCE_ROOT; };
 		A480725B16CACD6E00960127 /* CoronaLuaIOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaLuaIOS.mm; path = Corona/CoronaLuaIOS.mm; sourceTree = SOURCE_ROOT; };
-		A482FAA0183D74950005831B /* libCoronaCards.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCoronaCards.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A482FAA4183D74950005831B /* CoronaCards-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoronaCards-Prefix.pch"; sourceTree = "<group>"; };
-		A482FAA5183D74950005831B /* CoronaCards.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoronaCards.h; sourceTree = "<group>"; };
 		A482FAE8183D7F460005831B /* Rtt_IPhonePlatformBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_IPhonePlatformBase.h; path = platform/iphone/Rtt_IPhonePlatformBase.h; sourceTree = "<group>"; };
 		A482FAE9183D7F460005831B /* Rtt_IPhonePlatformBase.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhonePlatformBase.mm; path = platform/iphone/Rtt_IPhonePlatformBase.mm; sourceTree = "<group>"; };
 		A4F0B5BF28CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_IPhoneTextFieldObject.mm; path = platform/iphone/Rtt_IPhoneTextFieldObject.mm; sourceTree = "<group>"; };
@@ -1259,20 +1033,6 @@
 		A48DA975185307AA009D1F93 /* lfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lfs.h; path = ../../external/luafilesystem/src/lfs.h; sourceTree = SOURCE_ROOT; };
 		A48DA9771853094C009D1F93 /* CoronaIOSLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaIOSLoader.h; path = ../../plugins/ios/CoronaIOSLoader.h; sourceTree = SOURCE_ROOT; };
 		A48DA9781853094C009D1F93 /* CoronaIOSLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaIOSLoader.mm; path = ../../plugins/ios/CoronaIOSLoader.mm; sourceTree = SOURCE_ROOT; };
-		A48DA9CA18580415009D1F93 /* CoronaCardsTest-Tabs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoronaCardsTest-Tabs.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A48DA9D018580416009D1F93 /* CoronaCardsTabs-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "CoronaCardsTabs-Info.plist"; path = "CoronaCards/Test-Tabs/CoronaCardsTabs-Info.plist"; sourceTree = SOURCE_ROOT; };
-		A48DA9D218580416009D1F93 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A48DA9D418580416009D1F93 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = main.mm; path = "CoronaCards/Test-Tabs/main.mm"; sourceTree = SOURCE_ROOT; };
-		A48DA9D618580416009D1F93 /* CoronaCardsTabs-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CoronaCardsTabs-Prefix.pch"; path = "CoronaCards/Test-Tabs/CoronaCardsTabs-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		A48DA9D718580416009D1F93 /* AppDelegateTest-Tabs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AppDelegateTest-Tabs.h"; path = "CoronaCards/Test-Tabs/AppDelegateTest-Tabs.h"; sourceTree = SOURCE_ROOT; };
-		A48DA9D818580416009D1F93 /* AppDelegateTest-Tabs.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "AppDelegateTest-Tabs.mm"; path = "CoronaCards/Test-Tabs/AppDelegateTest-Tabs.mm"; sourceTree = SOURCE_ROOT; };
-		A48DA9DB18580416009D1F93 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		A48DA9DE18580416009D1F93 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		A48DA9E018580416009D1F93 /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FirstViewController.h; path = "CoronaCards/Test-Tabs/FirstViewController.h"; sourceTree = SOURCE_ROOT; };
-		A48DA9E118580416009D1F93 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = FirstViewController.m; path = "CoronaCards/Test-Tabs/FirstViewController.m"; sourceTree = SOURCE_ROOT; };
-		A48DA9E318580416009D1F93 /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SecondViewController.h; path = "CoronaCards/Test-Tabs/SecondViewController.h"; sourceTree = SOURCE_ROOT; };
-		A48DA9E418580416009D1F93 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SecondViewController.m; path = "CoronaCards/Test-Tabs/SecondViewController.m"; sourceTree = SOURCE_ROOT; };
-		A48E9B9B183EEC8600F67CB3 /* CoronaCardsTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoronaCardsTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A48E9BF5183EF42400F67CB3 /* CoronaViewControllerPrivate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaViewControllerPrivate.mm; path = platform/iphone/CoronaViewControllerPrivate.mm; sourceTree = "<group>"; };
 		A48E9BF6183EF42400F67CB3 /* CoronaViewControllerPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaViewControllerPrivate.h; path = platform/iphone/CoronaViewControllerPrivate.h; sourceTree = "<group>"; };
 		A48E9BFA183EFFC500F67CB3 /* Rtt_TouchInhibitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TouchInhibitor.h; path = platform/iphone/Rtt_TouchInhibitor.h; sourceTree = "<group>"; };
@@ -1287,16 +1047,6 @@
 		A4C318711A69A4E000F186DF /* CoronaGyroscopeObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaGyroscopeObserver.h; path = platform/iphone/CoronaGyroscopeObserver.h; sourceTree = "<group>"; };
 		A4C318991A6EDD4400F186DF /* AppleWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleWeakProxy.h; sourceTree = "<group>"; };
 		A4C3189A1A6EDD4400F186DF /* AppleWeakProxy.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppleWeakProxy.mm; sourceTree = "<group>"; };
-		A4EF76F51A352B43002D3BEF /* CoronaCardsTest-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CoronaCardsTest-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4EF76F61A352B43002D3BEF /* CoronaCards.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoronaCards.framework; path = Library/Frameworks/CoronaCards.framework; sourceTree = DEVELOPER_DIR; };
-		A4EF770F1A352B43002D3BEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A4EF77101A352B44002D3BEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "CoronaCards/Test-Swift/AppDelegate.swift"; sourceTree = SOURCE_ROOT; };
-		A4EF771D1A352B44002D3BEF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = "CoronaCards/Test-Swift/ViewController.swift"; sourceTree = SOURCE_ROOT; };
-		A4EF77201A352B44002D3BEF /* CPlusPlusLinkage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CPlusPlusLinkage.cpp; path = "CoronaCards/Test-Swift/Swift-Interoperability/CPlusPlusLinkage.cpp"; sourceTree = SOURCE_ROOT; };
-		A4EF77221A352B44002D3BEF /* CoronaCards-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CoronaCards-Bridging-Header.h"; path = "CoronaCards/Test-Swift/Swift-Interoperability/CoronaCards-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
-		A4EF77241A352B44002D3BEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A4EF77261A352B44002D3BEF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = "CoronaCards/Test-Swift/Images.xcassets"; sourceTree = SOURCE_ROOT; };
-		A4EF77291A352B44002D3BEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		A4EFF1E0169D4A1100EC7EEE /* lua.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lua.h; path = "../../external/lua-5.1.3/src/lua.h"; sourceTree = "<group>"; };
 		A4EFF1E1169D4A3500EC7EEE /* lauxlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lauxlib.h; path = "../../external/lua-5.1.3/src/lauxlib.h"; sourceTree = "<group>"; };
 		A4EFF1E2169D4A4F00EC7EEE /* lualib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lualib.h; path = "../../external/lua-5.1.3/src/lualib.h"; sourceTree = "<group>"; };
@@ -1304,17 +1054,6 @@
 		A4EFF1E5169D4AB400EC7EEE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		A4F12C2616D4379F002BCCFB /* liblicensing.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblicensing.a; path = "../../plugins/build-core/licensing/ios/liblicensing.a"; sourceTree = "<group>"; };
 		A4F2ADF516E0AF2E00814C7B /* libtemplate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtemplate.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4F5C39B184536A000E5ED54 /* AppDelegateTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegateTest.h; path = CoronaCards/Test/AppDelegateTest.h; sourceTree = SOURCE_ROOT; };
-		A4F5C39C184536A000E5ED54 /* AppDelegateTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegateTest.mm; path = CoronaCards/Test/AppDelegateTest.mm; sourceTree = SOURCE_ROOT; };
-		A4F5C39D184536A000E5ED54 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = CoronaCards/Test/ViewController.h; sourceTree = SOURCE_ROOT; };
-		A4F5C39E184536A000E5ED54 /* ViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ViewController.mm; path = CoronaCards/Test/ViewController.mm; sourceTree = SOURCE_ROOT; };
-		A4F5C3A1184536B100E5ED54 /* CoronaCardsTest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; name = "CoronaCardsTest-Info.plist"; path = "CoronaCards/Test/CoronaCardsTest-Info.plist"; sourceTree = SOURCE_ROOT; };
-		A4F5C3A2184536B100E5ED54 /* CoronaCardsTest-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CoronaCardsTest-Prefix.pch"; path = "CoronaCards/Test/CoronaCardsTest-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		A4F5C3A4184536D900E5ED54 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main.mm; path = CoronaCards/Test/main.mm; sourceTree = SOURCE_ROOT; };
-		A4F5C3A61845377200E5ED54 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CoronaCards/Test/Images.xcassets; sourceTree = SOURCE_ROOT; };
-		A4F5C3B818456DBC00E5ED54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = CoronaCards/Test/Base.lproj/Main_iPad.storyboard; sourceTree = SOURCE_ROOT; };
-		A4F5C3BA18456DBC00E5ED54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = CoronaCards/Test/Base.lproj/Main_iPhone.storyboard; sourceTree = SOURCE_ROOT; };
-		A4F5C3D1184574E200E5ED54 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		C2074EB81E160FC1009FC33C /* CoronaBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaBeacon.h; path = platform/iphone/CoronaBeacon.h; sourceTree = "<group>"; };
 		C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaBeacon.mm; path = platform/iphone/CoronaBeacon.mm; sourceTree = "<group>"; };
 		DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_AppleKeyServices.mm; sourceTree = "<group>"; };
@@ -1340,24 +1079,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A40D2F6F1889151E00B4A354 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A40D2FC11889182D00B4A354 /* libCoronaCards.a in Frameworks */,
-				A40D2FBF1889181F00B4A354 /* libobjc.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A43B955915C779EE003E6F9F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A43B957F15C78037003E6F9F /* libobjc.dylib in Frameworks */,
-				A47098D8169EA0FE00D31091 /* libplayer.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4693594169D62DA00723568 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1375,18 +1096,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A482FA9D183D74950005831B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A482FB0E183EB7AD0005831B /* libtachyon.a in Frameworks */,
-				A482FB06183EB7980005831B /* libalmixer.a in Frameworks */,
-				A482FB08183EB7980005831B /* liblua.a in Frameworks */,
-				A482FB0C183EB7980005831B /* librtt.a in Frameworks */,
-				F5E8ABDD28134C36004295B4 /* libNetworkPlugin.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4841092151147BE0074BD57 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1399,32 +1108,6 @@
 				A44D4404164B201300CFE7B3 /* librtt.a in Frameworks */,
 				A49186D416421AEC00A39286 /* libplugins.a in Frameworks */,
 				F5E8ABD928134BF0004295B4 /* libNetworkPlugin.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A48DA9C718580415009D1F93 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A438061E1858056D007E4E5D /* libCoronaCards.a in Frameworks */,
-				A43806291858056D007E4E5D /* libobjc.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A48E9B98183EEC8600F67CB3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A48E9BDC183EF19600F67CB3 /* libCoronaCards.a in Frameworks */,
-				A48E9BE4183EF22500F67CB3 /* libobjc.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4EF76F11A352B43002D3BEF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4EF77461A352B70002D3BEF /* libCoronaCards.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1596,16 +1279,10 @@
 				00F2E30D12B2E3C8000C2022 /* liblua.a */,
 				00F2E31012B2E3C8000C2022 /* libluasocket.a */,
 				A4841095151147BE0074BD57 /* libplayer-core.a */,
-				A43B955C15C779EE003E6F9F /* testplayer-enterprise.app */,
 				A46935C7169D62DA00723568 /* template.app */,
 				A47098D5169E9F2400D31091 /* libplayer.a */,
 				A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */,
 				A4F2ADF516E0AF2E00814C7B /* libtemplate.a */,
-				A482FAA0183D74950005831B /* libCoronaCards.a */,
-				A48E9B9B183EEC8600F67CB3 /* CoronaCardsTest.app */,
-				A48DA9CA18580415009D1F93 /* CoronaCardsTest-Tabs.app */,
-				A40D2F721889151E00B4A354 /* CoronaCardsTest-Ad.app */,
-				A4EF76F51A352B43002D3BEF /* CoronaCardsTest-Swift.app */,
 				F50E7EC424FA923B009F165B /* template-angle.app */,
 				F5C36C6824FAB49F00775C6E /* libplayer-core-angle.a */,
 				F5C36CBB24FAB4E900775C6E /* libplayer-angle.a */,
@@ -1653,50 +1330,8 @@
 			isa = PBXGroup;
 			children = (
 				000DCED912B0824800042A5E /* libobjc.dylib */,
-				A4EF76F61A352B43002D3BEF /* CoronaCards.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		A40D2F761889151E00B4A354 /* Test-Ad */ = {
-			isa = PBXGroup;
-			children = (
-				A40D2F7F1889151F00B4A354 /* AppDelegateTest-Ad.h */,
-				A40D2F801889151F00B4A354 /* AppDelegateTest-Ad.mm */,
-				A40D2F881889151F00B4A354 /* ViewControllerTest-Ad.h */,
-				A40D2F891889151F00B4A354 /* ViewControllerTest-Ad.mm */,
-				A40D2F771889151E00B4A354 /* Resources */,
-			);
-			path = "Test-Ad";
-			sourceTree = SOURCE_ROOT;
-		};
-		A40D2F771889151E00B4A354 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A40D2F821889151F00B4A354 /* Main_iPhone.storyboard */,
-				A40D2F851889151F00B4A354 /* Main_iPad.storyboard */,
-				A40D2F781889151E00B4A354 /* CoronaCardsTest-Ad-Info.plist */,
-				A40D2F7E1889151F00B4A354 /* CoronaCardsTest-Ad-Prefix.pch */,
-				A40D2F791889151E00B4A354 /* InfoPlist.strings */,
-				A40D2F7C1889151F00B4A354 /* main.mm */,
-				A40D2F8B1889151F00B4A354 /* Images.xcassets */,
-			);
-			name = Resources;
-			path = "Test-Ad";
-			sourceTree = SOURCE_ROOT;
-		};
-		A43B955615C77932003E6F9F /* TestApp */ = {
-			isa = PBXGroup;
-			children = (
-				A43B959C15C78721003E6F9F /* InfoPlist.strings */,
-				A43B958B15C78057003E6F9F /* TestApp-Info.plist */,
-				A43B958C15C78057003E6F9F /* TestAppCoronaDelegate.h */,
-				A43B958D15C78057003E6F9F /* TestAppCoronaDelegate.mm */,
-				A43B958E15C78057003E6F9F /* TestAppLibraryModule.h */,
-				A43B958F15C78057003E6F9F /* TestAppLibraryModule.mm */,
-				A43B959015C78057003E6F9F /* TestAppMain.mm */,
-			);
-			name = TestApp;
 			sourceTree = "<group>";
 		};
 		A445AA5E16B2049B00A9A764 /* Core Plugins */ = {
@@ -1740,7 +1375,6 @@
 				0795D1E3188494C400B3F4B7 /* IPhoneExports.h */,
 				A4698837169E642E00EAA645 /* main.mm */,
 				A4698817169E225600EAA645 /* Rtt_IPhoneTemplate.h */,
-				A41AC4DA184DE09400313BF9 /* Rtt_IPhoneTemplate-CoronaCards.mm */,
 				A469881B169E23B200EAA645 /* Rtt_IPhoneTemplate-Sub.mm */,
 			);
 			name = libtemplate;
@@ -1767,13 +1401,8 @@
 			isa = PBXGroup;
 			children = (
 				A48DA97618530937009D1F93 /* plugins */,
-				A482FAA4183D74950005831B /* CoronaCards-Prefix.pch */,
-				A482FAA5183D74950005831B /* CoronaCards.h */,
 				A4586812183EE425004C260A /* CoronaView.h */,
 				A4586813183EE425004C260A /* CoronaViewController.h */,
-				A48E9BA2183EEC8700F67CB3 /* Test */,
-				A48DA9CE18580416009D1F93 /* Test-Tabs */,
-				A40D2F761889151E00B4A354 /* Test-Ad */,
 			);
 			path = CoronaCards;
 			sourceTree = "<group>";
@@ -1787,9 +1416,7 @@
 				000DCD5812B073ED00042A5E /* iphone */,
 				000DCE3C12B07AF800042A5E /* external */,
 				A4543E7A151AA22900486F8A /* Corona */,
-				A43B955615C77932003E6F9F /* TestApp */,
 				A484115115115CE20074BD57 /* LibPlayerPrefix.pch */,
-				A4EF770D1A352B43002D3BEF /* TestApp-Swift */,
 			);
 			name = libplayer;
 			path = libcorona;
@@ -1822,64 +1449,6 @@
 			name = plugins;
 			sourceTree = "<group>";
 		};
-		A48DA9CE18580416009D1F93 /* Test-Tabs */ = {
-			isa = PBXGroup;
-			children = (
-				A48DA9D718580416009D1F93 /* AppDelegateTest-Tabs.h */,
-				A48DA9D818580416009D1F93 /* AppDelegateTest-Tabs.mm */,
-				A48DA9E018580416009D1F93 /* FirstViewController.h */,
-				A48DA9E118580416009D1F93 /* FirstViewController.m */,
-				A48DA9E318580416009D1F93 /* SecondViewController.h */,
-				A48DA9E418580416009D1F93 /* SecondViewController.m */,
-				A48DA9CF18580416009D1F93 /* Resources */,
-			);
-			name = "Test-Tabs";
-			path = CoronaCardsTabs;
-			sourceTree = SOURCE_ROOT;
-		};
-		A48DA9CF18580416009D1F93 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A48DA9DA18580416009D1F93 /* Main_iPhone.storyboard */,
-				A48DA9DD18580416009D1F93 /* Main_iPad.storyboard */,
-				A48DA9D018580416009D1F93 /* CoronaCardsTabs-Info.plist */,
-				A48DA9D118580416009D1F93 /* InfoPlist.strings */,
-				A48DA9D418580416009D1F93 /* main.mm */,
-				A48DA9D618580416009D1F93 /* CoronaCardsTabs-Prefix.pch */,
-				A43E5D40185EE7C90055BC21 /* Images.xcassets */,
-			);
-			name = Resources;
-			path = CoronaCardsTabs;
-			sourceTree = SOURCE_ROOT;
-		};
-		A48E9BA2183EEC8700F67CB3 /* Test */ = {
-			isa = PBXGroup;
-			children = (
-				A4F5C39B184536A000E5ED54 /* AppDelegateTest.h */,
-				A4F5C39C184536A000E5ED54 /* AppDelegateTest.mm */,
-				A4F5C39D184536A000E5ED54 /* ViewController.h */,
-				A4F5C39E184536A000E5ED54 /* ViewController.mm */,
-				A48E9BA3183EEC8700F67CB3 /* Resources */,
-			);
-			name = Test;
-			path = ../CoronaCardsTest;
-			sourceTree = "<group>";
-		};
-		A48E9BA3183EEC8700F67CB3 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A4F5C3B718456DBC00E5ED54 /* Main_iPad.storyboard */,
-				A4F5C3B918456DBC00E5ED54 /* Main_iPhone.storyboard */,
-				A4F5C3A1184536B100E5ED54 /* CoronaCardsTest-Info.plist */,
-				A4F5C3A2184536B100E5ED54 /* CoronaCardsTest-Prefix.pch */,
-				A4F5C3A4184536D900E5ED54 /* main.mm */,
-				A4F5C3A61845377200E5ED54 /* Images.xcassets */,
-				A4F5C3CF184574E200E5ED54 /* en.lproj */,
-			);
-			name = Resources;
-			path = CoronaCardsTest;
-			sourceTree = SOURCE_ROOT;
-		};
 		A49186971642195200A39286 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1896,39 +1465,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		A4EF770D1A352B43002D3BEF /* TestApp-Swift */ = {
-			isa = PBXGroup;
-			children = (
-				A4EF77101A352B44002D3BEF /* AppDelegate.swift */,
-				A4EF771D1A352B44002D3BEF /* ViewController.swift */,
-				A4EF77231A352B44002D3BEF /* Main.storyboard */,
-				A4EF77261A352B44002D3BEF /* Images.xcassets */,
-				A4EF77281A352B44002D3BEF /* LaunchScreen.xib */,
-				A4EF771F1A352B44002D3BEF /* Swift-Interoperability */,
-				A4EF770E1A352B43002D3BEF /* Supporting Files */,
-			);
-			name = "TestApp-Swift";
-			path = "CoronaCards/Test-Swift";
-			sourceTree = SOURCE_ROOT;
-		};
-		A4EF770E1A352B43002D3BEF /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				A4EF770F1A352B43002D3BEF /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		A4EF771F1A352B44002D3BEF /* Swift-Interoperability */ = {
-			isa = PBXGroup;
-			children = (
-				A4EF77201A352B44002D3BEF /* CPlusPlusLinkage.cpp */,
-				A4EF77221A352B44002D3BEF /* CoronaCards-Bridging-Header.h */,
-			);
-			name = "Swift-Interoperability";
-			path = "CoronaCards/Test-Swift";
-			sourceTree = SOURCE_ROOT;
 		};
 		A4EFF1DA169D496700EC7EEE /* librtt */ = {
 			isa = PBXGroup;
@@ -1996,15 +1532,6 @@
 			name = DDGReachability;
 			path = ../../librtt;
 			sourceTree = "<group>";
-		};
-		A4F5C3CF184574E200E5ED54 /* en.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				A4F5C3D0184574E200E5ED54 /* InfoPlist.strings */,
-			);
-			name = en.lproj;
-			path = CoronaCards/Test/en.lproj;
-			sourceTree = SOURCE_ROOT;
 		};
 		F5C36A3F24FA938100775C6E /* Products */ = {
 			isa = PBXGroup;
@@ -2094,24 +1621,6 @@
 				A47098AF169E9F2400D31091 /* CoronaRuntime.h in Headers */,
 				A47098B0169E9F2400D31091 /* CoronaIOSLoader.h in Headers */,
 				A480725D16CACD6E00960127 /* CoronaLuaIOS.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A482FACC183D74FC0005831B /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0748724918C1C469004FB786 /* NSData+Base64.h in Headers */,
-				A482FACD183D75070005831B /* CoronaCards.h in Headers */,
-				A4C3189C1A6EDD4500F186DF /* AppleWeakProxy.h in Headers */,
-				DB87237E28CD7F2900E1866A /* Rtt_AppleKeyServices.h in Headers */,
-				A48DA9791853094C009D1F93 /* CoronaIOSLoader.h in Headers */,
-				A4728FF11AE8176F00BC088D /* CoronaLuaObjC.h in Headers */,
-				F564C3711BE430F900C241E6 /* Rtt_AppleInputDevice.h in Headers */,
-				A4586814183EE425004C260A /* CoronaView.h in Headers */,
-				A4586815183EE425004C260A /* CoronaViewController.h in Headers */,
-				A4B2D5391842DBE1001311C9 /* CoronaViewRuntimeDelegate.h in Headers */,
-				A4728FE81AE7F77B00BC088D /* CoronaLuaObjC+NSObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2223,45 +1732,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		A40D2F711889151E00B4A354 /* CoronaCardsTest-Ad */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A40D2FAA1889152400B4A354 /* Build configuration list for PBXNativeTarget "CoronaCardsTest-Ad" */;
-			buildPhases = (
-				A40D2F6E1889151E00B4A354 /* Sources */,
-				A40D2F6F1889151E00B4A354 /* Frameworks */,
-				A40D2F701889151E00B4A354 /* Resources */,
-				A40D2FC21889186C00B4A354 /* Copy Corona Project Files */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A40D2FAD1889176000B4A354 /* PBXTargetDependency */,
-			);
-			name = "CoronaCardsTest-Ad";
-			productName = "Test-Ad";
-			productReference = A40D2F721889151E00B4A354 /* CoronaCardsTest-Ad.app */;
-			productType = "com.apple.product-type.application";
-		};
-		A43B955B15C779EE003E6F9F /* testplayer-enterprise */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A43B956D15C779EE003E6F9F /* Build configuration list for PBXNativeTarget "testplayer-enterprise" */;
-			buildPhases = (
-				A43B955815C779EE003E6F9F /* Sources */,
-				A43B955915C779EE003E6F9F /* Frameworks */,
-				A43B955A15C779EE003E6F9F /* Resources */,
-				A43B959815C780BF003E6F9F /* Script: Compile */,
-				A43B959A15C78138003E6F9F /* Script: build.settings to Info.plist */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A47098D7169EA0F400D31091 /* PBXTargetDependency */,
-			);
-			name = "testplayer-enterprise";
-			productName = "libplayer-testapp";
-			productReference = A43B955C15C779EE003E6F9F /* testplayer-enterprise.app */;
-			productType = "com.apple.product-type.application";
-		};
 		A4693558169D62DA00723568 /* template */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A46935C2169D62DA00723568 /* Build configuration list for PBXNativeTarget "template" */;
@@ -2300,30 +1770,6 @@
 			name = libplayer;
 			productName = libcorona;
 			productReference = A47098D5169E9F2400D31091 /* libplayer.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-		A482FA9F183D74950005831B /* CoronaCards */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A482FACA183D74960005831B /* Build configuration list for PBXNativeTarget "CoronaCards" */;
-			buildPhases = (
-				A482FA9C183D74950005831B /* Sources */,
-				A482FA9D183D74950005831B /* Frameworks */,
-				A482FA9E183D74950005831B /* Copy Files */,
-				A482FACC183D74FC0005831B /* Headers */,
-				A482FACE183D79A50005831B /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A482FAF7183EB72F0005831B /* PBXTargetDependency */,
-				A482FAF9183EB72F0005831B /* PBXTargetDependency */,
-				A482FAFB183EB72F0005831B /* PBXTargetDependency */,
-				A482FB03183EB72F0005831B /* PBXTargetDependency */,
-				F5E8ABDC28134C20004295B4 /* PBXTargetDependency */,
-			);
-			name = CoronaCards;
-			productName = CoronaCards;
-			productReference = A482FAA0183D74950005831B /* libCoronaCards.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		A4841094151147BE0074BD57 /* libplayer-core */ = {
@@ -2366,65 +1812,6 @@
 			productName = CoronaResources;
 			productReference = A48B825C16D594AA00CA01A1 /* CoronaResources.bundle */;
 			productType = "com.apple.product-type.bundle";
-		};
-		A48DA9C918580415009D1F93 /* CoronaCardsTest-Tabs */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A48DA9F818580418009D1F93 /* Build configuration list for PBXNativeTarget "CoronaCardsTest-Tabs" */;
-			buildPhases = (
-				A48DA9C618580415009D1F93 /* Sources */,
-				A48DA9C718580415009D1F93 /* Frameworks */,
-				A48DA9C818580415009D1F93 /* Resources */,
-				A43E5D3F185EE55C0055BC21 /* Copy Corona Project Files */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A43806331858057B007E4E5D /* PBXTargetDependency */,
-			);
-			name = "CoronaCardsTest-Tabs";
-			productName = CoronaCardsTabs;
-			productReference = A48DA9CA18580415009D1F93 /* CoronaCardsTest-Tabs.app */;
-			productType = "com.apple.product-type.application";
-		};
-		A48E9B9A183EEC8600F67CB3 /* CoronaCardsTest */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A48E9BCF183EEC8A00F67CB3 /* Build configuration list for PBXNativeTarget "CoronaCardsTest" */;
-			buildPhases = (
-				A48E9B97183EEC8600F67CB3 /* Sources */,
-				A48E9B98183EEC8600F67CB3 /* Frameworks */,
-				A48E9B99183EEC8600F67CB3 /* Resources */,
-				A44F22B6183FFB2700AB1835 /* Script: Compile */,
-				A44F22B8183FFF6D00AB1835 /* Script: build.settings to Info.plist */,
-				A43E5D3D185EE4CE0055BC21 /* Copy Corona Project Files */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A48E9BDB183EF19100F67CB3 /* PBXTargetDependency */,
-			);
-			name = CoronaCardsTest;
-			productName = CoronaCardsTest;
-			productReference = A48E9B9B183EEC8600F67CB3 /* CoronaCardsTest.app */;
-			productType = "com.apple.product-type.application";
-		};
-		A4EF76F41A352B43002D3BEF /* CoronaCardsTest-Swift */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A4EF77421A352B45002D3BEF /* Build configuration list for PBXNativeTarget "CoronaCardsTest-Swift" */;
-			buildPhases = (
-				A4EF76F01A352B43002D3BEF /* Sources */,
-				A4EF76F11A352B43002D3BEF /* Frameworks */,
-				A4EF76F21A352B43002D3BEF /* Resources */,
-				A4EF76F31A352B43002D3BEF /* Copy Corona Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A4EF77451A352B67002D3BEF /* PBXTargetDependency */,
-			);
-			name = "CoronaCardsTest-Swift";
-			productName = "CoronaCardsTest-Swift";
-			productReference = A4EF76F51A352B43002D3BEF /* CoronaCardsTest-Swift.app */;
-			productType = "com.apple.product-type.application";
 		};
 		A4F2ADC316E0AF2E00814C7B /* libtemplate */ = {
 			isa = PBXNativeTarget;
@@ -2539,26 +1926,17 @@
 				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0730;
 				TargetAttributes = {
-					A43B955B15C779EE003E6F9F = {
-						DevelopmentTeam = 9ALGBA85N3;
-					};
 					A4693558169D62DA00723568 = {
 						LastSwiftMigration = 0820;
 					};
 					A47098A4169E9F2400D31091 = {
 						LastSwiftMigration = 0820;
 					};
-					A482FA9F183D74950005831B = {
-						LastSwiftMigration = 0800;
-					};
 					A4841094151147BE0074BD57 = {
 						LastSwiftMigration = 0820;
 					};
 					A48B825B16D594AA00CA01A1 = {
 						LastSwiftMigration = 0820;
-					};
-					A4EF76F41A352B43002D3BEF = {
-						CreatedOnToolsVersion = 6.1;
 					};
 					A4F2ADC316E0AF2E00814C7B = {
 						LastSwiftMigration = 0820;
@@ -2608,17 +1986,10 @@
 				F5C36BE724FAB49F00775C6E /* libplayer-core-angle */,
 				A47098A4169E9F2400D31091 /* libplayer */,
 				F5C36CA724FAB4E900775C6E /* libplayer-angle */,
-				A43B955B15C779EE003E6F9F /* testplayer-enterprise */,
 				A4F2ADC316E0AF2E00814C7B /* libtemplate */,
 				F5C36CBC24FAB50800775C6E /* libtemplate-angle */,
 				A4693558169D62DA00723568 /* template */,
 				F50E7EAC24FA923B009F165B /* template-angle */,
-				A482FA9F183D74950005831B /* CoronaCards */,
-				A482FADF183D7B860005831B /* CoronaCards.framework */,
-				A48E9B9A183EEC8600F67CB3 /* CoronaCardsTest */,
-				A48DA9C918580415009D1F93 /* CoronaCardsTest-Tabs */,
-				A40D2F711889151E00B4A354 /* CoronaCardsTest-Ad */,
-				A4EF76F41A352B43002D3BEF /* CoronaCardsTest-Swift */,
 			);
 		};
 /* End PBXProject section */
@@ -3103,29 +2474,6 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A40D2F701889151E00B4A354 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A40D2F871889151F00B4A354 /* Main_iPad.storyboard in Resources */,
-				A40D2F8C1889151F00B4A354 /* Images.xcassets in Resources */,
-				A40D2F841889151F00B4A354 /* Main_iPhone.storyboard in Resources */,
-				A40D2F7B1889151F00B4A354 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A43B955A15C779EE003E6F9F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A48B827416D595C100CA01A1 /* CoronaResources.bundle in Resources */,
-				A43B959115C78057003E6F9F /* TestApp-Info.plist in Resources */,
-				A43B959515C7807C003E6F9F /* MainWindow-iPad.xib in Resources */,
-				A43B959615C7807C003E6F9F /* MainWindow.xib in Resources */,
-				A43B959E15C78721003E6F9F /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4693567169D62DA00723568 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3144,38 +2492,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A48DA9C818580415009D1F93 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A48DA9DF18580416009D1F93 /* Main_iPad.storyboard in Resources */,
-				A43E5D41185EE7C90055BC21 /* Images.xcassets in Resources */,
-				A48DA9DC18580416009D1F93 /* Main_iPhone.storyboard in Resources */,
-				A48DA9D318580416009D1F93 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A48E9B99183EEC8600F67CB3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4F5C3C518456F1800E5ED54 /* Main_iPad.storyboard in Resources */,
-				A4F5C3C618456F1800E5ED54 /* Main_iPhone.storyboard in Resources */,
-				A4F5C3A71845377200E5ED54 /* Images.xcassets in Resources */,
-				A4F5C3D2184574E200E5ED54 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4EF76F21A352B43002D3BEF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4EF77271A352B44002D3BEF /* Images.xcassets in Resources */,
-				A4EF772A1A352B44002D3BEF /* LaunchScreen.xib in Resources */,
-				A4EF77251A352B44002D3BEF /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		F50E7EB124FA923B009F165B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3190,125 +2506,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A40D2FC21889186C00B4A354 /* Copy Corona Project Files */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Corona Project Files";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "ditto -V \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\"";
-		};
-		A43B959815C780BF003E6F9F /* Script: Compile */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Script: Compile";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "${PROJECT_DIR}/../../bin/xcode/build_resource_car.sh";
-			showEnvVarsInLog = 0;
-		};
-		A43B959A15C78138003E6F9F /* Script: build.settings to Info.plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Script: build.settings to Info.plist";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "ASSETS_DIR=\"$PROJECT_DIR\"/../test/assets\nif [ -d \"$PROJECT_DIR\"/../test/assets2 ]\nthen\n    ASSETS_DIR=\"$PROJECT_DIR\"/../test/assets2\nfi\n\nTOOLSDIR=\"$PROJECT_DIR/../../bin/mac\"\n\necho Running \"$TOOLSDIR\"/lua \"$PROJECT_DIR\"/../../bin/mac/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\nLUA_PATH=\"$PROJECT_DIR/../../platform/resources/?.lua\" export LUA_PATH\n\"$TOOLSDIR\"/lua \"$PROJECT_DIR\"/../../bin/mac/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A43E5D3D185EE4CE0055BC21 /* Copy Corona Project Files */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Corona Project Files";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "ditto -V \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A43E5D3F185EE55C0055BC21 /* Copy Corona Project Files */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Corona Project Files";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "ditto -V \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR\"/\"$UNLOCALIZED_RESOURCES_FOLDER_PATH\"";
-			showEnvVarsInLog = 0;
-		};
-		A44F22B6183FFB2700AB1835 /* Script: Compile */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Script: Compile";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "## \"$PROJECT_DIR\"/bin-xcode/compile_car.sh";
-			showEnvVarsInLog = 0;
-		};
-		A44F22B8183FFF6D00AB1835 /* Script: build.settings to Info.plist */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Script: build.settings to Info.plist";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "## \"$PROJECT_DIR\"/bin-xcode/convert_metadata.sh";
-			showEnvVarsInLog = 0;
-		};
-		A45C4C61186AA3EA00FE59C2 /* Copy to /Users/Shared/CoronaLabs/Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy to /Users/Shared/CoronaLabs/Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "DST_DIR=/Users/Shared/CoronaLabs/ios\nmkdir -p $DST_DIR\n\n# Copy the standard framework for backward compatibility\nditto -V \"$TARGET_BUILD_DIR\"/\"$TARGETNAME\" \"$DST_DIR\"/\"$TARGETNAME\"\n\n# Also copy the XCFramework for M1 simulator support\nXCFRAMEWORK_NAME=\"${TARGETNAME%.framework}.xcframework\"\nif [ -d \"$TARGET_BUILD_DIR\"/$XCFRAMEWORK_NAME ]; then\n    ditto -V \"$TARGET_BUILD_DIR\"/$XCFRAMEWORK_NAME \"$DST_DIR\"/$XCFRAMEWORK_NAME\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		A46935BD169D62DA00723568 /* Script: CopyResources and resource.corona-archive */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3342,48 +2539,6 @@
 			shellPath = /bin/sh;
 			shellScript = "TOOLCHAIN_DIR=\"$PROJECT_DIR/../../bin/mac\"\nLUA=\"$TOOLCHAIN_DIR/lua\"\n\nASSETS_DIR=\"$PROJECT_DIR\"/../test/assets\nif [ -d \"$PROJECT_DIR\"/../test/assets2 ]\nthen\n    ASSETS_DIR=\"$PROJECT_DIR\"/../test/assets2\nfi\n\necho Running \"$LUA\" \"$PROJECT_DIR\"/../../bin/mac/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\nLUA_PATH=\"$PROJECT_DIR/../../platform/resources/?.lua\" export LUA_PATH\n\"$LUA\" \"$PROJECT_DIR\"/../../bin/mac/buildSettingsToPlist.lua $ASSETS_DIR \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_FOLDER_PATH/\"\n";
 			showEnvVarsInLog = 0;
-		};
-		A482FACE183D79A50005831B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"$PROJECT_DIR\"/bin-xcode/prepare_framework.sh";
-			showEnvVarsInLog = 0;
-		};
-		A482FAE7183D7C220005831B /* Build Universal Binary */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Build Universal Binary";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export SF_TARGET_NAME=CoronaCards\n\n\"$PROJECT_DIR\"/bin-xcode/build_framework.sh\n";
-		};
-		A4EF76F31A352B43002D3BEF /* Copy Corona Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Corona Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"Copying Corona\"\nditto -V \"$PROJECT_DIR\"/../test/assets2 \"$TARGET_BUILD_DIR/$EXECUTABLE_FOLDER_PATH\"";
 		};
 		F50E7EBC24FA923B009F165B /* Script: CopyResources and resource.corona-archive */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3424,26 +2579,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A40D2F6E1889151E00B4A354 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A40D2F8A1889151F00B4A354 /* ViewControllerTest-Ad.mm in Sources */,
-				A40D2F811889151F00B4A354 /* AppDelegateTest-Ad.mm in Sources */,
-				A40D2F7D1889151F00B4A354 /* main.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A43B955815C779EE003E6F9F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A43B959215C78057003E6F9F /* TestAppCoronaDelegate.mm in Sources */,
-				A43B959315C78057003E6F9F /* TestAppLibraryModule.mm in Sources */,
-				A43B959415C78057003E6F9F /* TestAppMain.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A469356D169D62DA00723568 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3457,51 +2592,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A47098A8169E9F2400D31091 /* Rtt_IPhoneTemplate-Sub.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A482FA9C183D74950005831B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DB87234028CD7F0E00E1866A /* Rtt_AppleKeyServices.mm in Sources */,
-				F53256051BFD1073009D4A07 /* CoronaLuaObjCHelper.mm in Sources */,
-				A4728FEA1AE7F77B00BC088D /* CoronaLuaObjC+NSObject.m in Sources */,
-				A48E9BFE183F0B7800F67CB3 /* CoronaViewPrivate.mm in Sources */,
-				A4B2D53B1842DBE1001311C9 /* CoronaViewRuntimeDelegate.mm in Sources */,
-				A48E9C04183F57B400F67CB3 /* Rtt_IPhonePlatformBase.mm in Sources */,
-				A4F0B5C128CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm in Sources */,
-				A7F0B5ED28CFA1C000A1B2C3 /* Rtt_IPhoneText.mm in Sources */,
-				0795D25A18861C6600B3F4B7 /* Rtt_IPhoneDisplayObject.mm in Sources */,
-				A4B2D52A184038AA001311C9 /* Rtt_AppleCrypto.cpp in Sources */,
-				A415ECB11BD861D5003E7114 /* Rtt_IPhonePlatformCore.mm in Sources */,
-				A48DA97A1853094C009D1F93 /* CoronaIOSLoader.mm in Sources */,
-				F564C3731BE430F900C241E6 /* Rtt_AppleInputDevice.mm in Sources */,
-				A4B2D52D184038AA001311C9 /* Rtt_AppleReachability.mm in Sources */,
-				A48E9C06183F57B400F67CB3 /* Rtt_IPhoneTimer.mm in Sources */,
-				A41AC4DB184DE09400313BF9 /* Rtt_IPhoneTemplate-CoronaCards.mm in Sources */,
-				A48E9C07183F57B400F67CB3 /* Rtt_TouchInhibitor.mm in Sources */,
-				A4B2D530184039D1001311C9 /* Rtt_AppleCallback.mm in Sources */,
-				A415ECB21BD861D5003E7114 /* Rtt_IPhoneRuntimeDelegate.mm in Sources */,
-				A4C3189E1A6EDD4500F186DF /* AppleWeakProxy.mm in Sources */,
-				A4B2D52C184038AA001311C9 /* Rtt_ApplePlatform.mm in Sources */,
-				0795D2481886008F00B3F4B7 /* Rtt_IPhoneVideoObject.mm in Sources */,
-				0748724A18C1C469004FB786 /* NSData+Base64.m in Sources */,
-				A4B2D529184038AA001311C9 /* Rtt_AppleBitmap.mm in Sources */,
-				A7F0B5D628CFA10000A1B2C3 /* Rtt_AppleTextAlignment.mm in Sources */,
-				A7F0B5D728CFA10000A1B2C3 /* Rtt_AppleTextDelegateWrapperObjectHelper.m in Sources */,
-				A48E9BF9183EF42E00F67CB3 /* CoronaViewControllerPrivate.mm in Sources */,
-				A4728FF31AE8176F00BC088D /* CoronaLuaObjC.mm in Sources */,
-				A48E9C00183F57B400F67CB3 /* Rtt_IPhoneAudioSessionManagerImplementation.mm in Sources */,
-				A4B2D52E184038AA001311C9 /* Rtt_AppleTimer.mm in Sources */,
-				F564C37F1BE430F900C241E6 /* Rtt_AppleInputMFiDeviceListener.mm in Sources */,
-				A48E9BFF183F57B400F67CB3 /* Rtt_IPhoneAudioSessionManager.mm in Sources */,
-				A48E9C05183F57B400F67CB3 /* Rtt_IPhoneScreenSurface.mm in Sources */,
-				F564C3771BE430F900C241E6 /* Rtt_AppleInputDeviceManager.mm in Sources */,
-				A4C318761A69D3D000F186DF /* CoronaSystemResourceManager.mm in Sources */,
-				A40D2F6818876D5200B4A354 /* CoronaViewPluginContext.mm in Sources */,
-				A48E9C01183F57B400F67CB3 /* Rtt_IPhoneDevice.mm in Sources */,
-				F522FE8824338E1500E64744 /* AutoLinkModules.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3553,37 +2643,6 @@
 				A4F0B5C028CFA10000A1B2C3 /* Rtt_IPhoneTextFieldObject.mm in Sources */,
 				A7F0B5EC28CFA1C000A1B2C3 /* Rtt_IPhoneText.mm in Sources */,
 				F5A7520F1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A48DA9C618580415009D1F93 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A48DA9E518580416009D1F93 /* SecondViewController.m in Sources */,
-				A48DA9D918580416009D1F93 /* AppDelegateTest-Tabs.mm in Sources */,
-				A48DA9E218580416009D1F93 /* FirstViewController.m in Sources */,
-				A48DA9D518580416009D1F93 /* main.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A48E9B97183EEC8600F67CB3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4F5C3A5184536D900E5ED54 /* main.mm in Sources */,
-				A4F5C39F184536A000E5ED54 /* AppDelegateTest.mm in Sources */,
-				A4F5C3A0184536A000E5ED54 /* ViewController.mm in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4EF76F01A352B43002D3BEF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4EF771E1A352B44002D3BEF /* ViewController.swift in Sources */,
-				A4EF77211A352B44002D3BEF /* CPlusPlusLinkage.cpp in Sources */,
-				A4EF77111A352B44002D3BEF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3673,16 +2732,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A40D2FAD1889176000B4A354 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A482FA9F183D74950005831B /* CoronaCards */;
-			targetProxy = A40D2FAC1889176000B4A354 /* PBXContainerItemProxy */;
-		};
-		A43806331858057B007E4E5D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A482FA9F183D74950005831B /* CoronaCards */;
-			targetProxy = A43806321858057B007E4E5D /* PBXContainerItemProxy */;
-		};
 		A44D41D7164A1D9C00CFE7B3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = plugins;
@@ -3718,60 +2767,20 @@
 			name = tachyon;
 			targetProxy = A46885E818062D3E00381941 /* PBXContainerItemProxy */;
 		};
-		A47098D7169EA0F400D31091 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A47098A4169E9F2400D31091 /* libplayer */;
-			targetProxy = A47098D6169EA0F400D31091 /* PBXContainerItemProxy */;
-		};
 		A47098E3169EAB5400D31091 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A47098A4169E9F2400D31091 /* libplayer */;
 			targetProxy = A47098E2169EAB5400D31091 /* PBXContainerItemProxy */;
-		};
-		A482FAE6183D7B940005831B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A482FA9F183D74950005831B /* CoronaCards */;
-			targetProxy = A482FAE5183D7B940005831B /* PBXContainerItemProxy */;
 		};
 		A482FAF2183EB5330005831B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A4841094151147BE0074BD57 /* libplayer-core */;
 			targetProxy = A482FAF1183EB5330005831B /* PBXContainerItemProxy */;
 		};
-		A482FAF7183EB72F0005831B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = tachyon;
-			targetProxy = A482FAF6183EB72F0005831B /* PBXContainerItemProxy */;
-		};
-		A482FAF9183EB72F0005831B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = librtt;
-			targetProxy = A482FAF8183EB72F0005831B /* PBXContainerItemProxy */;
-		};
-		A482FAFB183EB72F0005831B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = liblua;
-			targetProxy = A482FAFA183EB72F0005831B /* PBXContainerItemProxy */;
-		};
-		A482FB03183EB72F0005831B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libalmixer;
-			targetProxy = A482FB02183EB72F0005831B /* PBXContainerItemProxy */;
-		};
 		A48B827816D595DA00CA01A1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A48B825B16D594AA00CA01A1 /* CoronaResources */;
 			targetProxy = A48B827716D595DA00CA01A1 /* PBXContainerItemProxy */;
-		};
-		A48E9BDB183EF19100F67CB3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A482FA9F183D74950005831B /* CoronaCards */;
-			targetProxy = A48E9BDA183EF19100F67CB3 /* PBXContainerItemProxy */;
-		};
-		A4EF77451A352B67002D3BEF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A482FA9F183D74950005831B /* CoronaCards */;
-			targetProxy = A4EF77441A352B67002D3BEF /* PBXContainerItemProxy */;
 		};
 		A4F2ADF716E0AF4500814C7B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3858,239 +2867,12 @@
 			name = NetworkPlugin;
 			targetProxy = F5E8ABD728134BD5004295B4 /* PBXContainerItemProxy */;
 		};
-		F5E8ABDC28134C20004295B4 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = NetworkPlugin;
-			targetProxy = F5E8ABDB28134C20004295B4 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A40D2F791889151E00B4A354 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A40D2F7A1889151E00B4A354 /* en */,
-			);
-			name = InfoPlist.strings;
-			path = "CoronaCards/Test-Ad";
-			sourceTree = SOURCE_ROOT;
-		};
-		A40D2F821889151F00B4A354 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A40D2F831889151F00B4A354 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			path = "CoronaCards/Test-Ad";
-			sourceTree = SOURCE_ROOT;
-		};
-		A40D2F851889151F00B4A354 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A40D2F861889151F00B4A354 /* Base */,
-			);
-			name = Main_iPad.storyboard;
-			path = "CoronaCards/Test-Ad";
-			sourceTree = SOURCE_ROOT;
-		};
-		A43B959C15C78721003E6F9F /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A43B959D15C78721003E6F9F /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		A48DA9D118580416009D1F93 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A48DA9D218580416009D1F93 /* en */,
-			);
-			name = InfoPlist.strings;
-			path = "CoronaCards/Test-Tabs";
-			sourceTree = SOURCE_ROOT;
-		};
-		A48DA9DA18580416009D1F93 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A48DA9DB18580416009D1F93 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			path = "CoronaCards/Test-Tabs";
-			sourceTree = SOURCE_ROOT;
-		};
-		A48DA9DD18580416009D1F93 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A48DA9DE18580416009D1F93 /* Base */,
-			);
-			name = Main_iPad.storyboard;
-			path = "CoronaCards/Test-Tabs";
-			sourceTree = SOURCE_ROOT;
-		};
-		A4EF77231A352B44002D3BEF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A4EF77241A352B44002D3BEF /* Base */,
-			);
-			name = Main.storyboard;
-			path = "CoronaCards/Test-Swift";
-			sourceTree = SOURCE_ROOT;
-		};
-		A4EF77281A352B44002D3BEF /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A4EF77291A352B44002D3BEF /* Base */,
-			);
-			name = LaunchScreen.xib;
-			path = "CoronaCards/Test-Swift";
-			sourceTree = SOURCE_ROOT;
-		};
-		A4F5C3B718456DBC00E5ED54 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A4F5C3B818456DBC00E5ED54 /* Base */,
-			);
-			name = Main_iPad.storyboard;
-			sourceTree = "<group>";
-		};
-		A4F5C3B918456DBC00E5ED54 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A4F5C3BA18456DBC00E5ED54 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		A4F5C3D0184574E200E5ED54 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A4F5C3D1184574E200E5ED54 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		A40D2F9F1889152400B4A354 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Info.plist";
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		A40D2FA01889152400B4A354 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "CoronaCards/Test-Ad/CoronaCardsTest-Ad-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		A43B956E15C779EE003E6F9F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "enterprise/TestApp/TestApp-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "enterprise/TestApp/Testapp-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-Obj-C",
-					"-all_load",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		A43B956F15C779EE003E6F9F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				DEAD_CODE_STRIPPING = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "enterprise/TestApp/TestApp-Prefix.pch";
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "enterprise/TestApp/Testapp-Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-Obj-C",
-					"-all_load",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
 		A46935C3169D62DA00723568 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4174,86 +2956,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		A482FABD183D74960005831B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				DSTROOT = /tmp/CoronaCards.dst;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/CoronaCards-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = debugging;
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		A482FABE183D74960005831B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DSTROOT = /tmp/CoronaCards.dst;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/CoronaCards-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRIP_STYLE = debugging;
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		A482FAE1183D7B870005831B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		A482FAE2183D7B870005831B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -4343,243 +3045,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
-		A48DA9F918580418009D1F93 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test-Tabs/CoronaCardsTabs-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "CoronaCards/Test-Tabs/CoronaCardsTabs-Info.plist";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		A48DA9FA18580418009D1F93 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test-Tabs/CoronaCardsTabs-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "CoronaCards/Test-Tabs/CoronaCardsTabs-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		A48E9BD0183EEC8A00F67CB3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				DEAD_CODE_STRIPPING = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test/CoronaCardsTest-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/CoronaCards/Test/CoronaCardsTest-Info.plist";
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		A48E9BD1183EEC8A00F67CB3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				DEAD_CODE_STRIPPING = NO;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CoronaCards/Test/CoronaCardsTest-Prefix.pch";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/CoronaCards/Test/CoronaCardsTest-Info.plist";
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		A4EF77371A352B44002D3BEF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					/Users/Shared/CoronaLabs/ios/,
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "CoronaCards/Test-Swift/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lobjc",
-					"-lsqlite3",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				SWIFT_OBJC_BRIDGING_HEADER = "${SOURCE_ROOT}/CoronaCards/Test-Swift/Swift-Interoperability/CoronaCards-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		A4EF77381A352B44002D3BEF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					/Users/Shared/CoronaLabs/ios/,
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = "CoronaCards/Test-Swift/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lobjc",
-					"-lsqlite3",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = NO;
-				STRIP_STYLE = "non-global";
-				SWIFT_OBJC_BRIDGING_HEADER = "${SOURCE_ROOT}/CoronaCards/Test-Swift/Swift-Interoperability/CoronaCards-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -4949,24 +3414,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A40D2FAA1889152400B4A354 /* Build configuration list for PBXNativeTarget "CoronaCardsTest-Ad" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A40D2F9F1889152400B4A354 /* Debug */,
-				A40D2FA01889152400B4A354 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A43B956D15C779EE003E6F9F /* Build configuration list for PBXNativeTarget "testplayer-enterprise" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A43B956E15C779EE003E6F9F /* Debug */,
-				A43B956F15C779EE003E6F9F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A46935C2169D62DA00723568 /* Build configuration list for PBXNativeTarget "template" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -4985,24 +3432,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A482FACA183D74960005831B /* Build configuration list for PBXNativeTarget "CoronaCards" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A482FABD183D74960005831B /* Debug */,
-				A482FABE183D74960005831B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A482FAE0183D7B870005831B /* Build configuration list for PBXAggregateTarget "CoronaCards.framework" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A482FAE1183D7B870005831B /* Debug */,
-				A482FAE2183D7B870005831B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A48410A1151147BF0074BD57 /* Build configuration list for PBXNativeTarget "libplayer-core" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -5017,33 +3446,6 @@
 			buildConfigurations = (
 				A48B826716D594AA00CA01A1 /* Debug */,
 				A48B826816D594AA00CA01A1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A48DA9F818580418009D1F93 /* Build configuration list for PBXNativeTarget "CoronaCardsTest-Tabs" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A48DA9F918580418009D1F93 /* Debug */,
-				A48DA9FA18580418009D1F93 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A48E9BCF183EEC8A00F67CB3 /* Build configuration list for PBXNativeTarget "CoronaCardsTest" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A48E9BD0183EEC8A00F67CB3 /* Debug */,
-				A48E9BD1183EEC8A00F67CB3 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A4EF77421A352B45002D3BEF /* Build configuration list for PBXNativeTarget "CoronaCardsTest-Swift" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A4EF77371A352B44002D3BEF /* Debug */,
-				A4EF77381A352B44002D3BEF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

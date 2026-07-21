@@ -65,7 +65,6 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
    REM Delete the target directories.
    rmdir /q /s "$(SolutionDir)Bin\$(ProjectName)"
    rmdir /q /s "$(SolutionDir)Bin\Corona"
-   rmdir /q /s "$(SolutionDir)Bin\Corona.Enterprise"
    rmdir /q /s "$(SolutionDir)Bin\AppTemplates\Win32"
 
    mkdir "$(SolutionDir)Bin\Corona"
@@ -91,14 +90,9 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.lib"
    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.pdb"
 
-   REM copy Native libs
-   xcopy /y "$(SolutionDir)Bin\Corona.Enterprise\lib" "$(SolutionDir)Bin\Corona\Native\Corona\win\lib\"
-
    REM copy CoronaBuilder files
-   xcopy /y "$(SolutionDir)..\..\bin\win\CopyResources.bat" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
    move /y "$(SolutionDir)Bin\Corona\lfs.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
    move /y "$(SolutionDir)Bin\Corona\CoronaBuilder.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
-   xcopy /y "$(SolutionDir)..\..\bin\shared\Compile.lua" "$(SolutionDir)Bin\Corona\Native\Corona\shared\bin"
    xcopy /y "$(SolutionDir)Bin\Lua\lua.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
    xcopy /y "$(SolutionDir)Bin\Lua\lua.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
    xcopy /y "$(SolutionDir)Bin\Lua\luac.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"

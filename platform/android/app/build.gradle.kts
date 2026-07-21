@@ -39,37 +39,23 @@ val buildDirectory = layout.buildDirectory.asFile.get()
 val windows = System.getProperty("os.name").lowercase().contains("windows")
 val linux = System.getProperty("os.name").lowercase().contains("linux")
 val shortOsName = if (windows) "win" else if (linux) "linux" else "mac"
-
-val nativeDir = if (windows) {
-    val resourceDir = coronaResourcesDir?.let { file("$it/../Native/").absolutePath }?.takeIf { file(it).exists() }
-    (resourceDir ?: "${System.getenv("CORONA_PATH")}/Native").replace("\\", "/")
-} else if (linux) {
-    "$coronaResourcesDir/Native"
-} else {
-    val resourceDir = coronaResourcesDir?.let { file("$it/../../../Native/").absolutePath }?.takeIf { file(it).exists() }
-    resourceDir ?: "${System.getenv("HOME")}/Library/Application Support/Corona/Native/"
-}
+val solar2DBuildToolsDir = (rootProject.extra["solar2DBuildToolsDir"] as String).replace("\\", "/")
 
 val coronaPlugins = file("$buildDirectory/corona-plugins")
-val luaCmd = "$nativeDir/Corona/mac/bin/lua"
+val luaCmd = "$solar2DBuildToolsDir/Corona/mac/bin/lua"
 val isSimulatorBuild = coronaTmpDir != null
 
-fun checkCoronaNativeInstallation() {
-    if (file("$nativeDir/Corona/android/resource/android-template.zip").exists())
+fun checkSolar2DBuildTools() {
+    if (file("$solar2DBuildToolsDir/Corona/android/resource/android-template.zip").exists())
         return
-    val setupNativeApp = File("/Applications").listFiles { f ->
-        f.isDirectory && f.name.startsWith("Corona")
-    }?.maxOrNull()?.let {
-         "${it.absolutePath}/Native/Setup Corona Native.app"
-    } ?: "Native/Setup Corona Native.app"
-    throw InvalidUserDataException("Corona Native was not set-up properly. Launch '$setupNativeApp'.")
+    throw InvalidUserDataException("Solar2D build tools were not found at '$solar2DBuildToolsDir'.")
 }
 
 val buildToolsDir = "$projectDir/buildTools".takeIf { file(it).exists() }
         ?: "$projectDir/../template".takeIf { file(it).exists() } ?: {
-            checkCoronaNativeInstallation()
+            checkSolar2DBuildTools()
             copy {
-                from(zipTree("$nativeDir/Corona/android/resource/android-template.zip"))
+                from(zipTree("$solar2DBuildToolsDir/Corona/android/resource/android-template.zip"))
                 into("$buildDirectory/intermediates/corona-build-tools")
             }
             "$buildDirectory/intermediates/corona-build-tools/template/app/buildTools"
@@ -96,10 +82,10 @@ val parsedBuildProperties: JsonObject = run {
 
     val output = ByteArrayOutputStream()
     val execResult = exec {
-        setWorkingDir("$nativeDir/Corona/mac/bin")
+        setWorkingDir("$solar2DBuildToolsDir/Corona/mac/bin")
         commandLine(luaCmd,
                 "-e",
-                "package.path='$nativeDir/Corona/shared/resource/?.lua;'..package.path",
+                "package.path='$solar2DBuildToolsDir/Corona/shared/resource/?.lua;'..package.path",
                 "-e",
                 """
                         dofile('${buildSettingsFile.path.replace("\\", "\\\\")}')
@@ -125,11 +111,11 @@ extra["minSdkVersion"] = parsedBuildProperties.lookup<Any?>("buildSettings.andro
         ?: 15
 
 val coronaBuilder = if (windows) {
-    "$nativeDir/Corona/win/bin/CoronaBuilder.exe"
+    "$solar2DBuildToolsDir/Corona/win/bin/CoronaBuilder.exe"
 } else if (linux) {
     "$coronaResourcesDir/../Solar2DBuilder"
 } else {
-    "$nativeDir/Corona/$shortOsName/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
+    "$solar2DBuildToolsDir/Corona/$shortOsName/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
 }
 
 val coronaVersionName =
@@ -343,7 +329,7 @@ android.applicationVariants.all {
 
     val compileLuaTask = tasks.create("compileLua$baseNameCapitalized") {
         description = "If required, compiles Lua and archives it into resource.car"
-        val luac = "$nativeDir/Corona/mac/bin/luac"
+        val luac = "$solar2DBuildToolsDir/Corona/mac/bin/luac"
 
         val srcLuaFiles = fileTree(coronaSrcDir) {
             include("**/*.lua")
@@ -605,7 +591,7 @@ fun downloadAndProcessCoronaPlugins(reDownloadPlugins: Boolean = true) {
         exec {
             commandLine(luaCmd
                     , "-e"
-                    , "package.path='$nativeDir/Corona/shared/resource/?.lua;'..package.path"
+                    , "package.path='$solar2DBuildToolsDir/Corona/shared/resource/?.lua;'..package.path"
                     , *luaVerbosityPlug
                     , "$buildToolsDir/convert_metadata.lua"
                     , "$buildDirectory/intermediates/plugins_metadata.json"
@@ -631,7 +617,7 @@ fun downloadAndProcessCoronaPlugins(reDownloadPlugins: Boolean = true) {
         exec {
             commandLine(luaCmd
                     , "-e"
-                    , "package.path='$nativeDir/Corona/shared/resource/?.lua;'..package.path"
+                    , "package.path='$solar2DBuildToolsDir/Corona/shared/resource/?.lua;'..package.path"
                     , *luaVerbosityPlug
                     , "$buildToolsDir/update_manifest.lua"
                     , /*1*/ "$buildToolsDir/AndroidManifest.template.xml"
@@ -759,44 +745,8 @@ tasks.register<Zip>("exportCoronaAppTemplate") {
     }
 }
 
-tasks.register<Copy>("exportToNativeAppTemplate") {
-    if (coronaBuiltFromSource) group = "Corona-dev"
-    enabled = coronaBuiltFromSource
-    val templateDir = "$rootDir/../../subrepos/enterprise/contents/Project Template/App/android"
-
-    into(templateDir)
-    from(rootDir) {
-        include("build.gradle.kts")
-        include("gradlew", "gradlew.bat", "gradle/wrapper/**")
-        include("app/**")
-        exclude("app/build/**", "app/CMakeLists.txt", "app/build.gradle.kts")
-        exclude("**/*.iml", "**/\\.*")
-        exclude("**/AndroidManifest.xml")
-    }
-    from(rootDir) {
-        include("app/build.gradle.kts")
-        filter {
-            it.replace("com.corona.app", "com.mycompany.app")
-        }
-    }
-
-    doFirst {
-        delete(fileTree(templateDir) {
-            exclude("plugin/**")
-            exclude("settings.gradle")
-            exclude("**/AndroidManifest.xml")
-            exclude("**/*.java")
-            exclude("gradle.properties")
-        })
-    }
-    doLast {
-        logger.lifecycle("Copied to ${file(templateDir).absolutePath}")
-    }
-}
-
-
-val coronaNativeOutputDir = project.findProperty("coronaNativeOutputDir") as? String
-        ?: "$nativeDir/Corona"
+val solar2DBuildToolsOutputDir = project.findProperty("solar2DBuildToolsOutputDir") as? String
+        ?: "$solar2DBuildToolsDir/Corona"
 
 tasks.register<Copy>("installAppTemplateToSim") {
     if (coronaBuiltFromSource) group = "Corona-dev"
@@ -805,7 +755,7 @@ tasks.register<Copy>("installAppTemplateToSim") {
     from("$buildDirectory/outputs") {
         include("android-template.zip")
     }
-    into("$coronaNativeOutputDir/android/resource")
+    into("$solar2DBuildToolsOutputDir/android/resource")
 }
 
 tasks.register<Copy>("installAppTemplateAndAARToSim") {
@@ -817,7 +767,7 @@ tasks.register<Copy>("installAppTemplateAndAARToSim") {
         include("Corona-release.aar")
         rename("Corona-release.aar", "Corona.aar")
     }
-    into("$coronaNativeOutputDir/android/lib/gradle")
+    into("$solar2DBuildToolsOutputDir/android/lib/gradle")
 }
 
 fun copyWithAppFilename(dest: String, appName: String?) {
@@ -1018,7 +968,7 @@ dependencies {
         if (coronaLocal.exists()) {
             implementation(files(coronaLocal))
         } else {
-            checkCoronaNativeInstallation()
+            checkSolar2DBuildTools()
             implementation(":Corona@aar")
         }
         implementation(fileTree("libs") {

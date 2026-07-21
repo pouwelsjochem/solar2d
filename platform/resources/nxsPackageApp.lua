@@ -441,18 +441,6 @@ function nxsPackageApp( args )
     args.nxInfo = nil
     logd(json.prettify(args))
     local template = args.templateLocation
-    if not template then
-        local coronaRoot
-        if windows then
-            coronaRoot = os.getenv("CORONA_PATH")
-        else
-            local coronaDir = lfs.symlinkattributes(os.getenv('HOME') .. '/Library/Application Support/Corona/Native', "target")
-            if coronaDir then
-                coronaRoot = coronaDir .. "../Corona Simulator.app/Contents"
-            end
-        end
-        template = pathJoin(coronaRoot , 'Resources', 'nxtemplate')
-    end
     logd("template location: " .. template)
     if not isFile(template) then
         return 'Missing template: ' .. template
