@@ -13,10 +13,10 @@ android {
         minSdk = 15
         version = 1
     }
-    sourceSets["main"].manifest.srcFile(file("AndroidManifest-New.xml"))
+    sourceSets["main"].manifest.srcFile(file("AndroidManifest.xml"))
     sourceSets["main"].java.srcDirs(file("src"), file("../../../external/JNLua/src/main"), file("../../../plugins/network/android/src"))
     sourceSets["main"].java.filter.exclude("**/script/**")
-    sourceSets["main"].res.srcDirs(file("res-new"))
+    sourceSets["main"].res.srcDirs(file("res"))
 
     externalNativeBuild {
         cmake {
