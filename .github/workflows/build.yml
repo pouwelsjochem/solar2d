@@ -39,6 +39,7 @@ jobs:
   build-tools:
     needs:
       - source-code
+      - collect-ios-templates
     runs-on: macos-26
     steps:
       - run: CDR="$(basename "$(pwd)")" ; cd .. ; rm -rf "$CDR" ; mkdir -p "$CDR" ; cd "$CDR"
@@ -50,6 +51,13 @@ jobs:
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
+      - name: Get collected templates
+        uses: actions/download-artifact@v4
+        with:
+          name: Collected-ios-templates
+          path: Collected-ios-templates
+      - name: Put collected iOS templates in place
+        run: cp -Rv Collected-ios-templates/* platform/resources/
       - name: Put JRE in place
         run: curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.macos.tgz -o jre.macos.tgz
       - name: Build tools
@@ -130,7 +138,6 @@ jobs:
   macOS-Simulator:
     needs:
       - source-code
-      - collect-ios-templates
       - build-tools
     if: (! failure() && ! cancelled())
     runs-on: macos-26
@@ -144,13 +151,6 @@ jobs:
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
-      - name: Get collected templates
-        uses: actions/download-artifact@v4
-        with:
-          name: Collected-ios-templates
-          path: Collected-ios-templates
-      - name: Put collected iOS templates in place
-        run: cp -Rv Collected-ios-templates/* platform/resources/
       - run: mkdir docs
       - name: Get build tools
         uses: actions/download-artifact@v4

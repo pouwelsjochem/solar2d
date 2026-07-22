@@ -15,6 +15,14 @@ mkdir -p "$MAC_BIN_DIR" "$CORONA_DIR/win/bin" "$CORONA_DIR/android/resource" "$C
 xcodebuild -project "$WORKSPACE/platform/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG"
 
 cp -Rv "$WORKSPACE/platform/mac/build/$CONFIG/CoronaBuilder.app" "$MAC_BIN_DIR"
+TEMPLATE_DIR="$MAC_BIN_DIR/CoronaBuilder.app/Contents/Resources/iostemplate"
+shopt -s nullglob
+TEMPLATES=("$TEMPLATE_DIR"/*.tar.bz)
+if (( ${#TEMPLATES[@]} < 8 ))
+then
+	echo "ERROR: CoronaBuilder contains ${#TEMPLATES[@]} generated iOS and tvOS templates; expected at least 8"
+	exit 1
+fi
 "$MAC_BIN_DIR/CoronaBuilder.app/Contents/MacOS/CoronaBuilder" version > "$CORONA_DIR/BUILD"
 chmod -w "$CORONA_DIR/BUILD"
 
