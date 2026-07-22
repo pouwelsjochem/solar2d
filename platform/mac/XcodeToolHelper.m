@@ -7,32 +7,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "Core/Rtt_Build.h"
-#include "Core/Rtt_Assert.h"
-
 #import "XcodeToolHelper.h"
 
-#import <AppKit/AppKit.h>
-
-
 @implementation XcodeToolHelper
-
-static const NSString* kXcodeToolHelperUserDefaultsPrefix = @"XcodeOverrideTool_";
-
-+ (NSString*) toolLocationFromPreferences:(NSString*)toolbasename printWarning:(BOOL)should_print_warning
-{
-	// toolpath is the full path including the executable itself
-	// Preference convention is to make all keys have the prefix: XcodeOverrideTool_ followed by the tool name
-	NSString* key = [kXcodeToolHelperUserDefaultsPrefix stringByAppendingString:toolbasename];
-	NSString* toolpath = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-
-	if ( nil != toolpath && should_print_warning )
-	{
-		NSLog(@"Note: '%@' location has been overridden in Preferences:\n\t%@ = %@", toolbasename, key, toolpath);
-	}
-	
-	return toolpath;
-}
 
 + (void) printNotFoundWarningForTool:(NSString*)toolbasename
 {
@@ -42,27 +19,11 @@ static const NSString* kXcodeToolHelperUserDefaultsPrefix = @"XcodeOverrideTool_
 //
 // Return the path for codesign_allocate
 //
-+ (NSString*) pathForCodesignAllocateUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning
++ (NSString*) pathForCodesignAllocate
 {
-	// User preferences always overrides.
-	NSString* toolpath = [XcodeToolHelper toolLocationFromPreferences:@"codesign_allocate" printWarning:should_print_warning];
+	NSString* toolpath = [XcodeToolHelper findXcodePathFor:@"codesign_allocate"];
 
-	//  Don't do any validation for overrides because the only reason overrides are in effect is to force work around problems.
-	if ( nil != toolpath )
-	{
-		return toolpath;
-	}
-
-	// No override in effect. Do the normal thing.
-	toolpath = [XcodeToolHelper findXcodePathFor:@"codesign_allocate"];
-
-	if ([toolpath length] == 0)
-	{
-		// If xcrun can't find "codesign_allocate", this is the best bet
-		toolpath = [developerbase stringByAppendingPathComponent:@"Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate"];
-	}
-
-	if (should_print_warning && ! [[NSFileManager defaultManager] fileExistsAtPath:toolpath])
+	if (! [[NSFileManager defaultManager] fileExistsAtPath:toolpath])
 	{
 		toolpath = nil;
 
@@ -75,21 +36,11 @@ static const NSString* kXcodeToolHelperUserDefaultsPrefix = @"XcodeOverrideTool_
 //
 // Return the path for productbuild
 //
-+ (NSString*) pathForProductBuildUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning
++ (NSString*) pathForProductBuild
 {
-	// User preferences always overrides.
-	NSString* toolpath = [XcodeToolHelper toolLocationFromPreferences:@"productbuild" printWarning:should_print_warning];
+	NSString* toolpath = [XcodeToolHelper findXcodePathFor:@"productbuild"];
 
-	//  Don't do any validation for overrides because the only reason overrides are in effect is to force work around problems.
-	if ( nil != toolpath )
-	{
-		return toolpath;
-	}
-
-	// No override in effect. Do the normal thing.
-	toolpath = [XcodeToolHelper findXcodePathFor:@"productbuild"];
-
-	if (should_print_warning && ! [[NSFileManager defaultManager] fileExistsAtPath:toolpath])
+	if (! [[NSFileManager defaultManager] fileExistsAtPath:toolpath])
 	{
 		toolpath = nil;
 
@@ -98,64 +49,17 @@ static const NSString* kXcodeToolHelperUserDefaultsPrefix = @"XcodeOverrideTool_
 
 	return toolpath;
 }
-
-//
-// Return the path for copypng
-//
-+ (NSString*) pathForCopyPngUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning
-{
-	// User preferences always overrides.
-	NSString* toolpath = [XcodeToolHelper toolLocationFromPreferences:@"copypng" printWarning:should_print_warning];
-	
-	//  Don't do any validation for overrides because the only reason overrides are in effect is to force work around problems.
-	if ( nil != toolpath )
-	{
-		return toolpath;
-	}
-	
-	// No override in effect. Don't use [XcodeToolHelper findXcodePathFor:] because we want to suppress the warning
-	toolpath = [self launchTaskAndReturnOutput:@"/usr/bin/xcrun" arguments:@[@"--find", @"copypng"] printWarning:NO];
-	
-	if ([toolpath length] == 0)
-	{
-		// Xcode prior to 7.0 doesn't configure "copypng" as an xcrun tool but all the versions we care about have it here
-		toolpath = [developerbase stringByAppendingPathComponent:@"Platforms/iPhoneOS.platform/Developer/usr/bin/copypng"];
-	}
-	
-	if (should_print_warning && ! [[NSFileManager defaultManager] fileExistsAtPath:toolpath])
-	{
-		toolpath = nil;
-		
-		[XcodeToolHelper printNotFoundWarningForTool:@"copypng"];
-	}
-	
-	return toolpath;
-}
-
 //
 // Return the path for codesign
 //
-+ (NSString*) pathForCodesignUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning
++ (NSString*) pathForCodesign
 {
-	// User preferences always overrides.
-	NSString* toolpath = [XcodeToolHelper toolLocationFromPreferences:@"codesign" printWarning:should_print_warning];
-
-	//  Don't do any validation for overrides because the only reason overrides are in effect is to force work around problems.
-	if ( nil != toolpath )
-	{
-		return toolpath;
-	}
-
-	// No override in effect. Do the normal thing.
-	toolpath = @"/usr/bin/codesign";
+	NSString* toolpath = @"/usr/bin/codesign";
 
 	if ( NO == [[NSFileManager defaultManager] fileExistsAtPath:toolpath] )
 	{
 		toolpath = nil;
-		if ( should_print_warning )
-		{
-			[XcodeToolHelper printNotFoundWarningForTool:@"codesign"];
-		}
+		[XcodeToolHelper printNotFoundWarningForTool:@"codesign"];
 	}
 
 	return toolpath;

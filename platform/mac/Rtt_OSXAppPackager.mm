@@ -172,9 +172,8 @@ OSXAppPackager::Build( AppPackagerParams * params, const char* tmpDirBase )
 
                 lua_newtable(L);
                 {
-                    BOOL debugBuildProcess = YES;
                     NSString* sdkRoot = [XcodeToolHelper getXcodePath];
-                    NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
+                    NSString* codesign = [XcodeToolHelper pathForCodesign];
 
                     lua_pushstring( L, [sdkRoot UTF8String] );
                     lua_setfield( L, -2, "sdkRoot" );
@@ -407,10 +406,9 @@ OSXAppPackager::PackageForAppStore( OSXAppPackagerParams *osxParams )
 
 		lua_newtable(L);
 		{
-            BOOL debugBuildProcess = YES;
 			NSString* sdkRoot = [XcodeToolHelper getXcodePath];
-			NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
-			NSString* productBuild = [XcodeToolHelper pathForProductBuildUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
+			NSString* codesign = [XcodeToolHelper pathForCodesign];
+			NSString* productBuild = [XcodeToolHelper pathForProductBuild];
 
 			lua_pushstring( L, [sdkRoot UTF8String] );
 			lua_setfield( L, -2, "sdkRoot" );
@@ -494,9 +492,8 @@ OSXAppPackager::PackageForSelfDistribution( OSXAppPackagerParams *osxParams, boo
 
 		lua_newtable(L);
 		{
-            BOOL debugBuildProcess = YES;
 			NSString* sdkRoot = [XcodeToolHelper getXcodePath];
-			NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
+			NSString* codesign = [XcodeToolHelper pathForCodesign];
 
 			lua_pushstring( L, [sdkRoot UTF8String] );
 			lua_setfield( L, -2, "sdkRoot" );

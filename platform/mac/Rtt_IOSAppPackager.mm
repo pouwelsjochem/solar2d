@@ -276,18 +276,13 @@ IOSAppPackager::Build( AppPackagerParams * params, const char* tmpDirBase )
 
                     lua_newtable(L);
                     {
-                        BOOL debugBuildProcess = YES;
                         NSString* sdkRoot = [XcodeToolHelper getXcodePath];
-                        NSString* copypng = [XcodeToolHelper pathForCopyPngUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
-                        NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
-                        NSString* codesign_allocate = [XcodeToolHelper pathForCodesignAllocateUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
+                        NSString* codesign = [XcodeToolHelper pathForCodesign];
+                        NSString* codesign_allocate = [XcodeToolHelper pathForCodesignAllocate];
 						NSString *codesign_framework = [XcodeToolHelper pathForCodesignFramework];
 
                         lua_pushstring( L, [sdkRoot UTF8String] );
                         lua_setfield( L, -2, "sdkroot" );
-                        
-                        lua_pushstring( L, [copypng UTF8String] );
-                        lua_setfield( L, -2, "copypng" );
                         
                         lua_pushstring( L, [codesign UTF8String] );
                         lua_setfield( L, -2, "codesign" );

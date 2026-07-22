@@ -12,17 +12,11 @@
 // Helper functions to help deal with Xcode command lines tools.
 @interface XcodeToolHelper : NSObject
 
-+ (NSString*) toolLocationFromPreferences:(NSString*)toolbasename printWarning:(BOOL)should_print_warning;
-
 + (void) printNotFoundWarningForTool:(NSString*)toolbasename;
 
-+ (NSString*) pathForCodesignAllocateUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning;
-
-+ (NSString*) pathForCopyPngUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning;
-
-+ (NSString*) pathForCodesignUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning;
-
-+ (NSString*) pathForProductBuildUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning;
++ (NSString*) pathForCodesignAllocate;
++ (NSString*) pathForCodesign;
++ (NSString*) pathForProductBuild;
 
 + (NSString*) pathForCodesignFramework;
 + (NSString*) pathForResources;
