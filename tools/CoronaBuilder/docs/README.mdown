@@ -14,23 +14,6 @@ The tool is packaged in a Mac .app bundle because of various resource files it n
 Getting Started
 ---------------
 
-### Activation ###
-
-You must purchase an **Enterprise Automated Build** subscription to activate this product. Contact sales via our [web form](http://www.coronalabs.com/products/contact) for more information.
-
-To activate, type the following:
-
-	/path/to/CoronaBuilder.app/Contents/MacOS/CoronaBuilder authorize email password
-
-where `email` and `password` are associated with the Enterprise account subscription.
-
-This will activate a computer to use CoronaBuilder. Every account is allowed one computer.
-
-If you wish to activate CoronaBuilder on a different computer for the same account, you must first deactivate the original computer before activating on another one (or purchase additional subscriptions):
-
-	/path/to/CoronaBuilder.app/Contents/MacOS/CoronaBuilder deauthorize
-
-
 ### Building ###
 
 To build you must supply a file in Lua or JSON formats that contain the build arguments.

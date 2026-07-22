@@ -1052,7 +1052,6 @@
 		A4EFF1E2169D4A4F00EC7EEE /* lualib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lualib.h; path = "../../external/lua-5.1.3/src/lualib.h"; sourceTree = "<group>"; };
 		A4EFF1E4169D4A8300EC7EEE /* CoronaLua.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaLua.h; path = ../../librtt/Corona/CoronaLua.h; sourceTree = "<group>"; };
 		A4EFF1E5169D4AB400EC7EEE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		A4F12C2616D4379F002BCCFB /* liblicensing.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblicensing.a; path = "../../plugins/build-core/licensing/ios/liblicensing.a"; sourceTree = "<group>"; };
 		A4F2ADF516E0AF2E00814C7B /* libtemplate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtemplate.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2074EB81E160FC1009FC33C /* CoronaBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaBeacon.h; path = platform/iphone/CoronaBeacon.h; sourceTree = "<group>"; };
 		C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaBeacon.mm; path = platform/iphone/CoronaBeacon.mm; sourceTree = "<group>"; };
@@ -1305,7 +1304,6 @@
 				A46936AD169DEBB700723568 /* libtemplate */,
 				32CA4F630368D1EE00C91783 /* Rtt_Player.pch */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				A445AA5E16B2049B00A9A764 /* Core Plugins */,
 				A48B829C16D59BA800CA01A1 /* CoronaResources */,
 				A482FAA2183D74950005831B /* CoronaCards */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -1332,14 +1330,6 @@
 				000DCED912B0824800042A5E /* libobjc.dylib */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		A445AA5E16B2049B00A9A764 /* Core Plugins */ = {
-			isa = PBXGroup;
-			children = (
-				A4F12C2616D4379F002BCCFB /* liblicensing.a */,
-			);
-			name = "Core Plugins";
 			sourceTree = "<group>";
 		};
 		A44D4349164B1D5200CFE7B3 /* Products */ = {
@@ -2971,7 +2961,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -2993,7 +2982,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -3294,7 +3282,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -3320,7 +3307,6 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/ios\"",
 					"\"$(SRCROOT)\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";

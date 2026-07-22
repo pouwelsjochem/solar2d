@@ -136,10 +136,6 @@
             <!-- Multi-dex support library -->
             <copy file="../../../external/android-support-libs/multidex/android-support-multidex.jar" todir="libs"/>
             <copy file="./libs/android-support-multidex.jar" todir="../template/coreJars/"/>
-
-            <!-- Networking plugin -->
-            <copy file="../../../plugins/build-core/network/android/network.jar" tofile="libs/network.jar"/>
-            <copy file="./libs/network.jar" todir="../template/coreJars/"/>
         </sequential>
     </macrodef>
     <target name="release">

@@ -450,7 +450,6 @@
 		A4E76F191399772500AFB095 /* create_build_properties.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F181399772500AFB095 /* create_build_properties.lua */; };
 		A4E76F6D13A99D5200AFB095 /* json.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4E76F6C13A99D5200AFB095 /* json.lua */; };
 		A4ED10AE14D2931000ECF49E /* Rtt_Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4ED10AC14D2930F00ECF49E /* Rtt_Lua.cpp */; };
-		A4F12C2516D43685002BCCFB /* licensing.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A4F12C2316D43662002BCCFB /* licensing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A4F36552146C44030019808D /* AndroidAppBuild.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4F36550146C44030019808D /* AndroidAppBuild.xib */; };
 		A4FBC51E1A2D55A2004D9A01 /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733FB12B6F6BC0057F594 /* liblua.a */; };
 		A4FBC5221A2D55A2004D9A01 /* liblpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C2A08C2A1950DF2B002B7532 /* liblpeg.a */; };
@@ -912,7 +911,6 @@
 		C26E847F1A5DE1AE008950FB /* ALmixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; };
 		C26E84821A5DE1AE008950FB /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733FB12B6F6BC0057F594 /* liblua.a */; };
 		C26E84831A5DE1AE008950FB /* librtt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B733F312B6F6740057F594 /* librtt.a */; };
-		C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = A4F12C2316D43662002BCCFB /* licensing.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C27E338D1A71748C00DDED18 /* CoronaCards.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992961A6B135500E99F46 /* CoronaCards.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C27E338E1A71748C00DDED18 /* CoronaView.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992971A6B135500E99F46 /* CoronaView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C27E338F1A71748C00DDED18 /* CoronaViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C2E992981A6B135500E99F46 /* CoronaViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1584,16 +1582,6 @@
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A491868C1641FE1600A39286 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-				A4F12C2516D43685002BCCFB /* licensing.dylib in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C2427BBA191865E20011CE7A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
@@ -1610,7 +1598,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				F5567D492ADC73BC008CD550 /* network.dylib in Copy Frameworks and dylibs */,
-				C27945311B585BD60046B6E8 /* licensing.dylib in Copy Frameworks and dylibs */,
 				C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */,
 			);
 			name = "Copy Frameworks and dylibs";
@@ -2308,7 +2295,6 @@
 		A4E76F6C13A99D5200AFB095 /* json.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = json.lua; path = ../platform/resources/json.lua; sourceTree = "<group>"; };
 		A4ED10AC14D2930F00ECF49E /* Rtt_Lua.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Lua.cpp; sourceTree = "<group>"; };
 		A4ED10AD14D2930F00ECF49E /* Rtt_Lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Lua.h; sourceTree = "<group>"; };
-		A4F12C2316D43662002BCCFB /* licensing.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = licensing.dylib; path = "../../plugins/build-core/licensing/mac/licensing.dylib"; sourceTree = "<group>"; };
 		A4F36551146C44030019808D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AndroidAppBuild.xib; sourceTree = "<group>"; };
 		A4F36553146C44200019808D /* AndroidAppBuildController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndroidAppBuildController.h; sourceTree = "<group>"; };
 		A4F36554146C44200019808D /* AndroidAppBuildController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AndroidAppBuildController.mm; sourceTree = "<group>"; };
@@ -3357,7 +3343,6 @@
 				C2E992941A6B135500E99F46 /* CoronaCards */,
 				A4FBC55F1A2D5806004D9A01 /* CoronaCore */,
 				00B73C4B12B720C90057F594 /* player */,
-				A41AC1B416A75A6400AD331A /* plugins */,
 				004A5F351368DAEE003BD9DA /* Licenses */,
 				C26E845F1A5DE0C1008950FB /* CoronaCards */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -3405,14 +3390,6 @@
 			children = (
 			);
 			name = MacApp;
-			sourceTree = "<group>";
-		};
-		A41AC1B416A75A6400AD331A /* plugins */ = {
-			isa = PBXGroup;
-			children = (
-				A4F12C2316D43662002BCCFB /* licensing.dylib */,
-			);
-			name = plugins;
 			sourceTree = "<group>";
 		};
 		A43287E1176A61C300ACB6FF /* Display */ = {
@@ -4440,7 +4417,6 @@
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				00B737B312B707970057F594 /* Copy Frameworks */,
-				A491868C1641FE1600A39286 /* CopyFiles */,
 				00A76D3412C04C9200850EA0 /* Run script (write AppSettings: customBuildID, buildBucket, etc if defined) */,
 				00B73EE912B7311B0057F594 /* Run script (codesign utilities) */,
 				C2FD8EDF19C904DA00CBE369 /* Run Script (copy Skins files) */,
@@ -6210,7 +6186,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/mac\"",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../modules/platform/mac/build/Release\"";
 				OTHER_LDFLAGS = "-ObjC";
@@ -6530,7 +6505,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/mac\"",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../modules/platform/mac/build/Release\"";
 				OTHER_LDFLAGS = "-ObjC";
@@ -6584,7 +6558,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../plugins/build-core/licensing/mac\"",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../modules/platform/mac/build/Release\"";
 				OTHER_LDFLAGS = "-ObjC";

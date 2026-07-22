@@ -12,9 +12,6 @@ local json = require('json')
 local lfs = require('lfs')
 local builder = require('builder')
 
-local verbosity = 3
-local androidBuild = false
-local alwaysQuery = false
 local windows = (package.config:match("^.") == '\\')
 
 -- in offline build `user` is nil
@@ -25,14 +22,7 @@ function DownloadPluginsMain(args, user, buildYear, buildRevision)
 	end
 
 	for i=#args,1,-1 do
-		if args[i] == '--fetch-dependencies' then -- scans directory for dependencies
-			table.remove(args, i)
-			verbosity = 0
-			fetchDependencies = true
-		elseif args[i] == '--always-query' then -- forces always to query for available plugins, for test purposes mostly
-			table.remove(args, i)
-			alwaysQuery = true
-		elseif args[i] == '--build' then --verrides buildYear and buildRevision
+		if args[i] == '--build' then --verrides buildYear and buildRevision
 			table.remove(args, i)
 			local build = args[i]
 			table.remove(args, i)
@@ -153,11 +143,7 @@ function DownloadPluginsMain(args, user, buildYear, buildRevision)
 		return 1
 	end
 
-	if verbosity > 0 then
-		print("Done downloading plugins!")
-	end
-
-
+	print("Done downloading plugins!")
 	return 0
 end
 
