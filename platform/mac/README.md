@@ -59,7 +59,7 @@ when device chrome or a specific geometry matters.
 # Building your app with CoronaBuilder
 
 The Simulator only runs projects; it does not provide build dialogs. Device and desktop packages are built separately with `CoronaBuilder`.
-Some platforms require templates to be built first. CoronaBuilder resolves those templates and related build resources from the adjacent `Corona Simulator.app` bundle.
+Some platforms require templates to be built first. CoronaBuilder owns and resolves those templates and related build resources from its own application bundle.
 
 ## Building iOS/tvOS apps
 

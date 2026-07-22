@@ -39,7 +39,7 @@ extern "C"
  * This Lua state provides functionality related to supporting Android.
  * The Lua state currently includes the standard library, LPeg, and LuaFileSystem.
  * @param filepath The path (presumably absolute path) and file of the AndroidValidation.lua script.
- * So an example is "/Applications/Corona Simulator.app/Contents/Resources/AndroidValidation.lua".
+ * So an example is "/Applications/CoronaBuilder.app/Contents/Resources/AndroidValidation.lua".
  * This is required so platforms can provide the proper path to the bundled Lua file.
  * @return Returns the initialized lua_State.
  * @see Rtt_AndroidSupportTools_CloseLuaState

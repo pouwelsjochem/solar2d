@@ -29,6 +29,15 @@
 		03D1C5871D70D21B00DB02EE /* Rtt_Preference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5811D70D21B00DB02EE /* Rtt_Preference.cpp */; };
 		03D1C5881D70D21B00DB02EE /* Rtt_PreferenceCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5831D70D21B00DB02EE /* Rtt_PreferenceCollection.cpp */; };
 		03D1C5891D70D21B00DB02EE /* Rtt_PreferenceValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 03D1C5851D70D21B00DB02EE /* Rtt_PreferenceValue.cpp */; };
+		7A0000113000000000000001 /* debug.keystore in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000013000000000000001 /* debug.keystore */; };
+		7A0000123000000000000001 /* _coronatest.jar in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000023000000000000001 /* _coronatest.jar */; };
+		7A0000133000000000000001 /* AndroidValidation.lua in Copy Build Resources */ = {isa = PBXBuildFile; fileRef = 7A0000033000000000000001 /* AndroidValidation.lua */; };
+		7A0000143000000000000001 /* iostemplate in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000043000000000000001 /* iostemplate */; };
+		7A0000153000000000000001 /* linuxtemplate_x64.tgz in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000053000000000000001 /* linuxtemplate_x64.tgz */; };
+		7A0000163000000000000001 /* iOS-SDKs.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000063000000000000001 /* iOS-SDKs.json */; };
+		7A0000173000000000000001 /* tvOS-SDKs.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000073000000000000001 /* tvOS-SDKs.json */; };
+		7A0000183000000000000001 /* OSXApp.xcent in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000083000000000000001 /* OSXApp.xcent */; };
+		7A0000193000000000000001 /* codesign-framework.sh in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000093000000000000001 /* codesign-framework.sh */; };
 		1F23C320211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23C31E211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp */; };
 		1F23C322211ABCE40003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23C321211ABCE30003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp */; };
 		A4543F4C15265DE700486F8A /* Rtt_Car.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4543F4A15265DE700486F8A /* Rtt_Car.cpp */; };
@@ -307,6 +316,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		7A0000233000000000000001 /* Copy Build Resources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				7A0000133000000000000001 /* AndroidValidation.lua in Copy Build Resources */,
+			);
+			name = "Copy Build Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C259E4A91BB20B4000DE7BCB /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -369,6 +389,16 @@
 		03D1C5841D70D21B00DB02EE /* Rtt_PreferenceCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceCollection.h; path = ../../librtt/Rtt_PreferenceCollection.h; sourceTree = "<group>"; };
 		03D1C5851D70D21B00DB02EE /* Rtt_PreferenceValue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_PreferenceValue.cpp; path = ../../librtt/Rtt_PreferenceValue.cpp; sourceTree = "<group>"; };
 		03D1C5861D70D21B00DB02EE /* Rtt_PreferenceValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_PreferenceValue.h; path = ../../librtt/Rtt_PreferenceValue.h; sourceTree = "<group>"; };
+		7A0000013000000000000001 /* debug.keystore */ = {isa = PBXFileReference; lastKnownFileType = file; name = debug.keystore; path = ../android/resources/debug.keystore; sourceTree = SOURCE_ROOT; };
+		7A0000023000000000000001 /* _coronatest.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = _coronatest.jar; path = ../android/resources/_coronatest.jar; sourceTree = SOURCE_ROOT; };
+		7A0000033000000000000001 /* AndroidValidation.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AndroidValidation.lua; path = ../resources/AndroidValidation.lua; sourceTree = SOURCE_ROOT; };
+		7A0000043000000000000001 /* iostemplate */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iostemplate; path = ../resources/iostemplate; sourceTree = SOURCE_ROOT; };
+		7A0000053000000000000001 /* linuxtemplate_x64.tgz */ = {isa = PBXFileReference; lastKnownFileType = file; name = linuxtemplate_x64.tgz; path = ../resources/linuxtemplate_x64.tgz; sourceTree = SOURCE_ROOT; };
+		7A0000063000000000000001 /* iOS-SDKs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "iOS-SDKs.json"; path = "../resources/iOS-SDKs.json"; sourceTree = SOURCE_ROOT; };
+		7A0000073000000000000001 /* tvOS-SDKs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "tvOS-SDKs.json"; path = "../resources/tvOS-SDKs.json"; sourceTree = SOURCE_ROOT; };
+		7A0000083000000000000001 /* OSXApp.xcent */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = OSXApp.xcent; path = ../resources/OSXApp.xcent; sourceTree = SOURCE_ROOT; };
+		7A0000093000000000000001 /* codesign-framework.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "codesign-framework.sh"; path = ../../bin/xcode/codesign-framework.sh; sourceTree = SOURCE_ROOT; };
+		7A00000A3000000000000001 /* AppSettings.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AppSettings.lua; path = ../resources/AppSettings.lua; sourceTree = SOURCE_ROOT; };
 		1F23C31E211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_LinuxAppPackager.cpp; path = ../shared/Rtt_LinuxAppPackager.cpp; sourceTree = "<group>"; };
 		1F23C31F211ABC410003EBF0 /* Rtt_LinuxAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_LinuxAppPackager.h; path = ../shared/Rtt_LinuxAppPackager.h; sourceTree = "<group>"; };
 		1F23C321211ABCE30003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AppPackagerLinuxFactory.cpp; path = ../../tools/CoronaBuilder/Rtt_AppPackagerLinuxFactory.cpp; sourceTree = "<group>"; };
@@ -822,7 +852,17 @@
 		A4DFE6DA14CF439000C2A230 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7A0000033000000000000001 /* AndroidValidation.lua */,
+				7A00000A3000000000000001 /* AppSettings.lua */,
+				7A0000023000000000000001 /* _coronatest.jar */,
+				7A0000093000000000000001 /* codesign-framework.sh */,
 				C2471D7719882B260076CA1F /* CoronaSimulator.icns */,
+				7A0000013000000000000001 /* debug.keystore */,
+				7A0000063000000000000001 /* iOS-SDKs.json */,
+				7A0000043000000000000001 /* iostemplate */,
+				7A0000053000000000000001 /* linuxtemplate_x64.tgz */,
+				7A0000083000000000000001 /* OSXApp.xcent */,
+				7A0000073000000000000001 /* tvOS-SDKs.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1003,6 +1043,10 @@
 				A4FCD3E814CF417C0004E91D /* Sources */,
 				A4FCD3E914CF417C0004E91D /* Frameworks */,
 				A4FCD3EA14CF417C0004E91D /* Resources */,
+				7A0000233000000000000001 /* Copy Build Resources */,
+				7A0000243000000000000001 /* Write AppSettings */,
+				7A0000213000000000000001 /* Build OSXAppTemplate.zip */,
+				7A0000223000000000000001 /* Copy JRE if available */,
 				C259E4A91BB20B4000DE7BCB /* Copy Frameworks */,
 			);
 			buildRules = (
@@ -1216,11 +1260,70 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0000123000000000000001 /* _coronatest.jar in Resources */,
+				7A0000193000000000000001 /* codesign-framework.sh in Resources */,
 				C2471D7819882B260076CA1F /* CoronaSimulator.icns in Resources */,
+				7A0000113000000000000001 /* debug.keystore in Resources */,
+				7A0000163000000000000001 /* iOS-SDKs.json in Resources */,
+				7A0000143000000000000001 /* iostemplate in Resources */,
+				7A0000153000000000000001 /* linuxtemplate_x64.tgz in Resources */,
+				7A0000183000000000000001 /* OSXApp.xcent in Resources */,
+				7A0000173000000000000001 /* tvOS-SDKs.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7A0000243000000000000001 /* Write AppSettings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/../resources/AppSettings.lua",
+			);
+			name = "Write AppSettings";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/AppSettings.lua",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -e\n\ncp \"${SCRIPT_INPUT_FILE_0}\" \"${SCRIPT_OUTPUT_FILE_0}\"\n\nif [ -n \"$CUSTOM_BUILD_ID\" ]\nthen\n\techo \"customBuildId=\\\"$CUSTOM_BUILD_ID\\\"\" >> \"${SCRIPT_OUTPUT_FILE_0}\"\nfi\n\nif [ -n \"$BUILD_BUCKET\" ]\nthen\n\techo \"buildBucket=\\\"$BUILD_BUCKET\\\"\" >> \"${SCRIPT_OUTPUT_FILE_0}\"\nfi\n";
+		};
+		7A0000213000000000000001 /* Build OSXAppTemplate.zip */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/CoronaShell.app",
+			);
+			name = "Build OSXAppTemplate.zip";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/OSXAppTemplate.zip",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nSOURCE=\"$BUILT_PRODUCTS_DIR/CoronaShell.app\"\nDESTINATION=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/OSXAppTemplate.zip\"\n\nrm -f \"$DESTINATION\"\n(\n\tcd \"$SOURCE\"\n\tzip -rqy \"$DESTINATION\" Contents --exclude \"Contents/Resources/CoronaShell.icns\" --exclude \"*.DS_Store\" --exclude \"*_CodeSignature*\"\n)\n";
+		};
+		7A0000223000000000000001 /* Copy JRE if available */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/../../jre.macos.tgz",
+			);
+			name = "Copy JRE if available";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(CONTENTS_FOLDER_PATH)/jre",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "JRE_DIRECTORY=\"$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH/jre\"\nrm -rf \"$JRE_DIRECTORY\"\nif [ -f \"$SRCROOT/../../jre.macos.tgz\" ]\nthen\n\tmkdir -p \"$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH\"\n\ttar xzf \"$SRCROOT/../../jre.macos.tgz\" -C \"$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A4FCD3E814CF417C0004E91D /* Sources */ = {

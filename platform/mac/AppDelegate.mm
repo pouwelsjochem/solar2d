@@ -1872,13 +1872,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	fNextUpsellTime = 0;
 
 	[self coronaInit:aNotification];
-	
-#ifdef Rtt_AUTHORING_SIMULATOR
-	NSString *jhome = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Contents/jre/jdk/Contents/Home"];
-	if([[NSFileManager defaultManager] fileExistsAtPath:jhome]) {
-		setenv("JAVA_HOME", [jhome UTF8String], YES);
-	}
-#endif
 }
 
 - (void) startDebugAndOpenPanel

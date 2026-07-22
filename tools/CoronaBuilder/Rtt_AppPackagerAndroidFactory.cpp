@@ -134,11 +134,7 @@ AppPackagerFactory::CreatePackagerParamsAndroid(
 
 				String scriptPathStr;
 				scriptPathStr.Set(GetResourceDirectory());
-#if defined(Rtt_MAC_ENV)
-				scriptPathStr.Append("/AndroidValidation.lu");
-#elif defined(Rtt_WIN_ENV)
 				scriptPathStr.Append("/AndroidValidation.lua");
-#endif
 				lua_State* L1 = Rtt_AndroidSupportTools_NewLuaState( scriptPathStr.GetString() );
 				if (L1 == NULL)
 				{
@@ -230,4 +226,3 @@ AppPackagerFactory::GetResourceDirectoryWin() const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -50,6 +50,8 @@ jobs:
       - name: Unpack source code
         run: tar -xzf SourceCode/corona.tgz
       - run: ./tools/GHAction/daily_env.sh
+      - name: Put JRE in place
+        run: curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.macos.tgz -o jre.macos.tgz
       - name: Build tools
         run: JAVA_HOME="${JAVA_HOME_17_X64:-$JAVA_HOME_17_arm64}" ./tools/GHAction/build_tools.sh
       - name: Upload build tools
@@ -155,10 +157,6 @@ jobs:
         with:
           name: BuildTools
           path: BuildTools
-      - name: Put JRE in place
-        shell: bash
-        run: |
-          curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.macos.tgz -o jre.macos.tgz
       - name: required for appdmg
         run: brew install python-setuptools
       - name: install appdmg

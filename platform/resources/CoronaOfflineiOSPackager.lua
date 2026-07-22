@@ -33,16 +33,6 @@ function findTemplate(params)
     if lfs.attributes(template, 'mode') == 'file' then
         return template
     end
-    template = params.resourceDir .. '/../../../../../../../Corona Simulator.app/Contents/Resources/iostemplate/' .. params.template
-    print("template", template, lfs.attributes(template, 'mode'))
-    if lfs.attributes(template, 'mode') == 'file' then
-        return template
-    end
-    template = params.resourceDir .. '/../../../Corona Simulator.app/Contents/Resources/iostemplate/' .. params.template
-    print("template", template, lfs.attributes(template, 'mode'))
-    if lfs.attributes(template, 'mode') == 'file' then
-        return template
-    end
 end
 
 function findBuilder(params)
@@ -51,29 +41,10 @@ function findBuilder(params)
     if lfs.attributes(builder, 'mode') == 'file' then
         return builder
     end
-    local builder = params.resourceDir .. '/CoronaBuilder.app/Contents/MacOS/CoronaBuilder'
-    print("builder", builder, lfs.attributes(builder, 'mode'))
-    if lfs.attributes(builder, 'mode') == 'file' then
-        return builder
-    end
-    builder = params.resourceDir .. '/../../../Native/Corona/mac/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder'
-    print("builder", builder, lfs.attributes(builder, 'mode'))
-    if lfs.attributes(builder, 'mode') == 'file' then
-        return builder
-    end
-    builder = params.resourceDir .. '/../../../CoronaBuilder.app/Contents/MacOS/CoronaBuilder'
-    print("builder", builder, lfs.attributes(builder, 'mode'))
-    if lfs.attributes(builder, 'mode') == 'file' then
-        return builder
-    end
 end
 
 function findLuac(params)
     local luac = params.resourceDir .. '/../../../luac'
-    if lfs.attributes(luac, 'mode') == 'file' then
-        return luac
-    end
-    luac = params.resourceDir .. '/../../../Native/Corona/mac/bin/luac'
     if lfs.attributes(luac, 'mode') == 'file' then
         return luac
     end

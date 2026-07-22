@@ -209,17 +209,7 @@ static const NSString* kXcodeToolHelperUserDefaultsPrefix = @"XcodeOverrideTool_
 
 + (NSString*) pathForResources
 {
-	NSString* path;
-	NSString* bundleResources = [[NSBundle mainBundle] resourcePath];
-	path = [[bundleResources stringByAppendingPathComponent:@"/../../../../../../../Corona Simulator.app/Contents/Resources"] stringByStandardizingPath];
-	if([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-		return path;
-	}
-	path = [[bundleResources stringByAppendingPathComponent:@"/../../../Corona Simulator.app/Contents/Resources"] stringByStandardizingPath];
-	if([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-		return path;
-	}
-	return bundleResources;
+	return [[NSBundle mainBundle] resourcePath];
 }
 
 + (NSString*) pathForCodesignFramework

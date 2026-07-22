@@ -18,7 +18,6 @@ xcodebuild -project "$WORKSPACE/platform/mac/ratatouille.xcodeproj" -scheme luac
 if [[ ! -d "$WORKSPACE/platform/mac/build/Release/CoronaBuilder.app" ]]
 then
 	xcodebuild -project "$WORKSPACE/platform/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG" clean
-	xcodebuild -project "$WORKSPACE/platform/mac/ratatouille.xcodeproj" -target CoronaCards -configuration "$CONFIG"
 	xcodebuild -project "$WORKSPACE/platform/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG"
 fi
 

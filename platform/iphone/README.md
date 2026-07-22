@@ -26,4 +26,4 @@ TEMPLATE_TARGET=template-angle platform/iphone/gh_build_templates.sh
 cp output/* platform/resources/iostemplate/
 ```
 
-Alternatively, copy templates into `<Simulator.app>/Contents/Resources/iostemplate` in an existing Simulator build, where CoronaBuilder can resolve them.
+Alternatively, copy templates into `<CoronaBuilder.app>/Contents/Resources/iostemplate` in an existing CoronaBuilder build.
