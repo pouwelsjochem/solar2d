@@ -9,7 +9,7 @@ Note, that `platform/test/assets2` directory must not be committed to the repo.
 
 # Building iOS templates to use in Simulator
 
-Simulator is using templates from `platform/resources/iostemplate` to build iOS and tvOS apps. They contain already build template, where simulator replaces contents and links in plugins.
+CoronaBuilder uses templates from `platform/resources/iostemplate` to build iOS and tvOS apps. They contain prebuilt templates whose contents are replaced and linked with plugins during packaging.
 
 Here are commands which can be used to build templates. All commands assumed to be run from the repository root
 
@@ -26,5 +26,4 @@ TEMPLATE_TARGET=template-angle platform/iphone/gh_build_templates.sh
 cp output/* platform/resources/iostemplate/
 ```
 
-Alternative you can copy templates into the `<Simulator.app>/Contents/Resources/iostemplate` of already build Simulator
-
+Alternatively, copy templates into `<Simulator.app>/Contents/Resources/iostemplate` in an existing Simulator build, where CoronaBuilder can resolve them.

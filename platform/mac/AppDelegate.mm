@@ -57,11 +57,7 @@
 #include "Rtt_VersionTimestamp.h"
 #include "Rtt_String.h"
 
-#import "BuildSessionState.h" // holds the WebServicesSession object for build now.
-
 #import "GLView.h"
-#import "FoundationUtilities.h"
-#import "XcodeToolHelper.h"
 #import "NSAlert-OAExtensions.h"
 
 #include <CommonCrypto/CommonCrypto.h>
@@ -69,29 +65,11 @@
 #include <sys/sysctl.h>
 #include <string.h>
 
-#include "Rtt_IOSAppPackager.h"
-#include "Rtt_AndroidAppPackager.h"
-
-#import "IOSAppBuildController.h"
-#import "AndroidAppBuildController.h"
-#import "LinuxAppBuildController.h"
-#import "OSXAppBuildController.h"
-#import "TVOSAppBuildController.h"
-
 #include "Rtt_PlatformDictionaryWrapper.h"
-
-#import "AppleSigningIdentityController.h"
 
 #include "Rtt_TargetDevice.h"
 
-#include "ListKeyStore.h"
-
 #import "TextEditorSupport.h"
-#import "ValidationToolOutputViewController.h"
-#import "ValidationSupportMacUI.h"
-#import "SDKList.h"
-
-#include "Rtt_MacDialogController.h"
 
 // -------------------------
 
@@ -139,8 +117,6 @@ static NSString* kSimulatorSafeAreaRightArgument = @"simulator-safe-area-right";
 static NSString* kSimulatorRoundedCornersArgument = @"simulator-rounded-corners";
 
 // TODO: Remove once the Beta is over
-static NSString* kEnableLinuxBuild = @"enableLinuxBuild";
-
 static const int       kClearProjectSandboxMenuTag = 1001;
 static const int       kCustomDeviceMenuTag = -1000;
 static const int       kEditCustomDeviceMenuTag = -1001;
@@ -199,11 +175,6 @@ ReadSimulatorBooleanArgument(id value, BOOL *result)
 	}
 	return NO;
 }
-
-// These tags are defined on the various DeviceBuild dialogs in Interface Builder
-enum {
-	osxSigningIdentitiesTag = 1001,
-};
 
 #ifdef Rtt_DEBUG
 
@@ -628,11 +599,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 @implementation AppDelegate
 
 @synthesize fSimulator;
-@synthesize appName;
-@synthesize appVersionCode;
-@synthesize appVersion;
-@synthesize dstPath;
-@synthesize projectPath;
 @synthesize fSkin;
 @synthesize fAppPath;
 @synthesize applicationHasBeenInitialized;
@@ -659,17 +625,9 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		fConsolePlatform = new Rtt::MacConsolePlatform;
 		fRelaunchCount = 0;
 
-		fSdkRoot = nil;
-
 		fOpenAccessoryView = nil;
 		fDeviceSkins = nil;
 		fSkin = Rtt::TargetDevice::kUnknownSkin;
-
-		appName = nil;
-		appVersionCode = nil;
-		appVersion = nil;
-		dstPath = nil;
-		projectPath = nil;
 		
 		fPreferencesWindow = nil;
         
@@ -679,12 +637,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		{
 			[[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
 		}
-		fBuildProblemNotified = FALSE;
-
-        fAndroidAppBuildController = nil;
-        fIOSAppBuildController = nil;
-		fOSXAppBuildController = nil;
-		fLinuxAppBuildController = nil;
+		fRuntimeErrorNotified = FALSE;
 
 		fServices = NULL;
 		fSimulatorRelaunchPending = NO;
@@ -692,10 +645,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		fBackgroundedRuntime = NULL;
 		fActiveSimulatorDeviceInfo = nil;
 		fTemporarySimulatorDeviceInfo = nil;
-
-        fSimulatorWasSuspended = FALSE;
-		_stopRequested = NO;
-
 		// Register corona:// URL scheme handler
 		[[NSAppleEventManager sharedAppleEventManager]
 		 setEventHandler:self
@@ -2072,13 +2021,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	delete fServices;
 	[fPreferencesWindow release];
 
-	[fSdkRoot release];
 	delete fConsolePlatform;
-
-	[dstPath release];
-	[appVersionCode release];
-	[appVersion release];
-	[appName release];
 
 	[fAppPath release];
 	[self clearTemporarySimulatorConfiguration];
@@ -2092,8 +2035,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void)applicationWillResignActive:(NSNotification *)aNotification
 {
 	if(self.simulator && self.simulator->GetPlayer() ) {
-		Runtime& runtime = self.simulator->GetPlayer()->GetRuntime();
-		WindowStateEvent e( false );
+		Rtt::Runtime& runtime = self.simulator->GetPlayer()->GetRuntime();
+		Rtt::WindowStateEvent e( false );
 		runtime.DispatchEvent( e );
 	}
 }
@@ -2101,8 +2044,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void) applicationDidBecomeActive:(NSNotification *)notification
 {
 	if(self.simulator && self.simulator->GetPlayer() ) {
-		Runtime& runtime = self.simulator->GetPlayer()->GetRuntime();
-		WindowStateEvent e( true );
+		Rtt::Runtime& runtime = self.simulator->GetPlayer()->GetRuntime();
+		Rtt::WindowStateEvent e( true );
 		runtime.DispatchEvent( e );
 	}
 }
@@ -2154,28 +2097,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	[options release];
 	[applicationVersion release];
 	[version release];
-}
-
--(void)beginProgressSheet:(NSWindow*)parent
-{
-    if ( ! progressSheet )
-    {
-        [NSBundle loadNibNamed:@"BuildProgress" owner:self];
-        [progressSheet setReleasedWhenClosed:NO];
-        Rtt_ASSERT( progressSheet );
-        Rtt_ASSERT( progressBar );
-        [progressBar setUsesThreadedAnimation:YES];
-    }
-
-    [NSApp beginSheet:progressSheet modalForWindow:parent modalDelegate:nil didEndSelector:nil contextInfo:nil];
-    [progressBar startAnimation:nil];
-}
-
--(void)endProgressSheet
-{
-    [progressBar stopAnimation:nil];
-    [NSApp endSheet:progressSheet];
-    [progressSheet orderOut:self];
 }
 
 // -----------------------------------------------------------------------------
@@ -2262,7 +2183,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 {
 	BOOL result = NO; // did launch?
 
-	fBuildProblemNotified = FALSE;
+	fRuntimeErrorNotified = FALSE;
 
 	// Only launch simulator if valid appPath exists
 	if ( appPath )
@@ -2900,7 +2821,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	fSimulator = new Rtt::MacSimulator;
 
-	fBuildProblemNotified = false;
+	fRuntimeErrorNotified = false;
 	
 	// [1] Somewhere in Initialize (or its sub-calls), GLView's prepareOpenGL is invoked, and Runtime is instantiated
 	NSDictionary *deviceInfo = [[self configuredSimulatorDeviceInfo] retain];
@@ -3118,7 +3039,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 -(void)resumeSimulatorAfterBackground
 {
-	Runtime *runtime = [self runtime];
+	Rtt::Runtime *runtime = [self runtime];
 	if (runtime && runtime == fBackgroundedRuntime && runtime->IsSuspended())
 	{
 		fSimulator->ToggleSuspendResume(true);
@@ -3233,47 +3154,9 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 }
 */
 
-// -----------------------------------------------------------------------------
-// BEGIN: Device Build
-// -----------------------------------------------------------------------------
-
 -(BOOL)isRunnable
 {
 	return YES;
-}
-
--(BOOL)isBuildAvailable
-{
-	bool result = (fAppPath != nil) && (fSimulator != nil);
-	return result;
-}
-
-// TODO: Is this duplicate of isBuildAvailable?  If so remove...
--(BOOL)isAndroidBuildAvailable
-{
-	return [self isBuildAvailable];
-}
-
--(BOOL)isAllowedToBuild:(Rtt::TargetDevice::Platform)platform
-{
-	return [self isBuildAvailable];
-}
-
--(BOOL)isLinuxBuildHidden
-{
-	return ! [[NSUserDefaults standardUserDefaults] boolForKey:kEnableLinuxBuild];
-}
-
--(BOOL)isOSXBuildHidden
-{
-	// return ! [[NSUserDefaults standardUserDefaults] boolForKey:kEnableOSXBuild];
-	return false;
-}
-
--(BOOL)isTVOSBuildHidden
-{
-	// return ! [[NSUserDefaults standardUserDefaults] boolForKey:kEnableTVOSBuild];
-	return false;
 }
 
 -(void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void  *)contextInfo
@@ -3287,204 +3170,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 			[[alert window] close];
 		}
 	}
-}
-
--(void)willOpenForBuild:(id)sender
-{
-	fBuildProblemNotified = false;
-}
-
--(void)didOpenForBuild:(id)sender
-{
-}
-
--(void)prepareController:(AppBuildController*)controller
-{
-	controller.projectPath = fAppPath;
-	controller.appName = [fAppPath lastPathComponent];
-	controller.appVersion = @"1.0";
-	controller.dstPath = [AppBuildController defaultDstDir];
-}
-
--(IBAction)openForBuildiOS:(id)sender
-{
-    [self willOpenForBuild:sender];
-
-    if ( fIOSAppBuildController == nil )
-    {
-        fIOSAppBuildController = [[IOSAppBuildController alloc] initWithWindowNibName:@"IOSAppBuild"
-                                                                          projectPath:fAppPath];
-    }
-
-    Rtt_ASSERT(fIOSAppBuildController != nil);
-
-    if ( ! [fIOSAppBuildController verifyBuildTools:sender] )
-    {
-        return;
-    }
-
-    // If the simulator was not suspended prior to building, suspend it.
-    fSimulatorWasSuspended = fSimulator->GetPlayer()->GetRuntime().IsSuspended();
-    if( ! fSimulatorWasSuspended )
-    {
-        [self willChangeValueForKey:@"suspendResumeLabel"];
-        fSimulator->ToggleSuspendResume(false);
-        [self didChangeValueForKey:@"suspendResumeLabel"];
-    }
-
-    [self willChangeValueForKey:@"projectPath"];
-    projectPath = fAppPath;
-    [self didChangeValueForKey:@"projectPath"];
-
-    [self prepareController:fIOSAppBuildController];
-
-    [fIOSAppBuildController showWindow:self];
-}
-
--(IBAction)openForBuildAndroid:(id)sender
-{
-    [self willOpenForBuild:sender];
-
-    if ( fAndroidAppBuildController == nil )
-    {
-        fAndroidAppBuildController = [[AndroidAppBuildController alloc] initWithWindowNibName:@"AndroidAppBuild"
-                                                                                  projectPath:fAppPath];
-    }
-
-    Rtt_ASSERT(fAndroidAppBuildController);
-
-    // If the simulator was not suspended prior to building, suspend it.
-    fSimulatorWasSuspended = fSimulator->GetPlayer()->GetRuntime().IsSuspended();
-    if( ! fSimulatorWasSuspended )
-    {
-        [self willChangeValueForKey:@"suspendResumeLabel"];
-        fSimulator->ToggleSuspendResume(false);
-        [self didChangeValueForKey:@"suspendResumeLabel"];
-    }
-
-    [self willChangeValueForKey:@"projectPath"];
-    projectPath = fAppPath;
-    [self didChangeValueForKey:@"projectPath"];
-
-    [self prepareController:fAndroidAppBuildController];
-
-	if (! [fAndroidAppBuildController verifyBuildTools:sender])
-	{
-		return;
-	}
-
-    [fAndroidAppBuildController showWindow:self];
-}
-
--(IBAction)openForBuildLinux:(id)sender
-{
-	[self willOpenForBuild:sender];
-	
-	if ( ! fLinuxAppBuildController )
-	{
-		fLinuxAppBuildController = [[LinuxAppBuildController alloc] initWithWindowNibName:@"LinuxAppBuild"
-																				projectPath:fAppPath];
-	}
-	
-	Rtt_ASSERT(fLinuxAppBuildController);
-	
-	// If the simulator was not suspended prior to building, suspend it.
-	fSimulatorWasSuspended = fSimulator->GetPlayer()->GetRuntime().IsSuspended();
-	if( ! fSimulatorWasSuspended )
-	{
-		[self willChangeValueForKey:@"suspendResumeLabel"];
-		fSimulator->ToggleSuspendResume(false);
-		[self didChangeValueForKey:@"suspendResumeLabel"];
-	}
-	
-	[self willChangeValueForKey:@"projectPath"];
-	projectPath = fAppPath;
-	[self didChangeValueForKey:@"projectPath"];
-	
-	[self prepareController:fLinuxAppBuildController];
-	if (! [fLinuxAppBuildController verifyBuildTools:sender])
-	{
-		return;
-	}
-	
-	[fLinuxAppBuildController showWindow:self];
-}
-
--(IBAction)openForBuildOSX:(id)sender
-{
-	[self willOpenForBuild:sender];
-
-	if ( fOSXAppBuildController == nil )
-	{
-		fOSXAppBuildController = [[OSXAppBuildController alloc] initWithWindowNibName:@"OSXAppBuild"
-                                                                          projectPath:fAppPath];
-	}
-    
-    Rtt_ASSERT(fOSXAppBuildController);
-
-    if (! [fOSXAppBuildController verifyBuildTools:sender])
-    {
-        return;
-    }
-    
-    // If the simulator was not suspended prior to building, suspend it.
-    fSimulatorWasSuspended = fSimulator->GetPlayer()->GetRuntime().IsSuspended();
-    if( ! fSimulatorWasSuspended )
-    {
-        [self willChangeValueForKey:@"suspendResumeLabel"];
-        fSimulator->ToggleSuspendResume(false);
-        [self didChangeValueForKey:@"suspendResumeLabel"];
-    }
-    
-	[self willChangeValueForKey:@"projectPath"];
-	projectPath = fAppPath;
-	[self didChangeValueForKey:@"projectPath"];
-
-    // Set defaults
-	[self prepareController:fOSXAppBuildController];
-
-	[fOSXAppBuildController showWindow:self];
-}
-
--(IBAction)openForBuildTVOS:(id)sender
-{
-	[self willOpenForBuild:sender];
-
-	if ( fTVOSAppBuildController == nil )
-	{
-		fTVOSAppBuildController = [[TVOSAppBuildController alloc] initWithWindowNibName:@"TVOSAppBuild"
-                                                                          projectPath:fAppPath];
-	}
-    
-    Rtt_ASSERT(fTVOSAppBuildController);
-
-    if (! [fTVOSAppBuildController verifyBuildTools:sender])
-    {
-        return;
-    }
-    
-    // If the simulator was not suspended prior to building, suspend it.
-    fSimulatorWasSuspended = fSimulator->GetPlayer()->GetRuntime().IsSuspended();
-    if( ! fSimulatorWasSuspended )
-    {
-        [self willChangeValueForKey:@"suspendResumeLabel"];
-        fSimulator->ToggleSuspendResume(false);
-        [self didChangeValueForKey:@"suspendResumeLabel"];
-    }
-    
-	[self willChangeValueForKey:@"projectPath"];
-	projectPath = fAppPath;
-	[self didChangeValueForKey:@"projectPath"];
-
-    // Set defaults
-	[self prepareController:fTVOSAppBuildController];
-
-	[fTVOSAppBuildController showWindow:self];
-}
-
--(void)sheetDidEnd:(NSWindow*)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-
 }
 
 //This mimics growl send notification selector.
@@ -3506,44 +3191,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	notification.contentImage = iconData;
 	notification.soundName = NSUserNotificationDefaultSoundName;
 	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
-}
-
-
-//
-// Save and restore preferences in an application specific way so apps remember their individual settings
-//
--(void) saveAppSpecificPreference:(NSString *)prefName value:(NSString *)prefValue
-{
-    char keyId[CC_MD5_DIGEST_LENGTH*2 + 1];
-    MD5Hash( keyId, [projectPath UTF8String] );
-    
-    [[NSUserDefaults standardUserDefaults] setObject:prefValue forKey:[NSString stringWithFormat:@"%@/%s", prefName, keyId]];
-}
-
--(NSString *) restoreAppSpecificPreference:(NSString *)prefName defaultValue:(NSString *)defaultValue
-{
-	if (projectPath == nil)
-	{
-		return defaultValue;
-	}
-    char keyId[CC_MD5_DIGEST_LENGTH*2 + 1];
-    MD5Hash( keyId, [projectPath UTF8String] );
-    
-	NSString *value =  [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"%@/%s", prefName, keyId]];
-    
-    if ([value length] == 0)
-    {
-        return defaultValue;
-    }
-    else
-    {
-        return value;
-    }
-}
-
--(NSString *) getAppSpecificPreferenceKeyName:(NSString *)prefName
-{
-	return [self getAppSpecificPreferenceKeyName: prefName withProjectPath: self.projectPath];
 }
 
 -(NSString *) getAppSpecificPreferenceKeyName:(NSString *)prefName withProjectPath:(NSString *)projectDirectoryPath
@@ -3583,13 +3230,13 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 	if (fAgentMode)
 	{
 		fprintf(stderr, "Runtime error: %s\n", message ? [message UTF8String] : "Unknown runtime error");
-		fBuildProblemNotified = true;
+		fRuntimeErrorNotified = true;
 		return;
 	}
-	if ( !fBuildProblemNotified )
+	if ( !fRuntimeErrorNotified )
 	{
 		[self notifyWithTitle:@"Solar2D Simulator" description:message iconData:nil];
-		fBuildProblemNotified = true;
+		fRuntimeErrorNotified = true;
 	}
 }
 

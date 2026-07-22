@@ -8,7 +8,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #import <Foundation/Foundation.h>
-#import "NSString+Extensions.h"
 
 // Helper functions to help deal with Xcode command lines tools.
 @interface XcodeToolHelper : NSObject
@@ -25,13 +24,6 @@
 
 + (NSString*) pathForProductBuildUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning;
 
-+ (NSString*) pathForIOSDeviceInstallationUtility;
-+ (NSString*) pathForIOSDeviceSyslogUtility;
-+ (NSString*) pathForXcodeSimulatorDeviceInstallationUtility;
-+ (NSString*) pathForXcodeSimulatorDeviceSyslogUtility;
-+ (NSString*) pathForAndroidDeviceInstallationUtility;
-+ (NSString*) pathForAndroidDeviceSyslogUtility;
-
 + (NSString*) pathForCodesignFramework;
 + (NSString*) pathForResources;
 
@@ -40,12 +32,8 @@
 
 + (NSString*) getXcodePath;
 
-+ (double) getXcodeVersion;
-
 + (NSString *) findXcodePathFor:(NSString *)cmd;
 
 + (NSString *) launchTaskAndReturnOutput:(NSString *)cmd arguments:(NSArray *)args printWarning:(BOOL)printWarning;
-
-+ (NSDictionary *) loadSupportedIOSSimulatorDevices:(NSString *) osName;
 
 @end

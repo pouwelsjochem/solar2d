@@ -87,52 +87,6 @@
                             <menuItem isSeparatorItem="YES" id="79">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Build" id="535">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Build" id="536">
-                                    <items>
-                                        <menuItem title="iOS…" keyEquivalent="b" id="537">
-                                            <connections>
-                                                <action selector="openForBuildiOS:" target="207" id="549"/>
-                                                <binding destination="207" name="enabled" keyPath="self.isBuildAvailable" id="543"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Android..." keyEquivalent="B" id="538">
-                                            <connections>
-                                                <action selector="openForBuildAndroid:" target="207" id="551"/>
-                                                <binding destination="207" name="enabled" keyPath="self.isBuildAvailable" id="546"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="macOS…" hidden="YES" keyEquivalent="b" id="566">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="openForBuildOSX:" target="207" id="MNH-9S-pLd"/>
-                                                <binding destination="207" name="enabled" keyPath="self.isBuildAvailable" id="bst-bl-7Gm"/>
-                                                <binding destination="207" name="hidden" keyPath="self.isOSXBuildHidden" previousBinding="bst-bl-7Gm" id="ozY-E9-FUr"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="tvOS…" hidden="YES" keyEquivalent="b" id="Z63-GH-y2X">
-                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                            <connections>
-                                                <action selector="openForBuildTVOS:" target="207" id="HuU-xc-g2N"/>
-                                                <binding destination="207" name="enabled" keyPath="self.isBuildAvailable" id="cVm-oX-Usx"/>
-                                                <binding destination="207" name="hidden" keyPath="self.isTVOSBuildHidden" previousBinding="cVm-oX-Usx" id="lvv-ug-DEh"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Linux (beta)…" hidden="YES" keyEquivalent="B" id="B6O-ap-5j0">
-                                            <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES"/>
-                                            <connections>
-                                                <action selector="openForBuildLinux:" target="207" id="wGN-yK-OwW"/>
-                                                <binding destination="207" name="enabled" keyPath="self.isBuildAvailable" id="VvN-Yf-Amt"/>
-                                                <binding destination="207" name="hidden" keyPath="self.isLinuxBuildHidden" previousBinding="VvN-Yf-Amt" id="IDR-tC-wLU"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="371">
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                            </menuItem>
                             <menuItem title="Close" keyEquivalent="w" id="73">
                                 <connections>
                                     <action selector="performClose:" target="-1" id="625"/>

@@ -56,11 +56,12 @@ unobstructed surface. Pass
 `-simulator-rounded-corners YES` or other launch-time device configuration flags
 when device chrome or a specific geometry matters.
 
-# Building your app with simulator
+# Building your app with CoronaBuilder
 
-Note, that updated code would only work in Simulator. Device builds (like iOS, Android) require special templates to be built first.
+The Simulator only runs projects; it does not provide build dialogs. Device and desktop packages are built separately with `CoronaBuilder`.
+Some platforms require templates to be built first. CoronaBuilder resolves those templates and related build resources from the adjacent `Corona Simulator.app` bundle.
 
 ## Building iOS/tvOS apps
 
 First one would need to build templates. To see how, check out the [README](../iphone/README.md) in `iphone` directory.
-When templates are built and in place, open `CoronaBuilder.xcodeproj`. Then select `CoronaBuilder` target and build it (⌘B). When it is built you can (in the same project) select `rttplayer` target and run it. Now you should be able to build iOS applications from newly built Simulator.
+When templates are built and in place, open `CoronaBuilder.xcodeproj`, select the `CoronaBuilder` target, and build it (⌘B).
