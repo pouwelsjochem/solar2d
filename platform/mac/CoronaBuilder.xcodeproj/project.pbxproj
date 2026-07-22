@@ -92,7 +92,7 @@
 		A4ED10DB14D2A07B00ECF49E /* Rtt_Lua.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4ED10D914D2A07B00ECF49E /* Rtt_Lua.cpp */; };
 		A4ED10DE14D2A0D700ECF49E /* Rtt_AppleDictionaryWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4ED10DD14D2A0D700ECF49E /* Rtt_AppleDictionaryWrapper.mm */; };
 		A4ED11BF14D34CEF00ECF49E /* create_build_properties.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4ED11BC14D34A2D00ECF49E /* create_build_properties.lua */; };
-		A4ED11C014D34CEF00ECF49E /* iPhonePackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4BABC1414CF451600696484 /* iPhonePackageApp.lua */; };
+		A4ED11C014D34CEF00ECF49E /* AppleMobilePackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4BABC1414CF451600696484 /* AppleMobilePackageApp.lua */; };
 		A4F2AE7A16E676B300814C7B /* Rtt_DeviceBuildData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4F2AE7816E676B300814C7B /* Rtt_DeviceBuildData.cpp */; };
 		A4FCD3F114CF417C0004E91D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FCD3F014CF417C0004E91D /* Cocoa.framework */; };
 		C200AAF119638457005828AA /* CoronaPListSupport.lua in Sources */ = {isa = PBXBuildFile; fileRef = C200AAF019638457005828AA /* CoronaPListSupport.lua */; };
@@ -103,7 +103,9 @@
 		C22BAF6A1C1B8D5300EF1795 /* Rtt_TVOSAppPackager.mm in Sources */ = {isa = PBXBuildFile; fileRef = C22BAF681C1B8D5300EF1795 /* Rtt_TVOSAppPackager.mm */; };
 		C22BAF721C1B8D9800EF1795 /* Rtt_OSXAppPackager.mm in Sources */ = {isa = PBXBuildFile; fileRef = C22BAF701C1B8D9800EF1795 /* Rtt_OSXAppPackager.mm */; };
 		C22BAF791C1B8FD000EF1795 /* OSXPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = C22BAF751C1B8FBD00EF1795 /* OSXPackageApp.lua */; };
-		C22BAF7A1C1B8FD000EF1795 /* tvosPackageApp.lua in Sources */ = {isa = PBXBuildFile; fileRef = C22BAF761C1B8FBD00EF1795 /* tvosPackageApp.lua */; };
+		C22BAF7A1C1B8FD000EF1795 /* TVOSPackageSupport.lua in Sources */ = {isa = PBXBuildFile; fileRef = C22BAF761C1B8FBD00EF1795 /* TVOSPackageSupport.lua */; };
+		E9A4C00430A0000000000001 /* IOSPackageSupport.lua in Sources */ = {isa = PBXBuildFile; fileRef = E9A4C00530A0000000000001 /* IOSPackageSupport.lua */; };
+		E9A4C00130A0000000000001 /* Rtt_AppleMobileAppPackager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9A4C00230A0000000000001 /* Rtt_AppleMobileAppPackager.mm */; };
 		C2471D7819882B260076CA1F /* CoronaSimulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = C2471D7719882B260076CA1F /* CoronaSimulator.icns */; };
 		C25005EF1BA76836000308A7 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C25005ED1BA76836000308A7 /* Rtt_FileSystem.cpp */; };
 		C2756C4C1C5722DA00BE3194 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C4B1C5722DA00BE3194 /* NSString+Extensions.m */; };
@@ -485,7 +487,7 @@
 		A4BABC0E14CF44F100696484 /* ListKeyStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListKeyStore.h; path = ../../platform/shared/ListKeyStore.h; sourceTree = "<group>"; };
 		A4BABC1114CF44FF00696484 /* Rtt_AndroidAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AndroidAppPackager.cpp; path = ../../platform/android/Rtt_AndroidAppPackager.cpp; sourceTree = "<group>"; };
 		A4BABC1214CF44FF00696484 /* Rtt_AndroidAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AndroidAppPackager.h; path = ../../platform/android/Rtt_AndroidAppPackager.h; sourceTree = "<group>"; };
-		A4BABC1414CF451600696484 /* iPhonePackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = iPhonePackageApp.lua; path = ../resources/iPhonePackageApp.lua; sourceTree = "<group>"; };
+		A4BABC1414CF451600696484 /* AppleMobilePackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AppleMobilePackageApp.lua; path = ../resources/AppleMobilePackageApp.lua; sourceTree = "<group>"; };
 		A4BABCD614CF4AD100696484 /* Rtt_TargetDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_TargetDevice.cpp; path = ../../platform/shared/Rtt_TargetDevice.cpp; sourceTree = "<group>"; };
 		A4BABCD714CF4AD200696484 /* Rtt_TargetDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_TargetDevice.h; path = ../../platform/shared/Rtt_TargetDevice.h; sourceTree = "<group>"; };
 		A4BABF6514CF4CC900696484 /* hmac_sha2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hmac_sha2.c; sourceTree = "<group>"; };
@@ -528,7 +530,10 @@
 		C22BAF711C1B8D9800EF1795 /* Rtt_OSXAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_OSXAppPackager.h; sourceTree = "<group>"; };
 		C22BAF741C1B8DF500EF1795 /* Rtt_TVOSAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_TVOSAppPackager.h; sourceTree = "<group>"; };
 		C22BAF751C1B8FBD00EF1795 /* OSXPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = OSXPackageApp.lua; path = ../resources/OSXPackageApp.lua; sourceTree = "<group>"; };
-		C22BAF761C1B8FBD00EF1795 /* tvosPackageApp.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = tvosPackageApp.lua; path = ../resources/tvosPackageApp.lua; sourceTree = "<group>"; };
+		C22BAF761C1B8FBD00EF1795 /* TVOSPackageSupport.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TVOSPackageSupport.lua; path = ../resources/TVOSPackageSupport.lua; sourceTree = "<group>"; };
+		E9A4C00530A0000000000001 /* IOSPackageSupport.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = IOSPackageSupport.lua; path = ../resources/IOSPackageSupport.lua; sourceTree = "<group>"; };
+		E9A4C00230A0000000000001 /* Rtt_AppleMobileAppPackager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Rtt_AppleMobileAppPackager.mm; path = ../../platform/mac/Rtt_AppleMobileAppPackager.mm; sourceTree = "<group>"; };
+		E9A4C00330A0000000000001 /* Rtt_AppleMobileAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AppleMobileAppPackager.h; path = ../../platform/mac/Rtt_AppleMobileAppPackager.h; sourceTree = "<group>"; };
 		C2471D7719882B260076CA1F /* CoronaSimulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CoronaSimulator.icns; sourceTree = "<group>"; };
 		C25005ED1BA76836000308A7 /* Rtt_FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_FileSystem.cpp; path = ../../librtt/Core/Rtt_FileSystem.cpp; sourceTree = "<group>"; };
 		C25005EE1BA76836000308A7 /* Rtt_FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_FileSystem.h; path = ../../librtt/Core/Rtt_FileSystem.h; sourceTree = "<group>"; };
@@ -779,6 +784,8 @@
 		A4BAC00A14CF7D8400696484 /* apple */ = {
 			isa = PBXGroup;
 			children = (
+				E9A4C00330A0000000000001 /* Rtt_AppleMobileAppPackager.h */,
+				E9A4C00230A0000000000001 /* Rtt_AppleMobileAppPackager.mm */,
 				A472900F1AE83E1900BC088D /* CoronaLuaObjC.h */,
 				A47290101AE83E1900BC088D /* CoronaLuaObjC.mm */,
 				C2756C4A1C5722DA00BE3194 /* NSString+Extensions.h */,
@@ -964,10 +971,11 @@
 				C200AAF019638457005828AA /* CoronaPListSupport.lua */,
 				A4ED11BC14D34A2D00ECF49E /* create_build_properties.lua */,
 				C217F6CB19525FA400D3BFFE /* dkjson.lua */,
-				A4BABC1414CF451600696484 /* iPhonePackageApp.lua */,
+				E9A4C00530A0000000000001 /* IOSPackageSupport.lua */,
+				A4BABC1414CF451600696484 /* AppleMobilePackageApp.lua */,
 				C217F6CC19525FA400D3BFFE /* json.lua */,
 				C22BAF751C1B8FBD00EF1795 /* OSXPackageApp.lua */,
-				C22BAF761C1B8FBD00EF1795 /* tvosPackageApp.lua */,
+				C22BAF761C1B8FBD00EF1795 /* TVOSPackageSupport.lua */,
 				F53C328E2404E2C000BC2BED /* CoronaBuilderPluginCollector.lua */,
 				F5BEA4A723FFE97300206A6A /* CoronaOfflineiOSPackager.lua */,
 			);
@@ -1327,15 +1335,17 @@
 				F5DB5B312113702800EC5CBC /* linuxPackageApp.lua in Sources */,
 				C205D57F1C7D271D000A8EE1 /* CoronaBuilder.lua in Sources */,
 				C22BAF791C1B8FD000EF1795 /* OSXPackageApp.lua in Sources */,
-				C22BAF7A1C1B8FD000EF1795 /* tvosPackageApp.lua in Sources */,
+				C22BAF7A1C1B8FD000EF1795 /* TVOSPackageSupport.lua in Sources */,
 				C200AAF119638457005828AA /* CoronaPListSupport.lua in Sources */,
 				C217F6CF19525FC200D3BFFE /* dkjson.lua in Sources */,
 				C217F6D019525FC200D3BFFE /* json.lua in Sources */,
 				C29CB61219525CD800D1F011 /* re.lua in Sources */,
 				A4ED11BF14D34CEF00ECF49E /* create_build_properties.lua in Sources */,
-				A4ED11C014D34CEF00ECF49E /* iPhonePackageApp.lua in Sources */,
+				E9A4C00430A0000000000001 /* IOSPackageSupport.lua in Sources */,
+				A4ED11C014D34CEF00ECF49E /* AppleMobilePackageApp.lua in Sources */,
 				F547C7F71ED28BA600C4ED92 /* BuilderPluginDownloader.lua in Sources */,
 				A4BABBF214CF446E00696484 /* Rtt_IOSAppPackager.mm in Sources */,
+				E9A4C00130A0000000000001 /* Rtt_AppleMobileAppPackager.mm in Sources */,
 				A4BABBF514CF447A00696484 /* Rtt_PlatformAppPackager.cpp in Sources */,
 				A4BABBFE14CF44D500696484 /* Rtt_PlatformDictionaryWrapper.cpp in Sources */,
 				A4BABBFF14CF44D500696484 /* Rtt_PlatformObjectWrapper.cpp in Sources */,

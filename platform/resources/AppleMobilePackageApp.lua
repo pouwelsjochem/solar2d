@@ -1,14 +1,14 @@
 ------------------------------------------------------------------------------
 --
--- This file is part of the Corona game engine.
+-- This file is part of the Solar2D game engine.
 -- For overview and more information on licensing please refer to README.md 
 -- Home page: https://github.com/coronalabs/corona
--- Contact: support@coronalabs.com
+-- Contact: support@Solar2D.com
 --
 ------------------------------------------------------------------------------
 
 ----
----- Complete build of tvOS app by merging local project assets with app built
+---- Complete build of an Apple mobile app by merging local project assets with app built
 ---- on Corona servers.
 ----
 
@@ -18,13 +18,54 @@ local lfs = require('lfs')
 -- defines modifyPlist()
 local CoronaPListSupport = require("CoronaPListSupport")
 local captureCommandOutput = CoronaPListSupport.captureCommandOutput
+local IOSPackageSupport = require("IOSPackageSupport")
+local TVOSPackageSupport = require("TVOSPackageSupport")
 
 local xcodetoolhelper = nil
+local platformConfig = nil
+local platformSupport = nil
 
+local platformConfigs = {
+	ios = {
+		name = "iOS",
+		settingsKey = "ios",
+		deviceSDK = "iphoneos",
+		simulatorSDK = "iphonesimulator",
+		developerPlatform = "iPhoneOS",
+		targetDevices = { "iphone", "ipad" },
+		appIcon = "AppIcon",
+		extensionFilesDirectory = "iOSAppxFiles",
+	},
+	tvos = {
+		name = "tvOS",
+		settingsKey = "tvos",
+		deviceSDK = "appletvos",
+		simulatorSDK = "appletvsimulator",
+		developerPlatform = "AppleTVOS",
+		targetDevices = { "tv" },
+		appIcon = "AppIconTV",
+		launchImage = "LaunchImageTV",
+		extensionFilesDirectory = "tvOSAppxFiles",
+	},
+}
 
--- Read a value from the user's preferences
-local function getPreference( prefName )
-	return captureCommandOutput("defaults read com.coronalabs.Corona_Simulator "..tostring(prefName))
+local platformSupports = {
+	ios = IOSPackageSupport,
+	tvos = TVOSPackageSupport,
+}
+
+function configureAppleMobilePackager( platformName, minimumDeploymentTarget )
+	platformConfig = assert(platformConfigs[platformName], "Unsupported Apple mobile platform: " .. tostring(platformName))
+	platformSupport = assert(platformSupports[platformName], "Missing Apple mobile support module: " .. tostring(platformName))
+	platformConfig.minimumDeploymentTarget = assert(minimumDeploymentTarget, "Missing deployment target for " .. platformConfig.name)
+end
+
+local function getPlatformSettings( options )
+	return options.settings and options.settings[platformConfig.settingsKey]
+end
+
+local function isSimulatorBuild( options )
+	return options.sdkType == platformConfig.simulatorSDK
 end
 
 -- Double quote a string escaping backslashes and any double quotes
@@ -65,13 +106,13 @@ local function isAlpha( val )
 	if val >= "A" and val <= "Z" then
 		return true
 	end
-	
+
 	if val >= "a" and val <= "z" then
 		return true
 	end
-	
+
 	return false	-- not Alpha
-	
+
 end
 
 --------------------------------------------------------------------------------
@@ -87,9 +128,9 @@ local function isNumber( val )
 	if val >= "0" and val <= "9" then
 		return true
 	end
-	
+
 	return false	-- not number
-	
+
 end
 
 --------------------------------------------------------------------------------
@@ -104,17 +145,17 @@ end
 local function isDotDash( val, allowDots )
 
 	local char2 = "-"		-- default is to not test for dot
-	
+
 	if allowDots then
 		char2 = "."		-- test for dot
 	end
-	
+
 	if val == "-" or val == char2 then
 		return true
 	end
-	
+
 	return false	-- not dot or dash
-	
+
 end
 
 --------------------------------------------------------------------------------
@@ -134,12 +175,12 @@ end
 local function sanitizeBundleString( bundleStr, allowDots )
 
 	local newBundleStr	= ""	-- new string
-	
+
 	local val
-	
+
 	for i = 1, string.len( bundleStr ) do
 		val = string.sub( bundleStr, i, i )
-		
+
 		if isAlpha( val ) then
 			newBundleStr = newBundleStr .. val
 		elseif isNumber( val ) then
@@ -149,9 +190,9 @@ local function sanitizeBundleString( bundleStr, allowDots )
 		else
 			newBundleStr = newBundleStr .. "-"
 		end
-		
+
 	end -- do
-	
+
 	return newBundleStr
 
 end
@@ -186,7 +227,7 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 	# rsync goes haywire if either the source or destination are empty
 	if [ -z "$SRC_DIR" -o -z "$DST_DIR" ]
 	then
-		echo "tvosPackageApp: invalid SRC_DIR or DST_DIR for rsync"
+		echo "AppleMobilePackageApp: invalid SRC_DIR or DST_DIR for rsync"
 		exit 1
 	fi
 
@@ -208,7 +249,7 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 			-- we have actual files to exclude
 			print("Excluding specified files from build: ")
 			for platform,excludes in pairs(options.settings.excludeFiles) do
-				if platform == "all" or platform == "tvos" then
+				if platform == "all" or platform == platformConfig.settingsKey then
 					for index,pattern in ipairs(excludes) do
 						print("   excluding: "..pattern)
 						pattern = pattern:gsub("'", "'\\''") -- quote single quotes
@@ -224,6 +265,7 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 	args = args.."set -x\n"
 
 	args = args.."SRC_DIR="..src.."\n"
+
 	args = args.."DST_DIR="..dst.."\n"
 
 	if not should_preserve then
@@ -242,16 +284,16 @@ local function getCopyResourcesScript( src, dst, should_preserve, options )
 
 	return script
 end
---------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------
 local function getCodesignScript( entitlements, path, identity, developerBase )
 
 	codesign_allocate = xcodetoolhelper['codesign_allocate']
 	codesign = xcodetoolhelper['codesign']
 
-	-- Remove any extended macOS attributes from files in the bundle because
-	-- codesign doesn't like them
-	local removeXattrs = "/usr/bin/xattr -cr "..quoteString(path) .." && "
+    -- Remove any extended macOS attributes from files in the bundle because
+    -- codesign doesn't like them
+    local removeXattrs = "/usr/bin/xattr -cr "..quoteString(path) .." && "
 
 	-- quote for spaces
 	codesign_allocate = quoteString(codesign_allocate)
@@ -259,16 +301,11 @@ local function getCodesignScript( entitlements, path, identity, developerBase )
 	developerBase = quoteString(developerBase)
 
 	local devbase_shell = "DEVELOPER_BASE="..developerBase.."\n"
-	local export_path = [==[
-export PATH="$DEVELOPER_BASE/Platforms/AppleTVOS.platform/Developer/usr/bin:$DEVELOPER_BASE/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-]==]
+	local export_path = "export PATH=\"$DEVELOPER_BASE/Platforms/" .. platformConfig.developerPlatform .. ".platform/Developer/usr/bin:$DEVELOPER_BASE/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin\"\n"
 
 	local script = 'export CODESIGN_ALLOCATE=' .. codesign_allocate .. '\n'
 
 	local quotedpath = quoteString( path )
-
-	-- TODO: Do we need to specify --deep so that embedded Frameworks are correctly signed? 
-	-- Xcode 7.1 doesn't use --deep, so leave out for now...
 	local cmd = removeXattrs .. codesign .. " --verbose -f -s "..quoteString(identity).." --entitlements "..entitlements.." "..quotedpath
 
 	-- print("getCodesignScript: codesign: ".. codesign)
@@ -277,7 +314,15 @@ export PATH="$DEVELOPER_BASE/Platforms/AppleTVOS.platform/Developer/usr/bin:$DEV
 	return devbase_shell .. export_path .. script .. cmd
 end
 
---------------------------------------------------------------------------------
+local function fileExists( filename )
+	local f = io.open( filename, "r" )
+	if ( f ) then
+		io.close( f )
+	end
+	return ( nil ~= f )
+end
+
+
 
 local function getCodesignFrameworkScript( path, identity, developerBase )
 
@@ -306,395 +351,7 @@ end
 
 --------------------------------------------------------------------------------
 
--- Generic helper function to write the contents of a lua table to a json file.
--- Returns a boolean indicating if the attempt was successful, and an error message if one is encountered.
-local function writeLuaTableToJsonFile( filePath, luaTable )
-	local file, err = io.open( filePath, "w" )
-	if ( file ) then
-		local contents = json.prettify( luaTable )
-		file:write( contents )
-		io.close( file )
-		return true
-	else
-		return false, err
-	end
-end
-
--- Generic helper function to create a new folder at `path`, as well as a new `path`/Contents.json with the
--- data provided by the contents parameter.
--- Returns an error message, or nil if the attempt was successful.
-local function createBundle( path, contents )
-	local bundleLocation = path
-	local creationStatus, creationErrorMessage = lfs.mkdir( bundleLocation )
-	if ( creationStatus == false ) then
-		if ( creationErrorMessage ) then
-			return ( "Could not create bundle at " .. path .. ": " .. creationErrorMessage )
-		else
-			return ( "Could not create bundle at " .. path )
-		end
-	end
-
-	-- Write the Contents.json
-	local contentJsonPath = makepath( bundleLocation, "Contents.json" )
-	creationStatus, creationErrorMessage = writeLuaTableToJsonFile( contentJsonPath, contents )
-	if ( creationStatus == false ) then
-		if ( creationErrorMessage ) then
-			return ( "Could not create bundle descriptor at " .. contentJsonPath .. ": " .. creationErrorMessage )
-		else
-			return ( "Could not create bundle descriptor at " .. contentJsonPath )
-		end
-	end
-
-	return nil
-end
-
--- As `createBundle`, but will create all the nested bundles as well to make a properly formatted image stack.
--- Returns an error message, or nil if the attempt was successful.
-local function createImageStackBundle( path, defaultContents, assetDir, assetTable )
-	-- Get our parent bundle's contents.
-	local bundleContents = {
-		layers = {},
-		info = defaultContents.info
-	}
-	for k,v in pairs( assetTable ) do
-		table.insert( bundleContents.layers, { filename = "Layer"..k..".imagestack" } )
-	end
-
-	-- Create our parent bundle.
-	local createBundleError = createBundle( path, bundleContents )
-	if ( createBundleError ) then
-		return createBundleError
-	end
-
-	-- Create each layer's bundle.
-	for k,v in pairs( assetTable ) do
-		-- Create layer bundle.
-		local layerBundle = makepath( path, "Layer"..k..".imagestack" )
-		local createBundleError = createBundle( layerBundle, defaultContents )
-		if ( createBundleError ) then
-			return createBundleError
-		end
-
-		-- Get the filename of the asset.
-		local assetFilename = "asset.png"
-
-		-- Create the contained imageset
-		local imageSetBundleLocation = makepath( layerBundle, "Content.imageset" )
-		local imageSetBundleContents = {
-			images = {
-				{
-					idiom = "tv",
-					scale = "1x",
-					filename = assetFilename,
-				},
-			},
-			info = defaultContents.info,
-		}
-		createBundleError = createBundle( imageSetBundleLocation, imageSetBundleContents )
-		if ( createBundleError ) then
-			return createBundleError
-		end
-
-		-- Copy the asset over.
-		local result, errMsg = runScript( "cp " .. quoteString( makepath( assetDir, v ) ) .. " " .. quoteString( makepath( imageSetBundleLocation, assetFilename ) ) )
-		if ( result ~= 0 ) then
-			return ( "Could not find resource " .. tostring( v ) .. ". Please check your build.settings and make sure the file exists in your project." )
-		end
-	end
-
-	return nil
-end
-
-function getCoronaXcodeAssetBundleLocation( options )
-	return makepath( options.dstDir, options.dstFile ) .. ".app/.build/Corona.xcassets"
-end
-
--- Provides support for icon, top shelf, and launch screen images without users having to open Xcode.
--- This function will create a correctly formed Corona.xcassets bundle, with the required json definitions
--- and files provided into the correct places.
--- Returns true if successful, an error message if there was an issue in creating the asset, or false if one is not needed.
-local function getCoronaXcodeAssetBundle( options )
-	local tvOSSettings = options.settings.tvos
-	local createIconAssets = ( tvOSSettings.icon and tvOSSettings.icon.small and tvOSSettings.icon.large and tvOSSettings.topShelfImage and tvOSSettings.topShelfImageWide )
-	local createLaunchImage = ( tvOSSettings.launchImage ~= nil )
-
-	-- Reused variables.
-	local creationStatus, creationErrorMessage
-
-	-- Starting with Xcode 8.0 there is now a wide Top Shelf image. Warn users about this update and prompt them to add the resource.
-	if ( tvOSSettings.icon and tvOSSettings.icon.small and tvOSSettings.icon.large and tvOSSettings.topShelfImage and not tvOSSettings.topShelfImageWide ) then
-		return ( "Starting with Xcode 8.0, a new 2320x720 topShelfImageWide asset is required. See the [Apple TV / tvOS guide](https://docs.coronalabs.com/daily/guide/index.html)." )
-	end
-
-	-- Determine if we need a bundle created.
-	if ( createIconAssets or createLaunchImage ) then
-		setStatus( "Creating Corona.xcassets" )
-
-		-- Create asset bundle folder.
-		local bundleLocation = getCoronaXcodeAssetBundleLocation( options )
-		local defaultContentsJson = {
-			info = {
-				author = "CoronaSDK",
-				version = 1,
-			},
-		}
-		creationErrorMessage = createBundle( bundleLocation, defaultContentsJson )
-		if ( creationErrorMessage ) then
-			return creationErrorMessage
-		end
-
-		-- Create launch image bundle.
-		if ( createLaunchImage ) then
-			setStatus( "Creating Corona.xcassets - launch image" )
-
-			local launchImageBundleLocation = makepath( bundleLocation, "tvOS LaunchImage.launchimage" )
-			local launchImageContents = {
-				images = {
-					{
-						idiom = "tv",
-						extent = "full-screen",
-						orientation = "landscape",
-						scale = "1x",
-						["minimum-system-version"] = "9.0",
-						filename = "LaunchImage1920.png",
-					},
-				},
-				info = defaultContentsJson.info
-			}
-			creationErrorMessage = createBundle( launchImageBundleLocation, launchImageContents )
-			if ( creationErrorMessage ) then
-				return creationErrorMessage
-			end
-
-			local result, errMsg = runScript( "cp " .. quoteString( makepath( options.srcAssets, tvOSSettings.launchImage ) ) .. " " .. quoteString( makepath( launchImageBundleLocation, "LaunchImage1920.png" ) ) )
-			if ( result ~= 0 ) then
-				return ( "Could not find resource " .. tostring( tvOSSettings.launchImage ) .. ". Please check your build.settings and make sure the file exists in your project." )
-			end
-		end
-
-		-- Create icon and top shelf image bundles
-		if ( createIconAssets ) then
-			setStatus( "Creating Corona.xcassets - icon assets" )
-
-			-- Create parent bundle.
-			local iconBundleLocation = makepath( bundleLocation, "tvOS Icon.brandassets" )
-			local iconBundleContents = {
-				assets = {
-					{
-						role = "primary-app-icon",
-						idiom = "tv",
-						size = "1280x768",
-						filename = "App Icon - Large.imagestack",
-					},
-					{
-						role = "primary-app-icon",
-						idiom = "tv",
-						size = "400x240",
-						filename = "App Icon - Small.imagestack",
-					},
-					{
-						role = "top-shelf-image-wide",
-						idiom = "tv",
-						size = "2320x720",
-						filename = "Top Shelf Image Wide.imageset",
-					},
-					{
-						role = "top-shelf-image",
-						idiom = "tv",
-						size = "1920x720",
-						filename = "Top Shelf Image.imageset",
-					},
-				},
-				info = defaultContentsJson.info
-			}
-			creationErrorMessage = createBundle( iconBundleLocation, iconBundleContents )
-			if ( creationErrorMessage ) then
-				return creationErrorMessage
-			end
-
-			-- Create top shelf bundle.
-			local topShelfBundleLocation = makepath( iconBundleLocation, "Top Shelf Image.imageset" )
-			local topShelfBundleContents = {
-				images = {
-					{
-						idiom = "tv",
-						scale = "1x",
-						filename = "TopShelf1920.png",
-					},
-				},
-				info = defaultContentsJson.info
-			}
-			creationErrorMessage = createBundle( topShelfBundleLocation, topShelfBundleContents )
-			if ( creationErrorMessage ) then
-				return creationErrorMessage
-			end
-			
-			local result, errMsg = runScript( "cp " .. quoteString( makepath( options.srcAssets, tvOSSettings.topShelfImage ) ) .. " " .. quoteString( makepath( topShelfBundleLocation, "TopShelf1920.png" ) ) )
-			if ( result ~= 0 ) then
-				return ( "Could not find resource " .. tostring( tvOSSettings.topShelfImage ) .. ". Please check your build.settings and make sure the file exists in your project." )
-			end
-
-			-- Create top shelf wide bundle.
-			local topShelfWideBundleLocation = makepath( iconBundleLocation, "Top Shelf Image Wide.imageset" )
-			local topShelfWideBundleContents = {
-				images = {
-					{
-						idiom = "tv",
-						scale = "1x",
-						filename = "TopShelf2320.png",
-					},
-				},
-				info = defaultContentsJson.info
-			}
-			creationErrorMessage = createBundle( topShelfWideBundleLocation, topShelfWideBundleContents )
-			if ( creationErrorMessage ) then
-				return creationErrorMessage
-			end
-			
-			local result, errMsg = runScript( "cp " .. quoteString( makepath( options.srcAssets, tvOSSettings.topShelfImageWide ) ) .. " " .. quoteString( makepath( topShelfWideBundleLocation, "TopShelf2320.png" ) ) )
-			if ( result ~= 0 ) then
-				return ( "Could not find resource " .. tostring( tvOSSettings.topShelfImageWide ) .. ". Please check your build.settings and make sure the file exists in your project." )
-			end
-
-			-- Create large icon bundle.
-			creationErrorMessage = createImageStackBundle( makepath( iconBundleLocation, "App Icon - Small.imagestack" ), defaultContentsJson, options.srcAssets, tvOSSettings.icon.small )
-			if ( creationErrorMessage ) then
-				return creationErrorMessage
-			end
-
-			creationErrorMessage = createImageStackBundle( makepath( iconBundleLocation, "App Icon - Large.imagestack" ), defaultContentsJson, options.srcAssets, tvOSSettings.icon.large )
-			if ( creationErrorMessage ) then
-				return creationErrorMessage
-			end
-		end
-
-		return true
-	else
-		return false
-	end
-end
-
--- actool has a bug when passing the "output-partial-info-plist" parameter in which it will
--- fail with paths that contain a space. So, we use a tmpname here.
-local actoolTmpDir = os.tmpname()
-function getActoolPlistLocation( options )
-	return actoolTmpDir
-end
-
-
--- Fetches and prepares for execution of `actool`
--- As part of this process, it will create a 
--- Returns:
---		nil if the tool is not needed
---		The command (string) if it is to be run
---		false if an error has occurred, followed by the error message
-function getActoolCommand( options )
-	-- Get and make sure actool exists.
-	local actool = options.sdkRoot .. "/usr/bin/actool"
-	if ( lfs.attributes( actool ) == nil ) then
-		return "Unable to find Xcode utility actool. Be sure to update to Xcode 7.1 or higher."
-	end
-
-	-- Start building actool command.
-	local cmd = quoteString( actool )
-
-	-- Other static parameters.
-	cmd = cmd .. " --output-format human-readable-text"
-	cmd = cmd .. " --warnings"
-	cmd = cmd .. " --compress-pngs"
-	cmd = cmd .. " --target-device tv"
-	cmd = cmd .. " --minimum-deployment-target 9.0"
-	cmd = cmd .. " --notices"
-
-	-- Set where we're outputting plist information to.
-	cmd = cmd .. " --output-partial-info-plist " .. quoteString( getActoolPlistLocation( options ) )
-
-	-- We require these specific icon/launch image names.
-	cmd = cmd .. " --app-icon " .. quoteString( "tvOS Icon" )
-	cmd = cmd .. " --launch-image " .. quoteString( "tvOS Launch Image" )
-
-	-- Check for on-demand-resources
-	if ( options.settings.tvos.enableOnDemandResources ) then
-		cmd = cmd .. " --enable-on-demand-resources YES"
-	else
-		cmd = cmd .. " --enable-on-demand-resources NO"
-	end
-
-	-- Filtered for device model
-	if ( options.settings.tvos.filterForDeviceModel ) then
-		cmd = cmd .. " --filter-for-device-model " .. quoteString( options.settings.tvos.filterForDeviceModel )
-	end
-
-	-- Filter for device OS version
-	if ( options.settings.tvos.filterForDeviceOSVersion ) then
-		cmd = cmd .. " --filter-for-device-os-version " .. quoteString( options.settings.tvos.filterForDeviceOSVersion )
-	end
-
-	-- Leaderboard identifier prefix
-	if ( options.settings.tvos.leaderboardIdentifierPrefix ) then
-		cmd = cmd .. " --leaderboard-set-identifier-prefix " .. quoteString( options.settings.tvos.leaderboardIdentifierPrefix )
-	end
-
-	-- Determine if we're building for simulator vs an actual device.
-	if ( options.targetDevice == 130 ) then
-		cmd = cmd .. " --platform " .. "appletvsimulator"
-	else
-		cmd = cmd .. " --platform " .. "appletvos"
-	end
-
-	-- TODO: Generate asset specification plist.
-	-- This is more important once we have on-demand resources.
-	--cmd = cmd .. " --asset-pack-output-specifications " .. pathToAssetSpecificationPlist
-
-	-- Build compile target list.
-	cmd = cmd .. " --compile " .. options.appBundleFile
-
-	-- Add any local assets
-	-- TODO: Follow exclusion rules.
-	local assetList = {}
-	local function findAssetsInPath( path )
-		for hndl in lfs.dir( path ) do
-			if ( hndl ~= "." and hndl ~= ".." ) then
-				local hndlPath = makepath( path, hndl )
-				local attr, err = lfs.attributes( hndlPath )
-				if attr and attr.mode == "directory"  then
-					if ( string.find( hndl, ".xcassets" ) ) then
-						table.insert( assetList, hndlPath )
-					else
-						findAssetsInPath( hndlPath )
-					end
-				end
-			end
-		end
-	end
-	-- findAssetsInPath( options.srcAssets )
-
-	-- Attempt to get our own Corona.xcassets bundle. If one is available (any resources defined), include it here.
-	-- Assets defined in the Corona.xcassets bundle seem to overwrite any resources defined above.
-	local coronaXcodeAssetBundle = getCoronaXcodeAssetBundle( options )
-	if ( coronaXcodeAssetBundle == true ) then
-		table.insert( assetList, getCoronaXcodeAssetBundleLocation( options ) )
-	elseif ( type(coronaXcodeAssetBundle) == "string" ) then
-		return false, coronaXcodeAssetBundle
-	end
-
-	-- Compile each asset. If we have no assets to compile, return nil
-	if ( #assetList > 0 ) then
-		for k,v in pairs( assetList ) do
-			print( "Using Xcode asset: " .. v )
-			cmd = cmd .. " " .. quoteString( v )
-		end
-	else
-		return nil
-	end
-
-	return cmd
-end
-
---------------------------------------------------------------------------------
-
 function runScript( script, debugLevel )
-	local debugLevel = debugLevel or 0
 	local errMsg = nil
 
 	print("Running: ".. tostring(script))
@@ -714,6 +371,26 @@ function runScript( script, debugLevel )
 	os.remove( tmpFile )
 
 	return exitCode, errMsg
+end
+
+--------------------------------------------------------------------------------
+
+-- check if app has any appx in app folder
+local function checkAppHasAPPX( appPath )
+	local pluginsPath = appPath:gsub('["\']', "") .. "/PlugIns"
+
+	-- Check if PlugIns folder exists
+	if lfs.attributes(pluginsPath, "mode") == "directory" then
+
+		-- Find .appex files inside PlugIns
+		for file in lfs.dir(pluginsPath) do
+			if file:match("%.appex$") then
+				return true
+			end
+		end
+	else
+		return false
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -756,6 +433,7 @@ local function generateXcent( options )
 	if not options.signingIdentity then
 		return
 	end
+	
 
 	local filename = options.tmpDir .. "/entitlements.xcent"
 	local outFile = assert( io.open( filename, "wb" ) )
@@ -781,7 +459,8 @@ local function generateXcent( options )
 	local beta_reports_active_setting = captureCommandOutput("security cms -D -i '".. options.mobileProvision .."' | plutil -p - | fgrep 'beta-reports-active'")
 	print("beta_reports_active_setting: ".. tostring(beta_reports_active_setting))
 
-	if beta_reports_active_setting ~= "" and options.settings.tvos.betaReportsEnabled == true then
+	local platformSettings = getPlatformSettings(options) or {}
+	if beta_reports_active_setting ~= "" and platformSettings.betaReportsEnabled == true then
 		-- set the value appropriately
 		if nil ~= string.find( beta_reports_active_setting, "1", 1, true ) then
 			templateBetaReportsActive, numMatches = string.gsub( templateBetaReportsActive, "{{BETA_REPORTS}}", "true" )
@@ -799,7 +478,7 @@ local function generateXcent( options )
 	end
 
 	local numMatches = 0
-	data, numMatches = string.gsub( data, "{{APPLICATION_IDENTIFIER}}", options.appid )
+	data, numMatches = string.gsub( data, "{{APPLICATION_IDENTIFIER}}", options.appid )	
 	assert( numMatches == 2 )
 
 	local otherOptions = "" -- default is to assume no other options exist
@@ -811,8 +490,8 @@ local function generateXcent( options )
 	data, numMatches = string.gsub( data, "{{OTHER_OPTIONS}}", otherOptions )
 	assert( numMatches == 1 )
 
-	
-	local generatedEntitlements = CoronaPListSupport.generateEntitlements(options.settings, 'tvos', options.mobileProvision)
+
+	local generatedEntitlements = CoronaPListSupport.generateEntitlements(options.settings, platformConfig.settingsKey, options.mobileProvision)
 	data, numMatches = string.gsub( data, "{{CUSTOM_ENTITLEMENTS}}", generatedEntitlements )
 	assert( numMatches == 1 )
 
@@ -838,6 +517,16 @@ local function generateXcent( options )
 	print( "Created XCENT: " .. filename );
 
 	runScript("cat "..filename)
+	-- reset variables
+	templateGetTaskAllow = [[
+	<key>get-task-allow</key>
+	<{{GET_TASK}}/>]]
+	templateBetaReportsActive = [[
+	<key>beta-reports-active</key>
+	<{{BETA_REPORTS}}/>]]
+	templateOtherOptions = [[
+	<key>aps-environment</key>
+	<string>{{PUSH_ENVIRONMENT}}</string>]]
 end
 
 
@@ -857,7 +546,7 @@ local function generateXcprivacy( options )
 
 	local data = templateXcprivacy
 
-	local generatedPrivacy = CoronaPListSupport.generateXcprivacy( options.settings, 'tvos')
+	local generatedPrivacy = CoronaPListSupport.generateXcprivacy(options.settings, platformConfig.settingsKey)
 	if(  generatedPrivacy and generatedPrivacy ~= "" ) then
 		data, numMatches = string.gsub( data, "{{CUSTOM_XCPRIVACY}}", generatedPrivacy )
 		assert( numMatches == 1 )
@@ -877,7 +566,7 @@ end
 --
 -- generateFiles
 --
--- Create the .xcent and Info.plist files
+-- Create the .xcent, .xcprivacy, and Info.plist files
 --
 -- returns an error message or nil on success
 --
@@ -919,7 +608,7 @@ end
 -- helper function to figure out if building for App Store distribution
 -- returns true or false
 local function isBuildForAppStoreDistribution( options )
-	
+
 	if not options.signingIdentityName then
 		return false
 	end
@@ -937,8 +626,6 @@ local function isBuildForAppStoreDistribution( options )
 		return false
 	end
 end
-
-
 
 -- this function moves files from main bundle to target OnDemandResources directory
 local function generateOdrFileStructure(bundleDir, destDir, odr, appBundleId)
@@ -972,11 +659,116 @@ BSF="$(dirname "$BNDL_REL_SRC")"
   return nil
 end
 
+---------------------------------------------------------------------------------
+-- getCodesignAPPXScriptAndPackage 
+local function getCodesignAPPXScriptAndPackage(path, identity, entitlements, developerBase, bundleId, isBuildForDistribution, tempDir, srcAssets, appId)
+    local codesign_allocate = xcodetoolhelper['codesign_allocate']
+    local codesign = xcodetoolhelper['codesign']
+
+    local tempEntitlements = quoteString(entitlements)
+    local appxPath = path:gsub('["\']', "") .. "/PlugIns"
+    local removeXattrs = "/usr/bin/xattr -cr " .. quoteString(appxPath)
+
+    -- Ensure paths are shell safe
+    codesign_allocate = quoteString(codesign_allocate)
+    codesign = quoteString(codesign)
+    developerBase = quoteString(developerBase)
+
+    local devbase_shell = "DEVELOPER_BASE=" .. developerBase .. "\n"
+    local export_path = "export PATH=\"$DEVELOPER_BASE/Platforms/" .. platformConfig.developerPlatform .. ".platform/Developer/usr/bin:$DEVELOPER_BASE/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin\"\n"
+    local script = 'export CODESIGN_ALLOCATE=' .. codesign_allocate .. '\n'
+    local cmd = removeXattrs
+
+    if lfs.attributes(appxPath, "mode") == "directory" then
+        for file in lfs.dir(appxPath) do
+            if file:match("%.appex$") then
+                local appexPath = appxPath .. "/" .. file
+                local infoPlist = quoteString(appexPath .. "/Info.plist")
+
+                local getBundleIdCmd = "/usr/bin/plutil -extract CFBundleIdentifier xml1 -o - " .. infoPlist ..
+                                       " | sed -n 's/.*<string>\\(.*\\)<\\/string>.*/\\1/p' | awk -F'.' '{print $NF}'"
+                local bundleIdOutput = io.popen(getBundleIdCmd):read("*a"):gsub("%s+", "")
+
+                -- Set new Bundle ID
+                local setBundleIdCmd = "newBundleId=\"" .. bundleId .. "." .. bundleIdOutput .. "\" && " ..
+                                       "/usr/bin/plutil -replace CFBundleIdentifier -string \"$newBundleId\" " .. infoPlist
+                runScript(setBundleIdCmd)
+
+                local appxSrcFiles = srcAssets:gsub('["\']', "") .. "/" .. platformConfig.extensionFilesDirectory .. "/" .. bundleIdOutput .. "/"
+                local selectedProvision = isBuildForDistribution and
+                                          (appxSrcFiles .. "embedded.mobileprovision") or
+                                          (lfs.attributes(appxSrcFiles .. "embedded_dev.mobileprovision", "mode") == "file" and
+                                          appxSrcFiles .. "embedded_dev.mobileprovision" or
+                                          appxSrcFiles .. "embedded.mobileprovision")
+
+                -- Handle config.lua if present
+                local config = {}
+                local customSettingsFile = appxSrcFiles .. "config.lua"
+                if fileExists(customSettingsFile) then
+                    local chunk = loadfile(customSettingsFile)
+                    if chunk then
+                        local ok, result = pcall(chunk)
+                        if ok and type(result) == "table" then
+                            config = result
+                        end
+                    end
+                end
+
+                -- Apply plist changes if defined
+                if config.plist and fileExists(infoPlist:gsub('["\']', "")) then
+                    local plistResult = CoronaPListSupport.modifyPlist({
+                        settings = { [platformConfig.settingsKey] = { plist = config.plist } },
+                        appBundleFile = quoteString(appexPath),
+                        targetPlatform = platformConfig.name
+                    })
+                    if plistResult then print("Error modifying Info.plist: " .. plistResult) end
+                end
+
+                -- Generate entitlements
+                local entitlementsFilePath = tempDir .. "/" .. bundleIdOutput
+                runScript("mkdir -p " .. quoteString(entitlementsFilePath))
+				local teamId = appId:match("^(.-)%.")
+                local entitlementsAppx = config.entitlements or {}
+                local result = generateXcent({
+                    appid = teamId.."."..bundleId .. "." .. bundleIdOutput,
+                    mobileProvision = selectedProvision,
+                    tmpDir = entitlementsFilePath,
+                    signingIdentity = identity,
+                    settings = { [platformConfig.settingsKey] = { entitlements = entitlementsAppx } }
+                })
+
+                if result then
+                    print("Error generating entitlements: " .. result)
+                end
+
+                entitlementsFilePath = quoteString(entitlementsFilePath .. "/entitlements.xcent")
+                tempEntitlements = entitlementsFilePath
+
+                -- Copy embedded.mobileprovision
+                if lfs.attributes(selectedProvision, "mode") == "file" then
+                    local copyCmd = "cp " .. quoteString(selectedProvision) .. " " ..
+                                    quoteString(appexPath .. "/embedded.mobileprovision")
+                    runScript(copyCmd)
+                else
+                    print("Warning: missing provisioning profile for " .. bundleIdOutput)
+                end
+
+                -- Append codesign command
+                cmd = cmd .. " && " .. codesign .. " --force --sign " .. quoteString(identity) ..
+                      " --entitlements " .. tempEntitlements .. " " .. quoteString(appexPath)
+            end
+        end
+    end
+
+    return devbase_shell .. export_path .. script .. cmd
+end
+
+
 -- generates plists for ODR resources. One describing each bundle and some in app bundle to aggregate them
 local function generateOdrPlists (bundleDir, odrDir, odr, appBundleId)
-	
+
 	odrDir = odrDir .. "/"
-  
+
   local tagPacks = {}
   local packResources = {}
 	-- still to figure out how to create self hosted ODR. Uncomment related lines to generate AssetPackManifestTemplate.plist
@@ -990,7 +782,7 @@ local function generateOdrPlists (bundleDir, odrDir, odr, appBundleId)
     local plistPath = assetBundleDir .. '/Info.plist'
     local packBundleId = string.format(appBundleId .. ".asset-pack-%013d", c)
     c = c+1
-    
+
     tagPacks[tag] = {NSAssetPacks={packBundleId}}
     packResources[packBundleId] = {resource}
     -- resources[#resources+1] = {
@@ -1003,7 +795,7 @@ local function generateOdrPlists (bundleDir, odrDir, odr, appBundleId)
     --   bundleKey=packBundleId,
     --   isStreamable=true,
     -- }
-    
+
     local f = io.open(plistPath, "w")
 		if not f then
 			return "unable to create ODR file " .. plistPath
@@ -1021,7 +813,7 @@ local function generateOdrPlists (bundleDir, odrDir, odr, appBundleId)
 			return "plutil error: " .. errMsg
 		end
   end
-  
+
   -- now aggregate them into OnDemandResources.plist
   local plistPath = bundleDir .. "/OnDemandResources.plist"
   local f = io.open(plistPath, "w")
@@ -1035,7 +827,7 @@ local function generateOdrPlists (bundleDir, odrDir, odr, appBundleId)
 		return "plutil error: " .. errMsg
 	end
 
-	
+
   -- -- AssetPackManifestTemplate.plist for self hosted ODRs
   -- local plistPath = bundleDir .. "/AssetPackManifestTemplate.plist"
   -- local f = io.open(plistPath, "w")
@@ -1063,9 +855,7 @@ local function generateOdrCodesign(destDir, odr, appBundleId, identity, develope
 	developerBase = quoteString(developerBase)
 
 	local devbase_shell = "export DEVELOPER_BASE="..developerBase.."\n"
-	local export_path = [==[
-export PATH="$DEVELOPER_BASE/Platforms/iPhoneOS.platform/Developer/usr/bin:$DEVELOPER_BASE/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-]==]
+	local export_path = "export PATH=\"$DEVELOPER_BASE/Platforms/" .. platformConfig.developerPlatform .. ".platform/Developer/usr/bin:$DEVELOPER_BASE/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin\"\n"
 
 	local allocate_script = 'export CODESIGN_ALLOCATE=' .. codesign_allocate .. '\n\n'
 
@@ -1082,7 +872,6 @@ export PATH="$DEVELOPER_BASE/Platforms/iPhoneOS.platform/Developer/usr/bin:$DEVE
   return nil
 end
 
-
 --
 -- prePackageApp
 --
@@ -1093,14 +882,10 @@ end
 local function prePackageApp( bundleDir, options )
 
 	-- If "skipPNGCrush" is specified in the build.settings then set "should_preserve" to its value by default
-	local should_preserve = (options.settings ~= nil and options.settings.tvos ~= nil and options.settings.tvos.skipPNGCrush) or false;
+	local platformSettings = getPlatformSettings(options)
+	local should_preserve = (platformSettings and platformSettings.skipPNGCrush) or false
 
-	-- options.osPlatform will be nil or 0 for iOS, 2 for Mac
-	if options.osPlatform == 2 then
-		should_preserve = true
-	elseif options.targetDevice >= 128 then
-		should_preserve = true
-	elseif options.targetPlatform == "tvos" then
+	if isSimulatorBuild(options) then
 		should_preserve = true
 	end
 
@@ -1112,13 +897,15 @@ local function prePackageApp( bundleDir, options )
 		end
 	end
 
+	platformSupport.validateSettings(options)
+
 	setStatus("Copying app resources")
 	local result, errMsg = runScript( getCopyResourcesScript( quoteString( options.srcAssets ), quoteString(bundleDir), should_preserve, options ))
 
 	if result ~= 0 then
 		return "ERROR: copying resources failed: "..tostring(errMsg)
 	end
-	
+
 	return nil
 end
 
@@ -1136,14 +923,15 @@ local function packageApp( options )
 	-- Quoting should happen around the final string, otherwise you get quotes in multiple places which might not be what you expect.
 	local appBundleFile = quoteString( appBundleFileUnquoted )
 
-	local iPhoneSDKRoot = options.sdkRoot or "/Applications/Xcode.app/Contents/Developer"
-
+	local developerRoot = options.sdkRoot or "/Applications/Xcode.app/Contents/Developer"
+	local builtForAppStore = isBuildForAppStoreDistribution( options )
+	local platformSettings = getPlatformSettings(options)
 
 	-- package on demand resources
 	local odrOutputDir = nil
-	if options.settings and options.settings.tvos and options.settings.tvos.onDemandResources and isBuildForAppStoreDistribution( options ) then
+	if platformSettings and platformSettings.onDemandResources and isBuildForAppStoreDistribution(options) then
 		setStatus("Generating On-Demand Resource bundles")
-		local odrData = options.settings.tvos.onDemandResources
+		local odrData = platformSettings.onDemandResources
 
 		-- step 1: move resources into appropriate folders
 		odrOutputDir = captureCommandOutput('mktemp -d -t CLtmpXXXXXX_ODR') .. "/OnDemandResources"
@@ -1159,37 +947,118 @@ local function packageApp( options )
 		end
 
 		-- step 3: codesign ODRs
-		errMsg = generateOdrCodesign(odrOutputDir, odrData, options.bundleid, options.signingIdentity, iPhoneSDKRoot )
+		errMsg = generateOdrCodesign(odrOutputDir, odrData, options.bundleid, options.signingIdentity, developerRoot)
 		if errMsg then
 			return "ERROR: codesignig On-Demand Resources: "..errMsg
 		end
 	end
 
-	--add xcprivacy file to the bundle
-	if options.settings.tvos and options.settings.tvos.xcprivacy then
-		runScript("cp -v " .. quoteString(options.tmpDir .. "/PrivacyInfo.xcprivacy") .. " " .. quoteString(makepath(appBundleFileUnquoted, "PrivacyInfo.xcprivacy")))
+
+	-- bundle swift libraries if required
+	local bundleSwiftSupportDir
+	local bundleSwiftSupportParentDir
+	if options.usesSwift then
+		setStatus("Adding Swift support for plugins")
+
+		local bundleOptions = {
+			exe=options.bundleexecutable,
+			sdkBase=developerRoot,
+			app=appBundleFileUnquoted,
+			identity=options.signingIdentity,
+			platform=platformConfig.deviceSDK
+		}
+		local sdkVersion = captureCommandOutput("xcrun --sdk " .. platformConfig.deviceSDK .. " --show-sdk-version")
+		if not sdkVersion then
+			return "Unable to get " .. platformConfig.name .. " SDK version"
+		end
+		sdkVersion = tonumber(string.match(sdkVersion, '%d+%.?%d*'))
+		if not sdkVersion then
+			return "Unable to parse SDK version"
+		end
+
+		local bundleScript
+		if sdkVersion >= 16.4 then
+			bundleScript = '$(xcrun -f swift-stdlib-tool) --copy --verbose --scan-executable "{app}/{exe}" --scan-folder "{app}/Frameworks" --platform {platform} --destination "{app}/Frameworks" --strip-bitcode '
+		else
+			bundleScript = '$(xcrun -f swift-stdlib-tool) --copy --verbose --scan-executable "{app}/{exe}" --scan-folder "{app}/Frameworks" --platform {platform} --toolchain "{sdkBase}/Toolchains/XcodeDefault.xctoolchain" --destination "{app}/Frameworks" --strip-bitcode '
+		end
+
+		if isSimulatorBuild(options) then
+			bundleOptions.identity = "-"
+			bundleOptions.platform = platformConfig.simulatorSDK
+		end
+
+		if builtForAppStore then
+			-- generate SwiftSupport folder
+			local suffix = "_SwiftSupport"
+			local ssDir = captureCommandOutput("mktemp -d -t CLtmpXXXXXX"..suffix) -- creates a temporary directory
+			-- be paranoid because we'll "rm -r" this later
+			if ssDir:sub(-string.len(suffix)) ~= suffix then
+				return "Problem with temporary directory: "..tostring(ssDir)
+			end
+			bundleSwiftSupportParentDir = ssDir
+			bundleSwiftSupportDir = ssDir.."/SwiftSupport"
+			bundleOptions.SwiftSupport = bundleSwiftSupportDir
+			bundleScript = bundleScript .. '--unsigned-destination "{SwiftSupport}" '
+		else
+			-- just embed swift
+			bundleScript = bundleScript .. '--resource-destination "{app}" --resource-library libswiftRemoteMirror.dylib '
+		end
+		bundleScript = bundleScript .. ' && find "{app}/Frameworks" -iname "libSwift*.dylib" -exec $(xcrun -f lipo) {} -remove arm64e -output {} \\;'
+
+		bundleScript = bundleScript:gsub("({([^}]+)})",
+		function(whole,i) return bundleOptions[i] or whole end)
+
+		local result, errMsg = runScript( bundleScript )
+		if result ~= 0 then
+			errMsg = "ERROR: bundling Swift libraries required by plugins failed: "..tostring(errMsg)
+			return errMsg
+		end
 	end
 
+	--add xcprivacy file to the bundle
+	if platformSettings and platformSettings.xcprivacy then
+		runScript("cp -v " .. quoteString(options.tmpDir .. "/PrivacyInfo.xcprivacy") .. " " .. quoteString(makepath(appBundleFileUnquoted, "PrivacyInfo.xcprivacy")))
+	end
+	
 	-- bundle is now ready to be signed (don't sign if we don't have a signingIdentity, e.g. Xcode Simulator)
-	if options.signingIdentity then
+	if options.signingIdentity and not isSimulatorBuild(options) then
 		-- codesign embedded frameworks before signing the .app
-		local result, errMsg = runScript( getCodesignFrameworkScript( appBundleFileUnquoted, options.signingIdentity, iPhoneSDKRoot ) )		
+		local result, errMsg = runScript(getCodesignFrameworkScript(appBundleFileUnquoted, options.signingIdentity, developerRoot))
 		if result ~= 0 then
 			errMsg = "ERROR: code signing embedded frameworks failed: "..tostring(errMsg)
 			return errMsg
 		end
 
-
 		local entitlements = quoteString( options.tmpDir .. "/entitlements.xcent" )
 		setStatus("Signing application with "..tostring(options.signingIdentityName))
-		local result, errMsg = runScript( getCodesignScript( entitlements, appBundleFileUnquoted, options.signingIdentity, iPhoneSDKRoot ) )
+
+		-- Code sign embedded app extensions with their own profiles and entitlements.
+		if(checkAppHasAPPX(options.appBundleFile)) then
+			local result, errMsg = runScript(getCodesignAPPXScriptAndPackage(options.appBundleFile:gsub('["\']', ""), options.signingIdentity, entitlements, developerRoot, options.bundleid, builtForAppStore, options.tmpDir, quoteString(options.srcAssets), options.appid))
+			if result ~= 0 then
+				errMsg = "ERROR: code signing embedded appx failed: "..tostring(errMsg)
+				return errMsg
+			end
+		end
+				
+
+		local result, errMsg = runScript(getCodesignScript(entitlements, appBundleFileUnquoted, options.signingIdentity, developerRoot))
 
 		if result ~= 0 then
 			errMsg = "ERROR: code signing failed: "..tostring(errMsg)
 			return errMsg
 		end
 
-		-- runScript( "rm -f " .. entitlements )
+	else
+		setStatus("Signing application for Xcode Simulator")
+		local nestedCodeScript = "find " .. appBundleFile .. " -depth \\( -type d -name '*.framework' -o -type d -name '*.appex' -o -type f -name '*.dylib' \\) -exec /usr/bin/codesign --force --sign - --timestamp=none {} \\;"
+		local result, errMsg = runScript(nestedCodeScript .. " && /usr/bin/codesign --force --sign - --timestamp=none " .. appBundleFile)
+
+		if result ~= 0 then
+			errMsg = "ERROR: code signing for Xcode Simulator failed: "..tostring(errMsg)
+			return errMsg
+		end
 	end
 
 	runScript( "chmod 755 " .. appBundleFile )
@@ -1199,15 +1068,13 @@ local function packageApp( options )
 	-- remove old IPA for extra cleanliness, even if we are not building a new IPA for distribution (it's stale so let's remove it)
 	runScript( "rm -f " .. appBundleFileIPA )
 
-	if isBuildForAppStoreDistribution( options ) then
+	if builtForAppStore then
 		setStatus("Creating application bundle IPA for distribution: ".. appBundleFileIPA)
-		local quotedDestDir = quoteString( options.dstDir )
-		local baseBundleName = quoteString( options.dstFile .. ".app" )
 		local suffix = "_ipa"
 		local ipaTmpDir = captureCommandOutput("mktemp -d -t CLtmpXXXXXX"..suffix) -- creates a temporary directory
 
 		-- be paranoid because we'll "rm -r" this later
-		if not ipaTmpDir:sub(-string.len(suffix)) == suffix then
+		if ipaTmpDir:sub(-string.len(suffix)) ~= suffix then
 			return "Problem with temporary directory: "..tostring(ipaTmpDir)
 		end
 
@@ -1218,14 +1085,22 @@ local function packageApp( options )
 			-- note we move the app to the "Payload" directory to preserve permissions and for speed which means the .app doesn't exist anymore
 			runScript( "mv " .. quoteString(makepath(options.dstDir, options.dstFile..".app")) .." ".. quoteString(makepath(ipaTmpDir, "Payload")) )
 
+			--move odr resources to "Payload" folder
 			if odrOutputDir then
-				runScript( "mv " .. quoteString(odrOutputDir) .." ".. quoteString(makepath(ipaTmpDir, "Payload")) )
-				runScript( "rm -rf " .. quoteString(odrOutputDir) )
+				runScript( "mv " .. quoteString(makepath(odrOutputDir)) .." ".. quoteString(makepath(ipaTmpDir, "Payload")) )
+			end
+
+			if bundleSwiftSupportDir then
+				runScript( "mv " .. bundleSwiftSupportDir .." ".. quoteString(ipaTmpDir) )
 			end
 
 			runScript( "cd " .. quoteString(ipaTmpDir) .. "; zip --symlinks -r " .. appBundleFileIPA .. " *" )
 
 			runScript( "rm -r " .. quoteString(ipaTmpDir) )
+
+			if bundleSwiftSupportParentDir then
+				runScript( "rm -r " .. quoteString(bundleSwiftSupportParentDir) )
+			end
 		else
 			return "ERROR: failed to create IPA temporary directory '"..ipaTmpDir .."': " ..errorMesg
 		end
@@ -1236,13 +1111,12 @@ end
 
 --------------------------------------------------------------------------------
 
-local function getNames( name, result )
+local function getNames( name, dstFile, result )
 	local err
 
 	result.bundledisplayname = name
 	result.bundlename = name
-	result.bundleexecutable = name
-	result.dstFile = name
+	result.bundleexecutable = dstFile
 
 	return err
 end
@@ -1294,7 +1168,7 @@ local function getIDs( mobileProvision, result )
 	end
 
 	if ( appid ) then
-		value = appid
+			local value = appid
 
 		assert( result )
 
@@ -1317,18 +1191,10 @@ local function getIDs( mobileProvision, result )
 	return err
 end
 
-local function fileExists( filename )
-	local f = io.open( filename, "r" )
-	if ( f ) then
-		io.close( f )
-	end
-	return ( nil ~= f )
-end
-
-function getBundleId( mobileProvision, bundledisplayname )
+function getBundleId( mobileProvision, bundledisplayname, dstFile )
 	local options = {}
 
-	local err = getNames( bundledisplayname, options )
+	local err = getNames( bundledisplayname, dstFile, options )
 	if ( not err ) then
 		err = getIDs( mobileProvision, options )
 
@@ -1336,203 +1202,48 @@ function getBundleId( mobileProvision, bundledisplayname )
 			return options.bundleid
 		end
 	end
-	
-	return nil
-end
-
--- [Source] main/tools/buildsys-ios/template/Builder.lua (getPluginDirNames() through buildLuaPlugins())
-local function getPluginDirNames( pluginsDir )
-	local result = {}
-	for file in lfs.dir(pluginsDir) do
-		-- Ignore hidden files
-		if "libtemplate" ~= file and ( string.sub( file, 1, 1 ) ~= '.' ) then
-			local filePath = pluginsDir .. '/' .. file
-			local attributes = lfs.attributes( filePath )
-			if "directory" == attributes.mode then
-				table.insert( result, file )
-			end
-		end
-	end
-	return result
-end
-
-function buildExe( options )
-	local result = nil
-
-	-- TODO: Copy plugin frameworks into .app/Frameworks/
-
-	local appBundleFileUnquoted = makepath(options.dstDir, options.dstFile) .. ".app"
-	local dstDir = appBundleFileUnquoted
-
-	local buildDir = dstDir .. '/.build'
-	runScript('mkdir -p "' ..  buildDir .. '"')
-
-	local pluginsDir = buildDir
-	local dstFrameworksDir = dstDir .. "/Frameworks"
-
-	local sdkVersion = captureCommandOutput("xcrun --sdk appletvos --show-sdk-version" )
-	if not sdkVersion then
-		return "ERROR: Could not find TVos SDK Version"
-	end
-	sdkVersion = tonumber(string.match(sdkVersion, '%d+'))
-	if not sdkVersion then
-		return "ERROR: Could not parse TVos SDK Version"
-	end
-	local stripBitcode = (sdkVersion>=16)
-	local stripBitcodeScript = 'cd "' ..dstFrameworksDir ..  '" && for F in *.framework ; do  if (xcrun otool -l  "$F/${F%.*}" | grep LLVM -q ) ; then xcrun bitcode_strip -r "$F/${F%.*}" -o "$F/${F%.*}".tmp ; mv "$F/${F%.*}".tmp "$F/${F%.*}"  ; fi  ; done '
-
-
-	local pluginDirNames = getPluginDirNames( pluginsDir )
-	for i=1,#pluginDirNames do
-		local pluginName = pluginDirNames[i]
-
-		-- Replace '.' with '_'
-		local pluginFrameworkName = 'Corona_' .. string.gsub( pluginName, '%.', '_' ) .. '.framework'
-
-		-- Each plugin is expected to have a Corona_X.framework
-		local pluginFrameworkPath = pluginsDir .. '/' .. pluginName .. '/' .. pluginFrameworkName
-
-		if fileExists( pluginFrameworkPath ) then
-			-- Move the plugins frameworks into the .app/Frameworks directory
-			buildResult = runScript( 'mv "' .. pluginFrameworkPath .. '" "' .. dstFrameworksDir .. '"' )
-		else
-			print( "Plugins: The plugin (" .. pluginName .. ") is missing a .framework file at path (" .. pluginFrameworkPath .. ")" )
-		end
-	end
-
-	if stripBitcode then
-		runScript(stripBitcodeScript)
-	end
-
-	-- Move the helper files/plugin libs out of the .app bundle into the tmp dir
-	buildResult = runScript( 'mv "' .. dstDir .. '/.build" "' .. options.tmpDir .. '"' )
-
-	if buildResult ~= 0 then
-		return "ERROR: build failed to move helper files/plugin libs"
-	end
-
-	return result
-end
-
--- Corona table extension that we want to use here
-table.indexOf = function( t, object )
-	local result
-
-	if "table" == type( t ) then
-		for i=1,#t do
-			if object == t[i] then
-				result = i
-				break
-			end
-		end
-	end
-
-	return result
-end
-
-function buildLuaPlugins( options )
-
-	function checkError( status, msg, command )
-		if 0 ~= status then
-			local error =
-			{
-				command = command,
-				status = status,
-				message = msg,
-			}
-
-			local errorJson = json.encode( error )
-			assert( false, "<error>" .. errorJson .. "</error>" )
-		end
-
-		return status, msg
-	end
-
-	function findLuaPlugins( options )
-		local result = {}
-
-		local pluginsDir = options.pluginsDir
-
-		local pluginDirNames = getPluginDirNames( pluginsDir )
-		for i=1,#pluginDirNames do
-			local pluginName = pluginDirNames[i]
-
-			-- This path signifies a Lua plugin
-			local assetPath = pluginsDir .. '/' .. pluginName .. '/lua/lua_51/'
-			local assetPath2 = pluginsDir .. '/' .. pluginName .. '/lua_51/'
-
-			if options.verbose then
-				print("Examining plugin: "..tostring(pluginName))
-			end
-
-			local isLuaPlugin = lfs.attributes( assetPath, "mode" ) == "directory"
-			if isLuaPlugin then
-				print("Found Lua plugin: "..tostring(pluginName))
-				table.insert( result, assetPath )
-			end
-	
-			local isLuaPlugin = lfs.attributes( assetPath2, "mode" ) == "directory"
-			if isLuaPlugin then
-				print("Found Lua plugin: "..tostring(pluginName))
-				table.insert( result, assetPath2 )
-			end
-		end
-
-		return result
-	end
-
-	-- copy assets from Lua plugins to app
-	function copyLuaAssets( options, pluginDirs )
-		if #pluginDirs > 0 then
-			local appBundleFileUnquoted = makepath(options.dstDir, options.dstFile) .. ".app"
-			local pluginsDstDir = makepath(appBundleFileUnquoted, "corona-plugins")
-			checkError( runScript( 'mkdir -p ' ..  quoteString(pluginsDstDir) ) )
-
-			for i=1, #pluginDirs do
-				local pluginDir = pluginDirs[i]
-
-				-- copy all of the plugin files to the destination's .plugin directory
-				checkError( runScript( 'cp -R ' ..  quoteString(pluginDir) .."/* ".. quoteString(pluginsDstDir) ) )
-				-- delete all .lua and .lu files from the copy
-				checkError( runScript( 'find ' .. quoteString(pluginsDstDir) .. " \\( -name '*.lu' -o  -name '*.lua' \\) -delete" ) )
-				-- optimize pngs for tvOS
-				checkError( runScript( 'COPYPNG=$(xcrun -f copypng); find ' .. quoteString(pluginsDstDir) .. " -name '*.png' -exec \"$COPYPNG\" -compress {} {}.copypng \\; -exec mv {}.copypng {} \\;" ) )
-
-			end
-		end
-	end
-
-	-- this directory gets moved to this location by buildexe() so we must run after that
-	options.pluginsDir = makepath(options.tmpDir, '/.build')
-
-	local luaPluginDirs = findLuaPlugins( options )
-	copyLuaAssets( options, luaPluginDirs )
 
 	return nil
+end
+
+local function platformSupportContext()
+	return {
+		captureCommandOutput = captureCommandOutput,
+		makepath = makepath,
+		minimumDeploymentTarget = platformConfig.minimumDeploymentTarget,
+		quoteString = quoteString,
+		runScript = runScript,
+		setStatus = setStatus,
+	}
+end
+
+local function buildExe( options )
+	return platformSupport.integratePlugins(options, platformSupportContext())
 end
 
 --
--- tvosPostPackage
+-- AppleMobilePostPackage
 --
 -- Process the app bundle return by the build server (including code signing, Info.plist processing, etc)
 --
 -- returns an error message or nil on success
 --
-function tvosPostPackage( params )
+function AppleMobilePostPackage( params )
 
 	local srcAssets = params.srcAssets
 	local tmpDir = params.tmpDir
 	local dstDir = params.dstDir
+	local dstFile = params.dstFile
 	local bundledisplayname = params.bundledisplayname
 	local bundleversion = params.bundleversion
 	local provisionFile = params.provisionFile
 	local signingIdentity = params.signingIdentity
-	local sdkRoot = params.xcodetoolhelper.sdkRoot
+	local sdkRoot = params.sdkRoot
 	local targetDevice = params.targetDevice
 	local targetPlatform = params.targetPlatform
 	local verbose = true
-	local osPlatform = params.osPlatform
 	local err = nil
+	local result = nil
 
     -- Make available globally
     xcodetoolhelper = params.xcodetoolhelper
@@ -1540,6 +1251,7 @@ function tvosPostPackage( params )
 	-- init options
 	local options = {
 		dstDir=dstDir,
+		dstFile=dstFile,
 		srcAssets=srcAssets,
 		bundleversion=bundleversion,
 		signingIdentity=signingIdentity,
@@ -1548,8 +1260,7 @@ function tvosPostPackage( params )
 		targetDevice=targetDevice,
 		targetPlatform=targetPlatform,
 		verbose=verbose,
-		osPlatform=osPlatform,
-		sdkType=params.sdkType
+		sdkType=params.sdkType,
 	}
 
 	local customSettingsFile = srcAssets .. "/build.settings"
@@ -1569,14 +1280,16 @@ function tvosPostPackage( params )
 			print(err)
 		end
 	end
+	options.settings = options.settings or {}
+	options.settings[platformConfig.settingsKey] = options.settings[platformConfig.settingsKey] or {}
 
 	if ( not err ) then
-		local err = getNames( bundledisplayname, options )
+		err = getNames(bundledisplayname, dstFile, options)
 		if ( not err ) then
 
 			-- Special case for no provision profile (e.g. Xcode simulator)
 			if not provisionFile then
-				options.bundleid = "com.example." .. bundledisplayname
+				options.bundleid = "com.example." .. sanitizeBundleString(bundledisplayname, false)
 			else
 				err = getIDs( provisionFile, options )
 			end
@@ -1584,6 +1297,7 @@ function tvosPostPackage( params )
 	end
 
 	if ( not err ) then
+
 		options.appBundleFile = quoteString(makepath(dstDir, options.dstFile) .. ".app" )
 
 		runScript( "rm -rf ".. options.appBundleFile .. ".dSYM" )
@@ -1615,10 +1329,11 @@ function tvosPostPackage( params )
 			return result
 		end
 
-
 		-- extract output.zip into dstDir
 		print("Contents of ZIP file from server:")
-		runScript( "unzip -Z -1 "..tmpDir.."/output.zip" )
+		runScript( "unzip -l "..tmpDir.."/output.zip" )
+		-- uncomment to save a copy of the server zip file
+		-- runScript( "cp "..tmpDir.."/output.zip /tmp/" )
 
 		setStatus("Unpacking build with plugins")
 
@@ -1641,97 +1356,45 @@ function tvosPostPackage( params )
 
 		-- If the server's app name differs from ours, use ours
 		if serverAppName ~= options.dstFile then
-			-- Rename the executable in the bundle
-			runScript( "mv -f "..quoteString(makepath(dstDir, serverDirName, serverAppName)).." ".. quoteString(makepath(dstDir, serverDirName, options.dstFile)))
+
+			-- The ".build" directory will exist if this is a plugin build (which will create the executable later)
+			if not fileExists(makepath(dstDir, serverDirName, ".build")) then
+				-- Rename the executable in the bundle
+				runScript( "mv -f "..quoteString(makepath(dstDir, serverDirName, serverAppName)).." ".. quoteString(makepath(dstDir, serverDirName, options.dstFile)))
+			end
+
 			-- Rename the bundle itself
 			runScript( "rm -rf ".. options.appBundleFile ) -- remove any old bundle
 			runScript( "mv -f "..quoteString(makepath(dstDir, serverDirName)).." ".. options.appBundleFile )
 		end
 
-		if ( options.settings.tvos == nil ) then
-			options.settings.tvos = {}
-		end
-		if ( options.settings.tvos.plist == nil ) then
-			options.settings.tvos.plist = {}
+		result = platformSupport.compileLegacyAssets(options, platformSupportContext())
+		if result then
+			return result
 		end
 
-		-- Package any xcassets into the app through actool
-		local actoolCmd, actoolErrorMessage = getActoolCommand( options )
-		if ( actoolCmd ) then
-			setStatus("Compiling Xcode assets")
-			result = runScript( actoolCmd )
-			if result ~= 0 then
-				return "Error while packaging assets: Error code " .. result
-			end
-
-			-- Load generated json file created by actool
-			local actoolPlist = getActoolPlistLocation( options )
-			local tmpJsonFile = os.tmpname()
-			os.execute( "plutil -convert json -o '" .. tmpJsonFile .. "' " .. actoolPlist )
-			local jsonPlistEntries = nil
-			local jsonFP, errorMsg = io.open( tmpJsonFile, "r" )
-			if jsonFP ~= nil then
-				local jsonDataStr = jsonFP:read("*a")
-				jsonFP:close()
-				jsonPlistEntries, errorMsg = json.decode( jsonDataStr );
-				if jsonPlistEntries == nil then
-					return "Error while packaging assets: failed to load "..tmpJsonFile..": "..errorMsg.."\nJSON: "..tostring(jsonDataStr)
-				end
-			else
-				return "Error while packaging assets: failed to open plist input file '"..tmpJsonFile.."': "..errorMsg
-			end
-			os.remove( tmpJsonFile )
-
-			-- Overwrite plist settings using output from actool
-			for k,v in pairs( jsonPlistEntries ) do
-				options.settings.tvos.plist[k] = v
-			end
-
-			-- Clean up after ourselves.
-			local coronaXcassetsLocation = getCoronaXcodeAssetBundleLocation( options )
-			if ( lfs.attributes( coronaXcassetsLocation ) ~= nil ) then
-				local status, errorMessage = runScript( "rm -rf " .. quoteString( coronaXcassetsLocation ) )
-				if ( not status and errorMessage ) then
-					return "Failed to clean Corona.xcassets: " .. errorMessage
-				end
-			end
-			local actoolPlistLocation = getActoolPlistLocation( options )
-			if ( lfs.attributes( actoolPlistLocation ) ~= nil ) then
-				local status, errorMessage = runScript( "rm -rf " .. quoteString( actoolPlistLocation ) )
-				if ( not status and errorMessage ) then
-					return "Failed to clean temp plist location: " .. errorMessage
-				end
-			end
-		elseif ( actoolErrorMessage ) then
-			return actoolErrorMessage
-		end
-
-		-- for native plugins, build exe
+		-- Integrate platform-specific native and Lua plugins.
 		result = buildExe( options )
 
 		if result then
 			return result
 		end
 
-		-- for Lua plugins, copy things to the right places
-		result = buildLuaPlugins( options )
-
-		if result then
-			return result
-		end
-
-		-- compile Xcode assets for icon
-		if options.settings and options.settings.tvos then
+		-- Compile a project-provided Xcode asset catalog.
+		local platformSettings = getPlatformSettings(options)
+		if platformSettings then
 			setStatus("Compiling Xcode assets catalog")
-			local xcassetPlatformOptions = {
-				{ "target-device", "tv" },
-				{ "minimum-deployment-target", "9.0" },
-				{ "platform", options.signingIdentity and "appletvos" or "appletvsimulator" },
-
-				{"app-icon", "AppIconTV" },
-				{"launch-image", "LaunchImageTV" },
-			}
-			err = CoronaPListSupport.compileXcassets(options, tmpDir, srcAssets, xcassetPlatformOptions, options.settings.tvos)
+			local xcassetPlatformOptions = {}
+			for _, targetDeviceName in ipairs(platformConfig.targetDevices) do
+				table.insert(xcassetPlatformOptions, { "target-device", targetDeviceName })
+			end
+			table.insert(xcassetPlatformOptions, { "minimum-deployment-target", platformConfig.minimumDeploymentTarget })
+			table.insert(xcassetPlatformOptions, { "platform", isSimulatorBuild(options) and platformConfig.simulatorSDK or platformConfig.deviceSDK })
+			table.insert(xcassetPlatformOptions, { "app-icon", platformConfig.appIcon })
+			if platformConfig.launchImage then
+				table.insert(xcassetPlatformOptions, { "launch-image", platformConfig.launchImage })
+			end
+			err = CoronaPListSupport.compileXcassets(options, tmpDir, srcAssets, xcassetPlatformOptions, platformSettings)
 			if err then
 				return err
 			end
@@ -1749,7 +1412,7 @@ function tvosPostPackage( params )
 		end
 
 		print("====================================")
-		print("tvosPostPackage: options: "..json.prettify(options))
+		print("AppleMobilePostPackage: options: "..json.prettify(options))
 		print("====================================")
 
 		-- finalize package
@@ -1759,11 +1422,13 @@ function tvosPostPackage( params )
 			return result
 		end
 
-		result = packageApp( options )
 
+		result = packageApp( options )
+		
 		if result then
 			return result
 		end
+
 	end
 
 	return err

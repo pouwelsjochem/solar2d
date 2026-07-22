@@ -1,89 +1,29 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// This file is part of the Corona game engine.
+// This file is part of the Solar2D game engine.
 // For overview and more information on licensing please refer to README.md 
 // Home page: https://github.com/coronalabs/corona
-// Contact: support@coronalabs.com
+// Contact: support@Solar2D.com
 //
 //////////////////////////////////////////////////////////////////////////////
 
 #ifndef _Rtt_TVOSAppPackager_H__
 #define _Rtt_TVOSAppPackager_H__
 
-// ----------------------------------------------------------------------------
+#include "Rtt_AppleMobileAppPackager.h"
 
-#include "Rtt_PlatformAppPackager.h"
 namespace Rtt
 {
 
-class LuaContext;
-class MPlatformServices;
+typedef AppleMobileAppPackagerParams TVOSAppPackagerParams;
 
-// ----------------------------------------------------------------------------
-
-// TODO: This isn't really a Mac packager so much as it is an iPhone packager.
-// The Mac packager ought to be the projector. Refactor.
-	
-class TVOSAppPackagerParams : public AppPackagerParams
+class TVOSAppPackager : public AppleMobileAppPackager
 {
 	public:
-		typedef AppPackagerParams Super;
-
-	public:
-		TVOSAppPackagerParams( 
-			const char* appName, 
-			const char* version,
-			const char* identity,
-			const char* provisionFile,
-			const char* srcDir,
-			const char* dstDir,
-			const char* sdkRoot,
-			TargetDevice::Platform targetPlatform,
-			S32 targetVersion,
-			S32 targetDevice,
-			const char * customBuildId,
-			const char * productId,
-			const char * appPackage,
-			bool isDistributionBuild
-			)
-		: AppPackagerParams( 
-			appName, version, identity, provisionFile, srcDir, dstDir, sdkRoot,
-			targetPlatform, targetVersion, targetDevice, customBuildId, productId,
-			appPackage, isDistributionBuild )
-		{
-		}
-
-	public:
-		virtual void Print();
-};
-
-class TVOSAppPackager : public PlatformAppPackager
-{
-	public:
-		typedef PlatformAppPackager Super;
-
-	public:
-		TVOSAppPackager( const MPlatformServices& services );
+		TVOSAppPackager(const MPlatformServices& services);
 		virtual ~TVOSAppPackager();
-
-	public:
-		// TODO: caller should make dstDir a unique directory
-		virtual int Build( AppPackagerParams *params, const char *tmpDirBase );
-
-		virtual bool VerifyConfiguration() const;
-
-	public:
-		const char * GetBundleId( const char *provisionFile, const char *appName ) const; 
-
-	protected:
-		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
-		bool CopyProvisionFile( const AppPackagerParams * params, const char* tmpDir );
 };
-
-// ----------------------------------------------------------------------------
 
 } // namespace Rtt
-
-// ----------------------------------------------------------------------------
 
 #endif // _Rtt_TVOSAppPackager_H__
