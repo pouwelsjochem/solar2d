@@ -85,7 +85,7 @@ class AndroidAppPackager : public PlatformAppPackager
 
 	protected:
 		bool CreateBuildProperties( const AppPackagerParams& params, const char *tmpDir );
-		virtual char* Prepackage( AppPackagerParams * params, const char* tmpDir );
+		bool PrepareBuild( AppPackagerParams * params, const char* tmpDir );
 		virtual void OnReadingBuildSettings( lua_State *L, int index );
 		std::string EscapeArgument(std::string arg);
 

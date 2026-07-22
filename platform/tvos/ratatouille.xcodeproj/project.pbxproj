@@ -439,8 +439,6 @@
 		AAF34ADC29F9DFDB00076706 /* Rtt_TextureResourceCaptureAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AAF34ADA29F9DFDB00076706 /* Rtt_TextureResourceCaptureAdapter.cpp */; };
 		C221F5611D4BE37F00F45E77 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C221F55F1D4BE37F00F45E77 /* Rtt_FileSystem.cpp */; };
 		C221F5621D4BE44400F45E77 /* Rtt_FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C221F55F1D4BE37F00F45E77 /* Rtt_FileSystem.cpp */; };
-		C29CAC241E20832800CD05FC /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C29CAC221E20832800CD05FC /* CoronaBeacon.mm */; };
-		C29CAC251E20832800CD05FC /* CoronaBeacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C29CAC231E20832800CD05FC /* CoronaBeacon.h */; };
 		C2F9117C1CDC4C31004A5564 /* compat.c in Sources */ = {isa = PBXBuildFile; fileRef = C2F9117A1CDC4C31004A5564 /* compat.c */; };
 		C2F9117D1CDC4C5E004A5564 /* compat.c in Sources */ = {isa = PBXBuildFile; fileRef = C2F9117A1CDC4C31004A5564 /* compat.c */; };
 		C2F9117E1CDC4C5E004A5564 /* ftp.lua in Sources */ = {isa = PBXBuildFile; fileRef = A4AD31251BAB88B6006A0C97 /* ftp.lua */; };
@@ -481,7 +479,6 @@
 		F5C5E0E1251E112100217C19 /* CoronaCards.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A4E075911BD1BC09003A733A /* CoronaCards.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F5C5E10D251E114A00217C19 /* CoronaMainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4E075D91BD1C78E003A733A /* CoronaMainViewController.mm */; };
 		F5C5E10E251E114A00217C19 /* CoronaApplicationMain.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4E075A01BD1BC5D003A733A /* CoronaApplicationMain.mm */; };
-		F5C5E10F251E114A00217C19 /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C29CAC221E20832800CD05FC /* CoronaBeacon.mm */; };
 		F5C5E110251E114A00217C19 /* CoronaMainAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4E075D71BD1C78E003A733A /* CoronaMainAppDelegate.mm */; };
 		F5C5E111251E114A00217C19 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C2756C291C5722A500BE3194 /* NSString+Extensions.m */; };
 		F5C5E113251E114A00217C19 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DD47021BB2476F00FD988E /* AudioToolbox.framework */; };
@@ -519,7 +516,6 @@
 		F5C5E13A251E114A00217C19 /* CoronaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD316A1BAB9E19006A0C97 /* CoronaRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E13B251E114A00217C19 /* CoronaVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = A4551E931BAA180C00FB3BDF /* CoronaVersion.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E13C251E114A00217C19 /* lauxlib.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD175F1BAA14EA00BCF507 /* lauxlib.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		F5C5E13D251E114A00217C19 /* CoronaBeacon.h in Headers */ = {isa = PBXBuildFile; fileRef = C29CAC231E20832800CD05FC /* CoronaBeacon.h */; };
 		F5C5E13E251E114A00217C19 /* lua.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD17881BAA14EA00BCF507 /* lua.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		F5C5E13F251E114A00217C19 /* NSString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C2756C281C5722A500BE3194 /* NSString+Extensions.h */; };
 		F5C5E140251E114A00217C19 /* luaconf.h in Headers */ = {isa = PBXBuildFile; fileRef = A4AD178A1BAA14EA00BCF507 /* luaconf.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -2069,8 +2065,6 @@
 		C221F5601D4BE37F00F45E77 /* Rtt_FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_FileSystem.h; path = ../../librtt/Core/Rtt_FileSystem.h; sourceTree = "<group>"; };
 		C2756C281C5722A500BE3194 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C2756C291C5722A500BE3194 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../apple/NSString+Extensions.m"; sourceTree = "<group>"; };
-		C29CAC221E20832800CD05FC /* CoronaBeacon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaBeacon.mm; path = ../../iphone/CoronaBeacon.mm; sourceTree = "<group>"; };
-		C29CAC231E20832800CD05FC /* CoronaBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaBeacon.h; path = ../../iphone/CoronaBeacon.h; sourceTree = "<group>"; };
 		C2F9117A1CDC4C31004A5564 /* compat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = compat.c; path = ../../external/luasocket/src/compat.c; sourceTree = "<group>"; };
 		C2F9117B1CDC4C31004A5564 /* compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = compat.h; path = ../../external/luasocket/src/compat.h; sourceTree = "<group>"; };
 		C2F911861CDC4CC1004A5564 /* headers.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = headers.lua; path = ../../external/luasocket/src/headers.lua; sourceTree = "<group>"; };
@@ -3296,8 +3290,6 @@
 		A4E075921BD1BC09003A733A /* CoronaCards */ = {
 			isa = PBXGroup;
 			children = (
-				C29CAC221E20832800CD05FC /* CoronaBeacon.mm */,
-				C29CAC231E20832800CD05FC /* CoronaBeacon.h */,
 				A4E0759F1BD1BC5D003A733A /* CoronaApplicationMain.h */,
 				A4E075A01BD1BC5D003A733A /* CoronaApplicationMain.mm */,
 				A4E075931BD1BC09003A733A /* CoronaCards.h */,
@@ -3400,7 +3392,6 @@
 				A4E075F01BD1CAD1003A733A /* CoronaRuntime.h in Headers */,
 				A4E076131BD1D09E003A733A /* CoronaVersion.h in Headers */,
 				A49EC1B21BD77D950093F529 /* lauxlib.h in Headers */,
-				C29CAC251E20832800CD05FC /* CoronaBeacon.h in Headers */,
 				A49EC1AF1BD77D8D0093F529 /* lua.h in Headers */,
 				F517B79F1C6CEC520042F592 /* NSString+Extensions.h in Headers */,
 				A49EC1B01BD77D8D0093F529 /* luaconf.h in Headers */,
@@ -3430,7 +3421,6 @@
 				F5C5E13A251E114A00217C19 /* CoronaRuntime.h in Headers */,
 				F5C5E13B251E114A00217C19 /* CoronaVersion.h in Headers */,
 				F5C5E13C251E114A00217C19 /* lauxlib.h in Headers */,
-				F5C5E13D251E114A00217C19 /* CoronaBeacon.h in Headers */,
 				F5C5E13E251E114A00217C19 /* lua.h in Headers */,
 				F5C5E13F251E114A00217C19 /* NSString+Extensions.h in Headers */,
 				F5C5E140251E114A00217C19 /* luaconf.h in Headers */,
@@ -4805,7 +4795,6 @@
 			files = (
 				A4E075DD1BD1C78E003A733A /* CoronaMainViewController.mm in Sources */,
 				A4E075A21BD1BC5D003A733A /* CoronaApplicationMain.mm in Sources */,
-				C29CAC241E20832800CD05FC /* CoronaBeacon.mm in Sources */,
 				A4E075DB1BD1C78E003A733A /* CoronaMainAppDelegate.mm in Sources */,
 				F517B7A01C6CEC580042F592 /* NSString+Extensions.m in Sources */,
 			);
@@ -4827,7 +4816,6 @@
 			files = (
 				F5C5E10D251E114A00217C19 /* CoronaMainViewController.mm in Sources */,
 				F5C5E10E251E114A00217C19 /* CoronaApplicationMain.mm in Sources */,
-				F5C5E10F251E114A00217C19 /* CoronaBeacon.mm in Sources */,
 				F5C5E110251E114A00217C19 /* CoronaMainAppDelegate.mm in Sources */,
 				F5C5E111251E114A00217C19 /* NSString+Extensions.m in Sources */,
 			);

@@ -1,1 +1,0 @@
-../../tools/create_ticket.sh

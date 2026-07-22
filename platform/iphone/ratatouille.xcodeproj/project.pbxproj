@@ -95,7 +95,6 @@
 		A4F2ADEF16E0AF2E00814C7B /* CoronaLuaIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A480725A16CACD6D00960127 /* CoronaLuaIOS.h */; };
 		A4F2ADF816E0AF5F00814C7B /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4698837169E642E00EAA645 /* main.mm */; };
 		A4F2ADF916E0AF6F00814C7B /* libplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A47098D5169E9F2400D31091 /* libplayer.a */; };
-		C2074EBA1E160FCF009FC33C /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */; };
 		C2F911791CDC15F4004A5564 /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A44D4359164B1D5200CFE7B3 /* libluasocket.a */; };
 		DB56B4A0284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */; };
 		DB56B4A1284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */; };
@@ -119,7 +118,6 @@
 		F5A752191BFA401800CCDB94 /* CoronaLuaObjCHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F5A7520C1BFA3D3400CCDB94 /* CoronaLuaObjCHelper.h */; };
 		F5C36AF324FA93A700775C6E /* MetalANGLE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5C36A7E24FA938200775C6E /* MetalANGLE.framework */; };
 		F5C36AF424FA93A700775C6E /* MetalANGLE.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F5C36A7E24FA938200775C6E /* MetalANGLE.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F5C36BFB24FAB49F00775C6E /* CoronaBeacon.mm in Sources */ = {isa = PBXBuildFile; fileRef = C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */; };
 		F5C36BFC24FAB49F00775C6E /* AppleWeakProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C3189A1A6EDD4400F186DF /* AppleWeakProxy.mm */; };
 		F5C36BFD24FAB49F00775C6E /* Rtt_IPhonePlatformCore.mm in Sources */ = {isa = PBXBuildFile; fileRef = A415ECAD1BD861A1003E7114 /* Rtt_IPhonePlatformCore.mm */; };
 		F5C36BFE24FAB49F00775C6E /* CoronaSystemResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4C318511A67B65100F186DF /* CoronaSystemResourceManager.mm */; };
@@ -1053,8 +1051,6 @@
 		A4EFF1E4169D4A8300EC7EEE /* CoronaLua.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CoronaLua.h; path = ../../librtt/Corona/CoronaLua.h; sourceTree = "<group>"; };
 		A4EFF1E5169D4AB400EC7EEE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		A4F2ADF516E0AF2E00814C7B /* libtemplate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtemplate.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2074EB81E160FC1009FC33C /* CoronaBeacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaBeacon.h; path = platform/iphone/CoronaBeacon.h; sourceTree = "<group>"; };
-		C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CoronaBeacon.mm; path = platform/iphone/CoronaBeacon.mm; sourceTree = "<group>"; };
 		DB56B49E284BEB6400EC8B14 /* Rtt_AppleKeyServices.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Rtt_AppleKeyServices.mm; sourceTree = "<group>"; };
 		DB56B49F284BEB6400EC8B14 /* Rtt_AppleKeyServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_AppleKeyServices.h; sourceTree = "<group>"; };
 		F50E7EC424FA923B009F165B /* template-angle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "template-angle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1208,8 +1204,6 @@
 			isa = PBXGroup;
 			children = (
 				F5FD0AE02373933C0066F6A6 /* AutoLinkModules.m */,
-				C2074EB81E160FC1009FC33C /* CoronaBeacon.h */,
-				C2074EB91E160FC1009FC33C /* CoronaBeacon.mm */,
 				A46936B3169DED4700723568 /* AppDelegate.h */,
 				A46936B4169DED4700723568 /* AppDelegate.mm */,
 				A4C318711A69A4E000F186DF /* CoronaGyroscopeObserver.h */,
@@ -2589,7 +2583,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2074EBA1E160FCF009FC33C /* CoronaBeacon.mm in Sources */,
 				A4C3189D1A6EDD4500F186DF /* AppleWeakProxy.mm in Sources */,
 				A415ECAF1BD861A1003E7114 /* Rtt_IPhonePlatformCore.mm in Sources */,
 				A4C318531A67B65100F186DF /* CoronaSystemResourceManager.mm in Sources */,
@@ -2656,7 +2649,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5C36BFB24FAB49F00775C6E /* CoronaBeacon.mm in Sources */,
 				F5C36BFC24FAB49F00775C6E /* AppleWeakProxy.mm in Sources */,
 				F5C36BFD24FAB49F00775C6E /* Rtt_IPhonePlatformCore.mm in Sources */,
 				F5C36BFE24FAB49F00775C6E /* CoronaSystemResourceManager.mm in Sources */,
@@ -3120,7 +3112,6 @@
 				HEADER_SEARCH_PATHS = (
 					/System/Library/Frameworks/OpenAL.framework/Headers,
 					../../external/luasocket/src,
-					"../../external/CoronaBeacon/Beacon-iOS/Release-universal/include",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_CFLAGS[arch=arm64]" = "-fexceptions";
@@ -3184,7 +3175,6 @@
 				HEADER_SEARCH_PATHS = (
 					/System/Library/Frameworks/OpenAL.framework/Headers,
 					../../external/luasocket/src,
-					"../../external/CoronaBeacon/Beacon-iOS/Release-universal/include",
 				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				"OTHER_CFLAGS[arch=arm64]" = (

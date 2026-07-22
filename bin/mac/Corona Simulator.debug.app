@@ -1,1 +1,0 @@
-../../platform/mac/build/Debug/Corona Simulator.app

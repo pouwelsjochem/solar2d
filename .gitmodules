@@ -10,10 +10,6 @@
 	path = external/luasocket
 	url = https://github.com/coronalabs/submodule-luasocket.git
 	branch = master
-[submodule "external/openal-soft_apportable"]
-	path = external/openal-soft_apportable
-	url = https://github.com/coronalabs/submodule-openal-soft_apportable.git
-	branch = master
 [submodule "plugins/network"]
 	path = plugins/network
 	url = https://github.com/TRAGsoft/submodule-plugins-network

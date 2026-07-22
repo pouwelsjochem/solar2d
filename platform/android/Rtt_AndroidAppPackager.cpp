@@ -37,6 +37,34 @@ namespace Rtt
 
 #define kDefaultNumBytes 1024
 
+static bool
+FindAndroidBuildToolsDirectory( const char *resourcesDir, std::string& result )
+{
+	static const char *kRelativePaths[] =
+	{
+		"/../Native/Corona/android",
+		"/../../../Native/Corona/android",
+		"/../../../../../android",
+		"/Native/Corona/android"
+	};
+
+	for ( size_t i = 0; i < sizeof( kRelativePaths ) / sizeof( kRelativePaths[0] ); i++ )
+	{
+		std::string candidate( resourcesDir );
+		candidate.append( kRelativePaths[i] );
+
+		std::string templatePath( candidate );
+		templatePath.append( "/resource/android-template.zip" );
+		if ( Rtt_FileExists( templatePath.c_str() ) )
+		{
+			result = candidate;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 AndroidAppPackagerParams::AndroidAppPackagerParams(
 	const char* appName,
 	const char* versionName,
@@ -140,9 +168,7 @@ AndroidAppPackager::Build( AppPackagerParams * params, const char * tmpDirBase )
     // This is not as foolproof as mkdtemp() but has the advantage of working on Win32
     if ( mkdir( mktemp(tmpDir) ) )
 	{
-		char* inputFile = Prepackage( params, tmpDir );
-
-		if (inputFile) //offline build
+		if ( PrepareBuild( params, tmpDir ) )
 		{
 			const AndroidAppPackagerParams * androidParams = (const AndroidAppPackagerParams *)params;
 
@@ -368,70 +394,73 @@ AndroidAppPackager::CreateBuildProperties( const AppPackagerParams& params, cons
 	return result;
 }
 
-char *
-AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir )
+bool
+AndroidAppPackager::PrepareBuild( AppPackagerParams * params, const char * tmpDir )
 {
-	char* result = NULL;
-	int iresult = -1;
-
 	Rtt_ASSERT( params );
 
 	// Convert build.settings into build.properties
-	// And run Android specific pre package script
+	// and prepare the Gradle template.
 	Rtt_Log("Prepackage: Compiling Lua ...");
-	
-	if ( CompileScripts( params, tmpDir ) && CreateBuildProperties( * params, tmpDir ) )
+
+	if ( ! CompileScripts( params, tmpDir ) || ! CreateBuildProperties( * params, tmpDir ) )
 	{
-		std::string javaCmd = "/usr/bin/java";
-
-		const char kCmdFormat[] = "\"%s\" -Djava.class.path=%s org.apache.tools.ant.launch.Launcher %s -DTEMP_DIR=%s -DSRC_DIR=%s -DBUNDLE_DIR=%s -f %s/build.xml build-input-zip";
-
-		char cmdBuf[20480];
-
-		std::string jarPathStr;
-		std::string tmpDirStr = EscapeArgument(tmpDir);
-		std::string srcDirStr = EscapeArgument(params->GetSrcDir());
-		std::string resourcesDirStr = EscapeArgument(fResourcesDir.GetString());
-
-		jarPathStr.append(fResourcesDir.GetString());
-		jarPathStr.append("/");
-		jarPathStr.append("ant.jar");
-
-		jarPathStr.append(":");
-		jarPathStr.append(fResourcesDir.GetString());
-		jarPathStr.append("/");
-		jarPathStr.append("ant-launcher.jar" );
-
-		jarPathStr.append(":");
-		jarPathStr.append(fResourcesDir.GetString());
-		jarPathStr.append("/");
-		jarPathStr.append("AntLiveManifest.jar");
-		jarPathStr = EscapeArgument(jarPathStr);
-
-		const char *antDebugFlag = "-d";
-
-		snprintf(cmdBuf, sizeof(cmdBuf), kCmdFormat,
-				 javaCmd.c_str(),
-				 jarPathStr.c_str(),
-				 antDebugFlag,
-				 tmpDirStr.c_str(),
-				 srcDirStr.c_str(),
-				 resourcesDirStr.c_str(),
-				 resourcesDirStr.c_str() );
-		Rtt_Log("Prepackage: running: %s\n", cmdBuf);
-
-		iresult = system( cmdBuf );
-	
-		if ( iresult == 0 )
-		{
-			const char kDstName[] = "input.zip";
-			size_t resultLen = strlen( tmpDir ) + strlen( kDstName ) + sizeof( LUA_DIRSEP );
-			result = (char *) malloc( resultLen + 1 );
-			snprintf( result, resultLen, "%s" LUA_DIRSEP "%s", tmpDir, kDstName );
-		}
+		return false;
 	}
 
-	return result;
+	std::string androidBuildToolsDir;
+	if ( ! FindAndroidBuildToolsDirectory( fResourcesDir.GetString(), androidBuildToolsDir ) )
+	{
+		Rtt_TRACE_SIM( ( "ERROR: Android build tools were not found relative to '%s'.\n", fResourcesDir.GetString() ) );
+		return false;
+	}
+
+	std::string templatePath( androidBuildToolsDir );
+	templatePath.append( "/resource/android-template.zip" );
+	std::string unzipCommand( "/usr/bin/unzip -q -o " );
+	unzipCommand.append( EscapeArgument( templatePath ) );
+	unzipCommand.append( " -d " );
+	unzipCommand.append( EscapeArgument( tmpDir ) );
+	Rtt_Log( "Prepackage: running: %s\n", unzipCommand.c_str() );
+	if ( system( unzipCommand.c_str() ) != 0 )
+	{
+		Rtt_TRACE_SIM( ( "ERROR: Could not extract the Android Gradle template.\n" ) );
+		return false;
+	}
+
+	std::string gradleLibrariesDestination( tmpDir );
+	gradleLibrariesDestination.append( "/template/app/libs" );
+	if ( ! Rtt_MakeDirectory( gradleLibrariesDestination.c_str() ) )
+	{
+		Rtt_TRACE_SIM( ( "ERROR: Could not create '%s'.\n", gradleLibrariesDestination.c_str() ) );
+		return false;
+	}
+
+	std::string gradleLibrariesSource( androidBuildToolsDir );
+	gradleLibrariesSource.append( "/lib/gradle/." );
+	std::string copyCommand( "/bin/cp -R " );
+	copyCommand.append( EscapeArgument( gradleLibrariesSource ) );
+	copyCommand.append( " " );
+	copyCommand.append( EscapeArgument( gradleLibrariesDestination ) );
+	Rtt_Log( "Prepackage: running: %s\n", copyCommand.c_str() );
+	if ( system( copyCommand.c_str() ) != 0 )
+	{
+		Rtt_TRACE_SIM( ( "ERROR: Could not copy the Android Gradle libraries.\n" ) );
+		return false;
+	}
+
+	std::string chmodCommand( "/bin/chmod a+x " );
+	chmodCommand.append( EscapeArgument( std::string( tmpDir ) + "/template/gradlew" ) );
+	chmodCommand.append( " " );
+	chmodCommand.append( EscapeArgument( std::string( tmpDir ) + "/template/setup.sh" ) );
+	Rtt_Log( "Prepackage: running: %s\n", chmodCommand.c_str() );
+	if ( system( chmodCommand.c_str() ) != 0 )
+	{
+		Rtt_TRACE_SIM( ( "ERROR: Could not make the Android Gradle scripts executable.\n" ) );
+		return false;
+	}
+
+	return true;
 }
 
 
@@ -440,4 +469,3 @@ AndroidAppPackager::Prepackage( AppPackagerParams * params, const char * tmpDir 
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -198,10 +198,7 @@
 		00B73D5E12B720CA0057F594 /* CoronaSimulator.icns in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8512B720C90057F594 /* CoronaSimulator.icns */; };
 		00B73D6112B720CA0057F594 /* RememberPreferenceCheckbox.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8812B720C90057F594 /* RememberPreferenceCheckbox.xib */; };
 		00B73D6712B720CA0057F594 /* debug.keystore in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8F12B720C90057F594 /* debug.keystore */; };
-		00B73D6812B720CA0057F594 /* zipalign in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C9012B720C90057F594 /* zipalign */; };
 		00B73D6912B720CA0057F594 /* Rtt_AndroidAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C9112B720C90057F594 /* Rtt_AndroidAppPackager.cpp */; };
-		00B73D6A12B720CA0057F594 /* build.properties in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C9312B720C90057F594 /* build.properties */; };
-		00B73D6B12B720CA0057F594 /* build.xml in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C9412B720C90057F594 /* build.xml */; };
 		00B73D8B12B720CA0057F594 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CD912B720C90057F594 /* main.m */; };
 		00B73D9712B720CA0057F594 /* Rtt_MacDisplayObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00B73CF112B720C90057F594 /* Rtt_MacDisplayObject.mm */; };
 		A4F0B60628D0000000A1B2C3 /* Rtt_MacTextFieldObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = A4F0B60128D0000000A1B2C3 /* Rtt_MacTextFieldObject.mm */; };
@@ -219,9 +216,6 @@
 		00B73E1C12B727240057F594 /* BuildProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00B73E0012B727240057F594 /* BuildProgress.xib */; };
 		00B73E6A12B72DA50057F594 /* ALmixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; };
 		00B73E9D12B72FD80057F594 /* print.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B7343B12B6F7530057F594 /* print.c */; };
-		00B73ECE12B730AA0057F594 /* ant-launcher.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8B12B720C90057F594 /* ant-launcher.jar */; };
-		00B73ECF12B730AA0057F594 /* ant.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8C12B720C90057F594 /* ant.jar */; };
-		00B73ED012B730AA0057F594 /* ListKeyStore.jar in Resources */ = {isa = PBXBuildFile; fileRef = 00B73C8D12B720C90057F594 /* ListKeyStore.jar */; };
 		00C8225E13452C80005D1EEB /* ValidationSupportMacUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 00C8225D13452C80005D1EEB /* ValidationSupportMacUI.m */; };
 		00D3F20B1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c in Sources */ = {isa = PBXBuildFile; fileRef = 00D3F20A1613C1490095C5D6 /* Rtt_LuaCoronaBaseLib.c */; };
 		00D3F20F1613C4490095C5D6 /* Rtt_LuaCoronaBaseLib.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D3F20E1613C4490095C5D6 /* Rtt_LuaCoronaBaseLib.m */; };
@@ -1898,15 +1892,9 @@
 		00B73C8512B720C90057F594 /* CoronaSimulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CoronaSimulator.icns; sourceTree = "<group>"; };
 		00B73C8612B720C90057F594 /* remdebug_engine.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = remdebug_engine.lua; path = modules/lu/remdebug_engine.lua; sourceTree = "<group>"; };
 		00B73C8812B720C90057F594 /* RememberPreferenceCheckbox.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RememberPreferenceCheckbox.xib; sourceTree = "<group>"; };
-		00B73C8B12B720C90057F594 /* ant-launcher.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = "ant-launcher.jar"; path = "../../external/apache-ant-1.8.1/lib/ant-launcher.jar"; sourceTree = SOURCE_ROOT; };
-		00B73C8C12B720C90057F594 /* ant.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = ant.jar; path = "../../external/apache-ant-1.8.1/lib/ant.jar"; sourceTree = SOURCE_ROOT; };
-		00B73C8D12B720C90057F594 /* ListKeyStore.jar */ = {isa = PBXFileReference; lastKnownFileType = archive.jar; name = ListKeyStore.jar; path = ../android/project/ListKeyStore/ListKeyStore.jar; sourceTree = SOURCE_ROOT; };
 		00B73C8F12B720C90057F594 /* debug.keystore */ = {isa = PBXFileReference; lastKnownFileType = file; name = debug.keystore; path = ../android/resources/debug.keystore; sourceTree = SOURCE_ROOT; };
-		00B73C9012B720C90057F594 /* zipalign */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = zipalign; path = ../android/resources/zipalign; sourceTree = SOURCE_ROOT; };
 		00B73C9112B720C90057F594 /* Rtt_AndroidAppPackager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rtt_AndroidAppPackager.cpp; path = ../android/Rtt_AndroidAppPackager.cpp; sourceTree = SOURCE_ROOT; };
 		00B73C9212B720C90057F594 /* Rtt_AndroidAppPackager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rtt_AndroidAppPackager.h; path = ../android/Rtt_AndroidAppPackager.h; sourceTree = SOURCE_ROOT; };
-		00B73C9312B720C90057F594 /* build.properties */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = build.properties; path = ../android/resources/build.properties; sourceTree = SOURCE_ROOT; };
-		00B73C9412B720C90057F594 /* build.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = build.xml; path = ../android/resources/build.xml; sourceTree = SOURCE_ROOT; };
 		00B73CD812B720C90057F594 /* Rtt_Player.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Player.pch; sourceTree = "<group>"; };
 		00B73CD912B720C90057F594 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		00B73CDC12B720C90057F594 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -3224,13 +3212,9 @@
 			isa = PBXGroup;
 			children = (
 				C2AEAC1418E23B34004F30FE /* _coronatest.jar */,
-				00B73C9312B720C90057F594 /* build.properties */,
-				00B73C9412B720C90057F594 /* build.xml */,
 				00B73C8F12B720C90057F594 /* debug.keystore */,
-				00B73C8D12B720C90057F594 /* ListKeyStore.jar */,
 				00B73C9112B720C90057F594 /* Rtt_AndroidAppPackager.cpp */,
 				00B73C9212B720C90057F594 /* Rtt_AndroidAppPackager.h */,
-				00B73C9012B720C90057F594 /* zipalign */,
 			);
 			name = android;
 			sourceTree = "<group>";
@@ -4418,7 +4402,6 @@
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				00B737B312B707970057F594 /* Copy Frameworks */,
 				00A76D3412C04C9200850EA0 /* Run script (write AppSettings: customBuildID, buildBucket, etc if defined) */,
-				00B73EE912B7311B0057F594 /* Run script (codesign utilities) */,
 				C2FD8EDF19C904DA00CBE369 /* Run Script (copy Skins files) */,
 				C2B5FEF11B336C9000DD49E6 /* Run Script (build OSXAppTemplate.zip) */,
 				C2E454671F844BFC00717681 /* Run Script (copy device-support files) */,
@@ -4726,10 +4709,7 @@
 				C2ADB45A1B6C1C31008C9BF2 /* OSXAppPackageSheet.xib in Resources */,
 				A4DF586A1BE44A3000B17862 /* codesign-framework.sh in Resources */,
 				004A5F371368DB24003BD9DA /* Corona3rdPartyLicenses.txt in Resources */,
-				00B73ECE12B730AA0057F594 /* ant-launcher.jar in Resources */,
 				C2AF1E501DA6D80B00907A65 /* ValidateSettings.lua in Resources */,
-				00B73ECF12B730AA0057F594 /* ant.jar in Resources */,
-				00B73ED012B730AA0057F594 /* ListKeyStore.jar in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				C28165201B9AAC3500F16B5A /* OSXCreateDMGSheet.xib in Resources */,
 				C26149EB18DA10E300F34F71 /* CoronaResources-Info.plist in Resources */,
@@ -4741,11 +4721,8 @@
 				00B73D6712B720CA0057F594 /* debug.keystore in Resources */,
 				C21D9DC91BF6992D0042C5A9 /* ios_syslog.sh in Resources */,
 				C200AAEA19626D86005828AA /* CoronaPListSupport.lua in Resources */,
-				00B73D6812B720CA0057F594 /* zipalign in Resources */,
 				A40A90701BD99B23001D2038 /* TVOSAppPackageSheet.xib in Resources */,
-				00B73D6A12B720CA0057F594 /* build.properties in Resources */,
 				C220A3B41BFBED7F00161EC8 /* xcodesim_syslog.sh in Resources */,
-				00B73D6B12B720CA0057F594 /* build.xml in Resources */,
 				A40A90631BD99B0E001D2038 /* TVOSAppBuild.xib in Resources */,
 				00B73DF512B726350057F594 /* MainMenu.nib in Resources */,
 				C2E992D51A6B135500E99F46 /* Info.plist in Resources */,
@@ -4803,21 +4780,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "set -e\n\ncp \"${SCRIPT_INPUT_FILE_0}\" \"${SCRIPT_OUTPUT_FILE_0}\"\n\n# To define, do something like:\n# xcodebuild -project ratatouille.xcodeproj CUSTOM_BUILD_ID=01234ABC\nif [ \"$CUSTOM_BUILD_ID\" != \"\" ]; then\n\t# Our hardcoded Lua variable is named 'customBuildID'\n\t# should write out\n\t# customBuildId=\"01234ABC\"\n\techo \"customBuildId=\\\"$CUSTOM_BUILD_ID\\\"\" >> \"${SCRIPT_OUTPUT_FILE_0}\"\nfi\n\nif [ \"$BUILD_BUCKET\" != \"\" ]; then\n\t# Our hardcoded Lua variable is named 'buildBucket'\n\t# should write out\n\t# buildBucket=\"01234ABC\"\n\techo \"buildBucket=\\\"$BUILD_BUCKET\\\"\" >> \"${SCRIPT_OUTPUT_FILE_0}\"\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		00B73EE912B7311B0057F594 /* Run script (codesign utilities) */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run script (codesign utilities)";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [[ $CONFIGURATION == *-template ]]; then\necho \"Skipping creation of agent app in template build\"\nexit 0\nfi\n\nif [[ $CONFIGURATION == \"Debug\" ]]; then\necho \"Skipping codesign of components in Debug build\"\nexit 0\nfi\n\n# Xcode signs the main app, but bundled zipalign needs to be signed separately.\ncodesign -f -s \"Developer ID Application: Jochem Pouwels\" \"$BUILT_PRODUCTS_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/zipalign\"\n\n";
 			showEnvVarsInLog = 0;
 		};
 		C22607511B4B368800172FB1 /* Copy framework for CoronaShell */ = {

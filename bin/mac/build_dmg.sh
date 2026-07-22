@@ -262,11 +262,6 @@ fi
 
 rm -rf "$TMPPATH"		# Remove tmp folder
 
-# Convert tmp dmg into read-only dmg and add license
-# hdiutil unflatten "$DSTBASE/$DMG_FILE"
-# "$TOOLSPATH/AddLicense" "$DSTBASE/$DMG_FILE" English "$SRCROOT/sdk/dmg/Corona_License.rtf"
-# hdiutil flatten "$DSTBASE/$DMG_FILE"
-
 codesign --timestamp --deep --force --options runtime --strict --sign "Developer ID Application: Jochem Pouwels" "$DSTBASE/$DMG_FILE"
 mkdir -p "$SRCROOT/output"
 cp "$DSTBASE/$DMG_FILE" "$SRCROOT/output"
