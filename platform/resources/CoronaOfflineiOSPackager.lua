@@ -44,7 +44,7 @@ function findBuilder(params)
 end
 
 function findLuac(params)
-    local luac = params.resourceDir .. '/../../../luac'
+    local luac = params.resourceDir .. '/../Tools/luac'
     if lfs.attributes(luac, 'mode') == 'file' then
         return luac
     end

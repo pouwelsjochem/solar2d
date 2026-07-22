@@ -38,6 +38,8 @@
 		7A0000173000000000000001 /* tvOS-SDKs.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000073000000000000001 /* tvOS-SDKs.json */; };
 		7A0000183000000000000001 /* OSXApp.xcent in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000083000000000000001 /* OSXApp.xcent */; };
 		7A0000193000000000000001 /* codesign-framework.sh in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000093000000000000001 /* codesign-framework.sh */; };
+		7A0000253000000000000001 /* lua in Copy Helper Tools */ = {isa = PBXBuildFile; fileRef = A4ED11FE14D350C400ECF49E /* lua */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		7A0000263000000000000001 /* luac in Copy Helper Tools */ = {isa = PBXBuildFile; fileRef = A4ED120014D350C400ECF49E /* luac */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1F23C320211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23C31E211ABC410003EBF0 /* Rtt_LinuxAppPackager.cpp */; };
 		1F23C322211ABCE40003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F23C321211ABCE30003EBF0 /* Rtt_AppPackagerLinuxFactory.cpp */; };
 		A4543F4C15265DE700486F8A /* Rtt_Car.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4543F4A15265DE700486F8A /* Rtt_Car.cpp */; };
@@ -159,13 +161,6 @@
 			remoteGlobalIDString = 004CEC2F1339724E006ACF35;
 			remoteInfo = "liblua-universal";
 		};
-		A4ED120314D350C400ECF49E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A4ED11ED14D350C400ECF49E /* lua.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 004CED3713397862006ACF35;
-			remoteInfo = lstrip;
-		};
 		A4ED120514D350C400ECF49E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A4ED11ED14D350C400ECF49E /* lua.xcodeproj */;
@@ -193,13 +188,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 004CED2913397858006ACF35;
 			remoteInfo = luac;
-		};
-		A4ED120D14D350DA00ECF49E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A4ED11ED14D350C400ECF49E /* lua.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 004CED3613397862006ACF35;
-			remoteInfo = lstrip;
 		};
 		C221F5221D48156700F45E77 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -325,6 +313,18 @@
 				7A0000133000000000000001 /* AndroidValidation.lua in Copy Build Resources */,
 			);
 			name = "Copy Build Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A0000273000000000000001 /* Copy Helper Tools */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Tools;
+			dstSubfolderSpec = 1;
+			files = (
+				7A0000253000000000000001 /* lua in Copy Helper Tools */,
+				7A0000263000000000000001 /* luac in Copy Helper Tools */,
+			);
+			name = "Copy Helper Tools";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C259E4A91BB20B4000DE7BCB /* Copy Frameworks */ = {
@@ -873,7 +873,6 @@
 				A4ED11FE14D350C400ECF49E /* lua */,
 				A4ED120014D350C400ECF49E /* luac */,
 				A4ED120214D350C400ECF49E /* liblua-universal.a */,
-				A4ED120414D350C400ECF49E /* lstrip */,
 				A4ED120614D350C400ECF49E /* debugger */,
 				A4ED120814D350C400ECF49E /* liblua-tool.a */,
 				C221F5231D48156700F45E77 /* libluasocket.a */,
@@ -1044,6 +1043,7 @@
 				A4FCD3E914CF417C0004E91D /* Frameworks */,
 				A4FCD3EA14CF417C0004E91D /* Resources */,
 				7A0000233000000000000001 /* Copy Build Resources */,
+				7A0000273000000000000001 /* Copy Helper Tools */,
 				7A0000243000000000000001 /* Write AppSettings */,
 				7A0000213000000000000001 /* Build OSXAppTemplate.zip */,
 				7A0000223000000000000001 /* Copy JRE if available */,
@@ -1057,7 +1057,6 @@
 				C2342E501AC1D2220091FE20 /* PBXTargetDependency */,
 				A4ED120A14D350DA00ECF49E /* PBXTargetDependency */,
 				A4ED120C14D350DA00ECF49E /* PBXTargetDependency */,
-				A4ED120E14D350DA00ECF49E /* PBXTargetDependency */,
 				C2F1BB2B1EF48F7200D77BD7 /* PBXTargetDependency */,
 			);
 			name = CoronaBuilder;
@@ -1139,13 +1138,6 @@
 			fileType = archive.ar;
 			path = "liblua-universal.a";
 			remoteRef = A4ED120114D350C400ECF49E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A4ED120414D350C400ECF49E /* lstrip */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = lstrip;
-			remoteRef = A4ED120314D350C400ECF49E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A4ED120614D350C400ECF49E /* debugger */ = {
@@ -1441,11 +1433,6 @@
 			isa = PBXTargetDependency;
 			name = luac;
 			targetProxy = A4ED120B14D350DA00ECF49E /* PBXContainerItemProxy */;
-		};
-		A4ED120E14D350DA00ECF49E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = lstrip;
-			targetProxy = A4ED120D14D350DA00ECF49E /* PBXContainerItemProxy */;
 		};
 		C2342E501AC1D2220091FE20 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

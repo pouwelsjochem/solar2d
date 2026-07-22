@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C22039381B4B21E700942B73 /* CoronaCards.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C22039371B4B21E600942B73 /* CoronaCards.framework */; };
-		C22225351B4B28C300D84E64 /* CoronaCards.framework in Copy CoronaCards framework */ = {isa = PBXBuildFile; fileRef = C22039371B4B21E600942B73 /* CoronaCards.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C22039381B4B21E700942B73 /* CoronaCards.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B0000033000000000000001 /* CoronaCards.framework */; };
+		C22225351B4B28C300D84E64 /* CoronaCards.framework in Copy CoronaCards framework */ = {isa = PBXBuildFile; fileRef = 7B0000033000000000000001 /* CoronaCards.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C22607581B4B3CEB00172FB1 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2D927321ACA098800B7F9AC /* MainMenu.xib */; };
 		C24B5CE81C57EF9500A8E813 /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = C24B5CE71C57EF9500A8E813 /* NSString+Extensions.m */; };
 		C2A3776D1B33C69F00BB5B88 /* Icon-macos.icns in Resources */ = {isa = PBXBuildFile; fileRef = C2A3776C1B33C69F00BB5B88 /* Icon-macos.icns */; };
@@ -17,6 +17,23 @@
 		C2D927311ACA098800B7F9AC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2D927301ACA098800B7F9AC /* Images.xcassets */; };
 		C2D927531ACA1C3800B7F9AC /* CoronaShell.icns in Resources */ = {isa = PBXBuildFile; fileRef = C2D927521ACA1C3800B7F9AC /* CoronaShell.icns */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7B0000023000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B0000013000000000000001 /* ratatouille.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C26E845E1A5DE0C1008950FB;
+			remoteInfo = CoronaCards;
+		};
+		7B0000053000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B0000013000000000000001 /* ratatouille.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C26E845D1A5DE0C0008950FB;
+			remoteInfo = CoronaCards;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		C2D9274B1ACA0C1B00B7F9AC /* Copy CoronaCards framework */ = {
@@ -34,7 +51,7 @@
 
 /* Begin PBXFileReference section */
 		98B1A54AD8C8164ACA3BCF07 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
-		C22039371B4B21E600942B73 /* CoronaCards.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoronaCards.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B0000013000000000000001 /* ratatouille.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ratatouille.xcodeproj; path = ../ratatouille.xcodeproj; sourceTree = SOURCE_ROOT; };
 		C24B5CE61C57EF9500A8E813 /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Extensions.h"; path = "../../../apple/NSString+Extensions.h"; sourceTree = "<group>"; };
 		C24B5CE71C57EF9500A8E813 /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Extensions.m"; path = "../../../apple/NSString+Extensions.m"; sourceTree = "<group>"; };
 		C2A3776C1B33C69F00BB5B88 /* Icon-macos.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Icon-macos.icns"; sourceTree = "<group>"; };
@@ -64,7 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				98B1A54AD8C8164ACA3BCF07 /* Solar2D.xcconfig */,
-				C22039371B4B21E600942B73 /* CoronaCards.framework */,
+				7B0000013000000000000001 /* ratatouille.xcodeproj */,
 				C2A3776C1B33C69F00BB5B88 /* Icon-macos.icns */,
 				C2D927521ACA1C3800B7F9AC /* CoronaShell.icns */,
 				C2D927281ACA098800B7F9AC /* CoronaShell */,
@@ -103,6 +120,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		7B0000043000000000000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B0000033000000000000001 /* CoronaCards.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -118,6 +143,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				7B0000063000000000000001 /* PBXTargetDependency */,
 			);
 			name = CoronaShell;
 			productName = CoronaShell;
@@ -150,6 +176,12 @@
 			mainGroup = C2D9271D1ACA098800B7F9AC;
 			productRefGroup = C2D927271ACA098800B7F9AC /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 7B0000043000000000000001 /* Products */;
+					ProjectRef = 7B0000013000000000000001 /* ratatouille.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C2D927251ACA098800B7F9AC /* CoronaShell */,
@@ -171,6 +203,16 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXReferenceProxy section */
+		7B0000033000000000000001 /* CoronaCards.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CoronaCards.framework;
+			remoteRef = 7B0000023000000000000001 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C2D927221ACA098800B7F9AC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -183,6 +225,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7B0000063000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CoronaCards;
+			targetProxy = 7B0000053000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C2D927321ACA098800B7F9AC /* MainMenu.xib */ = {
@@ -238,6 +288,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SYMROOT = "$(SRCROOT)/../build";
 			};
 			name = Debug;
 		};
@@ -276,6 +327,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SYMROOT = "$(SRCROOT)/../build";
 			};
 			name = Release;
 		};

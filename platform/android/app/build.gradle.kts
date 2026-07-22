@@ -38,11 +38,12 @@ val buildDirectory = layout.buildDirectory.asFile.get()
 
 val windows = System.getProperty("os.name").lowercase().contains("windows")
 val linux = System.getProperty("os.name").lowercase().contains("linux")
-val shortOsName = if (windows) "win" else if (linux) "linux" else "mac"
 val solar2DBuildToolsDir = (rootProject.extra["solar2DBuildToolsDir"] as String).replace("\\", "/")
 
 val coronaPlugins = file("$buildDirectory/corona-plugins")
-val luaCmd = "$solar2DBuildToolsDir/Corona/mac/bin/lua"
+val macCoronaBuilder = "$solar2DBuildToolsDir/Corona/mac/bin/CoronaBuilder.app"
+val macHelperTools = "$macCoronaBuilder/Contents/Tools"
+val luaCmd = "$macHelperTools/lua"
 val isSimulatorBuild = coronaTmpDir != null
 
 fun checkSolar2DBuildTools() {
@@ -82,7 +83,7 @@ val parsedBuildProperties: JsonObject = run {
 
     val output = ByteArrayOutputStream()
     val execResult = exec {
-        setWorkingDir("$solar2DBuildToolsDir/Corona/mac/bin")
+        setWorkingDir(macHelperTools)
         commandLine(luaCmd,
                 "-e",
                 "package.path='$solar2DBuildToolsDir/Corona/shared/resource/?.lua;'..package.path",
@@ -115,7 +116,7 @@ val coronaBuilder = if (windows) {
 } else if (linux) {
     "$coronaResourcesDir/../Solar2DBuilder"
 } else {
-    "$solar2DBuildToolsDir/Corona/$shortOsName/bin/CoronaBuilder.app/Contents/MacOS/CoronaBuilder"
+    "$macCoronaBuilder/Contents/MacOS/CoronaBuilder"
 }
 
 val coronaVersionName =
@@ -329,7 +330,7 @@ android.applicationVariants.all {
 
     val compileLuaTask = tasks.create("compileLua$baseNameCapitalized") {
         description = "If required, compiles Lua and archives it into resource.car"
-        val luac = "$solar2DBuildToolsDir/Corona/mac/bin/luac"
+        val luac = "$macHelperTools/luac"
 
         val srcLuaFiles = fileTree(coronaSrcDir) {
             include("**/*.lua")
