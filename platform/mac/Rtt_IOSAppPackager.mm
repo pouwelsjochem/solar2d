@@ -366,94 +366,6 @@ exit_gracefully:
 	return result;
 }
 
-int
-IOSAppPackager::SendToAppStore( IOSAppPackagerParams *iosParams, const char *itunesConnectUsername, const char *itunesConnectPassword )
-{
-    int result = PlatformAppPackager::kNoError;
-    lua_State *L = fVM;
-    lua_getglobal( L, "IOSSendToAppStore" ); Rtt_ASSERT( lua_isfunction( L, -1 ) );
-
-    // params for Lua call
-    lua_newtable( L );
-    {
-        lua_pushstring( L, iosParams->GetSrcDir() );
-        lua_setfield( L, -2, "srcAssets" );
-
-        lua_pushstring( L, iosParams->GetDstDir() );
-        lua_setfield( L, -2, "dstDir" );
-
-		String sanitizedName;
-		PlatformAppPackager::EscapeFileName(iosParams->GetAppName(), sanitizedName);
-		lua_pushstring( L, sanitizedName.GetString() );
-		lua_setfield( L, -2, "dstFile" );
-
-		lua_pushstring( L, iosParams->GetAppName() );
-		lua_setfield( L, -2, "bundledisplayname" );
-
-        lua_pushstring( L, iosParams->GetVersion() );
-        lua_setfield( L, -2, "bundleversion" );
-
-        lua_pushstring( L, iosParams->GetIdentity() );
-        lua_setfield( L, -2, "signingIdentity" );
-
-        lua_pushinteger( L, iosParams->GetTargetDevice() );
-        lua_setfield( L, -2, "targetDevice" );
-
-        lua_pushstring( L, TargetDevice::StringForPlatform( iosParams->GetTargetPlatform() ) );
-        lua_setfield( L, -2, "targetPlatform" );
-
-        lua_pushstring( L, Rtt_STRING_BUILD );
-        lua_setfield( L, -2, "corona_build_id" );
-
-        lua_pushstring( L, itunesConnectUsername );
-        lua_setfield( L, -2, "itc1" );
-
-        lua_pushstring( L, itunesConnectPassword );
-        lua_setfield( L, -2, "itc2" );
-
-        lua_newtable(L);
-        {
-            BOOL debugBuildProcess = YES;
-            NSString* sdkRoot = [XcodeToolHelper getXcodePath];
-            NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
-            NSString* productBuild = [XcodeToolHelper pathForProductBuildUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
-            NSString* applicationLoader = [XcodeToolHelper pathForApplicationLoaderUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
-
-            lua_pushstring( L, [sdkRoot UTF8String] );
-            lua_setfield( L, -2, "sdkRoot" );
-
-            lua_pushstring( L, [codesign UTF8String] );
-            lua_setfield( L, -2, "codesign" );
-
-            lua_pushstring( L, [productBuild UTF8String] );
-            lua_setfield( L, -2, "productbuild" );
-            
-            lua_pushstring( L, [applicationLoader UTF8String] );
-            lua_setfield( L, -2, "applicationLoader" );
-        }
-        lua_setfield( L, -2, "xcodetoolhelper" );
-    }
-    
-    // IOSSendToAppStore( params )
-    if ( ! Rtt_VERIFY( 0 == Lua::DoCall( L, 1, 1 ) ) )
-    {
-        // The packaging script failed
-        result = PlatformAppPackager::kLocalPackagingError;
-    }
-    else
-    {
-        if ( lua_isstring( L, -1 ) )
-        {
-            result = PlatformAppPackager::kLocalPackagingError;
-            Rtt_TRACE_SIM( ( "PACKAGING %s\n", lua_tostring( L, -1 ) ) );
-            iosParams->SetBuildMessage( lua_tostring( L, -1 ) );
-        }
-        lua_pop( L, 1 );
-    }
-    
-    return result;
-}
-
 const char *
 IOSAppPackager::GetBundleId( const char *provisionFile, const char *appName ) const
 {
@@ -528,4 +440,3 @@ IOSAppPackager::CopyProvisionFile( const AppPackagerParams * params, const char*
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

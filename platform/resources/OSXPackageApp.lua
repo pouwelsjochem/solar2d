@@ -246,42 +246,6 @@ local function getProductBuildScript( path, installerIdentity, productbuild )
 	return cmd
 end
 
-local function getProductValidateScript( path, itunesConnectUsername, itunesConnectPassword, applicationLoader )
-
-	local packagePath = path:gsub('.app$', '') .. ".pkg"
-	-- Apple tells us to use this buried utility to automate Application Loader tasks in
-	-- https://itunesconnect.apple.com/docs/UsingApplicationLoader.pdf
-	local altool = makepath(applicationLoader, "Contents/Frameworks/ITunesSoftwareService.framework/Support/altool")
-
-	-- If the "cmd" generated below fails because it's the wrong path that's very hard to detect amongst all the XML parsing so we do it here
-	if lfs.attributes( altool ) == nil then
-		print("ERROR: cannot find 'altool' utility in "..altool)
-		return "echo Failed to find build utilities in expected places (cannot find 'altool' utility in '"..altool.."')"
-	end
-
-	-- Removing the "!DOCTYPE" line from the XML stops xpath trying to access the DTD
-	-- The xpath command parses the XML output looking for an error message
-	-- The final sed command adds a newline to the last line of output which xpath omits
-	local cmd = quoteString(altool) .. " --validate-app -f ".. quoteString(packagePath) .." -u '".. itunesConnectUsername .."' -p '".. itunesConnectPassword .."' --output-format xml | grep -v '^<!DOCTYPE' | /usr/bin/xpath '/plist/dict/key[.=\"product-errors\"]/following-sibling::*[1]//key[.=\"message\"]/following-sibling::*[1]/node()' 2>/dev/null  | sed -ne 'p'"
-
-	return cmd
-end
-
-local function getProductUploadScript( path, itunesConnectUsername, itunesConnectPassword, applicationLoader )
-
-	local packagePath = path:gsub('.app$', '') .. ".pkg"
-	-- Apple tells us to use this buried utility to automate Application Loader tasks in
-	-- https://itunesconnect.apple.com/docs/UsingApplicationLoader.pdf
-	local altool = makepath(applicationLoader, "Contents/Frameworks/ITunesSoftwareService.framework/Support/altool")
-	
-	-- Removing the "!DOCTYPE" line from the XML stops xpath trying to access the DTD
-	-- The xpath command parses the XML output looking for an error message
-	-- The final sed command adds a newline to the last line of output which xpath omits
-	local cmd = quoteString(altool) .. " --upload-app -f ".. quoteString(packagePath) .." -u '".. itunesConnectUsername .."' -p '".. itunesConnectPassword .."' --output-format xml | grep -v '^<!DOCTYPE' | /usr/bin/xpath '/plist/dict/key[.=\"product-errors\"]/following-sibling::*[1]//key[.=\"message\"]/following-sibling::*[1]/node()' 2>/dev/null | sed -ne 'p'"
-
-	return cmd
-end
-
 local function getCreateDMGScript( path )
 
 	local dmgPath = path:gsub('(.*)%.%w+$', '%1') .. ".dmg"
@@ -896,7 +860,7 @@ end
 --
 -- OSXPackageForAppStore
 --
--- Create an App Store package and optionally send it to iTunes Connect
+-- Create an App Store package for manual upload.
 --
 -- returns an error message or nil on success
 --
@@ -907,13 +871,9 @@ function OSXPackageForAppStore( params )
 	local installerSigningIdentity = params.installerSigningIdentity
 	local dstDir = params.dstDir
 	local dstFile = params.bundledisplayname
-	local sendToAppStore = params.sendToAppStore
 	local osxAppEntitlementsFile = params.osxAppEntitlements
-	local itunesConnectUsername = params.itc1
-	local itunesConnectPassword = params.itc2
 	local sdkRoot = params.xcodetoolhelper.sdkRoot
 	local codesign = params.xcodetoolhelper.codesign
-	local applicationLoader = params.xcodetoolhelper.applicationLoader
 	local productbuild = params.xcodetoolhelper.productbuild
 	local err = nil
 	local appSigningIdentityName
@@ -1010,39 +970,7 @@ function OSXPackageForAppStore( params )
 		return errMsg
 	end
 
-	if itunesConnectUsername and itunesConnectUsername ~= "" then
-		--
-		-- Validate package with iTunes Connect
-		--
-		setStatus("Validating application package with iTunes Connect")
-		local result = captureCommandOutput( getProductValidateScript( appBundleFile, itunesConnectUsername, itunesConnectPassword, applicationLoader ), 2 )
-
-		if result ~= "" then
-			if result:match('Unable to validate archive') then
-				-- Validation requires an internet connection but the error message is somewhat inscrutable
-				result = result .. "\n\n(make sure you are connected to the internet)"
-			end
-
-			errMsg = "ERROR: validation failed: "..tostring(result)
-			return errMsg
-		end
-	end
-
-	if sendToAppStore then
-		--
-		-- Upload package to iTunes Connect
-		--
-		setStatus("Uploading application package to iTunes Connect")
-		local result = captureCommandOutput( getProductUploadScript( appBundleFile, itunesConnectUsername, itunesConnectPassword, applicationLoader ), 2 )
-
-		if result ~= "" then
-			errMsg = "ERROR: upload failed: "..tostring(result)
-			return errMsg
-		end
-	else
-		-- Not sending to App Store so just show what we built in the Finder
-		runScript( getShowFileInFinderScript( productFile ) )
-	end
+	runScript( getShowFileInFinderScript( productFile ) )
 
 	return nil
 end

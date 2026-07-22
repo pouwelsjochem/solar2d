@@ -27,9 +27,6 @@
 + (NSString*) pathForCodesignFramework;
 + (NSString*) pathForResources;
 
-// Note: This returns Application Loader.app, not the full Application Loader.app/Contents/MacOS/Application Loader
-+ (NSString*) pathForApplicationLoaderUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning;
-
 + (NSString*) getXcodePath;
 
 + (NSString *) findXcodePathFor:(NSString *)cmd;

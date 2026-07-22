@@ -69,7 +69,6 @@ class IOSAppPackager : public PlatformAppPackager
 	public:
 		// TODO: caller should make dstDir a unique directory
 		virtual int Build( AppPackagerParams *params, const char *tmpDirBase );
-        int SendToAppStore( IOSAppPackagerParams *osxParams, const char *itunesConnectUsername, const char *itunesConnectPassword );
 
 		virtual bool VerifyConfiguration() const;
 

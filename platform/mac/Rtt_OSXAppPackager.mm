@@ -355,7 +355,7 @@ OSXAppPackager::PrepackagePlugins(OSXAppPackagerParams *params, String& pluginsD
 }
 
 int
-OSXAppPackager::PackageForAppStore( OSXAppPackagerParams *osxParams, bool sendToAppStore, const char *itunesConnectUsername, const char *itunesConnectPassword )
+OSXAppPackager::PackageForAppStore( OSXAppPackagerParams *osxParams )
 {
 	int result = PlatformAppPackager::kNoError;
 	lua_State *L = fVM;
@@ -402,17 +402,8 @@ OSXAppPackager::PackageForAppStore( OSXAppPackagerParams *osxParams, bool sendTo
 		lua_pushstring( L, [[[XcodeToolHelper pathForResources] stringByAppendingPathComponent:@"OSXApp.xcent"] UTF8String] );
 		lua_setfield( L, -2, "osxAppEntitlements" );
 
-		lua_pushboolean( L, sendToAppStore );
-		lua_setfield( L, -2, "sendToAppStore" );
-		
 		lua_pushstring( L, osxParams->GetProvisionFile() );
 		lua_setfield( L, -2, "provisionFile" );
-
-		lua_pushstring( L, itunesConnectUsername );
-		lua_setfield( L, -2, "itc1" );
-
-		lua_pushstring( L, itunesConnectPassword );
-		lua_setfield( L, -2, "itc2" );
 
 		lua_newtable(L);
 		{
@@ -420,7 +411,6 @@ OSXAppPackager::PackageForAppStore( OSXAppPackagerParams *osxParams, bool sendTo
 			NSString* sdkRoot = [XcodeToolHelper getXcodePath];
 			NSString* codesign = [XcodeToolHelper pathForCodesignUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
 			NSString* productBuild = [XcodeToolHelper pathForProductBuildUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
-			NSString* applicationLoader = [XcodeToolHelper pathForApplicationLoaderUsingDeveloperBase:sdkRoot printWarning:debugBuildProcess];
 
 			lua_pushstring( L, [sdkRoot UTF8String] );
 			lua_setfield( L, -2, "sdkRoot" );
@@ -430,9 +420,6 @@ OSXAppPackager::PackageForAppStore( OSXAppPackagerParams *osxParams, bool sendTo
 
 			lua_pushstring( L, [productBuild UTF8String] );
 			lua_setfield( L, -2, "productbuild" );
-
-			lua_pushstring( L, [applicationLoader UTF8String] );
-			lua_setfield( L, -2, "applicationLoader" );
 		}
 		lua_setfield( L, -2, "xcodetoolhelper" );
 	}
@@ -545,4 +532,3 @@ OSXAppPackager::PackageForSelfDistribution( OSXAppPackagerParams *osxParams, boo
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

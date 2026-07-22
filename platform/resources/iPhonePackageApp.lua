@@ -309,40 +309,6 @@ local function getCodesignFrameworkScript( path, identity, developerBase )
 	return exports_shell .. cmd
 end
 
-local function getProductValidateScript( path, itunesConnectUsername, itunesConnectPassword, applicationLoader )
-
-	-- Apple tells us to use this buried utility to automate Application Loader tasks in
-	-- https://itunesconnect.apple.com/docs/UsingApplicationLoader.pdf
-	local altool = makepath(applicationLoader, "Contents/Frameworks/ITunesSoftwareService.framework/Support/altool")
-
-	-- If the "cmd" generated below fails because it's the wrong path that's very hard to detect amongst all the XML parsing so we do it here
-	if lfs.attributes( altool ) == nil then
-		print("ERROR: cannot find 'altool' utility in "..altool)
-		return "echo Failed to find build utilities in expected places (cannot find 'altool' utility in '"..altool.."')"
-	end
-
-	-- Removing the "!DOCTYPE" line from the XML stops xpath trying to access the DTD
-	-- The xpath command parses the XML output looking for an error message
-	-- The final sed command adds a newline to the last line of output which xpath omits
-	local cmd = quoteString(altool) .. " --validate-app -f ".. quoteString(path) .." -u '".. itunesConnectUsername .."' -p '".. itunesConnectPassword .."' --output-format xml | grep -v '^<!DOCTYPE' | /usr/bin/xpath '/plist/dict/key[.=\"product-errors\"]/following-sibling::*[1]//key[.=\"message\"]/following-sibling::*[1]/node()' 2>/dev/null  | sed -ne 'p'"
-
-	return cmd
-end
-
-local function getProductUploadScript( path, itunesConnectUsername, itunesConnectPassword, applicationLoader )
-
-	-- Apple tells us to use this buried utility to automate Application Loader tasks in
-	-- https://itunesconnect.apple.com/docs/UsingApplicationLoader.pdf
-	local altool = makepath(applicationLoader, "Contents/Frameworks/ITunesSoftwareService.framework/Support/altool")
-
-	-- Removing the "!DOCTYPE" line from the XML stops xpath trying to access the DTD
-	-- The xpath command parses the XML output looking for an error message
-	-- The final sed command adds a newline to the last line of output which xpath omits
-	local cmd = quoteString(altool) .. " --upload-app -f ".. quoteString(path) .." -u '".. itunesConnectUsername .."' -p '".. itunesConnectPassword .."' --output-format xml | grep -v '^<!DOCTYPE' | /usr/bin/xpath '/plist/dict/key[.=\"product-errors\"]/following-sibling::*[1]//key[.=\"message\"]/following-sibling::*[1]/node()' 2>/dev/null | sed -ne 'p'"
-
-	return cmd
-end
-
 --------------------------------------------------------------------------------
 
 function runScript( script, debugLevel )
@@ -1067,7 +1033,7 @@ local function packageApp( options )
 
 	runScript( "chmod 755 " .. appBundleFile )
 
-	-- If building with a distribution identity, create an IPA of the .app which can be used by Application Loader
+	-- If building with a distribution identity, create an IPA for App Store upload.
 	local appBundleFileIPA = quoteString(makepath(options.dstDir, options.dstFile) .. ".ipa")
 	-- remove old IPA for extra cleanliness, even if we are not building a new IPA for distribution (it's stale so let's remove it)
 	runScript( "rm -f " .. appBundleFileIPA )
@@ -1512,66 +1478,4 @@ function iPhonePostPackage( params )
 	end
 
 	return err
-end
-
---
--- IOSSendToAppStore
---
--- Send an app to the App Store via iTunes Connect
---
--- returns an error message or nil on success
---
-function IOSSendToAppStore( params )
-
-	local tmpDir = params.tmpDir
-	local dstDir = params.dstDir
-	local dstFile = params.dstFile
-	local bundledisplayname = params.bundledisplayname
-	local itunesConnectUsername = params.itc1
-	local itunesConnectPassword = params.itc2
-	local sdkRoot = params.xcodetoolhelper.sdkRoot
-	local codesign = params.xcodetoolhelper.codesign
-	local applicationLoader = params.xcodetoolhelper.applicationLoader
-	local productbuild = params.xcodetoolhelper.productbuild
-	local err = nil
-	local appSigningIdentityName
-	local installerSigningIdentityName
-
-	print("Using Xcode utilities from "..sdkRoot)
-
-	local appArchiveFile = makepath(dstDir, dstFile) .. ".ipa"
-
-	-- logically at this point the IPA must exist
-	if lfs.attributes( appArchiveFile ) == nil then
-		return "ERROR: cannot locate IPA file at '"..appArchiveFile.."'"
-	end
-
-	--
-	-- Validate package with iTunes Connect
-	--
-	setStatus("Validating application with iTunes Connect")
-	local result = captureCommandOutput( getProductValidateScript( appArchiveFile, itunesConnectUsername, itunesConnectPassword, applicationLoader ), 2 )
-
-	if result ~= "" then
-		if result:match('Unable to validate archive') then
-			-- Validation requires an internet connection but the error message is somewhat inscrutable
-			result = result .. "\n\n(make sure you are connected to the internet)"
-		end
-
-		errMsg = "ERROR: validation failed: "..tostring(result:gsub('\n', '\n\n'))
-		return errMsg
-	end
-
-	--
-	-- Upload package to iTunes Connect
-	--
-	setStatus("Uploading application to iTunes Connect")
-	local result = captureCommandOutput( getProductUploadScript( appArchiveFile, itunesConnectUsername, itunesConnectPassword, applicationLoader ), 2 )
-
-	if result ~= "" then
-		errMsg = "ERROR: upload failed: "..tostring(result)
-		return errMsg
-	end
-
-	return nil
 end

@@ -119,7 +119,7 @@ class OSXAppPackager : public PlatformAppPackager
 
 	public:
 		virtual int Build( AppPackagerParams *params, const char *tmpDirBase );
-		virtual int PackageForAppStore( OSXAppPackagerParams *osxParams, bool sendToAppStore, const char *itunesConnectUsername, const char *itunesConnectPassword );
+		virtual int PackageForAppStore( OSXAppPackagerParams *osxParams );
 		virtual int PackageForSelfDistribution( OSXAppPackagerParams *osxParams, bool createDMG );
 
 		virtual bool VerifyConfiguration() const;

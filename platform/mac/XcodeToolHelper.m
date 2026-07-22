@@ -162,36 +162,6 @@ static const NSString* kXcodeToolHelperUserDefaultsPrefix = @"XcodeOverrideTool_
 }
 
 //
-// Return the path for Application Loader
-//
-+ (NSString*) pathForApplicationLoaderUsingDeveloperBase:(NSString*)developerbase printWarning:(BOOL)should_print_warning
-{
-	// User preferences always overrides.
-	NSString* toolpath = [XcodeToolHelper toolLocationFromPreferences:@"applicationloader" printWarning:should_print_warning];
-
-	//  Don't do any validation for overrides because the only reason overrides are in effect is to force work around problems.
-	if ( nil != toolpath )
-	{
-		return toolpath;
-	}
-
-	// No override in effect. Do the normal thing.
-	toolpath = [self getXcodePath];
-	toolpath = [toolpath stringByAppendingPathComponent:@"../Applications/Application Loader.app"];
-
-	if ( NO == [[NSFileManager defaultManager] fileExistsAtPath:toolpath] )
-	{
-		toolpath = nil;
-		if ( should_print_warning )
-		{
-			[XcodeToolHelper printNotFoundWarningForTool:@"Application Loader"];
-		}
-	}
-
-	return toolpath;
-}
-
-//
 // Find the Xcode "developer root" using xcode-select
 //
 + (NSString*) getXcodePath

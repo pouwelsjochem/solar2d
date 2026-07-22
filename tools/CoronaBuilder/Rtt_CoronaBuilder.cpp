@@ -431,8 +431,8 @@ CoronaBuilder::Build( const BuildParams& params ) const
 				if ( Rtt_StringCompareNoCase(method, "app-store") == 0 )
 				{
 					// Build the Mac App Store .pkg without uploading.
-					// Upload manually using Transporter or xcrun altool/notarytool.
-					code = osxPackager->PackageForAppStore( osxParams, false, "", "" );
+					// Upload manually using Transporter.
+					code = osxPackager->PackageForAppStore( osxParams );
 				}
 				else if ( Rtt_StringCompareNoCase(method, "developer-id") == 0 )
 				{
