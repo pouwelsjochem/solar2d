@@ -107,6 +107,41 @@ jobs:
           Set-Content -Path $path -Value $content -NoNewline
           if (-not ((Get-Content $path -Raw) -match 'librtt\\Corona')) { throw "librtt\Corona path not injected" }
 
+      - name: Remove stale CoronaLuaLibrary references from Switch project
+        shell: pwsh
+        run: |
+          # CoronaLuaLibrary was removed from the public repository, but older
+          # NDA refs still list its sources and include directory. This no-ops
+          # once those references are removed from the NDA repository itself.
+          $paths = @(
+            "platform\switch\Solar2D\Solar2D.vcxproj",
+            "platform\switch\Solar2D\Solar2D.vcxproj.filters"
+          )
+          $removedCount = 0
+          foreach ($path in $paths) {
+            $document = [System.Xml.XmlDocument]::new()
+            $document.PreserveWhitespace = $true
+            $document.Load($path)
+            $nodes = @($document.SelectNodes(
+              "//*[local-name()='ClCompile' or local-name()='ClInclude']"
+            ))
+            foreach ($node in $nodes) {
+              $include = $node.GetAttribute("Include")
+              if ($include -match 'plugins\\shared\\CoronaLuaLibrary(?:Metadata)?\.(?:cpp|h)$') {
+                $null = $node.ParentNode.RemoveChild($node)
+                $removedCount++
+              }
+            }
+            $document.Save($path)
+            $content = Get-Content $path -Raw
+            $content = $content.Replace('$(ProjectDir)..\..\..\plugins\shared;', '')
+            $content = $content.Replace('..\..\..\plugins\shared;', '')
+            Set-Content -Path $path -Value $content -NoNewline
+          }
+          Write-Host "Removed $removedCount stale CoronaLuaLibrary project items"
+          $remaining = Select-String -Path $paths -Pattern 'CoronaLuaLibrary|plugins\\shared'
+          if ($remaining) { throw "Stale CoronaLuaLibrary project references remain" }
+
       - name: Build Switch template
         shell: cmd
         run: |
