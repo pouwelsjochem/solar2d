@@ -31,6 +31,11 @@
 #define Rtt_BUILD_REVISION Rtt_LOCAL_BUILD_REVISION
 #endif
 
+// Fork builds append a suffix such as ".s".
+#ifndef Rtt_BUILD_SUFFIX
+#define Rtt_BUILD_SUFFIX ""
+#endif
+
 // If this is a public release, this should be 0
 #define Rtt_IS_DAILYBUILD	1
 
@@ -45,8 +50,8 @@
 // 2.1.0
 #define Rtt_STRING_VERSION	Rtt_MACRO_TO_STRING( Rtt_VERSION_MAJOR ) "." Rtt_MACRO_TO_STRING( Rtt_VERSION_MINOR ) "." Rtt_MACRO_TO_STRING( Rtt_VERSION_REVISION )
 
-// 2010.1234
-#define Rtt_STRING_BUILD	Rtt_MACRO_TO_STRING( Rtt_BUILD_YEAR ) "." Rtt_MACRO_TO_STRING( Rtt_BUILD_REVISION )
+// 2010.1234 or 2010.1234.s
+#define Rtt_STRING_BUILD	Rtt_MACRO_TO_STRING( Rtt_BUILD_YEAR ) "." Rtt_MACRO_TO_STRING( Rtt_BUILD_REVISION ) Rtt_BUILD_SUFFIX
 
 // 2010.9.26
 #define Rtt_STRING_BUILD_DATE Rtt_MACRO_TO_STRING( Rtt_BUILD_YEAR ) "." Rtt_MACRO_TO_STRING( Rtt_BUILD_MONTH ) "." Rtt_MACRO_TO_STRING( Rtt_BUILD_DAY ) 
