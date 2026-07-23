@@ -10,13 +10,8 @@
 #include "stdafx.h"
 #include "CoronaWin32.h"
 #include "resource.h"
-#include <algorithm>
 #include <CommCtrl.h>
-#include <string>
 #include <Windows.h>
-#ifdef Rtt_CORONA_SHELL
-#	include <Shlwapi.h>
-#endif
 
 
 /// <summary>The Win32 handle to the main application window.</summary>
@@ -166,13 +161,8 @@ int APIENTRY wWinMain(
 	// Create and configure the main application window.
 	// Note: This window is invisible/hidden until ShowWindow() has been called on it.
 	//       We don't want to show the window until we let Corona do size it according to the "build.settings" file.
-#ifdef Rtt_CORONA_SHELL
-	const wchar_t kDefaultWindowClassName[] = L"CoronaLabs.Corona.Shell.Window";
-	const wchar_t kDefaultWindowTitleText[] = L"Corona Shell";
-#else
 	const wchar_t kDefaultWindowClassName[] = L"CoronaLabs.Corona.App.Window";
 	const wchar_t kDefaultWindowTitleText[] = L"";
-#endif
 	{
 		WNDCLASSEXW windowClassSettings{};
 		windowClassSettings.cbSize = sizeof(windowClassSettings);
@@ -277,80 +267,6 @@ int APIENTRY wWinMain(
 					continue;
 				}
 
-#ifdef Rtt_CORONA_SHELL
-				// Special handling for the Corona Shell.
-				// Only command line arguments proceeding the "/args" are pushed into the "main.lua" as arguments.
-				// All other arguments are directed to the Corona Shell, such as the project to launch.
-				static bool sIsCoronaShellArgument = true;
-				if (sIsCoronaShellArgument)
-				{
-					if (!settings.GetResourceDirectory() && ::PathFileExistsW(argumentStringPointer))
-					{
-						// A file or directory path was provided.
-						// Check if it references a Corona project directory or "main.lua" file.
-						// If it does, then use that as the resource directory.
-						const wchar_t kMainLuaFileName[] = L"main.lua";
-						int mainLuaFileNameLength = wcslen(kMainLuaFileName);
-						int argumentStringLength = wcslen(argumentStringPointer);
-						if (argumentStringLength > mainLuaFileNameLength)
-						{
-							auto fileStringPointer = argumentStringPointer + (argumentStringLength - mainLuaFileNameLength);
-							if (!_wcsicmp(fileStringPointer, kMainLuaFileName))
-							{
-								std::wstring directoryPath = argumentStringPointer;
-								auto index = directoryPath.find_last_of(L"\\/");
-								if (index == std::wstring::npos)
-								{
-									directoryPath.clear();
-								}
-								else if (index < directoryPath.length())
-								{
-									directoryPath.erase(index);
-								}
-								if (::PathFileExistsW(directoryPath.c_str()))
-								{
-									settings.SetResourceDirectory(directoryPath.c_str());
-								}
-							}
-							else
-							{
-								std::wstring mainLuaFilePath = argumentStringPointer;
-								mainLuaFilePath += L"\\";
-								mainLuaFilePath += kMainLuaFileName;
-								if (::PathFileExistsW(mainLuaFilePath.c_str()))
-								{
-									settings.SetResourceDirectory(argumentStringPointer);
-								}
-							}
-						}
-					}
-					else if (argumentStringPointer[0] != L'\0')
-					{
-						// Check if the command line argument matches a known switch.
-						// Note: This is not case sensitive and supports arguments starting with a '/' or '-'.
-						std::wstring lowercaseArgumentString(argumentArray[argumentIndex]);
-						if (lowercaseArgumentString[0] == L'-')
-						{
-							lowercaseArgumentString[0] = L'/';
-						}
-						std::transform(
-								lowercaseArgumentString.begin(), lowercaseArgumentString.end(),
-								lowercaseArgumentString.begin(), ::towlower);
-						if (L"/debug" == lowercaseArgumentString)
-						{
-							// Set up the Corona runtime to connect to a Corona debugger.
-							settings.SetDebuggerEnabled(true);
-						}
-						else if (L"/args" == lowercaseArgumentString)
-						{
-							// All subsequent arguments are to be pushed into the "main.lua".
-							sIsCoronaShellArgument = false;
-						}
-					}
-					continue;
-				}
-#endif
-
 				// Add the next command line argument to Corona's launch settings.
 				settings.AddLaunchArgument(argumentStringPointer);
 			}
@@ -358,109 +274,11 @@ int APIENTRY wWinMain(
 		}
 	}
 
-#ifdef Rtt_CORONA_SHELL
-	// Display an "Open File" dialog requesting a Corona project if one was not selected at the command line.
-	if (!::PathFileExistsW(settings.GetResourceDirectory()))
-	{
-		// Display a blank window using the system's default width, height, and window mode.
-		// We'll use this as the parent window for the dialog below.
-		::ShowWindow(sMainWindowHandle, showWindowState);
-		::UpdateWindow(sMainWindowHandle);
-
-		// Display the "Open File" dialog, requesting the user to select a Corona project's "main.lua" file.
-		wchar_t filePath[1024];
-		filePath[0] = L'\0';
-		::OPENFILENAMEW openFileSettings{};
-		openFileSettings.lStructSize = sizeof(openFileSettings);
-		openFileSettings.hwndOwner = sMainWindowHandle;
-		openFileSettings.lpstrTitle = L"Select a Corona Project \"main.lua\" File";
-		openFileSettings.lpstrFilter = L"Main Lua File (main.lua)\0main.lua\0All Files (*.*)\0*.*\0\0";
-		openFileSettings.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
-		openFileSettings.lpstrFile = filePath;
-		openFileSettings.nMaxFile = sizeof(filePath) / sizeof(wchar_t);
-		::GetOpenFileNameW(&openFileSettings);
-
-		// Fetch the directory of the selected "main.lua" file and use it as the Corona resource directory.
-		// Note: Will be an empty string if the user canceled out of the dialog.
-		if (filePath[0])
-		{
-			std::wstring directoryPath = filePath;
-			auto index = directoryPath.find_last_of(L"\\/");
-			if (index == std::wstring::npos)
-			{
-				directoryPath.clear();
-			}
-			else if (index < directoryPath.length())
-			{
-				directoryPath.erase(index);
-			}
-			settings.SetResourceDirectory(directoryPath.c_str());
-		}
-	}
-
-	// Start the Corona runtime if we think we've been given a valid Corona project directory.
-	if (::PathFileExistsW(settings.GetResourceDirectory()))
-	{
-		// If the selected Corona project has a Win32 icon file, then use it on the Corona Shell window.
-		std::wstring iconFilePath(settings.GetResourceDirectory());
-		iconFilePath.append(L"\\Icon-win32.ico");
-		if (::PathFileExistsW(iconFilePath.c_str()))
-		{
-			int iconWidth = ::GetSystemMetrics(SM_CXSMICON);
-			int iconHeight = ::GetSystemMetrics(SM_CYSMICON);
-			if (iconWidth <= 0)
-			{
-				iconWidth = 16;
-			}
-			if (iconHeight <= 0)
-			{
-				iconHeight = 16;
-			}
-			HANDLE iconHandle = ::LoadImageW(
-					nullptr, iconFilePath.c_str(), IMAGE_ICON, iconWidth, iconHeight, LR_LOADFROMFILE | LR_SHARED);
-			if (iconHandle)
-			{
-				::SendMessageW(sMainWindowHandle, WM_SETICON, ICON_SMALL, (LPARAM)iconHandle);
-			}
-
-			iconWidth = ::GetSystemMetrics(SM_CXICON);
-			iconHeight = ::GetSystemMetrics(SM_CYICON);
-			if (iconWidth <= 0)
-			{
-				iconWidth = 32;
-			}
-			if (iconHeight <= 0)
-			{
-				iconHeight = 32;
-			}
-			iconHandle = ::LoadImageW(
-					nullptr, iconFilePath.c_str(), IMAGE_ICON, iconWidth, iconHeight, LR_LOADFROMFILE | LR_SHARED);
-			if (iconHandle)
-			{
-				::SendMessageW(sMainWindowHandle, WM_SETICON, ICON_BIG, (LPARAM)iconHandle);
-			}
-		}
-
-		// If we're debugging, then display the window now.
-		// This way the user can see which app window the debugger is operating on.
-		// Note: Normally we do not want to show the window immediately because Corona will
-		//       likely resize the window according to its "build.settings" on launch.
-		if (settings.IsDebuggerEnabled() && !::IsWindowVisible(sMainWindowHandle))
-		{
-			::ShowWindow(sMainWindowHandle, SW_SHOW);
-			::UpdateWindow(sMainWindowHandle);
-		}
-
-		// Start the Corona runtime.
-		hasCoronaRuntimeStarted = coronaRuntime.Run();
-	}
-#else
 	// Setting the resource directory to null makes Corona use the EXE directory by default.
 	settings.SetResourceDirectory(nullptr);
 
 	// Start the Corona runtime.
 	hasCoronaRuntimeStarted = coronaRuntime.Run();
-#endif
 
 	// Update the main application window.
 	if (!hasCoronaRuntimeStarted)

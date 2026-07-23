@@ -105,8 +105,6 @@ BEGIN
         BEGIN
             MENUITEM "Placeholder",                 ID_VIEWAS_BEGIN
         END
-        MENUITEM SEPARATOR
-        MENUITEM "&Console",                    ID_VIEW_CONSOLE
     END
     POPUP "&Help"
     BEGIN
@@ -150,19 +148,6 @@ BEGIN
     CONTROL         "<a href=""https://solar2d.com"">https://solar2d.com</a>",IDC_LINK_ANSCAMOBILE,
                     "SysLink",WS_TABSTOP,39,52,132,10
     LTEXT           "<Version>",IDC_ABOUT_VERSION,39,26,160,8
-END
-
-IDD_LICENSE DIALOGEX 0, 0, 302, 183
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Solar2D License Agreement"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "Agree",IDOK,187,162,50,14
-    PUSHBUTTON      "Disagree",IDCANCEL,245,162,50,14
-    ICON            IDR_MAINFRAME,IDC_STATIC,7,7,20,20
-    LTEXT           "Solar2D License Agreement",IDC_STATIC,95,13,107,10
-    LTEXT           "To use this software you must agree to the terms of the Solar2D license agreement.  Click Agree to continue or click Disagree to quit.",IDC_STATIC,7,30,288,18
-    CONTROL         "",IDC_LICENSE,"RichEdit20W",WS_BORDER | WS_VSCROLL | 0x804,7,51,288,107
 END
 
 IDD_MESSAGE DIALOGEX 0, 0, 253, 71
@@ -278,14 +263,6 @@ BEGIN
         BOTTOMMARGIN, 99
     END
 
-    IDD_LICENSE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 295
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 176
-    END
-
     IDD_MESSAGE, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -333,8 +310,6 @@ STRINGTABLE
 BEGIN
     IDS_OPENGL21_VERSION_WARNING 
                             "WARNING: This machine does not meet the Solar2D Simulator's minimum supported video hardware requirements for premium Graphics 2.0 features.\n\nMinimum OpenGL version required:  %s\nYour machine's OpenGL version:  %s"
-    IDS_CANNOT_BUILD_WITHOUT_PLUGINS 
-                            "You cannot do a build until all of the plugins referenced in your Solar2D project's ""build.settings"" file have been successfully acquired.\n\n%sThis can happen for the following reasons:\n- The plugin is not supported on Windows.\n- The plugin name was mistyped or does not exist. (Please check plugins directory at https://plugins.solar2d.com)\n- Solar2D failed to download the plugin. (Internet connection issue.)\n\nIf the plugin is not supported on Windows (the most likely case), then you'll need to use the ""supportedPlatforms"" setting in your ""build.settings"" file to indicate which platforms the plugin will be included in."
 END
 
 STRINGTABLE

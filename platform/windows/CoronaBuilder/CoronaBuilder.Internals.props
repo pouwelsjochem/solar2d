@@ -21,7 +21,11 @@ if $(ConfigurationName) == Release (
    call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)"
 )
 
-REM copy "..\..\..\sdk\dmg\Corona3rdPartyLicenses.txt" "$(OutDir)" /Y
+REM Package the resources consumed by CoronaBuilder.
+if not exist "$(OutDir)Resources" mkdir "$(OutDir)Resources"
+copy "..\Build.Tools\7za.exe" "$(OutDir)" /Y
+copy "..\..\switch\nxtemplate" "$(OutDir)Resources" /Y
+copy "..\..\resources\AppSettings.lua" "$(OutDir)Resources" /Y
 </Command>
     </PostBuildEvent>
     <Link>

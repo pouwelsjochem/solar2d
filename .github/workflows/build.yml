@@ -220,7 +220,6 @@ jobs:
   Windows-Simulator:
     needs:
       - source-code
-      - build-tools
     runs-on: windows-2022
     steps:
       - name: Get processed code
@@ -249,24 +248,6 @@ jobs:
       - run: mkdir -f docs
       - name: Move docs outside the directory
         run: mv docs ../docs
-      - name: Get build tools
-        uses: actions/download-artifact@v4
-        with:
-          name: BuildTools
-          path: BuildTools
-      - name: Put build tools in place
-        shell: cmd
-        run: |
-          mkdir "%WORKSPACE%\platform\windows\Bin"
-          cd "%WORKSPACE%\platform\windows\Bin"
-          rmdir /s /q "Native"
-          tar -xvzf "%WORKSPACE%\BuildTools\Native.tar.gz"
-          rmdir /s /q "Native\Corona\mac"
-      - name: Put JRE in place
-        shell: bash
-        run: |
-          curl -sL https://github.com/coronalabs/binary-data/releases/download/1.0/jre.win32.7z -o jre.win32.7z
-          7z x jre.win32.7z -o"platform/windows/Bin" -y
       - name: Put redistributables in place
         shell: bash
         run: |
@@ -397,13 +378,8 @@ jobs:
           rem simulator build hasn't run yet to materialize it).
           if not exist platform\windows\Bin\Corona\Resources mkdir platform\windows\Bin\Corona\Resources
           copy /y /b platform\switch\NX64\Release\nxtemplate platform\windows\Bin\Corona\Resources\nxtemplate
-          rem The NDA repo tracks a stale nxtemplate at its root, and the
-          rem simulator build (Corona.Simulator.Internals.props) copies
-          rem ..\..\switch\nxtemplate over $(OutDir)Resources - which used to
-          rem clobber the freshly built template with the stale one. That is
-          rem how 2026.3730.n/.o shipped NSS-less templates even though their
-          rem template builds succeeded. Overwrite the copy SOURCE so every
-          rem later copy propagates the fresh template instead.
+          rem CoronaBuilder packages the template from this path, so replace
+          rem the repository fallback with the freshly generated artifact.
           copy /y /b platform\switch\NX64\Release\nxtemplate platform\switch\nxtemplate
           del platform\switch\NX64\Release\nxtemplate
       - name: Install Codesigning Tools

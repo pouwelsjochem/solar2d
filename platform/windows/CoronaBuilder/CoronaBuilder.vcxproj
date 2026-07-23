@@ -48,7 +48,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\tools\CoronaBuilder;..\..\..\tools\car;..\Corona.Native.Library.Win32\Rtt;..\Corona.Native.Library.Win32;..\Corona.Simulator;..\Corona.Simulator\Rtt;..\..\..\librtt\Core;..\..\..\librtt\Corona;..\..\..\librtt;..\..\..\external\hmac;..\..\..\external\lua-5.1.3\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\..\external\luafilesystem\src</IncludePath>
+    <IncludePath>$(ProjectDir);..\..\..\tools\CoronaBuilder;..\..\..\tools\car;..\Corona.Native.Library.Win32\Rtt;..\Corona.Native.Library.Win32;..\..\..\librtt\Core;..\..\..\librtt\Corona;..\..\..\librtt;..\..\..\external\hmac;..\..\..\external\lua-5.1.3\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\..\external\luafilesystem\src</IncludePath>
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
@@ -56,7 +56,7 @@
     <LinkIncremental>false</LinkIncremental>
     <PreLinkEventUseInBuild>false</PreLinkEventUseInBuild>
     <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <IncludePath>..\..\..\tools\CoronaBuilder;..\..\..\tools\car;..\Corona.Native.Library.Win32\Rtt;..\Corona.Native.Library.Win32;..\Corona.Simulator;..\Corona.Simulator\Rtt;..\..\..\librtt\Core;..\..\..\librtt\Corona;..\..\..\librtt;..\..\..\external\hmac;..\..\..\external\lua-5.1.3\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\..\external\luafilesystem\src</IncludePath>
+    <IncludePath>$(ProjectDir);..\..\..\tools\CoronaBuilder;..\..\..\tools\car;..\Corona.Native.Library.Win32\Rtt;..\Corona.Native.Library.Win32;..\..\..\librtt\Core;..\..\..\librtt\Corona;..\..\..\librtt;..\..\..\external\hmac;..\..\..\external\lua-5.1.3\src;$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\..\external\luafilesystem\src</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,9 +112,6 @@
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
-    <PostBuildEvent>
-      <Command>if $(ConfigurationName) == Release ( call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)" )</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\external\hmac\hmac_sha2.c" />
@@ -193,9 +190,9 @@
     <ClCompile Include="..\Corona.Native.Library.Win32\Rtt\Rtt_WinCrypto.cpp" />
     <ClCompile Include="..\Corona.Native.Library.Win32\WinFile.cpp" />
     <ClCompile Include="..\Corona.Native.Library.Win32\WinString.cpp" />
-    <ClCompile Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackager.cpp" />
-    <ClCompile Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackagerParams.cpp" />
-    <ClCompile Include="..\Corona.Simulator\Rtt\Rtt_WinPlatformServices.cpp" />
+    <ClCompile Include="Rtt\Rtt_Win32AppPackager.cpp" />
+    <ClCompile Include="Rtt\Rtt_Win32AppPackagerParams.cpp" />
+    <ClCompile Include="Rtt\Rtt_WinPlatformServices.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -286,9 +283,9 @@
     <ClInclude Include="..\Corona.Native.Library.Win32\WinFile.h" />
     <ClInclude Include="..\Corona.Native.Library.Win32\WinString.h" />
     <ClInclude Include="..\..\shared\Rtt_NxSAppPackager.h" />
-    <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackager.h" />
-    <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackagerParams.h" />
-    <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_WinPlatformServices.h" />
+    <ClInclude Include="Rtt\Rtt_Win32AppPackager.h" />
+    <ClInclude Include="Rtt\Rtt_Win32AppPackagerParams.h" />
+    <ClInclude Include="Rtt\Rtt_WinPlatformServices.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerFactory.h" />
@@ -318,6 +315,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\external\luafilesystem\src\lfs.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Corona.AppTemplate.Win32\Corona.AppTemplate.Win32.vcxproj">
+      <Project>{38b61159-5222-4784-89e7-160778c63a3b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

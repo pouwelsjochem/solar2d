@@ -10,6 +10,7 @@
 #include "stdafx.h"
 
 #include "CoronaProject.h"
+#include "Simulator.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // CCoronaProject
@@ -44,7 +45,10 @@ CCoronaProject::Init( CString sPath )
     CString sSection = GetDir();
     sSection.MakeLower();
 	sSection.Replace(_T("\\\\"), _T(""));  // Fixes issue with network shares
-    RegistryGet( sSection );
+	if (!((CSimulatorApp*)AfxGetApp())->IsAgentModeEnabled())
+	{
+		RegistryGet(sSection);
+	}
 
     // If no stored name, get project name from last directory name in path
     if( m_sName == REGISTRY_NAME_DEFAULT )

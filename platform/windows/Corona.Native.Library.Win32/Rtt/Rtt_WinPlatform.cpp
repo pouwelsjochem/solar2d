@@ -147,7 +147,7 @@ namespace Rtt
 			wcscmp(pluginsDirectoryPath, Interop::ApplicationServices::GetDirectoryPath()))
 		{
 			// Add the plugins directory to the look up path via the SetDllDirectory() Win32 call.
-			// Note: We only do this for Corona apps such as the Corona Simulator or Corona Shell.
+			// Note: We only do this for the Corona Simulator.
 			//       It's not appropriate for the library version of Corona to call SetDllDirectory() since it can
 			//       only be set to one path for the entire application. This API is for the EXE developer to use.
 			if (Interop::ApplicationServices::IsCoronaSdkApp())
@@ -1582,6 +1582,12 @@ namespace Rtt
 		strResourcePath.SetUTF8(fEnvironment.GetUtf8PathFor(kResourceDir));
 		strResourcePath.Append("\\");
 		strMessage.Replace(strResourcePath.GetUTF8(), "");
+		auto simulatorServicesPointer = fEnvironment.GetDeviceSimulatorServices();
+		if (simulatorServicesPointer && simulatorServicesPointer->IsAgentModeEnabled())
+		{
+			fprintf(stderr, "Runtime error: %s\n", strMessage.GetUTF8());
+			return;
+		}
 		if (isSimulatingDevice)
 		{
 			strMessage.Append("\n\nDo you want to relaunch the project?");
@@ -1636,6 +1642,14 @@ namespace Rtt
 		WinPlatform::Resume() const
 	{
 	}
+
+#ifdef Rtt_AUTHORING_SIMULATOR
+	const MSimulatorHost*
+	WinPlatform::GetSimulatorHost() const
+	{
+		return fEnvironment.GetDeviceSimulatorServices();
+	}
+#endif
 
 	void WinPlatform::GetSafeAreaInsetsPixels(Rtt_Real& top, Rtt_Real& left, Rtt_Real& bottom, Rtt_Real& right) const
 	{

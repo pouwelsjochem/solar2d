@@ -19,9 +19,10 @@
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_WinPlatform.h"
+#include "MainFrm.h"
 #include "Simulator.h"
+#include "SimulatorMessages.h"
 #include "SimulatorView.h"
-#include "WinGlobalProperties.h"
 #include <exception>
 
 
@@ -90,16 +91,6 @@ SimulatorRuntimeEnvironment::CreationResult SimulatorRuntimeEnvironment::CreateU
 
 	// Fetch the Lua "system.SystemResourceDirectory" path equivalent.
 	std::wstring systemResourceDirectoryPath(ReturnEmptyWStringIfNull(settings.SystemResourceDirectoryPath));
-	if (systemResourceDirectoryPath.empty() && settings.IsRuntimeCreationEnabled )
-	{
-		auto appProperties = GetWinProperties();
-		if (appProperties && appProperties->GetResourcesDir())
-		{
-			WinString stringConverter;
-			stringConverter.SetUTF8(appProperties->GetResourcesDir());
-			systemResourceDirectoryPath = stringConverter.GetUTF16();
-		}
-	}
 	if (systemResourceDirectoryPath.empty())
 	{
 		systemResourceDirectoryPath = ApplicationServices::GetDirectoryPath();
@@ -245,6 +236,45 @@ void SimulatorRuntimeEnvironment::OnRuntimeTerminating(RuntimeEnvironment& sende
 
 
 #pragma region DeviceSimulatorServices Class
+static CSimulatorView* FetchSimulatorView()
+{
+	CFrameWnd* mainWindowPointer = dynamic_cast<CFrameWnd*>(::AfxGetMainWnd());
+	return mainWindowPointer ? dynamic_cast<CSimulatorView*>(mainWindowPointer->GetActiveView()) : nullptr;
+}
+
+static void ReadSimulatorDevice(CSimulatorView& view, Rtt::MSimulatorHost::Device& result)
+{
+	result = Rtt::MSimulatorHost::Device();
+	const Rtt::PlatformSimulator::Config& config = view.GetDeviceConfig();
+	if (view.IsCustomDevice())
+	{
+		result.id = "custom";
+		result.name = "Custom";
+		result.category = "Custom";
+		result.isCustom = true;
+	}
+	else
+	{
+		Rtt::TargetDevice::Skin skin = view.GetDeviceSkin();
+		const char* identifier = Rtt::TargetDevice::LabelForSkin(skin);
+		const char* name = Rtt::TargetDevice::NameForSkin(skin);
+		const char* category = Rtt::TargetDevice::CategoryForSkin(skin);
+		result.id = identifier ? identifier : "";
+		result.name = name ? name : "";
+		result.category = category ? category : "";
+		result.isProject = result.id.compare(0, 8, "project:") == 0;
+	}
+	result.width = (int)config.deviceWidth;
+	result.height = (int)config.deviceHeight;
+	result.safeAreaInsets.top = (int)config.safeAreaInsetTop;
+	result.safeAreaInsets.left = (int)config.safeAreaInsetLeft;
+	result.safeAreaInsets.bottom = (int)config.safeAreaInsetBottom;
+	result.safeAreaInsets.right = (int)config.safeAreaInsetRight;
+	result.hasRoundedCorners = true;
+	result.roundedCorners = false;
+	result.isCurrent = true;
+}
+
 SimulatorRuntimeEnvironment::DeviceSimulatorServices::DeviceSimulatorServices(
 	SimulatorRuntimeEnvironment* environmentPointer,
 	const Rtt::PlatformSimulator::Config* deviceConfigPointer)
@@ -260,6 +290,12 @@ SimulatorRuntimeEnvironment::DeviceSimulatorServices::DeviceSimulatorServices(
 const Rtt::PlatformSimulator::Config* SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetDeviceConfig() const
 {
 	return fDeviceConfigPointer;
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsAgentModeEnabled() const
+{
+	auto applicationPointer = ((CSimulatorApp*)::AfxGetApp());
+	return applicationPointer && applicationPointer->IsAgentModeEnabled();
 }
 
 bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::IsLuaExitAllowed() const
@@ -338,6 +374,153 @@ void SimulatorRuntimeEnvironment::DeviceSimulatorServices::RequestTerminate()
 	}
 
 	::PostMessage(mainWindowPointer->GetSafeHwnd(), WM_CLOSE, 0, 0);
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetCurrentDevice(
+	Rtt::MSimulatorHost::Device& result) const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	if (!viewPointer)
+	{
+		return false;
+	}
+	ReadSimulatorDevice(*viewPointer, result);
+	return true;
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetState(
+	Rtt::MSimulatorHost::State& result) const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	CMainFrame* framePointer = dynamic_cast<CMainFrame*>(::AfxGetMainWnd());
+	if (!viewPointer || !framePointer || !GetCurrentDevice(result.device))
+	{
+		return false;
+	}
+
+	result.isSuspended = viewPointer->IsSimulationSuspended();
+	result.safeAreaGuidesVisible = false;
+	result.isRelaunchPending = viewPointer->IsRelaunchPending();
+	result.relaunchCount = viewPointer->GetRelaunchCount();
+
+	CRect windowBounds;
+	framePointer->GetWindowRect(windowBounds);
+	UINT windowDpi = ::GetDpiForWindow(framePointer->GetSafeHwnd());
+	result.window.backingScale = windowDpi ? (double)windowDpi / 96.0 : 1.0;
+	result.window.x = windowBounds.left / result.window.backingScale;
+	result.window.y = windowBounds.top / result.window.backingScale;
+	result.window.width = windowBounds.Width() / result.window.backingScale;
+	result.window.height = windowBounds.Height() / result.window.backingScale;
+	result.window.isFullscreen = framePointer->IsSimulatorFullscreen();
+	return true;
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetDevices(
+	std::vector<Rtt::MSimulatorHost::Device>& result) const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	if (!viewPointer)
+	{
+		return false;
+	}
+
+	result.clear();
+	result.reserve(Rtt::TargetDevice::fSkinCount + 1);
+	for (int index = 0; index < Rtt::TargetDevice::fSkinCount; index++)
+	{
+		Rtt::MSimulatorHost::Device device;
+		const char* identifier = Rtt::TargetDevice::LabelForSkin(index);
+		const char* name = Rtt::TargetDevice::NameForSkin(index);
+		const char* category = Rtt::TargetDevice::CategoryForSkin(index);
+		device.id = identifier ? identifier : "";
+		device.name = name ? name : "";
+		device.category = category ? category : "";
+		device.width = Rtt::TargetDevice::WidthForSkin(index);
+		device.height = Rtt::TargetDevice::HeightForSkin(index);
+		device.isProject = device.id.compare(0, 8, "project:") == 0;
+		device.hasRoundedCorners = true;
+		device.roundedCorners = false;
+		device.isCurrent = !viewPointer->IsCustomDevice() && viewPointer->GetDeviceSkin() == index;
+		device.safeAreaInsets.top = Rtt::TargetDevice::SafeAreaInsetTopForSkin(index);
+		device.safeAreaInsets.left = Rtt::TargetDevice::SafeAreaInsetLeftForSkin(index);
+		device.safeAreaInsets.bottom = Rtt::TargetDevice::SafeAreaInsetBottomForSkin(index);
+		device.safeAreaInsets.right = Rtt::TargetDevice::SafeAreaInsetRightForSkin(index);
+		result.push_back(device);
+	}
+
+	Rtt::MSimulatorHost::Device customDevice;
+	customDevice.id = "custom";
+	customDevice.name = "Custom";
+	customDevice.category = "Custom";
+	customDevice.isCustom = true;
+	customDevice.hasRoundedCorners = true;
+	customDevice.roundedCorners = false;
+	customDevice.isCurrent = viewPointer->IsCustomDevice();
+	const Rtt::PlatformSimulator::Config& config = viewPointer->GetDeviceConfig();
+	customDevice.width = (int)config.deviceWidth;
+	customDevice.height = (int)config.deviceHeight;
+	customDevice.safeAreaInsets.top = (int)config.safeAreaInsetTop;
+	customDevice.safeAreaInsets.left = (int)config.safeAreaInsetLeft;
+	customDevice.safeAreaInsets.bottom = (int)config.safeAreaInsetBottom;
+	customDevice.safeAreaInsets.right = (int)config.safeAreaInsetRight;
+	result.push_back(customDevice);
+	return true;
+}
+
+Rtt::MSimulatorHost::ConfigureResult
+SimulatorRuntimeEnvironment::DeviceSimulatorServices::ConfigureAndRelaunch(
+	const Rtt::MSimulatorHost::Configuration& configuration, bool onlyIfNeeded) const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	return viewPointer ? viewPointer->ConfigureAndRelaunch(configuration, onlyIfNeeded) :
+		Rtt::MSimulatorHost::kConfigureFailed;
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::Relaunch() const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	if (!viewPointer)
+	{
+		return false;
+	}
+	return !!::PostMessage(viewPointer->GetSafeHwnd(), WM_COMMAND, ID_FILE_RELAUNCH, 0);
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::SetSafeAreaGuidesVisible(bool visible) const
+{
+	return !visible;
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::SetFullscreen(bool fullscreen) const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	return viewPointer && viewPointer->SetSimulatorFullscreen(fullscreen);
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::SendInput(
+	const Rtt::MSimulatorHost::Input& input) const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	return viewPointer && viewPointer->SendSimulatorInput(input);
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::Simulate(
+	const Rtt::MSimulatorHost::Event& event) const
+{
+	CSimulatorView* viewPointer = FetchSimulatorView();
+	return viewPointer && viewPointer->SimulateEvent(event);
+}
+
+bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::Quit(int exitCode) const
+{
+	CSimulatorApp* applicationPointer = (CSimulatorApp*)::AfxGetApp();
+	CFrameWnd* mainWindowPointer = dynamic_cast<CFrameWnd*>(::AfxGetMainWnd());
+	if (!applicationPointer || !mainWindowPointer)
+	{
+		return false;
+	}
+	applicationPointer->SetExitCode(exitCode);
+	return !!::PostMessage(mainWindowPointer->GetSafeHwnd(), WM_CLOSE, 0, 0);
 }
 
 #pragma endregion

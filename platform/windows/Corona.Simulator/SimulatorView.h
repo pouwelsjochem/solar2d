@@ -13,6 +13,7 @@
 #include "Core\Rtt_Array.h"
 #include "Interop\ScopedComInitializer.h"
 #include "Interop\SimulatorRuntimeEnvironment.h"
+#include "Rtt_MSimulatorHost.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_TargetDevice.h"
 
@@ -51,24 +52,18 @@ class CSimulatorView : public CView
 		CSimulatorDoc* GetDocument() const;
 		CString GetDeviceName() { return mDeviceName; }
 		const Rtt::PlatformSimulator::Config& GetDeviceConfig() { return mDeviceConfig; }
+		Rtt::TargetDevice::Skin GetDeviceSkin() const { return m_nSkinId; }
+		bool IsCustomDevice() const { return mIsCustomDevice; }
+		bool ShouldPersistDevice() const { return !mIsDeviceConfigurationTemporary; }
+		bool IsRelaunchPending() const { return mIsRelaunchPending; }
+		int GetRelaunchCount() const { return mRelaunchCount; }
+		Rtt::MSimulatorHost::ConfigureResult ConfigureAndRelaunch(
+			const Rtt::MSimulatorHost::Configuration& configuration, bool onlyIfNeeded);
+		bool SetSimulatorFullscreen(bool fullscreen);
+		bool SendSimulatorInput(const Rtt::MSimulatorHost::Input& input);
+		bool SimulateEvent(const Rtt::MSimulatorHost::Event& event);
 		void UpdateSimulatorSkin();
 		Interop::SimulatorRuntimeEnvironment* GetRuntimeEnvironment()  { return mRuntimeEnvironmentPointer; }
-
-		/// <summary>
-		///  <para>
-		///   Determines if all plugins for the currently running project have been successfully downloaded and acquired.
-		///  </para>
-		///  <para>Will display a message box if at least 1 plugin the project depends on was not found</para>
-		///  <para>Intended to be called by the Win32 build dialog if at least 1 plugin was missing.</para>
-		/// </summary>
-		/// <returns>
-		///  <para>
-		///   Returns true if all plugins for the currently running project have been acquired
-		///   or if the project the does not depend on any plugins.
-		///  </para>
-		///  <para>Returns false if at least 1 plugin the projct depends on was not found.</para>
-		/// </returns>
-		bool VerifyAllPluginsAcquired();
 
 		/// <summary>
 		///  <para>Custom control used by CSimulatorView to render Corona's content.</para>
@@ -109,7 +104,6 @@ class CSimulatorView : public CView
 		afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 		afx_msg void OnAppAbout();
 		afx_msg void OnHelp();
-		afx_msg void OnViewConsole();
 		afx_msg void OnViewSuspend();
 		afx_msg void OnViewNavigateBack();
 		afx_msg void OnFileMRU1();
@@ -129,13 +123,15 @@ class CSimulatorView : public CView
 		afx_msg void OnUpdateShowProjectSandbox(CCmdUI *pCmdUI);
 		afx_msg void OnUpdateFileOpenInEditor(CCmdUI *pCmdUI);
 		afx_msg LRESULT OnNativeAlert(WPARAM wParam, LPARAM lParam);
+		afx_msg LRESULT OnApplySimulatorConfiguration(WPARAM wParam, LPARAM lParam);
+		afx_msg void OnTimer(UINT_PTR timerId);
 
 	private:
 		void RunCoronaProject();
 		void RunCoronaProject(CString &projectPath);
 		Rtt::TargetDevice::Skin SkinIDFromMenuID(UINT nID);
 		bool InitSkin(Rtt::TargetDevice::Skin skinId);
-		bool InitializeSimulation(Rtt::TargetDevice::Skin skinId);
+		bool InitializeSimulation(Rtt::TargetDevice::Skin skinId, bool persist = true);
 		bool ValidateOpenGL();
 		bool LoadSkinResources();
 		void GetFilePaths(LPCTSTR pattern, CStringArray& filepaths);
@@ -157,6 +153,11 @@ class CSimulatorView : public CView
 		Rtt::TargetDevice::Skin m_nSkinId;
 		CString mSystemSkinsDir;
 		int mRelaunchCount;
+		bool mIsCustomDevice;
+		bool mIsDeviceConfigurationTemporary;
+		bool mIsRelaunchPending;
+		UINT_PTR mBackgroundTimerId;
+		Rtt::MSimulatorHost::Configuration mPendingConfiguration;
 };
 
 #ifndef _DEBUG  // debug version in SimulatorView.cpp

@@ -21,10 +21,7 @@ if $(ConfigurationName) == Release (
    call "$(SolutionDir)Build.Tools\CoronaLabsInc.Sign.bat" "$(TargetPath)"
 )
 
-REM Build the Corona Shell and its app template to the "Bin\Corona" directory. The simulator depends on them.
-"$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /build "$(ConfigurationName)|$(PlatformName)"
-
-REM Copy all other Corona Simulator related files to the "Bin\Corona" directory.
+REM Copy Corona Simulator files to the "Bin\Corona" directory.
 cd
 setlocal EnableDelayedExpansion
 set corona_mfc_source=
@@ -40,11 +37,6 @@ if "!corona_mfc_source!"=="" (
 xcopy "!corona_mfc_source!\*.dll" "$(OutDir)" /Y /I
 endlocal
 xcopy "..\..\resources\Skins" "$(OutDir)Resources\Skins" /Y /I /E
-copy "..\Build.Tools\7za.exe" "$(OutDir)" /Y
-copy "..\Build.Tools\zipalign.exe" "$(OutDir)Resources" /Y
-copy "..\..\switch\nxtemplate" "$(OutDir)Resources" /Y
-copy "..\..\resources\AppSettings.lua" "$(OutDir)Resources" /Y
-copy "..\..\resources\linuxtemplate_x64.tgz" "$(OutDir)Resources" /Y
 copy "..\..\..\sdk\dmg\Corona_License.rtf" "$(OutDir)" /Y
 copy "..\..\..\sdk\dmg\Corona3rdPartyLicenses.txt" "$(OutDir)" /Y
 </Command>

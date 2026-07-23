@@ -41,7 +41,7 @@ endlocal
 
 REM Do the following for debug and release DLL builds. (Skipped for Corona Simulator builds.)
 if $(TargetExt) == .dll (
-   REM Copy this library's DLL to the "Bin\Corona" directory. Used by the Corona Shell app.
+   REM Copy this library's DLL to the "Bin\Corona" directory. Used by packaged Win32 apps.
    copy /y "$(TargetPath)" "$(SolutionDir)Bin\Corona"
 
 )

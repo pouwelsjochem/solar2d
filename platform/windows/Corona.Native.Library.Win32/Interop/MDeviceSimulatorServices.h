@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Rtt_MPlatform.h"
+#include "Rtt_MSimulatorHost.h"
 
 
 #pragma region Forward Declarations
@@ -23,11 +24,12 @@ namespace Rtt
 
 namespace Interop {
 
-class MDeviceSimulatorServices
+class MDeviceSimulatorServices : public Rtt::MSimulatorHost
 {
 	public:
 		virtual ~MDeviceSimulatorServices() {}
 
+		virtual bool IsAgentModeEnabled() const = 0;
 		virtual bool IsLuaExitAllowed() const = 0;
 		virtual void* ShowNativeAlert(
 						const char *title, const char *message, const char **buttonLabels,

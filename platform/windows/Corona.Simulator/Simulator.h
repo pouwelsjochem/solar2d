@@ -19,8 +19,6 @@
 
 #include "resource.h"       // main symbols
 #include "afxcmn.h"
-#include "Interop\Ipc\Process.h"
-#include <memory>
 
 // CSimulatorApp:
 // See Simulator.cpp for the implementation of this class
@@ -36,19 +34,12 @@
 #define REGISTRY_DEVICE _T("Device")
 #define REGISTRY_XPOS _T("XPos")
 #define REGISTRY_YPOS _T("YPos")
-#define REGISTRY_CONSOLE_LEFT _T("ConsoleLeft")
-#define REGISTRY_CONSOLE_TOP _T("ConsoleTop")
-#define REGISTRY_CONSOLE_RIGHT _T("ConsoleRight")
-#define REGISTRY_CONSOLE_BOTTOM _T("ConsoleBottom")
-#define REGISTRY_DM_FIRST_RUN_COMPLETE _T("dmFirstRunComplete")
 #define REGISTRY_LAST_RUN_SUCCEEDED _T("lastRunSucceeded")
 
 // Define all registry item defaults here
 #define REGISTRY_DEVICE_DEFAULT ""
 #define REGISTRY_XPOS_DEFAULT 0
 #define REGISTRY_YPOS_DEFAULT 0
-#define REGISTRY_AUTOOPEN_DEFAULT 0
-#define REGISTRY_DM_FIRST_RUN_COMPLETE_DEFAULT 0
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CSimulatorApp
@@ -62,6 +53,7 @@ public:
 public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
+	virtual void AddToRecentFileList(LPCTSTR path);
 
 public:
     // Hold values to be written to/from Registry.  CSimulatorView has the real versions.
@@ -73,25 +65,27 @@ public:
 	void SetStopBuildRequested(int stopBuildRequested)  { m_isStopBuildRequested = stopBuildRequested; }
 
 	bool IsDebugModeEnabled() { return m_isDebugModeEnabled; }
+	bool IsAgentModeEnabled() { return m_isAgentModeEnabled; }
 	bool IsLuaExitAllowed() { return m_isLuaExitAllowed; }
+	void SetExitCode(int value) { m_exitCode = value; }
     CString GetWorkingDir();
     void SetWorkingDir( CString sDir );
 	CString GetApplicationDir();
 	CString GetResourceDir();
 	static bool CheckPathExists(LPCTSTR path);
 	static bool CheckDirExists(LPCTSTR dirName);
-	std::shared_ptr<Interop::Ipc::Process> GetOutputViewerProcessPointer() { return m_outputViewerProcessPointer; }
 
 protected:
 	ULONG_PTR m_gdiplusToken;
+	bool m_isGdiPlusInitialized;
     CString m_sDeviceName;
 	WINDOWPLACEMENT m_WP;
 	bool m_isDebugModeEnabled;
+	bool m_isAgentModeEnabled;
 	bool m_isLuaExitAllowed;
-	bool m_isConsoleEnabled;
+	int m_exitCode;
 	CString m_sApplicationDir;
     CString m_sResourceDir;
-	std::shared_ptr<Interop::Ipc::Process> m_outputViewerProcessPointer;
 	BOOL m_isStopBuildRequested;
 };
 

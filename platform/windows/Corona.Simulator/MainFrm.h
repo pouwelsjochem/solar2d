@@ -24,6 +24,8 @@ class CMainFrame : public CFrameWnd
 		virtual void Dump(CDumpContext& dc) const;
 #endif
 		CRect SizeToClient(CRect rectClient);
+		bool IsSimulatorFullscreen() const { return mIsSimulatorFullscreen; }
+		bool SetSimulatorFullscreen(bool fullscreen);
 
 	protected:
 		DECLARE_MESSAGE_MAP()
@@ -33,4 +35,9 @@ class CMainFrame : public CFrameWnd
 		afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 
 		void OnUpdateFrameTitle(BOOL bAddToTitle);
+
+	private:
+		bool mIsSimulatorFullscreen;
+		DWORD mWindowedStyle;
+		WINDOWPLACEMENT mWindowedPlacement;
 };

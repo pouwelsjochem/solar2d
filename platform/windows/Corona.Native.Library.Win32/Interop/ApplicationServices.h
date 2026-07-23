@@ -28,16 +28,15 @@ class ApplicationServices
 		/// <summary>
 		///  <para>
 		///   Determines if the currently running application is a Corona application,
-		///   such as the Corona Simulator or Corona Shell.
+		///   such as the Corona Simulator.
 		///  </para>
 		///  <para>
-		///   A Corona Win32 desktop app and the Corona Shell both use the same Corona library. The Corona library
-		///   can determine that it's okay to use Corona Simulator installed features by calling this function,
-		///   such as the Corona Shell using the same sandbox directory as the simulator.
+		///   A Corona Win32 desktop app and the Corona Simulator use the same Corona library. The Corona library
+		///   can determine whether Simulator-only installed features are available by calling this function.
 		///  </para>
 		/// </summary>
 		/// <returns>
-		///  <para>Returns true if this is a Corona application, such as the Corona Simulator or Corona Shell.</para>
+		///  <para>Returns true if this is the Corona Simulator.</para>
 		///  <para>Returns false if this is a normal Corona Win32 desktop app.</para>
 		/// </returns>
 		static bool IsCoronaSdkApp();

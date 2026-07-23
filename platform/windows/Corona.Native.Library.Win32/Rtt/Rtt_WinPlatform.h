@@ -97,6 +97,7 @@ class WinPlatform : public MPlatform
 		virtual PlatformExitCallback* GetExitCallback();
 		virtual bool RequestSystem(lua_State *L, const char *actionName, int optionsIndex) const;
 #ifdef Rtt_AUTHORING_SIMULATOR
+		virtual const MSimulatorHost* GetSimulatorHost() const override;
 		virtual void SetCursorForRect(const char *cursorName, int x, int y, int width, int height) const;
 #endif
 

@@ -145,6 +145,7 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 						const Rtt::PlatformSimulator::Config* deviceConfigPointer);
 
 				const Rtt::PlatformSimulator::Config* GetDeviceConfig() const;
+				virtual bool IsAgentModeEnabled() const override;
 				virtual bool IsLuaExitAllowed() const override;
 				virtual void* ShowNativeAlert(
 								const char *title, const char *message, const char **buttonLabels,
@@ -152,6 +153,17 @@ class SimulatorRuntimeEnvironment : public RuntimeEnvironment
 				virtual void CancelNativeAlert(void* alertReference) override;
 				virtual void RequestRestart() override;
 				virtual void RequestTerminate() override;
+				virtual bool GetCurrentDevice(Rtt::MSimulatorHost::Device& result) const override;
+				virtual bool GetState(Rtt::MSimulatorHost::State& result) const override;
+				virtual bool GetDevices(std::vector<Rtt::MSimulatorHost::Device>& result) const override;
+				virtual Rtt::MSimulatorHost::ConfigureResult ConfigureAndRelaunch(
+					const Rtt::MSimulatorHost::Configuration& configuration, bool onlyIfNeeded) const override;
+				virtual bool Relaunch() const override;
+				virtual bool SetSafeAreaGuidesVisible(bool visible) const override;
+				virtual bool SetFullscreen(bool fullscreen) const override;
+				virtual bool SendInput(const Rtt::MSimulatorHost::Input& input) const override;
+				virtual bool Simulate(const Rtt::MSimulatorHost::Event& event) const override;
+				virtual bool Quit(int exitCode) const override;
 
 			private:
 				SimulatorRuntimeEnvironment* fEnvironmentPointer;

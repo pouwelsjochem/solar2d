@@ -180,11 +180,11 @@
     <ClCompile Include="..\Corona.Native.Library.Win32\Rtt\Rtt_WinCrypto.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\Corona.Simulator\Rtt\Rtt_WinPlatformServices.cpp">
+    <ClCompile Include="Rtt\Rtt_WinPlatformServices.cpp">
       <Filter>Rtt</Filter>
     </ClCompile>
-    <ClCompile Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackager.cpp" />
-    <ClCompile Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackagerParams.cpp" />
+    <ClCompile Include="Rtt\Rtt_Win32AppPackager.cpp" />
+    <ClCompile Include="Rtt\Rtt_Win32AppPackagerParams.cpp" />
     <ClCompile Include="..\..\..\tools\CoronaBuilder\Rtt_AppPackagerWin32Factory.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Array.cpp">
       <Filter>%28root%29\librtt</Filter>
@@ -336,11 +336,11 @@
     <ClInclude Include="..\Corona.Native.Library.Win32\Rtt\Rtt_WinCrypto.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_WinPlatformServices.h">
+    <ClInclude Include="Rtt\Rtt_WinPlatformServices.h">
       <Filter>Rtt</Filter>
     </ClInclude>
-    <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackager.h" />
-    <ClInclude Include="..\Corona.Simulator\Rtt\Rtt_Win32AppPackagerParams.h" />
+    <ClInclude Include="Rtt\Rtt_Win32AppPackager.h" />
+    <ClInclude Include="Rtt\Rtt_Win32AppPackagerParams.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Array.h">
       <Filter>%28root%29\librtt</Filter>
     </ClInclude>

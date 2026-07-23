@@ -46,7 +46,11 @@ END_MESSAGE_MAP()
 // CMainFrame construction/destruction
 
 CMainFrame::CMainFrame()
+:	mIsSimulatorFullscreen(false),
+	mWindowedStyle(0)
 {
+	memset(&mWindowedPlacement, 0, sizeof(mWindowedPlacement));
+	mWindowedPlacement.length = sizeof(mWindowedPlacement);
 	// http://software.intel.com/en-us/articles/fast-floating-point-to-integer-conversions/
 //	unsigned int control_word;
 //	_controlfp_s( &control_word, 0, 0 );
@@ -73,8 +77,17 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	if( !CFrameWnd::PreCreateWindow(cs) )
 		return FALSE;
 
-    // Can't maximize or resize window
-	cs.style &= ~(WS_MAXIMIZEBOX|WS_THICKFRAME);
+	if (((CSimulatorApp*)AfxGetApp())->IsAgentModeEnabled())
+	{
+		cs.style &= ~(WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME);
+		cs.style |= WS_POPUP;
+		cs.hMenu = nullptr;
+	}
+	else
+	{
+		// Can't maximize or resize window
+		cs.style &= ~(WS_MAXIMIZEBOX | WS_THICKFRAME);
+	}
 
 	return TRUE;
 }
@@ -105,13 +118,59 @@ void CMainFrame::OnClose()
     // Store windows position
 	this->GetWindowPlacement(&wp);
 	app->PutWP(wp);
-    app->PutDeviceName( pView->GetDeviceName() );
+	if (pView->ShouldPersistDevice())
+	{
+		app->PutDeviceName(pView->GetDeviceName());
+	}
 
 	// Stop simulation. This also posts user feedback to the server if enabled.
 	pView->StopSimulation();
 
 	// Close the window.
 	CFrameWnd::OnClose();
+}
+
+bool CMainFrame::SetSimulatorFullscreen(bool fullscreen)
+{
+	if (fullscreen == mIsSimulatorFullscreen)
+	{
+		return true;
+	}
+
+	HWND windowHandle = GetSafeHwnd();
+	if (!windowHandle)
+	{
+		return false;
+	}
+
+	if (fullscreen)
+	{
+		MONITORINFO monitorInfo{};
+		monitorInfo.cbSize = sizeof(monitorInfo);
+		if (!::GetMonitorInfo(::MonitorFromWindow(windowHandle, MONITOR_DEFAULTTONEAREST), &monitorInfo))
+		{
+			return false;
+		}
+		mWindowedStyle = (DWORD)::GetWindowLongPtr(windowHandle, GWL_STYLE);
+		::GetWindowPlacement(windowHandle, &mWindowedPlacement);
+		::SetWindowLongPtr(windowHandle, GWL_STYLE, mWindowedStyle & ~WS_OVERLAPPEDWINDOW);
+		::SetWindowPos(
+			windowHandle, HWND_TOP,
+			monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
+			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
+			monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top,
+			SWP_FRAMECHANGED | SWP_NOOWNERZORDER);
+	}
+	else
+	{
+		::SetWindowLongPtr(windowHandle, GWL_STYLE, mWindowedStyle);
+		::SetWindowPlacement(windowHandle, &mWindowedPlacement);
+		::SetWindowPos(
+			windowHandle, nullptr, 0, 0, 0, 0,
+			SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	}
+	mIsSimulatorFullscreen = fullscreen;
+	return true;
 }
 
 /// Updates the title bar text on the window according to the currently selected document.

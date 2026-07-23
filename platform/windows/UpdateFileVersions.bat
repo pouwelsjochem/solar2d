@@ -18,11 +18,7 @@ set /a buildNumber = %1 %% 10000
 
 
 REM Update all project files.
-cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.Debugger\Corona.Debugger.rc %majorVersion% %minorVersion% %buildNumber%
-if ERRORLEVEL 1 goto OnError
 cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.Native.Library.Win32\resource.rc %majorVersion% %minorVersion% %buildNumber%
-if ERRORLEVEL 1 goto OnError
-cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.OutputViewer\Corona.OutputViewer.rc %majorVersion% %minorVersion% %buildNumber%
 if ERRORLEVEL 1 goto OnError
 cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.SDK.Installer\Main.wxs %majorVersion% %minorVersion% %buildNumber%
 if ERRORLEVEL 1 goto OnError
@@ -30,7 +26,7 @@ cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.Simulator\S
 if ERRORLEVEL 1 goto OnError
 cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.Simulator.Native.Library.Win32\resource.rc %majorVersion% %minorVersion% %buildNumber%
 if ERRORLEVEL 1 goto OnError
-cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.Shell\Corona.Shell.rc %majorVersion% %minorVersion% %buildNumber%
+cscript.exe //NoLogo Build.Tools\UpdateProjectFileVersion.vbs Corona.AppTemplate.Win32\Corona.AppTemplate.Win32.rc %majorVersion% %minorVersion% %buildNumber%
 if ERRORLEVEL 1 goto OnError
 
 @echo on
@@ -48,6 +44,5 @@ exit /b 1
 
 :OnError
 exit /b 1
-
 
 

@@ -39,10 +39,6 @@
     <Folder Include="Generated Files" />
   </ItemGroup>
   <ItemGroup>
-    <WixExtension Include="WixFirewallExtension">
-      <HintPath>$(WixExtDir)\WixFirewallExtension.dll</HintPath>
-      <Name>WixFirewallExtension</Name>
-    </WixExtension>
     <WixExtension Include="WixUtilExtension">
       <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
       <Name>WixUtilExtension</Name>
@@ -68,12 +64,9 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
    rmdir /q /s "$(SolutionDir)Bin\AppTemplates\Win32"
 
    mkdir "$(SolutionDir)Bin\Corona"
-   move /y "$(SolutionDir)Bin\Native" "$(SolutionDir)Bin\Corona\"
-   move /y "$(SolutionDir)Bin\jre" "$(SolutionDir)Bin\Corona\"
    move /y "$(SolutionDir)Bin\redist"\* "$(SolutionDir)Bin\Corona\"
 
    REM Compile all Corona related projects to the target directory.
-   "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Shell.sln" /rebuild "Release|Win32"
    "$(DevEnvDir)devenv" "$(SolutionDir)Corona.Simulator.sln" /build "Release|Win32"
    "$(DevEnvDir)devenv" "$(SolutionDir)CoronaBuilder.sln" /build "Release|Win32"
 
@@ -91,6 +84,10 @@ copy "$(TargetPath)" "$(SolutionDir)Bin\$(ProjectName)"</PostBuildEvent>
    del /q /s "$(SolutionDir)Bin\AppTemplates\Win32\%2a.pdb"
 
    REM copy CoronaBuilder files
+   mkdir "$(SolutionDir)Bin\Corona\Native"
+   mkdir "$(SolutionDir)Bin\Corona\Native\Corona"
+   mkdir "$(SolutionDir)Bin\Corona\Native\Corona\win"
+   mkdir "$(SolutionDir)Bin\Corona\Native\Corona\win\bin"
    move /y "$(SolutionDir)Bin\Corona\lfs.dll" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
    move /y "$(SolutionDir)Bin\Corona\CoronaBuilder.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"
    xcopy /y "$(SolutionDir)Bin\Lua\lua.exe" "$(SolutionDir)Bin\Corona\Native\Corona\win\bin\"

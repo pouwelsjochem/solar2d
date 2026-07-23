@@ -628,8 +628,7 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 	std::wstring rootSandboxTempDirectoryPath;
 	if (ApplicationServices::IsCoronaSdkApp())
 	{
-		// This is a Corona Labs made app, such as the Corona Shell.
-		// Generate a hashed subdirectory like how the Corona Simulator does it so that each project gets its own sandbox.
+		// Generate a hashed subdirectory for each project run by the Corona Simulator.
 		RuntimeEnvironment::GenerateSimulatorSandboxPath(resourceDirectoryPath.c_str(), rootSandboxDocumentsDirectoryPath);
 		rootSandboxTempDirectoryPath = rootSandboxDocumentsDirectoryPath;
 	}
@@ -754,7 +753,7 @@ RuntimeEnvironment::CreationResult RuntimeEnvironment::CreateUsing(const Runtime
 	}
 
 	// Do the following if the Corona project is set up to be a single instance application.
-	// Note: This can only happen for Win32 desktop apps and project ran via the Corona Shell.
+	// Note: This can only happen for Win32 desktop apps.
 	if (settings.IsRuntimeCreationEnabled &&
 	    (environmentPointer->GetDeviceSimulatorServices() == nullptr) &&
 	    environmentPointer->fMainWindowPointer &&

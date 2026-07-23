@@ -61,8 +61,6 @@ static HMODULE GetSimulatorModuleHandle()
 	static HMODULE sModuleHandle = nullptr;
 	if (!sModuleHandle)
 	{
-//TODO: Make this work with the "Corona.Console.exe" too.
-//      Perhaps change it to use the main module's file path which will always reference the EXE.
 		sModuleHandle = ::LoadLibraryW(L"Corona Simulator.exe");
 	}
 	return sModuleHandle;

@@ -470,7 +470,7 @@ CORONA_API int CoronaWin32RuntimeRun(
 		{
 			// We attempted to create a 2nd instance for an app configured to be single instance only.
 			// This type of failure is okay and can be ignored. It's not an error and shouldn't show an alert.
-			// Note: The exception is the Corona Shell, which should display all failures to the developer.
+			// The Simulator displays all failures to the developer.
 			HWND windowHandle = launchSettingsPointer->MainWindowHandle;
 			if (Interop::ApplicationServices::IsCoronaSdkApp() && windowHandle && ::IsWindowVisible(windowHandle))
 			{

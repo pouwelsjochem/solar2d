@@ -18,6 +18,7 @@
 namespace Rtt
 {
 
+/// Provides Windows implementations of the platform services used by CoronaBuilder.
 class WinPlatformServices : public MPlatformServices
 {
 	Rtt_CLASS_NO_COPIES( WinPlatformServices )

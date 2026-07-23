@@ -9,9 +9,7 @@
 
 #include "stdafx.h"
 #include "Core\Rtt_Build.h"
-#include "Rtt_WinPlatform.h"
 #include "Rtt_WinPlatformServices.h"
-#include "WinGlobalProperties.h"
 #include "WinString.h"
 
 #include <wincrypt.h>
@@ -27,22 +25,11 @@ namespace Rtt
 // returns key for HKEY_CURRENT_USER\"Software"\RegistryKey\ProfileName
 //  (or other top level key) creating it if it doesn't exist
 // responsibility of the caller to call RegCloseKey() on the returned HKEY
-// Modified to get registry key and profile name from WinGlobalProperties,
-// initialized in CSimulatorApp::InitInstance() 
 static HKEY GetAppRegistryKey( HKEY hkeyTopLevel ) 
 {
     WinString strRegKey, strRegProfile;
-#ifdef Rtt_NO_GUI
 	strRegKey.SetUTF8("Ansca Corona");
 	strRegProfile.SetUTF8("Corona Simulator");
-#else
-	Rtt_ASSERT( GetWinProperties()->GetRegistryKey() != NULL);
-	Rtt_ASSERT( GetWinProperties()->GetRegistryProfile() != NULL);
-
-    strRegKey.SetUTF8( GetWinProperties()->GetRegistryKey() );
-    strRegProfile.SetUTF8( GetWinProperties()->GetRegistryProfile() );
-#endif // Rtt_NO_GUI
-
 
 	HKEY hAppKey = NULL;
 	HKEY hSoftKey = NULL;

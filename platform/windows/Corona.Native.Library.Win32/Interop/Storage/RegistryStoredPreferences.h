@@ -36,14 +36,12 @@ class RegistryStoredPreferences : public MStoredPreferences
 		static const wchar_t* kCoronaSimulatorKeyName;
 
 		/// <summary>
-		///  Provides the "Corona Labs" registry key name used by the Corona install program
-		///  and Corona Console application.
+		///  Provides the "Corona Labs" registry key name used by the Corona install program.
 		/// </summary>
 		static const wchar_t* kCoronaLabsKeyName;
 
 		/// <summary>
-		///  Provides the "Corona" registry key name used by the Corona install program
-		///  and Corona Console application.
+		///  Provides the "Corona" registry key name used by the Corona install program.
 		/// </summary>
 		static const wchar_t* kCoronaSdkKeyName;
 

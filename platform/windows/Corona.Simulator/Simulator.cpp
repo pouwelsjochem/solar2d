@@ -10,9 +10,7 @@
 #include "stdafx.h"
 #include <Winver.h>
 #include <gdiplus.h>
-#include <io.h>
-#include <ios>
-#include <Fcntl.h>
+#include <shellapi.h>
 
 #include "Simulator.h"
 #include "MainFrm.h"
@@ -22,13 +20,9 @@
 #include "SimulatorView.h"
 
 #include "resource.h"
-#include "WinString.h"
 #include "CoronaInterface.h"
-#include "WinGlobalProperties.h"  // set the properties
-#include "CoronaInterface.h"  // player interface, appDeinit()
 
 #include "Core/Rtt_Build.h"
-#include "Interop\Ipc\AsyncPipeReader.h"
 #include "Rtt_Version.h"    // Rtt_STRING_BUILD and Rtt_STRING_BUILD_DATE
 
 
@@ -71,6 +65,132 @@ AFX_STATIC_DATA const TCHAR _afxFileEntry[] = _T("File%d");
 AFX_STATIC_DATA const TCHAR _afxPreviewSection[] = _T("Settings");
 AFX_STATIC_DATA const TCHAR _afxPreviewEntry[] = _T("PreviewPages");
 
+class CSimulatorCommandLineInfo : public CCommandLineInfo
+{
+	public:
+		CSimulatorCommandLineInfo()
+		:	IsAgentModeEnabled(false),
+			IsValid(true),
+			fPendingValue(kNoPendingValue)
+		{
+		}
+
+		virtual void ParseParam(const TCHAR* value, BOOL isFlag, BOOL isLast) override
+		{
+			if (fPendingValue != kNoPendingValue)
+			{
+				if (isFlag)
+				{
+					IsValid = false;
+				}
+				else if (fPendingValue == kAgentModeValue)
+				{
+					CString normalizedValue(value);
+					normalizedValue.MakeLower();
+					if (normalizedValue == _T("yes") || normalizedValue == _T("true") || normalizedValue == _T("1"))
+					{
+						IsAgentModeEnabled = true;
+					}
+					else if (normalizedValue == _T("no") || normalizedValue == _T("false") || normalizedValue == _T("0"))
+					{
+						IsAgentModeEnabled = false;
+					}
+					else
+					{
+						IsValid = false;
+					}
+				}
+				else
+				{
+					m_nShellCommand = CCommandLineInfo::FileOpen;
+					m_strFileName = value;
+					IsProjectExplicit = true;
+				}
+				fPendingValue = kNoPendingValue;
+				return;
+			}
+
+			if (isFlag)
+			{
+				CString normalizedValue(value);
+				normalizedValue.MakeLower();
+				if (normalizedValue == _T("agent-mode"))
+				{
+					fPendingValue = kAgentModeValue;
+					if (isLast)
+					{
+						IsValid = false;
+					}
+					return;
+				}
+				if (normalizedValue == _T("project"))
+				{
+					fPendingValue = kProjectValue;
+					if (isLast)
+					{
+						IsValid = false;
+					}
+					return;
+				}
+				if (normalizedValue == _T("singleton") || normalizedValue == _T("debug") ||
+					normalizedValue == _T("allowluaexit") || normalizedValue == _T("no-console"))
+				{
+					return;
+				}
+			}
+			else
+			{
+				IsProjectExplicit = true;
+			}
+			CCommandLineInfo::ParseParam(value, isFlag, isLast);
+		}
+
+		bool IsAgentModeEnabled;
+		bool IsProjectExplicit = false;
+		bool IsValid;
+
+	private:
+		enum PendingValue
+		{
+			kNoPendingValue,
+			kAgentModeValue,
+			kProjectValue
+		};
+		PendingValue fPendingValue;
+};
+
+static bool IsAgentModeRequested()
+{
+	int argumentCount = 0;
+	LPWSTR* arguments = ::CommandLineToArgvW(::GetCommandLineW(), &argumentCount);
+	bool result = false;
+	for (int index = 1; arguments && index < argumentCount; index++)
+	{
+		CString argument(arguments[index]);
+		argument.MakeLower();
+		argument.Replace(TCHAR('/'), TCHAR('-'));
+		if (argument == _T("-agent-mode"))
+		{
+			result = true;
+			if (index + 1 < argumentCount)
+			{
+				CString value(arguments[++index]);
+				value.MakeLower();
+				if (value == _T("no") || value == _T("false") || value == _T("0"))
+				{
+					result = false;
+				}
+			}
+			break;
+		}
+	}
+	if (arguments)
+	{
+		::LocalFree(arguments);
+	}
+	return result;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CSimulatorApp
@@ -79,15 +199,24 @@ AFX_STATIC_DATA const TCHAR _afxPreviewEntry[] = _T("PreviewPages");
 CSimulatorApp::CSimulatorApp()
 {
 	// Place all significant initialization in InitInstance
+	m_isGdiPlusInitialized = false;
 	m_isDebugModeEnabled = false;
+	m_isAgentModeEnabled = false;
 	m_isLuaExitAllowed = false;
-	m_isConsoleEnabled = true;
+	m_exitCode = 0;
 	m_isStopBuildRequested = false;
 }
 
 // InitInstance - initialize the application
 BOOL CSimulatorApp::InitInstance()
 {
+	const bool wasAgentModeRequested = IsAgentModeRequested();
+	m_isAgentModeEnabled = wasAgentModeRequested;
+
+	// Don't buffer stdout and stderr. Agent mode relies on the launching terminal for logs.
+	setvbuf(stdout, NULL, _IONBF, 0);
+	setvbuf(stderr, NULL, _IONBF, 0);
+
 	// Load the simulator version of the Corona library, which is only used by plugins to link against by name.
 	// This is a thin proxy DLL which forwards Solar2D's public APIs to this EXE's statically linked Solar2D APIs.
 	// This ensures that plugins link with the simulator's library and not the non-simulator version of the library.
@@ -98,7 +227,15 @@ BOOL CSimulatorApp::InitInstance()
 			_T("Failed to load the Solar2D Simulator's library.\r\n")
 			_T("This might mean that your Solar2D installation is corrupted.\r\n")
 			_T("You may be able to fix this by re-installing the Solar2D.");
-		AfxMessageBox(message, MB_OK | MB_ICONEXCLAMATION);
+		if (m_isAgentModeEnabled)
+		{
+			fwprintf(stderr, L"%ls\n", (LPCWSTR)message);
+			m_exitCode = 1;
+		}
+		else
+		{
+			AfxMessageBox(message, MB_OK | MB_ICONEXCLAMATION);
+		}
 		return FALSE;
 	}
 
@@ -117,26 +254,24 @@ BOOL CSimulatorApp::InitInstance()
 
 	}
 
-	// Initialize WinGlobalProperties object which mirrors theApp properties
-	// Make sure this is done before accessing any Solar2D functions
-	WinString strRegistryKey, strRegistryProfile, strResourcesDir;
-	
-	WinString stringTranscoder(L"Ansca Corona");
-	SetRegistryKey(stringTranscoder.GetTCHAR());
-	strRegistryKey.SetTCHAR(m_pszRegistryKey);
+	SetRegistryKey(_T("Ansca Corona"));
+	m_pszProfileName = _tcsdup(_T("Corona Simulator"));
 
-	WinString profileName(L"Corona Simulator");
-	m_pszProfileName = _tcsdup(profileName.GetTCHAR());
-	strRegistryProfile.SetTCHAR(m_pszProfileName);
-
-	strResourcesDir.SetTCHAR(GetResourceDir());
-	GetWinProperties()->SetRegistryKey(strRegistryKey.GetUTF8());
-	GetWinProperties()->SetRegistryProfile(strRegistryProfile.GetUTF8());
-	GetWinProperties()->SetResourcesDir(strResourcesDir.GetUTF8());
+	CSimulatorCommandLineInfo cmdInfo;
+	ParseCommandLine(cmdInfo);
+	m_isAgentModeEnabled = cmdInfo.IsAgentModeEnabled;
+	if (!cmdInfo.IsValid)
+	{
+		m_isAgentModeEnabled = wasAgentModeRequested;
+		m_exitCode = 1;
+		fprintf(stderr, "ERROR: -agent-mode and -project require valid values.\n");
+		return FALSE;
+	}
 
 	// See if we ran successfully without a crash last time (mostly
 	// used to detect crappy video drivers that crash us)
-	int lastRunSucceeded = GetProfileInt(REGISTRY_SECTION, REGISTRY_LAST_RUN_SUCCEEDED, 1);
+	int lastRunSucceeded = m_isAgentModeEnabled ? 1 :
+		GetProfileInt(REGISTRY_SECTION, REGISTRY_LAST_RUN_SUCCEEDED, 1);
 
 	if (!lastRunSucceeded)
 	{
@@ -155,7 +290,7 @@ BOOL CSimulatorApp::InitInstance()
 			IDOK,
 			L"CoronaShowCrashWarning");
 	}
-	else
+	else if (!m_isAgentModeEnabled)
 	{
 #ifndef Rtt_DEBUG
 		// Set the telltale to 0 so we'll know if we don't reset it in ExitInstance()
@@ -170,12 +305,8 @@ BOOL CSimulatorApp::InitInstance()
 	commandLine.MakeLower();
 	commandLine.Replace(TCHAR('/'), TCHAR('-'));
 
-	// Don't buffer stdout and stderr as this makes debugging easier
-	setvbuf(stdout, NULL, _IONBF, 0);
-	setvbuf(stderr, NULL, _IONBF, 0);
-
 	// Have we been asked to run just a single instance at a time?
-	if (commandLine.Find(_T("-singleton")) >= 0)
+	if (!m_isAgentModeEnabled && commandLine.Find(_T("-singleton")) >= 0)
 	{
 		// Check whether we have already an instance running
 		// (even if we get ERROR_ALREADY_EXISTS we increment the reference count so the semaphore
@@ -226,9 +357,10 @@ BOOL CSimulatorApp::InitInstance()
 		}
 	}
 
-    // Initialize GDIplus early to avoid crashes when double-clicking on a .lua file
+	// Initialize GDIplus early to avoid crashes when double-clicking on a .lua file
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
+	m_isGdiPlusInitialized =
+		Gdiplus::Ok == Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
 	// Handle the rest of the command line arguments.
 	if (commandLine.Find(_T("-debug")) >= 0)
@@ -239,48 +371,6 @@ BOOL CSimulatorApp::InitInstance()
 	{
 		m_isLuaExitAllowed = true;
 	}
-	if (commandLine.Find(_T("-no-console")) >= 0)
-	{
-		// No console is required, caller will grab our output from stdout and stderr
-		m_isConsoleEnabled = false;
-	}
-
-	// Display a logging window, if enabled.
-	if (m_isConsoleEnabled)
-	{
-		// Use the following Solar2D application as our logging window.
-		WinString outputViewerFilePath(GetApplicationDir());
-		WinString outputViewerArgs;
-
-		outputViewerArgs.Format("/parentProcess:%ld", ::GetCurrentProcessId());
-		outputViewerArgs.Append(L" /disableClose /windowName:\"Corona Simulator Console\"");
-
-		outputViewerFilePath.Append(L"\\Corona.Console.exe");
-		Interop::Ipc::Process::LaunchSettings launchSettings{};
-		launchSettings.FileNamePath = outputViewerFilePath.GetUTF16();
-		launchSettings.CommandLineArguments = outputViewerArgs.GetTCHAR();
-		launchSettings.IsStdInRedirectionEnabled = true;
-		auto launchResult = Interop::Ipc::Process::LaunchUsing(launchSettings);
-		m_outputViewerProcessPointer = launchResult.GetValue();
-		if (m_outputViewerProcessPointer)
-		{
-			auto stdInHandle = m_outputViewerProcessPointer->GetStdInHandle();
-			int stdInFD = _open_osfhandle((intptr_t)stdInHandle, _O_TEXT);
-			if (!GetConsoleWindow()) {
-				AllocConsole();
-				ShowWindow(GetConsoleWindow(), SW_HIDE);
-			}
-			::SetStdHandle(STD_OUTPUT_HANDLE, stdInHandle);
-			::SetStdHandle(STD_ERROR_HANDLE, stdInHandle);
-			FILE* notused;
-			freopen_s(&notused, "CONOUT$", "w", stdout);
-			freopen_s(&notused, "CONOUT$", "w", stderr);
-			int res = _dup2(stdInFD, _fileno(stdout));
-			res = _dup2(stdInFD, _fileno(stderr));
-			std::ios::sync_with_stdio();
-		}
-	}
-
 	// Stop MFC from flashing the simulator window on startup.
 	m_nCmdShow = SW_HIDE;
 
@@ -297,7 +387,10 @@ BOOL CSimulatorApp::InitInstance()
 	AfxEnableControlContainer();
 
 	int maxRecentFileCount = 10;
-	LoadStdProfileSettings(maxRecentFileCount);  // Load standard INI file options (including MRU)
+	if (!m_isAgentModeEnabled)
+	{
+		LoadStdProfileSettings(maxRecentFileCount);  // Load standard INI file options (including MRU)
+	}
 
     // Delete the m_pRecentFileList created in the LoadStdProfileSettings.
 	// We want to show directory name, not filename (which is always main.lua)
@@ -308,7 +401,10 @@ BOOL CSimulatorApp::InitInstance()
     // different value for the nMaxMRU argument you need to change the
     // nSize argument for the constructor call.
     m_pRecentFileList = new CRecentDirList(0, _afxFileSection, _afxFileEntry, maxRecentFileCount);
-    m_pRecentFileList->ReadList();
+	if (!m_isAgentModeEnabled)
+	{
+		m_pRecentFileList->ReadList();
+	}
 
     // Override default CDocManager class to manage initial directory for open file dialog
     // Initial directory set below
@@ -321,6 +417,7 @@ BOOL CSimulatorApp::InitInstance()
 	auto pDocTemplate = new CSimulatorDocTemplate();
 	if (!pDocTemplate)
 	{
+		m_exitCode = m_isAgentModeEnabled ? 1 : m_exitCode;
 		return FALSE;
 	}
 	AddDocTemplate(pDocTemplate);
@@ -330,18 +427,17 @@ BOOL CSimulatorApp::InitInstance()
 
 	// Load user preferences from registry
     // Initialize member variables used to write out preferences
-	SetWorkingDir(GetProfileString(REGISTRY_SECTION, REGISTRY_WORKINGDIR, GetResourceDir()));
-    m_sDeviceName = GetProfileString( REGISTRY_SECTION, REGISTRY_DEVICE, _T("") );
-
-	// Parse command line for standard shell commands, DDE, file open
-	CCommandLineInfo cmdInfo;
-	ParseCommandLine(cmdInfo);
+	SetWorkingDir(m_isAgentModeEnabled ? GetResourceDir() :
+		GetProfileString(REGISTRY_SECTION, REGISTRY_WORKINGDIR, GetResourceDir()));
+	m_sDeviceName = m_isAgentModeEnabled ? _T("") :
+		GetProfileString(REGISTRY_SECTION, REGISTRY_DEVICE, _T(""));
 
 	// Fake out command line since we want to automatically open the last open project.
 	// This is necessary because ProcessShellCommand() initiates a "New File"
 	// operation if there is no filename on the command line and this is very
 	// hard to unravel and inject the remembered filename into.
-	if (!m_isDebugModeEnabled && (cmdInfo.m_nShellCommand == CCommandLineInfo::FileNew))
+	if (!m_isAgentModeEnabled && !m_isDebugModeEnabled &&
+		(cmdInfo.m_nShellCommand == CCommandLineInfo::FileNew))
 	{
 		CRecentFileList *recentFileListPointer = GetRecentFileList();
 		if (recentFileListPointer && (recentFileListPointer->GetSize() > 0))
@@ -366,6 +462,19 @@ BOOL CSimulatorApp::InitInstance()
 		{
 			cmdInfo.m_strFileName = mainLuaFilePath;
 		}
+		else if (m_isAgentModeEnabled)
+		{
+			cmdInfo.m_strFileName.Empty();
+		}
+	}
+	if (m_isAgentModeEnabled &&
+		(!cmdInfo.IsProjectExplicit || cmdInfo.m_strFileName.IsEmpty() ||
+		 !::PathFileExists(cmdInfo.m_strFileName) ||
+		 _tcsicmp(::PathFindFileName(cmdInfo.m_strFileName), _T("main.lua")) != 0))
+	{
+		fprintf(stderr, "ERROR: Agent mode requires an existing Solar2D project via -project <path>.\n");
+		m_exitCode = 1;
+		return FALSE;
 	}
 
 	// Dispatch commands specified on the command line.  Will return FALSE if
@@ -373,6 +482,7 @@ BOOL CSimulatorApp::InitInstance()
 	// This will cause a new "document" to be opened and most initialization to take place
 	if (!ProcessShellCommand(cmdInfo))
 	{
+		m_exitCode = m_isAgentModeEnabled ? 1 : m_exitCode;
 		return FALSE;
 	}
 
@@ -382,22 +492,35 @@ BOOL CSimulatorApp::InitInstance()
 	{
         CString msg;
         msg.Format( IDS_DIR_s_NOTFOUND_INSTALL, sDir );
-		::AfxMessageBox( msg );
+		if (m_isAgentModeEnabled)
+		{
+			fwprintf(stderr, L"%ls\n", (LPCWSTR)msg);
+			m_exitCode = 1;
+		}
+		else
+		{
+			::AfxMessageBox(msg);
+		}
         return FALSE;
 	}
 
 	// Get the current window size (it's been calculated from the current app)
 	CRect cwr;
 	m_pMainWnd->GetWindowRect(&cwr);
-	m_WP.rcNormalPosition.left = GetProfileInt(REGISTRY_SECTION, REGISTRY_XPOS, REGISTRY_XPOS_DEFAULT);
-	m_WP.rcNormalPosition.top = GetProfileInt(REGISTRY_SECTION, REGISTRY_YPOS, REGISTRY_YPOS_DEFAULT);
+	m_WP.rcNormalPosition.left = m_isAgentModeEnabled ? REGISTRY_XPOS_DEFAULT :
+		GetProfileInt(REGISTRY_SECTION, REGISTRY_XPOS, REGISTRY_XPOS_DEFAULT);
+	m_WP.rcNormalPosition.top = m_isAgentModeEnabled ? REGISTRY_YPOS_DEFAULT :
+		GetProfileInt(REGISTRY_SECTION, REGISTRY_YPOS, REGISTRY_YPOS_DEFAULT);
 	// Don't use any remembered size as it might not be for the same app
 	m_WP.rcNormalPosition.right = m_WP.rcNormalPosition.left + (cwr.right - cwr.left); 
 	m_WP.rcNormalPosition.bottom = m_WP.rcNormalPosition.top + (cwr.bottom - cwr.top);
 	m_WP.length = sizeof(WINDOWPLACEMENT);
     const WINDOWPLACEMENT * wp = &m_WP;
 	// Places the window on the screen even if the information in WINDOWPLACEMENT puts the window off screen
-	SetWindowPlacement(*m_pMainWnd, wp);
+	if (!m_isAgentModeEnabled)
+	{
+		SetWindowPlacement(*m_pMainWnd, wp);
+	}
 
 	// Remember the main window's HWND in the shared memory area so other instances
 	// can find it and tell us to do things
@@ -405,7 +528,11 @@ BOOL CSimulatorApp::InitInstance()
 
 	// Set main window size based on device
     CMainFrame *pMainFrm = (CMainFrame *)m_pMainWnd;
-    CSimulatorView *pView = (CSimulatorView *)pMainFrm->GetActiveView();
+	CSimulatorView *pView = (CSimulatorView *)pMainFrm->GetActiveView();
+	if (m_isAgentModeEnabled)
+	{
+		m_pMainWnd->SetMenu(nullptr);
+	}
 
 	// The one and only window has been initialized, so show and update it
 	m_pMainWnd->ShowWindow(SW_SHOW);
@@ -504,6 +631,16 @@ void CSimulatorApp::SetWorkingDir( CString sDir )
 // ExitInstance - save position, etc. to registry
 int CSimulatorApp::ExitInstance()
 {
+	if (m_isAgentModeEnabled)
+	{
+		if (m_isGdiPlusInitialized)
+		{
+			Gdiplus::GdiplusShutdown(m_gdiplusToken);
+			m_isGdiPlusInitialized = false;
+		}
+		return m_exitCode;
+	}
+
 	// Check if we're exiting before we initialized.
 	if (m_pDocManager == nullptr)
 	{
@@ -524,36 +661,12 @@ int CSimulatorApp::ExitInstance()
 	WriteProfileInt(REGISTRY_SECTION, REGISTRY_XPOS, m_WP.rcNormalPosition.left);
     WriteProfileInt( REGISTRY_SECTION, REGISTRY_YPOS, m_WP.rcNormalPosition.top);
 
-	// Close the logging window if currently running.
-	if (m_outputViewerProcessPointer)
-	{
-		// Re-enable the logging window's close [x] button.
-		// Note: This window will ignore WM_CLOSE messages while the close button is disabled.
-		auto outputViewerWindowHandle = m_outputViewerProcessPointer->FetchMainWindowHandle();
-		if (outputViewerWindowHandle)
-		{
-			auto menuHandle = ::GetSystemMenu(outputViewerWindowHandle, FALSE);
-			if (menuHandle)
-			{
-				::EnableMenuItem(menuHandle, SC_CLOSE, MF_ENABLED);
-			}
-		}
-
-		// Close the logging window gracefully via a WM_CLOSE message.
-		m_outputViewerProcessPointer->RequestCloseMainWindow();
-		m_outputViewerProcessPointer = nullptr;
-
-		if (!GetConsoleWindow()) {
-			AllocConsole();
-			ShowWindow(GetConsoleWindow(), SW_HIDE);
-		}
-		FILE* notused;
-		freopen_s(&notused, "CONOUT$", "w", stdout);
-		freopen_s(&notused, "CONOUT$", "w", stderr);
-	}
-
     // Uninitialize GDIplus
-	Gdiplus::GdiplusShutdown(m_gdiplusToken);
+	if (m_isGdiPlusInitialized)
+	{
+		Gdiplus::GdiplusShutdown(m_gdiplusToken);
+		m_isGdiPlusInitialized = false;
+	}
 
 	// If we got this far, we ran successfully without a crash (mostly
 	// used to detect crappy video drivers that crash us)
@@ -561,6 +674,14 @@ int CSimulatorApp::ExitInstance()
 
 	// Exit this application.
 	return CWinApp::ExitInstance();
+}
+
+void CSimulatorApp::AddToRecentFileList(LPCTSTR path)
+{
+	if (!m_isAgentModeEnabled)
+	{
+		CWinApp::AddToRecentFileList(path);
+	}
 }
 
 // PutWP - save window placement so it can be written to registry

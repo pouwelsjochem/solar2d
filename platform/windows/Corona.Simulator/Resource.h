@@ -7,7 +7,6 @@
 #define IDR_SIMULATOR_MENU              128
 #define IDR_ACTIVEWND                   129
 #define IDS_INVALID_NXS_APP_VERSION_NUMBER 132
-#define IDD_LICENSE                     314
 #define IDD_PASSWORD                    316
 #define IDD_MESSAGE                     317
 #define IDD_PREFERENCES                 334
@@ -50,12 +49,10 @@
 #define IDS_SIMULATOR_FILES             650
 #define IDS_REMIND_ME_LATER             655
 #define IDS_OPENGL21_VERSION_WARNING    664
-#define IDS_CANNOT_BUILD_WITHOUT_PLUGINS 671
 #define IDC_LINK_ANSCAMOBILE            1000
 #define IDC_KEY                         1015
 #define IDC_PASSWORD                    1016
 #define IDC_SAVEPASSWORD                1017
-#define IDC_LICENSE                     1022
 #define IDC_MSG_ICON                    1025
 #define IDC_MSG_TEXT                    1026
 #define IDC_ABOUT_VERSION               1027
@@ -112,7 +109,6 @@
 #define ID_VIEWAS_PLACEHOLDER           32816
 #define ID_VIEW_NAVIGATE_BACK           32817
 #define ID_FILE_CLEARPROJECTSANDBOX     32818
-#define ID_VIEW_CONSOLE                 32819
 #define ID_VIEWAS_BEGIN                 32900
 #define ID_VIEWAS_END                   32999
 

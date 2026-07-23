@@ -87,19 +87,8 @@ ApplicationServices::ApplicationServices()
 bool ApplicationServices::IsCoronaSdkApp()
 {
 #ifdef Rtt_AUTHORING_SIMULATOR
-	// This is the Corona Simulator. Always return true.
 	return true;
 #else
-	// Check if this Win32 app template is the Corona Shell.
-	auto companyName = GetCompanyName();
-	if (wcsstr(companyName, L"Corona Labs") >= 0)
-	{
-		auto exeFileName = GetExeFileNameWithoutExtension();
-		if (!_wcsicmp(exeFileName, L"corona.shell") || !_wcsicmp(exeFileName, L"corona simulator"))
-		{
-			return true;
-		}
-	}
 	return false;
 #endif
 }

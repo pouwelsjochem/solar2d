@@ -613,8 +613,7 @@ class RuntimeEnvironment
 		///  and copies the result to the given destination string.
 		/// </summary>
 		/// <remarks>
-		///  <para>This function is expected to be called by the Corona Simulator and the Corona Shell.</para>
-		///  <para>This allows these 2 applications to use consistent sandbox directories for the same project.</para>
+		///  <para>This function is expected to be called by the Corona Simulator.</para>
 		/// </remarks>
 		/// <param name="resourceDirectoryPath">Path to the Corona project directory. Cannot be null or empty.</param>
 		/// <param name="destinationString">The string that the sandbox directory path will be copied to.</param>

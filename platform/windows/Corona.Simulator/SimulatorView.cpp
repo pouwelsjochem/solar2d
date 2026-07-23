@@ -14,13 +14,13 @@
 #include <math.h>
 
 #include "Core\Rtt_Build.h"
-#include "Interop\UI\TaskDialog.h"
+#include "Interop\Input\Key.h"
 #include "Interop\MDeviceSimulatorServices.h"
 #include "Interop\SimulatorRuntimeEnvironment.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaFile.h"
 #include "Rtt_MPlatform.h"
-#include "Rtt_PlatformAppPackager.h"
+#include "Rtt_Event.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_RenderingStream.h"
@@ -32,7 +32,7 @@
 #include "SimulatorView.h"
 #include "AboutDlg.h"
 #include "WinString.h"
-#include "WinGlobalProperties.h"  // WMU_ message IDs
+#include "SimulatorMessages.h"
 #include "MessageDlg.h"   // Alert
 #include "CoronaInterface.h"
 
@@ -68,9 +68,9 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_SETFOCUS()
+	ON_WM_TIMER()
 	ON_COMMAND(ID_APP_ABOUT, &CSimulatorView::OnAppAbout)
 	ON_COMMAND(ID_HELP, &CSimulatorView::OnHelp)
-	ON_COMMAND(ID_VIEW_CONSOLE, &CSimulatorView::OnViewConsole)
 	ON_COMMAND(ID_VIEW_SUSPEND, &CSimulatorView::OnViewSuspend)
 	ON_COMMAND(ID_VIEW_NAVIGATE_BACK, &CSimulatorView::OnViewNavigateBack)
 	ON_COMMAND(ID_FILE_MRU_FILE1, &CSimulatorView::OnFileMRU1)
@@ -90,6 +90,7 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOW_PROJECT_FILES, &CSimulatorView::OnUpdateShowProjectFiles)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOWPROJECTSANDBOX, &CSimulatorView::OnUpdateShowProjectSandbox)
 	ON_MESSAGE(WMU_NATIVEALERT, &CSimulatorView::OnNativeAlert)
+	ON_MESSAGE(WMU_APPLY_SIMULATOR_CONFIGURATION, &CSimulatorView::OnApplySimulatorConfiguration)
 END_MESSAGE_MAP()
 
 BEGIN_MESSAGE_MAP(CSimulatorView::CCoronaControlContainer, CStatic)
@@ -116,6 +117,10 @@ CSimulatorView::CSimulatorView()
 	mAppChangeHandle = nullptr;
 	m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
 	mRelaunchCount = 0;
+	mIsCustomDevice = false;
+	mIsDeviceConfigurationTemporary = false;
+	mIsRelaunchPending = false;
+	mBackgroundTimerId = 0;
 }
 
 /// Destructor. Destroys owned objects.
@@ -124,6 +129,11 @@ CSimulatorView::~CSimulatorView()
 	CStringA relaunchCountStr;
 	relaunchCountStr.Format("%d", mRelaunchCount);
 
+	if (mBackgroundTimerId)
+	{
+		KillTimer(mBackgroundTimerId);
+		mBackgroundTimerId = 0;
+	}
 	if (mRuntimeEnvironmentPointer)
 	{
 		Interop::SimulatorRuntimeEnvironment::Destroy(mRuntimeEnvironmentPointer);
@@ -164,8 +174,13 @@ void CSimulatorView::OnUpdate(CView* pSender, LPARAM lHint, CObject *pHint)
 {
 	// Start simulation with the new or updated file.
 	// If the last file was closed, then this will display the home screen.
-
-	InitializeSimulation(m_nSkinId);
+	LoadSkinResources();
+	Rtt::TargetDevice::Skin skinId = Rtt::TargetDevice::FindSkinForLabel(CStringA(mDeviceName));
+	if (skinId == Rtt::TargetDevice::kUnknownSkin)
+	{
+		skinId = Rtt::TargetDevice::fDefaultSkinID;
+	}
+	InitializeSimulation(skinId);
 }
 
 // OnDestroy - clean up
@@ -232,8 +247,7 @@ void CSimulatorView::OnSetFocus(CWnd* pOldWnd)
 	}
 }
 
-// OnClose- WinPlatformServices::Terminate() sends msg here, forward to Main window
-// Also used if skin .png files are missing
+// Forward view close requests to the main window.
 void CSimulatorView::OnClose()
 {
 	StopSimulation();
@@ -284,12 +298,6 @@ void CSimulatorView::OnHelp()
 		::ShellExecuteW(nullptr, L"open", kUrl, nullptr, nullptr, SW_SHOWNORMAL);
 	}
 	catch (...) { }
-}
-
-/// Closes the current project and displays the welcome/home screen.
-void CSimulatorView::OnViewConsole()
-{
-	((CSimulatorApp*)AfxGetApp())->GetOutputViewerProcessPointer()->RequestShowMainWindow();
 }
 
 // OnViewSuspend - handle Suspend/Resume menu item
@@ -797,6 +805,12 @@ bool CSimulatorView::LoadSkinResources()
 	systemSkinFilesGlob = mSystemSkinsDir + _T("*.lua");
 	
 	GetFilePaths(systemSkinFilesGlob, filePaths);
+	CString projectPath = CCoronaProject::RemoveMainLua(GetDocument()->GetPath());
+	if (!projectPath.IsEmpty())
+	{
+		CString projectDeviceFilesGlob = projectPath + _T("\\simulator\\devices\\*.lua");
+		GetFilePaths(projectDeviceFilesGlob, filePaths);
+	}
 
 	// Put the skins into a data structure we can share with core code
 	char **skinPaths;
@@ -1009,6 +1023,12 @@ void CSimulatorView::SuspendResumeSimulationWithOverlay(bool showOverlay, bool s
 /// Stops the current simulation and blanks out the screen.
 void CSimulatorView::StopSimulation()
 {
+	if (mBackgroundTimerId)
+	{
+		KillTimer(mBackgroundTimerId);
+		mBackgroundTimerId = 0;
+	}
+
 	// Do not continue if already stopped.
 	if (!mRuntimeEnvironmentPointer)
 	{
@@ -1047,11 +1067,288 @@ bool CSimulatorView::IsSimulationSuspended() const
 	return false;
 }
 
+Rtt::MSimulatorHost::ConfigureResult CSimulatorView::ConfigureAndRelaunch(
+	const Rtt::MSimulatorHost::Configuration& configuration, bool onlyIfNeeded)
+{
+	if (configuration.hasRoundedCorners && configuration.roundedCorners)
+	{
+		return Rtt::MSimulatorHost::kConfigureFailed;
+	}
+
+	bool configurationChanged = false;
+	if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kNamedDevice)
+	{
+		Rtt::TargetDevice::Skin skin = Rtt::TargetDevice::FindSkinForLabel(configuration.deviceId.c_str());
+		if (skin == Rtt::TargetDevice::kUnknownSkin && configuration.deviceId.compare(0, 8, "project:") != 0)
+		{
+			std::string projectIdentifier("project:");
+			projectIdentifier.append(configuration.deviceId);
+			skin = Rtt::TargetDevice::FindSkinForLabel(projectIdentifier.c_str());
+		}
+		if (skin == Rtt::TargetDevice::kUnknownSkin)
+		{
+			return Rtt::MSimulatorHost::kConfigureFailed;
+		}
+		configurationChanged = mIsCustomDevice || skin != m_nSkinId;
+	}
+	else if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kCustomDevice)
+	{
+		configurationChanged =
+			!mIsCustomDevice ||
+			(int)mDeviceConfig.deviceWidth != configuration.width ||
+			(int)mDeviceConfig.deviceHeight != configuration.height ||
+			(int)mDeviceConfig.safeAreaInsetTop != configuration.safeAreaInsets.top ||
+			(int)mDeviceConfig.safeAreaInsetLeft != configuration.safeAreaInsets.left ||
+			(int)mDeviceConfig.safeAreaInsetBottom != configuration.safeAreaInsets.bottom ||
+			(int)mDeviceConfig.safeAreaInsetRight != configuration.safeAreaInsets.right;
+	}
+
+	if (onlyIfNeeded && !configurationChanged && !mIsRelaunchPending)
+	{
+		return Rtt::MSimulatorHost::kConfigureAlreadyActive;
+	}
+
+	mPendingConfiguration = configuration;
+	if (!mIsRelaunchPending)
+	{
+		mIsRelaunchPending = true;
+		if (!PostMessage(WMU_APPLY_SIMULATOR_CONFIGURATION, 0, 0))
+		{
+			mIsRelaunchPending = false;
+			return Rtt::MSimulatorHost::kConfigureFailed;
+		}
+	}
+	return Rtt::MSimulatorHost::kConfigureApplied;
+}
+
+bool CSimulatorView::SetSimulatorFullscreen(bool fullscreen)
+{
+	CMainFrame* framePointer = (CMainFrame*)GetParentFrame();
+	return framePointer && framePointer->SetSimulatorFullscreen(fullscreen);
+}
+
+bool CSimulatorView::SendSimulatorInput(const Rtt::MSimulatorHost::Input& input)
+{
+	if (!mRuntimeEnvironmentPointer || !mRuntimeEnvironmentPointer->GetRuntime() || IsSimulationSuspended())
+	{
+		return false;
+	}
+	Rtt::Runtime* runtimePointer = mRuntimeEnvironmentPointer->GetRuntime();
+
+	if (input.type == Rtt::MSimulatorHost::Input::kBackInput)
+	{
+		Rtt::MSimulatorHost::Input keyInput;
+		keyInput.type = Rtt::MSimulatorHost::Input::kKeyInput;
+		keyInput.phase = Rtt::MSimulatorHost::Input::kPressedPhase;
+		keyInput.keyName = "back";
+		keyInput.hasNativeKeyCode = true;
+		keyInput.nativeKeyCode = VK_BROWSER_BACK;
+		return SendSimulatorInput(keyInput);
+	}
+	if (input.type == Rtt::MSimulatorHost::Input::kKeyInput)
+	{
+		const Interop::Input::Key* keyPointer = Interop::Input::Key::FromCoronaName(input.keyName.c_str());
+		int nativeKeyCode = input.hasNativeKeyCode ? input.nativeKeyCode :
+			(keyPointer ? keyPointer->GetNativeCodeValue() : 0);
+		if (!nativeKeyCode)
+		{
+			return false;
+		}
+		const char* qwertyKeyName = input.hasQwertyKeyName ? input.qwertyKeyName.c_str() : nullptr;
+		auto dispatchKey = [&](Rtt::KeyEvent::Phase phase)
+		{
+			Rtt::KeyEvent event(
+				nullptr, phase, input.keyName.c_str(), nativeKeyCode,
+				input.isShiftDown, input.isAltDown, input.isCtrlDown, input.isCommandDown,
+				qwertyKeyName);
+			runtimePointer->DispatchEvent(event);
+		};
+		if (input.phase == Rtt::MSimulatorHost::Input::kDownPhase ||
+			input.phase == Rtt::MSimulatorHost::Input::kPressedPhase)
+		{
+			dispatchKey(Rtt::KeyEvent::kDown);
+		}
+		if (input.phase == Rtt::MSimulatorHost::Input::kUpPhase ||
+			input.phase == Rtt::MSimulatorHost::Input::kPressedPhase)
+		{
+			dispatchKey(Rtt::KeyEvent::kUp);
+		}
+		return input.phase == Rtt::MSimulatorHost::Input::kDownPhase ||
+			input.phase == Rtt::MSimulatorHost::Input::kUpPhase ||
+			input.phase == Rtt::MSimulatorHost::Input::kPressedPhase;
+	}
+	if (input.type == Rtt::MSimulatorHost::Input::kTouchInput)
+	{
+		Rtt::TouchEvent::Phase phase;
+		switch (input.phase)
+		{
+			case Rtt::MSimulatorHost::Input::kBeganPhase: phase = Rtt::TouchEvent::kBegan; break;
+			case Rtt::MSimulatorHost::Input::kMovedPhase: phase = Rtt::TouchEvent::kMoved; break;
+			case Rtt::MSimulatorHost::Input::kEndedPhase: phase = Rtt::TouchEvent::kEnded; break;
+			case Rtt::MSimulatorHost::Input::kCancelledPhase: phase = Rtt::TouchEvent::kCancelled; break;
+			default: return false;
+		}
+		Rtt::TouchEvent event(
+			Rtt_FloatToReal((float)input.x), Rtt_FloatToReal((float)input.y),
+			Rtt_FloatToReal((float)input.xStart), Rtt_FloatToReal((float)input.yStart), phase);
+		event.SetId((const void*)1);
+		runtimePointer->DispatchEvent(event);
+		return true;
+	}
+	if (input.type == Rtt::MSimulatorHost::Input::kMouseInput)
+	{
+		Rtt::MouseEvent::MouseEventType eventType;
+		switch (input.phase)
+		{
+			case Rtt::MSimulatorHost::Input::kDownPhase: eventType = Rtt::MouseEvent::kDown; break;
+			case Rtt::MSimulatorHost::Input::kUpPhase: eventType = Rtt::MouseEvent::kUp; break;
+			case Rtt::MSimulatorHost::Input::kDragPhase: eventType = Rtt::MouseEvent::kDrag; break;
+			case Rtt::MSimulatorHost::Input::kMovePhase: eventType = Rtt::MouseEvent::kMove; break;
+			case Rtt::MSimulatorHost::Input::kExitPhase: eventType = Rtt::MouseEvent::kExit; break;
+			case Rtt::MSimulatorHost::Input::kScrollPhase: eventType = Rtt::MouseEvent::kScroll; break;
+			default: return false;
+		}
+		Rtt::MouseEvent event(
+			eventType,
+			Rtt_FloatToReal((float)input.x), Rtt_FloatToReal((float)input.y),
+			Rtt_FloatToReal((float)input.scrollX), Rtt_FloatToReal((float)input.scrollY),
+			input.clickCount,
+			input.isPrimaryButtonDown, input.isSecondaryButtonDown, input.isMiddleButtonDown,
+			input.isShiftDown, input.isAltDown, input.isCtrlDown, input.isCommandDown);
+		runtimePointer->DispatchEvent(event);
+		return true;
+	}
+	return false;
+}
+
+bool CSimulatorView::SimulateEvent(const Rtt::MSimulatorHost::Event& event)
+{
+	if (!mRuntimeEnvironmentPointer || !mRuntimeEnvironmentPointer->GetRuntime() || IsSimulationSuspended())
+	{
+		return false;
+	}
+	Rtt::Runtime* runtimePointer = mRuntimeEnvironmentPointer->GetRuntime();
+	switch (event.type)
+	{
+		case Rtt::MSimulatorHost::Event::kMemoryWarningEvent:
+		{
+			Rtt::MemoryWarningEvent memoryWarningEvent;
+			runtimePointer->DispatchEvent(memoryWarningEvent);
+			return true;
+		}
+		case Rtt::MSimulatorHost::Event::kBackgroundEvent:
+		{
+			if (!IsSimulationSuspended())
+			{
+				SuspendResumeSimulationWithOverlay(false, true);
+			}
+			if (event.duration <= 0.0)
+			{
+				SuspendResumeSimulationWithOverlay(false, true);
+			}
+			else
+			{
+				if (mBackgroundTimerId)
+				{
+					KillTimer(mBackgroundTimerId);
+				}
+				UINT duration = event.duration < (double)MAXUINT ? (UINT)event.duration : MAXUINT;
+				mBackgroundTimerId = SetTimer(1, duration, nullptr);
+				if (!mBackgroundTimerId)
+				{
+					SuspendResumeSimulationWithOverlay(false, true);
+					return false;
+				}
+			}
+			return true;
+		}
+		case Rtt::MSimulatorHost::Event::kAccelerometerEvent:
+		{
+			double gravity[] = { event.xGravity, event.yGravity, event.zGravity };
+			double instant[] = { event.xInstant, event.yInstant, event.zInstant };
+			double raw[] = { event.xRaw, event.yRaw, event.zRaw };
+			Rtt::AccelerometerEvent accelerometerEvent(
+				gravity, instant, raw, event.isShake, event.deltaTime);
+			runtimePointer->DispatchEvent(accelerometerEvent);
+			return true;
+		}
+		case Rtt::MSimulatorHost::Event::kGyroscopeEvent:
+		{
+			Rtt::GyroscopeEvent gyroscopeEvent(
+				event.xRotation, event.yRotation, event.zRotation, event.deltaTime);
+			runtimePointer->DispatchEvent(gyroscopeEvent);
+			return true;
+		}
+	}
+	return false;
+}
+
+LRESULT CSimulatorView::OnApplySimulatorConfiguration(WPARAM wParam, LPARAM lParam)
+{
+	Rtt::MSimulatorHost::Configuration configuration = mPendingConfiguration;
+	mIsRelaunchPending = false;
+
+	if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kNamedDevice)
+	{
+		Rtt::TargetDevice::Skin skin = Rtt::TargetDevice::FindSkinForLabel(configuration.deviceId.c_str());
+		if (skin == Rtt::TargetDevice::kUnknownSkin)
+		{
+			std::string projectIdentifier("project:");
+			projectIdentifier.append(configuration.deviceId);
+			skin = Rtt::TargetDevice::FindSkinForLabel(projectIdentifier.c_str());
+		}
+		if (skin != Rtt::TargetDevice::kUnknownSkin)
+		{
+			InitializeSimulation(skin, !configuration.temporary);
+		}
+	}
+	else if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kCustomDevice)
+	{
+		mIsCustomDevice = true;
+		mIsDeviceConfigurationTemporary = true;
+		m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
+		mDeviceName = _T("Custom");
+		mDeviceConfig.deviceName.Set("Custom");
+		mDeviceConfig.deviceWidth = (float)configuration.width;
+		mDeviceConfig.deviceHeight = (float)configuration.height;
+		mDeviceConfig.safeAreaInsetTop = (float)configuration.safeAreaInsets.top;
+		mDeviceConfig.safeAreaInsetLeft = (float)configuration.safeAreaInsets.left;
+		mDeviceConfig.safeAreaInsetBottom = (float)configuration.safeAreaInsets.bottom;
+		mDeviceConfig.safeAreaInsetRight = (float)configuration.safeAreaInsets.right;
+		UpdateSimulatorSkin();
+		RestartSimulation();
+	}
+	else
+	{
+		RestartSimulation();
+	}
+	return 0;
+}
+
+void CSimulatorView::OnTimer(UINT_PTR timerId)
+{
+	if (timerId == mBackgroundTimerId)
+	{
+		KillTimer(timerId);
+		mBackgroundTimerId = 0;
+		if (IsSimulationSuspended())
+		{
+			SuspendResumeSimulationWithOverlay(false, true);
+		}
+	}
+	CView::OnTimer(timerId);
+}
+
 // InitializeSimulation - select new skin and update
-bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId)
+bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId, bool persist)
 {
 	mDeviceName = Rtt::TargetDevice::LabelForSkin(skinId);
-	((CSimulatorApp*)AfxGetApp())->PutDeviceName(mDeviceName);
+	mIsCustomDevice = false;
+	mIsDeviceConfigurationTemporary = !persist;
+	if (persist)
+	{
+		((CSimulatorApp*)AfxGetApp())->PutDeviceName(mDeviceName);
+	}
 
 	bool skinLoaded = InitSkin(skinId);
 	UpdateSimulatorSkin();
@@ -1096,11 +1393,14 @@ void CSimulatorView::UpdateSimulatorSkin()
 	}
 	
 	// Set the client window size that will render the device skin and the Corona contents.
-	clientBounds.top = 0;
-	clientBounds.left = 0;
-	clientBounds.right = clientWidth;
-	clientBounds.bottom = clientHeight;
-	pMainWnd->SizeToClient(clientBounds);
+	if (!pMainWnd->IsSimulatorFullscreen())
+	{
+		clientBounds.top = 0;
+		clientBounds.left = 0;
+		clientBounds.right = clientWidth;
+		clientBounds.bottom = clientHeight;
+		pMainWnd->SizeToClient(clientBounds);
+	}
 	
 	// Calculate the bounds of the Corona control.
 	CRect coronaBounds;
@@ -1110,65 +1410,6 @@ void CSimulatorView::UpdateSimulatorSkin()
     // Set size, position, and visibility of view window
 	this->MoveWindow(clientBounds, TRUE);
 	this->ShowWindow(SW_SHOW);
-}
-
-bool CSimulatorView::VerifyAllPluginsAcquired()
-{
-	// Do not continue if we're not currently running a Corona project.
-	if (!mRuntimeEnvironmentPointer || !mRuntimeEnvironmentPointer->GetRuntime())
-	{
-		return true;
-	}
-
-	// Verify that all of the Corona project's plugins have been downloaded/acquired.
-	if (mRuntimeEnvironmentPointer->GetRuntime()->RequiresDownloadablePlugins())
-	{
-		Rtt::String utf8MissingPluginsString;
-		auto runtimePointer = mRuntimeEnvironmentPointer->GetRuntime();
-		if (Rtt::PlatformAppPackager::AreAllPluginsAvailable(runtimePointer, &utf8MissingPluginsString) == false)
-		{
-			// Display a message box detailing which plugins were not found and how to resolve it.
-			CStringW title;
-			CStringW message;
-			title.LoadStringW(IDS_WARNING);
-			WinString missingPluginsString(L"");
-			if (!utf8MissingPluginsString.IsEmpty())
-			{
-				missingPluginsString.SetUTF16(L"Corona failed to acquire the following plugins:\n- ");
-				WinString stringBuffer(utf8MissingPluginsString.GetString());
-				stringBuffer.Replace("\n", "\n- ");
-				missingPluginsString.Append(stringBuffer.GetUTF16());
-				missingPluginsString.Append(L"\n\n");
-			}
-			message.Format(IDS_CANNOT_BUILD_WITHOUT_PLUGINS, missingPluginsString.GetUTF16());
-			Interop::UI::TaskDialog dialog;
-			dialog.GetSettings().SetParentWindowHandle(this->GetSafeHwnd());
-			dialog.GetSettings().SetTitleText(title);
-			dialog.GetSettings().SetMessageText(message);
-			dialog.GetSettings().GetButtonLabels().push_back(std::wstring(L"&Learn More"));
-			dialog.GetSettings().GetButtonLabels().push_back(std::wstring(L"&Cancel"));
-			dialog.Show();
-
-			// Display Corona's documentation about plugin "build.settings" via the default web browser.
-			if (dialog.GetLastPressedButtonIndex() == 0)
-			{
-				try
-				{
-					::ShellExecuteW(
-							nullptr, L"open",
-							L"https://docs.coronalabs.com/daily/guide/distribution/buildSettings/index.html#plugins",
-							nullptr, nullptr, SW_SHOWNORMAL);
-				}
-				catch (...) {}
-			}
-
-			// Returning false indicates that we've failed to acquire all plugins.
-			return false;
-		}
-	}
-
-	// All plugins have been acquired or the project does not require plugins.
-	return true;
 }
 
 #ifdef _DEBUG
@@ -1226,7 +1467,7 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 	// If we're opening the "home screen" project, then show the home menu.
 	// Otherwise, show the device simulator menu.
 	auto frameWindowPointer = (CMainFrame*)GetParentFrame();
-	if (frameWindowPointer)
+	if (frameWindowPointer && !applicationPointer->IsAgentModeEnabled())
 	{
 		// Only replace the menu if it needs changing. If we're already showing the right menu, do nothing.
 		UINT nextMenuId = IDR_SIMULATOR_MENU;
@@ -1314,7 +1555,16 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 			{
 				errorMessage = L"Failed to load Corona project.";
 			}
-			::MessageBoxW(GetSafeHwnd(), errorMessage, (LPCWSTR)title, MB_OK | MB_ICONWARNING);
+			if (applicationPointer->IsAgentModeEnabled())
+			{
+				fwprintf(stderr, L"ERROR: %ls\n", errorMessage);
+				applicationPointer->SetExitCode(1);
+				::PostMessage(AfxGetMainWnd()->GetSafeHwnd(), WM_CLOSE, 0, 0);
+			}
+			else
+			{
+				::MessageBoxW(GetSafeHwnd(), errorMessage, (LPCWSTR)title, MB_OK | MB_ICONWARNING);
+			}
 		}
 	}
 	
@@ -1384,6 +1634,25 @@ bool CSimulatorView::ValidateOpenGL()
 	if (rendererVersionString.IsEmpty())
 	{
 		rendererVersionString.SetUTF16(L"OpenGL Driver Version: Unknown");
+	}
+	if (((CSimulatorApp*)AfxGetApp())->IsAgentModeEnabled())
+	{
+		if (!result.CanRender)
+		{
+			fwprintf(stderr, L"ERROR: Solar2D cannot render with %ls.\n", rendererVersionString.GetTCHAR());
+			((CSimulatorApp*)AfxGetApp())->SetExitCode(1);
+			::PostMessage(AfxGetMainWnd()->GetSafeHwnd(), WM_CLOSE, 0, 0);
+			return false;
+		}
+		if (!result.SupportsAllShaders)
+		{
+			fwprintf(stderr, L"WARNING: Some shaders are unsupported by %ls.\n", rendererVersionString.GetTCHAR());
+		}
+		if (!mCoronaContainerControl.IsWindowVisible())
+		{
+			mCoronaContainerControl.ShowWindow(SW_SHOW);
+		}
+		return true;
 	}
 
 	// Display a warning message if we can render, but not all graphics features will work.
