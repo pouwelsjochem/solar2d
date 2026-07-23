@@ -158,9 +158,7 @@
     <ClInclude Include="..\..\..\external\winutil\BtnST.h" />
     <ClInclude Include="..\..\..\external\winutil\BrowseDirDialog.h" />
     <ClInclude Include="..\..\..\external\winutil\dirent.h" />
-    <ClInclude Include="..\..\shared\Rtt_DeviceBuildData.h" />
     <ClInclude Include="..\..\shared\Rtt_MPlatformServices.h" />
-    <ClInclude Include="..\..\shared\Rtt_PlatformAppPackager.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformDictionaryWrapper.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h" />
     <ClInclude Include="..\..\shared\Rtt_PlatformPlayer.h" />
@@ -193,8 +191,6 @@
     <ClCompile Include="..\..\..\external\sundown\Project\sundown\stack.c" />
     <ClCompile Include="..\..\..\external\winutil\BtnST.cpp" />
     <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp" />
-    <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformDictionaryWrapper.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp" />
     <ClCompile Include="..\..\shared\Rtt_PlatformPlayer.cpp" />

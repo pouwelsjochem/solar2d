@@ -204,7 +204,7 @@ CSimulatorApp::CSimulatorApp()
 	m_isAgentModeEnabled = false;
 	m_isLuaExitAllowed = false;
 	m_exitCode = 0;
-	m_isStopBuildRequested = false;
+	m_hasExplicitExitCode = false;
 }
 
 // InitInstance - initialize the application
@@ -673,7 +673,8 @@ int CSimulatorApp::ExitInstance()
 	WriteProfileInt(REGISTRY_SECTION, REGISTRY_LAST_RUN_SUCCEEDED, 1);
 
 	// Exit this application.
-	return CWinApp::ExitInstance();
+	int defaultExitCode = CWinApp::ExitInstance();
+	return m_hasExplicitExitCode ? m_exitCode : defaultExitCode;
 }
 
 void CSimulatorApp::AddToRecentFileList(LPCTSTR path)
@@ -689,6 +690,69 @@ void CSimulatorApp::PutWP(const WINDOWPLACEMENT& newval)
 {	
 	m_WP = newval;
 	m_WP.length = sizeof(m_WP);
+}
+
+void CSimulatorApp::GetCustomDeviceSettings(
+	int& width, int& height, int& safeAreaTop, int& safeAreaLeft,
+	int& safeAreaBottom, int& safeAreaRight)
+{
+	width = GetProfileInt(
+		REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_WIDTH, REGISTRY_CUSTOM_DEVICE_WIDTH_DEFAULT);
+	height = GetProfileInt(
+		REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_HEIGHT, REGISTRY_CUSTOM_DEVICE_HEIGHT_DEFAULT);
+	safeAreaTop = GetProfileInt(
+		REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_TOP, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT);
+	safeAreaLeft = GetProfileInt(
+		REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_LEFT, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT);
+	safeAreaBottom = GetProfileInt(
+		REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_BOTTOM, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT);
+	safeAreaRight = GetProfileInt(
+		REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_RIGHT, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT);
+
+	if (width <= 0 || width > CUSTOM_DEVICE_MAXIMUM_DIMENSION)
+	{
+		width = REGISTRY_CUSTOM_DEVICE_WIDTH_DEFAULT;
+	}
+	if (height <= 0 || height > CUSTOM_DEVICE_MAXIMUM_DIMENSION)
+	{
+		height = REGISTRY_CUSTOM_DEVICE_HEIGHT_DEFAULT;
+	}
+	if (safeAreaTop < 0 || safeAreaLeft < 0 || safeAreaBottom < 0 || safeAreaRight < 0 ||
+		safeAreaTop > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaLeft > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaBottom > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaRight > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaTop + safeAreaBottom > height || safeAreaLeft + safeAreaRight > width)
+	{
+		safeAreaTop = REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT;
+		safeAreaLeft = REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT;
+		safeAreaBottom = REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT;
+		safeAreaRight = REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT;
+	}
+}
+
+void CSimulatorApp::PutCustomDeviceSettings(
+	int width, int height, int safeAreaTop, int safeAreaLeft,
+	int safeAreaBottom, int safeAreaRight)
+{
+	if (width <= 0 || height <= 0 ||
+		width > CUSTOM_DEVICE_MAXIMUM_DIMENSION || height > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaTop < 0 || safeAreaLeft < 0 || safeAreaBottom < 0 || safeAreaRight < 0 ||
+		safeAreaTop > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaLeft > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaBottom > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaRight > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		safeAreaTop + safeAreaBottom > height || safeAreaLeft + safeAreaRight > width)
+	{
+		return;
+	}
+
+	WriteProfileInt(REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_WIDTH, width);
+	WriteProfileInt(REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_HEIGHT, height);
+	WriteProfileInt(REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_TOP, safeAreaTop);
+	WriteProfileInt(REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_LEFT, safeAreaLeft);
+	WriteProfileInt(REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_BOTTOM, safeAreaBottom);
+	WriteProfileInt(REGISTRY_SECTION, REGISTRY_CUSTOM_DEVICE_SAFE_AREA_RIGHT, safeAreaRight);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

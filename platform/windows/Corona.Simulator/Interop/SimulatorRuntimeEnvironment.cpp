@@ -242,6 +242,31 @@ static CSimulatorView* FetchSimulatorView()
 	return mainWindowPointer ? dynamic_cast<CSimulatorView*>(mainWindowPointer->GetActiveView()) : nullptr;
 }
 
+static UINT FetchWindowDpi(HWND windowHandle)
+{
+	// GetDpiForWindow is only exported by newer Windows versions, so avoid a static loader dependency.
+	typedef UINT(WINAPI* GetDpiForWindowCallback)(HWND);
+	GetDpiForWindowCallback getDpiForWindow = nullptr;
+	HMODULE user32Module = ::GetModuleHandleW(L"user32.dll");
+	if (user32Module)
+	{
+		getDpiForWindow = reinterpret_cast<GetDpiForWindowCallback>(
+			::GetProcAddress(user32Module, "GetDpiForWindow"));
+	}
+
+	UINT dpi = getDpiForWindow ? getDpiForWindow(windowHandle) : 0;
+	if (!dpi)
+	{
+		HDC deviceContext = ::GetDC(windowHandle);
+		if (deviceContext)
+		{
+			dpi = ::GetDeviceCaps(deviceContext, LOGPIXELSX);
+			::ReleaseDC(windowHandle, deviceContext);
+		}
+	}
+	return dpi ? dpi : 96;
+}
+
 static void ReadSimulatorDevice(CSimulatorView& view, Rtt::MSimulatorHost::Device& result)
 {
 	result = Rtt::MSimulatorHost::Device();
@@ -405,8 +430,8 @@ bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetState(
 
 	CRect windowBounds;
 	framePointer->GetWindowRect(windowBounds);
-	UINT windowDpi = ::GetDpiForWindow(framePointer->GetSafeHwnd());
-	result.window.backingScale = windowDpi ? (double)windowDpi / 96.0 : 1.0;
+	UINT windowDpi = FetchWindowDpi(framePointer->GetSafeHwnd());
+	result.window.backingScale = (double)windowDpi / 96.0;
 	result.window.x = windowBounds.left / result.window.backingScale;
 	result.window.y = windowBounds.top / result.window.backingScale;
 	result.window.width = windowBounds.Width() / result.window.backingScale;
@@ -456,13 +481,24 @@ bool SimulatorRuntimeEnvironment::DeviceSimulatorServices::GetDevices(
 	customDevice.hasRoundedCorners = true;
 	customDevice.roundedCorners = false;
 	customDevice.isCurrent = viewPointer->IsCustomDevice();
-	const Rtt::PlatformSimulator::Config& config = viewPointer->GetDeviceConfig();
-	customDevice.width = (int)config.deviceWidth;
-	customDevice.height = (int)config.deviceHeight;
-	customDevice.safeAreaInsets.top = (int)config.safeAreaInsetTop;
-	customDevice.safeAreaInsets.left = (int)config.safeAreaInsetLeft;
-	customDevice.safeAreaInsets.bottom = (int)config.safeAreaInsetBottom;
-	customDevice.safeAreaInsets.right = (int)config.safeAreaInsetRight;
+	if (customDevice.isCurrent)
+	{
+		const Rtt::PlatformSimulator::Config& config = viewPointer->GetDeviceConfig();
+		customDevice.width = (int)config.deviceWidth;
+		customDevice.height = (int)config.deviceHeight;
+		customDevice.safeAreaInsets.top = (int)config.safeAreaInsetTop;
+		customDevice.safeAreaInsets.left = (int)config.safeAreaInsetLeft;
+		customDevice.safeAreaInsets.bottom = (int)config.safeAreaInsetBottom;
+		customDevice.safeAreaInsets.right = (int)config.safeAreaInsetRight;
+	}
+	else
+	{
+		CSimulatorApp* applicationPointer = (CSimulatorApp*)::AfxGetApp();
+		applicationPointer->GetCustomDeviceSettings(
+			customDevice.width, customDevice.height,
+			customDevice.safeAreaInsets.top, customDevice.safeAreaInsets.left,
+			customDevice.safeAreaInsets.bottom, customDevice.safeAreaInsets.right);
+	}
 	result.push_back(customDevice);
 	return true;
 }

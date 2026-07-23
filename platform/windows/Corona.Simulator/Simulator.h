@@ -32,12 +32,22 @@
 #define REGISTRY_SECTION _T("Preferences")
 #define REGISTRY_WORKINGDIR _T("WorkingDir")
 #define REGISTRY_DEVICE _T("Device")
+#define REGISTRY_CUSTOM_DEVICE_WIDTH _T("CustomDeviceWidth")
+#define REGISTRY_CUSTOM_DEVICE_HEIGHT _T("CustomDeviceHeight")
+#define REGISTRY_CUSTOM_DEVICE_SAFE_AREA_TOP _T("CustomDeviceSafeAreaTop")
+#define REGISTRY_CUSTOM_DEVICE_SAFE_AREA_LEFT _T("CustomDeviceSafeAreaLeft")
+#define REGISTRY_CUSTOM_DEVICE_SAFE_AREA_BOTTOM _T("CustomDeviceSafeAreaBottom")
+#define REGISTRY_CUSTOM_DEVICE_SAFE_AREA_RIGHT _T("CustomDeviceSafeAreaRight")
 #define REGISTRY_XPOS _T("XPos")
 #define REGISTRY_YPOS _T("YPos")
 #define REGISTRY_LAST_RUN_SUCCEEDED _T("lastRunSucceeded")
 
 // Define all registry item defaults here
 #define REGISTRY_DEVICE_DEFAULT ""
+#define REGISTRY_CUSTOM_DEVICE_WIDTH_DEFAULT 800
+#define REGISTRY_CUSTOM_DEVICE_HEIGHT_DEFAULT 600
+#define REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT 0
+#define CUSTOM_DEVICE_MAXIMUM_DIMENSION 16384
 #define REGISTRY_XPOS_DEFAULT 0
 #define REGISTRY_YPOS_DEFAULT 0
 
@@ -61,13 +71,17 @@ public:
 	void PutDeviceName( CString sDevice )  { m_sDeviceName = sDevice; }
 	CRecentFileList* GetRecentFileList() { return m_pRecentFileList; }
 	void PutWP(const WINDOWPLACEMENT& newval);
-	int IsStopBuildRequested() { return m_isStopBuildRequested; }
-	void SetStopBuildRequested(int stopBuildRequested)  { m_isStopBuildRequested = stopBuildRequested; }
+	void GetCustomDeviceSettings(
+		int& width, int& height, int& safeAreaTop, int& safeAreaLeft,
+		int& safeAreaBottom, int& safeAreaRight);
+	void PutCustomDeviceSettings(
+		int width, int height, int safeAreaTop, int safeAreaLeft,
+		int safeAreaBottom, int safeAreaRight);
 
 	bool IsDebugModeEnabled() { return m_isDebugModeEnabled; }
 	bool IsAgentModeEnabled() { return m_isAgentModeEnabled; }
 	bool IsLuaExitAllowed() { return m_isLuaExitAllowed; }
-	void SetExitCode(int value) { m_exitCode = value; }
+	void SetExitCode(int value) { m_exitCode = value; m_hasExplicitExitCode = true; }
     CString GetWorkingDir();
     void SetWorkingDir( CString sDir );
 	CString GetApplicationDir();
@@ -84,9 +98,9 @@ protected:
 	bool m_isAgentModeEnabled;
 	bool m_isLuaExitAllowed;
 	int m_exitCode;
+	bool m_hasExplicitExitCode;
 	CString m_sApplicationDir;
     CString m_sResourceDir;
-	BOOL m_isStopBuildRequested;
 };
 
 extern CSimulatorApp theApp;

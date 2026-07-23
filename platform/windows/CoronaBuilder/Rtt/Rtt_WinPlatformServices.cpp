@@ -308,10 +308,8 @@ WinPlatformServices::SetPreference( const char *key, const char *value ) const
 void
 WinPlatformServices::GetSecurePreference( const char *key, String * value ) const
 {
-    const char *sResult = NULL;
-
-	BYTE *aBytes;
-	UINT nBytes;
+	BYTE *aBytes = NULL;
+	UINT nBytes = 0;
     WinString strKey;
     strKey.SetUTF8( key );
 
@@ -325,6 +323,7 @@ WinPlatformServices::GetSecurePreference( const char *key, String * value ) cons
 			value->Set( strResult.GetUTF8() );
 		}
 	}
+	delete [] aBytes;
 }
 
 bool
@@ -334,17 +333,18 @@ WinPlatformServices::SetSecurePreference( const char *key, const char *value ) c
 
 	if ( Rtt_VERIFY( key ) )
 	{
-		BYTE *aBytes;
-		UINT nBytes;
+		BYTE *aBytes = NULL;
+		UINT nBytes = 0;
 		EncryptString( value, &aBytes, &nBytes );
 
 		WinString strKey;
 		strKey.SetUTF8( key );
 
-		result = WriteProfileBinary( Rtt_REGISTRY_SECTION, strKey.GetTCHAR(), aBytes, nBytes );
-
-         if( aBytes )
-			 delete aBytes;
+		if ( aBytes )
+		{
+			result = WriteProfileBinary( Rtt_REGISTRY_SECTION, strKey.GetTCHAR(), aBytes, nBytes );
+		}
+		delete [] aBytes;
     }
 	return result;
 }
@@ -355,6 +355,7 @@ bool
 WinPlatformServices::IsInternetAvailable() const
 {
 	MIB_IPFORWARDTABLE *pRoutingTable;
+	BYTE *routingTableBuffer;
 	DWORD dwBufferSize = 0;
 	DWORD dwRowCount;
 	DWORD dwIndex;
@@ -364,7 +365,8 @@ WinPlatformServices::IsInternetAvailable() const
 	// Fetch routing table information.
 	// We'll assume that the Internet is available if we can find a default route to a gateway.
 	GetIpForwardTable(NULL, &dwBufferSize, FALSE);
-	pRoutingTable = (MIB_IPFORWARDTABLE*)new BYTE[dwBufferSize];
+	routingTableBuffer = new BYTE[dwBufferSize];
+	pRoutingTable = (MIB_IPFORWARDTABLE*)routingTableBuffer;
 	dwResult = GetIpForwardTable(pRoutingTable, &dwBufferSize, FALSE);
 	if (NO_ERROR == dwResult)
 	{
@@ -379,7 +381,7 @@ WinPlatformServices::IsInternetAvailable() const
 			}
 		} 
 	}
-	delete pRoutingTable;
+	delete [] routingTableBuffer;
 
 	// Return the result.
 	return bIsInternetAvailable;

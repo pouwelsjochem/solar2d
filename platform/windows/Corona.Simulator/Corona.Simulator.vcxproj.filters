@@ -18,13 +18,7 @@
     <ClInclude Include="..\..\shared\Rtt_PlatformObjectWrapper.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_DeviceBuildData.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_MPlatformServices.h">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\shared\Rtt_PlatformAppPackager.h">
       <Filter>%28root%29\platform\shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shared\Rtt_TargetDevice.h">
@@ -89,12 +83,6 @@
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_PlatformObjectWrapper.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_DeviceBuildData.cpp">
-      <Filter>%28root%29\platform\shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\shared\Rtt_PlatformAppPackager.cpp">
       <Filter>%28root%29\platform\shared</Filter>
     </ClCompile>
     <ClCompile Include="..\..\shared\Rtt_TargetDevice.cpp">

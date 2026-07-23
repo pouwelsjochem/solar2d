@@ -132,6 +132,10 @@ class CSimulatorView : public CView
 		Rtt::TargetDevice::Skin SkinIDFromMenuID(UINT nID);
 		bool InitSkin(Rtt::TargetDevice::Skin skinId);
 		bool InitializeSimulation(Rtt::TargetDevice::Skin skinId, bool persist = true);
+		bool InitializeCustomSimulation(
+			const Rtt::MSimulatorHost::Configuration& configuration, bool persist);
+		void ApplyConfigurationPersistence(
+			const Rtt::MSimulatorHost::Configuration& configuration);
 		bool ValidateOpenGL();
 		bool LoadSkinResources();
 		void GetFilePaths(LPCTSTR pattern, CStringArray& filepaths);

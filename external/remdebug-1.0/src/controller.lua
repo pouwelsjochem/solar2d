@@ -120,22 +120,17 @@ for index, a in pairs(arg) do
 end
 -- print("argc: "..tostring(argc))
 if argc < 2 or arg[1] ~= "--dont-start-simulator" then
-    if arg[0]:find("Corona.Debugger.exe") ~= nil then
-      -- The Windows Corona Debugger automatically launches the simulator.
-      -- We don't need to do anything else here.
-    else -- Mac
-      simulator = arg[0]:gsub('debugger$', 'Corona Simulator.app/Contents/MacOS/Corona Simulator')
-      cmd = "'".. simulator .."' -debug 1 -singleton 1"
+    simulator = arg[0]:gsub('debugger$', 'Corona Simulator.app/Contents/MacOS/Corona Simulator')
+    cmd = "'".. simulator .."' -debug 1 -singleton 1"
 
-      if argc > 1 then
-          cmd = cmd .. " -project '"..arg[1].."'"
-      end
-
-      cmd = cmd .. " &"
-
-      -- print("Executing: " .. cmd)
-      os.execute(cmd)
+    if argc > 1 then
+        cmd = cmd .. " -project '"..arg[1].."'"
     end
+
+    cmd = cmd .. " &"
+
+    -- print("Executing: " .. cmd)
+    os.execute(cmd)
 else
     -- Remove processed argument and recalculate argc
     arg[1] = nil

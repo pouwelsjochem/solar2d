@@ -161,45 +161,6 @@ BEGIN
     PUSHBUTTON      "Alt",ID_MSG_BUTTON2,75,50,80,14
 END
 
-IDD_NEW_PROJECT DIALOGEX 0, 0, 339, 243
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "New Project"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    LTEXT           "Application Name :",IDC_APP_NAME_LABEL,6,6,66,8,0,WS_EX_RIGHT
-    EDITTEXT        IDC_APP_NAME_EDIT_BOX,78,6,198,14,ES_AUTOHSCROLL
-    LTEXT           "Project Folder :",IDC_APP_LOCATION_LABEL,6,24,66,8,0,WS_EX_RIGHT
-    EDITTEXT        IDC_APP_LOCATION_EDIT_BOX,78,24,198,14,ES_AUTOHSCROLL | ES_READONLY
-    PUSHBUTTON      "&Browse...",IDC_BROWSE_BUTTON,282,24,50,14
-    GROUPBOX        "Project Template",IDC_TEMPLATE_GROUP_BOX,6,48,204,162,WS_GROUP
-    CONTROL         "Blank",IDC_TEMPLATE_BLANK,"Button",BS_AUTORADIOBUTTON,12,60,108,10
-    CONTROL         "Tab Bar Application",IDC_TEMPLATE_TAB_BAR,"Button",BS_AUTORADIOBUTTON,12,96,108,10
-    CONTROL         "Physics Based Game",IDC_TEMPLATE_GAME,"Button",BS_AUTORADIOBUTTON,12,132,108,10
-    CONTROL         "eBook",IDC_TEMPLATE_EBOOK,"Button",BS_AUTORADIOBUTTON,12,168,108,10
-    LTEXT           "Creates a project folder with an empty ""main.lua"" file.",IDC_TEMPLATE_BLANK_LABEL,24,74,173,8,NOT WS_GROUP
-    LTEXT           "Multiscreen application using a Tab Bar for navigation.",IDC_TEMPLATE_TAB_BAR_LABEL,24,110,174,8,NOT WS_GROUP
-    LTEXT           "Application using the physics and composer APIs.",IDC_TEMPLATE_GAME_LABEL,24,146,158,8,NOT WS_GROUP
-    LTEXT           "Multi-page interface using the composer API.",IDC_TEMPLATE_EBOOK_LABEL,24,182,145,8,NOT WS_GROUP
-    GROUPBOX        "Screen Size",IDC_SCREEN_SIZE_GROUP_BOX,216,48,114,66
-    COMBOBOX        IDC_SCREEN_SIZE_COMBO_BOX,222,60,102,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Width :",IDC_SCREEN_WIDTH_LABEL,222,78,42,8,0,WS_EX_RIGHT
-    EDITTEXT        IDC_SCREEN_WIDTH_EDIT_BOX,270,78,54,14,ES_AUTOHSCROLL | ES_NUMBER,WS_EX_RIGHT
-    CONTROL         "Height :",IDC_SCREEN_HEIGHT_LABEL,"Static",SS_LEFTNOWORDWRAP | WS_GROUP,222,96,42,8,WS_EX_RIGHT
-    EDITTEXT        IDC_SCREEN_HEIGHT_EDIT_BOX,270,96,54,14,ES_AUTOHSCROLL | ES_NUMBER,WS_EX_RIGHT
-    LTEXT           "",IDC_DIVIDING_LINE,6,216,324,2,0,WS_EX_STATICEDGE
-    DEFPUSHBUTTON   "OK",IDOK,228,222,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,282,222,50,14
-END
-
-IDD_HTML_MESSAGE DIALOGEX 0, 0, 319, 194
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
-FONT 8, "MS Shell Dlg", 0, 0, 0x0
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,264,174,50,14
-    LTEXT           "Static",IDC_WEB_BROWSER,6,6,306,156
-END
-
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
@@ -255,14 +216,6 @@ BEGIN
         BOTTOMMARGIN, 78
     END
 
-    IDD_PASSWORD, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 162
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 99
-    END
-
     IDD_MESSAGE, DIALOG
     BEGIN
         LEFTMARGIN, 7
@@ -271,21 +224,6 @@ BEGIN
         BOTTOMMARGIN, 64
     END
 
-    IDD_NEW_PROJECT, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 332
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 236
-    END
-
-    IDD_HTML_MESSAGE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 312
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 187
-    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -416,7 +354,6 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_CONSOLE_FREE        "Could not free console."
     IDS_DIR_s_NOTFOUND_INSTALL 
                             "Solar2D Simulator cannot find the directory %s.\nPlease re-run the installer."
     IDS_FILE_s_NOTFOUND_INSTALL 
@@ -431,7 +368,6 @@ END
 STRINGTABLE
 BEGIN
     IDS_CONNECTINGTOSERVER  "Communicating with server..."
-    IDS_CONSOLE_CREATE      "Failed to create console."
     IDS_NO_INTERNET         "Could not connect to server. Please check your Internet connection."
     IDS_UNKNOWNERROR        "An unexpected account configuration error occurred.  Please visit Solar2D forums to find a solution at https://forums.solar2d.com"
     IDS_ASSOCLUA            "Please associate .lua files with an editor in Control Panel File Associations, then try again.  Click Yes to open the Control Panel File Associations applet."

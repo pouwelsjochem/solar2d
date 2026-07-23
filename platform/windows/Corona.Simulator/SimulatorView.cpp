@@ -20,6 +20,7 @@
 #include "Rtt_LuaContext.h"
 #include "Rtt_LuaFile.h"
 #include "Rtt_MPlatform.h"
+#include "Rtt_MPlatformDevice.h"
 #include "Rtt_Event.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
@@ -175,6 +176,18 @@ void CSimulatorView::OnUpdate(CView* pSender, LPARAM lHint, CObject *pHint)
 	// Start simulation with the new or updated file.
 	// If the last file was closed, then this will display the home screen.
 	LoadSkinResources();
+	if (mDeviceName == _T("Custom"))
+	{
+		Rtt::MSimulatorHost::Configuration configuration;
+		configuration.deviceSelection = Rtt::MSimulatorHost::Configuration::kCustomDevice;
+		((CSimulatorApp*)AfxGetApp())->GetCustomDeviceSettings(
+			configuration.width, configuration.height,
+			configuration.safeAreaInsets.top, configuration.safeAreaInsets.left,
+			configuration.safeAreaInsets.bottom, configuration.safeAreaInsets.right);
+		InitializeCustomSimulation(configuration, true);
+		return;
+	}
+
 	Rtt::TargetDevice::Skin skinId = Rtt::TargetDevice::FindSkinForLabel(CStringA(mDeviceName));
 	if (skinId == Rtt::TargetDevice::kUnknownSkin)
 	{
@@ -1074,6 +1087,19 @@ Rtt::MSimulatorHost::ConfigureResult CSimulatorView::ConfigureAndRelaunch(
 	{
 		return Rtt::MSimulatorHost::kConfigureFailed;
 	}
+	if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kCustomDevice &&
+		(configuration.width <= 0 || configuration.height <= 0 ||
+		 configuration.width > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		 configuration.height > CUSTOM_DEVICE_MAXIMUM_DIMENSION ||
+		 configuration.safeAreaInsets.top < 0 || configuration.safeAreaInsets.left < 0 ||
+		 configuration.safeAreaInsets.bottom < 0 || configuration.safeAreaInsets.right < 0 ||
+		 configuration.safeAreaInsets.top > configuration.height ||
+		 configuration.safeAreaInsets.bottom > configuration.height - configuration.safeAreaInsets.top ||
+		 configuration.safeAreaInsets.left > configuration.width ||
+		 configuration.safeAreaInsets.right > configuration.width - configuration.safeAreaInsets.left))
+	{
+		return Rtt::MSimulatorHost::kConfigureFailed;
+	}
 
 	bool configurationChanged = false;
 	if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kNamedDevice)
@@ -1105,6 +1131,7 @@ Rtt::MSimulatorHost::ConfigureResult CSimulatorView::ConfigureAndRelaunch(
 
 	if (onlyIfNeeded && !configurationChanged && !mIsRelaunchPending)
 	{
+		ApplyConfigurationPersistence(configuration);
 		return Rtt::MSimulatorHost::kConfigureAlreadyActive;
 	}
 
@@ -1137,13 +1164,8 @@ bool CSimulatorView::SendSimulatorInput(const Rtt::MSimulatorHost::Input& input)
 
 	if (input.type == Rtt::MSimulatorHost::Input::kBackInput)
 	{
-		Rtt::MSimulatorHost::Input keyInput;
-		keyInput.type = Rtt::MSimulatorHost::Input::kKeyInput;
-		keyInput.phase = Rtt::MSimulatorHost::Input::kPressedPhase;
-		keyInput.keyName = "back";
-		keyInput.hasNativeKeyCode = true;
-		keyInput.nativeKeyCode = VK_BROWSER_BACK;
-		return SendSimulatorInput(keyInput);
+		OnViewNavigateBack();
+		return true;
 	}
 	if (input.type == Rtt::MSimulatorHost::Input::kKeyInput)
 	{
@@ -1192,7 +1214,14 @@ bool CSimulatorView::SendSimulatorInput(const Rtt::MSimulatorHost::Input& input)
 			Rtt_FloatToReal((float)input.x), Rtt_FloatToReal((float)input.y),
 			Rtt_FloatToReal((float)input.xStart), Rtt_FloatToReal((float)input.yStart), phase);
 		event.SetId((const void*)1);
-		runtimePointer->DispatchEvent(event);
+		if (runtimePointer->Platform().GetDevice().DoesNotify(Rtt::MPlatformDevice::kMultitouchEvent))
+		{
+			runtimePointer->DispatchEvent(Rtt::MultitouchEvent(&event, 1));
+		}
+		else
+		{
+			runtimePointer->DispatchEvent(event);
+		}
 		return true;
 	}
 	if (input.type == Rtt::MSimulatorHost::Input::kMouseInput)
@@ -1304,22 +1333,11 @@ LRESULT CSimulatorView::OnApplySimulatorConfiguration(WPARAM wParam, LPARAM lPar
 	}
 	else if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kCustomDevice)
 	{
-		mIsCustomDevice = true;
-		mIsDeviceConfigurationTemporary = true;
-		m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
-		mDeviceName = _T("Custom");
-		mDeviceConfig.deviceName.Set("Custom");
-		mDeviceConfig.deviceWidth = (float)configuration.width;
-		mDeviceConfig.deviceHeight = (float)configuration.height;
-		mDeviceConfig.safeAreaInsetTop = (float)configuration.safeAreaInsets.top;
-		mDeviceConfig.safeAreaInsetLeft = (float)configuration.safeAreaInsets.left;
-		mDeviceConfig.safeAreaInsetBottom = (float)configuration.safeAreaInsets.bottom;
-		mDeviceConfig.safeAreaInsetRight = (float)configuration.safeAreaInsets.right;
-		UpdateSimulatorSkin();
-		RestartSimulation();
+		InitializeCustomSimulation(configuration, !configuration.temporary);
 	}
 	else
 	{
+		ApplyConfigurationPersistence(configuration);
 		RestartSimulation();
 	}
 	return 0;
@@ -1342,12 +1360,14 @@ void CSimulatorView::OnTimer(UINT_PTR timerId)
 // InitializeSimulation - select new skin and update
 bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId, bool persist)
 {
+	CSimulatorApp* applicationPointer = (CSimulatorApp*)AfxGetApp();
+	persist = persist && !applicationPointer->IsAgentModeEnabled();
 	mDeviceName = Rtt::TargetDevice::LabelForSkin(skinId);
 	mIsCustomDevice = false;
 	mIsDeviceConfigurationTemporary = !persist;
 	if (persist)
 	{
-		((CSimulatorApp*)AfxGetApp())->PutDeviceName(mDeviceName);
+		applicationPointer->PutDeviceName(mDeviceName);
 	}
 
 	bool skinLoaded = InitSkin(skinId);
@@ -1360,6 +1380,94 @@ bool CSimulatorView::InitializeSimulation(Rtt::TargetDevice::Skin skinId, bool p
 	}
 
 	return skinLoaded;
+}
+
+bool CSimulatorView::InitializeCustomSimulation(
+	const Rtt::MSimulatorHost::Configuration& configuration, bool persist)
+{
+	CSimulatorApp* applicationPointer = (CSimulatorApp*)AfxGetApp();
+	persist = persist && !applicationPointer->IsAgentModeEnabled();
+
+	bool skinLoaded = InitSkin(Rtt::TargetDevice::fDefaultSkinID);
+	mIsCustomDevice = true;
+	mIsDeviceConfigurationTemporary = !persist;
+	m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
+	mDeviceName = _T("Custom");
+	mDeviceConfig.deviceName.Set("Custom");
+	mDeviceConfig.deviceWidth = (float)configuration.width;
+	mDeviceConfig.deviceHeight = (float)configuration.height;
+	mDeviceConfig.safeAreaInsetTop = (float)configuration.safeAreaInsets.top;
+	mDeviceConfig.safeAreaInsetLeft = (float)configuration.safeAreaInsets.left;
+	mDeviceConfig.safeAreaInsetBottom = (float)configuration.safeAreaInsets.bottom;
+	mDeviceConfig.safeAreaInsetRight = (float)configuration.safeAreaInsets.right;
+
+	if (persist)
+	{
+		applicationPointer->PutDeviceName(mDeviceName);
+		applicationPointer->PutCustomDeviceSettings(
+			configuration.width, configuration.height,
+			configuration.safeAreaInsets.top, configuration.safeAreaInsets.left,
+			configuration.safeAreaInsets.bottom, configuration.safeAreaInsets.right);
+	}
+
+	UpdateSimulatorSkin();
+	if (skinLoaded)
+	{
+		RestartSimulation();
+	}
+	return skinLoaded;
+}
+
+void CSimulatorView::ApplyConfigurationPersistence(
+	const Rtt::MSimulatorHost::Configuration& configuration)
+{
+	CSimulatorApp* applicationPointer = (CSimulatorApp*)AfxGetApp();
+	bool persist = !configuration.temporary && !applicationPointer->IsAgentModeEnabled();
+	mIsDeviceConfigurationTemporary = !persist;
+	if (!persist)
+	{
+		return;
+	}
+
+	CString deviceName = mDeviceName;
+	bool isCustomDevice = mIsCustomDevice;
+	int width = (int)mDeviceConfig.deviceWidth;
+	int height = (int)mDeviceConfig.deviceHeight;
+	int safeAreaTop = (int)mDeviceConfig.safeAreaInsetTop;
+	int safeAreaLeft = (int)mDeviceConfig.safeAreaInsetLeft;
+	int safeAreaBottom = (int)mDeviceConfig.safeAreaInsetBottom;
+	int safeAreaRight = (int)mDeviceConfig.safeAreaInsetRight;
+
+	if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kNamedDevice)
+	{
+		Rtt::TargetDevice::Skin skin = Rtt::TargetDevice::FindSkinForLabel(configuration.deviceId.c_str());
+		if (skin == Rtt::TargetDevice::kUnknownSkin)
+		{
+			std::string projectIdentifier("project:");
+			projectIdentifier.append(configuration.deviceId);
+			skin = Rtt::TargetDevice::FindSkinForLabel(projectIdentifier.c_str());
+		}
+		deviceName = Rtt::TargetDevice::LabelForSkin(skin);
+		isCustomDevice = false;
+	}
+	else if (configuration.deviceSelection == Rtt::MSimulatorHost::Configuration::kCustomDevice)
+	{
+		deviceName = _T("Custom");
+		isCustomDevice = true;
+		width = configuration.width;
+		height = configuration.height;
+		safeAreaTop = configuration.safeAreaInsets.top;
+		safeAreaLeft = configuration.safeAreaInsets.left;
+		safeAreaBottom = configuration.safeAreaInsets.bottom;
+		safeAreaRight = configuration.safeAreaInsets.right;
+	}
+
+	applicationPointer->PutDeviceName(deviceName);
+	if (isCustomDevice)
+	{
+		applicationPointer->PutCustomDeviceSettings(
+			width, height, safeAreaTop, safeAreaLeft, safeAreaBottom, safeAreaRight);
+	}
 }
 
 // UpdateSimulatorSkin - Update main window size & skin based on display type
