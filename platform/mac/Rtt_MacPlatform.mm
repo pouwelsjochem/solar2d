@@ -38,6 +38,8 @@
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSFontManager.h>
 #import <AppKit/NSOpenGL.h>
+#import <AppKit/NSScrollView.h>
+#import <AppKit/NSTextView.h>
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSWorkspace.h>
 #import <Foundation/NSString.h>
@@ -1249,39 +1251,80 @@ MacPlatform::RuntimeErrorNotification( const char *errorType, const char *messag
 				appPath = (delegate.fAppPath == nil) ? @"" : [delegate.fAppPath stringByAppendingString:@"/"];;
 			}
 
-			char filename[BUFSIZ];
-			char errorMsg[BUFSIZ];
+			char filename[BUFSIZ] = {};
+			char errorMsg[BUFSIZ] = {};
 			int linenum = 0;
 			NSAlert *alert = [[NSAlert alloc] init];
 
 			if (stacktrace != NULL  && strlen(stacktrace) > 0)
 			{
-				NSTextView *accessory = [[NSTextView alloc] initWithFrame:NSMakeRect(0,0,600,15)];
-				// NSFont *font = [NSFont systemFontOfSize:[NSFont systemFontSize]];
-				NSFont *font = [NSFont userFixedPitchFontOfSize:6];
-				NSDictionary *textAttributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+				const CGFloat accessoryWidth = 600.0;
+				const CGFloat minimumAccessoryHeight = 120.0;
+				const CGFloat maximumAccessoryHeight = 240.0;
+				const CGFloat textPadding = 12.0;
+
+				NSFont *font = [NSFont userFixedPitchFontOfSize:[NSFont smallSystemFontSize]];
+				NSColor *textBackgroundColor = [NSColor textBackgroundColor];
+				NSDictionary *textAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+					font, NSFontAttributeName,
+					[NSColor textColor], NSForegroundColorAttributeName,
+					nil];
 				NSString *stacktraceStr = [NSString stringWithExternalString:stacktrace];
 				stacktraceStr = [stacktraceStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];  // trim any leading or trailing newlines
 				// elide the full path of the project in the stacktrace
-				[accessory insertText:[[NSAttributedString alloc] initWithString:[stacktraceStr stringByReplacingOccurrencesOfString:appPath withString:@""]
-																	  attributes:textAttributes]];
-				[accessory setEditable:NO];
-				[accessory setDrawsBackground:NO];
+				NSString *displayStacktrace = [stacktraceStr stringByReplacingOccurrencesOfString:appPath withString:@""];
+				NSAttributedString *attributedStacktrace = [[[NSAttributedString alloc]
+					initWithString:displayStacktrace
+					attributes:textAttributes] autorelease];
+				NSRect textBounds = [attributedStacktrace boundingRectWithSize:
+					NSMakeSize(accessoryWidth - (textPadding * 2.0), CGFLOAT_MAX)
+					options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)];
+				CGFloat accessoryHeight = MIN(
+					MAX(NSHeight(textBounds) + (textPadding * 2.0), minimumAccessoryHeight),
+					maximumAccessoryHeight);
 
-				[alert setAccessoryView:accessory];
+				NSScrollView *scrollView = [[[NSScrollView alloc]
+					initWithFrame:NSMakeRect(0.0, 0.0, accessoryWidth, accessoryHeight)] autorelease];
+				[scrollView setBorderType:NSBezelBorder];
+				[scrollView setHasVerticalScroller:YES];
+				[scrollView setAutohidesScrollers:YES];
+				[scrollView setDrawsBackground:YES];
+				[[scrollView contentView] setBackgroundColor:textBackgroundColor];
+
+				NSSize contentSize = [scrollView contentSize];
+				NSTextView *accessory = [[[NSTextView alloc]
+					initWithFrame:NSMakeRect(0.0, 0.0, contentSize.width, contentSize.height)] autorelease];
+				[accessory setMinSize:NSMakeSize(0.0, contentSize.height)];
+				[accessory setMaxSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
+				[accessory setVerticallyResizable:YES];
+				[accessory setHorizontallyResizable:NO];
+				[accessory setAutoresizingMask:NSViewWidthSizable];
+				[accessory setTextContainerInset:NSMakeSize(textPadding / 2.0, textPadding / 2.0)];
+				[[accessory textContainer] setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
+				[[accessory textContainer] setWidthTracksTextView:YES];
+				[[accessory textStorage] setAttributedString:attributedStacktrace];
+				[accessory setEditable:NO];
+				[accessory setSelectable:YES];
+				[accessory setBackgroundColor:textBackgroundColor];
+				[accessory setDrawsBackground:YES];
+
+				[scrollView setDocumentView:accessory];
+				[alert setAccessoryView:scrollView];
 			}
 
 			NSString *msgText = nil;
 
 			// Parse error message to get filename and linenumber
 			int count = sscanf(message, "%[^:]:%d: %[^\n]", filename, &linenum, errorMsg);
+			bool hasSourceLocation = (count == 3);
 			// NSLog(@"file: %s\nlinenum: %d\nerrorMsg: %s", filename, linenum, errorMsg);
 
-			if (count != 3)
+			if (!hasSourceLocation)
 			{
 				// Rtt_TRACE_SIM( ( "RuntimeErrorNotification: Failed to parse error message: %s", message));
 
-				strncpy(errorMsg, message, BUFSIZ);
+				filename[0] = '\0';
+				strlcpy(errorMsg, message, sizeof(errorMsg));
 				errorMsg[0] = toupper(errorMsg[0]);
 				msgText = [NSString stringWithExternalString:errorMsg];
 			}
@@ -1327,7 +1370,7 @@ MacPlatform::RuntimeErrorNotification( const char *errorType, const char *messag
 			[alert setMessageText:[NSString stringWithFormat:@"%s %s", platformName, errorType]];
 
 #ifdef Rtt_AUTHORING_SIMULATOR
-			if (strlen(filename) > 0)
+			if (hasSourceLocation)
 			{
 				msgText = [msgText stringByAppendingFormat:@"\n\nFile: %@\n", [[NSString stringWithExternalString:filename] stringByReplacingOccurrencesOfString:appPath withString:@""]];
 
