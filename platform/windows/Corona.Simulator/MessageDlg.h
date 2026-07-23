@@ -23,13 +23,11 @@ public:
 
     void SetTitle( int nID );
 	void SetTitle( CString sTitle ) { m_sTitle = sTitle; }
-    void SetText( int nID );
 	void SetText( CString sText ) { m_sText = sText; }
     void SetDefaultText( int nID );
 	void SetDefaultText( CString sDefText ) { m_sButtonDefault = sDefText; }
     void SetAltText( int nID );
 	void SetAltText( CString sAltText ) { m_sButtonAlt = sAltText; }
-    void SetButton3Text( int nID );
 	void SetButton3Text( CString sButton3 ) { m_sButton3 = sButton3; }
 	void SetIconStyle( int style ) { m_nIconStyle = style; }
 
@@ -42,8 +40,6 @@ public:
 	enum { IDD = IDD_MESSAGE };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-
     CString m_sTitle;
     CString m_sText;
     CString m_sButtonDefault;

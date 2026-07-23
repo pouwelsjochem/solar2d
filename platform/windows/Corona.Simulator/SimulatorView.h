@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "Core\Rtt_Build.h"
-#include "Core\Rtt_Array.h"
 #include "Interop\ScopedComInitializer.h"
 #include "Interop\SimulatorRuntimeEnvironment.h"
 #include "Rtt_MSimulatorHost.h"
@@ -63,7 +61,6 @@ class CSimulatorView : public CView
 		bool SendSimulatorInput(const Rtt::MSimulatorHost::Input& input);
 		bool SimulateEvent(const Rtt::MSimulatorHost::Event& event);
 		void UpdateSimulatorSkin();
-		Interop::SimulatorRuntimeEnvironment* GetRuntimeEnvironment()  { return mRuntimeEnvironmentPointer; }
 
 		/// <summary>
 		///  <para>Custom control used by CSimulatorView to render Corona's content.</para>
@@ -149,11 +146,6 @@ class CSimulatorView : public CView
 		CMessageDlg* mMessageDlgPointer;
 		CString mDeviceName;
 		Rtt::PlatformSimulator::Config mDeviceConfig;
-		HANDLE mAppChangeHandle;		// Filesystem notifications handle
-		int mShakeAmount;
-		int mShakeReps;
-		int mShakeNum;
-		CRect mShakeOriginRect;
 		Rtt::TargetDevice::Skin m_nSkinId;
 		CString mSystemSkinsDir;
 		int mRelaunchCount;

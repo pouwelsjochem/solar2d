@@ -194,9 +194,6 @@
     <ResourceCompile Include="Simulator.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Simulator.rc2" />
-  </ItemGroup>
-  <ItemGroup>
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua" />
     <LuaToCpp Include="..\..\resources\shell.lua" />
   </ItemGroup>

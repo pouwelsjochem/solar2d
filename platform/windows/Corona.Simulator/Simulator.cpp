@@ -8,22 +8,19 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include <Winver.h>
 #include <gdiplus.h>
 #include <shellapi.h>
 
 #include "Simulator.h"
 #include "MainFrm.h"
 
-#include "SimulatorDoc.h"
+#include "CoronaProject.h"
 #include "SimulatorDocTemplate.h"
 #include "SimulatorView.h"
 
 #include "resource.h"
-#include "CoronaInterface.h"
 
 #include "Core/Rtt_Build.h"
-#include "Rtt_Version.h"    // Rtt_STRING_BUILD and Rtt_STRING_BUILD_DATE
 
 
 #ifdef _DEBUG
@@ -62,8 +59,6 @@ CSimulatorApp theApp;
 // Copied from appcore.cpp
 AFX_STATIC_DATA const TCHAR _afxFileSection[] = _T("Recent File List");
 AFX_STATIC_DATA const TCHAR _afxFileEntry[] = _T("File%d");
-AFX_STATIC_DATA const TCHAR _afxPreviewSection[] = _T("Settings");
-AFX_STATIC_DATA const TCHAR _afxPreviewEntry[] = _T("PreviewPages");
 
 class CSimulatorCommandLineInfo : public CCommandLineInfo
 {
@@ -133,7 +128,7 @@ class CSimulatorCommandLineInfo : public CCommandLineInfo
 					return;
 				}
 				if (normalizedValue == _T("singleton") || normalizedValue == _T("debug") ||
-					normalizedValue == _T("allowluaexit") || normalizedValue == _T("no-console"))
+					normalizedValue == _T("allowluaexit"))
 				{
 					return;
 				}
@@ -584,20 +579,6 @@ CString CSimulatorApp::GetResourceDir()
 		m_sResourceDir += _T("\\Resources");
 	}
     return m_sResourceDir;
-}
-
-// CheckPathExists - return true if the file/directory exists.
-// Make sure paths don't have trailing backslashes
-bool CSimulatorApp::CheckPathExists(LPCTSTR path)
-{ 
-	WIN32_FIND_DATA  data; 
-	HANDLE handle = FindFirstFile(path,&data); 
-	if (handle != INVALID_HANDLE_VALUE)
-	{
-		FindClose(handle);
-		return true;
-	}
-	return false;
 }
 
 // CheckDirExists - return true if dirName is directory and exists

@@ -90,11 +90,6 @@
     <ResourceCompile Include="Simulator.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Simulator.rc2">
-      <Filter>res</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <LuaToCpp Include="..\..\resources\shell.lua">
       <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>

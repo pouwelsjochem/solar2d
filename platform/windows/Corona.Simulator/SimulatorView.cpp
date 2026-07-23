@@ -13,20 +13,15 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "Core\Rtt_Build.h"
+#include "Core\Rtt_Allocator.h"
 #include "Interop\Input\Key.h"
 #include "Interop\MDeviceSimulatorServices.h"
 #include "Interop\SimulatorRuntimeEnvironment.h"
-#include "Rtt_LuaContext.h"
-#include "Rtt_LuaFile.h"
 #include "Rtt_MPlatform.h"
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_Event.h"
-#include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
-#include "Rtt_RenderingStream.h"
 #include "Rtt_Runtime.h"
-#include "Rtt_WinPlatform.h"
 #include "Simulator.h"
 #include "MainFrm.h"
 #include "SimulatorDoc.h"
@@ -115,7 +110,6 @@ CSimulatorView::CSimulatorView()
 
 	mRuntimeEnvironmentPointer = nullptr;
 	mDeviceName = applicationPointer->GetDeviceName();
-	mAppChangeHandle = nullptr;
 	m_nSkinId = Rtt::TargetDevice::kUnknownSkin;
 	mRelaunchCount = 0;
 	mIsCustomDevice = false;
@@ -139,11 +133,6 @@ CSimulatorView::~CSimulatorView()
 	{
 		Interop::SimulatorRuntimeEnvironment::Destroy(mRuntimeEnvironmentPointer);
 		mRuntimeEnvironmentPointer = nullptr;
-	}
-	if (mAppChangeHandle)
-	{
-		::FindCloseChangeNotification(mAppChangeHandle);
-		mAppChangeHandle = nullptr;
 	}
 	if (mMessageDlgPointer)
 	{
@@ -1685,12 +1674,6 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 		mCoronaContainerControl.GetCoronaControl().ShowWindow(SW_HIDE);
 	}
 
-	// If we're monitoring a project directory, close that handle (we'll open a new one when we need to)
-	if (mAppChangeHandle)
-	{
-		FindCloseChangeNotification(mAppChangeHandle);
-		mAppChangeHandle = nullptr;
-	}
 }
 
 // SkinDeviceNameFromID - translate skin type from resource id

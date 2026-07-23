@@ -8,10 +8,9 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "Simulator.h"
+#include "Resource.h"
 
 #include "SimulatorDoc.h"
-#include "SimulatorView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

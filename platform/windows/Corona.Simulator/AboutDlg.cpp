@@ -29,12 +29,6 @@ CAboutDlg::~CAboutDlg()
 
 
 #pragma region Message Mappings
-/// Associates member variables with window's controls.
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-}
-
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 	ON_NOTIFY(NM_CLICK, IDC_LINK_ANSCAMOBILE, &CAboutDlg::OnClickLinkWebsite)
 	ON_NOTIFY(NM_RETURN, IDC_LINK_ANSCAMOBILE, &CAboutDlg::OnClickLinkWebsite)

@@ -37,12 +37,6 @@ CMessageDlg::~CMessageDlg()
 {
 }
 
-void CMessageDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-}
-
-
 BEGIN_MESSAGE_MAP(CMessageDlg, CDialog)
 	ON_BN_CLICKED(ID_MSG_BUTTON2, &CMessageDlg::OnButton2)
 	ON_BN_CLICKED(ID_MSG_BUTTON3, &CMessageDlg::OnButton3)
@@ -123,17 +117,6 @@ void CMessageDlg::SetTitle( int nID )
    }
 }
 
-// SetText - message text, loaded from resource id
-void CMessageDlg::SetText( int nID )
-{
-   if( nID )
-   {
-       CString sText;
-       sText.LoadStringW( nID );
-       SetText( sText );
-   }
-}
-
 // SetDefaultText - text for OK button (Button1), loaded from resource id
 void CMessageDlg::SetDefaultText( int nID )
 {
@@ -153,17 +136,6 @@ void CMessageDlg::SetAltText( int nID )
        CString sButton;
        sButton.LoadStringW( nID );
        SetAltText( sButton );
-   }
-}
-
-// SetButton3Text - text for Button3, loaded from resource id
-void CMessageDlg::SetButton3Text( int nID )
-{
-   if( nID )
-   {
-       CString sButton;
-       sButton.LoadStringW( nID );
-       SetButton3Text( sButton );
    }
 }
 

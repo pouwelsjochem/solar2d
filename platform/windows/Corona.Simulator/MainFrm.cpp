@@ -8,22 +8,11 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include <gdiplus.h>
-using namespace Gdiplus;
+#include <limits.h>
 
 #include "Simulator.h"
 #include "MainFrm.h"
-#include "math.h"     // floor
-#include "float.h"
-#include "Core/Rtt_Build.h"
-#include "Rtt_PlatformPlayer.h"
-#include "Rtt_PlatformSimulator.h"
-#include "Rtt_RenderingStream.h"
-#include "Rtt_Runtime.h"
-#include "SimulatorDoc.h"
 #include "SimulatorView.h"
-
-#define log2f(x) (logf(x)/logf(2.0f))
 
 // The #includes must go above this line because this macro will override the "new" operator
 // which will cause compiler errors with header files belonging to other libraries.
@@ -178,10 +167,6 @@ bool CMainFrame::SetSimulatorFullscreen(bool fullscreen)
 ///                    Set FALSE to only show the application name in the title.
 void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
 {
-	// Override the title bar text to only show the application name if we are currently
-	// showing an internal screen such as the home screen or demos screen.
-	CSimulatorView *viewPointer = (CSimulatorView*)GetActiveView();
-	
 	// Do not display an document name in title bar if document does not have a title.
 	// This works-around issue where MFC shows "- Corona Simulator" in this case.
 	CDocument *documentPointer = GetActiveDocument();

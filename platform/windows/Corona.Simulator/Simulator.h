@@ -24,10 +24,6 @@
 // See Simulator.cpp for the implementation of this class
 //
 
-#define SIM_SHAKE_AMOUNT		5	// in pixels
-#define SIM_SHAKE_REPS			7
-#define SIM_SHAKE_PERIOD		80	// msec
-
 // Define all registry items here
 #define REGISTRY_SECTION _T("Preferences")
 #define REGISTRY_WORKINGDIR _T("WorkingDir")
@@ -43,7 +39,6 @@
 #define REGISTRY_LAST_RUN_SUCCEEDED _T("lastRunSucceeded")
 
 // Define all registry item defaults here
-#define REGISTRY_DEVICE_DEFAULT ""
 #define REGISTRY_CUSTOM_DEVICE_WIDTH_DEFAULT 800
 #define REGISTRY_CUSTOM_DEVICE_HEIGHT_DEFAULT 600
 #define REGISTRY_CUSTOM_DEVICE_SAFE_AREA_DEFAULT 0
@@ -86,7 +81,6 @@ public:
     void SetWorkingDir( CString sDir );
 	CString GetApplicationDir();
 	CString GetResourceDir();
-	static bool CheckPathExists(LPCTSTR path);
 	static bool CheckDirExists(LPCTSTR dirName);
 
 protected:
