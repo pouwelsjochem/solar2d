@@ -12,7 +12,7 @@ MAC_BIN_DIR="$CORONA_DIR/mac/bin"
 rm -rf "$STAGING_DIR"
 mkdir -p "$MAC_BIN_DIR" "$CORONA_DIR/win/bin" "$CORONA_DIR/android/resource" "$CORONA_DIR/android/lib/gradle" "$CORONA_DIR/shared/resource"
 
-xcodebuild -project "$WORKSPACE/platform/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG"
+xcodebuild -project "$WORKSPACE/platform/mac/CoronaBuilder.xcodeproj" -target CoronaBuilder -configuration "$CONFIG" CODE_SIGNING_ALLOWED=NO
 
 cp -Rv "$WORKSPACE/platform/mac/build/$CONFIG/CoronaBuilder.app" "$MAC_BIN_DIR"
 TEMPLATE_DIR="$MAC_BIN_DIR/CoronaBuilder.app/Contents/Resources/iostemplate"
