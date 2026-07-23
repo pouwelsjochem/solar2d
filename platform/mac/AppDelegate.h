@@ -38,7 +38,7 @@ namespace Rtt
 	class MacSimulator;
 }
 
-@interface AppDelegate : NSObject <NSMenuDelegate,NSAlertDelegate,GLViewDelegate
+@interface AppDelegate : NSObject <NSMenuDelegate,GLViewDelegate
 #if !defined( Rtt_WEB_PLUGIN )
 	,NSUserNotificationCenterDelegate
 #endif
@@ -53,9 +53,6 @@ namespace Rtt
 	IBOutlet NSView *fOpenAccessoryView;
 	IBOutlet NSPopUpButton *fDeviceSkins;
 	int fSkin;
-
-	id fPreferencesControllerDelegate;
-	IBOutlet NSWindow* fPreferencesWindow;
 
 	BOOL fIsRemote;
 	
@@ -101,8 +98,6 @@ namespace Rtt
 
 -(BOOL)isRunnable;
 @property (assign) IBOutlet NSMenuItem *ccc;
-
--(IBAction)showPreferences:(id)sender;
 
 -(void) showOpenPanel:(NSString*)title withAccessoryView:(NSView*)accessoryView startDirectory:(NSString*)start_directory completionHandler:(void(^)(NSString* path))completionhandler;
 

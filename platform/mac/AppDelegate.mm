@@ -629,8 +629,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		fDeviceSkins = nil;
 		fSkin = Rtt::TargetDevice::kUnknownSkin;
 		
-		fPreferencesWindow = nil;
-        
 		fIsRemote = NO;
 
 		if (!fAgentMode)
@@ -2012,8 +2010,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     [[NSUserDefaults standardUserDefaults] synchronize];
 
 	delete fServices;
-	[fPreferencesWindow release];
-
 	delete fConsolePlatform;
 
 	[fAppPath release];
@@ -2093,19 +2089,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 }
 
 // -----------------------------------------------------------------------------
-// BEGIN: Simulator UI (Preferences, Deauth, Open project)
+// BEGIN: Simulator UI (Open project)
 // -----------------------------------------------------------------------------
-
--(IBAction)showPreferences:(id)sender
-{
-	if ( ! fPreferencesWindow )
-	{
-		[NSBundle loadNibNamed:@"Preferences" owner:self];
-	}
-    
-	[fPreferencesWindow center];
-	[fPreferencesWindow makeKeyAndOrderFront:self];
-}
 
 -(void) showOpenPanel:(NSString*)title withAccessoryView:(NSView*)accessoryView startDirectory:(NSString*)start_directory completionHandler:(void(^)(NSString* path))completionhandler
 {
@@ -2169,7 +2154,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-// END: Simulator UI (Preferences, Deauth, Open project)
+// END: Simulator UI (Open project)
 // -----------------------------------------------------------------------------
 
 -(BOOL)runApp:(NSString*)appPath
@@ -3150,19 +3135,6 @@ RunLoopObserverCallback( CFRunLoopObserverRef observer, CFRunLoopActivity activi
 -(BOOL)isRunnable
 {
 	return YES;
-}
-
--(void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void  *)contextInfo
-{
-	[[NSApplication sharedApplication] stopModal];
-
-	if ( contextInfo != nil && contextInfo == fPreferencesWindow )
-	{
-		if ( NSAlertFirstButtonReturn == returnCode )
-		{
-			[[alert window] close];
-		}
-	}
 }
 
 //This mimics growl send notification selector.
