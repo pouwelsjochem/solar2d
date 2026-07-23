@@ -121,16 +121,6 @@
     <ClCompile Include="..\..\..\external\rcedit\Project\src\rescle.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\autolink.c" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\buffer.c" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\houdini_href_e.c" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\houdini_html_e.c" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\html.c" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\html_smartypants.c" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\markdown.c" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\stack.c" />
-    <ClCompile Include="..\..\..\external\winutil\BtnST.cpp" />
-    <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Allocator.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Array.cpp" />
     <ClCompile Include="..\..\..\librtt\Core\Rtt_Assert.c" />
@@ -210,15 +200,6 @@
     <ClInclude Include="..\..\..\external\lpeg\lpeg.h" />
     <ClInclude Include="..\..\..\external\luafilesystem\src\lfs.h" />
     <ClInclude Include="..\..\..\external\rcedit\Project\src\rescle.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\autolink.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\buffer.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\houdini.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\html.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\html_blocks.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\markdown.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\stack.h" />
-    <ClInclude Include="..\..\..\external\winutil\BtnST.h" />
-    <ClInclude Include="..\..\..\external\winutil\BrowseDirDialog.h" />
     <ClInclude Include="..\..\..\external\winutil\dirent.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Allocator.h" />
     <ClInclude Include="..\..\..\librtt\Core\Rtt_Array.h" />

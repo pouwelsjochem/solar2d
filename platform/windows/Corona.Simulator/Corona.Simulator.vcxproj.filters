@@ -34,40 +34,7 @@
     <ClInclude Include="Interop\SimulatorRuntimeEnvironment.h">
       <Filter>Interop</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\external\winutil\BtnST.h">
-      <Filter>%28root%29\external\winutil</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\winutil\BrowseDirDialog.h">
-      <Filter>%28root%29\external\winutil</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\winutil\dirent.h">
-      <Filter>%28root%29\external\winutil</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\rcedit\Project\src\rescle.h">
-      <Filter>%28root%29\external\rcedit\src</Filter>
-    </ClInclude>
     <ClInclude Include="SimulatorDocTemplate.h" />
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\markdown.h">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\stack.h">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\autolink.h">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\buffer.h">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\houdini.h">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\html.h">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\external\sundown\Project\sundown\html_blocks.h">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -97,40 +64,7 @@
     <ClCompile Include="Interop\SimulatorRuntimeEnvironment.cpp">
       <Filter>Interop</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\external\winutil\BtnST.cpp">
-      <Filter>%28root%29\external\winutil</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\winutil\BrowseDirDialog.cpp">
-      <Filter>%28root%29\external\winutil</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\rcedit\Project\src\rescle.cc">
-      <Filter>%28root%29\external\rcedit\src</Filter>
-    </ClCompile>
     <ClCompile Include="SimulatorDocTemplate.cpp" />
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\html_smartypants.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\markdown.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\stack.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\autolink.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\buffer.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\houdini_href_e.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\houdini_html_e.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\external\sundown\Project\sundown\html.c">
-      <Filter>%28root%29\external\sundown</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="res">
@@ -139,44 +73,17 @@
     <Filter Include="%28root%29">
       <UniqueIdentifier>{7fbc2e32-fbde-43fa-84d1-74fd12385fd0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="%28root%29\external">
-      <UniqueIdentifier>{64696a94-3221-49f4-a14e-59befcc66a1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\external\winutil">
-      <UniqueIdentifier>{91769ba5-a9af-400f-a417-5e864770b8d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="%28root%29\platform">
       <UniqueIdentifier>{a4c6cdb8-f3eb-4da4-a53a-98a0afe12497}</UniqueIdentifier>
     </Filter>
     <Filter Include="%28root%29\platform\shared">
       <UniqueIdentifier>{bab6c157-27db-491b-827a-b3dc41580654}</UniqueIdentifier>
     </Filter>
-    <Filter Include="%28root%29\librtt">
-      <UniqueIdentifier>{0477e90a-ea8b-464f-8754-cc9a5305da5e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\modules">
-      <UniqueIdentifier>{bc4b6c38-8d30-41ce-8ce1-a6f431d8a80c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\modules\simulator">
-      <UniqueIdentifier>{90fe7d76-1dc6-4a1d-be15-74e62a087ac3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="%28root%29\platform\resources">
       <UniqueIdentifier>{9243bb47-2a89-4f5d-bebd-8c464dc40021}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rtt">
-      <UniqueIdentifier>{5ccb6c77-76dc-4b5f-bfae-d12dbd5fb9dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Interop">
       <UniqueIdentifier>{1c3c8cef-6d13-45db-9ba2-e910f23b8812}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\external\rcedit">
-      <UniqueIdentifier>{4f24b871-2ae8-4490-b023-0a9f244210c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\external\rcedit\src">
-      <UniqueIdentifier>{ed043c10-6e2d-426f-9634-9e56f5a80a2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="%28root%29\external\sundown">
-      <UniqueIdentifier>{260bec18-9ab4-496f-9d0f-94181a059933}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +99,6 @@
       <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\CoronaPListSupport.lua">
-      <Filter>%28root%29\platform\resources</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\resources\nxsPackageApp.lua">
       <Filter>%28root%29\platform\resources</Filter>
     </LuaToCpp>
   </ItemGroup>

@@ -8,10 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "simulator.h"
 #include "MessageDlg.h"
-#include "afxinet.h"  // AfxParseUrl()
-#include "winstring.h"
 #include "CoronaInterface.h"
 
 
@@ -29,8 +26,6 @@ CMessageDlg::CMessageDlg(CWnd* pParent /*=NULL*/)
       m_sButtonDefault(_T("")),
       m_sButtonAlt(_T("")),
       m_sButton3(_T("")),
-      m_sUrl(_T("")),
-      m_sFolder(_T("")),
       m_nIconStyle( 0 ),
 	  m_pLuaResource( NULL )
 
@@ -94,32 +89,18 @@ void CMessageDlg::OnCancel()
 }
 
 // OnOK - First button (from right), default button
-// If there's a url set, execute it (e.g. Purchase) and don't exit message dlg
 void CMessageDlg::OnOK()
 {
     if( IsNativeAlert() )
         EndNativeAlert( IDOK );
-    else if( ! m_sUrl.IsEmpty() )
-	{
-        // Dialog stays open in this case
-        // Url is validated in SetUrl()
-		ShellExecute( NULL, _T("open"), m_sUrl, NULL, NULL, SW_SHOWNORMAL);
-	}
 	else CDialog::OnOK();
 }
 
 // OnButton2 - Second button (from right)
-// If there's a folder set, open it (e.g. successful build)
 void CMessageDlg::OnButton2()
 {
     if( IsNativeAlert() )
         EndNativeAlert( ID_MSG_BUTTON2 );
-	else if( ! m_sFolder.IsEmpty() )
-	{
-        // Folder is validated in SetFolder()
-        ShellExecute( NULL, _T("open"), m_sFolder, NULL, NULL, SW_SHOWNORMAL );
-		CDialog::EndDialog( ID_MSG_BUTTON2 );
-	}
 	else CDialog::EndDialog( ID_MSG_BUTTON2 );
 }
 
@@ -184,73 +165,6 @@ void CMessageDlg::SetButton3Text( int nID )
        sButton.LoadStringW( nID );
        SetButton3Text( sButton );
    }
-}
-
-// SetUrl - char * version, calls TCHAR version, which validates it
-// Url is loaded when Button1/OK is pressed.
-// Returns true if url is valid (or empty)
-bool CMessageDlg::SetUrl( const char *url )
-{
-     if( NULL == url ) 
-	 {
-         m_sUrl = _T("");
-         return true;
-	 }
-
-     WinString strUrl;
-     strUrl.SetUTF8( url );
-
-     return SetUrl( strUrl.GetTCHAR() );
-}
-
-// SetUrl - TCHAR version, validates URL
-// Url is loaded when Button1/OK is pressed.
-// Returns true if url is valid (or empty)
-bool CMessageDlg::SetUrl( const TCHAR *sUrl )
-{
-     if( NULL == sUrl ) 
-	 {
-         m_sUrl = _T("");
-         return true;
-	 }
-
-     DWORD dwServiceType;
-     CString strServer, strObject;
-     INTERNET_PORT nPort;
-
-	 if( AfxParseURL( sUrl, dwServiceType, strServer, strObject, nPort )
-         && ( (dwServiceType == AFX_INET_SERVICE_HTTP)
-               || (dwServiceType == AFX_INET_SERVICE_HTTPS) ) )
-	 {
-		 m_sUrl = sUrl; 
-		 return true;
-	 }
-
-	 return false;
-}
-
-// SetFolder - validate folder
-// Folder is opened in Explorer when Button2/Alt is pressed
-// Returns true if folder is valid (or empty)
-bool CMessageDlg::SetFolder( CString sFolder )
-{
-     if( sFolder.IsEmpty() )
-	 {
-         m_sFolder = sFolder;
-         return true;
-	 }
-
-     // No trailing backslashes
-     if( sFolder[sFolder.GetLength() - 1] == _T('\\') )
-		 sFolder.Left(sFolder.GetLength() - 1);
-
-	 if( CSimulatorApp::CheckDirExists( sFolder ) )
-	 {
-		 m_sFolder = sFolder; 
-		 return true;
-	 }
-
-	 return false;
 }
 
 // SetNativeAlertInfo - parameter to pass back to lua

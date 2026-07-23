@@ -44,8 +44,7 @@ namespace
 
 		/// <summary>
 		///  <para>
-		///   Set true to set up Corona to connect to a debugger upon launch, such as with the
-		///   "Corona Debugger" or the Sublime "Corona Editor".
+		///   Set true to set up Corona to connect to a Lua debugger upon launch.
 		///  </para>
 		///  <para>Set false (the default) to not connect to a debugger.</para>
 		///  <para>

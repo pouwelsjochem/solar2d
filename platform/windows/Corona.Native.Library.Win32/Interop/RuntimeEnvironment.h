@@ -522,8 +522,7 @@ class RuntimeEnvironment
 
 		/// <summary>
 		///  <para>
-		///   Determines if there are no Corona apps currently connected to a debugger on the system, such as to
-		///   the "Corona Debugger" or Sublime "Corona Editor.
+		///   Determines if there are no Corona apps currently connected to a Lua debugger on the system.
 		///  </para>
 		///  <para>
 		///   Note that Corona debugging uses a fixed TCP port number, which means that only one Corona application
@@ -950,7 +949,6 @@ class RuntimeEnvironment
 		/// <summary>
 		///  <para>Initializes Microsoft OLE/COM upon construction and unitializes OLE/COM upon destruction.</para>
 		///  <para>OLE is needed to support ActiveX controls, drag & drop, and clipboard copy/paste.</para>
-		///  <para>Note: The Internet Explorer WebBrowser control is an ActiveX control which needs OLE support.</para>
 		/// </summary>
 		ScopedOleInitializer fScopedOleInitializer;
 
@@ -964,8 +962,7 @@ class RuntimeEnvironment
 
 		/// <summary>
 		///  <para>
-		///   Handle to a "named semaphore" used to indicate that this runtime is connected to a debugger such
-		///   as the "Corona Debugger" or Sublime "Corona Editor".
+		///   Handle to a "named semaphore" used to indicate that this runtime is connected to a Lua debugger.
 		///  </para>
 		///  <para>Set to null if the Corona runtime is not set up to connect to a debugger.</para>
 		/// </summary>

@@ -31,9 +31,6 @@ public:
 	void SetAltText( CString sAltText ) { m_sButtonAlt = sAltText; }
     void SetButton3Text( int nID );
 	void SetButton3Text( CString sButton3 ) { m_sButton3 = sButton3; }
-	bool SetUrl( const char *sUrl );
-	bool SetUrl( const TCHAR *sUrl );
-	bool SetFolder( CString sFolder );
 	void SetIconStyle( int style ) { m_nIconStyle = style; }
 
 	void SetNativeAlertInfo( void *pLuaResource );
@@ -52,8 +49,6 @@ protected:
     CString m_sButtonDefault;
     CString m_sButtonAlt;
     CString m_sButton3;
-    CString m_sUrl;
-    CString m_sFolder;
     int m_nIconStyle;
     void *m_pLuaResource;
 

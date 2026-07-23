@@ -254,10 +254,8 @@ STRINGTABLE
 BEGIN
     IDS_OPENMAINLUA         "Select a main.lua"
     IDS_ONLYMAINLUA         "Only main.lua can be opened"
-    IDS_EXPIRE              "This version of the Solar2D Simulator has expired. Please visit https://solar2d.com."
     IDS_HARDWARE_SUSPEND    "Suspend\tCtrl+down arrow"
     IDS_HARDWARE_RESUME     "Resume\tCtrl+down arrow"
-    IDS_CHOOSEFOLLOWING     "(Choose from the following)"
 END
 
 STRINGTABLE
@@ -356,39 +354,14 @@ STRINGTABLE
 BEGIN
     IDS_DIR_s_NOTFOUND_INSTALL 
                             "Solar2D Simulator cannot find the directory %s.\nPlease re-run the installer."
-    IDS_FILE_s_NOTFOUND_INSTALL 
-                            "Solar2D Simulator cannot find the file %s.\nPlease re-run the installer."
-    IDS_QUIT                "Quit"
-    IDS_CONTINUE            "Continue"
     IDS_OK                  "OK"
-    IDS_DOWNLOAD            "Download"
     IDS_CANCEL              "Cancel"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_CONNECTINGTOSERVER  "Communicating with server..."
-    IDS_NO_INTERNET         "Could not connect to server. Please check your Internet connection."
-    IDS_UNKNOWNERROR        "An unexpected account configuration error occurred.  Please visit Solar2D forums to find a solution at https://forums.solar2d.com"
-    IDS_ASSOCLUA            "Please associate .lua files with an editor in Control Panel File Associations, then try again.  Click Yes to open the Control Panel File Associations applet."
-    IDS_OPENPROJECTINEDITOR "Open Project in Editor"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_DONE                "Done"
-    IDS_VIEW_EXPLORER       "View in E&xplorer"
-    IDS_INSTALLNOW          "Install now"
-    IDS_COULDNOTLOAD_s_ERR_d "Could not load %s, error %ld"
-    IDS_FUNCTION_s_IN_s     "Could not find %s in %s."
-    IDS_APPCORRUPTED        "This application has been corrupted.  Please download and reinstall."
 END
 
 STRINGTABLE
 BEGIN
     IDS_IGNORE              "Ignore"
     IDS_SIMULATOR_FILES     "Simulator Files"
-    IDS_REMIND_ME_LATER     "Remind me Later"
 END
 
 #endif    // English (United States) resources
