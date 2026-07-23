@@ -102,8 +102,6 @@ jobs:
         run: ./gh_build_templates.sh
         env:
           CERTIFICATES_P12_PASSWORD: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
-      - name: Build templates JSON spec
-        run: ./tools/GHAction/generate_xcode_jsons.py
       - name: Upload templates
         uses: actions/upload-artifact@v4
         with:
@@ -127,8 +125,6 @@ jobs:
           do
             mv -v "$D/"*.tar.bz output/iostemplate
           done
-      - name: Generate template JSON
-        run: find Templates-* -name '*_*-SDKs.json' -exec ./tools/GHAction/aggregate_xcode_jsons.py output {} \+
       - name: Upload templates
         uses: actions/upload-artifact@v4
         with:

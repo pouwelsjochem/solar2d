@@ -508,7 +508,6 @@ TargetDevice::PlatformForTag( const char *str )
 	return result;
 }
 
-// TODO: Load these values from JSON file
 TargetDevice::Version
 TargetDevice::VersionForPlatform( Platform platform )
 {
@@ -518,11 +517,6 @@ TargetDevice::VersionForPlatform( Platform platform )
 	{
 		case kAndroidPlatform:
 			result = kAndroidOS4_0_3;
-			break;
-		case kOSXPlatform:
-		case kIPhonePlatform:
-		case kTVOSPlatform: // As of Xcode 7.1, it seems like iOS/tvOS versions are in sync
-			result = kIPhoneOS9_0;
 			break;
 		default:
 			break;

@@ -22,18 +22,25 @@ Here's an example Lua file for iOS (`fishies.ios.lua`):
 
 	local params =
 	{
-	    platform='iOS',
+	    platform='ios',
 	    appName='Fishies',
 	    appVersion='1.0',
 	    dstPath='/Users/JohnSmith/Desktop',
-	    sdkPath='/Developer',
 	    certificatePath='/path/to/Dev.mobileprovision',
 	    projectPath='/Applications/CoronaSDK/SampleCode/Graphics/Fishies',
+	}
+	return params
 
-	    -- Following are optional:
-	    --[[
-	    platformVersion='iOS6.0', -- allows targeting iOS beta builds
-	    --]]
+Here's an unsigned tvOS Simulator example (`fishies.tvos.lua`):
+
+	local params =
+	{
+	    platform='tvos',
+	    appName='Fishies',
+	    appVersion='1.0',
+	    dstPath='/Users/JohnSmith/Desktop',
+	    projectPath='/Applications/CoronaSDK/SampleCode/Graphics/Fishies',
+	    targetDevice='tvos-simulator',
 	}
 	return params
 

@@ -1,11 +1,11 @@
 local params =
 {
-	platform='ios',
+	platform='tvos',
 	appName='Fishies',
 	appVersion='1.0',
 	dstPath='/Users/XXXX/Desktop',
-	certificatePath='/Users/XXXX/Library/MobileDevice/Provisioning Profiles/24C903A1-4525-49A5-9F2B-A1BE4E879675.mobileprovision',
 	projectPath='/Applications/CoronaSDK/SampleCode/Graphics/Fishies',
+	targetDevice='tvos-simulator',
 }
 
 return params

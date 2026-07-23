@@ -137,20 +137,26 @@ AppPackagerFactory::CreatePackagerParamsApple(
 		case TargetDevice::kTVOSPlatform:
 		{
 			S32 targetDevice = TargetDevice::kAppleTV;
+			if ( templateType &&
+				( 0 == strcasecmp( templateType, "tvos-simulator" ) ||
+				  0 == strcasecmp( templateType, "appletvsimulator" ) ) )
+			{
+				targetDevice = TargetDevice::kTVOSXCodeSimulator;
+			}
 
-			if ( ! certificatePath )
+			if ( ! certificatePath && targetDevice != TargetDevice::kTVOSXCodeSimulator )
 			{
 				fprintf( stderr, "ERROR: Missing 'certificatePath' in build params\n" );
 				return NULL;
 			}
 
-			NSString *provisionFile = [NSString stringWithUTF8String:certificatePath];
+			NSString *provisionFile = certificatePath?[NSString stringWithUTF8String:certificatePath]:nil;
 
-			bool isDistributionBuild = [AppleSigningIdentityController hasProvisionedDevices:provisionFile];
+			bool isDistributionBuild = certificatePath?[AppleSigningIdentityController hasProvisionedDevices:provisionFile]:NO;
 
 			TVOSAppPackager packager( fServices );
 
-			const char *appBundleId = packager.GetBundleId( certificatePath, appName );
+			const char *appBundleId = certificatePath?packager.GetBundleId( certificatePath, appName ):"com.solar2d.xcodesim";
 
 			if ( ! customBuildId )
 			{
@@ -159,7 +165,7 @@ AppPackagerFactory::CreatePackagerParamsApple(
 			}
 
 			NSString *commonName = nil;
-			NSString *identity = [AppleSigningIdentityController signingIdentity:provisionFile commonName:&commonName];
+			NSString *identity = certificatePath?[AppleSigningIdentityController signingIdentity:provisionFile commonName:&commonName]:nil;
 
 			result = new TVOSAppPackagerParams(
 											  appName,
@@ -280,4 +286,3 @@ AppPackagerFactory::GetResourceDirectoryOSX() const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

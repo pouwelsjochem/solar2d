@@ -34,8 +34,6 @@
 		7A0000133000000000000001 /* AndroidValidation.lua in Copy Build Resources */ = {isa = PBXBuildFile; fileRef = 7A0000033000000000000001 /* AndroidValidation.lua */; };
 		7A0000143000000000000001 /* iostemplate in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000043000000000000001 /* iostemplate */; };
 		7A0000153000000000000001 /* linuxtemplate_x64.tgz in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000053000000000000001 /* linuxtemplate_x64.tgz */; };
-		7A0000163000000000000001 /* iOS-SDKs.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000063000000000000001 /* iOS-SDKs.json */; };
-		7A0000173000000000000001 /* tvOS-SDKs.json in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000073000000000000001 /* tvOS-SDKs.json */; };
 		7A0000183000000000000001 /* OSXApp.xcent in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000083000000000000001 /* OSXApp.xcent */; };
 		7A0000193000000000000001 /* codesign-framework.sh in Resources */ = {isa = PBXBuildFile; fileRef = 7A0000093000000000000001 /* codesign-framework.sh */; };
 		7A0000253000000000000001 /* lua in Copy Helper Tools */ = {isa = PBXBuildFile; fileRef = A4ED11FE14D350C400ECF49E /* lua */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -396,8 +394,6 @@
 		7A0000033000000000000001 /* AndroidValidation.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AndroidValidation.lua; path = ../resources/AndroidValidation.lua; sourceTree = SOURCE_ROOT; };
 		7A0000043000000000000001 /* iostemplate */ = {isa = PBXFileReference; lastKnownFileType = folder; name = iostemplate; path = ../resources/iostemplate; sourceTree = SOURCE_ROOT; };
 		7A0000053000000000000001 /* linuxtemplate_x64.tgz */ = {isa = PBXFileReference; lastKnownFileType = file; name = linuxtemplate_x64.tgz; path = ../resources/linuxtemplate_x64.tgz; sourceTree = SOURCE_ROOT; };
-		7A0000063000000000000001 /* iOS-SDKs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "iOS-SDKs.json"; path = "../resources/iOS-SDKs.json"; sourceTree = SOURCE_ROOT; };
-		7A0000073000000000000001 /* tvOS-SDKs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "tvOS-SDKs.json"; path = "../resources/tvOS-SDKs.json"; sourceTree = SOURCE_ROOT; };
 		7A0000083000000000000001 /* OSXApp.xcent */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = OSXApp.xcent; path = ../resources/OSXApp.xcent; sourceTree = SOURCE_ROOT; };
 		7A0000093000000000000001 /* codesign-framework.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "codesign-framework.sh"; path = ../../bin/xcode/codesign-framework.sh; sourceTree = SOURCE_ROOT; };
 		7A00000A3000000000000001 /* AppSettings.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = AppSettings.lua; path = ../resources/AppSettings.lua; sourceTree = SOURCE_ROOT; };
@@ -865,11 +861,9 @@
 				7A0000093000000000000001 /* codesign-framework.sh */,
 				C2471D7719882B260076CA1F /* CoronaSimulator.icns */,
 				7A0000013000000000000001 /* debug.keystore */,
-				7A0000063000000000000001 /* iOS-SDKs.json */,
 				7A0000043000000000000001 /* iostemplate */,
 				7A0000053000000000000001 /* linuxtemplate_x64.tgz */,
 				7A0000083000000000000001 /* OSXApp.xcent */,
-				7A0000073000000000000001 /* tvOS-SDKs.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1264,11 +1258,9 @@
 				7A0000193000000000000001 /* codesign-framework.sh in Resources */,
 				C2471D7819882B260076CA1F /* CoronaSimulator.icns in Resources */,
 				7A0000113000000000000001 /* debug.keystore in Resources */,
-				7A0000163000000000000001 /* iOS-SDKs.json in Resources */,
 				7A0000143000000000000001 /* iostemplate in Resources */,
 				7A0000153000000000000001 /* linuxtemplate_x64.tgz in Resources */,
 				7A0000183000000000000001 /* OSXApp.xcent in Resources */,
-				7A0000173000000000000001 /* tvOS-SDKs.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

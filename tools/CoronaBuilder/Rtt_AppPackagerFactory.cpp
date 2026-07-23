@@ -114,26 +114,24 @@ AppPackagerFactory::CreatePackagerParams( lua_State *L, int index, TargetDevice:
 			lua_getglobal( L, "CoronaBuilderDetermineTargetiOSVersion" ); Rtt_ASSERT( lua_isfunction( L, -1 ) );
 		}
 
-		// Push 'params' as the call parameter
+		// Push 'params' and the CoronaBuilder resource directory as the call parameters.
 		lua_pushvalue(L, -2);
-
 		lua_pushstring(L, bundleDir);
-		lua_pushstring(L, Rtt_STRING_BUILD);
 
-		if (Lua::DoCall( L, 3, 2 ) == 0)
+		if (Lua::DoCall( L, 2, 2 ) != 0)
 		{
-			// Stack is [1] message, [2] boolean indicating success or failure
-			if (! lua_toboolean(L, -2))
-			{
-				printf("ERROR: %s\n", lua_tostring(L, -1));
-
-				return NULL;
-			}
-			else
-			{
-				printf("CoronaBuilder: %s\n", lua_tostring(L, -1));
-			}
+			lua_settop(L, top);
+			return NULL;
 		}
+
+		// Stack is [1] boolean indicating success or failure, [2] message.
+		if (! lua_toboolean(L, -2))
+		{
+			printf("ERROR: %s\n", lua_tostring(L, -1));
+			lua_settop(L, top);
+			return NULL;
+		}
+		printf("CoronaBuilder: %s\n", lua_tostring(L, -1));
 
 		lua_settop(L, top);
 	}
@@ -381,4 +379,3 @@ AppPackagerFactory::GetResourceDirectory() const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

@@ -10,11 +10,73 @@
 local json = require('json')
 local builder = require('builder')
 
--- These helper functions are called by CoronaBuilder/Rtt_AppPackagerFactory.cpp to determine the
--- correct target SDK version for iOS and tvOS builds
-function CoronaBuilderDetermineTargetiOSVersion( params, bundleDir, buildNum )
-	local currentSDKsFile = bundleDir .. "/iOS-SDKs.json"
-	return CoronaBuilderDetermineTargetSDKVersion( "iphoneos", "ios", currentSDKsFile, params, buildNum )
+local function fileExists( path )
+	local file = io.open( path, "rb" )
+	if file then
+		file:close()
+		return true
+	end
+	return false
+end
+
+local function encodedSDKVersion( version )
+	if type(version) ~= "string" or not version:match("^%d+%.%d+$") then
+		return nil
+	end
+	return math.floor(tonumber(version) * 10000 + 0.5)
+end
+
+local function archiveSDKVersion( version )
+	return string.format("%.1f", version / 10000)
+end
+
+local function usesSimulatorTemplate( params, simulatorTargets )
+	return type(params.targetDevice) == "string" and simulatorTargets[params.targetDevice:lower()] == true
+end
+
+local function determineAppleMobileTargetVersion( params, bundleDir, deviceSDK, simulatorSDK, simulatorTargets )
+	if type(params) ~= "table" then
+		return false, "params must be a table when selecting an Apple mobile template"
+	end
+
+	local sdk = usesSimulatorTemplate(params, simulatorTargets) and simulatorSDK or deviceSDK
+	local CoronaPListSupport = require("CoronaPListSupport")
+	local activeVersion = CoronaPListSupport.captureCommandOutput("/usr/bin/xcrun --sdk '"..sdk.."' --show-sdk-version")
+	local activeEncodedVersion = encodedSDKVersion(activeVersion)
+	if not activeEncodedVersion then
+		return false, "could not determine the active "..sdk.." SDK version"
+	end
+
+	local requestedVersion = params.platformVersion
+	if requestedVersion ~= nil and type(requestedVersion) ~= "number" then
+		return false, "'platformVersion' must be a number"
+	end
+	requestedVersion = requestedVersion or activeEncodedVersion
+
+	if requestedVersion ~= activeEncodedVersion and not params.forceVersion then
+		return false, "requested 'platformVersion' "..requestedVersion.." does not match active "..sdk.." SDK "..activeVersion
+	end
+
+	local customTemplate = params.customTemplate or ""
+	if type(customTemplate) ~= "string" or (customTemplate ~= "" and not customTemplate:match("^%-%w[%w._-]*$")) then
+		return false, "'customTemplate' must be empty or a filename suffix such as '-angle'"
+	end
+
+	local version = archiveSDKVersion(requestedVersion)
+	local archiveName = sdk.."_"..version..customTemplate..".tar.bz"
+	if not fileExists(bundleDir.."/iostemplate/"..archiveName) then
+		return false, "CoronaBuilder does not contain template '"..archiveName.."'"
+	end
+
+	params.platformVersion = requestedVersion
+	return true, "using bundled template '"..archiveName.."'"
+end
+
+-- These helper functions are called by CoronaBuilder/Rtt_AppPackagerFactory.cpp to select a
+-- bundled template matching the active iOS or tvOS SDK.
+function CoronaBuilderDetermineTargetiOSVersion( params, bundleDir )
+	local simulatorTargets = { ["ios-simulator"] = true, ["iphone-simulator"] = true, ["ipad-simulator"] = true }
+	return determineAppleMobileTargetVersion( params, bundleDir, "iphoneos", "iphonesimulator", simulatorTargets )
 end
 
 -- Determine we're running in a debug build
@@ -30,63 +92,9 @@ function debug_print(...)
 	end
 end
 
-function CoronaBuilderDetermineTargettvOSVersion( params, bundleDir, buildNum )
-	local currentSDKsFile = bundleDir .. "/tvOS-SDKs.json"
-	return CoronaBuilderDetermineTargetSDKVersion( "appletvos", "tvos", currentSDKsFile, params, buildNum )
-end
-
-function CoronaBuilderDetermineTargetSDKVersion( sdkname, platformName, currentSDKsFile, params, buildNum )
-
-	local CoronaPListSupport = require("CoronaPListSupport")
-	local captureCommandOutput = CoronaPListSupport.captureCommandOutput
-
-	if not params then
-		return false, "params cannot be nil in determineTargetSDKVersion"
-	end
-	if type(params) ~= "table" then
-		return false, "params must be a table in determineTargetSDKVersion (not a "..type(params)..")"
-	end
-
-	-- Find currently active version of Xcode
-	local xcodeSDKVersion = captureCommandOutput("/usr/bin/xcrun --sdk '"..sdkname.."' --show-sdk-version")
-	print("Active "..sdkname.." SDK version: ", xcodeSDKVersion)
-
-	local targetVersion = params['targetPlatformVersion']
-	local SDKs, lineno, errorMsg = json.decodeFile(currentSDKsFile) 
-
-	if errorMsg then
-		return false, errorMsg
-	end
-
-	local coronaVersion = false
-	local failMessage = "cannot find a compatible CoronaSDK "..buildNum.." build target for "..sdkname.." SDK "..xcodeSDKVersion
-	for idx, sdkParams in ipairs(SDKs[platformName]) do
-		-- print(idx, json.prettify(sdkParams))
-		if sdkParams['coronaVersion'] == params['platformVersion'] then
-			failMessage = sdkParams['failMessage']
-			if params["forceVersion"] then
-				coronaVersion = sdkParams['coronaVersion']
-			end
-		end
-		if sdkParams['xcodeVersion'] == xcodeSDKVersion then
-			coronaVersion = sdkParams['coronaVersion']
-		end
-	end
-
-	if coronaVersion then
-		if not params['platformVersion'] then
-			params['platformVersion'] = coronaVersion
-
-			return true, "'platformVersion' defaulted to "..coronaVersion
-		elseif params['platformVersion'] == coronaVersion then
-			return true, "requested 'platformVersion' of "..coronaVersion.." available"
-		else
-			return false, "can't build with requested 'platformVersion' of "..params['platformVersion'].." ("..failMessage..")"
-		end
-	else
-		return false, failMessage
-	end
-
+function CoronaBuilderDetermineTargettvOSVersion( params, bundleDir )
+	local simulatorTargets = { ["tvos-simulator"] = true, appletvsimulator = true }
+	return determineAppleMobileTargetVersion( params, bundleDir, "appletvos", "appletvsimulator", simulatorTargets )
 end
 
 -- Called by CoronaBuilder/Rtt_BuildParams.cpp to load a JSON parameter file

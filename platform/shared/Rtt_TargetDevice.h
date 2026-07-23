@@ -85,7 +85,7 @@ class TargetDevice
 			kNxS				= 170000,
 		} Version;
 
-		static Version VersionForPlatform( Platform platform ); // Return current stable version
+		static Version VersionForPlatform( Platform platform ); // Return the platform's default version, if any
 
 	public:
 		enum _IPhoneDevice
