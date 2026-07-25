@@ -10,6 +10,8 @@
 #include "stdafx.h"
 #include <gdiplus.h>
 #include <shellapi.h>
+#include <string>
+#include <vector>
 
 #include "Simulator.h"
 #include "MainFrm.h"
@@ -21,6 +23,7 @@
 #include "resource.h"
 
 #include "Core/Rtt_Build.h"
+#include "Rtt_SimulatorControl.h"
 
 
 #ifdef _DEBUG
@@ -95,6 +98,10 @@ class CSimulatorCommandLineInfo : public CCommandLineInfo
 						IsValid = false;
 					}
 				}
+				else if (fPendingValue == kSimulatorControlDirectoryValue)
+				{
+					SimulatorControlDirectory = value;
+				}
 				else
 				{
 					m_nShellCommand = CCommandLineInfo::FileOpen;
@@ -127,6 +134,15 @@ class CSimulatorCommandLineInfo : public CCommandLineInfo
 					}
 					return;
 				}
+				if (normalizedValue == _T("simulator-control-dir"))
+				{
+					fPendingValue = kSimulatorControlDirectoryValue;
+					if (isLast)
+					{
+						IsValid = false;
+					}
+					return;
+				}
 				if (normalizedValue == _T("singleton") || normalizedValue == _T("debug") ||
 					normalizedValue == _T("allowluaexit"))
 				{
@@ -143,16 +159,64 @@ class CSimulatorCommandLineInfo : public CCommandLineInfo
 		bool IsAgentModeEnabled;
 		bool IsProjectExplicit = false;
 		bool IsValid;
+		CString SimulatorControlDirectory;
 
 	private:
 		enum PendingValue
 		{
 			kNoPendingValue,
 			kAgentModeValue,
-			kProjectValue
+			kProjectValue,
+			kSimulatorControlDirectoryValue
 		};
 		PendingValue fPendingValue;
 };
+
+static std::string Utf8FromSimulatorControlWideString(const wchar_t* value)
+{
+	if (!value || !value[0])
+	{
+		return std::string();
+	}
+	int length = ::WideCharToMultiByte(
+		CP_UTF8, 0, value, -1, nullptr, 0, nullptr, nullptr);
+	if (length <= 1)
+	{
+		return std::string();
+	}
+	std::vector<char> buffer(length);
+	::WideCharToMultiByte(
+		CP_UTF8, 0, value, -1, buffer.data(), length, nullptr, nullptr);
+	return std::string(buffer.data());
+}
+
+static bool TryRunSimulatorControlClient(int& exitCode)
+{
+	int argumentCount = 0;
+	LPWSTR* wideArguments =
+		::CommandLineToArgvW(::GetCommandLineW(), &argumentCount);
+	if (!wideArguments)
+	{
+		return false;
+	}
+
+	std::vector<std::string> arguments;
+	for (int index = 0; index < argumentCount; index++)
+	{
+		arguments.push_back(
+			Utf8FromSimulatorControlWideString(wideArguments[index]));
+	}
+	::LocalFree(wideArguments);
+
+	std::vector<const char*> argumentPointers;
+	for (std::vector<std::string>::const_iterator iterator = arguments.begin();
+		iterator != arguments.end(); iterator++)
+	{
+		argumentPointers.push_back(iterator->c_str());
+	}
+	return 0 != Rtt_RunSimulatorControlClient(
+		(int)argumentPointers.size(), argumentPointers.data(), &exitCode);
+}
 
 static bool IsAgentModeRequested()
 {
@@ -212,6 +276,15 @@ BOOL CSimulatorApp::InitInstance()
 	setvbuf(stdout, NULL, _IONBF, 0);
 	setvbuf(stderr, NULL, _IONBF, 0);
 
+	int simulatorControlExitCode = 0;
+	if (TryRunSimulatorControlClient(simulatorControlExitCode))
+	{
+		m_isAgentModeEnabled = true;
+		m_exitCode = simulatorControlExitCode;
+		m_hasExplicitExitCode = true;
+		return FALSE;
+	}
+
 	// Load the simulator version of the Corona library, which is only used by plugins to link against by name.
 	// This is a thin proxy DLL which forwards Solar2D's public APIs to this EXE's statically linked Solar2D APIs.
 	// This ensures that plugins link with the simulator's library and not the non-simulator version of the library.
@@ -259,9 +332,16 @@ BOOL CSimulatorApp::InitInstance()
 	{
 		m_isAgentModeEnabled = wasAgentModeRequested;
 		m_exitCode = 1;
-		fprintf(stderr, "ERROR: -agent-mode and -project require valid values.\n");
+		fprintf(
+			stderr,
+			"ERROR: -agent-mode, -project, and -simulator-control-dir "
+			"require valid values.\n");
 		return FALSE;
 	}
+	std::string simulatorControlDirectory = Utf8FromSimulatorControlWideString(
+		(LPCWSTR)cmdInfo.SimulatorControlDirectory);
+	Rtt::SimulatorControl::SetDirectory(
+		simulatorControlDirectory.c_str());
 
 	// See if we ran successfully without a crash last time (mostly
 	// used to detect crappy video drivers that crash us)

@@ -11,6 +11,7 @@
 #include "Core/Rtt_Build.h"
 
 #include "Rtt_Runtime.h"
+#include "Rtt_SimulatorControl.h"
 
 #include "Core/Rtt_Allocator.h"
 #include "Core/Rtt_String.h"
@@ -202,6 +203,10 @@ Runtime::~Runtime()
 	}
 
 	OnSystemEvent( SystemEvent::kOnAppExit );
+
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	SimulatorControl::Shutdown( *this );
+#endif
 
 #ifdef Rtt_USE_ALMIXER
 	if ( fOpenALPlayer )
@@ -1418,6 +1423,10 @@ Runtime::Step()
 		return;
 	}
 
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	SimulatorControl::Process( *this );
+#endif
+
 	const bool wasSuspended = IsSuspended();
 	fScheduler->Run();
 	const bool isSuspended = IsSuspended();
@@ -1466,6 +1475,10 @@ Runtime::operator()()
 	{
 		return;
 	}
+
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	SimulatorControl::Process( *this );
+#endif
 
 	const bool wasSuspended = IsSuspended();
 	fScheduler->Run();

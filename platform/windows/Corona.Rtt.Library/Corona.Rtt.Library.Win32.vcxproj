@@ -239,6 +239,8 @@
     <ClCompile Include="..\..\..\librtt\Rtt_RuntimeDelegatePlayer.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">..\..\..\external\luasocket\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibSimulator.cpp" />
+    <ClCompile Include="..\..\..\librtt\Rtt_SimulatorControl.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Scheduler.cpp" />
     <ClCompile Include="..\..\..\librtt\Rtt_Transform.cpp" />
     <ClCompile Include="..\..\..\plugins\network\win32\CharsetTranscoder.cpp" />
@@ -485,6 +487,8 @@
     <ClInclude Include="..\..\..\librtt\Rtt_HTTPClient.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_RuntimeDelegate.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_RuntimeDelegatePlayer.h" />
+    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibSimulator.h" />
+    <ClInclude Include="..\..\..\librtt\Rtt_SimulatorControl.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Scheduler.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_SurfaceInfo.h" />
     <ClInclude Include="..\..\..\librtt\Rtt_Transform.h" />

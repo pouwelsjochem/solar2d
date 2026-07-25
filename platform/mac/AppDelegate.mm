@@ -46,12 +46,12 @@
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_Runtime.h"
+#include "Rtt_SimulatorControl.h"
 
 #include "Rtt_Lua.h"
 #include "Rtt_LuaFile.h"
 #include "Rtt_LuaContext.h"
 
-#include "Rtt_LuaConsole.h"
 #include "CoronaLua.h"
 
 #include "Rtt_VersionTimestamp.h"
@@ -616,6 +616,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		fAppPath = nil;
 		memset( & fOptions, 0, sizeof( fOptions ) );
 		fAgentMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"agent-mode"];
+		NSString *simulatorControlDirectory =
+			[[NSUserDefaults standardUserDefaults] stringForKey:@"simulator-control-dir"];
+		Rtt::SimulatorControl::SetDirectory(
+			[simulatorControlDirectory UTF8String] );
 
 		if (fAgentMode)
 		{

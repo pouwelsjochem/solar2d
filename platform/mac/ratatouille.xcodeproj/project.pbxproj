@@ -367,6 +367,8 @@
 		A475032E1773A6840064ABA0 /* Rtt_PaintAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A475032D1773A6820064ABA0 /* Rtt_PaintAdapter.cpp */; };
 		A48B829B16D59B0F00CA01A1 /* CoronaResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A48B827D16D59A4000CA01A1 /* CoronaResources.bundle */; };
 		A48DA96C1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48DA96A1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */; };
+		D0A100011F00000000000001 /* Rtt_LuaLibSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A100111F00000000000001 /* Rtt_LuaLibSimulator.cpp */; };
+		D0A100021F00000000000001 /* Rtt_SimulatorControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A100121F00000000000001 /* Rtt_SimulatorControl.cpp */; };
 		A491861D1641DD6100A39286 /* CoronaAssert.c in Sources */ = {isa = PBXBuildFile; fileRef = A491860F1641DD6100A39286 /* CoronaAssert.c */; };
 		A49186211641DD6100A39286 /* CoronaEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A49186111641DD6100A39286 /* CoronaEvent.cpp */; };
 		A49186251641DD6100A39286 /* CoronaLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A49186131641DD6100A39286 /* CoronaLibrary.cpp */; };
@@ -705,6 +707,8 @@
 		C229E13E1B32221B00D87A7C /* Rtt_Runtime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74A12B73EE300D9B6A4 /* Rtt_Runtime.cpp */; };
 		C229E13F1B32221B00D87A7C /* Rtt_RuntimeDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4AB447B143E575C00607F77 /* Rtt_RuntimeDelegate.cpp */; };
 		C229E1401B32221B00D87A7C /* Rtt_RuntimeDelegatePlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A48DA96A1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */; };
+		D0A100031F00000000000001 /* Rtt_LuaLibSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A100111F00000000000001 /* Rtt_LuaLibSimulator.cpp */; };
+		D0A100041F00000000000001 /* Rtt_SimulatorControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0A100121F00000000000001 /* Rtt_SimulatorControl.cpp */; };
 		C229E1411B32221B00D87A7C /* Rtt_Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432881B176A621100ACB6FF /* Rtt_Scene.cpp */; };
 		C229E1421B32221B00D87A7C /* Rtt_Scheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE74C12B73EE300D9B6A4 /* Rtt_Scheduler.cpp */; };
 		C229E1431B32221B00D87A7C /* Rtt_Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A432881D176A621100ACB6FF /* Rtt_Shader.cpp */; };
@@ -2062,6 +2066,10 @@
 		A48B827D16D59A4000CA01A1 /* CoronaResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoronaResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		A48B827E16D59A4000CA01A1 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		A48DA96A1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_RuntimeDelegatePlayer.cpp; sourceTree = "<group>"; };
+		D0A100111F00000000000001 /* Rtt_LuaLibSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_LuaLibSimulator.cpp; sourceTree = "<group>"; };
+		D0A100131F00000000000001 /* Rtt_LuaLibSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_LuaLibSimulator.h; sourceTree = "<group>"; };
+		D0A100121F00000000000001 /* Rtt_SimulatorControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_SimulatorControl.cpp; sourceTree = "<group>"; };
+		D0A100141F00000000000001 /* Rtt_SimulatorControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_SimulatorControl.h; sourceTree = "<group>"; };
 		A48DA96B1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_RuntimeDelegatePlayer.h; sourceTree = "<group>"; };
 		A491860F1641DD6100A39286 /* CoronaAssert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CoronaAssert.c; path = Corona/CoronaAssert.c; sourceTree = "<group>"; };
 		A49186101641DD6100A39286 /* CoronaAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoronaAssert.h; path = Corona/CoronaAssert.h; sourceTree = "<group>"; };
@@ -2800,6 +2808,10 @@
 				A4AB447B143E575C00607F77 /* Rtt_RuntimeDelegate.cpp */,
 				A4AB447C143E575D00607F77 /* Rtt_RuntimeDelegate.h */,
 				A48DA96A1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp */,
+				D0A100111F00000000000001 /* Rtt_LuaLibSimulator.cpp */,
+				D0A100131F00000000000001 /* Rtt_LuaLibSimulator.h */,
+				D0A100121F00000000000001 /* Rtt_SimulatorControl.cpp */,
+				D0A100141F00000000000001 /* Rtt_SimulatorControl.h */,
 				A48DA96B1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.h */,
 				000CE74C12B73EE300D9B6A4 /* Rtt_Scheduler.cpp */,
 				000CE74D12B73EE300D9B6A4 /* Rtt_Scheduler.h */,
@@ -4550,6 +4562,8 @@
 				000CE7F612B73EE300D9B6A4 /* Rtt_Runtime.cpp in Sources */,
 				A4AB447D143E575E00607F77 /* Rtt_RuntimeDelegate.cpp in Sources */,
 				A48DA96C1853038A009D1F93 /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
+				D0A100011F00000000000001 /* Rtt_LuaLibSimulator.cpp in Sources */,
+				D0A100021F00000000000001 /* Rtt_SimulatorControl.cpp in Sources */,
 				AAF34A7E29F9CAA800076706 /* Rtt_TextureResourceCaptureAdapter.cpp in Sources */,
 				A432887A176A621200ACB6FF /* Rtt_Scene.cpp in Sources */,
 				000CE7F812B73EE300D9B6A4 /* Rtt_Scheduler.cpp in Sources */,
@@ -4950,6 +4964,8 @@
 				C229E13E1B32221B00D87A7C /* Rtt_Runtime.cpp in Sources */,
 				C229E13F1B32221B00D87A7C /* Rtt_RuntimeDelegate.cpp in Sources */,
 				C229E1401B32221B00D87A7C /* Rtt_RuntimeDelegatePlayer.cpp in Sources */,
+				D0A100031F00000000000001 /* Rtt_LuaLibSimulator.cpp in Sources */,
+				D0A100041F00000000000001 /* Rtt_SimulatorControl.cpp in Sources */,
 				C229E1411B32221B00D87A7C /* Rtt_Scene.cpp in Sources */,
 				C229E1421B32221B00D87A7C /* Rtt_Scheduler.cpp in Sources */,
 				C229E1431B32221B00D87A7C /* Rtt_Shader.cpp in Sources */,

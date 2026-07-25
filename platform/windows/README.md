@@ -36,6 +36,11 @@ Agent sessions do not read or write recent-project, device, working-directory,
 window-position, or previous-crash preferences. They never close another
 running Simulator instance.
 
+Pass `-simulator-control-dir C:\private\session` to enable native local Lua
+inspection, execution, and lifecycle control without modifying the project.
+See [Simulator control](../../tools/simulator-control/README.md) for the command
+reference.
+
 The Simulator exposes the same programmatic device, relaunch, input, simulated
 event, fullscreen, state, and quit API used on macOS. Windows does not draw
 rounded device corners or a safe-area guide overlay; requesting rounded corners

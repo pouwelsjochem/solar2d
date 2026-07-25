@@ -219,6 +219,12 @@
     <ClCompile Include="..\..\..\librtt\Rtt_RuntimeDelegatePlayer.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Rtt_LuaLibSimulator.cpp">
+      <Filter>librtt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\librtt\Rtt_SimulatorControl.cpp">
+      <Filter>librtt</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\librtt\Rtt_Scheduler.cpp">
       <Filter>librtt</Filter>
     </ClCompile>
@@ -885,6 +891,12 @@
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_RuntimeDelegatePlayer.h">
+      <Filter>librtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\librtt\Rtt_LuaLibSimulator.h">
+      <Filter>librtt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\librtt\Rtt_SimulatorControl.h">
       <Filter>librtt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\librtt\Rtt_Scheduler.h">

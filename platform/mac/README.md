@@ -50,6 +50,11 @@ while using Computer Use to inspect and interact with the rendered OpenGL
 surface. Applications should provide their own log message when they need a
 reliable, app-specific signal that initialization is complete.
 
+Pass `-simulator-control-dir /private/session/path` to enable native local Lua
+inspection, execution, and lifecycle control without modifying the project.
+See [Simulator control](../../tools/simulator-control/README.md) for the command
+reference.
+
 Agent sessions do not update recent projects or persist their window position.
 They start centered with rounded corners and safe-area guides disabled for an
 unobstructed surface. Pass

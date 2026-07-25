@@ -9,7 +9,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+#include "Rtt_SimulatorControl.h"
+
 int main(int argc, char *argv[])
 {
+    int exitCode = 0;
+    if (Rtt_RunSimulatorControlClient(argc, (const char * const *)argv, &exitCode))
+    {
+        return exitCode;
+    }
     return NSApplicationMain(argc,  (const char **) argv);
 }

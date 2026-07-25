@@ -295,6 +295,8 @@
         <File Name="../../librtt/Rtt_Scheduler.h"/>
         <File Name="../../librtt/Display/Rtt_Scene.h"/>
         <File Name="../../librtt/Rtt_RuntimeDelegatePlayer.h"/>
+        <File Name="../../librtt/Rtt_LuaLibSimulator.h"/>
+        <File Name="../../librtt/Rtt_SimulatorControl.h"/>
         <File Name="../../librtt/Rtt_RuntimeDelegate.h"/>
         <File Name="../../librtt/Rtt_Runtime.h"/>
         <File Name="../../librtt/Core/Rtt_ResourceHandle.h"/>
@@ -642,6 +644,8 @@
       <File Name="../../librtt/Rtt_SimpleCachedPath.cpp"/>
       <File Name="../../librtt/Rtt_Scheduler.cpp"/>
       <File Name="../../librtt/Rtt_RuntimeDelegatePlayer.cpp"/>
+      <File Name="../../librtt/Rtt_LuaLibSimulator.cpp"/>
+      <File Name="../../librtt/Rtt_SimulatorControl.cpp"/>
       <File Name="../../librtt/Rtt_RuntimeDelegate.cpp"/>
       <File Name="../../librtt/Rtt_Runtime.cpp"/>
       <File Name="../../librtt/Rtt_Resource.cpp"/>

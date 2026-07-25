@@ -474,6 +474,8 @@ SET( SOLAR2D_SOURCES
 		${CORONA_ROOT}/librtt/Rtt_Runtime.cpp
 		${CORONA_ROOT}/librtt/Rtt_RuntimeDelegate.cpp
 		${CORONA_ROOT}/librtt/Rtt_RuntimeDelegatePlayer.cpp
+		${CORONA_ROOT}/librtt/Rtt_LuaLibSimulator.cpp
+		${CORONA_ROOT}/librtt/Rtt_SimulatorControl.cpp
 		${CORONA_ROOT}/librtt/Rtt_Scheduler.cpp
 		${CORONA_ROOT}/librtt/Rtt_Transform.cpp
 		${Lua2CppOutputDir}/CoronaLibrary.cpp
