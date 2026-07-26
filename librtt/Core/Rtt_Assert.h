@@ -11,11 +11,17 @@
 #define _Rtt_Assert_H__
 
 #include "Rtt_Macros.h"
+#include <stddef.h>
 #include <stdarg.h>
+
+typedef void (*Rtt_LogCallback)(
+	const char *message, size_t length, void *context );
 
 Rtt_EXPORT void Rtt_LogEnable(void);
 Rtt_EXPORT void Rtt_LogDisable(void);
 Rtt_EXPORT int Rtt_LogIsEnabled(void);
+Rtt_EXPORT void Rtt_SetLogCallback( Rtt_LogCallback callback, void *context );
+Rtt_EXPORT void Rtt_InvokeLogCallback( const char *format, va_list arguments );
 
 #if defined( Rtt_MAC_ENV )
 	// On OSX we can easily validate printf-style function arguments

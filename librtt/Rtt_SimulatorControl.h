@@ -21,6 +21,9 @@ namespace SimulatorControl
 {
 	void SetDirectory( const char *directory );
 	void Process( Runtime& runtime );
+	void RecordRuntimeError(
+		Runtime& runtime, const char *errorType,
+		const char *message, const char *stackTrace );
 	void Shutdown( Runtime& runtime );
 }
 

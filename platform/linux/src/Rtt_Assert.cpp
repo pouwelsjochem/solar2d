@@ -29,6 +29,7 @@ Rtt_EXPORT_BEGIN
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 #if defined( Rtt_ANDROID_ENV )
 #include <android/log.h>
@@ -42,6 +43,41 @@ static bool linuxIsErrorMsg = false;
 #endif
 /// Static variable set to non-zero if logging is enabled. Set to zero if logging is disabled.
 static int fIsLoggingEnabled = 1;
+static Rtt_LogCallback fLogCallback = NULL;
+static void *fLogCallbackContext = NULL;
+
+void
+Rtt_SetLogCallback( Rtt_LogCallback callback, void *context )
+{
+	fLogCallback = callback;
+	fLogCallbackContext = context;
+}
+
+void
+Rtt_InvokeLogCallback( const char *format, va_list arguments )
+{
+	if ( ! fLogCallback || ! format )
+	{
+		return;
+	}
+
+	char message[16384];
+	va_list copiedArguments;
+	va_copy( copiedArguments, arguments );
+	int length = vsnprintf(
+		message, sizeof( message ), format, copiedArguments );
+	va_end( copiedArguments );
+	if ( length < 0 )
+	{
+		return;
+	}
+	size_t messageLength = (size_t)length;
+	if ( messageLength >= sizeof( message ) )
+	{
+		messageLength = sizeof( message ) - 1;
+	}
+	fLogCallback( message, messageLength, fLogCallbackContext );
+}
 
 /// Enables the logging system.
 void
@@ -95,6 +131,7 @@ int
 Rtt_VLogException(const char* format, va_list ap)
 {
 	int result = 0;
+	Rtt_InvokeLogCallback( format, ap );
 
 #ifdef Rtt_VPRINTF_SUPPORTED
 

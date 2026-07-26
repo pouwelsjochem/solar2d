@@ -114,6 +114,8 @@ Rtt_VLogException( const char *format, va_list ap )
 
 	if (Rtt_LogIsEnabled())
 	{
+		Rtt_InvokeLogCallback( format, ap );
+
 		/* With general purpose functions low level functions like this to be used in C code, we can't
 		 * guarantee the existence of an autorelease pool. We must create one every single time for safety.
 		 */

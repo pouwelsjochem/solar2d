@@ -42,6 +42,10 @@
 #include "Rtt_MRuntimeDelegate.h"
 #include "Core/Rtt_String.h"
 
+#ifdef Rtt_AUTHORING_SIMULATOR
+	#include "Rtt_SimulatorControl.h"
+#endif
+
 #include <string.h>
 #include <signal.h>
 
@@ -285,11 +289,25 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 	lua_getfield(L, LUA_GLOBALSINDEX, "debug");
 	if (!lua_istable(L, -1)) {
 		lua_pop(L, 1);
+#ifdef Rtt_AUTHORING_SIMULATOR
+		if (Self::HasRuntime(L))
+		{
+			SimulatorControl::RecordRuntimeError(
+				*Self::GetRuntime(L), errorType, briefMessage, "" );
+		}
+#endif
 		return 1;
 	}
 	lua_getfield(L, -1, "traceback");
 	if (!lua_isfunction(L, -1)) {
 		lua_pop(L, 2);
+#ifdef Rtt_AUTHORING_SIMULATOR
+		if (Self::HasRuntime(L))
+		{
+			SimulatorControl::RecordRuntimeError(
+				*Self::GetRuntime(L), errorType, briefMessage, "" );
+		}
+#endif
 		return 1;
 	}
 	lua_pushstring(L, briefMessage); /* provide error to overriders of debug.traceback */
@@ -324,6 +342,10 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 			CORONA_LOG_ERROR("Preventing recursive custom error handler call! Errors in error handle will not be handled by itself.\n");
 			return 1;
 		}
+#ifdef Rtt_AUTHORING_SIMULATOR
+		SimulatorControl::RecordRuntimeError(
+			*runtime, errorType, briefMessage, stackTrace );
+#endif
 		runtime->fErrorHandlerRecursionGuard = true;
 	}
 

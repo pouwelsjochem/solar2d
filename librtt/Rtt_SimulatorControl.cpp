@@ -8,17 +8,23 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "Core/Rtt_Build.h"
+#include "Core/Rtt_Assert.h"
+#include "Core/Rtt_Data.h"
 
 #include "Rtt_SimulatorControl.h"
 
 #ifdef Rtt_AUTHORING_SIMULATOR
 
+#include "Display/Rtt_BitmapPaint.h"
+#include "Display/Rtt_Display.h"
+#include "Display/Rtt_PlatformBitmap.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_MPlatform.h"
 #include "Rtt_MSimulatorHost.h"
 #include "Rtt_Runtime.h"
 
 #include <ctype.h>
+#include <deque>
 #include <errno.h>
 #include <fcntl.h>
 #include <float.h>
@@ -40,6 +46,9 @@
 	#include <process.h>
 	#include <windows.h>
 #else
+	#include <dirent.h>
+	#include <pthread.h>
+	#include <signal.h>
 	#include <sys/time.h>
 	#include <unistd.h>
 #endif
@@ -64,10 +73,164 @@ IsFiniteNumber( lua_Number value )
 }
 
 static const size_t kSimulatorControlMaximumRequestSize = 1024 * 1024;
+static const size_t kSimulatorControlMaximumExecFileSize = 16 * 1024 * 1024;
 static const size_t kSimulatorControlMaximumStringSize = 4096;
 static const size_t kSimulatorControlMaximumResponseSize = 256 * 1024;
+static const size_t kSimulatorControlMaximumDiagnosticMessageSize = 16 * 1024;
+static const size_t kSimulatorControlMaximumDiagnosticStackTraceSize = 128 * 1024;
+static const size_t kSimulatorControlMaximumLogBytes = 128 * 1024;
+static const size_t kSimulatorControlMaximumLogEntries = 500;
 static const int kSimulatorControlMaximumEntries = 100;
 static char kSimulatorControlRegistryKey;
+
+class SimulatorControlLogMutex
+{
+	public:
+		SimulatorControlLogMutex()
+		{
+#ifdef Rtt_WIN_ENV
+			InitializeCriticalSection( & fMutex );
+#else
+			pthread_mutex_init( & fMutex, NULL );
+#endif
+		}
+
+		~SimulatorControlLogMutex()
+		{
+#ifdef Rtt_WIN_ENV
+			DeleteCriticalSection( & fMutex );
+#else
+			pthread_mutex_destroy( & fMutex );
+#endif
+		}
+
+		void Lock()
+		{
+#ifdef Rtt_WIN_ENV
+			EnterCriticalSection( & fMutex );
+#else
+			pthread_mutex_lock( & fMutex );
+#endif
+		}
+
+		void Unlock()
+		{
+#ifdef Rtt_WIN_ENV
+			LeaveCriticalSection( & fMutex );
+#else
+			pthread_mutex_unlock( & fMutex );
+#endif
+		}
+
+	private:
+#ifdef Rtt_WIN_ENV
+		CRITICAL_SECTION fMutex;
+#else
+		pthread_mutex_t fMutex;
+#endif
+};
+
+class SimulatorControlLogGuard
+{
+	public:
+		SimulatorControlLogGuard( SimulatorControlLogMutex& mutex )
+		:	fMutex( mutex )
+		{
+			fMutex.Lock();
+		}
+
+		~SimulatorControlLogGuard()
+		{
+			fMutex.Unlock();
+		}
+
+	private:
+		SimulatorControlLogMutex& fMutex;
+};
+
+struct SimulatorControlLogEntry
+{
+	unsigned long sequence;
+	std::string message;
+};
+
+struct SimulatorControlLogState
+{
+	SimulatorControlLogState()
+	:	sequence( 0 ),
+		byteCount( 0 ),
+		droppedEntries( false )
+	{
+	}
+
+	unsigned long sequence;
+	size_t byteCount;
+	bool droppedEntries;
+	std::deque< SimulatorControlLogEntry > entries;
+};
+
+static SimulatorControlLogMutex&
+GetSimulatorControlLogMutex()
+{
+	static SimulatorControlLogMutex *mutex =
+		new SimulatorControlLogMutex();
+	return *mutex;
+}
+
+static SimulatorControlLogState&
+GetSimulatorControlLogState()
+{
+	static SimulatorControlLogState *state =
+		new SimulatorControlLogState();
+	return *state;
+}
+
+static void
+ResetSimulatorControlLogs()
+{
+	SimulatorControlLogGuard guard( GetSimulatorControlLogMutex() );
+	SimulatorControlLogState& state = GetSimulatorControlLogState();
+	state.sequence = 0;
+	state.byteCount = 0;
+	state.droppedEntries = false;
+	state.entries.clear();
+}
+
+static void
+RecordSimulatorControlLog(
+	const char *message, size_t length, void *context )
+{
+	(void)context;
+	if ( ! message || 0 == length )
+	{
+		return;
+	}
+	while ( length > 0 &&
+		( '\n' == message[length - 1] || '\r' == message[length - 1] ) )
+	{
+		length--;
+	}
+	if ( 0 == length )
+	{
+		return;
+	}
+
+	SimulatorControlLogGuard guard( GetSimulatorControlLogMutex() );
+	SimulatorControlLogState& state = GetSimulatorControlLogState();
+	SimulatorControlLogEntry entry;
+	entry.sequence = ++state.sequence;
+	entry.message.assign( message, length );
+	state.byteCount += entry.message.length();
+	state.entries.push_back( entry );
+
+	while ( state.entries.size() > kSimulatorControlMaximumLogEntries ||
+		state.byteCount > kSimulatorControlMaximumLogBytes )
+	{
+		state.byteCount -= state.entries.front().message.length();
+		state.entries.pop_front();
+		state.droppedEntries = true;
+	}
+}
 
 static std::string&
 GetSimulatorControlDirectory()
@@ -76,17 +239,51 @@ GetSimulatorControlDirectory()
 	return directory;
 }
 
+static std::string&
+GetSimulatorControlOwnerPath()
+{
+	static std::string path;
+	return path;
+}
+
 struct SimulatorControlRuntimeState
 {
 	SimulatorControlRuntimeState()
 	:	generation( 0 ),
+		diagnosticSequence( 0 ),
+		diagnosticFrame( 0 ),
+		hasDiagnostic( false ),
+		diagnosticTruncated( false ),
+		diagnosticsWritten( false ),
 		sessionWritten( false )
 	{
 	}
 
 	unsigned long generation;
+	unsigned long diagnosticSequence;
+	unsigned long diagnosticFrame;
 	std::string directory;
+	std::string sessionId;
+	std::string diagnosticType;
+	std::string diagnosticMessage;
+	std::string diagnosticStackTrace;
+	bool hasDiagnostic;
+	bool diagnosticTruncated;
+	bool diagnosticsWritten;
 	bool sessionWritten;
+};
+
+struct SimulatorControlSession
+{
+	SimulatorControlSession()
+	:	generation( 0 ),
+		processId( 0 )
+	{
+	}
+
+	unsigned long generation;
+	unsigned long processId;
+	std::string sessionId;
 };
 
 typedef std::map< const Runtime*, SimulatorControlRuntimeState >
@@ -137,9 +334,179 @@ SimulatorControlPath( const std::string& directory, const char *filename )
 #endif
 }
 
+#ifdef Rtt_WIN_ENV
+
 static bool
-ReadSimulatorControlFile( const std::string& path, std::string& result )
+ConvertSimulatorControlUtf8ToWide(
+	const std::string& value, std::wstring& result )
 {
+	if ( value.empty() )
+	{
+		result.clear();
+		return true;
+	}
+	int length = MultiByteToWideChar(
+		CP_UTF8, MB_ERR_INVALID_CHARS,
+		value.data(), (int)value.length(), NULL, 0 );
+	if ( length <= 0 )
+	{
+		return false;
+	}
+	result.resize( (size_t)length );
+	return length == MultiByteToWideChar(
+		CP_UTF8, MB_ERR_INVALID_CHARS,
+		value.data(), (int)value.length(), & result[0], length );
+}
+
+static bool
+ConvertSimulatorControlWideToUtf8(
+	const std::wstring& value, std::string& result )
+{
+	if ( value.empty() )
+	{
+		result.clear();
+		return true;
+	}
+	int length = WideCharToMultiByte(
+		CP_UTF8, WC_ERR_INVALID_CHARS,
+		value.data(), (int)value.length(), NULL, 0, NULL, NULL );
+	if ( length <= 0 )
+	{
+		return false;
+	}
+	result.resize( (size_t)length );
+	return length == WideCharToMultiByte(
+		CP_UTF8, WC_ERR_INVALID_CHARS,
+		value.data(), (int)value.length(), & result[0], length, NULL, NULL );
+}
+
+static void
+SetSimulatorControlErrnoFromWindowsError( DWORD error )
+{
+	switch ( error )
+	{
+		case ERROR_FILE_EXISTS:
+		case ERROR_ALREADY_EXISTS:
+			errno = EEXIST;
+			break;
+		case ERROR_FILE_NOT_FOUND:
+		case ERROR_PATH_NOT_FOUND:
+			errno = ENOENT;
+			break;
+		case ERROR_ACCESS_DENIED:
+			errno = EACCES;
+			break;
+		default:
+			errno = EIO;
+			break;
+	}
+}
+
+#endif
+
+static int
+DeleteSimulatorControlFile( const std::string& path )
+{
+#ifdef Rtt_WIN_ENV
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		errno = EINVAL;
+		return -1;
+	}
+	if ( DeleteFileW( widePath.c_str() ) )
+	{
+		return 0;
+	}
+	SetSimulatorControlErrnoFromWindowsError( GetLastError() );
+	return -1;
+#else
+	return remove( path.c_str() );
+#endif
+}
+
+static int
+MoveSimulatorControlFile(
+	const std::string& sourcePath, const std::string& destinationPath,
+	bool replaceExisting )
+{
+#ifdef Rtt_WIN_ENV
+	std::wstring wideSourcePath;
+	std::wstring wideDestinationPath;
+	if ( ! ConvertSimulatorControlUtf8ToWide(
+			sourcePath, wideSourcePath ) ||
+		! ConvertSimulatorControlUtf8ToWide(
+			destinationPath, wideDestinationPath ) )
+	{
+		errno = EINVAL;
+		return -1;
+	}
+	DWORD flags = replaceExisting ? MOVEFILE_REPLACE_EXISTING : 0;
+	if ( MoveFileExW(
+		wideSourcePath.c_str(), wideDestinationPath.c_str(), flags ) )
+	{
+		return 0;
+	}
+	SetSimulatorControlErrnoFromWindowsError( GetLastError() );
+	return -1;
+#else
+	if ( ! replaceExisting )
+	{
+		struct stat information;
+		if ( 0 == stat( destinationPath.c_str(), & information ) )
+		{
+			errno = EEXIST;
+			return -1;
+		}
+	}
+	return rename( sourcePath.c_str(), destinationPath.c_str() );
+#endif
+}
+
+static bool
+ReadSimulatorControlFile(
+	const std::string& path, std::string& result,
+	size_t maximumSize = kSimulatorControlMaximumRequestSize )
+{
+#ifdef Rtt_WIN_ENV
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		return false;
+	}
+	HANDLE fileHandle = CreateFileW(
+		widePath.c_str(), GENERIC_READ,
+		FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+		NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+	if ( INVALID_HANDLE_VALUE == fileHandle )
+	{
+		return false;
+	}
+
+	LARGE_INTEGER length;
+	if ( ! GetFileSizeEx( fileHandle, & length ) ||
+		length.QuadPart < 0 ||
+		(unsigned long long)length.QuadPart >
+			maximumSize )
+	{
+		CloseHandle( fileHandle );
+		return false;
+	}
+
+	result.resize( (size_t)length.QuadPart );
+	DWORD readLength = 0;
+	bool succeeded = result.empty() ||
+		( ReadFile(
+			fileHandle, & result[0], (DWORD)result.length(),
+			& readLength, NULL ) &&
+			readLength == result.length() );
+	CloseHandle( fileHandle );
+	if ( ! succeeded )
+	{
+		result.clear();
+	}
+	return succeeded;
+#else
 	std::ifstream stream( path.c_str(), std::ios::in | std::ios::binary );
 	if ( ! stream )
 	{
@@ -148,7 +515,7 @@ ReadSimulatorControlFile( const std::string& path, std::string& result )
 
 	stream.seekg( 0, std::ios::end );
 	std::streamoff length = stream.tellg();
-	if ( length < 0 || (size_t)length > kSimulatorControlMaximumRequestSize )
+	if ( length < 0 || (size_t)length > maximumSize )
 	{
 		return false;
 	}
@@ -156,12 +523,46 @@ ReadSimulatorControlFile( const std::string& path, std::string& result )
 
 	result.assign( (std::istreambuf_iterator< char >( stream )), std::istreambuf_iterator< char >() );
 	return stream.good() || stream.eof();
+#endif
 }
 
 static bool
 WriteSimulatorControlFileAtomically( const std::string& path, const std::string& contents )
 {
 	std::string temporaryPath = path + ".tmp";
+#ifdef Rtt_WIN_ENV
+	std::wstring wideTemporaryPath;
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide(
+			temporaryPath, wideTemporaryPath ) ||
+		! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		return false;
+	}
+	HANDLE fileHandle = CreateFileW(
+		wideTemporaryPath.c_str(), GENERIC_WRITE, 0, NULL,
+		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
+	if ( INVALID_HANDLE_VALUE == fileHandle )
+	{
+		return false;
+	}
+	DWORD writtenLength = 0;
+	bool succeeded = contents.empty() ||
+		( WriteFile(
+			fileHandle, contents.data(), (DWORD)contents.length(),
+			& writtenLength, NULL ) &&
+			writtenLength == contents.length() );
+	CloseHandle( fileHandle );
+	if ( ! succeeded ||
+		! MoveFileExW(
+			wideTemporaryPath.c_str(), widePath.c_str(),
+			MOVEFILE_REPLACE_EXISTING ) )
+	{
+		DeleteFileW( wideTemporaryPath.c_str() );
+		return false;
+	}
+	return true;
+#else
 	{
 		std::ofstream stream( temporaryPath.c_str(), std::ios::out | std::ios::binary | std::ios::trunc );
 		if ( ! stream )
@@ -169,24 +570,22 @@ WriteSimulatorControlFileAtomically( const std::string& path, const std::string&
 			return false;
 		}
 		stream.write( contents.data(), (std::streamsize)contents.length() );
-		if ( ! stream )
-		{
-			stream.close();
-			remove( temporaryPath.c_str() );
-			return false;
+			if ( ! stream )
+			{
+				stream.close();
+				DeleteSimulatorControlFile( temporaryPath );
+				return false;
+			}
 		}
-	}
 
-	// Windows does not replace an existing destination with rename(). Session
-	// descriptors are rewritten only during lifecycle changes, so the small gap
-	// between remove() and rename() is acceptable there.
-	remove( path.c_str() );
-	if ( 0 != rename( temporaryPath.c_str(), path.c_str() ) )
+	if ( 0 != MoveSimulatorControlFile(
+		temporaryPath, path, true ) )
 	{
-		remove( temporaryPath.c_str() );
+		DeleteSimulatorControlFile( temporaryPath );
 		return false;
 	}
 	return true;
+#endif
 }
 
 static unsigned long long
@@ -213,11 +612,149 @@ SleepSimulatorControlMilliseconds( unsigned long milliseconds )
 }
 
 static bool
+IsSimulatorControlProcessAlive( unsigned long processId )
+{
+	if ( 0 == processId )
+	{
+		return false;
+	}
+	if ( processId == (unsigned long)GetSimulatorControlProcessId() )
+	{
+		return true;
+	}
+
+#ifdef Rtt_WIN_ENV
+	HANDLE processHandle = OpenProcess(
+		SYNCHRONIZE, FALSE, (DWORD)processId );
+	if ( processHandle )
+	{
+		DWORD waitResult = WaitForSingleObject( processHandle, 0 );
+		CloseHandle( processHandle );
+		return WAIT_TIMEOUT == waitResult;
+	}
+
+	// If Windows refuses access, assume the process is alive. It is safer to
+	// leave a lock or session in place than to steal one from a live process.
+	return ERROR_ACCESS_DENIED == GetLastError();
+#else
+	if ( 0 == kill( (pid_t)processId, 0 ) )
+	{
+		return true;
+	}
+	return EPERM == errno;
+#endif
+}
+
+static std::string
+CreateSimulatorControlSessionId( unsigned long generation )
+{
+	static unsigned long counter = 0;
+	char value[128];
+	snprintf(
+		value, sizeof( value ), "%08lx-%08lx-%016llx-%08lx",
+		(unsigned long)GetSimulatorControlProcessId(),
+		(unsigned long)time( NULL ),
+		GetSimulatorControlMilliseconds(),
+		generation + ++counter );
+	return std::string( value );
+}
+
+static SimulatorControlRuntimeState*
+GetOrCreateSimulatorControlRuntimeState( Runtime& runtime )
+{
+	const std::string& directory = GetSimulatorControlDirectory();
+	if ( directory.empty() )
+	{
+		return NULL;
+	}
+
+	SimulatorControlRuntimeStateMap& states =
+		GetSimulatorControlRuntimeStates();
+	SimulatorControlRuntimeStateMap::iterator iterator =
+		states.find( & runtime );
+	if ( states.end() == iterator )
+	{
+		SimulatorControlRuntimeState state;
+		state.directory = directory;
+		state.generation = NextSimulatorControlGeneration();
+		state.sessionId =
+			CreateSimulatorControlSessionId( state.generation );
+		iterator = states.insert(
+			std::make_pair( (const Runtime*)& runtime, state ) ).first;
+	}
+	return & iterator->second;
+}
+
+static void
+AssignSimulatorControlDiagnosticText(
+	std::string& result, const char *value,
+	size_t maximumLength, bool& truncated )
+{
+	const char *safeValue = value ? value : "";
+	size_t length = strlen( safeValue );
+	if ( length > maximumLength )
+	{
+		length = maximumLength;
+		truncated = true;
+	}
+	result.assign( safeValue, length );
+}
+
+static void
+RecordSimulatorControlDiagnostic(
+	Runtime& runtime, SimulatorControlRuntimeState& state,
+	const char *errorType, const char *message, const char *stackTrace )
+{
+	state.diagnosticSequence++;
+	state.diagnosticFrame = (unsigned long)runtime.GetFrame();
+	state.diagnosticTruncated = false;
+	AssignSimulatorControlDiagnosticText(
+		state.diagnosticType, errorType ? errorType : "Runtime error",
+		256, state.diagnosticTruncated );
+	AssignSimulatorControlDiagnosticText(
+		state.diagnosticMessage, message,
+		kSimulatorControlMaximumDiagnosticMessageSize,
+		state.diagnosticTruncated );
+	AssignSimulatorControlDiagnosticText(
+		state.diagnosticStackTrace, stackTrace,
+		kSimulatorControlMaximumDiagnosticStackTraceSize,
+		state.diagnosticTruncated );
+	state.hasDiagnostic = true;
+	state.diagnosticsWritten = false;
+}
+
+static void
+RecordSimulatorControlExecutionDiagnostic(
+	Runtime& runtime, SimulatorControlRuntimeState& state,
+	const std::string& error )
+{
+	size_t stackTraceOffset = error.find( "\nstack traceback:" );
+	if ( std::string::npos == stackTraceOffset )
+	{
+		RecordSimulatorControlDiagnostic(
+			runtime, state, "Simulator control error",
+			error.c_str(), "" );
+		return;
+	}
+
+	std::string message = error.substr( 0, stackTraceOffset );
+	std::string stackTrace = error.substr( stackTraceOffset );
+	RecordSimulatorControlDiagnostic(
+		runtime, state, "Simulator control error",
+		message.c_str(), stackTrace.c_str() );
+}
+
+static bool
 SimulatorControlFileExists( const std::string& path )
 {
 #ifdef Rtt_WIN_ENV
-	struct _stat information;
-	return 0 == _stat( path.c_str(), & information );
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		return false;
+	}
+	return INVALID_FILE_ATTRIBUTES !=
+		GetFileAttributesW( widePath.c_str() );
 #else
 	struct stat information;
 	return 0 == stat( path.c_str(), & information );
@@ -228,9 +765,14 @@ static bool
 SimulatorControlDirectoryExists( const std::string& path )
 {
 #ifdef Rtt_WIN_ENV
-	struct _stat information;
-	return 0 == _stat( path.c_str(), & information ) &&
-		0 != ( information.st_mode & _S_IFDIR );
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		return false;
+	}
+	DWORD attributes = GetFileAttributesW( widePath.c_str() );
+	return INVALID_FILE_ATTRIBUTES != attributes &&
+		0 != ( attributes & FILE_ATTRIBUTE_DIRECTORY );
 #else
 	struct stat information;
 	return 0 == stat( path.c_str(), & information ) &&
@@ -242,8 +784,13 @@ static bool
 IsSimulatorControlFileStale( const std::string& path, unsigned long seconds )
 {
 #ifdef Rtt_WIN_ENV
-	struct _stat information;
-	if ( 0 != _stat( path.c_str(), & information ) )
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		return false;
+	}
+	struct _stat64 information;
+	if ( 0 != _wstat64( widePath.c_str(), & information ) )
 #else
 	struct stat information;
 	if ( 0 != stat( path.c_str(), & information ) )
@@ -255,31 +802,108 @@ IsSimulatorControlFileStale( const std::string& path, unsigned long seconds )
 }
 
 static bool
-CreateSimulatorControlLockFile( const std::string& path )
+CreateSimulatorControlExclusivePidFile( const std::string& path )
 {
 #ifdef Rtt_WIN_ENV
-	int descriptor = _open(
-		path.c_str(), _O_CREAT | _O_EXCL | _O_WRONLY | _O_BINARY,
-		_S_IREAD | _S_IWRITE );
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		errno = EINVAL;
+		return false;
+	}
+	HANDLE fileHandle = CreateFileW(
+		widePath.c_str(), GENERIC_WRITE, 0, NULL,
+		CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL );
+	if ( INVALID_HANDLE_VALUE == fileHandle )
+	{
+		SetSimulatorControlErrnoFromWindowsError( GetLastError() );
+		return false;
+	}
 #else
 	int descriptor = open( path.c_str(), O_CREAT | O_EXCL | O_WRONLY, 0600 );
-#endif
 	if ( descriptor < 0 )
 	{
 		return false;
 	}
+#endif
 
 	char contents[64];
 	int length = snprintf(
 		contents, sizeof( contents ), "%ld\n%lu\n",
 		GetSimulatorControlProcessId(), (unsigned long)time( NULL ) );
 #ifdef Rtt_WIN_ENV
-	_write( descriptor, contents, length );
-	_close( descriptor );
+	DWORD writtenLength = 0;
+	BOOL didWrite = WriteFile(
+		fileHandle, contents, (DWORD)length, & writtenLength, NULL );
+	bool succeeded = didWrite && writtenLength == (DWORD)length;
+	DWORD writeError = didWrite ? ERROR_WRITE_FAULT : GetLastError();
+	CloseHandle( fileHandle );
+	if ( ! succeeded )
+	{
+		SetSimulatorControlErrnoFromWindowsError( writeError );
+	}
+	int written = succeeded ? length : -1;
 #else
-	write( descriptor, contents, (size_t)length );
+	ssize_t written = write( descriptor, contents, (size_t)length );
 	close( descriptor );
 #endif
+	if ( written != length )
+	{
+		int writeError = errno ? errno : EIO;
+		DeleteSimulatorControlFile( path );
+		errno = writeError;
+		return false;
+	}
+	return true;
+}
+
+static bool
+ReadSimulatorControlFileOwner(
+	const std::string& path, unsigned long& processId )
+{
+	std::string contents;
+	if ( ! ReadSimulatorControlFile( path, contents ) )
+	{
+		return false;
+	}
+
+	char *end = NULL;
+	errno = 0;
+	processId = strtoul( contents.c_str(), & end, 10 );
+	return 0 != processId && ERANGE != errno && end &&
+		end != contents.c_str() && ( '\n' == end[0] || '\r' == end[0] );
+}
+
+static void
+ReleaseSimulatorControlDirectory()
+{
+	std::string& ownerPath = GetSimulatorControlOwnerPath();
+	unsigned long ownerProcessId = 0;
+	if ( ! ownerPath.empty() &&
+		ReadSimulatorControlFileOwner( ownerPath, ownerProcessId ) &&
+		ownerProcessId == (unsigned long)GetSimulatorControlProcessId() )
+	{
+		DeleteSimulatorControlFile( ownerPath );
+	}
+	ownerPath.clear();
+}
+
+static bool
+MoveSimulatorControlFileAside( const std::string& path )
+{
+	static unsigned long counter = 0;
+	char suffix[96];
+	snprintf(
+		suffix, sizeof( suffix ), ".stale.%ld.%llu.%lu",
+		GetSimulatorControlProcessId(),
+		GetSimulatorControlMilliseconds(), ++counter );
+	std::string stalePath = path + suffix;
+	if ( 0 != MoveSimulatorControlFile(
+		path, stalePath, false ) )
+	{
+		return false;
+	}
+	DeleteSimulatorControlFile( stalePath );
 	return true;
 }
 
@@ -293,7 +917,7 @@ AcquireSimulatorControlLock(
 		GetSimulatorControlMilliseconds() + timeoutMilliseconds;
 	while ( GetSimulatorControlMilliseconds() < deadline )
 	{
-		if ( CreateSimulatorControlLockFile( lockPath ) )
+		if ( CreateSimulatorControlExclusivePidFile( lockPath ) )
 		{
 			return true;
 		}
@@ -302,10 +926,26 @@ AcquireSimulatorControlLock(
 			error = "unable to create the Simulator control lock";
 			return false;
 		}
-		if ( IsSimulatorControlFileStale( lockPath, 30 ) )
+
+		unsigned long ownerProcessId = 0;
+		if ( ReadSimulatorControlFileOwner( lockPath, ownerProcessId ) )
 		{
-			remove( lockPath.c_str() );
-			continue;
+			if ( ! IsSimulatorControlProcessAlive( ownerProcessId ) )
+			{
+				if ( MoveSimulatorControlFileAside( lockPath ) )
+				{
+					continue;
+				}
+			}
+		}
+		else if ( IsSimulatorControlFileStale( lockPath, 30 ) )
+		{
+			// Preserve compatibility with malformed or pre-owner lock files,
+			// but never steal a valid lock from a process that is still alive.
+			if ( MoveSimulatorControlFileAside( lockPath ) )
+			{
+				continue;
+			}
 		}
 		SleepSimulatorControlMilliseconds( 20 );
 	}
@@ -318,10 +958,28 @@ MakeSimulatorControlAbsolutePath(
 	const std::string& path, std::string& result )
 {
 #ifdef Rtt_WIN_ENV
-	char *absolutePath = _fullpath( NULL, path.c_str(), 0 );
+	std::wstring widePath;
+	if ( ! ConvertSimulatorControlUtf8ToWide( path, widePath ) )
+	{
+		return false;
+	}
+	DWORD requiredLength =
+		GetFullPathNameW( widePath.c_str(), 0, NULL, NULL );
+	if ( 0 == requiredLength )
+	{
+		return false;
+	}
+	std::wstring absolutePath( requiredLength, L'\0' );
+	DWORD writtenLength = GetFullPathNameW(
+		widePath.c_str(), requiredLength, & absolutePath[0], NULL );
+	if ( 0 == writtenLength || writtenLength >= requiredLength )
+	{
+		return false;
+	}
+	absolutePath.resize( writtenLength );
+	return ConvertSimulatorControlWideToUtf8( absolutePath, result );
 #else
 	char *absolutePath = realpath( path.c_str(), NULL );
-#endif
 	if ( ! absolutePath )
 	{
 		return false;
@@ -329,6 +987,35 @@ MakeSimulatorControlAbsolutePath(
 	result.assign( absolutePath );
 	free( absolutePath );
 	return true;
+#endif
+}
+
+static bool
+MakeSimulatorControlAbsoluteOutputPath(
+	const std::string& path, std::string& result )
+{
+	if ( path.empty() )
+	{
+		return false;
+	}
+#ifdef Rtt_WIN_ENV
+	return MakeSimulatorControlAbsolutePath( path, result );
+#else
+	if ( '/' == path[0] )
+	{
+		result = path;
+		return true;
+	}
+	char workingDirectory[PATH_MAX];
+	if ( ! getcwd( workingDirectory, sizeof( workingDirectory ) ) )
+	{
+		return false;
+	}
+	result.assign( workingDirectory );
+	result.push_back( '/' );
+	result.append( path );
+	return true;
+#endif
 }
 
 static void
@@ -384,6 +1071,190 @@ static std::string
 SimulatorControlSuccessResponse( const std::string& jsonResult )
 {
 	return std::string( "{\"ok\":true,\"result\":" ) + jsonResult + "}";
+}
+
+static std::string
+BuildSimulatorControlDiagnostics(
+	const SimulatorControlRuntimeState& state )
+{
+	std::string result( "{\"sessionId\":" );
+	AppendSimulatorControlJsonString( result, state.sessionId );
+	char identity[128];
+	snprintf(
+		identity, sizeof( identity ),
+		",\"generation\":%lu,\"latestRuntimeError\":",
+		state.generation );
+	result.append( identity );
+	if ( ! state.hasDiagnostic )
+	{
+		result.append( "null}" );
+		return result;
+	}
+
+	char metadata[128];
+	snprintf(
+		metadata, sizeof( metadata ),
+		"{\"sequence\":%lu,\"frame\":%lu,\"type\":",
+		state.diagnosticSequence, state.diagnosticFrame );
+	result.append( metadata );
+	AppendSimulatorControlJsonString( result, state.diagnosticType );
+	result.append( ",\"message\":" );
+	AppendSimulatorControlJsonString( result, state.diagnosticMessage );
+	result.append( ",\"stackTrace\":" );
+	AppendSimulatorControlJsonString( result, state.diagnosticStackTrace );
+	result.append(
+		state.diagnosticTruncated ?
+			",\"truncated\":true}}" : ",\"truncated\":false}}" );
+	return result;
+}
+
+static std::string
+BuildSimulatorControlLogs(
+	const SimulatorControlRuntimeState& runtimeState,
+	unsigned long sinceSequence )
+{
+	std::deque< SimulatorControlLogEntry > entries;
+	unsigned long latestSequence = 0;
+	bool droppedEntries = false;
+	{
+		SimulatorControlLogGuard guard( GetSimulatorControlLogMutex() );
+		SimulatorControlLogState& logState = GetSimulatorControlLogState();
+		entries = logState.entries;
+		latestSequence = logState.sequence;
+		droppedEntries = logState.droppedEntries;
+	}
+
+	unsigned long oldestSequence =
+		entries.empty() ? 0 : entries.front().sequence;
+	bool truncated = droppedEntries && oldestSequence > 0 &&
+		sinceSequence < oldestSequence - 1;
+	std::string result( "{\"sessionId\":" );
+	AppendSimulatorControlJsonString( result, runtimeState.sessionId );
+	char information[192];
+	snprintf(
+		information, sizeof( information ),
+		",\"generation\":%lu,\"oldestSequence\":%lu,"
+		"\"latestSequence\":%lu,\"truncated\":%s,\"entries\":[",
+		runtimeState.generation, oldestSequence, latestSequence,
+		truncated ? "true" : "false" );
+	result.append( information );
+
+	bool first = true;
+	bool hasMore = false;
+	for ( std::deque< SimulatorControlLogEntry >::const_iterator iterator =
+			entries.begin(); entries.end() != iterator; iterator++ )
+	{
+		if ( iterator->sequence <= sinceSequence )
+		{
+			continue;
+		}
+
+		std::string serialized;
+		char sequence[64];
+		snprintf(
+			sequence, sizeof( sequence ),
+			"{\"sequence\":%lu,\"message\":", iterator->sequence );
+		serialized.append( sequence );
+		AppendSimulatorControlJsonString( serialized, iterator->message );
+		serialized.push_back( '}' );
+		if ( result.length() + serialized.length() + 40 >
+			kSimulatorControlMaximumResponseSize )
+		{
+			hasMore = true;
+			break;
+		}
+		if ( ! first )
+		{
+			result.push_back( ',' );
+		}
+		result.append( serialized );
+		first = false;
+	}
+	result.append( "],\"hasMore\":" );
+	result.append( hasMore ? "true}" : "false}" );
+	return result;
+}
+
+static bool
+CaptureSimulatorControlScreenshot(
+	Runtime& runtime, const std::string& path,
+	std::string& result, std::string& error )
+{
+	BitmapPaint *paint =
+		runtime.GetDisplay().CaptureSave( NULL, false, NULL );
+	if ( ! paint )
+	{
+		error = "the Simulator could not capture the current screen";
+		return false;
+	}
+
+	PlatformBitmap *bitmap = paint->GetBitmap();
+	if ( ! bitmap )
+	{
+		Rtt_DELETE( paint );
+		error = "the Simulator screenshot did not contain a bitmap";
+		return false;
+	}
+	int width = bitmap->Width();
+	int height = bitmap->Height();
+	Data< const char > pngBytes( runtime.GetAllocator() );
+	runtime.Platform().SaveBitmap( bitmap, pngBytes );
+	Rtt_DELETE( paint );
+	if ( ! pngBytes.GetData() || pngBytes.GetLength() <= 0 )
+	{
+		error = "the Simulator could not encode the screenshot as PNG";
+		return false;
+	}
+
+	std::string contents(
+		pngBytes.GetData(), (size_t)pngBytes.GetLength() );
+	if ( ! WriteSimulatorControlFileAtomically( path, contents ) )
+	{
+		error = "the Simulator could not write the screenshot";
+		return false;
+	}
+
+	result.assign( "{\"path\":" );
+	AppendSimulatorControlJsonString( result, path );
+	char information[128];
+	snprintf(
+		information, sizeof( information ),
+		",\"width\":%d,\"height\":%d,\"bytes\":%ld}",
+		width, height, (long)pngBytes.GetLength() );
+	result.append( information );
+	return true;
+}
+
+static bool
+WriteSimulatorControlSession(
+	SimulatorControlRuntimeState& state )
+{
+	if ( state.sessionWritten )
+	{
+		return true;
+	}
+
+	char session[512];
+	snprintf(
+		session, sizeof( session ),
+		"{\"protocol\":2,\"transport\":\"filesystem\",\"sessionId\":\"%s\","
+		"\"generation\":%lu,\"pid\":%ld,\"requestFile\":\"request\"}",
+		state.sessionId.c_str(), state.generation,
+		GetSimulatorControlProcessId() );
+	state.sessionWritten = WriteSimulatorControlFileAtomically(
+		SimulatorControlPath( state.directory, "session.json" ), session );
+	return state.sessionWritten;
+}
+
+static bool
+WriteSimulatorControlDiagnostics(
+	SimulatorControlRuntimeState& state )
+{
+	state.diagnosticsWritten = WriteSimulatorControlFileAtomically(
+		SimulatorControlPath( state.directory, "diagnostics.json" ),
+		SimulatorControlSuccessResponse(
+			BuildSimulatorControlDiagnostics( state ) ) );
+	return state.diagnosticsWritten;
 }
 
 static void
@@ -937,7 +1808,17 @@ ExecuteSimulatorControlChunk(
 			error = "exec-file path cannot contain a null byte";
 			return false;
 		}
-		status = luaL_loadfile( L, payload.c_str() );
+		std::string code;
+		if ( ! ReadSimulatorControlFile(
+			payload, code, kSimulatorControlMaximumExecFileSize ) )
+		{
+			error =
+				"unable to read exec-file or file exceeded sixteen megabytes";
+			return false;
+		}
+		std::string fileChunkName = "@" + payload;
+		status = luaL_loadbuffer(
+			L, code.data(), code.length(), fileChunkName.c_str() );
 	}
 	else
 	{
@@ -993,21 +1874,32 @@ StripSimulatorControlCarriageReturn( std::string& value )
 static bool
 ParseSimulatorControlRequest(
 	const std::string& contents, std::string& identifier,
-	std::string& command, std::string& payload, std::string& error )
+	std::string& sessionId, std::string& command,
+	std::string& payload, std::string& error )
 {
 	size_t firstLineEnd = contents.find( '\n' );
 	size_t secondLineEnd =
 		std::string::npos == firstLineEnd ? std::string::npos : contents.find( '\n', firstLineEnd + 1 );
-	if ( std::string::npos == firstLineEnd || std::string::npos == secondLineEnd )
+	size_t thirdLineEnd =
+		std::string::npos == secondLineEnd ? std::string::npos : contents.find( '\n', secondLineEnd + 1 );
+	if ( std::string::npos == firstLineEnd ||
+		std::string::npos == secondLineEnd ||
+		std::string::npos == thirdLineEnd )
 	{
-		error = "control request must contain an identifier line and command line";
+		error =
+			"control request must contain identifier, session, and command lines";
 		return false;
 	}
 
 	identifier.assign( contents, 0, firstLineEnd );
-	command.assign( contents, firstLineEnd + 1, secondLineEnd - firstLineEnd - 1 );
-	payload.assign( contents, secondLineEnd + 1, contents.length() - secondLineEnd - 1 );
+	sessionId.assign(
+		contents, firstLineEnd + 1, secondLineEnd - firstLineEnd - 1 );
+	command.assign(
+		contents, secondLineEnd + 1, thirdLineEnd - secondLineEnd - 1 );
+	payload.assign(
+		contents, thirdLineEnd + 1, contents.length() - thirdLineEnd - 1 );
 	StripSimulatorControlCarriageReturn( identifier );
+	StripSimulatorControlCarriageReturn( sessionId );
 	StripSimulatorControlCarriageReturn( command );
 
 	if ( identifier.empty() || identifier.length() > 128 )
@@ -1024,6 +1916,21 @@ ParseSimulatorControlRequest(
 		{
 			error = "control request identifier contains an unsupported character";
 			identifier.clear();
+			return false;
+		}
+	}
+	if ( sessionId.empty() || sessionId.length() > 127 )
+	{
+		error = "control request session ID must contain 1 through 127 characters";
+		return false;
+	}
+	for ( size_t index = 0; index < sessionId.length(); index++ )
+	{
+		char character = sessionId[index];
+		if ( '-' != character && '_' != character &&
+			! isalnum( (unsigned char)character ) )
+		{
+			error = "control request session ID contains an unsupported character";
 			return false;
 		}
 	}
@@ -1100,40 +2007,382 @@ ParseSimulatorControlUnsignedLong(
 	{
 		offset++;
 	}
+	if ( offset >= value.length() ||
+		! isdigit( (unsigned char)value[offset] ) )
+	{
+		return false;
+	}
 
 	char *end = NULL;
+	errno = 0;
 	result = strtoul( value.c_str() + offset, & end, 10 );
-	return end && end != value.c_str() + offset;
+	return ERANGE != errno && end && end != value.c_str() + offset;
+}
+
+static bool
+ParseSimulatorControlJsonString(
+	const std::string& value, const char *key, std::string& result )
+{
+	size_t offset = value.find( key );
+	if ( std::string::npos == offset )
+	{
+		return false;
+	}
+	offset += strlen( key );
+	while ( offset < value.length() && isspace( (unsigned char)value[offset] ) )
+	{
+		offset++;
+	}
+	if ( offset >= value.length() || '"' != value[offset++] )
+	{
+		return false;
+	}
+
+	size_t start = offset;
+	while ( offset < value.length() && '"' != value[offset] )
+	{
+		unsigned char character = (unsigned char)value[offset];
+		if ( '-' != character && '_' != character && ! isalnum( character ) )
+		{
+			return false;
+		}
+		offset++;
+	}
+	if ( offset >= value.length() || start == offset || offset - start > 127 )
+	{
+		return false;
+	}
+	result.assign( value, start, offset - start );
+	return true;
+}
+
+static bool
+ParseSimulatorControlSession(
+	const std::string& value, SimulatorControlSession& result )
+{
+	unsigned long protocol = 0;
+	return ParseSimulatorControlUnsignedLong(
+			value, "\"protocol\":", protocol ) &&
+		2 == protocol &&
+		ParseSimulatorControlUnsignedLong(
+			value, "\"generation\":", result.generation ) &&
+		ParseSimulatorControlUnsignedLong(
+			value, "\"pid\":", result.processId ) &&
+		ParseSimulatorControlJsonString(
+			value, "\"sessionId\":", result.sessionId );
+}
+
+static bool
+ReadSimulatorControlSession(
+	const std::string& directory, SimulatorControlSession& result )
+{
+	std::string contents;
+	return ReadSimulatorControlFile(
+			SimulatorControlPath( directory, "session.json" ), contents ) &&
+		ParseSimulatorControlSession( contents, result );
+}
+
+static bool
+IsSimulatorControlProtocolFilename( const char *filename )
+{
+	if ( ! filename || ! filename[0] )
+	{
+		return false;
+	}
+	if ( 0 == strcmp( filename, "session.json" ) ||
+		0 == strcmp( filename, "session.json.tmp" ) ||
+		0 == strcmp( filename, "diagnostics.json" ) ||
+		0 == strcmp( filename, "diagnostics.json.tmp" ) ||
+		0 == strcmp( filename, "screenshot.png" ) ||
+		0 == strcmp( filename, "screenshot.png.tmp" ) ||
+		0 == strcmp( filename, "request" ) ||
+		0 == strcmp( filename, "request.tmp" ) ||
+		0 == strcmp( filename, ".simulator-control.lock" ) )
+	{
+		return true;
+	}
+	if ( 0 == strncmp(
+			filename, ".simulator-control.lock.stale.",
+			strlen( ".simulator-control.lock.stale." ) ) ||
+		0 == strncmp(
+			filename, ".simulator-control.owner.stale.",
+			strlen( ".simulator-control.owner.stale." ) ) )
+	{
+		return true;
+	}
+	if ( 0 == strncmp(
+		filename, "request.processing.", strlen( "request.processing." ) ) )
+	{
+		const char *generation = filename + strlen( "request.processing." );
+		if ( ! generation[0] )
+		{
+			return false;
+		}
+		while ( generation[0] )
+		{
+			if ( ! isdigit( (unsigned char)generation[0] ) )
+			{
+				return false;
+			}
+			generation++;
+		}
+		return true;
+	}
+	if ( 0 != strncmp( filename, "response.", strlen( "response." ) ) )
+	{
+		return false;
+	}
+
+	const char *identifier = filename + strlen( "response." );
+	const char *suffix = strstr( identifier, ".json" );
+	if ( ! suffix || suffix == identifier ||
+		( suffix[5] && 0 != strcmp( suffix + 5, ".tmp" ) ) )
+	{
+		return false;
+	}
+	while ( identifier < suffix )
+	{
+		if ( '-' != identifier[0] && '_' != identifier[0] &&
+			! isalnum( (unsigned char)identifier[0] ) )
+		{
+			return false;
+		}
+		identifier++;
+	}
+	return true;
+}
+
+static bool
+CleanupSimulatorControlDirectory( const std::string& directory )
+{
+	bool succeeded = true;
+#ifdef Rtt_WIN_ENV
+	std::string pattern = SimulatorControlPath( directory, "*" );
+	std::wstring widePattern;
+	if ( ! ConvertSimulatorControlUtf8ToWide( pattern, widePattern ) )
+	{
+		return false;
+	}
+	WIN32_FIND_DATAW information;
+	HANDLE findHandle =
+		FindFirstFileW( widePattern.c_str(), & information );
+	if ( INVALID_HANDLE_VALUE == findHandle )
+	{
+		return ERROR_FILE_NOT_FOUND == GetLastError();
+	}
+	do
+	{
+		std::string filename;
+		if ( ConvertSimulatorControlWideToUtf8(
+				information.cFileName, filename ) &&
+			IsSimulatorControlProtocolFilename( filename.c_str() ) &&
+			0 != DeleteSimulatorControlFile(
+				SimulatorControlPath(
+					directory, filename.c_str() ) ) )
+		{
+			succeeded = false;
+		}
+	}
+	while ( FindNextFileW( findHandle, & information ) );
+	FindClose( findHandle );
+#else
+	DIR *directoryHandle = opendir( directory.c_str() );
+	if ( ! directoryHandle )
+	{
+		return false;
+	}
+	struct dirent *entry = NULL;
+	while ( NULL != ( entry = readdir( directoryHandle ) ) )
+	{
+		if ( IsSimulatorControlProtocolFilename( entry->d_name ) &&
+			0 != DeleteSimulatorControlFile(
+				SimulatorControlPath(
+					directory, entry->d_name ) ) )
+		{
+			succeeded = false;
+		}
+	}
+	closedir( directoryHandle );
+#endif
+	return succeeded;
+}
+
+static bool
+PrepareSimulatorControlDirectory(
+	const std::string& directory, std::string& error )
+{
+	std::string ownerPath =
+		SimulatorControlPath( directory, ".simulator-control.owner" );
+	while ( ! CreateSimulatorControlExclusivePidFile( ownerPath ) )
+	{
+		if ( EEXIST != errno )
+		{
+			error = "unable to claim the Simulator control directory";
+			return false;
+		}
+
+		unsigned long ownerProcessId = 0;
+		if ( ReadSimulatorControlFileOwner( ownerPath, ownerProcessId ) )
+		{
+			if ( IsSimulatorControlProcessAlive( ownerProcessId ) )
+			{
+				char message[192];
+				snprintf(
+					message, sizeof( message ),
+					"control directory is already owned by live process %lu",
+					ownerProcessId );
+				error.assign( message );
+				return false;
+			}
+			if ( ! MoveSimulatorControlFileAside( ownerPath ) &&
+				SimulatorControlFileExists( ownerPath ) )
+			{
+				error = "unable to remove stale Simulator control ownership";
+				return false;
+			}
+			continue;
+		}
+		if ( IsSimulatorControlFileStale( ownerPath, 30 ) )
+		{
+			if ( ! MoveSimulatorControlFileAside( ownerPath ) &&
+				SimulatorControlFileExists( ownerPath ) )
+			{
+				error = "unable to remove stale Simulator control ownership";
+				return false;
+			}
+			continue;
+		}
+
+		error = "control directory has an unreadable active ownership file";
+		return false;
+	}
+
+	std::string existingSession;
+	if ( ReadSimulatorControlFile(
+		SimulatorControlPath( directory, "session.json" ), existingSession ) )
+	{
+		unsigned long ownerProcessId = 0;
+		if ( ParseSimulatorControlUnsignedLong(
+				existingSession, "\"pid\":", ownerProcessId ) &&
+			IsSimulatorControlProcessAlive( ownerProcessId ) )
+		{
+			char message[192];
+			snprintf(
+				message, sizeof( message ),
+				"control directory is already owned by live process %lu",
+				ownerProcessId );
+			error.assign( message );
+			DeleteSimulatorControlFile( ownerPath );
+			return false;
+		}
+	}
+
+	if ( ! CleanupSimulatorControlDirectory( directory ) )
+	{
+		error = "unable to clean stale Simulator control files";
+		DeleteSimulatorControlFile( ownerPath );
+		return false;
+	}
+	return true;
 }
 
 static bool
 WaitForSimulatorControlSession(
 	const std::string& directory, unsigned long timeoutMilliseconds,
-	bool requireNewGeneration, unsigned long previousGeneration,
-	unsigned long& generation, std::string& error )
+	bool requireNewSession, const std::string& previousSessionId,
+	SimulatorControlSession& session, std::string& error )
 {
 	std::string sessionPath = SimulatorControlPath( directory, "session.json" );
 	unsigned long long deadline =
 		GetSimulatorControlMilliseconds() + timeoutMilliseconds;
+	bool foundExitedProcess = false;
+	bool foundIncompatibleSession = false;
 	while ( GetSimulatorControlMilliseconds() < deadline )
 	{
-		std::string session;
-		unsigned long candidateGeneration = 0;
-		if ( ReadSimulatorControlFile( sessionPath, session ) &&
-			std::string::npos != session.find( "\"protocol\":1" ) &&
-			ParseSimulatorControlUnsignedLong(
-				session, "\"generation\":", candidateGeneration ) &&
-			( ! requireNewGeneration || candidateGeneration != previousGeneration ) )
+		std::string contents;
+		if ( ReadSimulatorControlFile( sessionPath, contents ) )
 		{
-			generation = candidateGeneration;
-			return true;
+			SimulatorControlSession candidate;
+			if ( ParseSimulatorControlSession( contents, candidate ) )
+			{
+				if ( IsSimulatorControlProcessAlive( candidate.processId ) )
+				{
+					if ( ! requireNewSession ||
+						candidate.sessionId != previousSessionId )
+					{
+						session = candidate;
+						return true;
+					}
+				}
+				else
+				{
+					foundExitedProcess = true;
+				}
+			}
+			else
+			{
+				foundIncompatibleSession = true;
+			}
 		}
 		SleepSimulatorControlMilliseconds( 20 );
 	}
 
-	error = requireNewGeneration ?
-		"the Simulator accepted relaunch but its replacement Lua runtime did not become ready" :
-		"no ready Simulator control session was found";
+	if ( requireNewSession )
+	{
+		error =
+			"the Simulator accepted relaunch but its replacement Lua runtime "
+			"did not become ready";
+	}
+	else if ( foundExitedProcess )
+	{
+		error =
+			"the Simulator control session belongs to a process that is no "
+			"longer running";
+	}
+	else if ( foundIncompatibleSession )
+	{
+		error = "no compatible Simulator control session was found";
+	}
+	else
+	{
+		error = "no ready Simulator control session was found";
+	}
+	return false;
+}
+
+static bool
+WaitForSimulatorControlDiagnostics(
+	const std::string& directory,
+	const SimulatorControlSession& session,
+	unsigned long timeoutMilliseconds,
+	std::string& response, std::string& error )
+{
+	std::string diagnosticsPath =
+		SimulatorControlPath( directory, "diagnostics.json" );
+	unsigned long long deadline =
+		GetSimulatorControlMilliseconds() + timeoutMilliseconds;
+	while ( GetSimulatorControlMilliseconds() < deadline )
+	{
+		std::string contents;
+		std::string sessionId;
+		if ( ReadSimulatorControlFile( diagnosticsPath, contents ) &&
+			ParseSimulatorControlJsonString(
+				contents, "\"sessionId\":", sessionId ) &&
+			sessionId == session.sessionId )
+		{
+			response = contents;
+			return true;
+		}
+		if ( ! IsSimulatorControlProcessAlive( session.processId ) )
+		{
+			error =
+				"the Simulator exited before diagnostics could be read";
+			return false;
+		}
+		SleepSimulatorControlMilliseconds( 20 );
+	}
+
+	error = "the Simulator did not publish diagnostics before the timeout";
 	return false;
 }
 
@@ -1146,9 +2395,13 @@ class SimulatorControlClientLock
 
 		~SimulatorControlClientLock()
 		{
-			if ( ! fPath.empty() )
+			unsigned long ownerProcessId = 0;
+			if ( ! fPath.empty() &&
+				ReadSimulatorControlFileOwner( fPath, ownerProcessId ) &&
+				ownerProcessId ==
+					(unsigned long)GetSimulatorControlProcessId() )
 			{
-				remove( fPath.c_str() );
+				DeleteSimulatorControlFile( fPath );
 			}
 		}
 
@@ -1156,8 +2409,14 @@ class SimulatorControlClientLock
 			const std::string& directory, unsigned long timeoutMilliseconds,
 			std::string& error )
 		{
-			return AcquireSimulatorControlLock(
-				directory, timeoutMilliseconds, fPath, error );
+			std::string path;
+			if ( ! AcquireSimulatorControlLock(
+				directory, timeoutMilliseconds, path, error ) )
+			{
+				return false;
+			}
+			fPath = path;
+			return true;
 		}
 
 	private:
@@ -1170,16 +2429,33 @@ PerformSimulatorControlClientRequest(
 	const std::string& payload, unsigned long timeoutMilliseconds,
 	std::string& response, std::string& error )
 {
-	unsigned long generation = 0;
+	SimulatorControlSession session;
 	if ( ! WaitForSimulatorControlSession(
-		directory, timeoutMilliseconds, false, 0, generation, error ) )
+		directory, timeoutMilliseconds, false, std::string(), session, error ) )
 	{
 		return false;
+	}
+
+	if ( "diagnostics" == command )
+	{
+		return WaitForSimulatorControlDiagnostics(
+			directory, session, timeoutMilliseconds,
+			response, error );
 	}
 
 	SimulatorControlClientLock lock;
 	if ( ! lock.Acquire( directory, timeoutMilliseconds, error ) )
 	{
+		return false;
+	}
+
+	SimulatorControlSession lockedSession;
+	if ( ! ReadSimulatorControlSession( directory, lockedSession ) ||
+		lockedSession.sessionId != session.sessionId ||
+		lockedSession.processId != session.processId ||
+		! IsSimulatorControlProcessAlive( lockedSession.processId ) )
+	{
+		error = "the Simulator control session changed before the request was sent";
 		return false;
 	}
 
@@ -1198,9 +2474,11 @@ PerformSimulatorControlClientRequest(
 		++requestCounter );
 	std::string responsePath = SimulatorControlPath(
 		directory, ( std::string( "response." ) + identifier + ".json" ).c_str() );
-	remove( responsePath.c_str() );
+	DeleteSimulatorControlFile( responsePath );
 
 	std::string request( identifier );
+	request.push_back( '\n' );
+	request.append( session.sessionId );
 	request.push_back( '\n' );
 	request.append( command );
 	request.push_back( '\n' );
@@ -1217,14 +2495,14 @@ PerformSimulatorControlClientRequest(
 	{
 		if ( ReadSimulatorControlFile( responsePath, response ) )
 		{
-			remove( responsePath.c_str() );
+			DeleteSimulatorControlFile( responsePath );
 			if ( "relaunch" == command &&
 				0 == response.compare( 0, 10, "{\"ok\":true" ) )
 			{
-				unsigned long newGeneration = 0;
+				SimulatorControlSession replacementSession;
 				if ( ! WaitForSimulatorControlSession(
-					directory, timeoutMilliseconds, true, generation,
-					newGeneration, error ) )
+					directory, timeoutMilliseconds, true, session.sessionId,
+					replacementSession, error ) )
 				{
 					return false;
 				}
@@ -1234,7 +2512,7 @@ PerformSimulatorControlClientRequest(
 		SleepSimulatorControlMilliseconds( 10 );
 	}
 
-	remove( requestPath.c_str() );
+	DeleteSimulatorControlFile( requestPath );
 	error = "the Simulator did not answer the control request before the timeout";
 	return false;
 }
@@ -1289,9 +2567,12 @@ PrintSimulatorControlClientHelp()
 		"  Corona Simulator -simulator-control-dir DIR "
 			"-simulator-control [--timeout SECONDS] COMMAND [ARGUMENTS]\n"
 		"\n"
-		"Commands:\n"
-		"  status\n"
-		"  eval [LUA EXPRESSION]\n"
+			"Commands:\n"
+			"  status\n"
+			"  diagnostics\n"
+			"  logs [--since SEQUENCE]\n"
+			"  screenshot [PATH]\n"
+			"  eval [LUA EXPRESSION]\n"
 		"  exec [LUA STATEMENTS]\n"
 		"  exec-file PATH\n"
 		"  inspect PATH [--cursor OFFSET]\n"
@@ -1387,13 +2668,84 @@ RunSimulatorControlClientInternal(
 
 	std::string command( argv[argumentIndex++] );
 	std::string payload;
-	if ( "status" == command || "relaunch" == command )
+	if ( "status" == command ||
+		"diagnostics" == command ||
+		"relaunch" == command )
 	{
 		if ( argumentIndex != argc )
 		{
 			fprintf(
 				stderr, "Simulator control: %s does not accept arguments\n",
 				command.c_str() );
+			return true;
+		}
+	}
+	else if ( "logs" == command )
+	{
+		payload.assign( "0" );
+		if ( argumentIndex < argc )
+		{
+			if ( argumentIndex + 2 != argc ||
+				( ! IsSimulatorControlArgument(
+					argv[argumentIndex], "--since" ) &&
+					! IsSimulatorControlArgument(
+						argv[argumentIndex], "-since" ) ) )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: logs accepts only --since SEQUENCE\n" );
+				return true;
+			}
+			const char *sequence = argv[argumentIndex + 1];
+			if ( ! sequence[0] )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: logs sequence must be non-negative\n" );
+				return true;
+			}
+			for ( const char *character = sequence; *character; character++ )
+			{
+				if ( ! isdigit( (unsigned char)*character ) )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: logs sequence must be non-negative\n" );
+					return true;
+				}
+			}
+			errno = 0;
+			char *sequenceEnd = NULL;
+			strtoul( sequence, & sequenceEnd, 10 );
+			if ( ERANGE == errno || ! sequenceEnd || sequenceEnd[0] )
+			{
+				fprintf(
+					stderr, "Simulator control: logs sequence is too large\n" );
+				return true;
+			}
+			payload.assign( sequence );
+		}
+	}
+	else if ( "screenshot" == command )
+	{
+		if ( argumentIndex + 1 < argc )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: screenshot accepts at most one path\n" );
+			return true;
+		}
+		const char *path = argumentIndex < argc ?
+			argv[argumentIndex] : "screenshot.png";
+		std::string outputPath = argumentIndex < argc ?
+			std::string( path ) :
+			SimulatorControlPath( directory, path );
+		if ( ! MakeSimulatorControlAbsoluteOutputPath(
+			outputPath, payload ) )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: screenshot expects a valid output path\n" );
 			return true;
 		}
 	}
@@ -1551,22 +2903,18 @@ RunSimulatorControlClientInternal(
 
 static std::string
 ProcessSimulatorControlRequest(
-	Runtime& runtime, const SimulatorControlRuntimeState& state,
+	Runtime& runtime, SimulatorControlRuntimeState& state,
 	const std::string& command, const std::string& payload, int& pendingQuitExitCode )
 {
-	lua_State *L = runtime.VMContext().L();
-	if ( ! L )
-	{
-		return SimulatorControlErrorResponse( "the Lua runtime is not available" );
-	}
-
 	if ( "status" == command )
 	{
-		char result[320];
+		char result[512];
 		snprintf(
 			result, sizeof( result ),
-			"{\"protocol\":1,\"generation\":%lu,\"pid\":%ld,\"frame\":%lu,"
+			"{\"protocol\":2,\"sessionId\":\"%s\",\"generation\":%lu,"
+			"\"pid\":%ld,\"frame\":%lu,"
 			"\"applicationLoaded\":%s,\"applicationExecuting\":%s,\"suspended\":%s}",
+			state.sessionId.c_str(),
 			state.generation,
 			GetSimulatorControlProcessId(),
 			(unsigned long)runtime.GetFrame(),
@@ -1574,6 +2922,58 @@ ProcessSimulatorControlRequest(
 			runtime.IsProperty( Runtime::kIsApplicationExecuting ) ? "true" : "false",
 			runtime.IsSuspended() ? "true" : "false" );
 		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "diagnostics" == command )
+	{
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlDiagnostics( state ) );
+	}
+
+	if ( "logs" == command )
+	{
+		if ( payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"logs expects a non-negative sequence" );
+		}
+		for ( size_t index = 0; index < payload.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)payload[index] ) )
+			{
+				return SimulatorControlErrorResponse(
+					"logs expects a non-negative sequence" );
+			}
+		}
+		errno = 0;
+		char *sequenceEnd = NULL;
+		unsigned long sinceSequence =
+			strtoul( payload.c_str(), & sequenceEnd, 10 );
+		if ( ERANGE == errno || ! sequenceEnd || sequenceEnd[0] )
+		{
+			return SimulatorControlErrorResponse(
+				"logs sequence is too large" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlLogs( state, sinceSequence ) );
+	}
+
+	if ( "screenshot" == command )
+	{
+		std::string result;
+		std::string error;
+		if ( ! CaptureSimulatorControlScreenshot(
+			runtime, payload, result, error ) )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	lua_State *L = runtime.VMContext().L();
+	if ( ! L )
+	{
+		return SimulatorControlErrorResponse( "the Lua runtime is not available" );
 	}
 
 	if ( "eval" == command || "exec" == command || "exec-file" == command )
@@ -1592,6 +2992,9 @@ ProcessSimulatorControlRequest(
 		if ( ! ExecuteSimulatorControlChunk(
 			L, payload, chunkName, isExpression, isFile, jsonResult, error ) )
 		{
+			RecordSimulatorControlExecutionDiagnostic(
+				runtime, state, error );
+			WriteSimulatorControlDiagnostics( state );
 			return SimulatorControlErrorResponse( error );
 		}
 		return SimulatorControlSuccessResponse( jsonResult );
@@ -1669,40 +3072,59 @@ ProcessSimulatorControlRequest(
 void
 SimulatorControl::SetDirectory( const char *directory )
 {
-	GetSimulatorControlDirectory() = directory ? directory : "";
+	Rtt_SetLogCallback( NULL, NULL );
+	ResetSimulatorControlLogs();
+	std::string& configuredDirectory = GetSimulatorControlDirectory();
+	configuredDirectory.clear();
+	if ( ! directory || ! directory[0] )
+	{
+		return;
+	}
+
+	std::string value( directory );
+	std::string error;
+	if ( ! SimulatorControlDirectoryExists( value ) )
+	{
+		error = "control directory does not exist";
+	}
+	else if ( PrepareSimulatorControlDirectory( value, error ) )
+	{
+		configuredDirectory = value;
+		GetSimulatorControlOwnerPath() =
+			SimulatorControlPath( value, ".simulator-control.owner" );
+		static bool registeredExitHandler = false;
+		if ( ! registeredExitHandler )
+		{
+			registeredExitHandler =
+				0 == atexit( ReleaseSimulatorControlDirectory );
+		}
+		Rtt_SetLogCallback( RecordSimulatorControlLog, NULL );
+		return;
+	}
+
+	fprintf(
+		stderr, "Simulator control disabled: %s: %s\n",
+		error.c_str(), directory );
 }
 
 void
 SimulatorControl::Process( Runtime& sender )
 {
-	const std::string& directory = GetSimulatorControlDirectory();
-	if ( directory.empty() )
+	SimulatorControlRuntimeState *statePointer =
+		GetOrCreateSimulatorControlRuntimeState( sender );
+	if ( ! statePointer )
 	{
 		return;
 	}
-
-	SimulatorControlRuntimeStateMap& states = GetSimulatorControlRuntimeStates();
-	SimulatorControlRuntimeStateMap::iterator iterator = states.find( & sender );
-	if ( states.end() == iterator )
-	{
-		SimulatorControlRuntimeState state;
-		state.directory = directory;
-		state.generation = NextSimulatorControlGeneration();
-		iterator = states.insert(
-			std::make_pair( (const Runtime*)& sender, state ) ).first;
-	}
-	SimulatorControlRuntimeState& state = iterator->second;
+	SimulatorControlRuntimeState& state = *statePointer;
 
 	if ( ! state.sessionWritten )
 	{
-		char session[512];
-		snprintf(
-			session, sizeof( session ),
-			"{\"protocol\":1,\"transport\":\"filesystem\",\"generation\":%lu,"
-			"\"pid\":%ld,\"requestFile\":\"request\"}",
-			state.generation, GetSimulatorControlProcessId() );
-		state.sessionWritten = WriteSimulatorControlFileAtomically(
-			SimulatorControlPath( state.directory, "session.json" ), session );
+		WriteSimulatorControlSession( state );
+	}
+	if ( state.sessionWritten && ! state.diagnosticsWritten )
+	{
+		WriteSimulatorControlDiagnostics( state );
 	}
 
 	std::string requestPath = SimulatorControlPath( state.directory, "request" );
@@ -1713,17 +3135,19 @@ SimulatorControl::Process( Runtime& sender )
 		state.generation );
 	std::string processingPath =
 		SimulatorControlPath( state.directory, processingFilename );
-	remove( processingPath.c_str() );
-	if ( 0 != rename( requestPath.c_str(), processingPath.c_str() ) )
+	DeleteSimulatorControlFile( processingPath );
+	if ( 0 != MoveSimulatorControlFile(
+		requestPath, processingPath, true ) )
 	{
 		return;
 	}
 
 	std::string contents;
 	bool didRead = ReadSimulatorControlFile( processingPath, contents );
-	remove( processingPath.c_str() );
+	DeleteSimulatorControlFile( processingPath );
 
 	std::string identifier;
+	std::string requestSessionId;
 	std::string command;
 	std::string payload;
 	std::string error;
@@ -1735,9 +3159,14 @@ SimulatorControl::Process( Runtime& sender )
 			"unable to read control request or request exceeded one megabyte" );
 	}
 	else if ( ! ParseSimulatorControlRequest(
-		contents, identifier, command, payload, error ) )
+		contents, identifier, requestSessionId, command, payload, error ) )
 	{
 		response = SimulatorControlErrorResponse( error );
+	}
+	else if ( requestSessionId != state.sessionId )
+	{
+		response = SimulatorControlErrorResponse(
+			"control request belongs to a different Simulator session" );
 	}
 	else
 	{
@@ -1764,6 +3193,22 @@ SimulatorControl::Process( Runtime& sender )
 }
 
 void
+SimulatorControl::RecordRuntimeError(
+	Runtime& sender, const char *errorType,
+	const char *message, const char *stackTrace )
+{
+	SimulatorControlRuntimeState *state =
+		GetOrCreateSimulatorControlRuntimeState( sender );
+	if ( state )
+	{
+		RecordSimulatorControlDiagnostic(
+			sender, *state, errorType, message, stackTrace );
+		WriteSimulatorControlSession( *state );
+		WriteSimulatorControlDiagnostics( *state );
+	}
+}
+
+void
 SimulatorControl::Shutdown( Runtime& sender )
 {
 	SimulatorControlRuntimeStateMap& states = GetSimulatorControlRuntimeStates();
@@ -1773,7 +3218,30 @@ SimulatorControl::Shutdown( Runtime& sender )
 		return;
 	}
 
-	remove( SimulatorControlPath( iterator->second.directory, "session.json" ).c_str() );
+	SimulatorControlSession currentSession;
+	if ( ReadSimulatorControlSession(
+			iterator->second.directory, currentSession ) &&
+		currentSession.sessionId == iterator->second.sessionId &&
+		currentSession.processId ==
+			(unsigned long)GetSimulatorControlProcessId() )
+	{
+		DeleteSimulatorControlFile(
+			SimulatorControlPath(
+				iterator->second.directory, "session.json" ) );
+		std::string diagnostics;
+		std::string diagnosticsSessionId;
+		std::string diagnosticsPath =
+			SimulatorControlPath(
+				iterator->second.directory, "diagnostics.json" );
+		if ( ReadSimulatorControlFile( diagnosticsPath, diagnostics ) &&
+			ParseSimulatorControlJsonString(
+				diagnostics, "\"sessionId\":",
+				diagnosticsSessionId ) &&
+			diagnosticsSessionId == iterator->second.sessionId )
+		{
+			DeleteSimulatorControlFile( diagnosticsPath );
+		}
+	}
 	states.erase( iterator );
 }
 

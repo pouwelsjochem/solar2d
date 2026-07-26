@@ -30,6 +30,9 @@ Run the same native executable in control-client mode from another terminal:
 
 ```sh
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control status
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control diagnostics
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control logs
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control screenshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control eval 'player.score'
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control inspect player
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control exec 'player.score = player.score + 100'
@@ -42,6 +45,14 @@ Run the same native executable in control-client mode from another terminal:
 executes statements. Either command reads standard input when its code argument
 is omitted. `exec-file` loads a file into the current Lua runtime; it does not
 add a module or require project changes.
+
+`diagnostics` returns the most recent Lua or control-command error, including
+its type, message, stack trace, frame, and sequence number. Its
+`latestRuntimeError` value is `null` if no error has occurred.
+
+`logs` returns recent Simulator log messages. Pass `--since SEQUENCE` to return
+only newer messages. `screenshot` writes the current frame to a PNG in the
+control directory, or to an optional output path.
 
 `inspect` is read-only. It accepts paths such as `player.inventory[1]` and
 `settings["audio"]`, uses raw table access, and never invokes metamethods. A
