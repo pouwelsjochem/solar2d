@@ -242,7 +242,10 @@ TextureFactory::FindOrCreate(
 	if ( result.IsNull() )
 	{
 		PlatformBitmap *bitmap = CreateBitmap( filePath.GetString(), flags, isMask );
-		result = CreateAndAdd( key, bitmap, true );
+		if ( bitmap )
+		{
+			result = CreateAndAdd( key, bitmap, true );
+		}
 	}
 
 	return result;
@@ -617,4 +620,3 @@ void TextureFactory::UpdateTextures(Renderer &renderer)
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

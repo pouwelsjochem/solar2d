@@ -17,9 +17,14 @@
 
 namespace bitmapUtil
 {
+	void pngErrorHandler(png_structp png_ptr, png_const_charp)
+	{
+		longjmp(png_jmpbuf(png_ptr), 1);
+	}
+
 	uint8_t* loadPNG(FILE* fp, int& w, int& h)
 	{
-		png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+		png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, pngErrorHandler, NULL);
 		if (png == NULL)
 		{
 			return NULL;
@@ -28,11 +33,13 @@ namespace bitmapUtil
 		png_infop info = png_create_info_struct(png);
 		if (info == NULL)
 		{
+			png_destroy_read_struct(&png, NULL, NULL);
 			return NULL;
 		}
 
 		if (setjmp(png_jmpbuf(png)))
 		{
+			png_destroy_read_struct(&png, &info, NULL);
 			return NULL;
 		}
 
@@ -186,4 +193,3 @@ namespace bitmapUtil
 		return png_buffer.buffer;
 	}
 }
-
