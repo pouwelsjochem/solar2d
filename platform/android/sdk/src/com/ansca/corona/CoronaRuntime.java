@@ -294,13 +294,11 @@ public class CoronaRuntime {
 			fLuaState.pushString(main);
 			fLuaState.rawSet(-2, i++);
 		}
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-			String[] splits = ai.splitSourceDirs;
-			if (splits != null) {
-				for (String split : splits) {
-					fLuaState.pushString(split);
-					fLuaState.rawSet(-2, i++);
-				}
+		String[] splits = ai.splitSourceDirs;
+		if (splits != null) {
+			for (String split : splits) {
+				fLuaState.pushString(split);
+				fLuaState.rawSet(-2, i++);
 			}
 		}
 		fLuaState.pushString(android.os.Build.CPU_ABI); // despite promise, SUPPORTED_ABIS[0] is not what we want

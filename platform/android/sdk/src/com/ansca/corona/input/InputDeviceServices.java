@@ -340,14 +340,6 @@ public final class InputDeviceServices extends com.ansca.corona.ApplicationConte
 												deviceInfo.getType(), deviceInfo.getDisplayName());
 				}
 
-				// If still not found, then attempt to fetch a disconnected device having the same display name.
-				// Note: This is needed on Android 4.0 and older systems where Android does not assign devices
-				//       a permanent string ID. Devices that are disconnected and re-connected are assigned
-				//       new Android device IDs. So, we assume the last disconnected device is the same device.
-				if ((deviceInterface == null) && (android.os.Build.VERSION.SDK_INT < 16)) {
-					deviceInterface = sDeviceCollection.getBy(ConnectionState.DISCONNECTED).getByTypeAndDisplayName(
-												deviceInfo.getType(), deviceInfo.getDisplayName());
-				}
 			}
 			if (deviceInterface != null) {
 				deviceContext = deviceInterface.getContext();
@@ -629,7 +621,7 @@ public final class InputDeviceServices extends com.ansca.corona.ApplicationConte
 			}
 
 			// Vibrate the input device, if supported.
-			if ((android.os.Build.VERSION.SDK_INT >= 16) && context.getDeviceInfo().hasAndroidDeviceId()) {
+			if (context.getDeviceInfo().hasAndroidDeviceId()) {
 				ApiLevel16.vibrateInputDeviceUsing(context.getDeviceInfo().getAndroidDeviceId(), settings);
 			}
 		}

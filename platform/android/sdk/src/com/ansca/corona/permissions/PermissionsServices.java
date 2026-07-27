@@ -642,20 +642,14 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 				// Phone group
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_PHONE_STATE, PermissionGroup.PHONE);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.CALL_PHONE, PermissionGroup.PHONE);
-				// Exclude these permissions from the Phone group if they don't exist on the API Level of the device we're running on.
-				if (android.os.Build.VERSION.SDK_INT >= 16) {
-					sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_CALL_LOG, PermissionGroup.PHONE);
-					sMarshmallowPermissionToPermissionGroupMap.put(Permission.WRITE_CALL_LOG, PermissionGroup.PHONE);
-				}
+				sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_CALL_LOG, PermissionGroup.PHONE);
+				sMarshmallowPermissionToPermissionGroupMap.put(Permission.WRITE_CALL_LOG, PermissionGroup.PHONE);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.ADD_VOICEMAIL, PermissionGroup.PHONE);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.USE_SIP, PermissionGroup.PHONE);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.PROCESS_OUTGOING_CALLS, PermissionGroup.PHONE);
 
 				// Body Sensors group
-				// Exclude these permissions from the Body Sensors group if they don't exist on the API Level of the device we're running on.
-				if (android.os.Build.VERSION.SDK_INT >= 20) {
-					sMarshmallowPermissionToPermissionGroupMap.put(Permission.BODY_SENSORS, PermissionGroup.SENSORS);
-				}
+				sMarshmallowPermissionToPermissionGroupMap.put(Permission.BODY_SENSORS, PermissionGroup.SENSORS);
 
 				// SMS group
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.SEND_SMS, PermissionGroup.SMS);
@@ -663,16 +657,11 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_SMS, PermissionGroup.SMS);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.RECEIVE_WAP_PUSH, PermissionGroup.SMS);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.RECEIVE_MMS, PermissionGroup.SMS);
-				if (android.os.Build.VERSION.SDK_INT >= 16) {
-					// WARNING: This permission is hidden in the Android source code!
-					sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_CELL_BROADCASTS, PermissionGroup.SMS);
-				}
+				// WARNING: This permission is hidden in the Android source code!
+				sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_CELL_BROADCASTS, PermissionGroup.SMS);
 
 				// Storage group
-				// Exclude these permissions from the Storage group if they don't exist on the API Level of the device we're running on.
-				if (android.os.Build.VERSION.SDK_INT >= 16) {
-					sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_EXTERNAL_STORAGE, PermissionGroup.STORAGE);
-				}
+				sMarshmallowPermissionToPermissionGroupMap.put(Permission.READ_EXTERNAL_STORAGE, PermissionGroup.STORAGE);
 				sMarshmallowPermissionToPermissionGroupMap.put(Permission.WRITE_EXTERNAL_STORAGE, PermissionGroup.STORAGE);
 			}
 			if (sMarshmallowPermissionGroupToPermissionsMap.isEmpty()) {
@@ -711,21 +700,17 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 					sMarshmallowPermissionGroupToPermissionsMap.get(PermissionGroup.PHONE);
 				phoneGroupPermissions.add(Permission.READ_PHONE_STATE);
 				phoneGroupPermissions.add(Permission.CALL_PHONE);
-				if (android.os.Build.VERSION.SDK_INT >= 16) {
-					phoneGroupPermissions.add(Permission.READ_CALL_LOG);
-					phoneGroupPermissions.add(Permission.WRITE_CALL_LOG);
-				}
+				phoneGroupPermissions.add(Permission.READ_CALL_LOG);
+				phoneGroupPermissions.add(Permission.WRITE_CALL_LOG);
 				phoneGroupPermissions.add(Permission.ADD_VOICEMAIL);
 				phoneGroupPermissions.add(Permission.USE_SIP);
 				phoneGroupPermissions.add(Permission.PROCESS_OUTGOING_CALLS);
 
 				// Body Sensors group
-				if (android.os.Build.VERSION.SDK_INT >= 20) {
-					sMarshmallowPermissionGroupToPermissionsMap.put(PermissionGroup.SENSORS, new java.util.ArrayList<String>());
-					java.util.ArrayList<String> sensorsGroupPermissions = 
-						sMarshmallowPermissionGroupToPermissionsMap.get(PermissionGroup.SENSORS);
-					sensorsGroupPermissions.add(Permission.BODY_SENSORS);
-				}
+				sMarshmallowPermissionGroupToPermissionsMap.put(PermissionGroup.SENSORS, new java.util.ArrayList<String>());
+				java.util.ArrayList<String> sensorsGroupPermissions =
+					sMarshmallowPermissionGroupToPermissionsMap.get(PermissionGroup.SENSORS);
+				sensorsGroupPermissions.add(Permission.BODY_SENSORS);
 
 				// SMS group
 				sMarshmallowPermissionGroupToPermissionsMap.put(PermissionGroup.SMS, new java.util.ArrayList<String>());
@@ -736,18 +721,14 @@ public class PermissionsServices extends com.ansca.corona.ApplicationContextProv
 				smsGroupPermissions.add(Permission.READ_SMS);
 				smsGroupPermissions.add(Permission.RECEIVE_WAP_PUSH);
 				smsGroupPermissions.add(Permission.RECEIVE_MMS);
-				if (android.os.Build.VERSION.SDK_INT >= 16) {
-					// WARNING: This permission is hidden in the Android source code!
-					smsGroupPermissions.add(Permission.READ_CELL_BROADCASTS);
-				}
+				// WARNING: This permission is hidden in the Android source code!
+				smsGroupPermissions.add(Permission.READ_CELL_BROADCASTS);
 
 				// Storage group
 				sMarshmallowPermissionGroupToPermissionsMap.put(PermissionGroup.STORAGE, new java.util.ArrayList<String>());
 				java.util.ArrayList<String> storageGroupPermissions = 
 					sMarshmallowPermissionGroupToPermissionsMap.get(PermissionGroup.STORAGE);
-				if (android.os.Build.VERSION.SDK_INT >= 16) {
-					storageGroupPermissions.add(Permission.READ_EXTERNAL_STORAGE);
-				}
+				storageGroupPermissions.add(Permission.READ_EXTERNAL_STORAGE);
 				storageGroupPermissions.add(Permission.WRITE_EXTERNAL_STORAGE);			
 			}
 		}

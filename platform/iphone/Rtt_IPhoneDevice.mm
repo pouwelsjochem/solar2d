@@ -30,6 +30,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CommonCrypto/CommonDigest.h>
+#import <Security/Security.h>
 
 #include <sys/types.h> // for sysctlbyname
 #include <sys/sysctl.h> // for sysctlbyname
@@ -38,6 +39,9 @@
 
 namespace Rtt
 {
+
+static NSString *const kDeviceIdentifierService = @"com.coronalabs.Corona.deviceIdentifier";
+static NSString *const kDeviceIdentifierAccount = @"deviceID";
 
 // ----------------------------------------------------------------------------
 IPhoneDevice::IPhoneDevice( Rtt_Allocator &allocator, CoronaView *view )
@@ -166,10 +170,76 @@ MD5Hash( NSString *value )
 }
 
 static NSString *
+GetPersistedDeviceIdentifier()
+{
+	NSDictionary *query =
+	@{
+		(id)kSecClass: (id)kSecClassGenericPassword,
+		(id)kSecAttrService: kDeviceIdentifierService,
+		(id)kSecAttrAccount: kDeviceIdentifierAccount,
+		(id)kSecAttrSynchronizable: (id)kCFBooleanFalse,
+		(id)kSecReturnData: (id)kCFBooleanTrue,
+		(id)kSecMatchLimit: (id)kSecMatchLimitOne
+	};
+
+	CFTypeRef result = NULL;
+	OSStatus status = SecItemCopyMatching( (CFDictionaryRef)query, &result );
+	if ( ( errSecSuccess != status ) || ! result )
+	{
+		return nil;
+	}
+
+	NSString *identifier = nil;
+	if ( CFDataGetTypeID() == CFGetTypeID( result ) )
+	{
+		identifier = [[[NSString alloc]
+				initWithData:(NSData *)result
+				encoding:NSUTF8StringEncoding] autorelease];
+	}
+	CFRelease( result );
+
+	return [identifier length] > 0 ? identifier : nil;
+}
+
+static void
+PersistDeviceIdentifier( NSString *identifier )
+{
+	if ( [identifier length] <= 0 )
+	{
+		return;
+	}
+
+	NSData *identifierData = [identifier dataUsingEncoding:NSUTF8StringEncoding];
+	if ( ! identifierData )
+	{
+		return;
+	}
+
+	NSDictionary *attributes =
+	@{
+		(id)kSecClass: (id)kSecClassGenericPassword,
+		(id)kSecAttrService: kDeviceIdentifierService,
+		(id)kSecAttrAccount: kDeviceIdentifierAccount,
+		(id)kSecAttrSynchronizable: (id)kCFBooleanFalse,
+		(id)kSecAttrAccessible: (id)kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly,
+		(id)kSecValueData: identifierData
+	};
+	SecItemAdd( (CFDictionaryRef)attributes, NULL );
+}
+
+static NSString *
 GetApprovedIdentifier()
 {
-    // Return the MD5 hash of the identifierForVendor (hashed to make it backwards compatible)
-    return MD5Hash([[[UIDevice currentDevice] identifierForVendor] UUIDString] );
+	NSString *identifier = GetPersistedDeviceIdentifier();
+	if ( [identifier length] > 0 )
+	{
+		return identifier;
+	}
+
+	// Return the MD5 hash of identifierForVendor to remain backwards compatible.
+	identifier = MD5Hash([[[UIDevice currentDevice] identifierForVendor] UUIDString] );
+	PersistDeviceIdentifier( identifier );
+	return identifier;
 }
 
 	

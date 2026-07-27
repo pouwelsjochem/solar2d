@@ -108,8 +108,8 @@ val parsedBuildProperties: JsonObject = run {
     return@run JsonObject(mapOf("buildSettings" to parsedBuildSettingsFile, "packageName" to coronaAppPackage))
 }
 
-extra["minSdkVersion"] = parsedBuildProperties.lookup<Any?>("buildSettings.android.minSdkVersion").firstOrNull()?.toString()?.toIntOrNull()
-        ?: 15
+extra["minSdkVersion"] = parsedBuildProperties.lookup<Any?>("buildSettings.android.minSdkVersion").firstOrNull()?.toString()?.toIntOrNull()?.coerceAtLeast(21)
+        ?: 21
 
 val coronaBuilder = if (windows) {
     "$solar2DBuildToolsDir/Corona/win/bin/CoronaBuilder.exe"
@@ -162,7 +162,6 @@ android {
         minSdk = (extra["minSdkVersion"] as Int)
         versionCode = coronaVersionCode
         versionName = coronaVersionName
-        multiDexEnabled = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -962,6 +961,7 @@ tasks.register<Zip>("createExpansionFile") {
 //</editor-fold>
 
 dependencies {
+    implementation("com.google.android.gms:play-services-auth-blockstore:16.4.0")
     if (coronaBuiltFromSource) {
         implementation(project(":Corona"))
     } else {
@@ -991,5 +991,4 @@ dependencies {
     if (file("../plugin").exists()) {
         implementation(project(":plugin"))
     }
-    implementation("androidx.multidex:multidex:2.0.1")
 }

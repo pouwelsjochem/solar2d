@@ -545,15 +545,11 @@ public class InputDeviceInfo implements Cloneable {
 			deviceInfo.fInputSources.add(deviceType);
 			deviceInfo.fProductName = inputDevice.getName();
 			deviceInfo.fDisplayName = inputDevice.getName();
-			if (android.os.Build.VERSION.SDK_INT >= 16) {
-				deviceInfo.fPermanentStringId = ApiLevel16.getPermanentStringIdFrom(inputDevice);
-				deviceInfo.fCanVibrate = ApiLevel16.isVibrationSupportedFor(inputDevice);
-			}
-			if (android.os.Build.VERSION.SDK_INT >= 19) {
-				deviceInfo.fPlayerNumber = ApiLevel19.getControllerNumberFrom(inputDevice);
-				deviceInfo.fVendorId = ApiLevel19.getVendorIdFrom(inputDevice);
-				deviceInfo.fProductId = ApiLevel19.getProductIdFrom(inputDevice);
-			}
+			deviceInfo.fPermanentStringId = ApiLevel16.getPermanentStringIdFrom(inputDevice);
+			deviceInfo.fCanVibrate = ApiLevel16.isVibrationSupportedFor(inputDevice);
+			deviceInfo.fPlayerNumber = ApiLevel19.getControllerNumberFrom(inputDevice);
+			deviceInfo.fVendorId = ApiLevel19.getVendorIdFrom(inputDevice);
+			deviceInfo.fProductId = ApiLevel19.getProductIdFrom(inputDevice);
 
 			// Return the new device info object.
 			return deviceInfo;

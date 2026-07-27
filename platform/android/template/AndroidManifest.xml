@@ -7,10 +7,10 @@
           >
 	<!--
 	 Set the minimum and target Android API levels here to inform the app store what OS versions this app supports.
-	 Set the "minSdkVersion" to at least API level 15 (aka: Android 4.0.3 "Ice Cream Sandwich") which is the minimum Corona supports.
+	 Set the "minSdkVersion" to at least API level 21 (aka: Android 5.0 "Lollipop") which is the minimum Solar2D supports.
 	 Set the "targetSdkVersion" to the API level that you compile with. Set to a high level to avoid compatibility mode.
 	 -->
-	<uses-sdk android:minSdkVersion="@USER_MIN_SDK_VERSION@" android:targetSdkVersion="27" />
+	<uses-sdk android:minSdkVersion="@USER_MIN_SDK_VERSION@" android:targetSdkVersion="36" />
 	
     @USER_PERMISSIONS@
 
@@ -30,7 +30,6 @@
 	             @USER_LARGE_HEAP@
 	             @USER_IS_GAME@
 	             android:hardwareAccelerated="true"
-	             android:name="androidx.multidex.MultiDexApplication"
 	             android:networkSecurityConfig="@xml/network_security_config"
 	             >
 

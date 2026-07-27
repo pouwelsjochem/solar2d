@@ -79,6 +79,7 @@ public class Controller {
 	private CoronaRuntime           myRuntime;
 	private NativeToJavaBridge      myBridge;
 	private AlertDialog             myAlertDialog;
+	private DeviceIdentifierStore myBlockStoreDeviceIdentifier;
 
 	private boolean 				myIdleEnabled;
 
@@ -115,9 +116,29 @@ public class Controller {
 		Stopped
 	}
 
+	interface DeviceIdentifierStore {
+		String getDeviceIdentifier(
+				String currentDeviceIdentifier, String currentOSIdentifier);
+	}
+
 	Controller( Context context, CoronaRuntime runtime ) {
 		// Keep a reference to the Corona activity.
 		myContext = context;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			try {
+				Object instance = Class
+						.forName("com.ansca.corona.BlockStoreDeviceIdentifier")
+						.getDeclaredConstructor(Context.class)
+						.newInstance(myContext);
+				if (instance instanceof DeviceIdentifierStore) {
+					myBlockStoreDeviceIdentifier = (DeviceIdentifierStore)instance;
+				}
+			}
+			catch (Throwable ex) {
+				// Block Store is optional and unavailable on devices without Google Play services.
+				myBlockStoreDeviceIdentifier = null;
+			}
+		}
 
 		// Initialize sub-systems.
 		myRuntime = runtime;
@@ -846,20 +867,8 @@ public class Controller {
 		// Go through the standard API-specific theming rules.
 		if (deviceAPILevel >= 22) {
 			return ApiLevel22.createDefaultAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 21) {
-			return ApiLevel21.createDefaultAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 14) {
-			return ApiLevel14.createDefaultAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 11) {
-			return ApiLevel11.createDefaultAlertDialogBuilder(context);
-		} else { // API Level 10
-			// Apply the desired theme to the context.
-			android.view.ContextThemeWrapper contextThemeWrapper = 
-				new android.view.ContextThemeWrapper(context, android.R.style.Theme_Dialog);
-
-			// Create the Alert Dialog Builder.
-			return new AlertDialog.Builder(contextThemeWrapper);
 		}
+		return ApiLevel21.createDefaultAlertDialogBuilder(context);
 	}
 
 	/**
@@ -870,20 +879,8 @@ public class Controller {
 		// Go through the standard API-specific theming rules.
 		if (deviceAPILevel >= 22) {
 			return ApiLevel22.createDarkAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 21) {
-			return ApiLevel21.createDarkAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 14) {
-			return ApiLevel14.createDarkAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 11) {
-			return ApiLevel11.createDarkAlertDialogBuilder(context);
-		} else { // API Level 10
-			// Apply the desired theme to the context.
-			android.view.ContextThemeWrapper contextThemeWrapper = 
-				new android.view.ContextThemeWrapper(context, android.R.style.Theme_Dialog);
-
-			// Create the Alert Dialog Builder.
-			return new AlertDialog.Builder(contextThemeWrapper);
 		}
+		return ApiLevel21.createDarkAlertDialogBuilder(context);
 	}
 
 	/**
@@ -894,20 +891,8 @@ public class Controller {
 		// Go through the standard API-specific theming rules.
 		if (deviceAPILevel >= 22) {
 			return ApiLevel22.createLightAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 21) {
-			return ApiLevel21.createLightAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 14) {
-			return ApiLevel14.createLightAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 11) {
-			return ApiLevel11.createLightAlertDialogBuilder(context);
-		} else { // API Level 10
-			// Apply the desired theme to the context.
-			android.view.ContextThemeWrapper contextThemeWrapper = 
-				new android.view.ContextThemeWrapper(context, android.R.style.Theme_Dialog);
-
-			// Create the Alert Dialog Builder.
-			return new AlertDialog.Builder(contextThemeWrapper);
 		}
+		return ApiLevel21.createLightAlertDialogBuilder(context);
 	}
 
 	/**
@@ -920,17 +905,8 @@ public class Controller {
 		if (deviceAPILevel >= 22) { // Fire OS 5
 			// Use the dark themes for Amazon Fire OS 5-based devices.
 			return ApiLevel22.createDarkAlertDialogBuilder(context);
-		} else if (deviceAPILevel >= 14) { // Android 4.0.3 fork and Fire OS 3 - 4
-			return ApiLevel14.createDefaultAlertDialogBuilder(context);
-		} else { // API Level 13 and lower. 
-			// No known Amazon devices are based on Android 3, so this is effectively just the first gen Kindle Fires.
-			// Apply the desired theme to the context.
-			android.view.ContextThemeWrapper contextThemeWrapper = 
-				new android.view.ContextThemeWrapper(context, android.R.style.Theme_Dialog);
-
-			// Create the Alert Dialog Builder.
-			return new AlertDialog.Builder(contextThemeWrapper);
 		}
+		return ApiLevel14.createDefaultAlertDialogBuilder(context);
 	}
 
 	public void showNativeAlert(final String title, final String msg, final String[] buttonLabels) {
@@ -1576,6 +1552,28 @@ public class Controller {
 		return Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 	}
 
+	private String GetPersistedDeviceIdentifier(String currentDeviceIdentifier)
+	{
+		if ((currentDeviceIdentifier == null) || (currentDeviceIdentifier.length() <= 0)) {
+			return currentDeviceIdentifier;
+		}
+
+		String currentOSIdentifier = GetOSIdentifier();
+		if ((currentOSIdentifier == null) ||
+				(currentOSIdentifier.length() <= 0) ||
+				(myBlockStoreDeviceIdentifier == null)) {
+			return currentDeviceIdentifier;
+		}
+
+		try {
+			return myBlockStoreDeviceIdentifier.getDeviceIdentifier(
+					currentDeviceIdentifier, currentOSIdentifier);
+		}
+		catch (Exception ex) { }
+
+		return currentDeviceIdentifier;
+	}
+
 	public String getUniqueIdentifier( int identifierType ) {
 		String stringId = null;
 		
@@ -1593,6 +1591,7 @@ public class Controller {
 				if ( null == stringId ) {
 					stringId = GetOSIdentifier();
 				}
+				stringId = GetPersistedDeviceIdentifier(stringId);
 				break;
 
 			case 1: // kHardwareIdentifier
@@ -1627,52 +1626,6 @@ public class Controller {
     public int getDefaultTextFieldPaddingInPixels() {
     	return myDefaultTextFieldPaddingInPixels;
     }
-
-	/** Provides easy access to Android 3.x APIs. */
-	// TODO: Less duplication of all the AlertDialig.Builder code.
-	private static class ApiLevel11 {
-		/** Constructor made private to prevent instances from being made. */
-		private ApiLevel11() { }
-
-		/**
-		 * Creates an "AlertDialog.Builder" object using the Holo theme by default.
-		 * @param context The parent that will host the dialog.
-		 * @return Returns a new "AlertDialog.Builder" object.
-		 */
-		public static android.app.AlertDialog.Builder createDefaultAlertDialogBuilder(android.content.Context context) {
-			return createDarkAlertDialogBuilder(context);
-		}
-
-		/**
-		 * Creates an "AlertDialog.Builder" object using the THEME_HOLO_DARK theme.
-		 * @param context The parent that will host the dialog.
-		 * @return Returns a new "AlertDialog.Builder" object.
-		 */
-		public static android.app.AlertDialog.Builder createDarkAlertDialogBuilder(android.content.Context context) {
-			return new AlertDialog.Builder(context, android.app.AlertDialog.THEME_HOLO_DARK);
-		}
-
-		/**
-		 * Creates an "AlertDialog.Builder" object using the THEME_HOLO_LIGHT theme.
-		 * @param context The parent that will host the dialog.
-		 * @return Returns a new "AlertDialog.Builder" object.
-		 */
-		public static android.app.AlertDialog.Builder createLightAlertDialogBuilder(android.content.Context context) {
-			return new AlertDialog.Builder(context, android.app.AlertDialog.THEME_HOLO_LIGHT);
-		}
-
-		/**
-		 * Creates an "AlertDialog.Builder" object.
-		 * @param context The parent that will host the dialog.
-		 * @param theme A "style" resource ID used to theme the dialog.
-		 * @return Returns a new "AlertDialog.Builder" object.
-		 */
-		public static android.app.AlertDialog.Builder createAlertDialogBuilder(
-			android.content.Context context, int theme)
-		{
-			return new AlertDialog.Builder(context, theme);
-		}
-	}
 
 	/**
 	 * Provides access to API Level 14 (Android 4.0 Ice Cream Sandwich) features.

@@ -22,6 +22,7 @@ otool -l libplayer.a | grep -A 4 LC_LINKER_OPTION | grep string | grep -v '\-fra
 @import MobileCoreServices;
 @import OpenAL;
 @import Photos;
+@import Security;
 @import SQLite3;
 @import StoreKit;
 @import SystemConfiguration;

@@ -10,7 +10,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 15
+        minSdk = 21
         version = 1
     }
     sourceSets["main"].manifest.srcFile(file("AndroidManifest.xml"))
@@ -47,4 +47,8 @@ val networkHelper = tasks.register<Copy>("generateNetworkHelper") {
 }
 android.libraryVariants.all {
     registerJavaGeneratingTask(networkHelper, networkHelperOutputDir)
+}
+
+dependencies {
+    compileOnly("com.google.android.gms:play-services-auth-blockstore:16.4.0")
 }

@@ -456,15 +456,9 @@ public final class NotificationServices extends com.ansca.corona.ApplicationCont
 								scheduledSettings.getEndTime().getTime(),
 								pendingIntent);
 					}
-					else if (android.os.Build.VERSION.SDK_INT >= 19) {
+					else {
 						NotificationServices.ApiLevel19.alarmManagerSetExact(
 								alarmManager,
-								android.app.AlarmManager.RTC_WAKEUP,
-								scheduledSettings.getEndTime().getTime(),
-								pendingIntent);
-					}
-					else {
-						alarmManager.set(
 								android.app.AlarmManager.RTC_WAKEUP,
 								scheduledSettings.getEndTime().getTime(),
 								pendingIntent);
@@ -475,15 +469,8 @@ public final class NotificationServices extends com.ansca.corona.ApplicationCont
 					StatusBarNotificationSettings statusBarSettings = (StatusBarNotificationSettings)settings;
 
 					// Create and set up the status bar notification object.
-					// Note: Android 3.x and higher versions requires us to use the the "Notification.Builder"
-					//       class because many of the "Notification" class' methods and fields have been deprecated.
-					android.app.Notification notification = null;
-					if (android.os.Build.VERSION.SDK_INT >= 16) {
-						notification = NotificationServices.ApiLevel16.createNotificationFrom(context, statusBarSettings);
-					}
-					else {
-						notification = NotificationServices.ApiLevel11.createNotificationFrom(context, statusBarSettings);
-					}
+					android.app.Notification notification =
+							NotificationServices.ApiLevel16.createNotificationFrom(context, statusBarSettings);
 
 					// Update the Android system's status bar.
 					android.app.NotificationManager notificationManager;
@@ -896,67 +883,6 @@ public final class NotificationServices extends com.ansca.corona.ApplicationCont
 			return iconResourceId;
 		}
 
-		/**
-		 * Creates an Android "Notification" object with the given settings.
-		 * <p>
-		 * The notification object is made using the "Notification" class.
-		 * @param context Context needed to set up the notification. Cannot be null.
-		 * @param settings The status bar settings used to build the notification object.
-		 * @return Returns a new Android "Notification" object using the given settings.
-		 *         <p>
-		 *         Returns null if given a null "context" or "settings" object.
-		 */
-		public static android.app.Notification createNotificationFrom(
-				android.content.Context context, StatusBarNotificationSettings settings)
-		{
-			Integer iconResourceId = ApiLevel1.getIconResourceId(context, settings);
-			if (iconResourceId == null) {
-				return null;
-			}
-
-			// Set up the notification object.
-			android.app.Notification notification = new android.app.Notification(
-					iconResourceId, settings.getTickerText(),
-					settings.getTimestamp().getTime());
-			android.content.Intent intent =
-					StatusBarBroadcastReceiver.createContentIntentFrom(context, settings);
-
-			// Invoke the "setLatestEventInfo" method is available.
-			// It was removed from API Level 23, so we get it by reflection.
-			try {
-				// notification.setLatestEventInfo(
-				// 	context, settings.getContentTitle(),
-				// 	settings.getContentText(),
-				// 	android.app.PendingIntent.getBroadcast(context, 0, intent, 0));
-				java.lang.reflect.Method setLatestEventInfoMethod = notification.getClass().getMethod("setLatestEventInfo",
-						android.content.Context.class, CharSequence.class, CharSequence.class, android.app.PendingIntent.class);
-				setLatestEventInfoMethod.invoke(notification, context, settings.getContentTitle(),
-						settings.getContentText(), android.app.PendingIntent.getBroadcast(context, 0, intent, 0));
-			} catch (Exception e) {
-				// TODO: Print some warning to the developer telling them to use the ApiLevel16 class if they get here.
-				return null;
-			}
-
-			intent = StatusBarBroadcastReceiver.createDeleteIntentFrom(context, settings);
-			notification.deleteIntent = android.app.PendingIntent.getBroadcast(context, 0, intent, 0);
-			notification.number = settings.getBadgeNumber();
-			if (settings.getSoundFileUri() != null) {
-				notification.sound = settings.getSoundFileUri();
-			}
-			else {
-				notification.defaults = android.app.Notification.DEFAULT_SOUND;
-			}
-			notification.flags = android.app.Notification.FLAG_ONLY_ALERT_ONCE;
-			if (settings.isRemovable()) {
-				notification.flags |= android.app.Notification.FLAG_AUTO_CANCEL;
-			}
-			else {
-				notification.flags |= android.app.Notification.FLAG_ONGOING_EVENT;
-				notification.flags |= android.app.Notification.FLAG_NO_CLEAR;
-			}
-
-			return notification;
-		}
 	}
 
 
@@ -1021,28 +947,6 @@ public final class NotificationServices extends com.ansca.corona.ApplicationCont
 			return builder;
 		}
 
-		/**
-		 * Creates an Android "Notification" object with the given settings.
-		 * <p>
-		 * The notification object is made using the "Notification.Builder" class.
-		 * @param context Context needed to set up the notification. Cannot be null.
-		 * @param settings The status bar settings used to build the notification object.
-		 * @return Returns a new Android "Notification" object using the given settings.
-		 *         <p>
-		 *         Returns null if given a null "context" or "settings" object.
-		 */
-		public static android.app.Notification createNotificationFrom(
-				android.content.Context context, StatusBarNotificationSettings settings)
-		{
-			// Set up a notification builder.
-			android.app.Notification.Builder builder = ApiLevel11.createNotificationBuilderFrom(context, settings);
-			if (builder == null) {
-				return null;
-			}
-
-			// Create and return the notification object.
-			return builder.getNotification();
-		}
 	}
 
 	/**

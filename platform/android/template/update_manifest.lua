@@ -54,11 +54,11 @@ end
 -- Initialize Android manifest settings.
 ----------------------------------------------------------------------------------------------------
 
--- Corona's min and target SDK defaults
+-- Solar2D's min and target SDK defaults
 local Constants =
 {
-	MIN_SDK_VERSION = 15,
-	TARGET_SDK_VERSION = 23,
+	MIN_SDK_VERSION = 21,
+	TARGET_SDK_VERSION = 36,
 }
 
 local minSdkVersion = tostring( Constants.MIN_SDK_VERSION )

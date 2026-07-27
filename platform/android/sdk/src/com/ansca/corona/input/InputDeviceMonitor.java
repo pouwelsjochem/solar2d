@@ -80,14 +80,8 @@ public class InputDeviceMonitor {
 		fListener = null;
 		fIsRunning = false;
 
-		// Create the input device event handler based on the OS version we're running on.
-		// This must be done after initializing the above member variables.
-		if (android.os.Build.VERSION.SDK_INT >= 16) {
-			fEventHandler = ApiLevel16.createEventHandlerWith(this);
-		}
-		else {
-			fEventHandler = ApiLevel9.createEventHandlerWith(this);
-		}
+		// Create the input device event handler after initializing the above member variables.
+		fEventHandler = ApiLevel16.createEventHandlerWith(this);
 	}
 
 	/**

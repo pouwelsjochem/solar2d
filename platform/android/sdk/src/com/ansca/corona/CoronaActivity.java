@@ -27,8 +27,6 @@ import android.view.WindowInsets;
 import android.view.animation.AlphaAnimation;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
 import android.util.Log;
 import android.widget.*;
 import com.ansca.corona.events.EventManager;
@@ -157,16 +155,12 @@ public class CoronaActivity extends Activity {
 	}
 
 	private void setSystemUiVisibility() {
-		if (android.os.Build.VERSION.SDK_INT < 19) {
-			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE); // On API Level 14 and above: View.SYSTEM_UI_FLAG_LOW_PROFILE dims any on screen buttons if they exists
-		} else {
-			myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-					| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-		}
+		myGLView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+				| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+				| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+				| View.SYSTEM_UI_FLAG_FULLSCREEN
+				| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 	}
 
 	/**
@@ -582,7 +576,7 @@ public class CoronaActivity extends Activity {
 			// Check if navigation bar insets exist
 			Insets navBarInsets = insets.getInsets(WindowInsets.Type.navigationBars());
 			hasSoftwareKeys = navBarInsets.bottom > 0 || navBarInsets.right > 0;
-		}else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1){
+		}else {
 			android.view.Display display = getWindowManager().getDefaultDisplay();
 
 			android.util.DisplayMetrics realDisplayMetrics = new android.util.DisplayMetrics();
@@ -598,10 +592,6 @@ public class CoronaActivity extends Activity {
 			int displayWidth = displayMetrics.widthPixels;
 
 			hasSoftwareKeys = (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
-		} else {
-			boolean hasMenuKey = android.view.ViewConfiguration.get(CoronaEnvironment.getApplicationContext()).hasPermanentMenuKey();
-			boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-			hasSoftwareKeys = !(hasMenuKey || hasBackKey);
 		}
 		return hasSoftwareKeys;
 	}

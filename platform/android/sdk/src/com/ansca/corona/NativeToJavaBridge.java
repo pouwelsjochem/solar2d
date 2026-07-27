@@ -247,18 +247,15 @@ public class NativeToJavaBridge {
 	
 	protected static String getAudioOutputSettings()
 	{
-		if (android.os.Build.VERSION.SDK_INT >= 17) // getProperty
+		android.content.Context context = CoronaEnvironment.getApplicationContext();
+		if (context != null)
 		{
-			android.content.Context context = CoronaEnvironment.getApplicationContext();
-			if (context != null)
+			AudioManager am = (AudioManager) context.getSystemService(android.content.Context.AUDIO_SERVICE);
+			if (am != null)
 			{
-				AudioManager am = (AudioManager) context.getSystemService(android.content.Context.AUDIO_SERVICE);
-				if (am != null)
-				{
-					String sampleRate = am.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
-					String framesPerBuffer = am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
-					return sampleRate + "," + framesPerBuffer;
-				}
+				String sampleRate = am.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
+				String framesPerBuffer = am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER);
+				return sampleRate + "," + framesPerBuffer;
 			}
 		}
 		return "";
@@ -1435,7 +1432,7 @@ public class NativeToJavaBridge {
 			else {
 				languageCode = "";
 			}
-			if ("zh".equals(languageCode) && (android.os.Build.VERSION.SDK_INT >= 21)) {
+			if ("zh".equals(languageCode)) {
 				// Special case for the Chinese language.
 				// Append the ISO 15924 script to the language which identifies if it is Simplified or Traditional.
 				String scriptId = NativeToJavaBridge.ApiLevel21.getScriptFrom(java.util.Locale.getDefault());

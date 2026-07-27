@@ -103,12 +103,6 @@ public class CoronaWebView extends WebView {
 				}
 			}
 
-			/*
-			 Override only exists on Lollipop(5.0) or above.
-			 On pre 5.0 devices, this could be supported through an undocumented API, openFileChooser().
-			 However, we won't support this behavior prior to Lollipop because of the undocumented nature.
-			 Furthermore, this undocumented method didn't work for 4.4.0 - 4.4.2.
-			*/
 			@Override
 			public boolean onShowFileChooser(WebView webView, 
 				android.webkit.ValueCallback<android.net.Uri[]> filePathCallback, 
@@ -120,27 +114,12 @@ public class CoronaWebView extends WebView {
 
 			@Override
 			public void onShowCustomView(View view, android.webkit.WebChromeClient.CustomViewCallback callback) {
-				// Kitkat(4.4) or above
-				if (android.os.Build.VERSION.SDK_INT >= 19) {
-					CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
-					if (activity != null) {
-						android.widget.FrameLayout layout = activity.getOverlayView();
-						ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-						layout.addView(view, params);
-						mCustomView = view;
-					}
-				} else {
-					/*
-					 On pre 4.4 devices we disable full screen videos because:
-					 1) On 4.0 > x devices the controls don't show up.
-					 2) On 4.4 > x > 2.3 devices the touch goes through the video and goes to the webview.
-					 3) On 4.4 > x devices the view would result in a black rectangle.  This can be solved by setting setZOrderMediaOverlay for both the CoronaGLView and the view that we get.
-
-					 Attempts at displaying the custom view in another activity also failed.  The issues were:
-					 1) On 4.4 > x devices the controls wouldn't show up.
-					*/
-					onHideCustomView();
-					callback.onCustomViewHidden();
+				CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
+				if (activity != null) {
+					android.widget.FrameLayout layout = activity.getOverlayView();
+					ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+					layout.addView(view, params);
+					mCustomView = view;
 				}
 			}
 
@@ -149,7 +128,6 @@ public class CoronaWebView extends WebView {
 				if (mCustomView != null) {
 					CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
 					if (activity != null) {
-						ViewManager viewManager = fCoronaRuntime.getViewManager();
 						android.widget.FrameLayout layout = activity.getOverlayView();
 						layout.removeView(mCustomView);
 					}
@@ -157,31 +135,17 @@ public class CoronaWebView extends WebView {
 			}
 		});
 		
-		// Enable support for JavaScript, HTML5 DOM storage, Flash plug-in, touch zoom controls, etc.
+		// Enable support for JavaScript, HTML5 DOM storage, touch zoom controls, etc.
 		android.webkit.WebSettings settings = getSettings();
 		settings.setJavaScriptEnabled(true);
 		settings.setSupportZoom(true);
 		settings.setBuiltInZoomControls(true);
 		settings.setLoadWithOverviewMode(true);
 		settings.setUseWideViewPort(true);
-		settings.setPluginState(android.webkit.WebSettings.PluginState.ON);
 		settings.setDomStorageEnabled(true);
-		if (android.os.Build.VERSION.SDK_INT >= 17) {
-			settings.setMediaPlaybackRequiresUserGesture(false);
-		}
-		if (android.os.Build.VERSION.SDK_INT >= 11) {
-			try {
-				java.lang.reflect.Method setEnableSmoothTransitionMethod;
-				setEnableSmoothTransitionMethod = android.webkit.WebSettings.class.getMethod(
-						"setEnableSmoothTransition", new Class[] { Boolean.TYPE });
-				setEnableSmoothTransitionMethod.invoke(settings, new Object[] { true });
-			}
-			catch (Exception ex) { ex.printStackTrace(); }
-		}
-		if (android.os.Build.VERSION.SDK_INT >= 21) {
-			ApiLevel21.setAcceptThirdPartyCookies(this, true);
-			ApiLevel21.setMixedContentModeToAlwaysAllowFor(settings);
-		}
+		settings.setMediaPlaybackRequiresUserGesture(false);
+		ApiLevel21.setAcceptThirdPartyCookies(this, true);
+		ApiLevel21.setMixedContentModeToAlwaysAllowFor(settings);
 		
 		// Set up web view to have the focus when touched.
 		// This allows the virtual keyboard to appear when the user taps on a text field.

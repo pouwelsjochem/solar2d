@@ -9,7 +9,6 @@
 
 package com.ansca.corona;
 
-import android.os.Build;
 import android.util.Log;
 import android.content.Intent;
 
@@ -115,17 +114,14 @@ public class CoronaSystemApiHandler implements com.ansca.corona.listeners.Corona
 		else if (actionName.equals("reportFullyDrawn"))
 		{
 			// Report to the system that app is now fully drawn, for diagnostic and optimization purposes.
-			// API introduced in KITKAT but has permission issue, so raise to LOLLIPOP, see https://github.com/flutter/flutter/issues/46172.
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				fActivity.runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						if (fActivity != null) {
-							fActivity.reportFullyDrawn();
-						}
+			fActivity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (fActivity != null) {
+						fActivity.reportFullyDrawn();
 					}
-				});
-			}
+				}
+			});
 		}
 		else {
 			// The requested action is unknown.
