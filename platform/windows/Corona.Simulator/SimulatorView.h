@@ -15,6 +15,8 @@
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_TargetDevice.h"
 
+#include <deque>
+
 
 #pragma region Forward Declarations
 namespace Gdiplus
@@ -121,6 +123,7 @@ class CSimulatorView : public CView
 		afx_msg void OnUpdateFileOpenInEditor(CCmdUI *pCmdUI);
 		afx_msg LRESULT OnNativeAlert(WPARAM wParam, LPARAM lParam);
 		afx_msg LRESULT OnApplySimulatorConfiguration(WPARAM wParam, LPARAM lParam);
+		afx_msg LRESULT OnSendSimulatorInput(WPARAM wParam, LPARAM lParam);
 		afx_msg void OnTimer(UINT_PTR timerId);
 
 	private:
@@ -133,6 +136,7 @@ class CSimulatorView : public CView
 			const Rtt::MSimulatorHost::Configuration& configuration, bool persist);
 		void ApplyConfigurationPersistence(
 			const Rtt::MSimulatorHost::Configuration& configuration);
+		bool DispatchSimulatorInput(const Rtt::MSimulatorHost::Input& input);
 		bool ValidateOpenGL();
 		bool LoadSkinResources();
 		void GetFilePaths(LPCTSTR pattern, CStringArray& filepaths);
@@ -154,6 +158,7 @@ class CSimulatorView : public CView
 		bool mIsRelaunchPending;
 		UINT_PTR mBackgroundTimerId;
 		Rtt::MSimulatorHost::Configuration mPendingConfiguration;
+		std::deque<Rtt::MSimulatorHost::Input> mPendingSimulatorInputs;
 };
 
 #ifndef _DEBUG  // debug version in SimulatorView.cpp

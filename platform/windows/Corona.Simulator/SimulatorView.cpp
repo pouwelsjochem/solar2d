@@ -87,6 +87,7 @@ BEGIN_MESSAGE_MAP(CSimulatorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SHOWPROJECTSANDBOX, &CSimulatorView::OnUpdateShowProjectSandbox)
 	ON_MESSAGE(WMU_NATIVEALERT, &CSimulatorView::OnNativeAlert)
 	ON_MESSAGE(WMU_APPLY_SIMULATOR_CONFIGURATION, &CSimulatorView::OnApplySimulatorConfiguration)
+	ON_MESSAGE(WMU_SEND_SIMULATOR_INPUT, &CSimulatorView::OnSendSimulatorInput)
 END_MESSAGE_MAP()
 
 BEGIN_MESSAGE_MAP(CSimulatorView::CCoronaControlContainer, CStatic)
@@ -1149,6 +1150,21 @@ bool CSimulatorView::SendSimulatorInput(const Rtt::MSimulatorHost::Input& input)
 	{
 		return false;
 	}
+	mPendingSimulatorInputs.push_back(input);
+	if (!PostMessage(WMU_SEND_SIMULATOR_INPUT, 0, 0))
+	{
+		mPendingSimulatorInputs.pop_back();
+		return false;
+	}
+	return true;
+}
+
+bool CSimulatorView::DispatchSimulatorInput(const Rtt::MSimulatorHost::Input& input)
+{
+	if (!mRuntimeEnvironmentPointer || !mRuntimeEnvironmentPointer->GetRuntime() || IsSimulationSuspended())
+	{
+		return false;
+	}
 	Rtt::Runtime* runtimePointer = mRuntimeEnvironmentPointer->GetRuntime();
 
 	if (input.type == Rtt::MSimulatorHost::Input::kBackInput)
@@ -1237,6 +1253,17 @@ bool CSimulatorView::SendSimulatorInput(const Rtt::MSimulatorHost::Input& input)
 		return true;
 	}
 	return false;
+}
+
+LRESULT CSimulatorView::OnSendSimulatorInput(WPARAM wParam, LPARAM lParam)
+{
+	if (mPendingSimulatorInputs.empty())
+	{
+		return 0;
+	}
+	Rtt::MSimulatorHost::Input input = mPendingSimulatorInputs.front();
+	mPendingSimulatorInputs.pop_front();
+	return DispatchSimulatorInput(input) ? 1 : 0;
 }
 
 bool CSimulatorView::SimulateEvent(const Rtt::MSimulatorHost::Event& event)

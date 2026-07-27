@@ -15,6 +15,7 @@
 // Messages processed by CSimulatorView.
 #define WMU_NATIVEALERT (WM_APP + 101)
 #define WMU_APPLY_SIMULATOR_CONFIGURATION (WM_APP + 102)
+#define WMU_SEND_SIMULATOR_INPUT (WM_APP + 103)
 
 // Parameters passed to WMU_NATIVEALERT. Strings are UTF-8.
 typedef struct wmu_alert_params

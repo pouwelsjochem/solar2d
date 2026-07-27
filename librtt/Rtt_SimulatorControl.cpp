@@ -33,6 +33,7 @@
 #include <iterator>
 #include <limits.h>
 #include <map>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1994,6 +1995,67 @@ ParseSimulatorControlInspectPayload(
 }
 
 static bool
+ParseSimulatorControlTapPayload(
+	const std::string& payload, MSimulatorHost::Input& input,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::string extra;
+	if ( ! ( stream >> input.x >> input.y ) || stream >> extra ||
+		! IsFiniteNumber( (lua_Number)input.x ) ||
+		! IsFiniteNumber( (lua_Number)input.y ) )
+	{
+		error = "tap expects finite X and Y screen coordinates";
+		return false;
+	}
+	input.type = MSimulatorHost::Input::kTouchInput;
+	input.phase = MSimulatorHost::Input::kBeganPhase;
+	input.xStart = input.x;
+	input.yStart = input.y;
+	return true;
+}
+
+static bool
+ParseSimulatorControlKeyPayload(
+	const std::string& payload, MSimulatorHost::Input& input,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::string phase;
+	std::string extra;
+	if ( ! ( stream >> input.keyName ) || input.keyName.length() > 128 )
+	{
+		error = "key expects a key name and optional phase";
+		return false;
+	}
+	if ( stream >> phase && stream >> extra )
+	{
+		error = "key expects a key name and optional phase";
+		return false;
+	}
+
+	input.type = MSimulatorHost::Input::kKeyInput;
+	if ( phase.empty() || "pressed" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kPressedPhase;
+	}
+	else if ( "down" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kDownPhase;
+	}
+	else if ( "up" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kUpPhase;
+	}
+	else
+	{
+		error = "key phase must be 'down', 'up', or 'pressed'";
+		return false;
+	}
+	return true;
+}
+
+static bool
 ParseSimulatorControlUnsignedLong(
 	const std::string& value, const char *key, unsigned long& result )
 {
@@ -2566,12 +2628,14 @@ PrintSimulatorControlClientHelp()
 		"Usage:\n"
 		"  [--timeout SECONDS] COMMAND [ARGUMENTS]\n"
 		"\n"
-			"Commands:\n"
-			"  status\n"
-			"  diagnostics\n"
-			"  logs [--since SEQUENCE]\n"
-			"  screenshot [PATH]\n"
-			"  eval [LUA EXPRESSION]\n"
+		"Commands:\n"
+		"  status\n"
+		"  diagnostics\n"
+		"  logs [--since SEQUENCE]\n"
+		"  screenshot [PATH]\n"
+		"  tap X Y\n"
+		"  key NAME [down|up|pressed]\n"
+		"  eval [LUA EXPRESSION]\n"
 		"  exec [LUA STATEMENTS]\n"
 		"  exec-file PATH\n"
 		"  inspect PATH [--cursor OFFSET]\n"
@@ -2745,6 +2809,36 @@ RunSimulatorControlClientInternal(
 			fprintf(
 				stderr,
 				"Simulator control: screenshot expects a valid output path\n" );
+			return true;
+		}
+	}
+	else if ( "tap" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlTapPayload(
+			payload, input, error ) )
+		{
+			fprintf(
+				stderr, "Simulator control: %s\n",
+				error.c_str() );
+			return true;
+		}
+	}
+	else if ( "key" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlKeyPayload(
+			payload, input, error ) )
+		{
+			fprintf(
+				stderr, "Simulator control: %s\n",
+				error.c_str() );
 			return true;
 		}
 	}
@@ -2967,6 +3061,57 @@ ProcessSimulatorControlRequest(
 			return SimulatorControlErrorResponse( error );
 		}
 		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "tap" == command || "key" == command )
+	{
+		const MSimulatorHost *host = runtime.Platform().GetSimulatorHost();
+		if ( ! host )
+		{
+			return SimulatorControlErrorResponse(
+				"the Simulator cannot send input to this runtime" );
+		}
+
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( "tap" == command )
+		{
+			if ( ! ParseSimulatorControlTapPayload(
+				payload, input, error ) )
+			{
+				return SimulatorControlErrorResponse( error );
+			}
+			if ( ! host->SendInput( input ) )
+			{
+				return SimulatorControlErrorResponse(
+					"the Simulator could not queue the requested tap" );
+			}
+			input.phase = MSimulatorHost::Input::kEndedPhase;
+		}
+		else if ( "key" == command )
+		{
+			if ( ! ParseSimulatorControlKeyPayload(
+				payload, input, error ) )
+			{
+				return SimulatorControlErrorResponse( error );
+			}
+			if ( MSimulatorHost::Input::kPressedPhase == input.phase )
+			{
+				input.phase = MSimulatorHost::Input::kDownPhase;
+				if ( ! host->SendInput( input ) )
+				{
+					return SimulatorControlErrorResponse(
+						"the Simulator could not queue the requested key" );
+				}
+				input.phase = MSimulatorHost::Input::kUpPhase;
+			}
+		}
+		if ( ! host->SendInput( input ) )
+		{
+			return SimulatorControlErrorResponse(
+				"the Simulator could not queue the requested input" );
+		}
+		return SimulatorControlSuccessResponse( "true" );
 	}
 
 	lua_State *L = runtime.VMContext().L();

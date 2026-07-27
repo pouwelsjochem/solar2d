@@ -1974,7 +1974,8 @@ MacGUIPlatform::SendInput( const MSimulatorHost::Input& value ) const
 	[input setObject:[NSNumber numberWithBool:value.isMiddleButtonDown] forKey:@"isMiddleButtonDown"];
 
 	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
-	return [appDelegate dispatchSimulatorInput:input];
+	[appDelegate performSelector:@selector(dispatchSimulatorInput:) withObject:input afterDelay:0.0];
+	return true;
 }
 
 bool

@@ -731,13 +731,22 @@ SendSimulatorInput( lua_State *L )
 	{
 		return luaL_error( L, "the Simulator could not send the requested input" );
 	}
-	if ( isTap )
+	bool isKeyPress =
+		MSimulatorHost::Input::kKeyInput == input.type &&
+		MSimulatorHost::Input::kPressedPhase == input.phase;
+	if ( isTap || isKeyPress )
 	{
+		if ( isKeyPress )
+		{
+			input.phase = MSimulatorHost::Input::kDownPhase;
+		}
 		if ( ! host->SendInput( input ) )
 		{
 			return luaL_error( L, "the Simulator could not send the requested input" );
 		}
-		input.phase = MSimulatorHost::Input::kEndedPhase;
+		input.phase = isTap ?
+			MSimulatorHost::Input::kEndedPhase :
+			MSimulatorHost::Input::kUpPhase;
 	}
 	if ( ! host->SendInput( input ) )
 	{

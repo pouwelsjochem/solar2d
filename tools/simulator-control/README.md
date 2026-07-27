@@ -33,6 +33,8 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control diagnostics
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control logs
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control screenshot
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control tap 640 360
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control key escape
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control eval 'player.score'
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control inspect player
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control exec 'player.score = player.score + 100'
@@ -53,6 +55,13 @@ its type, message, stack trace, frame, and sequence number. Its
 `logs` returns recent Simulator log messages. Pass `--since SEQUENCE` to return
 only newer messages. `screenshot` writes the current frame to a PNG in the
 control directory, or to an optional output path.
+
+`tap` queues touch `began` and `ended` events at the given screen coordinates;
+it does not dispatch a separate tap event. The coordinates use the same
+simulated screen space returned by `screenshot`. `key` queues a key press by
+default, or one explicit `down` or `up` phase. Input is dispatched after the
+control response is written, so handlers may safely relaunch or close the
+runtime.
 
 `inspect` is read-only. It accepts paths such as `player.inventory[1]` and
 `settings["audio"]`, uses raw table access, and never invokes metamethods. A
