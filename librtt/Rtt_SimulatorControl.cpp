@@ -2564,8 +2564,7 @@ PrintSimulatorControlClientHelp()
 {
 	fputs(
 		"Usage:\n"
-		"  Corona Simulator -simulator-control-dir DIR "
-			"-simulator-control [--timeout SECONDS] COMMAND [ARGUMENTS]\n"
+		"  [--timeout SECONDS] COMMAND [ARGUMENTS]\n"
 		"\n"
 			"Commands:\n"
 			"  status\n"
