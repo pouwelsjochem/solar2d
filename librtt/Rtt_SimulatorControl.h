@@ -12,6 +12,8 @@
 
 #ifdef __cplusplus
 
+#include "Rtt_MSimulatorHost.h"
+
 namespace Rtt
 {
 
@@ -25,6 +27,8 @@ namespace SimulatorControl
 		Runtime& runtime, const char *errorType,
 		const char *message, const char *stackTrace );
 	void Shutdown( Runtime& runtime );
+	bool DispatchControllerInput(
+		Runtime& runtime, const MSimulatorHost::Input& input );
 }
 
 } // namespace Rtt

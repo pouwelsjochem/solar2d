@@ -37,6 +37,10 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control key escape
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control text 'Player name'
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control scroll 640 360 0 -120
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control controller button buttonA
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control controller axis leftX -1
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control controller connect --id pad2 --profile playstation --player 2
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control controller button buttonA --id pad2
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control eval 'player.score'
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control inspect player
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control exec 'player.score = player.score + 100'
@@ -67,6 +71,23 @@ when the simulated screen has focus. It reads standard input when `TEXT` is
 omitted. `scroll` queues a mouse scroll event at the given screen coordinates
 with horizontal and vertical deltas. Input is dispatched after the control
 response is written, so handlers may safely relaunch or close the runtime.
+
+`controller` provides virtual gamepads through Solar2D's normal input-device
+APIs. Commands without `--id` use a default Xbox controller. Use `--id` to
+address independent devices, and explicitly `connect` a new ID with an `xbox`,
+`playstation`, `nintendo`, or `generic` profile and optional player number from
+1 through 4. Profiles set representative product names and controller types;
+all provide the standard six-axis extended-gamepad layout.
+
+Button and axis input automatically connects its target as an Xbox controller
+if it does not exist yet. `disconnect` emits a normal `inputDeviceStatus`
+event, and reconnecting an existing ID preserves its profile. Connecting it
+with a different profile or player number emits a reconfiguration event.
+Buttons use Solar2D key names such as `buttonA`, `up`, and
+`leftShoulderButton1`. Supported axes are `leftX`, `leftY`, `rightX`, and
+`rightY` from -1 through 1, plus `leftTrigger` and `rightTrigger` from 0 through
+1. Axis values remain set until changed; send 0 to center a stick axis or
+release a trigger.
 
 `inspect` is read-only. It accepts paths such as `player.inventory[1]` and
 `settings["audio"]`, uses raw table access, and never invokes metamethods. A

@@ -22,6 +22,7 @@
 #include "Rtt_Event.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_Runtime.h"
+#include "Rtt_SimulatorControl.h"
 #include "Simulator.h"
 #include "MainFrm.h"
 #include "SimulatorDoc.h"
@@ -1228,6 +1229,10 @@ bool CSimulatorView::DispatchSimulatorInput(const Rtt::MSimulatorHost::Input& in
 			}
 		}
 		return true;
+	}
+	if (input.type == Rtt::MSimulatorHost::Input::kControllerInput)
+	{
+		return Rtt::SimulatorControl::DispatchControllerInput(*runtimePointer, input);
 	}
 	if (input.type == Rtt::MSimulatorHost::Input::kTouchInput)
 	{

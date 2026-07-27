@@ -2961,6 +2961,56 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		}
 		return NO;
 	}
+	else if ([type isEqualToString:@"controller"])
+	{
+		MSimulatorHost::Input controllerInput;
+		controllerInput.type = MSimulatorHost::Input::kControllerInput;
+		controllerInput.controllerId = [[input objectForKey:@"controllerId"] UTF8String];
+		NSString *profile = [input objectForKey:@"controllerProfile"];
+		if (profile)
+		{
+			controllerInput.hasControllerProfile = true;
+			controllerInput.controllerProfile = [profile UTF8String];
+		}
+		NSNumber *playerNumber = [input objectForKey:@"controllerPlayerNumber"];
+		if (playerNumber)
+		{
+			controllerInput.hasControllerPlayerNumber = true;
+			controllerInput.controllerPlayerNumber = [playerNumber intValue];
+		}
+
+		NSString *action = [input objectForKey:@"action"];
+		if ([action isEqualToString:@"connect"])
+		{
+			controllerInput.controllerAction = MSimulatorHost::Input::kConnectController;
+		}
+		else if ([action isEqualToString:@"disconnect"])
+		{
+			controllerInput.controllerAction = MSimulatorHost::Input::kDisconnectController;
+		}
+		else if ([action isEqualToString:@"button"])
+		{
+			controllerInput.controllerAction = MSimulatorHost::Input::kButtonController;
+			controllerInput.keyName = [[input objectForKey:@"keyName"] UTF8String];
+			controllerInput.phase = [[input objectForKey:@"phase"] isEqualToString:@"down"] ?
+				MSimulatorHost::Input::kDownPhase :
+				MSimulatorHost::Input::kUpPhase;
+		}
+		else if ([action isEqualToString:@"axis"])
+		{
+			controllerInput.controllerAction = MSimulatorHost::Input::kAxisController;
+			controllerInput.axisName = [[input objectForKey:@"axisName"] UTF8String];
+			controllerInput.axisValue = [[input objectForKey:@"axisValue"] doubleValue];
+		}
+		else
+		{
+			return NO;
+		}
+
+		Runtime *runtime = [self runtime];
+		return runtime && SimulatorControl::DispatchControllerInput(
+			*runtime, controllerInput );
+	}
 	else if ([type isEqualToString:@"touch"])
 	{
 		NSString *phaseName = [input objectForKey:@"phase"];

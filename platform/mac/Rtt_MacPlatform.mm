@@ -1902,6 +1902,22 @@ SimulatorInputTypeName( MSimulatorHost::Input::Type type )
 		case MSimulatorHost::Input::kTextInput: return @"text";
 		case MSimulatorHost::Input::kTouchInput: return @"touch";
 		case MSimulatorHost::Input::kMouseInput: return @"mouse";
+		case MSimulatorHost::Input::kControllerInput: return @"controller";
+	}
+	return nil;
+}
+
+static NSString*
+SimulatorControllerActionName(
+	MSimulatorHost::Input::ControllerAction action )
+{
+	switch ( action )
+	{
+		case MSimulatorHost::Input::kConnectController: return @"connect";
+		case MSimulatorHost::Input::kDisconnectController: return @"disconnect";
+		case MSimulatorHost::Input::kButtonController: return @"button";
+		case MSimulatorHost::Input::kAxisController: return @"axis";
+		case MSimulatorHost::Input::kNoControllerAction: break;
 	}
 	return nil;
 }
@@ -1968,6 +1984,28 @@ MacGUIPlatform::SendInput( const MSimulatorHost::Input& value ) const
 		[input setObject:[NSNumber numberWithDouble:value.scrollX] forKey:@"scrollX"];
 		[input setObject:[NSNumber numberWithDouble:value.scrollY] forKey:@"scrollY"];
 		[input setObject:[NSNumber numberWithInt:value.clickCount] forKey:@"clickCount"];
+	}
+	else if ( MSimulatorHost::Input::kControllerInput == value.type )
+	{
+		[input setObject:SimulatorControllerActionName( value.controllerAction ) forKey:@"action"];
+		[input setObject:[NSString stringWithExternalString:value.controllerId.c_str()] forKey:@"controllerId"];
+		if ( value.hasControllerProfile )
+		{
+			[input setObject:[NSString stringWithExternalString:value.controllerProfile.c_str()] forKey:@"controllerProfile"];
+		}
+		if ( value.hasControllerPlayerNumber )
+		{
+			[input setObject:[NSNumber numberWithInt:value.controllerPlayerNumber] forKey:@"controllerPlayerNumber"];
+		}
+		if ( MSimulatorHost::Input::kButtonController == value.controllerAction )
+		{
+			[input setObject:[NSString stringWithExternalString:value.keyName.c_str()] forKey:@"keyName"];
+		}
+		else if ( MSimulatorHost::Input::kAxisController == value.controllerAction )
+		{
+			[input setObject:[NSString stringWithExternalString:value.axisName.c_str()] forKey:@"axisName"];
+			[input setObject:[NSNumber numberWithDouble:value.axisValue] forKey:@"axisValue"];
+		}
 	}
 
 	[input setObject:[NSNumber numberWithBool:value.isShiftDown] forKey:@"isShiftDown"];

@@ -20,6 +20,7 @@ namespace Rtt
 {
 	class InputDeviceType;
 	class PlatformInputDevice;
+	class SimulatorControllerInputDevice;
 }
 
 
@@ -40,6 +41,9 @@ class PlatformInputDeviceManager
 		virtual ~PlatformInputDeviceManager();
 
 		PlatformInputDevice* Add(InputDeviceType type);
+		SimulatorControllerInputDevice* AddSimulatorController(
+			const char *identifier, const char *profileName,
+			int playerNumber);
 		Rtt_Allocator* GetAllocator() const;
 		const ReadOnlyInputDeviceCollection& GetDevices() const;
 
@@ -48,6 +52,8 @@ class PlatformInputDeviceManager
 		virtual void Destroy(PlatformInputDevice* devicePointer);
 
 	private:
+		InputDeviceDescriptor CreateDescriptor(InputDeviceType type);
+
 		// Copy constructor and assignment operator made private to prevent object from being overwritten.
 		void operator=(const PlatformInputDeviceManager &manager) { };
 

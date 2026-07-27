@@ -221,6 +221,139 @@ void PlatformInputDevice::Vibrate()
 {
 }
 
+struct SimulatorControllerProfile
+{
+	const char *name;
+	const char *productName;
+	const char *displayName;
+	const char *controllerType;
+};
+
+static const SimulatorControllerProfile kSimulatorControllerProfiles[] =
+{
+	{ "xbox", "XInput Gamepad", "Solar2D Virtual Gamepad", "xbox" },
+	{ "playstation", "DUALSHOCK 4 Wireless Controller", "Solar2D Virtual PlayStation Gamepad", "playstation" },
+	{ "nintendo", "Nintendo Switch Pro Controller", "Solar2D Virtual Nintendo Gamepad", "nintendo" },
+	{ "generic", "Generic Gamepad", "Solar2D Virtual Generic Gamepad", "generic" }
+};
+
+static const SimulatorControllerProfile&
+GetSimulatorControllerProfile(const char *name)
+{
+	for (size_t index = 0;
+		index < sizeof(kSimulatorControllerProfiles) /
+			sizeof(kSimulatorControllerProfiles[0]); index++)
+	{
+		if (name && !strcmp(name, kSimulatorControllerProfiles[index].name))
+		{
+			return kSimulatorControllerProfiles[index];
+		}
+	}
+	return kSimulatorControllerProfiles[0];
+}
+
+SimulatorControllerInputDevice::SimulatorControllerInputDevice(
+	const InputDeviceDescriptor& descriptor,
+	const char *identifier, const char *profileName,
+	int playerNumber)
+:	PlatformInputDevice(descriptor),
+	fPlayerNumber(playerNumber > 0 ? playerNumber : descriptor.GetDeviceNumber()),
+	fConnectionState(InputDeviceConnectionState::kDisconnected)
+{
+	fIdentifier = identifier ? identifier : "default";
+	fPermanentStringId = "solar2d-simulator-gamepad";
+	if (fIdentifier != "default")
+	{
+		fPermanentStringId.append("-");
+		fPermanentStringId.append(fIdentifier);
+	}
+	Configure(profileName, fPlayerNumber);
+
+	PlatformInputAxis *axis = AddAxis();
+	axis->SetType(InputAxisType::kLeftX);
+	axis = AddAxis();
+	axis->SetType(InputAxisType::kLeftY);
+	axis = AddAxis();
+	axis->SetType(InputAxisType::kRightX);
+	axis = AddAxis();
+	axis->SetType(InputAxisType::kRightY);
+	axis = AddAxis();
+	axis->SetType(InputAxisType::kLeftTrigger);
+	axis->SetMinValue(Rtt_REAL_0);
+	axis = AddAxis();
+	axis->SetType(InputAxisType::kRightTrigger);
+	axis->SetMinValue(Rtt_REAL_0);
+}
+
+const char* SimulatorControllerInputDevice::GetProductName()
+{
+	return fProductName.c_str();
+}
+
+const char* SimulatorControllerInputDevice::GetDisplayName()
+{
+	return fDisplayName.c_str();
+}
+
+const char* SimulatorControllerInputDevice::GetPermanentStringId()
+{
+	return fPermanentStringId.c_str();
+}
+
+const char* SimulatorControllerInputDevice::GetDriverName()
+{
+	return "simulator";
+}
+
+const char* SimulatorControllerInputDevice::GetControllerType()
+{
+	return fControllerType.c_str();
+}
+
+int SimulatorControllerInputDevice::GetPlayerNumber()
+{
+	return fPlayerNumber;
+}
+
+InputDeviceConnectionState SimulatorControllerInputDevice::GetConnectionState()
+{
+	return fConnectionState;
+}
+
+bool SimulatorControllerInputDevice::Configure(
+	const char *profileName, int playerNumber)
+{
+	std::string oldProfileName = fProfileName;
+	int oldPlayerNumber = fPlayerNumber;
+	if (profileName)
+	{
+		const SimulatorControllerProfile& profile =
+			GetSimulatorControllerProfile(profileName);
+		fProfileName = profile.name;
+		fProductName = profile.productName;
+		fDisplayName = profile.displayName;
+		fControllerType = profile.controllerType;
+	}
+	if (playerNumber > 0)
+	{
+		fPlayerNumber = playerNumber;
+	}
+	return oldProfileName != fProfileName ||
+		oldPlayerNumber != fPlayerNumber;
+}
+
+bool SimulatorControllerInputDevice::HasIdentifier(const char *identifier) const
+{
+	return fIdentifier == (identifier ? identifier : "default");
+}
+
+void SimulatorControllerInputDevice::SetConnected(bool connected)
+{
+	fConnectionState = connected ?
+		InputDeviceConnectionState::kConnected :
+		InputDeviceConnectionState::kDisconnected;
+}
+
 /// Fetches a collection of all input axes provided by this input device.
 /// @return Returns a read-only collection of all input axes.
 ///         The collection will be empty if the device does not have any input axes.

@@ -149,9 +149,20 @@ class MSimulatorHost
 				kKeyInput,
 				kTextInput,
 				kTouchInput,
-				kMouseInput
+				kMouseInput,
+				kControllerInput
 			}
 			Type;
+
+			typedef enum _ControllerAction
+			{
+				kNoControllerAction = 0,
+				kConnectController,
+				kDisconnectController,
+				kButtonController,
+				kAxisController
+			}
+			ControllerAction;
 
 			typedef enum _Phase
 			{
@@ -172,7 +183,12 @@ class MSimulatorHost
 
 			Input()
 			:	type( kBackInput ),
+				controllerAction( kNoControllerAction ),
 				phase( kNoPhase ),
+				controllerId( "default" ),
+				hasControllerProfile( false ),
+				hasControllerPlayerNumber( false ),
+				controllerPlayerNumber( 0 ),
 				hasQwertyKeyName( false ),
 				hasNativeKeyCode( false ),
 				nativeKeyCode( 0 ),
@@ -182,6 +198,7 @@ class MSimulatorHost
 				yStart( 0.0 ),
 				scrollX( 0.0 ),
 				scrollY( 0.0 ),
+				axisValue( 0.0 ),
 				clickCount( 0 ),
 				isShiftDown( false ),
 				isAltDown( false ),
@@ -194,9 +211,16 @@ class MSimulatorHost
 			}
 
 			Type type;
+			ControllerAction controllerAction;
 			Phase phase;
+			std::string controllerId;
+			std::string controllerProfile;
+			bool hasControllerProfile;
+			bool hasControllerPlayerNumber;
+			int controllerPlayerNumber;
 			std::string keyName;
 			std::string text;
+			std::string axisName;
 			bool hasQwertyKeyName;
 			std::string qwertyKeyName;
 			bool hasNativeKeyCode;
@@ -207,6 +231,7 @@ class MSimulatorHost
 			double yStart;
 			double scrollX;
 			double scrollY;
+			double axisValue;
 			int clickCount;
 			bool isShiftDown;
 			bool isAltDown;

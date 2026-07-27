@@ -17,6 +17,8 @@
 #include "Rtt_InputDeviceDescriptor.h"
 #include "Rtt_ReadOnlyInputAxisCollection.h"
 
+#include <string>
+
 
 // Forward declarations.
 struct Rtt_Allocator;
@@ -101,6 +103,37 @@ class PlatformInputDevice
 
 //		LightPointerArray<LuaResource*> fKeyEventListeners;
 //		LightPointerArray<LuaResource*> fMouseEventListeners;
+};
+
+class SimulatorControllerInputDevice : public PlatformInputDevice
+{
+	public:
+		SimulatorControllerInputDevice(
+			const InputDeviceDescriptor& descriptor,
+			const char *identifier, const char *profileName,
+			int playerNumber);
+
+		virtual const char* GetProductName() override;
+		virtual const char* GetDisplayName() override;
+		virtual const char* GetPermanentStringId() override;
+		virtual const char* GetDriverName() override;
+		virtual const char* GetControllerType() override;
+		virtual int GetPlayerNumber() override;
+		virtual InputDeviceConnectionState GetConnectionState() override;
+
+		bool Configure(const char *profileName, int playerNumber);
+		bool HasIdentifier(const char *identifier) const;
+		void SetConnected(bool connected);
+
+	private:
+		std::string fIdentifier;
+		std::string fProfileName;
+		std::string fProductName;
+		std::string fDisplayName;
+		std::string fPermanentStringId;
+		std::string fControllerType;
+		int fPlayerNumber;
+		InputDeviceConnectionState fConnectionState;
 };
 
 // ----------------------------------------------------------------------------

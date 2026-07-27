@@ -51,6 +51,26 @@ PlatformInputDeviceManager::~PlatformInputDeviceManager()
 /// @return Returns a pointer to a new input device object for the given type.
 PlatformInputDevice* PlatformInputDeviceManager::Add(InputDeviceType type)
 {
+	InputDeviceDescriptor descriptor = CreateDescriptor(type);
+	PlatformInputDevice *devicePointer = CreateUsing(descriptor);
+	fDeviceCollection.Add(devicePointer);
+	return devicePointer;
+}
+
+SimulatorControllerInputDevice* PlatformInputDeviceManager::AddSimulatorController(
+	const char *identifier, const char *profileName,
+	int playerNumber)
+{
+	InputDeviceDescriptor descriptor = CreateDescriptor(InputDeviceType::kGamepad);
+	SimulatorControllerInputDevice *devicePointer = Rtt_NEW(
+		GetAllocator(), SimulatorControllerInputDevice(
+			descriptor, identifier, profileName, playerNumber));
+	fDeviceCollection.Add(devicePointer);
+	return devicePointer;
+}
+
+InputDeviceDescriptor PlatformInputDeviceManager::CreateDescriptor(InputDeviceType type)
+{
 	PlatformInputDevice *devicePointer;
 
 	// Count the number of devices matching the given type.
@@ -67,12 +87,7 @@ PlatformInputDevice* PlatformInputDeviceManager::Add(InputDeviceType type)
 
 	// Create a new device object with a unique descriptor and add it to the main collection.
 	// The descriptor assigns the device a unique number for its type, such as "Joystick 1".
-	InputDeviceDescriptor descriptor(GetAllocator(), type, deviceTypeCount + 1);
-	devicePointer = CreateUsing(descriptor);
-	fDeviceCollection.Add(devicePointer);
-
-	// Return the new device object.
-	return devicePointer;
+	return InputDeviceDescriptor(GetAllocator(), type, deviceTypeCount + 1);
 }
 
 /// Gets the allocator that this manager uses when adding new input device objects.

@@ -18,8 +18,15 @@
 #include "Display/Rtt_BitmapPaint.h"
 #include "Display/Rtt_Display.h"
 #include "Display/Rtt_PlatformBitmap.h"
+#include "Input/Rtt_PlatformInputAxis.h"
+#include "Input/Rtt_PlatformInputDevice.h"
+#include "Input/Rtt_PlatformInputDeviceManager.h"
+#include "Input/Rtt_ReadOnlyInputAxisCollection.h"
+#include "Input/Rtt_ReadOnlyInputDeviceCollection.h"
+#include "Rtt_Event.h"
 #include "Rtt_LuaContext.h"
 #include "Rtt_MPlatform.h"
+#include "Rtt_MPlatformDevice.h"
 #include "Rtt_MSimulatorHost.h"
 #include "Rtt_Runtime.h"
 
@@ -71,6 +78,130 @@ static bool
 IsFiniteNumber( lua_Number value )
 {
 	return value == value && value <= DBL_MAX && value >= -DBL_MAX;
+}
+
+static SimulatorControllerInputDevice*
+GetSimulatorController(
+	Runtime& runtime, const MSimulatorHost::Input& input,
+	bool create )
+{
+	PlatformInputDeviceManager& manager =
+		runtime.Platform().GetDevice().GetInputDeviceManager();
+	const ReadOnlyInputDeviceCollection& devices = manager.GetDevices();
+	for ( int index = 0; index < devices.GetCount(); index++ )
+	{
+		PlatformInputDevice *device = devices.GetByIndex( index );
+		const char *driverName = device ? device->GetDriverName() : NULL;
+		if ( driverName && ! strcmp( driverName, "simulator" ) &&
+			device->GetDescriptor().GetDeviceType().Equals(
+				InputDeviceType::kGamepad ) )
+		{
+			SimulatorControllerInputDevice *simulatorController =
+				static_cast< SimulatorControllerInputDevice* >( device );
+			if ( simulatorController->HasIdentifier(
+				input.controllerId.c_str() ) )
+			{
+				return simulatorController;
+			}
+		}
+	}
+	return create ? manager.AddSimulatorController(
+		input.controllerId.c_str(),
+		input.hasControllerProfile ?
+			input.controllerProfile.c_str() : "xbox",
+		input.hasControllerPlayerNumber ?
+			input.controllerPlayerNumber : 0 ) : NULL;
+}
+
+bool
+SimulatorControl::DispatchControllerInput(
+	Runtime& runtime, const MSimulatorHost::Input& input )
+{
+	if ( MSimulatorHost::Input::kControllerInput != input.type )
+	{
+		return false;
+	}
+
+	const bool shouldCreate =
+		MSimulatorHost::Input::kDisconnectController != input.controllerAction;
+	SimulatorControllerInputDevice *device =
+		GetSimulatorController( runtime, input, shouldCreate );
+	if ( ! device )
+	{
+		return ! shouldCreate;
+	}
+
+	const bool wasConnected = device->GetConnectionState().IsConnected();
+	if ( MSimulatorHost::Input::kDisconnectController == input.controllerAction )
+	{
+		if ( wasConnected )
+		{
+			device->SetConnected( false );
+			InputDeviceStatusEvent event( device, true, false );
+			runtime.DispatchEvent( event );
+		}
+		return true;
+	}
+
+	if ( MSimulatorHost::Input::kConnectController == input.controllerAction )
+	{
+		const bool wasReconfigured = device->Configure(
+			input.hasControllerProfile ?
+				input.controllerProfile.c_str() : NULL,
+			input.hasControllerPlayerNumber ?
+				input.controllerPlayerNumber : 0 );
+		if ( ! wasConnected || wasReconfigured )
+		{
+			device->SetConnected( true );
+			InputDeviceStatusEvent event(
+				device, ! wasConnected, wasReconfigured );
+			runtime.DispatchEvent( event );
+		}
+		return true;
+	}
+	if ( ! wasConnected )
+	{
+		return false;
+	}
+	if ( MSimulatorHost::Input::kButtonController == input.controllerAction )
+	{
+		KeyEvent::Phase phase;
+		if ( MSimulatorHost::Input::kDownPhase == input.phase )
+		{
+			phase = KeyEvent::kDown;
+		}
+		else if ( MSimulatorHost::Input::kUpPhase == input.phase )
+		{
+			phase = KeyEvent::kUp;
+		}
+		else
+		{
+			return false;
+		}
+		KeyEvent event(
+			device, phase, input.keyName.c_str(), 0,
+			false, false, false, false );
+		runtime.DispatchEvent( event );
+		return true;
+	}
+	if ( MSimulatorHost::Input::kAxisController == input.controllerAction )
+	{
+		const ReadOnlyInputAxisCollection& axes = device->GetAxes();
+		for ( int index = 0; index < axes.GetCount(); index++ )
+		{
+			PlatformInputAxis *axis = axes.GetByIndex( index );
+			if ( axis && 0 == strcmp(
+				axis->GetType().GetStringId(), input.axisName.c_str() ) )
+			{
+				AxisEvent event(
+					device, axis,
+					Rtt_FloatToReal( (float)input.axisValue ) );
+				runtime.DispatchEvent( event );
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 static const size_t kSimulatorControlMaximumRequestSize = 1024 * 1024;
@@ -2078,6 +2209,204 @@ ParseSimulatorControlScrollPayload(
 }
 
 static bool
+ParseSimulatorControlControllerArguments(
+	const std::vector< std::string >& arguments,
+	bool allowConfiguration, MSimulatorHost::Input& input,
+	std::vector< std::string >& positionalArguments,
+	std::string& error )
+{
+	bool hasIdentifier = false;
+	for ( size_t index = 0; index < arguments.size(); index++ )
+	{
+		const std::string& argument = arguments[index];
+		if ( "--id" != argument &&
+			"--profile" != argument &&
+			"--player" != argument )
+		{
+			positionalArguments.push_back( argument );
+			continue;
+		}
+		if ( index + 1 >= arguments.size() )
+		{
+			error = argument + " expects a value";
+			return false;
+		}
+
+		const std::string& value = arguments[++index];
+		if ( "--id" == argument )
+		{
+			if ( hasIdentifier || value.empty() || value.length() > 64 )
+			{
+				error = "controller --id expects one identifier of 1 through 64 characters";
+				return false;
+			}
+			for ( size_t characterIndex = 0;
+				characterIndex < value.length(); characterIndex++ )
+			{
+				const char character = value[characterIndex];
+				if ( '-' != character && '_' != character &&
+					'.' != character &&
+					! isalnum( (unsigned char)character ) )
+				{
+					error = "controller --id supports letters, numbers, periods, hyphens, and underscores";
+					return false;
+				}
+			}
+			hasIdentifier = true;
+			input.controllerId = value;
+		}
+		else if ( ! allowConfiguration )
+		{
+			error = argument + " is only supported by controller connect";
+			return false;
+		}
+		else if ( "--profile" == argument )
+		{
+			if ( input.hasControllerProfile ||
+				( "xbox" != value && "playstation" != value &&
+					"nintendo" != value && "generic" != value ) )
+			{
+				error = "controller --profile expects xbox, playstation, nintendo, or generic";
+				return false;
+			}
+			input.hasControllerProfile = true;
+			input.controllerProfile = value;
+		}
+		else
+		{
+			if ( input.hasControllerPlayerNumber )
+			{
+				error = "controller --player can only be provided once";
+				return false;
+			}
+			std::istringstream playerStream( value );
+			std::string extra;
+			if ( ! ( playerStream >> input.controllerPlayerNumber ) ||
+				playerStream >> extra ||
+				input.controllerPlayerNumber < 1 ||
+				input.controllerPlayerNumber > 4 )
+			{
+				error = "controller --player expects a number from 1 through 4";
+				return false;
+			}
+			input.hasControllerPlayerNumber = true;
+		}
+	}
+	return true;
+}
+
+static bool
+ParseSimulatorControlControllerPayload(
+	const std::string& payload, MSimulatorHost::Input& input,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::vector< std::string > arguments;
+	std::string argument;
+	while ( stream >> argument )
+	{
+		arguments.push_back( argument );
+	}
+	if ( arguments.empty() )
+	{
+		error = "controller expects connect, disconnect, button, or axis";
+		return false;
+	}
+
+	const std::string action = arguments.front();
+	input.type = MSimulatorHost::Input::kControllerInput;
+	std::vector< std::string > positionalArguments;
+	if ( ! ParseSimulatorControlControllerArguments(
+		std::vector< std::string >( arguments.begin() + 1, arguments.end() ),
+		"connect" == action, input, positionalArguments, error ) )
+	{
+		return false;
+	}
+	if ( "connect" == action || "disconnect" == action )
+	{
+		if ( ! positionalArguments.empty() )
+		{
+			error = "controller connect and disconnect only accept options";
+			return false;
+		}
+		input.controllerAction = "connect" == action ?
+			MSimulatorHost::Input::kConnectController :
+			MSimulatorHost::Input::kDisconnectController;
+		return true;
+	}
+	if ( "button" == action )
+	{
+		if ( positionalArguments.empty() ||
+			positionalArguments.size() > 2 ||
+			positionalArguments.front().length() > 128 )
+		{
+			error = "controller button expects a key name and optional phase";
+			return false;
+		}
+		input.keyName = positionalArguments.front();
+		const std::string phase = positionalArguments.size() > 1 ?
+			positionalArguments[1] : "pressed";
+		input.controllerAction = MSimulatorHost::Input::kButtonController;
+		if ( "pressed" == phase )
+		{
+			input.phase = MSimulatorHost::Input::kPressedPhase;
+		}
+		else if ( "down" == phase )
+		{
+			input.phase = MSimulatorHost::Input::kDownPhase;
+		}
+		else if ( "up" == phase )
+		{
+			input.phase = MSimulatorHost::Input::kUpPhase;
+		}
+		else
+		{
+			error = "controller button phase must be 'down', 'up', or 'pressed'";
+			return false;
+		}
+		return true;
+	}
+	if ( "axis" == action )
+	{
+		if ( 2 != positionalArguments.size() )
+		{
+			error = "controller axis expects an axis name and finite value";
+			return false;
+		}
+		input.axisName = positionalArguments.front();
+		std::istringstream valueStream( positionalArguments[1] );
+		std::string extra;
+		if ( ! ( valueStream >> input.axisValue ) ||
+			valueStream >> extra ||
+			! IsFiniteNumber( (lua_Number)input.axisValue ) )
+		{
+			error = "controller axis expects an axis name and finite value";
+			return false;
+		}
+		const bool isTrigger =
+			"leftTrigger" == input.axisName ||
+			"rightTrigger" == input.axisName;
+		const bool isStick =
+			"leftX" == input.axisName ||
+			"leftY" == input.axisName ||
+			"rightX" == input.axisName ||
+			"rightY" == input.axisName;
+		if ( ( ! isTrigger && ! isStick ) ||
+			input.axisValue < ( isTrigger ? 0.0 : -1.0 ) ||
+			input.axisValue > 1.0 )
+		{
+			error = "controller axis supports leftX, leftY, rightX, rightY (-1 to 1), and leftTrigger or rightTrigger (0 to 1)";
+			return false;
+		}
+		input.controllerAction = MSimulatorHost::Input::kAxisController;
+		return true;
+	}
+
+	error = "controller expects connect, disconnect, button, or axis";
+	return false;
+}
+
+static bool
 ParseSimulatorControlUnsignedLong(
 	const std::string& value, const char *key, unsigned long& result )
 {
@@ -2659,6 +2988,10 @@ PrintSimulatorControlClientHelp()
 		"  key NAME [down|up|pressed]\n"
 		"  text [TEXT]\n"
 		"  scroll X Y SCROLL_X SCROLL_Y\n"
+		"  controller connect [--id ID] [--profile PROFILE] [--player NUMBER]\n"
+		"  controller disconnect [--id ID]\n"
+		"  controller button NAME [down|up|pressed] [--id ID]\n"
+		"  controller axis NAME VALUE [--id ID]\n"
 		"  eval [LUA EXPRESSION]\n"
 		"  exec [LUA STATEMENTS]\n"
 		"  exec-file PATH\n"
@@ -2873,6 +3206,21 @@ RunSimulatorControlClientInternal(
 		MSimulatorHost::Input input;
 		std::string error;
 		if ( ! ParseSimulatorControlScrollPayload(
+			payload, input, error ) )
+		{
+			fprintf(
+				stderr, "Simulator control: %s\n",
+				error.c_str() );
+			return true;
+		}
+	}
+	else if ( "controller" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlControllerPayload(
 			payload, input, error ) )
 		{
 			fprintf(
@@ -3104,7 +3452,7 @@ ProcessSimulatorControlRequest(
 	}
 
 	if ( "tap" == command || "key" == command || "text" == command ||
-		"scroll" == command )
+		"scroll" == command || "controller" == command )
 	{
 		const MSimulatorHost *host = runtime.Platform().GetSimulatorHost();
 		if ( ! host )
@@ -3156,6 +3504,42 @@ ProcessSimulatorControlRequest(
 			}
 			input.type = MSimulatorHost::Input::kTextInput;
 			input.text = payload;
+		}
+		else if ( "controller" == command )
+		{
+			if ( ! ParseSimulatorControlControllerPayload(
+				payload, input, error ) )
+			{
+				return SimulatorControlErrorResponse( error );
+			}
+			if ( MSimulatorHost::Input::kButtonController ==
+					input.controllerAction ||
+				MSimulatorHost::Input::kAxisController ==
+					input.controllerAction )
+			{
+				MSimulatorHost::Input connectInput;
+				connectInput.type = MSimulatorHost::Input::kControllerInput;
+				connectInput.controllerAction =
+					MSimulatorHost::Input::kConnectController;
+				connectInput.controllerId = input.controllerId;
+				if ( ! host->SendInput( connectInput ) )
+				{
+					return SimulatorControlErrorResponse(
+						"the Simulator could not queue the virtual controller connection" );
+				}
+			}
+			if ( MSimulatorHost::Input::kButtonController ==
+					input.controllerAction &&
+				MSimulatorHost::Input::kPressedPhase == input.phase )
+			{
+				input.phase = MSimulatorHost::Input::kDownPhase;
+				if ( ! host->SendInput( input ) )
+				{
+					return SimulatorControlErrorResponse(
+						"the Simulator could not queue the requested controller input" );
+				}
+				input.phase = MSimulatorHost::Input::kUpPhase;
+			}
 		}
 		else if ( ! ParseSimulatorControlScrollPayload(
 			payload, input, error ) )
