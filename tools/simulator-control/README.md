@@ -35,6 +35,8 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control screenshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control tap 640 360
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control key escape
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control text 'Player name'
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control scroll 640 360 0 -120
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control eval 'player.score'
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control inspect player
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control exec 'player.score = player.score + 100'
@@ -59,9 +61,12 @@ control directory, or to an optional output path.
 `tap` queues touch `began` and `ended` events at the given screen coordinates;
 it does not dispatch a separate tap event. The coordinates use the same
 simulated screen space returned by `screenshot`. `key` queues a key press by
-default, or one explicit `down` or `up` phase. Input is dispatched after the
-control response is written, so handlers may safely relaunch or close the
-runtime.
+default, or one explicit `down` or `up` phase. `text` inserts UTF-8 text at the
+selection of the focused native text field, or dispatches a `character` event
+when the simulated screen has focus. It reads standard input when `TEXT` is
+omitted. `scroll` queues a mouse scroll event at the given screen coordinates
+with horizontal and vertical deltas. Input is dispatched after the control
+response is written, so handlers may safely relaunch or close the runtime.
 
 `inspect` is read-only. It accepts paths such as `player.inventory[1]` and
 `settings["audio"]`, uses raw table access, and never invokes metamethods. A

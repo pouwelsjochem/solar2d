@@ -147,6 +147,7 @@ class MSimulatorHost
 			{
 				kBackInput = 0,
 				kKeyInput,
+				kTextInput,
 				kTouchInput,
 				kMouseInput
 			}
@@ -195,6 +196,7 @@ class MSimulatorHost
 			Type type;
 			Phase phase;
 			std::string keyName;
+			std::string text;
 			bool hasQwertyKeyName;
 			std::string qwertyKeyName;
 			bool hasNativeKeyCode;

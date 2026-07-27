@@ -2944,6 +2944,23 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		}
 		return wasDispatched;
 	}
+	else if ([type isEqualToString:@"text"])
+	{
+		NSString *text = [input objectForKey:@"text"];
+		NSResponder *firstResponder = [[screenView window] firstResponder];
+		if (firstResponder == screenView)
+		{
+			CharacterEvent event(NULL, [text UTF8String]);
+			return [screenView dispatchEvent:&event];
+		}
+		if ([firstResponder conformsToProtocol:@protocol(NSTextInputClient)])
+		{
+			[(id<NSTextInputClient>)firstResponder insertText:text
+				replacementRange:NSMakeRange(NSNotFound, 0)];
+			return YES;
+		}
+		return NO;
+	}
 	else if ([type isEqualToString:@"touch"])
 	{
 		NSString *phaseName = [input objectForKey:@"phase"];

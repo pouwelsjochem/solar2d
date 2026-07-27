@@ -1899,6 +1899,7 @@ SimulatorInputTypeName( MSimulatorHost::Input::Type type )
 	{
 		case MSimulatorHost::Input::kBackInput: return @"back";
 		case MSimulatorHost::Input::kKeyInput: return @"key";
+		case MSimulatorHost::Input::kTextInput: return @"text";
 		case MSimulatorHost::Input::kTouchInput: return @"touch";
 		case MSimulatorHost::Input::kMouseInput: return @"mouse";
 	}
@@ -1948,6 +1949,10 @@ MacGUIPlatform::SendInput( const MSimulatorHost::Input& value ) const
 		{
 			[input setObject:[NSNumber numberWithInt:value.nativeKeyCode] forKey:@"nativeKeyCode"];
 		}
+	}
+	else if ( MSimulatorHost::Input::kTextInput == value.type )
+	{
+		[input setObject:[NSString stringWithExternalString:value.text.c_str()] forKey:@"text"];
 	}
 	else if ( MSimulatorHost::Input::kTouchInput == value.type )
 	{

@@ -2056,6 +2056,28 @@ ParseSimulatorControlKeyPayload(
 }
 
 static bool
+ParseSimulatorControlScrollPayload(
+	const std::string& payload, MSimulatorHost::Input& input,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::string extra;
+	if ( ! ( stream >> input.x >> input.y >> input.scrollX >> input.scrollY ) ||
+		stream >> extra ||
+		! IsFiniteNumber( (lua_Number)input.x ) ||
+		! IsFiniteNumber( (lua_Number)input.y ) ||
+		! IsFiniteNumber( (lua_Number)input.scrollX ) ||
+		! IsFiniteNumber( (lua_Number)input.scrollY ) )
+	{
+		error = "scroll expects finite X, Y, SCROLL_X, and SCROLL_Y values";
+		return false;
+	}
+	input.type = MSimulatorHost::Input::kMouseInput;
+	input.phase = MSimulatorHost::Input::kScrollPhase;
+	return true;
+}
+
+static bool
 ParseSimulatorControlUnsignedLong(
 	const std::string& value, const char *key, unsigned long& result )
 {
@@ -2635,6 +2657,8 @@ PrintSimulatorControlClientHelp()
 		"  screenshot [PATH]\n"
 		"  tap X Y\n"
 		"  key NAME [down|up|pressed]\n"
+		"  text [TEXT]\n"
+		"  scroll X Y SCROLL_X SCROLL_Y\n"
 		"  eval [LUA EXPRESSION]\n"
 		"  exec [LUA STATEMENTS]\n"
 		"  exec-file PATH\n"
@@ -2642,7 +2666,7 @@ PrintSimulatorControlClientHelp()
 		"  relaunch\n"
 		"  quit [EXIT CODE]\n"
 		"\n"
-		"eval and exec read standard input when their code is omitted.\n",
+		"text, eval, and exec read standard input when their payload is omitted.\n",
 		stdout );
 }
 
@@ -2842,7 +2866,22 @@ RunSimulatorControlClientInternal(
 			return true;
 		}
 	}
-	else if ( "eval" == command || "exec" == command )
+	else if ( "scroll" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlScrollPayload(
+			payload, input, error ) )
+		{
+			fprintf(
+				stderr, "Simulator control: %s\n",
+				error.c_str() );
+			return true;
+		}
+	}
+	else if ( "text" == command || "eval" == command || "exec" == command )
 	{
 		if ( argumentIndex < argc )
 		{
@@ -2858,8 +2897,9 @@ RunSimulatorControlClientInternal(
 		if ( payload.empty() )
 		{
 			fprintf(
-				stderr, "Simulator control: %s expects Lua code\n",
-				command.c_str() );
+				stderr, "Simulator control: %s expects %s\n",
+				command.c_str(),
+				( "text" == command ) ? "non-empty text" : "Lua code" );
 			return true;
 		}
 	}
@@ -3063,7 +3103,8 @@ ProcessSimulatorControlRequest(
 		return SimulatorControlSuccessResponse( result );
 	}
 
-	if ( "tap" == command || "key" == command )
+	if ( "tap" == command || "key" == command || "text" == command ||
+		"scroll" == command )
 	{
 		const MSimulatorHost *host = runtime.Platform().GetSimulatorHost();
 		if ( ! host )
@@ -3105,6 +3146,21 @@ ProcessSimulatorControlRequest(
 				}
 				input.phase = MSimulatorHost::Input::kUpPhase;
 			}
+		}
+		else if ( "text" == command )
+		{
+			if ( payload.empty() )
+			{
+				return SimulatorControlErrorResponse(
+					"text expects non-empty text" );
+			}
+			input.type = MSimulatorHost::Input::kTextInput;
+			input.text = payload;
+		}
+		else if ( ! ParseSimulatorControlScrollPayload(
+			payload, input, error ) )
+		{
+			return SimulatorControlErrorResponse( error );
 		}
 		if ( ! host->SendInput( input ) )
 		{

@@ -1204,6 +1204,31 @@ bool CSimulatorView::DispatchSimulatorInput(const Rtt::MSimulatorHost::Input& in
 			input.phase == Rtt::MSimulatorHost::Input::kUpPhase ||
 			input.phase == Rtt::MSimulatorHost::Input::kPressedPhase;
 	}
+	if (input.type == Rtt::MSimulatorHost::Input::kTextInput)
+	{
+		HWND renderSurfaceHandle = mCoronaContainerControl.GetCoronaControl().GetSafeHwnd();
+		HWND focusedWindowHandle = ::GetFocus();
+		if (focusedWindowHandle == renderSurfaceHandle)
+		{
+			Rtt::CharacterEvent event(nullptr, input.text.c_str());
+			runtimePointer->DispatchEvent(event);
+			return true;
+		}
+		if (!focusedWindowHandle || !::IsChild(renderSurfaceHandle, focusedWindowHandle))
+		{
+			return false;
+		}
+
+		WinString text(input.text.c_str());
+		for (const wchar_t* character = text.GetUTF16(); *character; character++)
+		{
+			if (!::PostMessageW(focusedWindowHandle, WM_CHAR, *character, 0))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 	if (input.type == Rtt::MSimulatorHost::Input::kTouchInput)
 	{
 		Rtt::TouchEvent::Phase phase;

@@ -529,7 +529,7 @@ SendSimulatorInput( lua_State *L )
 {
 	const char * const allowedOptions[] =
 	{
-		"type", "phase", "keyName", "qwertyKeyName", "nativeKeyCode",
+		"type", "phase", "keyName", "qwertyKeyName", "nativeKeyCode", "text",
 		"x", "y", "xStart", "yStart", "scrollX", "scrollY", "clickCount",
 		"isShiftDown", "isAltDown", "isCtrlDown", "isCommandDown",
 		"isPrimaryButtonDown", "isSecondaryButtonDown", "isMiddleButtonDown",
@@ -538,7 +538,7 @@ SendSimulatorInput( lua_State *L )
 	ValidateOptionKeys( L, 1, allowedOptions, "simulator input" );
 
 	std::string inputType = ReadRequiredString(
-		L, 1, "type", "simulator input type must be 'back', 'key', 'touch', 'tap', or 'mouse'" );
+		L, 1, "type", "simulator input type must be 'back', 'key', 'text', 'touch', 'tap', or 'mouse'" );
 	MSimulatorHost::Input input;
 	bool isTap = false;
 
@@ -547,6 +547,17 @@ SendSimulatorInput( lua_State *L )
 		const char * const options[] = { "type", NULL };
 		ValidateOptionKeys( L, 1, options, "back simulator input" );
 		input.type = MSimulatorHost::Input::kBackInput;
+	}
+	else if ( "text" == inputType )
+	{
+		const char * const options[] = { "type", "text", NULL };
+		ValidateOptionKeys( L, 1, options, "text simulator input" );
+		input.type = MSimulatorHost::Input::kTextInput;
+		input.text = ReadRequiredString( L, 1, "text", "text simulator input expects non-empty text" );
+		if ( input.text.empty() )
+		{
+			return luaL_error( L, "text simulator input expects non-empty text" );
+		}
 	}
 	else if ( "key" == inputType )
 	{
@@ -722,7 +733,7 @@ SendSimulatorInput( lua_State *L )
 	}
 	else
 	{
-		return luaL_error( L, "simulator input type must be 'back', 'key', 'touch', 'tap', or 'mouse'" );
+		return luaL_error( L, "simulator input type must be 'back', 'key', 'text', 'touch', 'tap', or 'mouse'" );
 	}
 
 	ReadSimulatorInputBooleans( L, 1, input );
