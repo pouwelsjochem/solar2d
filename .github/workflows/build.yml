@@ -358,8 +358,12 @@ jobs:
         shell: cmd
         working-directory: platform\windows
         run: |
-          nuget restore "Corona.SDK.sln" -PackagesDirectory packages -NonInteractive
+          nuget restore "Corona.Native.Library.Win32\packages.config" -PackagesDirectory packages -NonInteractive
           if errorlevel 1 exit /b 1
+          if not exist "packages\Microsoft.Web.WebView2.1.0.4078.44\build\native\Microsoft.Web.WebView2.targets" (
+            echo WebView2 NuGet package restore did not produce the expected native targets file.
+            exit /b 1
+          )
       - name: Missing VC Components
         shell: powershell
         run: |
