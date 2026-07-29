@@ -243,6 +243,9 @@
     <ClInclude Include="Interop\ScopedOleInitializer.h">
       <Filter>Interop</Filter>
     </ClInclude>
+    <ClInclude Include="Interop\UI\EdgeWebView2Handler.h">
+      <Filter>Interop\UI</Filter>
+    </ClInclude>
     <ClInclude Include="Interop\UI\WebBrowser.h">
       <Filter>Interop\UI</Filter>
     </ClInclude>
@@ -470,6 +473,9 @@
     </ClCompile>
     <ClCompile Include="Interop\ScopedOleInitializer.cpp">
       <Filter>Interop</Filter>
+    </ClCompile>
+    <ClCompile Include="Interop\UI\EdgeWebView2Handler.cpp">
+      <Filter>Interop\UI</Filter>
     </ClCompile>
     <ClCompile Include="Interop\UI\WebBrowser.cpp">
       <Filter>Interop\UI</Filter>

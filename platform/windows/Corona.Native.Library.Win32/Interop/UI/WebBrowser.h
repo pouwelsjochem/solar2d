@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Core\Rtt_Macros.h"
+#include "EdgeWebView2Handler.h"
 #include "Interop\Event.h"
 #include "Interop\ScopedOleInitializer.h"
 #include "Control.h"
@@ -24,8 +25,8 @@
 
 namespace Interop { namespace UI {
 
-/// <summary>Microsoft Web Browser ActiveX control.</summary>
-class WebBrowser : public Control
+/// <summary>Web browser control backed by Edge WebView2 with an Internet Explorer fallback.</summary>
+class WebBrowser : public Control, private EdgeWebView2Handler::Delegate
 {
 	Rtt_CLASS_NO_COPIES(WebBrowser)
 
@@ -346,6 +347,18 @@ class WebBrowser : public Control
 		#pragma endregion
 
 
+		#pragma region Private Methods
+		void OnResized(Interop::UI::Control& sender, const Interop::EventArgs& arguments);
+		virtual bool OnEdgeWebView2Navigating(const wchar_t* url) override;
+		virtual void OnEdgeWebView2Navigated(const wchar_t* url) override;
+		virtual void OnEdgeWebView2NavigationFailed(
+				const wchar_t* url, int errorCode, const wchar_t* errorMessage) override;
+		virtual void OnEdgeWebView2InitializationFailed(
+				HRESULT result, const wchar_t* pendingUrl, const wchar_t* pendingHeaders) override;
+
+		#pragma endregion
+
+
 		#pragma region Private Member Variables
 		/// <summary>Manages the "Navigating" event.</summary>
 		NavigatingEvent fNavigatingEvent;
@@ -365,6 +378,12 @@ class WebBrowser : public Control
 
 		/// <summary>Handler which creates and interfaces with the Internet Explorer ActiveX object.</summary>
 		MicrosoftWebBrowserHandler* fWebBrowserHandlerPointer;
+
+		/// <summary>Handler which creates and interfaces with an Edge WebView2 controller.</summary>
+		EdgeWebView2Handler* fEdgeWebView2HandlerPointer;
+
+		/// <summary>Keeps the Edge WebView2 controller sized to this control's client bounds.</summary>
+		Control::ResizedEvent::MethodHandler<WebBrowser> fResizedEventHandler;
 		
 		/// <summary>
 		///  <para>

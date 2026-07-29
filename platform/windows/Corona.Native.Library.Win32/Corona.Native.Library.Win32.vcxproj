@@ -96,6 +96,9 @@
     <Import Project="Corona.Native.Library.Win32.Internals.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <WebView2LoaderPreference>Static</WebView2LoaderPreference>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -241,6 +244,7 @@
     <ClInclude Include="Interop\Ticks.h" />
     <ClInclude Include="Interop\UI\Control.h" />
     <ClInclude Include="Interop\UI\CoronaTaskDialogHandler.h" />
+    <ClInclude Include="Interop\UI\EdgeWebView2Handler.h" />
     <ClInclude Include="Interop\UI\HandleMessageEventArgs.h" />
     <ClInclude Include="Interop\UI\TaskDialog.h" />
     <ClInclude Include="Interop\UI\MessageOnlyWindow.h" />
@@ -343,6 +347,7 @@
     <ClCompile Include="Interop\Ticks.cpp" />
     <ClCompile Include="Interop\UI\Control.cpp" />
     <ClCompile Include="Interop\UI\CoronaTaskDialogHandler.cpp" />
+    <ClCompile Include="Interop\UI\EdgeWebView2Handler.cpp" />
     <ClCompile Include="Interop\UI\HandleMessageEventArgs.cpp" />
     <ClCompile Include="Interop\UI\TaskDialog.cpp" />
     <ClCompile Include="Interop\UI\MessageOnlyWindow.cpp" />
@@ -403,8 +408,18 @@
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\Build.Tools\LuaToCppTask.targets" />
+    <Import Project="..\packages\Microsoft.Web.WebView2.1.0.4078.44\build\native\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.4078.44\build\native\Microsoft.Web.WebView2.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Web.WebView2.1.0.4078.44\build\native\Microsoft.Web.WebView2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Web.WebView2.1.0.4078.44\build\native\Microsoft.Web.WebView2.targets'))" />
+  </Target>
 </Project>
