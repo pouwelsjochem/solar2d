@@ -354,6 +354,12 @@ jobs:
           choco install dotnet-8.0-runtime --no-progress
           nuget install Microsoft.Windows.SDK.BuildTools -Version 10.0.22621.3233 -x
           nuget install Microsoft.Trusted.Signing.Client -Version 1.0.53 -x
+      - name: Restore Windows NuGet packages
+        shell: cmd
+        working-directory: platform\windows
+        run: |
+          nuget restore "Corona.SDK.sln" -PackagesDirectory packages -NonInteractive
+          if errorlevel 1 exit /b 1
       - name: Missing VC Components
         shell: powershell
         run: |
