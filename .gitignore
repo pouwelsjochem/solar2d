@@ -137,6 +137,7 @@ platform/windows/**/Release.Simulator/*
 platform/windows/**/Debug/
 platform/windows/**/PreRelease/
 platform/windows/**/Release/
+platform/windows/packages/
 
 # Android
 */libs/armeabi/*

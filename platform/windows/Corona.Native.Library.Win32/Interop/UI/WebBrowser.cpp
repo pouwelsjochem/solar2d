@@ -15,16 +15,49 @@
 #include <comutil.h>
 #include <ExDispid.h>
 #include <MsHTML.h>
+#include <ShlObj.h>
 #include <sstream>
 #include <string>
 #include <strsafe.h>
 
 namespace Interop { namespace UI {
 
+namespace
+{
+	std::wstring CreateWebView2UserDataFolderPath()
+	{
+		wchar_t localAppDataPath[MAX_PATH] = {};
+		if (FAILED(::SHGetFolderPathW(
+				nullptr, CSIDL_LOCAL_APPDATA, nullptr, SHGFP_TYPE_CURRENT, localAppDataPath)))
+		{
+			return std::wstring();
+		}
+
+		const wchar_t* executableName = ApplicationServices::GetExeFileNameWithoutExtension();
+		if (!executableName || (executableName[0] == L'\0'))
+		{
+			executableName = L"Corona";
+		}
+
+		std::wstring userDataFolderPath(localAppDataPath);
+		userDataFolderPath.append(L"\\Corona Labs\\WebView2\\");
+		userDataFolderPath.append(executableName);
+
+		int result = ::SHCreateDirectoryExW(nullptr, userDataFolderPath.c_str(), nullptr);
+		if ((result != ERROR_SUCCESS) && (result != ERROR_FILE_EXISTS) && (result != ERROR_ALREADY_EXISTS))
+		{
+			return std::wstring();
+		}
+		return userDataFolderPath;
+	}
+}
+
 #pragma region Constructors/Destructors
 WebBrowser::WebBrowser(const WebBrowser::CreationSettings& settings)
 :	Control(),
-	fWebBrowserHandlerPointer(nullptr)
+	fWebBrowserHandlerPointer(nullptr),
+	fEdgeWebView2HandlerPointer(nullptr),
+	fResizedEventHandler(this, &WebBrowser::OnResized)
 {
 	// Store the Internet Explorer registy path, if given.
 	if (settings.IEOverrideRegistryPath && (settings.IEOverrideRegistryPath[0] != L'\0'))
@@ -48,12 +81,30 @@ WebBrowser::WebBrowser(const WebBrowser::CreationSettings& settings)
 	// Store the window handle and start listening to its Windows message events.
 	OnSetWindowHandle(windowHandle);
 
-	// Create the ActiveX web browser object and embed into this container control.
-	fWebBrowserHandlerPointer = MicrosoftWebBrowserHandler::CreateAndAttachTo(this);
+	// Prefer Edge WebView2 and preserve the ActiveX implementation as a fallback.
+	GetResizedEventHandlers().Add(&fResizedEventHandler);
+	std::wstring userDataFolderPath = CreateWebView2UserDataFolderPath();
+	fEdgeWebView2HandlerPointer = EdgeWebView2Handler::CreateAndAttachTo(
+			GetWindowHandle(),
+			userDataFolderPath.empty() ? nullptr : userDataFolderPath.c_str(),
+			this);
+	if (!fEdgeWebView2HandlerPointer)
+	{
+		fWebBrowserHandlerPointer = MicrosoftWebBrowserHandler::CreateAndAttachTo(this);
+	}
 }
 
 WebBrowser::~WebBrowser()
 {
+	GetResizedEventHandlers().Remove(&fResizedEventHandler);
+
+	// Detach Edge WebView2 before destroying its parent window.
+	if (fEdgeWebView2HandlerPointer)
+	{
+		delete fEdgeWebView2HandlerPointer;
+		fEdgeWebView2HandlerPointer = nullptr;
+	}
+
 	// Detach the embedded ActiveX web browser from this control.
 	if (fWebBrowserHandlerPointer)
 	{
@@ -103,17 +154,29 @@ const wchar_t* WebBrowser::GetIEOverrideRegistryPath() const
 
 bool WebBrowser::CanNavigateBack()
 {
+	if (fEdgeWebView2HandlerPointer)
+	{
+		return fEdgeWebView2HandlerPointer->CanNavigateBack();
+	}
 	return fWebBrowserHandlerPointer ? fWebBrowserHandlerPointer->CanNavigateBack() : false;
 }
 
 bool WebBrowser::CanNavigateForward()
 {
+	if (fEdgeWebView2HandlerPointer)
+	{
+		return fEdgeWebView2HandlerPointer->CanNavigateForward();
+	}
 	return fWebBrowserHandlerPointer ? fWebBrowserHandlerPointer->CanNavigateForward() : false;
 }
 
 void WebBrowser::NavigateBack()
 {
-	if (fWebBrowserHandlerPointer)
+	if (fEdgeWebView2HandlerPointer)
+	{
+		fEdgeWebView2HandlerPointer->NavigateBack();
+	}
+	else if (fWebBrowserHandlerPointer)
 	{
 		fWebBrowserHandlerPointer->NavigateBack();
 	}
@@ -121,7 +184,11 @@ void WebBrowser::NavigateBack()
 
 void WebBrowser::NavigateForward()
 {
-	if (fWebBrowserHandlerPointer)
+	if (fEdgeWebView2HandlerPointer)
+	{
+		fEdgeWebView2HandlerPointer->NavigateForward();
+	}
+	else if (fWebBrowserHandlerPointer)
 	{
 		fWebBrowserHandlerPointer->NavigateForward();
 	}
@@ -129,7 +196,11 @@ void WebBrowser::NavigateForward()
 
 void WebBrowser::NavigateTo(const wchar_t* url)
 {
-	if (fWebBrowserHandlerPointer)
+	if (fEdgeWebView2HandlerPointer)
+	{
+		fEdgeWebView2HandlerPointer->NavigateTo(url);
+	}
+	else if (fWebBrowserHandlerPointer)
 	{
 		fWebBrowserHandlerPointer->NavigateTo(url);
 	}
@@ -137,7 +208,11 @@ void WebBrowser::NavigateTo(const wchar_t* url)
 
 void WebBrowser::NavigateToWithHeader(const wchar_t* url, const wchar_t* header)
 {
-	if (fWebBrowserHandlerPointer)
+	if (fEdgeWebView2HandlerPointer)
+	{
+		fEdgeWebView2HandlerPointer->NavigateTo(url, header);
+	}
+	else if (fWebBrowserHandlerPointer)
 	{
 		fWebBrowserHandlerPointer->NavigateToWithHeader(url, header);
 	}
@@ -145,7 +220,11 @@ void WebBrowser::NavigateToWithHeader(const wchar_t* url, const wchar_t* header)
 
 void WebBrowser::Reload()
 {
-	if (fWebBrowserHandlerPointer)
+	if (fEdgeWebView2HandlerPointer)
+	{
+		fEdgeWebView2HandlerPointer->Reload();
+	}
+	else if (fWebBrowserHandlerPointer)
 	{
 		fWebBrowserHandlerPointer->Reload();
 	}
@@ -153,9 +232,80 @@ void WebBrowser::Reload()
 
 void WebBrowser::StopLoading()
 {
-	if (fWebBrowserHandlerPointer)
+	if (fEdgeWebView2HandlerPointer)
+	{
+		fEdgeWebView2HandlerPointer->StopLoading();
+	}
+	else if (fWebBrowserHandlerPointer)
 	{
 		fWebBrowserHandlerPointer->StopLoading();
+	}
+}
+
+#pragma endregion
+
+
+#pragma region Private Methods
+void WebBrowser::OnResized(Interop::UI::Control& sender, const Interop::EventArgs& arguments)
+{
+	if (fEdgeWebView2HandlerPointer)
+	{
+		fEdgeWebView2HandlerPointer->UpdateBounds();
+	}
+}
+
+bool WebBrowser::OnEdgeWebView2Navigating(const wchar_t* url)
+{
+	WebBrowserNavigatingEventArgs eventArgs(url);
+	fNavigatingEvent.Raise(*this, eventArgs);
+	return eventArgs.WasCanceled();
+}
+
+void WebBrowser::OnEdgeWebView2Navigated(const wchar_t* url)
+{
+	WebBrowserNavigatedEventArgs eventArgs(url);
+	fNavigatedEvent.Raise(*this, eventArgs);
+}
+
+void WebBrowser::OnEdgeWebView2NavigationFailed(
+		const wchar_t* url, int errorCode, const wchar_t* errorMessage)
+{
+	WebBrowserNavigationFailedEventArgs eventArgs(url, errorCode, errorMessage);
+	fNavigationFailedEvent.Raise(*this, eventArgs);
+}
+
+void WebBrowser::OnEdgeWebView2InitializationFailed(
+		HRESULT result, const wchar_t* pendingUrl, const wchar_t* pendingHeaders)
+{
+	std::wstring url = pendingUrl ? pendingUrl : L"";
+	std::wstring headers = pendingHeaders ? pendingHeaders : L"";
+
+	if (fEdgeWebView2HandlerPointer)
+	{
+		delete fEdgeWebView2HandlerPointer;
+		fEdgeWebView2HandlerPointer = nullptr;
+	}
+
+	fWebBrowserHandlerPointer = MicrosoftWebBrowserHandler::CreateAndAttachTo(this);
+	if (fWebBrowserHandlerPointer)
+	{
+		if (!url.empty() && !headers.empty())
+		{
+			fWebBrowserHandlerPointer->NavigateToWithHeader(url.c_str(), headers.c_str());
+		}
+		else if (!url.empty())
+		{
+			fWebBrowserHandlerPointer->NavigateTo(url.c_str());
+		}
+	}
+	else
+	{
+		std::wstringstream messageStream;
+		messageStream << L"Failed to initialize WebView2 or its Internet Explorer fallback (HRESULT 0x";
+		messageStream << std::hex << static_cast<unsigned long>(result) << L").";
+		WebBrowserNavigationFailedEventArgs eventArgs(
+				url.c_str(), static_cast<int>(result), messageStream.str().c_str());
+		fNavigationFailedEvent.Raise(*this, eventArgs);
 	}
 }
 
@@ -297,7 +447,14 @@ WebBrowser::MicrosoftWebBrowserHandler* WebBrowser::MicrosoftWebBrowserHandler::
 	{
 		return nullptr;
 	}
-	return new MicrosoftWebBrowserHandler(controlPointer);
+
+	auto handlerPointer = new MicrosoftWebBrowserHandler(controlPointer);
+	if (!handlerPointer->fWebBrowserOleObjectPointer)
+	{
+		handlerPointer->Release();
+		return nullptr;
+	}
+	return handlerPointer;
 }
 
 void WebBrowser::MicrosoftWebBrowserHandler::DetachFromControl()

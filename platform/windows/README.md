@@ -6,6 +6,12 @@ Install Visual Studio with the Desktop development with C++ workload, the v142
 x86 build tools, and MFC for v142. Building the MSI also requires WiX Toolset
 v3.
 
+The Windows projects restore the Microsoft WebView2 SDK through NuGet. Enable
+automatic NuGet package restore in Visual Studio, or restore the solution before
+building. The loader is linked statically, but running a native web view still
+requires the [Evergreen WebView2 Runtime](https://learn.microsoft.com/microsoft-edge/webview2/concepts/distribution)
+to be installed on the test machine.
+
 ## Build ownership
 
 Open `Corona.Simulator.sln` to build and debug the Simulator. Its output is
