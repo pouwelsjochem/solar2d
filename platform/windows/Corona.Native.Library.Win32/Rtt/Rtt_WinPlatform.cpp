@@ -36,7 +36,7 @@
 #include "Rtt_WinTextBoxObject.h"
 #include "Rtt_WinTimer.h"
 #include "Rtt_WinWebViewObject.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <algorithm>
 #include <Gdiplus.h>
 #include <Gdipluscolor.h>

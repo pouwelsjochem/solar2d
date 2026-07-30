@@ -22,7 +22,7 @@
 #	include "Core/Rtt_FileSystem.h"
 #	include "stdafx.h"
 #	include "Interop/Ipc/CommandLine.h"
-#	include "WinString.h"
+#	include "CoronaWinString.h"
 #	include <Shlobj.h>
 #if !defined( Rtt_NO_GUI )
 #	include "Simulator.h"

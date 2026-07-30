@@ -20,7 +20,7 @@
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 #include "CryptoPP\md5.h"
 
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 #include "Rtt_WinConsoleDevice.h"
 

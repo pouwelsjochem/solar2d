@@ -12,7 +12,7 @@
 #include "Core\Rtt_Assert.h"
 // Required to access WinTimer::sTimerMap for WM_CORONA_TIMER dispatch.
 #include "Rtt\Rtt_WinTimer.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <exception>
 #include <GL\glew.h>
 #include <GL\wglew.h>

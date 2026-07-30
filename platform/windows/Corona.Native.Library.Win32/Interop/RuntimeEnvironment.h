@@ -25,7 +25,7 @@
 #include "Rtt_WinProjectSettings.h"
 #include "RuntimeState.h"
 #include "ScopedOleInitializer.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <list>
 #include <Windows.h>
 extern "C"

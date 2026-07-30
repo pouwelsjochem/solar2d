@@ -25,7 +25,7 @@
 #include "Rtt_Runtime.h"
 #include "Rtt_String.h"
 #include "Rtt_WinPlatform.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <string>
 
 

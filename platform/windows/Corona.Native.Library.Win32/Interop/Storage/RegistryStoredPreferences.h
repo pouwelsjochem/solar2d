@@ -12,7 +12,7 @@
 #include "Core\Rtt_Macros.h"
 #include "MStoredPreferences.h"
 #include "StoredPreferencesChain.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <memory>
 #include <string>
 #include <Windows.h>

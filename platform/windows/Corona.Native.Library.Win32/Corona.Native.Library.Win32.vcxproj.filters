@@ -33,7 +33,7 @@
     <ClInclude Include="Rtt\Rtt_WinWebViewObject.h"> 
       <Filter>Rtt</Filter> 
     </ClInclude>
-    <ClInclude Include="WinString.h" />
+    <ClInclude Include="CoronaWinString.h" />
     <ClInclude Include="WinFile.h" />
     <ClInclude Include="Interop\RuntimeEnvironment.h">
       <Filter>Interop</Filter>
@@ -295,7 +295,7 @@
     <ClCompile Include="Rtt\Rtt_WinWebViewObject.cpp"> 
       <Filter>Rtt</Filter> 
     </ClCompile> 
-    <ClCompile Include="WinString.cpp" />
+    <ClCompile Include="CoronaWinString.cpp" />
     <ClCompile Include="WinFile.cpp" />
     <ClCompile Include="Interop\RuntimeEnvironment.cpp">
       <Filter>Interop</Filter>

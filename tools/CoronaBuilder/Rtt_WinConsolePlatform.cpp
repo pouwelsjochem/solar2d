@@ -23,7 +23,7 @@
 #include "Rtt_PreferenceCollection.h"
 #include "Rtt_Runtime.h"
 #include "Rtt_String.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <algorithm>
 #include <io.h>
 #include <shellapi.h>

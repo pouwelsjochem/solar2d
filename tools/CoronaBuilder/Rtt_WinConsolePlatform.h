@@ -20,7 +20,7 @@
 #include "Rtt_WinCrypto.h"
 #include "Rtt_WinConsoleDevice.h"
 #include "Rtt_WinExitCallback.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <windows.h>
 
 

@@ -14,8 +14,8 @@
  * This implementation currently assumes TCHAR is UTF16.
  */
 
-#ifndef _WinString_H_
-#define _WinString_H_
+#ifndef _CoronaWinString_H_
+#define _CoronaWinString_H_
 
 #include <windows.h>
 #include <string.h>

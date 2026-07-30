@@ -14,7 +14,7 @@
 #include "Rtt_Win32AppPackager.h"
 #include "Rtt_Win32AppPackagerParams.h"
 
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 #include <string.h>
 #include <ctype.h>

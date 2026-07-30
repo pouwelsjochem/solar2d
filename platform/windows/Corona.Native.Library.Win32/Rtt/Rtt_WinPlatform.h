@@ -16,7 +16,7 @@
 #include "Rtt_WinCrypto.h"
 #include "Rtt_WinDevice.h"
 #include "Rtt_WinExitCallback.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <memory>
 #include <windows.h>
 

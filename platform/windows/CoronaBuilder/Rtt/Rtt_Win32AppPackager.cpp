@@ -18,7 +18,7 @@
 #include "Rtt_MPlatform.h"
 #include "Rtt_MPlatformServices.h"
 #include "Rtt_Win32AppPackagerParams.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <string>
 
 #if defined( Rtt_NO_GUI )

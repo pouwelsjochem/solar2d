@@ -9,7 +9,7 @@
 
 #include "stdafx.h"
 #include "WinFile.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 WinFile::WinFile()
 {
