@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Interop\EventArgs.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 
 namespace Interop { namespace UI {

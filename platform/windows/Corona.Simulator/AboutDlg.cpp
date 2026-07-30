@@ -9,7 +9,7 @@
 
 #include "stdafx.h"
 #include "AboutDlg.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include "Core/Rtt_Build.h"
 
 

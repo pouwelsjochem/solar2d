@@ -20,7 +20,7 @@
 #include "Interop\ScopedComInitializer.h"
 #include "Rtt_Event.h"
 #include "Rtt_Runtime.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <iphlpapi.h>
 #include <Sddl.h>
 #include <sstream>

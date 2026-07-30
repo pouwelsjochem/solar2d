@@ -11,7 +11,7 @@
 
 #include "Interop\EventArgs.h"
 #include "WebBrowserNavigatedEventArgs.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 
 namespace Interop { namespace UI {

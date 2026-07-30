@@ -15,7 +15,7 @@
 #include <fstream>
 #include <cstring>
 #include <shlwapi.h>
-#include "..\Corona.Native.Library.Win32\WinString.h"
+#include "..\Corona.Native.Library.Win32\CoronaWinString.h"
 
 namespace Rtt {
 

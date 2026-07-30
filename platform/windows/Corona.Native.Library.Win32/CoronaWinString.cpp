@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include "WinFile.h"
 #include <string>
 

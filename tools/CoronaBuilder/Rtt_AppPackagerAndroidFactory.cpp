@@ -19,7 +19,7 @@
 #include <ctype.h>
 
 #if defined(Rtt_WIN_ENV)
-#include "WinString.h"
+#include "CoronaWinString.h"
 #endif
 
 // ----------------------------------------------------------------------------

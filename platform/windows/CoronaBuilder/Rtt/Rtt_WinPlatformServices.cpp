@@ -10,7 +10,7 @@
 #include "stdafx.h"
 #include "Core\Rtt_Build.h"
 #include "Rtt_WinPlatformServices.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 #include <wincrypt.h>
 

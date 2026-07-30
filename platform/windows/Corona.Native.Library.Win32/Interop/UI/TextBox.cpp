@@ -9,7 +9,7 @@
 
 #include "stdafx.h"
 #include "TextBox.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <CommCtrl.h>
 #include <cwctype>
 #include <cstring>

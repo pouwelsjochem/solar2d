@@ -12,7 +12,7 @@
 #include "Interop\ApplicationServices.h"
 #include "Interop\RuntimeEnvironment.h"
 #include "Rtt_MPlatform.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <list>
 #include <string>
 

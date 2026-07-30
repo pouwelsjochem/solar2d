@@ -9,7 +9,7 @@
 
 #include "stdafx.h"
 #include "OperationResult.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 
 namespace Interop {

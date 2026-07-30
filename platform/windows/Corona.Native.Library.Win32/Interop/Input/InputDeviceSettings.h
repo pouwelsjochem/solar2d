@@ -12,7 +12,7 @@
 #include "Input\Rtt_InputAxisType.h"
 #include "Input\Rtt_InputDeviceType.h"
 #include "Key.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <string>
 #include <vector>
 

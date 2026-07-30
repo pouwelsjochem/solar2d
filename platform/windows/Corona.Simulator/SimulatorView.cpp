@@ -28,7 +28,7 @@
 #include "SimulatorDoc.h"
 #include "SimulatorView.h"
 #include "AboutDlg.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include "SimulatorMessages.h"
 #include "MessageDlg.h"   // Alert
 #include "CoronaInterface.h"

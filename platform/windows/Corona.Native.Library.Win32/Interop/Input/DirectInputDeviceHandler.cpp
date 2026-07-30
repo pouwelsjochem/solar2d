@@ -13,7 +13,7 @@
 #include "InputAxisSettings.h"
 #include "InputDeviceSettings.h"
 #include "InputDeviceDriverType.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <algorithm>
 #include <map>
 #include <vector>

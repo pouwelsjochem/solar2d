@@ -10,7 +10,7 @@
 #include "stdafx.h"
 #include "CommandLine.h"
 #include "CommandLineRunner.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 
 namespace Interop { namespace Ipc {

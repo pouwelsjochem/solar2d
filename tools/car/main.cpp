@@ -11,7 +11,7 @@
 
 
 #if defined(Rtt_WIN_ENV) && defined(_UNICODE)
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 int
 wmain(int argc, wchar_t *argv[], wchar_t *envp[])

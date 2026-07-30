@@ -13,7 +13,7 @@
 #include "Interop\UI\HandleMessageEventArgs.h"
 #include "Interop\UI\MessageOnlyWindow.h"
 #include "AsyncPipeReader.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <Shlwapi.h>
 #include <thread>
 

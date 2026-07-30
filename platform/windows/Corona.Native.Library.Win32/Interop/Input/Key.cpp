@@ -12,7 +12,7 @@
 #include "Core\Rtt_Assert.h"
 #include "Rtt_KeyName.h"
 #include <unordered_map>
-#include "WinString.h"
+#include "CoronaWinString.h"
 
 namespace Interop { namespace Input {
 

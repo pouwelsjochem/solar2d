@@ -13,7 +13,7 @@
 #include "Display\Rtt_Display.h"
 #include "Interop\RuntimeEnvironment.h"
 #include "Rtt_RenderingStream.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <windows.h>
 #include <algorithm>
 using std::min;

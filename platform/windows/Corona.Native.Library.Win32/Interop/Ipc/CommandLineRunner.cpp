@@ -13,7 +13,7 @@
 #include "AsyncPipeReader.h"
 #include "IODataEventArgs.h"
 #include "Process.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 #include <Shlwapi.h>
 
 

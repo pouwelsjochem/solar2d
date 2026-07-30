@@ -280,7 +280,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WinFile.h" />
-    <ClInclude Include="WinString.h" />
+    <ClInclude Include="CoronaWinString.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\external\winutil\XMessageBox.cpp" />
@@ -385,7 +385,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release.App|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WinFile.cpp" />
-    <ClCompile Include="WinString.cpp" />
+    <ClCompile Include="CoronaWinString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Corona.Rtt.Library\Corona.Rtt.Library.Win32.vcxproj">

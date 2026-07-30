@@ -12,7 +12,7 @@
 #include "Core\Rtt_Macros.h"
 #include "MStoredPreferences.h"
 #include "Rtt_PreferenceCollection.h"
-#include "WinString.h"
+#include "CoronaWinString.h"
 extern "C"
 {
 	struct sqlite3;
