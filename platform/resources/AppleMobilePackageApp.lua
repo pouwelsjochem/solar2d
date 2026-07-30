@@ -89,6 +89,23 @@ local function makepath( inPath, ... )
 	return path
 end
 
+local function createTemporaryDirectory( prefix )
+	local directory = captureCommandOutput("mktemp -d -t " .. prefix)
+	local basename = directory and directory:match("([^/]+)$")
+	local expectedBasenamePrefix = prefix .. "."
+
+	-- macOS treats the argument to `mktemp -t` as a prefix and appends
+	-- a dot followed by random characters.
+	if not basename
+		or basename:sub(1, string.len(expectedBasenamePrefix)) ~= expectedBasenamePrefix
+		or lfs.attributes(directory, "mode") ~= "directory"
+	then
+		return nil, "Problem with temporary directory: " .. tostring(directory)
+	end
+
+	return directory
+end
+
 local function setStatus( msg )
 	print( "Building: " .. msg )
 end
@@ -991,10 +1008,9 @@ local function packageApp( options )
 		if builtForAppStore then
 			-- generate SwiftSupport folder
 			local suffix = "_SwiftSupport"
-			local ssDir = captureCommandOutput("mktemp -d -t CLtmpXXXXXX"..suffix) -- creates a temporary directory
-			-- be paranoid because we'll "rm -r" this later
-			if ssDir:sub(-string.len(suffix)) ~= suffix then
-				return "Problem with temporary directory: "..tostring(ssDir)
+			local ssDir, temporaryDirectoryError = createTemporaryDirectory("CLtmpXXXXXX" .. suffix)
+			if temporaryDirectoryError then
+				return temporaryDirectoryError
 			end
 			bundleSwiftSupportParentDir = ssDir
 			bundleSwiftSupportDir = ssDir.."/SwiftSupport"
@@ -1071,11 +1087,9 @@ local function packageApp( options )
 	if builtForAppStore then
 		setStatus("Creating application bundle IPA for distribution: ".. appBundleFileIPA)
 		local suffix = "_ipa"
-		local ipaTmpDir = captureCommandOutput("mktemp -d -t CLtmpXXXXXX"..suffix) -- creates a temporary directory
-
-		-- be paranoid because we'll "rm -r" this later
-		if ipaTmpDir:sub(-string.len(suffix)) ~= suffix then
-			return "Problem with temporary directory: "..tostring(ipaTmpDir)
+		local ipaTmpDir, temporaryDirectoryError = createTemporaryDirectory("CLtmpXXXXXX" .. suffix)
+		if temporaryDirectoryError then
+			return temporaryDirectoryError
 		end
 
 		local mkTmpDirResult, errorMesg = lfs.mkdir(makepath(ipaTmpDir, "Payload"))
