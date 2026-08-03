@@ -43,6 +43,8 @@ REM Do the following for debug and release DLL builds. (Skipped for Corona Simul
 if $(TargetExt) == .dll (
    REM Copy this library's DLL to the "Bin\Corona" directory. Used by packaged Win32 apps.
    copy /y "$(TargetPath)" "$(SolutionDir)Bin\Corona"
+   if not exist "$(SolutionDir)Bin\Symbols\Win32" mkdir "$(SolutionDir)Bin\Symbols\Win32"
+   if exist "$(TargetDir)$(TargetName).pdb" copy /y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Bin\Symbols\Win32\CoronaLabs.Corona.Native.pdb"
 
 )
 </Command>

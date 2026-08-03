@@ -25,6 +25,33 @@ Open `Corona.SDK.sln` to build the complete MSI. The installer builds the
 Simulator and CoronaBuilder and stages only the Windows-native packaging tools.
 It does not require the macOS `Native.tar.gz` artifact or a bundled JRE.
 
+## Packaged app diagnostics
+
+Packaged Win32 apps keep their five most recent launch logs in:
+
+```text
+%LOCALAPPDATA%\<company>\<product>\Logs
+```
+
+Each log uses its UTC launch time and process ID, for example
+`launch-2026-08-03T14-58-12-345Z-1234.log`. Logs include startup milestones,
+app and Solar2D versions, Windows and display-adapter information, and engine
+messages. Lua `print()` output is not captured. Each log is capped at 5 MB.
+The five newest files are retained according to their Windows last-modified
+time. A log still open by another app instance is left in place and retried on
+a later launch. Recognized startup errors show the current log path and a stable
+error code in their error dialog.
+
+Unhandled native exceptions also write up to five minidumps under the adjacent
+`Crashes` directory. Dumps can contain private process memory and should be
+transferred securely. Matching app-template and native-runtime PDBs are copied
+to `Bin\Symbols\Win32` when building `CoronaBuilder.sln`; archive that directory
+for every engine version used to ship a game.
+
+Windows loader failures caused by a missing or invalid imported DLL happen
+before the app entry point and cannot be recorded by this facility. Use Windows
+Error Reporting, Reliability Monitor, or an external launcher for those cases.
+
 ## Agent mode
 
 Agent mode launches a project in a borderless, menu-free Simulator window and

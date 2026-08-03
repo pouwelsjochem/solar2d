@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "CoronaWin32.h"
+#include "Core\Rtt_Assert.h"
 #include "Interop\ApplicationServices.h"
 #include "Interop\RuntimeEnvironment.h"
 #include "Rtt_MPlatform.h"
@@ -20,6 +21,8 @@
 #pragma region Private LaunchSettingsWrapper Struct
 namespace
 {
+	std::wstring sDiagnosticLogPath;
+
 	struct CoronaLaunchSettings
 	{
 		/// <summary>Handle to the main window frame which contains the rendering surface.</summary>
@@ -250,6 +253,31 @@ namespace
 
 
 #pragma region Public Functions
+CORONA_API const wchar_t* CoronaWin32ApplicationGetCompanyName(void)
+{
+	return Interop::ApplicationServices::GetCompanyName();
+}
+
+CORONA_API const wchar_t* CoronaWin32ApplicationGetProductName(void)
+{
+	return Interop::ApplicationServices::GetProductName();
+}
+
+CORONA_API const wchar_t* CoronaWin32ApplicationGetFileVersionString(void)
+{
+	return Interop::ApplicationServices::GetFileVersionString();
+}
+
+CORONA_API void CoronaWin32SetLogCallback(CoronaWin32LogCallback callback, void *contextPointer)
+{
+	Rtt_SetLogCallback(callback, contextPointer);
+}
+
+CORONA_API void CoronaWin32SetDiagnosticLogPath(const wchar_t *path)
+{
+	sDiagnosticLogPath = path ? path : L"";
+}
+
 CORONA_API CoronaWin32LaunchSettingsRef CoronaWin32LaunchSettingsNewRef(void)
 {
 	auto settings = new CoronaLaunchSettings();
@@ -489,6 +517,12 @@ CORONA_API int CoronaWin32RuntimeRun(
 			message.SetUTF16(L"An unknown error occurred while starting up the Corona runtime.");
 			isError = true;
 		}
+		message.Append(L"\r\n\r\nError code: S2D-WIN-RUNTIME-START");
+		if (!sDiagnosticLogPath.empty())
+		{
+			message.Append(L"\r\nDiagnostic log:\r\n");
+			message.Append(sDiagnosticLogPath.c_str());
+		}
 
 		// Log the failure message.
 		if (isError)
@@ -497,7 +531,7 @@ CORONA_API int CoronaWin32RuntimeRun(
 		}
 		else
 		{
-			Rtt_LogException(message.GetUTF8());
+			Rtt_LogException("%s", message.GetUTF8());
 		}
 
 		// Display the failure message to the user, if needed.

@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "CoronaWin32.h"
 #include "resource.h"
+#include "StartupDiagnostics.h"
 #include <CommCtrl.h>
 #include <Windows.h>
 
@@ -19,6 +20,18 @@ static HWND sMainWindowHandle = nullptr;
 
 /// <summary>The Win32 handle to a child control that Corona will render to.</summary>
 static HWND sRenderSurfaceWindowHandle = nullptr;
+
+enum ApplicationExitCode
+{
+	kExitCodeSuccess = 0,
+	kExitCodeMainWindowCreationFailed = 10,
+	kExitCodeRenderSurfaceCreationFailed = 11,
+	kExitCodeRuntimeStartFailed = 12,
+	kExitCodeMessageLoopFailed = 13,
+};
+
+/// <summary>Exit code to be returned to the process which launched this application.</summary>
+static int sExitCode = kExitCodeSuccess;
 
 
 /// <summary>
@@ -61,7 +74,7 @@ LRESULT CALLBACK OnProcessWindowMessage(HWND windowHandle, UINT messageId, WPARA
 		{
 			// The main window has been closed.
 			// Post a quit message so that we can exit out of the main message loop below and quit the app.
-			::PostQuitMessage(0);
+			::PostQuitMessage(sExitCode);
 			sMainWindowHandle = nullptr;
 			return 0;
 		}
@@ -95,14 +108,19 @@ LRESULT CALLBACK OnProcessControlMessage(HWND windowHandle, UINT messageId, WPAR
 /// </param>
 /// <returns>
 ///  <para>Returns the WM_QUIT message's wParam value when the application terminates gracefully.</para>
-///  <para>Returns zero if the application terminated before entering its message loop.</para>
+///  <para>Returns a stable non-zero error code if startup or the message loop fails.</para>
 /// </returns>
 int APIENTRY wWinMain(
 	_In_ HINSTANCE instanceHandle, _In_opt_ HINSTANCE previousInstanceHandle,
 	_In_ LPWSTR commandLineString, _In_ int showWindowState)
 {
+	StartupDiagnostics diagnostics;
+	diagnostics.Start();
+	diagnostics.Log("stage=process-entry");
+
 	// Enable themed controls and support for version 6 (or newer) of the "ComCtl32.dll" library.
 	::InitCommonControls();
+	diagnostics.Log("stage=common-controls-initialized");
 
 #ifdef _DEBUG
 	// Enable memory leak tracking.
@@ -183,8 +201,14 @@ int APIENTRY wWinMain(
 	}
 	if (!sMainWindowHandle)
 	{
-		return 0;
+		auto errorCode = ::GetLastError();
+		diagnostics.LogLastError("main-window-create-failed", errorCode);
+		diagnostics.ShowStartupError(
+			nullptr, L"S2D-WIN-WINDOW-CREATE",
+			L"The application could not create its main window.", errorCode);
+		return kExitCodeMainWindowCreationFailed;
 	}
+	diagnostics.Log("stage=main-window-created");
 
 	// If this application is being requested to display as maximized or minimized on launch, then handle it now.
 	// Note: This show state usually comes from the application shortcut's "Run" field.
@@ -229,6 +253,10 @@ int APIENTRY wWinMain(
 				windowClassSettings.lpszClassName, nullptr, controlStyles, 0, 0,
 				clientBounds.right - clientBounds.left, clientBounds.bottom - clientBounds.top,
 				sMainWindowHandle, nullptr, instanceHandle, nullptr);
+		if (!testSurfaceHandle)
+		{
+			diagnostics.LogLastError("graphics-test-surface-create-failed", ::GetLastError());
+		}
 		ShowWindow(testSurfaceHandle, SW_HIDE);
 		sRenderSurfaceWindowHandle = ::CreateWindowW(
 				windowClassSettings.lpszClassName, nullptr, controlStyles, 0, 0,
@@ -237,9 +265,15 @@ int APIENTRY wWinMain(
 	}
 	if (!sRenderSurfaceWindowHandle)
 	{
-		return 0;
+		auto errorCode = ::GetLastError();
+		diagnostics.LogLastError("render-surface-create-failed", errorCode);
+		diagnostics.ShowStartupError(
+			sMainWindowHandle, L"S2D-WIN-RENDER-SURFACE-CREATE",
+			L"The application could not create its rendering surface.", errorCode);
+		return kExitCodeRenderSurfaceCreationFailed;
 	}
 	::SetFocus(sRenderSurfaceWindowHandle);
+	diagnostics.Log("stage=render-surface-created");
 
 	// Create and configure the Corona runtime.
 	bool hasCoronaRuntimeStarted = false;
@@ -278,35 +312,48 @@ int APIENTRY wWinMain(
 	settings.SetResourceDirectory(nullptr);
 
 	// Start the Corona runtime.
+	diagnostics.Log("stage=runtime-starting launch-argument-count=%d", settings.GetLaunchArgumentCount());
 	hasCoronaRuntimeStarted = coronaRuntime.Run();
 
 	// Update the main application window.
 	if (!hasCoronaRuntimeStarted)
 	{
+		sExitCode = kExitCodeRuntimeStartFailed;
+		diagnostics.Log("stage=runtime-start-failed exit-code=%d", sExitCode);
 		// We've failed to start the Corona runtime. Close the main application window.
 		// Note: The Corona runtime would have already displayed an error message to the user at this point.
 		::PostMessageW(sMainWindowHandle, WM_CLOSE, 0, 0);
 	}
 	else
 	{
+		diagnostics.Log("stage=runtime-started");
 		// We've successfully started the Corona runtime.
 		// If the main application window hasn't been made visible yet, then do so now.
 		if (::IsWindowVisible(sMainWindowHandle) == FALSE)
 		{
 			::ShowWindow(sMainWindowHandle, SW_SHOW);
 		}
+		diagnostics.Log("stage=main-window-visible");
 	}
 
 	// Run the window's main message loop.
 	// This loop will run until a WM_QUIT message has been received, causing GetMessage() to return false.
 	MSG message{};
-	while (::GetMessage(&message, nullptr, 0, 0))
+	BOOL getMessageResult = 0;
+	diagnostics.Log("stage=message-loop-started");
+	while ((getMessageResult = ::GetMessage(&message, nullptr, 0, 0)) > 0)
 	{
 		::TranslateMessage(&message);
 		::DispatchMessage(&message);
 	}
+	if (getMessageResult < 0)
+	{
+		sExitCode = kExitCodeMessageLoopFailed;
+		diagnostics.LogLastError("message-loop-failed", ::GetLastError());
+	}
 
 	// The application is terminating.
 	// Return the exit code provided by the WM_QUIT message.
-	return (int)message.wParam;
+	diagnostics.Log("stage=process-exit exit-code=%d", sExitCode);
+	return sExitCode;
 }

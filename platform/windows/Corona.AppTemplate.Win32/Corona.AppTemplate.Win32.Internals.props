@@ -24,6 +24,8 @@ copy "$(SolutionDir)Bin\Corona\CoronaLabs.Corona.Native.dll" "$(IntDir)AppTempla
 copy "$(SolutionDir)Bin\Corona\lua.dll" "$(IntDir)AppTemplate" /Y
 copy "$(SolutionDir)Bin\Corona\OpenAL32.dll" "$(IntDir)AppTemplate" /Y
 copy "$(SolutionDir)Bin\Corona\pthreads.dll" "$(IntDir)AppTemplate" /Y
+if not exist "$(SolutionDir)Bin\Symbols\Win32" mkdir "$(SolutionDir)Bin\Symbols\Win32"
+if exist "$(TargetDir)$(TargetName).pdb" copy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Bin\Symbols\Win32\Corona.App.pdb" /Y
 setlocal EnableDelayedExpansion
 set corona_crt_source=
 if exist "$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT\*.dll" set corona_crt_source=$(VCToolsRedistDir)$(PlatformTarget)\Microsoft.VC$(PlatformToolsetVersion).CRT

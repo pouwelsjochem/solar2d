@@ -11,15 +11,25 @@
 
 #include "CoronaMacros.h"
 //#include "CoronaLua.h"		//TODO: Figure out a good way to include this.
+#include <stddef.h>
 #include <Windows.h>
 
 
 CORONA_EXTERN_C struct lua_State;
 CORONA_EXTERN_C typedef void* CoronaWin32RuntimeRef;
 CORONA_EXTERN_C typedef void* CoronaWin32LaunchSettingsRef;
+CORONA_EXTERN_C typedef void (*CoronaWin32LogCallback)(
+	const char *message, size_t length, void *contextPointer);
 
 
 //CORONA_EXTERN_C typedef void((*CoronaWin32RuntimeEventCallback)(CoronaWin32RuntimeRef, void*));
+
+
+CORONA_API const wchar_t* CoronaWin32ApplicationGetCompanyName(void);
+CORONA_API const wchar_t* CoronaWin32ApplicationGetProductName(void);
+CORONA_API const wchar_t* CoronaWin32ApplicationGetFileVersionString(void);
+CORONA_API void CoronaWin32SetLogCallback(CoronaWin32LogCallback callback, void *contextPointer);
+CORONA_API void CoronaWin32SetDiagnosticLogPath(const wchar_t *path);
 
 
 CORONA_API CoronaWin32LaunchSettingsRef CoronaWin32LaunchSettingsNewRef(void);
