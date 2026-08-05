@@ -276,10 +276,21 @@ LuaContext::traceback( lua_State* L )
 int
 LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorListener )
 {
-    const char *briefMessage = lua_tostring( L, -1 );
+	const char *briefMessage = lua_tostring( L, -1 );
     
 	if (!lua_isstring(L, -1))  /* 'message' not a string? */
+	{
+#ifdef Rtt_AUTHORING_SIMULATOR
+		if (Self::HasRuntime(L))
+		{
+			SimulatorControl::RecordRuntimeError(
+				*Self::GetRuntime(L), errorType,
+				"error object is not a string", "" );
+			SimulatorControl::HaltOnRuntimeError( *Self::GetRuntime(L) );
+		}
+#endif
 		return 1;  /* keep it intact */
+	}
 
 	if (briefMessage == NULL)
 	{
@@ -294,6 +305,7 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 		{
 			SimulatorControl::RecordRuntimeError(
 				*Self::GetRuntime(L), errorType, briefMessage, "" );
+			SimulatorControl::HaltOnRuntimeError( *Self::GetRuntime(L) );
 		}
 #endif
 		return 1;
@@ -306,6 +318,7 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 		{
 			SimulatorControl::RecordRuntimeError(
 				*Self::GetRuntime(L), errorType, briefMessage, "" );
+			SimulatorControl::HaltOnRuntimeError( *Self::GetRuntime(L) );
 		}
 #endif
 		return 1;
@@ -340,6 +353,9 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 		if (runtime->fErrorHandlerRecursionGuard == true)
 		{
 			CORONA_LOG_ERROR("Preventing recursive custom error handler call! Errors in error handle will not be handled by itself.\n");
+#ifdef Rtt_AUTHORING_SIMULATOR
+			SimulatorControl::HaltOnRuntimeError( *runtime );
+#endif
 			return 1;
 		}
 #ifdef Rtt_AUTHORING_SIMULATOR
@@ -356,6 +372,13 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 	{
 		bail = LuaContext::callUnhandledErrorHandler( L, briefMessage, stackTrace );
 	}
+
+#ifdef Rtt_AUTHORING_SIMULATOR
+	if ( bail && Self::HasRuntime( L ) )
+	{
+		SimulatorControl::HaltOnRuntimeError( *Self::GetRuntime( L ) );
+	}
+#endif
 	
 	// TODO: this ought to be in a shared header somewhere
 	const char *javaStackTraceSignature = "\nJava Stack Trace:";

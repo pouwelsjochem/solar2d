@@ -397,6 +397,7 @@ struct SimulatorControlRuntimeState
 		diagnosticFrame( 0 ),
 		hasDiagnostic( false ),
 		diagnosticTruncated( false ),
+		runtimeErrorHalted( false ),
 		diagnosticsWritten( false ),
 		sessionWritten( false )
 	{
@@ -412,6 +413,7 @@ struct SimulatorControlRuntimeState
 	std::string diagnosticStackTrace;
 	bool hasDiagnostic;
 	bool diagnosticTruncated;
+	bool runtimeErrorHalted;
 	bool diagnosticsWritten;
 	bool sessionWritten;
 };
@@ -849,6 +851,16 @@ GetOrCreateSimulatorControlRuntimeState( Runtime& runtime )
 	return & iterator->second;
 }
 
+static SimulatorControlRuntimeState*
+GetSimulatorControlRuntimeState( Runtime& runtime )
+{
+	SimulatorControlRuntimeStateMap& states =
+		GetSimulatorControlRuntimeStates();
+	SimulatorControlRuntimeStateMap::iterator iterator =
+		states.find( & runtime );
+	return states.end() == iterator ? NULL : & iterator->second;
+}
+
 static void
 AssignSimulatorControlDiagnosticText(
 	std::string& result, const char *value,
@@ -1242,17 +1254,22 @@ BuildSimulatorControlStatus(
 	Runtime& runtime, const SimulatorControlRuntimeState& state )
 {
 	char result[512];
+	const char *executionState = state.runtimeErrorHalted ?
+		"error-halted" : ( runtime.IsSuspended() ? "suspended" : "running" );
 	snprintf(
 		result, sizeof( result ),
 		"{\"protocol\":2,\"sessionId\":\"%s\",\"generation\":%lu,"
 		"\"pid\":%ld,\"frame\":%lu,"
-		"\"applicationLoaded\":%s,\"applicationExecuting\":%s,\"suspended\":%s}",
+		"\"applicationLoaded\":%s,\"applicationExecuting\":%s,"
+		"\"executionState\":\"%s\",\"runtimeErrorHalted\":%s,\"suspended\":%s}",
 		state.sessionId.c_str(),
 		state.generation,
 		GetSimulatorControlProcessId(),
 		(unsigned long)runtime.GetFrame(),
 		runtime.IsProperty( Runtime::kIsApplicationLoaded ) ? "true" : "false",
 		runtime.IsProperty( Runtime::kIsApplicationExecuting ) ? "true" : "false",
+		executionState,
+		state.runtimeErrorHalted ? "true" : "false",
 		runtime.IsSuspended() ? "true" : "false" );
 	return std::string( result );
 }
@@ -1266,8 +1283,9 @@ BuildSimulatorControlDiagnostics(
 	char identity[128];
 	snprintf(
 		identity, sizeof( identity ),
-		",\"generation\":%lu,\"latestRuntimeError\":",
-		state.generation );
+		",\"generation\":%lu,\"runtimeErrorHalted\":%s,"
+		"\"latestRuntimeError\":",
+		state.generation, state.runtimeErrorHalted ? "true" : "false" );
 	result.append( identity );
 	if ( ! state.hasDiagnostic )
 	{
@@ -1289,6 +1307,37 @@ BuildSimulatorControlDiagnostics(
 	result.append(
 		state.diagnosticTruncated ?
 			",\"truncated\":true}}" : ",\"truncated\":false}}" );
+	return result;
+}
+
+static bool
+IsSimulatorControlCommandAllowedWhileErrorHalted(
+	const std::string& command )
+{
+	return "runtime-status" == command ||
+		"runtime-diagnostics" == command ||
+		"runtime-logs" == command ||
+		"capture-screenshot" == command ||
+		"debug-snapshot" == command ||
+		"screen-recording-status" == command ||
+		"stop-screen-recording" == command ||
+		"display-object-tree" == command ||
+		"find-display-object" == command ||
+		"hit-test-display-objects" == command ||
+		"relaunch-project" == command ||
+		"quit-simulator" == command;
+}
+
+static std::string
+BuildSimulatorControlRuntimeErrorHaltedResponse(
+	const SimulatorControlRuntimeState& state )
+{
+	std::string result(
+		"{\"ok\":false,\"error\":{\"code\":\"runtime-error-halted\","
+		"\"message\":\"runtime execution is halted after an unhandled error; "
+		"relaunch the project before issuing this command\"},\"result\":" );
+	result.append( BuildSimulatorControlDiagnostics( state ) );
+	result.push_back( '}' );
 	return result;
 }
 
@@ -5023,6 +5072,12 @@ ProcessSimulatorControlRequest(
 	Runtime& runtime, SimulatorControlRuntimeState& state,
 	const std::string& command, const std::string& payload, int& pendingQuitExitCode )
 {
+	if ( state.runtimeErrorHalted &&
+		! IsSimulatorControlCommandAllowedWhileErrorHalted( command ) )
+	{
+		return BuildSimulatorControlRuntimeErrorHaltedResponse( state );
+	}
+
 	if ( "runtime-status" == command )
 	{
 		return SimulatorControlSuccessResponse(
@@ -5807,6 +5862,27 @@ SimulatorControl::RecordRuntimeError(
 		WriteSimulatorControlSession( *state );
 		WriteSimulatorControlDiagnostics( *state );
 	}
+}
+
+void
+SimulatorControl::HaltOnRuntimeError( Runtime& sender )
+{
+	SimulatorControlRuntimeState *state =
+		GetOrCreateSimulatorControlRuntimeState( sender );
+	if ( state && ! state->runtimeErrorHalted )
+	{
+		state->runtimeErrorHalted = true;
+		WriteSimulatorControlSession( *state );
+		WriteSimulatorControlDiagnostics( *state );
+	}
+}
+
+bool
+SimulatorControl::IsRuntimeErrorHalted( Runtime& sender )
+{
+	SimulatorControlRuntimeState *state =
+		GetSimulatorControlRuntimeState( sender );
+	return state && state->runtimeErrorHalted;
 }
 
 void

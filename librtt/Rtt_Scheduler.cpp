@@ -11,6 +11,9 @@
 
 #include "Rtt_Scheduler.h"
 #include "Rtt_Runtime.h"
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	#include "Rtt_SimulatorControl.h"
+#endif
 
 // ----------------------------------------------------------------------------
 
@@ -121,6 +124,13 @@ Scheduler::Run()
 			(*t)(*this);
 			Rtt_DELETE(t);
 		}
+
+#if defined(Rtt_AUTHORING_SIMULATOR)
+		if ( SimulatorControl::IsRuntimeErrorHalted( fOwner ) )
+		{
+			break;
+		}
+#endif
 	}
 
 	fProcessing = false;
@@ -181,4 +191,3 @@ Scheduler::SyncPendingList()
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

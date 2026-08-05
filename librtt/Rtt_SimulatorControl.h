@@ -26,6 +26,8 @@ namespace SimulatorControl
 	void RecordRuntimeError(
 		Runtime& runtime, const char *errorType,
 		const char *message, const char *stackTrace );
+	void HaltOnRuntimeError( Runtime& runtime );
+	bool IsRuntimeErrorHalted( Runtime& runtime );
 	void Shutdown( Runtime& runtime );
 	bool DispatchControllerInput(
 		Runtime& runtime, const MSimulatorHost::Input& input );

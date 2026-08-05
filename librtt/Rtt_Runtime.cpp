@@ -1185,6 +1185,13 @@ Runtime::DispatchEvent( const MEvent& e )
 {
 	RuntimeGuard guard( * this );
 
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
+#endif
+
 	e.Dispatch( fVMContext->L(), * this );
 }
 
@@ -1425,10 +1432,20 @@ Runtime::Step()
 
 #if defined(Rtt_AUTHORING_SIMULATOR)
 	SimulatorControl::Process( *this );
+	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
 #endif
 
 	const bool wasSuspended = IsSuspended();
 	fScheduler->Run();
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
+#endif
 	const bool isSuspended = IsSuspended();
 	if( wasSuspended != isSuspended && isSuspended )
 	{
@@ -1442,9 +1459,19 @@ Runtime::Step()
 	if (m_fAsyncResultStr.load()) {
 		FinalizeWorkingThreadWithEvent(this, fVMContext->L());
 	}
+	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
 #endif
 
 	fDisplay->Update();
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
+#endif
 	++fFrame;	
 }
 
@@ -1478,10 +1505,20 @@ Runtime::operator()()
 
 #if defined(Rtt_AUTHORING_SIMULATOR)
 	SimulatorControl::Process( *this );
+	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
 #endif
 
 	const bool wasSuspended = IsSuspended();
 	fScheduler->Run();
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
+#endif
 	const bool isSuspended = IsSuspended();
 	if (wasSuspended != isSuspended && isSuspended)
 	{
@@ -1495,9 +1532,19 @@ Runtime::operator()()
 		if (m_fAsyncResultStr.load()) {
 			FinalizeWorkingThreadWithEvent(this, fVMContext->L());
 		}
+		if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+		{
+			return;
+		}
 #endif
 		fDisplay->Update();
 
+#if defined(Rtt_AUTHORING_SIMULATOR)
+		if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+		{
+			return;
+		}
+#endif
 		++fFrame;
 	}
 

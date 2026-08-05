@@ -97,7 +97,35 @@ runtime; it does not add a module or require project changes.
 
 `runtime-diagnostics` returns the most recent Lua or control-command error,
 including its type, message, stack trace, frame, and sequence number. Its
-`latestRuntimeError` value is `null` if no error has occurred.
+`latestRuntimeError` value is `null` if no error has occurred. Both it and
+`runtime-status` include `runtimeErrorHalted`; status also reports an
+`executionState` of `running`, `suspended`, or `error-halted`.
+
+## Unhandled runtime errors
+
+When the Lua `unhandledError` listener does not return `true`, a controllable
+runtime enters the `error-halted` state after recording the error. The current
+frame stops advancing, remaining scheduler tasks do not run, and subsequent
+application events and automation input are not dispatched. An error that an
+`unhandledError` listener explicitly handles by returning `true` is still
+recorded but does not halt the runtime. Errors from `evaluate-lua`,
+`execute-lua`, and other control commands are diagnostics only and do not halt
+the application.
+
+The control mailbox remains responsive while error-halted. The following safe
+inspection, artifact, and lifecycle commands remain available:
+
+- `runtime-status`, `runtime-diagnostics`, and `runtime-logs`
+- `capture-screenshot` and `debug-snapshot`
+- `screen-recording-status` and `stop-screen-recording`
+- `display-object-tree`, `find-display-object`, and
+  `hit-test-display-objects`
+- `relaunch-project` and `quit-simulator`
+
+Other commands, including waits, Lua inspection/evaluation, input, and
+assertions, fail immediately with error code `runtime-error-halted` and include
+the latest diagnostics in their result. `relaunch-project` replaces the Lua
+runtime and clears the halt as part of the new control session.
 
 `runtime-logs` returns recent Simulator log messages. Pass `--since SEQUENCE`
 to return only newer messages, or `--filter TEXT` to return only messages that
@@ -257,4 +285,5 @@ The Simulator writes `session.json` once the Lua runtime can accept requests.
 Requests are processed on the runtime thread, at most one per frame, so Lua
 access does not race the engine. Relaunching replaces the session and invalidates
 table and display-object handles. A suspended or blocked Lua runtime cannot
-answer until it resumes.
+answer until it resumes; an error-halted runtime remains responsive to the safe
+commands listed above.
