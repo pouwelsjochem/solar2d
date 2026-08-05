@@ -52,6 +52,7 @@ Run the same native executable in control-client mode from another terminal:
 
 ```sh
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-status
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-metrics
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-diagnostics
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-logs
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-logs --filter 'scene loaded' --follow
@@ -116,6 +117,19 @@ or `error-halted`. Its `controlPaused` and `stepFramesRemaining` fields expose
 automation-controlled execution independently from the platform suspension
 state. `debuggerPaused` and `debuggerPauseSequence` identify a live Lua source
 pause.
+
+`runtime-metrics` returns a timestamped performance and memory snapshot without
+executing project Lua. Frame timing contains up to the latest 120 intervals and
+reports the configured rate and budget, latest, average, minimum, maximum, p95,
+and observed FPS. Intervals use runtime elapsed time, so time spent suspended,
+control-paused, or debug-paused does not appear as an artificial slow frame.
+
+Memory reports the current Lua heap and application texture allocation in
+bytes. Rendering reports the previous rendered frame's CPU/GPU timing, resource
+work, draw calls, primitives, and binding counts. Renderer statistics are
+enabled automatically when a controllable runtime starts; if project code later
+disables them with `display.enableStatistics(false)`, `statisticsEnabled` is
+false and `previousFrame` is `null`.
 
 Application runtime errors also include a `context` snapshot containing
 structured stack frames with source, line, function, locals, and upvalues.
@@ -253,9 +267,9 @@ a Unix-epoch `timestampMs`.
 or to an optional output path.
 
 `debug-snapshot` writes a PNG and a JSON manifest beside it using the `.png.json`
-suffix. The manifest contains runtime status, the latest diagnostic, captured
-logs, and the first page of the display tree. It is intended as a compact
-debugging bundle rather than a complete trace.
+suffix. The manifest contains runtime status, runtime metrics, the latest
+diagnostic, captured logs, and the first page of the display tree. It is
+intended as a compact debugging bundle rather than a complete trace.
 
 On macOS 15 or later, `start-screen-recording` records the Simulator device view
 to an H.264 `.mp4`. Its path may be relative to the control client's working

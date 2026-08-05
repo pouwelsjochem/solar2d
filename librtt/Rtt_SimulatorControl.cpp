@@ -22,6 +22,7 @@
 #include "Display/Rtt_GroupObject.h"
 #include "Display/Rtt_PlatformBitmap.h"
 #include "Display/Rtt_StageObject.h"
+#include "Display/Rtt_TextureFactory.h"
 #include "Input/Rtt_PlatformInputAxis.h"
 #include "Input/Rtt_PlatformInputDevice.h"
 #include "Input/Rtt_PlatformInputDeviceManager.h"
@@ -34,7 +35,9 @@
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_MSimulatorHost.h"
 #include "Rtt_Runtime.h"
+#include "Renderer/Rtt_Renderer.h"
 
+#include <algorithm>
 #include <ctype.h>
 #include <deque>
 #include <errno.h>
@@ -228,6 +231,7 @@ static const int kSimulatorControlMaximumDiagnosticTableEntries = 3;
 static const int kSimulatorControlMaximumDebuggerFrames = 64;
 static const int kSimulatorControlMaximumDebuggerValues = 100;
 static const unsigned long kSimulatorControlMaximumStepFrames = 1000;
+static const size_t kSimulatorControlMaximumFrameTimingSamples = 120;
 static char kSimulatorControlRegistryKey;
 
 static unsigned long long GetSimulatorControlMilliseconds();
@@ -414,6 +418,7 @@ struct SimulatorControlRuntimeState
 		debuggerStepDepth( 0 ),
 		stepFramesRemaining( 0 ),
 		controlledInputDispatchDepth( 0 ),
+		lastFrameStartElapsedMilliseconds( 0.0 ),
 		debuggerThread( NULL ),
 		debuggerStepThread( NULL ),
 		hasDiagnostic( false ),
@@ -425,6 +430,8 @@ struct SimulatorControlRuntimeState
 		debuggerHookInstalled( false ),
 		debuggerEvaluating( false ),
 		stepStartPending( false ),
+		hasLastFrameStart( false ),
+		rendererStatisticsRequested( false ),
 		diagnosticsWritten( false ),
 		sessionWritten( false )
 	{
@@ -439,6 +446,7 @@ struct SimulatorControlRuntimeState
 	int debuggerStepDepth;
 	unsigned long stepFramesRemaining;
 	int controlledInputDispatchDepth;
+	double lastFrameStartElapsedMilliseconds;
 	lua_State *debuggerThread;
 	lua_State *debuggerStepThread;
 	std::string directory;
@@ -455,6 +463,7 @@ struct SimulatorControlRuntimeState
 	std::string diagnosticMessage;
 	std::string diagnosticStackTrace;
 	std::string diagnosticContext;
+	std::deque< double > frameIntervalsMilliseconds;
 	bool hasDiagnostic;
 	bool diagnosticTruncated;
 	bool runtimeErrorHalted;
@@ -464,6 +473,8 @@ struct SimulatorControlRuntimeState
 	bool debuggerHookInstalled;
 	bool debuggerEvaluating;
 	bool stepStartPending;
+	bool hasLastFrameStart;
+	bool rendererStatisticsRequested;
 	bool diagnosticsWritten;
 	bool sessionWritten;
 };
@@ -1481,6 +1492,178 @@ BuildSimulatorControlStatus(
 	return std::string( result );
 }
 
+static void
+AppendSimulatorControlJsonNumber( std::string& result, double value )
+{
+	char number[64];
+	snprintf( number, sizeof( number ), "%.3f", value );
+	result.append( number );
+}
+
+static std::string
+BuildSimulatorControlRuntimeMetrics(
+	Runtime& runtime, const SimulatorControlRuntimeState& state )
+{
+	const std::deque< double >& samples = state.frameIntervalsMilliseconds;
+	double latestInterval = 0.0;
+	double averageInterval = 0.0;
+	double minimumInterval = 0.0;
+	double maximumInterval = 0.0;
+	double percentile95Interval = 0.0;
+	if ( ! samples.empty() )
+	{
+		latestInterval = samples.back();
+		minimumInterval = samples.front();
+		maximumInterval = samples.front();
+		std::vector< double > sortedSamples( samples.begin(), samples.end() );
+		for ( size_t index = 0; index < samples.size(); index++ )
+		{
+			const double sample = samples[index];
+			averageInterval += sample;
+			minimumInterval = sample < minimumInterval ? sample : minimumInterval;
+			maximumInterval = sample > maximumInterval ? sample : maximumInterval;
+		}
+		averageInterval /= (double)samples.size();
+		std::sort( sortedSamples.begin(), sortedSamples.end() );
+		size_t percentileIndex =
+			( sortedSamples.size() * 95 + 99 ) / 100 - 1;
+		percentile95Interval = sortedSamples[percentileIndex];
+	}
+
+	lua_State *L = runtime.VMContext().L();
+	unsigned long long luaBytes = 0;
+	if ( L )
+	{
+		const int kilobytes = lua_gc( L, LUA_GCCOUNT, 0 );
+		const int remainingBytes = lua_gc( L, LUA_GCCOUNTB, 0 );
+		if ( kilobytes >= 0 && remainingBytes >= 0 )
+		{
+			luaBytes = (unsigned long long)kilobytes * 1024ULL +
+				(unsigned long long)remainingBytes;
+		}
+	}
+
+	const S32 textureBytes =
+		runtime.GetDisplay().GetTextureFactory().GetTextureMemoryUsed();
+	Renderer& renderer = runtime.GetDisplay().GetRenderer();
+	const bool statisticsEnabled = renderer.GetStatisticsEnabled();
+
+	std::string result( "{\"sessionId\":" );
+	AppendSimulatorControlJsonString( result, state.sessionId );
+	char metadata[320];
+	snprintf(
+		metadata, sizeof( metadata ),
+		",\"generation\":%lu,\"timestampMs\":%llu,\"frame\":%lu,"
+		"\"runtimeElapsedMs\":",
+		state.generation, GetSimulatorControlTimestampMilliseconds(),
+		(unsigned long)runtime.GetFrame() );
+	result.append( metadata );
+	AppendSimulatorControlJsonNumber( result, runtime.GetElapsedMS() );
+
+	char timing[192];
+	snprintf(
+		timing, sizeof( timing ),
+		",\"frameTiming\":{\"configuredFps\":%lu,"
+		"\"configuredFrameIntervalMs\":",
+		(unsigned long)runtime.GetFPS() );
+	result.append( timing );
+	if ( runtime.GetFPS() > 0 )
+	{
+		AppendSimulatorControlJsonNumber(
+			result, 1000.0 / (double)runtime.GetFPS() );
+	}
+	else
+	{
+		result.append( "null" );
+	}
+	snprintf(
+		timing, sizeof( timing ),
+		",\"sampleCount\":%lu,\"sampleCapacity\":%lu,"
+		"\"latestFrameIntervalMs\":",
+		(unsigned long)samples.size(),
+		(unsigned long)kSimulatorControlMaximumFrameTimingSamples );
+	result.append( timing );
+	if ( samples.empty() )
+	{
+		result.append(
+			"null,\"averageFrameIntervalMs\":null,"
+			"\"minimumFrameIntervalMs\":null,"
+			"\"maximumFrameIntervalMs\":null,"
+			"\"p95FrameIntervalMs\":null,\"observedFps\":null}" );
+	}
+	else
+	{
+		AppendSimulatorControlJsonNumber( result, latestInterval );
+		result.append( ",\"averageFrameIntervalMs\":" );
+		AppendSimulatorControlJsonNumber( result, averageInterval );
+		result.append( ",\"minimumFrameIntervalMs\":" );
+		AppendSimulatorControlJsonNumber( result, minimumInterval );
+		result.append( ",\"maximumFrameIntervalMs\":" );
+		AppendSimulatorControlJsonNumber( result, maximumInterval );
+		result.append( ",\"p95FrameIntervalMs\":" );
+		AppendSimulatorControlJsonNumber( result, percentile95Interval );
+		result.append( ",\"observedFps\":" );
+		if ( averageInterval > 0.0 )
+		{
+			AppendSimulatorControlJsonNumber( result, 1000.0 / averageInterval );
+		}
+		else
+		{
+			result.append( "null" );
+		}
+		result.push_back( '}' );
+	}
+
+	char memory[160];
+	snprintf(
+		memory, sizeof( memory ),
+		",\"memory\":{\"luaBytes\":%llu,\"textureBytes\":%ld},"
+		"\"rendering\":{\"statisticsEnabled\":%s,\"previousFrame\":",
+		luaBytes, (long)( textureBytes < 0 ? 0 : textureBytes ),
+		statisticsEnabled ? "true" : "false" );
+	result.append( memory );
+	if ( ! statisticsEnabled )
+	{
+		result.append( "null}}" );
+		return result;
+	}
+
+	const Renderer::Statistics& statistics = renderer.GetFrameStatistics();
+	result.append( "{\"resourceCreateMs\":" );
+	AppendSimulatorControlJsonNumber(
+		result, (double)statistics.fResourceCreateTime );
+	result.append( ",\"resourceUpdateMs\":" );
+	AppendSimulatorControlJsonNumber(
+		result, (double)statistics.fResourceUpdateTime );
+	result.append( ",\"resourceDestroyMs\":" );
+	AppendSimulatorControlJsonNumber(
+		result, (double)statistics.fResourceDestroyTime );
+	result.append( ",\"preparationMs\":" );
+	AppendSimulatorControlJsonNumber(
+		result, (double)statistics.fPreparationTime );
+	result.append( ",\"cpuRenderMs\":" );
+	AppendSimulatorControlJsonNumber(
+		result, (double)statistics.fRenderTimeCPU );
+	result.append( ",\"gpuRenderMs\":" );
+	AppendSimulatorControlJsonNumber(
+		result, (double)statistics.fRenderTimeGPU );
+	char rendererCounts[384];
+	snprintf(
+		rendererCounts, sizeof( rendererCounts ),
+		",\"drawCalls\":%lu,\"triangles\":%lu,\"lines\":%lu,"
+		"\"geometryBinds\":%lu,\"programBinds\":%lu,"
+		"\"textureBinds\":%lu,\"uniformBinds\":%lu}}}",
+		(unsigned long)statistics.fDrawCallCount,
+		(unsigned long)statistics.fTriangleCount,
+		(unsigned long)statistics.fLineCount,
+		(unsigned long)statistics.fGeometryBindCount,
+		(unsigned long)statistics.fProgramBindCount,
+		(unsigned long)statistics.fTextureBindCount,
+		(unsigned long)statistics.fUniformBindCount );
+	result.append( rendererCounts );
+	return result;
+}
+
 static std::string
 BuildSimulatorControlDiagnostics(
 	const SimulatorControlRuntimeState& state )
@@ -1525,6 +1708,7 @@ IsSimulatorControlCommandAllowedWhileErrorHalted(
 	const std::string& command )
 {
 	return "runtime-status" == command ||
+		"runtime-metrics" == command ||
 		"runtime-diagnostics" == command ||
 		"runtime-logs" == command ||
 		"capture-screenshot" == command ||
@@ -1548,6 +1732,7 @@ IsSimulatorControlCommandAllowedWhileDebuggerPaused(
 	const std::string& command )
 {
 	return "runtime-status" == command ||
+		"runtime-metrics" == command ||
 		"runtime-diagnostics" == command ||
 		"runtime-logs" == command ||
 		"inspect-lua-value" == command ||
@@ -2090,6 +2275,8 @@ CaptureSimulatorControlSnapshot(
 
 	std::string manifest( "{\"status\":" );
 	manifest.append( BuildSimulatorControlStatus( runtime, state ) );
+	manifest.append( ",\"metrics\":" );
+	manifest.append( BuildSimulatorControlRuntimeMetrics( runtime, state ) );
 	manifest.append( ",\"diagnostics\":" );
 	manifest.append( BuildSimulatorControlDiagnostics( state ) );
 	manifest.append( ",\"logs\":" );
@@ -5312,7 +5499,7 @@ IsSimulatorControlScenarioCommand( const std::string& command )
 {
 	static const char *commands[] =
 	{
-		"runtime-status", "runtime-diagnostics", "runtime-logs",
+		"runtime-status", "runtime-metrics", "runtime-diagnostics", "runtime-logs",
 		"pause-runtime", "resume-runtime", "step-runtime-frame",
 		"add-lua-breakpoint", "remove-lua-breakpoint",
 		"list-lua-breakpoints", "debugger-status",
@@ -5686,6 +5873,7 @@ PrintSimulatorControlClientHelp()
 		"\n"
 		"Commands:\n"
 		"  runtime-status\n"
+		"  runtime-metrics\n"
 		"  runtime-diagnostics\n"
 		"  runtime-logs [--since SEQUENCE] [--filter TEXT] [--follow]\n"
 		"  pause-runtime\n"
@@ -5830,6 +6018,7 @@ RunSimulatorControlClientInternal(
 	unsigned long runtimeLogsSinceSequence = 0;
 	std::string runtimeLogsFilter;
 	if ( "runtime-status" == command ||
+		"runtime-metrics" == command ||
 		"runtime-diagnostics" == command ||
 		"pause-runtime" == command ||
 		"resume-runtime" == command ||
@@ -7060,6 +7249,17 @@ ProcessSimulatorControlRequest(
 			BuildSimulatorControlStatus( runtime, state ) );
 	}
 
+	if ( "runtime-metrics" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"runtime-metrics does not accept arguments" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlRuntimeMetrics( runtime, state ) );
+	}
+
 	if ( "runtime-diagnostics" == command )
 	{
 		return SimulatorControlSuccessResponse(
@@ -7964,6 +8164,11 @@ SimulatorControl::Process( Runtime& sender )
 		return;
 	}
 	SimulatorControlRuntimeState& state = *statePointer;
+	if ( ! state.rendererStatisticsRequested )
+	{
+		sender.GetDisplay().GetRenderer().SetStatisticsEnabled( true );
+		state.rendererStatisticsRequested = true;
+	}
 
 	if ( ! state.sessionWritten )
 	{
@@ -8044,6 +8249,26 @@ SimulatorControl::IsRuntimeErrorHalted( Runtime& sender )
 	return state && state->runtimeErrorHalted;
 }
 
+static void
+RecordSimulatorControlRuntimeFrameStart(
+	Runtime& runtime, SimulatorControlRuntimeState& state )
+{
+	const double elapsedMilliseconds = runtime.GetElapsedMS();
+	if ( state.hasLastFrameStart &&
+		elapsedMilliseconds > state.lastFrameStartElapsedMilliseconds )
+	{
+		state.frameIntervalsMilliseconds.push_back(
+			elapsedMilliseconds - state.lastFrameStartElapsedMilliseconds );
+		while ( state.frameIntervalsMilliseconds.size() >
+			kSimulatorControlMaximumFrameTimingSamples )
+		{
+			state.frameIntervalsMilliseconds.pop_front();
+		}
+	}
+	state.lastFrameStartElapsedMilliseconds = elapsedMilliseconds;
+	state.hasLastFrameStart = true;
+}
+
 bool
 SimulatorControl::ShouldRunRuntimeFrame( Runtime& sender )
 {
@@ -8051,6 +8276,10 @@ SimulatorControl::ShouldRunRuntimeFrame( Runtime& sender )
 		GetSimulatorControlRuntimeState( sender );
 	if ( ! state || ! state->controlPaused )
 	{
+		if ( state )
+		{
+			RecordSimulatorControlRuntimeFrameStart( sender, *state );
+		}
 		return true;
 	}
 	if ( state->stepStartPending )
@@ -8063,6 +8292,7 @@ SimulatorControl::ShouldRunRuntimeFrame( Runtime& sender )
 	{
 		state->stepFramesRemaining--;
 		sender.AdvanceSimulatorControlPausedFrame();
+		RecordSimulatorControlRuntimeFrameStart( sender, *state );
 		return true;
 	}
 	state->stepFramesRemaining = 0;
