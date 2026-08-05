@@ -54,6 +54,7 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-status
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-diagnostics
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-logs
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-logs --filter 'scene loaded' --follow
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control capture-screenshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control debug-snapshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control start-screen-recording capture.mp4 --fps 60 --overwrite
@@ -99,7 +100,11 @@ including its type, message, stack trace, frame, and sequence number. Its
 `latestRuntimeError` value is `null` if no error has occurred.
 
 `runtime-logs` returns recent Simulator log messages. Pass `--since SEQUENCE`
-to return only newer messages. Each entry includes a Unix-epoch `timestampMs`.
+to return only newer messages, or `--filter TEXT` to return only messages that
+contain the given case-sensitive text. `--follow` prints each non-empty result
+batch as one line of JSON, flushes it immediately, and continues polling until
+the client is interrupted. These options can be combined. Each entry includes
+a Unix-epoch `timestampMs`.
 `capture-screenshot` writes the current frame to a PNG in the control directory,
 or to an optional output path.
 

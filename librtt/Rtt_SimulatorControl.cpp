@@ -1295,7 +1295,7 @@ BuildSimulatorControlDiagnostics(
 static std::string
 BuildSimulatorControlLogs(
 	const SimulatorControlRuntimeState& runtimeState,
-	unsigned long sinceSequence )
+	unsigned long sinceSequence, const std::string& filter )
 {
 	std::deque< SimulatorControlLogEntry > entries;
 	unsigned long latestSequence = 0;
@@ -1322,6 +1322,8 @@ BuildSimulatorControlLogs(
 		runtimeState.generation, oldestSequence, latestSequence,
 		truncated ? "true" : "false" );
 	result.append( information );
+	std::string serializedFilter;
+	AppendSimulatorControlJsonString( serializedFilter, filter );
 
 	bool first = true;
 	bool hasMore = false;
@@ -1329,6 +1331,11 @@ BuildSimulatorControlLogs(
 			entries.begin(); entries.end() != iterator; iterator++ )
 	{
 		if ( iterator->sequence <= sinceSequence )
+		{
+			continue;
+		}
+		if ( ! filter.empty() &&
+			std::string::npos == iterator->message.find( filter ) )
 		{
 			continue;
 		}
@@ -1342,7 +1349,8 @@ BuildSimulatorControlLogs(
 		serialized.append( sequence );
 		AppendSimulatorControlJsonString( serialized, iterator->message );
 		serialized.push_back( '}' );
-		if ( result.length() + serialized.length() + 40 >
+		if ( result.length() + serialized.length() +
+			serializedFilter.length() + 40 >
 			kSimulatorControlMaximumResponseSize )
 		{
 			hasMore = true;
@@ -1355,7 +1363,9 @@ BuildSimulatorControlLogs(
 		result.append( serialized );
 		first = false;
 	}
-	result.append( "],\"hasMore\":" );
+	result.append( "],\"filter\":" );
+	result.append( serializedFilter );
+	result.append( ",\"hasMore\":" );
 	result.append( hasMore ? "true}" : "false}" );
 	return result;
 }
@@ -1798,7 +1808,7 @@ CaptureSimulatorControlSnapshot(
 	manifest.append( ",\"diagnostics\":" );
 	manifest.append( BuildSimulatorControlDiagnostics( state ) );
 	manifest.append( ",\"logs\":" );
-	manifest.append( BuildSimulatorControlLogs( state, 0 ) );
+	manifest.append( BuildSimulatorControlLogs( state, 0, std::string() ) );
 	manifest.append( ",\"displayTree\":" );
 	manifest.append( BuildSimulatorControlDisplayTree( runtime, 0 ) );
 	manifest.push_back( '}' );
@@ -3851,6 +3861,142 @@ IsSimulatorControlSuccessResponse( const std::string& response )
 }
 
 static std::string
+BuildSimulatorControlLogsPayload(
+	unsigned long sinceSequence, const std::string& filter )
+{
+	char sequence[32];
+	snprintf( sequence, sizeof( sequence ), "%lu", sinceSequence );
+	std::string result( sequence );
+	if ( ! filter.empty() )
+	{
+		result.push_back( '\n' );
+		result.append( filter );
+	}
+	return result;
+}
+
+static bool
+ParseSimulatorControlLogsResponse(
+	const std::string& response, std::string& sessionId,
+	unsigned long& latestSequence, unsigned long& lastEntrySequence,
+	bool& hasEntries, bool& hasMore )
+{
+	if ( ! IsSimulatorControlSuccessResponse( response ) ||
+		! ParseSimulatorControlJsonString(
+			response, "\"sessionId\":", sessionId ) ||
+		! ParseSimulatorControlUnsignedLong(
+			response, "\"latestSequence\":", latestSequence ) )
+	{
+		return false;
+	}
+
+	size_t entriesStart = response.find( "\"entries\":[" );
+	if ( std::string::npos == entriesStart )
+	{
+		return false;
+	}
+	entriesStart += strlen( "\"entries\":[" );
+	size_t entriesEnd = response.find( "],\"filter\":", entriesStart );
+	if ( std::string::npos == entriesEnd )
+	{
+		return false;
+	}
+
+	hasEntries = entriesStart < entriesEnd;
+	lastEntrySequence = 0;
+	size_t offset = entriesStart;
+	while ( offset < entriesEnd )
+	{
+		offset = response.find( "\"sequence\":", offset );
+		if ( std::string::npos == offset || offset >= entriesEnd )
+		{
+			break;
+		}
+		unsigned long sequence = 0;
+		if ( ! ParseSimulatorControlUnsignedLong(
+			response.substr( offset, entriesEnd - offset ),
+			"\"sequence\":", sequence ) )
+		{
+			return false;
+		}
+		lastEntrySequence = sequence;
+		offset += strlen( "\"sequence\":" );
+	}
+	if ( hasEntries && 0 == lastEntrySequence )
+	{
+		return false;
+	}
+
+	size_t hasMoreOffset = response.find( "\"hasMore\":", entriesEnd );
+	if ( std::string::npos == hasMoreOffset )
+	{
+		return false;
+	}
+	hasMoreOffset += strlen( "\"hasMore\":" );
+	hasMore = 0 == response.compare( hasMoreOffset, 4, "true" );
+	return hasMore || 0 == response.compare( hasMoreOffset, 5, "false" );
+}
+
+static bool
+PerformSimulatorControlClientFollowLogs(
+	const std::string& directory, unsigned long sinceSequence,
+	const std::string& filter, unsigned long timeoutMilliseconds,
+	std::string& response, std::string& error )
+{
+	std::string sessionId;
+	for ( ;; )
+	{
+		std::string candidate;
+		if ( ! PerformSimulatorControlClientRequest(
+			directory, "runtime-logs",
+			BuildSimulatorControlLogsPayload( sinceSequence, filter ),
+			timeoutMilliseconds, candidate, error ) )
+		{
+			return false;
+		}
+		if ( ! IsSimulatorControlSuccessResponse( candidate ) )
+		{
+			response = candidate;
+			return true;
+		}
+
+		std::string candidateSessionId;
+		unsigned long latestSequence = 0;
+		unsigned long lastEntrySequence = 0;
+		bool hasEntries = false;
+		bool hasMore = false;
+		if ( ! ParseSimulatorControlLogsResponse(
+			candidate, candidateSessionId, latestSequence,
+			lastEntrySequence, hasEntries, hasMore ) )
+		{
+			error = "the Simulator returned an invalid runtime-logs response";
+			return false;
+		}
+		if ( ! sessionId.empty() && sessionId != candidateSessionId )
+		{
+			sessionId = candidateSessionId;
+			sinceSequence = 0;
+			continue;
+		}
+		sessionId = candidateSessionId;
+
+		if ( hasEntries )
+		{
+			if ( candidate.length() != fwrite(
+					candidate.data(), 1, candidate.length(), stdout ) ||
+				EOF == fputc( '\n', stdout ) || 0 != fflush( stdout ) )
+			{
+				error = "unable to write followed logs to standard output";
+				return false;
+			}
+		}
+		sinceSequence = hasMore && hasEntries ?
+			lastEntrySequence : latestSequence;
+		SleepSimulatorControlMilliseconds( 100 );
+	}
+}
+
+static std::string
 BuildSimulatorControlFailureWithSnapshot(
 	const std::string& directory, const std::string& failureResponse )
 {
@@ -4211,7 +4357,7 @@ PrintSimulatorControlClientHelp()
 		"Commands:\n"
 		"  runtime-status\n"
 		"  runtime-diagnostics\n"
-		"  runtime-logs [--since SEQUENCE]\n"
+		"  runtime-logs [--since SEQUENCE] [--filter TEXT] [--follow]\n"
 		"  capture-screenshot [PATH]\n"
 		"  debug-snapshot [PATH]\n"
 		"  start-screen-recording PATH [--fps FPS] [--no-audio] [--show-cursor] [--overwrite]\n"
@@ -4335,6 +4481,9 @@ RunSimulatorControlClientInternal(
 
 	std::string command( argv[argumentIndex++] );
 	std::string payload;
+	bool followRuntimeLogs = false;
+	unsigned long runtimeLogsSinceSequence = 0;
+	std::string runtimeLogsFilter;
 	if ( "runtime-status" == command ||
 		"runtime-diagnostics" == command ||
 		"relaunch-project" == command ||
@@ -4352,49 +4501,94 @@ RunSimulatorControlClientInternal(
 	}
 	else if ( "runtime-logs" == command )
 	{
-		payload.assign( "0" );
-		if ( argumentIndex < argc )
+		bool hasSince = false;
+		bool hasFilter = false;
+		while ( argumentIndex < argc )
 		{
-			if ( argumentIndex + 2 != argc ||
-				( ! IsSimulatorControlArgument(
-					argv[argumentIndex], "--since" ) &&
-					! IsSimulatorControlArgument(
-						argv[argumentIndex], "-since" ) ) )
+			if ( IsSimulatorControlArgument(
+				argv[argumentIndex], "--follow" ) )
 			{
-				fprintf(
-					stderr,
-					"Simulator control: runtime-logs accepts only --since SEQUENCE\n" );
-				return true;
+				if ( followRuntimeLogs )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: runtime-logs accepts --follow only once\n" );
+					return true;
+				}
+				followRuntimeLogs = true;
+				argumentIndex++;
+				continue;
 			}
-			const char *sequence = argv[argumentIndex + 1];
-			if ( ! sequence[0] )
+			if ( IsSimulatorControlArgument(
+					argv[argumentIndex], "--filter" ) )
 			{
-				fprintf(
-					stderr,
-					"Simulator control: runtime-logs sequence must be non-negative\n" );
-				return true;
+				if ( hasFilter || argumentIndex + 1 >= argc ||
+					! argv[argumentIndex + 1][0] ||
+					strlen( argv[argumentIndex + 1] ) >
+						kSimulatorControlMaximumStringSize )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: --filter expects one non-empty text value of at most 4096 bytes\n" );
+					return true;
+				}
+				runtimeLogsFilter.assign( argv[argumentIndex + 1] );
+				hasFilter = true;
+				argumentIndex += 2;
+				continue;
 			}
-			for ( const char *character = sequence; *character; character++ )
+			if ( IsSimulatorControlArgument(
+					argv[argumentIndex], "--since" ) ||
+				IsSimulatorControlArgument(
+					argv[argumentIndex], "-since" ) )
 			{
-				if ( ! isdigit( (unsigned char)*character ) )
+				if ( hasSince || argumentIndex + 1 >= argc )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: --since expects one non-negative sequence\n" );
+					return true;
+				}
+				const char *sequence = argv[argumentIndex + 1];
+				if ( ! sequence[0] )
 				{
 					fprintf(
 						stderr,
 						"Simulator control: runtime-logs sequence must be non-negative\n" );
 					return true;
 				}
+				for ( const char *character = sequence; *character; character++ )
+				{
+					if ( ! isdigit( (unsigned char)*character ) )
+					{
+						fprintf(
+							stderr,
+							"Simulator control: runtime-logs sequence must be non-negative\n" );
+						return true;
+					}
+				}
+				errno = 0;
+				char *sequenceEnd = NULL;
+				unsigned long sequenceValue =
+					strtoul( sequence, & sequenceEnd, 10 );
+				if ( ERANGE == errno || ! sequenceEnd || sequenceEnd[0] )
+				{
+					fprintf(
+						stderr, "Simulator control: runtime-logs sequence is too large\n" );
+					return true;
+				}
+				runtimeLogsSinceSequence = sequenceValue;
+				hasSince = true;
+				argumentIndex += 2;
+				continue;
 			}
-			errno = 0;
-			char *sequenceEnd = NULL;
-			strtoul( sequence, & sequenceEnd, 10 );
-			if ( ERANGE == errno || ! sequenceEnd || sequenceEnd[0] )
-			{
-				fprintf(
-					stderr, "Simulator control: runtime-logs sequence is too large\n" );
-				return true;
-			}
-			payload.assign( sequence );
+			fprintf(
+				stderr,
+				"Simulator control: runtime-logs accepts only --since SEQUENCE, --filter TEXT, and --follow\n" );
+			return true;
 		}
+		payload = BuildSimulatorControlLogsPayload(
+			runtimeLogsSinceSequence, runtimeLogsFilter );
 	}
 	else if ( "capture-screenshot" == command ||
 		"debug-snapshot" == command )
@@ -4790,6 +4984,12 @@ RunSimulatorControlClientInternal(
 		performed = PerformSimulatorControlClientScenario(
 			directory, payload, timeoutMilliseconds, response, error );
 	}
+	else if ( "runtime-logs" == command && followRuntimeLogs )
+	{
+		performed = PerformSimulatorControlClientFollowLogs(
+			directory, runtimeLogsSinceSequence, runtimeLogsFilter,
+			timeoutMilliseconds, response, error );
+	}
 	else
 	{
 		performed = PerformSimulatorControlClientRequest(
@@ -4837,14 +5037,24 @@ ProcessSimulatorControlRequest(
 
 	if ( "runtime-logs" == command )
 	{
-		if ( payload.empty() )
+		size_t separator = payload.find( '\n' );
+		std::string sequenceText = std::string::npos == separator ?
+			payload : payload.substr( 0, separator );
+		std::string filter = std::string::npos == separator ?
+			std::string() : payload.substr( separator + 1 );
+		if ( sequenceText.empty() )
 		{
 			return SimulatorControlErrorResponse(
 				"runtime-logs expects a non-negative sequence" );
 		}
-		for ( size_t index = 0; index < payload.length(); index++ )
+		if ( filter.length() > kSimulatorControlMaximumStringSize )
 		{
-			if ( ! isdigit( (unsigned char)payload[index] ) )
+			return SimulatorControlErrorResponse(
+				"runtime-logs filter cannot exceed 4096 bytes" );
+		}
+		for ( size_t index = 0; index < sequenceText.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)sequenceText[index] ) )
 			{
 				return SimulatorControlErrorResponse(
 					"runtime-logs expects a non-negative sequence" );
@@ -4853,14 +5063,14 @@ ProcessSimulatorControlRequest(
 		errno = 0;
 		char *sequenceEnd = NULL;
 		unsigned long sinceSequence =
-			strtoul( payload.c_str(), & sequenceEnd, 10 );
+			strtoul( sequenceText.c_str(), & sequenceEnd, 10 );
 		if ( ERANGE == errno || ! sequenceEnd || sequenceEnd[0] )
 		{
 			return SimulatorControlErrorResponse(
 				"runtime-logs sequence is too large" );
 		}
 		return SimulatorControlSuccessResponse(
-			BuildSimulatorControlLogs( state, sinceSequence ) );
+			BuildSimulatorControlLogs( state, sinceSequence, filter ) );
 	}
 
 	if ( "log-search" == command )
