@@ -59,10 +59,12 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control step-runtime-frame
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control resume-runtime
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control add-lua-breakpoint "$PWD/main.lua" 42
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control add-lua-breakpoint "$PWD/main.lua" 42 --condition 'score > bestScore' --hit-count 5
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control list-lua-breakpoints
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control wait-for-debugger-pause
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control debugger-stack
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control inspect-debugger-frame 0
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control evaluate-debugger-frame 0 'score + bonus'
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control step-over
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control continue-debugger
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control capture-screenshot
@@ -159,10 +161,23 @@ one-based line number:
 ```
 
 `add-lua-breakpoint` returns a numeric ID. The same path and line are
-deduplicated; use `list-lua-breakpoints` to discover IDs and
-`remove-lua-breakpoint ID` to delete one. Breakpoint configuration survives a
-project relaunch in the same Simulator process, so a breakpoint can be added
-after initial startup and activated with `relaunch-project`.
+deduplicated; adding that location again updates its condition and hit count,
+resets its accumulated hits, and preserves its ID. Use `list-lua-breakpoints`
+to discover IDs and `remove-lua-breakpoint ID` to delete one. Breakpoint
+configuration survives a project relaunch in the same Simulator process, so a
+breakpoint can be added after initial startup and activated with
+`relaunch-project`.
+
+Add `--condition EXPRESSION` to pause only when an expression evaluated in the
+current Lua frame is truthy. Add `--hit-count COUNT` to pause on every COUNTth
+condition-matching hit. The condition is evaluated first, so false conditions
+do not advance `hits`; a breakpoint without a condition counts every visit.
+Hit counters reset when the breakpoint is changed or the project relaunches.
+`list-lua-breakpoints` reports `condition`, `hitCount`, and the current `hits`.
+If a condition raises an error, execution pauses with a
+`breakpoint-condition-error` reason and `debugger-status.conditionError`
+contains the traceback. Conditions are ordinary Lua expressions and can call
+application functions, so keep them side-effect-free.
 
 When Lua reaches a breakpoint, `runtime-status` reports `debug-paused` and
 `debugger-status` reports the reason, breakpoint ID, source, project-relative
@@ -172,6 +187,15 @@ source, line, function, and monotonically increasing pause sequence.
 frame level to `inspect-debugger-frame` to read its locals and upvalues; at most
 100 of each are returned, and tables are represented by normal
 `inspect-lua-value` handles.
+
+`evaluate-debugger-frame FRAME EXPRESSION` evaluates an expression using the
+selected live frame. Name lookup prefers locals, then upvalues, then globals,
+including correct shadowing when a local or upvalue is `nil`. It returns all
+expression values; returned tables use the same handles as
+`inspect-lua-value`. The expression can be read from standard input when it is
+omitted from the command line. Evaluation errors are returned to the client
+without resuming or error-halting the application. Like breakpoint conditions,
+frame expressions are normal Lua and can invoke functions or metamethods.
 
 `step-into`, `step-over`, and `step-out` resume and wait for the next matching
 file-backed Lua source line. `continue-debugger` resumes without waiting for
@@ -183,12 +207,13 @@ runtime has resumed; `debugger-status` distinguishes this from a paused
 runtime.
 
 While debug-paused, the mailbox accepts runtime status, diagnostics and logs,
-breakpoint management, debugger inspection and execution-control commands, and
-`inspect-lua-value`. Commands that would execute unrelated Lua or mutate the
-application are rejected until execution continues. Runtime elapsed time is
-frozen during the pause. An application call to `debug.sethook()` replaces the
-Simulator's source hook for that Lua thread, so projects using their own debug
-hook cannot simultaneously use these breakpoint and stepping commands.
+breakpoint management, debugger inspection and execution-control commands,
+`evaluate-debugger-frame`, and `inspect-lua-value`. Commands that would execute
+Lua outside the selected frame or otherwise mutate the application are rejected
+until execution continues. Runtime elapsed time is frozen during the pause. An
+application call to `debug.sethook()` replaces the Simulator's source hook for
+that Lua thread, so projects using their own debug hook cannot simultaneously
+use these breakpoint and stepping commands.
 
 ## Unhandled runtime errors
 

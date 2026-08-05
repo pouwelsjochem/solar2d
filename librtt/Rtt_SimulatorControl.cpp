@@ -423,6 +423,7 @@ struct SimulatorControlRuntimeState
 		debuggerPaused( false ),
 		debuggerOwnsRuntimeClock( false ),
 		debuggerHookInstalled( false ),
+		debuggerEvaluating( false ),
 		stepStartPending( false ),
 		diagnosticsWritten( false ),
 		sessionWritten( false )
@@ -448,6 +449,7 @@ struct SimulatorControlRuntimeState
 	std::string debuggerProjectSource;
 	std::string debuggerFunction;
 	std::string debuggerStepMode;
+	std::string debuggerConditionError;
 	std::map< std::string, std::string > debuggerSourcePaths;
 	std::string diagnosticType;
 	std::string diagnosticMessage;
@@ -460,6 +462,7 @@ struct SimulatorControlRuntimeState
 	bool debuggerPaused;
 	bool debuggerOwnsRuntimeClock;
 	bool debuggerHookInstalled;
+	bool debuggerEvaluating;
 	bool stepStartPending;
 	bool diagnosticsWritten;
 	bool sessionWritten;
@@ -469,14 +472,19 @@ struct SimulatorControlBreakpoint
 {
 	SimulatorControlBreakpoint()
 	:	id( 0 ),
-		line( 0 )
+		line( 0 ),
+		hitCount( 0 ),
+		hits( 0 )
 	{
 	}
 
 	unsigned long id;
 	int line;
+	unsigned long hitCount;
+	unsigned long hits;
 	std::string path;
 	std::string comparisonPath;
+	std::string condition;
 };
 
 struct SimulatorControlDebuggerConfiguration
@@ -1027,7 +1035,7 @@ GetSimulatorControlLuaStackDepth( lua_State *L )
 	return depth;
 }
 
-static unsigned long
+static SimulatorControlBreakpoint*
 FindSimulatorControlBreakpoint(
 	const SimulatorControlRuntimeState& state,
 	const std::string& source, int line )
@@ -1036,7 +1044,7 @@ FindSimulatorControlBreakpoint(
 		GetSimulatorControlProjectSource( state, source );
 	SimulatorControlDebuggerConfiguration& configuration =
 		GetSimulatorControlDebuggerConfiguration();
-	for ( std::vector< SimulatorControlBreakpoint >::const_iterator iterator =
+	for ( std::vector< SimulatorControlBreakpoint >::iterator iterator =
 			configuration.breakpoints.begin();
 		configuration.breakpoints.end() != iterator; iterator++ )
 	{
@@ -1045,10 +1053,10 @@ FindSimulatorControlBreakpoint(
 				( ! projectSource.empty() &&
 					iterator->comparisonPath == projectSource ) ) )
 		{
-			return iterator->id;
+			return & *iterator;
 		}
 	}
-	return 0;
+	return NULL;
 }
 
 static void
@@ -1549,6 +1557,7 @@ IsSimulatorControlCommandAllowedWhileDebuggerPaused(
 		"debugger-status" == command ||
 		"debugger-stack" == command ||
 		"inspect-debugger-frame" == command ||
+		"evaluate-debugger-frame" == command ||
 		"continue-debugger" == command ||
 		"step-into" == command ||
 		"step-over" == command ||
@@ -2774,9 +2783,22 @@ BuildSimulatorControlBreakpoints()
 			"{\"id\":%lu,\"path\":", breakpoint.id );
 		result.append( identity );
 		AppendSimulatorControlJsonString( result, breakpoint.path );
-		char line[48];
-		snprintf( line, sizeof( line ), ",\"line\":%d}", breakpoint.line );
+		char line[160];
+		snprintf(
+			line, sizeof( line ),
+			",\"line\":%d,\"hitCount\":%lu,\"hits\":%lu,\"condition\":",
+			breakpoint.line, breakpoint.hitCount, breakpoint.hits );
 		result.append( line );
+		if ( breakpoint.condition.empty() )
+		{
+			result.append( "null" );
+		}
+		else
+		{
+			AppendSimulatorControlJsonString(
+				result, breakpoint.condition );
+		}
+		result.push_back( '}' );
 	}
 	result.append( "]}" );
 	return result;
@@ -2837,11 +2859,21 @@ BuildSimulatorControlDebuggerStatus(
 	result.append( ",\"stepMode\":" );
 	if ( state.debuggerStepMode.empty() )
 	{
-		result.append( "null}" );
+		result.append( "null" );
 	}
 	else
 	{
 		AppendSimulatorControlJsonString( result, state.debuggerStepMode );
+	}
+	result.append( ",\"conditionError\":" );
+	if ( state.debuggerConditionError.empty() )
+	{
+		result.append( "null}" );
+	}
+	else
+	{
+		AppendSimulatorControlJsonString(
+			result, state.debuggerConditionError );
 		result.push_back( '}' );
 	}
 	return result;
@@ -3377,6 +3409,178 @@ ExecuteSimulatorControlChunk(
 			jsonResult.push_back( ',' );
 		}
 		AppendSimulatorControlValueSummary( L, originalTop + index + 1, jsonResult );
+	}
+	jsonResult.push_back( ']' );
+	lua_settop( L, originalTop );
+	return true;
+}
+
+static int
+SimulatorControlDebuggerEnvironmentIndex( lua_State *L )
+{
+	lua_pushvalue( L, 2 );
+	lua_rawget( L, lua_upvalueindex( 1 ) );
+	bool isShadowedNil = 0 != lua_toboolean( L, -1 );
+	lua_pop( L, 1 );
+	if ( isShadowedNil )
+	{
+		return 0;
+	}
+
+	lua_pushvalue( L, 2 );
+	lua_rawget( L, lua_upvalueindex( 2 ) );
+	return 1;
+}
+
+static void
+SetSimulatorControlDebuggerEnvironmentValue(
+	lua_State *L, int environmentIndex, int nilNamesIndex,
+	const char *name, int valueIndex )
+{
+	environmentIndex = AbsoluteLuaIndex( L, environmentIndex );
+	nilNamesIndex = AbsoluteLuaIndex( L, nilNamesIndex );
+	valueIndex = AbsoluteLuaIndex( L, valueIndex );
+
+	lua_pushstring( L, name );
+	lua_pushvalue( L, valueIndex );
+	lua_rawset( L, environmentIndex );
+
+	lua_pushstring( L, name );
+	if ( lua_isnil( L, valueIndex ) )
+	{
+		lua_pushboolean( L, 1 );
+	}
+	else
+	{
+		lua_pushnil( L );
+	}
+	lua_rawset( L, nilNamesIndex );
+}
+
+static bool
+EvaluateSimulatorControlDebuggerExpression(
+	SimulatorControlRuntimeState& state, int frameLevel,
+	const std::string& expression, std::string& jsonResult,
+	std::string& error, bool *firstResultTruthy = NULL,
+	bool serializeResults = true )
+{
+	lua_State *L = state.debuggerThread;
+	if ( ! L || frameLevel < 0 )
+	{
+		error = "debugger frame level was not found";
+		return false;
+	}
+	if ( expression.empty() )
+	{
+		error = "debugger frame evaluation expects a Lua expression";
+		return false;
+	}
+	if ( expression.length() > kSimulatorControlMaximumRequestSize ||
+		expression.find( '\0' ) != std::string::npos )
+	{
+		error = "debugger frame expression is too large or contains a null byte";
+		return false;
+	}
+
+	int originalTop = lua_gettop( L );
+	lua_Debug information;
+	memset( & information, 0, sizeof( information ) );
+	if ( ! lua_getstack( L, frameLevel, & information ) ||
+		! lua_getinfo( L, "f", & information ) )
+	{
+		lua_settop( L, originalTop );
+		error = "debugger frame level was not found";
+		return false;
+	}
+	int frameFunctionIndex = lua_gettop( L );
+
+	std::string code( "return " );
+	code.append( expression );
+	int status = luaL_loadbuffer(
+		L, code.data(), code.length(), "=@simulator-control/debugger-frame" );
+	if ( 0 != status )
+	{
+		const char *message = lua_tostring( L, -1 );
+		error = message ? message : "unable to load debugger frame expression";
+		lua_settop( L, originalTop );
+		return false;
+	}
+	int evaluationFunctionIndex = lua_gettop( L );
+
+	lua_newtable( L );
+	int environmentIndex = lua_gettop( L );
+	lua_newtable( L );
+	int nilNamesIndex = lua_gettop( L );
+
+	for ( int index = 1; ; index++ )
+	{
+		const char *name = lua_getupvalue( L, frameFunctionIndex, index );
+		if ( ! name )
+		{
+			break;
+		}
+		SetSimulatorControlDebuggerEnvironmentValue(
+			L, environmentIndex, nilNamesIndex, name, -1 );
+		lua_pop( L, 1 );
+	}
+	for ( int index = 1; ; index++ )
+	{
+		const char *name = lua_getlocal( L, & information, index );
+		if ( ! name )
+		{
+			break;
+		}
+		SetSimulatorControlDebuggerEnvironmentValue(
+			L, environmentIndex, nilNamesIndex, name, -1 );
+		lua_pop( L, 1 );
+	}
+
+	lua_newtable( L );
+	lua_pushvalue( L, nilNamesIndex );
+	lua_pushvalue( L, LUA_GLOBALSINDEX );
+	lua_pushcclosure( L, SimulatorControlDebuggerEnvironmentIndex, 2 );
+	lua_setfield( L, -2, "__index" );
+	lua_setmetatable( L, environmentIndex );
+	lua_pushvalue( L, environmentIndex );
+	lua_setfenv( L, evaluationFunctionIndex );
+
+	lua_settop( L, evaluationFunctionIndex );
+	lua_remove( L, frameFunctionIndex );
+	int functionIndex = originalTop + 1;
+	lua_pushcfunction( L, SimulatorControlTraceback );
+	lua_insert( L, functionIndex );
+	bool wasEvaluating = state.debuggerEvaluating;
+	state.debuggerEvaluating = true;
+	status = lua_pcall( L, 0, LUA_MULTRET, functionIndex );
+	state.debuggerEvaluating = wasEvaluating;
+	lua_remove( L, functionIndex );
+	if ( 0 != status )
+	{
+		const char *message = lua_tostring( L, -1 );
+		error = message ? message : "debugger frame evaluation failed";
+		lua_settop( L, originalTop );
+		return false;
+	}
+
+	jsonResult.assign( "[" );
+	int resultCount = lua_gettop( L ) - originalTop;
+	if ( firstResultTruthy )
+	{
+		*firstResultTruthy = resultCount > 0 &&
+			0 != lua_toboolean( L, originalTop + 1 );
+	}
+	for ( int index = 0; index < resultCount; index++ )
+	{
+		if ( ! serializeResults )
+		{
+			break;
+		}
+		if ( index > 0 )
+		{
+			jsonResult.push_back( ',' );
+		}
+		AppendSimulatorControlValueSummary(
+			L, originalTop + index + 1, jsonResult );
 	}
 	jsonResult.push_back( ']' );
 	lua_settop( L, originalTop );
@@ -5113,7 +5317,8 @@ IsSimulatorControlScenarioCommand( const std::string& command )
 		"add-lua-breakpoint", "remove-lua-breakpoint",
 		"list-lua-breakpoints", "debugger-status",
 		"wait-for-debugger-pause", "debugger-stack",
-		"inspect-debugger-frame", "continue-debugger",
+		"inspect-debugger-frame", "evaluate-debugger-frame",
+		"continue-debugger",
 		"step-into", "step-over", "step-out",
 		"capture-screenshot", "debug-snapshot", "start-screen-recording",
 		"stop-screen-recording", "screen-recording-status",
@@ -5198,18 +5403,51 @@ PerformSimulatorControlClientScenario(
 		}
 		else if ( "add-lua-breakpoint" == command )
 		{
-			size_t lineSeparator = payload.find_last_of( " \t" );
+			const std::string conditionOption( " --condition " );
+			const std::string hitCountOption( " --hit-count " );
+			size_t conditionPosition = payload.find( conditionOption );
+			size_t hitCountPosition = payload.find( hitCountOption );
+			size_t optionsPosition = Min(
+				std::string::npos == conditionPosition ? payload.length() :
+					conditionPosition,
+				std::string::npos == hitCountPosition ? payload.length() :
+					hitCountPosition );
+			std::string condition;
+			if ( std::string::npos != conditionPosition )
+			{
+				size_t start = conditionPosition + conditionOption.length();
+				size_t end = std::string::npos != hitCountPosition &&
+					hitCountPosition > conditionPosition ?
+					hitCountPosition : payload.length();
+				condition = payload.substr( start, end - start );
+				TrimSimulatorControlScenarioLine( condition );
+			}
+			std::string hitCountText( "0" );
+			if ( std::string::npos != hitCountPosition )
+			{
+				size_t start = hitCountPosition + hitCountOption.length();
+				size_t end = std::string::npos != conditionPosition &&
+					conditionPosition > hitCountPosition ?
+					conditionPosition : payload.length();
+				hitCountText = payload.substr( start, end - start );
+				TrimSimulatorControlScenarioLine( hitCountText );
+			}
+			std::string breakpoint = payload.substr( 0, optionsPosition );
+			TrimSimulatorControlScenarioLine( breakpoint );
+			size_t lineSeparator = breakpoint.find_last_of( " \t" );
 			if ( std::string::npos == lineSeparator )
 			{
-				error = "scenario add-lua-breakpoint expects a source path and line";
+				error = "scenario add-lua-breakpoint expects a source path and line, followed by optional --condition and --hit-count values";
 				return false;
 			}
-			std::string sourcePath = payload.substr( 0, lineSeparator );
-			std::string lineText = payload.substr( lineSeparator + 1 );
+			std::string sourcePath = breakpoint.substr( 0, lineSeparator );
+			std::string lineText = breakpoint.substr( lineSeparator + 1 );
 			TrimSimulatorControlScenarioLine( sourcePath );
 			TrimSimulatorControlScenarioLine( lineText );
 			std::string absoluteSourcePath;
 			if ( sourcePath.empty() || lineText.empty() ||
+				( std::string::npos != conditionPosition && condition.empty() ) ||
+				( std::string::npos != hitCountPosition && hitCountText.empty() ) ||
 				! MakeSimulatorControlAbsolutePath(
 					sourcePath, absoluteSourcePath ) )
 			{
@@ -5219,6 +5457,31 @@ PerformSimulatorControlClientScenario(
 			payload = absoluteSourcePath;
 			payload.push_back( '\n' );
 			payload.append( lineText );
+			payload.push_back( '\n' );
+			payload.append( hitCountText );
+			payload.push_back( '\n' );
+			payload.append( condition );
+		}
+		else if ( "evaluate-debugger-frame" == command )
+		{
+			size_t separator = payload.find_first_of( " \t" );
+			if ( std::string::npos == separator )
+			{
+				error = "scenario evaluate-debugger-frame expects a frame level and Lua expression";
+				return false;
+			}
+			std::string frame = payload.substr( 0, separator );
+			std::string expression = payload.substr( separator + 1 );
+			TrimSimulatorControlScenarioLine( frame );
+			TrimSimulatorControlScenarioLine( expression );
+			if ( frame.empty() || expression.empty() )
+			{
+				error = "scenario evaluate-debugger-frame expects a frame level and Lua expression";
+				return false;
+			}
+			payload = frame;
+			payload.push_back( '\n' );
+			payload.append( expression );
 		}
 		else if ( "quit-simulator" == command && payload.empty() )
 		{
@@ -5428,13 +5691,14 @@ PrintSimulatorControlClientHelp()
 		"  pause-runtime\n"
 		"  resume-runtime\n"
 		"  step-runtime-frame [COUNT]\n"
-		"  add-lua-breakpoint PATH LINE\n"
+		"  add-lua-breakpoint PATH LINE [--condition EXPRESSION] [--hit-count COUNT]\n"
 		"  remove-lua-breakpoint ID\n"
 		"  list-lua-breakpoints\n"
 		"  debugger-status\n"
 		"  wait-for-debugger-pause\n"
 		"  debugger-stack\n"
 		"  inspect-debugger-frame FRAME\n"
+		"  evaluate-debugger-frame FRAME [LUA EXPRESSION]\n"
 		"  continue-debugger\n"
 		"  step-into\n"
 		"  step-over\n"
@@ -5473,7 +5737,7 @@ PrintSimulatorControlClientHelp()
 		"  relaunch-project\n"
 		"  quit-simulator [EXIT CODE]\n"
 		"\n"
-		"type-text, evaluate-lua, execute-lua, wait-for-condition, wait-for-log, and assert-condition read standard input when their payload is omitted.\n",
+		"type-text, evaluate-debugger-frame, evaluate-lua, execute-lua, wait-for-condition, wait-for-log, and assert-condition read standard input when their payload is omitted.\n",
 		stdout );
 }
 
@@ -5592,11 +5856,11 @@ RunSimulatorControlClientInternal(
 	}
 	else if ( "add-lua-breakpoint" == command )
 	{
-		if ( argumentIndex + 2 != argc )
+		if ( argumentIndex + 2 > argc )
 		{
 			fprintf(
 				stderr,
-				"Simulator control: add-lua-breakpoint expects a source path and line\n" );
+				"Simulator control: add-lua-breakpoint expects a source path and line, followed by optional --condition and --hit-count values\n" );
 			return true;
 		}
 		std::string sourcePath;
@@ -5631,9 +5895,80 @@ RunSimulatorControlClientInternal(
 				"Simulator control: Lua breakpoint lines must be positive integers\n" );
 			return true;
 		}
+		argumentIndex += 2;
+		std::string condition;
+		unsigned long hitCount = 0;
+		bool hasCondition = false;
+		bool hasHitCount = false;
+		while ( argumentIndex < argc )
+		{
+			if ( IsSimulatorControlArgument(
+				argv[argumentIndex], "--condition" ) )
+			{
+				if ( hasCondition || argumentIndex + 1 >= argc ||
+					! argv[argumentIndex + 1][0] ||
+					strlen( argv[argumentIndex + 1] ) >
+						kSimulatorControlMaximumStringSize )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: --condition expects one non-empty Lua expression of at most 4096 bytes\n" );
+					return true;
+				}
+				condition.assign( argv[argumentIndex + 1] );
+				hasCondition = true;
+				argumentIndex += 2;
+				continue;
+			}
+			if ( IsSimulatorControlArgument(
+				argv[argumentIndex], "--hit-count" ) )
+			{
+				if ( hasHitCount || argumentIndex + 1 >= argc ||
+					! argv[argumentIndex + 1][0] )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: --hit-count expects one positive integer\n" );
+					return true;
+				}
+				const char *count = argv[argumentIndex + 1];
+				for ( const char *character = count; *character; character++ )
+				{
+					if ( ! isdigit( (unsigned char)*character ) )
+					{
+						fprintf(
+							stderr,
+							"Simulator control: --hit-count expects one positive integer\n" );
+						return true;
+					}
+				}
+				errno = 0;
+				char *countEnd = NULL;
+				hitCount = strtoul( count, & countEnd, 10 );
+				if ( ERANGE == errno || ! countEnd || countEnd[0] ||
+					0 == hitCount )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: --hit-count expects one positive integer\n" );
+					return true;
+				}
+				hasHitCount = true;
+				argumentIndex += 2;
+				continue;
+			}
+			fprintf(
+				stderr,
+				"Simulator control: add-lua-breakpoint accepts only --condition EXPRESSION and --hit-count COUNT after the source path and line\n" );
+			return true;
+		}
 		payload = sourcePath;
 		payload.push_back( '\n' );
 		payload.append( line );
+		char count[48];
+		snprintf( count, sizeof( count ), "\n%lu\n", hitCount );
+		payload.append( count );
+		payload.append( condition );
 	}
 	else if ( "remove-lua-breakpoint" == command )
 	{
@@ -5683,6 +6018,49 @@ RunSimulatorControlClientInternal(
 				return true;
 			}
 		}
+	}
+	else if ( "evaluate-debugger-frame" == command )
+	{
+		if ( argumentIndex >= argc || ! argv[argumentIndex][0] )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: evaluate-debugger-frame expects a non-negative frame level and Lua expression\n" );
+			return true;
+		}
+		std::string frame( argv[argumentIndex++] );
+		for ( size_t index = 0; index < frame.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)frame[index] ) )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: evaluate-debugger-frame frame level must be non-negative\n" );
+				return true;
+			}
+		}
+		std::string expression;
+		if ( argumentIndex < argc )
+		{
+			expression = JoinSimulatorControlClientArguments(
+				argc, argv, argumentIndex );
+		}
+		else
+		{
+			expression.assign(
+				std::istreambuf_iterator< char >( std::cin ),
+				std::istreambuf_iterator< char >() );
+		}
+		if ( expression.empty() )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: evaluate-debugger-frame expects a Lua expression\n" );
+			return true;
+		}
+		payload = frame;
+		payload.push_back( '\n' );
+		payload.append( expression );
 	}
 	else if ( "step-runtime-frame" == command )
 	{
@@ -6319,17 +6697,31 @@ ProcessSimulatorControlRequest(
 
 	if ( "add-lua-breakpoint" == command )
 	{
-		size_t separator = payload.rfind( '\n' );
-		if ( std::string::npos == separator || 0 == separator ||
-			separator + 1 >= payload.length() )
+		size_t pathSeparator = payload.find( '\n' );
+		if ( std::string::npos == pathSeparator || 0 == pathSeparator ||
+			pathSeparator + 1 >= payload.length() )
 		{
 			return SimulatorControlErrorResponse(
 				"add-lua-breakpoint expects a source path and line" );
 		}
-		std::string path = payload.substr( 0, separator );
-		std::string lineText = payload.substr( separator + 1 );
+		size_t lineSeparator = payload.find( '\n', pathSeparator + 1 );
+		size_t countSeparator = std::string::npos == lineSeparator ?
+			std::string::npos : payload.find( '\n', lineSeparator + 1 );
+		std::string path = payload.substr( 0, pathSeparator );
+		std::string lineText = std::string::npos == lineSeparator ?
+			payload.substr( pathSeparator + 1 ) :
+			payload.substr(
+				pathSeparator + 1, lineSeparator - pathSeparator - 1 );
+		std::string hitCountText = std::string::npos == lineSeparator ?
+			std::string() : ( std::string::npos == countSeparator ?
+				payload.substr( lineSeparator + 1 ) :
+				payload.substr(
+					lineSeparator + 1, countSeparator - lineSeparator - 1 ) );
+		std::string condition = std::string::npos == countSeparator ?
+			std::string() : payload.substr( countSeparator + 1 );
 		StripSimulatorControlCarriageReturn( path );
 		StripSimulatorControlCarriageReturn( lineText );
+		StripSimulatorControlCarriageReturn( hitCountText );
 		if ( path.empty() || path.length() > kSimulatorControlMaximumStringSize )
 		{
 			return SimulatorControlErrorResponse(
@@ -6352,22 +6744,55 @@ ProcessSimulatorControlRequest(
 			return SimulatorControlErrorResponse(
 				"Lua breakpoint lines must be positive integers" );
 		}
+		if ( condition.length() > kSimulatorControlMaximumStringSize ||
+			condition.find( '\0' ) != std::string::npos )
+		{
+			return SimulatorControlErrorResponse(
+				"Lua breakpoint conditions cannot exceed 4096 bytes or contain a null byte" );
+		}
+		for ( size_t index = 0; index < hitCountText.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)hitCountText[index] ) )
+			{
+				return SimulatorControlErrorResponse(
+					"Lua breakpoint hit count must be a non-negative integer" );
+			}
+		}
+		errno = 0;
+		char *hitCountEnd = NULL;
+		unsigned long hitCount = hitCountText.empty() ? 0 :
+			strtoul( hitCountText.c_str(), & hitCountEnd, 10 );
+		if ( ! hitCountText.empty() &&
+			( ERANGE == errno || ! hitCountEnd || hitCountEnd[0] ) )
+		{
+			return SimulatorControlErrorResponse(
+				"Lua breakpoint hit count is too large" );
+		}
 
 		std::string comparisonPath =
 			NormalizeSimulatorControlDebuggerPath( path.c_str() );
 		SimulatorControlDebuggerConfiguration& configuration =
 			GetSimulatorControlDebuggerConfiguration();
-		for ( std::vector< SimulatorControlBreakpoint >::const_iterator iterator =
+		for ( std::vector< SimulatorControlBreakpoint >::iterator iterator =
 				configuration.breakpoints.begin();
 			configuration.breakpoints.end() != iterator; iterator++ )
 		{
 			if ( iterator->line == (int)line &&
 				iterator->comparisonPath == comparisonPath )
 			{
-				char existing[64];
+				bool updated = iterator->condition != condition ||
+					iterator->hitCount != hitCount;
+				if ( updated )
+				{
+					iterator->condition = condition;
+					iterator->hitCount = hitCount;
+					iterator->hits = 0;
+				}
+				char existing[96];
 				snprintf(
 					existing, sizeof( existing ),
-					"{\"id\":%lu,\"existing\":true}", iterator->id );
+					"{\"id\":%lu,\"existing\":true,\"updated\":%s}",
+					iterator->id, updated ? "true" : "false" );
 				return SimulatorControlSuccessResponse( existing );
 			}
 		}
@@ -6375,13 +6800,15 @@ ProcessSimulatorControlRequest(
 		SimulatorControlBreakpoint breakpoint;
 		breakpoint.id = ++configuration.nextBreakpointId;
 		breakpoint.line = (int)line;
+		breakpoint.hitCount = hitCount;
 		breakpoint.path = comparisonPath;
 		breakpoint.comparisonPath = comparisonPath;
+		breakpoint.condition = condition;
 		configuration.breakpoints.push_back( breakpoint );
 		char added[64];
 		snprintf(
 			added, sizeof( added ),
-			"{\"id\":%lu,\"existing\":false}", breakpoint.id );
+			"{\"id\":%lu,\"existing\":false,\"updated\":false}", breakpoint.id );
 		return SimulatorControlSuccessResponse( added );
 	}
 
@@ -6468,6 +6895,60 @@ ProcessSimulatorControlRequest(
 				"debugger frame level was not found" );
 		}
 		return SimulatorControlSuccessResponse( frame );
+	}
+
+	if ( "evaluate-debugger-frame" == command )
+	{
+		if ( ! state.debuggerPaused || ! state.debuggerThread )
+		{
+			return SimulatorControlErrorResponse(
+				"evaluate-debugger-frame requires debug-paused Lua execution" );
+		}
+		size_t separator = payload.find( '\n' );
+		if ( std::string::npos == separator || 0 == separator ||
+			separator + 1 >= payload.length() )
+		{
+			return SimulatorControlErrorResponse(
+				"evaluate-debugger-frame expects a non-negative frame level and Lua expression" );
+		}
+		std::string levelText = payload.substr( 0, separator );
+		std::string expression = payload.substr( separator + 1 );
+		StripSimulatorControlCarriageReturn( levelText );
+		for ( size_t index = 0; index < levelText.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)levelText[index] ) )
+			{
+				return SimulatorControlErrorResponse(
+					"evaluate-debugger-frame frame level must be non-negative" );
+			}
+		}
+		errno = 0;
+		char *levelEnd = NULL;
+		unsigned long level = strtoul(
+			levelText.c_str(), & levelEnd, 10 );
+		if ( levelText.empty() || ERANGE == errno || ! levelEnd ||
+			levelEnd[0] || level > INT_MAX )
+		{
+			return SimulatorControlErrorResponse(
+				"evaluate-debugger-frame frame level must be non-negative" );
+		}
+
+		std::string values;
+		std::string error;
+		if ( ! EvaluateSimulatorControlDebuggerExpression(
+			state, (int)level, expression, values, error ) )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		char prefix[128];
+		snprintf(
+			prefix, sizeof( prefix ),
+			"{\"pauseSequence\":%lu,\"frame\":%lu,\"values\":",
+			state.debuggerPauseSequence, level );
+		std::string result( prefix );
+		result.append( values );
+		result.push_back( '}' );
+		return SimulatorControlSuccessResponse( result );
 	}
 
 	if ( "continue-debugger" == command ||
@@ -7354,6 +7835,14 @@ SimulatorControl::InitializeDebugger( Runtime& sender, lua_State *L )
 			resourceDirectory.GetString() );
 	state->resourceDirectory = CanonicalizeSimulatorControlDebuggerSource(
 		*state, normalizedResourceDirectory );
+	SimulatorControlDebuggerConfiguration& configuration =
+		GetSimulatorControlDebuggerConfiguration();
+	for ( std::vector< SimulatorControlBreakpoint >::iterator iterator =
+			configuration.breakpoints.begin();
+		configuration.breakpoints.end() != iterator; iterator++ )
+	{
+		iterator->hits = 0;
+	}
 	state->debuggerHookInstalled = true;
 	lua_sethook( L, SimulatorControlLuaHook, LUA_MASKLINE, 0 );
 	WriteSimulatorControlSession( *state );
@@ -7371,7 +7860,8 @@ SimulatorControlLuaHook( lua_State *L, lua_Debug *information )
 	Runtime *runtime = LuaContext::GetRuntime( L );
 	SimulatorControlRuntimeState *state = runtime ?
 		GetSimulatorControlRuntimeState( *runtime ) : NULL;
-	if ( ! state || state->debuggerPaused || state->runtimeErrorHalted )
+	if ( ! state || state->debuggerPaused || state->runtimeErrorHalted ||
+		state->debuggerEvaluating )
 	{
 		return;
 	}
@@ -7384,8 +7874,38 @@ SimulatorControlLuaHook( lua_State *L, lua_Debug *information )
 	std::string source = CanonicalizeSimulatorControlDebuggerSource(
 		*state,
 		NormalizeSimulatorControlDebuggerPath( information->source ) );
-	unsigned long breakpointId = FindSimulatorControlBreakpoint(
+	SimulatorControlBreakpoint *breakpoint = FindSimulatorControlBreakpoint(
 		*state, source, information->currentline );
+	bool breakpointMatched = false;
+	std::string conditionError;
+	if ( breakpoint )
+	{
+		bool conditionMatched = true;
+		if ( ! breakpoint->condition.empty() )
+		{
+			std::string ignoredValues;
+			lua_State *previousDebuggerThread = state->debuggerThread;
+			state->debuggerThread = L;
+			if ( ! EvaluateSimulatorControlDebuggerExpression(
+				*state, 0, breakpoint->condition,
+				ignoredValues, conditionError, & conditionMatched, false ) )
+			{
+				breakpointMatched = true;
+			}
+			state->debuggerThread = previousDebuggerThread;
+		}
+		if ( conditionError.empty() && conditionMatched )
+		{
+			if ( ULONG_MAX == breakpoint->hits )
+			{
+				breakpoint->hits = 0;
+			}
+			breakpoint->hits++;
+			breakpointMatched = 0 == breakpoint->hitCount ||
+				0 == breakpoint->hits % breakpoint->hitCount;
+		}
+	}
+	unsigned long breakpointId = breakpointMatched ? breakpoint->id : 0;
 	bool stepMatched = false;
 	if ( ! state->debuggerStepMode.empty() &&
 		state->debuggerStepThread == L )
@@ -7407,8 +7927,10 @@ SimulatorControlLuaHook( lua_State *L, lua_Debug *information )
 	state->debuggerBreakpointId = breakpointId;
 	state->debuggerLine = information->currentline;
 	state->debuggerThread = L;
-	state->debuggerPauseReason.assign(
-		breakpointId ? "breakpoint" : "step" );
+	state->debuggerConditionError = conditionError;
+	state->debuggerPauseReason.assign( ! conditionError.empty() ?
+		"breakpoint-condition-error" :
+		( breakpointId ? "breakpoint" : "step" ) );
 	state->debuggerSource = source;
 	state->debuggerProjectSource =
 		GetSimulatorControlProjectSource( *state, source );
