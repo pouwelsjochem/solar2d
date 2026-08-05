@@ -327,8 +327,7 @@ LoadMainTask::operator()( Scheduler& sender )
 		runtime.Platform().PathForFile( kMain, MPlatform::kResourceDir, MPlatform::kDefaultPathFlags, filePath );
 		if ( Rtt_VERIFY( filePath.GetString() ) )
 		{
-			bool connectToDebugger = runtime.IsProperty( Runtime::kIsDebuggerConnected );
-			runtime.VMContext().DoFile( filePath.GetString(), connectToDebugger, narg );
+			runtime.VMContext().DoFile( filePath.GetString(), narg );
 		}
 	}
 	else
@@ -379,9 +378,6 @@ pushShellArgs( lua_State* L )
 		// Pass function to schedule LoadMainTask
 		lua_pushcfunction( L, onShellComplete );
 		lua_setfield( L, -2, "onShellComplete" ); // params.onShellComplete
-
-		lua_pushboolean( L, runtime->IsProperty( Runtime::kIsDebuggerConnected ) );
-		lua_setfield( L, -2, "isDebuggerConnected" ); // params.isDebuggerConnected
 
 		if ( runtime->GetExitCallback() )
 		{
@@ -835,7 +831,7 @@ Runtime::LoadApplication( U32 launchOptions )
 		fVMContext->Initialize( fPlatform, this );
 		if ( ! IsProperty( kIsLuaParserAvailable ) )
 		{
-			fVMContext->DisableParser( ( launchOptions & kConnectToDebugger ) );
+			fVMContext->DisableParser();
 		}
 
 		if ( ! IsProperty( kIsApplicationNotArchived ) )
@@ -887,14 +883,11 @@ Runtime::LoadApplication( U32 launchOptions )
 		fOpenALPlayer = PlatformOpenALPlayer::RetainInstance();
 		fOpenALPlayer->AttachNotifier( Rtt_NEW( GetAllocator(), PlatformNotifier( VMContext().LuaState() ) ) );
 #endif
-		bool connectToDebugger = ( launchOptions & kConnectToDebugger );
-		SetProperty( kIsDebuggerConnected, connectToDebugger );
-		
 		// If kLaunchDeviceShell is set, run shell.lua which will, in turn, run main.lua (via onShellComplete())
 		if ( launchOptions & kLaunchDeviceShell )
 		{
 			// Load and invoke shell.lua bytecodes
-			bool retVal = Rtt_VERIFY( 0 == fVMContext->DoBuffer( luaload_shell, false, pushShellArgs ) );
+			bool retVal = Rtt_VERIFY( 0 == fVMContext->DoBuffer( luaload_shell, pushShellArgs ) );
 			result = retVal ? Runtime::kSuccess : Runtime::kGeneralFail;
 		}
 		else

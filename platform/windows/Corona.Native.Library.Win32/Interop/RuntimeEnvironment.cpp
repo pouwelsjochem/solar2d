@@ -52,21 +52,6 @@ const RuntimeEnvironment::CreationResult RuntimeEnvironment::CreationResults::kS
 #pragma endregion
 
 
-#pragma region Internal Members
-/// <summary>
-///  <para>The semaphore name used by Corona to flag that a runtime is currently connected to a debugger.</para>
-///  <para>Expected to be passed into the Win32 CreateSemaphoreW() function.</para>
-/// </summary>
-/// <remarks>
-///  Corona debugging uses a fixed TCP port number which only allows one Corona app on a system to be debugged
-///  at a time. So, a named semaphore is used to detect if another Corona app is currently connected to the
-///  debugger. If the named semaphore is not found on the system, then TCP debugging is available.
-/// </remarks>
-static const wchar_t kDebuggerSemaphoreName[] = L"Global\\CoronaLabs.Corona.Runtime.ConnectedToDebugger";
-
-#pragma endregion
-
-
 #pragma region Constructors/Destructors
 RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSettings& settings)
 :	fAllocatorPointer(Rtt_AllocatorCreate()),
@@ -89,7 +74,6 @@ RuntimeEnvironment::RuntimeEnvironment(const RuntimeEnvironment::CreationSetting
 	fMainWindowPointer(nullptr),
 	fRenderSurfacePointer(nullptr),
 	fGdiPlusToken(0),
-	fDebuggerSemaphoreHandle(nullptr),
 	fLastActivatedSent(true),
 	fSingleWindowInstanceSemaphoreHandle(nullptr)
 {
@@ -510,14 +494,6 @@ void RuntimeEnvironment::Terminate()
 	{
 		Gdiplus::GdiplusShutdown(fGdiPlusToken);
 		fGdiPlusToken = 0;
-	}
-
-	// If this runtime was connected to a debugger, then destroy its named semaphore.
-	// This makes the debugger available to other Corona apps on the system.
-	if (fDebuggerSemaphoreHandle)
-	{
-		::CloseHandle(fDebuggerSemaphoreHandle);
-		fDebuggerSemaphoreHandle = nullptr;
 	}
 
 	// If this runtime was set up to only support 1 application window at a time,
@@ -1006,24 +982,6 @@ RuntimeEnvironment::ValidateRenderSurfaceResult RuntimeEnvironment::ValidateRend
 	return result;
 }
 
-bool RuntimeEnvironment::IsDebuggerConnectionAvailable()
-{
-	bool isAvailable = true;
-	{
-		auto handle = ::CreateSemaphoreW(nullptr, 0, 1, kDebuggerSemaphoreName);
-		auto errorCode = ::GetLastError();
-		if (ERROR_ALREADY_EXISTS == errorCode)
-		{
-			isAvailable = false;
-		}
-		if (handle)
-		{
-			::CloseHandle(handle);
-		}
-	}
-	return isAvailable;
-}
-
 #pragma endregion
 
 
@@ -1085,102 +1043,6 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 		UpdateMainWindowUsing(fReadOnlyProjectSettings);
 	}
 
-	// Do the following if the Corona runtime was requested to connect to a debugger.
-	// Note: We cannot debug a Corona project using a "resource.car" file. We can only debug via Lua files.
-	if (hasMainLuaFile && (settings.LaunchOptions & Rtt::Runtime::kConnectToDebugger))
-	{
-		while (true)
-		{
-			// Attempt to create a system-wide named semaphore which flags that a Corona runtime is using the debugger.
-			auto semaphoreHandle = ::CreateSemaphoreW(nullptr, 0, 1, kDebuggerSemaphoreName);
-			auto errorCode = ::GetLastError();
-
-			// If we've failed to create a named semaphore, then we cannot debug reliably on the system.
-			if (!semaphoreHandle)
-			{
-				// Ask if the user wants to continue running the Corona project without debugging.
-				WinString message(L"Failed to set up Corona with the debugger.\r\n");
-				if (errorCode)
-				{
-					LPWSTR utf16ErrorMessage = nullptr;
-					::FormatMessageW(
-							FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-							nullptr, errorCode,
-							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-							(LPWSTR)&utf16ErrorMessage, 0, nullptr);
-					if (utf16ErrorMessage)
-					{
-						message.Append(L"Reason:\r\n\t");
-						message.Append(utf16ErrorMessage);
-						message.Append(L"\r\n");
-						::LocalFree(utf16ErrorMessage);
-					}
-				}
-				message.Append(
-						L"\r\n"
-						L"Would you like to run your Corona project without debug mode?\r\n"
-						L"(You will still be able to receive log output.)");
-				HWND windowHandle = settings.MainWindowHandle ? settings.MainWindowHandle : settings.RenderSurfaceHandle;
-				auto dialogResult = ::MessageBoxW(windowHandle, message.GetUTF16(), L"Warning", MB_ICONWARNING | MB_YESNO);
-				if (IDYES == dialogResult)
-				{
-					// The user want to run the Corona project without debugging.
-					break;
-				}
-				else
-				{
-					// The user is aborting. Do not create/launch a Corona runtime and exit out.
-					return OperationResult::FailedWith(L"The user has canceled out of debug mode.");
-				}
-			}
-
-			// If the named semaphore already exists, then another Corona app is already connected to the debugger.
-			// The Corona debugger uses a fixed TCP port number, meaning only 1 app can be debugged on the system at a time.
-			if (ERROR_ALREADY_EXISTS == errorCode)
-			{
-				// Destroy this app's reference to the semaphore created up above.
-				if (semaphoreHandle)
-				{
-					::CloseHandle(semaphoreHandle);
-				}
-
-				// Ask the user to close the other Corona app that is currently connected to the debugger.
-				const wchar_t utf16Message[] =
-						L"There is another Corona application currently connected to a debugger.\r\n"
-						L"Please close that application and then click the \"Retry\" button to try again.";
-				HWND windowHandle = settings.MainWindowHandle ? settings.MainWindowHandle : settings.RenderSurfaceHandle;
-				auto dialogResult = ::MessageBoxW(windowHandle, utf16Message, L"Warning", MB_ICONWARNING | MB_RETRYCANCEL);
-				if (IDRETRY == dialogResult)
-				{
-					// The user clicked the Retry button, which hopefully means the user closed the other
-					// Corona app that was in debug mode. Attempt to set this app for the debugger again.
-					continue;
-				}
-				else
-				{
-					// The user is aborting. Do not create/launch a Corona runtime and exit out.
-					return OperationResult::FailedWith(L"The user has canceled out of debug mode.");
-				}
-			}
-
-			// We have exclusive access to the Corona debugger and are ready to start debugging.
-			// Store the semaphore handle used to flag that this app is using the debugger.
-			// We'll later destroy this semaphore upon termination, letting the system know the debugger is available.
-			fDebuggerSemaphoreHandle = semaphoreHandle;
-			break;
-		}
-	}
-
-	// Copy the given Corona runtime launch settings, modifying it if needed.
-	auto updatedLaunchOptions = settings.LaunchOptions;
-	if (!fDebuggerSemaphoreHandle)
-	{
-		// This runtime environment is not set up to connect to a Corona debugger.
-		// Remove the debugger launch option flag in case it is set.
-		int value = (int)updatedLaunchOptions & ~(int)Rtt::Runtime::kConnectToDebugger;
-		updatedLaunchOptions = (Rtt::Runtime::LaunchOptions)value;
-	}
-
 	// Create a message-only window to be used for IPC (Inter-Process Communications).
 	// It must be created when the runtime is created and destroyed when the runtime is terminated.
 	// Note: This is mostly intended for single instance app support where a 2nd app instance would send its
@@ -1226,7 +1088,7 @@ OperationResult RuntimeEnvironment::RunUsing(const RuntimeEnvironment::CreationS
 
 	// Load and run the Corona project.
 	fRuntimeState = RuntimeState::kStarting;
-	auto result = fRuntimePointer->LoadApplication(updatedLaunchOptions);
+	auto result = fRuntimePointer->LoadApplication(settings.LaunchOptions);
 	if (Rtt::Runtime::kSuccess == result)
 	{
 		// Load was successful. Start running the Corona application.

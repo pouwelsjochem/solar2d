@@ -101,10 +101,6 @@
 		004CED9813397B52006ACF35 /* liblua-tool.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004CED5D13397ABD006ACF35 /* liblua-tool.a */; };
 		004CED9B13397B67006ACF35 /* liblua-tool.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004CED5D13397ABD006ACF35 /* liblua-tool.a */; };
 		004CED9D13397BBB006ACF35 /* lstrip.c in Sources */ = {isa = PBXBuildFile; fileRef = 004CED9C13397BBB006ACF35 /* lstrip.c */; };
-		004CEDFD133984AA006ACF35 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 004CEDFA133984AA006ACF35 /* main.cpp */; };
-		004CEE05133984D9006ACF35 /* liblua-universal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004CEC2F1339724E006ACF35 /* liblua-universal.a */; };
-		004CEE06133984DF006ACF35 /* controller.lua in Sources */ = {isa = PBXBuildFile; fileRef = 004CEDF91339847A006ACF35 /* controller.lua */; };
-		004CEE08133985EC006ACF35 /* libreadline.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 004CEE07133985EC006ACF35 /* libreadline.dylib */; };
 		004CEE09133985F8006ACF35 /* liblua-tool.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 004CED5D13397ABD006ACF35 /* liblua-tool.a */; };
 		004CEE0D1339860B006ACF35 /* libreadline.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 004CEE0C1339860B006ACF35 /* libreadline.dylib */; };
 		006F545C153CBF3D003583B0 /* lobjectivec_exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 006F545A153CBF3D003583B0 /* lobjectivec_exceptions.h */; };
@@ -113,7 +109,6 @@
 		006F5460153CC024003583B0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006F545F153CC024003583B0 /* Foundation.framework */; };
 		006F5461153CC031003583B0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006F545F153CC024003583B0 /* Foundation.framework */; };
 		006F5462153CC03A003583B0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006F545F153CC024003583B0 /* Foundation.framework */; };
-		006F5463153CC047003583B0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006F545F153CC024003583B0 /* Foundation.framework */; };
 		C21A81D71AAFC46100128F5E /* luac.c in Sources */ = {isa = PBXBuildFile; fileRef = 004CEC6D1339736F006ACF35 /* luac.c */; };
 		C24216931CCA8E8500D8E4BE /* compat.c in Sources */ = {isa = PBXBuildFile; fileRef = C24216911CCA8E8500D8E4BE /* compat.c */; };
 		C24216DF1CCACB7E00D8E4BE /* compat.c in Sources */ = {isa = PBXBuildFile; fileRef = C24216911CCA8E8500D8E4BE /* compat.c */; };
@@ -157,29 +152,12 @@
 		C24217201CCACC7800D8E4BE /* udp.h in Headers */ = {isa = PBXBuildFile; fileRef = 004CEDBF133982EC006ACF35 /* udp.h */; };
 		C24217211CCACC7800D8E4BE /* unix.h in Headers */ = {isa = PBXBuildFile; fileRef = 004CEDC1133982EC006ACF35 /* unix.h */; };
 		C24217221CCACC7800D8E4BE /* usocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 004CEDC4133982EC006ACF35 /* usocket.h */; };
-		C24217251CCACCA500D8E4BE /* libluasocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C24216D71CCACB6600D8E4BE /* libluasocket.a */; };
 		C2BD46601F60CBC000BB728E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2BD465F1F60CBC000BB728E /* CoreServices.framework */; };
-		C2BD46611F60CBE600BB728E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2BD465F1F60CBC000BB728E /* CoreServices.framework */; };
 		C2BD46621F60CBF100BB728E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2BD465F1F60CBC000BB728E /* CoreServices.framework */; };
 		C2BD46631F60CBFB00BB728E /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2BD465F1F60CBC000BB728E /* CoreServices.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
-		004CEDF7133983B2006ACF35 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.lua";
-			fileType = pattern.proxy;
-			inputFiles = (
-				"$(BUILT_PRODUCTS_DIR)/lua",
-			);
-			isEditable = 1;
-			outputFiles = (
-				"$(TARGET_TEMP_DIR)/$(INPUT_FILE_BASE).cpp",
-			);
-			runOncePerArchitecture = 0;
-			script = "set -o errexit\n# set -x\necho \"Compiling Lua to CPP: $INPUT_FILE_PATH -> $TARGET_TEMP_DIR/$INPUT_FILE_BASE.cpp\"\n\"$BUILT_PRODUCTS_DIR/lua\" \"$SRCROOT/../../bin/rcc.lua\" -c \"$BUILT_PRODUCTS_DIR\" -O\"$CONFIGURATION\" -o \"$TARGET_TEMP_DIR/$INPUT_FILE_BASE.lu\" \"$INPUT_FILE_PATH\"\n\"$BUILT_PRODUCTS_DIR/lua\" -epackage.path=\"[[$SRCROOT/../../external/loop-2.3-beta/lua/?.lua]]\" \"$SRCROOT/../../external/loop-2.3-beta/lua/precompiler.constant.lua\" -d \"$TARGET_TEMP_DIR\" -o \"$INPUT_FILE_BASE\" -l \"$TARGET_TEMP_DIR/?.lu\" -n \"$INPUT_FILE_BASE\"\n";
-		};
 		C24217121CCACBF100D8E4BE /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
@@ -198,13 +176,6 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		003A5D311339978B00A2561A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004CEC261339724E006ACF35 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 004CED2913397858006ACF35;
-			remoteInfo = luac;
-		};
 		004CED9513397B44006ACF35 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 004CEC261339724E006ACF35 /* Project object */;
@@ -218,20 +189,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 004CED5C13397ABD006ACF35;
 			remoteInfo = "lua-tool";
-		};
-		004CEDFF133984C9006ACF35 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004CEC261339724E006ACF35 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 004CED1C1339784D006ACF35;
-			remoteInfo = lua;
-		};
-		004CEE03133984D2006ACF35 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004CEC261339724E006ACF35 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 004CEC2E1339724E006ACF35;
-			remoteInfo = liblua;
 		};
 		004CEE0A133985FC006ACF35 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -253,13 +210,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 004CED2913397858006ACF35;
 			remoteInfo = luac;
-		};
-		C24217231CCACC9A00D8E4BE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 004CEC261339724E006ACF35 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C24216D61CCACB6600D8E4BE;
-			remoteInfo = libluasocket;
 		};
 		F5EDABDA2488EA5C00D7413F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -290,15 +240,6 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		004CED3513397862006ACF35 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-		004CED421339786A006ACF35 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -371,7 +312,6 @@
 		004CED1D1339784D006ACF35 /* lua */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lua; sourceTree = BUILT_PRODUCTS_DIR; };
 		004CED2A13397858006ACF35 /* luac */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = luac; sourceTree = BUILT_PRODUCTS_DIR; };
 		004CED3713397862006ACF35 /* lstrip */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lstrip; sourceTree = BUILT_PRODUCTS_DIR; };
-		004CED441339786A006ACF35 /* debugger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = debugger; sourceTree = BUILT_PRODUCTS_DIR; };
 		004CED501339791D006ACF35 /* libreadline.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.dylib; path = usr/lib/libreadline.dylib; sourceTree = SDKROOT; };
 		004CED5D13397ABD006ACF35 /* liblua-tool.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "liblua-tool.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		004CED9C13397BBB006ACF35 /* lstrip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lstrip.c; path = ../../external/lstrip/lstrip.c; sourceTree = "<group>"; };
@@ -404,9 +344,6 @@
 		004CEDC1133982EC006ACF35 /* unix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unix.h; sourceTree = "<group>"; };
 		004CEDC3133982EC006ACF35 /* usocket.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = usocket.c; sourceTree = "<group>"; };
 		004CEDC4133982EC006ACF35 /* usocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = usocket.h; sourceTree = "<group>"; };
-		004CEDF91339847A006ACF35 /* controller.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = controller.lua; path = "../../external/remdebug-1.0/src/controller.lua"; sourceTree = "<group>"; };
-		004CEDFA133984AA006ACF35 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../tools/debugger/main.cpp; sourceTree = "<group>"; };
-		004CEE07133985EC006ACF35 /* libreadline.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.dylib; path = usr/lib/libreadline.dylib; sourceTree = SDKROOT; };
 		004CEE0C1339860B006ACF35 /* libreadline.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.dylib; path = usr/lib/libreadline.dylib; sourceTree = SDKROOT; };
 		006F545A153CBF3D003583B0 /* lobjectivec_exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lobjectivec_exceptions.h; path = "../../external/lua-5.1.3/src/lobjectivec_exceptions.h"; sourceTree = "<group>"; };
 		006F545B153CBF3D003583B0 /* lobjectivec_exceptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = lobjectivec_exceptions.m; path = "../../external/lua-5.1.3/src/lobjectivec_exceptions.m"; sourceTree = "<group>"; };
@@ -469,18 +406,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		004CED411339786A006ACF35 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C2BD46611F60CBE600BB728E /* CoreServices.framework in Frameworks */,
-				C24217251CCACCA500D8E4BE /* libluasocket.a in Frameworks */,
-				006F5463153CC047003583B0 /* Foundation.framework in Frameworks */,
-				004CEE08133985EC006ACF35 /* libreadline.dylib in Frameworks */,
-				004CEE05133984D9006ACF35 /* liblua-universal.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		004CED5A13397ABD006ACF35 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -505,11 +430,9 @@
 				006F545F153CC024003583B0 /* Foundation.framework */,
 				004CEE0C1339860B006ACF35 /* libreadline.dylib */,
 				004CED5D13397ABD006ACF35 /* liblua-tool.a */,
-				004CEE07133985EC006ACF35 /* libreadline.dylib */,
 				004CEC2F1339724E006ACF35 /* liblua-universal.a */,
 				004CED501339791D006ACF35 /* libreadline.dylib */,
 				004CED9E133982EC006ACF35 /* libluasocket */,
-				004CECEF133973E9006ACF35 /* debugger */,
 				004CECEE133973E8006ACF35 /* lua */,
 				004CECED133973E4006ACF35 /* luac */,
 				004CECEC133973DB006ACF35 /* lstrip */,
@@ -527,7 +450,6 @@
 				004CED1D1339784D006ACF35 /* lua */,
 				004CED2A13397858006ACF35 /* luac */,
 				004CED3713397862006ACF35 /* lstrip */,
-				004CED441339786A006ACF35 /* debugger */,
 				C24216D71CCACB6600D8E4BE /* libluasocket.a */,
 			);
 			name = Products;
@@ -625,16 +547,6 @@
 			name = lua;
 			sourceTree = "<group>";
 		};
-		004CECEF133973E9006ACF35 /* debugger */ = {
-			isa = PBXGroup;
-			children = (
-				C24216B31CCAB0F100D8E4BE /* Rtt_LuaLibSocket.h */,
-				004CEDFA133984AA006ACF35 /* main.cpp */,
-				004CEDF81339845C006ACF35 /* Resources */,
-			);
-			name = debugger;
-			sourceTree = "<group>";
-		};
 		004CED9E133982EC006ACF35 /* libluasocket */ = {
 			isa = PBXGroup;
 			children = (
@@ -682,14 +594,6 @@
 			);
 			name = libluasocket;
 			path = ../../external/luasocket/src;
-			sourceTree = "<group>";
-		};
-		004CEDF81339845C006ACF35 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				004CEDF91339847A006ACF35 /* controller.lua */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		006F5458153CBEC7003583B0 /* ObjectiveC */ = {
@@ -852,28 +756,6 @@
 			productReference = 004CED3713397862006ACF35 /* lstrip */;
 			productType = "com.apple.product-type.tool";
 		};
-		004CED431339786A006ACF35 /* debugger */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 004CED4A1339786A006ACF35 /* Build configuration list for PBXNativeTarget "debugger" */;
-			buildPhases = (
-				004CED401339786A006ACF35 /* Sources */,
-				004CED411339786A006ACF35 /* Frameworks */,
-				004CED421339786A006ACF35 /* CopyFiles */,
-			);
-			buildRules = (
-				004CEDF7133983B2006ACF35 /* PBXBuildRule */,
-			);
-			dependencies = (
-				C24217241CCACC9A00D8E4BE /* PBXTargetDependency */,
-				003A5D321339978B00A2561A /* PBXTargetDependency */,
-				004CEE04133984D2006ACF35 /* PBXTargetDependency */,
-				004CEE00133984C9006ACF35 /* PBXTargetDependency */,
-			);
-			name = debugger;
-			productName = debugger;
-			productReference = 004CED441339786A006ACF35 /* debugger */;
-			productType = "com.apple.product-type.tool";
-		};
 		004CED5C13397ABD006ACF35 /* liblua-tool */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 004CED5E13397ABD006ACF35 /* Build configuration list for PBXNativeTarget "liblua-tool" */;
@@ -942,7 +824,6 @@
 				004CED2913397858006ACF35 /* luac */,
 				004CEC2E1339724E006ACF35 /* liblua-universal */,
 				004CED3613397862006ACF35 /* lstrip */,
-				004CED431339786A006ACF35 /* debugger */,
 				004CED5C13397ABD006ACF35 /* liblua-tool */,
 				C24216D61CCACB6600D8E4BE /* libluasocket */,
 			);
@@ -1012,15 +893,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				004CED9D13397BBB006ACF35 /* lstrip.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		004CED401339786A006ACF35 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				004CEDFD133984AA006ACF35 /* main.cpp in Sources */,
-				004CEE06133984DF006ACF35 /* controller.lua in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1096,11 +968,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		003A5D321339978B00A2561A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 004CED2913397858006ACF35 /* luac */;
-			targetProxy = 003A5D311339978B00A2561A /* PBXContainerItemProxy */;
-		};
 		004CED9613397B44006ACF35 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 004CED5C13397ABD006ACF35 /* liblua-tool */;
@@ -1110,16 +977,6 @@
 			isa = PBXTargetDependency;
 			target = 004CED5C13397ABD006ACF35 /* liblua-tool */;
 			targetProxy = 004CED9913397B64006ACF35 /* PBXContainerItemProxy */;
-		};
-		004CEE00133984C9006ACF35 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 004CED1C1339784D006ACF35 /* lua */;
-			targetProxy = 004CEDFF133984C9006ACF35 /* PBXContainerItemProxy */;
-		};
-		004CEE04133984D2006ACF35 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 004CEC2E1339724E006ACF35 /* liblua-universal */;
-			targetProxy = 004CEE03133984D2006ACF35 /* PBXContainerItemProxy */;
 		};
 		004CEE0B133985FC006ACF35 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1135,11 +992,6 @@
 			isa = PBXTargetDependency;
 			target = 004CED2913397858006ACF35 /* luac */;
 			targetProxy = C24216DD1CCACB6F00D8E4BE /* PBXContainerItemProxy */;
-		};
-		C24217241CCACC9A00D8E4BE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C24216D61CCACB6600D8E4BE /* libluasocket */;
-			targetProxy = C24217231CCACC9A00D8E4BE /* PBXContainerItemProxy */;
 		};
 		F5EDABDB2488EA5C00D7413F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1336,38 +1188,6 @@
 			};
 			name = Release;
 		};
-		004CED4B1339786A006ACF35 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					Rtt_ALLOCATOR_SYSTEM,
-					Rtt_NETWORK,
-				);
-				INSTALL_PATH = /;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = $SRCROOT/../../librtt;
-			};
-			name = Debug;
-		};
-		004CED4C1339786A006ACF35 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					Rtt_ALLOCATOR_SYSTEM,
-					Rtt_NETWORK,
-				);
-				INSTALL_PATH = /;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = $SRCROOT/../../librtt;
-			};
-			name = Release;
-		};
 		004CED5F13397ABD006ACF35 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1500,15 +1320,6 @@
 			buildConfigurations = (
 				004CED3E13397862006ACF35 /* Debug */,
 				004CED3F13397862006ACF35 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		004CED4A1339786A006ACF35 /* Build configuration list for PBXNativeTarget "debugger" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				004CED4B1339786A006ACF35 /* Debug */,
-				004CED4C1339786A006ACF35 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

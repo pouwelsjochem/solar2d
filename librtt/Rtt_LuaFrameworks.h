@@ -32,10 +32,6 @@ int luaload_json(lua_State* L);
 int luaload_re(lua_State* L);
 extern "C" { int luaopen_lpeg (lua_State *L); }
 
-#ifdef Rtt_DEBUGGER
-int luaload_remdebug_engine(lua_State *L);
-#endif
-
 // ----------------------------------------------------------------------------
 
 } // namespace Rtt

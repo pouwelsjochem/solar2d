@@ -46,16 +46,9 @@ PlatformPlayer::~PlatformPlayer()
 }
 
 void
-PlatformPlayer::Start(
-	const char *appFilePath,
-	bool connectToDebugger )
+PlatformPlayer::Start( const char *appFilePath )
 {
 	U32 launchOptions = Runtime::kSimulatorLaunchOption;
-
-	if ( connectToDebugger )
-	{
-		launchOptions |= Runtime::kConnectToDebugger;
-	}
 
 	if ( Runtime::kSuccess == fRuntime.LoadApplication( launchOptions ) )
 	{
@@ -68,4 +61,3 @@ PlatformPlayer::Start(
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

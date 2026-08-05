@@ -44,8 +44,7 @@ const char PlatformSimulator::kPlatformKeyNameMac[] = "mac";
 
 /*
 SimulatorOptions::SimulatorOptions()
-:	connectToDebugger( false ),
-	isInteractive( false ),
+:	isInteractive( false ),
 	appPath( NULL )
 {
 
@@ -228,7 +227,7 @@ PlatformSimulator::Start( const SimulatorOptions& options )
 			? PlatformPlayer::InteractiveFilePath()
 			: PlatformPlayer::DefaultAppFilePath() );
 
-	fPlayer->Start( appFilePath, options.connectToDebugger );
+	fPlayer->Start( appFilePath );
 	
 	DidStart();
 }

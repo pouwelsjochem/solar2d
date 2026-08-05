@@ -27,7 +27,6 @@ class PlatformPlayer;
 
 struct SimulatorOptions
 {
-	bool connectToDebugger;
 	bool isInteractive;
 };
 

@@ -221,9 +221,7 @@ namespace Rtt
 				{
 					collisions++;
 
-#ifndef Rtt_DEBUGGER
 					return collisions; // we don't realy care how many, just that there are
-#endif
 				}
 			}
 		}

@@ -204,14 +204,9 @@ SET( LUA_SOCKET_SOURCES
 	"${CORONA_ROOT}/external/luasocket/src/url.lua"
 )
 
-SET( LUA_REMDEBUG_SOURCES
-	"${CORONA_ROOT}/external/remdebug-1.0/src/remdebug/engine.lua"
-)
-
 SET( LUA_FILES
 	${LUA_SOURCES}
 	${LUA_SOCKET_SOURCES}
-	${LUA_REMDEBUG_SOURCES}
 )
 
 SET( LUA51_SOURCES
@@ -787,18 +782,6 @@ ENDFOREACH()
 FOREACH(LUA_FILE ${LUA_SOCKET_SOURCES})
 	SET(MODULE_COMMAND1 "-m")
 	SET(MODULE_COMMAND2 "luasocket")
-	get_filename_component(finame ${LUA_FILE} NAME_WE)
-	add_custom_target(${finame}
-		COMMAND ${CMAKE_COMMAND} -E env BUILD_CONFIG="${BUILD_CONFIG}" "${CORONA_ROOT}/platform/linux/lua_to_native_unixeol.sh" ${MODULE_COMMAND1} ${MODULE_COMMAND2} "${LUA_FILE}" "${Lua2CppOutputDir}/" "${CMAKE_CURRENT_BINARY_DIR}"
-		DEPENDS lua_binaries)
-	add_dependencies(Solar2D ${finame})
-	add_dependencies(Solar2DSimulator ${finame})
-	add_dependencies(Solar2DBuilder ${finame})
-ENDFOREACH()
-
-FOREACH(LUA_FILE ${LUA_REMDEBUG_SOURCES})
-	SET(MODULE_COMMAND1 "-m")
-	SET(MODULE_COMMAND2 "remdebug")
 	get_filename_component(finame ${LUA_FILE} NAME_WE)
 	add_custom_target(${finame}
 		COMMAND ${CMAKE_COMMAND} -E env BUILD_CONFIG="${BUILD_CONFIG}" "${CORONA_ROOT}/platform/linux/lua_to_native_unixeol.sh" ${MODULE_COMMAND1} ${MODULE_COMMAND2} "${LUA_FILE}" "${Lua2CppOutputDir}/" "${CMAKE_CURRENT_BINARY_DIR}"

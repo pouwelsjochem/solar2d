@@ -259,7 +259,6 @@ CSimulatorApp::CSimulatorApp()
 {
 	// Place all significant initialization in InitInstance
 	m_isGdiPlusInitialized = false;
-	m_isDebugModeEnabled = false;
 	m_isAgentModeEnabled = false;
 	m_isLuaExitAllowed = false;
 	m_exitCode = 0;
@@ -438,10 +437,6 @@ BOOL CSimulatorApp::InitInstance()
 		Gdiplus::Ok == Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
 	// Handle the rest of the command line arguments.
-	if (commandLine.Find(_T("-debug")) >= 0)
-	{
-		m_isDebugModeEnabled = true;
-	}
 	if (commandLine.Find(_T("-allowluaexit")) >= 0)
 	{
 		m_isLuaExitAllowed = true;
@@ -511,7 +506,7 @@ BOOL CSimulatorApp::InitInstance()
 	// This is necessary because ProcessShellCommand() initiates a "New File"
 	// operation if there is no filename on the command line and this is very
 	// hard to unravel and inject the remembered filename into.
-	if (!m_isAgentModeEnabled && !m_isDebugModeEnabled &&
+	if (!m_isAgentModeEnabled &&
 		(cmdInfo.m_nShellCommand == CCommandLineInfo::FileNew))
 	{
 		CRecentFileList *recentFileListPointer = GetRecentFileList();

@@ -53,16 +53,6 @@
 
 #include "CoronaLibrary.h"
 
-Rtt_EXPORT_BEGIN
-	#define lua_c
-
-	#ifdef Rtt_DEBUGGER
-		#include "ldo.h"
-	#endif
-
-Rtt_EXPORT_END
-
-
 // ----------------------------------------------------------------------------
 
 #ifdef Rtt_NXS_ENV
@@ -193,7 +183,7 @@ LuaContext::Panic( ::lua_State* L )
 
 // ----------------------------------------------------------------------------
 
-#if defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )
+#if defined( Rtt_DEBUG )
 
 static lua_State *sLuaContext = NULL;
 
@@ -213,7 +203,7 @@ static void laction( int i )
 	lua_sethook( sLuaContext, LuaContext::lstop, LUA_MASKCALL | LUA_MASKRET | LUA_MASKCOUNT, 1 );
 }
 
-#endif // Rtt_DEBUG || Rtt_DEBUGGER
+#endif // Rtt_DEBUG
 
 bool
 LuaContext::callUnhandledErrorHandler( lua_State* L, const char *message, const char *stacktrace )
@@ -464,46 +454,6 @@ static int report( lua_State* L, int status )
 }
 
 
-#ifdef Rtt_DEBUGGER
-
-#if 0
-// From ldblib.c
-static lua_State *getthread (lua_State* L, int *arg) {
-  if (lua_isthread(L, 1)) {
-    *arg = 1;
-    return lua_tothread(L, 1);
-  }
-  else {
-    *arg = 0;
-    return L;
-  }
-}
-
-// Calls debugger hook before calling traceback
-static int traperror (lua_State* L)
-{
-	if (!lua_isstring(L, 1))  // 'message' not a string?
-	{
-		return 1; // keep it intact
-	}
-
-//	Rtt_TRACE( ( "Runtime script error\n\t%s\n", lua_tostring( L, 1 ) ) );
-
-	int arg;
-	lua_State* L1 = getthread( L, & arg );//TODO: remove. level should be 1 b/c we want the caller, not this function
-	lua_Debug ar;
-	int level = (L == L1) ? 1 : 0;  /* level 0 may be this own function */
-
-	lua_getstack( L1, level, & ar );
-	lua_getinfo( L1, "l", &ar );
-	luaD_callhook( L1, LUA_HOOKERROR, ar.currentline );
-
-	return LuaContext::traceback( L );
-}
-#endif // 0
-
-#endif // Rtt_DEBUGGER
-
 // ----------------------------------------------------------------------------
 
 int
@@ -734,10 +684,6 @@ LuaContext::InitializeLuaCore( lua_State* L )
 		{ "easing", Lua::Open< luaload_easing> },
 		{ "dkjson", Lua::Open< luaload_dkjson > },
 		{ "json", Lua::Open< luaload_json > },
-#ifdef Rtt_DEBUGGER
-		{ "remdebug_engine", Lua::Open< luaload_remdebug_engine > },
-#endif
-
 #if defined(Rtt_LINUX_ENV)
 		{ "network", luaopen_network },
 		{ "lfs", luaopen_lfs },
@@ -816,26 +762,6 @@ LuaContext::InitializeRttCore( lua_State* L, Runtime *runtime )
 }
 
 void
-LuaContext::StartDebugger( lua_State* L )
-{
-	#ifdef Rtt_DEBUGGER
-		const char kChunk[] =
-			"require \"remdebug_engine\""
-			"remdebug.engine.start()";
-
-		int result = luaL_loadstring( L, kChunk );
-		if ( Rtt_VERIFY( 0 == result ) )
-		{
-			//result = lua_pcall( L, 0, 0, 0 );
-			result = DoCall( L, 0, 0 );
-			Rtt_WARN_SIM( 0 == result, ( "Error loading debugger (%d)\n", result ) );
-		}
-	#else
-		Rtt_ASSERT_MSG( false, "Debugger not available" );
-	#endif
-}
-
-void
 LuaContext::RegisterModuleLoader( lua_State *L, const char *name, lua_CFunction loader, int nupvalues )
 {
 	Lua::RegisterModuleLoader( L, name, loader, nupvalues );
@@ -861,14 +787,14 @@ LuaContext::DoCall( lua_State* L, int narg, int nresults )
 		errfunc = base;
 	}
 
-#if (defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )) && !defined(Rtt_NXS_ENV)
+#if defined( Rtt_DEBUG ) && !defined(Rtt_NXS_ENV)
 	signal(SIGINT, laction);
 #endif
 
 	// The actual call
 	int status = lua_pcall(L, narg, nresults, errfunc);
 
-#if (defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )) && !defined(Rtt_NXS_ENV)
+#if defined( Rtt_DEBUG ) && !defined(Rtt_NXS_ENV)
 	signal(SIGINT, SIG_DFL);
 #endif
 
@@ -907,13 +833,8 @@ LuaContext::DoCPCall( lua_State* L, lua_CFunction func, void* ud )
 #endif // Rtt_AUTHORING_SIMULATOR
 
 int
-LuaContext::DoBuffer( lua_State *L, lua_CFunction loader, bool connectToDebugger, lua_CFunction pushargs )
+LuaContext::DoBuffer( lua_State *L, lua_CFunction loader, lua_CFunction pushargs )
 {
-	if ( connectToDebugger )
-	{
-		StartDebugger( L );
-	}
-
 	Rtt_ASSERT( loader );
 
 	int status = loader( L );
@@ -1145,7 +1066,7 @@ LuaContext::Initialize( const MPlatform& platform, Runtime* runtime )
 		}
         
 		// Load and invoke init.lua bytecodes
-		DoBuffer( luaload_init, false );
+		DoBuffer( luaload_init );
 		/*
 		if ( Rtt_VERIFY( 0 == luaload_init( L ) ) )
 		{
@@ -1155,6 +1076,9 @@ LuaContext::Initialize( const MPlatform& platform, Runtime* runtime )
 		*/
 
 		UpdateStage( * runtime->GetDisplay().GetStage() );
+#ifdef Rtt_AUTHORING_SIMULATOR
+		SimulatorControl::InitializeDebugger( *runtime, L );
+#endif
 	}
 	else
 	{
@@ -1188,7 +1112,7 @@ ReplaceGlobalFunction( lua_State *L, const char *functionName, lua_CFunction f )
 }
 
 void
-LuaContext::DisableParser( bool isDebuggerConnected )
+LuaContext::DisableParser()
 {
 	lua_State *L = fL;
 
@@ -1232,20 +1156,9 @@ LuaContext::Collect()
 }
 
 int
-LuaContext::DoBuffer( lua_CFunction loader, bool connectToDebugger, lua_CFunction pushargs )
+LuaContext::DoBuffer( lua_CFunction loader, lua_CFunction pushargs )
 {
-	return Self::DoBuffer( fL, loader, connectToDebugger, pushargs );
-}
-
-int
-LuaContext::DoFile( const char* file, bool connectToDebugger, int narg )
-{
-	if ( connectToDebugger )
-	{
-		StartDebugger( fL );
-	}
-
-	return DoFile( file, narg, true );
+	return Self::DoBuffer( fL, loader, pushargs );
 }
 
 int

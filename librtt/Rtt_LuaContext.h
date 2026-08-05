@@ -57,7 +57,7 @@ class LuaContext
 		static void stackdump( lua_State* L );
 		#endif
 		
-		#if defined( Rtt_DEBUG ) || defined( Rtt_DEBUGGER )
+		#if defined( Rtt_DEBUG )
 		static void lstop( lua_State* L, lua_Debug *ar );
 		#endif
 
@@ -74,8 +74,6 @@ class LuaContext
 		static void InitializeLibraries( lua_State* L, Runtime *runtime );
 		static void InitializeLuaCore( lua_State* L );
 		static void InitializeRttCore( lua_State* L, Runtime *runtime );
-
-		static void StartDebugger( lua_State* L );
 
 	public:
 		static void RegisterModuleLoader( lua_State *L, const char *name, lua_CFunction loader, int nupvalues = 0 );
@@ -95,7 +93,7 @@ class LuaContext
 		#endif
 
 	public:
-		static int DoBuffer( lua_State *L, lua_CFunction loader, bool connectToDebugger, lua_CFunction pushargs = NULL );
+		static int DoBuffer( lua_State *L, lua_CFunction loader, lua_CFunction pushargs = NULL );
 		static int DoFile( lua_State *L, const char* file, int narg, bool clear = false );
 
 	protected:
@@ -104,11 +102,9 @@ class LuaContext
 	public:
 		// If runtime is NULL then only core Lua libs are init'd
 		void Initialize( const MPlatform& platform, Runtime* runtime );
-		void DisableParser( bool isDebuggerConnected );
+		void DisableParser();
 		void RestrictFunction( const char *libName, const char *functionName );
 
-//		void Initialize( Runtime& runtime, const MPlatform& platform, bool connectToDebugger );
-//		void Initialize( const char scriptPath[], const MPlatform& platform, bool connectToDebugger );
 		lua_State *L() const { return fL; }
 		const ResourceHandle< lua_State >& LuaState() const { return fHandle; }
 
@@ -121,8 +117,7 @@ class LuaContext
 	public:
 		// See comments for DoCall(): do *not* call from outside librtt *if* the receiver
 		// belongs to the Corona runtime.
-		int DoBuffer( lua_CFunction loader, bool connectToDebugger, lua_CFunction pushargs = NULL );
-		int DoFile( const char* file, bool connectToDebugger, int narg );
+		int DoBuffer( lua_CFunction loader, lua_CFunction pushargs = NULL );
 		int DoFile( const char* file, int narg, bool clear = false );
 
 //		void DispatchEvent( const MEvent& e );

@@ -45,9 +45,7 @@ class PlatformPlayer
 		virtual ~PlatformPlayer();
 
 	public:
-		void Start(
-				const char* appFilePath,
-				bool connectToDebugger);
+		void Start( const char* appFilePath );
 
 	public:
 		const MPlatform& GetPlatform() const { return fPlatform; }

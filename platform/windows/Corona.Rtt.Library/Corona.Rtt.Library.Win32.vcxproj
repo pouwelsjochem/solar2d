@@ -519,14 +519,6 @@
     <LuaToCpp Include="..\..\resources\valid_config_lua.lua" />
   </ItemGroup>
   <ItemGroup>
-    <LuaToCpp Include="..\..\..\external\remdebug-1.0\src\remdebug\engine.lua">
-      <BaseFunctionName Condition="'$(Configuration)|$(Platform)'=='Release.App|Win32'">remdebug_engine</BaseFunctionName>
-      <BaseFunctionName Condition="'$(Configuration)|$(Platform)'=='Debug.App|Win32'">remdebug_engine</BaseFunctionName>
-      <BaseFunctionName Condition="'$(Configuration)|$(Platform)'=='Debug.CoronaBuilder|Win32'">remdebug_engine</BaseFunctionName>
-      <BaseFunctionName Condition="'$(Configuration)|$(Platform)'=='Debug.Simulator|Win32'">remdebug_engine</BaseFunctionName>
-      <BaseFunctionName Condition="'$(Configuration)|$(Platform)'=='Release.Simulator|Win32'">remdebug_engine</BaseFunctionName>
-      <BaseFunctionName Condition="'$(Configuration)|$(Platform)'=='PreRelease|Win32'">remdebug_engine</BaseFunctionName>
-    </LuaToCpp>
     <LuaToCpp Include="..\..\..\librtt\Corona\CoronaLibrary.lua" />
     <LuaToCpp Include="..\..\..\librtt\Corona\CoronaPrototype.lua" />
     <LuaToCpp Include="..\..\..\librtt\Corona\CoronaProvider.lua" />

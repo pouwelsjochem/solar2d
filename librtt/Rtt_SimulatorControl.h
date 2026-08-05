@@ -37,6 +37,7 @@ namespace SimulatorControl
 	};
 
 	void SetDirectory( const char *directory );
+	void InitializeDebugger( Runtime& runtime, lua_State *L );
 	void Process( Runtime& runtime );
 	bool ShouldRunRuntimeFrame( Runtime& runtime );
 	bool CanDispatchApplicationEvent( Runtime& runtime );

@@ -195,7 +195,7 @@ class RuntimeEnvironment
 			/// </summary>
 			HWND RenderSurfaceHandle;
 
-			/// <summary>Launch options to be used such as kConnectToDebugger, kLaunchDeviceShell, etc.</summary>
+			/// <summary>Launch options to be used such as kLaunchDeviceShell.</summary>
 			Rtt::Runtime::LaunchOptions LaunchOptions;
 
 			/// <summary>
@@ -519,21 +519,6 @@ class RuntimeEnvironment
 		/// <param name="windowHandle">Handle to the window or control to be validated.</param>
 		/// <returns>Returns a result object determining if Corona can render to the given window successfully.</returns>
 		static ValidateRenderSurfaceResult ValidateRenderSurface(HWND windowHandle);
-
-		/// <summary>
-		///  <para>
-		///   Determines if there are no Corona apps currently connected to a Lua debugger on the system.
-		///  </para>
-		///  <para>
-		///   Note that Corona debugging uses a fixed TCP port number, which means that only one Corona application
-		///   on the system can connect to a debugger at a time.
-		///  </para>
-		/// </summary>
-		/// <returns>
-		///  <para>Returns true if no Corona application on the system is currently connected to a debugger.</para>
-		///  <para>Returns false if there is a Corona application connected to a debugger.</para>
-		/// </returns>
-		static bool IsDebuggerConnectionAvailable();
 
 		#pragma endregion
 
@@ -959,19 +944,6 @@ class RuntimeEnvironment
 		///  <para>Note: GDI+ is needed by Corona to load images and render text to bitmaps.</para>
 		/// </summary>
 		ULONG_PTR fGdiPlusToken;
-
-		/// <summary>
-		///  <para>
-		///   Handle to a "named semaphore" used to indicate that this runtime is connected to a Lua debugger.
-		///  </para>
-		///  <para>Set to null if the Corona runtime is not set up to connect to a debugger.</para>
-		/// </summary>
-		/// <remarks>
-		///  Corona debugging uses a fixed TCP port number which only allows one Corona app on a system to be debugged
-		///  at a time. This named semaphore is used to detect if another Corona app is currently connected to the
-		///  debugger. If this named semaphore is not found on the system, then TCP debugging is available.
-		/// </remarks>
-		HANDLE fDebuggerSemaphoreHandle;
 
 		/// <summary>
 		///  <para>

@@ -76,12 +76,6 @@
     <Filter Include="external\rsa">
       <UniqueIdentifier>{6e4c414b-0e01-4b29-8575-93e9534a6970}</UniqueIdentifier>
     </Filter>
-    <Filter Include="external\remdebug-1.0">
-      <UniqueIdentifier>{0e929d8f-fda5-4400-934d-4c6a4274aa72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="external\remdebug-1.0\src">
-      <UniqueIdentifier>{8902cd3f-285c-41da-b8b9-53800540d898}</UniqueIdentifier>
-    </Filter>
     <Filter Include="external\vulkan">
       <UniqueIdentifier>{5872729e-673e-4f2f-8b82-69ff24ad96e2}</UniqueIdentifier>
     </Filter>
@@ -1767,9 +1761,6 @@
     </LuaToCpp>
     <LuaToCpp Include="..\..\..\external\lpeg\re.lua">
       <Filter>external\lpeg</Filter>
-    </LuaToCpp>
-    <LuaToCpp Include="..\..\..\external\remdebug-1.0\src\remdebug\engine.lua">
-      <Filter>external\remdebug-1.0\src</Filter>
     </LuaToCpp>
     <LuaToCpp Include="..\..\resources\valid_build_settings.lua">
       <Filter>platform\resources</Filter>

@@ -150,10 +150,6 @@
 	#define Rtt_NETWORK
 	#define Rtt_LUA_LFS
 
-#if !defined( Rtt_LINUX_ENV) 
-	#define Rtt_DEBUGGER
-#endif
-
 #endif
 
 #if defined( Rtt_WIN_ENV )
@@ -246,16 +242,5 @@
 	#define Rtt_SQLITE
 	//#define Rtt_NETWORK
 #endif
-
-// Authoring Simulator
-// ----------------------------------------------------------------------------
-
-#ifdef Rtt_AUTHORING_SIMULATOR
-
-	#define Rtt_DEBUGGER
-
-#endif
-
-// ----------------------------------------------------------------------------
 
 #endif // __Rtt_Config_H__

@@ -46,17 +46,6 @@ namespace
 		HWND TestSurfaceHandle;
 
 		/// <summary>
-		///  <para>
-		///   Set true to set up Corona to connect to a Lua debugger upon launch.
-		///  </para>
-		///  <para>Set false (the default) to not connect to a debugger.</para>
-		///  <para>
-		///   Debugging can only be done if the project contains Lua files. You cannot debug an app with a "resource.car".
-		///  </para>
-		/// </summary>
-		bool IsDebuggerEnabled;
-
-		/// <summary>
 		///  Array storing paths of all sandboxed dirctories supported by Corona such as
 		///  kResourceDir, kDcoumentsDir, etc.
 		/// </summary>
@@ -73,8 +62,7 @@ namespace
 		CoronaLaunchSettings()
 		:	MainWindowHandle(nullptr),
 			RenderSurfaceHandle(nullptr),
-			TestSurfaceHandle(nullptr),
-			IsDebuggerEnabled(false)
+			TestSurfaceHandle(nullptr)
 		{}
 
 		void CopyTo(Interop::RuntimeEnvironment::CreationSettings& settings) const
@@ -90,12 +78,7 @@ namespace
 			settings.PluginsDirectoryPath = this->DirectoryPaths[Rtt::MPlatform::kPluginsDir].GetUTF16();
 			settings.LaunchArgumentsPointer = &(this->LaunchArguments);
 
-			int launchOptions = Rtt::Runtime::kDefaultLaunchOption;
-			if (this->IsDebuggerEnabled)
-			{
-				launchOptions |= Rtt::Runtime::kConnectToDebugger;
-			}
-			settings.LaunchOptions = (Rtt::Runtime::LaunchOptions)launchOptions;
+			settings.LaunchOptions = Rtt::Runtime::kDefaultLaunchOption;
 		}
 	};
 }
@@ -430,27 +413,6 @@ CORONA_API void CoronaWin32LaunchSettingsClearLaunchArguments(CoronaWin32LaunchS
 	if (settingsReference)
 	{
 		((CoronaLaunchSettings*)settingsReference)->LaunchArguments.clear();
-	}
-}
-
-CORONA_API void CoronaWin32LaunchSettingsIsDebuggerEnabled(
-	CoronaWin32LaunchSettingsRef settingsReference, int *valuePointer)
-{
-	// Validate arguments.
-	if (!settingsReference || !valuePointer)
-	{
-		return;
-	}
-
-	// Fetch the requested setting.
-	*valuePointer = ((CoronaLaunchSettings*)settingsReference)->IsDebuggerEnabled ? 1 : 0;
-}
-
-CORONA_API void CoronaWin32LaunchSettingsSetDebuggerEnabled(CoronaWin32LaunchSettingsRef settingsReference, int value)
-{
-	if (settingsReference)
-	{
-		((CoronaLaunchSettings*)settingsReference)->IsDebuggerEnabled = value ? true : false;
 	}
 }
 

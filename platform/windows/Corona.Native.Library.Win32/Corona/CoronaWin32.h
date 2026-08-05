@@ -46,9 +46,6 @@ CORONA_API void CoronaWin32LaunchSettingsAddLaunchArgument(CoronaWin32LaunchSett
 CORONA_API void CoronaWin32LaunchSettingsGetLaunchArgumentByIndex(CoronaWin32LaunchSettingsRef settingsReference, int index, const wchar_t **stringPointer);
 CORONA_API void CoronaWin32LaunchSettingsGetLaunchArgumentCount(CoronaWin32LaunchSettingsRef settingsReference, int *valuePointer);
 CORONA_API void CoronaWin32LaunchSettingsClearLaunchArguments(CoronaWin32LaunchSettingsRef settingsReference);
-CORONA_API void CoronaWin32LaunchSettingsIsDebuggerEnabled(CoronaWin32LaunchSettingsRef settingsReference, int *valuePointer);
-CORONA_API void CoronaWin32LaunchSettingsSetDebuggerEnabled(CoronaWin32LaunchSettingsRef settingsReference, int value);
-
 CORONA_API CoronaWin32RuntimeRef CoronaWin32RuntimeNewRef(void);
 CORONA_API void CoronaWin32RuntimeDeleteRef(CoronaWin32RuntimeRef runtimeReference);
 CORONA_API int CoronaWin32RuntimeRun(CoronaWin32RuntimeRef runtimeReference, CoronaWin32LaunchSettingsRef settingsReference);
@@ -153,18 +150,6 @@ class LaunchSettings
 		void ClearLaunchArguments()
 		{
 			::CoronaWin32LaunchSettingsClearLaunchArguments(fSettingsReference);
-		}
-
-		bool IsDebuggerEnabled() const
-		{
-			int value = 0;
-			::CoronaWin32LaunchSettingsIsDebuggerEnabled(fSettingsReference, &value);
-			return value ? true : false;
-		}
-
-		void SetDebuggerEnabled(bool value)
-		{
-			::CoronaWin32LaunchSettingsSetDebuggerEnabled(fSettingsReference, value ? 1 : 0);
 		}
 
 	private:

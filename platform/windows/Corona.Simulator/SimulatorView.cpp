@@ -1690,12 +1690,6 @@ void CSimulatorView::RunCoronaProject(CString& projectPath)
 		// Provide the configuration of the device we will be simulating.
 		settings.DeviceConfigPointer = &mDeviceConfig;
 
-		// Set up the runtime for debug mode, if enabled.
-		if (((CSimulatorApp*)::AfxGetApp())->IsDebugModeEnabled())
-		{
-			settings.LaunchOptions |= Rtt::Runtime::kConnectToDebugger;
-		}
-
 		// Create and startup the Corona runtime.
 		// Note: This class' OnRuntimeLoaded() method will be called before this function returns if successfully loaded.
 		auto result = Interop::SimulatorRuntimeEnvironment::CreateUsing(settings);

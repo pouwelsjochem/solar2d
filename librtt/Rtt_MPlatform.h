@@ -74,7 +74,7 @@ class MPlatform
 		 * On the simulator, we need to distinguish between resource files in the app bundle 
 		 * (system resources) vs project files (plain resources).  
 		 * On the simulator, load a resource.car file that lives in the app bundle (system resource dir).  
-		 * It contains the compiled lua for each device skin and the remdebug.engine.
+		 * It contains the compiled Lua for each device skin.
          *
 		 * On the device, there's no distinction.
 		 */

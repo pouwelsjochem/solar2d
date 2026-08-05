@@ -161,13 +161,6 @@
 			remoteGlobalIDString = 004CEC2F1339724E006ACF35;
 			remoteInfo = "liblua-universal";
 		};
-		A4ED120514D350C400ECF49E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A4ED11ED14D350C400ECF49E /* lua.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 004CED441339786A006ACF35;
-			remoteInfo = debugger;
-		};
 		A4ED120714D350C400ECF49E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A4ED11ED14D350C400ECF49E /* lua.xcodeproj */;
@@ -874,7 +867,6 @@
 				A4ED11FE14D350C400ECF49E /* lua */,
 				A4ED120014D350C400ECF49E /* luac */,
 				A4ED120214D350C400ECF49E /* liblua-universal.a */,
-				A4ED120614D350C400ECF49E /* debugger */,
 				A4ED120814D350C400ECF49E /* liblua-tool.a */,
 				C221F5231D48156700F45E77 /* libluasocket.a */,
 			);
@@ -1140,13 +1132,6 @@
 			fileType = archive.ar;
 			path = "liblua-universal.a";
 			remoteRef = A4ED120114D350C400ECF49E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		A4ED120614D350C400ECF49E /* debugger */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = debugger;
-			remoteRef = A4ED120514D350C400ECF49E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		A4ED120814D350C400ECF49E /* liblua-tool.a */ = {

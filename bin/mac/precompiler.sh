@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Example of how to precompile lua files that are inside a module
-# ./precompiler.sh -load engine.lua ~/tmp7 /Volumes/rtt/platform/mac/modules/remdebug/remdebug
 #
 
 # [-load] controls whether the file generates a luaL_load (default is luaopen)
@@ -77,4 +76,3 @@ then
 
 	cd -
 fi
-

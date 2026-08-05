@@ -94,7 +94,6 @@ bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}" "$SRCROOT/platform/resources/icons/Cor
 
 ditto -v -X "$TOOLSPATH/Corona Simulator.app" "$TMPPATH/${PRODUCT_DIR}/Corona Simulator.app"
 mkdir "${TMPPATH}/${PRODUCT_DIR}/${RESOURCE_DIR}"
-cp -v "$TOOLSPATH/debugger" "${TMPPATH}/${PRODUCT_DIR}/${RESOURCE_DIR}"
 cp -v "$SRCROOT"/platform/resources/icons/Documentation.html "$TMPPATH"/${PRODUCT_DIR}/
 
 if [ -d "$2/${RESOURCE_DIR}" ]
@@ -114,7 +113,6 @@ then
 fi
 
 # unfortunately, since macOS 10.12 resource forks can not be signed, so removing some icons
-# bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}/debugger" "$SRCROOT/platform/resources/icons/CoronaIcon-Debugger.png"
 # bin/mac/seticon "$TMPPATH/${PRODUCT_DIR}/${RESOURCE_DIR}" "$SRCROOT/platform/resources/icons/CoronaIcon-Folder.png"
 if [[ -d "$TMPPATH/${PRODUCT_DIR}/${NATIVE_DIR}" ]]
 then

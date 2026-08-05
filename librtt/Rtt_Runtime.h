@@ -57,7 +57,6 @@ class Runtime : public MCallback,
 	public:
 		typedef enum _Properties
 		{
-			kIsDebuggerConnected      = 0x1,
 			kIsApplicationLoaded      = 0x2,
 			kIsApplicationExecuting   = 0x4,
 			kIsUsingCustomCode        = 0x8,
@@ -86,7 +85,6 @@ class Runtime : public MCallback,
 		typedef enum _LaunchOptions
 		{
 			// Mask
-			kConnectToDebugger = 0x1,
 			kLaunchDeviceShell = 0x2,
 			kCoronaCardsOption = 0x8,
 

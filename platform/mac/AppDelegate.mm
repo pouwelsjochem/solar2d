@@ -1931,8 +1931,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	// This ensures Cocoa doesn't get confused with application:openFile:
 	NSUserDefaults* userdefaults = [NSUserDefaults standardUserDefaults];
 	
-	fOptions.connectToDebugger = [userdefaults boolForKey:@"debug"];
-	
 	NSString* runscriptpath = [userdefaults stringForKey:@"run"];
 	if ( nil != runscriptpath )
 	{
@@ -1989,7 +1987,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		Rtt_Allocator& allocator = platform.GetAllocator();
 		LuaContext* vm = LuaContext::New( & allocator, platform ); // vm cannot outlive platform
 		vm->Initialize( platform, NULL );
-		vm->DoFile( [scriptPath UTF8String], fOptions.connectToDebugger );
+		vm->DoFile( [scriptPath UTF8String], 0 );
 		LuaContext::Delete( vm );
 		[[NSApplication sharedApplication] terminate:self];
 	}
@@ -2541,9 +2539,6 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		delete fSimulator;
 		fSimulator = NULL;
 
-		// Prevent subsequent launches from connecting to debugger --- must relaunch
-		// process to connect to debugger
-		fOptions.connectToDebugger = false;
 	}
 	[self updateScreenRecordingMenuItem];
 }

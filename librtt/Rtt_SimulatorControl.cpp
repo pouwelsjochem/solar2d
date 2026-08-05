@@ -10,6 +10,7 @@
 #include "Core/Rtt_Build.h"
 #include "Core/Rtt_Assert.h"
 #include "Core/Rtt_Data.h"
+#include "Core/Rtt_String.h"
 
 #include "Rtt_SimulatorControl.h"
 
@@ -224,12 +225,17 @@ static const int kSimulatorControlMaximumDiagnosticFrames = 12;
 static const int kSimulatorControlMaximumDiagnosticLocals = 12;
 static const int kSimulatorControlMaximumDiagnosticUpvalues = 8;
 static const int kSimulatorControlMaximumDiagnosticTableEntries = 3;
+static const int kSimulatorControlMaximumDebuggerFrames = 64;
+static const int kSimulatorControlMaximumDebuggerValues = 100;
 static const unsigned long kSimulatorControlMaximumStepFrames = 1000;
 static char kSimulatorControlRegistryKey;
 
 static unsigned long long GetSimulatorControlMilliseconds();
 static unsigned long long GetSimulatorControlTimestampMilliseconds();
+static bool MakeSimulatorControlAbsolutePath(
+	const std::string& path, std::string& result );
 static int RegisterSimulatorControlHandle( lua_State *L, int valueIndex );
+static void SimulatorControlLuaHook( lua_State *L, lua_Debug *information );
 
 class SimulatorControlLogMutex
 {
@@ -402,12 +408,21 @@ struct SimulatorControlRuntimeState
 	:	generation( 0 ),
 		diagnosticSequence( 0 ),
 		diagnosticFrame( 0 ),
+		debuggerPauseSequence( 0 ),
+		debuggerBreakpointId( 0 ),
+		debuggerLine( 0 ),
+		debuggerStepDepth( 0 ),
 		stepFramesRemaining( 0 ),
 		controlledInputDispatchDepth( 0 ),
+		debuggerThread( NULL ),
+		debuggerStepThread( NULL ),
 		hasDiagnostic( false ),
 		diagnosticTruncated( false ),
 		runtimeErrorHalted( false ),
 		controlPaused( false ),
+		debuggerPaused( false ),
+		debuggerOwnsRuntimeClock( false ),
+		debuggerHookInstalled( false ),
 		stepStartPending( false ),
 		diagnosticsWritten( false ),
 		sessionWritten( false )
@@ -417,10 +432,23 @@ struct SimulatorControlRuntimeState
 	unsigned long generation;
 	unsigned long diagnosticSequence;
 	unsigned long diagnosticFrame;
+	unsigned long debuggerPauseSequence;
+	unsigned long debuggerBreakpointId;
+	int debuggerLine;
+	int debuggerStepDepth;
 	unsigned long stepFramesRemaining;
 	int controlledInputDispatchDepth;
+	lua_State *debuggerThread;
+	lua_State *debuggerStepThread;
 	std::string directory;
 	std::string sessionId;
+	std::string resourceDirectory;
+	std::string debuggerPauseReason;
+	std::string debuggerSource;
+	std::string debuggerProjectSource;
+	std::string debuggerFunction;
+	std::string debuggerStepMode;
+	std::map< std::string, std::string > debuggerSourcePaths;
 	std::string diagnosticType;
 	std::string diagnosticMessage;
 	std::string diagnosticStackTrace;
@@ -429,10 +457,45 @@ struct SimulatorControlRuntimeState
 	bool diagnosticTruncated;
 	bool runtimeErrorHalted;
 	bool controlPaused;
+	bool debuggerPaused;
+	bool debuggerOwnsRuntimeClock;
+	bool debuggerHookInstalled;
 	bool stepStartPending;
 	bool diagnosticsWritten;
 	bool sessionWritten;
 };
+
+struct SimulatorControlBreakpoint
+{
+	SimulatorControlBreakpoint()
+	:	id( 0 ),
+		line( 0 )
+	{
+	}
+
+	unsigned long id;
+	int line;
+	std::string path;
+	std::string comparisonPath;
+};
+
+struct SimulatorControlDebuggerConfiguration
+{
+	SimulatorControlDebuggerConfiguration()
+	:	nextBreakpointId( 0 )
+	{
+	}
+
+	unsigned long nextBreakpointId;
+	std::vector< SimulatorControlBreakpoint > breakpoints;
+};
+
+static SimulatorControlDebuggerConfiguration&
+GetSimulatorControlDebuggerConfiguration()
+{
+	static SimulatorControlDebuggerConfiguration configuration;
+	return configuration;
+}
 
 struct SimulatorControlSession
 {
@@ -883,6 +946,111 @@ GetSimulatorControlRuntimeState( Runtime& runtime )
 	return GetSimulatorControlRuntimeState( & runtime );
 }
 
+static std::string
+NormalizeSimulatorControlDebuggerPath( const char *path )
+{
+	std::string result( path ? path : "" );
+	if ( ! result.empty() && '@' == result[0] )
+	{
+		result.erase( 0, 1 );
+	}
+	for ( size_t index = 0; index < result.length(); index++ )
+	{
+		if ( '\\' == result[index] )
+		{
+			result[index] = '/';
+		}
+#ifdef Rtt_WIN_ENV
+		result[index] = (char)tolower( (unsigned char)result[index] );
+#endif
+	}
+	while ( result.length() > 1 && '/' == result[result.length() - 1] )
+	{
+		result.erase( result.length() - 1 );
+	}
+	return result;
+}
+
+static std::string
+CanonicalizeSimulatorControlDebuggerSource(
+	SimulatorControlRuntimeState& state, const std::string& source )
+{
+	std::map< std::string, std::string >::const_iterator iterator =
+		state.debuggerSourcePaths.find( source );
+	if ( state.debuggerSourcePaths.end() != iterator )
+	{
+		return iterator->second;
+	}
+
+	std::string absoluteSource;
+	std::string result = source;
+	if ( MakeSimulatorControlAbsolutePath( source, absoluteSource ) )
+	{
+		result = NormalizeSimulatorControlDebuggerPath(
+			absoluteSource.c_str() );
+	}
+	state.debuggerSourcePaths[source] = result;
+	return result;
+}
+
+static std::string
+GetSimulatorControlProjectSource(
+	const SimulatorControlRuntimeState& state, const std::string& source )
+{
+	if ( state.resourceDirectory.empty() )
+	{
+		return std::string();
+	}
+	if ( source == state.resourceDirectory )
+	{
+		return std::string();
+	}
+	if ( source.length() > state.resourceDirectory.length() &&
+		0 == source.compare(
+			0, state.resourceDirectory.length(), state.resourceDirectory ) &&
+		'/' == source[state.resourceDirectory.length()] )
+	{
+		return source.substr( state.resourceDirectory.length() + 1 );
+	}
+	return std::string();
+}
+
+static int
+GetSimulatorControlLuaStackDepth( lua_State *L )
+{
+	int depth = 0;
+	lua_Debug information;
+	while ( lua_getstack( L, depth, & information ) )
+	{
+		depth++;
+	}
+	return depth;
+}
+
+static unsigned long
+FindSimulatorControlBreakpoint(
+	const SimulatorControlRuntimeState& state,
+	const std::string& source, int line )
+{
+	std::string projectSource =
+		GetSimulatorControlProjectSource( state, source );
+	SimulatorControlDebuggerConfiguration& configuration =
+		GetSimulatorControlDebuggerConfiguration();
+	for ( std::vector< SimulatorControlBreakpoint >::const_iterator iterator =
+			configuration.breakpoints.begin();
+		configuration.breakpoints.end() != iterator; iterator++ )
+	{
+		if ( iterator->line == line &&
+			( iterator->comparisonPath == source ||
+				( ! projectSource.empty() &&
+					iterator->comparisonPath == projectSource ) ) )
+		{
+			return iterator->id;
+		}
+	}
+	return 0;
+}
+
 static void
 AssignSimulatorControlDiagnosticText(
 	std::string& result, const char *value,
@@ -1276,17 +1444,19 @@ static std::string
 BuildSimulatorControlStatus(
 	Runtime& runtime, const SimulatorControlRuntimeState& state )
 {
-	char result[512];
+	char result[640];
 	const char *executionState = state.runtimeErrorHalted ?
-		"error-halted" : ( state.controlPaused ?
-			"control-paused" : ( runtime.IsSuspended() ? "suspended" : "running" ) );
+		"error-halted" : ( state.debuggerPaused ?
+			"debug-paused" : ( state.controlPaused ?
+				"control-paused" : ( runtime.IsSuspended() ? "suspended" : "running" ) ) );
 	snprintf(
 		result, sizeof( result ),
 		"{\"protocol\":2,\"sessionId\":\"%s\",\"generation\":%lu,"
 		"\"pid\":%ld,\"frame\":%lu,"
 		"\"applicationLoaded\":%s,\"applicationExecuting\":%s,"
 		"\"executionState\":\"%s\",\"runtimeErrorHalted\":%s,"
-		"\"controlPaused\":%s,\"stepFramesRemaining\":%lu,\"suspended\":%s}",
+		"\"controlPaused\":%s,\"stepFramesRemaining\":%lu,"
+		"\"debuggerPaused\":%s,\"debuggerPauseSequence\":%lu,\"suspended\":%s}",
 		state.sessionId.c_str(),
 		state.generation,
 		GetSimulatorControlProcessId(),
@@ -1297,6 +1467,8 @@ BuildSimulatorControlStatus(
 		state.runtimeErrorHalted ? "true" : "false",
 		state.controlPaused ? "true" : "false",
 		state.stepFramesRemaining,
+		state.debuggerPaused ? "true" : "false",
+		state.debuggerPauseSequence,
 		runtime.IsSuspended() ? "true" : "false" );
 	return std::string( result );
 }
@@ -1355,8 +1527,32 @@ IsSimulatorControlCommandAllowedWhileErrorHalted(
 		"find-display-object" == command ||
 		"hit-test-display-objects" == command ||
 		"inspect-lua-value" == command ||
+		"add-lua-breakpoint" == command ||
+		"remove-lua-breakpoint" == command ||
+		"list-lua-breakpoints" == command ||
+		"debugger-status" == command ||
 		"relaunch-project" == command ||
 		"quit-simulator" == command;
+}
+
+static bool
+IsSimulatorControlCommandAllowedWhileDebuggerPaused(
+	const std::string& command )
+{
+	return "runtime-status" == command ||
+		"runtime-diagnostics" == command ||
+		"runtime-logs" == command ||
+		"inspect-lua-value" == command ||
+		"add-lua-breakpoint" == command ||
+		"remove-lua-breakpoint" == command ||
+		"list-lua-breakpoints" == command ||
+		"debugger-status" == command ||
+		"debugger-stack" == command ||
+		"inspect-debugger-frame" == command ||
+		"continue-debugger" == command ||
+		"step-into" == command ||
+		"step-over" == command ||
+		"step-out" == command;
 }
 
 static std::string
@@ -2472,6 +2668,337 @@ BuildSimulatorControlDiagnosticContext(
 	result.append( frames );
 	result.append( truncated ?
 		"],\"truncated\":true}" : "],\"truncated\":false}" );
+	return result;
+}
+
+static void
+AppendSimulatorControlDebuggerValue(
+	lua_State *L, int valueIndex, std::string& result )
+{
+	valueIndex = AbsoluteLuaIndex( L, valueIndex );
+	switch ( lua_type( L, valueIndex ) )
+	{
+		case LUA_TNIL:
+			result.append( "{\"type\":\"nil\",\"value\":null}" );
+			break;
+		case LUA_TBOOLEAN:
+			result.append( lua_toboolean( L, valueIndex ) ?
+				"{\"type\":\"boolean\",\"value\":true}" :
+				"{\"type\":\"boolean\",\"value\":false}" );
+			break;
+		case LUA_TNUMBER:
+		{
+			lua_Number value = lua_tonumber( L, valueIndex );
+			result.append( "{\"type\":\"number\",\"value\":" );
+			if ( IsFiniteNumber( value ) )
+			{
+				AppendSimulatorControlNumber( result, value );
+			}
+			else
+			{
+				result.append( "null,\"description\":" );
+				const char *description = value != value ?
+					"nan" : ( value > 0 ? "infinity" : "-infinity" );
+				AppendSimulatorControlJsonString(
+					result, description, strlen( description ) );
+			}
+			result.push_back( '}' );
+			break;
+		}
+		case LUA_TSTRING:
+		{
+			size_t length = 0;
+			const char *value = lua_tolstring( L, valueIndex, & length );
+			size_t serializedLength = length > kSimulatorControlMaximumStringSize ?
+				kSimulatorControlMaximumStringSize : length;
+			result.append( "{\"type\":\"string\",\"value\":" );
+			AppendSimulatorControlJsonString(
+				result, value, serializedLength );
+			char information[64];
+			snprintf(
+				information, sizeof( information ),
+				",\"length\":%lu", (unsigned long)length );
+			result.append( information );
+			if ( serializedLength < length )
+			{
+				result.append( ",\"truncated\":true" );
+			}
+			result.push_back( '}' );
+			break;
+		}
+		case LUA_TTABLE:
+		{
+			char information[80];
+			snprintf(
+				information, sizeof( information ),
+				"{\"type\":\"table\",\"handle\":%d}",
+				RegisterSimulatorControlHandle( L, valueIndex ) );
+			result.append( information );
+			break;
+		}
+		case LUA_TFUNCTION:
+			result.append( "{\"type\":\"function\"}" );
+			break;
+		case LUA_TUSERDATA:
+			result.append( "{\"type\":\"userdata\"}" );
+			break;
+		case LUA_TLIGHTUSERDATA:
+			result.append( "{\"type\":\"lightuserdata\"}" );
+			break;
+		case LUA_TTHREAD:
+			result.append( "{\"type\":\"thread\"}" );
+			break;
+		default:
+			result.append( "{\"type\":\"unknown\"}" );
+			break;
+	}
+}
+
+static std::string
+BuildSimulatorControlBreakpoints()
+{
+	SimulatorControlDebuggerConfiguration& configuration =
+		GetSimulatorControlDebuggerConfiguration();
+	std::string result( "{\"breakpoints\":[" );
+	for ( size_t index = 0; index < configuration.breakpoints.size(); index++ )
+	{
+		if ( index > 0 )
+		{
+			result.push_back( ',' );
+		}
+		const SimulatorControlBreakpoint& breakpoint =
+			configuration.breakpoints[index];
+		char identity[96];
+		snprintf(
+			identity, sizeof( identity ),
+			"{\"id\":%lu,\"path\":", breakpoint.id );
+		result.append( identity );
+		AppendSimulatorControlJsonString( result, breakpoint.path );
+		char line[48];
+		snprintf( line, sizeof( line ), ",\"line\":%d}", breakpoint.line );
+		result.append( line );
+	}
+	result.append( "]}" );
+	return result;
+}
+
+static std::string
+BuildSimulatorControlDebuggerStatus(
+	const SimulatorControlRuntimeState& state )
+{
+	char prefix[192];
+	snprintf(
+		prefix, sizeof( prefix ),
+		"{\"paused\":%s,\"pauseSequence\":%lu,\"breakpointId\":%lu,"
+		"\"line\":%d,\"reason\":",
+		state.debuggerPaused ? "true" : "false",
+		state.debuggerPauseSequence,
+		state.debuggerBreakpointId,
+		state.debuggerLine );
+	std::string result( prefix );
+	if ( state.debuggerPauseReason.empty() )
+	{
+		result.append( "null" );
+	}
+	else
+	{
+		AppendSimulatorControlJsonString(
+			result, state.debuggerPauseReason );
+	}
+	result.append( ",\"source\":" );
+	if ( state.debuggerSource.empty() )
+	{
+		result.append( "null" );
+	}
+	else
+	{
+		AppendSimulatorControlJsonString( result, state.debuggerSource );
+	}
+	result.append( ",\"projectSource\":" );
+	if ( state.debuggerProjectSource.empty() )
+	{
+		result.append( "null" );
+	}
+	else
+	{
+		AppendSimulatorControlJsonString(
+			result, state.debuggerProjectSource );
+	}
+	result.append( ",\"function\":" );
+	if ( state.debuggerFunction.empty() )
+	{
+		result.append( "null" );
+	}
+	else
+	{
+		AppendSimulatorControlJsonString(
+			result, state.debuggerFunction );
+	}
+	result.append( ",\"stepMode\":" );
+	if ( state.debuggerStepMode.empty() )
+	{
+		result.append( "null}" );
+	}
+	else
+	{
+		AppendSimulatorControlJsonString( result, state.debuggerStepMode );
+		result.push_back( '}' );
+	}
+	return result;
+}
+
+static void
+AppendSimulatorControlDebuggerFrameInformation(
+	lua_State *L, lua_Debug& information, int level,
+	std::string& result )
+{
+	char prefix[64];
+	snprintf( prefix, sizeof( prefix ), "{\"level\":%d", level );
+	result.append( prefix );
+	if ( information.source )
+	{
+		std::string source =
+			NormalizeSimulatorControlDebuggerPath( information.source );
+		result.append( ",\"source\":" );
+		AppendSimulatorControlJsonString( result, source );
+	}
+	if ( information.short_src[0] )
+	{
+		result.append( ",\"shortSource\":" );
+		AppendSimulatorControlJsonString(
+			result, information.short_src,
+			strlen( information.short_src ) );
+	}
+	char line[64];
+	snprintf(
+		line, sizeof( line ), ",\"line\":%d", information.currentline );
+	result.append( line );
+	if ( information.name && information.name[0] )
+	{
+		result.append( ",\"function\":" );
+		AppendSimulatorControlJsonString(
+			result, information.name, strlen( information.name ) );
+	}
+	if ( information.what )
+	{
+		result.append( ",\"kind\":" );
+		AppendSimulatorControlJsonString(
+			result, information.what, strlen( information.what ) );
+	}
+	result.push_back( '}' );
+}
+
+static std::string
+BuildSimulatorControlDebuggerStack(
+	const SimulatorControlRuntimeState& state )
+{
+	std::string result( "{\"pauseSequence\":" );
+	char sequence[48];
+	snprintf(
+		sequence, sizeof( sequence ),
+		"%lu,\"frames\":[", state.debuggerPauseSequence );
+	result.append( sequence );
+	bool first = true;
+	int level = 0;
+	for ( ; level < kSimulatorControlMaximumDebuggerFrames; level++ )
+	{
+		lua_Debug information;
+		memset( & information, 0, sizeof( information ) );
+		if ( ! lua_getstack( state.debuggerThread, level, & information ) ||
+			! lua_getinfo( state.debuggerThread, "nSl", & information ) )
+		{
+			break;
+		}
+		if ( ! first )
+		{
+			result.push_back( ',' );
+		}
+		AppendSimulatorControlDebuggerFrameInformation(
+			state.debuggerThread, information, level, result );
+		first = false;
+	}
+	lua_Debug extraFrame;
+	bool truncated = level >= kSimulatorControlMaximumDebuggerFrames &&
+		lua_getstack( state.debuggerThread, level, & extraFrame );
+	result.append( truncated ?
+		"],\"truncated\":true}" : "],\"truncated\":false}" );
+	return result;
+}
+
+static void
+AppendSimulatorControlDebuggerNamedValues(
+	lua_State *L, const lua_Debug& information, int functionIndex,
+	bool upvalues, std::string& result, bool& truncated )
+{
+	result.push_back( '[' );
+	int emitted = 0;
+	for ( int index = 1; ; index++ )
+	{
+		const char *name = upvalues ?
+			lua_getupvalue( L, functionIndex, index ) :
+			lua_getlocal( L, & information, index );
+		if ( ! name )
+		{
+			break;
+		}
+		if ( emitted >= kSimulatorControlMaximumDebuggerValues )
+		{
+			lua_pop( L, 1 );
+			truncated = true;
+			break;
+		}
+		if ( emitted > 0 )
+		{
+			result.push_back( ',' );
+		}
+		result.append( "{\"name\":" );
+		AppendSimulatorControlJsonString(
+			result, name, strlen( name ) );
+		result.append( ",\"value\":" );
+		AppendSimulatorControlDebuggerValue( L, -1, result );
+		result.push_back( '}' );
+		lua_pop( L, 1 );
+		emitted++;
+	}
+	result.push_back( ']' );
+}
+
+static std::string
+BuildSimulatorControlDebuggerFrame(
+	const SimulatorControlRuntimeState& state, int level )
+{
+	lua_State *L = state.debuggerThread;
+	lua_Debug information;
+	memset( & information, 0, sizeof( information ) );
+	if ( ! lua_getstack( L, level, & information ) )
+	{
+		return std::string();
+	}
+	int originalTop = lua_gettop( L );
+	if ( ! lua_getinfo( L, "nSlf", & information ) )
+	{
+		lua_settop( L, originalTop );
+		return std::string();
+	}
+	int functionIndex = lua_gettop( L );
+	std::string result( "{\"pauseSequence\":" );
+	char sequence[48];
+	snprintf(
+		sequence, sizeof( sequence ),
+		"%lu,\"frame\":", state.debuggerPauseSequence );
+	result.append( sequence );
+	AppendSimulatorControlDebuggerFrameInformation(
+		L, information, level, result );
+	result.append( ",\"locals\":" );
+	bool truncated = false;
+	AppendSimulatorControlDebuggerNamedValues(
+		L, information, functionIndex, false, result, truncated );
+	result.append( ",\"upvalues\":" );
+	AppendSimulatorControlDebuggerNamedValues(
+		L, information, functionIndex, true, result, truncated );
+	result.append( truncated ?
+		",\"truncated\":true}" : ",\"truncated\":false}" );
+	lua_settop( L, originalTop );
 	return result;
 }
 
@@ -4454,6 +4981,79 @@ PerformSimulatorControlClientWait(
 }
 
 static bool
+PerformSimulatorControlClientWaitForDebuggerPause(
+	const std::string& directory, unsigned long afterSequence,
+	unsigned long timeoutMilliseconds, std::string& response,
+	std::string& error )
+{
+	unsigned long long deadline =
+		GetSimulatorControlMilliseconds() + timeoutMilliseconds;
+	while ( GetSimulatorControlMilliseconds() < deadline )
+	{
+		unsigned long long now = GetSimulatorControlMilliseconds();
+		unsigned long remaining = (unsigned long)( deadline - now );
+		std::string candidate;
+		if ( ! PerformSimulatorControlClientRequest(
+			directory, "debugger-status", "", remaining,
+			candidate, error ) )
+		{
+			return false;
+		}
+		unsigned long sequence = 0;
+		if ( IsSimulatorControlSuccessResponse( candidate ) &&
+			std::string::npos != candidate.find( "\"paused\":true" ) &&
+			ParseSimulatorControlUnsignedLong(
+				candidate, "\"pauseSequence\":", sequence ) &&
+			sequence > afterSequence )
+		{
+			response = candidate;
+			return true;
+		}
+		SleepSimulatorControlMilliseconds( 10 );
+	}
+	error = "Lua execution did not become debug-paused before the timeout";
+	return false;
+}
+
+static bool
+PerformSimulatorControlClientDebuggerStep(
+	const std::string& directory, const std::string& command,
+	unsigned long timeoutMilliseconds, std::string& response,
+	std::string& error )
+{
+	unsigned long long deadline =
+		GetSimulatorControlMilliseconds() + timeoutMilliseconds;
+	std::string scheduledResponse;
+	if ( ! PerformSimulatorControlClientRequest(
+		directory, command, "", timeoutMilliseconds,
+		scheduledResponse, error ) )
+	{
+		return false;
+	}
+	if ( ! IsSimulatorControlSuccessResponse( scheduledResponse ) )
+	{
+		response = scheduledResponse;
+		return true;
+	}
+	unsigned long pauseSequence = 0;
+	if ( ! ParseSimulatorControlUnsignedLong(
+		scheduledResponse, "\"pauseSequence\":", pauseSequence ) )
+	{
+		error = "the Simulator returned an invalid debugger step response";
+		return false;
+	}
+	unsigned long long now = GetSimulatorControlMilliseconds();
+	if ( now >= deadline )
+	{
+		error = "Lua execution did not complete the debugger step before the timeout";
+		return false;
+	}
+	return PerformSimulatorControlClientWaitForDebuggerPause(
+		directory, pauseSequence, (unsigned long)( deadline - now ),
+		response, error );
+}
+
+static bool
 PerformSimulatorControlClientStep(
 	const std::string& directory, const std::string& payload,
 	unsigned long timeoutMilliseconds, std::string& response,
@@ -4510,6 +5110,11 @@ IsSimulatorControlScenarioCommand( const std::string& command )
 	{
 		"runtime-status", "runtime-diagnostics", "runtime-logs",
 		"pause-runtime", "resume-runtime", "step-runtime-frame",
+		"add-lua-breakpoint", "remove-lua-breakpoint",
+		"list-lua-breakpoints", "debugger-status",
+		"wait-for-debugger-pause", "debugger-stack",
+		"inspect-debugger-frame", "continue-debugger",
+		"step-into", "step-over", "step-out",
 		"capture-screenshot", "debug-snapshot", "start-screen-recording",
 		"stop-screen-recording", "screen-recording-status",
 		"display-object-tree",
@@ -4591,6 +5196,30 @@ PerformSimulatorControlClientScenario(
 		{
 			payload.assign( "1" );
 		}
+		else if ( "add-lua-breakpoint" == command )
+		{
+			size_t lineSeparator = payload.find_last_of( " \t" );
+			if ( std::string::npos == lineSeparator )
+			{
+				error = "scenario add-lua-breakpoint expects a source path and line";
+				return false;
+			}
+			std::string sourcePath = payload.substr( 0, lineSeparator );
+			std::string lineText = payload.substr( lineSeparator + 1 );
+			TrimSimulatorControlScenarioLine( sourcePath );
+			TrimSimulatorControlScenarioLine( lineText );
+			std::string absoluteSourcePath;
+			if ( sourcePath.empty() || lineText.empty() ||
+				! MakeSimulatorControlAbsolutePath(
+					sourcePath, absoluteSourcePath ) )
+			{
+				error = "scenario add-lua-breakpoint expects an existing source path and line";
+				return false;
+			}
+			payload = absoluteSourcePath;
+			payload.push_back( '\n' );
+			payload.append( lineText );
+		}
 		else if ( "quit-simulator" == command && payload.empty() )
 		{
 			payload.assign( "0" );
@@ -4665,6 +5294,19 @@ PerformSimulatorControlClientScenario(
 		{
 			performed = PerformSimulatorControlClientWait(
 				directory, "log-search", payload, timeoutMilliseconds,
+				stepResponse, error );
+		}
+		else if ( "wait-for-debugger-pause" == command )
+		{
+			performed = PerformSimulatorControlClientWaitForDebuggerPause(
+				directory, 0, timeoutMilliseconds,
+				stepResponse, error );
+		}
+		else if ( "step-into" == command ||
+			"step-over" == command || "step-out" == command )
+		{
+			performed = PerformSimulatorControlClientDebuggerStep(
+				directory, command, timeoutMilliseconds,
 				stepResponse, error );
 		}
 		else if ( "step-runtime-frame" == command )
@@ -4786,6 +5428,17 @@ PrintSimulatorControlClientHelp()
 		"  pause-runtime\n"
 		"  resume-runtime\n"
 		"  step-runtime-frame [COUNT]\n"
+		"  add-lua-breakpoint PATH LINE\n"
+		"  remove-lua-breakpoint ID\n"
+		"  list-lua-breakpoints\n"
+		"  debugger-status\n"
+		"  wait-for-debugger-pause\n"
+		"  debugger-stack\n"
+		"  inspect-debugger-frame FRAME\n"
+		"  continue-debugger\n"
+		"  step-into\n"
+		"  step-over\n"
+		"  step-out\n"
 		"  capture-screenshot [PATH]\n"
 		"  debug-snapshot [PATH]\n"
 		"  start-screen-recording PATH [--fps FPS] [--no-audio] [--show-cursor] [--overwrite]\n"
@@ -4916,6 +5569,14 @@ RunSimulatorControlClientInternal(
 		"runtime-diagnostics" == command ||
 		"pause-runtime" == command ||
 		"resume-runtime" == command ||
+		"list-lua-breakpoints" == command ||
+		"debugger-status" == command ||
+		"wait-for-debugger-pause" == command ||
+		"debugger-stack" == command ||
+		"continue-debugger" == command ||
+		"step-into" == command ||
+		"step-over" == command ||
+		"step-out" == command ||
 		"relaunch-project" == command ||
 		"press-back-button" == command ||
 		"stop-screen-recording" == command ||
@@ -4927,6 +5588,100 @@ RunSimulatorControlClientInternal(
 				stderr, "Simulator control: %s does not accept arguments\n",
 				command.c_str() );
 			return true;
+		}
+	}
+	else if ( "add-lua-breakpoint" == command )
+	{
+		if ( argumentIndex + 2 != argc )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: add-lua-breakpoint expects a source path and line\n" );
+			return true;
+		}
+		std::string sourcePath;
+		if ( ! MakeSimulatorControlAbsolutePath(
+			argv[argumentIndex], sourcePath ) ||
+			! SimulatorControlFileExists( sourcePath ) )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: add-lua-breakpoint expects an existing source path\n" );
+			return true;
+		}
+		const char *line = argv[argumentIndex + 1];
+		for ( const char *character = line; *character; character++ )
+		{
+			if ( ! isdigit( (unsigned char)*character ) )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: Lua breakpoint lines must be positive integers\n" );
+				return true;
+			}
+		}
+		errno = 0;
+		char *lineEnd = NULL;
+		unsigned long lineValue = strtoul( line, & lineEnd, 10 );
+		if ( ! line[0] || ERANGE == errno || ! lineEnd || lineEnd[0] ||
+			0 == lineValue || lineValue > INT_MAX )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: Lua breakpoint lines must be positive integers\n" );
+			return true;
+		}
+		payload = sourcePath;
+		payload.push_back( '\n' );
+		payload.append( line );
+	}
+	else if ( "remove-lua-breakpoint" == command )
+	{
+		if ( argumentIndex + 1 != argc || ! argv[argumentIndex][0] )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: remove-lua-breakpoint expects one positive ID\n" );
+			return true;
+		}
+		payload.assign( argv[argumentIndex] );
+		for ( size_t index = 0; index < payload.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)payload[index] ) )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: remove-lua-breakpoint expects one positive ID\n" );
+				return true;
+			}
+		}
+		if ( "0" == payload )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: remove-lua-breakpoint expects one positive ID\n" );
+			return true;
+		}
+	}
+	else if ( "inspect-debugger-frame" == command )
+	{
+		if ( argumentIndex + 1 != argc || ! argv[argumentIndex][0] )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: inspect-debugger-frame expects one non-negative frame level\n" );
+			return true;
+		}
+		payload.assign( argv[argumentIndex] );
+		for ( size_t index = 0; index < payload.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)payload[index] ) )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: inspect-debugger-frame expects one non-negative frame level\n" );
+				return true;
+			}
 		}
 	}
 	else if ( "step-runtime-frame" == command )
@@ -5452,6 +6207,17 @@ RunSimulatorControlClientInternal(
 			directory, runtimeLogsSinceSequence, runtimeLogsFilter,
 			timeoutMilliseconds, response, error );
 	}
+	else if ( "wait-for-debugger-pause" == command )
+	{
+		performed = PerformSimulatorControlClientWaitForDebuggerPause(
+			directory, 0, timeoutMilliseconds, response, error );
+	}
+	else if ( "step-into" == command ||
+		"step-over" == command || "step-out" == command )
+	{
+		performed = PerformSimulatorControlClientDebuggerStep(
+			directory, command, timeoutMilliseconds, response, error );
+	}
 	else if ( "step-runtime-frame" == command )
 	{
 		performed = PerformSimulatorControlClientStep(
@@ -5485,6 +6251,33 @@ RunSimulatorControlClientInternal(
 	return true;
 }
 
+static void
+ResumeSimulatorControlDebugger(
+	Runtime& runtime, SimulatorControlRuntimeState& state,
+	const char *stepMode )
+{
+	if ( stepMode && stepMode[0] )
+	{
+		state.debuggerStepMode.assign( stepMode );
+		state.debuggerStepThread = state.debuggerThread;
+		state.debuggerStepDepth =
+			GetSimulatorControlLuaStackDepth( state.debuggerThread );
+	}
+	else
+	{
+		state.debuggerStepMode.clear();
+		state.debuggerStepThread = NULL;
+		state.debuggerStepDepth = 0;
+	}
+	if ( state.debuggerOwnsRuntimeClock )
+	{
+		runtime.EndSimulatorControlPause( false );
+	}
+	state.debuggerOwnsRuntimeClock = false;
+	state.debuggerPaused = false;
+	state.debuggerThread = NULL;
+}
+
 static std::string
 ProcessSimulatorControlRequest(
 	Runtime& runtime, SimulatorControlRuntimeState& state,
@@ -5494,6 +6287,220 @@ ProcessSimulatorControlRequest(
 		! IsSimulatorControlCommandAllowedWhileErrorHalted( command ) )
 	{
 		return BuildSimulatorControlRuntimeErrorHaltedResponse( state );
+	}
+	if ( state.debuggerPaused &&
+		! IsSimulatorControlCommandAllowedWhileDebuggerPaused( command ) )
+	{
+		return SimulatorControlErrorResponse(
+			"this command is unavailable while Lua execution is debug-paused" );
+	}
+
+	if ( "debugger-status" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"debugger-status does not accept arguments" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlDebuggerStatus( state ) );
+	}
+
+	if ( "list-lua-breakpoints" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"list-lua-breakpoints does not accept arguments" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlBreakpoints() );
+	}
+
+	if ( "add-lua-breakpoint" == command )
+	{
+		size_t separator = payload.rfind( '\n' );
+		if ( std::string::npos == separator || 0 == separator ||
+			separator + 1 >= payload.length() )
+		{
+			return SimulatorControlErrorResponse(
+				"add-lua-breakpoint expects a source path and line" );
+		}
+		std::string path = payload.substr( 0, separator );
+		std::string lineText = payload.substr( separator + 1 );
+		StripSimulatorControlCarriageReturn( path );
+		StripSimulatorControlCarriageReturn( lineText );
+		if ( path.empty() || path.length() > kSimulatorControlMaximumStringSize )
+		{
+			return SimulatorControlErrorResponse(
+				"Lua breakpoint source paths must contain 1 through 4096 bytes" );
+		}
+		for ( size_t index = 0; index < lineText.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)lineText[index] ) )
+			{
+				return SimulatorControlErrorResponse(
+					"Lua breakpoint lines must be positive integers" );
+			}
+		}
+		errno = 0;
+		char *lineEnd = NULL;
+		unsigned long line = strtoul( lineText.c_str(), & lineEnd, 10 );
+		if ( lineText.empty() || ERANGE == errno || ! lineEnd || lineEnd[0] ||
+			0 == line || line > INT_MAX )
+		{
+			return SimulatorControlErrorResponse(
+				"Lua breakpoint lines must be positive integers" );
+		}
+
+		std::string comparisonPath =
+			NormalizeSimulatorControlDebuggerPath( path.c_str() );
+		SimulatorControlDebuggerConfiguration& configuration =
+			GetSimulatorControlDebuggerConfiguration();
+		for ( std::vector< SimulatorControlBreakpoint >::const_iterator iterator =
+				configuration.breakpoints.begin();
+			configuration.breakpoints.end() != iterator; iterator++ )
+		{
+			if ( iterator->line == (int)line &&
+				iterator->comparisonPath == comparisonPath )
+			{
+				char existing[64];
+				snprintf(
+					existing, sizeof( existing ),
+					"{\"id\":%lu,\"existing\":true}", iterator->id );
+				return SimulatorControlSuccessResponse( existing );
+			}
+		}
+
+		SimulatorControlBreakpoint breakpoint;
+		breakpoint.id = ++configuration.nextBreakpointId;
+		breakpoint.line = (int)line;
+		breakpoint.path = comparisonPath;
+		breakpoint.comparisonPath = comparisonPath;
+		configuration.breakpoints.push_back( breakpoint );
+		char added[64];
+		snprintf(
+			added, sizeof( added ),
+			"{\"id\":%lu,\"existing\":false}", breakpoint.id );
+		return SimulatorControlSuccessResponse( added );
+	}
+
+	if ( "remove-lua-breakpoint" == command )
+	{
+		for ( size_t index = 0; index < payload.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)payload[index] ) )
+			{
+				return SimulatorControlErrorResponse(
+					"remove-lua-breakpoint expects a positive breakpoint ID" );
+			}
+		}
+		errno = 0;
+		char *identifierEnd = NULL;
+		unsigned long identifier =
+			strtoul( payload.c_str(), & identifierEnd, 10 );
+		if ( payload.empty() || ERANGE == errno || ! identifierEnd ||
+			identifierEnd[0] || 0 == identifier )
+		{
+			return SimulatorControlErrorResponse(
+				"remove-lua-breakpoint expects a positive breakpoint ID" );
+		}
+		SimulatorControlDebuggerConfiguration& configuration =
+			GetSimulatorControlDebuggerConfiguration();
+		for ( std::vector< SimulatorControlBreakpoint >::iterator iterator =
+				configuration.breakpoints.begin();
+			configuration.breakpoints.end() != iterator; iterator++ )
+		{
+			if ( iterator->id == identifier )
+			{
+				configuration.breakpoints.erase( iterator );
+				return SimulatorControlSuccessResponse( "true" );
+			}
+		}
+		return SimulatorControlErrorResponse( "Lua breakpoint ID was not found" );
+	}
+
+	if ( "debugger-stack" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"debugger-stack does not accept arguments" );
+		}
+		if ( ! state.debuggerPaused || ! state.debuggerThread )
+		{
+			return SimulatorControlErrorResponse(
+				"debugger-stack requires debug-paused Lua execution" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlDebuggerStack( state ) );
+	}
+
+	if ( "inspect-debugger-frame" == command )
+	{
+		if ( ! state.debuggerPaused || ! state.debuggerThread )
+		{
+			return SimulatorControlErrorResponse(
+				"inspect-debugger-frame requires debug-paused Lua execution" );
+		}
+		for ( size_t index = 0; index < payload.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)payload[index] ) )
+			{
+				return SimulatorControlErrorResponse(
+					"inspect-debugger-frame expects a non-negative frame level" );
+			}
+		}
+		errno = 0;
+		char *levelEnd = NULL;
+		unsigned long level = strtoul( payload.c_str(), & levelEnd, 10 );
+		if ( payload.empty() || ERANGE == errno || ! levelEnd || levelEnd[0] ||
+			level > INT_MAX )
+		{
+			return SimulatorControlErrorResponse(
+				"inspect-debugger-frame expects a non-negative frame level" );
+		}
+		std::string frame = BuildSimulatorControlDebuggerFrame(
+			state, (int)level );
+		if ( frame.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"debugger frame level was not found" );
+		}
+		return SimulatorControlSuccessResponse( frame );
+	}
+
+	if ( "continue-debugger" == command ||
+		"step-into" == command ||
+		"step-over" == command ||
+		"step-out" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				command + " does not accept arguments" );
+		}
+		if ( ! state.debuggerPaused || ! state.debuggerThread )
+		{
+			return SimulatorControlErrorResponse(
+				command + " requires debug-paused Lua execution" );
+		}
+		const char *stepMode = NULL;
+		if ( "step-into" == command )
+		{
+			stepMode = "into";
+		}
+		else if ( "step-over" == command )
+		{
+			stepMode = "over";
+		}
+		else if ( "step-out" == command )
+		{
+			stepMode = "out";
+		}
+		ResumeSimulatorControlDebugger( runtime, state, stepMode );
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlDebuggerStatus( state ) );
 	}
 
 	if ( "pause-runtime" == command )
@@ -6213,72 +7220,10 @@ ProcessSimulatorControlRequest(
 	return SimulatorControlErrorResponse( std::string( "unknown control command '" ) + command + "'" );
 }
 
-void
-SimulatorControl::SetDirectory( const char *directory )
+static bool
+ProcessSimulatorControlMailbox(
+	Runtime& sender, SimulatorControlRuntimeState& state )
 {
-	Rtt_SetLogCallback( NULL, NULL );
-	ResetSimulatorControlLogs();
-	std::string& configuredDirectory = GetSimulatorControlDirectory();
-	configuredDirectory.clear();
-	if ( ! directory || ! directory[0] )
-	{
-		return;
-	}
-
-	std::string value( directory );
-	std::string error;
-	if ( ! SimulatorControlDirectoryExists( value ) )
-	{
-		error = "control directory does not exist";
-	}
-	else if ( PrepareSimulatorControlDirectory( value, error ) )
-	{
-		configuredDirectory = value;
-		GetSimulatorControlOwnerPath() =
-			SimulatorControlPath( value, ".simulator-control.owner" );
-		static bool registeredExitHandler = false;
-		if ( ! registeredExitHandler )
-		{
-			registeredExitHandler =
-				0 == atexit( ReleaseSimulatorControlDirectory );
-		}
-		Rtt_SetLogCallback( RecordSimulatorControlLog, NULL );
-		return;
-	}
-
-	fprintf(
-		stderr, "Simulator control disabled: %s: %s\n",
-		error.c_str(), directory );
-}
-
-void
-SimulatorControl::Process( Runtime& sender )
-{
-	SimulatorControlRuntimeState *statePointer =
-		GetOrCreateSimulatorControlRuntimeState( sender );
-	if ( ! statePointer )
-	{
-		return;
-	}
-	SimulatorControlRuntimeState& state = *statePointer;
-
-	if ( ! state.sessionWritten )
-	{
-		WriteSimulatorControlSession( state );
-	}
-	if ( state.sessionWritten && ! state.diagnosticsWritten )
-	{
-		WriteSimulatorControlDiagnostics( state );
-	}
-	if ( state.stepFramesRemaining > 0 && ! state.stepStartPending )
-	{
-		if ( ! sender.IsSuspended() )
-		{
-			return;
-		}
-		state.stepFramesRemaining = 0;
-	}
-
 	std::string requestPath = SimulatorControlPath( state.directory, "request" );
 	char processingFilename[96];
 	snprintf(
@@ -6291,7 +7236,7 @@ SimulatorControl::Process( Runtime& sender )
 	if ( 0 != MoveSimulatorControlFile(
 		requestPath, processingPath, true ) )
 	{
-		return;
+		return false;
 	}
 
 	std::string contents;
@@ -6330,8 +7275,9 @@ SimulatorControl::Process( Runtime& sender )
 	{
 		identifier = "invalid";
 	}
-	std::string responsePath =
-		SimulatorControlPath( state.directory, ( std::string( "response." ) + identifier + ".json" ).c_str() );
+	std::string responsePath = SimulatorControlPath(
+		state.directory,
+		( std::string( "response." ) + identifier + ".json" ).c_str() );
 	WriteSimulatorControlFileAtomically( responsePath, response );
 
 	if ( pendingQuitExitCode >= 0 )
@@ -6342,6 +7288,179 @@ SimulatorControl::Process( Runtime& sender )
 			host->Quit( pendingQuitExitCode );
 		}
 	}
+	return true;
+}
+
+void
+SimulatorControl::SetDirectory( const char *directory )
+{
+	Rtt_SetLogCallback( NULL, NULL );
+	ResetSimulatorControlLogs();
+	GetSimulatorControlDebuggerConfiguration() =
+		SimulatorControlDebuggerConfiguration();
+	std::string& configuredDirectory = GetSimulatorControlDirectory();
+	configuredDirectory.clear();
+	if ( ! directory || ! directory[0] )
+	{
+		return;
+	}
+
+	std::string value( directory );
+	std::string error;
+	if ( ! SimulatorControlDirectoryExists( value ) )
+	{
+		error = "control directory does not exist";
+	}
+	else if ( PrepareSimulatorControlDirectory( value, error ) )
+	{
+		configuredDirectory = value;
+		GetSimulatorControlOwnerPath() =
+			SimulatorControlPath( value, ".simulator-control.owner" );
+		static bool registeredExitHandler = false;
+		if ( ! registeredExitHandler )
+		{
+			registeredExitHandler =
+				0 == atexit( ReleaseSimulatorControlDirectory );
+		}
+		Rtt_SetLogCallback( RecordSimulatorControlLog, NULL );
+		return;
+	}
+
+	fprintf(
+		stderr, "Simulator control disabled: %s: %s\n",
+		error.c_str(), directory );
+}
+
+void
+SimulatorControl::InitializeDebugger( Runtime& sender, lua_State *L )
+{
+	if ( ! L )
+	{
+		return;
+	}
+	SimulatorControlRuntimeState *state =
+		GetOrCreateSimulatorControlRuntimeState( sender );
+	if ( ! state || state->debuggerHookInstalled )
+	{
+		return;
+	}
+
+	String resourceDirectory( sender.GetAllocator() );
+	sender.Platform().PathForFile(
+		NULL, MPlatform::kResourceDir,
+		MPlatform::kDefaultPathFlags, resourceDirectory );
+	std::string normalizedResourceDirectory =
+		NormalizeSimulatorControlDebuggerPath(
+			resourceDirectory.GetString() );
+	state->resourceDirectory = CanonicalizeSimulatorControlDebuggerSource(
+		*state, normalizedResourceDirectory );
+	state->debuggerHookInstalled = true;
+	lua_sethook( L, SimulatorControlLuaHook, LUA_MASKLINE, 0 );
+	WriteSimulatorControlSession( *state );
+	WriteSimulatorControlDiagnostics( *state );
+}
+
+static void
+SimulatorControlLuaHook( lua_State *L, lua_Debug *information )
+{
+	if ( ! L || ! information || LUA_HOOKLINE != information->event ||
+		! LuaContext::HasRuntime( L ) )
+	{
+		return;
+	}
+	Runtime *runtime = LuaContext::GetRuntime( L );
+	SimulatorControlRuntimeState *state = runtime ?
+		GetSimulatorControlRuntimeState( *runtime ) : NULL;
+	if ( ! state || state->debuggerPaused || state->runtimeErrorHalted )
+	{
+		return;
+	}
+
+	if ( ! lua_getinfo( L, "nS", information ) ||
+		! information->source || '@' != information->source[0] )
+	{
+		return;
+	}
+	std::string source = CanonicalizeSimulatorControlDebuggerSource(
+		*state,
+		NormalizeSimulatorControlDebuggerPath( information->source ) );
+	unsigned long breakpointId = FindSimulatorControlBreakpoint(
+		*state, source, information->currentline );
+	bool stepMatched = false;
+	if ( ! state->debuggerStepMode.empty() &&
+		state->debuggerStepThread == L )
+	{
+		int depth = GetSimulatorControlLuaStackDepth( L );
+		stepMatched = "into" == state->debuggerStepMode ||
+			( "over" == state->debuggerStepMode &&
+				depth <= state->debuggerStepDepth ) ||
+			( "out" == state->debuggerStepMode &&
+				depth < state->debuggerStepDepth );
+	}
+	if ( 0 == breakpointId && ! stepMatched )
+	{
+		return;
+	}
+
+	state->debuggerPaused = true;
+	state->debuggerPauseSequence++;
+	state->debuggerBreakpointId = breakpointId;
+	state->debuggerLine = information->currentline;
+	state->debuggerThread = L;
+	state->debuggerPauseReason.assign(
+		breakpointId ? "breakpoint" : "step" );
+	state->debuggerSource = source;
+	state->debuggerProjectSource =
+		GetSimulatorControlProjectSource( *state, source );
+	state->debuggerFunction.assign(
+		information->name ? information->name : "" );
+	state->debuggerStepMode.clear();
+	state->debuggerStepThread = NULL;
+	state->debuggerStepDepth = 0;
+	state->debuggerOwnsRuntimeClock = ! state->controlPaused;
+	if ( state->debuggerOwnsRuntimeClock )
+	{
+		runtime->BeginSimulatorControlPause();
+	}
+
+	while ( state->debuggerPaused )
+	{
+		if ( ! ProcessSimulatorControlMailbox( *runtime, *state ) )
+		{
+			SleepSimulatorControlMilliseconds( 10 );
+		}
+	}
+}
+
+void
+SimulatorControl::Process( Runtime& sender )
+{
+	SimulatorControlRuntimeState *statePointer =
+		GetOrCreateSimulatorControlRuntimeState( sender );
+	if ( ! statePointer )
+	{
+		return;
+	}
+	SimulatorControlRuntimeState& state = *statePointer;
+
+	if ( ! state.sessionWritten )
+	{
+		WriteSimulatorControlSession( state );
+	}
+	if ( state.sessionWritten && ! state.diagnosticsWritten )
+	{
+		WriteSimulatorControlDiagnostics( state );
+	}
+	if ( state.stepFramesRemaining > 0 && ! state.stepStartPending )
+	{
+		if ( ! sender.IsSuspended() )
+		{
+			return;
+		}
+		state.stepFramesRemaining = 0;
+	}
+
+	ProcessSimulatorControlMailbox( sender, state );
 }
 
 void
@@ -6377,11 +7496,17 @@ SimulatorControl::HaltOnRuntimeError( Runtime& sender )
 	if ( state && ! state->runtimeErrorHalted )
 	{
 		state->runtimeErrorHalted = true;
-		if ( state->controlPaused )
+		if ( state->controlPaused || state->debuggerOwnsRuntimeClock )
 		{
 			sender.EndSimulatorControlPause( false );
 		}
 		state->controlPaused = false;
+		state->debuggerPaused = false;
+		state->debuggerOwnsRuntimeClock = false;
+		state->debuggerThread = NULL;
+		state->debuggerStepThread = NULL;
+		state->debuggerStepMode.clear();
+		state->debuggerStepDepth = 0;
 		state->stepFramesRemaining = 0;
 		state->stepStartPending = false;
 		WriteSimulatorControlSession( *state );
@@ -6429,6 +7554,7 @@ SimulatorControl::CanDispatchApplicationEvent( Runtime& sender )
 	SimulatorControlRuntimeState *state =
 		GetSimulatorControlRuntimeState( sender );
 	return ! state || ( ! state->runtimeErrorHalted &&
+		! state->debuggerPaused &&
 		( ! state->controlPaused || state->controlledInputDispatchDepth > 0 ) );
 }
 
@@ -6462,27 +7588,43 @@ SimulatorControl::Shutdown( Runtime& sender )
 	{
 		return;
 	}
+	SimulatorControlRuntimeState& state = iterator->second;
+	if ( state.debuggerHookInstalled )
+	{
+		lua_State *L = sender.VMContext().L();
+		if ( L )
+		{
+			lua_sethook( L, NULL, 0, 0 );
+		}
+		state.debuggerHookInstalled = false;
+	}
+	if ( state.controlPaused || state.debuggerOwnsRuntimeClock )
+	{
+		sender.EndSimulatorControlPause( false );
+		state.controlPaused = false;
+		state.debuggerOwnsRuntimeClock = false;
+	}
 
 	SimulatorControlSession currentSession;
 	if ( ReadSimulatorControlSession(
-			iterator->second.directory, currentSession ) &&
-		currentSession.sessionId == iterator->second.sessionId &&
+			state.directory, currentSession ) &&
+		currentSession.sessionId == state.sessionId &&
 		currentSession.processId ==
 			(unsigned long)GetSimulatorControlProcessId() )
 	{
 		DeleteSimulatorControlFile(
 			SimulatorControlPath(
-				iterator->second.directory, "session.json" ) );
+				state.directory, "session.json" ) );
 		std::string diagnostics;
 		std::string diagnosticsSessionId;
 		std::string diagnosticsPath =
 			SimulatorControlPath(
-				iterator->second.directory, "diagnostics.json" );
+				state.directory, "diagnostics.json" );
 		if ( ReadSimulatorControlFile( diagnosticsPath, diagnostics ) &&
 			ParseSimulatorControlJsonString(
 				diagnostics, "\"sessionId\":",
 				diagnosticsSessionId ) &&
-			diagnosticsSessionId == iterator->second.sessionId )
+			diagnosticsSessionId == state.sessionId )
 		{
 			DeleteSimulatorControlFile( diagnosticsPath );
 		}

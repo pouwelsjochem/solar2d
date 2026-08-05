@@ -58,6 +58,13 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control pause-runtime
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control step-runtime-frame
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control resume-runtime
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control add-lua-breakpoint "$PWD/main.lua" 42
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control list-lua-breakpoints
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control wait-for-debugger-pause
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control debugger-stack
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control inspect-debugger-frame 0
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control step-over
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control continue-debugger
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control capture-screenshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control debug-snapshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control start-screen-recording capture.mp4 --fps 60 --overwrite
@@ -102,10 +109,11 @@ runtime; it does not add a module or require project changes.
 including its type, message, stack trace, frame, and sequence number. Its
 `latestRuntimeError` value is `null` if no error has occurred. Both it and
 `runtime-status` include `runtimeErrorHalted`; status also reports an
-`executionState` of `running`, `suspended`, `control-paused`, or
-`error-halted`. Its `controlPaused` and `stepFramesRemaining` fields expose
+`executionState` of `running`, `suspended`, `control-paused`, `debug-paused`,
+or `error-halted`. Its `controlPaused` and `stepFramesRemaining` fields expose
 automation-controlled execution independently from the platform suspension
-state.
+state. `debuggerPaused` and `debuggerPauseSequence` identify a live Lua source
+pause.
 
 Application runtime errors also include a `context` snapshot containing
 structured stack frames with source, line, function, locals, and upvalues.
@@ -135,9 +143,52 @@ code suspends or error-halts the runtime, the remaining steps are cancelled.
 Use `resume-runtime` to clear the control pause and return to continuous
 execution.
 
-Runtime frame stepping differs from future Lua debugger stepping: it advances
-the scheduler and display as a game frame, rather than stopping at the next Lua
-source statement.
+Runtime frame stepping advances the scheduler and display as a game frame. Lua
+debugger stepping, described below, resumes only until a matching source line.
+
+## Lua source debugging
+
+The source debugger is enabled automatically when the Simulator has a control
+directory. It uses the same local mailbox and does not open a network port or
+require project code. Add a breakpoint using an existing Lua source file and a
+one-based line number:
+
+```sh
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" \
+  -simulator-control add-lua-breakpoint "$PWD/scenes/game.lua" 84
+```
+
+`add-lua-breakpoint` returns a numeric ID. The same path and line are
+deduplicated; use `list-lua-breakpoints` to discover IDs and
+`remove-lua-breakpoint ID` to delete one. Breakpoint configuration survives a
+project relaunch in the same Simulator process, so a breakpoint can be added
+after initial startup and activated with `relaunch-project`.
+
+When Lua reaches a breakpoint, `runtime-status` reports `debug-paused` and
+`debugger-status` reports the reason, breakpoint ID, source, project-relative
+source, line, function, and monotonically increasing pause sequence.
+`wait-for-debugger-pause` waits for the next or current pause.
+`debugger-stack` returns up to 64 live Lua frames. Pass a returned zero-based
+frame level to `inspect-debugger-frame` to read its locals and upvalues; at most
+100 of each are returned, and tables are represented by normal
+`inspect-lua-value` handles.
+
+`step-into`, `step-over`, and `step-out` resume and wait for the next matching
+file-backed Lua source line. `continue-debugger` resumes without waiting for
+another pause. Step-over stops when execution reaches the next line at the same
+or a shallower Lua stack depth; step-out stops at the next line in the calling
+Lua frame. A step can finish without another pause when the outermost chunk
+returns, in which case the stepping client reaches its timeout even though the
+runtime has resumed; `debugger-status` distinguishes this from a paused
+runtime.
+
+While debug-paused, the mailbox accepts runtime status, diagnostics and logs,
+breakpoint management, debugger inspection and execution-control commands, and
+`inspect-lua-value`. Commands that would execute unrelated Lua or mutate the
+application are rejected until execution continues. Runtime elapsed time is
+frozen during the pause. An application call to `debug.sethook()` replaces the
+Simulator's source hook for that Lua thread, so projects using their own debug
+hook cannot simultaneously use these breakpoint and stepping commands.
 
 ## Unhandled runtime errors
 
@@ -159,6 +210,7 @@ inspection, artifact, and lifecycle commands remain available:
 - `display-object-tree`, `find-display-object`, and
   `hit-test-display-objects`
 - `inspect-lua-value`
+- breakpoint management and `debugger-status`
 - `relaunch-project` and `quit-simulator`
 
 Other commands, including waits, Lua evaluation/execution, input, and
@@ -325,8 +377,10 @@ contain captured locals and upvalues, including application secrets; remove
 persisted artifacts when they are no longer needed.
 
 The Simulator writes `session.json` once the Lua runtime can accept requests.
-Requests are processed on the runtime thread, at most one per frame, so Lua
-access does not race the engine. Relaunching replaces the session and invalidates
-table and display-object handles. A suspended or blocked Lua runtime cannot
-answer until it resumes; control-paused and error-halted runtimes keep the
-mailbox responsive, subject to the error-halted command restrictions above.
+Requests are processed on the runtime thread, at most one per frame during
+normal execution, so Lua access does not race the engine. A debug pause services
+its restricted command set directly from the Lua line hook. Relaunching replaces
+the session and invalidates table and display-object handles. A suspended or
+otherwise blocked Lua runtime cannot answer until it resumes; control-paused,
+debug-paused, and error-halted runtimes keep the mailbox responsive, subject to
+their command restrictions above.

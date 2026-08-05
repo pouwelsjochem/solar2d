@@ -73,7 +73,6 @@ public:
 		int width, int height, int safeAreaTop, int safeAreaLeft,
 		int safeAreaBottom, int safeAreaRight);
 
-	bool IsDebugModeEnabled() { return m_isDebugModeEnabled; }
 	bool IsAgentModeEnabled() { return m_isAgentModeEnabled; }
 	bool IsLuaExitAllowed() { return m_isLuaExitAllowed; }
 	void SetExitCode(int value) { m_exitCode = value; m_hasExplicitExitCode = true; }
@@ -88,7 +87,6 @@ protected:
 	bool m_isGdiPlusInitialized;
     CString m_sDeviceName;
 	WINDOWPLACEMENT m_WP;
-	bool m_isDebugModeEnabled;
 	bool m_isAgentModeEnabled;
 	bool m_isLuaExitAllowed;
 	int m_exitCode;

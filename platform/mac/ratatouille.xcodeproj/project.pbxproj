@@ -458,7 +458,6 @@
 		AAF34A8329F9CAA800076706 /* Rtt_TextureResourceCaptureAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF34A7C29F9CAA800076706 /* Rtt_TextureResourceCaptureAdapter.h */; };
 		AAF34A8429F9CAA800076706 /* Rtt_TextureResourceCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF34A7D29F9CAA800076706 /* Rtt_TextureResourceCapture.h */; };
 		AAF34A8529F9CAA800076706 /* Rtt_TextureResourceCapture.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF34A7D29F9CAA800076706 /* Rtt_TextureResourceCapture.h */; };
-		C208322D1AA54ADD005D2680 /* remdebug_engine.lua in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C8612B720C90057F594 /* remdebug_engine.lua */; };
 		C210C7401AD497EB00B51023 /* CoronaResources-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C26149EA18DA10E300F34F71 /* CoronaResources-Info.plist */; };
 		C229DFDF1B32221B00D87A7C /* CoronaAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186101641DD6100A39286 /* CoronaAssert.h */; };
 		C229DFE01B32221B00D87A7C /* CoronaEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = A49186121641DD6100A39286 /* CoronaEvent.h */; };
@@ -843,7 +842,6 @@
 		C229E1D61B32221B00D87A7C /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8AA12B73F7500D9B6A4 /* lsqlite3.c */; settings = {COMPILER_FLAGS = "-Wdeprecated-declarations "; }; };
 		C229E1D71B32221B00D87A7C /* luaal.c in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C2712B71C320057F594 /* luaal.c */; };
 		C229E1DA1B32221B00D87A7C /* re.lua in Sources */ = {isa = PBXBuildFile; fileRef = C26D8DA3195104D7008DE65C /* re.lua */; };
-		C229E1DB1B32221B00D87A7C /* remdebug_engine.lua in Sources */ = {isa = PBXBuildFile; fileRef = 00B73C8612B720C90057F594 /* remdebug_engine.lua */; };
 		C229E1DE1B32221B00D87A7C /* shell.lua in Sources */ = {isa = PBXBuildFile; fileRef = 000CE8D112B7400900D9B6A4 /* shell.lua */; };
 		C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */ = {isa = PBXBuildFile; fileRef = A43288A1176A626B00ACB6FF /* shell_default_gl.lua */; };
 		C244C0FF1A816AE1008DBA56 /* ALmixer.framework in Copy Frameworks and dylibs */ = {isa = PBXBuildFile; fileRef = 00B737BA12B707B40057F594 /* ALmixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1209,20 +1207,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = A43D07190ED2159600BAFE09;
 			remoteInfo = lstrip;
-		};
-		0039BD00132AF4570009B76B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0039BCEF132AF4570009B76B /* lua.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A40D8E82109399D7005E2F5E;
-			remoteInfo = debugger;
-		};
-		0039BD09132AF46F0009B76B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0039BCEF132AF4570009B76B /* lua.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 004CED431339786A006ACF35;
-			remoteInfo = debugger;
 		};
 		0039BD0B132AF7850009B76B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1786,7 +1770,6 @@
 		00B73C2812B71C320057F594 /* luaal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = luaal.h; path = ../../external/ALmixer/luaal.h; sourceTree = SOURCE_ROOT; };
 		00B73C8312B720C90057F594 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00B73C8512B720C90057F594 /* CoronaSimulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CoronaSimulator.icns; sourceTree = "<group>"; };
-		00B73C8612B720C90057F594 /* remdebug_engine.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = remdebug_engine.lua; path = modules/lu/remdebug_engine.lua; sourceTree = "<group>"; };
 		00B73CD812B720C90057F594 /* Rtt_Player.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Player.pch; sourceTree = "<group>"; };
 		00B73CD912B720C90057F594 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		00B73CDC12B720C90057F594 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -2444,7 +2427,6 @@
 				0039BCFB132AF4570009B76B /* luac */,
 				003A5C201339914000A2561A /* liblua-universal.a */,
 				0039BCFD132AF4570009B76B /* lstrip */,
-				0039BD01132AF4570009B76B /* debugger */,
 				003A5C221339914000A2561A /* liblua-tool.a */,
 				C242172A1CCAD44800D8E4BE /* libluasocket.a */,
 			);
@@ -2984,7 +2966,6 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				00E14F6313428CBF0089C390 /* Localizable.strings */,
 				00B73DF312B726350057F594 /* MainMenu.nib */,
-				00B73C8612B720C90057F594 /* remdebug_engine.lua */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -4130,7 +4111,6 @@
 				C2B5FEEE1B336C3D00DD49E6 /* PBXTargetDependency */,
 				A4FBC56C1A2D5A8A004D9A01 /* PBXTargetDependency */,
 				A48B829A16D59AFE00CA01A1 /* PBXTargetDependency */,
-				0039BD0A132AF46F0009B76B /* PBXTargetDependency */,
 				00B73DE212B725B40057F594 /* PBXTargetDependency */,
 			);
 			name = rttplayer;
@@ -4317,13 +4297,6 @@
 			fileType = "compiled.mach-o.executable";
 			path = lstrip;
 			remoteRef = 0039BCFC132AF4570009B76B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0039BD01132AF4570009B76B /* debugger */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = debugger;
-			remoteRef = 0039BD00132AF4570009B76B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		003A5C201339914000A2561A /* liblua-universal.a */ = {
@@ -4716,7 +4689,6 @@
 				AAA301392CEAEC2400FF77DE /* Rtt_ObjectHandle.cpp in Sources */,
 				C26D8DA51951053F008DE65C /* re.lua in Sources */,
 				AAF34A8029F9CAA800076706 /* Rtt_TextureResourceCapture.cpp in Sources */,
-				C208322D1AA54ADD005D2680 /* remdebug_engine.lua in Sources */,
 				000CE8D612B7400900D9B6A4 /* shell.lua in Sources */,
 				A43288B9176A67E600ACB6FF /* shell_default_gl.lua in Sources */,
 				F5A752291BFA40F000CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
@@ -5119,7 +5091,6 @@
 				C229E1D61B32221B00D87A7C /* lsqlite3.c in Sources */,
 				C229E1D71B32221B00D87A7C /* luaal.c in Sources */,
 				C229E1DA1B32221B00D87A7C /* re.lua in Sources */,
-				C229E1DB1B32221B00D87A7C /* remdebug_engine.lua in Sources */,
 				C229E1DE1B32221B00D87A7C /* shell.lua in Sources */,
 				C229E1DF1B32221B00D87A7C /* shell_default_gl.lua in Sources */,
 				F5A7522A1BFA40F000CCDB94 /* CoronaLuaObjCHelper.mm in Sources */,
@@ -5180,11 +5151,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0039BD0A132AF46F0009B76B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = debugger;
-			targetProxy = 0039BD09132AF46F0009B76B /* PBXContainerItemProxy */;
-		};
 		0039BD0C132AF7850009B76B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = lua;
