@@ -2085,6 +2085,7 @@ MacGUIPlatform::StartScreenRecording(
 	NSDictionary *recordingOptions = [NSDictionary dictionaryWithObjectsAndKeys:
 		path, @"path",
 		[NSNumber numberWithInt:options.framesPerSecond], @"fps",
+		[NSNumber numberWithDouble:options.resolutionScale], @"resolutionScale",
 		[NSNumber numberWithBool:options.includeAudio], @"includeAudio",
 		[NSNumber numberWithBool:options.showsCursor], @"showCursor",
 		[NSNumber numberWithBool:options.overwrite], @"overwrite",

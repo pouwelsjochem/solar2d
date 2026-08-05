@@ -284,7 +284,7 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 		if (Self::HasRuntime(L))
 		{
 			SimulatorControl::RecordRuntimeError(
-				*Self::GetRuntime(L), errorType,
+				*Self::GetRuntime(L), L, errorType,
 				"error object is not a string", "" );
 			SimulatorControl::HaltOnRuntimeError( *Self::GetRuntime(L) );
 		}
@@ -304,7 +304,7 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 		if (Self::HasRuntime(L))
 		{
 			SimulatorControl::RecordRuntimeError(
-				*Self::GetRuntime(L), errorType, briefMessage, "" );
+				*Self::GetRuntime(L), L, errorType, briefMessage, "" );
 			SimulatorControl::HaltOnRuntimeError( *Self::GetRuntime(L) );
 		}
 #endif
@@ -317,7 +317,7 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 		if (Self::HasRuntime(L))
 		{
 			SimulatorControl::RecordRuntimeError(
-				*Self::GetRuntime(L), errorType, briefMessage, "" );
+				*Self::GetRuntime(L), L, errorType, briefMessage, "" );
 			SimulatorControl::HaltOnRuntimeError( *Self::GetRuntime(L) );
 		}
 #endif
@@ -360,7 +360,7 @@ LuaContext::handleError( lua_State* L, const char *errorType, bool callErrorList
 		}
 #ifdef Rtt_AUTHORING_SIMULATOR
 		SimulatorControl::RecordRuntimeError(
-			*runtime, errorType, briefMessage, stackTrace );
+			*runtime, L, errorType, briefMessage, stackTrace );
 #endif
 		runtime->fErrorHandlerRecursionGuard = true;
 	}

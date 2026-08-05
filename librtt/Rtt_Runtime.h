@@ -219,6 +219,12 @@ class Runtime : public MCallback,
 		// Number of ms since app launch
 		double GetElapsedMS() const;
 		Rtt_AbsoluteTime GetElapsedTime() const;
+#if defined(Rtt_AUTHORING_SIMULATOR)
+		void BeginSimulatorControlPause();
+		void WaitSimulatorControlPausedFrame();
+		void AdvanceSimulatorControlPausedFrame();
+		void EndSimulatorControlPause( bool advanceToNextFrame );
+#endif
 
 		void Collect();
 
@@ -286,6 +292,12 @@ class Runtime : public MCallback,
 		const Rtt_AbsoluteTime fStartTime;
 		Rtt_AbsoluteTime fStartTimeCorrection;
 		Rtt_AbsoluteTime fSuspendTime;
+#if defined(Rtt_AUTHORING_SIMULATOR)
+		Rtt_AbsoluteTime fSimulatorControlTime;
+		Rtt_AbsoluteTime fSimulatorControlLastTickTime;
+		bool fSimulatorControlPaused;
+		bool fSimulatorControlTimeConsumed;
+#endif
 		CachedResource* fResourcesHead; // Dummy node.
 		Display *fDisplay;
 		LuaContext* fVMContext;

@@ -1167,6 +1167,7 @@ bool CSimulatorView::DispatchSimulatorInput(const Rtt::MSimulatorHost::Input& in
 		return false;
 	}
 	Rtt::Runtime* runtimePointer = mRuntimeEnvironmentPointer->GetRuntime();
+	Rtt::SimulatorControl::InputDispatchGuard inputDispatchGuard(*runtimePointer);
 
 	if (input.type == Rtt::MSimulatorHost::Input::kBackInput)
 	{

@@ -77,6 +77,7 @@ local path = system.pathForFile("capture.mp4", system.DocumentsDirectory)
 local accepted, message = simulator.startScreenRecording({
 	path = path,             -- Absolute .mp4 path (required).
 	fps = 60,                -- Optional; defaults to 60 (1 through 240).
+	resolutionScale = 1.0,   -- Optional; native resolution (greater than 0, at most 1).
 	includeAudio = true,     -- Optional; defaults to true.
 	showCursor = false,      -- Optional; defaults to false.
 	overwrite = true         -- Optional; defaults to false.
@@ -92,6 +93,11 @@ end
 -- Finish and finalize the file later.
 -- simulator.stopScreenRecording()
 ```
+
+At the default `resolutionScale = 1.0`, capture uses the display's native pixel
+scale, including Retina resolution. Use `0.5` for half the width and height
+(about one quarter of the encoded pixels) when lower overhead or smaller files
+matter more than maximum sharpness.
 
 `simulator.getScreenRecordingState()` returns `"idle"`, `"starting"`,
 `"recording"`, `"stopping"`, or `"unavailable"`. Recording completion is also

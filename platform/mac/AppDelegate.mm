@@ -2689,6 +2689,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 			[[panel URL] path], @"path",
 			[NSNumber numberWithInteger:framesPerSecond], @"fps",
+			[NSNumber numberWithDouble:1.0], @"resolutionScale",
 			[NSNumber numberWithBool:YES], @"includeAudio",
 			[NSNumber numberWithBool:NO], @"showCursor",
 			[NSNumber numberWithBool:YES], @"overwrite",
@@ -2784,6 +2785,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	}
 
 	NSInteger framesPerSecond = [[options objectForKey:@"fps"] integerValue];
+	NSNumber *resolutionScaleValue = [options objectForKey:@"resolutionScale"];
+	double resolutionScale = resolutionScaleValue ? [resolutionScaleValue doubleValue] : 1.0;
 	BOOL includeAudio = [[options objectForKey:@"includeAudio"] boolValue];
 	BOOL showsCursor = [[options objectForKey:@"showCursor"] boolValue];
 	NSError *startError = nil;
@@ -2791,6 +2794,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		sourceView:[self layerHostView]
 		outputURL:[NSURL fileURLWithPath:path]
 		framesPerSecond:framesPerSecond
+		resolutionScale:resolutionScale
 		includeAudio:includeAudio
 		showsCursor:showsCursor
 		error:&startError];
@@ -3286,6 +3290,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	{
 		return NO;
 	}
+	Runtime *runtime = [self runtime];
+	if (!runtime)
+	{
+		return NO;
+	}
+	SimulatorControl::InputDispatchGuard inputDispatchGuard( *runtime );
 
 	NSString *type = [input objectForKey:@"type"];
 	if ([type isEqualToString:@"back"])
@@ -3398,8 +3408,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 			return NO;
 		}
 
-		Runtime *runtime = [self runtime];
-		return runtime && SimulatorControl::DispatchControllerInput(
+		return SimulatorControl::DispatchControllerInput(
 			*runtime, controllerInput );
 	}
 	else if ([type isEqualToString:@"touch"])

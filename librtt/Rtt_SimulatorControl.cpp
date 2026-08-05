@@ -215,9 +215,16 @@ static const size_t kSimulatorControlMaximumStringSize = 4096;
 static const size_t kSimulatorControlMaximumResponseSize = 256 * 1024;
 static const size_t kSimulatorControlMaximumDiagnosticMessageSize = 16 * 1024;
 static const size_t kSimulatorControlMaximumDiagnosticStackTraceSize = 128 * 1024;
+static const size_t kSimulatorControlMaximumDiagnosticContextSize = 96 * 1024;
+static const size_t kSimulatorControlMaximumDiagnosticValueStringSize = 256;
 static const size_t kSimulatorControlMaximumLogBytes = 128 * 1024;
 static const size_t kSimulatorControlMaximumLogEntries = 500;
 static const int kSimulatorControlMaximumEntries = 100;
+static const int kSimulatorControlMaximumDiagnosticFrames = 12;
+static const int kSimulatorControlMaximumDiagnosticLocals = 12;
+static const int kSimulatorControlMaximumDiagnosticUpvalues = 8;
+static const int kSimulatorControlMaximumDiagnosticTableEntries = 3;
+static const unsigned long kSimulatorControlMaximumStepFrames = 1000;
 static char kSimulatorControlRegistryKey;
 
 static unsigned long long GetSimulatorControlMilliseconds();
@@ -395,9 +402,13 @@ struct SimulatorControlRuntimeState
 	:	generation( 0 ),
 		diagnosticSequence( 0 ),
 		diagnosticFrame( 0 ),
+		stepFramesRemaining( 0 ),
+		controlledInputDispatchDepth( 0 ),
 		hasDiagnostic( false ),
 		diagnosticTruncated( false ),
 		runtimeErrorHalted( false ),
+		controlPaused( false ),
+		stepStartPending( false ),
 		diagnosticsWritten( false ),
 		sessionWritten( false )
 	{
@@ -406,14 +417,19 @@ struct SimulatorControlRuntimeState
 	unsigned long generation;
 	unsigned long diagnosticSequence;
 	unsigned long diagnosticFrame;
+	unsigned long stepFramesRemaining;
+	int controlledInputDispatchDepth;
 	std::string directory;
 	std::string sessionId;
 	std::string diagnosticType;
 	std::string diagnosticMessage;
 	std::string diagnosticStackTrace;
+	std::string diagnosticContext;
 	bool hasDiagnostic;
 	bool diagnosticTruncated;
 	bool runtimeErrorHalted;
+	bool controlPaused;
+	bool stepStartPending;
 	bool diagnosticsWritten;
 	bool sessionWritten;
 };
@@ -852,13 +868,19 @@ GetOrCreateSimulatorControlRuntimeState( Runtime& runtime )
 }
 
 static SimulatorControlRuntimeState*
-GetSimulatorControlRuntimeState( Runtime& runtime )
+GetSimulatorControlRuntimeState( const Runtime *runtime )
 {
 	SimulatorControlRuntimeStateMap& states =
 		GetSimulatorControlRuntimeStates();
 	SimulatorControlRuntimeStateMap::iterator iterator =
-		states.find( & runtime );
+		states.find( runtime );
 	return states.end() == iterator ? NULL : & iterator->second;
+}
+
+static SimulatorControlRuntimeState*
+GetSimulatorControlRuntimeState( Runtime& runtime )
+{
+	return GetSimulatorControlRuntimeState( & runtime );
 }
 
 static void
@@ -895,6 +917,7 @@ RecordSimulatorControlDiagnostic(
 		state.diagnosticStackTrace, stackTrace,
 		kSimulatorControlMaximumDiagnosticStackTraceSize,
 		state.diagnosticTruncated );
+	state.diagnosticContext.clear();
 	state.hasDiagnostic = true;
 	state.diagnosticsWritten = false;
 }
@@ -1255,13 +1278,15 @@ BuildSimulatorControlStatus(
 {
 	char result[512];
 	const char *executionState = state.runtimeErrorHalted ?
-		"error-halted" : ( runtime.IsSuspended() ? "suspended" : "running" );
+		"error-halted" : ( state.controlPaused ?
+			"control-paused" : ( runtime.IsSuspended() ? "suspended" : "running" ) );
 	snprintf(
 		result, sizeof( result ),
 		"{\"protocol\":2,\"sessionId\":\"%s\",\"generation\":%lu,"
 		"\"pid\":%ld,\"frame\":%lu,"
 		"\"applicationLoaded\":%s,\"applicationExecuting\":%s,"
-		"\"executionState\":\"%s\",\"runtimeErrorHalted\":%s,\"suspended\":%s}",
+		"\"executionState\":\"%s\",\"runtimeErrorHalted\":%s,"
+		"\"controlPaused\":%s,\"stepFramesRemaining\":%lu,\"suspended\":%s}",
 		state.sessionId.c_str(),
 		state.generation,
 		GetSimulatorControlProcessId(),
@@ -1270,6 +1295,8 @@ BuildSimulatorControlStatus(
 		runtime.IsProperty( Runtime::kIsApplicationExecuting ) ? "true" : "false",
 		executionState,
 		state.runtimeErrorHalted ? "true" : "false",
+		state.controlPaused ? "true" : "false",
+		state.stepFramesRemaining,
 		runtime.IsSuspended() ? "true" : "false" );
 	return std::string( result );
 }
@@ -1304,6 +1331,9 @@ BuildSimulatorControlDiagnostics(
 	AppendSimulatorControlJsonString( result, state.diagnosticMessage );
 	result.append( ",\"stackTrace\":" );
 	AppendSimulatorControlJsonString( result, state.diagnosticStackTrace );
+	result.append( ",\"context\":" );
+	result.append(
+		state.diagnosticContext.empty() ? "null" : state.diagnosticContext );
 	result.append(
 		state.diagnosticTruncated ?
 			",\"truncated\":true}}" : ",\"truncated\":false}}" );
@@ -1324,6 +1354,7 @@ IsSimulatorControlCommandAllowedWhileErrorHalted(
 		"display-object-tree" == command ||
 		"find-display-object" == command ||
 		"hit-test-display-objects" == command ||
+		"inspect-lua-value" == command ||
 		"relaunch-project" == command ||
 		"quit-simulator" == command;
 }
@@ -2141,6 +2172,307 @@ AppendSimulatorControlValueSummary( lua_State *L, int valueIndex, std::string& r
 			result.append( "{\"type\":\"unknown\"}" );
 			break;
 	}
+}
+
+static void
+AppendSimulatorControlDiagnosticShallowValue(
+	lua_State *L, int valueIndex, std::string& result, bool& truncated )
+{
+	valueIndex = AbsoluteLuaIndex( L, valueIndex );
+	switch ( lua_type( L, valueIndex ) )
+	{
+		case LUA_TNIL:
+			result.append( "{\"type\":\"nil\",\"value\":null}" );
+			break;
+		case LUA_TBOOLEAN:
+			result.append( lua_toboolean( L, valueIndex ) ?
+				"{\"type\":\"boolean\",\"value\":true}" :
+				"{\"type\":\"boolean\",\"value\":false}" );
+			break;
+		case LUA_TNUMBER:
+		{
+			lua_Number value = lua_tonumber( L, valueIndex );
+			result.append( "{\"type\":\"number\",\"value\":" );
+			if ( IsFiniteNumber( value ) )
+			{
+				AppendSimulatorControlNumber( result, value );
+			}
+			else
+			{
+				result.append( "null,\"description\":" );
+				const char *description = value != value ?
+					"nan" : ( value > 0 ? "infinity" : "-infinity" );
+				AppendSimulatorControlJsonString(
+					result, description, strlen( description ) );
+			}
+			result.push_back( '}' );
+			break;
+		}
+		case LUA_TSTRING:
+		{
+			size_t length = 0;
+			const char *value = lua_tolstring( L, valueIndex, & length );
+			size_t serializedLength = length >
+				kSimulatorControlMaximumDiagnosticValueStringSize ?
+				kSimulatorControlMaximumDiagnosticValueStringSize : length;
+			result.append( "{\"type\":\"string\",\"value\":" );
+			AppendSimulatorControlJsonString(
+				result, value, serializedLength );
+			char information[64];
+			snprintf(
+				information, sizeof( information ),
+				",\"length\":%lu", (unsigned long)length );
+			result.append( information );
+			if ( serializedLength < length )
+			{
+				result.append( ",\"truncated\":true" );
+				truncated = true;
+			}
+			result.push_back( '}' );
+			break;
+		}
+		case LUA_TTABLE:
+			result.append( "{\"type\":\"table\"}" );
+			break;
+		case LUA_TFUNCTION:
+			result.append( "{\"type\":\"function\"}" );
+			break;
+		case LUA_TUSERDATA:
+			result.append( "{\"type\":\"userdata\"}" );
+			break;
+		case LUA_TLIGHTUSERDATA:
+			result.append( "{\"type\":\"lightuserdata\"}" );
+			break;
+		case LUA_TTHREAD:
+			result.append( "{\"type\":\"thread\"}" );
+			break;
+		default:
+			result.append( "{\"type\":\"unknown\"}" );
+			break;
+	}
+}
+
+static void
+AppendSimulatorControlDiagnosticValue(
+	lua_State *L, int valueIndex, std::string& result, bool& truncated )
+{
+	valueIndex = AbsoluteLuaIndex( L, valueIndex );
+	if ( ! lua_istable( L, valueIndex ) )
+	{
+		AppendSimulatorControlDiagnosticShallowValue(
+			L, valueIndex, result, truncated );
+		return;
+	}
+
+	result.append( "{\"type\":\"table\",\"entries\":[" );
+	int emitted = 0;
+	bool tableTruncated = false;
+	lua_pushnil( L );
+	while ( lua_next( L, valueIndex ) )
+	{
+		if ( emitted >= kSimulatorControlMaximumDiagnosticTableEntries )
+		{
+			tableTruncated = true;
+			lua_pop( L, 2 );
+			break;
+		}
+		if ( emitted > 0 )
+		{
+			result.push_back( ',' );
+		}
+		result.append( "{\"key\":" );
+		AppendSimulatorControlDiagnosticShallowValue(
+			L, -2, result, tableTruncated );
+		result.append( ",\"value\":" );
+		AppendSimulatorControlDiagnosticShallowValue(
+			L, -1, result, tableTruncated );
+		result.push_back( '}' );
+		emitted++;
+		lua_pop( L, 1 );
+	}
+	truncated = truncated || tableTruncated;
+	result.append( tableTruncated ?
+		"],\"truncated\":true}" : "],\"truncated\":false}" );
+}
+
+static std::string
+BuildSimulatorControlDiagnosticNamedValues(
+	lua_State *L, const lua_Debug& information, int functionIndex,
+	bool upvalues, int maximumValues, bool& truncated )
+{
+	std::string result( "[" );
+	int emitted = 0;
+	for ( int index = 1; ; index++ )
+	{
+		const char *name = upvalues ?
+			lua_getupvalue( L, functionIndex, index ) :
+			lua_getlocal( L, & information, index );
+		if ( ! name )
+		{
+			break;
+		}
+		if ( emitted >= maximumValues )
+		{
+			truncated = true;
+			lua_pop( L, 1 );
+			break;
+		}
+
+		std::string entry( emitted > 0 ? ",{\"name\":" : "{\"name\":" );
+		size_t nameLength = strlen( name );
+		if ( nameLength > kSimulatorControlMaximumDiagnosticValueStringSize )
+		{
+			nameLength = kSimulatorControlMaximumDiagnosticValueStringSize;
+			truncated = true;
+		}
+		AppendSimulatorControlJsonString( entry, name, nameLength );
+		entry.append( ",\"value\":" );
+		AppendSimulatorControlDiagnosticValue(
+			L, -1, entry, truncated );
+		entry.push_back( '}' );
+		lua_pop( L, 1 );
+
+		if ( result.length() + entry.length() >
+			kSimulatorControlMaximumDiagnosticContextSize / 3 )
+		{
+			truncated = true;
+			break;
+		}
+		result.append( entry );
+		emitted++;
+	}
+	result.push_back( ']' );
+	return result;
+}
+
+static bool
+BuildSimulatorControlDiagnosticFrame(
+	lua_State *L, int stackLevel, int frameLevel,
+	std::string& result, bool& truncated )
+{
+	lua_Debug information;
+	memset( & information, 0, sizeof( information ) );
+	if ( ! lua_getstack( L, stackLevel, & information ) )
+	{
+		return false;
+	}
+
+	int originalTop = lua_gettop( L );
+	if ( ! lua_getinfo( L, "nSluf", & information ) )
+	{
+		lua_settop( L, originalTop );
+		return false;
+	}
+	int functionIndex = lua_gettop( L );
+
+	char prefix[64];
+	snprintf( prefix, sizeof( prefix ), "{\"level\":%d", frameLevel );
+	result.assign( prefix );
+	if ( information.source )
+	{
+		size_t length = strlen( information.source );
+		if ( length > kSimulatorControlMaximumStringSize )
+		{
+			length = kSimulatorControlMaximumStringSize;
+			truncated = true;
+		}
+		result.append( ",\"source\":" );
+		AppendSimulatorControlJsonString(
+			result, information.source, length );
+	}
+	if ( information.short_src[0] )
+	{
+		result.append( ",\"shortSource\":" );
+		AppendSimulatorControlJsonString(
+			result, information.short_src,
+			strlen( information.short_src ) );
+	}
+	if ( information.currentline >= 0 )
+	{
+		char line[48];
+		snprintf(
+			line, sizeof( line ),
+			",\"line\":%d", information.currentline );
+		result.append( line );
+	}
+	if ( information.name && information.name[0] )
+	{
+		result.append( ",\"function\":" );
+		AppendSimulatorControlJsonString(
+			result, information.name, strlen( information.name ) );
+	}
+	if ( information.what )
+	{
+		result.append( ",\"kind\":" );
+		AppendSimulatorControlJsonString(
+			result, information.what, strlen( information.what ) );
+	}
+
+	bool localsTruncated = false;
+	std::string locals = BuildSimulatorControlDiagnosticNamedValues(
+		L, information, functionIndex, false,
+		kSimulatorControlMaximumDiagnosticLocals, localsTruncated );
+	bool upvaluesTruncated = false;
+	std::string capturedUpvalues = BuildSimulatorControlDiagnosticNamedValues(
+		L, information, functionIndex, true,
+		kSimulatorControlMaximumDiagnosticUpvalues, upvaluesTruncated );
+	result.append( ",\"locals\":" );
+	result.append( locals );
+	result.append( ",\"upvalues\":" );
+	result.append( capturedUpvalues );
+	truncated = truncated || localsTruncated || upvaluesTruncated;
+	result.append( truncated ?
+		",\"truncated\":true}" : ",\"truncated\":false}" );
+	lua_settop( L, originalTop );
+	return true;
+}
+
+static std::string
+BuildSimulatorControlDiagnosticContext(
+	lua_State *L, bool& truncated )
+{
+	std::string frames;
+	int emitted = 0;
+	for ( int stackLevel = 1;
+		stackLevel <= kSimulatorControlMaximumDiagnosticFrames;
+		stackLevel++ )
+	{
+		std::string frame;
+		bool frameTruncated = false;
+		if ( ! BuildSimulatorControlDiagnosticFrame(
+			L, stackLevel, emitted, frame, frameTruncated ) )
+		{
+			break;
+		}
+		if ( frames.length() + frame.length() + 64 >
+			kSimulatorControlMaximumDiagnosticContextSize )
+		{
+			truncated = true;
+			break;
+		}
+		if ( emitted > 0 )
+		{
+			frames.push_back( ',' );
+		}
+		frames.append( frame );
+		emitted++;
+		truncated = truncated || frameTruncated;
+	}
+
+	lua_Debug extraFrame;
+	if ( emitted >= kSimulatorControlMaximumDiagnosticFrames &&
+		lua_getstack(
+			L, kSimulatorControlMaximumDiagnosticFrames + 1,
+			& extraFrame ) )
+	{
+		truncated = true;
+	}
+
+	std::string result( "{\"frames\":[" );
+	result.append( frames );
+	result.append( truncated ?
+		"],\"truncated\":true}" : "],\"truncated\":false}" );
+	return result;
 }
 
 static void
@@ -4121,6 +4453,39 @@ PerformSimulatorControlClientWait(
 	return true;
 }
 
+static bool
+PerformSimulatorControlClientStep(
+	const std::string& directory, const std::string& payload,
+	unsigned long timeoutMilliseconds, std::string& response,
+	std::string& error )
+{
+	unsigned long long deadline =
+		GetSimulatorControlMilliseconds() + timeoutMilliseconds;
+	std::string scheduledResponse;
+	if ( ! PerformSimulatorControlClientRequest(
+		directory, "step-runtime-frame", payload, timeoutMilliseconds,
+		scheduledResponse, error ) )
+	{
+		return false;
+	}
+	if ( ! IsSimulatorControlSuccessResponse( scheduledResponse ) )
+	{
+		response = scheduledResponse;
+		return true;
+	}
+
+	unsigned long long now = GetSimulatorControlMilliseconds();
+	if ( now >= deadline )
+	{
+		error =
+			"the runtime did not complete the requested frame steps before the timeout";
+		return false;
+	}
+	return PerformSimulatorControlClientRequest(
+		directory, "runtime-status", "",
+		(unsigned long)( deadline - now ), response, error );
+}
+
 static void
 TrimSimulatorControlScenarioLine( std::string& line )
 {
@@ -4144,6 +4509,7 @@ IsSimulatorControlScenarioCommand( const std::string& command )
 	static const char *commands[] =
 	{
 		"runtime-status", "runtime-diagnostics", "runtime-logs",
+		"pause-runtime", "resume-runtime", "step-runtime-frame",
 		"capture-screenshot", "debug-snapshot", "start-screen-recording",
 		"stop-screen-recording", "screen-recording-status",
 		"display-object-tree",
@@ -4221,6 +4587,10 @@ PerformSimulatorControlClientScenario(
 		{
 			payload.assign( "0" );
 		}
+		else if ( "step-runtime-frame" == command && payload.empty() )
+		{
+			payload.assign( "1" );
+		}
 		else if ( "quit-simulator" == command && payload.empty() )
 		{
 			payload.assign( "0" );
@@ -4295,6 +4665,12 @@ PerformSimulatorControlClientScenario(
 		{
 			performed = PerformSimulatorControlClientWait(
 				directory, "log-search", payload, timeoutMilliseconds,
+				stepResponse, error );
+		}
+		else if ( "step-runtime-frame" == command )
+		{
+			performed = PerformSimulatorControlClientStep(
+				directory, payload, timeoutMilliseconds,
 				stepResponse, error );
 		}
 		else
@@ -4407,6 +4783,9 @@ PrintSimulatorControlClientHelp()
 		"  runtime-status\n"
 		"  runtime-diagnostics\n"
 		"  runtime-logs [--since SEQUENCE] [--filter TEXT] [--follow]\n"
+		"  pause-runtime\n"
+		"  resume-runtime\n"
+		"  step-runtime-frame [COUNT]\n"
 		"  capture-screenshot [PATH]\n"
 		"  debug-snapshot [PATH]\n"
 		"  start-screen-recording PATH [--fps FPS] [--no-audio] [--show-cursor] [--overwrite]\n"
@@ -4535,6 +4914,8 @@ RunSimulatorControlClientInternal(
 	std::string runtimeLogsFilter;
 	if ( "runtime-status" == command ||
 		"runtime-diagnostics" == command ||
+		"pause-runtime" == command ||
+		"resume-runtime" == command ||
 		"relaunch-project" == command ||
 		"press-back-button" == command ||
 		"stop-screen-recording" == command ||
@@ -4545,6 +4926,38 @@ RunSimulatorControlClientInternal(
 			fprintf(
 				stderr, "Simulator control: %s does not accept arguments\n",
 				command.c_str() );
+			return true;
+		}
+	}
+	else if ( "step-runtime-frame" == command )
+	{
+		payload.assign( argumentIndex < argc ? argv[argumentIndex++] : "1" );
+		if ( argumentIndex != argc || payload.empty() )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: step-runtime-frame accepts at most one count\n" );
+			return true;
+		}
+		for ( size_t index = 0; index < payload.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)payload[index] ) )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: step-runtime-frame count must be an integer from 1 through 1000\n" );
+				return true;
+			}
+		}
+		errno = 0;
+		char *countEnd = NULL;
+		unsigned long count = strtoul( payload.c_str(), & countEnd, 10 );
+		if ( ERANGE == errno || ! countEnd || countEnd[0] || 0 == count ||
+			count > kSimulatorControlMaximumStepFrames )
+		{
+			fprintf(
+				stderr,
+				"Simulator control: step-runtime-frame count must be an integer from 1 through 1000\n" );
 			return true;
 		}
 	}
@@ -5039,6 +5452,11 @@ RunSimulatorControlClientInternal(
 			directory, runtimeLogsSinceSequence, runtimeLogsFilter,
 			timeoutMilliseconds, response, error );
 	}
+	else if ( "step-runtime-frame" == command )
+	{
+		performed = PerformSimulatorControlClientStep(
+			directory, payload, timeoutMilliseconds, response, error );
+	}
 	else
 	{
 		performed = PerformSimulatorControlClientRequest(
@@ -5076,6 +5494,76 @@ ProcessSimulatorControlRequest(
 		! IsSimulatorControlCommandAllowedWhileErrorHalted( command ) )
 	{
 		return BuildSimulatorControlRuntimeErrorHaltedResponse( state );
+	}
+
+	if ( "pause-runtime" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"pause-runtime does not accept arguments" );
+		}
+		runtime.BeginSimulatorControlPause();
+		state.controlPaused = true;
+		state.stepFramesRemaining = 0;
+		state.stepStartPending = false;
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlStatus( runtime, state ) );
+	}
+
+	if ( "resume-runtime" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"resume-runtime does not accept arguments" );
+		}
+		runtime.EndSimulatorControlPause( true );
+		state.controlPaused = false;
+		state.stepFramesRemaining = 0;
+		state.stepStartPending = false;
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlStatus( runtime, state ) );
+	}
+
+	if ( "step-runtime-frame" == command )
+	{
+		if ( ! state.controlPaused )
+		{
+			return SimulatorControlErrorResponse(
+				"step-runtime-frame requires a control-paused runtime" );
+		}
+		if ( runtime.IsSuspended() )
+		{
+			return SimulatorControlErrorResponse(
+				"step-runtime-frame cannot advance a suspended runtime" );
+		}
+		if ( payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"step-runtime-frame expects a frame count" );
+		}
+		for ( size_t index = 0; index < payload.length(); index++ )
+		{
+			if ( ! isdigit( (unsigned char)payload[index] ) )
+			{
+				return SimulatorControlErrorResponse(
+					"step-runtime-frame count must be an integer from 1 through 1000" );
+			}
+		}
+		errno = 0;
+		char *countEnd = NULL;
+		unsigned long count = strtoul( payload.c_str(), & countEnd, 10 );
+		if ( ERANGE == errno || ! countEnd || countEnd[0] || 0 == count ||
+			count > kSimulatorControlMaximumStepFrames )
+		{
+			return SimulatorControlErrorResponse(
+				"step-runtime-frame count must be an integer from 1 through 1000" );
+		}
+		state.stepFramesRemaining = count;
+		state.stepStartPending = true;
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlStatus( runtime, state ) );
 	}
 
 	if ( "runtime-status" == command )
@@ -5782,6 +6270,14 @@ SimulatorControl::Process( Runtime& sender )
 	{
 		WriteSimulatorControlDiagnostics( state );
 	}
+	if ( state.stepFramesRemaining > 0 && ! state.stepStartPending )
+	{
+		if ( ! sender.IsSuspended() )
+		{
+			return;
+		}
+		state.stepFramesRemaining = 0;
+	}
 
 	std::string requestPath = SimulatorControlPath( state.directory, "request" );
 	char processingFilename[96];
@@ -5850,7 +6346,7 @@ SimulatorControl::Process( Runtime& sender )
 
 void
 SimulatorControl::RecordRuntimeError(
-	Runtime& sender, const char *errorType,
+	Runtime& sender, lua_State *L, const char *errorType,
 	const char *message, const char *stackTrace )
 {
 	SimulatorControlRuntimeState *state =
@@ -5859,6 +6355,15 @@ SimulatorControl::RecordRuntimeError(
 	{
 		RecordSimulatorControlDiagnostic(
 			sender, *state, errorType, message, stackTrace );
+		if ( L )
+		{
+			bool contextTruncated = false;
+			state->diagnosticContext =
+				BuildSimulatorControlDiagnosticContext(
+					L, contextTruncated );
+			state->diagnosticTruncated =
+				state->diagnosticTruncated || contextTruncated;
+		}
 		WriteSimulatorControlSession( *state );
 		WriteSimulatorControlDiagnostics( *state );
 	}
@@ -5872,6 +6377,13 @@ SimulatorControl::HaltOnRuntimeError( Runtime& sender )
 	if ( state && ! state->runtimeErrorHalted )
 	{
 		state->runtimeErrorHalted = true;
+		if ( state->controlPaused )
+		{
+			sender.EndSimulatorControlPause( false );
+		}
+		state->controlPaused = false;
+		state->stepFramesRemaining = 0;
+		state->stepStartPending = false;
 		WriteSimulatorControlSession( *state );
 		WriteSimulatorControlDiagnostics( *state );
 	}
@@ -5883,6 +6395,62 @@ SimulatorControl::IsRuntimeErrorHalted( Runtime& sender )
 	SimulatorControlRuntimeState *state =
 		GetSimulatorControlRuntimeState( sender );
 	return state && state->runtimeErrorHalted;
+}
+
+bool
+SimulatorControl::ShouldRunRuntimeFrame( Runtime& sender )
+{
+	SimulatorControlRuntimeState *state =
+		GetSimulatorControlRuntimeState( sender );
+	if ( ! state || ! state->controlPaused )
+	{
+		return true;
+	}
+	if ( state->stepStartPending )
+	{
+		state->stepStartPending = false;
+		sender.WaitSimulatorControlPausedFrame();
+		return false;
+	}
+	if ( state->stepFramesRemaining > 0 && ! sender.IsSuspended() )
+	{
+		state->stepFramesRemaining--;
+		sender.AdvanceSimulatorControlPausedFrame();
+		return true;
+	}
+	state->stepFramesRemaining = 0;
+	sender.WaitSimulatorControlPausedFrame();
+	return false;
+}
+
+bool
+SimulatorControl::CanDispatchApplicationEvent( Runtime& sender )
+{
+	SimulatorControlRuntimeState *state =
+		GetSimulatorControlRuntimeState( sender );
+	return ! state || ( ! state->runtimeErrorHalted &&
+		( ! state->controlPaused || state->controlledInputDispatchDepth > 0 ) );
+}
+
+SimulatorControl::InputDispatchGuard::InputDispatchGuard( Runtime& sender )
+:	fRuntime( & sender )
+{
+	SimulatorControlRuntimeState *state =
+		GetSimulatorControlRuntimeState( fRuntime );
+	if ( state )
+	{
+		state->controlledInputDispatchDepth++;
+	}
+}
+
+SimulatorControl::InputDispatchGuard::~InputDispatchGuard()
+{
+	SimulatorControlRuntimeState *state =
+		GetSimulatorControlRuntimeState( fRuntime );
+	if ( state && state->controlledInputDispatchDepth > 0 )
+	{
+		state->controlledInputDispatchDepth--;
+	}
 }
 
 void

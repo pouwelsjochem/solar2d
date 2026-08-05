@@ -920,7 +920,7 @@ StartScreenRecording( lua_State *L )
 	}
 	const char * const allowedOptions[] =
 	{
-		"path", "fps", "includeAudio", "showCursor", "overwrite", NULL
+		"path", "fps", "resolutionScale", "includeAudio", "showCursor", "overwrite", NULL
 	};
 	ValidateOptionKeys( L, 1, allowedOptions, "screen recording" );
 
@@ -939,6 +939,13 @@ StartScreenRecording( lua_State *L )
 		return luaL_error( L, "screen recording fps must be an integer between 1 and 240" );
 	}
 	options.framesPerSecond = (int)framesPerSecond;
+	double resolutionScale = ReadFiniteNumber(
+		L, 1, "resolutionScale", "screen recording resolutionScale", false, 1.0 );
+	if ( resolutionScale <= 0.0 || resolutionScale > 1.0 )
+	{
+		return luaL_error( L, "screen recording resolutionScale must be greater than 0 and no greater than 1" );
+	}
+	options.resolutionScale = resolutionScale;
 	options.includeAudio = ReadOptionalBoolean(
 		L, 1, "includeAudio", "screen recording includeAudio", true );
 	options.showsCursor = ReadOptionalBoolean(

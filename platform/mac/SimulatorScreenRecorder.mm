@@ -56,9 +56,8 @@ EvenPixelDimension(CGFloat value)
 	CGWindowID fWindowID;
 	CGDirectDisplayID fDisplayID;
 	CGRect fSourceRect;
-	size_t fOutputWidth;
-	size_t fOutputHeight;
 	NSInteger fFramesPerSecond;
+	double fResolutionScale;
 	BOOL fIncludeAudio;
 	BOOL fShowsCursor;
 }
@@ -120,6 +119,7 @@ EvenPixelDimension(CGFloat value)
 	sourceView:(NSView *)sourceView
 	outputURL:(NSURL *)outputURL
 	framesPerSecond:(NSInteger)framesPerSecond
+	resolutionScale:(double)resolutionScale
 	includeAudio:(BOOL)includeAudio
 	showsCursor:(BOOL)showsCursor
 	error:(NSError **)error
@@ -160,6 +160,15 @@ EvenPixelDimension(CGFloat value)
 		}
 		return NO;
 	}
+	if (!(resolutionScale > 0.0 && resolutionScale <= 1.0))
+	{
+		if (error)
+		{
+			*error = NewRecorderError(
+				SimulatorScreenRecorderErrorInvalidArgument, @"Recording resolution scale must be greater than 0 and no greater than 1.");
+		}
+		return NO;
+	}
 
 	NSScreen *screen = [window screen];
 	NSNumber *screenNumber = [[screen deviceDescription] objectForKey:@"NSScreenNumber"];
@@ -194,12 +203,10 @@ EvenPixelDimension(CGFloat value)
 		NSMaxY(screenFrame) - NSMaxY(clippedRect),
 		NSWidth(clippedRect),
 		NSHeight(clippedRect));
-	NSRect backingRect = [sourceView convertRectToBacking:[sourceView bounds]];
-	fOutputWidth = EvenPixelDimension(NSWidth(backingRect));
-	fOutputHeight = EvenPixelDimension(NSHeight(backingRect));
 	fWindowID = (CGWindowID)[window windowNumber];
 	fDisplayID = (CGDirectDisplayID)[screenNumber unsignedIntValue];
 	fFramesPerSecond = framesPerSecond;
+	fResolutionScale = resolutionScale;
 	fIncludeAudio = includeAudio;
 	fShowsCursor = showsCursor;
 	fOutputURL = [outputURL copy];
@@ -272,11 +279,16 @@ EvenPixelDimension(CGFloat value)
 
 	SCContentFilter *filter = [[[SCContentFilter alloc]
 		initWithDisplay:capturedDisplay includingWindows:[NSArray arrayWithObject:capturedWindow]] autorelease];
+	// fSourceRect is measured in screen points. Use ScreenCaptureKit's scale so
+	// transformed Simulator views retain the captured display's native pixels.
+	CGFloat pointPixelScale = MAX(1.0, [filter pointPixelScale]);
+	size_t outputWidth = EvenPixelDimension(CGRectGetWidth(fSourceRect) * pointPixelScale * fResolutionScale);
+	size_t outputHeight = EvenPixelDimension(CGRectGetHeight(fSourceRect) * pointPixelScale * fResolutionScale);
 	SCStreamConfiguration *streamConfiguration = [[[SCStreamConfiguration alloc] init] autorelease];
 	[streamConfiguration setSourceRect:fSourceRect];
-	[streamConfiguration setDestinationRect:CGRectMake(0, 0, fOutputWidth, fOutputHeight)];
-	[streamConfiguration setWidth:fOutputWidth];
-	[streamConfiguration setHeight:fOutputHeight];
+	[streamConfiguration setDestinationRect:CGRectMake(0, 0, outputWidth, outputHeight)];
+	[streamConfiguration setWidth:outputWidth];
+	[streamConfiguration setHeight:outputHeight];
 	[streamConfiguration setScalesToFit:YES];
 	[streamConfiguration setPreservesAspectRatio:YES];
 	[streamConfiguration setMinimumFrameInterval:CMTimeMake(1, (int32_t)fFramesPerSecond)];

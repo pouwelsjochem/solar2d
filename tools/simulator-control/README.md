@@ -55,6 +55,9 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-diagnostics
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-logs
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control runtime-logs --filter 'scene loaded' --follow
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control pause-runtime
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control step-runtime-frame
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control resume-runtime
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control capture-screenshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control debug-snapshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control start-screen-recording capture.mp4 --fps 60 --overwrite
@@ -99,7 +102,42 @@ runtime; it does not add a module or require project changes.
 including its type, message, stack trace, frame, and sequence number. Its
 `latestRuntimeError` value is `null` if no error has occurred. Both it and
 `runtime-status` include `runtimeErrorHalted`; status also reports an
-`executionState` of `running`, `suspended`, or `error-halted`.
+`executionState` of `running`, `suspended`, `control-paused`, or
+`error-halted`. Its `controlPaused` and `stepFramesRemaining` fields expose
+automation-controlled execution independently from the platform suspension
+state.
+
+Application runtime errors also include a `context` snapshot containing
+structured stack frames with source, line, function, locals, and upvalues.
+Capture is bounded to 12 frames, 12 locals and 8 upvalues per frame, three
+shallow entries per table, 256 bytes per captured string, and 96 KiB overall.
+Each affected value, frame, and context reports truncation. Capture uses only
+Lua's debug and raw table APIs; it does not call `tostring`, metamethods, or
+application code. Control-command errors have a `null` context.
+
+## Runtime execution control
+
+`pause-runtime` stops the scheduler, `enterFrame`, physics, display updates,
+and ordinary application-event dispatch without suspending the Simulator's
+control mailbox. Inspection, screenshots, Lua evaluation, and other control
+commands therefore remain responsive. Simulator-control input is still
+delivered while paused, allowing an input handler to run before the next
+explicit frame step; ordinary user and platform events are suppressed. Runtime
+elapsed time is frozen while frames are not advancing, so timers, transitions,
+and animations do not jump by the wall-clock duration of the pause.
+
+`step-runtime-frame [COUNT]` advances from one through 1000 complete runtime
+frame attempts and then remains control-paused. It requires a control-paused,
+non-suspended runtime and defaults to one frame. The native client waits for
+the requested steps before returning the final runtime status, and the mailbox
+does not process a later request between a multi-frame step. If application
+code suspends or error-halts the runtime, the remaining steps are cancelled.
+Use `resume-runtime` to clear the control pause and return to continuous
+execution.
+
+Runtime frame stepping differs from future Lua debugger stepping: it advances
+the scheduler and display as a game frame, rather than stopping at the next Lua
+source statement.
 
 ## Unhandled runtime errors
 
@@ -120,9 +158,10 @@ inspection, artifact, and lifecycle commands remain available:
 - `screen-recording-status` and `stop-screen-recording`
 - `display-object-tree`, `find-display-object`, and
   `hit-test-display-objects`
+- `inspect-lua-value`
 - `relaunch-project` and `quit-simulator`
 
-Other commands, including waits, Lua inspection/evaluation, input, and
+Other commands, including waits, Lua evaluation/execution, input, and
 assertions, fail immediately with error code `runtime-error-halted` and include
 the latest diagnostics in their result. `relaunch-project` replaces the Lua
 runtime and clears the halt as part of the new control session.
@@ -261,7 +300,9 @@ as `12`; inspect that table later with `inspect-lua-value @12`. Large tables
 return `nextCursor`, which can be passed as
 `inspect-lua-value player --cursor 100`. There is deliberately no depth
 argument: nested tables are represented as handles, keeping responses bounded
-without making callers choose an arbitrary depth.
+without making callers choose an arbitrary depth. It remains available while
+the runtime is error-halted, allowing globals and surviving table handles to be
+examined without resuming application execution.
 
 `relaunch-project` calls the Simulator's normal relaunch mechanism. It replaces
 the Lua runtime exactly as a menu or file-triggered relaunch would; it is not a
@@ -279,11 +320,13 @@ client/transport error respectively. Add `--timeout SECONDS` immediately after
 The mailbox is a local filesystem interface with no network listener. Treat
 access to its directory as permission to execute arbitrary code in the running
 project. Launch scripts should create it with user-only permissions and should
-not place it in a shared directory.
+not place it in a shared directory. Runtime diagnostics and debug snapshots can
+contain captured locals and upvalues, including application secrets; remove
+persisted artifacts when they are no longer needed.
 
 The Simulator writes `session.json` once the Lua runtime can accept requests.
 Requests are processed on the runtime thread, at most one per frame, so Lua
 access does not race the engine. Relaunching replaces the session and invalidates
 table and display-object handles. A suspended or blocked Lua runtime cannot
-answer until it resumes; an error-halted runtime remains responsive to the safe
-commands listed above.
+answer until it resumes; control-paused and error-halted runtimes keep the
+mailbox responsive, subject to the error-halted command restrictions above.

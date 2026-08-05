@@ -14,6 +14,8 @@
 
 #include "Rtt_MSimulatorHost.h"
 
+struct lua_State;
+
 namespace Rtt
 {
 
@@ -21,10 +23,25 @@ class Runtime;
 
 namespace SimulatorControl
 {
+	class InputDispatchGuard
+	{
+		public:
+			explicit InputDispatchGuard( Runtime& runtime );
+			~InputDispatchGuard();
+
+		private:
+			InputDispatchGuard( const InputDispatchGuard& );
+			InputDispatchGuard& operator=( const InputDispatchGuard& );
+
+			const Runtime *fRuntime;
+	};
+
 	void SetDirectory( const char *directory );
 	void Process( Runtime& runtime );
+	bool ShouldRunRuntimeFrame( Runtime& runtime );
+	bool CanDispatchApplicationEvent( Runtime& runtime );
 	void RecordRuntimeError(
-		Runtime& runtime, const char *errorType,
+		Runtime& runtime, lua_State *L, const char *errorType,
 		const char *message, const char *stackTrace );
 	void HaltOnRuntimeError( Runtime& runtime );
 	bool IsRuntimeErrorHalted( Runtime& runtime );

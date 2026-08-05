@@ -142,6 +142,12 @@ Runtime::Runtime( const MPlatform& platform, MCallback *viewCallback )
 	fStartTime( Rtt_GetAbsoluteTime() ),
 	fStartTimeCorrection( 0 ),
 	fSuspendTime( 0 ),
+#ifdef Rtt_AUTHORING_SIMULATOR
+	fSimulatorControlTime( 0 ),
+	fSimulatorControlLastTickTime( 0 ),
+	fSimulatorControlPaused( false ),
+	fSimulatorControlTimeConsumed( false ),
+#endif
 	fResourcesHead( Rtt_NEW( & fAllocator, CachedResource( * this, NULL ) ) ),
 	fDisplay( Rtt_NEW( & fAllocator, Display( * this ) ) ),
 	fVMContext( LuaContext::New( Allocator(), platform, this ) ), 
@@ -1108,7 +1114,15 @@ Runtime::CoronaCoreResume()
 		Rtt_AbsoluteTime suspendTime = fSuspendTime; Rtt_ASSERT( suspendTime > 0 );
 		if ( currentTime > suspendTime )
 		{
-			fStartTimeCorrection += (currentTime - suspendTime);
+			Rtt_AbsoluteTime suspendedDuration = currentTime - suspendTime;
+			fStartTimeCorrection += suspendedDuration;
+#if defined(Rtt_AUTHORING_SIMULATOR)
+			if ( fSimulatorControlPaused )
+			{
+				fSimulatorControlTime += suspendedDuration;
+				fSimulatorControlLastTickTime = currentTime;
+			}
+#endif
 		}
 		fSuspendTime = 0;
 
@@ -1186,7 +1200,7 @@ Runtime::DispatchEvent( const MEvent& e )
 	RuntimeGuard guard( * this );
 
 #if defined(Rtt_AUTHORING_SIMULATOR)
-	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	if ( ! SimulatorControl::CanDispatchApplicationEvent( *this ) )
 	{
 		return;
 	}
@@ -1207,6 +1221,12 @@ Runtime::GetElapsedTime() const
 {
 	// During a suspend, use fSuspendTime as current time; otherwise, fetch absolute time
 	Rtt_AbsoluteTime currentTime = ( 1 != fIsSuspended ? Rtt_GetAbsoluteTime() : fSuspendTime );
+#if defined(Rtt_AUTHORING_SIMULATOR)
+	if ( fSimulatorControlPaused )
+	{
+		currentTime = fSimulatorControlTime;
+	}
+#endif
 	Rtt_AbsoluteTime elapsed = currentTime - fStartTime;
 
 	// Subtract out correction, but protect against subtracting past 0
@@ -1217,6 +1237,76 @@ Runtime::GetElapsedTime() const
 
 	return elapsed;
 }
+
+#if defined(Rtt_AUTHORING_SIMULATOR)
+
+void
+Runtime::BeginSimulatorControlPause()
+{
+	if ( fSimulatorControlPaused )
+	{
+		return;
+	}
+	Rtt_AbsoluteTime currentTime = Rtt_GetAbsoluteTime();
+	fSimulatorControlTime = IsSuspended() ? fSuspendTime : currentTime;
+	fSimulatorControlLastTickTime = currentTime;
+	fSimulatorControlPaused = true;
+	fSimulatorControlTimeConsumed = false;
+}
+
+void
+Runtime::WaitSimulatorControlPausedFrame()
+{
+	if ( fSimulatorControlPaused )
+	{
+		fSimulatorControlLastTickTime = Rtt_GetAbsoluteTime();
+	}
+}
+
+void
+Runtime::AdvanceSimulatorControlPausedFrame()
+{
+	if ( ! fSimulatorControlPaused )
+	{
+		return;
+	}
+	Rtt_AbsoluteTime currentTime = Rtt_GetAbsoluteTime();
+	if ( fSimulatorControlTimeConsumed &&
+		currentTime > fSimulatorControlLastTickTime )
+	{
+		fSimulatorControlTime +=
+			currentTime - fSimulatorControlLastTickTime;
+	}
+	fSimulatorControlLastTickTime = currentTime;
+	fSimulatorControlTimeConsumed = true;
+}
+
+void
+Runtime::EndSimulatorControlPause( bool advanceToNextFrame )
+{
+	if ( ! fSimulatorControlPaused )
+	{
+		return;
+	}
+	Rtt_AbsoluteTime currentTime = Rtt_GetAbsoluteTime();
+	if ( advanceToNextFrame && fSimulatorControlTimeConsumed &&
+		currentTime > fSimulatorControlLastTickTime )
+	{
+		fSimulatorControlTime +=
+			currentTime - fSimulatorControlLastTickTime;
+	}
+	Rtt_AbsoluteTime runtimeTime = IsSuspended() ? fSuspendTime : currentTime;
+	if ( runtimeTime > fSimulatorControlTime )
+	{
+		fStartTimeCorrection += runtimeTime - fSimulatorControlTime;
+	}
+	fSimulatorControlTime = 0;
+	fSimulatorControlLastTickTime = 0;
+	fSimulatorControlPaused = false;
+	fSimulatorControlTimeConsumed = false;
+}
+
+#endif
 
 void
 Runtime::Collect()
@@ -1436,6 +1526,10 @@ Runtime::Step()
 	{
 		return;
 	}
+	if ( ! SimulatorControl::ShouldRunRuntimeFrame( *this ) )
+	{
+		return;
+	}
 #endif
 
 	const bool wasSuspended = IsSuspended();
@@ -1506,6 +1600,10 @@ Runtime::operator()()
 #if defined(Rtt_AUTHORING_SIMULATOR)
 	SimulatorControl::Process( *this );
 	if ( SimulatorControl::IsRuntimeErrorHalted( *this ) )
+	{
+		return;
+	}
+	if ( ! SimulatorControl::ShouldRunRuntimeFrame( *this ) )
 	{
 		return;
 	}
