@@ -97,6 +97,11 @@ end
 `"recording"`, `"stopping"`, or `"unavailable"`. Recording completion is also
 dispatched globally as a `screenRecording` Runtime event.
 
+Simulator control clients can use `start-screen-recording`,
+`screen-recording-status`, and `stop-screen-recording` without executing Lua.
+See [Simulator control](../../tools/simulator-control/README.md) for arguments
+and lifecycle details.
+
 # Building your app with CoronaBuilder
 
 The Simulator only runs projects; it does not provide build dialogs. Device and desktop packages are built separately with `CoronaBuilder`.

@@ -17,7 +17,10 @@
 
 #include "Display/Rtt_BitmapPaint.h"
 #include "Display/Rtt_Display.h"
+#include "Display/Rtt_DisplayObject.h"
+#include "Display/Rtt_GroupObject.h"
 #include "Display/Rtt_PlatformBitmap.h"
+#include "Display/Rtt_StageObject.h"
 #include "Input/Rtt_PlatformInputAxis.h"
 #include "Input/Rtt_PlatformInputDevice.h"
 #include "Input/Rtt_PlatformInputDeviceManager.h"
@@ -25,6 +28,7 @@
 #include "Input/Rtt_ReadOnlyInputDeviceCollection.h"
 #include "Rtt_Event.h"
 #include "Rtt_LuaContext.h"
+#include "Rtt_LuaProxy.h"
 #include "Rtt_MPlatform.h"
 #include "Rtt_MPlatformDevice.h"
 #include "Rtt_MSimulatorHost.h"
@@ -48,6 +52,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <utility>
+#include <vector>
 
 #ifdef Rtt_WIN_ENV
 	#include <io.h>
@@ -215,6 +220,10 @@ static const size_t kSimulatorControlMaximumLogEntries = 500;
 static const int kSimulatorControlMaximumEntries = 100;
 static char kSimulatorControlRegistryKey;
 
+static unsigned long long GetSimulatorControlMilliseconds();
+static unsigned long long GetSimulatorControlTimestampMilliseconds();
+static int RegisterSimulatorControlHandle( lua_State *L, int valueIndex );
+
 class SimulatorControlLogMutex
 {
 	public:
@@ -283,6 +292,7 @@ class SimulatorControlLogGuard
 struct SimulatorControlLogEntry
 {
 	unsigned long sequence;
+	unsigned long long timestampMilliseconds;
 	std::string message;
 };
 
@@ -351,6 +361,7 @@ RecordSimulatorControlLog(
 	SimulatorControlLogState& state = GetSimulatorControlLogState();
 	SimulatorControlLogEntry entry;
 	entry.sequence = ++state.sequence;
+	entry.timestampMilliseconds = GetSimulatorControlTimestampMilliseconds();
 	entry.message.assign( message, length );
 	state.byteCount += entry.message.length();
 	state.entries.push_back( entry );
@@ -725,6 +736,27 @@ GetSimulatorControlMilliseconds()
 {
 #ifdef Rtt_WIN_ENV
 	return (unsigned long long)GetTickCount64();
+#else
+	struct timeval value;
+	gettimeofday( & value, NULL );
+	return ( (unsigned long long)value.tv_sec * 1000ULL ) +
+		( (unsigned long long)value.tv_usec / 1000ULL );
+#endif
+}
+
+static unsigned long long
+GetSimulatorControlTimestampMilliseconds()
+{
+#ifdef Rtt_WIN_ENV
+	FILETIME fileTime;
+	ULARGE_INTEGER value;
+	GetSystemTimeAsFileTime( &fileTime );
+	value.LowPart = fileTime.dwLowDateTime;
+	value.HighPart = fileTime.dwHighDateTime;
+	static const unsigned long long kWindowsToUnixEpoch =
+		116444736000000000ULL;
+	return value.QuadPart >= kWindowsToUnixEpoch ?
+		( value.QuadPart - kWindowsToUnixEpoch ) / 10000ULL : 0;
 #else
 	struct timeval value;
 	gettimeofday( & value, NULL );
@@ -1206,6 +1238,26 @@ SimulatorControlSuccessResponse( const std::string& jsonResult )
 }
 
 static std::string
+BuildSimulatorControlStatus(
+	Runtime& runtime, const SimulatorControlRuntimeState& state )
+{
+	char result[512];
+	snprintf(
+		result, sizeof( result ),
+		"{\"protocol\":2,\"sessionId\":\"%s\",\"generation\":%lu,"
+		"\"pid\":%ld,\"frame\":%lu,"
+		"\"applicationLoaded\":%s,\"applicationExecuting\":%s,\"suspended\":%s}",
+		state.sessionId.c_str(),
+		state.generation,
+		GetSimulatorControlProcessId(),
+		(unsigned long)runtime.GetFrame(),
+		runtime.IsProperty( Runtime::kIsApplicationLoaded ) ? "true" : "false",
+		runtime.IsProperty( Runtime::kIsApplicationExecuting ) ? "true" : "false",
+		runtime.IsSuspended() ? "true" : "false" );
+	return std::string( result );
+}
+
+static std::string
 BuildSimulatorControlDiagnostics(
 	const SimulatorControlRuntimeState& state )
 {
@@ -1282,10 +1334,11 @@ BuildSimulatorControlLogs(
 		}
 
 		std::string serialized;
-		char sequence[64];
+		char sequence[128];
 		snprintf(
 			sequence, sizeof( sequence ),
-			"{\"sequence\":%lu,\"message\":", iterator->sequence );
+			"{\"sequence\":%lu,\"timestampMs\":%llu,\"message\":",
+			iterator->sequence, iterator->timestampMilliseconds );
 		serialized.append( sequence );
 		AppendSimulatorControlJsonString( serialized, iterator->message );
 		serialized.push_back( '}' );
@@ -1304,6 +1357,376 @@ BuildSimulatorControlLogs(
 	}
 	result.append( "],\"hasMore\":" );
 	result.append( hasMore ? "true}" : "false}" );
+	return result;
+}
+
+static std::string
+BuildSimulatorControlLogSearch( const std::string& text )
+{
+	SimulatorControlLogEntry match;
+	bool found = false;
+	unsigned long latestSequence = 0;
+	{
+		SimulatorControlLogGuard guard( GetSimulatorControlLogMutex() );
+		SimulatorControlLogState& state = GetSimulatorControlLogState();
+		latestSequence = state.sequence;
+		for ( std::deque< SimulatorControlLogEntry >::const_reverse_iterator iterator =
+			state.entries.rbegin(); state.entries.rend() != iterator; iterator++ )
+		{
+			if ( std::string::npos != iterator->message.find( text ) )
+			{
+				match = *iterator;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	std::string result( "{\"satisfied\":" );
+	result.append( found ? "true" : "false" );
+	char latest[64];
+	snprintf(
+		latest, sizeof( latest ),
+		",\"latestSequence\":%lu,\"entry\":", latestSequence );
+	result.append( latest );
+	if ( ! found )
+	{
+		result.append( "null}" );
+		return result;
+	}
+	char entry[128];
+	snprintf(
+		entry, sizeof( entry ),
+		"{\"sequence\":%lu,\"timestampMs\":%llu,\"message\":",
+		match.sequence, match.timestampMilliseconds );
+	result.append( entry );
+	AppendSimulatorControlJsonString( result, match.message );
+	result.append( "}}" );
+	return result;
+}
+
+struct SimulatorControlDisplayNode
+{
+	SimulatorControlDisplayNode(
+		lua_State *L, const DisplayObject& value, U32 parent, int child,
+		int nodeDepth, bool nodeVisible )
+	: object( & value ),
+		handle( 0 ),
+		parentHandle( parent ),
+		childIndex( child ),
+		depth( nodeDepth ),
+		visible( nodeVisible ),
+		hasAutomationId( false )
+	{
+		if ( L && value.IsReachable() )
+		{
+			LuaProxy *proxy = value.GetProxy();
+			if ( proxy && proxy->PushTable( L ) )
+			{
+				int tableIndex = lua_gettop( L );
+				handle = (U32)RegisterSimulatorControlHandle( L, tableIndex );
+				lua_pushliteral( L, "automationId" );
+				lua_rawget( L, tableIndex );
+				if ( lua_type( L, -1 ) == LUA_TSTRING )
+				{
+					size_t length = 0;
+					const char *value = lua_tolstring( L, -1, &length );
+					if ( value && length > 0 && length <= 128 &&
+						strlen( value ) == length )
+					{
+						automationId.assign( value, length );
+						hasAutomationId = true;
+					}
+				}
+				lua_settop( L, tableIndex - 1 );
+			}
+		}
+	}
+
+	const DisplayObject *object;
+	U32 handle;
+	U32 parentHandle;
+	int childIndex;
+	int depth;
+	bool visible;
+	std::string automationId;
+	bool hasAutomationId;
+};
+
+static void
+CollectSimulatorControlDisplayNodes(
+	lua_State *L, const GroupObject& group, U32 parentHandle, int depth,
+	bool parentVisible,
+	std::vector< SimulatorControlDisplayNode >& nodes )
+{
+	for ( S32 index = 0; index < group.NumChildren(); index++ )
+	{
+		const DisplayObject& child = group.ChildAt( index );
+		bool visible = parentVisible && child.IsVisible() &&
+			child.AlphaCumulative() > 0 && ! child.IsOffScreen();
+		nodes.push_back( SimulatorControlDisplayNode(
+			L, child, parentHandle, (int)index + 1, depth, visible ) );
+		const GroupObject *childGroup = child.AsGroupObject();
+		if ( childGroup )
+		{
+			CollectSimulatorControlDisplayNodes(
+				L, *childGroup, nodes.back().handle, depth + 1,
+				visible, nodes );
+		}
+	}
+}
+
+static void
+GetSimulatorControlScreenBounds(
+	const Display& display, const DisplayObject& object,
+	float& x, float& y, float& width, float& height )
+{
+	const Rect& bounds = object.StageBounds();
+	if ( bounds.IsEmpty() )
+	{
+		x = y = width = height = 0.0f;
+		return;
+	}
+	x = Rtt_RealToFloat( bounds.xMin );
+	y = Rtt_RealToFloat( bounds.yMin );
+	width = Rtt_RealToFloat( bounds.xMax - bounds.xMin );
+	height = Rtt_RealToFloat( bounds.yMax - bounds.yMin );
+	display.ContentToScreenUnrounded( x, y, width, height );
+}
+
+static void
+AppendSimulatorControlDisplayNode(
+	std::string& result, const Display& display,
+	const SimulatorControlDisplayNode& node )
+{
+	const DisplayObject& object = * node.object;
+	char prefix[192];
+	snprintf(
+		prefix, sizeof( prefix ),
+		"{\"handle\":%lu,\"parentHandle\":%lu,\"childIndex\":%d,"
+		"\"depth\":%d,\"type\":",
+		(unsigned long)node.handle,
+		(unsigned long)node.parentHandle, node.childIndex, node.depth );
+	result.append( prefix );
+	AppendSimulatorControlJsonString(
+		result, object.GetObjectDesc() ? object.GetObjectDesc() : "DisplayObject" );
+
+	result.append( ",\"automationId\":" );
+	if ( node.hasAutomationId )
+	{
+		AppendSimulatorControlJsonString( result, node.automationId );
+	}
+	else
+	{
+		result.append( "null" );
+	}
+
+	float x = 0.0f;
+	float y = 0.0f;
+	float width = 0.0f;
+	float height = 0.0f;
+	GetSimulatorControlScreenBounds(
+		display, object, x, y, width, height );
+	char details[384];
+	snprintf(
+		details, sizeof( details ),
+		",\"bounds\":{\"x\":%.9g,\"y\":%.9g,\"width\":%.9g,"
+		"\"height\":%.9g,\"centerX\":%.9g,\"centerY\":%.9g},"
+		"\"visible\":%s,\"alpha\":%.9g,\"hitTestable\":%s,"
+		"\"hittable\":%s,"
+		"\"touchListener\":%s,\"offscreen\":%s,\"children\":%d}",
+		x, y, width, height, x + width * 0.5f, y + height * 0.5f,
+		node.visible ? "true" : "false",
+		(float)object.AlphaCumulative() / 255.0f,
+		object.IsHitTestable() ? "true" : "false",
+		node.visible && object.ShouldHitTest() && ! object.SkipsHitTest() &&
+			object.CanHitTest() && width > 0.0f && height > 0.0f ? "true" : "false",
+		object.HasListener( DisplayObject::kTouchListener ) ? "true" : "false",
+		object.IsOffScreen() ? "true" : "false",
+		object.AsGroupObject() ? object.AsGroupObject()->NumChildren() : 0 );
+	result.append( details );
+}
+
+static std::vector< SimulatorControlDisplayNode >
+GetSimulatorControlDisplayNodes( Runtime& runtime )
+{
+	std::vector< SimulatorControlDisplayNode > nodes;
+	StageObject *stage = runtime.GetDisplay().GetStage();
+	if ( stage )
+	{
+		CollectSimulatorControlDisplayNodes(
+			runtime.VMContext().L(), *stage, 0, 0, true, nodes );
+	}
+	return nodes;
+}
+
+static const SimulatorControlDisplayNode*
+FindSimulatorControlDisplayNode(
+	const std::vector< SimulatorControlDisplayNode >& nodes,
+	const std::string& selector, std::string& error )
+{
+	std::string value( selector );
+	if ( ! value.empty() && '#' == value[0] )
+	{
+		value.erase( 0, 1 );
+	}
+	if ( value.empty() )
+	{
+		error = "display-object selector cannot be empty";
+		return NULL;
+	}
+
+	bool findHandle = '@' == value[0];
+	unsigned long requestedHandle = 0;
+	if ( findHandle )
+	{
+		const char *digits = value.c_str() + 1;
+		char *end = NULL;
+		errno = 0;
+		requestedHandle = strtoul( digits, &end, 10 );
+		if ( ERANGE == errno || end == digits || ! end || end[0] ||
+			0 == requestedHandle )
+		{
+			error = "display-object handle must look like @42";
+			return NULL;
+		}
+	}
+
+	const SimulatorControlDisplayNode *match = NULL;
+	int matchCount = 0;
+	for ( size_t index = 0; index < nodes.size(); index++ )
+	{
+		bool matches = findHandle ?
+			requestedHandle == (unsigned long)nodes[index].handle :
+			( nodes[index].hasAutomationId &&
+				value == nodes[index].automationId );
+		if ( matches )
+		{
+			match = & nodes[index];
+			matchCount++;
+		}
+	}
+	if ( 0 == matchCount )
+	{
+		error = findHandle ?
+			"display-object handle is stale or does not exist" :
+			std::string( "no display object has automationId '" ) + value + "'";
+		return NULL;
+	}
+	if ( matchCount > 1 )
+	{
+		error = std::string( "automationId '" ) + value +
+			"' is ambiguous; identifiers must be unique in the active display tree";
+		return NULL;
+	}
+	return match;
+}
+
+static std::string
+BuildSimulatorControlDisplayTree( Runtime& runtime, int cursor )
+{
+	std::vector< SimulatorControlDisplayNode > nodes =
+		GetSimulatorControlDisplayNodes( runtime );
+	std::string result( "{\"nodes\":[" );
+	int emitted = 0;
+	for ( size_t index = (size_t)cursor;
+		index < nodes.size() && emitted < kSimulatorControlMaximumEntries;
+		index++ )
+	{
+		std::string serialized;
+		AppendSimulatorControlDisplayNode(
+			serialized, runtime.GetDisplay(), nodes[index] );
+		if ( result.length() + serialized.length() + 128 >
+			kSimulatorControlMaximumResponseSize )
+		{
+			break;
+		}
+		if ( emitted > 0 )
+		{
+			result.push_back( ',' );
+		}
+		result.append( serialized );
+		emitted++;
+	}
+	int nextCursor = cursor + emitted;
+	char suffix[160];
+	snprintf(
+		suffix, sizeof( suffix ),
+		"],\"cursor\":%d,\"totalCount\":%lu,\"truncated\":%s",
+		cursor, (unsigned long)nodes.size(),
+		nextCursor < (int)nodes.size() ? "true" : "false" );
+	result.append( suffix );
+	if ( nextCursor < (int)nodes.size() )
+	{
+		char cursorSuffix[64];
+		snprintf(
+			cursorSuffix, sizeof( cursorSuffix ),
+			",\"nextCursor\":%d}", nextCursor );
+		result.append( cursorSuffix );
+	}
+	else
+	{
+		result.append( ",\"nextCursor\":null}" );
+	}
+	return result;
+}
+
+static std::string
+BuildSimulatorControlHitTest( Runtime& runtime, double screenX, double screenY )
+{
+	std::vector< SimulatorControlDisplayNode > nodes =
+		GetSimulatorControlDisplayNodes( runtime );
+	std::string hits( "[" );
+	int emitted = 0;
+	for ( std::vector< SimulatorControlDisplayNode >::const_reverse_iterator iterator =
+		nodes.rbegin(); nodes.rend() != iterator; iterator++ )
+	{
+		const DisplayObject& object = * iterator->object;
+		if ( ! iterator->visible || ! object.ShouldHitTest() || object.SkipsHitTest() ||
+			! object.CanHitTest() || object.IsOffScreen() ||
+			0 == object.AlphaCumulative() )
+		{
+			continue;
+		}
+		float x = 0.0f;
+		float y = 0.0f;
+		float width = 0.0f;
+		float height = 0.0f;
+		GetSimulatorControlScreenBounds(
+			runtime.GetDisplay(), object, x, y, width, height );
+		if ( width <= 0.0f || height <= 0.0f ||
+			screenX < x || screenX > x + width ||
+			screenY < y || screenY > y + height )
+		{
+			continue;
+		}
+
+		std::string serialized;
+		AppendSimulatorControlDisplayNode(
+			serialized, runtime.GetDisplay(), *iterator );
+		if ( emitted > 0 )
+		{
+			hits.push_back( ',' );
+		}
+		hits.append( serialized );
+		emitted++;
+		if ( emitted >= 20 || hits.length() + 1024 >
+			kSimulatorControlMaximumResponseSize )
+		{
+			break;
+		}
+	}
+	hits.push_back( ']' );
+
+	std::string result( "{\"x\":" );
+	char coordinates[128];
+	snprintf(
+		coordinates, sizeof( coordinates ),
+		"%.17g,\"y\":%.17g,\"approximate\":true,\"hits\":",
+		screenX, screenY );
+	result.append( coordinates );
+	result.append( hits );
+	result.push_back( '}' );
 	return result;
 }
 
@@ -1354,6 +1777,48 @@ CaptureSimulatorControlScreenshot(
 		",\"width\":%d,\"height\":%d,\"bytes\":%ld}",
 		width, height, (long)pngBytes.GetLength() );
 	result.append( information );
+	return true;
+}
+
+static bool
+CaptureSimulatorControlSnapshot(
+	Runtime& runtime, const SimulatorControlRuntimeState& state,
+	const std::string& screenshotPath, std::string& result,
+	std::string& error )
+{
+	std::string screenshot;
+	if ( ! CaptureSimulatorControlScreenshot(
+		runtime, screenshotPath, screenshot, error ) )
+	{
+		return false;
+	}
+
+	std::string manifest( "{\"status\":" );
+	manifest.append( BuildSimulatorControlStatus( runtime, state ) );
+	manifest.append( ",\"diagnostics\":" );
+	manifest.append( BuildSimulatorControlDiagnostics( state ) );
+	manifest.append( ",\"logs\":" );
+	manifest.append( BuildSimulatorControlLogs( state, 0 ) );
+	manifest.append( ",\"displayTree\":" );
+	manifest.append( BuildSimulatorControlDisplayTree( runtime, 0 ) );
+	manifest.push_back( '}' );
+
+	std::string manifestPath = screenshotPath + ".json";
+	if ( ! WriteSimulatorControlFileAtomically( manifestPath, manifest ) )
+	{
+		error = "the Simulator could not write the snapshot manifest";
+		return false;
+	}
+
+	result.assign( "{\"screenshot\":" );
+	result.append( screenshot );
+	result.append( ",\"manifestPath\":" );
+	AppendSimulatorControlJsonString( result, manifestPath );
+	char frame[64];
+	snprintf(
+		frame, sizeof( frame ),
+		",\"frame\":%lu}", (unsigned long)runtime.GetFrame() );
+	result.append( frame );
 	return true;
 }
 
@@ -1670,7 +2135,7 @@ ParseSimulatorControlQuotedString(
 		{
 			if ( offset >= path.length() )
 			{
-				error = "inspect path ends inside an escape sequence";
+					error = "inspect-lua-value path ends inside an escape sequence";
 				return false;
 			}
 			character = path[offset++];
@@ -1683,7 +2148,7 @@ ParseSimulatorControlQuotedString(
 				case '\'': result.push_back( '\'' ); break;
 				case '"': result.push_back( '"' ); break;
 				default:
-					error = "inspect path contains an unsupported escape sequence";
+					error = "inspect-lua-value path contains an unsupported escape sequence";
 					return false;
 			}
 		}
@@ -1693,7 +2158,7 @@ ParseSimulatorControlQuotedString(
 		}
 	}
 
-	error = "inspect path contains an unterminated string";
+	error = "inspect-lua-value path contains an unterminated string";
 	return false;
 }
 
@@ -1705,7 +2170,7 @@ PushSimulatorControlInspectedValue(
 	SkipSimulatorControlPathWhitespace( path, offset );
 	if ( offset >= path.length() )
 	{
-		error = "inspect expects a global path or handle";
+		error = "inspect-lua-value expects a global path or handle";
 		return false;
 	}
 
@@ -1719,13 +2184,13 @@ PushSimulatorControlInspectedValue(
 		}
 		if ( start == offset )
 		{
-			error = "inspect handle must contain a number after '@'";
+			error = "inspect-lua-value handle must contain a number after '@'";
 			return false;
 		}
 		int handle = atoi( path.substr( start, offset - start ).c_str() );
 		if ( handle <= 0 || ! PushSimulatorControlHandle( L, handle ) )
 		{
-			error = "inspect handle has expired or does not exist";
+			error = "inspect-lua-value handle has expired or does not exist";
 			return false;
 		}
 	}
@@ -1734,7 +2199,7 @@ PushSimulatorControlInspectedValue(
 		std::string identifier;
 		if ( ! ParseSimulatorControlIdentifier( path, offset, identifier ) )
 		{
-			error = "inspect path must start with a global identifier or handle";
+			error = "inspect-lua-value path must start with a global identifier or handle";
 			return false;
 		}
 		lua_pushvalue( L, LUA_GLOBALSINDEX );
@@ -1754,7 +2219,7 @@ PushSimulatorControlInspectedValue(
 		if ( ! lua_istable( L, -1 ) )
 		{
 			lua_pop( L, 1 );
-			error = "inspect path attempts to index a non-table value";
+			error = "inspect-lua-value path attempts to index a non-table value";
 			return false;
 		}
 
@@ -1765,7 +2230,7 @@ PushSimulatorControlInspectedValue(
 			if ( ! ParseSimulatorControlIdentifier( path, offset, identifier ) )
 			{
 				lua_pop( L, 1 );
-				error = "inspect path expects a field name after '.'";
+				error = "inspect-lua-value path expects a field name after '.'";
 				return false;
 			}
 			lua_pushlstring( L, identifier.data(), identifier.length() );
@@ -1779,7 +2244,7 @@ PushSimulatorControlInspectedValue(
 			if ( offset >= path.length() )
 			{
 				lua_pop( L, 1 );
-				error = "inspect path contains an unterminated '['";
+				error = "inspect-lua-value path contains an unterminated '['";
 				return false;
 			}
 
@@ -1809,7 +2274,7 @@ PushSimulatorControlInspectedValue(
 				if ( start == offset )
 				{
 					lua_pop( L, 1 );
-					error = "inspect brackets support only integer or quoted-string keys";
+					error = "inspect-lua-value brackets support only integer or quoted-string keys";
 					return false;
 				}
 				lua_Integer value = (lua_Integer)atol( path.substr( start, offset - start ).c_str() );
@@ -1820,7 +2285,7 @@ PushSimulatorControlInspectedValue(
 			if ( offset >= path.length() || ']' != path[offset] )
 			{
 				lua_pop( L, 2 );
-				error = "inspect path expects a closing ']'";
+				error = "inspect-lua-value path expects a closing ']'";
 				return false;
 			}
 			offset++;
@@ -1830,7 +2295,7 @@ PushSimulatorControlInspectedValue(
 		else
 		{
 			lua_pop( L, 1 );
-			error = "inspect path supports only '.', integer keys, and quoted-string keys";
+			error = "inspect-lua-value path supports only '.', integer keys, and quoted-string keys";
 			return false;
 		}
 	}
@@ -1929,7 +2394,8 @@ SimulatorControlTraceback( lua_State *L )
 static bool
 ExecuteSimulatorControlChunk(
 	lua_State *L, const std::string& payload, const char *chunkName,
-	bool isExpression, bool isFile, std::string& jsonResult, std::string& error )
+	bool isExpression, bool isFile, std::string& jsonResult, std::string& error,
+	bool *firstResultTruthy = NULL )
 {
 	int originalTop = lua_gettop( L );
 	int status = 0;
@@ -1937,7 +2403,7 @@ ExecuteSimulatorControlChunk(
 	{
 		if ( payload.find( '\0' ) != std::string::npos )
 		{
-			error = "exec-file path cannot contain a null byte";
+			error = "execute-lua-file path cannot contain a null byte";
 			return false;
 		}
 		std::string code;
@@ -1945,7 +2411,7 @@ ExecuteSimulatorControlChunk(
 			payload, code, kSimulatorControlMaximumExecFileSize ) )
 		{
 			error =
-				"unable to read exec-file or file exceeded sixteen megabytes";
+				"unable to read execute-lua-file or file exceeded sixteen megabytes";
 			return false;
 		}
 		std::string fileChunkName = "@" + payload;
@@ -1981,6 +2447,11 @@ ExecuteSimulatorControlChunk(
 
 	jsonResult.assign( "[" );
 	int resultCount = lua_gettop( L ) - originalTop;
+	if ( firstResultTruthy )
+	{
+		*firstResultTruthy = resultCount > 0 &&
+			0 != lua_toboolean( L, originalTop + 1 );
+	}
 	for ( int index = 0; index < resultCount; index++ )
 	{
 		if ( index > 0 )
@@ -2092,20 +2563,20 @@ ParseSimulatorControlInspectPayload(
 			static const char kCursorPrefix[] = "cursor=";
 			if ( 0 != options.compare( 0, sizeof( kCursorPrefix ) - 1, kCursorPrefix ) )
 			{
-				error = "inspect supports only a cursor option";
+				error = "inspect-lua-value supports only a cursor option";
 				return false;
 			}
 			std::string cursorString = options.substr( sizeof( kCursorPrefix ) - 1 );
 			if ( cursorString.empty() )
 			{
-				error = "inspect cursor must be a non-negative integer";
+				error = "inspect-lua-value cursor must be a non-negative integer";
 				return false;
 			}
 			for ( size_t index = 0; index < cursorString.length(); index++ )
 			{
 				if ( ! isdigit( (unsigned char)cursorString[index] ) )
 				{
-					error = "inspect cursor must be a non-negative integer";
+					error = "inspect-lua-value cursor must be a non-negative integer";
 					return false;
 				}
 			}
@@ -2116,7 +2587,7 @@ ParseSimulatorControlInspectPayload(
 			if ( ERANGE == errno || ! cursorEnd || cursorEnd[0] ||
 				cursorValue > INT_MAX )
 			{
-				error = "inspect cursor is too large";
+				error = "inspect-lua-value cursor is too large";
 				return false;
 			}
 			cursor = (int)cursorValue;
@@ -2136,7 +2607,7 @@ ParseSimulatorControlTapPayload(
 		! IsFiniteNumber( (lua_Number)input.x ) ||
 		! IsFiniteNumber( (lua_Number)input.y ) )
 	{
-		error = "tap expects finite X and Y screen coordinates";
+		error = "tap-screen expects finite X and Y screen coordinates";
 		return false;
 	}
 	input.type = MSimulatorHost::Input::kTouchInput;
@@ -2152,21 +2623,52 @@ ParseSimulatorControlKeyPayload(
 	std::string& error )
 {
 	std::istringstream stream( payload );
-	std::string phase;
-	std::string extra;
+	std::string phase( "pressed" );
 	if ( ! ( stream >> input.keyName ) || input.keyName.length() > 128 )
 	{
-		error = "key expects a key name and optional phase";
+		error = "send-key-event expects a key name, optional phase, and modifiers";
 		return false;
 	}
-	if ( stream >> phase && stream >> extra )
+	std::string argument;
+	bool hasPhase = false;
+	while ( stream >> argument )
 	{
-		error = "key expects a key name and optional phase";
-		return false;
+		if ( "down" == argument || "up" == argument ||
+			"pressed" == argument )
+		{
+			if ( hasPhase )
+			{
+				error = "send-key-event phase can only be provided once";
+				return false;
+			}
+			phase = argument;
+			hasPhase = true;
+		}
+		else if ( "--shift" == argument )
+		{
+			input.isShiftDown = true;
+		}
+		else if ( "--alt" == argument )
+		{
+			input.isAltDown = true;
+		}
+		else if ( "--ctrl" == argument )
+		{
+			input.isCtrlDown = true;
+		}
+		else if ( "--command" == argument )
+		{
+			input.isCommandDown = true;
+		}
+		else
+		{
+			error = "send-key-event modifiers are --shift, --alt, --ctrl, and --command";
+			return false;
+		}
 	}
 
 	input.type = MSimulatorHost::Input::kKeyInput;
-	if ( phase.empty() || "pressed" == phase )
+	if ( "pressed" == phase )
 	{
 		input.phase = MSimulatorHost::Input::kPressedPhase;
 	}
@@ -2180,7 +2682,7 @@ ParseSimulatorControlKeyPayload(
 	}
 	else
 	{
-		error = "key phase must be 'down', 'up', or 'pressed'";
+		error = "send-key-event phase must be 'down', 'up', or 'pressed'";
 		return false;
 	}
 	return true;
@@ -2200,12 +2702,260 @@ ParseSimulatorControlScrollPayload(
 		! IsFiniteNumber( (lua_Number)input.scrollX ) ||
 		! IsFiniteNumber( (lua_Number)input.scrollY ) )
 	{
-		error = "scroll expects finite X, Y, SCROLL_X, and SCROLL_Y values";
+		error = "send-scroll-event expects finite X, Y, SCROLL_X, and SCROLL_Y values";
 		return false;
 	}
 	input.type = MSimulatorHost::Input::kMouseInput;
 	input.phase = MSimulatorHost::Input::kScrollPhase;
 	return true;
+}
+
+static bool
+ParseSimulatorControlTouchPayload(
+	const std::string& payload, MSimulatorHost::Input& input,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::string phase;
+	std::vector< double > values;
+	double value = 0.0;
+	std::string extra;
+	if ( ! ( stream >> phase ) )
+	{
+		error = "send-touch-event expects PHASE X Y and optional X_START Y_START";
+		return false;
+	}
+	while ( stream >> value )
+	{
+		values.push_back( value );
+	}
+	if ( ! stream.eof() || ( 2 != values.size() && 4 != values.size() ) )
+	{
+		error = "send-touch-event expects PHASE X Y and optional X_START Y_START";
+		return false;
+	}
+	for ( size_t index = 0; index < values.size(); index++ )
+	{
+		if ( ! IsFiniteNumber( (lua_Number)values[index] ) )
+		{
+			error = "send-touch-event coordinates must be finite";
+			return false;
+		}
+	}
+	if ( "began" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kBeganPhase;
+	}
+	else if ( "moved" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kMovedPhase;
+	}
+	else if ( "ended" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kEndedPhase;
+	}
+	else if ( "cancelled" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kCancelledPhase;
+	}
+	else
+	{
+		error = "send-touch-event phase must be began, moved, ended, or cancelled";
+		return false;
+	}
+	input.type = MSimulatorHost::Input::kTouchInput;
+	input.x = values[0];
+	input.y = values[1];
+	input.xStart = 4 == values.size() ? values[2] : input.x;
+	input.yStart = 4 == values.size() ? values[3] : input.y;
+	return true;
+}
+
+static bool
+ParseSimulatorControlMousePayload(
+	const std::string& payload, MSimulatorHost::Input& input,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::string phase;
+	std::string extra;
+	if ( ! ( stream >> phase >> input.x >> input.y ) ||
+		! IsFiniteNumber( (lua_Number)input.x ) ||
+		! IsFiniteNumber( (lua_Number)input.y ) )
+	{
+		error = "send-mouse-event expects PHASE X Y and optional SCROLL_X SCROLL_Y";
+		return false;
+	}
+	input.type = MSimulatorHost::Input::kMouseInput;
+	if ( "down" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kDownPhase;
+		input.clickCount = 1;
+		input.isPrimaryButtonDown = true;
+	}
+	else if ( "up" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kUpPhase;
+		input.clickCount = 1;
+	}
+	else if ( "drag" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kDragPhase;
+		input.isPrimaryButtonDown = true;
+	}
+	else if ( "move" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kMovePhase;
+	}
+	else if ( "exit" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kExitPhase;
+	}
+	else if ( "scroll" == phase )
+	{
+		input.phase = MSimulatorHost::Input::kScrollPhase;
+		if ( ! ( stream >> input.scrollX >> input.scrollY ) ||
+			! IsFiniteNumber( (lua_Number)input.scrollX ) ||
+			! IsFiniteNumber( (lua_Number)input.scrollY ) )
+		{
+			error = "send-mouse-event scroll expects PHASE X Y SCROLL_X SCROLL_Y";
+			return false;
+		}
+	}
+	else
+	{
+		error = "send-mouse-event phase must be down, up, drag, move, exit, or scroll";
+		return false;
+	}
+	if ( stream >> extra )
+	{
+		error = "send-mouse-event received unexpected arguments";
+		return false;
+	}
+	return true;
+}
+
+struct SimulatorControlSwipe
+{
+	SimulatorControlSwipe()
+	: xStart( 0.0 ), yStart( 0.0 ), xEnd( 0.0 ), yEnd( 0.0 ), steps( 8 )
+	{
+	}
+	double xStart;
+	double yStart;
+	double xEnd;
+	double yEnd;
+	int steps;
+};
+
+static bool
+ParseSimulatorControlSwipePayload(
+	const std::string& payload, SimulatorControlSwipe& swipe,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::string steps;
+	std::string extra;
+	if ( ! ( stream >> swipe.xStart >> swipe.yStart >> swipe.xEnd >> swipe.yEnd ) )
+	{
+		error = "swipe-screen expects X_START Y_START X_END Y_END and optional STEPS";
+		return false;
+	}
+	if ( stream >> steps )
+	{
+		std::istringstream stepStream( steps );
+		if ( ! ( stepStream >> swipe.steps ) || stepStream >> extra ||
+			swipe.steps < 1 || swipe.steps > 120 )
+		{
+			error = "swipe-screen steps must be an integer from 1 through 120";
+			return false;
+		}
+	}
+	if ( stream >> extra ||
+		! IsFiniteNumber( (lua_Number)swipe.xStart ) ||
+		! IsFiniteNumber( (lua_Number)swipe.yStart ) ||
+		! IsFiniteNumber( (lua_Number)swipe.xEnd ) ||
+		! IsFiniteNumber( (lua_Number)swipe.yEnd ) )
+	{
+		error = "swipe-screen coordinates must be finite";
+		return false;
+	}
+	return true;
+}
+
+struct SimulatorControlNodeSwipe
+{
+	SimulatorControlNodeSwipe()
+	: deltaX( 0.0 ), deltaY( 0.0 ), steps( 8 )
+	{
+	}
+	std::string selector;
+	double deltaX;
+	double deltaY;
+	int steps;
+};
+
+static bool
+ParseSimulatorControlNodeSwipePayload(
+	const std::string& payload, SimulatorControlNodeSwipe& swipe,
+	std::string& error )
+{
+	std::istringstream stream( payload );
+	std::string steps;
+	std::string extra;
+	if ( ! ( stream >> swipe.selector >> swipe.deltaX >> swipe.deltaY ) )
+	{
+		error = "swipe-display-object expects ID|@HANDLE DELTA_X DELTA_Y and optional STEPS";
+		return false;
+	}
+	if ( stream >> steps )
+	{
+		std::istringstream stepStream( steps );
+		if ( ! ( stepStream >> swipe.steps ) || stepStream >> extra ||
+			swipe.steps < 1 || swipe.steps > 120 )
+		{
+			error = "swipe-display-object steps must be an integer from 1 through 120";
+			return false;
+		}
+	}
+	if ( stream >> extra ||
+		! IsFiniteNumber( (lua_Number)swipe.deltaX ) ||
+		! IsFiniteNumber( (lua_Number)swipe.deltaY ) )
+	{
+		error = "swipe-display-object deltas must be finite";
+		return false;
+	}
+	return true;
+}
+
+static bool
+SendSimulatorControlSwipe(
+	const MSimulatorHost& host, const SimulatorControlSwipe& swipe )
+{
+	MSimulatorHost::Input input;
+	input.type = MSimulatorHost::Input::kTouchInput;
+	input.phase = MSimulatorHost::Input::kBeganPhase;
+	input.x = input.xStart = swipe.xStart;
+	input.y = input.yStart = swipe.yStart;
+	if ( ! host.SendInput( input ) )
+	{
+		return false;
+	}
+	input.phase = MSimulatorHost::Input::kMovedPhase;
+	for ( int step = 1; step <= swipe.steps; step++ )
+	{
+		double progress = (double)step / (double)( swipe.steps + 1 );
+		input.x = swipe.xStart + ( swipe.xEnd - swipe.xStart ) * progress;
+		input.y = swipe.yStart + ( swipe.yEnd - swipe.yStart ) * progress;
+		if ( ! host.SendInput( input ) )
+		{
+			return false;
+		}
+	}
+	input.phase = MSimulatorHost::Input::kEndedPhase;
+	input.x = swipe.xEnd;
+	input.y = swipe.yEnd;
+	return host.SendInput( input );
 }
 
 static bool
@@ -2309,7 +3059,7 @@ ParseSimulatorControlControllerPayload(
 	}
 	if ( arguments.empty() )
 	{
-		error = "controller expects connect, disconnect, button, or axis";
+		error = "controller expects connect, disconnect, send-button-event, or set-axis";
 		return false;
 	}
 
@@ -2334,13 +3084,13 @@ ParseSimulatorControlControllerPayload(
 			MSimulatorHost::Input::kDisconnectController;
 		return true;
 	}
-	if ( "button" == action )
+	if ( "send-button-event" == action )
 	{
 		if ( positionalArguments.empty() ||
 			positionalArguments.size() > 2 ||
 			positionalArguments.front().length() > 128 )
 		{
-			error = "controller button expects a key name and optional phase";
+			error = "controller send-button-event expects a key name and optional phase";
 			return false;
 		}
 		input.keyName = positionalArguments.front();
@@ -2361,16 +3111,16 @@ ParseSimulatorControlControllerPayload(
 		}
 		else
 		{
-			error = "controller button phase must be 'down', 'up', or 'pressed'";
+			error = "controller send-button-event phase must be 'down', 'up', or 'pressed'";
 			return false;
 		}
 		return true;
 	}
-	if ( "axis" == action )
+	if ( "set-axis" == action )
 	{
 		if ( 2 != positionalArguments.size() )
 		{
-			error = "controller axis expects an axis name and finite value";
+			error = "controller set-axis expects an axis name and finite value";
 			return false;
 		}
 		input.axisName = positionalArguments.front();
@@ -2380,7 +3130,7 @@ ParseSimulatorControlControllerPayload(
 			valueStream >> extra ||
 			! IsFiniteNumber( (lua_Number)input.axisValue ) )
 		{
-			error = "controller axis expects an axis name and finite value";
+			error = "controller set-axis expects an axis name and finite value";
 			return false;
 		}
 		const bool isTrigger =
@@ -2395,15 +3145,179 @@ ParseSimulatorControlControllerPayload(
 			input.axisValue < ( isTrigger ? 0.0 : -1.0 ) ||
 			input.axisValue > 1.0 )
 		{
-			error = "controller axis supports leftX, leftY, rightX, rightY (-1 to 1), and leftTrigger or rightTrigger (0 to 1)";
+			error = "controller set-axis supports leftX, leftY, rightX, rightY (-1 to 1), and leftTrigger or rightTrigger (0 to 1)";
 			return false;
 		}
 		input.controllerAction = MSimulatorHost::Input::kAxisController;
 		return true;
 	}
 
-	error = "controller expects connect, disconnect, button, or axis";
+	error = "controller expects connect, disconnect, send-button-event, or set-axis";
 	return false;
+}
+
+static bool
+HasSimulatorControlMp4Extension( const std::string& path )
+{
+	if ( path.length() < 4 )
+	{
+		return false;
+	}
+	const size_t extension = path.length() - 4;
+	return '.' == path[extension] &&
+		'm' == tolower( (unsigned char)path[extension + 1] ) &&
+		'p' == tolower( (unsigned char)path[extension + 2] ) &&
+		'4' == path[extension + 3];
+}
+
+static bool
+BuildSimulatorControlScreenRecordingPayload(
+	const std::vector< std::string >& arguments, std::string& payload,
+	std::string& error )
+{
+	if ( arguments.empty() || arguments.front().empty() )
+	{
+		error = "start-screen-recording expects an MP4 output path";
+		return false;
+	}
+	if ( std::string::npos != arguments.front().find_first_of( "\r\n" ) ||
+		! HasSimulatorControlMp4Extension( arguments.front() ) )
+	{
+		error = "start-screen-recording path must end in .mp4 and cannot contain a newline";
+		return false;
+	}
+
+	std::string absolutePath;
+	if ( ! MakeSimulatorControlAbsoluteOutputPath(
+		arguments.front(), absolutePath ) )
+	{
+		error = "start-screen-recording expects a valid output path";
+		return false;
+	}
+
+	int framesPerSecond = 60;
+	bool includeAudio = true;
+	bool showsCursor = false;
+	bool overwrite = false;
+	bool hasFramesPerSecond = false;
+	bool hasNoAudio = false;
+	bool hasShowCursor = false;
+	bool hasOverwrite = false;
+	for ( size_t index = 1; index < arguments.size(); index++ )
+	{
+		const std::string& argument = arguments[index];
+		if ( "--fps" == argument )
+		{
+			if ( hasFramesPerSecond || index + 1 >= arguments.size() )
+			{
+				error = "start-screen-recording --fps expects one integer from 1 through 240";
+				return false;
+			}
+			const std::string& value = arguments[++index];
+			std::istringstream stream( value );
+			std::string extra;
+			if ( ! ( stream >> framesPerSecond ) || stream >> extra ||
+				framesPerSecond < 1 || framesPerSecond > 240 )
+			{
+				error = "start-screen-recording --fps expects one integer from 1 through 240";
+				return false;
+			}
+			hasFramesPerSecond = true;
+		}
+		else if ( "--no-audio" == argument )
+		{
+			if ( hasNoAudio )
+			{
+				error = "start-screen-recording --no-audio can only be provided once";
+				return false;
+			}
+			hasNoAudio = true;
+			includeAudio = false;
+		}
+		else if ( "--show-cursor" == argument )
+		{
+			if ( hasShowCursor )
+			{
+				error = "start-screen-recording --show-cursor can only be provided once";
+				return false;
+			}
+			hasShowCursor = true;
+			showsCursor = true;
+		}
+		else if ( "--overwrite" == argument )
+		{
+			if ( hasOverwrite )
+			{
+				error = "start-screen-recording --overwrite can only be provided once";
+				return false;
+			}
+			hasOverwrite = true;
+			overwrite = true;
+		}
+		else
+		{
+			error = "start-screen-recording options are --fps, --no-audio, --show-cursor, and --overwrite";
+			return false;
+		}
+	}
+
+	char options[64];
+	snprintf(
+		options, sizeof( options ), "\n%d %d %d %d",
+		framesPerSecond, includeAudio ? 1 : 0,
+		showsCursor ? 1 : 0, overwrite ? 1 : 0 );
+	payload.assign( absolutePath );
+	payload.append( options );
+	return true;
+}
+
+static bool
+ParseSimulatorControlScreenRecordingPayload(
+	const std::string& payload,
+	MSimulatorHost::ScreenRecordingOptions& options, std::string& error )
+{
+	size_t lineEnd = payload.find( '\n' );
+	if ( std::string::npos == lineEnd )
+	{
+		error = "start-screen-recording received an invalid payload";
+		return false;
+	}
+	options.path.assign( payload, 0, lineEnd );
+	int includeAudio = -1;
+	int showsCursor = -1;
+	int overwrite = -1;
+	std::string extra;
+	std::istringstream stream( payload.substr( lineEnd + 1 ) );
+	if ( options.path.empty() || ! HasSimulatorControlMp4Extension( options.path ) ||
+		! ( stream >> options.framesPerSecond >> includeAudio >>
+			showsCursor >> overwrite ) || stream >> extra ||
+		options.framesPerSecond < 1 || options.framesPerSecond > 240 ||
+		( 0 != includeAudio && 1 != includeAudio ) ||
+		( 0 != showsCursor && 1 != showsCursor ) ||
+		( 0 != overwrite && 1 != overwrite ) )
+	{
+		error = "start-screen-recording received an invalid payload";
+		return false;
+	}
+	options.includeAudio = 0 != includeAudio;
+	options.showsCursor = 0 != showsCursor;
+	options.overwrite = 0 != overwrite;
+	return true;
+}
+
+static const char *
+SimulatorControlScreenRecordingStateName(
+	MSimulatorHost::ScreenRecordingState state )
+{
+	switch ( state )
+	{
+		case MSimulatorHost::kScreenRecordingIdle: return "idle";
+		case MSimulatorHost::kScreenRecordingStarting: return "starting";
+		case MSimulatorHost::kScreenRecordingRecording: return "recording";
+		case MSimulatorHost::kScreenRecordingStopping: return "stopping";
+		case MSimulatorHost::kScreenRecordingUnavailable: break;
+	}
+	return "unavailable";
 }
 
 static bool
@@ -2849,7 +3763,7 @@ PerformSimulatorControlClientRequest(
 		return false;
 	}
 
-	if ( "diagnostics" == command )
+	if ( "runtime-diagnostics" == command )
 	{
 		return WaitForSimulatorControlDiagnostics(
 			directory, session, timeoutMilliseconds,
@@ -2909,7 +3823,7 @@ PerformSimulatorControlClientRequest(
 		if ( ReadSimulatorControlFile( responsePath, response ) )
 		{
 			DeleteSimulatorControlFile( responsePath );
-			if ( "relaunch" == command &&
+			if ( "relaunch-project" == command &&
 				0 == response.compare( 0, 10, "{\"ok\":true" ) )
 			{
 				SimulatorControlSession replacementSession;
@@ -2928,6 +3842,321 @@ PerformSimulatorControlClientRequest(
 	DeleteSimulatorControlFile( requestPath );
 	error = "the Simulator did not answer the control request before the timeout";
 	return false;
+}
+
+static bool
+IsSimulatorControlSuccessResponse( const std::string& response )
+{
+	return 0 == response.compare( 0, 10, "{\"ok\":true" );
+}
+
+static std::string
+BuildSimulatorControlFailureWithSnapshot(
+	const std::string& directory, const std::string& failureResponse )
+{
+	std::string snapshot;
+	std::string snapshotError;
+	std::string snapshotPath =
+		SimulatorControlPath( directory, "automation-failure.png" );
+	bool captured = PerformSimulatorControlClientRequest(
+		directory, "debug-snapshot", snapshotPath, 3000,
+		snapshot, snapshotError );
+
+	std::string result(
+		"{\"ok\":false,\"error\":\"automation command failed\","
+		"\"result\":{\"failure\":" );
+	result.append( failureResponse );
+	result.append( ",\"artifacts\":" );
+	if ( captured && IsSimulatorControlSuccessResponse( snapshot ) )
+	{
+		result.append( snapshot );
+	}
+	else
+	{
+		result.append( "null,\"artifactError\":" );
+		AppendSimulatorControlJsonString(
+			result, captured ? "snapshot command failed" : snapshotError );
+	}
+	result.append( "}}" );
+	return result;
+}
+
+static bool
+PerformSimulatorControlClientWait(
+	const std::string& directory, const std::string& command,
+	const std::string& payload, unsigned long timeoutMilliseconds,
+	std::string& response, std::string& error )
+{
+	unsigned long long deadline =
+		GetSimulatorControlMilliseconds() + timeoutMilliseconds;
+	while ( GetSimulatorControlMilliseconds() < deadline )
+	{
+		unsigned long long now = GetSimulatorControlMilliseconds();
+		unsigned long remaining = (unsigned long)( deadline - now );
+		std::string candidate;
+		if ( ! PerformSimulatorControlClientRequest(
+			directory, command, payload, remaining,
+			candidate, error ) )
+		{
+			return false;
+		}
+		if ( "condition" == command || "log-search" == command ||
+			"node-ready" == command )
+		{
+			if ( ! IsSimulatorControlSuccessResponse( candidate ) ||
+				std::string::npos != candidate.find( "\"satisfied\":true" ) )
+			{
+				response = candidate;
+				return true;
+			}
+		}
+		else if ( IsSimulatorControlSuccessResponse( candidate ) )
+		{
+			response = candidate;
+			return true;
+		}
+		SleepSimulatorControlMilliseconds( 10 );
+	}
+
+	response.assign( "{\"ok\":false,\"error\":" );
+	AppendSimulatorControlJsonString(
+		response,
+		"condition was not satisfied before the client timeout" );
+	response.push_back( '}' );
+	return true;
+}
+
+static void
+TrimSimulatorControlScenarioLine( std::string& line )
+{
+	size_t start = 0;
+	while ( start < line.length() &&
+		isspace( (unsigned char)line[start] ) )
+	{
+		start++;
+	}
+	size_t end = line.length();
+	while ( end > start && isspace( (unsigned char)line[end - 1] ) )
+	{
+		end--;
+	}
+	line.assign( line, start, end - start );
+}
+
+static bool
+IsSimulatorControlScenarioCommand( const std::string& command )
+{
+	static const char *commands[] =
+	{
+		"runtime-status", "runtime-diagnostics", "runtime-logs",
+		"capture-screenshot", "debug-snapshot", "start-screen-recording",
+		"stop-screen-recording", "screen-recording-status",
+		"display-object-tree",
+		"find-display-object", "hit-test-display-objects",
+		"tap-display-object", "swipe-display-object", "tap-screen",
+		"send-touch-event", "swipe-screen", "send-mouse-event",
+		"press-back-button", "send-key-event", "type-text",
+		"send-scroll-event", "controller", "wait-for-condition",
+		"wait-for-display-object", "wait-for-log", "assert-condition",
+		"evaluate-lua", "execute-lua", "execute-lua-file",
+		"inspect-lua-value", "relaunch-project", "quit-simulator", NULL
+	};
+	for ( int index = 0; commands[index]; index++ )
+	{
+		if ( command == commands[index] )
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+static bool
+PerformSimulatorControlClientScenario(
+	const std::string& directory, const std::string& path,
+	unsigned long timeoutMilliseconds, std::string& response,
+	std::string& error )
+{
+	std::string contents;
+	if ( ! ReadSimulatorControlFile(
+		path, contents, kSimulatorControlMaximumRequestSize ) )
+	{
+		error = "unable to read scenario or scenario exceeded one megabyte";
+		return false;
+	}
+
+	std::istringstream stream( contents );
+	std::string line;
+	std::string serializedSteps;
+	int lineNumber = 0;
+	int stepCount = 0;
+	while ( std::getline( stream, line ) )
+	{
+		lineNumber++;
+		TrimSimulatorControlScenarioLine( line );
+		if ( line.empty() || 0 == line.compare( 0, 2, "--" ) )
+		{
+			continue;
+		}
+		if ( stepCount >= kSimulatorControlMaximumEntries )
+		{
+			error = "scenario cannot contain more than 100 commands";
+			return false;
+		}
+
+		size_t separator = line.find_first_of( " \t" );
+		std::string command = std::string::npos == separator ?
+			line : line.substr( 0, separator );
+		std::string payload = std::string::npos == separator ?
+			std::string() : line.substr( separator + 1 );
+		TrimSimulatorControlScenarioLine( payload );
+		if ( ! IsSimulatorControlScenarioCommand( command ) )
+		{
+			char message[256];
+			snprintf(
+				message, sizeof( message ),
+				"scenario line %d contains unknown command '%s'",
+				lineNumber, command.c_str() );
+			error.assign( message );
+			return false;
+		}
+		if ( ( "runtime-logs" == command ||
+			"display-object-tree" == command ) &&
+			payload.empty() )
+		{
+			payload.assign( "0" );
+		}
+		else if ( "quit-simulator" == command && payload.empty() )
+		{
+			payload.assign( "0" );
+		}
+		else if ( "capture-screenshot" == command ||
+			"debug-snapshot" == command )
+		{
+			std::string outputPath = payload.empty() ?
+				SimulatorControlPath(
+					directory,
+					"debug-snapshot" == command ?
+						"snapshot.png" : "screenshot.png" ) :
+				payload;
+			if ( ! MakeSimulatorControlAbsoluteOutputPath(
+				outputPath, payload ) )
+			{
+				error = "scenario screenshot path is invalid";
+				return false;
+			}
+		}
+		else if ( "start-screen-recording" == command )
+		{
+			std::istringstream argumentStream( payload );
+			std::vector< std::string > tokens;
+			std::string argument;
+			while ( argumentStream >> argument )
+			{
+				tokens.push_back( argument );
+			}
+			std::vector< std::string > arguments;
+			if ( ! tokens.empty() )
+			{
+				size_t optionIndex = 1;
+				while ( optionIndex < tokens.size() &&
+					0 != tokens[optionIndex].compare( 0, 2, "--" ) )
+				{
+					optionIndex++;
+				}
+				std::string outputPath( tokens.front() );
+				for ( size_t index = 1; index < optionIndex; index++ )
+				{
+					outputPath.push_back( ' ' );
+					outputPath.append( tokens[index] );
+				}
+				arguments.push_back( outputPath );
+				arguments.insert(
+					arguments.end(), tokens.begin() + optionIndex,
+					tokens.end() );
+			}
+			if ( ! BuildSimulatorControlScreenRecordingPayload(
+				arguments, payload, error ) )
+			{
+				return false;
+			}
+		}
+
+		std::string stepResponse;
+		bool performed = false;
+		if ( "wait-for-condition" == command )
+		{
+			performed = PerformSimulatorControlClientWait(
+				directory, "condition", payload, timeoutMilliseconds,
+				stepResponse, error );
+		}
+		else if ( "wait-for-display-object" == command )
+		{
+			performed = PerformSimulatorControlClientWait(
+				directory, "node-ready", payload, timeoutMilliseconds,
+				stepResponse, error );
+		}
+		else if ( "wait-for-log" == command )
+		{
+			performed = PerformSimulatorControlClientWait(
+				directory, "log-search", payload, timeoutMilliseconds,
+				stepResponse, error );
+		}
+		else
+		{
+			performed = PerformSimulatorControlClientRequest(
+				directory, command, payload, timeoutMilliseconds,
+				stepResponse, error );
+		}
+		if ( ! performed )
+		{
+			return false;
+		}
+
+		if ( ! serializedSteps.empty() )
+		{
+			serializedSteps.push_back( ',' );
+		}
+		char prefix[96];
+		snprintf(
+			prefix, sizeof( prefix ),
+			"{\"line\":%d,\"command\":", lineNumber );
+		serializedSteps.append( prefix );
+		AppendSimulatorControlJsonString( serializedSteps, command );
+		serializedSteps.append( ",\"response\":" );
+		serializedSteps.append( stepResponse );
+		serializedSteps.push_back( '}' );
+		stepCount++;
+
+		if ( ! IsSimulatorControlSuccessResponse( stepResponse ) )
+		{
+			std::string failureWithArtifacts =
+				BuildSimulatorControlFailureWithSnapshot(
+					directory, stepResponse );
+			response.assign(
+				"{\"ok\":false,\"error\":\"scenario step failed\","
+				"\"result\":{\"steps\":[" );
+			response.append( serializedSteps );
+			response.append( "],\"failure\":" );
+			response.append( failureWithArtifacts );
+			response.append( "}}" );
+			return true;
+		}
+		if ( serializedSteps.length() + 512 >
+			kSimulatorControlMaximumResponseSize )
+		{
+			error = "scenario results exceeded the maximum response size";
+			return false;
+		}
+	}
+
+	response.assign( "{\"ok\":true,\"result\":{\"steps\":[" );
+	response.append( serializedSteps );
+	char suffix[64];
+	snprintf(
+		suffix, sizeof( suffix ), "],\"count\":%d}}", stepCount );
+	response.append( suffix );
+	return true;
 }
 
 static bool
@@ -2980,26 +4209,44 @@ PrintSimulatorControlClientHelp()
 		"  [--timeout SECONDS] COMMAND [ARGUMENTS]\n"
 		"\n"
 		"Commands:\n"
-		"  status\n"
-		"  diagnostics\n"
-		"  logs [--since SEQUENCE]\n"
-		"  screenshot [PATH]\n"
-		"  tap X Y\n"
-		"  key NAME [down|up|pressed]\n"
-		"  text [TEXT]\n"
-		"  scroll X Y SCROLL_X SCROLL_Y\n"
+		"  runtime-status\n"
+		"  runtime-diagnostics\n"
+		"  runtime-logs [--since SEQUENCE]\n"
+		"  capture-screenshot [PATH]\n"
+		"  debug-snapshot [PATH]\n"
+		"  start-screen-recording PATH [--fps FPS] [--no-audio] [--show-cursor] [--overwrite]\n"
+		"  stop-screen-recording\n"
+		"  screen-recording-status\n"
+		"  display-object-tree [--cursor OFFSET]\n"
+		"  find-display-object ID|@HANDLE\n"
+		"  hit-test-display-objects X Y\n"
+		"  tap-display-object ID|@HANDLE\n"
+		"  swipe-display-object ID|@HANDLE DELTA_X DELTA_Y [STEPS]\n"
+		"  wait-for-condition [LUA EXPRESSION]\n"
+		"  wait-for-display-object ID|@HANDLE\n"
+		"  wait-for-log [TEXT]\n"
+		"  assert-condition [LUA EXPRESSION]\n"
+		"  run-scenario PATH\n"
+		"  tap-screen X Y\n"
+		"  send-touch-event PHASE X Y [X_START Y_START]\n"
+		"  swipe-screen X_START Y_START X_END Y_END [STEPS]\n"
+		"  send-mouse-event PHASE X Y [SCROLL_X SCROLL_Y]\n"
+		"  press-back-button\n"
+		"  send-key-event NAME [down|up|pressed] [--shift] [--alt] [--ctrl] [--command]\n"
+		"  type-text [TEXT]\n"
+		"  send-scroll-event X Y SCROLL_X SCROLL_Y\n"
 		"  controller connect [--id ID] [--profile PROFILE] [--player NUMBER]\n"
 		"  controller disconnect [--id ID]\n"
-		"  controller button NAME [down|up|pressed] [--id ID]\n"
-		"  controller axis NAME VALUE [--id ID]\n"
-		"  eval [LUA EXPRESSION]\n"
-		"  exec [LUA STATEMENTS]\n"
-		"  exec-file PATH\n"
-		"  inspect PATH [--cursor OFFSET]\n"
-		"  relaunch\n"
-		"  quit [EXIT CODE]\n"
+		"  controller send-button-event NAME [down|up|pressed] [--id ID]\n"
+		"  controller set-axis NAME VALUE [--id ID]\n"
+		"  evaluate-lua [LUA EXPRESSION]\n"
+		"  execute-lua [LUA STATEMENTS]\n"
+		"  execute-lua-file PATH\n"
+		"  inspect-lua-value PATH [--cursor OFFSET]\n"
+		"  relaunch-project\n"
+		"  quit-simulator [EXIT CODE]\n"
 		"\n"
-		"text, eval, and exec read standard input when their payload is omitted.\n",
+		"type-text, evaluate-lua, execute-lua, wait-for-condition, wait-for-log, and assert-condition read standard input when their payload is omitted.\n",
 		stdout );
 }
 
@@ -3088,9 +4335,12 @@ RunSimulatorControlClientInternal(
 
 	std::string command( argv[argumentIndex++] );
 	std::string payload;
-	if ( "status" == command ||
-		"diagnostics" == command ||
-		"relaunch" == command )
+	if ( "runtime-status" == command ||
+		"runtime-diagnostics" == command ||
+		"relaunch-project" == command ||
+		"press-back-button" == command ||
+		"stop-screen-recording" == command ||
+		"screen-recording-status" == command )
 	{
 		if ( argumentIndex != argc )
 		{
@@ -3100,7 +4350,7 @@ RunSimulatorControlClientInternal(
 			return true;
 		}
 	}
-	else if ( "logs" == command )
+	else if ( "runtime-logs" == command )
 	{
 		payload.assign( "0" );
 		if ( argumentIndex < argc )
@@ -3113,7 +4363,7 @@ RunSimulatorControlClientInternal(
 			{
 				fprintf(
 					stderr,
-					"Simulator control: logs accepts only --since SEQUENCE\n" );
+					"Simulator control: runtime-logs accepts only --since SEQUENCE\n" );
 				return true;
 			}
 			const char *sequence = argv[argumentIndex + 1];
@@ -3121,7 +4371,7 @@ RunSimulatorControlClientInternal(
 			{
 				fprintf(
 					stderr,
-					"Simulator control: logs sequence must be non-negative\n" );
+					"Simulator control: runtime-logs sequence must be non-negative\n" );
 				return true;
 			}
 			for ( const char *character = sequence; *character; character++ )
@@ -3130,7 +4380,7 @@ RunSimulatorControlClientInternal(
 				{
 					fprintf(
 						stderr,
-						"Simulator control: logs sequence must be non-negative\n" );
+						"Simulator control: runtime-logs sequence must be non-negative\n" );
 					return true;
 				}
 			}
@@ -3140,23 +4390,27 @@ RunSimulatorControlClientInternal(
 			if ( ERANGE == errno || ! sequenceEnd || sequenceEnd[0] )
 			{
 				fprintf(
-					stderr, "Simulator control: logs sequence is too large\n" );
+					stderr, "Simulator control: runtime-logs sequence is too large\n" );
 				return true;
 			}
 			payload.assign( sequence );
 		}
 	}
-	else if ( "screenshot" == command )
+	else if ( "capture-screenshot" == command ||
+		"debug-snapshot" == command )
 	{
 		if ( argumentIndex + 1 < argc )
 		{
 			fprintf(
 				stderr,
-				"Simulator control: screenshot accepts at most one path\n" );
+				"Simulator control: %s accepts at most one path\n",
+				command.c_str() );
 			return true;
 		}
 		const char *path = argumentIndex < argc ?
-			argv[argumentIndex] : "screenshot.png";
+			argv[argumentIndex] :
+			( "debug-snapshot" == command ?
+				"snapshot.png" : "screenshot.png" );
 		std::string outputPath = argumentIndex < argc ?
 			std::string( path ) :
 			SimulatorControlPath( directory, path );
@@ -3165,11 +4419,103 @@ RunSimulatorControlClientInternal(
 		{
 			fprintf(
 				stderr,
-				"Simulator control: screenshot expects a valid output path\n" );
+				"Simulator control: %s expects a valid output path\n",
+				command.c_str() );
 			return true;
 		}
 	}
-	else if ( "tap" == command )
+	else if ( "start-screen-recording" == command )
+	{
+		std::vector< std::string > arguments;
+		for ( int index = argumentIndex; index < argc; index++ )
+		{
+			arguments.push_back( argv[index] );
+		}
+		std::string error;
+		if ( ! BuildSimulatorControlScreenRecordingPayload(
+			arguments, payload, error ) )
+		{
+			fprintf( stderr, "Simulator control: %s\n", error.c_str() );
+			return true;
+		}
+	}
+	else if ( "display-object-tree" == command )
+	{
+		payload.assign( "0" );
+		if ( argumentIndex < argc )
+		{
+			if ( argumentIndex + 2 != argc ||
+				( ! IsSimulatorControlArgument(
+					argv[argumentIndex], "--cursor" ) &&
+					! IsSimulatorControlArgument(
+						argv[argumentIndex], "-cursor" ) ) )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: display-object-tree accepts only --cursor OFFSET\n" );
+				return true;
+			}
+			const char *cursor = argv[argumentIndex + 1];
+			if ( ! cursor[0] )
+			{
+				fprintf(
+					stderr,
+					"Simulator control: display-object-tree cursor must be non-negative\n" );
+				return true;
+			}
+			for ( const char *character = cursor; *character; character++ )
+			{
+				if ( ! isdigit( (unsigned char)*character ) )
+				{
+					fprintf(
+						stderr,
+						"Simulator control: display-object-tree cursor must be non-negative\n" );
+					return true;
+				}
+			}
+			payload.assign( cursor );
+		}
+	}
+	else if ( "find-display-object" == command ||
+		"tap-display-object" == command ||
+		"wait-for-display-object" == command )
+	{
+		if ( argumentIndex + 1 != argc || ! argv[argumentIndex][0] )
+		{
+			fprintf(
+				stderr, "Simulator control: %s expects one automationId or @handle\n",
+				command.c_str() );
+			return true;
+		}
+		payload.assign( argv[argumentIndex] );
+	}
+	else if ( "swipe-display-object" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		SimulatorControlNodeSwipe swipe;
+		std::string error;
+		if ( ! ParseSimulatorControlNodeSwipePayload(
+			payload, swipe, error ) )
+		{
+			fprintf( stderr, "Simulator control: %s\n", error.c_str() );
+			return true;
+		}
+	}
+	else if ( "hit-test-display-objects" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlTapPayload( payload, input, error ) )
+		{
+			fprintf(
+				stderr, "Simulator control: hit-test-display-objects expects finite X and Y screen coordinates\n" );
+			return true;
+		}
+	}
+	else if ( "tap-screen" == command )
 	{
 		payload = JoinSimulatorControlClientArguments(
 			argc, argv, argumentIndex );
@@ -3184,7 +4530,46 @@ RunSimulatorControlClientInternal(
 			return true;
 		}
 	}
-	else if ( "key" == command )
+	else if ( "send-touch-event" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlTouchPayload(
+			payload, input, error ) )
+		{
+			fprintf( stderr, "Simulator control: %s\n", error.c_str() );
+			return true;
+		}
+	}
+	else if ( "swipe-screen" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		SimulatorControlSwipe swipe;
+		std::string error;
+		if ( ! ParseSimulatorControlSwipePayload(
+			payload, swipe, error ) )
+		{
+			fprintf( stderr, "Simulator control: %s\n", error.c_str() );
+			return true;
+		}
+	}
+	else if ( "send-mouse-event" == command )
+	{
+		payload = JoinSimulatorControlClientArguments(
+			argc, argv, argumentIndex );
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlMousePayload(
+			payload, input, error ) )
+		{
+			fprintf( stderr, "Simulator control: %s\n", error.c_str() );
+			return true;
+		}
+	}
+	else if ( "send-key-event" == command )
 	{
 		payload = JoinSimulatorControlClientArguments(
 			argc, argv, argumentIndex );
@@ -3199,7 +4584,7 @@ RunSimulatorControlClientInternal(
 			return true;
 		}
 	}
-	else if ( "scroll" == command )
+	else if ( "send-scroll-event" == command )
 	{
 		payload = JoinSimulatorControlClientArguments(
 			argc, argv, argumentIndex );
@@ -3229,7 +4614,10 @@ RunSimulatorControlClientInternal(
 			return true;
 		}
 	}
-	else if ( "text" == command || "eval" == command || "exec" == command )
+	else if ( "type-text" == command ||
+		"evaluate-lua" == command || "execute-lua" == command ||
+		"wait-for-condition" == command ||
+		"wait-for-log" == command || "assert-condition" == command )
 	{
 		if ( argumentIndex < argc )
 		{
@@ -3244,14 +4632,23 @@ RunSimulatorControlClientInternal(
 		}
 		if ( payload.empty() )
 		{
+			const char *expectation = "Lua code";
+			if ( "type-text" == command )
+			{
+				expectation = "non-empty text";
+			}
+			else if ( "wait-for-log" == command )
+			{
+				expectation = "log text";
+			}
 			fprintf(
 				stderr, "Simulator control: %s expects %s\n",
-				command.c_str(),
-				( "text" == command ) ? "non-empty text" : "Lua code" );
+				command.c_str(), expectation );
 			return true;
 		}
 	}
-	else if ( "exec-file" == command )
+	else if ( "execute-lua-file" == command ||
+		"run-scenario" == command )
 	{
 		if ( argumentIndex + 1 != argc ||
 			! MakeSimulatorControlAbsolutePath(
@@ -3260,16 +4657,17 @@ RunSimulatorControlClientInternal(
 		{
 			fprintf(
 				stderr,
-				"Simulator control: exec-file expects one existing file path\n" );
+				"Simulator control: %s expects one existing file path\n",
+				command.c_str() );
 			return true;
 		}
 	}
-	else if ( "inspect" == command )
+	else if ( "inspect-lua-value" == command )
 	{
 		if ( argumentIndex >= argc )
 		{
 			fprintf(
-				stderr, "Simulator control: inspect expects a path\n" );
+				stderr, "Simulator control: inspect-lua-value expects a path\n" );
 			return true;
 		}
 		payload.assign( argv[argumentIndex++] );
@@ -3283,7 +4681,7 @@ RunSimulatorControlClientInternal(
 			{
 				fprintf(
 					stderr,
-					"Simulator control: inspect accepts only --cursor OFFSET\n" );
+					"Simulator control: inspect-lua-value accepts only --cursor OFFSET\n" );
 				return true;
 			}
 			const char *cursor = argv[argumentIndex + 1];
@@ -3291,7 +4689,7 @@ RunSimulatorControlClientInternal(
 			{
 				fprintf(
 					stderr,
-					"Simulator control: inspect cursor must be non-negative\n" );
+					"Simulator control: inspect-lua-value cursor must be non-negative\n" );
 				return true;
 			}
 			for ( const char *character = cursor; *character; character++ )
@@ -3300,7 +4698,7 @@ RunSimulatorControlClientInternal(
 				{
 					fprintf(
 						stderr,
-						"Simulator control: inspect cursor must be non-negative\n" );
+						"Simulator control: inspect-lua-value cursor must be non-negative\n" );
 					return true;
 				}
 			}
@@ -3312,20 +4710,20 @@ RunSimulatorControlClientInternal(
 			{
 				fprintf(
 					stderr,
-					"Simulator control: inspect cursor is too large\n" );
+					"Simulator control: inspect-lua-value cursor is too large\n" );
 				return true;
 			}
 			payload.append( "\ncursor=" );
 			payload.append( cursor );
 		}
 	}
-	else if ( "quit" == command )
+	else if ( "quit-simulator" == command )
 	{
 		payload.assign( argumentIndex < argc ? argv[argumentIndex++] : "0" );
 		if ( argumentIndex != argc )
 		{
 			fprintf(
-				stderr, "Simulator control: quit accepts one exit code\n" );
+				stderr, "Simulator control: quit-simulator accepts one exit code\n" );
 			return true;
 		}
 		for ( size_t index = 0; index < payload.length(); index++ )
@@ -3334,7 +4732,7 @@ RunSimulatorControlClientInternal(
 			{
 				fprintf(
 					stderr,
-					"Simulator control: quit exit code must be 0 through 255\n" );
+					"Simulator control: quit-simulator exit code must be 0 through 255\n" );
 				return true;
 			}
 		}
@@ -3342,7 +4740,7 @@ RunSimulatorControlClientInternal(
 		{
 			fprintf(
 				stderr,
-				"Simulator control: quit exit code must be 0 through 255\n" );
+				"Simulator control: quit-simulator exit code must be 0 through 255\n" );
 			return true;
 		}
 		errno = 0;
@@ -3354,7 +4752,7 @@ RunSimulatorControlClientInternal(
 		{
 			fprintf(
 				stderr,
-				"Simulator control: quit exit code must be 0 through 255\n" );
+				"Simulator control: quit-simulator exit code must be 0 through 255\n" );
 			return true;
 		}
 	}
@@ -3368,11 +4766,49 @@ RunSimulatorControlClientInternal(
 
 	std::string response;
 	std::string error;
-	if ( ! PerformSimulatorControlClientRequest(
-		directory, command, payload, timeoutMilliseconds, response, error ) )
+	bool performed = false;
+	if ( "wait-for-condition" == command )
+	{
+		performed = PerformSimulatorControlClientWait(
+			directory, "condition", payload, timeoutMilliseconds,
+			response, error );
+	}
+	else if ( "wait-for-display-object" == command )
+	{
+		performed = PerformSimulatorControlClientWait(
+			directory, "node-ready", payload, timeoutMilliseconds,
+			response, error );
+	}
+	else if ( "wait-for-log" == command )
+	{
+		performed = PerformSimulatorControlClientWait(
+			directory, "log-search", payload, timeoutMilliseconds,
+			response, error );
+	}
+	else if ( "run-scenario" == command )
+	{
+		performed = PerformSimulatorControlClientScenario(
+			directory, payload, timeoutMilliseconds, response, error );
+	}
+	else
+	{
+		performed = PerformSimulatorControlClientRequest(
+			directory, command, payload, timeoutMilliseconds,
+			response, error );
+	}
+	if ( ! performed )
 	{
 		fprintf( stderr, "Simulator control: %s\n", error.c_str() );
 		return true;
+	}
+	if ( ( "assert-condition" == command ||
+		"wait-for-condition" == command ||
+		"wait-for-display-object" == command ||
+		"wait-for-log" == command ) &&
+		! IsSimulatorControlSuccessResponse( response ) )
+	{
+		response = BuildSimulatorControlFailureWithSnapshot(
+			directory, response );
 	}
 
 	fwrite( response.data(), 1, response.length(), stdout );
@@ -3387,43 +4823,31 @@ ProcessSimulatorControlRequest(
 	Runtime& runtime, SimulatorControlRuntimeState& state,
 	const std::string& command, const std::string& payload, int& pendingQuitExitCode )
 {
-	if ( "status" == command )
+	if ( "runtime-status" == command )
 	{
-		char result[512];
-		snprintf(
-			result, sizeof( result ),
-			"{\"protocol\":2,\"sessionId\":\"%s\",\"generation\":%lu,"
-			"\"pid\":%ld,\"frame\":%lu,"
-			"\"applicationLoaded\":%s,\"applicationExecuting\":%s,\"suspended\":%s}",
-			state.sessionId.c_str(),
-			state.generation,
-			GetSimulatorControlProcessId(),
-			(unsigned long)runtime.GetFrame(),
-			runtime.IsProperty( Runtime::kIsApplicationLoaded ) ? "true" : "false",
-			runtime.IsProperty( Runtime::kIsApplicationExecuting ) ? "true" : "false",
-			runtime.IsSuspended() ? "true" : "false" );
-		return SimulatorControlSuccessResponse( result );
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlStatus( runtime, state ) );
 	}
 
-	if ( "diagnostics" == command )
+	if ( "runtime-diagnostics" == command )
 	{
 		return SimulatorControlSuccessResponse(
 			BuildSimulatorControlDiagnostics( state ) );
 	}
 
-	if ( "logs" == command )
+	if ( "runtime-logs" == command )
 	{
 		if ( payload.empty() )
 		{
 			return SimulatorControlErrorResponse(
-				"logs expects a non-negative sequence" );
+				"runtime-logs expects a non-negative sequence" );
 		}
 		for ( size_t index = 0; index < payload.length(); index++ )
 		{
 			if ( ! isdigit( (unsigned char)payload[index] ) )
 			{
 				return SimulatorControlErrorResponse(
-					"logs expects a non-negative sequence" );
+					"runtime-logs expects a non-negative sequence" );
 			}
 		}
 		errno = 0;
@@ -3433,13 +4857,221 @@ ProcessSimulatorControlRequest(
 		if ( ERANGE == errno || ! sequenceEnd || sequenceEnd[0] )
 		{
 			return SimulatorControlErrorResponse(
-				"logs sequence is too large" );
+				"runtime-logs sequence is too large" );
 		}
 		return SimulatorControlSuccessResponse(
 			BuildSimulatorControlLogs( state, sinceSequence ) );
 	}
 
-	if ( "screenshot" == command )
+	if ( "log-search" == command )
+	{
+		if ( payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"log-search expects non-empty text" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlLogSearch( payload ) );
+	}
+
+	if ( "display-object-tree" == command )
+	{
+		errno = 0;
+		char *cursorEnd = NULL;
+		unsigned long cursorValue =
+			strtoul( payload.c_str(), &cursorEnd, 10 );
+		if ( payload.empty() || ERANGE == errno || ! cursorEnd ||
+			cursorEnd[0] || cursorValue > INT_MAX )
+		{
+			return SimulatorControlErrorResponse(
+				"display-object-tree cursor must be a non-negative integer" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlDisplayTree( runtime, (int)cursorValue ) );
+	}
+
+	if ( "find-display-object" == command )
+	{
+		std::vector< SimulatorControlDisplayNode > nodes =
+			GetSimulatorControlDisplayNodes( runtime );
+		std::string error;
+		const SimulatorControlDisplayNode *node =
+			FindSimulatorControlDisplayNode( nodes, payload, error );
+		if ( ! node )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		std::string result;
+		AppendSimulatorControlDisplayNode(
+			result, runtime.GetDisplay(), *node );
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "node-ready" == command )
+	{
+		std::vector< SimulatorControlDisplayNode > nodes =
+			GetSimulatorControlDisplayNodes( runtime );
+		std::string error;
+		const SimulatorControlDisplayNode *node =
+			FindSimulatorControlDisplayNode( nodes, payload, error );
+		if ( ! node )
+		{
+			std::string result( "{\"satisfied\":false,\"reason\":" );
+			AppendSimulatorControlJsonString( result, error );
+			result.push_back( '}' );
+			return SimulatorControlSuccessResponse( result );
+		}
+		float x = 0.0f;
+		float y = 0.0f;
+		float width = 0.0f;
+		float height = 0.0f;
+		GetSimulatorControlScreenBounds(
+			runtime.GetDisplay(), * node->object,
+			x, y, width, height );
+		bool ready = node->visible && node->object->ShouldHitTest() &&
+			! node->object->SkipsHitTest() &&
+			node->object->CanHitTest() && width > 0.0f && height > 0.0f;
+		std::string result( "{\"satisfied\":" );
+		result.append( ready ? "true,\"node\":" : "false,\"node\":" );
+		AppendSimulatorControlDisplayNode(
+			result, runtime.GetDisplay(), *node );
+		result.push_back( '}' );
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "hit-test-display-objects" == command )
+	{
+		MSimulatorHost::Input input;
+		std::string error;
+		if ( ! ParseSimulatorControlTapPayload( payload, input, error ) )
+		{
+			return SimulatorControlErrorResponse(
+				"hit-test-display-objects expects finite X and Y screen coordinates" );
+		}
+		return SimulatorControlSuccessResponse(
+			BuildSimulatorControlHitTest( runtime, input.x, input.y ) );
+	}
+
+	if ( "tap-display-object" == command )
+	{
+		std::vector< SimulatorControlDisplayNode > nodes =
+			GetSimulatorControlDisplayNodes( runtime );
+		std::string error;
+		const SimulatorControlDisplayNode *node =
+			FindSimulatorControlDisplayNode( nodes, payload, error );
+		if ( ! node )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		const DisplayObject& object = * node->object;
+		if ( ! node->visible || ! object.ShouldHitTest() || object.SkipsHitTest() ||
+			! object.CanHitTest() || object.IsOffScreen() )
+		{
+			return SimulatorControlErrorResponse(
+				"the selected display object is not currently hittable" );
+		}
+		float x = 0.0f;
+		float y = 0.0f;
+		float width = 0.0f;
+		float height = 0.0f;
+		GetSimulatorControlScreenBounds(
+			runtime.GetDisplay(), object, x, y, width, height );
+		if ( width <= 0.0f || height <= 0.0f )
+		{
+			return SimulatorControlErrorResponse(
+				"the selected display object has empty screen bounds" );
+		}
+		const MSimulatorHost *host = runtime.Platform().GetSimulatorHost();
+		if ( ! host )
+		{
+			return SimulatorControlErrorResponse(
+				"the Simulator cannot send input to this runtime" );
+		}
+		MSimulatorHost::Input input;
+		input.type = MSimulatorHost::Input::kTouchInput;
+		input.phase = MSimulatorHost::Input::kBeganPhase;
+		input.x = input.xStart = x + width * 0.5f;
+		input.y = input.yStart = y + height * 0.5f;
+		if ( ! host->SendInput( input ) )
+		{
+			return SimulatorControlErrorResponse(
+				"the Simulator could not queue the requested tap" );
+		}
+		input.phase = MSimulatorHost::Input::kEndedPhase;
+		if ( ! host->SendInput( input ) )
+		{
+			return SimulatorControlErrorResponse(
+				"the Simulator could not queue the requested tap" );
+		}
+
+		std::string result( "{\"node\":" );
+		AppendSimulatorControlDisplayNode(
+			result, runtime.GetDisplay(), *node );
+		char coordinates[128];
+		snprintf(
+			coordinates, sizeof( coordinates ),
+			",\"x\":%.9g,\"y\":%.9g}", input.x, input.y );
+		result.append( coordinates );
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "swipe-display-object" == command )
+	{
+		SimulatorControlNodeSwipe nodeSwipe;
+		std::string error;
+		if ( ! ParseSimulatorControlNodeSwipePayload(
+			payload, nodeSwipe, error ) )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		std::vector< SimulatorControlDisplayNode > nodes =
+			GetSimulatorControlDisplayNodes( runtime );
+		const SimulatorControlDisplayNode *node =
+			FindSimulatorControlDisplayNode(
+				nodes, nodeSwipe.selector, error );
+		if ( ! node )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		if ( ! node->visible || node->object->SkipsHitTest() ||
+			! node->object->CanHitTest() )
+		{
+			return SimulatorControlErrorResponse(
+				"the selected display object is not currently hittable" );
+		}
+		float x = 0.0f;
+		float y = 0.0f;
+		float width = 0.0f;
+		float height = 0.0f;
+		GetSimulatorControlScreenBounds(
+			runtime.GetDisplay(), * node->object,
+			x, y, width, height );
+		if ( width <= 0.0f || height <= 0.0f )
+		{
+			return SimulatorControlErrorResponse(
+				"the selected display object has empty screen bounds" );
+		}
+		const MSimulatorHost *host = runtime.Platform().GetSimulatorHost();
+		if ( ! host )
+		{
+			return SimulatorControlErrorResponse(
+				"the Simulator cannot send input to this runtime" );
+		}
+		SimulatorControlSwipe swipe;
+		swipe.xStart = x + width * 0.5f;
+		swipe.yStart = y + height * 0.5f;
+		swipe.xEnd = swipe.xStart + nodeSwipe.deltaX;
+		swipe.yEnd = swipe.yStart + nodeSwipe.deltaY;
+		swipe.steps = nodeSwipe.steps;
+		if ( ! SendSimulatorControlSwipe( *host, swipe ) )
+		{
+			return SimulatorControlErrorResponse(
+				"the Simulator could not queue the requested swipe" );
+		}
+		return SimulatorControlSuccessResponse( "true" );
+	}
+
+	if ( "capture-screenshot" == command )
 	{
 		std::string result;
 		std::string error;
@@ -3451,8 +5083,106 @@ ProcessSimulatorControlRequest(
 		return SimulatorControlSuccessResponse( result );
 	}
 
-	if ( "tap" == command || "key" == command || "text" == command ||
-		"scroll" == command || "controller" == command )
+	if ( "debug-snapshot" == command )
+	{
+		std::string result;
+		std::string error;
+		if ( ! CaptureSimulatorControlSnapshot(
+			runtime, state, payload, result, error ) )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "screen-recording-status" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"screen-recording-status does not accept arguments" );
+		}
+		const MSimulatorHost *host =
+			runtime.Platform().GetSimulatorHost();
+		const MSimulatorHost::ScreenRecordingState recordingState = host ?
+			host->GetScreenRecordingState() :
+			MSimulatorHost::kScreenRecordingUnavailable;
+		std::string result( "{\"state\":" );
+		AppendSimulatorControlJsonString(
+			result,
+			SimulatorControlScreenRecordingStateName( recordingState ) );
+		result.push_back( '}' );
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "start-screen-recording" == command )
+	{
+		MSimulatorHost::ScreenRecordingOptions options;
+		std::string error;
+		if ( ! ParseSimulatorControlScreenRecordingPayload(
+			payload, options, error ) )
+		{
+			return SimulatorControlErrorResponse( error );
+		}
+		const MSimulatorHost *host =
+			runtime.Platform().GetSimulatorHost();
+		if ( ! host || ! host->StartScreenRecording( options, error ) )
+		{
+			return SimulatorControlErrorResponse(
+				error.empty() ?
+					"the Simulator could not start screen recording" : error );
+		}
+
+		std::string result( "{\"state\":" );
+		AppendSimulatorControlJsonString(
+			result,
+			SimulatorControlScreenRecordingStateName(
+				host->GetScreenRecordingState() ) );
+		result.append( ",\"path\":" );
+		AppendSimulatorControlJsonString( result, options.path );
+		char settings[128];
+		snprintf(
+			settings, sizeof( settings ),
+			",\"fps\":%d,\"includeAudio\":%s,\"showCursor\":%s,"
+			"\"overwrite\":%s}",
+			options.framesPerSecond,
+			options.includeAudio ? "true" : "false",
+			options.showsCursor ? "true" : "false",
+			options.overwrite ? "true" : "false" );
+		result.append( settings );
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "stop-screen-recording" == command )
+	{
+		if ( ! payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				"stop-screen-recording does not accept arguments" );
+		}
+		const MSimulatorHost *host =
+			runtime.Platform().GetSimulatorHost();
+		std::string error;
+		if ( ! host || ! host->StopScreenRecording( error ) )
+		{
+			return SimulatorControlErrorResponse(
+				error.empty() ?
+					"the Simulator could not stop screen recording" : error );
+		}
+		std::string result( "{\"state\":" );
+		AppendSimulatorControlJsonString(
+			result,
+			SimulatorControlScreenRecordingStateName(
+				host->GetScreenRecordingState() ) );
+		result.push_back( '}' );
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "tap-screen" == command || "send-touch-event" == command ||
+		"swipe-screen" == command || "send-mouse-event" == command ||
+		"press-back-button" == command || "send-key-event" == command ||
+		"type-text" == command || "send-scroll-event" == command ||
+		"controller" == command )
 	{
 		const MSimulatorHost *host = runtime.Platform().GetSimulatorHost();
 		if ( ! host )
@@ -3463,7 +5193,16 @@ ProcessSimulatorControlRequest(
 
 		MSimulatorHost::Input input;
 		std::string error;
-		if ( "tap" == command )
+		if ( "press-back-button" == command )
+		{
+			if ( ! payload.empty() )
+			{
+				return SimulatorControlErrorResponse(
+					"press-back-button does not accept arguments" );
+			}
+			input.type = MSimulatorHost::Input::kBackInput;
+		}
+		else if ( "tap-screen" == command )
 		{
 			if ( ! ParseSimulatorControlTapPayload(
 				payload, input, error ) )
@@ -3477,7 +5216,38 @@ ProcessSimulatorControlRequest(
 			}
 			input.phase = MSimulatorHost::Input::kEndedPhase;
 		}
-		else if ( "key" == command )
+		else if ( "send-touch-event" == command )
+		{
+			if ( ! ParseSimulatorControlTouchPayload(
+				payload, input, error ) )
+			{
+				return SimulatorControlErrorResponse( error );
+			}
+		}
+		else if ( "swipe-screen" == command )
+		{
+			SimulatorControlSwipe swipe;
+			if ( ! ParseSimulatorControlSwipePayload(
+				payload, swipe, error ) )
+			{
+				return SimulatorControlErrorResponse( error );
+			}
+			if ( ! SendSimulatorControlSwipe( *host, swipe ) )
+			{
+				return SimulatorControlErrorResponse(
+					"the Simulator could not queue the requested swipe" );
+			}
+			return SimulatorControlSuccessResponse( "true" );
+		}
+		else if ( "send-mouse-event" == command )
+		{
+			if ( ! ParseSimulatorControlMousePayload(
+				payload, input, error ) )
+			{
+				return SimulatorControlErrorResponse( error );
+			}
+		}
+		else if ( "send-key-event" == command )
 		{
 			if ( ! ParseSimulatorControlKeyPayload(
 				payload, input, error ) )
@@ -3495,12 +5265,12 @@ ProcessSimulatorControlRequest(
 				input.phase = MSimulatorHost::Input::kUpPhase;
 			}
 		}
-		else if ( "text" == command )
+		else if ( "type-text" == command )
 		{
 			if ( payload.empty() )
 			{
 				return SimulatorControlErrorResponse(
-					"text expects non-empty text" );
+					"type-text expects non-empty text" );
 			}
 			input.type = MSimulatorHost::Input::kTextInput;
 			input.text = payload;
@@ -3560,7 +5330,44 @@ ProcessSimulatorControlRequest(
 		return SimulatorControlErrorResponse( "the Lua runtime is not available" );
 	}
 
-	if ( "eval" == command || "exec" == command || "exec-file" == command )
+	if ( "condition" == command || "assert-condition" == command )
+	{
+		if ( payload.empty() )
+		{
+			return SimulatorControlErrorResponse(
+				command + " expects a Lua expression" );
+		}
+		std::string values;
+		std::string error;
+		bool satisfied = false;
+		if ( ! ExecuteSimulatorControlChunk(
+			L, payload, "=@simulator-control/condition", true, false,
+			values, error, &satisfied ) )
+		{
+			RecordSimulatorControlExecutionDiagnostic(
+				runtime, state, error );
+			WriteSimulatorControlDiagnostics( state );
+			return SimulatorControlErrorResponse( error );
+		}
+		if ( "assert-condition" == command && ! satisfied )
+		{
+			std::string response( "{\"ok\":false,\"error\":" );
+			AppendSimulatorControlJsonString(
+				response, std::string( "assertion failed: " ) + payload );
+			response.append( ",\"result\":{\"satisfied\":false,\"values\":" );
+			response.append( values );
+			response.append( "}}" );
+			return response;
+		}
+		std::string result( "{\"satisfied\":" );
+		result.append( satisfied ? "true,\"values\":" : "false,\"values\":" );
+		result.append( values );
+		result.push_back( '}' );
+		return SimulatorControlSuccessResponse( result );
+	}
+
+	if ( "evaluate-lua" == command || "execute-lua" == command ||
+		"execute-lua-file" == command )
 	{
 		if ( payload.empty() )
 		{
@@ -3569,8 +5376,8 @@ ProcessSimulatorControlRequest(
 
 		std::string jsonResult;
 		std::string error;
-		const bool isExpression = "eval" == command;
-		const bool isFile = "exec-file" == command;
+		const bool isExpression = "evaluate-lua" == command;
+		const bool isFile = "execute-lua-file" == command;
 		const char *chunkName =
 			isExpression ? "=@simulator-control/eval" : "=@simulator-control/exec";
 		if ( ! ExecuteSimulatorControlChunk(
@@ -3584,7 +5391,7 @@ ProcessSimulatorControlRequest(
 		return SimulatorControlSuccessResponse( jsonResult );
 	}
 
-	if ( "inspect" == command )
+	if ( "inspect-lua-value" == command )
 	{
 		std::string path;
 		std::string error;
@@ -3605,7 +5412,7 @@ ProcessSimulatorControlRequest(
 		return SimulatorControlSuccessResponse( jsonResult );
 	}
 
-	if ( "relaunch" == command )
+	if ( "relaunch-project" == command )
 	{
 		const MSimulatorHost *host = runtime.Platform().GetSimulatorHost();
 		if ( ! host || ! host->Relaunch() )
@@ -3615,7 +5422,7 @@ ProcessSimulatorControlRequest(
 		return SimulatorControlSuccessResponse( "true" );
 	}
 
-	if ( "quit" == command )
+	if ( "quit-simulator" == command )
 	{
 		int exitCode = 0;
 		if ( ! payload.empty() )
@@ -3625,7 +5432,7 @@ ProcessSimulatorControlRequest(
 				if ( ! isdigit( (unsigned char)payload[index] ) )
 				{
 					return SimulatorControlErrorResponse(
-						"quit exit code must be an integer between 0 and 255" );
+						"quit-simulator exit code must be an integer between 0 and 255" );
 				}
 			}
 			errno = 0;
@@ -3636,7 +5443,7 @@ ProcessSimulatorControlRequest(
 				parsedExitCode > 255 )
 			{
 				return SimulatorControlErrorResponse(
-					"quit exit code must be an integer between 0 and 255" );
+					"quit-simulator exit code must be an integer between 0 and 255" );
 			}
 			exitCode = (int)parsedExitCode;
 		}

@@ -1,0 +1,8 @@
+-- Run this after launching the example project in a controllable Simulator.
+wait-for-display-object playButton
+find-display-object playButton
+tap-display-object playButton
+wait-for-condition automationExample.started
+wait-for-log PLAY_BUTTON_TAPPED
+assert-condition automationExample.tapCount == 1
+debug-snapshot
