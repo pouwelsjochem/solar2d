@@ -61,6 +61,42 @@ unobstructed surface. Pass
 `-simulator-rounded-corners YES` or other launch-time device configuration flags
 when device chrome or a specific geometry matters.
 
+## Screen recording
+
+On macOS 15 or later, the Simulator's **File > Start Screen Recording...** command
+records the device view directly to an H.264 `.mp4`. The capture and hardware
+encoding are handled by ScreenCaptureKit outside Solar2D's render loop. The
+selected capture area is fixed when recording starts, so keep the Simulator
+window in place until recording ends.
+
+Simulator Lua code can control the same recorder:
+
+```lua
+local path = system.pathForFile("capture.mp4", system.DocumentsDirectory)
+
+local accepted, message = simulator.startScreenRecording({
+	path = path,             -- Absolute .mp4 path (required).
+	fps = 60,                -- Optional; defaults to 60 (1 through 240).
+	includeAudio = true,     -- Optional; defaults to true.
+	showCursor = false,      -- Optional; defaults to false.
+	overwrite = true         -- Optional; defaults to false.
+}, function(event)
+	print(event.phase, event.path, event.errorMessage)
+	-- event.phase is "started", "ended", or "failed".
+end)
+
+if not accepted then
+	print(message)
+end
+
+-- Finish and finalize the file later.
+-- simulator.stopScreenRecording()
+```
+
+`simulator.getScreenRecordingState()` returns `"idle"`, `"starting"`,
+`"recording"`, `"stopping"`, or `"unavailable"`. Recording completion is also
+dispatched globally as a `screenRecording` Runtime event.
+
 # Building your app with CoronaBuilder
 
 The Simulator only runs projects; it does not provide build dialogs. Device and desktop packages are built separately with `CoronaBuilder`.

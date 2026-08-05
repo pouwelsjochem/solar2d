@@ -743,6 +743,34 @@ end
 
 if "simulator" == system.getInfo("environment") then
 	simulator = require("_simulator")
+
+	-- Screen recording is asynchronous. The native API dispatches a
+	-- "screenRecording" Runtime event; this wrapper offers the more convenient
+	-- per-recording listener form while preserving global Runtime listeners.
+	local nativeStartScreenRecording = simulator.startScreenRecording
+	simulator.startScreenRecording = function(options, listener)
+		if listener ~= nil and type(listener) ~= "function" and
+			(type(listener) ~= "table" or type(listener.screenRecording) ~= "function")
+		then
+			error("simulator.startScreenRecording() listener must be a function or table listener", 2)
+		end
+
+		local accepted, message = nativeStartScreenRecording(options)
+		if accepted and listener ~= nil then
+			local runtimeListener
+			runtimeListener = function(event)
+				if event.phase == "ended" or event.phase == "failed" then
+					Runtime:removeEventListener("screenRecording", runtimeListener)
+				end
+				if type(listener) == "function" then
+					return listener(event)
+				end
+				return listener:screenRecording(event)
+			end
+			Runtime:addEventListener("screenRecording", runtimeListener)
+		end
+		return accepted, message
+	end
 end
 --------------------------------------------------------------------------------
 -- Startup Logging

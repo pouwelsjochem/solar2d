@@ -99,6 +99,8 @@ static NSString* kWindowMenuItemName = @"Window";
 static NSString* kViewAsMenuItemName = @"View As";
 static NSString* kRoundedCornersMenuItemName = @"Rounded Corners";
 static NSString* kShowSafeAreaGuidesMenuItemName = @"Show Safe Area Guides";
+static NSString* kStartScreenRecordingMenuItemName = @"Start Screen Recording\u2026";
+static NSString* kStopScreenRecordingMenuItemName = @"Stop Screen Recording";
 static NSString* kCustomDevicePreferenceValue = @"__custom__";
 static NSString* kCustomDeviceWidthPreference = @"customDeviceWidth";
 static NSString* kCustomDeviceHeightPreference = @"customDeviceHeight";
@@ -118,6 +120,7 @@ static NSString* kSimulatorRoundedCornersArgument = @"simulator-rounded-corners"
 
 // TODO: Remove once the Beta is over
 static const int       kClearProjectSandboxMenuTag = 1001;
+static const int       kScreenRecordingMenuTag = 1002;
 static const int       kCustomDeviceMenuTag = -1000;
 static const int       kEditCustomDeviceMenuTag = -1001;
 static const NSInteger kDefaultCustomDeviceWidth = 800;
@@ -545,7 +548,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 @end
 
-@interface AppDelegate ()
+@interface AppDelegate () <SimulatorScreenRecorderDelegate>
 
 @property (nonatomic, readwrite, copy) NSString* fAppPath;
 
@@ -593,6 +596,12 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (IBAction) editCustomDeviceAction:(id)sender;
 - (IBAction) toggleRoundedCornersAction:(id)sender;
 - (IBAction) toggleSafeAreaGuidesAction:(id)sender;
+- (void) setupScreenRecordingMenuItem;
+- (void) updateScreenRecordingMenuItem;
+- (void) presentScreenRecordingError:(NSString *)message;
+- (void) dispatchScreenRecordingEventWithPhase:(NSString *)phase
+	outputURL:(NSURL *)outputURL
+	error:(NSError *)error;
 @end
 
 
@@ -647,6 +656,16 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		fBackgroundedRuntime = NULL;
 		fActiveSimulatorDeviceInfo = nil;
 		fTemporarySimulatorDeviceInfo = nil;
+		fScreenRecorder = nil;
+		if (@available(macOS 15.0, *))
+		{
+			fScreenRecorder = [[SimulatorScreenRecorder alloc] initWithDelegate:self];
+		}
+		fScreenRecordingMenuItem = nil;
+		fScreenRecordingProjectPath = nil;
+		fScreenRecordingRelaunchCount = 0;
+		fScreenRecordingStartedFromMenu = NO;
+		fTerminateAfterScreenRecording = NO;
 		// Register corona:// URL scheme handler
 		[[NSAppleEventManager sharedAppleEventManager]
 		 setEventHandler:self
@@ -1819,7 +1838,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
     NSMenu *appMenu = [[NSApplication sharedApplication] mainMenu];
     NSMenuItem *windowMenuItem = [appMenu itemWithTitle:kWindowMenuItemName];
     NSMenu *windowMenu = [windowMenuItem submenu];
-    [windowMenu setDelegate:self];
+	[windowMenu setDelegate:self];
+	[self setupScreenRecordingMenuItem];
 
 	if( NO == self.launchedWithFile )
 	{
@@ -1999,6 +2019,16 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 -(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
+	if (fScreenRecorder && [fScreenRecorder state] != SimulatorScreenRecorderStateIdle)
+	{
+		fTerminateAfterScreenRecording = YES;
+		NSString *errorMessage = nil;
+		if ([self stopSimulatorScreenRecording:&errorMessage])
+		{
+			return NSTerminateLater;
+		}
+		fTerminateAfterScreenRecording = NO;
+	}
 	return NSTerminateNow;
 }
 
@@ -2015,6 +2045,11 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 
 	delete fServices;
 	delete fConsolePlatform;
+	[fScreenRecorder setDelegate:nil];
+	[fScreenRecorder release];
+	fScreenRecorder = nil;
+	[fScreenRecordingProjectPath release];
+	fScreenRecordingProjectPath = nil;
 
 	[fAppPath release];
 	[self clearTemporarySimulatorConfiguration];
@@ -2489,6 +2524,10 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 - (void) closeSimulator:(id)sender
 {
 	using namespace Rtt;
+	if (fScreenRecorder && [fScreenRecorder state] != SimulatorScreenRecorderStateIdle)
+	{
+		[fScreenRecorder stopRecording:nil];
+	}
 
 	[NSObject cancelPreviousPerformRequestsWithTarget:self
 		selector:@selector(resumeSimulatorAfterBackground)
@@ -2506,6 +2545,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		// process to connect to debugger
 		fOptions.connectToDebugger = false;
 	}
+	[self updateScreenRecordingMenuItem];
 }
 
 -(IBAction)close:(id)sender
@@ -2529,6 +2569,356 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	if (! [fAppPath isEqualToString:@""])
 	{
 		[[NSWorkspace sharedWorkspace] selectFile:nil inFileViewerRootedAtPath:fAppPath];
+	}
+}
+
+- (void) setupScreenRecordingMenuItem
+{
+	NSMenu *appMenu = [[NSApplication sharedApplication] mainMenu];
+	NSMenuItem *fileMenuItem = [appMenu itemWithTitle:@"File"];
+	NSMenu *fileMenu = [fileMenuItem submenu];
+	if (!fileMenu)
+	{
+		return;
+	}
+
+	fScreenRecordingMenuItem = [fileMenu itemWithTag:kScreenRecordingMenuTag];
+	if (!fScreenRecordingMenuItem)
+	{
+		NSMenuItem *clearSandboxItem = [fileMenu itemWithTag:kClearProjectSandboxMenuTag];
+		NSInteger insertionIndex = clearSandboxItem ? [fileMenu indexOfItem:clearSandboxItem] : [fileMenu numberOfItems];
+		fScreenRecordingMenuItem = [fileMenu insertItemWithTitle:kStartScreenRecordingMenuItemName
+			action:@selector(toggleScreenRecording:)
+			keyEquivalent:@""
+			atIndex:insertionIndex];
+		[fScreenRecordingMenuItem setTag:kScreenRecordingMenuTag];
+		[fScreenRecordingMenuItem setTarget:self];
+	}
+	[self updateScreenRecordingMenuItem];
+}
+
+- (void) updateScreenRecordingMenuItem
+{
+	if (!fScreenRecordingMenuItem)
+	{
+		return;
+	}
+
+	SimulatorScreenRecorderState state = fScreenRecorder ?
+		[fScreenRecorder state] : SimulatorScreenRecorderStateIdle;
+	BOOL isActive = state != SimulatorScreenRecorderStateIdle;
+	[fScreenRecordingMenuItem setTitle:isActive ?
+		kStopScreenRecordingMenuItemName : kStartScreenRecordingMenuItemName];
+	[fScreenRecordingMenuItem setEnabled:fScreenRecorder != nil && (isActive || fSimulator != NULL)];
+}
+
+- (void) presentScreenRecordingError:(NSString *)message
+{
+	if (fAgentMode || applicationIsTerminating || ![message length])
+	{
+		return;
+	}
+
+	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+	[alert setAlertStyle:NSAlertStyleCritical];
+	[alert setMessageText:@"Screen Recording Failed"];
+	[alert setInformativeText:message];
+	[alert addButtonWithTitle:@"OK"];
+	NSWindow *window = [self currentWindow];
+	if (window)
+	{
+		[alert beginSheetModalForWindow:window completionHandler:nil];
+	}
+	else
+	{
+		[alert runModal];
+	}
+}
+
+- (IBAction)toggleScreenRecording:(id)sender
+{
+	if (!fScreenRecorder)
+	{
+		[self presentScreenRecordingError:@"Screen recording requires macOS 15 or later."];
+		return;
+	}
+
+	if ([fScreenRecorder state] != SimulatorScreenRecorderStateIdle)
+	{
+		NSString *errorMessage = nil;
+		if (![self stopSimulatorScreenRecording:&errorMessage])
+		{
+			[self presentScreenRecordingError:errorMessage];
+		}
+		return;
+	}
+
+	NSSavePanel *panel = [NSSavePanel savePanel];
+	[panel setCanCreateDirectories:YES];
+	[panel setAllowedFileTypes:[NSArray arrayWithObject:@"mp4"]];
+	[panel setAllowsOtherFileTypes:NO];
+
+	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	[formatter setDateFormat:@"yyyy-MM-dd 'at' HH.mm.ss"];
+	NSString *projectName = [fAppPath lastPathComponent];
+	if (![projectName length])
+	{
+		projectName = @"Solar2D";
+	}
+	[panel setNameFieldStringValue:[NSString stringWithFormat:@"%@ %@.mp4",
+		projectName, [formatter stringFromDate:[NSDate date]]]];
+	NSArray *moviesDirectories = NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES);
+	if ([moviesDirectories count] > 0)
+	{
+		[panel setDirectoryURL:[NSURL fileURLWithPath:[moviesDirectories objectAtIndex:0] isDirectory:YES]];
+	}
+
+	void (^startRecording)(NSModalResponse) = ^(NSModalResponse response)
+	{
+		if (response != NSModalResponseOK)
+		{
+			return;
+		}
+
+		NSInteger framesPerSecond = 60;
+		Rtt::Runtime *runtime = [self runtime];
+		if (runtime)
+		{
+			framesPerSecond = (NSInteger)runtime->GetFPS();
+		}
+		NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+			[[panel URL] path], @"path",
+			[NSNumber numberWithInteger:framesPerSecond], @"fps",
+			[NSNumber numberWithBool:YES], @"includeAudio",
+			[NSNumber numberWithBool:NO], @"showCursor",
+			[NSNumber numberWithBool:YES], @"overwrite",
+			[NSNumber numberWithBool:YES], @"startedFromMenu",
+			nil];
+		NSString *errorMessage = nil;
+		if (![self startSimulatorScreenRecording:options errorMessage:&errorMessage])
+		{
+			[self presentScreenRecordingError:errorMessage];
+		}
+	};
+
+	NSWindow *window = [self currentWindow];
+	if (window)
+	{
+		[panel beginSheetModalForWindow:window completionHandler:startRecording];
+	}
+	else
+	{
+		startRecording([panel runModal]);
+	}
+}
+
+-(BOOL)startSimulatorScreenRecording:(NSDictionary*)options errorMessage:(NSString**)errorMessage
+{
+	if (!fScreenRecorder)
+	{
+		if (errorMessage)
+		{
+			*errorMessage = @"Screen recording requires macOS 15 or later.";
+		}
+		return NO;
+	}
+	if (!fSimulator || ![self runtime] || ![[self layerHostView] window])
+	{
+		if (errorMessage)
+		{
+			*errorMessage = @"A Solar2D project must be running before recording can start.";
+		}
+		return NO;
+	}
+
+	NSString *path = [[options objectForKey:@"path"] stringByExpandingTildeInPath];
+	path = [path stringByStandardizingPath];
+	if (![path length] || ![[[path pathExtension] lowercaseString] isEqualToString:@"mp4"])
+	{
+		if (errorMessage)
+		{
+			*errorMessage = @"The screen recording path must end in .mp4.";
+		}
+		return NO;
+	}
+	if (![path isAbsolutePath])
+	{
+		if (errorMessage)
+		{
+			*errorMessage = @"The screen recording path must be absolute.";
+		}
+		return NO;
+	}
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	BOOL parentIsDirectory = NO;
+	NSString *parentPath = [path stringByDeletingLastPathComponent];
+	if (![fileManager fileExistsAtPath:parentPath isDirectory:&parentIsDirectory] || !parentIsDirectory)
+	{
+		if (errorMessage)
+		{
+			*errorMessage = @"The screen recording's destination directory does not exist.";
+		}
+		return NO;
+	}
+
+	if ([fileManager fileExistsAtPath:path])
+	{
+		if (![[options objectForKey:@"overwrite"] boolValue])
+		{
+			if (errorMessage)
+			{
+				*errorMessage = @"A file already exists at the screen recording path.";
+			}
+			return NO;
+		}
+		NSError *removeError = nil;
+		if (![fileManager removeItemAtPath:path error:&removeError])
+		{
+			if (errorMessage)
+			{
+				*errorMessage = [removeError localizedDescription];
+			}
+			return NO;
+		}
+	}
+
+	NSInteger framesPerSecond = [[options objectForKey:@"fps"] integerValue];
+	BOOL includeAudio = [[options objectForKey:@"includeAudio"] boolValue];
+	BOOL showsCursor = [[options objectForKey:@"showCursor"] boolValue];
+	NSError *startError = nil;
+	BOOL accepted = [fScreenRecorder startRecordingWindow:[self currentWindow]
+		sourceView:[self layerHostView]
+		outputURL:[NSURL fileURLWithPath:path]
+		framesPerSecond:framesPerSecond
+		includeAudio:includeAudio
+		showsCursor:showsCursor
+		error:&startError];
+	if (!accepted)
+	{
+		if (errorMessage)
+		{
+			*errorMessage = [startError localizedDescription];
+		}
+		return NO;
+	}
+
+	[fScreenRecordingProjectPath release];
+	fScreenRecordingProjectPath = [fAppPath copy];
+	fScreenRecordingRelaunchCount = fRelaunchCount;
+	fScreenRecordingStartedFromMenu = [[options objectForKey:@"startedFromMenu"] boolValue];
+	[self updateScreenRecordingMenuItem];
+	return YES;
+}
+
+-(BOOL)stopSimulatorScreenRecording:(NSString**)errorMessage
+{
+	if (!fScreenRecorder)
+	{
+		if (errorMessage)
+		{
+			*errorMessage = @"Screen recording requires macOS 15 or later.";
+		}
+		return NO;
+	}
+
+	NSError *stopError = nil;
+	BOOL accepted = [fScreenRecorder stopRecording:&stopError];
+	if (!accepted && errorMessage)
+	{
+		*errorMessage = [stopError localizedDescription];
+	}
+	[self updateScreenRecordingMenuItem];
+	return accepted;
+}
+
+-(NSString*)simulatorScreenRecordingState
+{
+	if (!fScreenRecorder)
+	{
+		return @"unavailable";
+	}
+	switch ([fScreenRecorder state])
+	{
+		case SimulatorScreenRecorderStateStarting: return @"starting";
+		case SimulatorScreenRecorderStateRecording: return @"recording";
+		case SimulatorScreenRecorderStateStopping: return @"stopping";
+		case SimulatorScreenRecorderStateIdle: return @"idle";
+	}
+	return @"unavailable";
+}
+
+- (void) dispatchScreenRecordingEventWithPhase:(NSString *)phase
+	outputURL:(NSURL *)outputURL
+	error:(NSError *)error
+{
+	BOOL isCurrentRuntime = fSimulator != NULL &&
+		fScreenRecordingRelaunchCount == fRelaunchCount &&
+		((!fScreenRecordingProjectPath && !fAppPath) || [fScreenRecordingProjectPath isEqualToString:fAppPath]);
+	Rtt::Runtime *runtime = isCurrentRuntime ? [self runtime] : NULL;
+	if (!runtime)
+	{
+		return;
+	}
+
+	Rtt::RuntimeGuard guard(*runtime);
+	lua_State *L = runtime->VMContext().L();
+	Rtt_LUA_STACK_GUARD(L);
+	CoronaLuaNewEvent(L, "screenRecording");
+	lua_pushstring(L, [phase UTF8String]);
+	lua_setfield(L, -2, "phase");
+	if (outputURL)
+	{
+		lua_pushstring(L, [[outputURL path] UTF8String]);
+		lua_setfield(L, -2, "path");
+	}
+	lua_pushboolean(L, error != nil);
+	lua_setfield(L, -2, "isError");
+	if (error)
+	{
+		lua_pushstring(L, [[error localizedDescription] UTF8String]);
+		lua_setfield(L, -2, "errorMessage");
+	}
+	CoronaLuaDispatchRuntimeEvent(L, 0);
+}
+
+- (void)screenRecorder:(SimulatorScreenRecorder *)recorder
+	didChangePhase:(NSString *)phase
+	outputURL:(NSURL *)outputURL
+	error:(NSError *)error
+{
+	[self updateScreenRecordingMenuItem];
+	[self dispatchScreenRecordingEventWithPhase:phase outputURL:outputURL error:error];
+
+	BOOL isTerminal = [phase isEqualToString:@"ended"] || [phase isEqualToString:@"failed"];
+	if (!isTerminal)
+	{
+		return;
+	}
+
+	BOOL startedFromMenu = fScreenRecordingStartedFromMenu;
+	fScreenRecordingStartedFromMenu = NO;
+	[fScreenRecordingProjectPath release];
+	fScreenRecordingProjectPath = nil;
+	if (startedFromMenu && error)
+	{
+		[self presentScreenRecordingError:[error localizedDescription]];
+	}
+	else if (startedFromMenu && outputURL &&
+		[[NSFileManager defaultManager] fileExistsAtPath:[outputURL path]])
+	{
+		[self notifyWithTitle:@"Screen Recording Saved"
+			description:[outputURL path]
+			iconData:nil];
+	}
+
+	if (fTerminateAfterScreenRecording)
+	{
+		fTerminateAfterScreenRecording = NO;
+		dispatch_async(dispatch_get_main_queue(),
+			^{
+				[[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
+			});
 	}
 }
 
@@ -2840,6 +3230,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	}
 
 	[self updateSafeAreaGuideOverlay];
+	[self updateScreenRecordingMenuItem];
 	
 	[self didChangeValueForKey:@"suspendResumeLabel"];
 }

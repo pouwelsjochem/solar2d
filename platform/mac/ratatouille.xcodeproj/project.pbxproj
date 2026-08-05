@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0B200011F00000000000001 /* SimulatorScreenRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0B200121F00000000000001 /* SimulatorScreenRecorder.mm */; };
+		D0B200021F00000000000001 /* ScreenCaptureKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0B200131F00000000000001 /* ScreenCaptureKit.framework */; };
 		000CE76712B73EE300D9B6A4 /* Rtt_Archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6BA12B73EE300D9B6A4 /* Rtt_Archive.cpp */; };
 		000CE78212B73EE300D9B6A4 /* Rtt_Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D512B73EE300D9B6A4 /* Rtt_Event.cpp */; };
 		000CE78412B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000CE6D712B73EE300D9B6A4 /* Rtt_ExplicitTemplates.cpp */; };
@@ -1506,6 +1508,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D0B200111F00000000000001 /* SimulatorScreenRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorScreenRecorder.h; sourceTree = "<group>"; };
+		D0B200121F00000000000001 /* SimulatorScreenRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimulatorScreenRecorder.mm; sourceTree = "<group>"; };
+		D0B200131F00000000000001 /* ScreenCaptureKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScreenCaptureKit.framework; path = System/Library/Frameworks/ScreenCaptureKit.framework; sourceTree = SDKROOT; };
 		E09783F1FC3227F7D287FA63 /* Solar2D.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Solar2D.xcconfig; path = ../apple/Solar2D.xcconfig; sourceTree = "<group>"; };
 		000CE6BA12B73EE300D9B6A4 /* Rtt_Archive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rtt_Archive.cpp; sourceTree = "<group>"; };
 		000CE6BB12B73EE300D9B6A4 /* Rtt_Archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtt_Archive.h; sourceTree = "<group>"; };
@@ -2285,6 +2290,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0B200021F00000000000001 /* ScreenCaptureKit.framework in Frameworks */,
 				C2C59B2C1E2812FF001DF51E /* CoreMedia.framework in Frameworks */,
 				F5567D4A2ADC73CB008CD550 /* network.dylib in Frameworks */,
 				C2C59B2A1E2812F9001DF51E /* AVFoundation.framework in Frameworks */,
@@ -2931,6 +2937,8 @@
 				000CE8DA12B7404400D9B6A4 /* shared */,
 				00B73CDD12B720C90057F594 /* AppDelegate.h */,
 				00B73CDC12B720C90057F594 /* AppDelegate.mm */,
+				D0B200111F00000000000001 /* SimulatorScreenRecorder.h */,
+				D0B200121F00000000000001 /* SimulatorScreenRecorder.mm */,
 				00B73D1A12B720C90057F594 /* DimView.h */,
 				00B73D1B12B720C90057F594 /* DimView.m */,
 				00B73CD912B720C90057F594 /* main.m */,
@@ -3100,6 +3108,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0B200131F00000000000001 /* ScreenCaptureKit.framework */,
 				F5FED0962512248E00AE2911 /* StoreKit.framework */,
 				F5F0542520374CBC007E92B0 /* CoreAudioKit.framework */,
 				F5F0542320374CB5007E92B0 /* CoreAudio.framework */,
@@ -4778,6 +4787,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C24ACF7B1B38D1600049599D /* AppDelegate.mm in Sources */,
+				D0B200011F00000000000001 /* SimulatorScreenRecorder.mm in Sources */,
 				C2F8376D1AC205FA00D33D6E /* CoronaViewRuntimeDelegate.mm in Sources */,
 				F57D176C1BE25C7C00AABAC1 /* Rtt_AppleInputHIDDeviceListener.mm in Sources */,
 				00B73DAC12B720CA0057F594 /* DimView.m in Sources */,

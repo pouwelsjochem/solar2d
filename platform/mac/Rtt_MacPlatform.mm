@@ -2071,6 +2071,72 @@ MacGUIPlatform::Quit( int exitCode ) const
 	return true;
 }
 
+bool
+MacGUIPlatform::StartScreenRecording(
+	const MSimulatorHost::ScreenRecordingOptions& options, std::string& error ) const
+{
+	NSString *path = [NSString stringWithUTF8String:options.path.c_str()];
+	if ( ! path )
+	{
+		error = "screen recording path is not valid UTF-8";
+		return false;
+	}
+
+	NSDictionary *recordingOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+		path, @"path",
+		[NSNumber numberWithInt:options.framesPerSecond], @"fps",
+		[NSNumber numberWithBool:options.includeAudio], @"includeAudio",
+		[NSNumber numberWithBool:options.showsCursor], @"showCursor",
+		[NSNumber numberWithBool:options.overwrite], @"overwrite",
+		[NSNumber numberWithBool:NO], @"startedFromMenu",
+		nil];
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	NSString *errorMessage = nil;
+	if ( ! [appDelegate startSimulatorScreenRecording:recordingOptions errorMessage:&errorMessage] )
+	{
+		error = errorMessage ? [errorMessage UTF8String] : "the Simulator could not start screen recording";
+		return false;
+	}
+	return true;
+}
+
+bool
+MacGUIPlatform::StopScreenRecording( std::string& error ) const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	NSString *errorMessage = nil;
+	if ( ! [appDelegate stopSimulatorScreenRecording:&errorMessage] )
+	{
+		error = errorMessage ? [errorMessage UTF8String] : "the Simulator could not stop screen recording";
+		return false;
+	}
+	return true;
+}
+
+MSimulatorHost::ScreenRecordingState
+MacGUIPlatform::GetScreenRecordingState() const
+{
+	AppDelegate *appDelegate = (AppDelegate*)[[NSApplication sharedApplication] delegate];
+	NSString *state = [appDelegate simulatorScreenRecordingState];
+	if ( [state isEqualToString:@"idle"] )
+	{
+		return MSimulatorHost::kScreenRecordingIdle;
+	}
+	if ( [state isEqualToString:@"starting"] )
+	{
+		return MSimulatorHost::kScreenRecordingStarting;
+	}
+	if ( [state isEqualToString:@"recording"] )
+	{
+		return MSimulatorHost::kScreenRecordingRecording;
+	}
+	if ( [state isEqualToString:@"stopping"] )
+	{
+		return MSimulatorHost::kScreenRecordingStopping;
+	}
+	return MSimulatorHost::kScreenRecordingUnavailable;
+}
+
 #endif // Rtt_AUTHORING_SIMULATOR
 
 bool

@@ -291,6 +291,33 @@ class MSimulatorHost
 			double zRotation;
 		};
 
+		struct ScreenRecordingOptions
+		{
+			ScreenRecordingOptions()
+			: framesPerSecond( 60 ),
+			  includeAudio( true ),
+			  showsCursor( false ),
+			  overwrite( false )
+			{
+			}
+
+			std::string path;
+			int framesPerSecond;
+			bool includeAudio;
+			bool showsCursor;
+			bool overwrite;
+		};
+
+		typedef enum _ScreenRecordingState
+		{
+			kScreenRecordingUnavailable = 0,
+			kScreenRecordingIdle,
+			kScreenRecordingStarting,
+			kScreenRecordingRecording,
+			kScreenRecordingStopping
+		}
+		ScreenRecordingState;
+
 	public:
 		virtual bool GetCurrentDevice( Device& result ) const = 0;
 		virtual bool GetState( State& result ) const = 0;
@@ -302,6 +329,21 @@ class MSimulatorHost
 		virtual bool SendInput( const Input& input ) const = 0;
 		virtual bool Simulate( const Event& event ) const = 0;
 		virtual bool Quit( int exitCode ) const = 0;
+		virtual bool StartScreenRecording( const ScreenRecordingOptions& options, std::string& error ) const
+		{
+			(void)options;
+			error = "screen recording is not supported by this Simulator";
+			return false;
+		}
+		virtual bool StopScreenRecording( std::string& error ) const
+		{
+			error = "screen recording is not supported by this Simulator";
+			return false;
+		}
+		virtual ScreenRecordingState GetScreenRecordingState() const
+		{
+			return kScreenRecordingUnavailable;
+		}
 };
 
 // ----------------------------------------------------------------------------

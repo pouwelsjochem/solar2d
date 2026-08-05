@@ -12,6 +12,7 @@
 //#import <Foundation/NSGeometry.h>
 //#import <AppKit/NSNibDeclarations.h>
 #import "GLView.h"
+#import "SimulatorScreenRecorder.h"
 #import <AppKit/AppKit.h>
 #import "NSString+Extensions.h"
 
@@ -77,6 +78,12 @@ namespace Rtt
 	NSDictionary *fActiveSimulatorDeviceInfo;
 	NSDictionary *fTemporarySimulatorDeviceInfo;
 	BOOL fAgentMode;
+	SimulatorScreenRecorder *fScreenRecorder;
+	NSMenuItem *fScreenRecordingMenuItem;
+	NSString *fScreenRecordingProjectPath;
+	long fScreenRecordingRelaunchCount;
+	BOOL fScreenRecordingStartedFromMenu;
+	BOOL fTerminateAfterScreenRecording;
 }
 
 @property (nonatomic, readonly, getter=simulator) Rtt::MacSimulator *fSimulator;
@@ -124,9 +131,13 @@ namespace Rtt
 -(NSArray*)simulatorDevices;
 -(BOOL)dispatchSimulatorInput:(NSDictionary*)input;
 -(BOOL)simulateSimulatorEvent:(NSDictionary*)event;
+-(BOOL)startSimulatorScreenRecording:(NSDictionary*)options errorMessage:(NSString**)errorMessage;
+-(BOOL)stopSimulatorScreenRecording:(NSString**)errorMessage;
+-(NSString*)simulatorScreenRecordingState;
 
 -(IBAction)launchSimulator:(id)sender;
 -(IBAction)toggleSuspendResume:(id)sender;
+-(IBAction)toggleScreenRecording:(id)sender;
 
 -(NSWindow*)currentWindow;
 -(void)notifyRuntimeError:(NSString *)message;

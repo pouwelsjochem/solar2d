@@ -166,6 +166,26 @@ ReadInputBoolean( lua_State *L, int tableIndex, const char *key, bool& result )
 	lua_pop( L, 1 );
 }
 
+static bool
+ReadOptionalBoolean(
+	lua_State *L, int tableIndex, const char *key, const char *context, bool defaultValue )
+{
+	lua_getfield( L, tableIndex, key );
+	if ( lua_isnil( L, -1 ) )
+	{
+		lua_pop( L, 1 );
+		return defaultValue;
+	}
+	if ( lua_type( L, -1 ) != LUA_TBOOLEAN )
+	{
+		luaL_error( L, "%s must be a boolean", context );
+		return defaultValue;
+	}
+	bool result = 0 != lua_toboolean( L, -1 );
+	lua_pop( L, 1 );
+	return result;
+}
+
 static std::string
 LuaValueDescription( lua_State *L, int index )
 {
@@ -891,6 +911,101 @@ QuitSimulator( lua_State *L )
 	return 1;
 }
 
+static int
+StartScreenRecording( lua_State *L )
+{
+	if ( ! lua_istable( L, 1 ) )
+	{
+		return luaL_error( L, "simulator.startScreenRecording() expects an options table" );
+	}
+	const char * const allowedOptions[] =
+	{
+		"path", "fps", "includeAudio", "showCursor", "overwrite", NULL
+	};
+	ValidateOptionKeys( L, 1, allowedOptions, "screen recording" );
+
+	MSimulatorHost::ScreenRecordingOptions options;
+	options.path = ReadRequiredString(
+		L, 1, "path", "screen recording path must be a string ending in .mp4" );
+	if ( options.path.empty() )
+	{
+		return luaL_error( L, "screen recording path cannot be empty" );
+	}
+
+	double framesPerSecond = ReadFiniteNumber(
+		L, 1, "fps", "screen recording fps", false, 60.0 );
+	if ( ! IsInteger( framesPerSecond ) || framesPerSecond < 1.0 || framesPerSecond > 240.0 )
+	{
+		return luaL_error( L, "screen recording fps must be an integer between 1 and 240" );
+	}
+	options.framesPerSecond = (int)framesPerSecond;
+	options.includeAudio = ReadOptionalBoolean(
+		L, 1, "includeAudio", "screen recording includeAudio", true );
+	options.showsCursor = ReadOptionalBoolean(
+		L, 1, "showCursor", "screen recording showCursor", false );
+	options.overwrite = ReadOptionalBoolean(
+		L, 1, "overwrite", "screen recording overwrite", false );
+
+	const MSimulatorHost *host = GetSimulatorHost( L );
+	std::string error;
+	bool accepted = host && host->StartScreenRecording( options, error );
+	lua_pushboolean( L, accepted );
+	if ( accepted )
+	{
+		lua_pushnil( L );
+	}
+	else
+	{
+		if ( error.empty() )
+		{
+			error = "the Simulator could not start screen recording";
+		}
+		lua_pushlstring( L, error.data(), error.length() );
+	}
+	return 2;
+}
+
+static int
+StopScreenRecording( lua_State *L )
+{
+	const MSimulatorHost *host = GetSimulatorHost( L );
+	std::string error;
+	bool accepted = host && host->StopScreenRecording( error );
+	lua_pushboolean( L, accepted );
+	if ( accepted )
+	{
+		lua_pushnil( L );
+	}
+	else
+	{
+		if ( error.empty() )
+		{
+			error = "the Simulator could not stop screen recording";
+		}
+		lua_pushlstring( L, error.data(), error.length() );
+	}
+	return 2;
+}
+
+static int
+GetScreenRecordingState( lua_State *L )
+{
+	const MSimulatorHost *host = GetSimulatorHost( L );
+	MSimulatorHost::ScreenRecordingState state = host ?
+		host->GetScreenRecordingState() : MSimulatorHost::kScreenRecordingUnavailable;
+	const char *result = "unavailable";
+	switch ( state )
+	{
+		case MSimulatorHost::kScreenRecordingIdle: result = "idle"; break;
+		case MSimulatorHost::kScreenRecordingStarting: result = "starting"; break;
+		case MSimulatorHost::kScreenRecordingRecording: result = "recording"; break;
+		case MSimulatorHost::kScreenRecordingStopping: result = "stopping"; break;
+		case MSimulatorHost::kScreenRecordingUnavailable: break;
+	}
+	lua_pushstring( L, result );
+	return 1;
+}
+
 int
 LuaLibSimulator::Open( lua_State *L )
 {
@@ -907,6 +1022,9 @@ LuaLibSimulator::Open( lua_State *L )
 		{ "sendInput", SendSimulatorInput },
 		{ "simulate", SimulateSimulatorEvent },
 		{ "quit", QuitSimulator },
+		{ "startScreenRecording", StartScreenRecording },
+		{ "stopScreenRecording", StopScreenRecording },
+		{ "getScreenRecordingState", GetScreenRecordingState },
 
 		{ NULL, NULL }
 	};

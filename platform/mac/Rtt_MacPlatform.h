@@ -188,6 +188,10 @@ class MacGUIPlatform : public MacPlatform
 		virtual bool SendInput( const MSimulatorHost::Input& input ) const;
 		virtual bool Simulate( const MSimulatorHost::Event& event ) const;
 		virtual bool Quit( int exitCode ) const;
+		virtual bool StartScreenRecording(
+			const MSimulatorHost::ScreenRecordingOptions& options, std::string& error ) const;
+		virtual bool StopScreenRecording( std::string& error ) const;
+		virtual MSimulatorHost::ScreenRecordingState GetScreenRecordingState() const;
 #endif
 
 	private:
