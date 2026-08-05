@@ -296,6 +296,8 @@ class MSimulatorHost
 			ScreenRecordingOptions()
 			: framesPerSecond( 60 ),
 			  resolutionScale( 1.0 ),
+			  outputWidth( 0 ),
+			  outputHeight( 0 ),
 			  includeAudio( true ),
 			  showsCursor( false ),
 			  overwrite( false )
@@ -305,6 +307,8 @@ class MSimulatorHost
 			std::string path;
 			int framesPerSecond;
 			double resolutionScale;
+			int outputWidth;
+			int outputHeight;
 			bool includeAudio;
 			bool showsCursor;
 			bool overwrite;

@@ -920,7 +920,8 @@ StartScreenRecording( lua_State *L )
 	}
 	const char * const allowedOptions[] =
 	{
-		"path", "fps", "resolutionScale", "includeAudio", "showCursor", "overwrite", NULL
+		"path", "fps", "resolutionScale", "outputWidth", "outputHeight",
+		"includeAudio", "showCursor", "overwrite", NULL
 	};
 	ValidateOptionKeys( L, 1, allowedOptions, "screen recording" );
 
@@ -946,6 +947,22 @@ StartScreenRecording( lua_State *L )
 		return luaL_error( L, "screen recording resolutionScale must be greater than 0 and no greater than 1" );
 	}
 	options.resolutionScale = resolutionScale;
+	double outputWidth = ReadFiniteNumber(
+		L, 1, "outputWidth", "screen recording outputWidth", false, 0.0 );
+	double outputHeight = ReadFiniteNumber(
+		L, 1, "outputHeight", "screen recording outputHeight", false, 0.0 );
+	if ( ( 0.0 == outputWidth ) != ( 0.0 == outputHeight ) ||
+		( 0.0 != outputWidth &&
+			( ! IsInteger( outputWidth ) || ! IsInteger( outputHeight ) ||
+			outputWidth < 2.0 || outputWidth > 16384.0 ||
+			outputHeight < 2.0 || outputHeight > 16384.0 ||
+			0 != (int)outputWidth % 2 || 0 != (int)outputHeight % 2 ) ) )
+	{
+		return luaL_error( L,
+			"screen recording outputWidth and outputHeight must both be even integers from 2 through 16384" );
+	}
+	options.outputWidth = (int)outputWidth;
+	options.outputHeight = (int)outputHeight;
 	options.includeAudio = ReadOptionalBoolean(
 		L, 1, "includeAudio", "screen recording includeAudio", true );
 	options.showsCursor = ReadOptionalBoolean(

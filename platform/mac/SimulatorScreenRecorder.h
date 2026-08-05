@@ -46,6 +46,8 @@ typedef NS_ENUM(NSInteger, SimulatorScreenRecorderState)
 	outputURL:(NSURL *)outputURL
 	framesPerSecond:(NSInteger)framesPerSecond
 	resolutionScale:(double)resolutionScale
+	outputWidth:(NSInteger)outputWidth
+	outputHeight:(NSInteger)outputHeight
 	includeAudio:(BOOL)includeAudio
 	showsCursor:(BOOL)showsCursor
 	error:(NSError **)error;

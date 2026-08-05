@@ -2782,6 +2782,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	NSInteger framesPerSecond = [[options objectForKey:@"fps"] integerValue];
 	NSNumber *resolutionScaleValue = [options objectForKey:@"resolutionScale"];
 	double resolutionScale = resolutionScaleValue ? [resolutionScaleValue doubleValue] : 1.0;
+	NSInteger outputWidth = [[options objectForKey:@"outputWidth"] integerValue];
+	NSInteger outputHeight = [[options objectForKey:@"outputHeight"] integerValue];
 	BOOL includeAudio = [[options objectForKey:@"includeAudio"] boolValue];
 	BOOL showsCursor = [[options objectForKey:@"showCursor"] boolValue];
 	NSError *startError = nil;
@@ -2790,6 +2792,8 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		outputURL:[NSURL fileURLWithPath:path]
 		framesPerSecond:framesPerSecond
 		resolutionScale:resolutionScale
+		outputWidth:outputWidth
+		outputHeight:outputHeight
 		includeAudio:includeAudio
 		showsCursor:showsCursor
 		error:&startError];
