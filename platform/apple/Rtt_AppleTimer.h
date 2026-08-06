@@ -18,10 +18,16 @@
 class NSTimer;
 class AppleCallback;
 class NSObject;
+#if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
+class NSView;
+#endif
 #else
 @class NSTimer;
 @class AppleCallback;
 @class NSObject;
+#if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
+@class NSView;
+#endif
 #endif
 
 
@@ -39,22 +45,41 @@ class AppleTimer : public PlatformTimer
 
 	public:
 		AppleTimer( MCallback& callback );
+#if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
+		AppleTimer( MCallback& callback, NSView* view );
+#endif
 		virtual ~AppleTimer();
 
 	public:
 		virtual void Start();
 		virtual void Stop();
 		virtual void SetInterval( U32 milliseconds );
+		virtual void SetInterval( double milliseconds );
 		virtual bool IsRunning() const;
 
 	public:
 		AppleCallback* GetTarget() { return fTarget; }
+
+#if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
+	private:
+		bool StartMacDisplayLink();
+		void StopMacDisplayLink();
+		void ApplyMacDisplayLinkInterval();
+		void UpdateMacDisplayLinkScreen();
+#endif
 	
 	private:
 		id fDisplayLink;
 		NSTimer* fTimer;
 		AppleCallback* fTarget;
-		U32 fInterval;
+		double fInterval;
+#if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
+		NSView* fView;
+		void* fMacDisplayLink;
+		void* fDisplaySource;
+		AppleCallback* fDisplayTarget;
+		NSObject* fScreenObserver;
+#endif
 };
 
 // ----------------------------------------------------------------------------

@@ -31,7 +31,7 @@ class PlatformTimer
 		virtual void Start() = 0;
 		virtual void Stop() = 0;
 		virtual void SetInterval( U32 milliseconds ) = 0;
-#ifdef Rtt_WIN_ENV
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_MAC_ENV )
 		virtual void SetInterval(double milliseconds) { SetInterval((U32)(milliseconds + 0.5)); }
 #endif
 		virtual bool IsRunning() const = 0;

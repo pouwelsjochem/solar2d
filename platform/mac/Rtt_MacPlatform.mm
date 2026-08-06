@@ -20,6 +20,7 @@
 #include "Rtt_MacWebViewObject.h"
 #include "Rtt_MacTextFieldObject.h"
 #include "Rtt_AppleKeyServices.h"
+#include "Rtt_AppleTimer.h"
 #include "Rtt_PlatformPlayer.h"
 #include "Rtt_PlatformSimulator.h"
 #include "Rtt_PreferenceCollection.h"
@@ -421,6 +422,12 @@ MacPlatform::Initialize( GLView* pView )
 	GetMacDevice().SetManufacturer( @"Apple" );
 	
 #endif
+}
+
+PlatformTimer*
+MacPlatform::CreateTimerWithCallback( MCallback& callback ) const
+{
+	return Rtt_NEW( & GetAllocator(), AppleTimer( callback, fView ) );
 }
 
 static const char kDocumentsDirName[] = "Documents";

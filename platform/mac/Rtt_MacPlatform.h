@@ -71,6 +71,7 @@ class MacPlatform : public ApplePlatform
 	public:
 		virtual MPlatformDevice& GetDevice() const;
 		virtual PlatformSurface* CreateScreenSurface() const;
+		virtual PlatformTimer* CreateTimerWithCallback( MCallback& callback ) const;
 
 #ifdef Rtt_AUTHORING_SIMULATOR
 	protected:
