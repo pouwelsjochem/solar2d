@@ -183,13 +183,15 @@ MacSimulator::Initialize(
     // restore the user's last setting for this skin
 	// We need a placeholder name for autosave
 	fDeviceName = [[NSString stringWithExternalString:config.deviceName] copy];
-	NSString* deviceNameWithResolution = [NSString stringWithFormat:@"%s - %.0fx%.0f", config.deviceName.GetString(), fDeviceWidth, fDeviceHeight];
+	NSString* windowTitle = [NSString stringWithFormat:
+		@"%s - %.0fx%.0f - Solar2D %s",
+		config.deviceName.GetString(), fDeviceWidth, fDeviceHeight, Rtt_STRING_BUILD];
 
     instanceWindow = [[SimulatorWindow alloc]
 		initWithScreenView:screenView
 		viewRect:screenRect
 		roundedCorners:roundedCorners
-		title:deviceNameWithResolution];
+		title:windowTitle];
 	[instanceWindow setPerformCloseBlock:window_close_handler];
 
 	NSWindowController *windowController = [[NSWindowController alloc] initWithWindow:instanceWindow];

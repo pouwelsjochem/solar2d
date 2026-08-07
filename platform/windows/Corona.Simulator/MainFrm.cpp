@@ -13,6 +13,8 @@
 #include "Simulator.h"
 #include "MainFrm.h"
 #include "SimulatorView.h"
+#include "CoronaWinString.h"
+#include "Core/Rtt_Build.h"
 
 // The #includes must go above this line because this macro will override the "new" operator
 // which will cause compiler errors with header files belonging to other libraries.
@@ -177,6 +179,13 @@ void CMainFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
 	
 	// Update the title bar text.
 	CFrameWnd::OnUpdateFrameTitle(bAddToTitle);
+
+	WinString buildVersion;
+	buildVersion.SetUTF8(Rtt_STRING_BUILD);
+	CString windowTitle;
+	GetWindowText(windowTitle);
+	windowTitle.AppendFormat(_T(" - %s"), buildVersion.GetTCHAR());
+	SetWindowText(windowTitle);
 }
 
 // OnSize - override because we don't want to call CFrameWnd implementation
