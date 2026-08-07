@@ -56,6 +56,9 @@ class AppleTimer : public PlatformTimer
 		virtual void SetInterval( U32 milliseconds );
 		virtual void SetInterval( double milliseconds );
 		virtual bool IsRunning() const;
+#if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
+		virtual Rtt_AbsoluteTime GetCurrentTime() const;
+#endif
 
 	public:
 		AppleCallback* GetTarget() { return fTarget; }

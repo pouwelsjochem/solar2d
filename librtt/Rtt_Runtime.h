@@ -297,9 +297,9 @@ class Runtime : public MCallback,
 		bool fSimulatorControlTimeConsumed;
 #endif
 		CachedResource* fResourcesHead; // Dummy node.
+		PlatformTimer* fTimer;
 		Display *fDisplay;
 		LuaContext* fVMContext;
-		PlatformTimer* fTimer;
 		Scheduler* fScheduler;
 		Archive* fArchive;
 		const char * fBackend;

@@ -149,9 +149,9 @@ Runtime::Runtime( const MPlatform& platform, MCallback *viewCallback )
 	fSimulatorControlTimeConsumed( false ),
 #endif
 	fResourcesHead( Rtt_NEW( & fAllocator, CachedResource( * this, NULL ) ) ),
-	fDisplay( Rtt_NEW( & fAllocator, Display( * this ) ) ),
-	fVMContext( LuaContext::New( Allocator(), platform, this ) ), 
 	fTimer( platform.CreateTimerWithCallback( viewCallback ? * viewCallback : * this ) ),
+	fDisplay( Rtt_NEW( & fAllocator, Display( * this ) ) ),
+	fVMContext( LuaContext::New( Allocator(), platform, this ) ),
 	fScheduler( Rtt_NEW( & fAllocator, Scheduler( * this ) ) ),
 	fArchive( NULL ),
 	fBackend("glBackend"),
@@ -1213,7 +1213,9 @@ Rtt_AbsoluteTime
 Runtime::GetElapsedTime() const
 {
 	// During a suspend, use fSuspendTime as current time; otherwise, fetch absolute time
-	Rtt_AbsoluteTime currentTime = ( 1 != fIsSuspended ? Rtt_GetAbsoluteTime() : fSuspendTime );
+	Rtt_AbsoluteTime currentTime = ( 1 != fIsSuspended
+		? ( fTimer ? fTimer->GetCurrentTime() : Rtt_GetAbsoluteTime() )
+		: fSuspendTime );
 #if defined(Rtt_AUTHORING_SIMULATOR)
 	if ( fSimulatorControlPaused )
 	{

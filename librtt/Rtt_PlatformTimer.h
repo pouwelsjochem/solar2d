@@ -10,6 +10,7 @@
 #ifndef _Rtt_PlatformTimer_H__
 #define _Rtt_PlatformTimer_H__
 
+#include "Core/Rtt_Time.h"
 #include "Rtt_MCallback.h"
 
 // ----------------------------------------------------------------------------
@@ -39,6 +40,9 @@ class PlatformTimer
 		// Overridden by platform-specific subclasses (e.g. WinTimer).
 		// Defaults to 0 for platforms that do not provide a native query.
 		virtual double GetRefreshRate() const { return 0.0; }
+		// Returns the time used to advance the runtime clock. Display-linked
+		// platforms can override this to use the upcoming presentation time.
+		virtual Rtt_AbsoluteTime GetCurrentTime() const { return Rtt_GetAbsoluteTime(); }
 
 		/// <summary>
 		///  Returns whether render-sync mode is enabled.

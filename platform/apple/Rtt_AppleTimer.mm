@@ -42,6 +42,8 @@
 @interface AppleDisplayLinkTarget : AppleCallback
 {
 	std::atomic<uint64_t> fLatestHostTime;
+	std::atomic<uint64_t> fLastTargetHostTime;
+	std::atomic<bool> fIsInvokingFrame;
 	std::atomic<void*> fDispatchSource;
 	NSTimeInterval fInterval;
 	NSTimeInterval fNextTimestamp;
@@ -55,6 +57,7 @@
 - (void)displayLinkOutputAtHostTime:(uint64_t)hostTime;
 - (void)dispatchSourceFired;
 - (void)displayLinkFired:(CADisplayLink*)displayLink;
+- (uint64_t)currentHostTime;
 
 @end
 
@@ -67,6 +70,8 @@
 	{
 		self.callback = timerCallback;
 		fLatestHostTime.store( 0 );
+		fLastTargetHostTime.store( 0 );
+		fIsInvokingFrame.store( false );
 		fDispatchSource.store( NULL );
 		fInterval = milliseconds / 1000.0;
 		fNextTimestamp = 0.0;
@@ -126,7 +131,16 @@
 		return;
 	}
 
+	double hostFrequency = CVGetHostClockFrequency();
+	if ( hostFrequency > 0.0 )
+	{
+		fLastTargetHostTime.store(
+			(uint64_t)( targetTimestamp * hostFrequency ),
+			std::memory_order_release );
+	}
+	fIsInvokingFrame.store( true, std::memory_order_release );
 	[self invoke:nil];
+	fIsInvokingFrame.store( false, std::memory_order_release );
 
 	if ( fNextTimestamp <= 0.0 || targetTimestamp - fNextTimestamp > fInterval * 4.0 )
 	{
@@ -155,6 +169,17 @@
 - (void)displayLinkFired:(CADisplayLink*)displayLink
 {
 	[self invokeForTargetTimestamp:displayLink.targetTimestamp];
+}
+
+- (uint64_t)currentHostTime
+{
+	uint64_t targetHostTime = fLastTargetHostTime.load( std::memory_order_acquire );
+	if ( targetHostTime > 0 && fIsInvokingFrame.load( std::memory_order_acquire ) )
+	{
+		return targetHostTime;
+	}
+	uint64_t currentHostTime = CVGetCurrentHostTime();
+	return currentHostTime < targetHostTime ? targetHostTime : currentHostTime;
 }
 
 @end
@@ -336,6 +361,16 @@ AppleTimer::IsRunning() const
 }
 
 #if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
+
+Rtt_AbsoluteTime
+AppleTimer::GetCurrentTime() const
+{
+	if ( fDisplayTarget )
+	{
+		return (Rtt_AbsoluteTime)[(AppleDisplayLinkTarget*)fDisplayTarget currentHostTime];
+	}
+	return Rtt_GetAbsoluteTime();
+}
 
 bool
 AppleTimer::StartMacDisplayLink()
