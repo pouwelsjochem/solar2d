@@ -77,6 +77,7 @@ local path = system.pathForFile("capture.mp4", system.DocumentsDirectory)
 local accepted, message = simulator.startScreenRecording({
 	path = path,             -- Absolute .mp4 path (required).
 	fps = 60,                -- Optional; defaults to 60 (1 through 240).
+	captureResolutionType = "best", -- Optional: "automatic", "best", or "nominal".
 	outputWidth = 1920,      -- Optional; even integer from 2 through 16384.
 	outputHeight = 1080,     -- Optional; must be provided with outputWidth.
 	includeAudio = true,     -- Optional; defaults to true.
@@ -101,6 +102,11 @@ dimensions independent of display scaling. If they are omitted, the default
 resolution. Set `resolutionScale = 0.5` for half the width and height (about one
 quarter of the encoded pixels) when lower overhead or smaller files matter more
 than maximum sharpness.
+
+`captureResolutionType` controls how ScreenCaptureKit sources pixels before scaling
+them to the requested output dimensions. `"best"` preserves the previous
+high-resolution behavior, while `"automatic"` and `"nominal"` can reduce capture
+overhead on Retina displays.
 
 `simulator.getScreenRecordingState()` returns `"idle"`, `"starting"`,
 `"recording"`, `"stopping"`, or `"unavailable"`. Recording completion is also

@@ -28,7 +28,6 @@ typedef NS_ENUM(NSInteger, SimulatorScreenRecorderError)
 	SimulatorScreenRecorderErrorBusy,
 	SimulatorScreenRecorderErrorUnavailable,
 	SimulatorScreenRecorderErrorWindowNotFound,
-	SimulatorScreenRecorderErrorDisplayNotFound,
 	SimulatorScreenRecorderErrorCleanupTimedOut
 };
 
@@ -64,10 +63,10 @@ EvenPixelDimension(CGFloat value)
 	BOOL fRemoveOutputFileWhenFinished;
 
 	CGWindowID fWindowID;
-	CGDirectDisplayID fDisplayID;
-	CGRect fSourceRect;
+	CGRect fWindowSourceRect;
 	NSInteger fFramesPerSecond;
 	double fResolutionScale;
+	SimulatorScreenRecorderCaptureResolutionType fCaptureResolutionType;
 	NSInteger fOutputWidth;
 	NSInteger fOutputHeight;
 	BOOL fIncludeAudio;
@@ -140,6 +139,7 @@ EvenPixelDimension(CGFloat value)
 	outputURL:(NSURL *)outputURL
 	framesPerSecond:(NSInteger)framesPerSecond
 	resolutionScale:(double)resolutionScale
+	captureResolutionType:(SimulatorScreenRecorderCaptureResolutionType)captureResolutionType
 	outputWidth:(NSInteger)outputWidth
 	outputHeight:(NSInteger)outputHeight
 	includeAudio:(BOOL)includeAudio
@@ -205,43 +205,30 @@ EvenPixelDimension(CGFloat value)
 		return NO;
 	}
 
-	NSScreen *screen = [window screen];
-	NSNumber *screenNumber = [[screen deviceDescription] objectForKey:@"NSScreenNumber"];
-	if (!screen || !screenNumber)
-	{
-		if (error)
-		{
-			*error = NewRecorderError(
-				SimulatorScreenRecorderErrorDisplayNotFound, @"The Simulator window is not on a capturable display.");
-		}
-		return NO;
-	}
-
 	NSRect viewRectInWindow = [sourceView convertRect:[sourceView bounds] toView:nil];
 	NSRect viewRectOnScreen = [window convertRectToScreen:viewRectInWindow];
-	NSRect screenFrame = [screen frame];
-	NSRect clippedRect = NSIntersectionRect(viewRectOnScreen, screenFrame);
-	if (NSIsEmptyRect(clippedRect))
+	if (NSIsEmptyRect(viewRectOnScreen))
 	{
 		if (error)
 		{
 			*error = NewRecorderError(
-				SimulatorScreenRecorderErrorInvalidArgument, @"The Simulator device view is outside the display bounds.");
+				SimulatorScreenRecorderErrorInvalidArgument, @"The Simulator device view has no capturable area.");
 		}
 		return NO;
 	}
 
 	// AppKit screen coordinates have a bottom-left origin. ScreenCaptureKit's
-	// display source rectangle has a top-left origin and is display-relative.
-	fSourceRect = CGRectMake(
-		NSMinX(clippedRect) - NSMinX(screenFrame),
-		NSMaxY(screenFrame) - NSMaxY(clippedRect),
-		NSWidth(clippedRect),
-		NSHeight(clippedRect));
+	// window source rectangle has a top-left origin and is window-relative.
+	NSRect windowFrame = [window frame];
+	fWindowSourceRect = CGRectMake(
+		NSMinX(viewRectOnScreen) - NSMinX(windowFrame),
+		NSMaxY(windowFrame) - NSMaxY(viewRectOnScreen),
+		NSWidth(viewRectOnScreen),
+		NSHeight(viewRectOnScreen));
 	fWindowID = (CGWindowID)[window windowNumber];
-	fDisplayID = (CGDirectDisplayID)[screenNumber unsignedIntValue];
 	fFramesPerSecond = framesPerSecond;
 	fResolutionScale = resolutionScale;
+	fCaptureResolutionType = captureResolutionType;
 	fOutputWidth = outputWidth;
 	fOutputHeight = outputHeight;
 	fIncludeAudio = includeAudio;
@@ -297,34 +284,17 @@ EvenPixelDimension(CGFloat value)
 		return;
 	}
 
-	SCDisplay *capturedDisplay = nil;
-	for (SCDisplay *display in [shareableContent displays])
-	{
-		if ([display displayID] == fDisplayID)
-		{
-			capturedDisplay = display;
-			break;
-		}
-	}
-	if (!capturedDisplay)
-	{
-		[self finishWithPhase:@"failed" error:NewRecorderError(
-			SimulatorScreenRecorderErrorDisplayNotFound, @"ScreenCaptureKit could not find the Simulator display.")
-			removeOutputFile:YES];
-		return;
-	}
-
 	SCContentFilter *filter = [[[SCContentFilter alloc]
-		initWithDisplay:capturedDisplay includingWindows:[NSArray arrayWithObject:capturedWindow]] autorelease];
-	// fSourceRect is measured in screen points. Use ScreenCaptureKit's scale so
-	// transformed Simulator views retain the captured display's native pixels.
+		initWithDesktopIndependentWindow:capturedWindow] autorelease];
+	// fWindowSourceRect is measured in window points. Use ScreenCaptureKit's
+	// scale so transformed Simulator views retain the captured window's native pixels.
 	CGFloat pointPixelScale = MAX(1.0, [filter pointPixelScale]);
 	size_t outputWidth = fOutputWidth > 0 ? (size_t)fOutputWidth :
-		EvenPixelDimension(CGRectGetWidth(fSourceRect) * pointPixelScale * fResolutionScale);
+		EvenPixelDimension(CGRectGetWidth(fWindowSourceRect) * pointPixelScale * fResolutionScale);
 	size_t outputHeight = fOutputHeight > 0 ? (size_t)fOutputHeight :
-		EvenPixelDimension(CGRectGetHeight(fSourceRect) * pointPixelScale * fResolutionScale);
+		EvenPixelDimension(CGRectGetHeight(fWindowSourceRect) * pointPixelScale * fResolutionScale);
 	SCStreamConfiguration *streamConfiguration = [[[SCStreamConfiguration alloc] init] autorelease];
-	[streamConfiguration setSourceRect:fSourceRect];
+	[streamConfiguration setSourceRect:fWindowSourceRect];
 	[streamConfiguration setDestinationRect:CGRectMake(0, 0, outputWidth, outputHeight)];
 	[streamConfiguration setWidth:outputWidth];
 	[streamConfiguration setHeight:outputHeight];
@@ -332,11 +302,21 @@ EvenPixelDimension(CGFloat value)
 	[streamConfiguration setPreservesAspectRatio:YES];
 	[streamConfiguration setMinimumFrameInterval:CMTimeMake(1, (int32_t)fFramesPerSecond)];
 	[streamConfiguration setQueueDepth:5];
+	[streamConfiguration setPixelFormat:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange];
 	[streamConfiguration setShowsCursor:fShowsCursor];
 	[streamConfiguration setShowMouseClicks:NO];
-	[streamConfiguration setIgnoreShadowsDisplay:YES];
+	[streamConfiguration setIgnoreShadowsSingleWindow:YES];
 	[streamConfiguration setShouldBeOpaque:YES];
-	[streamConfiguration setCaptureResolution:SCCaptureResolutionBest];
+	SCCaptureResolutionType captureResolutionType = SCCaptureResolutionAutomatic;
+	if (SimulatorScreenRecorderCaptureResolutionBest == fCaptureResolutionType)
+	{
+		captureResolutionType = SCCaptureResolutionBest;
+	}
+	else if (SimulatorScreenRecorderCaptureResolutionNominal == fCaptureResolutionType)
+	{
+		captureResolutionType = SCCaptureResolutionNominal;
+	}
+	[streamConfiguration setCaptureResolution:captureResolutionType];
 	[streamConfiguration setCapturesAudio:fIncludeAudio];
 	[streamConfiguration setExcludesCurrentProcessAudio:!fIncludeAudio];
 	[streamConfiguration setSampleRate:48000];

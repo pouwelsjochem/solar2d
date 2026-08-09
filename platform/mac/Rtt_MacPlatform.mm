@@ -2089,6 +2089,7 @@ MacGUIPlatform::StartScreenRecording(
 		path, @"path",
 		[NSNumber numberWithInt:options.framesPerSecond], @"fps",
 		[NSNumber numberWithDouble:options.resolutionScale], @"resolutionScale",
+		[NSString stringWithUTF8String:options.captureResolutionType.c_str()], @"captureResolutionType",
 		[NSNumber numberWithInt:options.outputWidth], @"outputWidth",
 		[NSNumber numberWithInt:options.outputHeight], @"outputHeight",
 		[NSNumber numberWithBool:options.includeAudio], @"includeAudio",

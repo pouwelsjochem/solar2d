@@ -920,7 +920,7 @@ StartScreenRecording( lua_State *L )
 	}
 	const char * const allowedOptions[] =
 	{
-		"path", "fps", "resolutionScale", "outputWidth", "outputHeight",
+		"path", "fps", "resolutionScale", "captureResolutionType", "outputWidth", "outputHeight",
 		"includeAudio", "showCursor", "overwrite", NULL
 	};
 	ValidateOptionKeys( L, 1, allowedOptions, "screen recording" );
@@ -947,6 +947,26 @@ StartScreenRecording( lua_State *L )
 		return luaL_error( L, "screen recording resolutionScale must be greater than 0 and no greater than 1" );
 	}
 	options.resolutionScale = resolutionScale;
+	lua_getfield( L, 1, "captureResolutionType" );
+	if ( lua_isnil( L, -1 ) )
+	{
+		options.captureResolutionType = "best";
+	}
+	else if ( lua_type( L, -1 ) != LUA_TSTRING )
+	{
+		return luaL_error( L, "screen recording captureResolutionType must be 'automatic', 'best', or 'nominal'" );
+	}
+	else
+	{
+		options.captureResolutionType = lua_tostring( L, -1 );
+		if ( "automatic" != options.captureResolutionType &&
+			"best" != options.captureResolutionType &&
+			"nominal" != options.captureResolutionType )
+		{
+			return luaL_error( L, "screen recording captureResolutionType must be 'automatic', 'best', or 'nominal'" );
+		}
+	}
+	lua_pop( L, 1 );
 	double outputWidth = ReadFiniteNumber(
 		L, 1, "outputWidth", "screen recording outputWidth", false, 0.0 );
 	double outputHeight = ReadFiniteNumber(

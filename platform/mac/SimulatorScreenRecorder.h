@@ -19,6 +19,13 @@ typedef NS_ENUM(NSInteger, SimulatorScreenRecorderState)
 	SimulatorScreenRecorderStateStopping
 };
 
+typedef NS_ENUM(NSInteger, SimulatorScreenRecorderCaptureResolutionType)
+{
+	SimulatorScreenRecorderCaptureResolutionAutomatic = 0,
+	SimulatorScreenRecorderCaptureResolutionBest,
+	SimulatorScreenRecorderCaptureResolutionNominal
+};
+
 @class SimulatorScreenRecorder;
 
 @protocol SimulatorScreenRecorderDelegate <NSObject>
@@ -46,6 +53,7 @@ typedef NS_ENUM(NSInteger, SimulatorScreenRecorderState)
 	outputURL:(NSURL *)outputURL
 	framesPerSecond:(NSInteger)framesPerSecond
 	resolutionScale:(double)resolutionScale
+	captureResolutionType:(SimulatorScreenRecorderCaptureResolutionType)captureResolutionType
 	outputWidth:(NSInteger)outputWidth
 	outputHeight:(NSInteger)outputHeight
 	includeAudio:(BOOL)includeAudio
