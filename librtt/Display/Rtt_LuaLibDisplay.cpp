@@ -284,7 +284,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 	{
 		Runtime& runtime = * LuaContext::GetRuntime( L );
 		U32 configuredFps = runtime.GetFPS();
-#ifdef Rtt_WIN_ENV
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_MAC_ENV )
 		double refreshRate = runtime.GetTimer()->GetRefreshRate();
 		U32 actualFps = ( refreshRate > 0.0 && configuredFps > (U32)refreshRate )
 			? (U32)refreshRate
@@ -393,7 +393,7 @@ DisplayLibrary::ValueForKey( lua_State *L )
 		break;
 	case 14:    // "refreshRate"
 		{
-#ifdef Rtt_WIN_ENV
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_MAC_ENV )
 			// Returns the monitor's actual refresh rate in Hz.
 			Runtime& runtime = *LuaContext::GetRuntime(L);
 			lua_pushnumber(L, runtime.GetTimer()->GetRefreshRate());
@@ -1157,7 +1157,7 @@ DisplayLibrary::getDefault( lua_State *L )
     {
         // Returns true if render-only vsync ticks are enabled.
         // On Windows, this syncs the display to the monitor refresh rate
-        // even when no logic tick has fired — reducing compositor jitter
+        // even when no logic tick has fired â€” reducing compositor jitter
         // on high-refresh displays. Returns nil on other platforms.
         Runtime& runtime = *LuaContext::GetRuntime(L);
         lua_pushboolean(L, runtime.GetTimer()->GetFrameSync() ? 1 : 0);
@@ -1783,26 +1783,14 @@ DisplayLibrary::getStatistics( lua_State *L )
 		lua_setfield( L, 1, "textureBindCount" );
 		lua_pushinteger( L, stats.fTextureBindCount );
 		lua_setfield( L, 1, "textureBindCount" );
-#if defined( Rtt_WIN_ENV )
-        // On Windows, expose the total frame work time measured in WinTimer::Evaluate().
-        // This covers the full per-frame CPU cost: Lua logic, physics, scene traversal,
-        // command buffer preparation, and GL dispatch — everything operator()() executes.
-        // Unlike preparationTime and renderTimeCPU which only cover portions of the render
-        // path, this value reflects the complete frame budget usage as seen from the
-        // scheduling layer, making it suitable for "X.X / 16.6 ms" budget display.
-        // Only populated on the DWM display-sync path (fUseDwmThread == true).
-        {
-            Runtime* runtime = LuaContext::GetRuntime(L);
-            if (runtime)
-            {
-                // frameWorkTime reflects total per-frame CPU cost as measured at the
-                // scheduling layer — Lua logic, physics, scene traversal, and GL dispatch.
-                // Returns 0.0 on platforms that do not support this measurement.
-                lua_pushnumber(L, runtime->GetTimer()->GetLastFrameWorkMs());
-                lua_setfield(L, 1, "frameWorkTime");
-            }
-        }
-#endif
+		// This reflects the full frame callback rather than just renderer
+		// preparation. Platforms without a scheduling-layer measurement return 0.
+		Runtime* runtime = LuaContext::GetRuntime( L );
+		if ( runtime )
+		{
+			lua_pushnumber( L, runtime->GetTimer()->GetLastFrameWorkMs() );
+			lua_setfield( L, 1, "frameWorkTime" );
+		}
 	}
 
 	return 0;

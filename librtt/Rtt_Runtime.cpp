@@ -534,9 +534,10 @@ Runtime::ReadConfig( lua_State *L )
 	Rtt_ASSERT( lua_istable( L, -1 ) );
 
 	lua_getfield(L, -1, "fps");
-#ifdef Rtt_WIN_ENV
+#if defined( Rtt_WIN_ENV ) || defined( Rtt_MAC_ENV )
 	int fps = (int)lua_tointeger(L, -1);
-	// Any positive integer fps value is accepted on Windows.
+	// Any positive integer fps value is accepted on desktop platforms with
+	// display-aware timers.
 	// The runtime caps the effective tick rate to the monitor refresh rate in BeginRunLoop().
 	if (fps > 0)
 	{
@@ -544,7 +545,7 @@ Runtime::ReadConfig( lua_State *L )
 		fFPS = (U32)fps;
 	}
 #else
-	// Non-Windows platforms do not support dynamic FPS yet; keep them fixed at 60 FPS.
+	// Other platforms do not support dynamic FPS yet; keep them fixed at 60 FPS.
 #endif
 	lua_pop(L, 1);
 

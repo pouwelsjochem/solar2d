@@ -408,7 +408,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	_hasLoadedApplication = NO;
 	_hasStartedRunLoop = NO;
 
-    _GLViewCallback = new Rtt::MacViewCallback( _GLView ); // This is what is on the Timer loop
+    _GLViewCallback = new Rtt::MacViewCallback(); // This is what is on the Timer loop
 
 	_projectSettings = new Rtt::ProjectSettings();
 }

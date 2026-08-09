@@ -12,10 +12,6 @@
 #include "Rtt_MacViewCallback.h"
 
 #include "Rtt_Runtime.h"
-#include "Display/Rtt_Display.h"
-#include "Display/Rtt_Scene.h"
-
-#import <AppKit/NSView.h>
 
 // ----------------------------------------------------------------------------
 
@@ -24,9 +20,8 @@ namespace Rtt
 
 // ----------------------------------------------------------------------------
 
-MacViewCallback::MacViewCallback( NSView *view )
-:	fView( view ),
-	fRuntime( NULL )
+MacViewCallback::MacViewCallback()
+:	fRuntime( NULL )
 {
 }
 
@@ -35,9 +30,9 @@ MacViewCallback::operator()()
 {
 	Rtt_ASSERT( fRuntime );
 	(*fRuntime)();
-	if ( ! fRuntime->GetDisplay().GetScene().IsValid() )
+	if ( fRuntime->IsProperty( Runtime::kRenderAsync ) )
 	{
-		[fView setNeedsDisplay:YES];
+		fRuntime->Render();
 	}
 }
 
@@ -46,4 +41,3 @@ MacViewCallback::operator()()
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

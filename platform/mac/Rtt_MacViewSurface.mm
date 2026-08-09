@@ -33,11 +33,12 @@ MacViewSurface::~MacViewSurface()
 void
 MacViewSurface::SetCurrent() const
 {
-
+	[[fView openGLContext] makeCurrentContext];
 }
 void
 MacViewSurface::Flush() const
 {
+	[[fView openGLContext] flushBuffer];
 }
 
 S32
@@ -70,4 +71,3 @@ MacViewSurface::PointsHeight() const
 } // namespace Rtt
 
 // ----------------------------------------------------------------------------
-

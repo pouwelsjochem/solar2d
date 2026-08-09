@@ -1134,15 +1134,11 @@ MacPlatform::BeginRuntime( const Runtime& runtime ) const
 	{
 		pthread_mutex_lock( & fMutex );
 
-		// calls setNeedDisplay
-		[fView update];
-
-		// When async, we do not guarantee the context is current
-		// unless we're in the Runtime::Render() call.
-		if ( runtime.IsProperty( Runtime::kRenderAsync ) )
-		{
-			[[fView openGLContext] makeCurrentContext];
-		}
+		// NSOpenGLView updates its drawable when the view moves or resizes.
+		// Updating it every runtime entry performs an unnecessary WindowServer
+		// round-trip, and Runtime::operator() and Runtime::Render() each enter
+		// the runtime once per display-link frame.
+		[[fView openGLContext] makeCurrentContext];
 	}
 }
 

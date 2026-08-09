@@ -14,8 +14,6 @@
 
 // ----------------------------------------------------------------------------
 
-@class NSView;
-
 namespace Rtt
 {
 
@@ -26,7 +24,7 @@ class Runtime;
 class MacViewCallback : public MCallback
 {
 	public:
-		MacViewCallback( NSView *view );
+		MacViewCallback();
 
 	public:
 		void Initialize( Runtime *runtime ) { fRuntime = runtime; }
@@ -35,7 +33,6 @@ class MacViewCallback : public MCallback
 		virtual void operator()();
 
 	private:
-		NSView *fView; // Weak ptr???
 		Runtime *fRuntime;
 };
 

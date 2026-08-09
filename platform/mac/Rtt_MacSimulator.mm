@@ -169,7 +169,7 @@ MacSimulator::Initialize(
 	// Need to do this BEFORE window is set up b/c window triggers other prepareOpenGL
 	platform->Initialize( screenView );
 
-	fViewCallback = new MacViewCallback( screenView ); // This is what is on the Timer loop
+	fViewCallback = new MacViewCallback(); // This is what is on the Timer loop
 	Super::Initialize( platform, fViewCallback ); // Inside here, Runtime is instantiated
 
 	//Mac simulator needs to defer the initial update and render in separate pass

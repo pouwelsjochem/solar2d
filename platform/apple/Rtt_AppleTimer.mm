@@ -42,8 +42,8 @@
 @interface AppleDisplayLinkTarget : AppleCallback
 {
 	std::atomic<uint64_t> fLatestHostTime;
-	std::atomic<uint64_t> fLastTargetHostTime;
-	std::atomic<bool> fIsInvokingFrame;
+	std::atomic<uint64_t> fCurrentFrameHostTime;
+	std::atomic<double> fLastFrameWorkMs;
 	std::atomic<void*> fDispatchSource;
 	NSTimeInterval fInterval;
 	NSTimeInterval fNextTimestamp;
@@ -57,7 +57,8 @@
 - (void)displayLinkOutputAtHostTime:(uint64_t)hostTime;
 - (void)dispatchSourceFired;
 - (void)displayLinkFired:(CADisplayLink*)displayLink;
-- (uint64_t)currentHostTime;
+- (uint64_t)currentFrameHostTime;
+- (double)lastFrameWorkMilliseconds;
 
 @end
 
@@ -70,8 +71,8 @@
 	{
 		self.callback = timerCallback;
 		fLatestHostTime.store( 0 );
-		fLastTargetHostTime.store( 0 );
-		fIsInvokingFrame.store( false );
+		fCurrentFrameHostTime.store( 0 );
+		fLastFrameWorkMs.store( 0.0 );
 		fDispatchSource.store( NULL );
 		fInterval = milliseconds / 1000.0;
 		fNextTimestamp = 0.0;
@@ -134,13 +135,19 @@
 	double hostFrequency = CVGetHostClockFrequency();
 	if ( hostFrequency > 0.0 )
 	{
-		fLastTargetHostTime.store(
+		fCurrentFrameHostTime.store(
 			(uint64_t)( targetTimestamp * hostFrequency ),
 			std::memory_order_release );
 	}
-	fIsInvokingFrame.store( true, std::memory_order_release );
+	uint64_t frameWorkStart = CVGetCurrentHostTime();
 	[self invoke:nil];
-	fIsInvokingFrame.store( false, std::memory_order_release );
+	uint64_t frameWorkEnd = CVGetCurrentHostTime();
+	if ( hostFrequency > 0.0 )
+	{
+		fLastFrameWorkMs.store(
+			(double)( frameWorkEnd - frameWorkStart ) * 1000.0 / hostFrequency,
+			std::memory_order_release );
+	}
 
 	if ( fNextTimestamp <= 0.0 || targetTimestamp - fNextTimestamp > fInterval * 4.0 )
 	{
@@ -168,18 +175,24 @@
 
 - (void)displayLinkFired:(CADisplayLink*)displayLink
 {
-	[self invokeForTargetTimestamp:displayLink.targetTimestamp];
+	double hostFrequency = CVGetHostClockFrequency();
+	NSTimeInterval targetTimestamp = displayLink.targetTimestamp;
+	if ( targetTimestamp > 0.0 && hostFrequency > 0.0 )
+	{
+		[self displayLinkOutputAtHostTime:
+			(uint64_t)( targetTimestamp * hostFrequency )];
+	}
 }
 
-- (uint64_t)currentHostTime
+- (uint64_t)currentFrameHostTime
 {
-	uint64_t targetHostTime = fLastTargetHostTime.load( std::memory_order_acquire );
-	if ( targetHostTime > 0 && fIsInvokingFrame.load( std::memory_order_acquire ) )
-	{
-		return targetHostTime;
-	}
-	uint64_t currentHostTime = CVGetCurrentHostTime();
-	return currentHostTime < targetHostTime ? targetHostTime : currentHostTime;
+	uint64_t frameHostTime = fCurrentFrameHostTime.load( std::memory_order_acquire );
+	return frameHostTime > 0 ? frameHostTime : CVGetCurrentHostTime();
+}
+
+- (double)lastFrameWorkMilliseconds
+{
+	return fLastFrameWorkMs.load( std::memory_order_acquire );
 }
 
 @end
@@ -367,9 +380,35 @@ AppleTimer::GetCurrentTime() const
 {
 	if ( fDisplayTarget )
 	{
-		return (Rtt_AbsoluteTime)[(AppleDisplayLinkTarget*)fDisplayTarget currentHostTime];
+		return (Rtt_AbsoluteTime)[(AppleDisplayLinkTarget*)fDisplayTarget currentFrameHostTime];
 	}
 	return Rtt_GetAbsoluteTime();
+}
+
+double
+AppleTimer::GetRefreshRate() const
+{
+	NSScreen* screen = [[fView window] screen];
+	if ( ! screen )
+	{
+		screen = [NSScreen mainScreen];
+	}
+	if ( @available( macOS 12.0, * ) )
+	{
+		NSInteger maximumFramesPerSecond = [screen maximumFramesPerSecond];
+		if ( maximumFramesPerSecond > 0 )
+		{
+			return (double)maximumFramesPerSecond;
+		}
+	}
+	return 0.0;
+}
+
+double
+AppleTimer::GetLastFrameWorkMs() const
+{
+	return fDisplayTarget ?
+		[(AppleDisplayLinkTarget*)fDisplayTarget lastFrameWorkMilliseconds] : 0.0;
 }
 
 bool
@@ -377,6 +416,18 @@ AppleTimer::StartMacDisplayLink()
 {
 	AppleDisplayLinkTarget* target = [[AppleDisplayLinkTarget alloc]
 		initWithCallback:&Callback() interval:fInterval];
+	dispatch_source_t source = dispatch_source_create(
+		DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, dispatch_get_main_queue() );
+	if ( ! source )
+	{
+		[target release];
+		return false;
+	}
+	[target setDispatchSource:source];
+	dispatch_source_set_event_handler( source, ^{
+		[target dispatchSourceFired];
+	} );
+	dispatch_resume( source );
 
 	if ( @available( macOS 14.0, * ) )
 	{
@@ -385,6 +436,7 @@ AppleTimer::StartMacDisplayLink()
 		if ( displayLink )
 		{
 			fDisplayTarget = target;
+			fDisplaySource = (void*)source;
 			fDisplayLink = [displayLink retain];
 			ApplyMacDisplayLinkInterval();
 
@@ -396,23 +448,14 @@ AppleTimer::StartMacDisplayLink()
 		}
 	}
 
-	dispatch_source_t source = dispatch_source_create(
-		DISPATCH_SOURCE_TYPE_DATA_ADD, 0, 0, dispatch_get_main_queue() );
 	CVDisplayLinkRef displayLink = NULL;
-	if ( source &&
-		 kCVReturnSuccess == CVDisplayLinkCreateWithActiveCGDisplays( & displayLink ) &&
+	if ( kCVReturnSuccess == CVDisplayLinkCreateWithActiveCGDisplays( & displayLink ) &&
 		 kCVReturnSuccess == CVDisplayLinkSetOutputCallback(
 			displayLink, AppleDisplayLinkOutputCallback, target ) )
 	{
 		fDisplayTarget = target;
 		fDisplaySource = (void*)source;
 		fMacDisplayLink = (void*)displayLink;
-		[target setDispatchSource:source];
-
-		dispatch_source_set_event_handler( source, ^{
-			[target dispatchSourceFired];
-		} );
-		dispatch_resume( source );
 
 		UpdateMacDisplayLinkScreen();
 

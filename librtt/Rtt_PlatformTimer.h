@@ -41,9 +41,8 @@ class PlatformTimer
 		// Defaults to 0 for platforms that do not provide a native query.
 		virtual double GetRefreshRate() const { return 0.0; }
 		// Returns the time used to advance the runtime clock. Display-linked
-		// platforms can override this to use the upcoming presentation time.
+		// platforms can override this to use presentation-aligned frame time.
 		virtual Rtt_AbsoluteTime GetCurrentTime() const { return Rtt_GetAbsoluteTime(); }
-
 		/// <summary>
 		///  Returns whether render-sync mode is enabled.
 		/// </summary>

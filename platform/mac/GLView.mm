@@ -337,12 +337,12 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
     {
         // This fixes nasty OpenGL painting artifacts when live resizing
 		[self invalidate];
-    }
+	}
 	else
 	{
-		// This turns out to be lightweight b/c setNeedsDisplay is called by the timer *only*
-		// when the Scene has already been invalidated. We invalidate here b/c drawRect
-		// can also be called by the OS in situations like dragging between multiple monitors.
+		// Display-link frames present directly. AppKit can still request a redraw
+		// when exposing the view or moving it between displays, so render a complete
+		// current frame for those requests as well.
 		[self invalidate];
 	}
 
@@ -356,8 +356,10 @@ static const char *RttCoronaKeyNameForKeyCode(unsigned short keyCode)
 	{
 		fRuntime->Render();
 	}
-    
-    [[self openGLContext] flushBuffer];
+	else
+	{
+		[[self openGLContext] flushBuffer];
+	}
 }
 
 - (void)setDelegate:(id< GLViewDelegate >)delegate

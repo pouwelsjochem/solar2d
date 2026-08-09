@@ -240,6 +240,9 @@ static bool MakeSimulatorControlAbsolutePath(
 	const std::string& path, std::string& result );
 static int RegisterSimulatorControlHandle( lua_State *L, int valueIndex );
 static void SimulatorControlLuaHook( lua_State *L, lua_Debug *information );
+struct SimulatorControlRuntimeState;
+static void UpdateSimulatorControlLuaHook(
+	Runtime& runtime, SimulatorControlRuntimeState& state );
 
 class SimulatorControlLogMutex
 {
@@ -6836,6 +6839,7 @@ ResumeSimulatorControlDebugger(
 		state.debuggerStepThread = NULL;
 		state.debuggerStepDepth = 0;
 	}
+	UpdateSimulatorControlLuaHook( runtime, state );
 	if ( state.debuggerOwnsRuntimeClock )
 	{
 		runtime.EndSimulatorControlPause( false );
@@ -6994,6 +6998,7 @@ ProcessSimulatorControlRequest(
 		breakpoint.comparisonPath = comparisonPath;
 		breakpoint.condition = condition;
 		configuration.breakpoints.push_back( breakpoint );
+		UpdateSimulatorControlLuaHook( runtime, state );
 		char added[64];
 		snprintf(
 			added, sizeof( added ),
@@ -7030,6 +7035,7 @@ ProcessSimulatorControlRequest(
 			if ( iterator->id == identifier )
 			{
 				configuration.breakpoints.erase( iterator );
+				UpdateSimulatorControlLuaHook( runtime, state );
 				return SimulatorControlSuccessResponse( "true" );
 			}
 		}
@@ -8043,10 +8049,32 @@ SimulatorControl::InitializeDebugger( Runtime& sender, lua_State *L )
 	{
 		iterator->hits = 0;
 	}
-	state->debuggerHookInstalled = true;
-	lua_sethook( L, SimulatorControlLuaHook, LUA_MASKLINE, 0 );
+	UpdateSimulatorControlLuaHook( sender, *state );
 	WriteSimulatorControlSession( *state );
 	WriteSimulatorControlDiagnostics( *state );
+}
+
+static void
+UpdateSimulatorControlLuaHook(
+	Runtime& runtime, SimulatorControlRuntimeState& state )
+{
+	lua_State *L = runtime.VMContext().L();
+	if ( ! L )
+	{
+		return;
+	}
+	bool shouldInstall =
+		! GetSimulatorControlDebuggerConfiguration().breakpoints.empty() ||
+		! state.debuggerStepMode.empty();
+	if ( shouldInstall != state.debuggerHookInstalled )
+	{
+		lua_sethook(
+			L,
+			shouldInstall ? SimulatorControlLuaHook : NULL,
+			shouldInstall ? LUA_MASKLINE : 0,
+			0 );
+		state.debuggerHookInstalled = shouldInstall;
+	}
 }
 
 static void

@@ -58,6 +58,8 @@ class AppleTimer : public PlatformTimer
 		virtual bool IsRunning() const;
 #if defined( Rtt_MAC_ENV ) && ! defined( Rtt_NO_GUI )
 		virtual Rtt_AbsoluteTime GetCurrentTime() const;
+		virtual double GetRefreshRate() const;
+		virtual double GetLastFrameWorkMs() const;
 #endif
 
 	public:
