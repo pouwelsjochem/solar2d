@@ -300,7 +300,10 @@ EvenPixelDimension(CGFloat value)
 	[streamConfiguration setHeight:outputHeight];
 	[streamConfiguration setScalesToFit:YES];
 	[streamConfiguration setPreservesAspectRatio:YES];
-	[streamConfiguration setMinimumFrameInterval:CMTimeMake(1, (int32_t)fFramesPerSecond)];
+	// Allow display-synchronized frames to arrive slightly inside the exact
+	// frame-rate boundary instead of having ScreenCaptureKit discard them.
+	CMTime frameInterval = CMTimeMake(1, (int32_t)fFramesPerSecond);
+	[streamConfiguration setMinimumFrameInterval:CMTimeMultiplyByFloat64(frameInterval, 0.9)];
 	[streamConfiguration setQueueDepth:5];
 	[streamConfiguration setPixelFormat:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange];
 	[streamConfiguration setShowsCursor:fShowsCursor];
