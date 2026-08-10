@@ -301,6 +301,7 @@ class MSimulatorHost
 			  outputHeight( 0 ),
 			  includeAudio( true ),
 			  showsCursor( false ),
+			  reuseCaptureStream( false ),
 			  overwrite( false )
 			{
 			}
@@ -313,6 +314,7 @@ class MSimulatorHost
 			int outputHeight;
 			bool includeAudio;
 			bool showsCursor;
+			bool reuseCaptureStream;
 			bool overwrite;
 		};
 

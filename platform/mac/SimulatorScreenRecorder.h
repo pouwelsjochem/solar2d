@@ -58,6 +58,7 @@ typedef NS_ENUM(NSInteger, SimulatorScreenRecorderCaptureResolutionType)
 	outputHeight:(NSInteger)outputHeight
 	includeAudio:(BOOL)includeAudio
 	showsCursor:(BOOL)showsCursor
+	reuseCaptureStream:(BOOL)reuseCaptureStream
 	error:(NSError **)error;
 
 - (BOOL)stopRecording:(NSError **)error;

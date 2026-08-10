@@ -61,6 +61,7 @@ EvenPixelDimension(CGFloat value)
 	BOOL fStreamStopRequested;
 	BOOL fStreamStopped;
 	BOOL fRemoveOutputFileWhenFinished;
+	BOOL fReuseCaptureStream;
 
 	CGWindowID fWindowID;
 	CGRect fWindowSourceRect;
@@ -76,11 +77,13 @@ EvenPixelDimension(CGFloat value)
 - (void)beginRecordingWithShareableContent:(SCShareableContent *)shareableContent
 	error:(NSError *)error
 	generation:(NSUInteger)generation;
+- (BOOL)attachRecordingOutput:(NSError **)error;
 - (void)beginStoppingWithError:(NSError *)error removeOutputFile:(BOOL)removeOutputFile;
 - (void)requestStreamStop;
 - (void)finishIfCaptureObjectsStopped;
 - (void)scheduleCleanupTimeout;
 - (void)finishWithPhase:(NSString *)phase error:(NSError *)error removeOutputFile:(BOOL)removeOutputFile;
+- (void)releaseRecordingOutput;
 - (void)releaseCaptureObjects;
 
 @end
@@ -144,6 +147,7 @@ EvenPixelDimension(CGFloat value)
 	outputHeight:(NSInteger)outputHeight
 	includeAudio:(BOOL)includeAudio
 	showsCursor:(BOOL)showsCursor
+	reuseCaptureStream:(BOOL)reuseCaptureStream
 	error:(NSError **)error
 {
 	if (fState != SimulatorScreenRecorderStateIdle)
@@ -220,12 +224,29 @@ EvenPixelDimension(CGFloat value)
 	// AppKit screen coordinates have a bottom-left origin. ScreenCaptureKit's
 	// window source rectangle has a top-left origin and is window-relative.
 	NSRect windowFrame = [window frame];
-	fWindowSourceRect = CGRectMake(
+	CGRect windowSourceRect = CGRectMake(
 		NSMinX(viewRectOnScreen) - NSMinX(windowFrame),
 		NSMaxY(windowFrame) - NSMaxY(viewRectOnScreen),
 		NSWidth(viewRectOnScreen),
 		NSHeight(viewRectOnScreen));
-	fWindowID = (CGWindowID)[window windowNumber];
+	CGWindowID windowID = (CGWindowID)[window windowNumber];
+	if (fStream &&
+		(fWindowID != windowID || !CGRectEqualToRect(fWindowSourceRect, windowSourceRect) ||
+		fFramesPerSecond != framesPerSecond || fResolutionScale != resolutionScale ||
+		fCaptureResolutionType != captureResolutionType || fOutputWidth != outputWidth ||
+		fOutputHeight != outputHeight || fIncludeAudio != includeAudio || fShowsCursor != showsCursor))
+	{
+		if (error)
+		{
+			*error = NewRecorderError(
+				SimulatorScreenRecorderErrorInvalidArgument,
+				@"A reused capture stream requires the same window and capture settings for every recording.");
+		}
+		return NO;
+	}
+
+	fWindowSourceRect = windowSourceRect;
+	fWindowID = windowID;
 	fFramesPerSecond = framesPerSecond;
 	fResolutionScale = resolutionScale;
 	fCaptureResolutionType = captureResolutionType;
@@ -233,9 +254,39 @@ EvenPixelDimension(CGFloat value)
 	fOutputHeight = outputHeight;
 	fIncludeAudio = includeAudio;
 	fShowsCursor = showsCursor;
+	fReuseCaptureStream = reuseCaptureStream;
 	fOutputURL = [outputURL copy];
 	fState = SimulatorScreenRecorderStateStarting;
 	fGeneration++;
+	fRecordingOutputFinished = NO;
+	fStreamStopRequested = NO;
+	fStreamStopped = NO;
+	fRemoveOutputFileWhenFinished = NO;
+
+	if (fStream)
+	{
+		NSError *addOutputError = nil;
+		if (![self attachRecordingOutput:&addOutputError])
+		{
+			[self beginStoppingWithError:addOutputError removeOutputFile:YES];
+		}
+		else
+		{
+			NSUInteger generation = fGeneration;
+			dispatch_async(dispatch_get_main_queue(),
+				^{
+					if (generation == fGeneration && fState == SimulatorScreenRecorderStateStarting)
+					{
+						fState = SimulatorScreenRecorderStateRecording;
+						if ([delegate respondsToSelector:@selector(screenRecorder:didChangePhase:outputURL:error:)])
+						{
+							[delegate screenRecorder:self didChangePhase:@"started" outputURL:fOutputURL error:nil];
+						}
+					}
+				});
+		}
+		return YES;
+	}
 
 	NSUInteger generation = fGeneration;
 	[SCShareableContent getCurrentProcessShareableContentWithCompletionHandler:
@@ -326,26 +377,14 @@ EvenPixelDimension(CGFloat value)
 	[streamConfiguration setChannelCount:2];
 	[streamConfiguration setStreamName:@"Solar2D Simulator Screen Recording"];
 
-	SCRecordingOutputConfiguration *recordingConfiguration =
-		[[[SCRecordingOutputConfiguration alloc] init] autorelease];
-	[recordingConfiguration setOutputURL:fOutputURL];
-	[recordingConfiguration setOutputFileType:AVFileTypeMPEG4];
-	[recordingConfiguration setVideoCodecType:AVVideoCodecTypeH264];
-
-	fRecordingOutput = [[SCRecordingOutput alloc]
-		initWithConfiguration:recordingConfiguration delegate:self];
 	fStream = [[SCStream alloc] initWithFilter:filter configuration:streamConfiguration delegate:self];
 
 	NSError *addOutputError = nil;
-	if (![fStream addRecordingOutput:fRecordingOutput error:&addOutputError])
+	if (![self attachRecordingOutput:&addOutputError])
 	{
 		[self finishWithPhase:@"failed" error:addOutputError removeOutputFile:YES];
 		return;
 	}
-	fRecordingOutputIsAttached = YES;
-	fRecordingOutputFinished = NO;
-	fStreamStopRequested = NO;
-	fStreamStopped = NO;
 
 	[fStream startCaptureWithCompletionHandler:
 		^(NSError *startError)
@@ -361,6 +400,26 @@ EvenPixelDimension(CGFloat value)
 					});
 			}
 		}];
+}
+
+- (BOOL)attachRecordingOutput:(NSError **)error
+{
+	SCRecordingOutputConfiguration *recordingConfiguration =
+		[[[SCRecordingOutputConfiguration alloc] init] autorelease];
+	[recordingConfiguration setOutputURL:fOutputURL];
+	[recordingConfiguration setOutputFileType:AVFileTypeMPEG4];
+	[recordingConfiguration setVideoCodecType:AVVideoCodecTypeH264];
+
+	fRecordingOutput = [[SCRecordingOutput alloc]
+		initWithConfiguration:recordingConfiguration delegate:self];
+	if (![fStream addRecordingOutput:fRecordingOutput error:error])
+	{
+		[fRecordingOutput release];
+		fRecordingOutput = nil;
+		return NO;
+	}
+	fRecordingOutputIsAttached = YES;
+	return YES;
 }
 
 - (BOOL)stopRecording:(NSError **)error
@@ -429,7 +488,6 @@ EvenPixelDimension(CGFloat value)
 				fRecordingOutputFinished = YES;
 				if (fState == SimulatorScreenRecorderStateStopping)
 				{
-					[self requestStreamStop];
 					[self finishIfCaptureObjectsStopped];
 				}
 				else
@@ -447,7 +505,14 @@ EvenPixelDimension(CGFloat value)
 {
 	dispatch_async(dispatch_get_main_queue(),
 		^{
-			if (stream == fStream && fState != SimulatorScreenRecorderStateIdle)
+			if (stream == fStream && fState == SimulatorScreenRecorderStateIdle)
+			{
+				[fStream release];
+				fStream = nil;
+				fReuseCaptureStream = NO;
+				fStreamStopped = NO;
+			}
+			else if (stream == fStream)
 			{
 				fStreamStopped = YES;
 				NSError *streamError = error ?: NewRecorderError(
@@ -467,6 +532,7 @@ EvenPixelDimension(CGFloat value)
 	if (error && !fTerminalError)
 	{
 		fTerminalError = [error retain];
+		fReuseCaptureStream = NO;
 	}
 	if (removeOutputFile)
 	{
@@ -499,6 +565,7 @@ EvenPixelDimension(CGFloat value)
 				{
 					fTerminalError = [removeError retain];
 				}
+				fReuseCaptureStream = NO;
 				[self requestStreamStop];
 			}
 		}
@@ -507,7 +574,10 @@ EvenPixelDimension(CGFloat value)
 
 	if (fRecordingOutputFinished)
 	{
-		[self requestStreamStop];
+		if (!fReuseCaptureStream || fTerminalError)
+		{
+			[self requestStreamStop];
+		}
 	}
 	[self finishIfCaptureObjectsStopped];
 }
@@ -548,8 +618,8 @@ EvenPixelDimension(CGFloat value)
 
 - (void)finishIfCaptureObjectsStopped
 {
-	if (fState == SimulatorScreenRecorderStateStopping &&
-		fRecordingOutputFinished && fStreamStopped)
+	if (fState == SimulatorScreenRecorderStateStopping && fRecordingOutputFinished &&
+		((fReuseCaptureStream && !fTerminalError) || fStreamStopped))
 	{
 		NSString *phase = fTerminalError ? @"failed" : @"ended";
 		[self finishWithPhase:phase error:fTerminalError removeOutputFile:fRemoveOutputFileWhenFinished];
@@ -572,6 +642,7 @@ EvenPixelDimension(CGFloat value)
 					@"ScreenCaptureKit timed out while finalizing the recording.") retain];
 			}
 			fRemoveOutputFileWhenFinished = YES;
+			fReuseCaptureStream = NO;
 			[self requestStreamStop];
 
 			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, kForcedCleanupTimeout), dispatch_get_main_queue(),
@@ -590,8 +661,16 @@ EvenPixelDimension(CGFloat value)
 {
 	NSURL *completedOutputURL = [fOutputURL retain];
 	NSError *completedError = [error retain];
+	BOOL keepCaptureStream = fReuseCaptureStream && !error && !removeOutputFile && fStream && !fStreamStopped;
 	fState = SimulatorScreenRecorderStateIdle;
-	[self releaseCaptureObjects];
+	if (keepCaptureStream)
+	{
+		[self releaseRecordingOutput];
+	}
+	else
+	{
+		[self releaseCaptureObjects];
+	}
 	if (removeOutputFile && completedOutputURL)
 	{
 		[[NSFileManager defaultManager] removeItemAtURL:completedOutputURL error:nil];
@@ -605,10 +684,8 @@ EvenPixelDimension(CGFloat value)
 	[completedOutputURL release];
 }
 
-- (void)releaseCaptureObjects
+- (void)releaseRecordingOutput
 {
-	[fStream release];
-	fStream = nil;
 	[fRecordingOutput release];
 	fRecordingOutput = nil;
 	[fOutputURL release];
@@ -620,6 +697,14 @@ EvenPixelDimension(CGFloat value)
 	fStreamStopRequested = NO;
 	fStreamStopped = NO;
 	fRemoveOutputFileWhenFinished = NO;
+}
+
+- (void)releaseCaptureObjects
+{
+	[fStream release];
+	fStream = nil;
+	fReuseCaptureStream = NO;
+	[self releaseRecordingOutput];
 }
 
 @end

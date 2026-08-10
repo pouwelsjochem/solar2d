@@ -921,7 +921,7 @@ StartScreenRecording( lua_State *L )
 	const char * const allowedOptions[] =
 	{
 		"path", "fps", "resolutionScale", "captureResolutionType", "outputWidth", "outputHeight",
-		"includeAudio", "showCursor", "overwrite", NULL
+		"includeAudio", "showCursor", "reuseCaptureStream", "overwrite", NULL
 	};
 	ValidateOptionKeys( L, 1, allowedOptions, "screen recording" );
 
@@ -987,6 +987,8 @@ StartScreenRecording( lua_State *L )
 		L, 1, "includeAudio", "screen recording includeAudio", true );
 	options.showsCursor = ReadOptionalBoolean(
 		L, 1, "showCursor", "screen recording showCursor", false );
+	options.reuseCaptureStream = ReadOptionalBoolean(
+		L, 1, "reuseCaptureStream", "screen recording reuseCaptureStream", false );
 	options.overwrite = ReadOptionalBoolean(
 		L, 1, "overwrite", "screen recording overwrite", false );
 

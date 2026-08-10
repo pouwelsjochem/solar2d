@@ -2796,6 +2796,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 	NSInteger outputHeight = [[options objectForKey:@"outputHeight"] integerValue];
 	BOOL includeAudio = [[options objectForKey:@"includeAudio"] boolValue];
 	BOOL showsCursor = [[options objectForKey:@"showCursor"] boolValue];
+	BOOL reuseCaptureStream = [[options objectForKey:@"reuseCaptureStream"] boolValue];
 	NSError *startError = nil;
 	BOOL accepted = [fScreenRecorder startRecordingWindow:[self currentWindow]
 		sourceView:[self layerHostView]
@@ -2807,6 +2808,7 @@ Rtt_EXPORT const luaL_Reg* Rtt_GetCustomModulesList()
 		outputHeight:outputHeight
 		includeAudio:includeAudio
 		showsCursor:showsCursor
+		reuseCaptureStream:reuseCaptureStream
 		error:&startError];
 	if (!accepted)
 	{

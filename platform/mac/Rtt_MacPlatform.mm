@@ -2094,6 +2094,7 @@ MacGUIPlatform::StartScreenRecording(
 		[NSNumber numberWithInt:options.outputHeight], @"outputHeight",
 		[NSNumber numberWithBool:options.includeAudio], @"includeAudio",
 		[NSNumber numberWithBool:options.showsCursor], @"showCursor",
+		[NSNumber numberWithBool:options.reuseCaptureStream], @"reuseCaptureStream",
 		[NSNumber numberWithBool:options.overwrite], @"overwrite",
 		[NSNumber numberWithBool:NO], @"startedFromMenu",
 		nil];

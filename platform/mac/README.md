@@ -82,6 +82,7 @@ local accepted, message = simulator.startScreenRecording({
 	outputHeight = 1080,     -- Optional; must be provided with outputWidth.
 	includeAudio = true,     -- Optional; defaults to true.
 	showCursor = false,      -- Optional; defaults to false.
+	reuseCaptureStream = false, -- Optional; reuse one stream for consecutive files.
 	overwrite = true         -- Optional; defaults to false.
 }, function(event)
 	print(event.phase, event.path, event.errorMessage)
@@ -107,6 +108,12 @@ than maximum sharpness.
 them to the requested output dimensions. `"best"` preserves the previous
 high-resolution behavior, while `"automatic"` and `"nominal"` can reduce capture
 overhead on Retina displays.
+
+Set `reuseCaptureStream = true` for consecutive recordings with identical capture
+settings. Stopping a file then keeps its ScreenCaptureKit stream alive, and the next
+recording attaches a new output to it. This avoids repeatedly creating native capture
+sessions while still producing separate MP4 files. The stream is released when the
+Simulator exits; use the option only for bounded automation sessions.
 
 `simulator.getScreenRecordingState()` returns `"idle"`, `"starting"`,
 `"recording"`, `"stopping"`, or `"unavailable"`. Recording completion is also
