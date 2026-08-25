@@ -70,7 +70,7 @@ Run the same native executable in control-client mode from another terminal:
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control continue-debugger
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control capture-screenshot
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control debug-snapshot
-"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control start-screen-recording capture.mp4 --fps 60 --overwrite
+"$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control start-screen-recording capture.mp4 --fps 60 --output-width 1920 --output-height 1080 --overwrite
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control screen-recording-status
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control stop-screen-recording
 "$SIMULATOR" -simulator-control-dir "$CONTROL_DIR" -simulator-control display-object-tree
@@ -273,9 +273,18 @@ intended as a compact debugging bundle rather than a complete trace.
 
 On macOS 15 or later, `start-screen-recording` records the Simulator device view
 to an H.264 `.mp4`. Its path may be relative to the control client's working
-directory or absolute. Recording defaults to 60 FPS with audio enabled and the
-cursor hidden. Pass `--fps FPS`, `--no-audio`, `--show-cursor`, or `--overwrite`
-to change those settings. The destination directory must already exist.
+directory or absolute. Recording defaults to 60 FPS with audio enabled, the
+cursor hidden, a resolution scale of 1, and the `best` capture resolution type.
+Pass `--fps FPS`, `--resolution-scale SCALE`, or
+`--capture-resolution-type automatic|best|nominal` to change those settings.
+Use `--output-width WIDTH` and `--output-height HEIGHT` together for exact even
+output dimensions from 2 through 16384. `--no-audio`, `--show-cursor`,
+`--reuse-capture-stream`, and `--overwrite` control their corresponding Boolean
+options. The destination directory must already exist.
+
+`--reuse-capture-stream` keeps the native capture stream alive between
+consecutive recordings with identical capture settings. It avoids recreating
+the stream for every short clip and is intended for bounded automation sessions.
 
 Starting and stopping are asynchronous. `start-screen-recording` usually
 returns state `"starting"`, and `stop-screen-recording` usually returns
@@ -383,6 +392,38 @@ emits a reconfiguration event. Buttons use Solar2D key names such as `buttonA`,
 and `rightY` from -1 through 1, plus `leftTrigger` and `rightTrigger` from 0
 through 1. Axis values remain set until changed; send 0 to center a stick axis
 or release a trigger.
+
+Simulator Lua code can inject the same virtual controller events through
+`simulator.sendInput()`:
+
+```lua
+simulator.sendInput({
+	type = "controller",
+	action = "connect",
+	controllerId = "player-one",
+	controllerProfile = "xbox",
+	controllerPlayerNumber = 1,
+})
+simulator.sendInput({
+	type = "controller",
+	action = "button",
+	controllerId = "player-one",
+	keyName = "buttonA",
+	phase = "pressed",
+})
+simulator.sendInput({
+	type = "controller",
+	action = "axis",
+	controllerId = "player-one",
+	axisName = "leftX",
+	axisValue = -1,
+})
+```
+
+The controller ID defaults to `default`. Button and axis actions automatically
+connect a new Xbox controller, while an explicit `connect` action can select a
+profile and player number. Use `action = "disconnect"` to emit the normal input
+device disconnection event.
 
 `inspect-lua-value` is read-only. It accepts paths such as
 `player.inventory[1]` and `settings["audio"]`, uses raw table access, and never

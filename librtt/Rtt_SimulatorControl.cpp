@@ -4508,12 +4508,22 @@ BuildSimulatorControlScreenRecordingPayload(
 	}
 
 	int framesPerSecond = 60;
+	double resolutionScale = 1.0;
+	std::string captureResolutionType( "best" );
+	int outputWidth = 0;
+	int outputHeight = 0;
 	bool includeAudio = true;
 	bool showsCursor = false;
+	bool reuseCaptureStream = false;
 	bool overwrite = false;
 	bool hasFramesPerSecond = false;
+	bool hasResolutionScale = false;
+	bool hasCaptureResolutionType = false;
+	bool hasOutputWidth = false;
+	bool hasOutputHeight = false;
 	bool hasNoAudio = false;
 	bool hasShowCursor = false;
+	bool hasReuseCaptureStream = false;
 	bool hasOverwrite = false;
 	for ( size_t index = 1; index < arguments.size(); index++ )
 	{
@@ -4536,6 +4546,62 @@ BuildSimulatorControlScreenRecordingPayload(
 			}
 			hasFramesPerSecond = true;
 		}
+		else if ( "--resolution-scale" == argument )
+		{
+			if ( hasResolutionScale || index + 1 >= arguments.size() )
+			{
+				error = "start-screen-recording --resolution-scale expects a number greater than 0 and no greater than 1";
+				return false;
+			}
+			const std::string& value = arguments[++index];
+			std::istringstream stream( value );
+			std::string extra;
+			if ( ! ( stream >> resolutionScale ) || stream >> extra ||
+				! IsFiniteNumber( (lua_Number)resolutionScale ) ||
+				resolutionScale <= 0.0 || resolutionScale > 1.0 )
+			{
+				error = "start-screen-recording --resolution-scale expects a number greater than 0 and no greater than 1";
+				return false;
+			}
+			hasResolutionScale = true;
+		}
+		else if ( "--capture-resolution-type" == argument )
+		{
+			if ( hasCaptureResolutionType || index + 1 >= arguments.size() )
+			{
+				error = "start-screen-recording --capture-resolution-type expects automatic, best, or nominal";
+				return false;
+			}
+			captureResolutionType = arguments[++index];
+			if ( "automatic" != captureResolutionType &&
+				"best" != captureResolutionType &&
+				"nominal" != captureResolutionType )
+			{
+				error = "start-screen-recording --capture-resolution-type expects automatic, best, or nominal";
+				return false;
+			}
+			hasCaptureResolutionType = true;
+		}
+		else if ( "--output-width" == argument || "--output-height" == argument )
+		{
+			bool& hasValue = "--output-width" == argument ? hasOutputWidth : hasOutputHeight;
+			int& result = "--output-width" == argument ? outputWidth : outputHeight;
+			if ( hasValue || index + 1 >= arguments.size() )
+			{
+				error = argument + " expects one even integer from 2 through 16384";
+				return false;
+			}
+			const std::string& value = arguments[++index];
+			std::istringstream stream( value );
+			std::string extra;
+			if ( ! ( stream >> result ) || stream >> extra ||
+				result < 2 || result > 16384 || 0 != result % 2 )
+			{
+				error = argument + " expects one even integer from 2 through 16384";
+				return false;
+			}
+			hasValue = true;
+		}
 		else if ( "--no-audio" == argument )
 		{
 			if ( hasNoAudio )
@@ -4556,6 +4622,16 @@ BuildSimulatorControlScreenRecordingPayload(
 			hasShowCursor = true;
 			showsCursor = true;
 		}
+		else if ( "--reuse-capture-stream" == argument )
+		{
+			if ( hasReuseCaptureStream )
+			{
+				error = "start-screen-recording --reuse-capture-stream can only be provided once";
+				return false;
+			}
+			hasReuseCaptureStream = true;
+			reuseCaptureStream = true;
+		}
 		else if ( "--overwrite" == argument )
 		{
 			if ( hasOverwrite )
@@ -4568,16 +4644,23 @@ BuildSimulatorControlScreenRecordingPayload(
 		}
 		else
 		{
-			error = "start-screen-recording options are --fps, --no-audio, --show-cursor, and --overwrite";
+			error = "start-screen-recording options are --fps, --resolution-scale, --capture-resolution-type, --output-width, --output-height, --no-audio, --show-cursor, --reuse-capture-stream, and --overwrite";
 			return false;
 		}
 	}
+	if ( hasOutputWidth != hasOutputHeight )
+	{
+		error = "start-screen-recording --output-width and --output-height must be provided together";
+		return false;
+	}
 
-	char options[64];
+	char options[192];
 	snprintf(
-		options, sizeof( options ), "\n%d %d %d %d",
-		framesPerSecond, includeAudio ? 1 : 0,
-		showsCursor ? 1 : 0, overwrite ? 1 : 0 );
+		options, sizeof( options ), "\n%d %.17g %s %d %d %d %d %d %d",
+		framesPerSecond, resolutionScale, captureResolutionType.c_str(),
+		outputWidth, outputHeight, includeAudio ? 1 : 0,
+		showsCursor ? 1 : 0, reuseCaptureStream ? 1 : 0,
+		overwrite ? 1 : 0 );
 	payload.assign( absolutePath );
 	payload.append( options );
 	return true;
@@ -4597,15 +4680,28 @@ ParseSimulatorControlScreenRecordingPayload(
 	options.path.assign( payload, 0, lineEnd );
 	int includeAudio = -1;
 	int showsCursor = -1;
+	int reuseCaptureStream = -1;
 	int overwrite = -1;
 	std::string extra;
 	std::istringstream stream( payload.substr( lineEnd + 1 ) );
 	if ( options.path.empty() || ! HasSimulatorControlMp4Extension( options.path ) ||
-		! ( stream >> options.framesPerSecond >> includeAudio >>
-			showsCursor >> overwrite ) || stream >> extra ||
+		! ( stream >> options.framesPerSecond >> options.resolutionScale >>
+			options.captureResolutionType >> options.outputWidth >> options.outputHeight >>
+			includeAudio >> showsCursor >> reuseCaptureStream >> overwrite ) || stream >> extra ||
 		options.framesPerSecond < 1 || options.framesPerSecond > 240 ||
+		! IsFiniteNumber( (lua_Number)options.resolutionScale ) ||
+		options.resolutionScale <= 0.0 || options.resolutionScale > 1.0 ||
+		( "automatic" != options.captureResolutionType &&
+			"best" != options.captureResolutionType &&
+			"nominal" != options.captureResolutionType ) ||
+		( ( 0 == options.outputWidth ) != ( 0 == options.outputHeight ) ) ||
+		( 0 != options.outputWidth &&
+			( options.outputWidth < 2 || options.outputWidth > 16384 ||
+			options.outputHeight < 2 || options.outputHeight > 16384 ||
+			0 != options.outputWidth % 2 || 0 != options.outputHeight % 2 ) ) ||
 		( 0 != includeAudio && 1 != includeAudio ) ||
 		( 0 != showsCursor && 1 != showsCursor ) ||
+		( 0 != reuseCaptureStream && 1 != reuseCaptureStream ) ||
 		( 0 != overwrite && 1 != overwrite ) )
 	{
 		error = "start-screen-recording received an invalid payload";
@@ -4613,6 +4709,7 @@ ParseSimulatorControlScreenRecordingPayload(
 	}
 	options.includeAudio = 0 != includeAudio;
 	options.showsCursor = 0 != showsCursor;
+	options.reuseCaptureStream = 0 != reuseCaptureStream;
 	options.overwrite = 0 != overwrite;
 	return true;
 }
@@ -5896,7 +5993,7 @@ PrintSimulatorControlClientHelp()
 		"  step-out\n"
 		"  capture-screenshot [PATH]\n"
 		"  debug-snapshot [PATH]\n"
-		"  start-screen-recording PATH [--fps FPS] [--no-audio] [--show-cursor] [--overwrite]\n"
+		"  start-screen-recording PATH [--fps FPS] [--resolution-scale SCALE] [--capture-resolution-type TYPE] [--output-width WIDTH --output-height HEIGHT] [--no-audio] [--show-cursor] [--reuse-capture-stream] [--overwrite]\n"
 		"  stop-screen-recording\n"
 		"  screen-recording-status\n"
 		"  display-object-tree [--cursor OFFSET]\n"
@@ -7587,14 +7684,19 @@ ProcessSimulatorControlRequest(
 				host->GetScreenRecordingState() ) );
 		result.append( ",\"path\":" );
 		AppendSimulatorControlJsonString( result, options.path );
-		char settings[128];
+		char settings[320];
 		snprintf(
 			settings, sizeof( settings ),
-			",\"fps\":%d,\"includeAudio\":%s,\"showCursor\":%s,"
-			"\"overwrite\":%s}",
-			options.framesPerSecond,
+			",\"fps\":%d,\"resolutionScale\":%.17g,"
+			"\"captureResolutionType\":\"%s\",\"outputWidth\":%d,"
+			"\"outputHeight\":%d,\"includeAudio\":%s,\"showCursor\":%s,"
+			"\"reuseCaptureStream\":%s,\"overwrite\":%s}",
+			options.framesPerSecond, options.resolutionScale,
+			options.captureResolutionType.c_str(),
+			options.outputWidth, options.outputHeight,
 			options.includeAudio ? "true" : "false",
 			options.showsCursor ? "true" : "false",
+			options.reuseCaptureStream ? "true" : "false",
 			options.overwrite ? "true" : "false" );
 		result.append( settings );
 		return SimulatorControlSuccessResponse( result );

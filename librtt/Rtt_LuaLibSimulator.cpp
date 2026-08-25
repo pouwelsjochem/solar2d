@@ -17,6 +17,7 @@
 #include "Rtt_MPlatform.h"
 #include "Rtt_MSimulatorHost.h"
 
+#include <ctype.h>
 #include <float.h>
 #include <math.h>
 #include <string.h>
@@ -550,6 +551,8 @@ SendSimulatorInput( lua_State *L )
 	const char * const allowedOptions[] =
 	{
 		"type", "phase", "keyName", "qwertyKeyName", "nativeKeyCode", "text",
+		"action", "controllerId", "controllerProfile", "controllerPlayerNumber",
+		"axisName", "axisValue",
 		"x", "y", "xStart", "yStart", "scrollX", "scrollY", "clickCount",
 		"isShiftDown", "isAltDown", "isCtrlDown", "isCommandDown",
 		"isPrimaryButtonDown", "isSecondaryButtonDown", "isMiddleButtonDown",
@@ -558,9 +561,10 @@ SendSimulatorInput( lua_State *L )
 	ValidateOptionKeys( L, 1, allowedOptions, "simulator input" );
 
 	std::string inputType = ReadRequiredString(
-		L, 1, "type", "simulator input type must be 'back', 'key', 'text', 'touch', 'tap', or 'mouse'" );
+		L, 1, "type", "simulator input type must be 'back', 'key', 'text', 'touch', 'tap', 'mouse', or 'controller'" );
 	MSimulatorHost::Input input;
 	bool isTap = false;
+	bool shouldConnectController = false;
 
 	if ( "back" == inputType )
 	{
@@ -751,9 +755,173 @@ SendSimulatorInput( lua_State *L )
 		}
 		lua_pop( L, 1 );
 	}
+	else if ( "controller" == inputType )
+	{
+		std::string action = ReadRequiredString(
+			L, 1, "action",
+			"controller simulator input action must be 'connect', 'disconnect', 'button', or 'axis'" );
+		input.type = MSimulatorHost::Input::kControllerInput;
+
+		lua_getfield( L, 1, "controllerId" );
+		if ( ! lua_isnil( L, -1 ) )
+		{
+			if ( lua_type( L, -1 ) != LUA_TSTRING )
+			{
+				return luaL_error( L, "controller simulator input controllerId must be a string" );
+			}
+			size_t length = 0;
+			const char *value = lua_tolstring( L, -1, &length );
+			if ( 0 == length || length > 64 )
+			{
+				return luaL_error(
+					L, "controller simulator input controllerId must contain 1 through 64 characters" );
+			}
+			for ( size_t index = 0; index < length; index++ )
+			{
+				const char character = value[index];
+				if ( '-' != character && '_' != character && '.' != character &&
+					! isalnum( (unsigned char)character ) )
+				{
+					return luaL_error(
+						L,
+						"controller simulator input controllerId supports letters, numbers, periods, hyphens, and underscores" );
+				}
+			}
+			input.controllerId.assign( value, length );
+		}
+		lua_pop( L, 1 );
+
+		if ( "connect" == action )
+		{
+			const char * const options[] =
+			{
+				"type", "action", "controllerId", "controllerProfile", "controllerPlayerNumber", NULL
+			};
+			ValidateOptionKeys( L, 1, options, "controller connect simulator input" );
+			input.controllerAction = MSimulatorHost::Input::kConnectController;
+
+			lua_getfield( L, 1, "controllerProfile" );
+			if ( ! lua_isnil( L, -1 ) )
+			{
+				if ( lua_type( L, -1 ) != LUA_TSTRING )
+				{
+					return luaL_error(
+						L,
+						"controller connect simulator input controllerProfile must be 'xbox', 'playstation', 'nintendo', or 'generic'" );
+				}
+				input.controllerProfile = lua_tostring( L, -1 );
+				if ( "xbox" != input.controllerProfile &&
+					"playstation" != input.controllerProfile &&
+					"nintendo" != input.controllerProfile &&
+					"generic" != input.controllerProfile )
+				{
+					return luaL_error(
+						L,
+						"controller connect simulator input controllerProfile must be 'xbox', 'playstation', 'nintendo', or 'generic'" );
+				}
+				input.hasControllerProfile = true;
+			}
+			lua_pop( L, 1 );
+
+			lua_getfield( L, 1, "controllerPlayerNumber" );
+			if ( ! lua_isnil( L, -1 ) )
+			{
+				lua_Number value = lua_type( L, -1 ) == LUA_TNUMBER ? lua_tonumber( L, -1 ) : 0.5;
+				if ( ! IsInteger( value ) || value < 1.0 || value > 4.0 )
+				{
+					return luaL_error(
+						L,
+						"controller connect simulator input controllerPlayerNumber must be an integer from 1 through 4" );
+				}
+				input.hasControllerPlayerNumber = true;
+				input.controllerPlayerNumber = (int)value;
+			}
+			lua_pop( L, 1 );
+		}
+		else if ( "disconnect" == action )
+		{
+			const char * const options[] = { "type", "action", "controllerId", NULL };
+			ValidateOptionKeys( L, 1, options, "controller disconnect simulator input" );
+			input.controllerAction = MSimulatorHost::Input::kDisconnectController;
+		}
+		else if ( "button" == action )
+		{
+			const char * const options[] =
+			{
+				"type", "action", "controllerId", "keyName", "phase", NULL
+			};
+			ValidateOptionKeys( L, 1, options, "controller button simulator input" );
+			input.controllerAction = MSimulatorHost::Input::kButtonController;
+			input.keyName = ReadRequiredString(
+				L, 1, "keyName", "controller button simulator input expects a non-empty keyName" );
+			if ( input.keyName.empty() || input.keyName.length() > 128 )
+			{
+				return luaL_error(
+					L, "controller button simulator input keyName must contain 1 through 128 characters" );
+			}
+
+			lua_getfield( L, 1, "phase" );
+			std::string phase = lua_isnil( L, -1 ) ? "pressed" : LuaValueDescription( L, -1 );
+			lua_pop( L, 1 );
+			if ( "down" == phase )
+			{
+				input.phase = MSimulatorHost::Input::kDownPhase;
+			}
+			else if ( "up" == phase )
+			{
+				input.phase = MSimulatorHost::Input::kUpPhase;
+			}
+			else if ( "pressed" == phase )
+			{
+				input.phase = MSimulatorHost::Input::kPressedPhase;
+			}
+			else
+			{
+				return luaL_error(
+					L, "controller button simulator input phase must be 'down', 'up', or 'pressed'" );
+			}
+			shouldConnectController = true;
+		}
+		else if ( "axis" == action )
+		{
+			const char * const options[] =
+			{
+				"type", "action", "controllerId", "axisName", "axisValue", NULL
+			};
+			ValidateOptionKeys( L, 1, options, "controller axis simulator input" );
+			input.controllerAction = MSimulatorHost::Input::kAxisController;
+			input.axisName = ReadRequiredString(
+				L, 1, "axisName", "controller axis simulator input expects a non-empty axisName" );
+			input.axisValue = ReadFiniteNumber(
+				L, 1, "axisValue", "controller axis simulator input axisValue", true, 0.0 );
+			const bool isTrigger =
+				"leftTrigger" == input.axisName ||
+				"rightTrigger" == input.axisName;
+			const bool isStick =
+				"leftX" == input.axisName ||
+				"leftY" == input.axisName ||
+				"rightX" == input.axisName ||
+				"rightY" == input.axisName;
+			if ( ( ! isTrigger && ! isStick ) ||
+				input.axisValue < ( isTrigger ? 0.0 : -1.0 ) ||
+				input.axisValue > 1.0 )
+			{
+				return luaL_error(
+					L,
+					"controller axis simulator input supports leftX, leftY, rightX, rightY (-1 to 1), and leftTrigger or rightTrigger (0 to 1)" );
+			}
+			shouldConnectController = true;
+		}
+		else
+		{
+			return luaL_error(
+				L,
+				"controller simulator input action must be 'connect', 'disconnect', 'button', or 'axis'" );
+		}
+	}
 	else
 	{
-		return luaL_error( L, "simulator input type must be 'back', 'key', 'text', 'touch', 'tap', or 'mouse'" );
+		return luaL_error( L, "simulator input type must be 'back', 'key', 'text', 'touch', 'tap', 'mouse', or 'controller'" );
 	}
 
 	ReadSimulatorInputBooleans( L, 1, input );
@@ -762,12 +930,27 @@ SendSimulatorInput( lua_State *L )
 	{
 		return luaL_error( L, "the Simulator could not send the requested input" );
 	}
+	if ( shouldConnectController )
+	{
+		MSimulatorHost::Input connectInput;
+		connectInput.type = MSimulatorHost::Input::kControllerInput;
+		connectInput.controllerAction = MSimulatorHost::Input::kConnectController;
+		connectInput.controllerId = input.controllerId;
+		if ( ! host->SendInput( connectInput ) )
+		{
+			return luaL_error( L, "the Simulator could not connect the requested virtual controller" );
+		}
+	}
 	bool isKeyPress =
 		MSimulatorHost::Input::kKeyInput == input.type &&
 		MSimulatorHost::Input::kPressedPhase == input.phase;
-	if ( isTap || isKeyPress )
+	bool isControllerButtonPress =
+		MSimulatorHost::Input::kControllerInput == input.type &&
+		MSimulatorHost::Input::kButtonController == input.controllerAction &&
+		MSimulatorHost::Input::kPressedPhase == input.phase;
+	if ( isTap || isKeyPress || isControllerButtonPress )
 	{
-		if ( isKeyPress )
+		if ( isKeyPress || isControllerButtonPress )
 		{
 			input.phase = MSimulatorHost::Input::kDownPhase;
 		}
